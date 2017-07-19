@@ -1,0 +1,21 @@
+
+
+<div *ngIf="screen.workAreaName=='DialogSpec'">
+  <h3>{{screen.data.dialog.title}}</h3>
+  <p>{{screen.data.dialog.line1}}</p>
+  <p>{{screen.data.dialog.line2}}</p>
+  <p>{{screen.data.dialog.line3}}</p>
+  <p>{{screen.data.dialog.line4}}</p>
+  <p>{{screen.data.dialog.line5}}</p>
+  <p>{{screen.data.dialog.line6}}</p>
+  <button *ngFor="let b of screen.data.dialog.buttons"  (click)="onAction(b)">{{b}}</button>
+  
+</div>
+
+<div *ngIf="screen">
+  <h4 *ngIf="screen.menuActions.length > 0">Menu Actions</h4>
+  <button *ngFor="let m of screen.menuActions" [disabled]="!m.enabled" (click)="onAction(m.action)">{{m.text}}</button>
+  <h4>Nav Actions</h4>
+  <button *ngFor="let m of screen.navActions" [disabled]="!m.enabled" (click)="onAction(m.action)">{{m.text}}</button>
+</div>
+<app-status></app-status>
