@@ -44,7 +44,7 @@ export class PrototypeComponent implements OnInit, OnDestroy {
     }
 
     // Stream of messages
-    this.messages = this._stompService.subscribe('/topic/screen');
+    this.messages = this._stompService.subscribe('/topic/store/05243/device/013');
 
     // Subscribe a function to be run on_next message
     this.subscription = this.messages.subscribe(this.on_next);
@@ -71,7 +71,7 @@ export class PrototypeComponent implements OnInit, OnDestroy {
   }
 
   public onAction(action) {
-    this._stompService.publish('/app/action',
+    this._stompService.publish('/app/action/store/05243/device/013',
       action);
     this._counter++;
   }

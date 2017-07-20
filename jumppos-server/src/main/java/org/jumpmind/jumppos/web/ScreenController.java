@@ -1,0 +1,57 @@
+package org.jumpmind.jumppos.web;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jumpmind.jumppos.flow.IStateManager;
+import org.jumpmind.jumppos.flow.StateManagerRepository;
+import org.jumpmind.jumppos.model.Action;
+import org.jumpmind.jumppos.model.Screen;
+import org.jumpmind.jumppos.service.IScreenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class ScreenController implements IScreenService {
+
+    Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private SimpMessagingTemplate template;
+    
+    @Autowired
+    StateManagerRepository repository;
+    
+    private Map<String, Screen> lastScreenByClientId = new HashMap<>();
+    
+    @MessageMapping("action/store/{storeId}/device/{deviceId}")
+    public void action(Message<byte[]> message) {
+	String clientId = (String)message.getHeaders().get("simpDestination");
+	clientId = clientId.substring(clientId.indexOf("/store"));
+	logger.info("Received action from {}", clientId);
+	IStateManager manager = repository.createOrLookup(clientId);
+	if (manager != null) {
+	    String action = new String(message.getPayload());
+	    logger.info("Posting action of {}", action);
+	    manager.onAction(new Action(action));
+	}
+    }
+    
+    @Override
+    public void showScreen(String clientId, Screen screen) {
+	if (screen != null) {
+	    this.template.convertAndSend("/topic" + clientId, screen);
+	    lastScreenByClientId.put(clientId, screen);
+	}
+    }
+    
+    @Override
+    public void refresh(String clientId) {
+        showScreen(clientId, lastScreenByClientId.get(clientId));        
+    }
+}
