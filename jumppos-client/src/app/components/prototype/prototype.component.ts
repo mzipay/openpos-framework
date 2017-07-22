@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import {Message} from '@stomp/stompjs';
-
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
 import {StompService} from '@stomp/ng2-stompjs';
 
 @Component({
-  selector: 'app-rawdata',
+  selector: 'app-prototype',
   templateUrl: './prototype.component.html',
-  styleUrls: ['./prototype.component.css'],
   providers: []
 })
 export class PrototypeComponent implements OnInit, OnDestroy {
@@ -25,7 +24,7 @@ export class PrototypeComponent implements OnInit, OnDestroy {
 
   private _counter = 1;
 
-  public screen: JSON;
+  public screen: any;
 
   /** Constructor */
   constructor(private _stompService: StompService) { }

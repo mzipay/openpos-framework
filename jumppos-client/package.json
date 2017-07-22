@@ -21,7 +21,9 @@
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.28",
     "@stomp/ng2-stompjs": "^0.4.1",
+    "bootstrap": "^4.0.0-alpha.6",
     "core-js": "^2.4.1",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
@@ -43,7 +45,10 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "node-sass": "^4.5.3",
     "protractor": "~5.1.2",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^6.0.6",
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
     "typescript": "~2.3.3"

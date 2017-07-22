@@ -1,4 +1,4 @@
-<div *ngIf="screen">
+<div *ngIf="screen" class="container">
 
 	<div *ngIf="screen.type==='Dialog'">
 		<h3>{{screen.data.dialog.title}}</h3>
@@ -8,15 +8,19 @@
 		<p>{{screen.data.dialog.line4}}</p>
 		<p>{{screen.data.dialog.line5}}</p>
 		<p>{{screen.data.dialog.line6}}</p>
-		<button *ngFor="let b of screen.data.dialog.buttons"
+		<button *ngFor="let b of screen.data.dialog.buttons" class="btn"
 			(click)="onAction(b)">{{b}}</button>
 
 	</div>
 	<h4 *ngIf="screen.menuActions.length > 0">Menu Actions</h4>
-	<button *ngFor="let m of screen.menuActions" [disabled]="!m.enabled"
-		(click)="onAction(m.action)">{{m.text}}</button>
+	<div class="col-xs-2">
+		<button *ngFor="let m of screen.menuActions" class="btn btn-primary btn-sm"
+			[disabled]="!m.enabled" (click)="onAction(m.action)">{{m.text}}</button>
+	</div>
 	<h4>Nav Actions</h4>
-	<button *ngFor="let m of screen.navActions" [disabled]="!m.enabled"
-		(click)="onAction(m.action)">{{m.text}}</button>
+	<div class="btn-toolbar">
+	<button *ngFor="let m of screen.navActions" class="btn btn-sm"
+		[disabled]="!m.enabled" (click)="onAction(m.action)">{{m.text}}</button>
+		</div>
 </div>
 <app-status></app-status>

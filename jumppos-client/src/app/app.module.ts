@@ -1,13 +1,13 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
-
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {StompConfig, StompService} from '@stomp/ng2-stompjs';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 
-import { AppRoutingModule } from './app-routing.module';
+import {AppRoutingModule} from './app-routing.module';
 
 import {RawDataComponent} from './components/rawdata/rawdata.component';
 import {StatusComponent} from './components/status/status.component';
@@ -47,6 +47,7 @@ const stompConfig: StompConfig = {
   ],
   imports: [
     BrowserModule,
+    NgbModule.forRoot(),
     FormsModule,
     HttpModule,
     AppRoutingModule
