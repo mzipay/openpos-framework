@@ -9,9 +9,10 @@ import {AppComponent} from './app.component';
 
 import {AppRoutingModule} from './app-routing.module';
 
-import {RawDataComponent} from './components/rawdata/rawdata.component';
-import {StatusComponent} from './components/status/status.component';
-import {PrototypeComponent} from './components/prototype/prototype.component';
+import {SessionService} from './session.service';
+import {PromptComponent} from './screens/prompt.component';
+// import {StatusComponent} from './components/status/status.component';
+// import {PrototypeComponent} from './components/prototype/prototype.component';
 
 const stompConfig: StompConfig = {
   // Which server?
@@ -20,8 +21,8 @@ const stompConfig: StompConfig = {
   // Headers
   // Typical keys: login, passcode, host
   headers: {
-//    login: 'guest',
-//    passcode: 'guest'
+    //    login: 'guest',
+    //    passcode: 'guest'
   },
 
   // How often to heartbeat?
@@ -41,9 +42,9 @@ const stompConfig: StompConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    RawDataComponent,
-    StatusComponent,
-    PrototypeComponent
+    PromptComponent,
+//    StatusComponent,
+//    PrototypeComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +54,8 @@ const stompConfig: StompConfig = {
     AppRoutingModule
   ],
   providers: [
-StompService,
+    SessionService,
+    StompService,
     {
       provide: StompConfig,
       useValue: stompConfig
@@ -61,4 +63,4 @@ StompService,
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

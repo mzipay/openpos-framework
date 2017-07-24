@@ -5,114 +5,122 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Screen {
+public class Screen extends HashMap<String, Object> {
 
-    String name;
-
-    String type;
-
-    List<MenuAction> menuActions = new ArrayList<>();
-    List<MenuAction> navActions = new ArrayList<>();
-
-    Map<String, Map<String, Object>> data = new HashMap<>();
+    private static final long serialVersionUID = 1L;
 
     public Screen() {
     }
 
     public Screen(String name) {
-	super();
-	this.name = name;
-    }
-
-    public Screen(String name, String type, Map<String, Map<String, Object>> data) {
-	this.name = name;
-	this.type = type;
-	this.data = data;
-    }
-
-    public List<MenuAction> getMenuActions() {
-	return menuActions;
-    }
-
-    public void setMenuActions(List<MenuAction> menuActions) {
-	this.menuActions = menuActions;
-    }
-
-    public List<MenuAction> getNavActions() {
-	return navActions;
-    }
-
-    public void setNavActions(List<MenuAction> navActions) {
-	this.navActions = navActions;
+        super();
+        put("name", name);
     }
 
     public String getName() {
-	return name;
+        return (String) get("name");
     }
 
     public void setName(String name) {
-	this.name = name;
+        put("name", name);
     }
 
     public String getType() {
-	return type;
+        return (String) get("type");
     }
 
     public void setType(String type) {
-	this.type = type;
+        put("type", type);
     }
 
-    public Map<String, Map<String, Object>> getData() {
-	return data;
+    @SuppressWarnings("unchecked")
+    public void addToGroup(String groupName, String dataName, Object value) {
+        Object group = get(groupName);
+        Map<String, Object> map = null;
+        if (group == null || !(group instanceof Map)) {
+            map = new HashMap<>();
+            put(groupName, map);
+        } else {
+            map = (Map<String, Object>) group;
+        }
+        map.put(dataName, value);
     }
 
-    public void setData(Map<String, Map<String, Object>> data) {
-	this.data = data;
-    }
-
-    public void addData(String groupName, String dataName, Object value) {
-	Map<String, Object> map = data.get(groupName);
-	if (map == null) {
-	    map = new HashMap<>();
-	    data.put(groupName, map);
-	}
-	map.put(dataName, value);
+    @SuppressWarnings("unchecked")
+    public void addToList(String dataName, Object value) {
+        Object obj = get(dataName);
+        List<Object> list = null;
+        if (obj == null || !(obj instanceof List)) {
+            list = new ArrayList<>();
+            put(dataName, list);
+        } else {
+            list = (List<Object>) obj;
+        }
+        if (!list.contains(value)) {
+            list.add(value);
+        }
     }
 
     public static class MenuAction {
-	String text;
-	String action;
-	boolean enabled;
 
-	public MenuAction(String text, String action, boolean enabled) {
-	    this.text = text;
-	    this.action = action;
-	    this.enabled = enabled;
-	}
+        String text;
+        String action;
+        boolean enabled;
 
-	public String getText() {
-	    return text;
-	}
+        public MenuAction(String text, String action, boolean enabled) {
+            this.text = text;
+            this.action = action;
+            this.enabled = enabled;
+        }
 
-	public void setText(String text) {
-	    this.text = text;
-	}
+        public String getText() {
+            return text;
+        }
 
-	public String getAction() {
-	    return action;
-	}
+        public void setText(String text) {
+            this.text = text;
+        }
 
-	public void setAction(String action) {
-	    this.action = action;
-	}
+        public String getAction() {
+            return action;
+        }
 
-	public boolean isEnabled() {
-	    return enabled;
-	}
+        public void setAction(String action) {
+            this.action = action;
+        }
 
-	public void setEnabled(boolean enabled) {
-	    this.enabled = enabled;
-	}
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((text == null) ? 0 : text.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            MenuAction other = (MenuAction) obj;
+            if (text == null) {
+                if (other.text != null)
+                    return false;
+            } else if (!text.equals(other.text))
+                return false;
+            return true;
+        }
     }
 
 }
