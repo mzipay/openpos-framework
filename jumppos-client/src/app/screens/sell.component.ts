@@ -11,4 +11,8 @@ export class SellComponent {
   constructor(public session: SessionService) {
   }
 
+  onEnter(value: string) {
+    this.session.onAction('Next');
+  }
+
 }

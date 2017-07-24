@@ -1,4 +1,8 @@
 
 <div *ngIf="session.screen.type==='Sell'">
-	<h3>Sell</h3>
+<div>
+	<label>Enter Item</label> 
+	<input #box (keyup.enter)="onEnter(box.value)"
+		[(ngModel)]="session.response">		
+</div>	
 </div>
