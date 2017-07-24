@@ -11,8 +11,7 @@ import {AppRoutingModule} from './app-routing.module';
 
 import {SessionService} from './session.service';
 import {PromptComponent} from './screens/prompt.component';
-// import {StatusComponent} from './components/status/status.component';
-// import {PrototypeComponent} from './components/prototype/prototype.component';
+import {SellComponent} from './screens/sell.component';
 
 const stompConfig: StompConfig = {
   // Which server?
@@ -43,8 +42,7 @@ const stompConfig: StompConfig = {
   declarations: [
     AppComponent,
     PromptComponent,
-//    StatusComponent,
-//    PrototypeComponent
+    SellComponent
   ],
   imports: [
     BrowserModule,

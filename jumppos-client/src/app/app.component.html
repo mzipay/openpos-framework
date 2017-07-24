@@ -7,16 +7,20 @@
 		<app-prompt></app-prompt>
 	</div>
 	
+	<div *ngIf="session.screen.type==='Sell'">
+		<app-sell></app-sell>
+	</div>	
+	
 	<div *ngIf="session.screen.menuActions">
 		<button *ngFor="let m of session.screen.menuActions"
 			class="btn btn-primary btn-sm" [disabled]="!m.enabled"
-			(click)="onAction(m.action)">{{m.text}}</button>
+			(click)="session.onAction(m.action)">{{m.text}}</button>
 	</div>
 	
 	<div *ngIf="session.screen.navActions">
 		<button *ngFor="let m of session.screen.navActions"
 			class="btn btn-primary btn-sm" [disabled]="!m.enabled"
-			(click)="onAction(m.action)">{{m.text}}</button>
+			(click)="session.onAction(m.action)">{{m.text}}</button>
 	</div>
 
 	<p>

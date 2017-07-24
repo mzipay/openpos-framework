@@ -12,8 +12,10 @@ export class PromptComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.session.response = null;
   }
 
+  onEnter(value: string) {
+    this.session.onAction('Next');
+  }
 
 }
