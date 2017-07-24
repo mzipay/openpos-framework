@@ -16,13 +16,12 @@ export class PromptComponent implements AfterViewInit, DoCheck {
   }
 
   ngDoCheck(): void {
-    if (this.initialized) {
+    if (this.initialized && this.vc && this.vc.nativeElement) {
       this.vc.nativeElement.focus();
     }
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
     this.initialized = true;
   }
 

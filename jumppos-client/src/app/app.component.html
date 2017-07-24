@@ -1,7 +1,7 @@
 
 <div *ngIf="session.screen" class="container">
 
-	<h2>Mobile POS</h2>
+	<h3>Mobile POS</h3>
 	
 	<div *ngIf="session.screen.type==='Prompt'">
 		<app-prompt></app-prompt>
@@ -19,12 +19,9 @@
 	
 	<div *ngIf="session.screen.navActions">
 		<button *ngFor="let m of session.screen.navActions"
-			class="btn btn-primary btn-sm" [disabled]="!m.enabled"
+			class="btn btn-primary" [disabled]="!m.enabled"
 			(click)="session.onAction(m.action)">{{m.text}}</button>
 	</div>
 
-	<p>
-		SERVER <span id="status"> {{state|async}} </span>
-	</p>
 </div>
 <router-outlet></router-outlet>
