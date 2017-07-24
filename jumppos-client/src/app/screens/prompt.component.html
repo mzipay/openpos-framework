@@ -4,8 +4,8 @@
 	<p *ngFor="let m of session.screen.message">{{m}}</p>
 </div>
 
-<div
-	*ngIf="session.screen.type==='Prompt' &&  session.screen.prompt">
-	<label>{{session.screen.prompt.text}}</label> <input
+<div *ngIf="session.screen.type==='Prompt' &&  session.screen.prompt">
+	<label>{{session.screen.prompt.text}}</label> 
+	<input
 		[(ngModel)]="session.response">
 </div>

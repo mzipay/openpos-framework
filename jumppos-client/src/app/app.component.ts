@@ -74,6 +74,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   /** Consume a message from the stompService */
   public onNextMessage = (message: Message) => {
+    this.session.response = null;
     this.session.screen = JSON.parse(message.body);
   }
 
