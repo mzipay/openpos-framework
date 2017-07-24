@@ -2,7 +2,7 @@
 <div *ngIf="session.screen.type==='Sell'">
 <div>
 	<label>Enter Item</label> 
-	<input #box (keyup.enter)="onEnter(box.value)"
+	<input #itemprompt (keyup.enter)="onEnter(itemprompt.value)"
 		[(ngModel)]="session.response">		
 </div>	
 </div>

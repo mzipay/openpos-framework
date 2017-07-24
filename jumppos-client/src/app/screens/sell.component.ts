@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SessionService} from '../session.service';
 
@@ -6,9 +6,24 @@ import {SessionService} from '../session.service';
   selector: 'app-sell',
   templateUrl: './sell.component.html'
 })
-export class SellComponent {
+export class SellComponent implements AfterViewInit, DoCheck {
+
+  @ViewChild('itemprompt') vc;
+
+  initialized = false;
 
   constructor(public session: SessionService) {
+  }
+
+  ngDoCheck(): void {
+    if (this.initialized) {
+      this.vc.nativeElement.focus();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    console.log('ngAfterViewInit');
+    this.initialized = true;
   }
 
   onEnter(value: string) {

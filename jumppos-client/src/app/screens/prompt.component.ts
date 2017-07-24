@@ -1,4 +1,4 @@
-import {Component, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SessionService} from '../session.service';
 
@@ -6,12 +6,24 @@ import {SessionService} from '../session.service';
   selector: 'app-prompt',
   templateUrl: './prompt.component.html'
 })
-export class PromptComponent implements OnChanges {
+export class PromptComponent implements AfterViewInit, DoCheck {
+
+  @ViewChild('box') vc;
+
+  initialized = false;
 
   constructor(public session: SessionService) {
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngDoCheck(): void {
+    if (this.initialized) {
+      this.vc.nativeElement.focus();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    console.log('ngAfterViewInit');
+    this.initialized = true;
   }
 
   onEnter(value: string) {
