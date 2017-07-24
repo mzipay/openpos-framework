@@ -1,4 +1,4 @@
-package org.jumpmind.jumppos.flow;
+package org.jumpmind.jumppos.core.flow;
 
 public interface IStateManagerFactory {
 
