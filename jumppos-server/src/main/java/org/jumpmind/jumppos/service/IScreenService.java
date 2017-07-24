@@ -1,6 +1,6 @@
 package org.jumpmind.jumppos.service;
 
-import org.jumpmind.jumppos.model.Screen;
+import org.jumpmind.jumppos.core.model.Screen;
 
 public interface IScreenService {
 

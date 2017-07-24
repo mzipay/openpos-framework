@@ -1,4 +1,4 @@
-package org.jumpmind.jumppos.web;
+package org.jumpmind.jumppos.core.web;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.scheduling.concurrent.DefaultManagedTaskScheduler;

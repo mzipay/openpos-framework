@@ -1,12 +1,14 @@
-package org.jumpmind.jumppos.web;
+package org.jumpmind.jumppos.core.web;
 
 import java.util.HashMap;
+
 import java.util.Map;
 
-import org.jumpmind.jumppos.flow.IStateManager;
-import org.jumpmind.jumppos.flow.StateManagerRepository;
-import org.jumpmind.jumppos.model.Action;
-import org.jumpmind.jumppos.model.Screen;
+import org.jumpmind.jumppos.core.flow.Action;
+import org.jumpmind.jumppos.core.flow.IStateManager;
+import org.jumpmind.jumppos.core.flow.IStateManagerRepository;
+import org.jumpmind.jumppos.core.flow.StateManagerRepository;
+import org.jumpmind.jumppos.core.model.Screen;
 import org.jumpmind.jumppos.service.IScreenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +19,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ScreenController implements IScreenService {
+public class ScreenService implements IScreenService {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -25,9 +27,9 @@ public class ScreenController implements IScreenService {
     private SimpMessagingTemplate template;
 
     @Autowired
-    StateManagerRepository repository;
+    IStateManagerRepository repository;
 
-    private Map<String, Screen> lastScreenByClientId = new HashMap<>();
+    private Map<String, Screen> lastScreenByClientId = new HashMap<String, Screen>();
 
     @MessageMapping("action/store/{storeId}/device/{deviceId}")
     public void action(@DestinationVariable String storeId, @DestinationVariable String deviceId, Action action) {
@@ -37,7 +39,7 @@ public class ScreenController implements IScreenService {
         IStateManager manager = repository.createOrLookup(clientId);
         if (manager != null) {
             logger.info("Posting action of {}", action);
-            manager.onAction(action);
+            manager.doAction(action);
         }
     }
 

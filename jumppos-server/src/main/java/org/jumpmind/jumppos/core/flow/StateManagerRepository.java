@@ -1,4 +1,4 @@
-package org.jumpmind.jumppos.flow;
+package org.jumpmind.jumppos.core.flow;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StateManagerRepository {
+public class StateManagerRepository implements IStateManagerRepository {
 
-    Map<String, IStateManager> repositoryById = new HashMap<>();
+    Map<String, IStateManager> repositoryById = new HashMap<String, IStateManager>();
 
     @Autowired
     IStateManagerFactory factory;

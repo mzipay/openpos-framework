@@ -1,7 +1,8 @@
-package org.jumpmind.jumppos.web;
+package org.jumpmind.jumppos.core.web;
 
-import org.jumpmind.jumppos.flow.IStateManager;
-import org.jumpmind.jumppos.flow.StateManagerRepository;
+
+import org.jumpmind.jumppos.core.flow.IStateManager;
+import org.jumpmind.jumppos.core.flow.StateManagerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
 	    clientId = clientId.substring(clientId.indexOf("/store"));
 	    logger.info("subscribed to {}", clientId);
 	    IStateManager manager = repository.createOrLookup(clientId);
-	    manager.refreshScreen();
+	    manager.init();
 	}
 		
 }

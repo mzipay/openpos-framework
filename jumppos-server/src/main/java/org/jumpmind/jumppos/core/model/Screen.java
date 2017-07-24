@@ -1,4 +1,4 @@
-package org.jumpmind.jumppos.model;
+package org.jumpmind.jumppos.core.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
