@@ -23,6 +23,7 @@ package org.jumpmind.jumppos.core.flow;
 import org.jumpmind.jumppos.core.flow.config.IFlowConfigProvider;
 import org.jumpmind.jumppos.service.IScreenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,6 +33,8 @@ public class StateManagerFactory implements IStateManagerFactory {
     IFlowConfigProvider flowConfigProvider;
     @Autowired
     IScreenService screenService;
+    @Autowired
+    ApplicationContext applicationContext;
 
     @Override
     public IStateManager create(String nodeId) {
@@ -39,6 +42,7 @@ public class StateManagerFactory implements IStateManagerFactory {
         stateManager.setNodeId(nodeId);
         stateManager.setFlowConfig(flowConfigProvider.getConfig(nodeId));
         stateManager.setScreenService(screenService);
+        stateManager.setApplicationContext(applicationContext);
         return stateManager;
     }
 

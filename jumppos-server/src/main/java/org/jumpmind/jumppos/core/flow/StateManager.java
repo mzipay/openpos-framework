@@ -22,21 +22,28 @@ package org.jumpmind.jumppos.core.flow;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.jumpmind.jumppos.core.flow.config.FlowConfig;
 import org.jumpmind.jumppos.core.flow.config.StateConfig;
 import org.jumpmind.jumppos.core.model.Screen;
 import org.jumpmind.jumppos.service.IScreenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.context.ApplicationContext;
 
 public class StateManager implements IStateManager, IScreenManager {
     
+    Logger logger = LoggerFactory.getLogger(getClass());
+    
+    private ApplicationContext applicationContext;
     private String nodeId;
     private Scope scope = new Scope();
     private FlowConfig flowConfig;
     private IState currentState;
-//    private IUiModelListener uiModelListener;
     private IScreenService screenService;
     
     public void init() {
@@ -155,6 +162,24 @@ public class StateManager implements IStateManager, IScreenManager {
                 } else if (name.equals("stateManager") || name.equals("screenManager")) {
                     value = new ScopeValue(this);
                 }
+                if (value == null) {
+                    System.out.println(Arrays.toString(applicationContext.getBeanNamesForType(field.getDeclaringClass())));
+                    if (applicationContext.containsBean(name)) {
+                        value = new ScopeValue(applicationContext.getBean(name));
+                    } else {
+                        try {                            
+                            Object beanByClass = applicationContext.getBean(field.getType());
+                            if (beanByClass != null) {
+                                value = new ScopeValue(beanByClass);
+                            }
+                        } catch (NoSuchBeanDefinitionException ex) {
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("No bean found", ex);
+                            }
+                        }
+                    }
+                }
+                
                 if (value != null) {
                     try {
                         field.set(stepOrState, value.getValue());
@@ -221,8 +246,8 @@ public class StateManager implements IStateManager, IScreenManager {
     }
 
     @Override
-    public void showScreen(String screenName, Map<String, Object> params) {
 //        UiModel uiModel = new UiModel();
+    public void showScreen(String screenName, Map<String, Object> params) {
         Screen screen = new Screen();
         screen.setName(screenName);
         // TODO get this from config.
@@ -257,6 +282,10 @@ public class StateManager implements IStateManager, IScreenManager {
 
     public void setScreenService(IScreenService screenService) {
         this.screenService = screenService;
+    }
+
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
 }
