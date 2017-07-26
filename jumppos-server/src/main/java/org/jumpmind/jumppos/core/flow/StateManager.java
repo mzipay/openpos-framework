@@ -28,7 +28,6 @@ import java.util.Map;
 import org.jumpmind.jumppos.core.flow.config.FlowConfig;
 import org.jumpmind.jumppos.core.flow.config.StateConfig;
 import org.jumpmind.jumppos.core.model.Screen;
-import org.jumpmind.jumppos.service.IScreenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;

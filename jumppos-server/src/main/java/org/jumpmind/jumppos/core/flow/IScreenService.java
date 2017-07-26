@@ -1,4 +1,4 @@
-package org.jumpmind.jumppos.service;
+package org.jumpmind.jumppos.core.flow;
 
 import org.jumpmind.jumppos.core.model.Screen;
 
