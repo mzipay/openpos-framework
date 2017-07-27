@@ -31,19 +31,25 @@ import org.jumpmind.jumppos.core.model.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
+
+@Component()
+@org.springframework.context.annotation.Scope("websocket")
 public class StateManager implements IStateManager, IScreenManager {
     
     Logger logger = LoggerFactory.getLogger(getClass());
     
+    @Autowired
     private ApplicationContext applicationContext;
+    @Autowired
+    private IScreenService screenService;
     private String nodeId;
     private Scope scope = new Scope();
     private FlowConfig flowConfig;
     private IState currentState;
-    private IScreenService screenService;
     
     public void init() {
         transitionTo(flowConfig.getInitialState());
@@ -55,8 +61,8 @@ public class StateManager implements IStateManager, IScreenManager {
     }
     
     protected void transitionTo(IState newState) {
-        if (currentState != newState) {            
-            System.out.println("Transition from " + currentState + " to " + newState);
+        if (currentState != newState) {
+            logger.info("Transition from " + currentState + " to " + newState);
         }
         performInjections(newState, null);
         currentState = newState;
@@ -152,8 +158,8 @@ public class StateManager implements IStateManager, IScreenManager {
 
         for (Field field : fields) {
             field.setAccessible(true);
-            Inject injectAnnotation = field.getAnnotation(Inject.class);
-            if (injectAnnotation != null) {
+            Autowired autowired = field.getAnnotation(Autowired.class);
+            if (autowired != null) {
                 String name = field.getName();
                 ScopeValue value = scope.resolve(name);
                 if (value == null && extraScope != null) {
@@ -185,7 +191,7 @@ public class StateManager implements IStateManager, IScreenManager {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                } else if (injectAnnotation.required()) {
+                } else if (autowired.required()) {
                     throw new FlowException("Failed to resolve required injection: " + name + " for " + stepOrState);
                 }
             }
@@ -279,12 +285,12 @@ public class StateManager implements IStateManager, IScreenManager {
         return screenService;
     }
 
-    public void setScreenService(IScreenService screenService) {
-        this.screenService = screenService;
-    }
-
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+//    public void setScreenService(IScreenService screenService) {
+//        this.screenService = screenService;
+//    }
+//
+//    public void setApplicationContext(ApplicationContext applicationContext) {
+//        this.applicationContext = applicationContext;
+//    }
 
 }

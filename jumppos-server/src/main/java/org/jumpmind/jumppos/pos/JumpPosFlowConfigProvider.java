@@ -18,23 +18,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.jumppos.core.flow;
+package org.jumpmind.jumppos.pos;
 
-import java.util.Map;
+import org.jumpmind.jumppos.core.flow.config.FlowBuilder;
+import org.jumpmind.jumppos.core.flow.config.FlowConfig;
+import org.jumpmind.jumppos.core.flow.config.IFlowConfigProvider;
+import org.jumpmind.jumppos.pos.state.HomeScreenState;
+import org.jumpmind.jumppos.pos.state.NodePersonalizationState;
+import org.springframework.stereotype.Component;
 
+@Component
+public class JumpPosFlowConfigProvider implements IFlowConfigProvider {
 
-public interface IStateManager {
+    @Override
+    public FlowConfig getConfig(String nodeId) {
+        FlowConfig config = new FlowConfig();
+        config.setInitialState(FlowBuilder.addState(new NodePersonalizationState())
+                .withTransition("Complete", new HomeScreenState())
+                .build());
+        config.add(FlowBuilder.addState(new HomeScreenState())
+                .build());
+        return config;
+    }
 
-    public void init();
-    public void setNodeId(String nodeId);
-    public String getNodeId();
-    public void doAction(String action);
-    public void doAction(String action, Map<String, String> params);
-    public void doAction(Action action);    
-    public void endConversation();
-    public void endSession();
-    public ScopeValue getScopeValue(String name);
-    public void setSessionScope(String name, Object value);
-    public void setConversationScope(String name, Object value);
-    
 }

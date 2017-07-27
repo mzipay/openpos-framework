@@ -18,17 +18,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.jumppos.core.flow;
+package org.jumpmind.jumppos.pos.state;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.jumpmind.jumppos.core.flow.Action;
+import org.jumpmind.jumppos.core.flow.IScreenManager;
+import org.jumpmind.jumppos.core.flow.IState;
+import org.jumpmind.jumppos.core.flow.IStateManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Inject {
-
-    boolean required() default true;
+public class NodePersonalizationState implements IState {
     
+    static final String UNDEFINED_NODE = "UNDEFINED-";
+    
+    @Autowired IStateManager stateManager;
+    @Autowired IScreenManager screenManager;
+
+    @Override
+    public void arrive() {
+        stateManager.doAction(new Action("Complete"));
+//        if (stateManager.getNodeId().startsWith(UNDEFINED_NODE)) {
+//            screenManager.showScreen("NodePersonalization");
+//        } else {
+//            stateManager.doAction(new Action("Complete"));
+//        }
+    }
+
 }

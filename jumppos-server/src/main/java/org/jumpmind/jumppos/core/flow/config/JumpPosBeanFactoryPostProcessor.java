@@ -18,9 +18,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.jumppos.core.flow;
+package org.jumpmind.jumppos.core.flow.config;
 
+import org.jumpmind.jumppos.core.flow.TransactionScope;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.stereotype.Component;
 
-public interface IStateManagerRepository {
-    IStateManager createOrLookup(String clientId);
+@Component
+public class JumpPosBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+
+    @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        beanFactory.registerScope("transaction", new TransactionScope());
+    }
+
 }

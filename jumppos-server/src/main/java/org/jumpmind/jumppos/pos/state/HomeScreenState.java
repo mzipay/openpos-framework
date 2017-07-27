@@ -18,33 +18,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.jumppos.core.flow;
+package org.jumpmind.jumppos.pos.state;
 
-import org.jumpmind.jumppos.core.flow.config.IFlowConfigProvider;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jumpmind.jumppos.core.flow.IScreenManager;
+import org.jumpmind.jumppos.core.flow.IState;
+import org.jumpmind.jumppos.core.model.MenuItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
-@Component
-public class StateManagerFactory implements IStateManagerFactory {
+public class HomeScreenState implements IState {
     
-    @Autowired
-    IFlowConfigProvider flowConfigProvider;
-    @Autowired
-    IScreenService screenService;
-    @Autowired
-    ApplicationContext applicationContext;
+    @Autowired private IScreenManager screenManager;
 
     @Override
-    public IStateManager create(String nodeId) {
-//        StateManager stateManager = new StateManager();
-        
-        StateManager stateManager = applicationContext.getBean(StateManager.class);
-        stateManager.setNodeId(nodeId);
-        stateManager.setFlowConfig(flowConfigProvider.getConfig(nodeId));
-//        stateManager.setScreenService(screenService);
-//        stateManager.setApplicationContext(applicationContext);
-        return stateManager;
+    public void arrive() {
+        screenManager.showScreen("MainMenu", buildMenu());
     }
-
+    
+    protected Map<String, Object> buildMenu() {
+        List<MenuItem> menuItems = new ArrayList<MenuItem>();
+        menuItems.add(new MenuItem("Sell", "Sell", "http://server/icon"));
+        menuItems.add(new MenuItem("ItemLookup", "Item Lookup", "http://server/icon"));
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("menuItems", menuItems);
+        return params;
+    }
 }

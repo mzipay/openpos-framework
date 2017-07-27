@@ -31,14 +31,13 @@ public class Action {
     private Object data;
 
     public Action() {
-
+        this(null);
+    }
+    
+    public Action(String actionName) {
+        this(actionName, null, null);
     }
 
-    /**
-     * @param action
-     * @param stateHash2
-     * @param parameters2
-     */
     public Action(String actionName, String stateHash, Map<String, String> parameters) {
         this.name = actionName;
         this.stateHash = stateHash;

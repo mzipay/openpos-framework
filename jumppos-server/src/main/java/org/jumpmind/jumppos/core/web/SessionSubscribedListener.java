@@ -2,7 +2,8 @@ package org.jumpmind.jumppos.core.web;
 
 
 import org.jumpmind.jumppos.core.flow.IStateManager;
-import org.jumpmind.jumppos.core.flow.StateManagerRepository;
+import org.jumpmind.jumppos.core.flow.IStateManagerFactory;
+import org.jumpmind.jumppos.core.flow.StateManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,14 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
-	StateManagerRepository repository;
+	IStateManagerFactory stateManagerFactory;
 	
 	@Override
 	public void onApplicationEvent(SessionSubscribeEvent event) {
-	    String clientId = (String)event.getMessage().getHeaders().get("simpDestination");
-	    clientId = clientId.substring(clientId.indexOf("/store"));
-	    logger.info("subscribed to {}", clientId);
-	    IStateManager manager = repository.createOrLookup(clientId);
+	    String nodeId = (String)event.getMessage().getHeaders().get("simpDestination");
+	    nodeId = nodeId.substring(nodeId.indexOf("/node/")+"/node/".length());
+	    logger.info("subscribed to {}", nodeId);
+	    IStateManager manager = stateManagerFactory.create(nodeId);
 	    manager.init();
 	}
 		

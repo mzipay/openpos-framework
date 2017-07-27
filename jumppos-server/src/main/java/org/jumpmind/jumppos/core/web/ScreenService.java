@@ -1,14 +1,12 @@
 package org.jumpmind.jumppos.core.web;
 
 import java.util.HashMap;
-
 import java.util.Map;
 
 import org.jumpmind.jumppos.core.flow.Action;
 import org.jumpmind.jumppos.core.flow.IScreenService;
 import org.jumpmind.jumppos.core.flow.IStateManager;
-import org.jumpmind.jumppos.core.flow.IStateManagerRepository;
-import org.jumpmind.jumppos.core.flow.StateManagerRepository;
+import org.jumpmind.jumppos.core.flow.IStateManagerFactory;
 import org.jumpmind.jumppos.core.model.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,27 +25,26 @@ public class ScreenService implements IScreenService {
     private SimpMessagingTemplate template;
 
     @Autowired
-    IStateManagerRepository repository;
+    IStateManagerFactory stateManagerFactory;
 
     private Map<String, Screen> lastScreenByClientId = new HashMap<String, Screen>();
-
-    @MessageMapping("action/store/{storeId}/device/{deviceId}")
-    public void action(@DestinationVariable String storeId, @DestinationVariable String deviceId, Action action) {
-        String clientId = String.format("/store/%s/device/%s", storeId, deviceId);
-        //clientId = clientId.substring(clientId.indexOf("/store"));
-        logger.info("Received action from {}", clientId);
-        IStateManager manager = repository.createOrLookup(clientId);
-        if (manager != null) {
+    
+    @MessageMapping("action/node/{nodeId}")
+    public void action(@DestinationVariable String nodeId, Action action) {
+        logger.info("Received action from {}", nodeId);
+        IStateManager stateManager = stateManagerFactory.create(nodeId);
+        stateManager.setNodeId(nodeId);
+        if (stateManager != null) {
             logger.info("Posting action of {}", action);
-            manager.doAction(action);
+            stateManager.doAction(action);
         }
     }
 
     @Override
-    public void showScreen(String clientId, Screen screen) {
+    public void showScreen(String nodeId, Screen screen) {
         if (screen != null) {
-            this.template.convertAndSend("/topic" + clientId, screen);
-            lastScreenByClientId.put(clientId, screen);
+            this.template.convertAndSend("/topic/node/" + nodeId, screen);
+            lastScreenByClientId.put(nodeId, screen);
         }
     }
 

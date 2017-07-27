@@ -18,23 +18,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.jumppos.core.flow;
+package org.jumpmind.jumppos.core.flow.config;
 
-import java.util.Map;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 
-public interface IStateManager {
+@Qualifier
+@Scope("transaction")
+@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.FIELD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface TransactionScope {
 
-    public void init();
-    public void setNodeId(String nodeId);
-    public String getNodeId();
-    public void doAction(String action);
-    public void doAction(String action, Map<String, String> params);
-    public void doAction(Action action);    
-    public void endConversation();
-    public void endSession();
-    public ScopeValue getScopeValue(String name);
-    public void setSessionScope(String name, Object value);
-    public void setConversationScope(String name, Object value);
-    
 }

@@ -11,9 +11,7 @@ export class SessionService {
 
   public response: any;
 
-  public storeId: String = '05243';
-
-  public deviceId: String = '013';
+  public nodeId: String = '05243013';
 
   private subscribed: boolean;
 
@@ -30,10 +28,17 @@ export class SessionService {
       return;
     }
 
+    this.nodeId = localStorage.getItem('nodeId');
+    if (this.nodeId == null) {
+      this.nodeId = 'UNDEFINED-' + Math.random();
+    }
+    
+    localStorage.setItem('nodeId', '05243::001');
+
     console.log('subscribing to server ...');
 
     this.messages = this.stompService.subscribe(
-      '/topic/store/' + this.storeId + '/device/' + this.deviceId);
+      '/topic/node/' + this.nodeId);
 
     // Subscribe a function to be run on_next message
     this.subscription = this.messages.subscribe(this.onNextMessage);
@@ -61,7 +66,7 @@ export class SessionService {
   }
 
   public onAction(action: String) {
-    this.stompService.publish('/app/action/store/' + this.storeId + '/device/' + this.deviceId,
+    this.stompService.publish('/app/action/node/' + this.nodeId,
       JSON.stringify({name: action, data: this.response}));
   }
 
