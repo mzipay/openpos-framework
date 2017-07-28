@@ -16,19 +16,19 @@
 	</div>
   
     <div *ngIf="session.screen.menuItems">
-        <button *ngFor="let m of session.screen.menuItems"
+        <button *ngFor="let m of menuItems"
             class="btn btn-primary btn-sm" 
             (click)="session.onAction(m.action)">{{m.title}}</button>
     </div>
 	
 	<div *ngIf="session.screen.menuActions">
-		<button *ngFor="let m of session.screen.menuActions"
+		<button *ngFor="let m of menuActions"
 			class="btn btn-primary btn-sm" [disabled]="!m.enabled"
 			(click)="session.onAction(m.action)">{{m.text}}</button>
 	</div>
 	
 	<div *ngIf="session.screen.navActions">
-		<button *ngFor="let m of session.screen.navActions"
+		<button *ngFor="let m of navActions"
 			class="btn btn-primary" [disabled]="!m.enabled"
 			(click)="session.onAction(m.action)">{{m.text}}</button>
 	</div>

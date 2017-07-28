@@ -12,7 +12,10 @@ export class FormComponent implements AfterViewInit, DoCheck {
 
   initialized = false;
 
+  public formElements: IFormElement[];
+
   constructor(public session: SessionService) {
+    this.formElements = session.screen.form.formElements;
   }
 
   ngDoCheck(): void {
@@ -27,7 +30,18 @@ export class FormComponent implements AfterViewInit, DoCheck {
   }
 
   onEnter(value: string) {
-    this.session.onAction('Next');
+    this.session.onAction('Save');
   }
 
 }
+
+export interface IFormElement {
+    elementType: string;
+    inputType: string;
+    label: string;
+    fieldId: string;
+    value: string;
+    placeholder: string;
+    buttonAction: string;
+}
+

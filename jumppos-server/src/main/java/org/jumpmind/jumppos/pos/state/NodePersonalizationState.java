@@ -81,8 +81,8 @@ public class NodePersonalizationState implements IState {
     @ActionHandler
     public void onSavePersonalization(Action action) {
         // TODO need some binding/form model support here.
-        Map<String, Object> formJson = (Map<String, Object>)action.getData();
-        List<Map<String, Object>> formActions = (List<Map<String, Object>>)formJson.get("formElements");
+//        Map<String, Object> formJson = (Map<String, Object>)action.getData();
+        List<Map<String, Object>> formActions = (List<Map<String, Object>>)action.getData();
         String nodeId = (String) formActions.get(0).get("value");
         // TODO validate.
         stateManager.setNodeId(nodeId);
