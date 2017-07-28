@@ -36,5 +36,6 @@ public interface IStateManager {
     public ScopeValue getScopeValue(String name);
     public void setSessionScope(String name, Object value);
     public void setConversationScope(String name, Object value);
+    public String toJSONPretty(Object o);
     
 }

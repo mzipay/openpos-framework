@@ -21,9 +21,9 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
 	
 	@Override
 	public void onApplicationEvent(SessionSubscribeEvent event) {
-	    String nodeId = (String)event.getMessage().getHeaders().get("simpDestination");
-	    nodeId = nodeId.substring(nodeId.indexOf("/node/")+"/node/".length());
-	    logger.info("subscribed to {}", nodeId);
+	    String topicName = (String)event.getMessage().getHeaders().get("simpDestination");
+	    String nodeId = topicName.substring(topicName.indexOf("/node/")+"/node/".length());
+	    logger.info("subscribed to {}", topicName);
 	    IStateManager manager = stateManagerFactory.create(nodeId);
 	    manager.init();
 	}

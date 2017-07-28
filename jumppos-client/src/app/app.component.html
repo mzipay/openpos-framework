@@ -9,7 +9,11 @@
 	
 	<div *ngIf="session.screen.type==='Sell'">
 		<app-sell></app-sell>
-	</div>	
+	</div>
+	
+	<div *ngIf="session.screen.type==='Form'">
+		<app-form></app-form>
+	</div>
   
     <div *ngIf="session.screen.menuItems">
         <button *ngFor="let m of session.screen.menuItems"

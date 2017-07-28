@@ -16,22 +16,30 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Controller
 public class ScreenService implements IScreenService {
 
     Logger logger = LoggerFactory.getLogger(getClass());
+    
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    private SimpMessagingTemplate template;
-
+    SimpMessagingTemplate template;
     @Autowired
     IStateManagerFactory stateManagerFactory;
 
     private Map<String, Screen> lastScreenByClientId = new HashMap<String, Screen>();
-    
+  
     @MessageMapping("action/node/{nodeId}")
     public void action(@DestinationVariable String nodeId, Action action) {
-        logger.info("Received action from {}", nodeId);
+        try {
+            logger.info("Received action from {}\n{}", nodeId, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(action));
+        } catch (JsonProcessingException ex) {
+            logger.error("Failed to write screen to JSON", ex);
+        }
         IStateManager stateManager = stateManagerFactory.create(nodeId);
         stateManager.setNodeId(nodeId);
         if (stateManager != null) {
@@ -43,6 +51,11 @@ public class ScreenService implements IScreenService {
     @Override
     public void showScreen(String nodeId, Screen screen) {
         if (screen != null) {
+            try {
+                logger.info("Show screen on nodeId " + nodeId + "\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
+            } catch (JsonProcessingException ex) {
+                logger.error("Failed to write screen to JSON", ex);
+            }
             this.template.convertAndSend("/topic/node/" + nodeId, screen);
             lastScreenByClientId.put(nodeId, screen);
         }

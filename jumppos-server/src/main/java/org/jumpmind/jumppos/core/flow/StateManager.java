@@ -35,6 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 @Component()
 @org.springframework.context.annotation.Scope("websocket")
@@ -50,6 +53,8 @@ public class StateManager implements IStateManager, IScreenManager {
     private Scope scope = new Scope();
     private FlowConfig flowConfig;
     private IState currentState;
+    
+    private ObjectMapper jsonMapper = new ObjectMapper();
     
     public void init() {
         transitionTo(flowConfig.getInitialState());
@@ -242,7 +247,7 @@ public class StateManager implements IStateManager, IScreenManager {
 
     @Override
     public void showScreen(String screenName) {
-        showScreen(screenName, null);
+        showScreen(screenName, (Map<String, Object> )null);
     }
     
     @Override
@@ -262,15 +267,29 @@ public class StateManager implements IStateManager, IScreenManager {
             screen.setType("NOTIFY");
         } else if (screenName.equals("TransMain")) {
             screen.setType("TransMain");
+        } else if (screenName.equals("NodePersonalization")) {
+            screen.setType("Form");
         } else {
             screen.setType("PROMPT_TEXT");
         }
-        screen.putAll(params);
+        
+        if (params != null && !params.isEmpty()) {            
+            screen.putAll(params);
+        }
         showScreen(nodeId, screen);
         
 //        uiModelListener.notifyUiUpdate(uiModel);
         
         screenService.showScreen(nodeId, screen);
+    }
+    
+    public String toJSONPretty(Object o) {
+        try {
+            return jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
+        } catch (JsonProcessingException ex) {
+            logger.warn("Failed to format object to json", ex);
+            return String.valueOf(o);
+        }
     }
 
     public String getNodeId() {

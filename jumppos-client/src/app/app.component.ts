@@ -4,6 +4,7 @@ import {SessionService} from './session.service';
 
 import {PromptComponent} from './screens/prompt.component';
 import {SellComponent} from './screens/sell.component';
+import {FormComponent} from './screens/form.component';
 
 
 

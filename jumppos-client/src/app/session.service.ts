@@ -30,12 +30,19 @@ export class SessionService {
 
     this.nodeId = localStorage.getItem('nodeId');
     if (this.nodeId == null) {
-      this.nodeId = 'UNDEFINED-' + Math.random();
+      let temporaryNodeId = localStorage.getItem('temporaryNodeId');
+      console.log('temporaryNodeId from local storage: ' + temporaryNodeId);
+      if (temporaryNodeId == null) {
+        const MIN = 999;
+        const MAX = 9999990;
+        temporaryNodeId = 'TEMPNODEID-' + Math.floor(Math.random() * (MAX - MIN + 1)) + MIN;
+        console.log('GENERATING new temporaryNodeId: ' + temporaryNodeId);
+        localStorage.setItem('temporaryNodeId', temporaryNodeId);
+      }
+      this.nodeId = temporaryNodeId;
     }
-    
-    localStorage.setItem('nodeId', '05243::001');
 
-    console.log('subscribing to server ...');
+    console.log('subscribing to server at ...' + '/topic/node/' + this.nodeId);
 
     this.messages = this.stompService.subscribe(
       '/topic/node/' + this.nodeId);
@@ -66,8 +73,17 @@ export class SessionService {
   }
 
   public onAction(action: String) {
+    console.log('Publish action ' + action);
     this.stompService.publish('/app/action/node/' + this.nodeId,
       JSON.stringify({name: action, data: this.response}));
+
+    if (action === 'SavePersonalization') {
+      this.nodeId = this.response.formElements[0].value;
+      localStorage.setItem('nodeId', '' + this.nodeId);
+      localStorage.removeItem('temporaryNodeId');
+      this.subscribed = false;
+      this.subscribe();
+    }
   }
 
   /** Consume a message from the stompService */
