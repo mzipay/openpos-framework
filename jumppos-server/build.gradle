@@ -13,7 +13,6 @@ repositories {
     mavenCentral()
 }
 
-apply plugin: 'org.springframework.boot'
 apply plugin: 'eclipse'
 apply plugin: 'java'
 
@@ -35,6 +34,12 @@ task develop {
 
 ext {
    springBootVersion = '1.5.4.RELEASE'
+}
+
+processResources {
+    from ('../jumppos-client/dist/') {
+        into 'public'
+    }
 }
 
 dependencies {
