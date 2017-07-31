@@ -21,13 +21,12 @@
 package org.jumpmind.jumppos.pos.state;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jumpmind.jumppos.core.flow.IScreenManager;
 import org.jumpmind.jumppos.core.flow.IState;
 import org.jumpmind.jumppos.core.model.MenuItem;
+import org.jumpmind.jumppos.core.model.Screen;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class HomeScreenState implements IState {
@@ -36,15 +35,16 @@ public class HomeScreenState implements IState {
 
     @Override
     public void arrive() {
-        screenManager.showScreen("MainMenu", buildMenu());
+        screenManager.showScreen(buildMenu());
     }
     
-    protected Map<String, Object> buildMenu() {
+    protected Screen buildMenu() {
         List<MenuItem> menuItems = new ArrayList<MenuItem>();
         menuItems.add(new MenuItem("Sell", "Sell", "http://server/icon"));
         menuItems.add(new MenuItem("ItemLookup", "Item Lookup", "http://server/icon"));
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("menuItems", menuItems);
-        return params;
+        Screen screen = new Screen();
+        screen.setName("MainMenu");
+        screen.put("menuItems", menuItems);
+        return screen;
     }
 }

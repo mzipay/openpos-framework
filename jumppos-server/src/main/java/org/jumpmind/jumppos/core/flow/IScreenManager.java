@@ -20,14 +20,10 @@
  */
 package org.jumpmind.jumppos.core.flow;
 
-import java.util.Map;
-
 import org.jumpmind.jumppos.core.model.Screen;
 
 public interface IScreenManager {
     
-    public void showScreen(String clientId, Screen screen);
-    public void showScreen(String screenName);
-    public void showScreen(String screenName, Map<String, Object> params);
+    public void showScreen(Screen screen);
  
 }

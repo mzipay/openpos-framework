@@ -20,7 +20,6 @@
  */
 package org.jumpmind.jumppos.pos.state;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +31,7 @@ import org.jumpmind.jumppos.core.flow.IStateManager;
 import org.jumpmind.jumppos.core.model.Form;
 import org.jumpmind.jumppos.core.model.FormButton;
 import org.jumpmind.jumppos.core.model.FormField;
+import org.jumpmind.jumppos.core.model.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,16 +48,17 @@ public class NodePersonalizationState implements IState {
     @Override
     public void arrive() {
         if (stateManager.getNodeId().startsWith(TEMPORARY_NODE_ID)) {
-            screenManager.showScreen("NodePersonalization", buildParams());
+            screenManager.showScreen(buildParams());
         } else {
             stateManager.doAction(new Action("Complete"));
         }
     }
 
-    protected Map<String, Object> buildParams() {
-        Map<String, Object> params = new HashMap<>();
-        params.put("form", buildForm());
-        return params;
+    protected Screen buildParams() {
+        Screen screen = new Screen();
+        screen.setName("NodePersonalization");        
+        screen.put("form", buildForm());
+        return screen;
     }
     
     protected Form buildForm() {

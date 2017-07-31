@@ -5,10 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Screen extends HashMap<String, Object> {
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 
-    private static final long serialVersionUID = 1L;
+public class Screen {
 
+    protected Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    
+    String name;
+    
+    String type;
+    
     public Screen() {
     }
 
@@ -16,21 +23,35 @@ public class Screen extends HashMap<String, Object> {
         super();
         put("name", name);
     }
-
-    public String getName() {
-        return (String) get("name");
+    
+    @JsonAnyGetter
+    public Map<String, Object> any() {
+       return this.additionalProperties;
     }
 
+    @JsonAnySetter
+    public void put(String name, Object value) {
+       this.additionalProperties.put(name, value);
+    }
+    
+    public Object get(String name) {
+        return additionalProperties.get(name);
+    }
+    
     public void setName(String name) {
-        put("name", name);
+        this.name = name;
     }
-
-    public String getType() {
-        return (String) get("type");
+    
+    public String getName() {
+        return name;
     }
-
+    
     public void setType(String type) {
-        put("type", type);
+        this.type = type;
+    }
+    
+    public String getType() {
+        return type;
     }
 
     @SuppressWarnings("unchecked")

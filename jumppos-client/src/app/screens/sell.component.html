@@ -1,8 +1,12 @@
-
-<div *ngIf="session.screen.type==='Sell'">
 <div>
-	<label>Enter Item</label> 
-	<input #itemprompt (keyup.enter)="onEnter(itemprompt.value)"
-		[(ngModel)]="session.response">		
-</div>	
+	<label>Enter Item</label>
+	<input #itemprompt (keyup.enter)="onEnter(itemprompt.value)" [(ngModel)]="session.response">
+	<div *ngIf="sellItems">
+		<ul class="list-group">
+			<li *ngFor="let i of sellItems" class="list-group-item justify-content-between">
+				{{i.itemId}} - {{i.description}}
+				<span class="badge badge-default badge-pill">{{i.extendedAmount}}</span>
+			</li>
+		</ul>
+	</div>
 </div>

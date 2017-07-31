@@ -12,7 +12,10 @@ export class SellComponent implements AfterViewInit, DoCheck {
 
   initialized = false;
 
+  public sellItems: ISellItem[];
+
   constructor(public session: SessionService) {
+    this.sellItems = session.screen.items;
   }
 
   ngDoCheck(): void {
@@ -30,4 +33,11 @@ export class SellComponent implements AfterViewInit, DoCheck {
     this.session.onAction('Next');
   }
 
+}
+
+export interface ISellItem {
+    itemId: string;
+    posItemId: string;
+    description: string;
+    extendedAmount: number;
 }

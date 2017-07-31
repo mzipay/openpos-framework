@@ -246,41 +246,8 @@ public class StateManager implements IStateManager, IScreenManager {
     }
 
     @Override
-    public void showScreen(String screenName) {
-        showScreen(screenName, (Map<String, Object> )null);
-    }
-    
-    @Override
-    public void showScreen(String clientId, Screen screen) {
-        screenService.showScreen(nodeId, screen);
-    }
-
-    @Override
-//        UiModel uiModel = new UiModel();
-    public void showScreen(String screenName, Map<String, Object> params) {
-        Screen screen = new Screen();
-        screen.setName(screenName);
-        // TODO get this from config.
-        if (screenName.equals("MainMenu")) {
-            screen.setType("MAIN_MENU");
-        } else if (screenName.equals("NOTIFY")) {
-            screen.setType("NOTIFY");
-        } else if (screenName.equals("TransMain")) {
-            screen.setType("TransMain");
-        } else if (screenName.equals("NodePersonalization")) {
-            screen.setType("Form");
-        } else {
-            screen.setType("PROMPT_TEXT");
-        }
-        
-        if (params != null && !params.isEmpty()) {            
-            screen.putAll(params);
-        }
-        showScreen(nodeId, screen);
-        
-//        uiModelListener.notifyUiUpdate(uiModel);
-        
-        screenService.showScreen(nodeId, screen);
+    public void showScreen(Screen screen) {
+        screenService.showScreen(nodeId, screen);        
     }
     
     public String toJSONPretty(Object o) {
