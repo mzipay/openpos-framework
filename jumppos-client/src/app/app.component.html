@@ -3,6 +3,10 @@
 
 	<h3>Mobile POS</h3>
 	
+	<div *ngIf="session.screen.type==='Dialog'">
+		<app-dialog></app-dialog>
+	</div>
+
 	<div *ngIf="session.screen.type==='Prompt'">
 		<app-prompt></app-prompt>
 	</div>

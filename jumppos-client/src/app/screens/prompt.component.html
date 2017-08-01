@@ -1,9 +1,4 @@
 
-<div *ngIf="session.screen.type==='Prompt'">
-	<h3>{{session.screen.title}}</h3>
-	<p *ngFor="let m of session.screen.message">{{m}}</p>
-</div>
-
 <div *ngIf="session.screen.type==='Prompt' &&  session.screen.prompt">
 	<label>{{session.screen.prompt.text}}</label> 
 	<input #box *ngIf="session.screen.prompt.responseType==='ALPHANUMERICPASSWORD'" type='password' (keyup.enter)="onEnter(box.value)"

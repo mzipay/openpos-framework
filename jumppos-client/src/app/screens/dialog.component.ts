@@ -3,10 +3,10 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SessionService} from '../session.service';
 
 @Component({
-  selector: 'app-prompt',
-  templateUrl: './prompt.component.html'
+  selector: 'app-dialog',
+  templateUrl: './dialog.component.html'
 })
-export class PromptComponent implements AfterViewInit, DoCheck {
+export class DialogComponent implements AfterViewInit, DoCheck {
 
   @ViewChild('box') vc;
 

@@ -12,6 +12,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {SessionService} from './session.service';
 import {PromptComponent} from './screens/prompt.component';
 import {SellComponent} from './screens/sell.component';
+import {DialogComponent} from './screens/dialog.component';
 import {FormComponent} from './screens/form.component';
 
 const stompConfig: StompConfig = {
@@ -43,6 +44,7 @@ const stompConfig: StompConfig = {
   declarations: [
     AppComponent,
     PromptComponent,
+    DialogComponent,
     SellComponent,
     FormComponent
   ],
