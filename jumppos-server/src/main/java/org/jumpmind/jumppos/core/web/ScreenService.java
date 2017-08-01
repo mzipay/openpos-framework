@@ -28,6 +28,7 @@ public class ScreenService implements IScreenService {
 
     @Autowired
     SimpMessagingTemplate template;
+    
     @Autowired
     IStateManagerFactory stateManagerFactory;
 
@@ -40,7 +41,7 @@ public class ScreenService implements IScreenService {
         } catch (JsonProcessingException ex) {
             logger.error("Failed to write action to JSON", ex);
         }
-        IStateManager stateManager = stateManagerFactory.create(nodeId);
+        IStateManager stateManager = stateManagerFactory.retreiveOrCreate(nodeId);
         stateManager.setNodeId(nodeId);
         if (stateManager != null) {
             logger.info("Posting action of {}", action);

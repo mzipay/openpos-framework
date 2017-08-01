@@ -19,8 +19,9 @@ export class SellComponent implements AfterViewInit, DoCheck {
   }
 
   ngDoCheck(): void {
+    console.log('ngDoCheck');
     if (this.initialized) {
-      this.vc.nativeElement.focus();
+      // this.vc.nativeElement.focus();
     }
   }
 

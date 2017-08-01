@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.jumpmind.jumppos.core.flow.Action;
 import org.jumpmind.jumppos.core.flow.ActionHandler;
-import org.jumpmind.jumppos.core.flow.IScreenManager;
 import org.jumpmind.jumppos.core.flow.IState;
 import org.jumpmind.jumppos.core.flow.IStateManager;
 import org.jumpmind.jumppos.core.model.Form;
@@ -34,21 +33,24 @@ import org.jumpmind.jumppos.core.model.FormField;
 import org.jumpmind.jumppos.core.model.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class NodePersonalizationState implements IState {
-    
+
     Logger logger = LoggerFactory.getLogger(getClass());
-    
+
     static final String TEMPORARY_NODE_ID = "TEMPNODEID-";
-    
-    @Autowired IStateManager stateManager;
-    @Autowired IScreenManager screenManager;
+
+    IStateManager stateManager;
+
+    @Override
+    public void init(IStateManager stateManager) {
+        this.stateManager = stateManager;
+    }
 
     @Override
     public void arrive() {
         if (stateManager.getNodeId().startsWith(TEMPORARY_NODE_ID)) {
-            screenManager.showScreen(buildParams());
+            stateManager.showScreen(buildParams());
         } else {
             stateManager.doAction(new Action("Complete"));
         }
@@ -56,11 +58,11 @@ public class NodePersonalizationState implements IState {
 
     protected Screen buildParams() {
         Screen screen = new Screen();
-        screen.setName("NodePersonalization");        
+        screen.setName("NodePersonalization");
         screen.put("form", buildForm());
         return screen;
     }
-    
+
     protected Form buildForm() {
         Form form = new Form();
         {
@@ -78,12 +80,13 @@ public class NodePersonalizationState implements IState {
         }
         return form;
     }
-    
+
+    @SuppressWarnings("unchecked")
     @ActionHandler
     public void onSavePersonalization(Action action) {
         // TODO need some binding/form model support here.
-//        Map<String, Object> formJson = (Map<String, Object>)action.getData();
-        List<Map<String, Object>> formActions = (List<Map<String, Object>>)action.getData();
+        // Map<String, Object> formJson = (Map<String, Object>)action.getData();
+        List<Map<String, Object>> formActions = (List<Map<String, Object>>) action.getData();
         String nodeId = (String) formActions.get(0).get("value");
         // TODO validate.
         stateManager.setNodeId(nodeId);

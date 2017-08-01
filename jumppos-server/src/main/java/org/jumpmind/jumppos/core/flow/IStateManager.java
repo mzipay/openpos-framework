@@ -22,6 +22,8 @@ package org.jumpmind.jumppos.core.flow;
 
 import java.util.Map;
 
+import org.jumpmind.jumppos.core.model.Screen;
+
 
 public interface IStateManager {
 
@@ -37,5 +39,8 @@ public interface IStateManager {
     public void setSessionScope(String name, Object value);
     public void setConversationScope(String name, Object value);
     public String toJSONPretty(Object o);
+    public void showScreen(Screen screen);    
+    public Screen getLastScreen();    
+    public void refreshScreen();
     
 }

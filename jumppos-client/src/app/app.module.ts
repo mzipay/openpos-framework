@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
 import {StompConfig, StompService} from '@stomp/ng2-stompjs';
 
 import {AppComponent} from './app.component';
@@ -51,6 +52,7 @@ const stompConfig: StompConfig = {
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
+    NgbCollapseModule,
     FormsModule,
     HttpModule,
     AppRoutingModule

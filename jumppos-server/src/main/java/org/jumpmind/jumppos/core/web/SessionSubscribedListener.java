@@ -17,14 +17,15 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
 	
 	@Autowired
 	IStateManagerFactory stateManagerFactory;
-	
+		
 	@Override
 	public void onApplicationEvent(SessionSubscribeEvent event) {
 	    String topicName = (String)event.getMessage().getHeaders().get("simpDestination");
 	    String nodeId = topicName.substring(topicName.indexOf("/node/")+"/node/".length());
 	    logger.info("subscribed to {}", topicName);
-	    IStateManager manager = stateManagerFactory.create(nodeId);
-	    manager.init();
+	    IStateManager stateManager = stateManagerFactory.retreiveOrCreate(nodeId);
+	    stateManager.refreshScreen();
+
 	}
 		
 }

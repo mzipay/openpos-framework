@@ -40,8 +40,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @Component()
-@org.springframework.context.annotation.Scope("websocket")
-public class StateManager implements IStateManager, IScreenManager {
+@org.springframework.context.annotation.Scope("prototype")
+public class StateManager implements IStateManager {
     
     Logger logger = LoggerFactory.getLogger(getClass());
     
@@ -72,6 +72,7 @@ public class StateManager implements IStateManager, IScreenManager {
             logger.info("Transition from " + currentState + " to " + newState);
         }
         performInjections(newState, null);
+        newState.init(this);
         currentState = newState;
         currentState.arrive();
     }
@@ -90,6 +91,11 @@ public class StateManager implements IStateManager, IScreenManager {
     @Override
     public Screen getLastScreen() {
         return screenService.getLastScreen(nodeId);
+    }
+    
+    @Override
+    public void refreshScreen() {
+        showScreen(getLastScreen());        
     }
 
     // Could come from a UI or a running state..
@@ -176,7 +182,7 @@ public class StateManager implements IStateManager, IScreenManager {
                 ScopeValue value = scope.resolve(name);
                 if (value == null && extraScope != null) {
                     value = extraScope.get(name);
-                } else if (name.equals("stateManager") || name.equals("screenManager")) {
+                } else if (name.equals("stateManager")) {
                     value = new ScopeValue(this);
                 }
                 if (value == null) {

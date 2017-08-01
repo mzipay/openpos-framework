@@ -1,7 +1,5 @@
 import {Component, OnInit, OnDestroy, DoCheck} from '@angular/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SessionService} from './session.service';
-
 import {PromptComponent} from './screens/prompt.component';
 import {SellComponent} from './screens/sell.component';
 import {FormComponent} from './screens/form.component';
@@ -13,9 +11,10 @@ import {FormComponent} from './screens/form.component';
 export class AppComponent implements OnInit, OnDestroy, DoCheck {
 
   // TODO these should be conflated or removed perhaps.
-  public menuItems: IMenuItem[];
-  public menuActions: IMenuItem[];
-  public navActions: IMenuItem[];
+  public menuItems: IMenuItem[] = [];
+  public menuActions: IMenuItem[] = [];
+  public navActions: IMenuItem[] = [];
+  public isCollapsed = true;
 
   constructor(public session: SessionService) {
 

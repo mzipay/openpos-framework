@@ -20,6 +20,9 @@
  */
 package org.jumpmind.jumppos.core.flow;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jumpmind.jumppos.core.flow.config.IFlowConfigProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -27,23 +30,28 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StateManagerFactory implements IStateManagerFactory {
-    
+
     @Autowired
     IFlowConfigProvider flowConfigProvider;
+
     @Autowired
     IScreenService screenService;
+
     @Autowired
     ApplicationContext applicationContext;
 
+    private Map<String, StateManager> stateManagersByNodeId = new HashMap<>();
+
     @Override
-    public IStateManager create(String nodeId) {
-//        StateManager stateManager = new StateManager();
-        
-        StateManager stateManager = applicationContext.getBean(StateManager.class);
-        stateManager.setNodeId(nodeId);
-        stateManager.setFlowConfig(flowConfigProvider.getConfig(nodeId));
-//        stateManager.setScreenService(screenService);
-//        stateManager.setApplicationContext(applicationContext);
+    public IStateManager retreiveOrCreate(String nodeId) {
+        StateManager stateManager = stateManagersByNodeId.get(nodeId);
+        if (stateManager == null) {
+            stateManager = applicationContext.getBean(StateManager.class);
+            stateManager.setNodeId(nodeId);
+            stateManager.setFlowConfig(flowConfigProvider.getConfig(nodeId));
+            stateManager.init();
+            stateManagersByNodeId.put(nodeId, stateManager);
+        }
         return stateManager;
     }
 

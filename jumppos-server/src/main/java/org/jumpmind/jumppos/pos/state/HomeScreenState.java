@@ -23,19 +23,23 @@ package org.jumpmind.jumppos.pos.state;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jumpmind.jumppos.core.flow.IScreenManager;
 import org.jumpmind.jumppos.core.flow.IState;
+import org.jumpmind.jumppos.core.flow.IStateManager;
 import org.jumpmind.jumppos.core.model.MenuItem;
 import org.jumpmind.jumppos.core.model.Screen;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class HomeScreenState implements IState {
     
-    @Autowired private IScreenManager screenManager;
-
+    IStateManager stateManager;
+    
+    @Override
+    public void init(IStateManager stateManager) {
+         this.stateManager = stateManager;        
+    }
+    
     @Override
     public void arrive() {
-        screenManager.showScreen(buildMenu());
+        stateManager.showScreen(buildMenu());
     }
     
     protected Screen buildMenu() {
