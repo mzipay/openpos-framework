@@ -42,7 +42,7 @@ public class HomeScreenState implements IState {
         List<MenuItem> menuItems = new ArrayList<MenuItem>();
         menuItems.add(new MenuItem("Sell", "Sell", "http://server/icon"));
         menuItems.add(new MenuItem("ItemLookup", "Item Lookup", "http://server/icon"));
-        Screen screen = new Screen();
+        Screen screen = new Screen(){};
         screen.setName("MainMenu");
         screen.put("menuItems", menuItems);
         return screen;

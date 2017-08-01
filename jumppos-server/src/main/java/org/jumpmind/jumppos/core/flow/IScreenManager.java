@@ -20,10 +20,12 @@
  */
 package org.jumpmind.jumppos.core.flow;
 
-import org.jumpmind.jumppos.core.model.Screen;
+import org.jumpmind.jumppos.core.model.IScreen;
 
 public interface IScreenManager {
     
-    public void showScreen(Screen screen);
+    public void showScreen(IScreen screen);
+    
+    public IScreen getLastScreen();
  
 }

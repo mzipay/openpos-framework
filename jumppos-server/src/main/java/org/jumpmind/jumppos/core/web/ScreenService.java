@@ -7,7 +7,7 @@ import org.jumpmind.jumppos.core.flow.Action;
 import org.jumpmind.jumppos.core.flow.IScreenService;
 import org.jumpmind.jumppos.core.flow.IStateManager;
 import org.jumpmind.jumppos.core.flow.IStateManagerFactory;
-import org.jumpmind.jumppos.core.model.Screen;
+import org.jumpmind.jumppos.core.model.IScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +31,14 @@ public class ScreenService implements IScreenService {
     @Autowired
     IStateManagerFactory stateManagerFactory;
 
-    private Map<String, Screen> lastScreenByClientId = new HashMap<String, Screen>();
+    private Map<String, IScreen> lastScreenByNodeId = new HashMap<String, IScreen>();
   
     @MessageMapping("action/node/{nodeId}")
     public void action(@DestinationVariable String nodeId, Action action) {
         try {
             logger.info("Received action from {}\n{}", nodeId, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(action));
         } catch (JsonProcessingException ex) {
-            logger.error("Failed to write screen to JSON", ex);
+            logger.error("Failed to write action to JSON", ex);
         }
         IStateManager stateManager = stateManagerFactory.create(nodeId);
         stateManager.setNodeId(nodeId);
@@ -47,9 +47,14 @@ public class ScreenService implements IScreenService {
             stateManager.doAction(action);
         }
     }
+    
+    @Override
+    public IScreen getLastScreen(String nodeId) {
+        return lastScreenByNodeId.get(nodeId);
+    }
 
     @Override
-    public void showScreen(String nodeId, Screen screen) {
+    public void showScreen(String nodeId, IScreen screen) {
         if (screen != null) {
             try {
                 logger.info("Show screen on nodeId " + nodeId + "\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
@@ -57,12 +62,12 @@ public class ScreenService implements IScreenService {
                 logger.error("Failed to write screen to JSON", ex);
             }
             this.template.convertAndSend("/topic/node/" + nodeId, screen);
-            lastScreenByClientId.put(nodeId, screen);
+            lastScreenByNodeId.put(nodeId, screen);
         }
     }
 
     @Override
     public void refresh(String clientId) {
-        showScreen(clientId, lastScreenByClientId.get(clientId));
+        showScreen(clientId, lastScreenByNodeId.get(clientId));
     }
 }

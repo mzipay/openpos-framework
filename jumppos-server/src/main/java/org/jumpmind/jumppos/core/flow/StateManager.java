@@ -27,7 +27,7 @@ import java.util.Map;
 
 import org.jumpmind.jumppos.core.flow.config.FlowConfig;
 import org.jumpmind.jumppos.core.flow.config.StateConfig;
-import org.jumpmind.jumppos.core.model.Screen;
+import org.jumpmind.jumppos.core.model.IScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -47,8 +47,10 @@ public class StateManager implements IStateManager, IScreenManager {
     
     @Autowired
     private ApplicationContext applicationContext;
+    
     @Autowired
     private IScreenService screenService;
+    
     private String nodeId;
     private Scope scope = new Scope();
     private FlowConfig flowConfig;
@@ -83,6 +85,11 @@ public class StateManager implements IStateManager, IScreenManager {
                     stateConfig.getStateName() + " class " + stateConfig.getStateClass(), ex);
         }
         return state;
+    }
+    
+    @Override
+    public IScreen getLastScreen() {
+        return screenService.getLastScreen(nodeId);
     }
 
     // Could come from a UI or a running state..
@@ -246,7 +253,7 @@ public class StateManager implements IStateManager, IScreenManager {
     }
 
     @Override
-    public void showScreen(Screen screen) {
+    public void showScreen(IScreen screen) {
         screenService.showScreen(nodeId, screen);        
     }
     
@@ -270,13 +277,5 @@ public class StateManager implements IStateManager, IScreenManager {
     public IScreenService getScreenService() {
         return screenService;
     }
-
-//    public void setScreenService(IScreenService screenService) {
-//        this.screenService = screenService;
-//    }
-//
-//    public void setApplicationContext(ApplicationContext applicationContext) {
-//        this.applicationContext = applicationContext;
-//    }
 
 }
