@@ -7,7 +7,7 @@ import org.jumpmind.jumppos.core.flow.Action;
 import org.jumpmind.jumppos.core.flow.IScreenService;
 import org.jumpmind.jumppos.core.flow.IStateManager;
 import org.jumpmind.jumppos.core.flow.IStateManagerFactory;
-import org.jumpmind.jumppos.core.model.Screen;
+import org.jumpmind.jumppos.core.model.IScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class ScreenService implements IScreenService {
     @Autowired
     IStateManagerFactory stateManagerFactory;
 
-    private Map<String, Screen> lastScreenByNodeId = new HashMap<String, Screen>();
+    private Map<String, IScreen> lastScreenByNodeId = new HashMap<String, IScreen>();
   
     @MessageMapping("action/node/{nodeId}")
     public void action(@DestinationVariable String nodeId, Action action) {
@@ -50,12 +50,12 @@ public class ScreenService implements IScreenService {
     }
     
     @Override
-    public Screen getLastScreen(String nodeId) {
+    public IScreen getLastScreen(String nodeId) {
         return lastScreenByNodeId.get(nodeId);
     }
 
     @Override
-    public void showScreen(String nodeId, Screen screen) {
+    public void showScreen(String nodeId, IScreen screen) {
         if (screen != null) {
             try {
                 logger.info("Show screen on nodeId " + nodeId + "\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));

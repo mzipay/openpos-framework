@@ -27,7 +27,7 @@ import java.util.Map;
 
 import org.jumpmind.jumppos.core.flow.config.FlowConfig;
 import org.jumpmind.jumppos.core.flow.config.StateConfig;
-import org.jumpmind.jumppos.core.model.Screen;
+import org.jumpmind.jumppos.core.model.IScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -89,7 +89,7 @@ public class StateManager implements IStateManager {
     }
     
     @Override
-    public Screen getLastScreen() {
+    public IScreen getLastScreen() {
         return screenService.getLastScreen(nodeId);
     }
     
@@ -259,7 +259,7 @@ public class StateManager implements IStateManager {
     }
 
     @Override
-    public void showScreen(Screen screen) {
+    public void showScreen(IScreen screen) {
         screenService.showScreen(nodeId, screen);        
     }
     

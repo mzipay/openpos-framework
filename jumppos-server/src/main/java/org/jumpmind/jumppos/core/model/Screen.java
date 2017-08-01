@@ -8,7 +8,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 
-public class Screen {
+public abstract class Screen implements IScreen {
 
     protected Map<String, Object> additionalProperties = new HashMap<String, Object>();
     
@@ -30,31 +30,38 @@ public class Screen {
     }
 
     @JsonAnySetter
+    @Override
     public void put(String name, Object value) {
        this.additionalProperties.put(name, value);
     }
     
+    @Override
     public Object get(String name) {
         return additionalProperties.get(name);
     }
     
+    @Override
     public void setName(String name) {
         this.name = name;
     }
     
+    @Override
     public String getName() {
         return name;
     }
     
+    @Override
     public void setType(String type) {
         this.type = type;
     }
     
+    @Override
     public String getType() {
         return type;
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void addToGroup(String groupName, String dataName, Object value) {
         Object group = get(groupName);
         Map<String, Object> map = null;
@@ -68,6 +75,7 @@ public class Screen {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void addToList(String dataName, Object value) {
         Object obj = get(dataName);
         List<Object> list = null;

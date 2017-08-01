@@ -30,6 +30,7 @@ import org.jumpmind.jumppos.core.flow.IStateManager;
 import org.jumpmind.jumppos.core.model.Form;
 import org.jumpmind.jumppos.core.model.FormButton;
 import org.jumpmind.jumppos.core.model.FormField;
+import org.jumpmind.jumppos.core.model.IScreen;
 import org.jumpmind.jumppos.core.model.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,9 +57,9 @@ public class NodePersonalizationState implements IState {
         }
     }
 
-    protected Screen buildParams() {
-        Screen screen = new Screen();
-        screen.setName("NodePersonalization");
+    protected IScreen buildParams() {
+        IScreen screen = new Screen(){};
+        screen.setName("NodePersonalization");        
         screen.put("form", buildForm());
         return screen;
     }
