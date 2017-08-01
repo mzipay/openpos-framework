@@ -1,8 +1,10 @@
-<div>
-	<label>Enter Item</label>
-	<input #itemprompt (keyup.enter)="onEnter(itemprompt.value)" [(ngModel)]="session.response">
-	<div *ngIf="sellItems">
-		<ul class="list-group">
+<div class="container">
+	<label for="itemprompt" class="sr-only">Enter Item</label>
+	<input #itemprompt class="form-control component-margin-top" (keyup.enter)="onEnter(itemprompt.value)" [(ngModel)]="session.response" placeholder="scan something" required autofocus>
+
+	<button class="btn btn-lg btn-success btn-block component-margin-top">{{session.screen.grandTotal}}</button>
+	<div>
+		<ul *ngIf="sellItems" class="list-group component-margin-top">
 			<li *ngFor="let i of sellItems" class="list-group-item justify-content-between">
 				{{i.itemId}} - {{i.description}}
 				<span class="badge badge-default badge-pill">{{i.extendedAmount}}</span>

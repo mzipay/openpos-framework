@@ -1,9 +1,9 @@
-<nav class="navbar navbar-light bg-faded">
+<nav class="navbar navbar-inverse bg-inverse">
 	<a class="navbar-brand" href="#">Mobile POS</a>
-	<button *ngIf="menuActions" class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed" aria-controls="exCollapsingNavbar2"
-	 aria-expanded="false" aria-label="Toggle navigation">
+	<button *ngIf="menuActions" class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed"
+	 aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
-	</button>	
+	</button>
 	<div *ngIf="menuActions" [ngbCollapse]="isCollapsed" class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
 		<ul class="nav navbar-nav">
 			<li *ngFor="let m of menuActions" class="nav-item">
@@ -13,9 +13,7 @@
 	</div>
 </nav>
 
-<div *ngIf="session.screen" class="container">
-
-
+<ng-container *ngIf="session.screen" class="container">
 
 	<div *ngIf="session.screen.type==='Dialog'">
 		<app-dialog></app-dialog>
@@ -34,14 +32,18 @@
 	</div>
 
 	<div *ngIf="session.screen.menuItems">
-		<button *ngFor="let m of menuItems" class="btn btn-primary btn-sm" (click)="session.onAction(m.action)">{{m.title}}</button>
+		<button *ngFor="let m of menuItems" class="btn btn-primary btn-lg component-space" (click)="session.onAction(m.action)">{{m.title}}</button>
 	</div>
-
-
 
 	<div *ngIf="session.screen.navActions">
-		<button *ngFor="let m of navActions" class="btn btn-primary" [disabled]="!m.enabled" (click)="session.onAction(m.action)">{{m.text}}</button>
+		<button *ngFor="let m of navActions" class="btn btn-primary component-space" [disabled]="!m.enabled" (click)="session.onAction(m.action)">{{m.text}}</button>
 	</div>
 
-</div>
+</ng-container>
+
+<footer class="footer">
+	<div class="container">
+		<span class="text-muted">Place sticky footer content here.</span>
+	</div>
+</footer>
 <router-outlet></router-outlet>
