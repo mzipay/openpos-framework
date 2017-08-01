@@ -3,7 +3,6 @@ package org.jumpmind.jumppos.core.web;
 
 import org.jumpmind.jumppos.core.flow.IStateManager;
 import org.jumpmind.jumppos.core.flow.IStateManagerFactory;
-import org.jumpmind.jumppos.core.flow.StateManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -47,8 +47,10 @@ public class StateManager implements IStateManager, IScreenManager {
     
     @Autowired
     private ApplicationContext applicationContext;
+    
     @Autowired
     private IScreenService screenService;
+    
     private String nodeId;
     private Scope scope = new Scope();
     private FlowConfig flowConfig;
@@ -83,6 +85,11 @@ public class StateManager implements IStateManager, IScreenManager {
                     stateConfig.getStateName() + " class " + stateConfig.getStateClass(), ex);
         }
         return state;
+    }
+    
+    @Override
+    public Screen getLastScreen() {
+        return screenService.getLastScreen(nodeId);
     }
 
     // Could come from a UI or a running state..
@@ -270,13 +277,5 @@ public class StateManager implements IStateManager, IScreenManager {
     public IScreenService getScreenService() {
         return screenService;
     }
-
-//    public void setScreenService(IScreenService screenService) {
-//        this.screenService = screenService;
-//    }
-//
-//    public void setApplicationContext(ApplicationContext applicationContext) {
-//        this.applicationContext = applicationContext;
-//    }
 
 }

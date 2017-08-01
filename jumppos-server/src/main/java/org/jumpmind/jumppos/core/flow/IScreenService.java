@@ -4,8 +4,10 @@ import org.jumpmind.jumppos.core.model.Screen;
 
 public interface IScreenService {
 
-    public void showScreen(String clientId, Screen screen);
+    public void showScreen(String nodeId, Screen screen);
     
-    public void refresh(String clientId);
+    public void refresh(String nodeId);
+    
+    public Screen getLastScreen(String nodeId);
     
 }

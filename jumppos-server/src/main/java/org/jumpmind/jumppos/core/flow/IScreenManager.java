@@ -25,5 +25,7 @@ import org.jumpmind.jumppos.core.model.Screen;
 public interface IScreenManager {
     
     public void showScreen(Screen screen);
+    
+    public Screen getLastScreen();
  
 }

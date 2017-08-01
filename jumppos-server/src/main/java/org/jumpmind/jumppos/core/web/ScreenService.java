@@ -31,14 +31,14 @@ public class ScreenService implements IScreenService {
     @Autowired
     IStateManagerFactory stateManagerFactory;
 
-    private Map<String, Screen> lastScreenByClientId = new HashMap<String, Screen>();
+    private Map<String, Screen> lastScreenByNodeId = new HashMap<String, Screen>();
   
     @MessageMapping("action/node/{nodeId}")
     public void action(@DestinationVariable String nodeId, Action action) {
         try {
             logger.info("Received action from {}\n{}", nodeId, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(action));
         } catch (JsonProcessingException ex) {
-            logger.error("Failed to write screen to JSON", ex);
+            logger.error("Failed to write action to JSON", ex);
         }
         IStateManager stateManager = stateManagerFactory.create(nodeId);
         stateManager.setNodeId(nodeId);
@@ -46,6 +46,11 @@ public class ScreenService implements IScreenService {
             logger.info("Posting action of {}", action);
             stateManager.doAction(action);
         }
+    }
+    
+    @Override
+    public Screen getLastScreen(String nodeId) {
+        return lastScreenByNodeId.get(nodeId);
     }
 
     @Override
@@ -57,12 +62,12 @@ public class ScreenService implements IScreenService {
                 logger.error("Failed to write screen to JSON", ex);
             }
             this.template.convertAndSend("/topic/node/" + nodeId, screen);
-            lastScreenByClientId.put(nodeId, screen);
+            lastScreenByNodeId.put(nodeId, screen);
         }
     }
 
     @Override
     public void refresh(String clientId) {
-        showScreen(clientId, lastScreenByClientId.get(clientId));
+        showScreen(clientId, lastScreenByNodeId.get(clientId));
     }
 }
