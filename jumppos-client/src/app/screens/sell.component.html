@@ -3,6 +3,24 @@
 	<input #itemprompt class="form-control mt-2" (keyup.enter)="onEnter(itemprompt.value)" [(ngModel)]="session.response" placeholder="scan something" required autofocus>
 
 	<button class="btn btn-lg btn-success btn-block mt-2">{{session.screen.grandTotal}}</button>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Discounts</th>
+      <th>Tax</th>
+      <th>Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{session.screen.discountTotal}}</td>
+      <td>{{session.screen.taxTotal}}</td>
+      <td>{{session.screen.subTotal}}</td>
+	</tr>
+  </tbody>
+</table>
+
 	<div class="mt-2">
 		<ul *ngIf="sellItems" class="list-group m-t-2">
 			<li *ngFor="let i of sellItems" class="list-group-item justify-content-between">
