@@ -1,5 +1,5 @@
 <div *ngIf="session.screen.type==='Form'">
-	<div>
+	<div class="container m-2">
 		<label>Register Personalization</label>
 		<div *ngFor="let formElement of formElements">
 
@@ -13,5 +13,5 @@
 				<button class="btn btn-primary btn-sm" (click)="session.response=formElements; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>
 			</div>
 		</div>
-	</div>ß
+	</div>
 </div>
