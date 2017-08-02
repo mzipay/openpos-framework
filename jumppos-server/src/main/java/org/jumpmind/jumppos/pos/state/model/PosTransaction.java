@@ -1,6 +1,5 @@
 package org.jumpmind.jumppos.pos.state.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +10,7 @@ public class PosTransaction {
     private String userId;
     private List<PosLineItem> lines = new ArrayList<PosLineItem>();
     private List<TenderLineItem> tenderLines = new ArrayList<TenderLineItem>();
+    private String grandTotal;
 
     public String getUserId() {
         return userId;
@@ -36,12 +36,12 @@ public class PosTransaction {
         this.tenderLines = tenderLines;
     }
 
-    public BigDecimal getGrandTotal() {
-        BigDecimal grandTotal = new BigDecimal(0);
-        for (PosLineItem line : lines) {
-            grandTotal = grandTotal.add(line.getExtendedAmount());
-        }
+    public String getGrandTotal() {
         return grandTotal;
+    }
+    
+    public void setGrandTotal(String grandTotal) {
+        this.grandTotal = grandTotal;
     }
 
 }

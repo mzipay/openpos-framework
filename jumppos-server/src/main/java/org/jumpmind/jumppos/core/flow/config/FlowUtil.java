@@ -23,7 +23,7 @@ package org.jumpmind.jumppos.core.flow.config;
 import org.jumpmind.jumppos.core.flow.IState;
 
 public class FlowUtil {
-    public static String getStateName(IState state) {
+    public static String getStateName(Class<? extends IState> state) {
         // TODO may consider annotation in the future.
         return state.getClass().getSimpleName();
     }

@@ -25,6 +25,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.jumpmind.jumppos.core.flow.config.FlowConfig;
 import org.jumpmind.jumppos.core.flow.config.StateConfig;
 import org.jumpmind.jumppos.core.model.IScreen;
@@ -72,7 +74,7 @@ public class StateManager implements IStateManager {
             logger.info("Transition from " + currentState + " to " + newState);
         }
         performInjections(newState, null);
-        newState.init(this);
+        performPostContruct(newState);
         currentState = newState;
         currentState.arrive();
     }
@@ -176,8 +178,8 @@ public class StateManager implements IStateManager {
     }    
 
     // TODO move to Injector class. 
-    protected void performInjections(Object stepOrState, Map<String, ScopeValue> extraScope) {
-        Field[] fields = stepOrState.getClass().getDeclaredFields();
+    protected void performInjections(Object target, Map<String, ScopeValue> extraScope) {
+        Field[] fields = target.getClass().getDeclaredFields();
 
         for (Field field : fields) {
             field.setAccessible(true);
@@ -210,17 +212,32 @@ public class StateManager implements IStateManager {
                 
                 if (value != null) {
                     try {
-                        field.set(stepOrState, value.getValue());
+                        field.set(target, value.getValue());
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 } else if (autowired.required()) {
-                    throw new FlowException("Failed to resolve required injection: " + name + " for " + stepOrState);
+                    throw new FlowException("Failed to resolve required injection: " + name + " for " + target);
                 }
             }
         }
     }
     
+    protected void performPostContruct(Object target) {
+        Method[] methods = target.getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            PostConstruct postConstructAnnotation = method.getAnnotation(PostConstruct.class);
+            if (postConstructAnnotation != null) {
+                method.setAccessible(true);
+                try {
+                    method.invoke(target);
+                } catch (Exception ex) {
+                    throw new FlowException("Failed to invoke @PostConstruct method " + method, ex);
+                }
+            }
+        }
+    }
+
     private boolean handleAction(Object state, Action action) {
         Method[] methods = state.getClass().getDeclaredMethods();
         

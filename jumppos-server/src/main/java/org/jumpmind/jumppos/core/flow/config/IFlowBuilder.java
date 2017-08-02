@@ -24,7 +24,7 @@ import org.jumpmind.jumppos.core.flow.IState;
 
 public interface IFlowBuilder {
     
-    public IFlowBuilder withTransition(String actionName, IState destination);
+    public IFlowBuilder withTransition(String actionName, Class<? extends IState> destination);
     
     public StateConfig build();
 }

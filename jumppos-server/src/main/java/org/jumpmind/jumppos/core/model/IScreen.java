@@ -12,8 +12,8 @@ public interface IScreen {
     public static final String PROMPT_SCREEN_TYPE = "Prompt";
     public static final String FORM_SCREEN_TYPE = "Form";
     public static final String SELL_ITEM_DETAIL_SCREEN_TYPE = "SellItemDetail";
-    
 
+    
     public void put(String name, Object value);
 
     public Object get(String name);
