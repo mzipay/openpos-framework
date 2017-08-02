@@ -76,6 +76,11 @@ public class StateManager implements IStateManager {
         currentState = newState;
         currentState.arrive();
     }
+    
+    @Override
+    public IState getCurrentState() {
+        return currentState;
+    }
 
     protected IState buildState(StateConfig stateConfig) {
         IState state;
@@ -126,7 +131,7 @@ public class StateManager implements IStateManager {
         } else {            
             IState savedCurrentState = currentState;
             boolean handled  = handleAction(currentState, action);
-            if (handled) {
+            if (handled) {   
                 if (savedCurrentState == currentState) {
                     // state did not change, reassert the current state.
                     transitionTo(currentState);
@@ -234,7 +239,7 @@ public class StateManager implements IStateManager {
                         method.invoke(state, action); // TODO allow for some flexibility in args.
                         return true;
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        logger.error("", ex);
                     }                     
                 } else if (METHOD_ON_ANY.equals(method.getName())) {
                     anyMethod = method;
@@ -247,7 +252,7 @@ public class StateManager implements IStateManager {
                 anyMethod.invoke(state, action); // TODO allow for some flexibility in args.
                 return true;
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error("", ex);
             }
         }
 

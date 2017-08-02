@@ -35,6 +35,10 @@ public abstract class Screen implements IScreen {
        this.additionalProperties.put(name, value);
     }
     
+    public boolean contains(String name) {
+        return this.additionalProperties.containsKey(name);
+    }
+    
     @Override
     public Object get(String name) {
         return additionalProperties.get(name);
