@@ -33,6 +33,10 @@
 	<app-sell></app-sell>
 </div>
 
+<div *ngIf="session.screen.type==='SellItemDetail'">
+    <app-sell-item-detail></app-sell-item-detail>
+</div>
+
 <div *ngIf="session.screen.type==='Form'">
 	<app-form></app-form>
 </div>

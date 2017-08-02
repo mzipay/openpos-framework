@@ -7,6 +7,7 @@ public class PosLineItem {
     private String itemId;
     private String description;
     private BigDecimal extendedAmount;
+    private BigDecimal quantity;
 
     public String getItemId() {
         return itemId;
@@ -30,6 +31,14 @@ public class PosLineItem {
 
     public void setExtendedAmount(BigDecimal extendedAmount) {
         this.extendedAmount = extendedAmount;
+    }
+
+    public BigDecimal getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(BigDecimal quantity) {
+        this.quantity = quantity;
     }
 
 }

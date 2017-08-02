@@ -15,6 +15,7 @@ import {PromptComponent} from './screens/prompt.component';
 import {SellComponent} from './screens/sell.component';
 import {DialogComponent} from './screens/dialog.component';
 import {FormComponent} from './screens/form.component';
+import {SellItemDetailComponent} from './screens/sell-item-detail.component';
 
 const stompConfig: StompConfig = {
   // Which server?
@@ -47,6 +48,7 @@ const stompConfig: StompConfig = {
     PromptComponent,
     DialogComponent,
     SellComponent,
+    SellItemDetailComponent,
     FormComponent
   ],
   imports: [

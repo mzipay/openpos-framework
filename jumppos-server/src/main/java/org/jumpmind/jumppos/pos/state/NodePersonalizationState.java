@@ -61,6 +61,7 @@ public class NodePersonalizationState implements IState {
         IScreen screen = new Screen(){};
         screen.setName("NodePersonalization");        
         screen.put("form", buildForm());
+        screen.setType( IScreen.FORM_SCREEN_TYPE);
         return screen;
     }
 
