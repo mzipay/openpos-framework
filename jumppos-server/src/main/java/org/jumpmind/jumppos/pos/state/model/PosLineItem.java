@@ -1,12 +1,10 @@
 package org.jumpmind.jumppos.pos.state.model;
 
-import java.math.BigDecimal;
-
 public class PosLineItem {
 
     private String itemId;
     private String description;
-    private BigDecimal extendedAmount;
+    private String extendedAmount;
 
     public String getItemId() {
         return itemId;
@@ -24,11 +22,11 @@ public class PosLineItem {
         this.description = description;
     }
 
-    public BigDecimal getExtendedAmount() {
+    public String getExtendedAmount() {
         return extendedAmount;
     }
 
-    public void setExtendedAmount(BigDecimal extendedAmount) {
+    public void setExtendedAmount(String extendedAmount) {
         this.extendedAmount = extendedAmount;
     }
 
