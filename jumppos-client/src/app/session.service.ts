@@ -86,6 +86,12 @@ export class SessionService {
     }
   }
 
+    public onActionWithStringPayload(action: String, payload: String) {
+    console.log('Publish action ' + action);
+    this.stompService.publish('/app/action/node/' + this.nodeId,
+      JSON.stringify({name: action, data: payload}));
+  }
+
   /** Consume a message from the stompService */
   public onNextMessage = (message: Message) => {
     this.response = null;
