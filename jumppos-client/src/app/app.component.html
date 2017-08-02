@@ -35,8 +35,10 @@
 		<button *ngFor="let m of menuItems" class="btn btn-primary btn-lg component-space" (click)="session.onAction(m.action)">{{m.title}}</button>
 	</div>
 
+	<div class="container">
 	<div *ngIf="session.screen.navActions">
 		<button *ngFor="let m of navActions" class="btn btn-primary component-space" [disabled]="!m.enabled" (click)="session.onAction(m.action)">{{m.text}}</button>
+	</div>
 	</div>
 
 </ng-container>
