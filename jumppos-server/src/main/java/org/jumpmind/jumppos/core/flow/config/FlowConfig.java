@@ -32,7 +32,7 @@ public class FlowConfig {
     private Map<String, StateConfig> stateConfigs = new HashMap<>();
     
     public StateConfig getStateConfig(IState state) {
-        String stateName = FlowUtil.getStateName(state);
+        String stateName = FlowUtil.getStateName(state.getClass());
         return stateConfigs.get(stateName);
     }
     

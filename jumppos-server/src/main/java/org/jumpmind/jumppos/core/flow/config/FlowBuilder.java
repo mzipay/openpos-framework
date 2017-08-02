@@ -26,21 +26,21 @@ public class FlowBuilder implements IFlowBuilder {
     
     private StateConfig stateConfig;
 
-    public static FlowBuilder addInitialState(IState state) {
+    public static FlowBuilder addInitialState(Class<? extends IState> state) {
         FlowBuilder builder = addState(state);
         return builder;
     }
     
-    public static FlowBuilder addState(IState state) {
+    public static FlowBuilder addState(Class<? extends IState> state) {
         FlowBuilder builder = new FlowBuilder();
         builder.stateConfig = new StateConfig();
         builder.stateConfig.setStateName(FlowUtil.getStateName(state));
-        builder.stateConfig.setStateClass(state.getClass());
+        builder.stateConfig.setStateClass(state);
         return builder;
     }
     
     @Override
-    public IFlowBuilder withTransition(String actionName, IState destination) {
+    public IFlowBuilder withTransition(String actionName, Class<? extends IState> destination) {
         stateConfig.getActionToStateMapping().put(actionName, FlowUtil.getStateName(destination));        
         return this;
     }

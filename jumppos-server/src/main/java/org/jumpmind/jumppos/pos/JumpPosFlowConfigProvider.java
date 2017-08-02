@@ -33,10 +33,10 @@ public class JumpPosFlowConfigProvider implements IFlowConfigProvider {
     @Override
     public FlowConfig getConfig(String nodeId) {
         FlowConfig config = new FlowConfig();
-        config.setInitialState(FlowBuilder.addState(new NodePersonalizationState())
-                .withTransition("Complete", new HomeScreenState())
+        config.setInitialState(FlowBuilder.addState(NodePersonalizationState.class)
+                .withTransition("Complete", HomeScreenState.class)
                 .build());
-        config.add(FlowBuilder.addState(new HomeScreenState())
+        config.add(FlowBuilder.addState(HomeScreenState.class)
                 .build());
         return config;
     }
