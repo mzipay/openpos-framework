@@ -34,6 +34,7 @@ import org.jumpmind.jumppos.core.model.IScreen;
 import org.jumpmind.jumppos.core.model.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class NodePersonalizationState implements IState {
 
@@ -41,12 +42,8 @@ public class NodePersonalizationState implements IState {
 
     static final String TEMPORARY_NODE_ID = "TEMPNODEID-";
 
+    @Autowired
     IStateManager stateManager;
-
-    @Override
-    public void init(IStateManager stateManager) {
-        this.stateManager = stateManager;
-    }
 
     @Override
     public void arrive() {

@@ -27,15 +27,12 @@ import org.jumpmind.jumppos.core.flow.IState;
 import org.jumpmind.jumppos.core.flow.IStateManager;
 import org.jumpmind.jumppos.core.model.MenuItem;
 import org.jumpmind.jumppos.core.model.Screen;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class HomeScreenState implements IState {
     
+    @Autowired
     IStateManager stateManager;
-    
-    @Override
-    public void init(IStateManager stateManager) {
-         this.stateManager = stateManager;        
-    }
     
     @Override
     public void arrive() {

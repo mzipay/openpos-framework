@@ -22,9 +22,6 @@ package org.jumpmind.jumppos.core.flow;
 
 
 public interface IState {
-
-    // TODO move this to an injection.  didn't see the injection code until after i added this
-    public void init(IStateManager stateManager);
     
     public void arrive();
     
