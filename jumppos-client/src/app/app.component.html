@@ -47,18 +47,11 @@
 		(click)="session.onAction(m.action)">{{m.title}}</button>
 </div>
 
-<div class="container">
-	<div *ngIf="session.screen.navActions">
-		<button *ngFor="let m of navActions" class="btn btn-primary mt-2 mr-2"
-			[disabled]="!m.enabled" (click)="session.onAction(m.action)">{{m.text}}</button>
-	</div>
-</div>
-
 </ng-container>
 
 <footer class="footer">
 	<div class="container">
-		<span class="text-muted">Place sticky footer content here.</span>
+		<span class="text-muted">© JumpMind, Inc</span>
 	</div>
 </footer>
 <router-outlet></router-outlet>

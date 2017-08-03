@@ -13,16 +13,11 @@ export class AppComponent implements OnInit, OnDestroy, DoCheck {
   // TODO these should be conflated or removed perhaps.
   public menuItems: IMenuItem[] = [];
   public menuActions: IMenuItem[] = [];
-  public navActions: IMenuItem[] = [];
   public isCollapsed = true;
 
   constructor(public session: SessionService) {
 
   }
-
-//  menuItemsFunction(): IMenuItem[] {
-//     return this.session.screen.menuItems;
-//  }
 
   ngOnInit(): void {
     this.session.subscribe();
@@ -32,7 +27,6 @@ export class AppComponent implements OnInit, OnDestroy, DoCheck {
     if (typeof this.session.screen !== 'undefined') {
       this.menuItems = this.session.screen.menuItems;
       this.menuActions = this.session.screen.menuActions;
-      this.navActions = this.session.screen.navActions;
     }
   }
 
