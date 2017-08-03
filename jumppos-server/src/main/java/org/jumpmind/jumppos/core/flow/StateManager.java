@@ -57,7 +57,6 @@ public class StateManager implements IStateManager {
     private Scope scope = new Scope();
     private FlowConfig flowConfig;
     private IState currentState;
-    private IState previousState;
     
     private ObjectMapper jsonMapper = new ObjectMapper();
     
@@ -76,14 +75,8 @@ public class StateManager implements IStateManager {
         }
         performInjections(newState, null);
         performPostContruct(newState);
-        previousState = currentState;
         currentState = newState;
         currentState.arrive();
-    }
-    
-    @Override
-    public IState getPreviousState() {
-        return previousState;
     }
     
     @Override
@@ -143,10 +136,10 @@ public class StateManager implements IStateManager {
             if (handled) {   
                 if (savedCurrentState == currentState) {
                     // state did not change, reassert the current state.
-                    transitionTo(currentState);
+                //    transitionTo(currentState);
                 }
             } else {
-                System.out.println("Unexpeted action " + action);                
+                logger.warn("Unexpected action " + action);                
             }
         }
     }
@@ -167,13 +160,18 @@ public class StateManager implements IStateManager {
         return scope.resolve(name);
     }
     
-    public void setConversationScope(String name, Object value) {
-        scope.setConversationScope(name, value);
+    @Override
+    public void setNodeScope(String name, Object value) {
+        scope.setNodeScope(name, value);
     }
-
+    
     @Override
     public void setSessionScope(String name, Object value) {
         scope.setSessionScope(name, value);
+    }
+    
+    public void setConversationScope(String name, Object value) {
+        scope.setConversationScope(name, value);
     }
 
     public FlowConfig getFlowConfig() {
