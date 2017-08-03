@@ -24,13 +24,19 @@
 
 	<div class="mt-2">
 		<div *ngIf="sellItems" class="list-group">
-			<a *ngFor="let i of sellItems"  (click)="session.onActionWithStringPayload('Item',i.lineNumber)" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a *ngFor="let i of sellItems" (click)="session.onActionWithStringPayload('Item',i.lineNumber)" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
 				<div class="d-flex w-100 justify-content-between">
 					<h5 class="mb-1">{{i.itemId}}</h5>
 					<h5>{{i.extendedAmount}}</h5>
 				</div>
 				<p class="mb-1">{{i.description}}</p>
 			</a>
+
+			<div *ngIf="sellItems.length==0" class="list-group-item list-group-item-warning">
+				<strong>There are no items in the cart</strong>
+			</div>
 		</div>
+
+
 	</div>
 </div>

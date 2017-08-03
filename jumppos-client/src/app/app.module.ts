@@ -15,6 +15,7 @@ import {SellComponent} from './screens/sell.component';
 import {DialogComponent} from './screens/dialog.component';
 import {FormComponent} from './screens/form.component';
 import {SellItemDetailComponent} from './screens/sell-item-detail.component';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 
 const stompConfig: StompConfig = {
   // Which server?
@@ -56,7 +57,8 @@ const stompConfig: StompConfig = {
     NgbCollapseModule,
     FormsModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    Angular2FontawesomeModule
   ],
   providers: [
     NgbModal,

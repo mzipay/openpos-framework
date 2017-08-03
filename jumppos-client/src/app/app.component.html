@@ -1,19 +1,15 @@
 <nav class="navbar navbar-inverse bg-inverse">
 	<div class="nav">
-		<button *ngIf="session.screen && session.screen.backButton" type="button" class="btn btn-outline-warning btn-sm mr-2"  (click)="session.onAction(session.screen.backButton.action)">Back</button>
+		<button *ngIf="session.screen && session.screen.backButton" type="button" class="btn btn-outline-warning btn-sm mr-2" (click)="session.onAction(session.screen.backButton.action)">Back</button>
 		<a class="navbar-brand" href="#">Mobile POS</a>
 	</div>
-	<button *ngIf="menuActions" class="navbar-toggler navbar-toggler-right"
-		type="button" (click)="isCollapsed = !isCollapsed"
-		aria-controls="exCollapsingNavbar2" aria-expanded="false"
-		aria-label="Toggle navigation">
+	<button *ngIf="menuActions" class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed"
+	 aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<div *ngIf="menuActions" [ngbCollapse]="isCollapsed"
-		class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
+	<div *ngIf="menuActions" [ngbCollapse]="isCollapsed" class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
 		<ul class="nav navbar-nav">
-			<li *ngFor="let m of menuActions" class="nav-item"><a
-				class="nav-link" (click)="session.onAction(m.action)" href="#">{{m.text}}</a>
+			<li *ngFor="let m of menuActions" class="nav-item"><a class="nav-link" (click)="session.onAction(m.action)" href="#">{{m.text}}</a>
 			</li>
 		</ul>
 	</div>
@@ -21,32 +17,29 @@
 
 <ng-container *ngIf="session.screen" class="container">
 
-<div *ngIf="session.screen.type==='Dialog'">
-	<app-dialog></app-dialog>
-</div>
+	<div *ngIf="session.screen.type==='Dialog'">
+		<app-dialog></app-dialog>
+	</div>
 
-<div *ngIf="session.screen.type==='Prompt'">
-	<app-prompt></app-prompt>
-</div>
+	<div *ngIf="session.screen.type==='Prompt'">
+		<app-prompt></app-prompt>
+	</div>
 
-<div *ngIf="session.screen.type==='Sell'">
-	<app-sell></app-sell>
-</div>
+	<div *ngIf="session.screen.type==='Sell'">
+		<app-sell></app-sell>
+	</div>
 
-<div *ngIf="session.screen.type==='SellItemDetail'">
-    <app-sell-item-detail></app-sell-item-detail>
-</div>
+	<div *ngIf="session.screen.type==='SellItemDetail'">
+		<app-sell-item-detail></app-sell-item-detail>
+	</div>
 
-<div *ngIf="session.screen.type==='Form'">
-	<app-form></app-form>
-</div>
+	<div *ngIf="session.screen.type==='Form'">
+		<app-form></app-form>
+	</div>
 
-<div *ngIf="session.screen.menuItems" class="m-2">
-	<button *ngFor="let m of menuItems"
-		class="btn btn-primary btn-lg p-1 btn-block"
-		(click)="session.onAction(m.action)">{{m.title}}</button>
-</div>
-
+	<div *ngIf="session.screen.menuItems" class="m-2">
+		<button *ngFor="let m of menuItems" class="btn btn-primary btn-lg p-1 btn-block" (click)="session.onAction(m.action)">{{m.title}}</button>
+	</div>
 </ng-container>
 
 <footer class="footer">
