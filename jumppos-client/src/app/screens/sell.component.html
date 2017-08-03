@@ -24,7 +24,7 @@
 
 	<div class="mt-2">
 		<div *ngIf="sellItems" class="list-group">
-			<a *ngFor="let i of sellItems"  href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a *ngFor="let i of sellItems"  href="#" (click)="session.onAction('Item')" class="list-group-item list-group-item-action flex-column align-items-start">
 				<div class="d-flex w-100 justify-content-between">
 					<h5 class="mb-1">{{i.itemId}}</h5>
 					<h5>{{i.extendedAmount}}</h5>
