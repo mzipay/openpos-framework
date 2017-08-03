@@ -44,6 +44,5 @@ public interface IStateManager {
     public IScreen getLastScreen();    
     public void refreshScreen();
     public IState getCurrentState();
-    public IState getPreviousState();
     
 }

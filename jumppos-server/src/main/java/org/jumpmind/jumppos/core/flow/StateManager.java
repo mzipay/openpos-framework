@@ -57,7 +57,6 @@ public class StateManager implements IStateManager {
     private Scope scope = new Scope();
     private FlowConfig flowConfig;
     private IState currentState;
-    private IState previousState;
     
     private ObjectMapper jsonMapper = new ObjectMapper();
     
@@ -76,14 +75,8 @@ public class StateManager implements IStateManager {
         }
         performInjections(newState, null);
         performPostContruct(newState);
-        previousState = currentState;
         currentState = newState;
         currentState.arrive();
-    }
-    
-    @Override
-    public IState getPreviousState() {
-        return previousState;
     }
     
     @Override
@@ -143,7 +136,7 @@ public class StateManager implements IStateManager {
             if (handled) {   
                 if (savedCurrentState == currentState) {
                     // state did not change, reassert the current state.
-                    transitionTo(currentState);
+                //    transitionTo(currentState);
                 }
             } else {
                 logger.warn("Unexpected action " + action);                
