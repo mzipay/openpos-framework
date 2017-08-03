@@ -1,7 +1,4 @@
 <div class="container">
-<!--  
-    <button class="btn btn-lg btn-success btn-block component-margin-top">{{session.screen.grandTotal}}</button>
-    -->
     <div>
         <ul *ngIf="sellItems" class="list-group component-margin-top">
             <li *ngFor="let i of sellItems" class="list-group-item justify-content-between">
@@ -22,15 +19,6 @@
                         </tbody>
                     </table>
                 </div>
-                <!--                  
-                <div>
-                    <p>{{i.description}}</p>
-                    <ul class="list-group">
-                        <li class="list-group-item"><label>Item ID: </label><input type="text" readonly="readonly" value="{{i.itemId}}"></li>
-                        <li class="list-group-item"><label>Quantity: </label><input type="text" readonly="readonly" value="{{i.quantity}}"></li>
-                    </ul>
-                </div>
-                -->
             </li>
         </ul>
     </div>
