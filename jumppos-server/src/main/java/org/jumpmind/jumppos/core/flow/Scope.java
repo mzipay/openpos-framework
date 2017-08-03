@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class Scope {
 
-    private Map<String, ScopeValue> applicationScope = new HashMap<String, ScopeValue>();
+    private Map<String, ScopeValue> nodeScope = new HashMap<String, ScopeValue>();
     private Map<String, ScopeValue> sessionScope = new HashMap<String, ScopeValue>();
     private Map<String, ScopeValue> conversationScope = new HashMap<String, ScopeValue>();
     
@@ -42,14 +42,14 @@ public class Scope {
             return conversationScope.get(name);
         } else if (sessionScope.containsKey(name)) {
             return sessionScope.get(name);
-        } else if (applicationScope.containsKey(name)) {
-            return applicationScope.get(name);
+        } else if (nodeScope.containsKey(name)) {
+            return nodeScope.get(name);
         }
         return null;
     }
     
-    public void setApplicationScope(String name, Object value) {
-        setScope(applicationScope, name, value);
+    public void setNodeScope(String name, Object value) {
+        setScope(nodeScope, name, value);
     }
     public void setSessionScope(String name, Object value) {
         setScope(sessionScope, name, value);
