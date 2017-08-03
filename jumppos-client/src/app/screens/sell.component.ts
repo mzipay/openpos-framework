@@ -42,4 +42,5 @@ export interface ISellItem {
     description: string;
     extendedAmount: number;
     quantity: number;
+    lineNumber: number;
 }
