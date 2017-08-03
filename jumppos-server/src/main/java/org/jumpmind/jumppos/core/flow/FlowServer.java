@@ -20,8 +20,6 @@
  */
 package org.jumpmind.jumppos.core.flow;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

@@ -1,0 +1,37 @@
+<div class="container">
+<!--  
+    <button class="btn btn-lg btn-success btn-block component-margin-top">{{session.screen.grandTotal}}</button>
+    -->
+    <div>
+        <ul *ngIf="sellItems" class="list-group component-margin-top">
+            <li *ngFor="let i of sellItems" class="list-group-item justify-content-between">
+                <div>
+                    <h5 class="mb-1">{{i.description}}</h5>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Item ID</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{i.itemId}}</td><td>{{i.quantity}}</td><td>{{i.extendedAmount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--                  
+                <div>
+                    <p>{{i.description}}</p>
+                    <ul class="list-group">
+                        <li class="list-group-item"><label>Item ID: </label><input type="text" readonly="readonly" value="{{i.itemId}}"></li>
+                        <li class="list-group-item"><label>Quantity: </label><input type="text" readonly="readonly" value="{{i.quantity}}"></li>
+                    </ul>
+                </div>
+                -->
+            </li>
+        </ul>
+    </div>
+</div>

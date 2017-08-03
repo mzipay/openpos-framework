@@ -2,10 +2,13 @@ package org.jumpmind.jumppos.pos.state.model;
 
 public class PosLineItem {
 
+    private int lineNumber;
     private String itemId;
+    private String posItemId;
     private String description;
     private String extendedAmount;
-
+    private String quantity;
+    
     public String getItemId() {
         return itemId;
     }
@@ -28,6 +31,30 @@ public class PosLineItem {
 
     public void setExtendedAmount(String extendedAmount) {
         this.extendedAmount = extendedAmount;
+    }
+    
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+    
+    public int getLineNumber() {
+        return lineNumber;
+    }
+    
+    public void setPosItemId(String posItemId) {
+        this.posItemId = posItemId;
+    }
+    
+    public String getPosItemId() {
+        return posItemId;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
 }

@@ -41,4 +41,6 @@ export interface ISellItem {
     posItemId: string;
     description: string;
     extendedAmount: number;
+    quantity: number;
+    lineNumber: number;
 }
