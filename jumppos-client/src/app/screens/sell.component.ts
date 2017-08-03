@@ -1,3 +1,4 @@
+import { IMenuItem } from './dialog.component';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SessionService} from '../session.service';
@@ -15,19 +16,18 @@ export class SellComponent implements AfterViewInit, DoCheck {
   public sellItems: ISellItem[];
 
   constructor(public session: SessionService) {
-    this.sellItems = session.screen.items;
+
   }
 
   ngDoCheck(): void {
-    console.log('ngDoCheck');
-    if (this.initialized) {
-      // this.vc.nativeElement.focus();
+    if (typeof this.session.screen !== 'undefined') {
+      this.sellItems = this.session.screen.items;
     }
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
     this.initialized = true;
+    setTimeout(() => this.vc.nativeElement.focus(), 0);
   }
 
   onEnter(value: string) {

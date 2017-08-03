@@ -1,8 +1,9 @@
-import {Component, OnInit, OnDestroy, DoCheck} from '@angular/core';
-import {SessionService} from './session.service';
-import {PromptComponent} from './screens/prompt.component';
-import {SellComponent} from './screens/sell.component';
-import {FormComponent} from './screens/form.component';
+import { IMenuItem } from './screens/dialog.component';
+import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
+import { SessionService } from './session.service';
+import { PromptComponent } from './screens/prompt.component';
+import { SellComponent } from './screens/sell.component';
+import { FormComponent } from './screens/form.component';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +14,10 @@ export class AppComponent implements OnInit, OnDestroy, DoCheck {
   // TODO these should be conflated or removed perhaps.
   public menuItems: IMenuItem[] = [];
   public menuActions: IMenuItem[] = [];
+  public backButton: IMenuItem;
   public isCollapsed = true;
 
   constructor(public session: SessionService) {
-
   }
 
   ngOnInit(): void {
@@ -27,6 +28,8 @@ export class AppComponent implements OnInit, OnDestroy, DoCheck {
     if (typeof this.session.screen !== 'undefined') {
       this.menuItems = this.session.screen.menuItems;
       this.menuActions = this.session.screen.menuActions;
+      this.backButton = this.session.screen.backButton;
+      console.log('back button enabled? ' + (this.backButton ? this.backButton.enabled : false));
     }
   }
 
@@ -36,9 +39,8 @@ export class AppComponent implements OnInit, OnDestroy, DoCheck {
 }
 
 export interface IMenuItem {
-    enabled: boolean;
-    action: string;
-    title: string;
-    text: string;
-    icon: string;
+  enabled: boolean;
+  action: string;
+  title: string;
+  icon: string;
 }

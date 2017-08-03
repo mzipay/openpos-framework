@@ -12,9 +12,11 @@ public abstract class Screen implements IScreen {
 
     protected Map<String, Object> additionalProperties = new HashMap<String, Object>();
     
-    String name;
+    protected String name;
     
-    String type;
+    protected String type;
+    
+    protected MenuItem backButton;
     
     public Screen() {
     }
@@ -93,67 +95,13 @@ public abstract class Screen implements IScreen {
             list.add(value);
         }
     }
-
-    public static class MenuAction {
-
-        String text;
-        String action;
-        boolean enabled;
-
-        public MenuAction(String text, String action, boolean enabled) {
-            this.text = text;
-            this.action = action;
-            this.enabled = enabled;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        public String getAction() {
-            return action;
-        }
-
-        public void setAction(String action) {
-            this.action = action;
-        }
-
-        public boolean isEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((text == null) ? 0 : text.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            MenuAction other = (MenuAction) obj;
-            if (text == null) {
-                if (other.text != null)
-                    return false;
-            } else if (!text.equals(other.text))
-                return false;
-            return true;
-        }
+    
+    public void setBackButton(MenuItem backButton) {
+        this.backButton = backButton;
+    }
+    
+    public MenuItem getBackButton() {
+        return backButton;
     }
 
 }
