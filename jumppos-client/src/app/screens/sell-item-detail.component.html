@@ -6,7 +6,7 @@
         <ul *ngIf="sellItems" class="list-group component-margin-top">
             <li *ngFor="let i of sellItems" class="list-group-item justify-content-between">
                 <div>
-                    <p>{{i.description}}</p>
+                    <h5 class="mb-1">{{i.description}}</h5>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -17,7 +17,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{i.itemId}}</td><td>{{i.quantity}}</td><td>TODO</td>
+                                <td>{{i.itemId}}</td><td>{{i.quantity}}</td><td>{{i.extendedAmount}}</td>
                             </tr>
                         </tbody>
                     </table>
