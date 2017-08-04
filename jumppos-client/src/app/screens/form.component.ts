@@ -8,14 +8,12 @@ import {SessionService} from '../session.service';
 })
 export class FormComponent implements AfterViewInit, DoCheck {
 
-//  @ViewChild('itemprompt') vc;
-
   initialized = false;
 
-  public formElements: IFormElement[];
+  public form: IForm;
 
   constructor(public session: SessionService) {
-    this.formElements = session.screen.form.formElements;
+    this.form = session.screen.form;
   }
 
   ngDoCheck(): void {
@@ -33,6 +31,10 @@ export class FormComponent implements AfterViewInit, DoCheck {
     this.session.onAction('Save');
   }
 
+}
+
+export interface IForm {
+    formElements: IFormElement[];
 }
 
 export interface IFormElement {

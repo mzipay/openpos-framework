@@ -1,16 +1,13 @@
 <div *ngIf="session.screen.type==='Form'">
 	<div class="container m-2">
 		<label>Register Personalization</label>
-		<div *ngFor="let formElement of formElements">
-
-			<div *ngIf="session.screen.type==='input'">
-			</div>
+		<div *ngFor="let formElement of form.formElements">
 			<div *ngIf="formElement.elementType==='input'">
-				<label>{{ formElement.label }}</label>
+			<label>{{ formElement.label }}</label>
 				<input [(ngModel)]="formElement.value" placeholder="{{formElement.placeholder}}" required>
 			</div>
 			<div *ngIf="formElement.elementType==='button'">
-				<button class="btn btn-primary btn-sm" (click)="session.response=formElements; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>
+				<button class="btn btn-primary btn-sm" (click)="session.response=form; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>
 			</div>
 		</div>
 	</div>

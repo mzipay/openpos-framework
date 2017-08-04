@@ -78,7 +78,7 @@ export class SessionService {
       JSON.stringify({name: action, data: this.response}));
 
     if (action === 'SavePersonalization') {
-      this.nodeId = this.response[0].value;
+      this.nodeId = this.response.formElements[0].value;
       localStorage.setItem('nodeId', '' + this.nodeId);
       localStorage.removeItem('temporaryNodeId');
       this.subscribed = false;
