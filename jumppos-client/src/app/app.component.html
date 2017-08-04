@@ -1,6 +1,8 @@
 <nav class="navbar navbar-inverse bg-inverse">
 	<div class="nav">
-		<button *ngIf="backButton && backButton.enabled" type="button" class="btn btn-outline-warning btn-sm mr-2" (click)="session.onAction(session.screen.backButton.action)">Back</button>
+		<a *ngIf="backButton && backButton.enabled" class="btn btn-warning mr-2" (click)="session.onAction(session.screen.backButton.action)">
+			<i class="fa fa-undo fa-lg"></i>
+			</a>
 		<a class="navbar-brand" href="#">Mobile POS</a>
 	</div>
 	<button *ngIf="menuActions && menuActions.length > 0" class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed"
