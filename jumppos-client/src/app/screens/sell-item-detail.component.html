@@ -14,10 +14,16 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{i.itemId}}</td><td>{{i.quantity}}</td><td>{{i.extendedAmount}}</td>
+                                <td>{{i.itemId}}</td>
+                                <td>{{i.quantity}}</td>
+                                <td>{{i.extendedAmount}}</td>
                             </tr>
                         </tbody>
                     </table>
+
+                    <div *ngIf="session.screen.itemActions" class="m-2">
+                        <button *ngFor="let m of session.screen.itemActions" class="btn btn-primary p-1 btn-block" (click)="session.onAction(m.action)">{{m.title}}</button>
+                    </div>
                 </div>
             </li>
         </ul>
