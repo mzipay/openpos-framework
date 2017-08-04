@@ -48,47 +48,52 @@ public class NodePersonalizationState implements IState {
     @Override
     public void arrive() {
         if (stateManager.getNodeId().startsWith(TEMPORARY_NODE_ID)) {
-            stateManager.showScreen(buildParams());
+            stateManager.showScreen(new NodePersonalizationForm());
         } else {
             stateManager.doAction(new Action("Complete"));
         }
     }
-
-    protected IScreen buildParams() {
-        IScreen screen = new Screen(){};
-        screen.setName("NodePersonalization");        
-        screen.put("form", buildForm());
-        screen.setType(IScreen.FORM_SCREEN_TYPE);
-        return screen;
-    }
-
-    protected Form buildForm() {
-        Form form = new Form();
-        {
-            FormField field = new FormField();
-            field.setFieldId("nodeId");
-            field.setLabel("Node Id:");
-            field.setPlaceholder("e.g. 100-1");
-            form.getFormElements().add(field);
-        }
-        {
-            FormButton button = new FormButton();
-            button.setLabel("Save");
-            button.setButtonAction("SavePersonalization");
-            form.addFormElement(button);
-        }
-        return form;
-    }
-
+    
     @SuppressWarnings("unchecked")
     @ActionHandler
-    public void onSavePersonalization(Action action) {
+    public void onSavePersonalization(Action action, NodePersonalizationForm screen) {
         // TODO need some binding/form model support here.
         // Map<String, Object> formJson = (Map<String, Object>)action.getData();
-        List<Map<String, Object>> formActions = (List<Map<String, Object>>) action.getData();
-        String nodeId = (String) formActions.get(0).get("value");
+//        List<Map<String, Object>> formActions = (List<Map<String, Object>>) action.getData();
+//        String nodeId = (String) formActions.get(0).get("value");
+        
+        
+        String nodeId = screen.getNodeId();
+        
         // TODO validate.
         stateManager.setNodeId(nodeId);
         stateManager.doAction(new Action("Complete"));
-    }
+    }    
+
+//    protected IScreen buildParams() {
+////        IScreen screen = new Screen(){};
+////        screen.setName("NodePersonalization");        
+////        screen.put("form", buildForm());
+////        screen.setType(IScreen.FORM_SCREEN_TYPE);
+//        return screen;
+//    }
+
+//    protected Form buildForm() {
+//        Form form = new Form();
+//        {
+//            FormField field = new FormField();
+//            field.setFieldId("nodeId");
+//            field.setLabel("Node Id:");
+//            field.setPlaceholder("e.g. 100-1");
+//            form.getFormElements().add(field);
+//        }
+//        {
+//            FormButton button = new FormButton();
+//            button.setLabel("Save");
+//            button.setButtonAction("SavePersonalization");
+//            form.addFormElement(button);
+//        }
+//        return form;
+//    }
+
 }
