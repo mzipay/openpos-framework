@@ -20,9 +20,6 @@
  */
 package org.jumpmind.jumppos.core.flow;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,10 +31,8 @@ import org.jumpmind.jumppos.core.model.IScreen;
 import org.jumpmind.jumppos.core.model.annotations.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
@@ -51,9 +46,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class StateManager implements IStateManager {
 
     Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Autowired
-    private ApplicationContext applicationContext;
 
     @Autowired
     private IScreenService screenService;
@@ -157,7 +149,9 @@ public class StateManager implements IStateManager {
             }
         } else {            
             IState savedCurrentState = currentState;
-            boolean handled  = actionHandler.handleAction(currentState, action);
+            IScreen deserializedScreen = screenService.deserializeScreenPayload(nodeId, action);
+            
+            boolean handled  = actionHandler.handleAction(currentState, action, deserializedScreen);
             if (handled) {   
                 if (savedCurrentState == currentState) {
                     // state did not change, reassert the current state.

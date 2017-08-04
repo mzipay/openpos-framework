@@ -1,10 +1,12 @@
 package org.jumpmind.jumppos.core.flow;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 // TODO should be called just ActionHandler, need to repackage annotation of the same name.
 @Component
@@ -13,8 +15,10 @@ public class ActionHandlerImpl {
 
 //    private Logger logger = LoggerFactory.getLogger(getClass());
     private static final String METHOD_ON_ANY = "onAnyAction";
+    
+    private ObjectMapper jsonMapper = new ObjectMapper();
 
-    public boolean handleAction(Object state, Action action) {
+    public boolean handleAction(Object state, Action action, Object deserializedPayload) {
         Method[] methods = state.getClass().getDeclaredMethods();
 
         Method anyMethod = null;
@@ -26,7 +30,7 @@ public class ActionHandlerImpl {
             if (actionHandlerAnnotation != null) {
                 method.setAccessible(true);
                 if (matchingMethodName.equals(method.getName())) {
-                    invokeHandleAction(state, action, method);
+                    invokeHandleAction(state, action, method, deserializedPayload);
                 } else if (METHOD_ON_ANY.equals(method.getName())) {
                     anyMethod = method;
                 }
@@ -34,7 +38,7 @@ public class ActionHandlerImpl {
         }
 
         if (anyMethod != null) {            
-            invokeHandleAction(state, action, anyMethod);
+            invokeHandleAction(state, action, anyMethod, deserializedPayload);
             return true;
         }
 
@@ -42,9 +46,25 @@ public class ActionHandlerImpl {
 
     }
 
-    protected void invokeHandleAction(Object state, Action action, Method method) {
+    protected void invokeHandleAction(Object state, Action action, Method method, Object deserializedPayload) {
+        List<Object> arguments = new ArrayList<Object>();
         try {
-            method.invoke(state, action); // TODO allow for some flexibility in args.
+            for (Class<?> type : method.getParameterTypes()) {
+                if (type.isAssignableFrom(Action.class)) {
+                    arguments.add(action);
+                } else if (type.isAssignableFrom(deserializedPayload.getClass())) {
+                    arguments.add(deserializedPayload);
+                } else {
+                    Object deserializedTarget = jsonMapper.convertValue(action.getData(), type);
+                    if (deserializedTarget != null) {
+                        arguments.add(deserializedTarget);
+                    } else {
+                        throw new FlowException("Failed to satisfy action method argument " + type);
+                    }
+                }
+            }
+            
+            method.invoke(state, arguments.toArray(new Object[arguments.size()]));
         } catch (Exception ex) {
             throw new FlowException("Failed to invoke method " + method, ex);
         }      

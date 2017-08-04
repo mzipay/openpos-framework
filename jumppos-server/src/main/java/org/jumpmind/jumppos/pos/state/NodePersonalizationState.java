@@ -20,18 +20,11 @@
  */
 package org.jumpmind.jumppos.pos.state;
 
-import java.util.List;
-import java.util.Map;
-
+import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.jumppos.core.flow.Action;
 import org.jumpmind.jumppos.core.flow.ActionHandler;
 import org.jumpmind.jumppos.core.flow.IState;
 import org.jumpmind.jumppos.core.flow.IStateManager;
-import org.jumpmind.jumppos.core.model.Form;
-import org.jumpmind.jumppos.core.model.FormButton;
-import org.jumpmind.jumppos.core.model.FormField;
-import org.jumpmind.jumppos.core.model.IScreen;
-import org.jumpmind.jumppos.core.model.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,46 +47,16 @@ public class NodePersonalizationState implements IState {
         }
     }
     
-    @SuppressWarnings("unchecked")
     @ActionHandler
     public void onSavePersonalization(Action action, NodePersonalizationForm screen) {
-        // TODO need some binding/form model support here.
-        // Map<String, Object> formJson = (Map<String, Object>)action.getData();
-//        List<Map<String, Object>> formActions = (List<Map<String, Object>>) action.getData();
-//        String nodeId = (String) formActions.get(0).get("value");
-        
-        
         String nodeId = screen.getNodeId();
         
         // TODO validate.
-        stateManager.setNodeId(nodeId);
-        stateManager.doAction(new Action("Complete"));
+        if (!StringUtils.isEmpty(nodeId)) {            
+            stateManager.setNodeId(nodeId);
+            stateManager.doAction(new Action("Complete"));
+        } else {
+            stateManager.showScreen(new NodePersonalizationForm());
+        }
     }    
-
-//    protected IScreen buildParams() {
-////        IScreen screen = new Screen(){};
-////        screen.setName("NodePersonalization");        
-////        screen.put("form", buildForm());
-////        screen.setType(IScreen.FORM_SCREEN_TYPE);
-//        return screen;
-//    }
-
-//    protected Form buildForm() {
-//        Form form = new Form();
-//        {
-//            FormField field = new FormField();
-//            field.setFieldId("nodeId");
-//            field.setLabel("Node Id:");
-//            field.setPlaceholder("e.g. 100-1");
-//            form.getFormElements().add(field);
-//        }
-//        {
-//            FormButton button = new FormButton();
-//            button.setLabel("Save");
-//            button.setButtonAction("SavePersonalization");
-//            form.addFormElement(button);
-//        }
-//        return form;
-//    }
-
 }

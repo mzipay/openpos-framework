@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.Payload;
-
 import org.jumpmind.jumppos.core.flow.Action;
 import org.jumpmind.jumppos.core.flow.FlowException;
 import org.jumpmind.jumppos.core.flow.IScreenService;
@@ -13,6 +11,7 @@ import org.jumpmind.jumppos.core.flow.IStateManager;
 import org.jumpmind.jumppos.core.flow.IStateManagerFactory;
 import org.jumpmind.jumppos.core.model.Form;
 import org.jumpmind.jumppos.core.model.FormField;
+import org.jumpmind.jumppos.core.model.IFormElement;
 import org.jumpmind.jumppos.core.model.IScreen;
 import org.jumpmind.jumppos.core.model.annotations.FormButton;
 import org.jumpmind.jumppos.core.model.annotations.FormTextField;
@@ -81,6 +80,37 @@ public class ScreenService implements IScreenService {
             lastScreenByNodeId.put(nodeId, screen);
         }
     }
+    
+    public IScreen deserializeScreenPayload(String nodeId, Action action) {
+        IScreen lastScreen = lastScreenByNodeId.get(nodeId);
+        if (lastScreen != null && lastScreen.getType() != null && lastScreen.getType().equals(IScreen.FORM_SCREEN_TYPE)) {
+            Form form = mapper.convertValue(action.getData(), Form.class);
+            return populateFormScreen(nodeId, form);
+        } else {
+            return null;
+        }
+    }
+    
+    public IScreen populateFormScreen(String nodeId, Form form) {
+        IScreen lastScreen = lastScreenByNodeId.get(nodeId);
+        
+        for (IFormElement formElement : form.getFormElements()) {
+            if (formElement instanceof FormField) {
+                FormField formField = (FormField) formElement;
+                String fieldId = formField.getFieldId();
+                for (Field field : lastScreen.getClass().getDeclaredFields()) {
+                    FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
+                    if (textFieldAnnotation != null) {
+                        if (field.getName().equals(fieldId)) {
+                            setFieldValue(field, lastScreen, formField.getValue());
+                        }
+                    }
+                }
+            }
+        }
+        
+        return lastScreen;
+    }
 
     protected Form buildForm(IScreen screen) {
 
@@ -119,6 +149,15 @@ public class ScreenService implements IScreenService {
     @Override
     public void refresh(String clientId) {
         showScreen(clientId, lastScreenByNodeId.get(clientId));
+    }
+    
+    protected void setFieldValue(Field field, Object target, Object value) {
+        try {
+            field.setAccessible(true);
+            field.set(target, value);
+        } catch (Exception ex) {
+            throw new FlowException("Field to set value " + value + " for field " + field + " from target " + target, ex);
+        }
     }
 
     protected String getFieldValueAsString(Field field, Object target) {

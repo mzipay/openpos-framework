@@ -9,5 +9,7 @@ public interface IScreenService {
     public void refresh(String nodeId);
     
     public IScreen getLastScreen(String nodeId);
+
+    public IScreen deserializeScreenPayload(String nodeId, Action action);
     
 }
