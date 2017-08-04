@@ -2,6 +2,7 @@ package org.jumpmind.jumppos.core.model;
 
 
 public interface IScreen {
+    
     public static final String GLOBAL_NAV_ACTIONS_KEY = "navActions";
     public static final String MENU_ACTIONS_KEY = "menuActions";
     public static final String DIALOG_MESSAGE_LINE_KEY = "message";
