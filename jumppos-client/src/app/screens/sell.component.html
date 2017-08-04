@@ -25,11 +25,33 @@
 	<div class="mt-2">
 		<div *ngIf="sellItems" class="list-group">
 			<a *ngFor="let i of sellItems" (click)="session.onActionWithStringPayload('Item',i.lineNumber)" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-				<div class="d-flex w-100 justify-content-between">
-					<h5 class="mb-1">{{i.itemId}}</h5>
-					<h5>{{i.extendedAmount}}</h5>
+				<div class="container">
+					<div class="row">
+						<div class="col-8  pl-0">
+							<div class="container-fluid">
+								<div class="row  pl-0">
+									<div class="col  pl-0">
+										<h5 class="mb-1">{{i.description}}</h5>
+									</div>
+								</div>
+								<div class="row  pl-0">
+									<div class="col  pl-0">
+										{{i.itemId}}
+									</div>
+									<div class="col">
+										{{i.quantity}} @ {{i.sellingPrice}}
+									</div>
+									<div class="col">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							 <div class="pull-right"><h5>{{i.extendedAmount}}</h5></div>  
+							
+						</div>
+					</div>
 				</div>
-				<p class="mb-1">{{i.description}}</p>
 			</a>
 
 			<div *ngIf="sellItems.length==0" class="list-group-item list-group-item-warning">

@@ -7,6 +7,7 @@ public class PosLineItem {
     private String posItemId;
     private String description;
     private String extendedAmount;
+    private String sellingPrice;
     private String quantity;
     
     public String getItemId() {
@@ -57,4 +58,11 @@ public class PosLineItem {
         this.quantity = quantity;
     }
 
+    public void setSellingPrice(String sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
+    
+    public String getSellingPrice() {
+        return sellingPrice;
+    }
 }

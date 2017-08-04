@@ -29,7 +29,6 @@ export class AppComponent implements OnInit, OnDestroy, DoCheck {
       this.menuItems = this.session.screen.menuItems;
       this.menuActions = this.session.screen.menuActions;
       this.backButton = this.session.screen.backButton;
-      console.log('back button enabled? ' + (this.backButton ? this.backButton.enabled : false));
     }
   }
 

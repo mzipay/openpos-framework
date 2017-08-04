@@ -8,7 +8,7 @@ import { SessionService } from '../session.service';
 })
 export class DialogComponent implements AfterViewInit, DoCheck {
 
-  @ViewChild('content') vc;
+  @ViewChild('content') vcDialog;
 
   initialized = false;
 
@@ -33,14 +33,7 @@ export class DialogComponent implements AfterViewInit, DoCheck {
 
   ngAfterViewInit(): void {
     this.initialized = true;
-    console.log('after view init of dialog');
-    setTimeout(() => this.show(this.vc), 0);
-  }
-
-  onEnter(value: string) {
-    if (this.session.response) {
-      this.session.onAction('Next');
-    }
+    setTimeout(() => this.show(this.vcDialog), 0);
   }
 
 }
