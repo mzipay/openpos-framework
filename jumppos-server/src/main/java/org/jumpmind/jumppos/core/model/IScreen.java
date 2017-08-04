@@ -29,5 +29,7 @@ public interface IScreen {
     public void addToGroup(String groupName, String dataName, Object value);
 
     public void addToList(String dataName, Object value);
+    
+    public MenuItem getBackButton();
 
 }

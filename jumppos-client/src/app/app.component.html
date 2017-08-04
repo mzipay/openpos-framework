@@ -1,15 +1,15 @@
 <nav class="navbar navbar-inverse bg-inverse">
 	<div class="nav">
-		<button *ngIf="session.screen && session.screen.backButton" type="button" class="btn btn-outline-warning btn-sm mr-2" (click)="session.onAction(session.screen.backButton.action)">Back</button>
+		<button *ngIf="backButton && backButton.enabled" type="button" class="btn btn-outline-warning btn-sm mr-2" (click)="session.onAction(session.screen.backButton.action)">Back</button>
 		<a class="navbar-brand" href="#">Mobile POS</a>
 	</div>
-	<button *ngIf="menuActions" class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed"
+	<button *ngIf="menuActions && menuActions.length > 0" class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed"
 	 aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div *ngIf="menuActions" [ngbCollapse]="isCollapsed" class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
 		<ul class="nav navbar-nav">
-			<li *ngFor="let m of menuActions" class="nav-item"><a class="nav-link" (click)="session.onAction(m.action)" href="#">{{m.text}}</a>
+			<li *ngFor="let m of menuActions" class="nav-item"><a class="nav-link" (click)="session.onAction(m.action)" href="#">{{m.title}}</a>
 			</li>
 		</ul>
 	</div>

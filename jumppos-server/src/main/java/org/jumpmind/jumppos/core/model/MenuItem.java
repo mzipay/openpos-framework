@@ -20,7 +20,6 @@
  */
 package org.jumpmind.jumppos.core.model;
 
-
 public class MenuItem {
 
     public MenuItem(String action, String title, String icon) {
@@ -30,27 +29,48 @@ public class MenuItem {
         this.icon = icon;
     }
     
+    public MenuItem(String title, String action, boolean enabled) {
+        super();
+        this.action = action;
+        this.title = title;
+        this.enabled = enabled;
+    }
+
     private String action;
     private String title;
     private String icon;
-    
+    private boolean enabled = true;
+
     public String getAction() {
         return action;
     }
+
     public void setAction(String action) {
         this.action = action;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getIcon() {
         return icon;
     }
+
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
 }
