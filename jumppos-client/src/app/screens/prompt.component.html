@@ -5,5 +5,7 @@
 	<input #box *ngIf="session.screen.prompt.responseType==='ALPHANUMERICTEXT'" (keyup.enter)="onEnter(box.value)"
 		[(ngModel)]="session.response">		
     <input #box *ngIf="session.screen.prompt.responseType==='CURRENCYTEXT'" (keyup.enter)="onEnter(box.value)"
-        [(ngModel)]="session.response">     
+		[(ngModel)]="session.response">    
+    <input #box *ngIf="session.screen.prompt.responseType==='NUMERICTEXT'" (keyup.enter)="onEnter(box.value)"
+        [(ngModel)]="session.response">   		 
 </div>

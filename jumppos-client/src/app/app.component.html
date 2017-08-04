@@ -1,6 +1,6 @@
 <nav class="navbar navbar-inverse bg-inverse">
 	<div class="nav">
-		<a *ngIf="backButton && backButton.enabled" class="btn btn-warning mr-2" (click)="session.onAction(session.screen.backButton.action)">
+		<a *ngIf="backButton && backButton.enabled" class="btn btn-info mr-2" (click)="session.onAction(session.screen.backButton.action)">
 			<i class="fa fa-undo fa-lg"></i>
 			</a>
 		<a class="navbar-brand" href="#">Mobile POS</a>
@@ -40,7 +40,7 @@
 	</div>
 
 	<div *ngIf="session.screen.menuItems" class="m-2">
-		<button *ngFor="let m of menuItems" class="btn btn-primary btn-lg p-1 btn-block" (click)="session.onAction(m.action)">{{m.title}}</button>
+		<button *ngFor="let m of menuItems" class="btn btn-info btn-lg p-1 btn-block" (click)="session.onAction(m.action)">{{m.title}}</button>
 	</div>
 </ng-container>
 

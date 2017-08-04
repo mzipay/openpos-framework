@@ -1,7 +1,10 @@
 <div class="container">
 	<label for="itemprompt" class="sr-only">Enter Item</label>
-	<input #itemprompt class="form-control mt-2" (keyup.enter)="onEnter(itemprompt.value)" [(ngModel)]="session.response" placeholder="scan something"
-	 required autofocus>
+	<div class="input-group margin-bottom-sm mt-2">
+		<span class="input-group-addon"><i class="fa fa-barcode fa-2x"></i></span>
+		<input #itemprompt class="form-control" (keyup.enter)="onEnter(itemprompt.value)" [(ngModel)]="session.response" placeholder="scan something"
+		 required autofocus>
+	</div>
 
 	<button class="btn btn-lg btn-success btn-block mt-2">{{session.screen.grandTotal}}</button>
 
@@ -25,11 +28,35 @@
 	<div class="mt-2">
 		<div *ngIf="sellItems" class="list-group">
 			<a *ngFor="let i of sellItems" (click)="session.onActionWithStringPayload('Item',i.lineNumber)" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-				<div class="d-flex w-100 justify-content-between">
-					<h5 class="mb-1">{{i.itemId}}</h5>
-					<h5>{{i.extendedAmount}}</h5>
+				<div class="container">
+					<div class="row">
+						<div class="col  pl-0">
+							<div class="container-fluid">
+								<div class="row  pl-0">
+									<div class="col  pl-0">
+										<h5 class="mb-1">{{i.description}}</h5>
+									</div>
+								</div>
+								<div class="row  pl-0">
+									<div class="col  pl-0">
+										{{i.itemId}}
+									</div>
+									<div class="col">
+										{{i.quantity}}@{{i.sellingPrice}}
+									</div>
+									<div class="col">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-1 align-self-center">
+							<h5 class="mb-0 pull-right middle-align">{{i.extendedAmount}}</h5>
+						</div>						
+						<div class="col-1 align-self-center pr-0">
+							<i class="fa fa-chevron-right fa-2x pull-right" aria-hidden="true"></i>
+						</div>
+					</div>
 				</div>
-				<p class="mb-1">{{i.description}}</p>
 			</a>
 
 			<div *ngIf="sellItems.length==0" class="list-group-item list-group-item-warning">
