@@ -1,31 +1,25 @@
-<div class="container">
-    <div>
-        <ul *ngIf="sellItems" class="list-group component-margin-top">
-            <li *ngFor="let i of sellItems" class="list-group-item justify-content-between">
-                <div>
-                    <h5 class="mb-1">{{i.description}}</h5>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Item ID</th>
-                                <th>Quantity</th>
-                                <th>Unit Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{i.itemId}}</td>
-                                <td>{{i.quantity}}</td>
-                                <td>{{i.extendedAmount}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+<div *ngIf="sellItems" class="container">
+    <div *ngFor="let i of sellItems">
+        <h5 class="mb-1">{{i.description}}</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{i.itemId}}</td>
+                    <td>{{i.quantity}}</td>
+                    <td>{{i.extendedAmount}}</td>
+                </tr>
+            </tbody>
+        </table>
 
-                    <div *ngIf="session.screen.itemActions" class="m-2">
-                        <button *ngFor="let m of session.screen.itemActions" class="btn btn-info p-1 btn-block" (click)="session.onAction(m.action)">{{m.title}}</button>
-                    </div>
-                </div>
-            </li>
-        </ul>
+        <div *ngIf="session.screen.itemActions" class="m-2">
+            <button *ngFor="let m of session.screen.itemActions" class="btn btn-info p-1 btn-block" (click)="session.onAction(m.action)">{{m.title}}</button>
+        </div>
     </div>
 </div>
