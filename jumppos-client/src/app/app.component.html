@@ -35,6 +35,10 @@
 		<app-sell-item-detail></app-sell-item-detail>
 	</div>
 
+	<div *ngIf="session.screen.type==='PaymentStatus'">
+		<app-payment-status></app-payment-status>
+	</div>	
+
 	<div *ngIf="session.screen.type==='Form'">
 		<app-form></app-form>
 	</div>

@@ -19,7 +19,7 @@
         </table>
 
         <div *ngIf="session.screen.itemActions" class="m-2">
-            <button *ngFor="let m of session.screen.itemActions" class="btn btn-info p-1 btn-block" (click)="session.onAction(m.action)">{{m.title}}</button>
+            <button *ngFor="let m of session.screen.itemActions" class="btn btn-info btn-lg p-1 btn-block" (click)="session.onAction(m.action)">{{m.title}}</button>
         </div>
     </div>
 </div>

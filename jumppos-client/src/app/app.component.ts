@@ -29,6 +29,10 @@ export class AppComponent implements OnInit, OnDestroy, DoCheck {
       this.menuItems = this.session.screen.menuItems;
       this.menuActions = this.session.screen.menuActions;
       this.backButton = this.session.screen.backButton;
+      if (!this.menuActions || this.menuActions.length === 0) {
+        this.isCollapsed = true;
+      }
+
     }
   }
 

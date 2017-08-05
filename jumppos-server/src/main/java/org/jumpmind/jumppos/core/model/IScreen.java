@@ -12,6 +12,7 @@ public interface IScreen {
     public static final String SELL_SCREEN_TYPE = "Sell";
     public static final String PROMPT_SCREEN_TYPE = "Prompt";
     public static final String FORM_SCREEN_TYPE = "Form";
+    public static final String PAYMENT_STATUS = "PaymentStatus";
     public static final String SELL_ITEM_DETAIL_SCREEN_TYPE = "SellItemDetail";
 
     
