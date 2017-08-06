@@ -1,13 +1,18 @@
 <div *ngIf="sellItems" class="container">
     <div *ngFor="let i of sellItems">
         <h5 class="mb-1 mt-2">{{i.description}}</h5>
-        <div class="text-center p-2">
+        <div class="p-2">
             <div class="container mb-2">
-                <div class="col-md-4">
-                    <img *ngIf="i.imageUrl" class="img-thumbnail" [src]="i.imageUrl" />
+                <div class="row">
+                    <div class="col-4">
+                        <img *ngIf="i.imageUrl" class="img-thumbnail" [src]="i.imageUrl" />
+                    </div>
+                    <div class="col-md">
+                        <p>{{i.productDescription}}</p>
+                    </div>
                 </div>
             </div>
-            <table class="table table-sm">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Item ID</th>

@@ -10,6 +10,7 @@ public class PosLineItem {
     private String sellingPrice;
     private String quantity;
     private String imageUrl;
+    private String productDescription;
     
     
     public String getItemId() {
@@ -74,5 +75,13 @@ public class PosLineItem {
     
     public String getImageUrl() {
         return imageUrl;
+    }
+    
+    public String getProductDescription() {
+        return productDescription;
+    }
+    
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
     }
 }
