@@ -1,23 +1,29 @@
 <div *ngIf="sellItems" class="container">
     <div *ngFor="let i of sellItems">
-        <h5 class="mb-1">{{i.description}}</h5>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Item ID</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{i.itemId}}</td>
-                    <td>{{i.quantity}}</td>
-                    <td>{{i.extendedAmount}}</td>
-                </tr>
-            </tbody>
-        </table>
-
+        <h5 class="mb-1 mt-2">{{i.description}}</h5>
+        <div class="text-center p-2">
+            <div class="container mb-2">
+                <div class="col-md-4">
+                    <img *ngIf="i.imageUrl" class="img-thumbnail" [src]="i.imageUrl" />
+                </div>
+            </div>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Item ID</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{i.itemId}}</td>
+                        <td>{{i.quantity}}</td>
+                        <td>{{i.extendedAmount}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div *ngIf="session.screen.itemActions" class="m-2">
             <button *ngFor="let m of session.screen.itemActions" class="btn btn-info btn-lg p-1 btn-block" (click)="session.onAction(m.action)">{{m.title}}</button>
         </div>

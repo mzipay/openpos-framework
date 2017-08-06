@@ -9,6 +9,8 @@ public class PosLineItem {
     private String extendedAmount;
     private String sellingPrice;
     private String quantity;
+    private String imageUrl;
+    
     
     public String getItemId() {
         return itemId;
@@ -64,5 +66,13 @@ public class PosLineItem {
     
     public String getSellingPrice() {
         return sellingPrice;
+    }
+    
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    
+    public String getImageUrl() {
+        return imageUrl;
     }
 }
