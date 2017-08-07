@@ -7,7 +7,7 @@ import org.jumpmind.jumppos.core.screen.PromptScreen;
 
 public class SellItemScreen extends PromptScreen {
 
-    private List<PosLineItem> items = new ArrayList<>();
+    private List<LineItem> items = new ArrayList<>();
     
     String balanceDue;
     String discountTotal;
@@ -19,11 +19,11 @@ public class SellItemScreen extends PromptScreen {
         this.setType(SELL_SCREEN_TYPE);
     }
   
-    public List<PosLineItem> getItems() {
+    public List<LineItem> getItems() {
         return items;
     }
 
-    public void setItems(List<PosLineItem> items) {
+    public void setItems(List<LineItem> items) {
         this.items = items;
     }
 

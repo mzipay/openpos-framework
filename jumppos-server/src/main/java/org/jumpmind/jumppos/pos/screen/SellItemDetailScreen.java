@@ -8,7 +8,7 @@ import org.jumpmind.jumppos.core.screen.MenuItem;
 
 public class SellItemDetailScreen extends DefaultScreen {
 
-    private PosLineItem item = new PosLineItem();
+    private LineItem item = new LineItem();
 
     private List<MenuItem> itemActions = new ArrayList<>();
 
@@ -24,11 +24,11 @@ public class SellItemDetailScreen extends DefaultScreen {
         this.itemActions = itemActions;
     }
 
-    public PosLineItem getItem() {
+    public LineItem getItem() {
         return item;
     }
 
-    public void setItem(PosLineItem item) {
+    public void setItem(LineItem item) {
         this.item = item;
     }
 

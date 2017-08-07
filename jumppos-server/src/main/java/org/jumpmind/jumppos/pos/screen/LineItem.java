@@ -1,6 +1,6 @@
 package org.jumpmind.jumppos.pos.screen;
 
-public class PosLineItem {
+public class LineItem {
 
     private int lineNumber;
     private String itemId;
