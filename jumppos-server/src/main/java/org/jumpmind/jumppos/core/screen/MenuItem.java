@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.jumppos.core.model;
+package org.jumpmind.jumppos.core.screen;
 
 public class MenuItem {
 

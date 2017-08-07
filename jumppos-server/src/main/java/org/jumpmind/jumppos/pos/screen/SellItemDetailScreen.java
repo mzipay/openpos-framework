@@ -1,15 +1,18 @@
-package org.jumpmind.jumppos.core.model;
+package org.jumpmind.jumppos.pos.screen;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemOptionsScreen extends DefaultScreen {
+import org.jumpmind.jumppos.core.screen.DefaultScreen;
+import org.jumpmind.jumppos.core.screen.MenuItem;
+
+public class SellItemDetailScreen extends DefaultScreen {
 
     private PosLineItem item = new PosLineItem();
 
     private List<MenuItem> itemActions = new ArrayList<>();
 
-    public ItemOptionsScreen() {
+    public SellItemDetailScreen() {
         setType(SELL_ITEM_DETAIL_SCREEN_TYPE);
     }
 

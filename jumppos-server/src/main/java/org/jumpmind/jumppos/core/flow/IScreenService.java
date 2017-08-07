@@ -1,6 +1,6 @@
 package org.jumpmind.jumppos.core.flow;
 
-import org.jumpmind.jumppos.core.model.DefaultScreen;
+import org.jumpmind.jumppos.core.screen.DefaultScreen;
 
 public interface IScreenService {
 

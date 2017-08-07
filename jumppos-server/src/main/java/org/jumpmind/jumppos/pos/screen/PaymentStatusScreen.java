@@ -1,4 +1,6 @@
-package org.jumpmind.jumppos.core.model;
+package org.jumpmind.jumppos.pos.screen;
+
+import org.jumpmind.jumppos.core.screen.DefaultScreen;
 
 public class PaymentStatusScreen extends DefaultScreen {
 

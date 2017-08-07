@@ -1,7 +1,9 @@
-package org.jumpmind.jumppos.core.model;
+package org.jumpmind.jumppos.pos.screen;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jumpmind.jumppos.core.screen.PromptScreen;
 
 public class SellItemScreen extends PromptScreen {
 

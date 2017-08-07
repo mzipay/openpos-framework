@@ -27,7 +27,7 @@ import javax.annotation.PostConstruct;
 
 import org.jumpmind.jumppos.core.flow.config.FlowConfig;
 import org.jumpmind.jumppos.core.flow.config.StateConfig;
-import org.jumpmind.jumppos.core.model.DefaultScreen;
+import org.jumpmind.jumppos.core.screen.DefaultScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

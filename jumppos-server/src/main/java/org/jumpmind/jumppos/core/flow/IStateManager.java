@@ -22,7 +22,7 @@ package org.jumpmind.jumppos.core.flow;
 
 import java.util.Map;
 
-import org.jumpmind.jumppos.core.model.DefaultScreen;
+import org.jumpmind.jumppos.core.screen.DefaultScreen;
 
 
 public interface IStateManager {

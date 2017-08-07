@@ -25,8 +25,8 @@ import java.util.List;
 
 import org.jumpmind.jumppos.core.flow.IState;
 import org.jumpmind.jumppos.core.flow.IStateManager;
-import org.jumpmind.jumppos.core.model.MenuItem;
-import org.jumpmind.jumppos.core.model.DefaultScreen;
+import org.jumpmind.jumppos.core.screen.DefaultScreen;
+import org.jumpmind.jumppos.core.screen.MenuItem;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class HomeScreenState implements IState {

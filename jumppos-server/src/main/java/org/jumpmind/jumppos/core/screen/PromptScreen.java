@@ -1,4 +1,4 @@
-package org.jumpmind.jumppos.core.model;
+package org.jumpmind.jumppos.core.screen;
 
 public class PromptScreen extends DefaultScreen {
 
