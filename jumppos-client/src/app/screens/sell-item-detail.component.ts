@@ -8,9 +8,9 @@ import {SessionService} from '../session.service';
 })
 
 export class SellItemDetailComponent {
-  public sellItems: ISellItem[];
+  public item: ISellItem;
 
   constructor(public session: SessionService ) {
-    this.sellItems = session.screen.items;
+    this.item = session.screen.item;
   }
 }

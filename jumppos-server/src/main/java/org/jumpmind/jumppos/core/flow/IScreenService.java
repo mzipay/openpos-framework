@@ -1,15 +1,15 @@
 package org.jumpmind.jumppos.core.flow;
 
-import org.jumpmind.jumppos.core.model.IScreen;
+import org.jumpmind.jumppos.core.model.DefaultScreen;
 
 public interface IScreenService {
 
-    public void showScreen(String nodeId, IScreen screen);
+    public void showScreen(String nodeId, DefaultScreen screen);
     
     public void refresh(String nodeId);
     
-    public IScreen getLastScreen(String nodeId);
+    public DefaultScreen getLastScreen(String nodeId);
 
-    public IScreen deserializeScreenPayload(String nodeId, Action action);
+    public DefaultScreen deserializeScreenPayload(String nodeId, Action action);
     
 }

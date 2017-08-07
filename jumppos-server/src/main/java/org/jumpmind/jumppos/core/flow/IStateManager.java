@@ -22,7 +22,7 @@ package org.jumpmind.jumppos.core.flow;
 
 import java.util.Map;
 
-import org.jumpmind.jumppos.core.model.IScreen;
+import org.jumpmind.jumppos.core.model.DefaultScreen;
 
 
 public interface IStateManager {
@@ -40,8 +40,8 @@ public interface IStateManager {
     public void setSessionScope(String name, Object value);
     public void setConversationScope(String name, Object value);
     public String toJSONPretty(Object o);
-    public void showScreen(IScreen screen);    
-    public IScreen getLastScreen();    
+    public void showScreen(DefaultScreen screen);    
+    public DefaultScreen getLastScreen();    
     public void refreshScreen();
     public IState getCurrentState();
     

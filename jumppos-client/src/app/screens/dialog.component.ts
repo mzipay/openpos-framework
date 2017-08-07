@@ -12,14 +12,14 @@ export class DialogComponent implements AfterViewInit, DoCheck {
 
   initialized = false;
 
-  public navActions: IMenuItem[] = [];
+  public buttons: IMenuItem[] = [];
 
   constructor(public session: SessionService, private modalService: NgbModal) {
   }
 
   ngDoCheck(): void {
     if (typeof this.session.screen !== 'undefined') {
-      this.navActions = this.session.screen.navActions;
+      this.buttons = this.session.screen.buttons;
     }
   }
 

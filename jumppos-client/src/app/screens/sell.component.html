@@ -26,8 +26,8 @@
 	</table>
 
 	<div class="mt-2">
-		<div *ngIf="sellItems" class="list-group">
-			<a *ngFor="let i of sellItems" (click)="session.onActionWithStringPayload('Item',i.lineNumber)" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+		<div *ngIf="items" class="list-group">
+			<a *ngFor="let i of items" (click)="session.onActionWithStringPayload('Item',i.lineNumber)" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
 				<div class="container">
 					<div class="row">
 						<div class="col  pl-0">
@@ -59,7 +59,7 @@
 				</div>
 			</a>
 
-			<div *ngIf="sellItems.length==0" class="list-group-item list-group-item-warning">
+			<div *ngIf="items.length==0" class="list-group-item list-group-item-warning">
 				<strong>There are no items in the cart</strong>
 			</div>
 		</div>

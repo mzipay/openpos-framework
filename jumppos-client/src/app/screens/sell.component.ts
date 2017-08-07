@@ -13,7 +13,7 @@ export class SellComponent implements AfterViewInit, DoCheck {
 
   initialized = false;
 
-  public sellItems: ISellItem[];
+  public items: ISellItem[];
 
   constructor(public session: SessionService) {
 
@@ -21,7 +21,7 @@ export class SellComponent implements AfterViewInit, DoCheck {
 
   ngDoCheck(): void {
     if (typeof this.session.screen !== 'undefined') {
-      this.sellItems = this.session.screen.items;
+      this.items = this.session.screen.items;
     }
   }
 

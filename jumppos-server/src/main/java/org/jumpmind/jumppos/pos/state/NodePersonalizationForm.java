@@ -3,10 +3,10 @@ package org.jumpmind.jumppos.pos.state;
 import org.jumpmind.jumppos.core.model.annotations.FormButton;
 import org.jumpmind.jumppos.core.model.annotations.FormTextField;
 import org.jumpmind.jumppos.core.model.annotations.Screen;
-import static org.jumpmind.jumppos.core.model.IScreen.FORM_SCREEN_TYPE;
+import static org.jumpmind.jumppos.core.model.DefaultScreen.FORM_SCREEN_TYPE;
 
 @Screen(name="NodePersonalization", type=FORM_SCREEN_TYPE)
-public class NodePersonalizationForm extends org.jumpmind.jumppos.core.model.Screen {
+public class NodePersonalizationForm extends org.jumpmind.jumppos.core.model.DefaultScreen {
     
     @FormTextField(label="Node Id:", placeholder="e.g. 100-1")
     private String nodeId;

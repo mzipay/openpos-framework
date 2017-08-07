@@ -27,8 +27,7 @@ import javax.annotation.PostConstruct;
 
 import org.jumpmind.jumppos.core.flow.config.FlowConfig;
 import org.jumpmind.jumppos.core.flow.config.StateConfig;
-import org.jumpmind.jumppos.core.model.IScreen;
-import org.jumpmind.jumppos.core.model.annotations.Screen;
+import org.jumpmind.jumppos.core.model.DefaultScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +67,7 @@ public class StateManager implements IStateManager {
         ClassPathScanningCandidateComponentProvider scanner =
                 new ClassPathScanningCandidateComponentProvider(false);
 
-        scanner.addIncludeFilter(new AnnotationTypeFilter(Screen.class));
+        scanner.addIncludeFilter(new AnnotationTypeFilter(org.jumpmind.jumppos.core.model.annotations.Screen.class));
 
         for (BeanDefinition bd : scanner.findCandidateComponents("org.jumpmind.jumppos")) {
             logger.info("" + bd);
@@ -113,7 +112,7 @@ public class StateManager implements IStateManager {
     }
 
     @Override
-    public IScreen getLastScreen() {
+    public DefaultScreen getLastScreen() {
         return screenService.getLastScreen(nodeId);
     }
 
@@ -149,7 +148,7 @@ public class StateManager implements IStateManager {
             }
         } else {            
             IState savedCurrentState = currentState;
-            IScreen deserializedScreen = screenService.deserializeScreenPayload(nodeId, action);
+            DefaultScreen deserializedScreen = screenService.deserializeScreenPayload(nodeId, action);
             
             boolean handled  = actionHandler.handleAction(currentState, action, deserializedScreen);
             if (handled) {   
@@ -206,7 +205,7 @@ public class StateManager implements IStateManager {
     }
 
     @Override
-    public void showScreen(IScreen screen) {
+    public void showScreen(DefaultScreen screen) {
         screenService.showScreen(nodeId, screen);        
     }
 

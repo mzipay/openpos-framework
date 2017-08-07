@@ -1,4 +1,4 @@
-package org.jumpmind.jumppos.pos.state.model;
+package org.jumpmind.jumppos.core.model;
 
 public class PosLineItem {
 

@@ -12,10 +12,9 @@ import org.jumpmind.jumppos.core.flow.IStateManagerFactory;
 import org.jumpmind.jumppos.core.model.Form;
 import org.jumpmind.jumppos.core.model.FormField;
 import org.jumpmind.jumppos.core.model.IFormElement;
-import org.jumpmind.jumppos.core.model.IScreen;
+import org.jumpmind.jumppos.core.model.DefaultScreen;
 import org.jumpmind.jumppos.core.model.annotations.FormButton;
 import org.jumpmind.jumppos.core.model.annotations.FormTextField;
-import org.jumpmind.jumppos.core.model.annotations.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class ScreenService implements IScreenService {
     @Autowired
     IStateManagerFactory stateManagerFactory;
 
-    private Map<String, IScreen> lastScreenByNodeId = new HashMap<String, IScreen>();
+    private Map<String, DefaultScreen> lastScreenByNodeId = new HashMap<String, DefaultScreen>();
 
     @MessageMapping("action/node/{nodeId}")
     public void action(@DestinationVariable String nodeId, Action action) {
@@ -58,17 +57,17 @@ public class ScreenService implements IScreenService {
     }
 
     @Override
-    public IScreen getLastScreen(String nodeId) {
+    public DefaultScreen getLastScreen(String nodeId) {
         return lastScreenByNodeId.get(nodeId);
     }
 
     @Override
-    public void showScreen(String nodeId, IScreen screen) {
+    public void showScreen(String nodeId, DefaultScreen screen) {
         if (screen != null) {
             Object payload = screen;
             try {
                 applyAnnotations(screen);
-                if (screen.getType() != null && screen.getType().equals(IScreen.FORM_SCREEN_TYPE)) {
+                if (screen.getType() != null && screen.getType().equals(DefaultScreen.FORM_SCREEN_TYPE)) {
                     Form form = buildForm(screen);
                     screen.put("form", form);
                 }
@@ -81,9 +80,9 @@ public class ScreenService implements IScreenService {
         }
     }
     
-    public IScreen deserializeScreenPayload(String nodeId, Action action) {
-        IScreen lastScreen = lastScreenByNodeId.get(nodeId);
-        if (lastScreen != null && lastScreen.getType() != null && lastScreen.getType().equals(IScreen.FORM_SCREEN_TYPE)) {
+    public DefaultScreen deserializeScreenPayload(String nodeId, Action action) {
+        DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
+        if (lastScreen != null && lastScreen.getType() != null && lastScreen.getType().equals(DefaultScreen.FORM_SCREEN_TYPE)) {
             Form form = mapper.convertValue(action.getData(), Form.class);
             return populateFormScreen(nodeId, form);
         } else {
@@ -91,8 +90,8 @@ public class ScreenService implements IScreenService {
         }
     }
     
-    public IScreen populateFormScreen(String nodeId, Form form) {
-        IScreen lastScreen = lastScreenByNodeId.get(nodeId);
+    public DefaultScreen populateFormScreen(String nodeId, Form form) {
+        DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
         
         for (IFormElement formElement : form.getFormElements()) {
             if (formElement instanceof FormField) {
@@ -112,7 +111,7 @@ public class ScreenService implements IScreenService {
         return lastScreen;
     }
 
-    protected Form buildForm(IScreen screen) {
+    protected Form buildForm(DefaultScreen screen) {
 
         Form form = new Form();
 
@@ -138,8 +137,8 @@ public class ScreenService implements IScreenService {
         return form;
     }
 
-    protected void applyAnnotations(IScreen screen) {
-        Screen screenAnnotation = screen.getClass().getAnnotation(Screen.class);
+    protected void applyAnnotations(DefaultScreen screen) {
+        org.jumpmind.jumppos.core.model.annotations.Screen screenAnnotation = screen.getClass().getAnnotation(org.jumpmind.jumppos.core.model.annotations.Screen.class);
         if (screenAnnotation != null) {
             screen.setName(screenAnnotation.name());
             screen.setType(screenAnnotation.type());

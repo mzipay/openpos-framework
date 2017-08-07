@@ -8,7 +8,17 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 
-public abstract class Screen implements IScreen {
+public abstract class DefaultScreen {
+    
+//    public static final String GLOBAL_NAV_ACTIONS_KEY = "navActions";
+//    public static final String MENU_ACTIONS_KEY = "menuActions";
+    
+    public static final String DIALOG_SCREEN_TYPE = "Dialog";
+    public static final String SELL_SCREEN_TYPE = "Sell";
+    public static final String PROMPT_SCREEN_TYPE = "Prompt";
+    public static final String FORM_SCREEN_TYPE = "Form";
+    public static final String PAYMENT_STATUS = "PaymentStatus";
+    public static final String SELL_ITEM_DETAIL_SCREEN_TYPE = "SellItemDetail";
 
     protected Map<String, Object> additionalProperties = new HashMap<String, Object>();
     
@@ -18,10 +28,12 @@ public abstract class Screen implements IScreen {
     
     protected MenuItem backButton;
     
-    public Screen() {
+    protected List<MenuItem> menuActions = new ArrayList<>();
+    
+    public DefaultScreen() {
     }
 
-    public Screen(String name) {
+    public DefaultScreen(String name) {
         super();
         put("name", name);
     }
@@ -32,7 +44,6 @@ public abstract class Screen implements IScreen {
     }
 
     @JsonAnySetter
-    @Override
     public void put(String name, Object value) {
        this.additionalProperties.put(name, value);
     }
@@ -41,33 +52,27 @@ public abstract class Screen implements IScreen {
         return this.additionalProperties.containsKey(name);
     }
     
-    @Override
     public Object get(String name) {
         return additionalProperties.get(name);
     }
     
-    @Override
     public void setName(String name) {
         this.name = name;
     }
     
-    @Override
     public String getName() {
         return name;
     }
     
-    @Override
     public void setType(String type) {
         this.type = type;
     }
     
-    @Override
     public String getType() {
         return type;
     }
 
     @SuppressWarnings("unchecked")
-    @Override
     public void addToGroup(String groupName, String dataName, Object value) {
         Object group = get(groupName);
         Map<String, Object> map = null;
@@ -81,7 +86,6 @@ public abstract class Screen implements IScreen {
     }
 
     @SuppressWarnings("unchecked")
-    @Override
     public void addToList(String dataName, Object value) {
         Object obj = get(dataName);
         List<Object> list = null;
@@ -102,6 +106,14 @@ public abstract class Screen implements IScreen {
     
     public MenuItem getBackButton() {
         return backButton;
+    }
+    
+    public List<MenuItem> getMenuActions() {
+        return menuActions;
+    }
+    
+    public void setMenuActions(List<MenuItem> menuActions) {
+        this.menuActions = menuActions;
     }
 
 }

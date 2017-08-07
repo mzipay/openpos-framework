@@ -1,11 +1,11 @@
-<div *ngIf="session.screen.type==='Prompt' &&  session.screen.prompt" class="container m-2">
-	<label>{{session.screen.prompt.text}}</label> 	
-	<input #box *ngIf="session.screen.prompt.responseType==='ALPHANUMERICPASSWORD'" type='password' (keyup.enter)="onEnter(box.value)"
+<div *ngIf="session.screen.type==='Prompt' &&  session.screen.text" class="container m-2">
+	<label>{{session.screen.text}}</label> 	
+	<input #box *ngIf="session.screen.responseType==='ALPHANUMERICPASSWORD'" type='password' (keyup.enter)="onEnter(box.value)"
 		[(ngModel)]="session.response">
-	<input #box *ngIf="session.screen.prompt.responseType==='ALPHANUMERICTEXT'" (keyup.enter)="onEnter(box.value)"
+	<input #box *ngIf="session.screen.responseType==='ALPHANUMERICTEXT'" (keyup.enter)="onEnter(box.value)"
 		[(ngModel)]="session.response">		
-    <input #box *ngIf="session.screen.prompt.responseType==='CURRENCYTEXT'" (keyup.enter)="onEnter(box.value)"
+    <input #box *ngIf="session.screen.responseType==='CURRENCYTEXT'" (keyup.enter)="onEnter(box.value)"
 		[(ngModel)]="session.response">    
-    <input #box *ngIf="session.screen.prompt.responseType==='NUMERICTEXT'" (keyup.enter)="onEnter(box.value)"
+    <input #box *ngIf="session.screen.responseType==='NUMERICTEXT'" (keyup.enter)="onEnter(box.value)"
         [(ngModel)]="session.response">   		 
 </div>

@@ -9,7 +9,7 @@
     <p *ngFor="let m of session.screen.message">{{m}}</p>
   </div>
   <div class="modal-footer">
-      <button *ngFor="let m of navActions; let i = index" [id]="i" class="btn btn-primary btn-lg mt-2 mr-2"
+      <button *ngFor="let m of buttons; let i = index" [id]="i" class="btn btn-primary btn-lg mt-2 mr-2"
 			[disabled]="!m.enabled" (click)="c(); session.onAction(m.action)">{{m.title}}</button>
   </div>
 </ng-template>
