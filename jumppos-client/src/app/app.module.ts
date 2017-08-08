@@ -16,6 +16,7 @@ import {DialogComponent} from './screens/dialog.component';
 import {FormComponent} from './screens/form.component';
 import {PaymentStatusComponent} from './screens/payment-status.component';
 import {SellItemDetailComponent} from './screens/sell-item-detail.component';
+import { FocusDirective } from './screens/focus';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 
 const stompConfig: StompConfig = {
@@ -51,7 +52,8 @@ const stompConfig: StompConfig = {
     SellComponent,
     SellItemDetailComponent,
     PaymentStatusComponent,
-    FormComponent
+    FormComponent,
+    FocusDirective
   ],
   imports: [
     BrowserModule,

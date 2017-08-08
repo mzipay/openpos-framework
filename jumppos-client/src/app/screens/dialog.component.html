@@ -1,5 +1,5 @@
 <ng-template #content let-c="close">
-  <div class="modal-header">
+  <div #test class="modal-header">
     <h4 class="modal-title">{{session.screen.title}}</h4>
     <button type="button" class="close" aria-label="Close" (click)="c(); session.onAction(navActions[0].action)" [disabled]="navActions && navActions.length>1">
       <span aria-hidden="true">&times;</span>
@@ -9,7 +9,7 @@
     <p *ngFor="let m of session.screen.message">{{m}}</p>
   </div>
   <div class="modal-footer">
-      <button *ngFor="let m of buttons; let i = index" [id]="i" class="btn btn-primary btn-lg mt-2 mr-2"
-			[disabled]="!m.enabled" (click)="c(); session.onAction(m.action)">{{m.title}}</button>
+      <button *ngFor="let m of buttons; let i = index" [id]="'button-' + i" class="btn btn-primary btn-lg mt-2 mr-2"
+			[disabled]="!m.enabled" [autofocus]="i===0" [appFocus]="i===0" (click)="c(); session.onAction(m.action)">{{m.title}}</button>
   </div>
 </ng-template>
