@@ -26,9 +26,11 @@ import java.util.Map;
 import org.jumpmind.jumppos.core.flow.config.IFlowConfigProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope("singleton")
 public class StateManagerFactory implements IStateManagerFactory {
 
     @Autowired
