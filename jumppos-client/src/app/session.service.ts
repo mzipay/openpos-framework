@@ -1,8 +1,8 @@
-import {Observable} from 'rxjs/Observable';
-import {Message} from '@stomp/stompjs';
-import {Subscription} from 'rxjs/Subscription';
-import {Injectable} from '@angular/core';
-import {StompService, StompState} from '@stomp/ng2-stompjs';
+import { Observable } from 'rxjs/Observable';
+import { Message } from '@stomp/stompjs';
+import { Subscription } from 'rxjs/Subscription';
+import { Injectable } from '@angular/core';
+import { StompService, StompState } from '@stomp/ng2-stompjs';
 
 @Injectable()
 export class SessionService {
@@ -73,23 +73,23 @@ export class SessionService {
   }
 
   public onAction(action: String) {
-    console.log('Publish action ' + action);
-    this.stompService.publish('/app/action/node/' + this.nodeId,
-      JSON.stringify({name: action, data: this.response}));
-
     if (action === 'SavePersonalization') {
       this.nodeId = this.response.formElements[0].value;
       localStorage.setItem('nodeId', '' + this.nodeId);
       localStorage.removeItem('temporaryNodeId');
-      this.subscribed = false;
+      this.unsubscribe();
       this.subscribe();
+    } else {
+      console.log('Publish action ' + action);
+      this.stompService.publish('/app/action/node/' + this.nodeId,
+      JSON.stringify({ name: action, data: this.response }));
     }
   }
 
-    public onActionWithStringPayload(action: String, payload: String) {
+  public onActionWithStringPayload(action: String, payload: String) {
     console.log('Publish action ' + action);
     this.stompService.publish('/app/action/node/' + this.nodeId,
-      JSON.stringify({name: action, data: payload}));
+      JSON.stringify({ name: action, data: payload }));
   }
 
   /** Consume a message from the stompService */

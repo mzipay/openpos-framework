@@ -50,8 +50,6 @@ public class NodePersonalizationState implements IState {
     @ActionHandler
     public void onSavePersonalization(Action action, NodePersonalizationForm screen) {
         String nodeId = screen.getNodeId();
-        
-        // TODO validate.
         if (!StringUtils.isEmpty(nodeId)) {            
             stateManager.setNodeId(nodeId);
             stateManager.doAction(new Action("Complete"));

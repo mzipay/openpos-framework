@@ -23,8 +23,12 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
 	    String topicName = (String)event.getMessage().getHeaders().get("simpDestination");
 	    String nodeId = topicName.substring(topicName.indexOf("/node/")+"/node/".length());
 	    logger.info("subscribed to {}", topicName);
-	    IStateManager stateManager = stateManagerFactory.retreiveOrCreate(nodeId);
-	    stateManager.refreshScreen();
+	    IStateManager stateManager = stateManagerFactory.retreive(nodeId);
+	    if (stateManager == null) {
+	        stateManager = stateManagerFactory.create(nodeId);
+	    } else {
+	        stateManager.refreshScreen();
+	    }
 
 	}
 		

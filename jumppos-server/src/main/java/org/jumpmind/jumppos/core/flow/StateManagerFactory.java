@@ -43,7 +43,12 @@ public class StateManagerFactory implements IStateManagerFactory {
     private Map<String, StateManager> stateManagersByNodeId = new HashMap<>();
 
     @Override
-    public IStateManager retreiveOrCreate(String nodeId) {
+    public IStateManager retreive(String nodeId) {
+        return  stateManagersByNodeId.get(nodeId);
+    }
+    
+    @Override
+    public IStateManager create(String nodeId) {
         StateManager stateManager = stateManagersByNodeId.get(nodeId);
         if (stateManager == null) {
             stateManager = applicationContext.getBean(StateManager.class);

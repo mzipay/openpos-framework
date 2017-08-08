@@ -2,7 +2,6 @@ package org.jumpmind.jumppos.core.flow;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;

@@ -48,7 +48,7 @@ public class ScreenService implements IScreenService {
         } catch (JsonProcessingException ex) {
             logger.error("Failed to write action to JSON", ex);
         }
-        IStateManager stateManager = stateManagerFactory.retreiveOrCreate(nodeId);
+        IStateManager stateManager = stateManagerFactory.retreive(nodeId);
         stateManager.setNodeId(nodeId);
         if (stateManager != null) {
             logger.info("Posting action of {}", action);
