@@ -2,9 +2,17 @@
 	<div class="container m-2">
 		<label>Register Personalization</label>
 		<div *ngFor="let formElement of form.formElements">
-			<div *ngIf="formElement.elementType==='input'">
-			<label>{{ formElement.label }}</label>
-				<input [(ngModel)]="formElement.value" placeholder="{{formElement.placeholder}}" required>
+			<div *ngIf="formElement.elementType==='input'" [class]="'form-group ' + ((field.invalid && (field.dirty || field.touched)) ? 'has-warning' : '')">
+				<label class="form-control-label">{{formElement.label}}</label>
+				<input [(ngModel)]="formElement.value" #field="ngModel" class="form-control" placeholder="{{formElement.placeholder}}" [pattern]="formElement.pattern" required>
+				<div *ngIf="field.invalid && (field.dirty || field.touched)" class="form-control-feedback">
+					<div *ngIf="field.errors.required">
+						* is required.
+					</div>
+					<div *ngIf="field.errors.pattern">
+						* did not follow the designated pattern
+					</div>				
+				</div>
 			</div>
 			<div *ngIf="formElement.elementType==='button'">
 				<button class="btn btn-primary btn-sm" (click)="session.response=form; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>

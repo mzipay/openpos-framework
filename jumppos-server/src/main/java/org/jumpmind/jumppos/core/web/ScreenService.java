@@ -123,6 +123,7 @@ public class ScreenService implements IScreenService {
                 formField.setFieldId(field.getName());
                 formField.setLabel(textFieldAnnotation.label());
                 formField.setPlaceholder(textFieldAnnotation.placeholder());
+                formField.setPattern(textFieldAnnotation.pattern());
                 formField.setValue(getFieldValueAsString(field, screen));
                 form.addFormElement(formField);
             }

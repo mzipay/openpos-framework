@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 public @interface FormTextField {
     String label();
     String placeholder();
-    
+    String pattern() default ".*";    
 }
