@@ -6,7 +6,7 @@
 		 required autofocus>
 	</div>
 
-	<button class="btn btn-lg btn-success btn-block mt-2" [disabled]="!sellItems || sellItems.length == 0" (click)="session.onAction('Checkout')">{{session.screen.grandTotal}}</button>
+	<button class="btn btn-lg btn-success btn-block mt-2" [disabled]="!items || items.length == 0" (click)="session.onAction('Checkout')">{{session.screen.grandTotal}}</button>
 
 	<table class="table table-bordered mt-2">
 		<thead>
