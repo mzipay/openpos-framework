@@ -1,5 +1,6 @@
 package org.jumpmind.jumppos.core.screen;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,10 +9,9 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 
-public abstract class DefaultScreen {
+public class DefaultScreen implements Serializable {
     
-//    public static final String GLOBAL_NAV_ACTIONS_KEY = "navActions";
-//    public static final String MENU_ACTIONS_KEY = "menuActions";
+    private static final long serialVersionUID = 1L;
     
     public static final String DIALOG_SCREEN_TYPE = "Dialog";
     public static final String SELL_SCREEN_TYPE = "Sell";
@@ -20,21 +20,17 @@ public abstract class DefaultScreen {
     public static final String PAYMENT_STATUS = "PaymentStatus";
     public static final String SELL_ITEM_DETAIL_SCREEN_TYPE = "SellItemDetail";
 
-    protected Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();    
+    private String name;    
+    private String type;    
+    private MenuItem backButton;
     
-    protected String name;
-    
-    protected String type;
-    
-    protected MenuItem backButton;
-    
-    protected List<MenuItem> menuActions = new ArrayList<>();
+    private List<MenuItem> menuActions = new ArrayList<>();
     
     public DefaultScreen() {
     }
 
     public DefaultScreen(String name) {
-        super();
         put("name", name);
     }
     

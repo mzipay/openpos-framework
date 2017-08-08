@@ -10,6 +10,8 @@ import org.jumpmind.jumppos.core.screen.DefaultScreen;
 @Screen(name="NodePersonalization", type=FORM_SCREEN_TYPE)
 public class NodePersonalizationForm extends DefaultScreen {
     
+    private static final long serialVersionUID = 1L;
+    
     @FormTextField(label="Node Id", placeholder="e.g. 00100-001", pattern="\\d{5}-\\d{3}")
     private String nodeId;
     

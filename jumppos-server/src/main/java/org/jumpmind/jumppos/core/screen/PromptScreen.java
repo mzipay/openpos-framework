@@ -2,6 +2,8 @@ package org.jumpmind.jumppos.core.screen;
 
 public class PromptScreen extends DefaultScreen {
 
+    private static final long serialVersionUID = 1L;
+    
     private String text;
     private String responseText;
     private boolean editable;

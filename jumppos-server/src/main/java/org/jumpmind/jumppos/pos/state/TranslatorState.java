@@ -20,32 +20,41 @@
  */
 package org.jumpmind.jumppos.pos.state;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.PostConstruct;
 
+import org.jumpmind.jumppos.core.flow.Action;
+import org.jumpmind.jumppos.core.flow.ActionHandler;
 import org.jumpmind.jumppos.core.flow.IState;
 import org.jumpmind.jumppos.core.flow.IStateManager;
-import org.jumpmind.jumppos.core.screen.DefaultScreen;
-import org.jumpmind.jumppos.core.screen.MenuItem;
+import org.jumpmind.jumppos.pos.screen.translate.ITranslationManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class HomeScreenState implements IState {
-    
+public class TranslatorState implements IState {
+
+    final Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     IStateManager stateManager;
-    
+
+    @PostConstruct
+    public void init() {
+        if (stateManager.getTranslationManager() == null) {
+            throw new IllegalStateException("When using a translation state, we expect an implementation of "
+                    + ITranslationManager.class.getSimpleName() + " to be bound at the prototype scope");
+        }
+    }
+
     @Override
     public void arrive() {
-        stateManager.showScreen(buildMenu());
+        stateManager.getTranslationManager().showActiveScreen();
     }
-    
-    protected DefaultScreen buildMenu() {
-        List<MenuItem> menuItems = new ArrayList<MenuItem>();
-        menuItems.add(new MenuItem("Sell", "Sell", "http://server/icon"));
-        menuItems.add(new MenuItem("ItemLookup", "Item Lookup", "http://server/icon"));
-        DefaultScreen screen = new DefaultScreen();
-        screen.setName("MainMenu");
-        screen.put("menuItems", menuItems);
-        return screen;
+
+    @ActionHandler
+    public void onAnyAction(Action action) {
+        ITranslationManager translationManager = stateManager.getTranslationManager();
+        translationManager.doAction(action);
     }
+
 }
