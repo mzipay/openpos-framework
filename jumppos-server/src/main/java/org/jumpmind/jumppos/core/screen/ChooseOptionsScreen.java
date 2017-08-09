@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ChooseOptionsScreen extends DefaultScreen {
+    private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public enum SelectionMode {
@@ -15,9 +16,11 @@ public class ChooseOptionsScreen extends DefaultScreen {
         MultipleOptions
     }
     
-    protected List<OptionItem> options;
-    protected SelectionMode selectionMode = SelectionMode.SingleOption;
-
+    
+    private List<OptionItem> options;
+    private SelectionMode selectionMode = SelectionMode.SingleOption;
+    private String promptText;
+    
     public ChooseOptionsScreen( ) {
         this( new ArrayList<OptionItem>() );
     }
@@ -80,6 +83,14 @@ public class ChooseOptionsScreen extends DefaultScreen {
         }
         
         return selectedOptions;
+    }
+
+    public String getPromptText() {
+        return promptText;
+    }
+
+    public void setPromptText(String text) {
+        this.promptText = text;
     }
     
 }

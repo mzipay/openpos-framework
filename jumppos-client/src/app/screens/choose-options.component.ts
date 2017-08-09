@@ -9,9 +9,11 @@ import {SessionService} from '../session.service';
 export class ChooseOptionsComponent {
 
   public optionItems: IOptionItem[];
+  public promptText: string;
 
   constructor(public session: SessionService) {
     this.optionItems = session.screen.options;
+    this.promptText = session.screen.promptText;
   }
 
 }
