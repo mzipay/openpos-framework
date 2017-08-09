@@ -28,8 +28,7 @@ import org.jumpmind.jumppos.pos.screen.translate.ITranslationManager;
 
 public interface IStateManager {
 
-    public void init();
-    public void setNodeId(String nodeId);
+    public void init(String nodeId);
     public String getNodeId();
     public void doAction(String action);
     public void doAction(String action, Map<String, String> params);

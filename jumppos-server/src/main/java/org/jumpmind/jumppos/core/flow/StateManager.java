@@ -78,7 +78,8 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
         }
     }
 
-    public void init() {
+    public void init(String nodeId) {
+        this.nodeId = nodeId;
         if (translationManager != null) {
             translationManager.setTranslationManagerSubscriber(this);
         }
@@ -211,10 +212,6 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
         this.flowConfig = flowConfig;
     }
 
-    public void registerUiModelListener(IUiModelListener uiModelListener) {
-        // this.uiModelListener = uiModelListener;
-    }
-
     @Override
     public void showScreen(DefaultScreen screen) {
         screenService.showScreen(nodeId, screen);
@@ -229,16 +226,9 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
         }
     }
 
+    @Override
     public String getNodeId() {
         return nodeId;
-    }
-
-    public void setNodeId(String nodeId) {
-        this.nodeId = nodeId;
-    }
-
-    public IScreenService getScreenService() {
-        return screenService;
     }
 
     @Override

@@ -19,10 +19,11 @@ import {PaymentStatusComponent} from './screens/payment-status.component';
 import {SellItemDetailComponent} from './screens/sell-item-detail.component';
 import { FocusDirective } from './screens/focus';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
+import { environment } from '../environments/environment';
 
 const stompConfig: StompConfig = {
   // Which server?
-  url: 'ws://localhost:8080/api/websocket',
+  url: environment.apiUrl,
 
   // Headers
   // Typical keys: login, passcode, host

@@ -54,9 +54,8 @@ public class StateManagerFactory implements IStateManagerFactory {
         StateManager stateManager = stateManagersByNodeId.get(nodeId);
         if (stateManager == null) {
             stateManager = applicationContext.getBean(StateManager.class);
-            stateManager.setNodeId(nodeId);
             stateManager.setFlowConfig(flowConfigProvider.getConfig(nodeId));
-            stateManager.init();
+            stateManager.init(nodeId);
             stateManagersByNodeId.put(nodeId, stateManager);
         }
         return stateManager;

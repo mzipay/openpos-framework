@@ -11,4 +11,6 @@ public interface ITranslationManagerSubscriber {
     
     public boolean isInTranslateState();
     
+    public String getNodeId();
+    
 }
