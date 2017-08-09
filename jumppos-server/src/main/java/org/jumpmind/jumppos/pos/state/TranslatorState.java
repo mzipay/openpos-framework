@@ -26,6 +26,7 @@ import org.jumpmind.jumppos.core.flow.Action;
 import org.jumpmind.jumppos.core.flow.ActionHandler;
 import org.jumpmind.jumppos.core.flow.IState;
 import org.jumpmind.jumppos.core.flow.IStateManager;
+import org.jumpmind.jumppos.core.screen.DefaultScreen;
 import org.jumpmind.jumppos.pos.screen.translate.ITranslationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +53,9 @@ public class TranslatorState implements IState {
     }
 
     @ActionHandler
-    public void onAnyAction(Action action) {
+    public void onAnyAction(Action action, DefaultScreen screen) {
         ITranslationManager translationManager = stateManager.getTranslationManager();
-        translationManager.doAction(action);
+        translationManager.doAction(action, screen);
     }
 
 }

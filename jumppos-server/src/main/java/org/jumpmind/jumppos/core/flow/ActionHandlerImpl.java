@@ -52,15 +52,17 @@ public class ActionHandlerImpl {
             for (Class<?> type : method.getParameterTypes()) {
                 if (type.isAssignableFrom(Action.class)) {
                     arguments.add(action);
-                } else if (type.isAssignableFrom(deserializedPayload.getClass())) {
+                } else if (deserializedPayload != null && type.isAssignableFrom(deserializedPayload.getClass())) {
                     arguments.add(deserializedPayload);
-                } else {
+                } else if (action.getData() != null) {
                     Object deserializedTarget = jsonMapper.convertValue(action.getData(), type);
                     if (deserializedTarget != null) {
                         arguments.add(deserializedTarget);
                     } else {
                         throw new FlowException("Failed to satisfy action method argument " + type);
                     }
+                } else {
+                    arguments.add(null);
                 }
             }
             
