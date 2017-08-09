@@ -13,9 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @org.springframework.context.annotation.Scope("prototype")
 public class ActionHandlerImpl {
 
-//    private Logger logger = LoggerFactory.getLogger(getClass());
+    // private Logger logger = LoggerFactory.getLogger(getClass());
     private static final String METHOD_ON_ANY = "onAnyAction";
-    
+
     private ObjectMapper jsonMapper = new ObjectMapper();
 
     public boolean handleAction(Object state, Action action, Object deserializedPayload) {
@@ -37,7 +37,7 @@ public class ActionHandlerImpl {
             }
         }
 
-        if (anyMethod != null) {            
+        if (anyMethod != null) {
             invokeHandleAction(state, action, anyMethod, deserializedPayload);
             return true;
         }
@@ -54,7 +54,7 @@ public class ActionHandlerImpl {
                     arguments.add(action);
                 } else if (deserializedPayload != null && type.isAssignableFrom(deserializedPayload.getClass())) {
                     arguments.add(deserializedPayload);
-                } else if (action.getData() != null) {
+                } else if (action.getData() != null && (action.getData() instanceof String || action.getData() instanceof byte[])) {
                     Object deserializedTarget = jsonMapper.convertValue(action.getData(), type);
                     if (deserializedTarget != null) {
                         arguments.add(deserializedTarget);
@@ -65,11 +65,11 @@ public class ActionHandlerImpl {
                     arguments.add(null);
                 }
             }
-            
+
             method.invoke(state, arguments.toArray(new Object[arguments.size()]));
         } catch (Exception ex) {
             throw new FlowException("Failed to invoke method " + method, ex);
-        }      
+        }
     }
 
 }
