@@ -13,12 +13,13 @@ public abstract class DefaultScreen {
 //    public static final String GLOBAL_NAV_ACTIONS_KEY = "navActions";
 //    public static final String MENU_ACTIONS_KEY = "menuActions";
     
+    public static final String CHOOSE_OPTIONS_SCREEN_TYPE = "ChooseOptions";
     public static final String DIALOG_SCREEN_TYPE = "Dialog";
-    public static final String SELL_SCREEN_TYPE = "Sell";
-    public static final String PROMPT_SCREEN_TYPE = "Prompt";
     public static final String FORM_SCREEN_TYPE = "Form";
     public static final String PAYMENT_STATUS = "PaymentStatus";
+    public static final String PROMPT_SCREEN_TYPE = "Prompt";
     public static final String SELL_ITEM_DETAIL_SCREEN_TYPE = "SellItemDetail";
+    public static final String SELL_SCREEN_TYPE = "Sell";
 
     protected Map<String, Object> additionalProperties = new HashMap<String, Object>();
     

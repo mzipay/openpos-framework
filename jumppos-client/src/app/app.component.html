@@ -18,6 +18,10 @@
 
 <ng-container *ngIf="session.screen" class="container">
 
+    <div *ngIf="session.screen.type==='ChooseOptions'">
+        <app-choose-options></app-choose-options>
+    </div>
+    
 	<div *ngIf="session.screen.type==='Dialog'">
 		<app-dialog></app-dialog>
 	</div>

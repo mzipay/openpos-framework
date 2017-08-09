@@ -12,10 +12,12 @@ import {AppRoutingModule} from './app-routing.module';
 import {SessionService} from './session.service';
 import {PromptComponent} from './screens/prompt.component';
 import {SellComponent} from './screens/sell.component';
+import {ChooseOptionsComponent} from './screens/choose-options.component';
 import {DialogComponent} from './screens/dialog.component';
 import {FormComponent} from './screens/form.component';
 import {PaymentStatusComponent} from './screens/payment-status.component';
 import {SellItemDetailComponent} from './screens/sell-item-detail.component';
+
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 
 const stompConfig: StompConfig = {
@@ -47,6 +49,7 @@ const stompConfig: StompConfig = {
   declarations: [
     AppComponent,
     PromptComponent,
+    ChooseOptionsComponent,
     DialogComponent,
     SellComponent,
     SellItemDetailComponent,
