@@ -26,9 +26,11 @@ import java.util.Map;
 import org.jumpmind.jumppos.core.flow.config.IFlowConfigProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope("singleton")
 public class StateManagerFactory implements IStateManagerFactory {
 
     @Autowired
@@ -43,7 +45,12 @@ public class StateManagerFactory implements IStateManagerFactory {
     private Map<String, StateManager> stateManagersByNodeId = new HashMap<>();
 
     @Override
-    public IStateManager retreiveOrCreate(String nodeId) {
+    public IStateManager retreive(String nodeId) {
+        return  stateManagersByNodeId.get(nodeId);
+    }
+    
+    @Override
+    public IStateManager create(String nodeId) {
         StateManager stateManager = stateManagersByNodeId.get(nodeId);
         if (stateManager == null) {
             stateManager = applicationContext.getBean(StateManager.class);

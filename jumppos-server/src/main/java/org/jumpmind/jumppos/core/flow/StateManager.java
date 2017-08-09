@@ -28,6 +28,9 @@ import javax.annotation.PostConstruct;
 import org.jumpmind.jumppos.core.flow.config.FlowConfig;
 import org.jumpmind.jumppos.core.flow.config.StateConfig;
 import org.jumpmind.jumppos.core.screen.DefaultScreen;
+import org.jumpmind.jumppos.pos.screen.translate.ITranslationManager;
+import org.jumpmind.jumppos.pos.screen.translate.ITranslationManagerSubscriber;
+import org.jumpmind.jumppos.pos.state.TranslatorState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,21 +42,23 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
 @Component()
 @org.springframework.context.annotation.Scope("prototype")
-public class StateManager implements IStateManager {
+public class StateManager implements IStateManager, ITranslationManagerSubscriber {
 
-    Logger logger = LoggerFactory.getLogger(getClass());
+    final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private IScreenService screenService;
-    
+
     @Autowired
     private ActionHandlerImpl actionHandler;
-    
+
     @Autowired
     private Injector injector;
+
+    @Autowired(required = false)
+    private ITranslationManager translationManager;
 
     private String nodeId;
     private Scope scope = new Scope();
@@ -64,18 +69,19 @@ public class StateManager implements IStateManager {
 
     @PostConstruct
     public void postConstruct() {
-        ClassPathScanningCandidateComponentProvider scanner =
-                new ClassPathScanningCandidateComponentProvider(false);
+        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
 
         scanner.addIncludeFilter(new AnnotationTypeFilter(org.jumpmind.jumppos.core.model.annotations.Screen.class));
 
         for (BeanDefinition bd : scanner.findCandidateComponents("org.jumpmind.jumppos")) {
             logger.info("" + bd);
-            System.out.println(bd.getBeanClassName());
         }
     }
 
     public void init() {
+        if (translationManager != null) {
+            translationManager.setTranslationManagerSubscriber(this);
+        }
         transitionTo(flowConfig.getInitialState());
     }
 
@@ -95,20 +101,25 @@ public class StateManager implements IStateManager {
         currentState.arrive();
     }
 
-    @Override
-    public IState getCurrentState() {
-        return currentState;
-    }
-
     protected IState buildState(StateConfig stateConfig) {
         IState state;
         try {
             state = stateConfig.getStateClass().newInstance();
         } catch (Exception ex) {
-            throw new FlowException("Failed to instantiate state " + 
-                    stateConfig.getStateName() + " class " + stateConfig.getStateClass(), ex);
+            throw new FlowException("Failed to instantiate state " + stateConfig.getStateName() + " class " + stateConfig.getStateClass(),
+                    ex);
         }
         return state;
+    }
+
+    @Override
+    public boolean isInTranslateState() {
+        return currentState != null && currentState instanceof TranslatorState;
+    }
+
+    @Override
+    public IState getCurrentState() {
+        return currentState;
     }
 
     @Override
@@ -118,7 +129,7 @@ public class StateManager implements IStateManager {
 
     @Override
     public void refreshScreen() {
-        showScreen(getLastScreen());        
+        showScreen(getLastScreen());
     }
 
     // Could come from a UI or a running state..
@@ -139,25 +150,25 @@ public class StateManager implements IStateManager {
     public void doAction(Action action) {
         StateConfig stateConfig = flowConfig.getStateConfig(currentState);
         String newStateName = stateConfig.getActionToStateMapping().get(action.getName());
-        if (newStateName != null) {  
+        if (newStateName != null) {
             StateConfig newStateConfig = flowConfig.getStateConfig(newStateName);
-            if (newStateConfig != null) {                
+            if (newStateConfig != null) {
                 transitionTo(newStateConfig);
             } else {
                 throw new FlowException("No State found for name " + newStateName);
             }
-        } else {            
+        } else {
             IState savedCurrentState = currentState;
             DefaultScreen deserializedScreen = screenService.deserializeScreenPayload(nodeId, action);
-            
-            boolean handled  = actionHandler.handleAction(currentState, action, deserializedScreen);
-            if (handled) {   
+
+            boolean handled = actionHandler.handleAction(currentState, action, deserializedScreen);
+            if (handled) {
                 if (savedCurrentState == currentState) {
                     // state did not change, reassert the current state.
-                    //    transitionTo(currentState);
+                    // transitionTo(currentState);
                 }
             } else {
-                logger.warn("Unexpected action " + action);                
+                logger.warn("Unexpected action " + action);
             }
         }
     }
@@ -198,15 +209,15 @@ public class StateManager implements IStateManager {
 
     public void setFlowConfig(FlowConfig flowConfig) {
         this.flowConfig = flowConfig;
-    }    
+    }
 
     public void registerUiModelListener(IUiModelListener uiModelListener) {
-        //        this.uiModelListener = uiModelListener;
+        // this.uiModelListener = uiModelListener;
     }
 
     @Override
     public void showScreen(DefaultScreen screen) {
-        screenService.showScreen(nodeId, screen);        
+        screenService.showScreen(nodeId, screen);
     }
 
     public String toJSONPretty(Object o) {
@@ -228,6 +239,11 @@ public class StateManager implements IStateManager {
 
     public IScreenService getScreenService() {
         return screenService;
+    }
+
+    @Override
+    public ITranslationManager getTranslationManager() {
+        return translationManager;
     }
 
 }

@@ -7,13 +7,15 @@ import org.jumpmind.jumppos.core.screen.PromptScreen;
 
 public class SellItemScreen extends PromptScreen {
 
+    private static final long serialVersionUID = 1L;
+    
     private List<LineItem> items = new ArrayList<>();
     
-    String balanceDue;
-    String discountTotal;
-    String grandTotal;
-    String subTotal;
-    String taxTotal;   
+    private String balanceDue;
+    private String discountTotal;
+    private String grandTotal;
+    private String subTotal;
+    private String taxTotal;   
     
     public SellItemScreen() {
         this.setType(SELL_SCREEN_TYPE);

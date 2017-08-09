@@ -48,7 +48,7 @@ public class ScreenService implements IScreenService {
         } catch (JsonProcessingException ex) {
             logger.error("Failed to write action to JSON", ex);
         }
-        IStateManager stateManager = stateManagerFactory.retreiveOrCreate(nodeId);
+        IStateManager stateManager = stateManagerFactory.retreive(nodeId);
         stateManager.setNodeId(nodeId);
         if (stateManager != null) {
             logger.info("Posting action of {}", action);
@@ -123,6 +123,7 @@ public class ScreenService implements IScreenService {
                 formField.setFieldId(field.getName());
                 formField.setLabel(textFieldAnnotation.label());
                 formField.setPlaceholder(textFieldAnnotation.placeholder());
+                formField.setPattern(textFieldAnnotation.pattern());
                 formField.setValue(getFieldValueAsString(field, screen));
                 form.addFormElement(formField);
             }

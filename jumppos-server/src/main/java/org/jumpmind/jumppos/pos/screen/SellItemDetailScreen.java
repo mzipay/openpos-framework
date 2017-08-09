@@ -8,6 +8,8 @@ import org.jumpmind.jumppos.core.screen.MenuItem;
 
 public class SellItemDetailScreen extends DefaultScreen {
 
+    private static final long serialVersionUID = 1L;
+    
     private LineItem item = new LineItem();
 
     private List<MenuItem> itemActions = new ArrayList<>();

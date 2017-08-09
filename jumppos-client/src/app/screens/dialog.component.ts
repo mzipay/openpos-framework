@@ -1,6 +1,7 @@
 import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SessionService } from '../session.service';
+import { FocusDirective } from './focus';
 
 @Component({
   selector: 'app-dialog',
@@ -9,6 +10,8 @@ import { SessionService } from '../session.service';
 export class DialogComponent implements AfterViewInit, DoCheck {
 
   @ViewChild('content') vcDialog;
+
+  @ViewChild('test') vcTest;
 
   initialized = false;
 
@@ -29,11 +32,17 @@ export class DialogComponent implements AfterViewInit, DoCheck {
      }, (reason) => {
        console.log('reason: ' + reason);
      });
+
+     if (this.vcTest) {
+       console.log('found test');
+     } else {
+       console.log('did not find test');
+     }
   }
 
   ngAfterViewInit(): void {
     this.initialized = true;
-    setTimeout(() => this.show(this.vcDialog), 0);
+    setTimeout(() => this.show(this.vcDialog), 0);    
   }
 
 }

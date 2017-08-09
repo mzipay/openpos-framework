@@ -20,8 +20,12 @@
  */
 package org.jumpmind.jumppos.core.screen;
 
-public class MenuItem {
+import java.io.Serializable;
 
+public class MenuItem implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    
     public MenuItem(String action, String title, String icon) {
         super();
         this.action = action;

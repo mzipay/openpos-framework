@@ -5,11 +5,14 @@ import static org.jumpmind.jumppos.core.screen.DefaultScreen.FORM_SCREEN_TYPE;
 import org.jumpmind.jumppos.core.model.annotations.FormButton;
 import org.jumpmind.jumppos.core.model.annotations.FormTextField;
 import org.jumpmind.jumppos.core.model.annotations.Screen;
+import org.jumpmind.jumppos.core.screen.DefaultScreen;
 
 @Screen(name="NodePersonalization", type=FORM_SCREEN_TYPE)
-public class NodePersonalizationForm extends org.jumpmind.jumppos.core.screen.DefaultScreen {
+public class NodePersonalizationForm extends DefaultScreen {
     
-    @FormTextField(label="Node Id:", placeholder="e.g. 100-1")
+    private static final long serialVersionUID = 1L;
+    
+    @FormTextField(label="Node Id", placeholder="e.g. 00100-001", pattern="\\d{5}-\\d{3}")
     private String nodeId;
     
     @FormButton(label="Save")

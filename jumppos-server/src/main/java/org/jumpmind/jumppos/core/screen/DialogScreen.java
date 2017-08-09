@@ -5,6 +5,8 @@ import java.util.List;
 
 public class DialogScreen extends DefaultScreen {
 
+    private static final long serialVersionUID = 1L;
+    
     String subType;
     
     List<MenuItem> buttons = new ArrayList<>();
