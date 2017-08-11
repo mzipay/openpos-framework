@@ -31,6 +31,7 @@ import org.jumpmind.jumppos.core.screen.DefaultScreen;
 import org.jumpmind.jumppos.core.service.IScreenService;
 import org.jumpmind.jumppos.pos.screen.translate.ITranslationManager;
 import org.jumpmind.jumppos.pos.screen.translate.ITranslationManagerSubscriber;
+import org.jumpmind.jumppos.pos.state.NodePersonalizationState;
 import org.jumpmind.jumppos.pos.state.TranslatorState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +82,8 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
 
     public void init(String nodeId) {
         this.nodeId = nodeId;
-        if (translationManager != null) {
+        if (translationManager != null && 
+                !nodeId.startsWith(NodePersonalizationState.TEMPORARY_NODE_ID)) {
             translationManager.setTranslationManagerSubscriber(this);
         }
         transitionTo(flowConfig.getInitialState());

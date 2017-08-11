@@ -33,7 +33,7 @@ public class NodePersonalizationState implements IState {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
-    static final String TEMPORARY_NODE_ID = "TEMPNODEID-";
+    public static final String TEMPORARY_NODE_ID = "TEMPNODEID-";
 
     @Autowired
     IStateManager stateManager;

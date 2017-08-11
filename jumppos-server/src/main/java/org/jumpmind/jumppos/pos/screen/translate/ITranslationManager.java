@@ -11,4 +11,6 @@ public interface ITranslationManager {
     
     public void showActiveScreen();
     
+    public void ping();
+    
 }
