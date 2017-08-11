@@ -20,11 +20,14 @@
  */
 package org.jumpmind.jumppos.core.flow;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Action {
+public class Action implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     private String name;
     private String stateHash;
     private Map<String, String> parameters = new HashMap<>();

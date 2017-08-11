@@ -1,4 +1,4 @@
-package org.jumpmind.jumppos.core.web;
+package org.jumpmind.jumppos.core.service;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.jumpmind.jumppos.core.flow.Action;
 import org.jumpmind.jumppos.core.flow.FlowException;
-import org.jumpmind.jumppos.core.flow.IScreenService;
 import org.jumpmind.jumppos.core.flow.IStateManager;
 import org.jumpmind.jumppos.core.flow.IStateManagerFactory;
 import org.jumpmind.jumppos.core.model.Form;

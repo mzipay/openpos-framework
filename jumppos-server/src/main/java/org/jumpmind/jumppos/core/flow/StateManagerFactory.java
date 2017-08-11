@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jumpmind.jumppos.core.flow.config.IFlowConfigProvider;
+import org.jumpmind.jumppos.core.service.IScreenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;

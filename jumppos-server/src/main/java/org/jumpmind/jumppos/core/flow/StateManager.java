@@ -28,6 +28,7 @@ import javax.annotation.PostConstruct;
 import org.jumpmind.jumppos.core.flow.config.FlowConfig;
 import org.jumpmind.jumppos.core.flow.config.StateConfig;
 import org.jumpmind.jumppos.core.screen.DefaultScreen;
+import org.jumpmind.jumppos.core.service.IScreenService;
 import org.jumpmind.jumppos.pos.screen.translate.ITranslationManager;
 import org.jumpmind.jumppos.pos.screen.translate.ITranslationManagerSubscriber;
 import org.jumpmind.jumppos.pos.state.TranslatorState;
