@@ -26,6 +26,11 @@ public class MenuItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
+    private String action;
+    private String title;
+    private String icon;
+    private boolean enabled = true;
+    
     public MenuItem(String action, String title, String icon) {
         super();
         this.action = action;
@@ -39,11 +44,6 @@ public class MenuItem implements Serializable {
         this.title = title;
         this.enabled = enabled;
     }
-
-    private String action;
-    private String title;
-    private String icon;
-    private boolean enabled = true;
 
     public String getAction() {
         return action;

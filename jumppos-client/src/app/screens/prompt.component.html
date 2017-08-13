@@ -1,11 +1,24 @@
-<div *ngIf="session.screen.type==='Prompt' &&  session.screen.text" class="container m-2">
-	<label>{{session.screen.text}}</label> 	
-	<input #box *ngIf="session.screen.responseType==='ALPHANUMERICPASSWORD'" type='password' (keyup.enter)="onEnter(box.value)"
-		[(ngModel)]="session.response">
-	<input #box *ngIf="session.screen.responseType==='ALPHANUMERICTEXT'" (keyup.enter)="onEnter(box.value)"
-		[(ngModel)]="session.response">		
-    <input #box *ngIf="session.screen.responseType==='CURRENCYTEXT'" (keyup.enter)="onEnter(box.value)"
-		[(ngModel)]="session.response">    
-    <input #box *ngIf="session.screen.responseType==='NUMERICTEXT'" (keyup.enter)="onEnter(box.value)"
-        [(ngModel)]="session.response">   		 
+<div *ngIf="session.screen.type==='Prompt' &&  session.screen.text" class="main-menu-container" fxLayout="column" fxLayoutAlign="center center">
+	<md-card class="prompt-container" style="background-color:#f0f0f0">
+		<md-card-content>
+
+			<div class="prompt-input-container">
+				<p>
+					<input #box *ngIf="session.screen.responseType==='ALPHANUMERICPASSWORD'" class="prompt-input" type='password' (keyup.enter)="onEnter(box.value)"
+					 [(ngModel)]="session.response" placeholder="{{session.screen.placeholderText}}">
+					<input #box *ngIf="session.screen.responseType==='ALPHANUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter(box.value)"
+					 [(ngModel)]="session.response" placeholder="{{session.screen.placeholderText}}">
+					<input #box *ngIf="session.screen.responseType==='CURRENCYTEXT'" class="prompt-input" (keyup.enter)="onEnter(box.value)"
+					 [(ngModel)]="session.response" placeholder="{{session.screen.placeholderText}}">
+					<input #box *ngIf="session.screen.responseType==='NUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter(box.value)" [(ngModel)]="session.response" 
+					placeholder="{{session.screen.placeholderText}}">
+				</p>
+				<md-icon class="material-icons prompt-icon">{{session.screen.promptIcon}}</md-icon>
+			</div>
+			<div style="height:50px"></div>
+			<label class="prompt-text">{{session.screen.text}}</label>
+		</md-card-content>
+	</md-card>
+
+
 </div>

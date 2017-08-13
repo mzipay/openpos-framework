@@ -1,5 +1,4 @@
 import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
-import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SessionService } from '../session.service';
 import { FocusDirective } from './focus';
 
@@ -17,7 +16,7 @@ export class DialogComponent implements AfterViewInit, DoCheck {
 
   public buttons: IMenuItem[] = [];
 
-  constructor(public session: SessionService, private modalService: NgbModal) {
+  constructor(public session: SessionService) {
   }
 
   ngDoCheck(): void {
@@ -27,11 +26,11 @@ export class DialogComponent implements AfterViewInit, DoCheck {
   }
 
   show(content) {
-     this.modalService.open(content, {keyboard: false}).result.then((result) => {
-       console.log('result: ' + result);
-     }, (reason) => {
-       console.log('reason: ' + reason);
-     });
+    //  this.modalService.open(content, {keyboard: false}).result.then((result) => {
+    //    console.log('result: ' + result);
+    //  }, (reason) => {
+    //    console.log('reason: ' + reason);
+    //  });
 
      if (this.vcTest) {
        console.log('found test');

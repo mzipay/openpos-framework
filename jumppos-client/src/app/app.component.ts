@@ -4,6 +4,8 @@ import { SessionService } from './session.service';
 import { PromptComponent } from './screens/prompt.component';
 import { SellComponent } from './screens/sell.component';
 import { FormComponent } from './screens/form.component';
+import { HomeComponent } from './screens/home.component';
+import { StatusBarComponent } from './screens/statusbar.component';
 import { FocusDirective } from './screens/focus';
 
 @Component({

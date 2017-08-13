@@ -1,6 +1,5 @@
 import { IMenuItem } from './dialog.component';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SessionService} from '../session.service';
 
 @Component({

@@ -1,55 +1,99 @@
-<nav class="navbar navbar-inverse bg-inverse">
-	<div class="nav">
-		<a *ngIf="backButton && backButton.enabled" class="navbar-text mr-2" (click)="session.onAction(session.screen.backButton.action)">
-			<i class="navbar-text fa fa-chevron-left fa-lg"></i></a>
-		<span class="navbar-brand">Mobile POS</span>
-	</div>
-	<button *ngIf="menuActions && menuActions.length > 0" class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed"
-	 aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
+<!-- <md-sidenav-container class="example-container">
+  <md-sidenav #sidenav class="sidenav" style="width:200px">
+   <md-nav-list>
+      <a md-list-item (click)="sidenav.close()" [routerLink]="['/']">
+        <md-icon md-list-icon>Home</md-icon>
+        <span md-line>Home</span>
+        <span md-line class="secondary">Home</span>
+      </a>
+      <a md-list-item (click)="sidenav.close()" [routerLink]="['/categories']">
+        <md-icon md-list-icon>list</md-icon>
+        <span md-line>Categories</span>
+        <span md-line class="secondary">Categories</span>
+      </a>
+      <a md-list-item (click)="sidenav.close()" [routerLink]="['/tags']">
+        <md-icon md-list-icon>bookmark</md-icon>
+        <span md-line>Tags</span>
+        <span md-line class="secondary">Tags</span>
+      </a>
+      <a md-list-item (click)="sidenav.close()" [routerLink]="['/questions']">
+        <md-icon md-list-icon>question_answer</md-icon>
+        <span md-line>Questions</span>
+        <span md-line class="secondary">Questions</span>
+      </a>
+    </md-nav-list>
+  </md-sidenav>
+
+  <div class="example-sidenav-content">
+    <button type="button" md-button (click)="sidenav.open()">
+      Open sidenav
+    </button>
+  </div>
+
+</md-sidenav-container> -->
+
+
+
+<md-sidenav-container style="background-color: transparent">
+	<md-sidenav #sidenav>
+		Here is the navigation.
+		<div *ngIf="menuActions" class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
+			<ul class="nav navbar-nav" style="margin:0px;">
+				<li *ngFor="let m of menuActions" class="nav-item"><a class="nav-link" (click)="session.onAction(m.action)" href="#">{{m.title}}</a>
+				</li>
+			</ul>
+		</div>
+
+	</md-sidenav>
+	<div>
+
+		<div>
+
+			<div style="height: 0">
+				<button class="hamburger-button" *ngIf="session.screen && session.screen.menuActions && session.screen.menuActions.length > 0" type="button" md-button
+				 (click)="sidenav.open()">                   
+      <md-icon class="material-icons statusbar-icon hamburger-icon">menu</md-icon>
 	</button>
-	<div *ngIf="menuActions" [ngbCollapse]="isCollapsed" class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
-		<ul class="nav navbar-nav">
-			<li *ngFor="let m of menuActions" class="nav-item"><a class="nav-link" (click)="session.onAction(m.action)" href="#">{{m.title}}</a>
-			</li>
-		</ul>
+			</div>
+			<app-statusbar *ngIf="session.screen && session.screen.showStatusBar"></app-statusbar>
+		</div>
+
+		<ng-container *ngIf="session.screen">
+
+			<div *ngIf="session.screen.type==='ChooseOptions'">
+				<app-choose-options></app-choose-options>
+			</div>
+
+			<div *ngIf="session.screen.type==='Dialog'">
+				<app-dialog></app-dialog>
+			</div>
+
+			<div *ngIf="session.screen.type==='Prompt'">
+				<app-prompt></app-prompt>
+			</div>
+
+			<div *ngIf="session.screen.type==='Sell'">
+				<app-sell></app-sell>
+			</div>
+
+			<div *ngIf="session.screen.type==='SellItemDetail'">
+				<app-sell-item-detail></app-sell-item-detail>
+			</div>
+
+			<div *ngIf="session.screen.type==='PaymentStatus'">
+				<app-payment-status></app-payment-status>
+			</div>
+
+			<div *ngIf="session.screen.type==='Form'">
+				<app-form></app-form>
+			</div>
+
+			<div *ngIf="session.screen.type==='Home'">
+				<app-home></app-home>
+			</div>
+
+		</ng-container>
+
+		<router-outlet></router-outlet>
 	</div>
-</nav>
-
-<ng-container *ngIf="session.screen" class="container">
-
-    <div *ngIf="session.screen.type==='ChooseOptions'">
-        <app-choose-options></app-choose-options>
-    </div>
-    
-	<div *ngIf="session.screen.type==='Dialog'">
-		<app-dialog></app-dialog>
-	</div>
-
-	<div *ngIf="session.screen.type==='Prompt'">
-		<app-prompt></app-prompt>
-	</div>
-
-	<div *ngIf="session.screen.type==='Sell'">
-		<app-sell></app-sell>
-	</div>
-
-	<div *ngIf="session.screen.type==='SellItemDetail'">
-		<app-sell-item-detail></app-sell-item-detail>
-	</div>
-
-	<div *ngIf="session.screen.type==='PaymentStatus'">
-		<app-payment-status></app-payment-status>
-	</div>
-
-	<div *ngIf="session.screen.type==='Form'">
-		<app-form></app-form>
-	</div>
-
-	<div *ngIf="session.screen.menuItems" class="m-2">
-		<button *ngFor="let m of menuItems" class="btn btn-info btn-lg p-1 btn-block" (click)="session.onAction(m.action)">{{m.title}}</button>
-	</div>
-</ng-container>
-
-
-<router-outlet></router-outlet>
+</md-sidenav-container>

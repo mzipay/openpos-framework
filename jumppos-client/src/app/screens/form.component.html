@@ -1,6 +1,7 @@
 <div *ngIf="session.screen.type==='Form'">
 	<div class="container m-2">
 		<label>Register Personalization</label>
+
 		<div *ngFor="let formElement of form.formElements">
 			<div *ngIf="formElement.elementType==='input'" [class]="'form-group ' + ((field.invalid && (field.dirty || field.touched)) ? 'has-warning' : '')">
 				<label class="form-control-label">{{formElement.label}}</label>

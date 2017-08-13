@@ -3,17 +3,17 @@ import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {SessionService} from '../session.service';
 
 @Component({
-  selector: 'app-form',
-  templateUrl: './form.component.html'
+  selector: 'app-statusbar',
+  templateUrl: './statusbar.component.html'
 })
-export class FormComponent implements AfterViewInit, DoCheck {
+export class StatusBarComponent implements AfterViewInit, DoCheck {
 
-  initialized = false;
+initialized = false;
 
-  public form: IForm;
+  public menuItems: IMenuItem[];
 
   constructor(public session: SessionService) {
-    this.form = session.screen.form;
+    //this.menuItems = session.screen.menuItems;
   }
 
   ngDoCheck(): void {
@@ -30,20 +30,12 @@ export class FormComponent implements AfterViewInit, DoCheck {
   onEnter(value: string) {
     this.session.onAction('Save');
   }
-
 }
 
-export interface IForm {
-    formElements: IFormElement[];
-}
-
-export interface IFormElement {
-    elementType: string;
-    inputType: string;
-    label: string;
-    fieldId: string;
-    value: string;
-    placeholder: string;
-    buttonAction: string;
+export interface IMenuItem {
+    action: string;
+    title: string;
+    icon: string;
+    enabled: boolean;
 }
 

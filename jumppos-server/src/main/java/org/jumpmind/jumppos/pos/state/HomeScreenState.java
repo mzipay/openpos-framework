@@ -45,6 +45,7 @@ public class HomeScreenState implements IState {
         menuItems.add(new MenuItem("ItemLookup", "Item Lookup", "http://server/icon"));
         DefaultScreen screen = new DefaultScreen();
         screen.setName("MainMenu");
+        screen.setType("Home");
         screen.put("menuItems", menuItems);
         return screen;
     }

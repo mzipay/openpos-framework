@@ -25,8 +25,14 @@ public class DefaultScreen implements Serializable {
     private String name;    
     private String type;    
     private MenuItem backButton;
+    private String storeNumber = "1453";
+    private String registerNumber = "1";
+    private boolean storeOpen = true;
+    private boolean registerOpen = false;
+    private String userDisplayName = "Jane Doe";
+    private boolean showStatusBar = true;
     
-    private List<MenuItem> menuActions = new ArrayList<>();
+    private List<MenuItem> menuItems = new ArrayList<>();
     
     public DefaultScreen() {
     }
@@ -106,11 +112,59 @@ public class DefaultScreen implements Serializable {
     }
     
     public List<MenuItem> getMenuActions() {
-        return menuActions;
+        return menuItems;
     }
     
-    public void setMenuActions(List<MenuItem> menuActions) {
-        this.menuActions = menuActions;
+    public void setMenuItems(List<MenuItem> menuItem) {
+        this.menuItems = menuItem;
+    }
+
+    public String getStoreNumber() {
+        return storeNumber;
+    }
+
+    public void setStoreNumber(String storeNumber) {
+        this.storeNumber = storeNumber;
+    }
+
+    public String getRegisterNumber() {
+        return registerNumber;
+    }
+
+    public void setRegisterNumber(String registerNumber) {
+        this.registerNumber = registerNumber;
+    }
+
+    public boolean isStoreOpen() {
+        return storeOpen;
+    }
+
+    public void setStoreOpen(boolean storeOpen) {
+        this.storeOpen = storeOpen;
+    }
+
+    public boolean isRegisterOpen() {
+        return registerOpen;
+    }
+
+    public void setRegisterOpen(boolean registerOpen) {
+        this.registerOpen = registerOpen;
+    }
+
+    public String getUserDisplayName() {
+        return userDisplayName;
+    }
+
+    public void setUserDisplayName(String userDisplayName) {
+        this.userDisplayName = userDisplayName;
+    }
+
+    public boolean isShowStatusBar() {
+        return showStatusBar;
+    }
+
+    public void setShowStatusBar(boolean showStatusBar) {
+        this.showStatusBar = showStatusBar;
     }
 
 }

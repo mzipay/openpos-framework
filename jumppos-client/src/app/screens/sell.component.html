@@ -1,68 +1,79 @@
-<div class="container">
-	<label for="itemprompt" class="sr-only">Enter Item</label>
-	<div class="input-group margin-bottom-sm mt-2">
-		<span class="input-group-addon"><i class="fa fa-barcode fa-2x"></i></span>
-		<input #itemprompt class="form-control" (keyup.enter)="onEnter(itemprompt.value)" [(ngModel)]="session.response" placeholder="scan something"
-		 required autofocus>
-	</div>
+<div class="containerX" fxLayout="row" fxLayoutAlign="center center">
+	<div class="sale-trans-panel-container" fxFlex="60">
+		<div class="prompt-input-container">
+			<p>
+				<input #box class="prompt-input-scan-something" (keyup.enter)="onEnter(box.value)" [(ngModel)]="session.response" placeholder="Scan something">
 
-	<button class="btn btn-lg btn-success btn-block mt-2" [disabled]="!items || items.length == 0" (click)="session.onAction('Checkout')">{{session.screen.grandTotal}}</button>
-
-	<table class="table table-bordered mt-2">
-		<thead>
-			<tr>
-				<th>Discounts</th>
-				<th>Tax</th>
-				<th>Subtotal</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>{{session.screen.discountTotal}}</td>
-				<td>{{session.screen.taxTotal}}</td>
-				<td>{{session.screen.subTotal}}</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<div class="mt-2">
-		<div *ngIf="items" class="list-group">
-			<a *ngFor="let i of items" (click)="session.onActionWithStringPayload('Item',i.lineNumber)" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-				<div class="container">
-					<div class="row">
-						<div class="col  pl-0">
-							<div class="container-fluid">
-								<div class="row  pl-0">
-									<div class="col  pl-0">
-										<h5 class="mb-1">{{i.description}}</h5>
-									</div>
-								</div>
-								<div class="row  pl-0">
-									<div class="col  pl-0">
-										{{i.itemId}}
-									</div>
-									<div class="col">
-										{{i.quantity}}@{{i.sellingPrice}}
-									</div>
-									<div class="col">
-									</div>
-								</div>
+			</p>
+			<svg style="width:64px;height:64px;    position:absolute;left:14px;top:5px;" viewBox="0 0 40 40">
+				<path fill="#c8c8c8" d="M4,6H6V18H4V6M7,6H8V18H7V6M9,6H12V18H9V6M13,6H14V18H13V6M16,6H18V18H16V6M19,6H20V18H19V6M2,4V8H0V4A2,2 0 0,1 2,2H6V4H2M22,2A2,2 0 0,1 24,4V8H22V4H18V2H22M2,16V20H6V22H2A2,2 0 0,1 0,20V16H2M22,20V16H24V20A2,2 0 0,1 22,22H18V20H22Z"
+				/>
+			</svg>
+		</div>
+		<button md-raised-button class="sale-total-button" (click)="session.onAction('Checkout')">
+								<div class="containerX" fxLayout="row" fxLayoutAlign="center center">
+									<div  fxFlex> </div>
+							<p class="sale-total-text">{{session.screen.grandTotal}}</p>
+							<div  fxFlex> </div>
+							<div class="sale-total-checkout-container" fxLayout="row">
+							<p class="sale-total-checkout-text">Checkout</p>
+							<md-icon class="material-icons md-48 sale-total-icon">keyboard_arrow_right</md-icon>
 							</div>
+							</div>
+		</button>
+
+		<div class="containerX sub-totals-outer-conatiner" fxLayout="row" fxLayoutAlign="center center">
+			<div fxFlex>
+				<md-card class="subtotals-container">
+					<md-card-content>
+						<p class="subtotals-label">Discounts</p>
+						<p class="subtotals-amount">{{session.screen.discountTotal}}</p>
+					</md-card-content>
+				</md-card>
+			</div>
+			<div fxFlex style="padding:12px;">
+				<md-card class="subtotals-container" style="position:relative;">
+
+					<md-card-content>
+						<p class="subtotals-label">Tax</p>
+						<p class="subtotals-amount">{{session.screen.taxTotal}}</p>
+					</md-card-content>
+				</md-card>
+			</div>
+			<div fxFlex>
+				<md-card class="subtotals-container" style="position:relative;">
+					<md-card-content>
+						<p class="subtotals-label">Subtotal</p>
+						<p class="subtotals-amount">{{session.screen.subTotal}}</p>
+					</md-card-content>
+				</md-card>
+			</div>
+
+		</div>
+
+		<div class="sale-line-item-container">
+			<md-list>
+				<md-list-item *ngFor="let i of items" class="sale-line-item" (click)="session.onActionWithStringPayload('Item',i.lineNumber)">
+					<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
+						<div fxFlex="80">
+							<div md-line class="line-item-description">{{i.description}}</div>
+							<div md-line class="line-item-subtitle">{{i.itemId}} {{i.quantity}}@{{i.sellingPrice}}</div>
 						</div>
-						<div class="col-1 align-self-center">
-							<h5 class="mb-0 pull-right middle-align">{{i.extendedAmount}}</h5>
-						</div>
-						<div class="col-1 align-self-center pr-0">
-							<i class="fa fa-chevron-right fa-2x pull-right" aria-hidden="true"></i>
+						
+						<div fxFlex>
+							<!-- <md-icon class="material-icons pull-right middle-align line-item-caret">keyboard_arrow_right</md-icon> -->
+							<md-icon class="material-icons pull-right middle-align line-item-caret">></md-icon>
+							<h5 class="mb-0 pull-right middle-align line-item-extended-amt">{{i.extendedAmount}}</h5>
 						</div>
 					</div>
-				</div>
-			</a>
-
-			<div *ngIf="items.length==0" class="list-group-item list-group-item-warning">
-				<strong>There are no items in the cart</strong>
-			</div>
+				</md-list-item>
+			</md-list>
 		</div>
+
+
+	</div>
+	<div class="sale-marketing-panel-container" fxFlex>
+
 	</div>
 
 </div>
