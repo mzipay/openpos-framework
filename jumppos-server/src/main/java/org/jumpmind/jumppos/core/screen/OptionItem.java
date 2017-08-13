@@ -1,7 +1,11 @@
 package org.jumpmind.jumppos.core.screen;
 
-public class OptionItem {
+import java.io.Serializable;
 
+public class OptionItem implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    
     protected String displayValue;
     protected String value;
     protected boolean enabled = true;
