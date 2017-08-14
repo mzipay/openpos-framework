@@ -16,6 +16,7 @@ public class SellItemScreen extends PromptScreen {
     private String grandTotal;
     private String subTotal;
     private String taxTotal;
+    private boolean transactionActive = false;
     private String transactionNumber;
 
     public SellItemScreen() {
@@ -76,6 +77,14 @@ public class SellItemScreen extends PromptScreen {
 
     public String getTransactionNumber() {
         return transactionNumber;
+    }
+    
+    public void setTransactionActive(boolean transactionActive) {
+        this.transactionActive = transactionActive;
+    }
+    
+    public boolean isTransactionActive() {
+        return transactionActive;
     }
 
 }

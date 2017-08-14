@@ -10,16 +10,16 @@
 				/>
 			</svg>
 		</div>
-		<button md-raised-button class="sale-total-button" (click)="session.onAction('Checkout')">
-								<div class="containerX" fxLayout="row" fxLayoutAlign="center center">
-									<div  fxFlex> </div>
-							<p class="sale-total-text">{{session.screen.grandTotal}}</p>
-							<div  fxFlex> </div>
-							<div class="sale-total-checkout-container" fxLayout="row">
-							<p class="sale-total-checkout-text">Checkout</p>
-							<md-icon class="material-icons md-48 sale-total-icon">keyboard_arrow_right</md-icon>
-							</div>
-							</div>
+		<button md-raised-button class="sale-total-button" [disabled]="!session.screen.transactionActive || items.length == 0" (click)="session.onAction('Checkout')">
+			<div class="containerX" fxLayout="row" fxLayoutAlign="center center">
+			<div  fxFlex> </div>
+			<p class="sale-total-text">{{session.screen.grandTotal}}</p>
+			<div  fxFlex> </div>
+			<div class="sale-total-checkout-container" fxLayout="row">
+			<p class="sale-total-checkout-text">Checkout</p>
+			<md-icon class="material-icons md-48 sale-total-icon">keyboard_arrow_right</md-icon>
+			</div>
+			</div>
 		</button>
 
 		<div class="containerX sub-totals-outer-conatiner" fxLayout="row" fxLayoutAlign="center center">
@@ -59,7 +59,7 @@
 							<div md-line class="line-item-description">{{i.description}}</div>
 							<div md-line class="line-item-subtitle">{{i.itemId}} {{i.quantity}}@{{i.sellingPrice}}</div>
 						</div>
-						
+
 						<div fxFlex>
 							<!-- <md-icon class="material-icons pull-right middle-align line-item-caret">keyboard_arrow_right</md-icon> -->
 							<md-icon class="material-icons pull-right middle-align line-item-caret">></md-icon>
