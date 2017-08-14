@@ -8,7 +8,7 @@ import {SessionService} from '../session.service';
 })
 export class SellComponent implements AfterViewInit, DoCheck {
 
-  @ViewChild('itemprompt') vc;
+  @ViewChild('box') vc;
 
   initialized = false;
 
