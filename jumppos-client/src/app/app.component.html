@@ -34,24 +34,25 @@
 
 <md-sidenav-container style="background-color: transparent">
 	<md-sidenav #sidenav>
-		Here is the navigation.
 		<div *ngIf="menuActions" class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
-			<ul class="nav navbar-nav" style="margin:0px;">
-				<li *ngFor="let m of menuActions" class="nav-item"><a class="nav-link" (click)="session.onAction(m.action)" href="#">{{m.title}}</a>
-				</li>
-			</ul>
+			<md-nav-list>
+				<md-list-item *ngFor="let m of menuActions">
+						<md-icon class="material-icons">{{m.icon}}</md-icon>
+						<a (click)="session.onAction(m.action);  sidenav.close()" href="#">{{m.title}}</a>
+						<md-icon class="material-icons">keyboard_arrow_right</md-icon>						
+				</md-list-item>
+			</md-nav-list>
 		</div>
-
 	</md-sidenav>
+
 	<div>
 
 		<div>
-
 			<div style="height: 0">
 				<button class="hamburger-button" *ngIf="session.screen && session.screen.menuActions && session.screen.menuActions.length > 0"
 				 type="button" md-button (click)="sidenav.open()">                   
-      <md-icon class="material-icons statusbar-icon hamburger-icon">menu</md-icon>
-	 </button>
+      		<md-icon class="material-icons statusbar-icon hamburger-icon">menu</md-icon>
+	 			</button>
 			</div>
 			<app-statusbar *ngIf="session.screen && session.screen.showStatusBar"></app-statusbar>
 		</div>
