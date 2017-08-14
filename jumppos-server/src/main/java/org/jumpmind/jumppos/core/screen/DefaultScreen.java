@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 
 public class DefaultScreen implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public static final String CHOOSE_OPTIONS_SCREEN_TYPE = "ChooseOptions";
     public static final String DIALOG_SCREEN_TYPE = "Dialog";
     public static final String FORM_SCREEN_TYPE = "Form";
@@ -21,56 +21,56 @@ public class DefaultScreen implements Serializable {
     public static final String SELL_ITEM_DETAIL_SCREEN_TYPE = "SellItemDetail";
     public static final String SELL_SCREEN_TYPE = "Sell";
 
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();    
-    private String name;    
-    private String type;    
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private String name;
+    private String type;
     private MenuItem backButton;
-    private String storeNumber = "1453";
-    private String registerNumber = "1";
+    private Workstation workstation;
+    private String operatorName;
     private boolean storeOpen = true;
     private boolean registerOpen = false;
     private String userDisplayName = "Jane Doe";
     private boolean showStatusBar = true;
-    
+
     private List<MenuItem> menuItems = new ArrayList<>();
-    
+
     public DefaultScreen() {
     }
 
     public DefaultScreen(String name) {
         put("name", name);
     }
-    
+
     @JsonAnyGetter
     public Map<String, Object> any() {
-       return this.additionalProperties;
+        return this.additionalProperties;
     }
 
     @JsonAnySetter
     public void put(String name, Object value) {
-       this.additionalProperties.put(name, value);
+        this.additionalProperties.put(name, value);
     }
-    
+
     public boolean contains(String name) {
         return this.additionalProperties.containsKey(name);
     }
-    
+
     public Object get(String name) {
         return additionalProperties.get(name);
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public void setType(String type) {
         this.type = type;
     }
-    
+
     public String getType() {
         return type;
     }
@@ -102,37 +102,37 @@ public class DefaultScreen implements Serializable {
             list.add(value);
         }
     }
-    
+
     public void setBackButton(MenuItem backButton) {
         this.backButton = backButton;
     }
-    
+
     public MenuItem getBackButton() {
         return backButton;
     }
-    
+
     public List<MenuItem> getMenuActions() {
         return menuItems;
     }
-    
+
     public void setMenuItems(List<MenuItem> menuItem) {
         this.menuItems = menuItem;
     }
 
-    public String getStoreNumber() {
-        return storeNumber;
+    public String getOperatorName() {
+        return operatorName;
     }
 
-    public void setStoreNumber(String storeNumber) {
-        this.storeNumber = storeNumber;
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
     }
 
-    public String getRegisterNumber() {
-        return registerNumber;
+    public Workstation getWorkstation() {
+        return workstation;
     }
 
-    public void setRegisterNumber(String registerNumber) {
-        this.registerNumber = registerNumber;
+    public void setWorkstation(Workstation workstation) {
+        this.workstation = workstation;
     }
 
     public boolean isStoreOpen() {

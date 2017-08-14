@@ -1,30 +1,33 @@
 <div fxLayout="row" class="container statusbar-container">
-	
+
 	<div *ngIf="session.screen && session.screen.menuActions && session.screen.menuActions.length > 0" style="width:70px">
-		</div>
-	
+	</div>
+
 	<a *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled" class="navbar-text" (click)="session.onAction(session.screen.backButton.action)">
-		<md-icon class="material-icons statusbar-icon" style="">arrow_back</md-icon>
+		<md-icon class="material-icons statusbar-icon">arrow_back</md-icon>
 	</a>
-	<md-icon class="material-icons statusbar-icon" style="">location_on</md-icon>
-	<md-icon *ngIf="session.screen.storeOpen" class="material-icons" style="width:0px;position:relative;left: -29px;top:5px;color:#18b220; z-index: 0;">fiber_manual_record</md-icon>
 
-	<p class="statusbar-text">Store #{{session.screen.storeNumber}}</p>
-	<div style="width:10px"></div>
-	<md-icon *ngIf="session.screen.regterOpen" class="material-icons statusbar-icon">location_on</md-icon>
-	<md-icon *ngIf="session.screen.registerOpen" class="material-icons" style="width:0px;position:relative;left: -29px;top:5px;color:#18b220; z-index: 0;">fiber_manual_record</md-icon>
-	<md-icon *ngIf="!session.screen.registerOpen" class="material-icons statusbar-icon statusbar-icon-off">location_off</md-icon>
-	<p class="statusbar-text">Register #{{session.screen.registerNumber}}</p>
+	<ng-container *ngIf="session.screen.workstation">
+		<md-icon class="material-icons statusbar-icon">location_on</md-icon>
+		<md-icon *ngIf="session.screen.storeOpen" class="material-icons" style="width:0px;position:relative;left: -29px;top:5px;color:#18b220; z-index: 0;">fiber_manual_record</md-icon>
+		<p class="statusbar-text">Store #{{session.screen.workstation.storeId}}</p>
+		<div style="width:10px"></div>
+		<md-icon *ngIf="session.screen.registerOpen" class="material-icons statusbar-icon">location_on</md-icon>
+		<md-icon *ngIf="session.screen.registerOpen" class="material-icons" style="width:0px;position:relative;left: -29px;top:5px;color:#18b220; z-index: 0;">fiber_manual_record</md-icon>
+		<md-icon *ngIf="!session.screen.registerOpen" class="material-icons statusbar-icon statusbar-icon-off">location_off</md-icon>
 
-		<md-icon *ngIf="session.screen.grandTotal && session.screen.grandTotal > 0" class="material-icons statusbar-icon statusbar-icon-off">receipt</md-icon>
-		<p *ngIf="session.screen.grandTotal && session.screen.grandTotal > 0" class="statusbar-text">Transaction #XYZ</p>
+		<p class="statusbar-text">Register #{{session.screen.workstation.workstationId}}</p>
+	</ng-container>
+	<md-icon *ngIf="session.screen.transactionNumber" class="material-icons statusbar-icon statusbar-icon-off">receipt</md-icon>
+	<p *ngIf="session.screen.transactionNumber" class="statusbar-text">Transaction #{{session.screen.transactionNumber}}</p>
 
 	<div fxFlex></div>
 
-
-	<md-icon class="material-icons statusbar-icon">lock_open</md-icon>
-	<p class="statusbar-text">Signed in as <span style="font-weight: bold">{{session.screen.userDisplayName}}</span></p>
-	<md-icon class="material-icons statusbar-icon status-bar-logout-icon">arrow_drop_down</md-icon>
+	<ng-container *ngIf="session.screen.operatorName">
+		<md-icon class="material-icons statusbar-icon">lock_open</md-icon>
+		<p class="statusbar-text">Signed in as <span style="font-weight: bold">{{session.screen.operatorName}}</span></p>
+		<md-icon class="material-icons statusbar-icon status-bar-logout-icon">arrow_drop_down</md-icon>
+	</ng-container>
 
 
 

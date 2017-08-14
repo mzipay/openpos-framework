@@ -1,6 +1,6 @@
 // import {MdButtonModule, MdCheckboxModule} from '@angular/material';
-import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
-import {SessionService} from '../session.service';
+import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
+import { SessionService } from '../session.service';
 
 @Component({
   selector: 'app-statusbar',
@@ -8,17 +8,17 @@ import {SessionService} from '../session.service';
 })
 export class StatusBarComponent implements AfterViewInit, DoCheck {
 
-initialized = false;
+  initialized = false;
 
   public menuItems: IMenuItem[];
 
   constructor(public session: SessionService) {
-    //this.menuItems = session.screen.menuItems;
+    // this.menuItems = session.screen.menuItems;
   }
 
   ngDoCheck(): void {
     if (this.initialized) {
-  //    this.vc.nativeElement.focus();
+      //    this.vc.nativeElement.focus();
     }
   }
 
@@ -33,9 +33,10 @@ initialized = false;
 }
 
 export interface IMenuItem {
-    action: string;
-    title: string;
-    icon: string;
-    enabled: boolean;
+  action: string;
+  title: string;
+  icon: string;
+  enabled: boolean;
 }
+
 

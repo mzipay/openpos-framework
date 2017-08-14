@@ -1,0 +1,30 @@
+package org.jumpmind.jumppos.core.screen;
+
+import java.io.Serializable;
+
+public class Workstation implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
+    
+    String storeId;
+    
+    String workstationId;
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getWorkstationId() {
+        return workstationId;
+    }
+
+    public void setWorkstationId(String workstationId) {
+        this.workstationId = workstationId;
+    }
+    
+    
+}
