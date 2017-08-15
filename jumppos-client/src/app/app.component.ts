@@ -28,7 +28,6 @@ export class AppComponent implements OnInit, OnDestroy, DoCheck {
 
   ngOnInit(): void {
     this.session.subscribe();
-    console.log('init');
   }
 
   ngDoCheck(): void {
