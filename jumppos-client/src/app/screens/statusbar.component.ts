@@ -1,4 +1,4 @@
-// import {MdButtonModule, MdCheckboxModule} from '@angular/material';
+import { IMenuItem } from './imenuitem';
 import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';
 
@@ -31,12 +31,3 @@ export class StatusBarComponent implements AfterViewInit, DoCheck {
     this.session.onAction('Save');
   }
 }
-
-export interface IMenuItem {
-  action: string;
-  title: string;
-  icon: string;
-  enabled: boolean;
-}
-
-

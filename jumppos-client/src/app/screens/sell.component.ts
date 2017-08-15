@@ -1,4 +1,4 @@
-import { IMenuItem } from './dialog.component';
+import { IMenuItem } from './imenuitem';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {SessionService} from '../session.service';
 

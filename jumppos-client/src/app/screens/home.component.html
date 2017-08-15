@@ -1,20 +1,19 @@
 <div *ngIf="session.screen.type==='Home'" fxLayout="row" fxLayoutAlign="center center" class="main-menu-container">
 
-		<md-card class="main-menu">
-			<app-statusbar></app-statusbar>
-			<md-card-content style="height:450px">
-					<div fxLayout="row" fxLayoutAlign="center center" style="padding-top: 20px" fxLayoutWrap>
-						<div *ngFor="let menuItem of menuItems">
-							<div fxLayout="column" style="height: 200px; width:250px;" fxLayoutAlign="center center">
-							<button md-raised-button class="main-menu-item"  (click)="session.onAction(menuItem.action)">
+	<md-card class="main-menu">
+		<app-statusbar></app-statusbar>
+		<md-card-content style="height:450px">
+			<div fxLayout="row" fxLayoutAlign="center center" style="padding-top: 20px" fxLayoutWrap>
+				<div *ngFor="let menuItem of menuItems">
+					<div fxLayout="column" style="height: 200px; width:250px;" fxLayoutAlign="center center">
+						<button md-raised-button class="main-menu-item" (click)="session.onAction(menuItem.action)">
 							<md-icon class="material-icons md-64 main-menu-item-icon">{{menuItem.icon}}</md-icon>
 							<p class="main-menu-item-text">{{menuItem.title}}</p>
 								</button>
-						</div>
-						</div>
 					</div>
-
-			</md-card-content>
-		</md-card>
+				</div>
+			</div>
+		</md-card-content>
+	</md-card>
 
 </div>
