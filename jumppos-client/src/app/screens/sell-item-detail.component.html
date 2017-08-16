@@ -1,12 +1,12 @@
 <md-card>
     <md-card-title>{{item.description}}</md-card-title>
 
-    <md-card-title-group>
-        <img *ngIf="item.imageUrl" md-card-md-image [src]="item.imageUrl" />
-        <p>{{item.productDescription}}</p>
-    </md-card-title-group>
-
     <md-card-content>
+        <div fxLayout="row">
+            <img *ngIf="item.imageUrl" md-card-md-image [src]="item.imageUrl" />
+            <p>{{item.productDescription}}</p>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
         <table>
             <thead>
                 <tr>
@@ -23,6 +23,7 @@
                 </tr>
             </tbody>
         </table>
+        </div>
     </md-card-content>
     <md-card-actions *ngIf="session.screen.itemActions">
         <button *ngFor="let m of session.screen.itemActions" md-raised-button (click)="session.onAction(m.action)">{{m.title}}</button>

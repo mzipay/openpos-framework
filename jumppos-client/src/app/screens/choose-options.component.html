@@ -1,15 +1,8 @@
-<div *ngIf="promptText" class="container mt-2">
-    <h5>{{promptText}}</h5>
-</div>
-
-<div class="container mt-2">
-    <a *ngFor="let o of optionItems" (click)="session.onAction(o.value)" href="#" class="mt-4 list-group-item list-group-item-action flex-column align-items-start">
-        <div class="container">
-            <div class="row">
-                <div class="container-fluid ">
-                        <h5 class="mb-1">{{o.displayValue}}</h5>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
+<md-card>
+    <md-card-title *ngIf="promptText">{{promptText}}</md-card-title>
+    <md-card-content>
+        <md-nav-list>
+            <md-list-item *ngFor="let o of optionItems" (click)="session.onAction(o.value)">{{o.displayValue}}</md-list-item>
+        </md-nav-list>
+    </md-card-content>
+</md-card>

@@ -1,18 +1,18 @@
 <md-sidenav-container style="background-color: transparent">
-	<md-sidenav #sidenav>
-		<div *ngIf="menuActions" class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
+	<md-sidenav class="app-sidenav" #sidenav>
+		<div class="app-sidenav-content" *ngIf="menuActions" class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
 			<md-nav-list>
-						<div *ngFor="let m of menuActions" fxLayout="row" fxLayoutAlign="start center">
-								<md-icon fxFlex="12" class="material-icons">{{m.icon}}</md-icon>
-								<a  fxFlex (click)="session.onAction(m.action);  sidenav.close()" href="#">{{m.title}}</a>
-								<md-icon fxFlexAlign="end" class="material-icons">keyboard_arrow_right</md-icon>							
-						</div>								
+				<a *ngFor="let m of menuActions" md-list-item (click)="session.onAction(m.action);  sidenav.close()" href="#">
+					<md-icon  md-list-icon class="material-icons">{{m.icon}}</md-icon>
+					<span md-line>{{m.title}}</span>
+					<md-icon class="material-icons">keyboard_arrow_right</md-icon>
+				</a>
+
 			</md-nav-list>
 		</div>
 	</md-sidenav>
 
 	<div>
-
 		<div>
 			<div style="height: 0">
 				<button class="hamburger-button" *ngIf="session.screen && session.screen.menuActions && session.screen.menuActions.length > 0"
