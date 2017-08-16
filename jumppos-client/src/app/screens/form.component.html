@@ -3,18 +3,18 @@
 		<md-card-title>Register Personalization</md-card-title>
 		<md-card-content>
 			<ng-container *ngFor="let formElement of form.formElements">
-				<div *ngIf="formElement.elementType==='input'" [class]="'form-group ' + ((field.invalid && (field.dirty || field.touched)) ? 'has-warning' : '')">
+				<div *ngIf="formElement.elementType==='input'">
 					<md-input-container>
 						<input [(ngModel)]="formElement.value" #field="ngModel" mdInput placeholder="{{formElement.label + ' - ' + formElement.placeholder}}"
 						 [pattern]="formElement.pattern" required>
-						<div *ngIf="field.invalid && (field.dirty || field.touched)" class="form-control-feedback">
-							<div *ngIf="field.errors.required">
+						<ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
+							<md-error div *ngIf="field.errors.required">
 								* is required.
-							</div>
-							<div *ngIf="field.errors.pattern">
+							</md-error>
+							<md-error *ngIf="field.errors.pattern">
 								* did not follow the designated pattern
-							</div>
-						</div>
+							</md-error>
+						</ng-container>
 					</md-input-container>
 				</div>
 			</ng-container>
