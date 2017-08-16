@@ -79,7 +79,7 @@ public class ChooseOptionsScreen extends DefaultScreen {
 
         if ( SelectionMode.SingleOption == this.getSelectionMode() && selectedOptions.size() > 1 ) {
             logger.warn( "Selection mode is {}, but there are multiple items selected.  Returning only first OptionItem.", this.selectionMode );
-            selectedOptions.removeIf( o -> o != selectedOptions.get( 0 ) ); // remove all but first tiem
+            selectedOptions.removeIf( o -> o != selectedOptions.get( 0 ) ); // remove all but first item
         }
         
         return selectedOptions;
