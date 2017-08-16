@@ -223,21 +223,15 @@ md-card {
 }
 
 .sale-line-item-container {
-    //background-color: white; 
     height: calc(100% - 336px);
     width: calc(100% - 64px);
     font-size: 14px;
-    //padding-left: 10px;
-    //padding-right: 10px;
-    //width: calc(100% - 36px);    
     margin: 0px;
 }
 
 .sale-line-item-container-content {
-    //background-color: white; 
     overflow-y: auto;
     height: 100%;
-    //height: calc(100% - 200px);
 }
 
 .line-item-caret {
