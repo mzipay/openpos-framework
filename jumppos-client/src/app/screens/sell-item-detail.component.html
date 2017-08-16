@@ -1,17 +1,13 @@
-<div class="container">
-    <h5 class="mb-1 mt-2">{{item.description}}</h5>
-    <div class="p-2">
-        <div class="container mb-2">
-            <div class="row">
-                <div class="col-4">
-                    <img *ngIf="item.imageUrl" class="img-thumbnail" [src]="item.imageUrl" />
-                </div>
-                <div class="col-md">
-                    <p>{{item.productDescription}}</p>
-                </div>
-            </div>
-        </div>
-        <table class="table table-bordered">
+<md-card>
+    <md-card-title>{{item.description}}</md-card-title>
+
+    <md-card-title-group>
+        <img *ngIf="item.imageUrl" md-card-md-image [src]="item.imageUrl" />
+        <p>{{item.productDescription}}</p>
+    </md-card-title-group>
+
+    <md-card-content>
+        <table>
             <thead>
                 <tr>
                     <th>Item ID</th>
@@ -27,8 +23,9 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div *ngIf="session.screen.itemActions" class="m-2">
-        <button *ngFor="let m of session.screen.itemActions" class="btn btn-info btn-lg p-1 btn-block" (click)="session.onAction(m.action)">{{m.title}}</button>
-    </div>
-</div>
+    </md-card-content>
+    <md-card-actions *ngIf="session.screen.itemActions">
+        <button *ngFor="let m of session.screen.itemActions" md-raised-button (click)="session.onAction(m.action)">{{m.title}}</button>
+    </md-card-actions>
+
+</md-card>

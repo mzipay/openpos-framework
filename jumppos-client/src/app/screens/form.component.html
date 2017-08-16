@@ -1,23 +1,29 @@
-<div *ngIf="session.screen.type==='Form'">
-	<div class="container m-2">
-		<label>Register Personalization</label>
-
-		<div *ngFor="let formElement of form.formElements">
-			<div *ngIf="formElement.elementType==='input'" [class]="'form-group ' + ((field.invalid && (field.dirty || field.touched)) ? 'has-warning' : '')">
-				<label class="form-control-label">{{formElement.label}}</label>
-				<input [(ngModel)]="formElement.value" #field="ngModel" class="form-control" placeholder="{{formElement.placeholder}}" [pattern]="formElement.pattern" required>
-				<div *ngIf="field.invalid && (field.dirty || field.touched)" class="form-control-feedback">
-					<div *ngIf="field.errors.required">
-						* is required.
-					</div>
-					<div *ngIf="field.errors.pattern">
-						* did not follow the designated pattern
-					</div>				
+<ng-container *ngIf="session.screen.type==='Form'">
+	<md-card>
+		<md-card-title>Register Personalization</md-card-title>
+		<md-card-content>
+			<ng-container *ngFor="let formElement of form.formElements">
+				<div *ngIf="formElement.elementType==='input'" [class]="'form-group ' + ((field.invalid && (field.dirty || field.touched)) ? 'has-warning' : '')">
+					<md-input-container>
+						<input [(ngModel)]="formElement.value" #field="ngModel" mdInput placeholder="{{formElement.label + ' - ' + formElement.placeholder}}"
+						 [pattern]="formElement.pattern" required>
+						<div *ngIf="field.invalid && (field.dirty || field.touched)" class="form-control-feedback">
+							<div *ngIf="field.errors.required">
+								* is required.
+							</div>
+							<div *ngIf="field.errors.pattern">
+								* did not follow the designated pattern
+							</div>
+						</div>
+					</md-input-container>
 				</div>
-			</div>
-			<div *ngIf="formElement.elementType==='button'">
-				<button class="btn btn-primary btn-sm" (click)="session.response=form; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>
-			</div>
-		</div>
-	</div>
-</div>
+			</ng-container>
+			<ng-container *ngFor="let formElement of form.formElements">
+				<div *ngIf="formElement.elementType==='button'">
+					<button md-raised-button [color]="'primary'" (click)="session.response=form; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>
+				</div>
+			</ng-container>
+
+		</md-card-content>
+	</md-card>
+</ng-container>
