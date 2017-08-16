@@ -22,7 +22,7 @@
 			</div>
 		</button>
 
-		<div class="containerX sub-totals-outer-conatiner" fxLayout="row" fxLayoutAlign="center center">
+		<div class="containerX sub-totals-outer-container" fxLayout="row" fxLayoutAlign="center center">
 			<div fxFlex>
 				<md-card class="subtotals-container">
 					<md-card-content>
@@ -51,27 +51,30 @@
 
 		</div>
 
-		<div class="sale-line-item-container">
-			<md-list>
-				<md-list-item *ngFor="let i of items" class="sale-line-item" (click)="session.onActionWithStringPayload('Item',i.lineNumber)">
-					<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
-						<div fxFlex="80">
-							<div md-line class="line-item-description">{{i.description}}</div>
-							<div md-line class="line-item-subtitle">{{i.itemId}} {{i.quantity}}@{{i.sellingPrice}}</div>
+		<md-card class="sale-line-item-container">
+			<md-card-content class="sale-line-item-container-content">
+				<md-list>
+					<md-list-item *ngFor="let i of items" class="sale-line-item" (click)="session.onActionWithStringPayload('Item',i.lineNumber)">
+						<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
+							<div fxFlex="80">
+								<div md-line class="line-item-description">{{i.description}}</div>
+								<div md-line class="line-item-subtitle">{{i.itemId}} {{i.quantity}}@{{i.sellingPrice}}</div>
+							</div>
+
+							<div fxFlex>
+								<!-- <md-icon class="material-icons pull-right middle-align line-item-caret">keyboard_arrow_right</md-icon> -->
+								<md-icon class="material-icons pull-right middle-align line-item-caret">keyboard_arrow_right</md-icon>
+								<h5 class="mb-0 pull-right middle-align line-item-extended-amt">{{i.extendedAmount}}</h5>
+							</div>
 						</div>
-
-						<div fxFlex>
-							<!-- <md-icon class="material-icons pull-right middle-align line-item-caret">keyboard_arrow_right</md-icon> -->
-							<md-icon class="material-icons pull-right middle-align line-item-caret">keyboard_arrow_right</md-icon>
-							<h5 class="mb-0 pull-right middle-align line-item-extended-amt">{{i.extendedAmount}}</h5>
-						</div>
-					</div>
-				</md-list-item>
-			</md-list>
-		</div>
-
-
+					</md-list-item>
+				</md-list>
+			</md-card-content>
+		</md-card>
 	</div>
+
+
+
 	<div class="sale-marketing-panel-container" fxFlex>
 
 	</div>
