@@ -24,9 +24,10 @@ export class PromptComponent implements AfterViewInit, DoCheck {
     this.initialized = true;
   }
 
-  onEnter(value: string) {
+  onEnter($event) {
     if (this.session.response) {
         this.session.onAction('Next');
+        $event.target.disabled = true;
     }
   }
 

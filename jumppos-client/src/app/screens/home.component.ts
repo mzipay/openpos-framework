@@ -1,14 +1,14 @@
+import { IMenuItem } from './imenuitem';
 // import {MdButtonModule, MdCheckboxModule} from '@angular/material';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {SessionService} from '../session.service';
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements AfterViewInit, DoCheck {
-
-initialized = false;
 
   public menuItems: IMenuItem[];
 
@@ -17,25 +17,13 @@ initialized = false;
   }
 
   ngDoCheck(): void {
-    if (this.initialized) {
-  //    this.vc.nativeElement.focus();
-    }
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
-    this.initialized = true;
+    console.log('Home Screen');
   }
 
   onEnter(value: string) {
     this.session.onAction('Save');
   }
 }
-
-export interface IMenuItem {
-    action: string;
-    title: string;
-    icon: string;
-    enabled: boolean;
-}
-

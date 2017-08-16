@@ -1,3 +1,4 @@
+import { IDialog } from './screens/idialog';
 import { Observable } from 'rxjs/Observable';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs/Subscription';
@@ -8,6 +9,8 @@ import { StompService, StompState } from '@stomp/ng2-stompjs';
 export class SessionService {
 
   public screen: any;
+
+  public dialog: IDialog;
 
   public response: any;
 
@@ -82,7 +85,8 @@ export class SessionService {
     } else {
       console.log('Publish action ' + action);
       this.stompService.publish('/app/action/node/' + this.nodeId,
-      JSON.stringify({ name: action, data: this.response }));
+        JSON.stringify({ name: action, data: this.response }));
+      this.dialog = null;
     }
   }
 
@@ -94,8 +98,15 @@ export class SessionService {
 
   /** Consume a message from the stompService */
   public onNextMessage = (message: Message) => {
-    this.response = null;
-    this.screen = JSON.parse(message.body);
+    const json = JSON.parse(message.body);
+    if (json.type === 'Dialog') {
+      this.dialog = json;
+    } else {
+      this.response = null;
+      this.screen = json;
+    }
   }
 
 }
+
+

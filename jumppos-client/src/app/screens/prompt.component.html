@@ -4,13 +4,13 @@
 
 			<div class="prompt-input-container">
 				<p>
-					<input #box *ngIf="session.screen.responseType==='ALPHANUMERICPASSWORD'" class="prompt-input" type='password' (keyup.enter)="onEnter(box.value)"
+					<input #box *ngIf="session.screen.responseType==='ALPHANUMERICPASSWORD'" class="prompt-input" type='password' (keyup.enter)="onEnter($event)"
 					 [(ngModel)]="session.response" placeholder="{{session.screen.placeholderText}}">
-					<input #box *ngIf="session.screen.responseType==='ALPHANUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter(box.value)"
+					<input #box *ngIf="session.screen.responseType==='ALPHANUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)"
 					 [(ngModel)]="session.response" placeholder="{{session.screen.placeholderText}}">
-					<input #box *ngIf="session.screen.responseType==='CURRENCYTEXT'" class="prompt-input" (keyup.enter)="onEnter(box.value)"
+					<input #box *ngIf="session.screen.responseType==='CURRENCYTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)"
 					 [(ngModel)]="session.response" placeholder="{{session.screen.placeholderText}}">
-					<input #box *ngIf="session.screen.responseType==='NUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter(box.value)" [(ngModel)]="session.response" 
+					<input #box *ngIf="session.screen.responseType==='NUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)" [(ngModel)]="session.response" 
 					placeholder="{{session.screen.placeholderText}}">
 				</p>
 				<md-icon class="material-icons prompt-icon">{{session.screen.promptIcon}}</md-icon>

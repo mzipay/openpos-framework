@@ -1,28 +1,29 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
-import {StompConfig, StompService} from '@stomp/ng2-stompjs';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { StompConfig, StompService } from '@stomp/ng2-stompjs';
 
-import {AppComponent} from './app.component';
+import { AppComponent } from './app.component';
 
-import {AppRoutingModule} from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 
-import {SessionService} from './session.service';
-import {PromptComponent} from './screens/prompt.component';
-import {SellComponent} from './screens/sell.component';
-import {ChooseOptionsComponent} from './screens/choose-options.component';
-import {DialogComponent} from './screens/dialog.component';
-import {FormComponent} from './screens/form.component';
-import {HomeComponent} from './screens/home.component';
-import {StatusBarComponent} from './screens/statusbar.component';
-import {PaymentStatusComponent} from './screens/payment-status.component';
-import {SellItemDetailComponent} from './screens/sell-item-detail.component';
+import { SessionService } from './session.service';
+import { PromptComponent } from './screens/prompt.component';
+import { SellComponent } from './screens/sell.component';
+import { ChooseOptionsComponent } from './screens/choose-options.component';
+import { DialogComponent } from './screens/dialog.component';
+import { FormComponent } from './screens/form.component';
+import { HomeComponent } from './screens/home.component';
+import { StatusBarComponent } from './screens/statusbar.component';
+import { PaymentStatusComponent } from './screens/payment-status.component';
+import { SellItemDetailComponent } from './screens/sell-item-detail.component';
 import { FocusDirective } from './screens/focus';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { environment } from '../environments/environment';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations'; // for material
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MdDialog, MdDialogRef } from '@angular/material';
 
 import {
   MdAutocompleteModule,
@@ -85,6 +86,9 @@ const stompConfig: StompConfig = {
 };
 
 @NgModule({
+  entryComponents: [
+    DialogComponent
+  ],
   declarations: [
     AppComponent,
     PromptComponent,
@@ -104,45 +108,45 @@ const stompConfig: StompConfig = {
     HttpModule,
     AppRoutingModule,
     Angular2FontawesomeModule,
-    MdButtonModule, 
+    MdButtonModule,
     MdCheckboxModule,
     MdCardModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
-      MdAutocompleteModule,
-  MdButtonModule,
-  MdButtonToggleModule,
-  MdCardModule,
-  MdCheckboxModule,
-  MdChipsModule,
-  MdCoreModule,
-  MdDatepickerModule,
-  MdDialogModule,
-  MdExpansionModule,
-  MdGridListModule,
-  MdIconModule,
-  MdInputModule,
-  MdListModule,
-  MdMenuModule,
-  MdNativeDateModule,
-  MdPaginatorModule,
-  MdProgressBarModule,
-  MdProgressSpinnerModule,
-  MdRadioModule,
-  MdRippleModule,
-  MdSelectModule,
-  MdSidenavModule,
-  MdSliderModule,
-  MdSlideToggleModule,
-  MdSnackBarModule,
-  MdSortModule,
-  MdTableModule,
-  MdTabsModule,
-  MdToolbarModule,
-  MdTooltipModule
+    MdAutocompleteModule,
+    MdButtonModule,
+    MdButtonToggleModule,
+    MdCardModule,
+    MdCheckboxModule,
+    MdChipsModule,
+    MdCoreModule,
+    MdDatepickerModule,
+    MdDialogModule,
+    MdExpansionModule,
+    MdGridListModule,
+    MdIconModule,
+    MdInputModule,
+    MdListModule,
+    MdMenuModule,
+    MdNativeDateModule,
+    MdPaginatorModule,
+    MdProgressBarModule,
+    MdProgressSpinnerModule,
+    MdRadioModule,
+    MdRippleModule,
+    MdSelectModule,
+    MdSidenavModule,
+    MdSliderModule,
+    MdSlideToggleModule,
+    MdSnackBarModule,
+    MdSortModule,
+    MdTableModule,
+    MdTabsModule,
+    MdToolbarModule,
+    MdTooltipModule
 
   ],
-    exports: [
+  exports: [
     MdAutocompleteModule,
     MdButtonModule,
     MdButtonToggleModule,
@@ -176,6 +180,7 @@ const stompConfig: StompConfig = {
     MdTooltipModule,
   ],
   providers: [
+    MdDialog,
     SessionService,
     StompService,
     {
@@ -185,4 +190,4 @@ const stompConfig: StompConfig = {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
