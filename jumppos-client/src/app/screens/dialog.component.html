@@ -6,7 +6,9 @@
     <p *ngFor="let m of session.dialog.message">{{m}}</p>
   </div>
   <div md-dialog-actions>
-    <button *ngFor="let m of session.dialog.buttons; let i = index" [id]="'button-' + i" md-raised-button md-dialog-close="{{m.action}}"
-      [color]="i===0?'primary':'accent'" [disabled]="!m.enabled" [autofocus]="i===0" [appFocus]="i===0">{{m.title}}</button>
+    <div fxLayout="row">
+      <button *ngFor="let m of session.dialog.buttons; let i = index" [id]="'button-' + i" md-raised-button md-dialog-close="{{m.action}}"
+        [color]="i===0?'primary':''" [disabled]="!m.enabled" [autofocus]="i===0" [appFocus]="i===0">{{m.title}}</button>
+    </div>
   </div>
 </ng-container>

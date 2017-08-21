@@ -7,22 +7,22 @@
             <p>{{item.productDescription}}</p>
         </div>
         <div fxLayout="row" fxLayoutAlign="center center">
-        <table>
-            <thead>
-                <tr>
-                    <th>Item ID</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{item.itemId}}</td>
-                    <td>{{item.quantity}}</td>
-                    <td>{{item.extendedAmount}}</td>
-                </tr>
-            </tbody>
-        </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item ID</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{item.itemId}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.extendedAmount}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </md-card-content>
     <md-card-actions *ngIf="session.screen.itemActions">
