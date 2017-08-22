@@ -21,14 +21,17 @@ public class DefaultScreen implements Serializable {
     public static final String SELL_ITEM_DETAIL_SCREEN_TYPE = "SellItemDetail";
     public static final String SELL_SCREEN_TYPE = "Sell";
 
+    public static final String TITLE_OPEN_STATUS = "Open";
+    public static final String TITLE_CLOSED_STATUS = "Closed";
+
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private String name;
     private String type;
     private MenuItem backButton;
     private Workstation workstation;
     private String operatorName;
-    private boolean storeOpen = true;
-    private boolean registerOpen = false;
+    private MenuItem storeStatus;
+    private MenuItem registerStatus;
     private String userDisplayName = "Jane Doe";
     private boolean showStatusBar = true;
 
@@ -135,20 +138,20 @@ public class DefaultScreen implements Serializable {
         this.workstation = workstation;
     }
 
-    public boolean isStoreOpen() {
-        return storeOpen;
+    public MenuItem getStoreStatus() {
+        return storeStatus;
     }
 
-    public void setStoreOpen(boolean storeOpen) {
-        this.storeOpen = storeOpen;
+    public void setStoreStatus(MenuItem storeStatus) {
+        this.storeStatus = storeStatus;
     }
 
-    public boolean isRegisterOpen() {
-        return registerOpen;
+    public MenuItem getRegisterStatus() {
+        return registerStatus;
     }
 
-    public void setRegisterOpen(boolean registerOpen) {
-        this.registerOpen = registerOpen;
+    public void setRegisterStatus(MenuItem registerStatus) {
+        this.registerStatus = registerStatus;
     }
 
     public String getUserDisplayName() {
