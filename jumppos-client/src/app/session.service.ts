@@ -4,6 +4,8 @@ import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs/Subscription';
 import { Injectable } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class SessionService {
@@ -23,7 +25,8 @@ export class SessionService {
   private subscription: Subscription;
   private messages: Observable<Message>;
 
-  constructor(private stompService: StompService) {
+
+  constructor(private stompService: StompService, private location: Location, private router: Router) {
   }
 
   public subscribe() {
@@ -31,7 +34,10 @@ export class SessionService {
       return;
     }
 
-    this.nodeId = localStorage.getItem('nodeId');
+    // Give preference to nodeId query parameter if it's present, then fallback to
+    // local storage
+    const urlNodeId = this.getUrlNodeId();
+    this.nodeId = urlNodeId ? urlNodeId : localStorage.getItem('nodeId');
     if (this.nodeId == null) {
       let temporaryNodeId = localStorage.getItem('temporaryNodeId');
       console.log('temporaryNodeId from local storage: ' + temporaryNodeId);
@@ -107,6 +113,20 @@ export class SessionService {
     }
   }
 
+  private getUrlNodeId() {
+    const urlPath = this.location.path();
+    let urlNodeId = '';
+    if (urlPath) {
+      const urlTree = this.router.parseUrl(urlPath);
+      if (urlTree) {
+        if (urlTree.queryParams['nodeId']) {
+          urlNodeId = urlTree.queryParams['nodeId'];
+          console.log('nodeId found on query parameters: [' + urlNodeId + ']');
+        }
+      }
+    }
+    return urlNodeId;
+  }
 }
 
 

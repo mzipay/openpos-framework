@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { StompConfig, StompService } from '@stomp/ng2-stompjs';
+import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 import { AppComponent } from './app.component';
 
@@ -186,6 +187,11 @@ const stompConfig: StompConfig = {
     {
       provide: StompConfig,
       useValue: stompConfig
+    },
+    Location,
+    {
+      provide: LocationStrategy,
+      useClass: PathLocationStrategy
     }
   ],
   bootstrap: [AppComponent]
