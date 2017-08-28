@@ -43,21 +43,40 @@ public class StateManagerFactory implements IStateManagerFactory {
     @Autowired
     ApplicationContext applicationContext;
 
-    private Map<String, StateManager> stateManagersByNodeId = new HashMap<>();
+    private Map<String, Map<String, StateManager>> stateManagersByAppIdByNodeId = new HashMap<>();
 
     @Override
-    public IStateManager retreive(String nodeId) {
-        return  stateManagersByNodeId.get(nodeId);
+    public IStateManager retreive(String appId, String nodeId) {
+        Map<String, StateManager> stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
+        if (stateManagersByNodeId != null) {
+            return stateManagersByNodeId.get(nodeId);
+        } else {
+            return null;
+        }
     }
-    
+
     @Override
-    public IStateManager create(String nodeId) {
+    public IStateManager create(String appId, String nodeId) {
+        Map<String, StateManager> stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
+        if (stateManagersByNodeId == null) {
+            synchronized (this) {
+                if (stateManagersByNodeId == null) {
+                    stateManagersByNodeId = new HashMap<>();
+                    stateManagersByAppIdByNodeId.put(appId, stateManagersByNodeId);
+                }
+            }
+        }
+
         StateManager stateManager = stateManagersByNodeId.get(nodeId);
         if (stateManager == null) {
-            stateManager = applicationContext.getBean(StateManager.class);
-            stateManager.setFlowConfig(flowConfigProvider.getConfig(nodeId));
-            stateManager.init(nodeId);
-            stateManagersByNodeId.put(nodeId, stateManager);
+            synchronized (this) {
+                if (stateManager == null) {
+                    stateManager = applicationContext.getBean(StateManager.class);
+                    stateManager.setFlowConfig(flowConfigProvider.getConfig(appId, nodeId));
+                    stateManager.init(appId, nodeId);
+                    stateManagersByNodeId.put(nodeId, stateManager);
+                }
+            }
         }
         return stateManager;
     }

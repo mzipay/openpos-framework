@@ -5,12 +5,12 @@ import org.jumpmind.jumppos.core.screen.DefaultScreen;
 
 public interface IScreenService {
 
-    public void showScreen(String nodeId, DefaultScreen screen);
+    public void showScreen(String appId, String nodeId, DefaultScreen screen);
     
-    public void refresh(String nodeId);
+    public void refresh(String appId, String nodeId);
     
-    public DefaultScreen getLastScreen(String nodeId);
+    public DefaultScreen getLastScreen(String appId, String nodeId);
+    
+    public DefaultScreen deserializeScreenPayload(String appId, String nodeId, Action action);
 
-    public DefaultScreen deserializeScreenPayload(String nodeId, Action action);
-    
 }

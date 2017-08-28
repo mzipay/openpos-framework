@@ -22,5 +22,5 @@ package org.jumpmind.jumppos.core.flow.config;
 
 
 public interface IFlowConfigProvider {
-    public FlowConfig getConfig(String nodeId);
+    public FlowConfig getConfig(String appId, String nodeId);
 }

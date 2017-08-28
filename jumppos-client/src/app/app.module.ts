@@ -7,10 +7,12 @@ import { Location, LocationStrategy, PathLocationStrategy } from '@angular/commo
 
 import { AppComponent } from './app.component';
 import { PosComponent } from './pos/pos.component';
+import { KioskComponent } from './kiosk/kiosk.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { SessionService } from './session.service';
+import { AbstractApp } from './screens/abstract-app';
 import { PromptComponent } from './screens/prompt.component';
 import { SellComponent } from './screens/sell.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
@@ -94,6 +96,7 @@ const stompConfig: StompConfig = {
   declarations: [
     AppComponent,
     PosComponent,
+    KioskComponent,
     PromptComponent,
     ChooseOptionsComponent,
     DialogComponent,

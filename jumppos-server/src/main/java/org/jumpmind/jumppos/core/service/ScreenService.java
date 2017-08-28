@@ -38,16 +38,16 @@ public class ScreenService implements IScreenService {
     @Autowired
     IStateManagerFactory stateManagerFactory;
 
-    private Map<String, DefaultScreen> lastScreenByNodeId = new HashMap<String, DefaultScreen>();
+    private Map<String, Map<String, DefaultScreen>> lastScreenByAppIdByNodeId = new HashMap<>();
 
-    @MessageMapping("action/node/{nodeId}")
-    public void action(@DestinationVariable String nodeId, Action action) {
+    @MessageMapping("action/app/{appId}/node/{nodeId}")
+    public void action(@DestinationVariable String appId, @DestinationVariable String nodeId, Action action) {
         try {
             logger.info("Received action from {}\n{}", nodeId, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(action));
         } catch (JsonProcessingException ex) {
             logger.error("Failed to write action to JSON", ex);
         }
-        IStateManager stateManager = stateManagerFactory.retreive(nodeId);
+        IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
         if (stateManager != null) {
             logger.info("Posting action of {}", action);
             stateManager.doAction(action);
@@ -55,12 +55,17 @@ public class ScreenService implements IScreenService {
     }
 
     @Override
-    public DefaultScreen getLastScreen(String nodeId) {
-        return lastScreenByNodeId.get(nodeId);
+    public DefaultScreen getLastScreen(String appId, String nodeId) {
+        Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+        if (lastScreenByNodeId != null) {
+            return lastScreenByNodeId.get(nodeId);
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public void showScreen(String nodeId, DefaultScreen screen) {
+    public void showScreen(String appId, String nodeId, DefaultScreen screen) {
         if (screen != null) {
             Object payload = screen;
             try {
@@ -73,51 +78,65 @@ public class ScreenService implements IScreenService {
             } catch (JsonProcessingException ex) {
                 logger.error("Failed to write screen to JSON", ex);
             }
-            this.template.convertAndSend("/topic/node/" + nodeId, payload);
+            this.template.convertAndSend("/topic/app/" + appId + "/node/" + nodeId, payload);
+            Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+            if (lastScreenByNodeId == null) {
+                lastScreenByNodeId = new HashMap<>();
+                lastScreenByAppIdByNodeId.put(appId, lastScreenByNodeId);
+            }
             lastScreenByNodeId.put(nodeId, screen);
         }
     }
-    
-    public DefaultScreen deserializeScreenPayload(String nodeId, Action action) {
-        DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
-        if (lastScreen != null && lastScreen.getType() != null && lastScreen.getType().equals(DefaultScreen.FORM_SCREEN_TYPE)) {
-            Form form = mapper.convertValue(action.getData(), Form.class);
-            return populateFormScreen(nodeId, form);
-        } else {
-            return null;
+
+    @Override
+    public DefaultScreen deserializeScreenPayload(String appId, String nodeId, Action action) {
+        Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+        if (lastScreenByNodeId != null) {
+            DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
+            if (lastScreen != null && lastScreen.getType() != null && lastScreen.getType().equals(DefaultScreen.FORM_SCREEN_TYPE)) {
+                Form form = mapper.convertValue(action.getData(), Form.class);
+                return populateFormScreen(appId, nodeId, form);
+
+            }
         }
+        return null;
+
     }
-    
-    public DefaultScreen populateFormScreen(String nodeId, Form form) {
-        DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
-        
-        for (IFormElement formElement : form.getFormElements()) {
-            if (formElement instanceof FormField) {
-                FormField formField = (FormField) formElement;
-                String fieldId = formField.getFieldId();
-                for (Field field : lastScreen.getClass().getDeclaredFields()) {
-                    FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
-                    if (textFieldAnnotation != null) {
-                        if (field.getName().equals(fieldId)) {
-                            setFieldValue(field, lastScreen, formField.getValue());
+
+    protected DefaultScreen populateFormScreen(String appId, String nodeId, Form form) {
+        DefaultScreen lastScreen = null;
+        Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+        if (lastScreenByNodeId != null) {
+            lastScreen = lastScreenByNodeId.get(nodeId);
+
+            for (IFormElement formElement : form.getFormElements()) {
+                if (formElement instanceof FormField) {
+                    FormField formField = (FormField) formElement;
+                    String fieldId = formField.getFieldId();
+                    for (Field field : lastScreen.getClass().getDeclaredFields()) {
+                        FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
+                        if (textFieldAnnotation != null) {
+                            if (field.getName().equals(fieldId)) {
+                                setFieldValue(field, lastScreen, formField.getValue());
+                            }
                         }
                     }
                 }
             }
         }
-        
+
         return lastScreen;
     }
 
     protected Form buildForm(DefaultScreen screen) {
-
         Form form = new Form();
 
         for (Field field : screen.getClass().getDeclaredFields()) {
             FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
             if (textFieldAnnotation != null) {
                 FormField formField = new FormField();
-                formField.setElementType("input"); // TODO support other types here?
+                formField.setElementType("input"); // TODO support other types
+                                                   // here?
                 formField.setFieldId(field.getName());
                 formField.setLabel(textFieldAnnotation.label());
                 formField.setPlaceholder(textFieldAnnotation.placeholder());
@@ -130,14 +149,15 @@ public class ScreenService implements IScreenService {
                 org.jumpmind.jumppos.core.model.FormButton button = new org.jumpmind.jumppos.core.model.FormButton();
                 button.setLabel(buttonAnnotation.label());
                 button.setButtonAction(getFieldValueAsString(field, screen));
-                form.addFormElement(button);                
+                form.addFormElement(button);
             }
         }
         return form;
     }
 
     protected void applyAnnotations(DefaultScreen screen) {
-        org.jumpmind.jumppos.core.model.annotations.Screen screenAnnotation = screen.getClass().getAnnotation(org.jumpmind.jumppos.core.model.annotations.Screen.class);
+        org.jumpmind.jumppos.core.model.annotations.Screen screenAnnotation = screen.getClass()
+                .getAnnotation(org.jumpmind.jumppos.core.model.annotations.Screen.class);
         if (screenAnnotation != null) {
             screen.setName(screenAnnotation.name());
             screen.setType(screenAnnotation.type());
@@ -145,10 +165,13 @@ public class ScreenService implements IScreenService {
     }
 
     @Override
-    public void refresh(String clientId) {
-        showScreen(clientId, lastScreenByNodeId.get(clientId));
+    public void refresh(String appId, String nodeId) {
+        Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+        if (lastScreenByNodeId != null) {
+            showScreen(appId, nodeId, lastScreenByNodeId.get(nodeId));
+        }
     }
-    
+
     protected void setFieldValue(Field field, Object target, Object value) {
         try {
             field.setAccessible(true);
@@ -167,7 +190,7 @@ public class ScreenService implements IScreenService {
             } else {
                 return null;
             }
-            
+
         } catch (Exception ex) {
             throw new FlowException("Field to get value for field " + field + " from target " + target, ex);
         }

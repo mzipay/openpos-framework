@@ -1,3 +1,4 @@
+import { AbstractApp } from '../screens/abstract-app';
 import { DialogComponent } from '../screens/dialog.component';
 import { IMenuItem } from '../screens/imenuitem';
 import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
@@ -10,20 +11,20 @@ import { MdDialog, MdDialogRef } from '@angular/material';
   selector: 'app-pos',
   templateUrl: './pos.component.html'
 })
-export class PosComponent implements OnInit, OnDestroy, DoCheck {
+export class PosComponent extends AbstractApp implements DoCheck {
 
   // TODO these should be conflated or removed perhaps.
   public menuItems: IMenuItem[] = [];
   public menuActions: IMenuItem[] = [];
   public backButton: IMenuItem;
   public isCollapsed = true;
-  private dialogRef: MdDialogRef<DialogComponent>;
 
   constructor(public session: SessionService, public dialog: MdDialog) {
+    super(session, dialog);
   }
 
-  ngOnInit(): void {
-    this.session.subscribe();
+  protected appName(): String {
+    return 'pos';
   }
 
   ngDoCheck(): void {
@@ -36,22 +37,7 @@ export class PosComponent implements OnInit, OnDestroy, DoCheck {
       }
     }
 
-    if (this.session.dialog && !this.dialogRef) {
-      setTimeout(() => this.openDialog(), 0);
-    }
-
+    super.ngDoCheck();
   }
 
-  ngOnDestroy(): void {
-    this.session.unsubscribe();
-  }
-
-  openDialog() {
-    console.log('openDialog');
-    this.dialogRef = this.dialog.open(DialogComponent, {disableClose: true});
-    this.dialogRef.afterClosed().subscribe(result => {
-      this.session.onAction(result);
-      this.dialogRef = null;
-    });
-  }
 }

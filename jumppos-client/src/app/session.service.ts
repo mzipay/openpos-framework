@@ -23,13 +23,20 @@ export class SessionService {
   public state: Observable<string>;
 
   private subscription: Subscription;
+
   private messages: Observable<Message>;
+
+  private appId: String;
 
 
   constructor(private stompService: StompService, private location: Location, private router: Router) {
   }
 
-  public subscribe() {
+  private buildTopicName(): String {
+    return '/topic/app/' + this.appId + '/node/' + this.nodeId;
+  }
+
+  public subscribe(appName: String) {
     if (this.subscribed) {
       return;
     }
@@ -51,10 +58,12 @@ export class SessionService {
       this.nodeId = temporaryNodeId;
     }
 
-    console.log('subscribing to server at ...' + '/topic/node/' + this.nodeId);
+    this.appId = appName;
+    const currentTopic = this.buildTopicName();
 
-    this.messages = this.stompService.subscribe(
-      '/topic/node/' + this.nodeId);
+    console.log('subscribing to server at ...' + currentTopic);
+
+    this.messages = this.stompService.subscribe(currentTopic as string);
 
     // Subscribe a function to be run on_next message
     this.subscription = this.messages.subscribe(this.onNextMessage);
@@ -87,10 +96,10 @@ export class SessionService {
       localStorage.setItem('nodeId', '' + this.nodeId);
       localStorage.removeItem('temporaryNodeId');
       this.unsubscribe();
-      this.subscribe();
+      this.subscribe(this.appId);
     } else {
       console.log('Publish action ' + action);
-      this.stompService.publish('/app/action/node/' + this.nodeId,
+      this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
         JSON.stringify({ name: action, data: this.response }));
       this.dialog = null;
     }
@@ -98,7 +107,7 @@ export class SessionService {
 
   public onActionWithStringPayload(action: String, payload: String) {
     console.log('Publish action ' + action);
-    this.stompService.publish('/app/action/node/' + this.nodeId,
+    this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
       JSON.stringify({ name: action, data: payload }));
   }
 

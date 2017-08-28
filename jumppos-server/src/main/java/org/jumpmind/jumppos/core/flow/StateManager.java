@@ -62,6 +62,7 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
     @Autowired(required = false)
     private ITranslationManager translationManager;
 
+    private String appId;
     private String nodeId;
     private Scope scope = new Scope();
     private FlowConfig flowConfig;
@@ -80,7 +81,8 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
         }
     }
 
-    public void init(String nodeId) {
+    public void init(String appId, String nodeId) {
+        this.appId = appId;
         this.nodeId = nodeId;
         if (translationManager != null && 
                 !nodeId.startsWith(NodePersonalizationState.TEMPORARY_NODE_ID)) {
@@ -128,7 +130,7 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
 
     @Override
     public DefaultScreen getLastScreen() {
-        return screenService.getLastScreen(nodeId);
+        return screenService.getLastScreen(appId, nodeId);
     }
 
     @Override
@@ -163,7 +165,7 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
             }
         } else {
             IState savedCurrentState = currentState;
-            DefaultScreen deserializedScreen = screenService.deserializeScreenPayload(nodeId, action);
+            DefaultScreen deserializedScreen = screenService.deserializeScreenPayload(appId, nodeId, action);
 
             boolean handled = actionHandler.handleAction(currentState, action, deserializedScreen);
             if (handled) {
@@ -217,7 +219,7 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
 
     @Override
     public void showScreen(DefaultScreen screen) {
-        screenService.showScreen(nodeId, screen);
+        screenService.showScreen(appId, nodeId, screen);
     }
 
     public String toJSONPretty(Object o) {

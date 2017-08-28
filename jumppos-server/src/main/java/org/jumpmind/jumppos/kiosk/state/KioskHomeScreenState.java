@@ -18,27 +18,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.jumppos.pos;
+package org.jumpmind.jumppos.kiosk.state;
 
-import org.jumpmind.jumppos.core.flow.config.FlowBuilder;
-import org.jumpmind.jumppos.core.flow.config.FlowConfig;
-import org.jumpmind.jumppos.core.flow.config.IFlowConfigProvider;
-import org.jumpmind.jumppos.pos.state.HomeScreenState;
-import org.jumpmind.jumppos.pos.state.NodePersonalizationState;
-import org.springframework.stereotype.Component;
+import org.jumpmind.jumppos.core.flow.IState;
+import org.jumpmind.jumppos.core.flow.IStateManager;
+import org.jumpmind.jumppos.core.screen.DefaultScreen;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Component
-public class JumpPosFlowConfigProvider implements IFlowConfigProvider {
-
+public class KioskHomeScreenState implements IState {
+    
+    @Autowired
+    IStateManager stateManager;
+    
     @Override
-    public FlowConfig getConfig(String appId, String nodeId) {
-        FlowConfig config = new FlowConfig();
-        config.setInitialState(FlowBuilder.addState(NodePersonalizationState.class)
-                .withTransition("Complete", HomeScreenState.class)
-                .build());
-        config.add(FlowBuilder.addState(HomeScreenState.class)
-                .build());
-        return config;
+    public void arrive() {
+        stateManager.showScreen(buildMenu());
     }
-
+    
+    protected DefaultScreen buildMenu() {
+        DefaultScreen screen = new DefaultScreen();
+        return screen;
+    }
 }
