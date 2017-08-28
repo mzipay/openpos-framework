@@ -6,6 +6,7 @@ import { StompConfig, StompService } from '@stomp/ng2-stompjs';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 import { AppComponent } from './app.component';
+import { PosComponent } from './pos/pos.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -92,6 +93,7 @@ const stompConfig: StompConfig = {
   ],
   declarations: [
     AppComponent,
+    PosComponent,
     PromptComponent,
     ChooseOptionsComponent,
     DialogComponent,
