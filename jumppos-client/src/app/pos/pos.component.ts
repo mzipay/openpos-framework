@@ -1,10 +1,9 @@
+import { ScreenService } from './../screen.service';
 import { AbstractApp } from '../screens/abstract-app';
-import { DialogComponent } from '../screens/dialog.component';
-import { IMenuItem } from '../screens/imenuitem';
-import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
+import { IMenuItem } from '../common/imenuitem';
+import { Component, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';
-import { StatusBarComponent } from '../screens/statusbar.component';
-import { FocusDirective } from '../screens/focus';
+import { FocusDirective } from '../common/focus.directive';
 import { MdDialog, MdDialogRef } from '@angular/material';
 
 @Component({
@@ -19,8 +18,8 @@ export class PosComponent extends AbstractApp implements DoCheck {
   public backButton: IMenuItem;
   public isCollapsed = true;
 
-  constructor(public session: SessionService, public dialog: MdDialog) {
-    super(session, dialog);
+  constructor(screenService: ScreenService, public session: SessionService, public dialog: MdDialog) {
+    super(screenService, session, dialog);
   }
 
   protected appName(): String {

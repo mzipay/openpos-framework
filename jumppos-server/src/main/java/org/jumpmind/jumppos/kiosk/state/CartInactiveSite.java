@@ -22,21 +22,18 @@ package org.jumpmind.jumppos.kiosk.state;
 
 import org.jumpmind.jumppos.core.flow.IState;
 import org.jumpmind.jumppos.core.flow.IStateManager;
-import org.jumpmind.jumppos.core.screen.DefaultScreen;
+import org.jumpmind.jumppos.core.screen.EmbeddedWebPageScreen;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class KioskHomeScreenState implements IState {
+public class CartInactiveSite implements IState {
     
     @Autowired
     IStateManager stateManager;
     
     @Override
     public void arrive() {
-        stateManager.showScreen(buildMenu());
+        // TODO this url should come from a properties file
+        stateManager.showScreen(new EmbeddedWebPageScreen("https://www.youtube.com/embed/3rlNErYuevY"));
     }
     
-    protected DefaultScreen buildMenu() {
-        DefaultScreen screen = new DefaultScreen();
-        return screen;
-    }
 }

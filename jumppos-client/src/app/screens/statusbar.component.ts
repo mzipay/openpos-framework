@@ -1,4 +1,4 @@
-import { IMenuItem } from './imenuitem';
+import { IMenuItem } from '../common/imenuitem';
 import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';
 
@@ -8,26 +8,13 @@ import { SessionService } from '../session.service';
 })
 export class StatusBarComponent implements AfterViewInit, DoCheck {
 
-  initialized = false;
-
-  public menuItems: IMenuItem[];
-
   constructor(public session: SessionService) {
-    // this.menuItems = session.screen.menuItems;
   }
 
   ngDoCheck(): void {
-    if (this.initialized) {
-      //    this.vc.nativeElement.focus();
-    }
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
-    this.initialized = true;
   }
 
-  onEnter(value: string) {
-    this.session.onAction('Save');
-  }
 }

@@ -1,3 +1,7 @@
+import { SafePipe } from './common/safe.pipe';
+import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component';
+import { ScreenService } from './screen.service';
+import { ScreenDirective } from './common/screen.directive';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -22,7 +26,7 @@ import { HomeComponent } from './screens/home.component';
 import { StatusBarComponent } from './screens/statusbar.component';
 import { PaymentStatusComponent } from './screens/payment-status.component';
 import { SellItemDetailComponent } from './screens/sell-item-detail.component';
-import { FocusDirective } from './screens/focus';
+import { FocusDirective } from './common/focus.directive';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
@@ -91,22 +95,33 @@ const stompConfig: StompConfig = {
 
 @NgModule({
   entryComponents: [
-    DialogComponent
+    DialogComponent,
+    PromptComponent,
+    ChooseOptionsComponent,
+    SellComponent,
+    SellItemDetailComponent,
+    PaymentStatusComponent,
+    FormComponent,
+    HomeComponent,
+    EmbeddedWebPageComponent
   ],
   declarations: [
     AppComponent,
     PosComponent,
     KioskComponent,
+    DialogComponent,
     PromptComponent,
     ChooseOptionsComponent,
-    DialogComponent,
     SellComponent,
     SellItemDetailComponent,
     PaymentStatusComponent,
     FormComponent,
     HomeComponent,
     StatusBarComponent,
-    FocusDirective
+    EmbeddedWebPageComponent,
+    FocusDirective,
+    ScreenDirective,
+    SafePipe
   ],
   imports: [
     BrowserModule,
@@ -188,6 +203,7 @@ const stompConfig: StompConfig = {
   providers: [
     MdDialog,
     SessionService,
+    ScreenService,
     StompService,
     {
       provide: StompConfig,

@@ -13,6 +13,7 @@ public class DefaultScreen implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String EMBEDDED_WEB_PAGE = "EmbeddedWebPage";
     public static final String CHOOSE_OPTIONS_SCREEN_TYPE = "ChooseOptions";
     public static final String DIALOG_SCREEN_TYPE = "Dialog";
     public static final String FORM_SCREEN_TYPE = "Form";

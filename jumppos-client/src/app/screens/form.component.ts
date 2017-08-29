@@ -1,4 +1,4 @@
-// import {MdButtonModule, MdCheckboxModule} from '@angular/material';
+import { IScreen } from '../common/iscreen';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {SessionService} from '../session.service';
 
@@ -6,9 +6,7 @@ import {SessionService} from '../session.service';
   selector: 'app-form',
   templateUrl: './form.component.html'
 })
-export class FormComponent implements AfterViewInit, DoCheck {
-
-  initialized = false;
+export class FormComponent implements AfterViewInit, DoCheck, IScreen {
 
   public form: IForm;
 
@@ -16,15 +14,13 @@ export class FormComponent implements AfterViewInit, DoCheck {
     this.form = session.screen.form;
   }
 
+  show(session: SessionService) {
+  }
+
   ngDoCheck(): void {
-    if (this.initialized) {
-  //    this.vc.nativeElement.focus();
-    }
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
-    this.initialized = true;
   }
 
   onEnter(value: string) {

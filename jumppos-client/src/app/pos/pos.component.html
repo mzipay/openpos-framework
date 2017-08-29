@@ -23,38 +23,7 @@
 			<app-statusbar *ngIf="session.screen && session.screen.showStatusBar"></app-statusbar>
 		</div>
 
-		<ng-container *ngIf="session.screen">
+		<ng-template appScreen></ng-template>
 
-			<div *ngIf="session.screen.type==='ChooseOptions'">
-				<app-choose-options></app-choose-options>
-			</div>
-
-			<div *ngIf="session.screen.type==='Prompt'">
-				<app-prompt></app-prompt>
-			</div>
-
-			<div *ngIf="session.screen.type==='Sell'">
-				<app-sell></app-sell>
-			</div>
-
-			<div *ngIf="session.screen.type==='SellItemDetail'">
-				<app-sell-item-detail></app-sell-item-detail>
-			</div>
-
-			<div *ngIf="session.screen.type==='PaymentStatus'">
-				<app-payment-status></app-payment-status>
-			</div>
-
-			<div *ngIf="session.screen.type==='Form'">
-				<app-form></app-form>
-			</div>
-
-			<div *ngIf="session.screen.type==='Home'">
-				<app-home></app-home>
-			</div>
-
-		</ng-container>
-
-		<router-outlet></router-outlet>
 	</div>
 </md-sidenav-container>

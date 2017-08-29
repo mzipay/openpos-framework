@@ -1,7 +1,7 @@
-import { IMenuItem } from './imenuitem';
+import { IMenuItem } from '../common/imenuitem';
 import { Component } from '@angular/core';
 import { SessionService } from '../session.service';
-import { FocusDirective } from './focus';
+import { FocusDirective } from '../common/focus.directive';
 import { MdDialog, MdDialogRef } from '@angular/material';
 
 @Component({

@@ -1,4 +1,5 @@
-import { IMenuItem } from './imenuitem';
+import { IScreen } from '../common/iscreen';
+import { IMenuItem } from '../common/imenuitem';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {SessionService} from '../session.service';
 
@@ -6,7 +7,7 @@ import {SessionService} from '../session.service';
   selector: 'app-sell',
   templateUrl: './sell.component.html'
 })
-export class SellComponent implements AfterViewInit, DoCheck {
+export class SellComponent implements AfterViewInit, DoCheck, IScreen {
 
   @ViewChild('box') vc;
 
@@ -16,6 +17,9 @@ export class SellComponent implements AfterViewInit, DoCheck {
 
   constructor(public session: SessionService) {
 
+  }
+
+  show(session: SessionService) {
   }
 
   ngDoCheck(): void {

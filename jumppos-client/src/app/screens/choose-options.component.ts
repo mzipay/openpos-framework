@@ -1,3 +1,4 @@
+import { IScreen } from '../common/iscreen';
 import {Component} from '@angular/core';
 import {SessionService} from '../session.service';
 
@@ -6,7 +7,7 @@ import {SessionService} from '../session.service';
   selector: 'app-choose-options',
   templateUrl: './choose-options.component.html'
 })
-export class ChooseOptionsComponent {
+export class ChooseOptionsComponent implements IScreen {
 
   public optionItems: IOptionItem[];
   public promptText: string;
@@ -14,6 +15,9 @@ export class ChooseOptionsComponent {
   constructor(public session: SessionService) {
     this.optionItems = session.screen.options;
     this.promptText = session.screen.promptText;
+  }
+
+  show(session: SessionService) {
   }
 
 }

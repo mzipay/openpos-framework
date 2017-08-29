@@ -1,4 +1,4 @@
-import { IDialog } from './screens/idialog';
+import { IDialog } from './common/idialog';
 import { Observable } from 'rxjs/Observable';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs/Subscription';
@@ -16,7 +16,9 @@ export class SessionService {
 
   public response: any;
 
-  public nodeId: String = '05243013';
+  private appId: String;
+
+  public nodeId: String = '05243-013';
 
   private subscribed: boolean;
 
@@ -25,9 +27,6 @@ export class SessionService {
   private subscription: Subscription;
 
   private messages: Observable<Message>;
-
-  private appId: String;
-
 
   constructor(private stompService: StompService, private location: Location, private router: Router) {
   }

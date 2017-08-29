@@ -6,28 +6,18 @@ import { SessionService } from '../session.service';
 
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html'
+  selector: 'app-embedded-web-page',
+  templateUrl: './embedded-web-page.component.html'
 })
-export class HomeComponent implements AfterViewInit, DoCheck, IScreen {
+export class EmbeddedWebPageComponent implements IScreen {
 
-  public menuItems: IMenuItem[];
+  public url: string;
 
   constructor(public session: SessionService) {
-    this.menuItems = session.screen.menuItems;
   }
 
   show(session: SessionService) {
+    this.url = session.screen.url;
   }
 
-  ngDoCheck(): void {
-  }
-
-  ngAfterViewInit(): void {
-    console.log('Home Screen');
-  }
-
-  onEnter(value: string) {
-    this.session.onAction('Save');
-  }
 }
