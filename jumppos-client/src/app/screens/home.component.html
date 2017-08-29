@@ -2,6 +2,7 @@
 
 	<md-card class="main-menu">
 		<app-statusbar *ngIf="session.screen.showStatusBar"></app-statusbar>
+
 		<md-card-content style="height:450px">
 			<div fxLayout="row" fxLayoutAlign="center center" style="padding-top: 20px" fxLayoutWrap>
 				<div *ngFor="let menuItem of menuItems">
@@ -15,5 +16,6 @@
 			</div>
 		</md-card-content>
 	</md-card>
-
+	<div class="home-screen-logo"></div>
 </div>
+

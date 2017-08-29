@@ -108,6 +108,8 @@ md-card {
 
 .prompt-container {
     min-width: 520px;
+    max-width: 570px;
+    
     height: 320px;
     bottom: 100px;
 }
@@ -395,6 +397,11 @@ md-card {
     width: 100%;
     height: 10px;
   }  
+
+  .choose-options-title {
+    color: #537889;  
+    font-size: 1.5em;
+  }
  
 .line-item-detail-title {
     font-weight: bold;
@@ -404,7 +411,6 @@ md-card {
 
 .line-item-detail-header-container {
     background-color: #eff0ef;   
-
 }
 .line-item-detail-title::first-letter {
     text-transform: uppercase;
@@ -421,8 +427,9 @@ md-card {
 
 .line-item-detail-image {
     padding-right: 30px;
-    width: 256px !important;
-    height: 256px !important;
+    zoom: 50%;
+    // width: 256px !important;
+    // height: 256px !important;
 }
 
 th {
@@ -440,4 +447,22 @@ td {
 
 .mat-dialog-actions {
     text-align: center;
+}
+
+.super-currency-symbol {
+    vertical-align: super;
+    font-size: 0.5em;
+    padding-right: 2px;
+}
+
+.home-screen-logo {
+        width: 296px;
+        height: 74px;
+        background-image: url(assets/jumpmart-logo.png); 
+        background-repeat: no-repeat;
+        background-size: cover;
+        zoom: 90%;
+        position: absolute;
+        top:75px;
+        right:50px;
 }

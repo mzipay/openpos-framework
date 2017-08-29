@@ -1,8 +1,12 @@
 <md-card>
-    <md-card-title *ngIf="promptText">{{promptText}}</md-card-title>
+    <md-card-title *ngIf="promptText" class="choose-options-title">{{promptText}}</md-card-title>
     <md-card-content>
         <md-nav-list>
-            <md-list-item *ngFor="let o of optionItems" (click)="session.onAction(o.value)">{{o.displayValue}}</md-list-item>
+            <md-list-item *ngFor="let o of optionItems" (click)="session.onAction(o.value)" style="border-color: black">
+                {{o.displayValue}}
+                <md-icon class="material-icons pull-right line-item-caret" style="top: 1px;">keyboard_arrow_right</md-icon>
+                
+            </md-list-item>
         </md-nav-list>
     </md-card-content>
 </md-card>

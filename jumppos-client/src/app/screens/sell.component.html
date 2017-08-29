@@ -13,7 +13,7 @@
 		<button md-raised-button class="sale-total-button" [disabled]="!session.screen.transactionActive || items.length == 0" (click)="session.onAction('Checkout')">
 			<div class="containerX" fxLayout="row" fxLayoutAlign="center center">
 			<div  fxFlex> </div>
-			<p class="sale-total-text">{{session.screen.grandTotal}}</p>
+			<p class="sale-total-text"><span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</p>
 			<div  fxFlex> </div>
 			<div class="sale-total-checkout-container" [ngClass]="{'sale-total-checkout-container-dimmed':items.length == 0}" fxLayout="row">
 			<p class="sale-total-checkout-text">Checkout</p>
@@ -27,7 +27,7 @@
 				<md-card class="subtotals-container">
 					<md-card-content>
 						<p class="subtotals-label">Discounts</p>
-						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">{{session.screen.discountTotal}}</p>
+						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}"><span class="super-currency-symbol">$</span>{{session.screen.discountTotal}}</p>
 					</md-card-content>
 				</md-card>
 			</div>
@@ -36,7 +36,7 @@
 
 					<md-card-content>
 						<p class="subtotals-label">Tax</p>
-						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">{{session.screen.taxTotal}}</p>
+						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}"><span class="super-currency-symbol">$</span>{{session.screen.taxTotal}}</p>
 					</md-card-content>
 				</md-card>
 			</div>
@@ -44,7 +44,7 @@
 				<md-card class="subtotals-container" style="position:relative;">
 					<md-card-content>
 						<p class="subtotals-label">Subtotal</p>
-						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">{{session.screen.subTotal}}</p>
+						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}"><span class="super-currency-symbol">$</span>{{session.screen.subTotal}}</p>
 					</md-card-content>
 				</md-card>
 			</div>
@@ -63,7 +63,7 @@
 
 							<div fxFlex>
 								<md-icon class="material-icons pull-right middle-align line-item-caret">keyboard_arrow_right</md-icon>
-								<h5 class="mb-0 pull-right middle-align line-item-extended-amt">{{i.extendedAmount}}</h5>
+								<h5 class="mb-0 pull-right middle-align line-item-extended-amt"><span class="super-currency-symbol">$</span>{{i.extendedAmount}}</h5>
 							</div>
 						</div>
 						
