@@ -1,31 +1,35 @@
-<md-card>
-    <md-card-title>{{item.description}}</md-card-title>
+<md-card class="line-item-detail-header-container">
+    <md-card-title class="line-item-detail-title">{{item.description}}</md-card-title>
 
     <md-card-content>
-        <div fxLayout="row">
-            <img *ngIf="item.imageUrl" md-card-md-image [src]="item.imageUrl" />
-            <p>{{item.productDescription}}</p>
+        <div fxLayout="row" fxLayoutAlign="center center" class="line-item-detail-header serrated-edge serrated-edge-bottom">
+            <img *ngIf="item.imageUrl" class="line-item-detail-image" [src]="item.imageUrl" />
+            <div fxLayout="column" class="line-item-detail-header serrated-edge serrated-edge-bottom">            
+                    <p>{{item.productDescription}}</p>
+                    <table style="font-size: 22px; align-content: left; text-align: left;">
+                            <thead>
+                                <tr>
+                                    <th>Item ID</th>
+                                    <th>Quantity</th>
+                                    <th style="background-color: #537889;color:white">Item Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{item.itemId}}</td>
+                                    <td>{{item.quantity}}</td>
+                                    <td>{{item.extendedAmount}}</td>
+                                </tr>
+                            </tbody>
+                        </table>                    
+            </div>
+            
         </div>
         <div fxLayout="row" fxLayoutAlign="center center">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Item ID</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{item.itemId}}</td>
-                        <td>{{item.quantity}}</td>
-                        <td>{{item.extendedAmount}}</td>
-                    </tr>
-                </tbody>
-            </table>
+
         </div>
     </md-card-content>
-    <md-card-actions *ngIf="session.screen.itemActions">
+    <md-card-actions *ngIf="session.screen.itemActions" class="line-item-detail-actions">
         <button *ngFor="let m of session.screen.itemActions" md-raised-button (click)="session.onAction(m.action)">{{m.title}}</button>
     </md-card-actions>
 

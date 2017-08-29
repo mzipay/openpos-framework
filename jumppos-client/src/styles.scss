@@ -205,6 +205,10 @@ md-card {
     left: 15px;
 }
 
+.sale-total-checkout-container-dimmed {
+    background-color:rgba(0, 0, 0, 0.0);
+}
+
 .sale-trans-panel-container {
     background-color: #eff0ef;
     height:100vh;
@@ -219,6 +223,8 @@ md-card {
 }
 
 .sub-totals-outer-container {
+    position: relative;
+    top: 4px;
     width: calc(100% - 15px);
 }
 
@@ -243,11 +249,25 @@ md-card {
     bottom: 32px;
 }
 
+.subtotals-amount-dimmed {
+    color:    #c8c8c8;
+}
+
+.sale-line-item {
+    border-bottom: dashed 1px;
+    border-color: #eff0ef;
+    padding: 18px;
+}
 .sale-line-item-container {
-    height: calc(100% - 336px);
-    width: calc(100% - 64px);
+    height: calc(100% - 297px);
+    width: calc(100% - 16px);
     font-size: 14px;
     margin: 0px;
+    top: 10px;
+    padding: 0px !important;
+}
+
+.sale-line-item-container-list {
 }
 
 .sale-line-item-container-content {
@@ -255,10 +275,18 @@ md-card {
     height: 100%;
 }
 
+.sale-line-item-container-no-content {
+    overflow-y: hidden;
+    height: 95%;
+    font-size: 36px;
+    color: #537889;
+    font-weight: lighter;
+}
+
 .line-item-caret {
     color: #c8c8c8;
     position: relative;
-    top: 25px;
+    top: 29px;
 }
 
 .line-item-description {
@@ -300,4 +328,107 @@ md-card {
 
 .hamburger-icon {
     color: white;
+}
+.serrated-edge {
+    position: relative;
+  }
+
+.serrated-edge:before {
+    background:
+    linear-gradient(
+      45deg, transparent 33.333%,
+      white 33.333%, white 66.667%,
+      transparent 66.667%
+    ),
+    linear-gradient(
+      -45deg, transparent 33.333%,
+      white 33.333%, white 66.667%,
+      transparent 66.667%
+    );
+
+  background-size: 10px 20px;      
+    content: "";
+    display: block;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+    width: 100%;
+    height: 10px;
+  }
+
+  .serrated-edge-bottom {
+    position: relative;
+  }
+
+.serrated-edge-bottom:after {
+    background:
+    linear-gradient(
+      -45deg,
+      white 33.333%,
+      transparent 33.333%,
+      transparent 66.667%,
+      white 66.667%      
+    ),
+    linear-gradient(
+      45deg,
+      white 33.333%,
+      transparent 33.333%,
+      transparent 66.667%,
+      white 66.667%      
+    );
+    
+  background-size: 10px 20px;      
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -10px;
+    left: 0px;
+    width: 100%;
+    height: 10px;
+  }  
+ 
+.line-item-detail-title {
+    font-weight: bold;
+    text-transform: lowercase;
+    color: #537889;
+}
+
+.line-item-detail-header-container {
+    background-color: #eff0ef;   
+
+}
+.line-item-detail-title::first-letter {
+    text-transform: uppercase;
+}
+
+.line-item-detail-header {
+    background-color: white;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    color: #537889;
+}
+
+.line-item-detail-image {
+    padding-right: 30px;
+    width: 256px !important;
+    height: 256px !important;
+}
+
+th {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+td {
+    padding: 10px;
+}
+
+.line-item-detail-actions {
+    text-align: right;
+}
+
+.mat-dialog-actions {
+    text-align: center;
 }
