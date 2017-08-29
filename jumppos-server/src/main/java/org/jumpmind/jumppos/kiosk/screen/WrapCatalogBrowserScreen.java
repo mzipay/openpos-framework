@@ -1,4 +1,4 @@
-package org.jumpmind.jumppos.kiosk.state.screen;
+package org.jumpmind.jumppos.kiosk.screen;
 
 import java.util.ArrayList;
 import java.util.List;

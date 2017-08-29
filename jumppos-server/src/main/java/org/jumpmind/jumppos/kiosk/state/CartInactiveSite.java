@@ -22,7 +22,7 @@ package org.jumpmind.jumppos.kiosk.state;
 
 import org.jumpmind.jumppos.core.flow.IState;
 import org.jumpmind.jumppos.core.flow.IStateManager;
-import org.jumpmind.jumppos.kiosk.state.screen.WrapCatalogBrowserScreen;
+import org.jumpmind.jumppos.kiosk.screen.WrapCatalogBrowserScreen;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class CartInactiveSite implements IState {
