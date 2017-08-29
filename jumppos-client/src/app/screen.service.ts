@@ -18,9 +18,10 @@ import { Router } from '@angular/router';
 @Injectable()
 export class ScreenService {
 
-  screens = new Map<string, Type<IScreen>>();
+  private screens = new Map<string, Type<IScreen>>();
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {
+    // To make a screen available add it here and in entryComponents in the app.module.ts
     this.screens.set('ChooseOptions', ChooseOptionsComponent);
     this.screens.set('Prompt', PromptComponent);
     this.screens.set('Sell', SellComponent);
@@ -28,15 +29,10 @@ export class ScreenService {
     this.screens.set('PaymentStatus', PaymentStatusComponent);
     this.screens.set('Form', FormComponent);
     this.screens.set('Home', HomeComponent);
-
-  }
-
-  public getScreenOfType(type: string): Type<IScreen> {
-    return this.screens.get(type);
   }
 
   public resolveScreen(type: string): ComponentFactory<IScreen> {
-    const screenType: Type<IScreen> = this.getScreenOfType(type);
+    const screenType: Type<IScreen> = this.screens.get(type);
     if (screenType) {
       return this.componentFactoryResolver.resolveComponentFactory(screenType);
     } else {

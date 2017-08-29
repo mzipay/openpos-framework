@@ -1,5 +1,5 @@
-import { IScreen } from './iscreen';
-import { IMenuItem } from './imenuitem';
+import { IScreen } from '../common/iscreen';
+import { IMenuItem } from '../common/imenuitem';
 // import {MdButtonModule, MdCheckboxModule} from '@angular/material';
 import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';

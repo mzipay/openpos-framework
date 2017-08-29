@@ -1,4 +1,4 @@
-import { IScreen } from './iscreen';
+import { IScreen } from '../common/iscreen';
 import {Component} from '@angular/core';
 import {ISellItem} from './sell.component';
 import {SessionService} from '../session.service';

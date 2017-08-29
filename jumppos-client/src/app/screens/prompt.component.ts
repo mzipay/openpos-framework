@@ -1,4 +1,4 @@
-import { IScreen } from './iscreen';
+import { IScreen } from '../common/iscreen';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {SessionService} from '../session.service';
 

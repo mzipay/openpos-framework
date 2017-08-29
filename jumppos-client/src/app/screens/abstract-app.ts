@@ -1,13 +1,13 @@
-import { ScreenDirective } from './screen.directive';
-import { IScreen } from './iscreen';
+import { ScreenDirective } from '../common/screen.directive';
+import { IScreen } from '../common/iscreen';
 import { ScreenService } from './../screen.service';
 import { DialogComponent } from '../screens/dialog.component';
-import { IMenuItem } from '../screens/imenuitem';
+import { IMenuItem } from '../common/imenuitem';
 import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
 import { Type, ViewChild, ComponentFactory } from '@angular/core';
 import { SessionService } from '../session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
-import { FocusDirective } from '../screens/focus';
+import { FocusDirective } from '../common/focus.directive';
 import { MdDialog, MdDialogRef } from '@angular/material';
 
 export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
@@ -43,8 +43,9 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
             const componentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(this.session.screen.type);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
-            const componentRef: IScreen = viewContainerRef.createComponent(componentFactory).instance;
+            const screen: IScreen = viewContainerRef.createComponent(componentFactory).instance;
             this.previousScreenType = this.session.screen.type;
+            screen.show(this.session);
         }
     }
 
