@@ -1,3 +1,4 @@
+import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component';
 import { PromptComponent } from './screens/prompt.component';
 import { SellComponent } from './screens/sell.component';
 import { SellItemDetailComponent } from './screens/sell-item-detail.component';
@@ -29,6 +30,7 @@ export class ScreenService {
     this.screens.set('PaymentStatus', PaymentStatusComponent);
     this.screens.set('Form', FormComponent);
     this.screens.set('Home', HomeComponent);
+    this.screens.set('EmbeddedWebPage', EmbeddedWebPageComponent);
   }
 
   public resolveScreen(type: string): ComponentFactory<IScreen> {

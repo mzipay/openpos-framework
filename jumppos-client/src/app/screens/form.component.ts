@@ -8,8 +8,6 @@ import {SessionService} from '../session.service';
 })
 export class FormComponent implements AfterViewInit, DoCheck, IScreen {
 
-  initialized = false;
-
   public form: IForm;
 
   constructor(public session: SessionService) {
@@ -20,14 +18,9 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen {
   }
 
   ngDoCheck(): void {
-    if (this.initialized) {
-  //    this.vc.nativeElement.focus();
-    }
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
-    this.initialized = true;
   }
 
   onEnter(value: string) {

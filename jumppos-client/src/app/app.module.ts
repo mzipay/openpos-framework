@@ -1,3 +1,5 @@
+import { SafePipe } from './common/safe.pipe';
+import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component';
 import { ScreenService } from './screen.service';
 import { ScreenDirective } from './common/screen.directive';
 import { BrowserModule } from '@angular/platform-browser';
@@ -100,7 +102,8 @@ const stompConfig: StompConfig = {
     SellItemDetailComponent,
     PaymentStatusComponent,
     FormComponent,
-    HomeComponent
+    HomeComponent,
+    EmbeddedWebPageComponent
   ],
   declarations: [
     AppComponent,
@@ -115,8 +118,10 @@ const stompConfig: StompConfig = {
     FormComponent,
     HomeComponent,
     StatusBarComponent,
+    EmbeddedWebPageComponent,
     FocusDirective,
-    ScreenDirective
+    ScreenDirective,
+    SafePipe
   ],
   imports: [
     BrowserModule,
