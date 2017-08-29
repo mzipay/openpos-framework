@@ -1,4 +1,4 @@
-import { IDialog } from './screens/idialog';
+import { IDialog } from './common/idialog';
 import { Observable } from 'rxjs/Observable';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs/Subscription';
