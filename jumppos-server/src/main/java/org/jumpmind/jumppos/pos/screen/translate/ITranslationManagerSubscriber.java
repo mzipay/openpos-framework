@@ -12,5 +12,7 @@ public interface ITranslationManagerSubscriber {
     public boolean isInTranslateState();
 
     public String getNodeId();
+    
+    public String getAppId();
 
 }

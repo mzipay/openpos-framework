@@ -235,6 +235,11 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
     public String getNodeId() {
         return nodeId;
     }
+    
+    @Override
+    public String getAppId() {
+        return appId;
+    }
 
     @Override
     public ITranslationManager getTranslationManager() {
