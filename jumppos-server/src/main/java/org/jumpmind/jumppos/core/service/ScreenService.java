@@ -1,8 +1,11 @@
 package org.jumpmind.jumppos.core.service;
 
 import java.lang.reflect.Field;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.jumpmind.jumppos.core.flow.Action;
 import org.jumpmind.jumppos.core.flow.FlowException;
@@ -21,6 +24,9 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,6 +45,17 @@ public class ScreenService implements IScreenService {
     IStateManagerFactory stateManagerFactory;
 
     private Map<String, Map<String, DefaultScreen>> lastScreenByAppIdByNodeId = new HashMap<>();
+    
+    @RequestMapping(method=RequestMethod.GET, value="app/{appId}/node/{nodeId}/{action}/{payload}")
+    public void getAction(@PathVariable String appId, @PathVariable String nodeId,
+            @PathVariable String action, @PathVariable String payload, HttpServletResponse resp) {
+        logger.info("Received a request for {} {} {} {}", appId, nodeId, action, payload);
+        IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
+        if (stateManager != null) {
+            logger.info("Posting action of {}", action);
+            stateManager.doAction(new Action(action, payload));
+        }
+    }
 
     @MessageMapping("action/app/{appId}/node/{nodeId}")
     public void action(@DestinationVariable String appId, @DestinationVariable String nodeId, Action action) {

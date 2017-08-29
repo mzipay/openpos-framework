@@ -22,7 +22,7 @@ package org.jumpmind.jumppos.kiosk.state;
 
 import org.jumpmind.jumppos.core.flow.IState;
 import org.jumpmind.jumppos.core.flow.IStateManager;
-import org.jumpmind.jumppos.core.screen.EmbeddedWebPageScreen;
+import org.jumpmind.jumppos.kiosk.state.screen.WrapCatalogBrowserScreen;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class CartInactiveSite implements IState {
@@ -33,7 +33,7 @@ public class CartInactiveSite implements IState {
     @Override
     public void arrive() {
         // TODO this url should come from a properties file
-        stateManager.showScreen(new EmbeddedWebPageScreen("https://www.youtube.com/embed/3rlNErYuevY"));
+        stateManager.showScreen(new WrapCatalogBrowserScreen("http://localhost:4200/assets/test.html"));
     }
     
 }

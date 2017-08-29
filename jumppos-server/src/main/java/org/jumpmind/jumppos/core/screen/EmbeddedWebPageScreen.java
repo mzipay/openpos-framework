@@ -5,9 +5,13 @@ public class EmbeddedWebPageScreen extends DefaultScreen {
     private static final long serialVersionUID = 1L;
     
     private String url;
-    
-    public EmbeddedWebPageScreen(String url) {
+            
+    public EmbeddedWebPageScreen() {
         setType(EMBEDDED_WEB_PAGE);
+    }
+
+    public EmbeddedWebPageScreen(String url) {
+        this();
         this.url = url;
     }
     

@@ -40,6 +40,11 @@ public class Action implements Serializable {
     public Action(String actionName) {
         this(actionName, null, null);
     }
+    
+    public Action(String actionName, Object data) {
+        this(actionName, null, null);
+        this.data = data;
+    }
 
     public Action(String actionName, String stateHash, Map<String, String> parameters) {
         this.name = actionName;
