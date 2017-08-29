@@ -1,3 +1,4 @@
+import { ScreenService } from './../screen.service';
 import { AbstractApp } from '../screens/abstract-app';
 import { DialogComponent } from '../screens/dialog.component';
 import { IMenuItem } from '../screens/imenuitem';
@@ -13,8 +14,8 @@ import { MdDialog, MdDialogRef } from '@angular/material';
 })
 export class KioskComponent extends AbstractApp {
 
-  constructor(public session: SessionService, public dialog: MdDialog) {
-    super(session, dialog);
+  constructor(screenService: ScreenService, public session: SessionService, public dialog: MdDialog) {
+    super(screenService, session, dialog);
   }
 
   protected appName(): String {

@@ -1,3 +1,4 @@
+import { IScreen } from './iscreen';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {SessionService} from '../session.service';
 
@@ -5,18 +6,18 @@ import {SessionService} from '../session.service';
   selector: 'app-payment-status',
   templateUrl: './payment-status.component.html'
 })
-export class PaymentStatusComponent implements AfterViewInit, DoCheck {
-
-  initialized = false;
+export class PaymentStatusComponent implements AfterViewInit, DoCheck, IScreen {
 
   constructor(public session: SessionService) {
+  }
+
+  show(session: SessionService) {
   }
 
   ngDoCheck(): void {
   }
 
   ngAfterViewInit(): void {
-    this.initialized = true;
   }
 
 }

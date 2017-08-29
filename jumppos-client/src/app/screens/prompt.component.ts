@@ -1,3 +1,4 @@
+import { IScreen } from './iscreen';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {SessionService} from '../session.service';
 
@@ -5,13 +6,16 @@ import {SessionService} from '../session.service';
   selector: 'app-prompt',
   templateUrl: './prompt.component.html'
 })
-export class PromptComponent implements AfterViewInit, DoCheck {
+export class PromptComponent implements AfterViewInit, DoCheck, IScreen {
 
   @ViewChild('box') vc;
 
   initialized = false;
 
   constructor(public session: SessionService) {
+  }
+
+  show(session: SessionService) {
   }
 
   ngDoCheck(): void {

@@ -1,3 +1,4 @@
+import { IScreen } from './iscreen';
 // import {MdButtonModule, MdCheckboxModule} from '@angular/material';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {SessionService} from '../session.service';
@@ -6,7 +7,7 @@ import {SessionService} from '../session.service';
   selector: 'app-form',
   templateUrl: './form.component.html'
 })
-export class FormComponent implements AfterViewInit, DoCheck {
+export class FormComponent implements AfterViewInit, DoCheck, IScreen {
 
   initialized = false;
 
@@ -14,6 +15,9 @@ export class FormComponent implements AfterViewInit, DoCheck {
 
   constructor(public session: SessionService) {
     this.form = session.screen.form;
+  }
+
+  show(session: SessionService) {
   }
 
   ngDoCheck(): void {

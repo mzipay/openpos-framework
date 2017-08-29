@@ -1,3 +1,5 @@
+import { ScreenService } from './screen.service';
+import { ScreenDirective } from './screens/screen.directive';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -91,22 +93,30 @@ const stompConfig: StompConfig = {
 
 @NgModule({
   entryComponents: [
-    DialogComponent
+    DialogComponent,
+    PromptComponent,
+    ChooseOptionsComponent,
+    SellComponent,
+    SellItemDetailComponent,
+    PaymentStatusComponent,
+    FormComponent,
+    HomeComponent
   ],
   declarations: [
     AppComponent,
     PosComponent,
     KioskComponent,
+    DialogComponent,
     PromptComponent,
     ChooseOptionsComponent,
-    DialogComponent,
     SellComponent,
     SellItemDetailComponent,
     PaymentStatusComponent,
     FormComponent,
     HomeComponent,
     StatusBarComponent,
-    FocusDirective
+    FocusDirective,
+    ScreenDirective
   ],
   imports: [
     BrowserModule,
@@ -188,6 +198,7 @@ const stompConfig: StompConfig = {
   providers: [
     MdDialog,
     SessionService,
+    ScreenService,
     StompService,
     {
       provide: StompConfig,

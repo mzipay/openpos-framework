@@ -16,7 +16,9 @@ export class SessionService {
 
   public response: any;
 
-  public nodeId: String = '05243013';
+  private appId: String;
+
+  public nodeId: String = '05243-013';
 
   private subscribed: boolean;
 
@@ -25,9 +27,6 @@ export class SessionService {
   private subscription: Subscription;
 
   private messages: Observable<Message>;
-
-  private appId: String;
-
 
   constructor(private stompService: StompService, private location: Location, private router: Router) {
   }
