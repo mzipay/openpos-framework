@@ -17,6 +17,7 @@ import org.jumpmind.jumppos.core.model.IFormElement;
 import org.jumpmind.jumppos.core.model.annotations.FormButton;
 import org.jumpmind.jumppos.core.model.annotations.FormTextField;
 import org.jumpmind.jumppos.core.screen.DefaultScreen;
+import org.jumpmind.jumppos.core.screen.DialogScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,10 @@ public class ScreenService implements IScreenService {
         } catch (JsonProcessingException ex) {
             logger.error("Failed to write action to JSON", ex);
         }
+        DefaultScreen lastScreen = getLastScreen(appId, nodeId);
+        if (lastScreen instanceof DialogScreen) {
+            publishToClients(appId, nodeId, "{\"clearDialog\":true }");
+        }
         IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
         if (stateManager != null) {
             logger.info("Posting action of {}", action);
@@ -95,7 +100,7 @@ public class ScreenService implements IScreenService {
             } catch (JsonProcessingException ex) {
                 logger.error("Failed to write screen to JSON", ex);
             }
-            this.template.convertAndSend("/topic/app/" + appId + "/node/" + nodeId, payload);
+            publishToClients(appId, nodeId, payload);
             Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
             if (lastScreenByNodeId == null) {
                 lastScreenByNodeId = new HashMap<>();
@@ -103,6 +108,10 @@ public class ScreenService implements IScreenService {
             }
             lastScreenByNodeId.put(nodeId, screen);
         }
+    }
+    
+    protected void publishToClients(String appId, String nodeId, Object payload) {
+        this.template.convertAndSend("/topic/app/" + appId + "/node/" + nodeId, payload);
     }
 
     @Override

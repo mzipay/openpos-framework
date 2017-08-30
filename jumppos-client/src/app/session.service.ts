@@ -113,7 +113,9 @@ export class SessionService {
   /** Consume a message from the stompService */
   public onNextMessage = (message: Message) => {
     const json = JSON.parse(message.body);
-    if (json.type === 'Dialog') {
+    if (json.clearDialog) {
+      this.dialog = null;
+    } else if (json.type === 'Dialog') {
       this.dialog = json;
     } else {
       this.response = null;

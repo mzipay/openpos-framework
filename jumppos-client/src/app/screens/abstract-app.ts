@@ -36,6 +36,10 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
     ngDoCheck(): void {
         if (this.session.dialog && !this.dialogRef) {
             setTimeout(() => this.openDialog(), 0);
+        } else if (!this.session.dialog && this.dialogRef) {
+            console.log('closing dialog');
+            this.dialogRef.close();
+            this.dialogRef = null;
         }
 
         if (this.session.screen && this.session.screen.type !== this.previousScreenType) {
@@ -52,8 +56,10 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
     openDialog() {
         this.dialogRef = this.dialog.open(DialogComponent, { disableClose: true });
         this.dialogRef.afterClosed().subscribe(result => {
-            this.session.onAction(result);
-            this.dialogRef = null;
+            if (result) {
+                this.session.onAction(result);
+                this.dialogRef = null;
+            }
         });
     }
 }

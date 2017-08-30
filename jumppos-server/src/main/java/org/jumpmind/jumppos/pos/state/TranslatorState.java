@@ -37,7 +37,7 @@ public class TranslatorState implements IState {
     final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    IStateManager stateManager;
+    protected IStateManager stateManager;
 
     @PostConstruct
     public void init() {
@@ -46,7 +46,7 @@ public class TranslatorState implements IState {
                     + ITranslationManager.class.getSimpleName() + " to be bound at the prototype scope");
         }
     }
-
+    
     @Override
     public void arrive() {
         stateManager.getTranslationManager().showActiveScreen();
