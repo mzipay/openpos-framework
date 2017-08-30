@@ -12,10 +12,19 @@ import { MdDialog, MdDialogRef } from '@angular/material';
   selector: 'app-pos',
   templateUrl: './kiosk.component.html'
 })
-export class KioskComponent extends AbstractApp {
+export class KioskComponent extends AbstractApp implements DoCheck {
+
+  cartSize: number;
 
   constructor(screenService: ScreenService, public session: SessionService, public dialog: MdDialog) {
     super(screenService, session, dialog);
+  }
+
+  ngDoCheck(): void {
+    super.ngDoCheck();
+    if (this.session.screen && this.session.screen.lineItems) {
+      this.cartSize = this.session.screen.lineItems.length;
+    }
   }
 
   protected appName(): String {
