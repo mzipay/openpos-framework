@@ -10,7 +10,7 @@ public class WrapCatalogBrowserScreen extends EmbeddedWebPageScreen {
 
     private static final long serialVersionUID = 1L;
     
-    List<LineItem> lineItems = new ArrayList<LineItem>();
+    List<LineItem> items = new ArrayList<LineItem>();
 
     public WrapCatalogBrowserScreen() {
         super();
@@ -19,13 +19,13 @@ public class WrapCatalogBrowserScreen extends EmbeddedWebPageScreen {
     public WrapCatalogBrowserScreen(String url) {
         super(url);
     }
-
-    public void setLineItems(List<LineItem> lineItems) {
-        this.lineItems = lineItems;
+    
+    public void setItems(List<LineItem> items) {
+        this.items = items;
     }
     
-    public List<LineItem> getLineItems() {
-        return lineItems;
+    public List<LineItem> getItems() {
+        return items;
     }
 
 }
