@@ -26,9 +26,20 @@ public class Injector {
         performInjectionsImpl(target, scope, extraScope);
         performPostContruct(target);
     }
-
+    
     protected void performInjectionsImpl(Object target, Scope scope,  Map<String, ScopeValue> extraScope) {
-        Field[] fields = target.getClass().getDeclaredFields();
+        Class<?> targetClass = target.getClass();
+        while (targetClass != null) {
+            performInjectionsImpl(targetClass, target, scope, extraScope);
+            targetClass = targetClass.getSuperclass();
+            if (targetClass == Object.class) {
+                targetClass = null;
+            }
+        }
+    }
+
+    protected void performInjectionsImpl(Class<?> targetClass, Object target, Scope scope,  Map<String, ScopeValue> extraScope) {
+        Field[] fields = targetClass.getDeclaredFields();
 
         for (Field field : fields) {
             field.setAccessible(true);
