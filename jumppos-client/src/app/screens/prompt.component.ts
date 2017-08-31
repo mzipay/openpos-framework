@@ -18,10 +18,11 @@ export class PromptComponent implements AfterViewInit, DoCheck, IScreen {
   show(session: SessionService) {
   }
 
+
   ngDoCheck(): void {
-    if (this.initialized && this.vc && this.vc.nativeElement) {
-      setTimeout(this.vc.nativeElement.focus(), 0);
-    }
+    // if (this.initialized && this.vc && this.vc.nativeElement) {
+    //   setTimeout(this.vc.nativeElement.focus(), 0);
+    // }
   }
 
   ngAfterViewInit(): void {

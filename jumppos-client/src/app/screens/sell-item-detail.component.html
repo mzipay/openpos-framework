@@ -3,7 +3,7 @@
 
     <md-card-content>
         <div fxLayout="row" fxLayoutAlign="center center" class="line-item-detail-header serrated-edge serrated-edge-bottom">
-            <img *ngIf="item.imageUrl" class="line-item-detail-image" [src]="item.imageUrl" />
+            <img *ngIf="item.imageUrl" class="line-item-detail-image"  [style.xs]="{'zoom': '10%'}" [style.sm]="{'zoom': '10%'}" [src]="item.imageUrl" />
             <div fxLayout="column" class="line-item-detail-header serrated-edge serrated-edge-bottom">            
                     <p>{{item.productDescription}}</p>
                     <table style="font-size: 22px; align-content: left; text-align: left;">

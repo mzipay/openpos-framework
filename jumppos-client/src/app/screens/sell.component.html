@@ -1,11 +1,11 @@
 <div class="containerX" fxLayout="row" fxLayoutAlign="center center">
-	<div class="sale-trans-panel-container" fxFlex="60">
+	<div class="sale-trans-panel-container" fxFlex>
 		<div class="prompt-input-container">
 			<p>
 				<input #box class="prompt-input-scan-something" (keyup.enter)="onEnter(box.value)" [(ngModel)]="session.response" placeholder="Scan something">
 
 			</p>
-			<svg style="width:64px;height:64px;position:absolute;left:14px;top:5px;" viewBox="0 0 40 40">
+			<svg style="width:64px;height:64px;position:absolute;left:14px;top:7px;" viewBox="0 0 40 40">
 				<path fill="#c8c8c8" d="M4,6H6V18H4V6M7,6H8V18H7V6M9,6H12V18H9V6M13,6H14V18H13V6M16,6H18V18H16V6M19,6H20V18H19V6M2,4V8H0V4A2,2 0 0,1 2,2H6V4H2M22,2A2,2 0 0,1 24,4V8H22V4H18V2H22M2,16V20H6V22H2A2,2 0 0,1 0,20V16H2M22,20V16H24V20A2,2 0 0,1 22,22H18V20H22Z"
 				/>
 			</svg>
@@ -15,7 +15,7 @@
 			<div  fxFlex> </div>
 			<p class="sale-total-text"><span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</p>
 			<div  fxFlex> </div>
-			<div class="sale-total-checkout-container" [ngClass]="{'sale-total-checkout-container-dimmed':items.length == 0}" fxLayout="row">
+			<div class="sale-total-checkout-container" ngClass.xs="sale-total-checkout-container-small" [ngClass]="{'sale-total-checkout-container-dimmed':items.length == 0}" fxLayout="row">
 			<p class="sale-total-checkout-text">Checkout</p>
 			<md-icon class="material-icons md-48 sale-total-icon">keyboard_arrow_right</md-icon>
 			</div>
@@ -63,13 +63,13 @@
 
 							<div fxFlex>
 								<md-icon class="material-icons pull-right middle-align line-item-caret">keyboard_arrow_right</md-icon>
-								<h5 class="mb-0 pull-right middle-align line-item-extended-amt"><span class="super-currency-symbol">$</span>{{i.extendedAmount}}</h5>
+								<h5 class="middle-align line-item-extended-amt"><span class="super-currency-symbol">$</span>{{i.extendedAmount}}</h5>
 							</div>
 						</div>
 						
 					</md-list-item>
 				</md-list>
-				<div *ngIf="items.length == 0" class="sale-line-item-container-no-content" fxLayout="column" fxLayoutAlign="center center">
+				<div *ngIf="items.length == 0" class="sale-line-item-container-no-content" [style.sm]="{'font-size': '16px'}" [style.xs]="{'font-size': '16px'}" fxLayout="column" fxLayoutAlign="center center">
 
 						<svg style="width:180px;height:180px" viewBox="0 0 25 25">
 								<path fill="#c8c8c8" d="M4,6H6V18H4V6M7,6H8V18H7V6M9,6H12V18H9V6M13,6H14V18H13V6M16,6H18V18H16V6M19,6H20V18H19V6M2,4V8H0V4A2,2 0 0,1 2,2H6V4H2M22,2A2,2 0 0,1 24,4V8H22V4H18V2H22M2,16V20H6V22H2A2,2 0 0,1 0,20V16H2M22,20V16H24V20A2,2 0 0,1 22,22H18V20H22Z"
@@ -83,7 +83,7 @@
 		</md-card>
 	</div>
 
-	<div class="sale-marketing-panel-container" fxFlex>
+	<div class="sale-marketing-panel-container" fxFlex="40" fxHide.xs fxHide.sm>
 
 	</div>
 

@@ -53,8 +53,9 @@ md-card {
 }
 
 .main-menu-container {
-    height:100vh;
-     background-color:transparent;
+
+     height:100vh;
+     //background-color:transparent;
 }
 
 ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
@@ -70,6 +71,7 @@ md-card {
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 10px;
+    width: calc(100% - 73px)
 }
 
 .prompt-input-scan-something {
@@ -112,6 +114,15 @@ md-card {
     
     height: 320px;
     bottom: 100px;
+    background-color:#f0f0f0;
+}
+
+.prompt-input-container-small {
+
+    top:10px;
+    min-width: 300px;
+    max-width: 570px;    
+    height: 200px;
 }
 
 .statusbar-container {
@@ -212,8 +223,20 @@ md-card {
     height: 55px;
     padding-left: 40px;
     line-height: 28px;
-    position: relative;
-    left: 15px;
+    position: absolute;
+    right: 0px;
+}
+
+.sale-total-checkout-container.xs {
+    background-color: red;
+}
+
+.xs.sale-total-checkout-container {
+    background-color: red;
+}
+
+.sale-total-checkout-container-small {
+    width: 120px;
 }
 
 .sale-total-checkout-container-dimmed {
@@ -461,7 +484,7 @@ td {
         background-image: url(assets/jumpmart-logo.png); 
         background-repeat: no-repeat;
         background-size: cover;
-        zoom: 90%;
+        zoom: 70%;
         position: absolute;
         top:75px;
         right:50px;

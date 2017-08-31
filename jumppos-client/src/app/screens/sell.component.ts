@@ -30,7 +30,7 @@ export class SellComponent implements AfterViewInit, DoCheck, IScreen {
 
   ngAfterViewInit(): void {
     this.initialized = true;
-    setTimeout(() => this.vc.nativeElement.focus(), 0);
+    //setTimeout(() => this.vc.nativeElement.focus(), 0);
   }
 
   onEnter(value: string) {
