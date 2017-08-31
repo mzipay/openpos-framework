@@ -10,7 +10,7 @@
 				/>
 			</svg>
 		</div>
-		<button md-raised-button class="sale-total-button" [disabled]="!session.screen.transactionActive || items.length == 0" (click)="session.onAction('Checkout')">
+		<button md-raised-button class="sale-total-button" [disabled]="!session.screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')">
 			<div class="containerX" fxLayout="row" fxLayoutAlign="center center">
 			<div  fxFlex> </div>
 			<p class="sale-total-text"><span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</p>

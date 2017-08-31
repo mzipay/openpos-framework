@@ -6,10 +6,10 @@ public class OptionItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    protected String displayValue;
-    protected String value;
-    protected boolean enabled = true;
-    protected boolean selected = false;
+    private String displayValue;
+    private String value;
+    private boolean enabled = true;
+    private boolean selected = false;
     
     public OptionItem() {
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.jumppos.core.screen.SellItem;
+import org.jumpmind.jumppos.core.screen.Transaction;
 import org.jumpmind.jumppos.core.screen.PromptScreen;
 
 public class SellItemScreen extends PromptScreen {
@@ -17,8 +18,7 @@ public class SellItemScreen extends PromptScreen {
     private String grandTotal;
     private String subTotal;
     private String taxTotal;
-    private boolean transactionActive = false;
-    private String transactionNumber;
+    private Transaction transaction = new Transaction();
 
     public SellItemScreen() {
         this.setType(SELL_SCREEN_TYPE);
@@ -72,20 +72,12 @@ public class SellItemScreen extends PromptScreen {
         this.taxTotal = taxTotal;
     }
 
-    public void setTransactionNumber(String transactionNumber) {
-        this.transactionNumber = transactionNumber;
+    
+    public Transaction getTransaction() {
+        return transaction;
     }
 
-    public String getTransactionNumber() {
-        return transactionNumber;
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
-    
-    public void setTransactionActive(boolean transactionActive) {
-        this.transactionActive = transactionActive;
-    }
-    
-    public boolean isTransactionActive() {
-        return transactionActive;
-    }
-
 }

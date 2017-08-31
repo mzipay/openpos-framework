@@ -22,8 +22,8 @@
 			<p class="statusbar-text">Register #{{session.screen.workstation.workstationId}}</p>
 		</ng-container>
 	</ng-container>
-	<md-icon *ngIf="session.screen.transactionNumber" class="material-icons statusbar-icon statusbar-icon-off">receipt</md-icon>
-	<p *ngIf="session.screen.transactionNumber" class="statusbar-text">Transaction #{{session.screen.transactionNumber}}</p>
+	<md-icon *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber" class="material-icons statusbar-icon statusbar-icon-off">receipt</md-icon>
+	<p *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber" class="statusbar-text">Transaction #{{session.screen.transaction.transactionNumber}}</p>
 
 	<div fxFlex></div>
 
