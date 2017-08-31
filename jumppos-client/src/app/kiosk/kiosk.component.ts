@@ -22,8 +22,8 @@ export class KioskComponent extends AbstractApp implements DoCheck {
 
   ngDoCheck(): void {
     super.ngDoCheck();
-    if (this.session.screen && this.session.screen.items) {
-      this.cartSize = this.session.screen.items.length;
+    if (this.session.screen && this.session.screen.cart.items) {
+      this.cartSize = this.session.screen.cart.items.length;
     }
   }
 

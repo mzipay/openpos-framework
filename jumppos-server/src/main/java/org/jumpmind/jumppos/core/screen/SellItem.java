@@ -1,8 +1,8 @@
-package org.jumpmind.jumppos.pos.screen;
+package org.jumpmind.jumppos.core.screen;
 
 import java.io.Serializable;
 
-public class LineItem implements Serializable {
+public class SellItem implements Serializable {
     
     private static final long serialVersionUID = 1L;
 

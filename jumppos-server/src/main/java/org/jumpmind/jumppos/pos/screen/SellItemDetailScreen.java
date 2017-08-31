@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.jumppos.core.screen.DefaultScreen;
+import org.jumpmind.jumppos.core.screen.SellItem;
 import org.jumpmind.jumppos.core.screen.MenuItem;
 
 public class SellItemDetailScreen extends DefaultScreen {
 
     private static final long serialVersionUID = 1L;
     
-    private LineItem item = new LineItem();
+    private SellItem item = new SellItem();
 
     private List<MenuItem> itemActions = new ArrayList<>();
 
@@ -26,11 +27,11 @@ public class SellItemDetailScreen extends DefaultScreen {
         this.itemActions = itemActions;
     }
 
-    public LineItem getItem() {
+    public SellItem getItem() {
         return item;
     }
 
-    public void setItem(LineItem item) {
+    public void setItem(SellItem item) {
         this.item = item;
     }
 

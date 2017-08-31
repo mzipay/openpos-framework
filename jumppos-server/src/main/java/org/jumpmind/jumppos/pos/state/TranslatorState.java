@@ -50,12 +50,11 @@ public class TranslatorState implements IState {
     @Override
     public void arrive() {
         stateManager.getTranslationManager().showActiveScreen();
-    }
+    } 
 
     @ActionHandler
     public void onAnyAction(Action action, DefaultScreen screen) {
-        ITranslationManager translationManager = stateManager.getTranslationManager();
-        translationManager.doAction(action, screen);
+        stateManager.getTranslationManager().doAction(action, screen);
     }
 
 }
