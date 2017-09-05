@@ -2,10 +2,11 @@
     <md-card-title *ngIf="promptText" class="choose-options-title">{{promptText}}</md-card-title>
     <md-card-content>
         <md-nav-list>
-            <md-list-item *ngFor="let o of optionItems" (click)="session.onAction(o.value)" style="border-color: black">
-                {{o.displayValue}}
+            <!-- material doesn't yet support enable/disable of md-list-item, workaround ... -->
+            <md-list-item *ngFor="let o of optionItems" (click)="o.enabled && session.onAction(o.value)" style="border-color: black">
+                <span *ngIf="!o.enabled; else elseBlock" class="choose-options-item-dimmed">{{o.displayValue}}</span>
+                <ng-template #elseBlock>{{o.displayValue}}</ng-template>
                 <md-icon class="material-icons pull-right line-item-caret" style="top: 1px;">keyboard_arrow_right</md-icon>
-                
             </md-list-item>
         </md-nav-list>
     </md-card-content>
