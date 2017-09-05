@@ -7,7 +7,7 @@ public interface ITranslationManager {
 
     public void setTranslationManagerSubscriber(ITranslationManagerSubscriber subscriber);
     
-    public void doAction(Action action, DefaultScreen screen);
+    public void doAction(String appId, Action action, DefaultScreen screen);
     
     public void showActiveScreen();
     

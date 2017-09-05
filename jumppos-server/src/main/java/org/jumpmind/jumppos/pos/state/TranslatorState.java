@@ -54,7 +54,7 @@ public class TranslatorState implements IState {
 
     @ActionHandler
     public void onAnyAction(Action action, DefaultScreen screen) {
-        stateManager.getTranslationManager().doAction(action, screen);
+        stateManager.getTranslationManager().doAction(stateManager.getAppId(), action, screen);
     }
 
 }
