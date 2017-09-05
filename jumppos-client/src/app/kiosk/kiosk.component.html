@@ -1,6 +1,9 @@
 <md-toolbar color="primary">
+    <button *ngIf="showBackButton" md-button (click)="session.onAction('Back')">
+        <md-icon>arrow_back</md-icon>
+    </button>
     <span class="toolbar-fill-remaining-space"></span>
-    <button md-button>
+    <button md-button (click)="session.onAction('ShowCart')">
         <md-icon>shopping_cart</md-icon>
         <small>{{cartSize}}</small>
     </button>

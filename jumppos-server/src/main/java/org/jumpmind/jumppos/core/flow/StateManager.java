@@ -219,6 +219,9 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
 
     @Override
     public void showScreen(DefaultScreen screen) {
+        if (this.currentState != null && this.currentState instanceof IScreenInterceptor) {
+            screen = ((IScreenInterceptor)this.currentState).intercept(screen);            
+        }
         screenService.showScreen(appId, nodeId, screen);
     }
 

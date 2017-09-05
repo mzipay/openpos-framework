@@ -30,6 +30,7 @@ public interface IStateManager {
 
     public void init(String appId, String nodeId);
     public String getNodeId();
+    public String getAppId();
     public void doAction(String action);
     public void doAction(String action, Map<String, String> params);
     public void doAction(Action action);    

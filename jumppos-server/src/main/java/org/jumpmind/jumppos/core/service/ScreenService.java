@@ -53,7 +53,7 @@ public class ScreenService implements IScreenService {
         logger.info("Received a request for {} {} {} {}", appId, nodeId, action, payload);
         IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
         if (stateManager != null) {
-            logger.info("Posting action of {}", action);
+            logger.info("Calling stateManager.doAction with: {}", action);
             stateManager.doAction(new Action(action, payload));
         }
     }
