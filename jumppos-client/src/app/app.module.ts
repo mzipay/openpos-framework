@@ -1,3 +1,4 @@
+import { CartComponent } from './kiosk/cart.component';
 import { SafePipe } from './common/safe.pipe';
 import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component';
 import { ScreenService } from './screen.service';
@@ -97,6 +98,7 @@ const stompConfig: StompConfig = {
   entryComponents: [
     DialogComponent,
     PromptComponent,
+    CartComponent,
     ChooseOptionsComponent,
     SellComponent,
     SellItemDetailComponent,
@@ -109,6 +111,7 @@ const stompConfig: StompConfig = {
     AppComponent,
     PosComponent,
     KioskComponent,
+    CartComponent,
     DialogComponent,
     PromptComponent,
     ChooseOptionsComponent,

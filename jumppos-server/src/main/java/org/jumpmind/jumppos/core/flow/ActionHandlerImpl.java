@@ -19,27 +19,34 @@ public class ActionHandlerImpl {
     private ObjectMapper jsonMapper = new ObjectMapper();
 
     public boolean handleAction(Object state, Action action, Object deserializedPayload) {
-        Method[] methods = state.getClass().getDeclaredMethods();
+        Class<?> clazz = state.getClass();
 
-        Method anyMethod = null;
+        while (clazz != null) {
+            Method[] methods = clazz.getDeclaredMethods();
 
-        String actionName = action.getName();
-        for (Method method : methods) {
-            ActionHandler actionHandlerAnnotation = method.getAnnotation(ActionHandler.class);
-            String matchingMethodName = "on" + actionName;
-            if (actionHandlerAnnotation != null) {
-                method.setAccessible(true);
-                if (matchingMethodName.equals(method.getName())) {
-                    invokeHandleAction(state, action, method, deserializedPayload);
-                } else if (METHOD_ON_ANY.equals(method.getName())) {
-                    anyMethod = method;
+            Method anyMethod = null;
+
+            String actionName = action.getName();
+            for (Method method : methods) {
+                ActionHandler actionHandlerAnnotation = method.getAnnotation(ActionHandler.class);
+                String matchingMethodName = "on" + actionName;
+                if (actionHandlerAnnotation != null) {
+                    method.setAccessible(true);
+                    if (matchingMethodName.equals(method.getName())) {
+                        invokeHandleAction(state, action, method, deserializedPayload);
+                    } else if (METHOD_ON_ANY.equals(method.getName())) {
+                        anyMethod = method;
+                    }
                 }
             }
-        }
 
-        if (anyMethod != null) {
-            invokeHandleAction(state, action, anyMethod, deserializedPayload);
-            return true;
+            if (anyMethod != null) {
+                invokeHandleAction(state, action, anyMethod, deserializedPayload);
+                return true;
+            }
+            
+            clazz = clazz.getSuperclass();
+
         }
 
         return false;

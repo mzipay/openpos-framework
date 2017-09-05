@@ -15,6 +15,7 @@ import { MdDialog, MdDialogRef } from '@angular/material';
 export class KioskComponent extends AbstractApp implements DoCheck {
 
   cartSize: number;
+  showBackButton: boolean;
 
   constructor(screenService: ScreenService, public session: SessionService, public dialog: MdDialog) {
     super(screenService, session, dialog);
@@ -22,8 +23,11 @@ export class KioskComponent extends AbstractApp implements DoCheck {
 
   ngDoCheck(): void {
     super.ngDoCheck();
-    if (this.session.screen && this.session.screen.cart.items) {
-      this.cartSize = this.session.screen.cart.items.length;
+    if (this.session.screen) {
+      if (this.session.screen.cart.items) {
+        this.cartSize = this.session.screen.cart.items.length;
+      }
+      this.showBackButton = this.session.screen.type === 'Cart';
     }
   }
 

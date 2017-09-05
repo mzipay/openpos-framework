@@ -1,27 +1,23 @@
 package org.jumpmind.jumppos.kiosk.screen;
 
-import org.jumpmind.jumppos.core.screen.EmbeddedWebPageScreen;
-
-public class BrowseExternalCatalogScreen extends EmbeddedWebPageScreen {
+public class BrowseExternalCatalogScreen extends CartScreen {
 
     private static final long serialVersionUID = 1L;
 
-    private Cart cart = new Cart();
+    private String url;
 
-    public BrowseExternalCatalogScreen() {
-        super();
-    }
-
-    public BrowseExternalCatalogScreen(String url) {
-        super(url);
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
+    public BrowseExternalCatalogScreen(String url, Cart cart) {
+        super(cart);
+        setType(EMBEDDED_WEB_PAGE);
+        this.url = url;
         this.cart = cart;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }
