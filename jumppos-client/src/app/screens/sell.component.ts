@@ -1,3 +1,4 @@
+import { ISellItem } from './../common/isellitem';
 import { IScreen } from '../common/iscreen';
 import { IMenuItem } from '../common/imenuitem';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
@@ -30,20 +31,11 @@ export class SellComponent implements AfterViewInit, DoCheck, IScreen {
 
   ngAfterViewInit(): void {
     this.initialized = true;
-    //setTimeout(() => this.vc.nativeElement.focus(), 0);
+    // setTimeout(() => this.vc.nativeElement.focus(), 0);
   }
 
   onEnter(value: string) {
     this.session.onAction('Next');
   }
 
-}
-
-export interface ISellItem {
-    itemId: string;
-    posItemId: string;
-    description: string;
-    extendedAmount: number;
-    quantity: number;
-    lineNumber: number;
 }

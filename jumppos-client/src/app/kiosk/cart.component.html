@@ -1,0 +1,48 @@
+<div class="containerX" [fxLayout]="direction" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="center">
+    <div fxFlex>
+        <md-table #table [dataSource]="dataSource">
+            <ng-container mdColumnDef="description">
+                <md-header-cell *mdHeaderCellDef></md-header-cell>
+                <md-cell *mdCellDef="let item"> {{item.description}} </md-cell>
+            </ng-container>
+            
+            <ng-container mdColumnDef="extendedAmount">
+                <md-header-cell [style.flex]="'0 0 75px'" *mdHeaderCellDef>Price</md-header-cell>
+                <md-cell [style.flex]="'0 0 75px'" *mdCellDef="let item"> {{item.extendedAmount}} </md-cell>
+            </ng-container>
+
+            <ng-container mdColumnDef="quantity">
+                <md-header-cell [style.flex]="'0 0 75px'" *mdHeaderCellDef>Quantity</md-header-cell>
+                <md-cell [style.flex]="'0 0 75px'" *mdCellDef="let item"> {{item.quantity}} </md-cell>
+            </ng-container>
+
+            <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+            <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+        </md-table>
+    </div>
+    <div fxFlex="33">
+        <md-card>
+            <md-card-header>
+                <md-card-title>Order Summary</md-card-title>
+            </md-card-header>
+            <md-card-content>
+                <div class='container' fxLayoutAlign='space-between'>
+                    <div><strong>Total:</strong></div>
+                    <div>$299.88</div>
+                </div>
+                <div class='container' fxLayoutAlign='space-between'>
+                    <div>Tax:</div>
+                    <div>$13.44</div>
+                </div>
+                <div class='container' fxLayoutAlign='space-between'>
+                    <div>Subtotal:</div>
+                    <div>$286.44</div>
+                </div>
+            </md-card-content>
+            <md-card-actions fxLayoutAlign="center">
+                <button md-raised-button color='primary'>Send to Register</button>
+                <button md-raised-button color='primary'>Checkout Now</button>
+            </md-card-actions>
+        </md-card>
+    </div>
+</div>
