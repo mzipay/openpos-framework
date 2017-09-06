@@ -28,15 +28,19 @@
                     <h2>Order Summary</h2>
                 <div class='container' fxLayoutAlign='space-between'>
                     <div><strong>Total:</strong></div>
-                    <div>$299.88</div>
+                    <div>{{session.screen.cart.grandTotal}}</div>
                 </div>
                 <div class='container' fxLayoutAlign='space-between'>
+                    <div>Discounts:</div>
+                    <div>{{session.screen.cart.discountTotal}}</div>
+                </div>                
+                <div class='container' fxLayoutAlign='space-between'>
                     <div>Tax:</div>
-                    <div>$13.44</div>
+                    <div>{{session.screen.cart.taxTotal}}</div>
                 </div>
                 <div class='container' fxLayoutAlign='space-between'>
                     <div>Subtotal:</div>
-                    <div>$286.44</div>
+                    <div>{{session.screen.cart.subTotal}}</div>
                 </div>
             </md-card-content>
             <md-card-actions fxLayoutAlign="center">
