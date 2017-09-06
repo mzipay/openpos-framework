@@ -28,7 +28,6 @@ import { StatusBarComponent } from './screens/statusbar.component';
 import { PaymentStatusComponent } from './screens/payment-status.component';
 import { SellItemDetailComponent } from './screens/sell-item-detail.component';
 import { FocusDirective } from './common/focus.directive';
-import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -131,7 +130,6 @@ const stompConfig: StompConfig = {
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    Angular2FontawesomeModule,
     MdButtonModule,
     MdCheckboxModule,
     MdCardModule,
