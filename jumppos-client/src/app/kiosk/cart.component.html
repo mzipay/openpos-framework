@@ -2,7 +2,7 @@
     <div fxFlex>
         <md-table #table [dataSource]="dataSource">
             <ng-container mdColumnDef="description">
-                <md-header-cell *mdHeaderCellDef></md-header-cell>
+                <md-header-cell *mdHeaderCellDef><h1>Shopping Cart</h1></md-header-cell>
                 <md-cell *mdCellDef="let item"> {{item.description}} </md-cell>
             </ng-container>
             
@@ -22,10 +22,10 @@
     </div>
     <div fxFlex="33">
         <md-card>
-            <md-card-header>
-                <md-card-title>Order Summary</md-card-title>
-            </md-card-header>
+            <md-card-header>                
+            </md-card-header>            
             <md-card-content>
+                    <h2>Order Summary</h2>
                 <div class='container' fxLayoutAlign='space-between'>
                     <div><strong>Total:</strong></div>
                     <div>$299.88</div>
