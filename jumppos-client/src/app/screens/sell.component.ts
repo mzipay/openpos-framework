@@ -1,4 +1,4 @@
-import { ISellItem } from './../common/isellitem';
+import { ISellItem } from '../common/isellitem';
 import { IScreen } from '../common/iscreen';
 import { IMenuItem } from '../common/imenuitem';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
