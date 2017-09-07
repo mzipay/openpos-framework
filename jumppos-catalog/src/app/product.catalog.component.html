@@ -1,0 +1,21 @@
+
+<div class="conatinerX">
+
+    <div class="home-stripe home-stripe-top" style="color:white; text-align: center; font-size: 70px;padding-top:30px;padding-bottom:30px;height: initial;">Shop Furniture</div>
+    <div fxFlexLayout="row">
+            <div fxFlex="15"></div>
+            <div fxFlex="70" fxLayout="row" fxLayoutWrap>
+                    <a routerLink="/product-list" *ngFor="let category of categories" >
+                <md-card class="product-category" 
+                    [ngStyle]="{'background-image':'url(' + category.imageUrl + ')'}"  ng-click="homeTapped()" >        
+                    <div style="height: 90%"></div>
+                    <p style="font-family: 'Open Sans'; color: #999;text-align: center;position: relative; bottom: 10px;">{{category.description}}</p>
+                </md-card>
+                    </a>
+            </div>
+
+            <div fxFlex="15"></div>
+    </div>
+        
+
+</div>
