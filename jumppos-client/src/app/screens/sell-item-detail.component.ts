@@ -1,6 +1,6 @@
 import { IScreen } from '../common/iscreen';
 import {Component} from '@angular/core';
-import {ISellItem} from './sell.component';
+import { ISellItem } from '../common/isellitem';
 import {SessionService} from '../session.service';
 
 @Component({
