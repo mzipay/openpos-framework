@@ -18,7 +18,7 @@ processResources {
 }
 
 dependencies {
-    compile project('jumppos-domain')
+    compile project(':jumppos-domain')
     compile "net.java.dev.jna:jna:$jnaVersion"
     compile "net.java.dev.jna:jna-platform:$jnaVersion"
     compile group: 'org.javapos', name: 'javapos', version: '1.14.1'
