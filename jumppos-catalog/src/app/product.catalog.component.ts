@@ -16,7 +16,6 @@ import {
 })
 export class ProductCatalogComponent {
   constructor(private http: Http) {
-    console.log('ProductCatalogComponent constructed.');
      this.categories = ProductCategory.getCategories();
   }
 

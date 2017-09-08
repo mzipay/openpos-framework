@@ -23,12 +23,15 @@ export class ProductDetailsComponent {
     public sanitizer: DomSanitizer 
   ) {
     this.route.params.subscribe(params => {
-      console.log("Item ID is: " + params['itemId']);
       this.product = Product.getProduct(params['itemId']);
+      this.productFeatures = Product.getProductFeatures(params['itemId']);
+      this.productSpecifications = Product.getProductSpecifications(params['itemId']);
     });
 }
 
 product:Product;
+productFeatures:string[];
+productSpecifications:string[];
 restUrl:string;
 
 addProductToCart() {
