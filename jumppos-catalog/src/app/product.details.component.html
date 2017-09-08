@@ -1,4 +1,12 @@
 <div class="containerX">
+         
+        <a routerLink="/product-list">
+            <div style="position: absolute;padding-left:48px;">
+                <div style="height: calc(100vh*0.05)"></div>
+                <svg style="width:48px;height:48px" viewBox="0 0 24 24">
+                    <path fill="#FFF" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+                </svg></div>
+                </a>   
         <div fxLayout="column" >
             <div fxLayout="row">
                     <div fxFlex style="width:100%;height: calc(100vh*0.15);text-align: center;font-size: 3vh;color: white;background-color: #432614"><div style="height: calc(100vh*0.05)"></div>{{product.shortDescription}}</div>
@@ -15,7 +23,7 @@
                             <p style="font-size: 1.75em;text-align: left;">Price ${{product.price}}</p>
                         </div>
                         
-                        <div fxFlex style="background-color: #432614; width: 100%;color: white;text-align: center;margin-bottom: 40px;padding: 10px;padding-top: 20px;"
+                        <button md-raised-button color='primary' fxFlex style="background-color: #432614; width: 100%;color: white;text-align: center;margin-bottom: 40px;padding: 10px;padding-top: 10px;"
                             (click)="addProductToCart()">
 
                             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -23,9 +31,25 @@
                                 </svg>
                             
                             <p style="line-height: 5px;">Add to Cart  ></p>
-                        </div>
+                            </button>
                         
-                        <div fxFlex="40">Features</div>
+                        <div fxFlex="40"><md-tab-group>
+                            <md-tab label="Features">
+                                <ul style="list-style-type: square;font-family: 'Open Sans','Helvetica Neue',sans-serif;color: #432614;font-size: 0.9em;">
+                                    <li *ngFor="let feature of productFeatures">
+                                        {{feature}}
+                                    </li>
+                                </ul>
+                            </md-tab>
+                            <md-tab label="Specifications">
+                                    <ul style="list-style-type: square;font-family: 'Open Sans','Helvetica Neue',sans-serif;color: #432614;font-size: 0.9em;">
+                                            <li *ngFor="let spec of productSpecifications">
+                                                {{spec}}
+                                            </li>
+                                        </ul>
+                            </md-tab>
+                          </md-tab-group>
+                        </div>
                 </div>
             </div>
         </div>

@@ -45,6 +45,7 @@ import 'hammerjs'; // for material
 
 import { AppComponent } from './app.component';
 import { CatalogTileComponent } from './catalog-tile.component';
+import { RoutingListener } from './routing-listener';
 import { HomeComponent } from './home.component';
 import { ProductCatalogComponent } from './product.catalog.component';
 import { ProductListComponent } from './product.list.component';
@@ -75,6 +76,7 @@ const appRoutes: Routes = [
     AppComponent,
     CatalogTileComponent,
     HomeComponent,
+    RoutingListener,
     ProductCatalogComponent,
     ProductListComponent,
     ProductDetailsComponent
