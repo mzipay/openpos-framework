@@ -4,14 +4,20 @@ public class PromptScreen extends DefaultScreen {
 
     private static final long serialVersionUID = 1L;
     
+    public static final String TYPE_ALPHANUMERICTEXT = "ALPHANUMERICTEXT";
+    public static final String TYPE_ALPHANUMERICPASSWORD = "ALPHANUMERICPASSWORD";
+    public static final String TYPE_CURRENCYTEXT = "CURRENCYTEXT";
+    public static final String TYPE_NUMERICTEXT = "NUMERICTEXT";
+    
     private String promptIcon;
     private String placeholderText;
     private String text;
     private String responseText;
-    private boolean editable;
+    private boolean editable = true;
     private String responseType;
     private int minLength;
     private int maxLength;
+    private String action = "Next";
 
     public PromptScreen() {
         setType(PROMPT_SCREEN_TYPE);
@@ -79,6 +85,14 @@ public class PromptScreen extends DefaultScreen {
 
     public void setPlaceholderText(String placeholderText) {
         this.placeholderText = placeholderText;
+    }
+    
+    public String getAction() {
+        return action;
+    }
+    
+    public void setAction(String action) {
+        this.action = action;
     }
 
 }

@@ -44,7 +44,7 @@
                 </div>
             </md-card-content>
             <md-card-actions fxLayoutAlign="center">
-                <button md-raised-button color='primary'>Send to Register</button>
+                <button md-raised-button color='primary' (click)="session.onAction('SendToRegister')">Send to Register</button>
                 <button md-raised-button color='primary'>Checkout Now</button>
             </md-card-actions>
         </md-card>

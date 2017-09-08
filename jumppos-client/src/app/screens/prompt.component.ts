@@ -31,7 +31,7 @@ export class PromptComponent implements AfterViewInit, DoCheck, IScreen {
 
   onEnter($event) {
     if (this.session.response) {
-        this.session.onAction('Next');
+        this.session.onAction(this.session.screen.action);
         $event.target.disabled = true;
     }
   }

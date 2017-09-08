@@ -1,7 +1,8 @@
 <md-toolbar color="primary">
-    <button *ngIf="showBackButton" md-button (click)="session.onAction('Back')">
+    <button *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled" md-button (click)="session.onAction(session.screen.backButton.action)">
         <md-icon>arrow_back</md-icon>
     </button>
+    
     <span class="toolbar-fill-remaining-space"></span>
     <button md-button (click)="session.onAction('ShowCart')">
         <md-icon>shopping_cart</md-icon>
