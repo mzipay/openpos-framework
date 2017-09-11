@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { SessionService } from '../session.service';
 import {DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs/Observable';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Component({
     selector: 'app-cart',
@@ -15,23 +16,22 @@ export class CartComponent implements IScreen {
     displayedColumns = [ 'description', 'extendedAmount', 'quantity'];
 
     constructor(public session: SessionService) {
+        this.dataSource = new TableDataSource();
     }
 
     show(session: SessionService) {
         console.log('populating datasource with ' + this.session.screen.cart.items.length);
-        this.dataSource = new TableDataSource(this.session.screen.cart.items);
+        this.dataSource.dataChange.next(this.session.screen.cart.items);
     }
 
 }
 
 export class TableDataSource extends DataSource<ISellItem> {
 
-    constructor(public list: ISellItem[]) {
-        super();
-    }
+    public dataChange: BehaviorSubject<ISellItem[]>  = new BehaviorSubject<ISellItem[]>([]);
 
     connect(): Observable<ISellItem[]> {
-      return Observable.of(this.list);
+      return this.dataChange;
     }
     disconnect() {}
   }

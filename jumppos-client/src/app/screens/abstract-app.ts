@@ -16,6 +16,8 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
     private previousScreenType: string;
 
+    private previousScreenSequenceNumber: number;
+
     @ViewChild(ScreenDirective) host: ScreenDirective;
 
     constructor(private screenService: ScreenService,
@@ -42,15 +44,20 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
             this.dialogRef = null;
         }
 
-        if (this.session.screen && this.session.screen.type !== this.previousScreenType) {
+        let screen: IScreen = null;
+        if (this.session.screen &&
+            ((this.session.screen.sequenceNumber !== this.previousScreenSequenceNumber && this.session.screen.refreshAlways)
+                || this.session.screen.type !== this.previousScreenType)) {
             console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
             const componentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(this.session.screen.type);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
-            const screen: IScreen = viewContainerRef.createComponent(componentFactory).instance;
+            screen = viewContainerRef.createComponent(componentFactory).instance;
             this.previousScreenType = this.session.screen.type;
             screen.show(this.session);
+            this.previousScreenSequenceNumber = this.session.screen.sequenceNumber;
         }
+
     }
 
     openDialog() {

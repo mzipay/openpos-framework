@@ -4,9 +4,9 @@
     </button>
     
     <span class="toolbar-fill-remaining-space"></span>
-    <button md-button (click)="session.onAction('ShowCart')">
+    <button md-button [disabled]="cartSize == 0" (click)="session.onAction('ShowCart')">
         <md-icon>shopping_cart</md-icon>
-        <small>{{cartSize}}</small>
+        <small *ngIf="cartSize > 0">{{cartSize}}</small>
     </button>
 </md-toolbar>
 <ng-template appScreen></ng-template>

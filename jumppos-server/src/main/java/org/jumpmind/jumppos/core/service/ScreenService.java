@@ -44,6 +44,8 @@ public class ScreenService implements IScreenService {
 
     @Autowired
     IStateManagerFactory stateManagerFactory;
+    
+    int screenSequenceNumber = 0;
 
     private Map<String, Map<String, DefaultScreen>> lastScreenByAppIdByNodeId = new HashMap<>();
     
@@ -89,6 +91,7 @@ public class ScreenService implements IScreenService {
     @Override
     public void showScreen(String appId, String nodeId, DefaultScreen screen) {
         if (screen != null) {
+            screen.setSequenceNumber(++this.screenSequenceNumber);
             Object payload = screen;
             try {
                 applyAnnotations(screen);

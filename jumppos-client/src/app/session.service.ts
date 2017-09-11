@@ -105,7 +105,7 @@ export class SessionService {
   }
 
   public onActionWithStringPayload(action: String, payload: String) {
-    console.log('Publish action ' + action);
+    console.log('Publish action ' + action + ' with payload ' + payload);
     this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
       JSON.stringify({ name: action, data: payload }));
   }
