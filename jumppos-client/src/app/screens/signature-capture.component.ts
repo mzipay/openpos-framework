@@ -33,21 +33,21 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
     this.canvas.height = wrapper.clientHeight;
     this.canvas.width = wrapper.clientWidth;
     this.signaturePad = new SignaturePad(this.canvas);
-    // TODO window.onresize = resizeCanvas;
-    this.resizeCanvas();
-    // const signaturePad = new SignaturePad(canvas);
+    window.addEventListener('resize', this.resizeCanvas);
+    this.resizeCanvas(null);
   }
 
-  private resizeCanvas() {
+  private resizeCanvas = (evt: Event) => {
     // When zoomed out to less than 100%, for some very strange reason,
     // some browsers report devicePixelRatio as less than 1
     // and only part of the canvas is cleared then.
     const ratio =  Math.max(window.devicePixelRatio || 1, 1);
 
     // This part causes the canvas to be cleared
-    this.canvas.width = this.canvas.offsetWidth * ratio;
-    this.canvas.height = this.canvas.offsetHeight * ratio;
-    this.canvas.getContext('2d').scale(ratio, ratio);
+// TODO: determine if this is necessary, working better without for now
+//    this.canvas.width = this.canvas.offsetWidth * ratio;
+//    this.canvas.height = this.canvas.offsetHeight * ratio;
+//    this.canvas.getContext('2d').scale(ratio, ratio);
 
     // This library does not listen for canvas changes, so after the canvas is automatically
     // cleared by the browser, SignaturePad#isEmpty might still return false, even though the
