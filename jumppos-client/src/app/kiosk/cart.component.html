@@ -1,36 +1,42 @@
 <div class="containerX" [fxLayout]="direction" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="center">
     <div fxFlex>
-        <md-table #table [dataSource]="dataSource">
-            <ng-container mdColumnDef="description">
-                <md-header-cell *mdHeaderCellDef><h1>Shopping Cart</h1></md-header-cell>
-                <md-cell *mdCellDef="let item; let i = index"> 
-                        <div class='container'>
-                            <div>{{item.description}}</div>
-                            <div><button md-button (click)="session.onActionWithStringPayload('RemoveItem', i)">Remove Item</button></div>
-                        </div>                         
-                </md-cell>
-            </ng-container>
-            
-            <ng-container mdColumnDef="extendedAmount">
-                <md-header-cell [style.flex]="'0 0 75px'" *mdHeaderCellDef>Price</md-header-cell>
-                <md-cell [style.flex]="'0 0 75px'" *mdCellDef="let item"> {{item.extendedAmount}} </md-cell>
-            </ng-container>
+        <md-card>
+            <md-card-content>
+                <md-table #table [dataSource]="dataSource">
+                    <ng-container mdColumnDef="description">
+                        <md-header-cell *mdHeaderCellDef>
+                            <h1>Shopping Cart</h1>
+                        </md-header-cell>
+                        <md-cell *mdCellDef="let item; let i = index">
+                            <div class='container'>
+                                <div>{{item.description}}</div>
+                                <div><button md-button (click)="session.onActionWithStringPayload('RemoveItem', i)">Remove Item</button></div>
+                            </div>
+                        </md-cell>
+                    </ng-container>
 
-            <ng-container mdColumnDef="quantity">
-                <md-header-cell [style.flex]="'0 0 75px'" *mdHeaderCellDef>Quantity</md-header-cell>
-                <md-cell [style.flex]="'0 0 75px'" *mdCellDef="let item"> {{item.quantity}} </md-cell>
-            </ng-container>
+                    <ng-container mdColumnDef="extendedAmount">
+                        <md-header-cell [style.flex]="'0 0 75px'" *mdHeaderCellDef>Price</md-header-cell>
+                        <md-cell [style.flex]="'0 0 75px'" *mdCellDef="let item"> {{item.extendedAmount}} </md-cell>
+                    </ng-container>
 
-            <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-            <md-row class="cart-row" *mdRowDef="let row; columns: displayedColumns; let i = index"></md-row>
-        </md-table>
+                    <ng-container mdColumnDef="quantity">
+                        <md-header-cell [style.flex]="'0 0 75px'" *mdHeaderCellDef>Quantity</md-header-cell>
+                        <md-cell [style.flex]="'0 0 75px'" *mdCellDef="let item"> {{item.quantity}} </md-cell>
+                    </ng-container>
+
+                    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+                    <md-row class="cart-row" *mdRowDef="let row; columns: displayedColumns; let i = index"></md-row>
+                </md-table>
+            </md-card-content>
+        </md-card>
     </div>
     <div fxFlex="40">
         <md-card>
-            <md-card-header>                
-            </md-card-header>            
+            <md-card-header>
+            </md-card-header>
             <md-card-content>
-                    <h2>Order Summary</h2>
+                <h2>Order Summary</h2>
                 <div class='container' fxLayoutAlign='space-between'>
                     <div><strong>Total:</strong></div>
                     <div>{{session.screen.cart.grandTotal}}</div>
@@ -38,7 +44,7 @@
                 <div class='container' fxLayoutAlign='space-between'>
                     <div>Discounts:</div>
                     <div>{{session.screen.cart.discountTotal}}</div>
-                </div>                
+                </div>
                 <div class='container' fxLayoutAlign='space-between'>
                     <div>Tax:</div>
                     <div>{{session.screen.cart.taxTotal}}</div>
