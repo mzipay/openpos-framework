@@ -11,7 +11,7 @@ export class RoutingListener {
     constructor(router:Router) {
         router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
-                if (event && event.url == '/initial' && localStorage.getItem('lastUrl') != null) {
+                if (event && event.url == '/reentering' && localStorage.getItem('lastUrl') != null) {
                     let url = localStorage.getItem('lastUrl');
                     router.navigateByUrl(url);
                 }
