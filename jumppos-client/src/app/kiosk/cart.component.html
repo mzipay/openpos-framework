@@ -3,7 +3,12 @@
         <md-table #table [dataSource]="dataSource">
             <ng-container mdColumnDef="description">
                 <md-header-cell *mdHeaderCellDef><h1>Shopping Cart</h1></md-header-cell>
-                <md-cell *mdCellDef="let item"> {{item.description}} </md-cell>
+                <md-cell *mdCellDef="let item; let i = index"> 
+                        <div class='container'>
+                            <div>{{item.description}}</div>
+                            <div><button md-button (click)="session.onActionWithStringPayload('RemoveItem', i)">Remove Item</button></div>
+                        </div>                         
+                </md-cell>
             </ng-container>
             
             <ng-container mdColumnDef="extendedAmount">
@@ -17,7 +22,7 @@
             </ng-container>
 
             <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-            <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+            <md-row class="cart-row" *mdRowDef="let row; columns: displayedColumns; let i = index"></md-row>
         </md-table>
     </div>
     <div fxFlex="40">

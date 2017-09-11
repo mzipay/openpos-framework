@@ -9,6 +9,7 @@ public class BrowseExternalCatalogScreen extends CartScreen {
     public BrowseExternalCatalogScreen(String url, Cart cart) {
         super(cart);
         setType(EMBEDDED_WEB_PAGE);
+        setRefreshAlways(false);
         this.url = url;
         this.cart = cart;
     }

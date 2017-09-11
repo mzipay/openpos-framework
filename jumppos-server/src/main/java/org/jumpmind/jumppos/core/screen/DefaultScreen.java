@@ -36,6 +36,8 @@ public class DefaultScreen implements Serializable {
     private MenuItem registerStatus;
     private String userDisplayName = "Jane Doe";
     private boolean showStatusBar = true;
+    private int sequenceNumber;
+    private boolean refreshAlways = false;
 
     private List<MenuItem> menuItems = new ArrayList<>();
 
@@ -170,6 +172,22 @@ public class DefaultScreen implements Serializable {
 
     public void setShowStatusBar(boolean showStatusBar) {
         this.showStatusBar = showStatusBar;
+    }
+    
+    public void setSequenceNumber(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+    
+    public int getSequenceNumber() {
+        return sequenceNumber;
+    }
+    
+    public void setRefreshAlways(boolean refreshAlways) {
+        this.refreshAlways = refreshAlways;
+    }
+    
+    public boolean isRefreshAlways() {
+        return refreshAlways;
     }
 
 }
