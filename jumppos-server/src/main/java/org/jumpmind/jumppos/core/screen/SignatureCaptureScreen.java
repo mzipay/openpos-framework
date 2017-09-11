@@ -1,0 +1,38 @@
+package org.jumpmind.jumppos.core.screen;
+
+public class SignatureCaptureScreen extends DefaultScreen {
+    private static final long serialVersionUID = 1L;
+
+    private String text;
+    private String textIcon;
+    private String signatureData;
+    
+    public SignatureCaptureScreen() {
+        setType(SIGNATURE_CAPTURE_SCREEN_TYPE);
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getSignatureData() {
+        return signatureData;
+    }
+
+    public void setSignatureData(String signatureData) {
+        this.signatureData = signatureData;
+    }
+    
+    public String getTextIcon() {
+        return textIcon;
+    }
+
+    public void setTextIcon(String textIcon) {
+        this.textIcon = textIcon;
+    }
+    
+}

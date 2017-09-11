@@ -1,0 +1,41 @@
+<!-- TODO: fix classes/styles -->
+<div *ngIf="session.screen.type==='SignatureCapture' &&  session.screen.text" class="main-menu-container" fxLayout="column" fxLayoutAlign="center center">
+	<md-card class="prompt-container" ngClass.xs="prompt-input-container-small">
+		<md-card-content>
+			<div class="prompt-input-container" >
+				<md-icon class="material-icons prompt-icon">{{session.screen.textIcon}}</md-icon>
+			</div>
+			<div style="height:50px"></div>
+			<label class="prompt-text">{{session.screen.text}}</label>
+		</md-card-content>
+
+		<div id="signature-pad">
+			<canvas></canvas>
+			<!--
+			<div class="m-signature-pad--footer">
+				<div class="description">Sign above</div>
+				<div class="left">
+				<button type="button" class="button clear" data-action="clear">Clear</button>
+				</div>
+				<div class="right">
+				<button type="button" class="button save" data-action="save-png">Save as PNG</button>
+				<button type="button" class="button save" data-action="save-svg">Save as SVG</button>
+				</div>
+			</div>
+		-->
+		</div>
+		<md-card-actions class="line-item-detail-actions">
+			<div fxLayout="row" fxLayoutAlign="space-between">
+			<button md-raised-button (click)="onClearSignature()">Clear</button>
+			<div *ngFor="let m of session.screen.menuActions">
+				<button *ngIf="m.action === 'SaveSignature'; else elseBlock" md-raised-button (click)="onSaveSignature()">{{m.title}}</button>
+				<ng-template #elseBlock><button md-raised-button (click)="session.onAction(m.action)">{{m.title}}</button></ng-template>
+			</div>
+		    </div>
+<!--			<button *ngFor="let m of session.screen.menuActions" md-raised-button (click)="session.onAction(m.action)">{{m.title}}</button> -->
+     	</md-card-actions>
+	
+	</md-card>
+
+
+</div>

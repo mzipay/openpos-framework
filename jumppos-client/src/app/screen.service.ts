@@ -3,6 +3,7 @@ import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component'
 import { PromptComponent } from './screens/prompt.component';
 import { SellComponent } from './screens/sell.component';
 import { SellItemDetailComponent } from './screens/sell-item-detail.component';
+import { SignatureCaptureComponent } from './screens/signature-capture.component';
 import { PaymentStatusComponent } from './screens/payment-status.component';
 import { FormComponent } from './screens/form.component';
 import { HomeComponent } from './screens/home.component';
@@ -28,6 +29,7 @@ export class ScreenService {
     this.screens.set('Prompt', PromptComponent);
     this.screens.set('Sell', SellComponent);
     this.screens.set('SellItemDetail', SellItemDetailComponent);
+    this.screens.set('SignatureCapture', SignatureCaptureComponent);
     this.screens.set('PaymentStatus', PaymentStatusComponent);
     this.screens.set('Form', FormComponent);
     this.screens.set('Home', HomeComponent);

@@ -27,6 +27,7 @@ import { HomeComponent } from './screens/home.component';
 import { StatusBarComponent } from './screens/statusbar.component';
 import { PaymentStatusComponent } from './screens/payment-status.component';
 import { SellItemDetailComponent } from './screens/sell-item-detail.component';
+import { SignatureCaptureComponent } from './screens/signature-capture.component';
 import { FocusDirective } from './common/focus.directive';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
@@ -99,6 +100,7 @@ const stompConfig: StompConfig = {
     PromptComponent,
     CartComponent,
     ChooseOptionsComponent,
+    SignatureCaptureComponent,
     SellComponent,
     SellItemDetailComponent,
     PaymentStatusComponent,
@@ -114,6 +116,7 @@ const stompConfig: StompConfig = {
     DialogComponent,
     PromptComponent,
     ChooseOptionsComponent,
+    SignatureCaptureComponent,
     SellComponent,
     SellItemDetailComponent,
     PaymentStatusComponent,
