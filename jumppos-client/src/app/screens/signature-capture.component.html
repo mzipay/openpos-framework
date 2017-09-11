@@ -10,19 +10,7 @@
 		</md-card-content>
 
 		<div id="signature-pad">
-			<canvas></canvas>
-			<!--
-			<div class="m-signature-pad--footer">
-				<div class="description">Sign above</div>
-				<div class="left">
-				<button type="button" class="button clear" data-action="clear">Clear</button>
-				</div>
-				<div class="right">
-				<button type="button" class="button save" data-action="save-png">Save as PNG</button>
-				<button type="button" class="button save" data-action="save-svg">Save as SVG</button>
-				</div>
-			</div>
-		-->
+			<canvas class="signature-capture-canvas"></canvas>
 		</div>
 		<md-card-actions class="line-item-detail-actions">
 			<div fxLayout="row" fxLayoutAlign="space-between">
@@ -32,7 +20,6 @@
 				<ng-template #elseBlock><button md-raised-button (click)="session.onAction(m.action)">{{m.title}}</button></ng-template>
 			</div>
 		    </div>
-<!--			<button *ngFor="let m of session.screen.menuActions" md-raised-button (click)="session.onAction(m.action)">{{m.title}}</button> -->
      	</md-card-actions>
 	
 	</md-card>
