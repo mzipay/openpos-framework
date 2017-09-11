@@ -20,7 +20,7 @@
             <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
         </md-table>
     </div>
-    <div fxFlex="33">
+    <div fxFlex="40">
         <md-card>
             <md-card-header>                
             </md-card-header>            
@@ -45,7 +45,8 @@
             </md-card-content>
             <md-card-actions fxLayoutAlign="center">
                 <button md-raised-button color='primary' (click)="session.onAction('SendToRegister')">Send to Register</button>
-                <button md-raised-button color='primary'>Checkout Now</button>
+                <button md-raised-button color='primary'>Checkout</button>
+                <button md-button (click)="session.onAction('EmptyCart')">Empty Cart</button>
             </md-card-actions>
         </md-card>
     </div>

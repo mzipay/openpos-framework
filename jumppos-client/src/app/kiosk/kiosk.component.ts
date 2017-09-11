@@ -29,15 +29,6 @@ export class KioskComponent extends AbstractApp implements DoCheck {
     }
   }
 
-  ngAfterViewInit() {
-    //     //document.getElementById('embeddedIFrame').contentWindow.location.href
-    //     console.log('ngAfterViewInit');
-    // console.log(
-    //   document.getElementById('embeddedIFrame').nodeValue
-    // );
-    
-  }
-
   protected appName(): String {
     return 'kiosk';
   }
