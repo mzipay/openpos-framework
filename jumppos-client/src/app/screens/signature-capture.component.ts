@@ -65,8 +65,15 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
     if ( this.signaturePad.isEmpty()) {
       return;
     }
-    this.signaturePad.toDataURL();
-    this.session.response = this.signaturePad.points;
+    // TODO: Once get updated typescript definitions, change to maybe send
+    // encoded tiff data back or array of points.
+    const dataUrl = this.signaturePad.toDataURL();
+    let encodedPngData = null;
+    if (dataUrl) {
+      const matches = dataUrl.match(/^data:.+\/(.+);base64,(.*)$/);
+      encodedPngData = matches && matches.length > 2 ? matches[2] : null;
+    }
+    this.session.response = encodedPngData;
     this.session.onAction('SaveSignature');
   }
 }
