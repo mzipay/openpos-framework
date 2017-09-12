@@ -72,7 +72,7 @@ a, u {
 
 .product-list-item {
     width: 280px;
-    height:280px;
+   // height:280px;
     background-repeat: no-repeat;
     background-size: cover;    
     margin: 15px;
@@ -101,4 +101,35 @@ a, u {
     font-size: 64px !important;
     height: 64px !important;
     width: 64px !important;
+}
+
+.header-stripe-top {
+    color:white;
+    text-align: center;
+    font-size: 70px;
+    padding-top:30px;
+    padding-bottom:30px;
+    height: initial;
+}
+
+.product-card-title {
+    font-family: 'Open Sans'; 
+    color: #999;
+    text-align: center;
+    position: relative; 
+    bottom: 10px;
+}
+.product-card-text {
+    font-family: 'Open Sans'; 
+    color: #999;
+    font-size: 0.9em;
+}
+
+.toolbar-back-button {
+    position: absolute;
+    padding-left:48px;
+}
+
+.product-card-price {
+    color: #432614;    
 }

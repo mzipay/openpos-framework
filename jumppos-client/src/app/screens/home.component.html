@@ -1,7 +1,28 @@
+
+
+<!-- <div fxLayout="row" fxLayoutAlign="space-around center center">
+		<div fxFlex fxHide.xs></div>
+		<div class="home-screen-logo" ngClass.xs="home-screen-logo-xs"></div>
+	</div>
+
+	<div fxLayout="row">
+			<div fxFlex="25" fxHide.xs></div>
+				<md-card fxFlex class="main-menu" >
+					<md-card-content fxLayout="row" fxLayoutWrap
+					fxLayoutAlign="space-between" style="padding: 20px;">
+							<button md-raised-button *ngFor="let menuItem of menuItems" class="main-menu-item"  style="margin: 20px;" fxLayoutAlign="center center">
+									<md-icon class="material-icons md-64 main-menu-item-icon">{{menuItem.icon}}</md-icon>
+							<p style="position: absolute">{{menuItem.title}}</p>
+							</button>
+					</md-card-content>
+				</md-card> 
+
+			<div fxFlex="25" fxHide.xs></div>
+	</div> -->
+
 <div *ngIf="session.screen.type==='Home'"  fxLayoutAlign="center center" class="main-menu-container" [style.xs]="{'height': 'initial'}">
 
 			<md-card class="main-menu">
-		<!-- <app-statusbar *ngIf="session.screen.showStatusBar"></app-statusbar> -->
 
 		<md-card-content style="min-height: 450px" [style.sm]="{'min-height': 'initial'}" [style.xs]="{'right': 'initial'}">
 			<div fxLayout="row" fxLayoutAlign="center center" style="padding-top: 20px" fxLayoutWrap>
@@ -18,4 +39,4 @@
 	</md-card>
 	<div class="home-screen-logo" [style.sm]="{'right': 'initial', 'top': '10px','zoom': '50%'}" [style.xs]="{'right': 'initial', 'top': '10px','zoom': '50%'}"></div>
 </div>
-
+ 

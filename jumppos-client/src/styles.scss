@@ -9,7 +9,7 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
-$app-primary: mat-palette($mat-blue, A200, A100, A400);
+$app-primary: mat-palette($mat-brown);
 $app-accent:  mat-palette($mat-orange, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
@@ -263,6 +263,12 @@ md-card {
     width: calc(100% - 15px);
 }
 
+.cart-sub-totals-outer-container {
+    position: relative;
+    top: 4px;
+    width: calc(100%);
+}
+
 .subtotals-container {
     text-align: center;
     height:45px;
@@ -270,6 +276,14 @@ md-card {
     padding: 12px !important;
     
 }
+
+.cart-subtotals-container {
+    text-align: center;
+   // height:45px;
+    margin: 0px;
+    padding: 12px !important;
+}
+
 
 .subtotals-label {
     color: #537889;
@@ -333,9 +347,10 @@ md-card {
 }
 
 .line-item-extended-amt {
-    font-size: 1.1em;
+    font-size: 1.2em;
     color: #2371ad;
     padding-right: 20px;
+    text-align: right;
 }
 
 .example-container {
@@ -507,3 +522,29 @@ td {
 .signature-capture-canvas {
     background-color: white;
 }
+
+.cart-header-stripe {
+    background-color: #432614;
+   // height: calc(100vh/7);
+    color: white;
+    font-family: 'Open Sans',"Helvetica Neue",sans-serif;
+    text-align: center;
+    width: 100%;
+    font-size: 40px;
+    padding-top:40px;
+     padding-bottom:40px;    
+}
+
+.cart-header-title {
+    font-family: 'Open Sans',"Helvetica Neue",sans-serif;
+    font-size:1.4em;
+    //color: #c8c8c8;
+}
+
+
+// .header-stripe-top {
+//     color:white;
+//     font-size: 70px;
+//     padding-top:30px;
+//     padding-bottom:30px;
+// }

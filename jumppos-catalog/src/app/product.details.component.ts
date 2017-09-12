@@ -32,11 +32,21 @@ export class ProductDetailsComponent {
 product:Product;
 productFeatures:string[];
 productSpecifications:string[];
-restUrl:string;
+restUrl = "";
+productInCart = false;
+
+getRestUrl() {
+  let restUrlTemp = this.restUrl;
+  if (this.restUrl && this.restUrl.startsWith("http:")) { // Avoid issue where page refreshes are adding multiple items to the cart.
+    this.restUrl = "";
+  }
+  return restUrlTemp;
+}
 
 addProductToCart() {
   console.log('Add to cart');
   this.restUrl = 'http://localhost:8080/app/kiosk/node/05243-013/AddItem/' + this.product.itemId;
+  this.productInCart = true;
 }
 
 }

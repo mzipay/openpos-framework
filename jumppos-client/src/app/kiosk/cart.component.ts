@@ -12,26 +12,24 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 })
 export class CartComponent implements IScreen {
 
-    public dataSource: TableDataSource;
-    displayedColumns = [ 'description', 'extendedAmount', 'quantity'];
-
     constructor(public session: SessionService) {
-        this.dataSource = new TableDataSource();
+    }
+
+    getCartMessage() {
+        if (this.session.screen.cart.items == null || this.session.screen.cart.items.length == 0) {
+            return "No items in your cart yet.";
+        } else if (this.session.screen.cart.items.length == 1) {
+            return "1 item in your cart.";
+        } else {
+            return this.session.screen.cart.items.length + " items in your cart.";
+        }
+    }
+
+    removeItem(index) {        
+        this.session.onActionWithStringPayload('RemoveItem', index);
     }
 
     show(session: SessionService) {
-        console.log('populating datasource with ' + this.session.screen.cart.items.length);
-        this.dataSource.dataChange.next(this.session.screen.cart.items);
-    }
 
+    }
 }
-
-export class TableDataSource extends DataSource<ISellItem> {
-
-    public dataChange: BehaviorSubject<ISellItem[]>  = new BehaviorSubject<ISellItem[]>([]);
-
-    connect(): Observable<ISellItem[]> {
-      return this.dataChange;
-    }
-    disconnect() {}
-  }

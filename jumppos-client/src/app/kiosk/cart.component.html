@@ -1,7 +1,42 @@
+<div>
+    
+        <button style="position:absolute;padding:48px;" *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled" md-button (click)="session.onAction(session.screen.backButton.action)">
+                <!-- <md-icon >arrow_back</md-icon> -->
+                <svg style="width:48px;height:48px" viewBox="0 0 24 24">
+                        <path fill="#FFF" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+                    </svg>
+            </button> 
+            <div class="cart-header-stripe">
+                    Shopping Cart
+                </div>            
+
 <div class="containerX" [fxLayout]="direction" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="center">
     <div fxFlex>
-        <md-card>
-            <md-card-content>
+        <md-card class="serrated-edge">
+                <md-card-content class="sale-line-item-container-content">
+                    <span class="cart-header-title">{{getCartMessage()}}</span>
+                        <md-list class="sale-line-item-container-list">
+                            <md-list-item *ngFor="let item of session.screen.cart.items; let i = index" class="sale-line-item">
+                                <div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
+                                    <div fxFlex="80">
+                                        <div md-line class="line-item-description">{{item.description}}</div>
+                                        <div md-line class="line-item-subtitle">Sku {{item.itemId}} {{item.quantity}}@{{item.sellingPrice}}</div>
+                                    </div>
+        
+                                    <div fxFlex>
+                                        <h5 class="line-item-extended-amt" style="margin-right:30px"><span class="super-currency-symbol">$</span>{{item.extendedAmount}}</h5>
+                                        <svg (click)="removeItem(i);" style="margin-left:40px;width:24px;height:24px;position:absolute;top:10px;right:10px;" viewBox="0 0 24 24">
+                                                <path fill="#ccc" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                                            </svg>
+                                    </div>
+                                </div>
+                                
+                            </md-list-item>
+                        </md-list>
+                        </md-card-content>
+
+
+            <!-- <md-card-content>
                 <md-table #table [dataSource]="dataSource">
                     <ng-container mdColumnDef="description">
                         <md-header-cell *mdHeaderCellDef>
@@ -28,37 +63,43 @@
                     <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
                     <md-row class="cart-row" *mdRowDef="let row; columns: displayedColumns; let i = index"></md-row>
                 </md-table>
-            </md-card-content>
+            </md-card-content> -->
         </md-card>
     </div>
     <div fxFlex="40">
-        <md-card>
-            <md-card-header>
-            </md-card-header>
-            <md-card-content>
-                <h2>Order Summary</h2>
-                <div class='container' fxLayoutAlign='space-between'>
-                    <div><strong>Total:</strong></div>
-                    <div>{{session.screen.cart.grandTotal}}</div>
+        <md-card >
+                <md-card-content>
+                        <span class="cart-header-title">Order Summary</span>
+                        <div style="height: 15px;"></div>
+		<div class="containerX cart-sub-totals-outer-container" fxLayout="row" fxLayoutAlign="center center">
+                <div fxFlex>
+                        <div class='container' fxLayoutAlign='space-between'>
+                                <div>Discounts:</div>
+                                <div><span class="super-currency-symbol">$</span>{{session.screen.cart.discountTotal}}</div>
+                            </div>
+                            <div class='container' fxLayoutAlign='space-between'>
+                                    <div>Tax:</div>
+                                    <div><span class="super-currency-symbol">$</span>{{session.screen.cart.taxTotal}}</div>
+                                </div>                            
+                                <div class='container' fxLayoutAlign='space-between'>
+                                        <div>Subtotal:</div>
+                                        <div><span class="super-currency-symbol">$</span>{{session.screen.cart.subTotal}}</div>
+                                    </div> 
+                                    <div class='container' fxLayoutAlign='space-between'>
+                                    <div><strong>Total:</strong></div>
+                                    <div><strong><span class="super-currency-symbol">$</span>{{session.screen.cart.grandTotal}}</strong></div>
+                            </div>                                                                
                 </div>
-                <div class='container' fxLayoutAlign='space-between'>
-                    <div>Discounts:</div>
-                    <div>{{session.screen.cart.discountTotal}}</div>
-                </div>
-                <div class='container' fxLayoutAlign='space-between'>
-                    <div>Tax:</div>
-                    <div>{{session.screen.cart.taxTotal}}</div>
-                </div>
-                <div class='container' fxLayoutAlign='space-between'>
-                    <div>Subtotal:</div>
-                    <div>{{session.screen.cart.subTotal}}</div>
-                </div>
+    
+            </div>
+
             </md-card-content>
             <md-card-actions fxLayoutAlign="center">
-                <button md-raised-button color='primary' (click)="session.onAction('SendToRegister')">Send to Register</button>
-                <button md-raised-button color='primary'>Checkout</button>
+                <button md-raised-button style="background-color:#432614;color:white" (click)="session.onAction('SendToRegister')">Send to Register</button>
+                <button md-raised-button style="background-color:#432614;color:white">Checkout</button>
                 <button md-button (click)="session.onAction('EmptyCart')">Empty Cart</button>
             </md-card-actions>
         </md-card>
     </div>
+</div>
 </div>
