@@ -43,9 +43,10 @@ getRestUrl() {
   return restUrlTemp;
 }
 
-addProductToCart() {
-  console.log('Add to cart');
-  this.restUrl = 'http://localhost:8080/app/kiosk/node/05243-013/AddItem/' + this.product.itemId;
+addProductToCart() {  
+  let url = `http://${window.location.hostname}:8080/app/kiosk/node/05243-013/AddItem/${this.product.itemId}`;
+  console.log('Add to cart ' + url);
+  this.restUrl = url;
   this.productInCart = true;
 }
 
