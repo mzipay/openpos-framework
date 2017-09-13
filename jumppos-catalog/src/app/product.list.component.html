@@ -6,11 +6,11 @@
                 </svg></div>
                 </a>        
             <div class="home-stripe home-stripe-top header-stripe-top">Shop Furniture</div>
-            <div fxFlexLayout="row">
+            <div fxFlexLayout="row" style="overflow: auto;height:100vh;position:absolute; min-height:auto;max-height:100%;">
                     <div fxFlex="12"></div>
-                    <div fxFlex="80" fxLayout="row" fxLayoutWrap>
+                    <div fxFlex="80" fxLayout="row" fxLayoutWrap  >
                             <a *ngFor="let product of products" [routerLink]="['/product-detail/', product.itemId]"  >
-                                <md-card class="product-list-item" >        
+                        <md-card class="product-list-item" >        
                             <img src="{{product.imageUrl}}" class="product-list-item-image"/>                
                             <p class="product-card-title">{{product.shortDescription}}</p>
                             <p class="product-card-text">{{product.getAbreviatedLongDescription()}}</p>

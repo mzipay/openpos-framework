@@ -9,7 +9,7 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
-$app-primary: mat-palette($mat-brown);
+$app-primary: mat-palette($mat-blue, A200, A100, A400);
 $app-accent:  mat-palette($mat-orange, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
@@ -48,13 +48,14 @@ md-card {
 .main-background {
     height:100vh;
     background-color: #e7e7e7;
-    //background-image: url(assets/background.jpg); 
-    //background-repeat: no-repeat;
-    //background-size: cover;
+    background-image: url(assets/background.jpg); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center; 
+    background-position-x: 100px;
 }
 
 .main-menu-container {
-
      height:100vh;
      //background-color:transparent;
 }
@@ -182,6 +183,12 @@ md-card {
 
 }
 
+.material-icons.md-40 {
+    font-size: 40px !important;
+    height: 40px !important;
+    width: 40px !important;
+}
+
 .material-icons.md-48 {
     font-size: 48px !important;
     height: 48px !important;
@@ -199,6 +206,7 @@ md-card {
     background-image: url(assets/marketing-image.png); 
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center; 
 }
 
 .sale-total-button {
@@ -334,8 +342,10 @@ md-card {
 
 .line-item-caret {
     color: #c8c8c8;
-    position: relative;
-    top: 29px;
+    // position: relative;
+    top: 12px;
+    position:absolute;
+    right:10px;    
 }
 
 .line-item-description {
@@ -349,7 +359,7 @@ md-card {
 .line-item-extended-amt {
     font-size: 1.2em;
     color: #2371ad;
-    padding-right: 20px;
+    margin-right:30px;
     text-align: right;
 }
 

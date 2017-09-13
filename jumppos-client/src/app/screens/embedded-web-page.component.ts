@@ -20,4 +20,8 @@ export class EmbeddedWebPageComponent implements IScreen {
     this.url = session.screen.url;
   }
 
+  getURL() {
+    return `http://${window.location.hostname}:4201/` + this.url;
+  }
+
 }
