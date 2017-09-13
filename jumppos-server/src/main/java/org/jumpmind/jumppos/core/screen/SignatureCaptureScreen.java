@@ -6,7 +6,9 @@ public class SignatureCaptureScreen extends DefaultScreen {
     private String text;
     private String textIcon;
     private String signatureData;
+    private String signatureMediaType;
     
+
     public SignatureCaptureScreen() {
         setType(SIGNATURE_CAPTURE_SCREEN_TYPE);
     }
@@ -33,6 +35,14 @@ public class SignatureCaptureScreen extends DefaultScreen {
 
     public void setTextIcon(String textIcon) {
         this.textIcon = textIcon;
+    }
+
+    public String getSignatureMediaType() {
+        return signatureMediaType;
+    }
+
+    public void setSignatureMediaType(String signatureMediaType) {
+        this.signatureMediaType = signatureMediaType;
     }
     
 }
