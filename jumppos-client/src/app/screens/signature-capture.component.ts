@@ -1,7 +1,6 @@
 import { IScreen } from '../common/iscreen';
 import {Component, AfterViewInit, DoCheck} from '@angular/core';
 import {SessionService} from '../session.service';
-// import * as SignaturePad from 'signature_pad';
 import 'signature_pad';
 
 @Component({
@@ -10,13 +9,13 @@ import 'signature_pad';
 })
 export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScreen {
 
-  // @ViewChild('box') vc;
+  static readonly DEFAULT_MEDIA_TYPE = 'image/jpeg';
 
-  initialized = false;
-  signaturePad: SignaturePad;
-  canvas = null;
+  protected initialized: Boolean = false;
+  protected signaturePad: SignaturePad;
+  protected canvas: HTMLCanvasElement = null;
 
-  constructor(public session: SessionService) {
+  constructor(public readonly session: SessionService) {
   }
 
   show(session: SessionService) {
@@ -37,7 +36,7 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
     this.resizeCanvas(null);
   }
 
-  private resizeCanvas = (evt: Event) => {
+  protected resizeCanvas = (evt: Event) => {
     // When zoomed out to less than 100%, for some very strange reason,
     // some browsers report devicePixelRatio as less than 1
     // and only part of the canvas is cleared then.
@@ -65,15 +64,18 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
     if ( this.signaturePad.isEmpty()) {
       return;
     }
-    // TODO: Once get updated typescript definitions, change to maybe send
-    // encoded tiff data back or array of points.
-    const dataUrl = this.signaturePad.toDataURL();
-    let encodedPngData = null;
+    const mediaType: string = this.session.screen.signatureMediaType ?
+        this.session.screen.signatureMediaType : SignatureCaptureComponent.DEFAULT_MEDIA_TYPE;
+
+    const dataUrl: string|null = this.signaturePad.toDataURL(mediaType);
+    const dataPoints = this.signaturePad.toData();
+    let encodedImage: string|null = null;
     if (dataUrl) {
-      const matches = dataUrl.match(/^data:.+\/(.+);base64,(.*)$/);
-      encodedPngData = matches && matches.length > 2 ? matches[2] : null;
+      const matches: RegExpMatchArray|null = dataUrl.match(/^data:.+\/(.+);base64,(.*)$/);
+      encodedImage = matches && matches.length > 2 ? matches[2] : null;
     }
-    this.session.response = encodedPngData;
+    this.session.screen.signatureData = encodedImage;
+    this.session.response = JSON.stringify( {points: dataPoints, mediaType: mediaType, base64EncodedImage: encodedImage });
     this.session.onAction('SaveSignature');
   }
 }
