@@ -13,7 +13,7 @@
 
 <div>
 <button md-button [disabled]="cartSize == 0" (click)="session.onAction('ShowCart')"
-    style="position: absolute;top:40px;color:#e7e7e7;right: 64px;">
+    style="position: absolute;top:55px;right: 64px;color:#e7e7e7;">
     <md-icon class="md-40">shopping_cart</md-icon>
     <span *ngIf="cartSize > 0">{{cartSize}}</span>
 </button>
