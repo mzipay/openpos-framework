@@ -37,6 +37,8 @@ export class EmbeddedWebPageComponent implements IScreen {
     if ( ! hasNodeIdAlready ) {
       returnUrl = `${this.url}${hasQueryParams ? '&' : '?'}nodeId=${urlNodeId}`;
     }
+    returnUrl = `http://${window.location.hostname}:4201/${returnUrl}`;
+    console.log('catalogUrl: ' + returnUrl);
     return returnUrl;
   }
 
