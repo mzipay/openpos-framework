@@ -50,6 +50,7 @@ import { HomeComponent } from './home.component';
 import { ProductCatalogComponent } from './product.catalog.component';
 import { ProductListComponent } from './product.list.component';
 import { ProductDetailsComponent } from './product.details.component';
+import { SessionService } from './session.service';
 
 import {
   Component,
@@ -157,7 +158,9 @@ const appRoutes: Routes = [
     MdToolbarModule,
     MdTooltipModule,
   ],  
-  providers: [],
+  providers: [
+    SessionService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

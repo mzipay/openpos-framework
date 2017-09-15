@@ -1,3 +1,4 @@
+import { SessionService } from './session.service';
 import { Component,Input } from '@angular/core';
 import {ActivatedRoute, Router, Params} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
@@ -20,7 +21,8 @@ export class ProductDetailsComponent {
     private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
-    public sanitizer: DomSanitizer 
+    public sanitizer: DomSanitizer,
+    private session: SessionService 
   ) {
     this.route.params.subscribe(params => {
       this.product = Product.getProduct(params['itemId']);
@@ -43,8 +45,9 @@ getRestUrl() {
   return restUrlTemp;
 }
 
-addProductToCart() {  
-  let url = `http://${window.location.hostname}:8080/app/kiosk/node/05243-013/AddItem/${this.product.itemId}`;
+addProductToCart() {
+  const nodeId: string = this.session.nodeId;  
+  let url = `http://${window.location.hostname}:8080/app/kiosk/node/${nodeId}/AddItem/${this.product.itemId}`;
   console.log('Add to cart ' + url);
   this.restUrl = url;
   this.productInCart = true;
