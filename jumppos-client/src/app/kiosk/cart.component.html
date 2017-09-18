@@ -36,34 +36,6 @@
                         </md-card-content>
 
 
-            <!-- <md-card-content>
-                <md-table #table [dataSource]="dataSource">
-                    <ng-container mdColumnDef="description">
-                        <md-header-cell *mdHeaderCellDef>
-                            <h1>Shopping Cart</h1>
-                        </md-header-cell>
-                        <md-cell *mdCellDef="let item; let i = index">
-                            <div class='container'>
-                                <div>{{item.description}}</div>
-                                <div><button md-button (click)="session.onActionWithStringPayload('RemoveItem', i)">Remove Item</button></div>
-                            </div>
-                        </md-cell>
-                    </ng-container>
-
-                    <ng-container mdColumnDef="extendedAmount">
-                        <md-header-cell [style.flex]="'0 0 75px'" *mdHeaderCellDef>Price</md-header-cell>
-                        <md-cell [style.flex]="'0 0 75px'" *mdCellDef="let item"> {{item.extendedAmount}} </md-cell>
-                    </ng-container>
-
-                    <ng-container mdColumnDef="quantity">
-                        <md-header-cell [style.flex]="'0 0 75px'" *mdHeaderCellDef>Quantity</md-header-cell>
-                        <md-cell [style.flex]="'0 0 75px'" *mdCellDef="let item"> {{item.quantity}} </md-cell>
-                    </ng-container>
-
-                    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-                    <md-row class="cart-row" *mdRowDef="let row; columns: displayedColumns; let i = index"></md-row>
-                </md-table>
-            </md-card-content> -->
         </md-card>
     </div>
     <div fxFlex="40">
@@ -72,7 +44,7 @@
                         <span class="cart-header-title">Order Summary</span>
                         <div style="height: 15px;"></div>
 		<div class="containerX cart-sub-totals-outer-container" fxLayout="row" fxLayoutAlign="center center">
-                <div fxFlex>
+                <div fxFlex style="font-size:1.2em;">
                         <div class='container' fxLayoutAlign='space-between'>
                                 <div>Discounts:</div>
                                 <div><span class="super-currency-symbol">$</span>{{session.screen.cart.discountTotal}}</div>

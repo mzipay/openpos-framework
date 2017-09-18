@@ -9,21 +9,23 @@
         </a>   
         <div fxLayout="column" >
             <div fxLayout="row">
-                    <div fxFlex style="width:100%;height: calc(100vh*0.15);text-align: center;font-size: 3vh;color: white;background-color: #432614"><div style="height: calc(100vh*0.05)"></div>{{product.shortDescription}}</div>
+                    <div fxFlex [style.lt-lg]="{'font-size': '22px;'}" style="width:100%;height: calc(100vh*0.15);text-align: center;font-size: 3vh;color: white;background-color: #432614">
+                        <div style="height: calc(100vh*0.05)"></div>{{product.shortDescription}}
+                    </div>
             </div>
             
             <div fxLayout="row" fxLayoutAlign="center" style="margin: 40px" >
                 <div fxFlex="70" > <img src="{{product.imageUrl}}" style="width: 95%"/>
                                         </div>
                 <div style="height: calc(100vh - (100vh*0.15))" fxFlex fxLayout="column" fxLayoutAlign="space-around" >
-                        <div fxFlex="30" style="color: #432614">{{product.longDescription}}</div>
+                        <div fxFlex="20" style="color: #432614">{{product.longDescription}}</div>
                         <div fxFlex="15" style="line-height: 5px">
                             <p *ngIf="product.regularPrice">Reg. <span style="text-decoration: line-through;">${{product.regularPrice}}</span></p>
                             <p *ngIf="product.savings" style="font-style: italic;">{{product.savings}}</p>
                             <p style="font-size: 1.75em;text-align: left;">Price ${{product.price}}</p>
                         </div>
 
-                        <button *ngIf="!productInCart" md-raised-button color='primary' fxFlex style="background-color: #432614; width: 100%;color: white;text-align: center;margin-bottom: 40px;padding: 10px;padding-top: 10px;"
+                        <button *ngIf="!productInCart" md-raised-button color='primary' fxFlex="12" style="background-color: #432614; width: 100%;color: white;text-align: center;margin-bottom: 40px;padding: 10px"
                             (click)="addProductToCart()">
 
                             <svg style="width:24px;height:24px" viewBox="0 0 24 24">

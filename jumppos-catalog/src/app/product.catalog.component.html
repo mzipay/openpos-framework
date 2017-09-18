@@ -1,25 +1,28 @@
+    <div>
+             <a routerLink="/">
+                <div style="position: absolute;padding:48px;">
+                    <svg style="width:48px;height:48px" viewBox="0 0 24 24">
+                        <path fill="#FFF" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+                    </svg></div>
+            </a>
+            <div class="home-stripe home-stripe-top header-stripe-top" style="margin-bottom: 50px;"> Furniture</div>  
+            <div style="height:100vh !important; overflow-y: auto;">
+            <md-grid-list style="height:768px !important;" [gutterSize]="gutterSize" [cols]="gridColumns" rowHeight="270px" >
+                    <md-grid-tile style="padding: 10px;" *ngFor="let category of categories">
+                            <a routerLink="/product-list"  >
+                                <md-card class="product-category" 
+                                    [ngStyle]="{'background-image':'url(' + category.imageUrl + ')'}"  ng-click="homeTapped()" >        
+                                    <div style="height: 90%"></div>
+                                    <p class="product-card-title">{{category.description}}</p>
+                                </md-card>
+                                    </a>                        
+                    </md-grid-tile> 
+                    <!-- spacer tiles for scroll... -->               
+                    <md-grid-tile></md-grid-tile>
+                    <md-grid-tile></md-grid-tile>
+                    <md-grid-tile></md-grid-tile>
+                    <md-grid-tile></md-grid-tile>
 
-<div class="conatinerX">
-        <a routerLink="/">
-    <div style="position: absolute;padding:48px;">
-        <svg style="width:48px;height:48px" viewBox="0 0 24 24">
-            <path fill="#FFF" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
-        </svg></div>
-        </a>
-    <div class="home-stripe home-stripe-top header-stripe-top"> Furniture</div>
-    <div fxFlexLayout="row">
-            <div fxFlex="16"></div>
-            <div fxFlex="80" fxLayout="row" fxLayoutWrap>
-                    <a routerLink="/product-list" *ngFor="let category of categories" >
-                <md-card class="product-category" 
-                    [ngStyle]="{'background-image':'url(' + category.imageUrl + ')'}"  ng-click="homeTapped()" >        
-                    <div style="height: 90%"></div>
-                    <p class="product-card-title">{{category.description}}</p>
-                </md-card>
-                    </a>
+            </md-grid-list>
             </div>
-
-            <div fxFlex></div>
-    </div>
-
-</div>
+     </div> 
