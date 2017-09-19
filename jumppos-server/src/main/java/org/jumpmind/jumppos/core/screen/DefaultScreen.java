@@ -15,6 +15,7 @@ public class DefaultScreen implements Serializable {
 
     public static final String EMBEDDED_WEB_PAGE = "EmbeddedWebPage";
     public static final String CHOOSE_OPTIONS_SCREEN_TYPE = "ChooseOptions";
+    public static final String PROMPT_WITH_OPTIONS_SCREEN_TYPE = "PromptWithOptions";
     public static final String DIALOG_SCREEN_TYPE = "Dialog";
     public static final String FORM_SCREEN_TYPE = "Form";
     public static final String PAYMENT_STATUS = "PaymentStatus";

@@ -19,8 +19,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { SessionService } from './session.service';
 import { AbstractApp } from './screens/abstract-app';
 import { PromptComponent } from './screens/prompt.component';
+import { PromptInputComponent } from './common/controls/prompt-input.component';
 import { SellComponent } from './screens/sell.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
+import { PromptWithOptionsComponent } from './screens/prompt-with-options.component';
 import { DialogComponent } from './screens/dialog.component';
 import { FormComponent } from './screens/form.component';
 import { HomeComponent } from './screens/home.component';
@@ -100,6 +102,7 @@ const stompConfig: StompConfig = {
     PromptComponent,
     CartComponent,
     ChooseOptionsComponent,
+    PromptWithOptionsComponent,
     SignatureCaptureComponent,
     SellComponent,
     SellItemDetailComponent,
@@ -115,7 +118,9 @@ const stompConfig: StompConfig = {
     CartComponent,
     DialogComponent,
     PromptComponent,
+    PromptInputComponent,
     ChooseOptionsComponent,
+    PromptWithOptionsComponent,
     SignatureCaptureComponent,
     SellComponent,
     SellItemDetailComponent,

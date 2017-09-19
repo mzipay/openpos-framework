@@ -4,7 +4,7 @@ import {SessionService} from '../session.service';
 import 'signature_pad';
 
 @Component({
-  selector: 'app-prompt',
+  selector: 'app-signature-capture',
   templateUrl: './signature-capture.component.html'
 })
 export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScreen {

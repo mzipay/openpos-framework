@@ -8,6 +8,7 @@ import { PaymentStatusComponent } from './screens/payment-status.component';
 import { FormComponent } from './screens/form.component';
 import { HomeComponent } from './screens/home.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
+import { PromptWithOptionsComponent } from './screens/prompt-with-options.component';
 import { IScreen } from './common/iscreen';
 import { IDialog } from './common/idialog';
 import { Observable } from 'rxjs/Observable';
@@ -27,6 +28,7 @@ export class ScreenService {
     // To make a screen available add it here and in entryComponents in the app.module.ts
     this.screens.set('ChooseOptions', ChooseOptionsComponent);
     this.screens.set('Prompt', PromptComponent);
+    this.screens.set('PromptWithOptions', PromptWithOptionsComponent);
     this.screens.set('Sell', SellComponent);
     this.screens.set('SellItemDetail', SellItemDetailComponent);
     this.screens.set('SignatureCapture', SignatureCaptureComponent);

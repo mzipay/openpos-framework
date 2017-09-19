@@ -1,0 +1,16 @@
+<md-card>
+    <!-- md-card-title *ngIf="promptText" class="choose-options-title">{{promptText}}</md-card-title -->
+    <md-card-content>
+        <label class="prompt-text">{{promptText}}</label>
+        <app-prompt-input [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
+            [promptIcon]="session.screen.promptIcon" [onEnterCallback]="promptInputCallback"></app-prompt-input>
+        <md-nav-list>
+            <!-- material doesn't yet support enable/disable of md-list-item, workaround ... -->
+            <md-list-item *ngFor="let o of optionItems" (click)="o.enabled && session.onAction(o.value)" style="border-color: black">
+                <span *ngIf="!o.enabled; else elseBlock" class="choose-options-item-dimmed">{{o.displayValue}}</span>
+                <ng-template #elseBlock>{{o.displayValue}}</ng-template>
+                <md-icon class="material-icons pull-right line-item-caret" style="top: 1px;">keyboard_arrow_right</md-icon>
+            </md-list-item>
+        </md-nav-list>
+    </md-card-content>
+</md-card>
