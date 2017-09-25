@@ -24,6 +24,7 @@ public class DefaultScreen implements Serializable {
     public static final String SELL_SCREEN_TYPE = "Sell";
     public static final String SIGNATURE_CAPTURE_SCREEN_TYPE = "SignatureCapture";
     public static final String SHOW_CART_SCREEN = "Cart";
+    public static final String TABLE_SCREEN_TYPE = "Table";
 
     public static final String TITLE_OPEN_STATUS = "Open";
     public static final String TITLE_CLOSED_STATUS = "Closed";

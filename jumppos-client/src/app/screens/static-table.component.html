@@ -1,0 +1,15 @@
+<div *ngIf="session.screen.type==='Table'" class="main-menu-container" fxLayout="column" fxLayoutAlign="center center">
+    <md-card class="prompt-container" ngClass.xs="prompt-input-container-small">
+        <md-card-content>
+            <md-table #table [dataSource]="dataSource">
+                <ng-container *ngFor="let col of columnIds" mdColumnDef="{{col}}">
+                    <md-header-cell *mdHeaderCellDef>{{columnsById[col].headerLabel}}</md-header-cell>
+                    <!-- md-cell *mdCellDef="let row"> {{row[col]}} </md-cell -->
+                    <md-cell *mdCellDef="let row">{{row.values[columnsById[col].index]}}</md-cell>
+                </ng-container>
+                <md-header-row *mdHeaderRowDef="columnIds"></md-header-row>
+                <md-row *mdRowDef="let row; columns: columnIds;"></md-row>
+            </md-table>
+        </md-card-content>
+    </md-card>
+</div>

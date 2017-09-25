@@ -9,6 +9,7 @@ import { FormComponent } from './screens/form.component';
 import { HomeComponent } from './screens/home.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
 import { PromptWithOptionsComponent } from './screens/prompt-with-options.component';
+import { StaticTableComponent } from './screens/static-table.component';
 import { IScreen } from './common/iscreen';
 import { IDialog } from './common/idialog';
 import { Observable } from 'rxjs/Observable';
@@ -26,17 +27,18 @@ export class ScreenService {
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {
     // To make a screen available add it here and in entryComponents in the app.module.ts
+    this.screens.set('Cart', CartComponent);
     this.screens.set('ChooseOptions', ChooseOptionsComponent);
+    this.screens.set('EmbeddedWebPage', EmbeddedWebPageComponent);
+    this.screens.set('Form', FormComponent);
+    this.screens.set('Home', HomeComponent);
+    this.screens.set('PaymentStatus', PaymentStatusComponent);
     this.screens.set('Prompt', PromptComponent);
     this.screens.set('PromptWithOptions', PromptWithOptionsComponent);
     this.screens.set('Sell', SellComponent);
     this.screens.set('SellItemDetail', SellItemDetailComponent);
     this.screens.set('SignatureCapture', SignatureCaptureComponent);
-    this.screens.set('PaymentStatus', PaymentStatusComponent);
-    this.screens.set('Form', FormComponent);
-    this.screens.set('Home', HomeComponent);
-    this.screens.set('EmbeddedWebPage', EmbeddedWebPageComponent);
-    this.screens.set('Cart', CartComponent);
+    this.screens.set('Table', StaticTableComponent);
   }
 
   public resolveScreen(type: string): ComponentFactory<IScreen> {

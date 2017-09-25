@@ -30,6 +30,7 @@ import { StatusBarComponent } from './screens/statusbar.component';
 import { PaymentStatusComponent } from './screens/payment-status.component';
 import { SellItemDetailComponent } from './screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from './screens/signature-capture.component';
+import { StaticTableComponent } from './screens/static-table.component';
 import { FocusDirective } from './common/focus.directive';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
@@ -98,18 +99,19 @@ const stompConfig: StompConfig = {
 
 @NgModule({
   entryComponents: [
-    DialogComponent,
-    PromptComponent,
     CartComponent,
     ChooseOptionsComponent,
-    PromptWithOptionsComponent,
-    SignatureCaptureComponent,
-    SellComponent,
-    SellItemDetailComponent,
-    PaymentStatusComponent,
+    DialogComponent,
+    EmbeddedWebPageComponent,
     FormComponent,
     HomeComponent,
-    EmbeddedWebPageComponent
+    PaymentStatusComponent,
+    PromptComponent,
+    PromptWithOptionsComponent,
+    SellComponent,
+    SellItemDetailComponent,
+    SignatureCaptureComponent,
+    StaticTableComponent
   ],
   declarations: [
     AppComponent,
@@ -125,6 +127,7 @@ const stompConfig: StompConfig = {
     SellComponent,
     SellItemDetailComponent,
     PaymentStatusComponent,
+    StaticTableComponent,
     FormComponent,
     HomeComponent,
     StatusBarComponent,
