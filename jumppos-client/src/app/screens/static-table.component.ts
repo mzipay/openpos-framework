@@ -20,6 +20,8 @@ export class StaticTableComponent implements IScreen, OnInit, AfterViewInit {
 
     selectionMode: SelectionMode;
     selectedRow: number;
+    // Name of action specified by server side which should behave like
+    // a form submission
     submitActionName: string;
 
     /** Prompt text to display to user */
@@ -31,7 +33,7 @@ export class StaticTableComponent implements IScreen, OnInit, AfterViewInit {
         this.rowData = new RowDatabase(this.session.screen.tableData);
         this.submitActionName = this.session.screen.submitActionName;
     }
-    
+
     private initColumnDefs(): void {
         // Create the list of column definitions
         let columnIdx = 0;
