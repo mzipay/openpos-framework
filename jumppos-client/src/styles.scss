@@ -39,6 +39,18 @@ md-card {
     position: relative;
 }
 
+// controls sizing of radio button column on static-table template
+md-cell.mat-cell.mat-column-_selection {
+    width: 30px;
+    flex: 0 0 30px;
+}
+
+// controls sizing of radio button column header on static-table template
+md-header-cell.mat-header-cell.mat-column-_selection {
+    width: 30px;
+    flex: 0 0 30px;
+}
+
 .toolbar-fill-remaining-space {
     // This fills the remaining space, by using flexbox. 
     // Every toolbar row uses a flexbox row layout.
@@ -107,6 +119,15 @@ md-card {
 .main-menu {
     max-width: 768px;
     padding: 0px !important;
+}
+
+.prompt-container {
+    min-width: 520px;
+    max-width: 570px;
+    
+    height: 320px;
+    bottom: 100px;
+    background-color:#f0f0f0;
 }
 
 .prompt-container {
@@ -549,7 +570,6 @@ td {
     font-size:1.4em;
     //color: #c8c8c8;
 }
-
 
 // .header-stripe-top {
 //     color:white;

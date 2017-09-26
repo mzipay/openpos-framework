@@ -3,12 +3,23 @@ package org.jumpmind.jumppos.core.screen;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class TableScreen extends DefaultScreen {
 
     private static final long serialVersionUID = 1L;
     
+    public enum SelectionMode {
+        None,
+        MultipleRows,
+        SingleRow
+    }
+    
     private List<String> headerLabels;
     private List<List<String>> tableData = new ArrayList<>();
+    private String text;
+    private SelectionMode selectionMode = SelectionMode.None;
+    private int selectedRow = -1;
+    private String submitActionName;
     
     public TableScreen() {
         setType(TABLE_SCREEN_TYPE);
@@ -34,5 +45,36 @@ public class TableScreen extends DefaultScreen {
         this.getTableData().add(tableRow);
     }
     
+    public String getText() {
+        return this.text;
+    }
+    
+    public void setText(String text) {
+        this.text = text;
+    }
+ 
+    public SelectionMode getSelectionMode() {
+        return selectionMode;
+    }
+    
+    public void setSelectionMode(SelectionMode selectionMode) {
+        this.selectionMode = selectionMode;
+    }
+
+    public void setSelectedRow(int selectedRow) {
+       this.selectedRow = selectedRow;
+    }
+    
+    public int getSelectedRow() {
+        return this.selectedRow;
+    }
+
+    public String getSubmitActionName() {
+        return submitActionName;
+    }
+
+    public void setSubmitActionName(String submitActionName) {
+        this.submitActionName = submitActionName;
+    }
     
 }

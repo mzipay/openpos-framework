@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { SessionService } from '../session.service';
 import { IScreen } from './../common/iscreen';
 import { DataSource } from '@angular/cdk/collections';
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable';
     selector: 'app-static-table',
     templateUrl: './static-table.component.html'
 })
-export class StaticTableComponent implements IScreen, OnInit {
+export class StaticTableComponent implements IScreen, OnInit, AfterViewInit {
     rowData: RowDatabase;
     dataSource: RowDataSource | null;
 
@@ -18,11 +18,20 @@ export class StaticTableComponent implements IScreen, OnInit {
     columnIds: Array<string> = [];
     columnsById: {[key: string]: ColumnDef} = {};
 
+    selectionMode: SelectionMode;
+    selectedRow: number;
+    submitActionName: string;
+
+    /** Prompt text to display to user */
+    text: string;
+
     constructor(public session: SessionService) {
+        this.selectionMode = SelectionMode[session.screen.selectionMode as string];
         this.initColumnDefs();
         this.rowData = new RowDatabase(this.session.screen.tableData);
+        this.submitActionName = this.session.screen.submitActionName;
     }
-
+    
     private initColumnDefs(): void {
         // Create the list of column definitions
         let columnIdx = 0;
@@ -37,16 +46,57 @@ export class StaticTableComponent implements IScreen, OnInit {
                 }
             );
             this.columnIds = this.columns.map(c => c.columnId);
+            // console.log('selectionMode:' + this.selectionMode);
+
+            // If our selection mode allows for selection of a Single table row
+            // or Multiple table rows, add an extra '_selection' column to the front
+            // of the list of other columnIds. The _selection column
+            // will be used by the template to enable selection of a row (or rows).
+            if ([SelectionMode.SingleRow, SelectionMode.MultipleRows].indexOf(this.selectionMode) >= 0) {
+                this.columnIds.unshift('_selection');
+            }
+
+            // console.log('columnIds:' + this.columnIds);
             this.columns.forEach((col) => { this.columnsById[col.columnId] = col; });
         }
     }
 
+    isRowSelected(rowIndex: number) {
+        return this.selectedRow === rowIndex ;
+    }
+
     ngOnInit() {
         this.dataSource = new RowDataSource(this.rowData);
+        this.text = this.session.screen.text;
+        this.selectedRow = this.session.screen.selectedRow;
+    }
+
+    ngAfterViewInit(): void {
     }
 
     show(session: SessionService) {
     }
+
+    onSelectRow(rowId: number) {
+        this.selectedRow = rowId;
+    }
+
+    onAction(action: string) {
+        if (action === this.submitActionName) {
+            this.session.response = this.selectedRow;
+            this.session.onAction(action);
+        }
+    }
+}
+
+/**
+ * Indicates if the table component will allow the user to
+ * select no rows, a single row, or multiple rows.
+ */
+export enum SelectionMode {
+    None,
+    MultipleRows,
+    SingleRow
 }
 
 /**
@@ -59,6 +109,7 @@ export interface ColumnDef {
     columnId: string;
     /** A label for the column that can be displayed to the user */
     headerLabel: string;
+
 }
 
 /**
