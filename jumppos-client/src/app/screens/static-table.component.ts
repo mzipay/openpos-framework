@@ -79,8 +79,8 @@ export class StaticTableComponent implements IScreen, OnInit, AfterViewInit {
     show(session: SessionService) {
     }
 
-    onSelectRow(rowId: number) {
-        this.selectedRow = rowId;
+    onSelectRow(rowIndex: number) {
+        this.selectedRow = rowIndex;
     }
 
     onAction(action: string) {

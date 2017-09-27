@@ -6,7 +6,7 @@
                 <ng-container *ngFor="let columnId of columnIds" mdColumnDef="{{columnId}}">
                     <!-- If there is a '_selection' column present, don't add a header label for it -->
                     <md-header-cell *mdHeaderCellDef>{{columnId !== '_selection' ? columnsById[columnId].headerLabel : ''}}</md-header-cell>
-                    <md-cell *mdCellDef="let row">
+                    <md-cell *mdCellDef="let row" (click)="onSelectRow(row.index)">
                         <div *ngIf="columnId === '_selection'; else elseBlock"> 
                             <md-radio-button [value]="row.index" [checked]="isRowSelected(row.index)" (click)="onSelectRow(row.index)"></md-radio-button>
                         </div>
