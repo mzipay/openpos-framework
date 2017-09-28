@@ -16,9 +16,15 @@ public class ChooseOptionsScreen extends DefaultScreen {
         MultipleOptions
     }
     
+    public enum DisplayStyle {
+        ButtonList,
+        ButtonGrid
+    }
+    
     
     private List<OptionItem> options;
     private SelectionMode selectionMode = SelectionMode.SingleOption;
+    private DisplayStyle displayStyle = DisplayStyle.ButtonList;
     private String promptText;
     
     public ChooseOptionsScreen( ) {
@@ -91,6 +97,14 @@ public class ChooseOptionsScreen extends DefaultScreen {
 
     public void setPromptText(String text) {
         this.promptText = text;
+    }
+
+    public DisplayStyle getDisplayStyle() {
+        return displayStyle;
+    }
+
+    public void setDisplayStyle(DisplayStyle displayStyle) {
+        this.displayStyle = displayStyle;
     }
     
 }

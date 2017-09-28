@@ -1,3 +1,4 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { ScreenDirective } from '../common/screen.directive';
 import { IScreen } from '../common/iscreen';
 import { ScreenService } from './../screen.service';
@@ -8,7 +9,7 @@ import { Type, ViewChild, ComponentFactory } from '@angular/core';
 import { SessionService } from '../session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
 import { FocusDirective } from '../common/focus.directive';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MdDialog, MdDialogRef, MdIconRegistry } from '@angular/material';
 
 export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
@@ -21,7 +22,9 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
     @ViewChild(ScreenDirective) host: ScreenDirective;
 
     constructor(private screenService: ScreenService,
-        public session: SessionService, public dialog: MdDialog) {
+        public session: SessionService, public dialog: MdDialog,
+        private iconRegistry: MdIconRegistry,
+        private sanitizer: DomSanitizer) {
     }
 
     protected abstract appName(): String;
@@ -29,6 +32,9 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
     ngOnInit(): void {
         this.session.unsubscribe();
         this.session.subscribe(this.appName());
+        this.iconRegistry.addSvgIcon('calculator', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/calculator.svg'));
+        this.iconRegistry.addSvgIcon('cash', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/cash.svg'));
+        this.iconRegistry.addSvgIcon('cash-multiple', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/cash-multiple.svg'));
     }
 
     ngOnDestroy(): void {

@@ -37,6 +37,10 @@ public class MenuItem implements Serializable {
         this.title = title;
         this.icon = icon;
     }
+
+    public MenuItem(String action, String title, IIcon icon) {
+        this(action, title, icon.getName());
+    }
     
     public MenuItem(String title, String action, boolean enabled) {
         super();

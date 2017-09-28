@@ -174,7 +174,7 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
                     // transitionTo(currentState);
                 }
             } else {
-                logger.warn("Unexpected action " + action);
+                logger.warn("Unexpected action {}", action);
             }
         }
     }
