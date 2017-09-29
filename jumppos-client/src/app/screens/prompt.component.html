@@ -1,12 +1,13 @@
-<div *ngIf="session.screen.type==='Prompt' &&  session.screen.text" class="main-menu-container" fxLayout="column" fxLayoutAlign="center center">
-	<md-card class="prompt-container" ngClass.xs="prompt-input-container-small">
-		<md-card-content>
+<div *ngIf="session.screen.type==='Prompt' &&  session.screen.text" class="prompt-container-outer" fxLayout="row" fxLayoutAlign="center center">
+	<div class="toolbar-fill-remaining-space" style="background-color: red"></div>
+	<md-card class="prompt-container" [style.sm]="{'width': '75%'}" [style.xs]="{'width': '85%','top': 'initial'}">
+		 <md-card-content>
 			<app-prompt-input [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
 			[promptIcon]="session.screen.promptIcon" [onEnterCallback]="promptInputCallback" [responseText]="session.screen.responseText"></app-prompt-input>
 			<div style="height:50px"></div>
 			<label class="prompt-text">{{session.screen.text}}</label>
-		</md-card-content>
+		</md-card-content> 
 	</md-card>
-
+	<div class="toolbar-fill-remaining-space" style="background-color: red"></div>
 
 </div>
