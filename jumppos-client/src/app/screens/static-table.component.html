@@ -17,10 +17,10 @@
                 <md-row *mdRowDef="let row; columns: columnIds;"></md-row>
             </md-table>
         </md-card-content>
-        <md-card-actions class="line-item-detail-actions">
-            <div fxLayout="row" fxLayoutAlign="center center">
+        <md-card-actions>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" fxLayoutWrap>
                 <div *ngFor="let m of session.screen.menuActions">
-                    <button md-raised-button (click)="onAction(m.action)" [disabled]="!m.enabled">{{m.title}}</button>
+                    <button md-raised-button class="static-table-button" (click)="onAction(m.action)" [disabled]="!m.enabled">{{m.title}}</button>
                 </div>
             </div>
         </md-card-actions>

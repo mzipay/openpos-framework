@@ -258,6 +258,10 @@ md-header-cell.mat-header-cell.mat-column-_selection {
     background-color: red;
 }
 
+button.static-table-button.mat-raised-button {
+    margin: 5px;
+}
+
 .xs.sale-total-checkout-container {
     background-color: red;
 }
@@ -413,49 +417,49 @@ md-header-cell.mat-header-cell.mat-column-_selection {
 
 .serrated-edge:before {
     background:
-    linear-gradient(
-      45deg, transparent 33.333%,
-      white 33.333%, white 66.667%,
-      transparent 66.667%
-    ),
-    linear-gradient(
-      -45deg, transparent 33.333%,
-      white 33.333%, white 66.667%,
-      transparent 66.667%
-    );
+        linear-gradient(
+            45deg, transparent 33.333%,
+            white 33.333%, white 66.667%,
+            transparent 66.667%
+        ),
+        linear-gradient(
+            -45deg, transparent 33.333%,
+            white 33.333%, white 66.667%,
+            transparent 66.667%
+        );
 
-  background-size: 10px 20px;      
-    content: "";
-    display: block;
-    position: absolute;
-    top: -5px;
-    left: 0px;
-    width: 100%;
-    height: 10px;
-  }
+    background-size: 10px 20px;      
+        content: "";
+        display: block;
+        position: absolute;
+        top: -5px;
+        left: 0px;
+        width: 100%;
+        height: 10px;
+}
 
-  .serrated-edge-bottom {
+.serrated-edge-bottom {
     position: relative;
-  }
+}
 
 .serrated-edge-bottom:after {
     background:
-    linear-gradient(
-      -45deg,
-      white 33.333%,
-      transparent 33.333%,
-      transparent 66.667%,
-      white 66.667%      
-    ),
-    linear-gradient(
-      45deg,
-      white 33.333%,
-      transparent 33.333%,
-      transparent 66.667%,
-      white 66.667%      
-    );
+        linear-gradient(
+            -45deg,
+            white 33.333%,
+            transparent 33.333%,
+            transparent 66.667%,
+            white 66.667%      
+        ),
+        linear-gradient(
+            45deg,
+            white 33.333%,
+            transparent 33.333%,
+            transparent 66.667%,
+            white 66.667%      
+        );
     
-  background-size: 10px 20px;      
+    background-size: 10px 20px;      
     content: "";
     display: block;
     position: absolute;
@@ -463,12 +467,12 @@ md-header-cell.mat-header-cell.mat-column-_selection {
     left: 0px;
     width: 100%;
     height: 10px;
-  }  
+}  
 
-  .choose-options-title {
+.choose-options-title {
     color: #537889;  
     font-size: 1.5em;
-  }
+}
  
 .choose-options-item-dimmed {
     color:    #c8c8c8;
