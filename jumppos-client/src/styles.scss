@@ -59,7 +59,6 @@ md-header-cell.mat-header-cell.mat-column-_selection {
 
 .main-background {
     height:100vh;
-    background-color: #e7e7e7;
     background-image: url(assets/background.jpg); 
     background-repeat: no-repeat;
     background-size: cover;
@@ -68,7 +67,14 @@ md-header-cell.mat-header-cell.mat-column-_selection {
 
 .main-menu-container {
      height:100vh;
-     //background-color:transparent;
+}
+
+.prompt-container-outer {
+    height:100vh;
+}
+
+.main-menu-grid-list {
+    //height: 100vh !important;
 }
 
 ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
@@ -117,26 +123,38 @@ md-header-cell.mat-header-cell.mat-column-_selection {
 }
 
 .main-menu {
-    max-width: 768px;
-    padding: 0px !important;
+    min-height: 450px;    
+    width:60%;
 }
 
+.main-menu-item {
+        padding: 25px;
+        height: 150px;
+        width: 150px;
+        margin: 10px;
+        background-color: #2371ad;
+    }
+    
+    .main-menu-item-icon {
+        position: relative;
+        top: 30px;
+        color: white;
+    }
+    
+    .main-menu-item-text {
+        position: relative;
+        top: 65px;
+        color: #c8c8c8;
+        font-weight: normal;
+    }
+
 .prompt-container {
-    min-width: 520px;
-    max-width: 570px;
+    width: 40%;
     
     height: 320px;
     bottom: 100px;
     background-color:#f0f0f0;
-}
-
-.prompt-container {
-    min-width: 520px;
-    max-width: 570px;
-    
-    height: 320px;
-    bottom: 100px;
-    background-color:#f0f0f0;
+    margin: 10px;
 }
 
 .prompt-input-container-small {
@@ -181,27 +199,7 @@ md-header-cell.mat-header-cell.mat-column-_selection {
     padding-right: 15px;
 }
 
-.main-menu-item {
-    padding: 50px;
-    height: 150px;
-    width: 150px;
-    background-color: #2371ad;
-}
 
-
-.main-menu-item-icon {
-    position: relative;
-    top: 30px;
-    color: white;
-}
-
-.main-menu-item-text {
-    position: relative;
-    top: 65px;
-    color: #c8c8c8;
-    font-weight: normal;
-
-}
 
 .material-icons.md-40 {
     font-size: 40px !important;
@@ -538,7 +536,7 @@ td {
         position: absolute;
         top:75px;
         right:50px;
-}
+	}
 
 
 .mat-column-extendedAmount {
@@ -577,3 +575,4 @@ td {
 //     padding-top:30px;
 //     padding-bottom:30px;
 // }
+
