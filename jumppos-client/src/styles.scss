@@ -133,20 +133,20 @@ md-header-cell.mat-header-cell.mat-column-_selection {
         width: 150px;
         margin: 10px;
         background-color: #2371ad;
-    }
+}
     
-    .main-menu-item-icon {
-        position: relative;
-        top: 30px;
-        color: white;
-    }
+.main-menu-item-icon {
+    position: relative;
+    top: 30px;
+    color: white;
+}
     
-    .main-menu-item-text {
-        position: relative;
-        top: 65px;
-        color: #c8c8c8;
-        font-weight: normal;
-    }
+.main-menu-item-text {
+    position: relative;
+    top: 65px;
+    color: #c8c8c8;
+    font-weight: normal;
+}
 
 .prompt-container {
     width: 40%;
@@ -473,6 +473,11 @@ md-header-cell.mat-header-cell.mat-column-_selection {
 .choose-options-item-dimmed {
     color:    #c8c8c8;
 }
+
+.menu-item-dimmed {
+    color:    #c8c8c8;
+}
+
   
 .line-item-detail-title {
     font-weight: bold;

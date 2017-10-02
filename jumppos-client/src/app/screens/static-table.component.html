@@ -20,7 +20,7 @@
         <md-card-actions class="line-item-detail-actions">
             <div fxLayout="row" fxLayoutAlign="center center">
                 <div *ngFor="let m of session.screen.menuActions">
-                    <button md-raised-button (click)="onAction(m.action)">{{m.title}}</button>
+                    <button md-raised-button (click)="onAction(m.action)" [disabled]="!m.enabled">{{m.title}}</button>
                 </div>
             </div>
         </md-card-actions>

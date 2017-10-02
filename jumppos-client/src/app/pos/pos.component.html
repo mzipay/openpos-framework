@@ -4,7 +4,7 @@
 			<md-nav-list>
 				<a *ngFor="let m of menuActions" md-list-item (click)="session.onAction(m.action);  sidenav.close()" href="#">
 					<md-icon  md-list-icon class="material-icons">{{m.icon}}</md-icon>
-					<span md-line>{{m.title}}</span>
+					<span md-line [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>
 					<md-icon class="material-icons">keyboard_arrow_right</md-icon>
 				</a>
 			</md-nav-list>

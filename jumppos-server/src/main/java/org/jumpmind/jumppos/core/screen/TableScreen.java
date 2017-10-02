@@ -19,7 +19,7 @@ public class TableScreen extends DefaultScreen {
     private String text;
     private SelectionMode selectionMode = SelectionMode.None;
     private int selectedRow = -1;
-    private String submitActionName;
+    private List<String> submitActionNames = new ArrayList<>();
     
     public TableScreen() {
         setType(TABLE_SCREEN_TYPE);
@@ -69,12 +69,16 @@ public class TableScreen extends DefaultScreen {
         return this.selectedRow;
     }
 
-    public String getSubmitActionName() {
-        return submitActionName;
+    public List<String> getSubmitActionNames() {
+        return submitActionNames;
     }
 
-    public void setSubmitActionName(String submitActionName) {
-        this.submitActionName = submitActionName;
+    public void setSubmitActionNames(List<String> submitActionNames) {
+        this.submitActionNames = submitActionNames;
+    }
+    
+    public void addSubmitActionName(String submitActionName) {
+        this.getSubmitActionNames().add(submitActionName);
     }
     
 }

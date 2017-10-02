@@ -23,7 +23,7 @@ export class StaticTableComponent implements IScreen, DoCheck {
     selectedRow: number;
     // Name of action specified by server side which should behave like
     // a form submission
-    submitActionName: string;
+    submitActionNames: string[] = [];
 
     /** Prompt text to display to user */
     text: string;
@@ -80,7 +80,7 @@ export class StaticTableComponent implements IScreen, DoCheck {
         this.initColumnDefs();
         this.rowData = new RowDatabase(this.session.screen.tableData);
 
-        this.submitActionName = this.session.screen.submitActionName;
+        this.submitActionNames = this.session.screen.submitActionNames;
         this.dataSource = new RowDataSource(this.rowData);
         this.text = this.session.screen.text;
         this.selectedRow = this.session.screen.selectedRow;
@@ -94,7 +94,7 @@ export class StaticTableComponent implements IScreen, DoCheck {
     }
 
     onAction(action: string) {
-        if (action === this.submitActionName) {
+        if (this.submitActionNames.includes(action)) {
             this.session.response = this.selectedRow;
             this.session.onAction(action);
         }
