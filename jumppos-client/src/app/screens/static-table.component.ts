@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';
 import { IScreen } from './../common/iscreen';
 import { DataSource } from '@angular/cdk/collections';
@@ -9,7 +9,8 @@ import { Observable } from 'rxjs/Observable';
     selector: 'app-static-table',
     templateUrl: './static-table.component.html'
 })
-export class StaticTableComponent implements IScreen, OnInit, AfterViewInit {
+export class StaticTableComponent implements IScreen, DoCheck {
+    private lastSequenceNum: number;
     rowData: RowDatabase;
     dataSource: RowDataSource | null;
 
@@ -28,13 +29,12 @@ export class StaticTableComponent implements IScreen, OnInit, AfterViewInit {
     text: string;
 
     constructor(public session: SessionService) {
-        this.selectionMode = SelectionMode[session.screen.selectionMode as string];
-        this.initColumnDefs();
-        this.rowData = new RowDatabase(this.session.screen.tableData);
-        this.submitActionName = this.session.screen.submitActionName;
     }
 
     private initColumnDefs(): void {
+        this.columns = [];
+        this.columnIds = [];
+        this.columnsById = {};
         // Create the list of column definitions
         let columnIdx = 0;
         if (this.session.screen.headerLabels) {
@@ -67,13 +67,23 @@ export class StaticTableComponent implements IScreen, OnInit, AfterViewInit {
         return this.selectedRow === rowIndex ;
     }
 
-    ngOnInit() {
+    ngDoCheck(): void {
+        if (this.session.screen.sequenceNumber !== this.lastSequenceNum) {
+            // Screen changed, re-init
+            this.init();
+            this.lastSequenceNum = this.session.screen.sequenceNumber;
+        }
+    }
+
+    init(): void {
+        this.selectionMode = SelectionMode[this.session.screen.selectionMode as string];
+        this.initColumnDefs();
+        this.rowData = new RowDatabase(this.session.screen.tableData);
+
+        this.submitActionName = this.session.screen.submitActionName;
         this.dataSource = new RowDataSource(this.rowData);
         this.text = this.session.screen.text;
         this.selectedRow = this.session.screen.selectedRow;
-    }
-
-    ngAfterViewInit(): void {
     }
 
     show(session: SessionService) {

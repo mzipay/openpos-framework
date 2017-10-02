@@ -1,5 +1,5 @@
 import { IScreen } from '../common/iscreen';
-import {Component} from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 import {SessionService} from '../session.service';
 
 
@@ -7,17 +7,29 @@ import {SessionService} from '../session.service';
   selector: 'app-choose-options',
   templateUrl: './choose-options.component.html'
 })
-export class ChooseOptionsComponent implements IScreen {
+export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck {
 
   public optionItems: IOptionItem[];
   public promptText: string;
+  private lastSequenceNum: number;
 
   constructor(public session: SessionService) {
-    this.optionItems = session.screen.options;
-    this.promptText = session.screen.promptText;
   }
 
   show(session: SessionService) {
+    console.log('Show invoked');
+  }
+
+  ngOnInit(): void {
+  }
+
+  ngDoCheck(): void {
+    if (this.session.screen.sequenceNumber !== this.lastSequenceNum) {
+      // Screen changed, re-init
+      this.optionItems = this.session.screen.options;
+      this.promptText = this.session.screen.promptText;
+      this.lastSequenceNum = this.session.screen.sequenceNumber;
+    }
   }
 
 }

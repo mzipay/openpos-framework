@@ -1,5 +1,3 @@
-
-
 <!-- <div fxLayout="row" fxLayoutAlign="space-around center center">
 		<div fxFlex fxHide.xs></div>
 		<div class="home-screen-logo" ngClass.xs="home-screen-logo-xs"></div>
@@ -20,17 +18,16 @@
 			<div fxFlex="25" fxHide.xs></div>
 	</div> -->
 
-<div *ngIf="session.screen.type==='Home'"  fxLayoutAlign="center center" class="main-menu-container" [style.xs]="{'height': 'initial'}">
+<div *ngIf="session.screen.type==='Home'" fxLayoutAlign="center center" class="main-menu-container" [style.xs]="{'height': 'initial'}">
 
-			<md-card class="main-menu">
+	<md-card class="main-menu">
 
 		<md-card-content style="min-height: 460px" [style.sm]="{'min-height': 'initial'}" [style.xs]="{'right': 'initial'}">
 			<div fxLayout="row" fxLayoutAlign="center center" style="padding-top: 20px" fxLayoutWrap>
 				<div *ngFor="let menuItem of menuItems">
 					<div fxLayout="column" style="height: 200px; width:250px;" [style.xs]="{'zoom': '50%'}" fxLayoutAlign="center center">
 						<button md-raised-button class="main-menu-item" (click)="session.onAction(menuItem.action)">
-							<md-icon *ngIf="menuItem.icon.startsWith('local_')" [svgIcon]="menuItem.icon.substring(6)" class="material-icons md-64 main-menu-item-icon"></md-icon>
-								
+							<md-icon *ngIf="menuItem.icon.startsWith('local_')" [svgIcon]="menuItem.icon" class="material-icons md-64 main-menu-item-icon"></md-icon>
 							<md-icon *ngIf="! menuItem.icon.startsWith('local_')" class="material-icons md-64 main-menu-item-icon">{{menuItem.icon}}</md-icon>
 							<p class="main-menu-item-text" [style.xs]="{'zoom': '150%', 'top': '10px'}">{{menuItem.title}}</p>
 								</button>
@@ -41,4 +38,3 @@
 	</md-card>
 	<div class="home-screen-logo" [style.sm]="{'right': 'initial', 'top': '10px','zoom': '50%'}" [style.xs]="{'right': 'initial', 'top': '10px','zoom': '50%'}"></div>
 </div>
- 

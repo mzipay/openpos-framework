@@ -6,9 +6,10 @@
                  <div fxLayout="row" fxLayoutAlign="center center" style="padding-top: 20px" fxLayoutWrap>
                     <div *ngFor="let o of optionItems">
                         <div fxLayout="column" style="height: 200px; width:250px;" [style.xs]="{'zoom': '50%'}" fxLayoutAlign="center center">
+                            <!-- TODO: make buttons into a component since used on both Main screen and here -->
                             <button md-raised-button class="main-menu-item" (click)="session.onAction(o.value)">
                                 <!-- TODO: NEED TO SUPPORT DISABLED -->
-                                <md-icon *ngIf="o.icon.startsWith('local_')" [svgIcon]="o.icon.substring(6)" class="material-icons md-64 main-menu-item-icon"></md-icon>
+                                <md-icon *ngIf="o.icon.startsWith('local_')" [svgIcon]="o.icon" class="material-icons md-64 main-menu-item-icon"></md-icon>
     							<md-icon *ngIf="! o.icon.startsWith('local_')" class="material-icons md-64 main-menu-item-icon">{{o.icon}}</md-icon>
                                 <p class="main-menu-item-text" [style.xs]="{'zoom': '150%', 'top': '10px'}">{{o.displayValue}}</p>
                             </button>
@@ -27,7 +28,7 @@
                     <md-list-item *ngFor="let o of optionItems" (click)="o.enabled && session.onAction(o.value)" style="border-color: black">
                         <span *ngIf="!o.enabled; else elseBlock" class="choose-options-item-dimmed">{{o.displayValue}}</span>
                         <ng-template #elseBlock>{{o.displayValue}}</ng-template>
-                        <md-icon class="material-icons pull-right line-item-caret" style="top: 1px;">keyboard_arrow_right</md-icon>
+                        <md-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</md-icon>
                     </md-list-item>
                 </md-nav-list>
             </md-card-content>

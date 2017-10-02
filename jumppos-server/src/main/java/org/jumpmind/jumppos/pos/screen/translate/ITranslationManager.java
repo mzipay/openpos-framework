@@ -11,6 +11,8 @@ public interface ITranslationManager {
     
     public void showActiveScreen();
     
+    public String getActiveScreenID();
+    
     public void ping();
     
 }

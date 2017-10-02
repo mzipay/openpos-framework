@@ -9,7 +9,7 @@
                 <md-list-item *ngFor="let o of optionItems" (click)="o.enabled && session.onAction(o.value)" style="border-color: black">
                     <span *ngIf="!o.enabled; else elseBlock" class="choose-options-item-dimmed">{{o.displayValue}}</span>
                     <ng-template #elseBlock>{{o.displayValue}}</ng-template>
-                    <md-icon class="material-icons pull-right line-item-caret" style="top: 1px;">keyboard_arrow_right</md-icon>
+                    <md-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</md-icon>
                 </md-list-item>
             </md-nav-list>
         </md-card-content>

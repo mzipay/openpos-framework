@@ -32,9 +32,10 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
     ngOnInit(): void {
         this.session.unsubscribe();
         this.session.subscribe(this.appName());
-        this.iconRegistry.addSvgIcon('calculator', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/calculator.svg'));
-        this.iconRegistry.addSvgIcon('cash', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/cash.svg'));
-        this.iconRegistry.addSvgIcon('cash-multiple', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/cash-multiple.svg'));
+        // TODO: move to another service.  Add local_ prefix to icon name
+        this.iconRegistry.addSvgIcon('local_calculator', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/calculator.svg'));
+        this.iconRegistry.addSvgIcon('local_cash', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/cash.svg'));
+        this.iconRegistry.addSvgIcon('local_cash-multiple', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/cash-multiple.svg'));
     }
 
     ngOnDestroy(): void {
