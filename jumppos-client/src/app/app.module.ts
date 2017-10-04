@@ -17,8 +17,10 @@ import { KioskComponent } from './kiosk/kiosk.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { SessionService } from './session.service';
+import { IconService } from './icon.service';
 import { AbstractApp } from './screens/abstract-app';
 import { PromptComponent } from './screens/prompt.component';
+import { IconComponent } from './common/controls/icon.component';
 import { PromptInputComponent } from './common/controls/prompt-input.component';
 import { SellComponent } from './screens/sell.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
@@ -118,6 +120,7 @@ const stompConfig: StompConfig = {
     KioskComponent,
     CartComponent,
     DialogComponent,
+    IconComponent,
     PromptComponent,
     PromptInputComponent,
     ChooseOptionsComponent,
@@ -211,6 +214,7 @@ const stompConfig: StompConfig = {
   ],
   providers: [
     MdDialog,
+    IconService,
     SessionService,
     ScreenService,
     StompService,

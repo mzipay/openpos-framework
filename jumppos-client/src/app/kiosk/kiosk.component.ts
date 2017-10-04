@@ -1,3 +1,4 @@
+import { IconService } from './../icon.service';
 import { ScreenService } from './../screen.service';
 import { AbstractApp } from '../screens/abstract-app';
 import { DialogComponent } from '../screens/dialog.component';
@@ -6,8 +7,7 @@ import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
 import { FocusDirective } from '../common/focus.directive';
-import { MdDialog, MdDialogRef, MdIconRegistry } from '@angular/material';
-import { DomSanitizer } from '@angular/platform-browser';
+import { MdDialog, MdDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-pos',
@@ -18,8 +18,8 @@ export class KioskComponent extends AbstractApp implements DoCheck {
   cartSize: number;
 
   constructor(screenService: ScreenService, public session: SessionService, public dialog: MdDialog,
-    iconRegistry: MdIconRegistry, sanitizer: DomSanitizer) {
-    super(screenService, session, dialog, iconRegistry, sanitizer);
+    iconService: IconService) {
+    super(screenService, session, dialog, iconService);
   }
 
   ngDoCheck(): void {

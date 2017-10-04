@@ -1,3 +1,4 @@
+import { IconService } from './../icon.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ScreenDirective } from '../common/screen.directive';
 import { IScreen } from '../common/iscreen';
@@ -23,8 +24,7 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
     constructor(private screenService: ScreenService,
         public session: SessionService, public dialog: MdDialog,
-        private iconRegistry: MdIconRegistry,
-        private sanitizer: DomSanitizer) {
+        public iconService: IconService) {
     }
 
     protected abstract appName(): String;
@@ -32,10 +32,7 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
     ngOnInit(): void {
         this.session.unsubscribe();
         this.session.subscribe(this.appName());
-        // TODO: move to another service.  Add local_ prefix to icon name
-        this.iconRegistry.addSvgIcon('local_calculator', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/calculator.svg'));
-        this.iconRegistry.addSvgIcon('local_cash', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/cash.svg'));
-        this.iconRegistry.addSvgIcon('local_cash-multiple', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/cash-multiple.svg'));
+        this.iconService.registerLocalSvgIcons();
     }
 
     ngOnDestroy(): void {

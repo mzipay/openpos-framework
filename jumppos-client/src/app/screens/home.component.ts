@@ -1,10 +1,10 @@
+import { IconComponent } from './../common/controls/icon.component';
 import { IScreen } from '../common/iscreen';
 import { IMenuItem } from '../common/imenuitem';
 // import {MdButtonModule, MdCheckboxModule} from '@angular/material';
 import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';
-import {MediaChange, ObservableMedia} from "@angular/flex-layout";
-
+import {MediaChange, ObservableMedia} from '@angular/flex-layout';
 
 @Component({
   selector: 'app-home',
