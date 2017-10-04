@@ -303,8 +303,7 @@ button.static-table-button.mat-raised-button {
     text-align: center;
     height:45px;
     margin: 0px;
-    padding: 12px !important;
-    
+    padding: 10px !important;
 }
 
 .cart-subtotals-container {
@@ -371,6 +370,7 @@ button.static-table-button.mat-raised-button {
 }
 
 .line-item-description {
+    width: 95%;
     font-weight: bold;
 }
 
@@ -404,7 +404,6 @@ button.static-table-button.mat-raised-button {
 
 .hamburger-button {
     position: relative;
-    
     line-height: 0 !important;
 }
 
