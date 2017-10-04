@@ -1,5 +1,4 @@
 <div *ngIf="session.screen.type==='Prompt' &&  session.screen.text" class="prompt-container-outer" fxLayout="row" fxLayoutAlign="center center">
-	<div class="toolbar-fill-remaining-space" style="background-color: red"></div>
 	<md-card class="prompt-container" [style.sm]="{'width': '75%'}" [style.xs]="{'width': '85%','top': 'initial'}">
 		 <md-card-content>
 			<app-prompt-input [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
@@ -8,6 +7,4 @@
 			<label class="prompt-text">{{session.screen.text}}</label>
 		</md-card-content> 
 	</md-card>
-	<div class="toolbar-fill-remaining-space" style="background-color: red"></div>
-
 </div>

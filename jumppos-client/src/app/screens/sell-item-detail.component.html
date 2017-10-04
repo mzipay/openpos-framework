@@ -2,11 +2,12 @@
     <md-card-title class="line-item-detail-title">{{item.description}}</md-card-title>
 
     <md-card-content>
-        <div fxLayout="row" fxLayoutAlign="center center" class="line-item-detail-header serrated-edge serrated-edge-bottom">
-            <img *ngIf="item.imageUrl" class="line-item-detail-image"  [style.xs]="{'zoom': '10%'}" [style.sm]="{'zoom': '10%'}" [src]="item.imageUrl" />
+        <div fxLayout="row" fxLayoutAlign="center center" >
+            
             <div fxLayout="column" class="line-item-detail-header serrated-edge serrated-edge-bottom">            
+                    <img *ngIf="item.imageUrl" class="line-item-detail-image"  [style.xs]="{'width': '50%'}" [style.sm]="{'width': '50%'}" [src]="item.imageUrl" />
                     <p>{{item.productDescription}}</p>
-                    <table style="font-size: 22px; align-content: left; text-align: left;">
+                    <table style="font-size: 22px; align-content: left; text-align: left;" [style.xs]="{'font-size': '12px'}">
                             <thead>
                                 <tr>
                                     <th>Item ID</th>
