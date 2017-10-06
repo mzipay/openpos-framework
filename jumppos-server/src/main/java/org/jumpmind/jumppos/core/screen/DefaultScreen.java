@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 public class DefaultScreen implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+/*
     public static final String EMBEDDED_WEB_PAGE = "EmbeddedWebPage";
     public static final String CHOOSE_OPTIONS_SCREEN_TYPE = "ChooseOptions";
     public static final String PROMPT_WITH_OPTIONS_SCREEN_TYPE = "PromptWithOptions";
@@ -25,13 +25,13 @@ public class DefaultScreen implements Serializable {
     public static final String SIGNATURE_CAPTURE_SCREEN_TYPE = "SignatureCapture";
     public static final String SHOW_CART_SCREEN = "Cart";
     public static final String TABLE_SCREEN_TYPE = "Table";
-
+*/
     public static final String TITLE_OPEN_STATUS = "Open";
     public static final String TITLE_CLOSED_STATUS = "Closed";
 
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private String name;
-    private String type;
+    private ScreenType type;
     private MenuItem backButton;
     private Workstation workstation;
     private String operatorName;
@@ -78,11 +78,23 @@ public class DefaultScreen implements Serializable {
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type = ScreenType.valueOf(type);
     }
 
+    public void setType(ScreenType type) {
+        this.type = type;
+    }
+    
     public String getType() {
-        return type;
+        return this.type.name();
+    }
+    
+    public void setScreenType(ScreenType type) {
+        this.type = type;
+    }
+    
+    public ScreenType getScreenType() {
+        return this.type;
     }
 
     @SuppressWarnings("unchecked")

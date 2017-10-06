@@ -1,5 +1,7 @@
 package org.jumpmind.jumppos.kiosk.screen;
 
+import org.jumpmind.jumppos.core.screen.ScreenType;
+
 public class BrowseExternalCatalogScreen extends CartScreen {
 
     private static final long serialVersionUID = 1L;
@@ -8,7 +10,7 @@ public class BrowseExternalCatalogScreen extends CartScreen {
 
     public BrowseExternalCatalogScreen(String url, Cart cart) {
         super(cart);
-        setType(EMBEDDED_WEB_PAGE);
+        setType(ScreenType.EmbeddedWebPage);
         setRefreshAlways(false);
         this.url = url;
         this.cart = cart;

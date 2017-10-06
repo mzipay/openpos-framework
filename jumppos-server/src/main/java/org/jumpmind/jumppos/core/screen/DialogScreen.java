@@ -16,7 +16,7 @@ public class DialogScreen extends DefaultScreen {
     List<String> message = new ArrayList<>();
 
     public DialogScreen() {
-        setType(DIALOG_SCREEN_TYPE);
+        setType(ScreenType.Dialog);
     }
     
     public void setSubType(String subType) {

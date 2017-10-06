@@ -1,13 +1,13 @@
 package org.jumpmind.jumppos.pos.state;
 
-import static org.jumpmind.jumppos.core.screen.DefaultScreen.FORM_SCREEN_TYPE;
 
 import org.jumpmind.jumppos.core.model.annotations.FormButton;
 import org.jumpmind.jumppos.core.model.annotations.FormTextField;
 import org.jumpmind.jumppos.core.model.annotations.Screen;
 import org.jumpmind.jumppos.core.screen.DefaultScreen;
+import org.jumpmind.jumppos.core.screen.ScreenType;
 
-@Screen(name="NodePersonalization", type=FORM_SCREEN_TYPE)
+@Screen(name="NodePersonalization", type=ScreenType.Form)
 public class NodePersonalizationForm extends DefaultScreen {
     
     private static final long serialVersionUID = 1L;

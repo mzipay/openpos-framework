@@ -36,7 +36,7 @@ public class ChooseOptionsScreen extends DefaultScreen {
     }
 
     public ChooseOptionsScreen( List<OptionItem> options, SelectionMode selectionMode ) {
-        setType(CHOOSE_OPTIONS_SCREEN_TYPE);
+        setType(ScreenType.ChooseOptions);
         this.options = options;
         this.selectionMode = selectionMode;
     }

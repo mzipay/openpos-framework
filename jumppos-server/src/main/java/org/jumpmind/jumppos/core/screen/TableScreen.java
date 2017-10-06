@@ -22,7 +22,7 @@ public class TableScreen extends DefaultScreen {
     private List<String> submitActionNames = new ArrayList<>();
     
     public TableScreen() {
-        setType(TABLE_SCREEN_TYPE);
+        setType(ScreenType.Table);
     }
     
     public List<String> getHeaderLabels() {

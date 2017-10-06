@@ -15,7 +15,7 @@ public class PromptScreen extends DefaultScreen implements IPromptScreen {
     private String action = "Next";
 
     public PromptScreen() {
-        setType(PROMPT_SCREEN_TYPE);
+        setType(ScreenType.Prompt);
     }
 
     @Override

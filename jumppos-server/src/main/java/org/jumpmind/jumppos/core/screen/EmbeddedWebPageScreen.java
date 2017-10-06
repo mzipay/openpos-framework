@@ -7,7 +7,7 @@ public class EmbeddedWebPageScreen extends DefaultScreen {
     private String url;
             
     public EmbeddedWebPageScreen() {
-        setType(EMBEDDED_WEB_PAGE);
+        setType(ScreenType.EmbeddedWebPage);
     }
 
     public EmbeddedWebPageScreen(String url) {

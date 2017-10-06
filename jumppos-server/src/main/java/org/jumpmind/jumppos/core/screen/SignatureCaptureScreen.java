@@ -10,7 +10,7 @@ public class SignatureCaptureScreen extends DefaultScreen {
     
 
     public SignatureCaptureScreen() {
-        setType(SIGNATURE_CAPTURE_SCREEN_TYPE);
+        setType(ScreenType.SignatureCapture);
     }
 
     public String getText() {

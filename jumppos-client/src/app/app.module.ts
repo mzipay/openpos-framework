@@ -24,6 +24,7 @@ import { PromptComponent } from './screens/prompt.component';
 import { IconComponent } from './common/controls/icon.component';
 import { PromptInputComponent } from './common/controls/prompt-input.component';
 import { SellComponent } from './screens/sell.component';
+import { BasicItemSearchComponent } from './screens/basic-item-search.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
 import { PromptWithOptionsComponent } from './screens/prompt-with-options.component';
 import { DialogComponent } from './screens/dialog.component';
@@ -39,7 +40,6 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MdDialog, MdDialogRef } from '@angular/material';
-
 
 import {
   MdAutocompleteModule,
@@ -102,6 +102,7 @@ const stompConfig: StompConfig = {
 
 @NgModule({
   entryComponents: [
+    BasicItemSearchComponent,
     CartComponent,
     ChooseOptionsComponent,
     DialogComponent,
@@ -126,6 +127,7 @@ const stompConfig: StompConfig = {
     IconComponent,
     PromptComponent,
     PromptInputComponent,
+    BasicItemSearchComponent,
     ChooseOptionsComponent,
     PromptWithOptionsComponent,
     SignatureCaptureComponent,

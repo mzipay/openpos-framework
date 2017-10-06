@@ -26,7 +26,7 @@ public class PromptWithOptionsScreen extends ChooseOptionsScreen implements IPro
 
     public PromptWithOptionsScreen(List<OptionItem> options, SelectionMode selectionMode) {
         super(options, selectionMode);
-        setType(PROMPT_WITH_OPTIONS_SCREEN_TYPE);
+        setType(ScreenType.PromptWithOptions);
     }
 
     @Override

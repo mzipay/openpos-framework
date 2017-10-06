@@ -6,6 +6,7 @@ import java.util.List;
 import org.jumpmind.jumppos.core.screen.SellItem;
 import org.jumpmind.jumppos.core.screen.Transaction;
 import org.jumpmind.jumppos.core.screen.PromptScreen;
+import org.jumpmind.jumppos.core.screen.ScreenType;
 
 public class SellItemScreen extends PromptScreen {
 
@@ -21,7 +22,7 @@ public class SellItemScreen extends PromptScreen {
     private Transaction transaction = new Transaction();
 
     public SellItemScreen() {
-        this.setType(SELL_SCREEN_TYPE);
+        this.setType(ScreenType.Sell);
     }
 
     public List<SellItem> getItems() {

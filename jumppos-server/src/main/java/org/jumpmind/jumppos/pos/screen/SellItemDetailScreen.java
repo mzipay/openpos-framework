@@ -7,6 +7,7 @@ import org.jumpmind.jumppos.core.screen.DefaultScreen;
 import org.jumpmind.jumppos.core.screen.SellItem;
 import org.jumpmind.jumppos.core.screen.Transaction;
 import org.jumpmind.jumppos.core.screen.MenuItem;
+import org.jumpmind.jumppos.core.screen.ScreenType;
 
 public class SellItemDetailScreen extends DefaultScreen {
 
@@ -17,7 +18,7 @@ public class SellItemDetailScreen extends DefaultScreen {
     private Transaction transaction = new Transaction();
 
     public SellItemDetailScreen() {
-        setType(SELL_ITEM_DETAIL_SCREEN_TYPE);
+        setType(ScreenType.SellItemDetail);
     }
 
     public List<MenuItem> getItemActions() {

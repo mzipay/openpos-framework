@@ -1,3 +1,4 @@
+import { BasicItemSearchComponent } from './screens/basic-item-search.component';
 import { CartComponent } from './kiosk/cart.component';
 import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component';
 import { PromptComponent } from './screens/prompt.component';
@@ -27,6 +28,7 @@ export class ScreenService {
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {
     // To make a screen available add it here and in entryComponents in the app.module.ts
+    this.screens.set('BasicItemSearch', BasicItemSearchComponent);
     this.screens.set('Cart', CartComponent);
     this.screens.set('ChooseOptions', ChooseOptionsComponent);
     this.screens.set('EmbeddedWebPage', EmbeddedWebPageComponent);

@@ -18,6 +18,7 @@ import org.jumpmind.jumppos.core.model.annotations.FormButton;
 import org.jumpmind.jumppos.core.model.annotations.FormTextField;
 import org.jumpmind.jumppos.core.screen.DefaultScreen;
 import org.jumpmind.jumppos.core.screen.DialogScreen;
+import org.jumpmind.jumppos.core.screen.ScreenType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +96,7 @@ public class ScreenService implements IScreenService {
             Object payload = screen;
             try {
                 applyAnnotations(screen);
-                if (screen.getType() != null && screen.getType().equals(DefaultScreen.FORM_SCREEN_TYPE)) {
+                if (screen.getType() != null && screen.getScreenType() == ScreenType.Form) {
                     Form form = buildForm(screen);
                     screen.put("form", form);
                 }
@@ -122,7 +123,7 @@ public class ScreenService implements IScreenService {
         Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
-            if (lastScreen != null && lastScreen.getType() != null && lastScreen.getType().equals(DefaultScreen.FORM_SCREEN_TYPE)) {
+            if (lastScreen != null && lastScreen.getType() != null && lastScreen.getScreenType() == ScreenType.Form) {
                 Form form = mapper.convertValue(action.getData(), Form.class);
                 return populateFormScreen(appId, nodeId, form);
 
