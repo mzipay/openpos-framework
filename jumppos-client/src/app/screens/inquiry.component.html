@@ -1,0 +1,76 @@
+<md-card>
+        <md-card-content style="height: 650px; overflow-y: auto;">
+            <div fxLayout="row">
+                <md-card>
+                    <md-card-subtitle>Filter by:</md-card-subtitle>
+                    <md-form-field style="width: 100%;">
+                        <input mdInput placeholder="SKU or UPC">
+                    </md-form-field>
+                    <md-form-field style="width: 100%;">
+                        <input mdInput placeholder="Description">
+                    </md-form-field>
+                    <md-form-field style="width: 100%;">
+                        <input mdInput placeholder="Mfg Part #">
+                    </md-form-field>
+                </md-card>
+            </div>
+
+            <div fxLayout="row" fxLayoutWrap>
+                <md-card>
+                    <md-card-subtitle>Department</md-card-subtitle>
+                    <md-card-content>
+                        <md-selection-list dense style="height: 200px; overflow-y: auto;">
+                            <md-list-option *ngFor="let dept of departments">
+                                <h4 md-line>{{dept.name}}</h4>
+                            </md-list-option>
+                        </md-selection-list>
+                    </md-card-content>
+                </md-card>
+
+                <md-card>
+                    <md-card-subtitle>Class</md-card-subtitle>
+                    <md-selection-list dense style="height: 200px; overflow-y: auto;">
+                        <md-list-option *ngFor="let clz of itemClasses">
+                            <h4 md-line>{{clz.name}}</h4>
+                        </md-list-option>
+                    </md-selection-list>
+                </md-card>
+                <md-card>
+                    <md-card-subtitle>Merchandise Category</md-card-subtitle>
+                    <md-selection-list dense style="height: 200px; overflow-y: auto;">
+                        <md-list-option *ngFor="let merchCat of merchandiseCategories">
+                            <h4 md-line>{{merchCat.name}}</h4>
+                        </md-list-option>
+                    </md-selection-list>
+                </md-card>
+            </div>
+        </md-card-content>
+    <md-card-actions>
+        <button md-button>Search</button>
+    </md-card-actions>
+</md-card>
+<!--
+<div>
+    <md-card>
+        <md-grid-list cols="3" rowHeight="2:1">
+                <md-grid-tile>
+                        <md-card style="height: 200px">
+                                <md-card-subtitle>Department</md-card-subtitle>
+                                <md-card-content style="overflow-y: auto">
+                                    <md-selection-list dense>
+                                        <md-list-option *ngFor="let dept of departments">
+                                            <h4 md-line>{{dept.name}}</h4>
+                                        </md-list-option>
+                                        <md-divider></md-divider>
+                                    </md-selection-list>
+                                </md-card-content>
+                            </md-card>
+                
+                </md-grid-tile>
+                <md-grid-tile>2</md-grid-tile>
+                <md-grid-tile>3</md-grid-tile>
+              </md-grid-list>
+</md-card>                  
+                  
+</div>
+-->

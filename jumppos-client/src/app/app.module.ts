@@ -1,3 +1,4 @@
+import { InquiryComponent } from './screens/inquiry.component';
 import { CartComponent } from './kiosk/cart.component';
 import { SafePipe } from './common/safe.pipe';
 import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component';
@@ -38,6 +39,7 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MdDialog, MdDialogRef } from '@angular/material';
+
 
 import {
   MdAutocompleteModule,
@@ -115,6 +117,7 @@ const stompConfig: StompConfig = {
     StaticTableComponent
   ],
   declarations: [
+    InquiryComponent,
     AppComponent,
     PosComponent,
     KioskComponent,

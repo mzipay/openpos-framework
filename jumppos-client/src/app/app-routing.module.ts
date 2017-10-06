@@ -1,3 +1,4 @@
+import { InquiryComponent } from './screens/inquiry.component';
 import { PosComponent } from './pos/pos.component';
 import { KioskComponent } from './kiosk/kiosk.component';
 import { NgModule } from '@angular/core';
@@ -7,6 +8,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/pos', pathMatch: 'full' },
   { path: 'pos',  component: PosComponent },
   { path: 'kiosk',  component: KioskComponent },
+  { path: 'inquiry', component: InquiryComponent }
 ];
 
 @NgModule({
