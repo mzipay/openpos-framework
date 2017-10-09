@@ -1,0 +1,28 @@
+<md-card>
+    <md-card-content style="height: 650px; overflow-y: auto;">
+        <div fxLayout="row">
+            <md-card>
+                <md-card-subtitle>Filter by:</md-card-subtitle>
+                <md-form-field *ngFor="let field of searchFieldForm.formElements" style="width: 100%;">
+                    <input mdInput placeholder="{{field.placeholder}}">
+                </md-form-field>
+            </md-card>
+        </div>
+
+        <div fxLayout="row" fxLayoutWrap>
+            <md-card *ngFor="let category of searchCategories; let catIdx=index">
+                <md-card-subtitle>{{category.attributes.name}}</md-card-subtitle>
+                <md-card-content>
+                    <md-selection-list dense style="height: 200px; overflow-y: auto;">
+                        <md-list-option *ngFor="let val of searchCategoryValues[catIdx].values">
+                            <h4 md-line>{{val.attributes.name}}</h4>
+                        </md-list-option>
+                    </md-selection-list>
+                </md-card-content>
+            </md-card>
+        </div>
+    </md-card-content>
+    <md-card-actions>
+        <button *ngFor="let submitAction of submitActionNames" md-button>{{submitAction}}</button>
+    </md-card-actions>
+</md-card>

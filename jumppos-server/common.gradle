@@ -18,7 +18,7 @@ eclipse {
 }
 
 ext {
-   springBootVersion = '1.5.4.RELEASE'
+   springBootVersion = '1.5.7.RELEASE'
    springVersion = '4.3.9.RELEASE'
    jnaVersion = '4.1.0'
 }

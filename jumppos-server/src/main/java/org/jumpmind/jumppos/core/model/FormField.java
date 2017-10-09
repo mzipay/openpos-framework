@@ -10,6 +10,28 @@ public class FormField implements IFormElement {
     private String placeholder;
     private String pattern;
 
+    public FormField() {
+    }
+    
+    public FormField(String fieldId, String placeholder) {
+        this.fieldId = fieldId;
+        this.placeholder = placeholder;
+    }
+
+    public FormField(String fieldId, String label, String placeholder) {
+        this.fieldId = fieldId;
+        this.label = label;
+        this.placeholder = placeholder;
+    }
+    
+    public FormField(String fieldId, String label, String elementType, String inputType, String placeholder) {
+        this.fieldId = fieldId;
+        this.label = label;
+        this.elementType = elementType;
+        this.inputType = inputType;
+        this.placeholder = placeholder;
+    }
+    
     public String getInputType() {
         return inputType;
     }

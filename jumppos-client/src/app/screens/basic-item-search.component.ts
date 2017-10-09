@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { IForm } from './form.component';
+import { Component, OnInit } from '@angular/core';
 import { SessionService } from '../session.service';
 import { IScreen } from '../common/iscreen';
 
@@ -6,11 +7,48 @@ import { IScreen } from '../common/iscreen';
   selector: 'app-basic-item-search',
   templateUrl: './basic-item-search.component.html'
 })
-export class BasicItemSearchComponent implements IScreen {
+export class BasicItemSearchComponent implements IScreen, OnInit {
+
+  searchCategories: SearchCategory[];
+  searchCategoryStructure: SearchCategoryStructure;
+  searchCategoryValues: SearchCategoryValue[];
+  searchFieldForm: IForm;
+  // Name of action specified by server side which should behave like
+  // a form submission
+  submitActionNames: string[] = [];
 
   constructor(public session: SessionService) {
   }
+
   show(session: SessionService) {
   }
 
+  ngOnInit(): void {
+    this.searchCategories = this.session.screen.searchCategories;
+    this.searchCategoryStructure = this.session.screen.searchCategoryStructure;
+    this.searchCategoryValues = this.session.screen.searchCategoryValues;
+    this.searchFieldForm = this.session.screen.searchFieldForm;
+    this.submitActionNames = this.session.screen.submitActionNames;
+  }
+}
+
+export interface SearchCategory {
+  attributes: Map<string, any>;
+  searchCategoryType: SearchCategoryType;
+
+}
+
+export interface SearchCategoryValue {
+  attributes: Map<string, any>;
+  subCategoryValues: SearchCategoryValue[];
+}
+
+export enum SearchCategoryType {
+  ROOT,
+  SUBCATEGORY
+}
+
+export enum SearchCategoryStructure {
+  FLAT,
+  HIERARCHICAL
 }
