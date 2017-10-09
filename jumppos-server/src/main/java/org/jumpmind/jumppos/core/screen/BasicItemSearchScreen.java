@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.jumpmind.jumppos.core.model.Form;
 import org.slf4j.Logger;
@@ -93,13 +94,36 @@ public class BasicItemSearchScreen extends DefaultScreen {
         };
         
         private Map<String, Object> attributes = new HashMap<>();
+        private SearchCategoryType searchCategoryType = SearchCategoryType.ROOT;
         
-        public void setAttribute(String attributeName, Object value) {
+        public SearchCategory() {
+        }
+        public SearchCategory(SearchCategoryType searchCategoryType) {
+            this.searchCategoryType = searchCategoryType;
+        }
+        
+        public SearchCategory setAttribute(String attributeName, Object value) {
             this.attributes.put(attributeName, value);
+            return this;
         }
         
         public Object getAttribute(String attributeName) {
             return this.attributes.get(attributeName);
+        }
+        public SearchCategoryType getSearchCategoryType() {
+            return searchCategoryType;
+        }
+        public SearchCategory setSearchCategoryType(SearchCategoryType searchCategoryType) {
+            this.searchCategoryType = searchCategoryType;
+            return this;
+        }
+        
+        public Map<String, Object> getAttributes() {
+            return Collections.unmodifiableMap(this.attributes);
+        }
+        
+        public void setAttributes(Map<String, Object> attributes) {
+            this.attributes = attributes;
         }
     }
     
@@ -107,14 +131,24 @@ public class BasicItemSearchScreen extends DefaultScreen {
         public static final String ATTR_NAME = "name";
         
         private Map<String, Object> attributes = new HashMap<>();
-        private List<SearchCategoryValue> subCategoryValues = new ArrayList<>();
+        private Optional<List<SearchCategoryValue>> subCategoryValues = Optional.empty();
         
-        public List<SearchCategoryValue> getSubCategoryValues() {
-            return Collections.unmodifiableList(this.subCategoryValues);
+        public SearchCategoryValue() {
+        }
+        
+        public SearchCategoryValue(String attributeName, Object attributeValue) {
+            this.setAttribute(attributeName, attributeValue);
+        }
+        
+        public Optional<List<SearchCategoryValue>> getSubCategoryValues() {
+            return this.subCategoryValues.map(s -> Collections.unmodifiableList(s));
         }
         
         public void addSubCategoryValue(SearchCategoryValue searchCategoryValue) {
-            this.subCategoryValues.add(searchCategoryValue);
+            if (! this.subCategoryValues.isPresent()) {
+                this.subCategoryValues = Optional.of(new ArrayList<>());
+            }
+            this.subCategoryValues.get().add(searchCategoryValue);
         }
         
         public void setAttribute(String attributeName, Object value) {
@@ -125,5 +159,13 @@ public class BasicItemSearchScreen extends DefaultScreen {
             return this.attributes.get(attributeName);
         }
        
+        public Map<String, Object> getAttributes() {
+            return Collections.unmodifiableMap(this.attributes);
+        }
+        
+        public void setAttributes(Map<String, Object> attributes) {
+            this.attributes = attributes;
+        }
+        
     }
 }

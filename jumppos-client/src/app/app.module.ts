@@ -154,7 +154,6 @@ const stompConfig: StompConfig = {
     FlexLayoutModule,
     BrowserAnimationsModule,
     MdAutocompleteModule,
-    MdButtonModule,
     MdButtonToggleModule,
     MdCardModule,
     MdCheckboxModule,
