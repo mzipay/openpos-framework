@@ -1,8 +1,7 @@
 import { IconComponent } from './../common/controls/icon.component';
 import { IScreen } from '../common/iscreen';
 import { IMenuItem } from '../common/imenuitem';
-// import {MdButtonModule, MdCheckboxModule} from '@angular/material';
-import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { SessionService } from '../session.service';
 import {MediaChange, ObservableMedia} from '@angular/flex-layout';
 
@@ -10,11 +9,11 @@ import {MediaChange, ObservableMedia} from '@angular/flex-layout';
   selector: 'app-home',
   templateUrl: './home.component.html'
 })
-export class HomeComponent implements AfterViewInit, DoCheck, IScreen {
+export class HomeComponent implements IScreen, OnInit {
 
   public menuItems: IMenuItem[];
-  gutterSize: number = 40;
-  gridColumns: number = 3;
+  gutterSize = 40;
+  gridColumns = 3;
 
   constructor(public session: SessionService, public media: ObservableMedia) {
     this.menuItems = session.screen.menuItems;
@@ -27,21 +26,14 @@ export class HomeComponent implements AfterViewInit, DoCheck, IScreen {
     });
   }
 
-  private updateGrid(): void {  
-    let isLarge = (this.media.isActive('xl') || this.media.isActive('lg') || this.media.isActive('md'));
-    let isSmall = (this.media.isActive('sm'));
+  private updateGrid(): void {
+    const isLarge = (this.media.isActive('xl') || this.media.isActive('lg') || this.media.isActive('md'));
+    const isSmall = (this.media.isActive('sm'));
     this.gridColumns = isLarge ? 3 : (isSmall ? 2 : 1);
     this.gutterSize = isLarge ? 20 : 10;
-  }  
+  }
 
   show(session: SessionService) {
-  }
-
-  ngDoCheck(): void {
-  }
-
-  ngAfterViewInit(): void {
-    console.log('Home Screen');
   }
 
   onEnter(value: string) {
@@ -49,7 +41,7 @@ export class HomeComponent implements AfterViewInit, DoCheck, IScreen {
   }
 
   getClass(): String {
-    //return 'main-menu-grid-list';
+    // return 'main-menu-grid-list';
     return 'foo';
   }
 }

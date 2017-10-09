@@ -18,6 +18,7 @@ import org.jumpmind.jumppos.core.model.annotations.FormButton;
 import org.jumpmind.jumppos.core.model.annotations.FormTextField;
 import org.jumpmind.jumppos.core.screen.DefaultScreen;
 import org.jumpmind.jumppos.core.screen.DialogScreen;
+import org.jumpmind.jumppos.core.screen.FormScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +96,7 @@ public class ScreenService implements IScreenService {
             Object payload = screen;
             try {
                 applyAnnotations(screen);
-                if (screen.getType() != null && screen.getType().equals(DefaultScreen.FORM_SCREEN_TYPE)) {
+                if (screen.getType() != null && screen.getType().equals(DefaultScreen.FORM_SCREEN_TYPE) && !(screen instanceof FormScreen)) {
                     Form form = buildForm(screen);
                     screen.put("form", form);
                 }
