@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DefaultScreen implements Serializable {
 
@@ -41,6 +42,9 @@ public class DefaultScreen implements Serializable {
     private boolean showStatusBar = true;
     private int sequenceNumber;
     private boolean refreshAlways = false;
+    
+    private ObjectMapper mapper = new ObjectMapper();
+
 
     private List<MenuItem> menuItems = new ArrayList<>();
 
@@ -69,6 +73,10 @@ public class DefaultScreen implements Serializable {
         return additionalProperties.get(name);
     }
 
+    public void clearAdditionalProperties() {
+        this.additionalProperties.clear();
+    }
+    
     public void setName(String name) {
         this.name = name;
     }
@@ -141,6 +149,10 @@ public class DefaultScreen implements Serializable {
         this.menuItems = menuItem;
     }
 
+    public void clearMenuItems() {
+        this.menuItems.clear();
+    }
+    
     public String getOperatorName() {
         return operatorName;
     }
@@ -205,4 +217,7 @@ public class DefaultScreen implements Serializable {
         return refreshAlways;
     }
 
+    public <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
+        return this.mapper.convertValue(actionData, convertToInstanceOf);
+    }
 }

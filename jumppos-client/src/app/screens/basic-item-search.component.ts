@@ -30,6 +30,12 @@ export class BasicItemSearchComponent implements IScreen, OnInit {
     this.searchFieldForm = this.session.screen.searchFieldForm;
     this.submitActionNames = this.session.screen.submitActionNames;
   }
+
+  onValueSelected(value: SearchCategoryValue, categoryName: string): void {
+    value.selected = true;
+    this.session.response = value;
+    this.session.onAction(`on${categoryName}Selected`);
+  }
 }
 
 export interface SearchCategory {
@@ -40,7 +46,8 @@ export interface SearchCategory {
 
 export interface SearchCategoryValue {
   attributes: Map<string, any>;
-  subCategoryValues: SearchCategoryValue[];
+  values: SearchCategoryValue[];
+  selected: boolean;
 }
 
 export enum SearchCategoryType {

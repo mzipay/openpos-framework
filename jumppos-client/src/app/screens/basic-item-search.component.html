@@ -14,7 +14,10 @@
                 <md-card-subtitle>{{category.attributes.name}}</md-card-subtitle>
                 <md-card-content>
                     <md-selection-list dense style="height: 200px; overflow-y: auto;">
-                        <md-list-option *ngFor="let val of searchCategoryValues[catIdx].values">
+                        <!-- TODO: only invoke callbacks when in callback mode -->
+                        <md-list-option *ngFor="let val of searchCategoryValues[catIdx].values" 
+                            (click)="onValueSelected(val, searchCategoryValues[catIdx].attributes.name)"
+                            [selected]="val.selected">
                             <h4 md-line>{{val.attributes.name}}</h4>
                         </md-list-option>
                     </md-selection-list>

@@ -10,10 +10,12 @@ import org.jumpmind.jumppos.core.model.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 public class BasicItemSearchScreen extends DefaultScreen {
     private static final long serialVersionUID = 1L;
     @SuppressWarnings("unused")
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    
 
     public enum ItemRetrievalMode {
         ALL,
@@ -56,10 +58,18 @@ public class BasicItemSearchScreen extends DefaultScreen {
         this.searchCategoryValues.add(searchCategoryValue);
     }
     
+    public void clearSearchCategories() {
+        this.searchCategories.clear();
+    }
+    
     public List<SearchCategory> getSearchCategories() {
         return Collections.unmodifiableList(this.searchCategories);
     }
 
+    public void clearSearchCategoryValues() {
+        this.searchCategoryValues.clear();
+    }
+    
     public List<SearchCategoryValue> getSearchCategoryValues() {
         return Collections.unmodifiableList(this.searchCategoryValues);
     }
@@ -86,6 +96,10 @@ public class BasicItemSearchScreen extends DefaultScreen {
 
     public void setSearchFieldForm(Form searchFieldForm) {
         this.searchFieldForm = searchFieldForm;
+    }
+    
+    public void clearSubmitActionNames() {
+        this.submitActionNames.clear();
     }
     
     public List<String> getSubmitActionNames() {
@@ -146,12 +160,25 @@ public class BasicItemSearchScreen extends DefaultScreen {
         
         private Map<String, Object> attributes = new HashMap<>();
         private List<SearchCategoryValue> values = new ArrayList<>();
+        private boolean selected = false;
+        private String id;
         
         public SearchCategoryValue() {
         }
         
         public SearchCategoryValue(String attributeName, Object attributeValue) {
             this.setAttribute(attributeName, attributeValue);
+        }
+        
+        public SearchCategoryValue(String attributeName, Object attributeValue, boolean selected) {
+            this.setAttribute(attributeName, attributeValue);
+            this.selected = selected;
+        }
+        
+        public SearchCategoryValue(String id, String attributeName, Object attributeValue, boolean selected) {
+            this.id = id;
+            this.setAttribute(attributeName, attributeValue);
+            this.selected = selected;
         }
         
         public List<SearchCategoryValue> getValues() {
@@ -176,6 +203,22 @@ public class BasicItemSearchScreen extends DefaultScreen {
         
         public void setAttributes(Map<String, Object> attributes) {
             this.attributes = attributes;
+        }
+
+        public boolean isSelected() {
+            return selected;
+        }
+
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
         }
         
     }
