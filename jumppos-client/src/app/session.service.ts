@@ -35,6 +35,10 @@ export class SessionService {
     return '/topic/app/' + this.appId + '/node/' + this.nodeId;
   }
 
+  public connected(): boolean {
+    return this.stompService.connected();
+  }
+
   public subscribe(appName: String) {
     if (this.subscribed) {
       return;

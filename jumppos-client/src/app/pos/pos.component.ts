@@ -4,7 +4,7 @@ import { IMenuItem } from '../common/imenuitem';
 import { Component, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';
 import { FocusDirective } from '../common/focus.directive';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { IconService } from './../icon.service';
 
 @Component({
@@ -19,8 +19,9 @@ export class PosComponent extends AbstractApp implements DoCheck {
   public backButton: IMenuItem;
   public isCollapsed = true;
 
-  constructor(screenService: ScreenService, public session: SessionService, public dialog: MdDialog, iconService: IconService) {
-    super(screenService, session, dialog, iconService);
+  constructor(public screenService: ScreenService, public session: SessionService, public dialog: MdDialog,
+    public iconService: IconService, public snackBar: MdSnackBar) {
+    super(screenService, session, dialog, iconService, snackBar);
   }
 
   protected appName(): String {

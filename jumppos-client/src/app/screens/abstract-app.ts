@@ -10,7 +10,8 @@ import { Type, ViewChild, ComponentFactory } from '@angular/core';
 import { SessionService } from '../session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
 import { FocusDirective } from '../common/focus.directive';
-import { MdDialog, MdDialogRef, MdIconRegistry } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
+import { MdDialog, MdDialogRef, MdIconRegistry, MdSnackBar, MdSnackBarRef, SimpleSnackBar } from '@angular/material';
 
 export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
@@ -20,11 +21,17 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
     private previousScreenSequenceNumber: number;
 
+    private snackBarRef: MdSnackBarRef<SimpleSnackBar>;
+
     @ViewChild(ScreenDirective) host: ScreenDirective;
 
-    constructor(private screenService: ScreenService,
-        public session: SessionService, public dialog: MdDialog,
-        public iconService: IconService) {
+
+
+    constructor(public screenService: ScreenService,
+        public session: SessionService,
+        public dialog: MdDialog,
+        public iconService: IconService,
+        public snackBar: MdSnackBar) {
     }
 
     protected abstract appName(): String;
@@ -33,6 +40,23 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
         this.session.unsubscribe();
         this.session.subscribe(this.appName());
         this.iconService.registerLocalSvgIcons();
+        const timer = Observable.timer(1000, 1000);
+        timer.subscribe(t => this.checkConnectionStatus(this.session));
+    }
+
+    protected checkConnectionStatus(session: SessionService): void {
+        const connected = session.connected();
+       if (!connected && !this.snackBarRef) {
+           this.snackBarRef = this.snackBar.open('The server is disconnected', 'Dismiss', {
+               duration: 60000, viewContainerRef: null
+            });
+            this.snackBarRef.afterDismissed().subscribe(() => {
+                this.snackBarRef = null;
+              });
+       } else if (connected) {
+           this.snackBar.dismiss();
+           this.snackBarRef = null;
+       }
     }
 
     ngOnDestroy(): void {
