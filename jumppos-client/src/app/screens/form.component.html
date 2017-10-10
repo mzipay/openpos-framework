@@ -1,10 +1,10 @@
 <ng-container *ngIf="session.screen.type==='Form'">
 	<md-card>
-		<md-card-title>Register Personalization</md-card-title>
-		<md-card-content>
-			<ng-container *ngFor="let formElement of form.formElements">
+		<md-card-title>{{session.screen.form.name}}</md-card-title>
+		<md-card-content>						
+			<ng-container *ngFor="let formElement of session.screen.form.formElements">
 				<div *ngIf="formElement.elementType==='input'">
-					<md-input-container>
+					<md-input-container style="width:100%">
 						<input [(ngModel)]="formElement.value" #field="ngModel" mdInput placeholder="{{formElement.label + ' - ' + formElement.placeholder}}"
 						 [pattern]="formElement.pattern" required>
 						<ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
@@ -17,8 +17,14 @@
 						</ng-container>
 					</md-input-container>
 				</div>
+				<div *ngIf="formElement.elementType==='display'">
+					<md-input-container  style="width:100%">
+					    <label class="prompt-text">{{formElement.label}}</label>
+						<input [(ngModel)]="formElement.value" #field="ngModel" mdInput disabled>
+					</md-input-container>
+				</div>				
 			</ng-container>
-			<ng-container *ngFor="let formElement of form.formElements">
+			<ng-container *ngFor="let formElement of session.screen.form.formElements">
 				<div *ngIf="formElement.elementType==='button'">
 					<button md-raised-button [color]="'primary'" (click)="session.response=form; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>
 				</div>

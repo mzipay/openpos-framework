@@ -30,6 +30,7 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen {
 }
 
 export interface IForm {
+    name: string;
     formElements: IFormElement[];
 }
 

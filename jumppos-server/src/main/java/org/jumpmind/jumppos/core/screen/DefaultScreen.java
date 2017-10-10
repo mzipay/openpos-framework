@@ -13,20 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DefaultScreen implements Serializable {
 
     private static final long serialVersionUID = 1L;
-/*
-    public static final String EMBEDDED_WEB_PAGE = "EmbeddedWebPage";
-    public static final String CHOOSE_OPTIONS_SCREEN_TYPE = "ChooseOptions";
-    public static final String PROMPT_WITH_OPTIONS_SCREEN_TYPE = "PromptWithOptions";
-    public static final String DIALOG_SCREEN_TYPE = "Dialog";
-    public static final String FORM_SCREEN_TYPE = "Form";
-    public static final String PAYMENT_STATUS = "PaymentStatus";
-    public static final String PROMPT_SCREEN_TYPE = "Prompt";
-    public static final String SELL_ITEM_DETAIL_SCREEN_TYPE = "SellItemDetail";
-    public static final String SELL_SCREEN_TYPE = "Sell";
-    public static final String SIGNATURE_CAPTURE_SCREEN_TYPE = "SignatureCapture";
-    public static final String SHOW_CART_SCREEN = "Cart";
-    public static final String TABLE_SCREEN_TYPE = "Table";
-*/
     public static final String TITLE_OPEN_STATUS = "Open";
     public static final String TITLE_CLOSED_STATUS = "Closed";
 
