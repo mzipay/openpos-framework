@@ -39,7 +39,13 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
     this.session.onAction(`on${categoryName}Selected`);
   }
 
+  onSubmitAction(submitAction: string): void {
+    // TODO: left off here
+  }
+  
   protected refreshContent(): void {
+    // Loop over each category to determine if the values need updated
+    // Screen changed, re-init
     for (let catIdx = 0; catIdx < this.session.screen.searchCategoryValues.length; catIdx++) {
       const srcSearchCategoryValues = this.session.screen.searchCategoryValues[catIdx];
       if (srcSearchCategoryValues.attributes.valuesChanged) {
@@ -67,8 +73,6 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
 
   ngDoCheck(): void {
     if (this.session.screen.sequenceNumber !== this.lastSequenceNum) {
-        // Loop over each category to determine if the values need updated
-        // Screen changed, re-init
         this.refreshContent();
         this.lastSequenceNum = this.session.screen.sequenceNumber;
     }
