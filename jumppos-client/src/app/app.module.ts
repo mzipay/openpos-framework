@@ -1,4 +1,4 @@
-import { InquiryComponent } from './screens/inquiry.component';
+import { InquiryComponent } from './screens/inquiry.component'; // TODO: remove when done experimenting with item search
 import { CartComponent } from './kiosk/cart.component';
 import { SafePipe } from './common/safe.pipe';
 import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component';
@@ -118,7 +118,7 @@ const stompConfig: StompConfig = {
     StaticTableComponent
   ],
   declarations: [
-    InquiryComponent,
+    InquiryComponent, // TODO: remove when done experimenting with item search
     AppComponent,
     PosComponent,
     KioskComponent,
