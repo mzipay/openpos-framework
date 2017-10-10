@@ -1,10 +1,13 @@
 package org.jumpmind.jumppos.core.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Form {
+public class Form implements Serializable {
     
+    private static final long serialVersionUID = 1L;
+
     private List<IFormElement> formElements = new ArrayList<IFormElement>();
     
     private String name;

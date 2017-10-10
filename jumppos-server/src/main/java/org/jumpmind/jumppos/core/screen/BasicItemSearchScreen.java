@@ -1,5 +1,6 @@
 package org.jumpmind.jumppos.core.screen;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -114,7 +115,9 @@ public class BasicItemSearchScreen extends DefaultScreen {
         this.getSubmitActionNames().add(submitActionName);
     }
 
-    static public class SearchCategory {
+    static public class SearchCategory implements Serializable {
+        private static final long serialVersionUID = 1L;
+        
         public static final String NAME_ATTR = "name";
         public enum SearchCategoryType {
             ROOT,
@@ -168,7 +171,10 @@ public class BasicItemSearchScreen extends DefaultScreen {
         }
     }
     
-    static public class SearchCategoryValue {
+    static public class SearchCategoryValue implements Serializable {
+        
+        private static final long serialVersionUID = 1L;
+
         public static final String NAME_ATTR = "name";
         
         private Map<String, Object> attributes = new HashMap<>();

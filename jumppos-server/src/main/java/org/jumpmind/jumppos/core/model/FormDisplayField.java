@@ -1,7 +1,10 @@
 package org.jumpmind.jumppos.core.model;
 
-public class FormDisplayField implements IFormElement {
+import java.io.Serializable;
 
+public class FormDisplayField implements IFormElement, Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String elementType = "display";
     private String label;
     private String fieldId;
