@@ -121,8 +121,14 @@ public class BasicItemSearchScreen extends DefaultScreen {
             SUBCATEGORY
         };
         
+        public enum SelectionMode {
+            Single,
+            Multiple
+        }
+        
         private Map<String, Object> attributes = new HashMap<>();
         private SearchCategoryType searchCategoryType = SearchCategoryType.ROOT;
+        private SelectionMode selectionMode = SelectionMode.Single;
         
         public SearchCategory() {
         }
@@ -153,6 +159,13 @@ public class BasicItemSearchScreen extends DefaultScreen {
         public void setAttributes(Map<String, Object> attributes) {
             this.attributes = attributes;
         }
+        
+        public SelectionMode getSelectionMode() {
+            return selectionMode;
+        }
+        public void setSelectionMode(SelectionMode selectionMode) {
+            this.selectionMode = selectionMode;
+        }
     }
     
     static public class SearchCategoryValue {
@@ -161,7 +174,7 @@ public class BasicItemSearchScreen extends DefaultScreen {
         private Map<String, Object> attributes = new HashMap<>();
         private List<SearchCategoryValue> values = new ArrayList<>();
         private boolean selected = false;
-        private String id;
+        private Integer index;
         
         public SearchCategoryValue() {
         }
@@ -175,8 +188,8 @@ public class BasicItemSearchScreen extends DefaultScreen {
             this.selected = selected;
         }
         
-        public SearchCategoryValue(String id, String attributeName, Object attributeValue, boolean selected) {
-            this.id = id;
+        public SearchCategoryValue(Integer index, String attributeName, Object attributeValue, boolean selected) {
+            this.index = index;
             this.setAttribute(attributeName, attributeValue);
             this.selected = selected;
         }
@@ -213,12 +226,12 @@ public class BasicItemSearchScreen extends DefaultScreen {
             this.selected = selected;
         }
 
-        public String getId() {
-            return id;
+        public Integer getIndex() {
+            return index;
         }
 
-        public void setId(String id) {
-            this.id = id;
+        public void setIndex(Integer index) {
+            this.index = index;
         }
         
     }
