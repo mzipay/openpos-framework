@@ -1,9 +1,9 @@
 <div class="prompt-input-container">
     <p>
         <input #box *ngIf="responseType==='ALPHANUMERICPASSWORD'" class="prompt-input" type='password' (keyup.enter)="onEnter($event)"
-            [(ngModel)]="responseText" placeholder="{{placeholderText}}">
+            [(ngModel)]="responseText" placeholder="{{placeholderText}}" [appFocus]="true">
         <input #box *ngIf="responseType==='ALPHANUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)"
-            [(ngModel)]="responseText" placeholder="{{placeholderText}}">
+            [(ngModel)]="responseText" placeholder="{{placeholderText}}"  [appFocus]="true">
         <input #box *ngIf="responseType==='CURRENCYTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)" [(ngModel)]="responseText"
             placeholder="{{placeholderText}}">
         <input #box *ngIf="responseType==='NUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)" [(ngModel)]="responseText"
