@@ -1,7 +1,10 @@
 package org.jumpmind.jumppos.core.model;
 
-public class FormButton implements IFormElement {
+import java.io.Serializable;
 
+public class FormButton implements IFormElement, Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String elementType = "button";
     private String label;
     private String buttonAction;

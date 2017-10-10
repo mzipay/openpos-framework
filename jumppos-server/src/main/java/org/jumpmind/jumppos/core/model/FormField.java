@@ -1,7 +1,10 @@
 package org.jumpmind.jumppos.core.model;
 
-public class FormField implements IFormElement {
+import java.io.Serializable;
 
+public class FormField implements IFormElement, Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String elementType = "input";
     private String inputType = "text";
     private String label;

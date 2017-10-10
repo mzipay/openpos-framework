@@ -1,11 +1,14 @@
 package org.jumpmind.jumppos.core.screen;
 
+import java.io.Serializable;
+
 /**
  * Indicates that the icon is hosted locally on the client and should be resolved
  * in the context of the client UI.
  */
-public class LocalIcon implements IIcon {
-
+public class LocalIcon implements IIcon, Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String name;
     
     public LocalIcon(String name) {
