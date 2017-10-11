@@ -40,9 +40,15 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
   }
 
   onSubmitAction(submitAction: string): void {
-    // TODO: left off here
+    this.session.response = {
+      'searchCategories': this.searchCategories,
+      'searchCategoryStructure': this.searchCategoryStructure,
+      'searchCategoryValues': this.searchCategoryValues,
+      'searchFieldForm': this.searchFieldForm
+    };
+    this.session.onAction(submitAction);
   }
-  
+
   protected refreshContent(): void {
     // Loop over each category to determine if the values need updated
     // Screen changed, re-init

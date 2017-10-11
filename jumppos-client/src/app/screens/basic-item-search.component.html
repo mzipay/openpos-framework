@@ -7,7 +7,7 @@
                 <md-card>
                     <md-card-subtitle>{{searchFieldForm.name}}</md-card-subtitle>
                     <md-form-field *ngFor="let field of searchFieldForm.formElements" style="width: 100%;">
-                        <input mdInput placeholder="{{field.placeholder}}">
+                        <input mdInput placeholder="{{field.placeholder}}" [(ngModel)]="field.value">
                     </md-form-field>
                 </md-card>
 
