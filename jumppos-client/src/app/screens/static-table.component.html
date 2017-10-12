@@ -2,7 +2,7 @@
     <md-card>
         <md-card-content>
             <label class="prompt-text">{{text}}</label>
-            <md-table #table [dataSource]="dataSource">
+            <md-table #table [dataSource]="dataSource" style="max-height: 800px; overflow-y: auto;">
                 <ng-container *ngFor="let columnId of columnIds" mdColumnDef="{{columnId}}">
                     <!-- If there is a '_selection' column present, don't add a header label for it -->
                     <md-header-cell *mdHeaderCellDef>{{columnId !== '_selection' ? columnsById[columnId].headerLabel : ''}}</md-header-cell>

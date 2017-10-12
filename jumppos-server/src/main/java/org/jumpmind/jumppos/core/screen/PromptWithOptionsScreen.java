@@ -21,7 +21,7 @@ public class PromptWithOptionsScreen extends ChooseOptionsScreen implements IPro
     }
 
     public PromptWithOptionsScreen(List<OptionItem> options) {
-        this(options, SelectionMode.SingleOption);
+        this(options, SelectionMode.Single);
     }
 
     public PromptWithOptionsScreen(List<OptionItem> options, SelectionMode selectionMode) {

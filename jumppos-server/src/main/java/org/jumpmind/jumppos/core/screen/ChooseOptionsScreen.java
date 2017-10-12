@@ -11,11 +11,6 @@ public class ChooseOptionsScreen extends DefaultScreen {
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public enum SelectionMode {
-        SingleOption,
-        MultipleOptions
-    }
-    
     public enum DisplayStyle {
         ButtonList,
         ButtonGrid
@@ -23,7 +18,7 @@ public class ChooseOptionsScreen extends DefaultScreen {
     
     
     private List<OptionItem> options;
-    private SelectionMode selectionMode = SelectionMode.SingleOption;
+    private SelectionMode selectionMode = SelectionMode.Single;
     private DisplayStyle displayStyle = DisplayStyle.ButtonList;
     private String promptText;
     
@@ -32,7 +27,7 @@ public class ChooseOptionsScreen extends DefaultScreen {
     }
    
     public ChooseOptionsScreen( List<OptionItem> options ) {
-        this( options, SelectionMode.SingleOption );
+        this( options, SelectionMode.Single );
     }
 
     public ChooseOptionsScreen( List<OptionItem> options, SelectionMode selectionMode ) {
@@ -64,7 +59,7 @@ public class ChooseOptionsScreen extends DefaultScreen {
         List<OptionItem> selectedOptions = this.getSelectedOptions();
         Optional<OptionItem> selectedItem = Optional.empty();
         if ( selectedOptions.size() > 0 ) {
-            if ( SelectionMode.MultipleOptions == this.getSelectionMode() ) {
+            if ( SelectionMode.Multiple == this.getSelectionMode() ) {
                 if ( selectedOptions.size() > 1 ) {
                     logger.warn( "Selection mode is {}, but there are multiple items selected.  Returning only first OptionItem.", this.selectionMode );
                 }
@@ -83,7 +78,7 @@ public class ChooseOptionsScreen extends DefaultScreen {
             .forEachOrdered( o -> selectedOptions.add( o ) );
         } );
 
-        if ( SelectionMode.SingleOption == this.getSelectionMode() && selectedOptions.size() > 1 ) {
+        if ( SelectionMode.Single == this.getSelectionMode() && selectedOptions.size() > 1 ) {
             logger.warn( "Selection mode is {}, but there are multiple items selected.  Returning only first OptionItem.", this.selectionMode );
             selectedOptions.removeIf( o -> o != selectedOptions.get( 0 ) ); // remove all but first item
         }

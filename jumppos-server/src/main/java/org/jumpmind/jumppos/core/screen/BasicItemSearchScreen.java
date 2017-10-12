@@ -124,10 +124,6 @@ public class BasicItemSearchScreen extends DefaultScreen {
             SUBCATEGORY
         };
         
-        public enum SelectionMode {
-            Single,
-            Multiple
-        }
         
         private Map<String, Object> attributes = new HashMap<>();
         private SearchCategoryType searchCategoryType = SearchCategoryType.ROOT;

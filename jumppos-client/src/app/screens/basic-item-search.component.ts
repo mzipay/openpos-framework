@@ -10,9 +10,9 @@ import { IScreen } from '../common/iscreen';
 export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
   private lastSequenceNum: number;
 
-  searchCategories: SearchCategory[];
+  searchCategories: ISearchCategory[];
   searchCategoryStructure: SearchCategoryStructure;
-  searchCategoryValues: SearchCategoryValue[];
+  searchCategoryValues: ISearchCategoryValue[];
   searchFieldForm: IForm;
   // Name of action specified by server side which should behave like
   // a form submission
@@ -32,7 +32,7 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
     this.submitActionNames = this.session.screen.submitActionNames;
   }
 
-  onValueSelected(value: SearchCategoryValue, categoryName: string): void {
+  onValueSelected(value: ISearchCategoryValue, categoryName: string): void {
     console.log(`onValueSelected: ${value}, ${categoryName}`)
     value.selected = true;
     this.session.response = value;
@@ -40,6 +40,7 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
   }
 
   onSubmitAction(submitAction: string): void {
+    // Collect the field values
     this.session.response = {
       'searchCategories': this.searchCategories,
       'searchCategoryStructure': this.searchCategoryStructure,
@@ -87,15 +88,15 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
 }
 
 
-export interface SearchCategory {
+export interface ISearchCategory {
   attributes: Map<string, any>;
   searchCategoryType: SearchCategoryType;
 
 }
 
-export interface SearchCategoryValue {
+export interface ISearchCategoryValue {
   attributes: Map<string, any>;
-  values: SearchCategoryValue[];
+  values: ISearchCategoryValue[];
   selected: boolean;
   index: number;
 }

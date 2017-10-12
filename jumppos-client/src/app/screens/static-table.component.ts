@@ -54,7 +54,7 @@ export class StaticTableComponent implements IScreen, DoCheck {
             // or Multiple table rows, add an extra '_selection' column to the front
             // of the list of other columnIds. The _selection column
             // will be used by the template to enable selection of a row (or rows).
-            if ([SelectionMode.SingleRow, SelectionMode.MultipleRows].indexOf(this.selectionMode) >= 0) {
+            if ([SelectionMode.Single, SelectionMode.Multiple].indexOf(this.selectionMode) >= 0) {
                 this.columnIds.unshift('_selection');
             }
 
@@ -107,8 +107,8 @@ export class StaticTableComponent implements IScreen, DoCheck {
  */
 export enum SelectionMode {
     None,
-    MultipleRows,
-    SingleRow
+    Multiple,
+    Single
 }
 
 /**

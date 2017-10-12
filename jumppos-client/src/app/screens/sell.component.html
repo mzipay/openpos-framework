@@ -52,22 +52,7 @@
 
 		<md-card class="sale-line-item-container serrated-edge">
 			<md-card-content class="sale-line-item-container-content">
-				<md-list class="sale-line-item-container-list">
-					<md-list-item *ngFor="let i of items" class="sale-line-item" (click)="session.onActionWithStringPayload('Item',i.lineNumber)">
-						<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
-							<div fxFlex="80">
-								<div md-line class="line-item-description" >{{i.description}}</div>
-								<div md-line class="line-item-subtitle">{{i.itemId}} {{i.quantity}}@{{i.sellingPrice}}</div>
-							</div>
-
-							<div fxFlex>							
-								<h5 class="middle-align line-item-extended-amt"><span class="super-currency-symbol">$</span>{{i.extendedAmount}}</h5>
-								<md-icon class="material-icons line-item-caret">keyboard_arrow_right</md-icon>
-							</div>
-						</div>
-						
-					</md-list-item>
-				</md-list>
+				<app-product-list [items]="items" (itemClick)="session.onActionWithStringPayload('Item',$event.index)"></app-product-list>
 				<div *ngIf="items.length == 0" class="sale-line-item-container-no-content" [style.sm]="{'font-size': '16px'}" [style.xs]="{'font-size': '16px'}" fxLayout="column" fxLayoutAlign="center center">
 
 						<svg style="width:180px;height:180px" viewBox="0 0 25 25">

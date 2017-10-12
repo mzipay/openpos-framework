@@ -1,0 +1,15 @@
+<md-list class="sale-line-item-container-list">
+    <md-list-item *ngFor="let i of items" class="sale-line-item" (click)="onItemClick(i)">
+        <div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
+            <div fxFlex="80">
+                <div md-line class="line-item-description" >{{i.description}}</div>
+                <div md-line class="line-item-subtitle">{{i.subtitle}}</div>
+            </div>
+
+            <div fxFlex>							
+                <h5 class="middle-align line-item-extended-amt"><span class="super-currency-symbol">$</span>{{i.amount}}</h5>
+                <md-icon class="material-icons line-item-caret">keyboard_arrow_right</md-icon>
+            </div>
+        </div>
+    </md-list-item>
+</md-list>

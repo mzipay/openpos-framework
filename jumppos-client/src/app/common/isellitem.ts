@@ -1,8 +1,6 @@
-export interface ISellItem {
-    itemId: string;
+import { IItem } from './iitem';
+
+export interface ISellItem extends IItem {
     posItemId: string;
-    description: string;
-    extendedAmount: number;
     quantity: number;
-    lineNumber: number;
 }
