@@ -3,10 +3,11 @@ package org.jumpmind.jumppos.pos.screen;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jumpmind.jumppos.core.screen.SellItem;
-import org.jumpmind.jumppos.core.screen.Transaction;
+import org.jumpmind.jumppos.core.screen.Customer;
 import org.jumpmind.jumppos.core.screen.PromptScreen;
 import org.jumpmind.jumppos.core.screen.ScreenType;
+import org.jumpmind.jumppos.core.screen.SellItem;
+import org.jumpmind.jumppos.core.screen.Transaction;
 
 public class SellItemScreen extends PromptScreen {
 
@@ -20,6 +21,7 @@ public class SellItemScreen extends PromptScreen {
     private String subTotal;
     private String taxTotal;
     private Transaction transaction = new Transaction();
+    private Customer customer;
 
     public SellItemScreen() {
         this.setType(ScreenType.Sell);
@@ -80,5 +82,13 @@ public class SellItemScreen extends PromptScreen {
 
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
+    }
+    
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+    
+    public Customer getCustomer() {
+        return customer;
     }
 }

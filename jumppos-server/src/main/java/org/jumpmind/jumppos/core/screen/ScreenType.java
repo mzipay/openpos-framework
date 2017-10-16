@@ -8,6 +8,7 @@ public enum ScreenType {
     EmbeddedWebPage,
     Form,
     Home,
+    ItemList,
     PaymentStatus,
     Prompt,
     PromptWithOptions,

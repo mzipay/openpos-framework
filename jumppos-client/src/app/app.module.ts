@@ -22,6 +22,7 @@ import { IconService } from './icon.service';
 import { AbstractApp } from './screens/abstract-app';
 import { PromptComponent } from './screens/prompt.component';
 import { IconComponent } from './common/controls/icon.component';
+import { ProductListComponent } from './common/controls/product-list.component';
 import { PromptInputComponent } from './common/controls/prompt-input.component';
 import { SellComponent } from './screens/sell.component';
 import { BasicItemSearchComponent } from './screens/basic-item-search.component';
@@ -35,6 +36,7 @@ import { PaymentStatusComponent } from './screens/payment-status.component';
 import { SellItemDetailComponent } from './screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from './screens/signature-capture.component';
 import { StaticTableComponent } from './screens/static-table.component';
+import { ItemListComponent } from './screens/item-list.component';
 import { FocusDirective } from './common/focus.directive';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
@@ -109,6 +111,7 @@ const stompConfig: StompConfig = {
     EmbeddedWebPageComponent,
     FormComponent,
     HomeComponent,
+    ItemListComponent,
     PaymentStatusComponent,
     PromptComponent,
     PromptWithOptionsComponent,
@@ -125,9 +128,11 @@ const stompConfig: StompConfig = {
     CartComponent,
     DialogComponent,
     IconComponent,
+    ProductListComponent,
     PromptComponent,
     PromptInputComponent,
     BasicItemSearchComponent,
+    ItemListComponent,
     ChooseOptionsComponent,
     PromptWithOptionsComponent,
     SignatureCaptureComponent,

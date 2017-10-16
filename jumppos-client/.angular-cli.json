@@ -19,8 +19,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.scss",
-        "customer-styles.scss"
+        "styles.scss"
       ],
       "scripts": [
         "../node_modules/signature_pad/dist/signature_pad.js"

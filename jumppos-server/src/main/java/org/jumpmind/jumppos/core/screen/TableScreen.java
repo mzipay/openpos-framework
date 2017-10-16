@@ -6,13 +6,7 @@ import java.util.List;
 
 public class TableScreen extends DefaultScreen {
 
-    private static final long serialVersionUID = 1L;
-    
-    public enum SelectionMode {
-        None,
-        MultipleRows,
-        SingleRow
-    }
+    private static final long serialVersionUID = 1L;    
     
     private List<String> headerLabels;
     private List<List<String>> tableData = new ArrayList<>();
@@ -29,6 +23,13 @@ public class TableScreen extends DefaultScreen {
         return headerLabels;
     }
     
+    public void setHeaderLabels(String...headers) {
+        headerLabels = new ArrayList<>(headers.length);
+        for (String string : headers) {
+            headerLabels.add(string);
+        }
+    }
+    
     public void setHeaderLabels(List<String> headerLabels) {
         this.headerLabels = headerLabels;
     }
@@ -39,6 +40,14 @@ public class TableScreen extends DefaultScreen {
     
     public void setTableData(List<List<String>> tableData) {
         this.tableData = tableData;
+    }
+    
+    public void addRow(String...row) {
+        List<String> tableRow = new ArrayList<>();
+        for (String string : row) {
+            tableRow.add(string);
+        }
+        addRow(tableRow);
     }
     
     public void addRow(List<String> tableRow) {

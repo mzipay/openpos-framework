@@ -6,8 +6,6 @@ import javax.persistence.Id;
 /**
  * A Person or Organization who purchases, may purchase, or did purchase goods
  * and or services from the retail enterprise.
- * 
- * @author jkrajews
  */
 @Entity
 public class Customer  {

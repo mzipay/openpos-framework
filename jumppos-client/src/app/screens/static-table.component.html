@@ -2,7 +2,7 @@
     <md-card>
         <md-card-content>
             <label class="prompt-text">{{text}}</label>
-            <md-table #table [dataSource]="dataSource">
+            <md-table #table [dataSource]="dataSource" style="max-height: 800px; overflow-y: auto;">
                 <ng-container *ngFor="let columnId of columnIds" mdColumnDef="{{columnId}}">
                     <!-- If there is a '_selection' column present, don't add a header label for it -->
                     <md-header-cell *mdHeaderCellDef>{{columnId !== '_selection' ? columnsById[columnId].headerLabel : ''}}</md-header-cell>
@@ -19,8 +19,10 @@
         </md-card-content>
         <md-card-actions>
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" fxLayoutWrap>
-                <div *ngFor="let m of session.screen.menuActions">
-                    <button md-raised-button class="static-table-button" (click)="onAction(m.action)" [disabled]="!m.enabled">{{m.title}}</button>
+                <div *ngFor="let m of session.screen.menuActions; let i = index">
+                    <button md-raised-button class="static-table-button"
+                    [color]="i===0?'primary':''" [disabled]="!m.enabled" [autofocus]="i===0" [appFocus]="i===0"
+                     (click)="onAction(m.action)" [disabled]="!m.enabled">{{m.title}}</button>
                 </div>
             </div>
         </md-card-actions>

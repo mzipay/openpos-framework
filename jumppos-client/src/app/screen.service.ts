@@ -8,6 +8,7 @@ import { SignatureCaptureComponent } from './screens/signature-capture.component
 import { PaymentStatusComponent } from './screens/payment-status.component';
 import { FormComponent } from './screens/form.component';
 import { HomeComponent } from './screens/home.component';
+import { ItemListComponent } from './screens/item-list.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
 import { PromptWithOptionsComponent } from './screens/prompt-with-options.component';
 import { StaticTableComponent } from './screens/static-table.component';
@@ -34,6 +35,7 @@ export class ScreenService {
     this.screens.set('EmbeddedWebPage', EmbeddedWebPageComponent);
     this.screens.set('Form', FormComponent);
     this.screens.set('Home', HomeComponent);
+    this.screens.set('ItemList', ItemListComponent);
     this.screens.set('PaymentStatus', PaymentStatusComponent);
     this.screens.set('Prompt', PromptComponent);
     this.screens.set('PromptWithOptions', PromptWithOptionsComponent);

@@ -2,53 +2,72 @@ package org.jumpmind.jumppos.core.screen;
 
 import java.io.Serializable;
 
-public class SellItem implements Serializable {
+public class SellItem implements IItem, Serializable {
     
     private static final long serialVersionUID = 1L;
 
-    private int lineNumber;
-    private String itemId;
+    private Integer index;
+    private String id;
     private String posItemId;
     private String description;
-    private String extendedAmount;
+    private String amount;
     private String sellingPrice;
     private String quantity;
     private String imageUrl;
     private String productDescription;
     
     
-    public String getItemId() {
-        return itemId;
+    @Override
+    public String getID() {
+        return this.id;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    @Override
+    public void setID(String id) {
+        this.id = id;
     }
 
+    @Override
+    public Integer getIndex() {
+        return this.index;
+    }
+
+    @Override
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+    
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
+    
+    @Override
+    public String getAmount() {
+        return this.amount;
+    }
+    
+    @Override
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+    
+    @Override
+    public String getSubtitle() {
+        String subTitle = String.format("%s %s@%s", this.getID(), this.getQuantity(), this.getSellingPrice());
+        return subTitle;
+    }
+    
+    @Override
+    public void setSubtitle(String subtitle) {
+        // do nothing
+    }
 
-    public String getExtendedAmount() {
-        return extendedAmount;
-    }
-
-    public void setExtendedAmount(String extendedAmount) {
-        this.extendedAmount = extendedAmount;
-    }
-    
-    public void setLineNumber(int lineNumber) {
-        this.lineNumber = lineNumber;
-    }
-    
-    public int getLineNumber() {
-        return lineNumber;
-    }
-    
     public void setPosItemId(String posItemId) {
         this.posItemId = posItemId;
     }

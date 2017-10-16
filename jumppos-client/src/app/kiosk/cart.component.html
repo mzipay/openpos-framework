@@ -20,11 +20,11 @@
                                 <div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
                                     <div fxFlex="80">
                                         <div md-line class="line-item-description">{{item.description}}</div>
-                                        <div md-line class="line-item-subtitle">Sku {{item.itemId}} {{item.quantity}}@{{item.sellingPrice}}</div>
+                                        <div md-line class="line-item-subtitle">Sku {{item.id}} {{item.quantity}}@{{item.sellingPrice}}</div>
                                     </div>
         
                                     <div fxFlex>
-                                        <h5 class="line-item-extended-amt" style="margin-right:30px"><span class="super-currency-symbol">$</span>{{item.extendedAmount}}</h5>
+                                        <h5 class="line-item-extended-amt" style="margin-right:30px"><span class="super-currency-symbol">$</span>{{item.amount}}</h5>
                                         <svg (click)="removeItem(i);" style="margin-left:40px;width:24px;height:24px;position:absolute;top:10px;right:10px;" viewBox="0 0 24 24">
                                                 <path fill="#ccc" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
                                             </svg>
