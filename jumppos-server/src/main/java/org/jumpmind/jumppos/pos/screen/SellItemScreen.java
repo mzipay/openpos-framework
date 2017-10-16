@@ -20,6 +20,8 @@ public class SellItemScreen extends PromptScreen {
     private String grandTotal;
     private String subTotal;
     private String taxTotal;
+    private String itemActionName = "Item";
+
     private Transaction transaction = new Transaction();
     private Customer customer;
 
@@ -90,5 +92,13 @@ public class SellItemScreen extends PromptScreen {
     
     public Customer getCustomer() {
         return customer;
+    }
+
+    public String getItemActionName() {
+        return itemActionName;
+    }
+
+    public void setItemActionName(String itemActionName) {
+        this.itemActionName = itemActionName;
     }
 }

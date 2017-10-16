@@ -2,7 +2,7 @@ package org.jumpmind.jumppos.core.screen;
 
 import java.io.Serializable;
 
-public class OptionItem implements Serializable {
+public class OptionItem implements IUIAction, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,10 +54,12 @@ public class OptionItem implements Serializable {
         this.value = value;
     }
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
@@ -70,12 +72,34 @@ public class OptionItem implements Serializable {
         this.selected = selected;
     }
 
+    @Override
     public String getIcon() {
         return icon;
     }
 
+    @Override
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    @Override
+    public String getAction() {
+        return this.getValue();
+    }
+
+    @Override
+    public void setAction(String action) {
+        this.setValue(action);
+    }
+
+    @Override
+    public String getTitle() {
+        return this.getDisplayValue();
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.setDisplayValue(title);
     }
 
 }

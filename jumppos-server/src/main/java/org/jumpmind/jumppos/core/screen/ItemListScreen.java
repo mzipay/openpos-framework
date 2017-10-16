@@ -10,8 +10,8 @@ public class ItemListScreen extends DefaultScreen {
     
     private List<IItem> items = new ArrayList<>();
     private SelectionMode selectionMode = SelectionMode.None;
-    private int selectedRow = -1;
-    private List<String> submitActionNames = new ArrayList<>();
+    private int selectedIndex = -1;
+    private String itemActionName = "Item";
     private String text;
 
     public ItemListScreen() {
@@ -47,26 +47,23 @@ public class ItemListScreen extends DefaultScreen {
         this.selectionMode = selectionMode;
     }
 
-    public void setSelectedRow(int selectedRow) {
-       this.selectedRow = selectedRow;
+    public void setSelectedIndex(int selectedIndex) {
+       this.selectedIndex = selectedIndex;
     }
     
-    public int getSelectedRow() {
-        return this.selectedRow;
+    public int getSelectedIndex() {
+        return this.selectedIndex;
+    }
+    
+    public String getItemActionName() {
+        return itemActionName;
     }
 
-    public List<String> getSubmitActionNames() {
-        return submitActionNames;
+
+    public void setItemActionName(String itemActionName) {
+        this.itemActionName = itemActionName;
     }
 
-    public void setSubmitActionNames(List<String> submitActionNames) {
-        this.submitActionNames = submitActionNames;
-    }
-    
-    public void addSubmitActionName(String submitActionName) {
-        this.getSubmitActionNames().add(submitActionName);
-    }
-    
     static public class Item implements IItem {
         private String id;
         private Integer index;

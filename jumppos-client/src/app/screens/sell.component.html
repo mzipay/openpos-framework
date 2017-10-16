@@ -58,7 +58,7 @@
 		<md-card class="sale-line-item-container serrated-edge">
 			<md-card-content class="sale-line-item-container-content" fxLayout="column" fxLayoutAlign="space-between">
 				<div class="scrollable">
-					<app-product-list [items]="items" (itemClick)="session.onActionWithStringPayload('Item',$event.index)"></app-product-list>
+					<app-product-list [items]="items" (itemClick)="session.onActionWithStringPayload(session.screen.itemActionName,$event.index)"></app-product-list>
 					<div *ngIf="items.length == 0" class="sale-line-item-container-no-content" [style.sm]="{'font-size': '16px'}" [style.xs]="{'font-size': '16px'}"
 					 fxLayout="column" fxLayoutAlign="center center">
 						<svg style="width:180px;height:180px" viewBox="0 0 25 25">

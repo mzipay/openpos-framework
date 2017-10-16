@@ -10,6 +10,7 @@ import { IItem } from './../common/iitem';
 export class ItemListComponent implements IScreen, OnInit {
 
     items: IItem[];
+    itemActionName: string;
 
     constructor(public session: SessionService) {
     }
@@ -19,11 +20,12 @@ export class ItemListComponent implements IScreen, OnInit {
 
     ngOnInit(): void {
         this.items = this.session.screen.items;
+        this.itemActionName = this.session.screen.itemActionName;
     }
 
     onItemClick(item: IItem): void {
-        console.log(`onItemClick:${item.description}`);
-
+        this.session.response = item;
+        this.session.onAction(this.itemActionName);
     }
 
 }
