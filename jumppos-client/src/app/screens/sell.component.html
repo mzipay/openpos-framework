@@ -9,15 +9,18 @@
 				/>
 			</svg>
 		</div>
+
 		<button md-raised-button class="sale-total-button" [disabled]="!session.screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')">
 			<div class="containerX" fxLayout="row" fxLayoutAlign="center center">
-			<div fxFlex [style.xs]="{'flex': 'initial', 'margin': '10px'}"> </div>
-			<p class="sale-total-text"><span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</p>
-			<div  fxFlex> </div>
-			<div class="sale-total-checkout-container" ngClass.xs="sale-total-checkout-container-small" [ngClass]="{'sale-total-checkout-container-dimmed':items.length == 0}" fxLayout="row">
-			<p class="sale-total-checkout-text">Checkout</p>
-			<md-icon class="material-icons md-48 sale-total-icon">keyboard_arrow_right</md-icon>
-			</div>
+				<div fxFlex [style.xs]="{'flex': 'initial', 'margin': '10px'}"> </div>
+				<p class="sale-total-text">
+					<span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</p>
+				<div fxFlex> </div>
+				<div class="sale-total-checkout-container" ngClass.xs="sale-total-checkout-container-small" [ngClass]="{'sale-total-checkout-container-dimmed':items.length == 0}"
+				 fxLayout="row">
+					<p class="sale-total-checkout-text">Checkout</p>
+					<md-icon class="material-icons md-48 sale-total-icon">keyboard_arrow_right</md-icon>
+				</div>
 			</div>
 		</button>
 
@@ -26,7 +29,8 @@
 				<md-card class="subtotals-container">
 					<md-card-content>
 						<p class="subtotals-label">Discounts</p>
-						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}"><span class="super-currency-symbol">$</span>{{session.screen.discountTotal}}</p>
+						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">
+							<span class="super-currency-symbol">$</span>{{session.screen.discountTotal}}</p>
 					</md-card-content>
 				</md-card>
 			</div>
@@ -35,7 +39,8 @@
 
 					<md-card-content>
 						<p class="subtotals-label">Tax</p>
-						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}"><span class="super-currency-symbol">$</span>{{session.screen.taxTotal}}</p>
+						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">
+							<span class="super-currency-symbol">$</span>{{session.screen.taxTotal}}</p>
 					</md-card-content>
 				</md-card>
 			</div>
@@ -43,43 +48,63 @@
 				<md-card class="subtotals-container" style="position:relative;">
 					<md-card-content>
 						<p class="subtotals-label">Subtotal</p>
-						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}"><span class="super-currency-symbol">$</span>{{session.screen.subTotal}}</p>
+						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">
+							<span class="super-currency-symbol">$</span>{{session.screen.subTotal}}</p>
 					</md-card-content>
 				</md-card>
 			</div>
-
 		</div>
 
 		<md-card class="sale-line-item-container serrated-edge">
-			<md-card-content class="sale-line-item-container-content">
-				<md-list class="sale-line-item-container-list">
-					<md-list-item *ngFor="let i of items" class="sale-line-item" (click)="session.onActionWithStringPayload('Item',i.lineNumber)">
-						<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
-							<div fxFlex="80">
-								<div md-line class="line-item-description" >{{i.description}}</div>
-								<div md-line class="line-item-subtitle">{{i.itemId}} {{i.quantity}}@{{i.sellingPrice}}</div>
+			<md-card-content class="sale-line-item-container-content" fxLayout="column" fxLayoutAlign="space-between">
+				<div>
+					<md-list class="sale-line-item-container-list">
+						<md-list-item *ngFor="let i of items" class="sale-line-item" (click)="session.onActionWithStringPayload('Item',i.lineNumber)">
+							<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
+								<div fxFlex="80">
+									<div md-line class="line-item-description">{{i.description}}</div>
+									<div md-line class="line-item-subtitle">{{i.itemId}} {{i.quantity}}@{{i.sellingPrice}}</div>
+								</div>
+
+								<div fxFlex>
+									<h5 class="middle-align line-item-extended-amt">
+										<span class="super-currency-symbol">$</span>{{i.extendedAmount}}</h5>
+									<md-icon class="material-icons line-item-caret">keyboard_arrow_right</md-icon>
+								</div>
 							</div>
 
-							<div fxFlex>							
-								<h5 class="middle-align line-item-extended-amt"><span class="super-currency-symbol">$</span>{{i.extendedAmount}}</h5>
-								<md-icon class="material-icons line-item-caret">keyboard_arrow_right</md-icon>
-							</div>
-						</div>
-						
-					</md-list-item>
-				</md-list>
-				<div *ngIf="items.length == 0" class="sale-line-item-container-no-content" [style.sm]="{'font-size': '16px'}" [style.xs]="{'font-size': '16px'}" fxLayout="column" fxLayoutAlign="center center">
+						</md-list-item>
+					</md-list>
+					<div *ngIf="items.length == 0" class="sale-line-item-container-no-content" [style.sm]="{'font-size': '16px'}" [style.xs]="{'font-size': '16px'}"
+					 fxLayout="column" fxLayoutAlign="center center">
 
 						<svg style="width:180px;height:180px" viewBox="0 0 25 25">
-								<path fill="#c8c8c8" d="M4,6H6V18H4V6M7,6H8V18H7V6M9,6H12V18H9V6M13,6H14V18H13V6M16,6H18V18H16V6M19,6H20V18H19V6M2,4V8H0V4A2,2 0 0,1 2,2H6V4H2M22,2A2,2 0 0,1 24,4V8H22V4H18V2H22M2,16V20H6V22H2A2,2 0 0,1 0,20V16H2M22,20V16H24V20A2,2 0 0,1 22,22H18V20H22Z"
-								/>
-							</svg>
-					Scan something to get started.
+							<path fill="#c8c8c8" d="M4,6H6V18H4V6M7,6H8V18H7V6M9,6H12V18H9V6M13,6H14V18H13V6M16,6H18V18H16V6M19,6H20V18H19V6M2,4V8H0V4A2,2 0 0,1 2,2H6V4H2M22,2A2,2 0 0,1 24,4V8H22V4H18V2H22M2,16V20H6V22H2A2,2 0 0,1 0,20V16H2M22,20V16H24V20A2,2 0 0,1 22,22H18V20H22Z"
+							/>
+						</svg>
+						Scan something to get started.
+					</div>
+
 				</div>
+				<button class="lookup-customer-button" md-raised-button [disabled]="!session.screen.transaction.active || items.length == 0"
+				 (click)="session.onAction('LookupCustomer')">
+					<div fxLayout="row" fxLayoutAlign=" center" >
+						<div fxFlex>
+							<md-icon class="material-icons md-48">person</md-icon>
+						</div>
+						<div>Lookup Customer</div>
+						<div style="width:100%"></div>
+						<div fxFlex>
+							<md-icon class="material-icons md-48">keyboard_arrow_right</md-icon>
+						</div>
+					</div>
+				</button>
 
 			</md-card-content>
 
 		</md-card>
+
+
 	</div>
 
 	<div class="sale-marketing-panel-container" fxFlex="40" fxHide.xs fxHide.sm>
