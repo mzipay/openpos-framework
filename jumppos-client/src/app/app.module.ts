@@ -1,3 +1,5 @@
+import { LoaderService } from './common/loader/loader.service';
+import { LoaderComponent } from './common/loader/loader.component';
 import { InquiryComponent } from './screens/inquiry.component'; // TODO: remove when done experimenting with item search
 import { CartComponent } from './kiosk/cart.component';
 import { SafePipe } from './common/safe.pipe';
@@ -140,6 +142,7 @@ const stompConfig: StompConfig = {
     SellItemDetailComponent,
     PaymentStatusComponent,
     StaticTableComponent,
+    LoaderComponent,
     FormComponent,
     HomeComponent,
     StatusBarComponent,
@@ -225,6 +228,7 @@ const stompConfig: StompConfig = {
     MdDialog,
     IconService,
     SessionService,
+    LoaderService,
     ScreenService,
     StompService,
     {

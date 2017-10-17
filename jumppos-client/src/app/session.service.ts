@@ -1,3 +1,4 @@
+import { LoaderService } from './common/loader/loader.service';
 import { IDialog } from './common/idialog';
 import { Observable } from 'rxjs/Observable';
 import { Message } from '@stomp/stompjs';
@@ -28,7 +29,9 @@ export class SessionService {
 
   private messages: Observable<Message>;
 
-  constructor(private stompService: StompService, private location: Location, private router: Router) {
+  private loading: boolean;
+
+  constructor(private stompService: StompService, private location: Location, private router: Router, private loader: LoaderService) {
   }
 
   private buildTopicName(): String {
@@ -105,13 +108,31 @@ export class SessionService {
       this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
         JSON.stringify({ name: action, data: this.response }));
       this.dialog = null;
+      this.queueLoading();
     }
+  }
+
+  private queueLoading() {
+    this.loading = true;
+    setTimeout(() => this.showLoading(), 100);
+  }
+
+  private showLoading() {
+    if (this.loading) {
+      this.loader.show();
+    }
+  }
+
+  private cancelLoading() {
+    this.loading = false;
+    this.loader.hide();
   }
 
   public onActionWithStringPayload(action: String, payload: String) {
     console.log('Publish action ' + action + ' with payload ' + payload);
     this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
       JSON.stringify({ name: action, data: payload }));
+      this.queueLoading();
   }
 
   /** Consume a message from the stompService */
@@ -125,6 +146,7 @@ export class SessionService {
       this.response = null;
       this.screen = json;
     }
+    this.cancelLoading();
   }
 
   private getUrlNodeId() {
