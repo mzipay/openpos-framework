@@ -1,6 +1,6 @@
 <div (keyup.enter)="onEnter($event)">
     <md-card>
-        <md-card-subtitle>{{searchFieldForm.name}}</md-card-subtitle>
+        <md-card-title>{{searchFieldForm.name}}</md-card-title>
         <md-card-content>
             <md-form-field *ngFor="let field of searchFieldForm.formElements" style="width: 100%;">
                 <input mdInput placeholder="{{field.placeholder}}" [(ngModel)]="field.value">
@@ -9,14 +9,15 @@
     </md-card>
 
     <md-card>
-        <md-card-subtitle *ngIf="searchCategoriesText">{{searchCategoriesText}}</md-card-subtitle>
+        <md-card-title *ngIf="searchCategoriesText">{{searchCategoriesText}}</md-card-title>
         <md-card-content>
-            <div fxLayout="row" fxLayoutWrap fxLayoutAlign="center" style="height: 525px; overflow-y: auto;">
+            <div fxLayout="row" fxLayoutWrap fxLayoutAlign="center" style="height: 450px; overflow-y: auto;">
                 <md-card *ngFor="let category of searchCategories; let catIdx=index" style="padding: 12px; margin: 12px">
                     <md-card-subtitle>{{category.attributes.name}}</md-card-subtitle>
-                    <md-card-content style="height: 400px; overflow-y: auto; width: 250px;">
+                    <md-card-content style="height: 365px; overflow-y: auto; width: 250px;">
                         <md-selection-list dense>
-                            <md-list-option *ngFor="let val of searchCategoryValues[catIdx].values" (click)="onValueSelected(val, searchCategoryValues[catIdx].attributes.name)"
+                            <md-list-option *ngFor="let val of searchCategoryValues[catIdx].values" 
+                                (click)="onValueSelected(val, searchCategoryValues[catIdx].attributes.name)"
                                 [selected]="val.selected">
                                 <h4 md-line>{{val.attributes.name}}</h4>
                             </md-list-option>
