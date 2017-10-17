@@ -41,10 +41,12 @@ public class BasicItemSearchScreen extends DefaultScreen {
     
     private ItemRetrievalMode itemRetrievalMode = ItemRetrievalMode.ALL;
     private SearchCategoryStructure searchCategoryStructure = SearchCategoryStructure.HIERARCHICAL;
+    private String searchCategoriesText;
     private List<SearchCategory> searchCategories = new ArrayList<>();
     private List<SearchCategoryValue> searchCategoryValues = new ArrayList<>();
     private Form searchFieldForm;
     private List<String> submitActionNames = new ArrayList<>();
+    private String defaultActionName;
 
     
     public BasicItemSearchScreen() {
@@ -91,6 +93,14 @@ public class BasicItemSearchScreen extends DefaultScreen {
         this.searchCategoryStructure = searchCategoryStructure;
     }
 
+    public String getSearchCategoriesText() {
+        return searchCategoriesText;
+    }
+
+    public void setSearchCategoriesText(String searchCategoriesText) {
+        this.searchCategoriesText = searchCategoriesText;
+    }
+
     public Form getSearchFieldForm() {
         return searchFieldForm;
     }
@@ -113,6 +123,14 @@ public class BasicItemSearchScreen extends DefaultScreen {
     
     public void addSubmitActionName(String submitActionName) {
         this.getSubmitActionNames().add(submitActionName);
+    }
+
+    public String getDefaultActionName() {
+        return defaultActionName;
+    }
+
+    public void setDefaultActionName(String defaultActionName) {
+        this.defaultActionName = defaultActionName;
     }
 
     static public class SearchCategory implements Serializable {

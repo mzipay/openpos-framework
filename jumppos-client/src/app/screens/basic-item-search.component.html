@@ -1,21 +1,21 @@
-<div class="containerX" fxLayout="row" fxLayoutAlign="center center">
-    <div class="sale-trans-panel-container" fxFlex fxLayout="column" style="min-width: 33%;">
-        <md-card>
-            <md-card-content style="max-height: 850px; overflow-y: auto;">
+<div (keyup.enter)="onEnter($event)">
+    <md-card>
+        <md-card-subtitle>{{searchFieldForm.name}}</md-card-subtitle>
+        <md-card-content>
+            <md-form-field *ngFor="let field of searchFieldForm.formElements" style="width: 100%;">
+                <input mdInput placeholder="{{field.placeholder}}" [(ngModel)]="field.value">
+            </md-form-field>
+        </md-card-content>
+    </md-card>
 
-                <!-- <div fxLayout="column" style="width: 400px"> -->
-                <md-card>
-                    <md-card-subtitle>{{searchFieldForm.name}}</md-card-subtitle>
-                    <md-form-field *ngFor="let field of searchFieldForm.formElements" style="width: 100%;">
-                        <input mdInput placeholder="{{field.placeholder}}" [(ngModel)]="field.value">
-                    </md-form-field>
-                </md-card>
-
+    <md-card>
+        <md-card-subtitle *ngIf="searchCategoriesText">{{searchCategoriesText}}</md-card-subtitle>
+        <md-card-content>
+            <div fxLayout="row" fxLayoutWrap fxLayoutAlign="center" style="height: 400px; overflow-y: auto;">
                 <md-card *ngFor="let category of searchCategories; let catIdx=index">
                     <md-card-subtitle>{{category.attributes.name}}</md-card-subtitle>
-                    <md-card-content>
-                        <md-selection-list dense style="height: 200px; overflow-y: auto;">
-                            <!-- TODO: only invoke callbacks when in callback mode -->
+                    <md-card-content style="height: 250px; overflow-y: auto; width: 250px;">
+                        <md-selection-list dense>
                             <md-list-option *ngFor="let val of searchCategoryValues[catIdx].values" (click)="onValueSelected(val, searchCategoryValues[catIdx].attributes.name)"
                                 [selected]="val.selected">
                                 <h4 md-line>{{val.attributes.name}}</h4>
@@ -23,22 +23,16 @@
                         </md-selection-list>
                     </md-card-content>
                 </md-card>
-                <!-- </div> -->
-            </md-card-content>
-            <md-card-actions>
-                <button *ngFor="let submitAction of submitActionNames" md-button
-                    (click)="onSubmitAction(submitAction)">
-                    {{submitAction}}
-                </button>
-            </md-card-actions>
-        </md-card>
-    </div>
-    <div style="min-width: 67%;">
-        <md-card>
-            <md-card-content>
-                <p>text</p>
-            </md-card-content>
-        </md-card>
-    </div>
+            </div>
+        </md-card-content>
 
+    </md-card>
+    <div fxLayoutAlign="center">
+        <button *ngFor="let submitAction of submitActionNames" 
+            (click)="onSubmitAction(submitAction)" 
+            [color]="submitAction === defaultActionName ? 'primary':''"
+            md-raised-button>
+            {{submitAction}}
+        </button>
+    </div>
 </div>

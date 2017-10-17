@@ -126,8 +126,9 @@ public class ScreenService implements IScreenService {
             DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
             if (lastScreen != null && lastScreen.getType() != null && lastScreen.getScreenType() == ScreenType.Form) {
                 Form form = mapper.convertValue(action.getData(), Form.class);
-                return populateFormScreen(appId, nodeId, form);
-
+                if (form != null) { // A form that has display only fields won't have any data
+                    return populateFormScreen(appId, nodeId, form);
+                }
             }
         }
         return null;

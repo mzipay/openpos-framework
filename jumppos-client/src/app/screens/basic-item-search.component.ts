@@ -14,14 +14,20 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
   searchCategoryStructure: SearchCategoryStructure;
   searchCategoryValues: ISearchCategoryValue[];
   searchFieldForm: IForm;
+  searchCategoriesText: string;
   // Name of action specified by server side which should behave like
   // a form submission
   submitActionNames: string[] = [];
+  defaultActionName: string;
 
   constructor(public session: SessionService) {
   }
 
   show(session: SessionService) {
+  }
+
+  onEnter(): void {
+    this.onSubmitAction('enter');
   }
 
   ngOnInit(): void {
@@ -30,10 +36,11 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
     this.searchCategoryValues = this.session.screen.searchCategoryValues;
     this.searchFieldForm = this.session.screen.searchFieldForm;
     this.submitActionNames = this.session.screen.submitActionNames;
+    this.searchCategoriesText = this.session.screen.searchCategoriesText;
+    this.defaultActionName = this.session.screen.defaultActionName;
   }
 
   onValueSelected(value: ISearchCategoryValue, categoryName: string): void {
-    console.log(`onValueSelected: ${value}, ${categoryName}`)
     value.selected = true;
     this.session.response = value;
     this.session.onAction(`on${categoryName}Selected`);

@@ -1,7 +1,7 @@
 <ng-container *ngIf="session.screen.type==='Form'">
 	<md-card>
 		<md-card-title>{{session.screen.form.name}}</md-card-title>
-		<md-card-content>						
+		<md-card-content style="max-height: 850px; overflow-y: auto;">						
 			<ng-container *ngFor="let formElement of session.screen.form.formElements">
 				<div *ngIf="formElement.elementType==='input'">
 					<md-input-container style="width:100%">
