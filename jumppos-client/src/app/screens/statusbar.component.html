@@ -1,44 +1,43 @@
-<div fxLayout="row" class="container statusbar-container">
+<div fxLayout="row" fxLayoutAlign="space-between " class="statusbar-container">
 
-	<!-- padding -->
-	<div *ngIf="session.screen && session.screen.menuActions && session.screen.menuActions.length > 0" style="width:70px">
-	</div>
+	    <div fxLayout="row">
+				
+	<button *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled" 
+	class="statusbar-button"
+	 md-button (click)="session.onAction(session.screen.backButton.action)">
+		<md-icon class="material-icons">arrow_back</md-icon>
+	</button>
 
-	<a *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled" class="navbar-text" (click)="session.onAction(session.screen.backButton.action)">
-		<md-icon class="material-icons statusbar-icon">arrow_back</md-icon>
-	</a>
-
-	
-	<ng-container *ngIf="session.screen.workstation"  >
-		<ng-container   *ngIf="session.screen && session.screen.storeStatus && session.screen.storeStatus.enabled" >
+	<ng-container *ngIf="session.screen.workstation">
+		<ng-container *ngIf="session.screen && session.screen.storeStatus && session.screen.storeStatus.enabled">
 			<div fxHide.xs>
-			<md-icon *ngIf="session.screen.storeStatus.title === 'Open'" class="material-icons statusbar-icon">location_on</md-icon>
-		</div>
-		<div fxHide.xs>
-			<md-icon *ngIf="session.screen.storeStatus.title === 'Open'" class="material-icons" style="width:0px;position:relative;left: -29px;top:5px;color:#18b220; z-index: 0;">fiber_manual_record</md-icon>
-		</div>
-		<div fxHide.xs>
-			<md-icon *ngIf="session.screen.storeStatus.title !== 'Open'" class="material-icons statusbar-icon statusbar-icon-off">location_off</md-icon>
-		</div>
-		<div fxHide.xs>
-			<p class="statusbar-text">Store #{{session.screen.workstation.storeId}}</p>
-	</div>
-		
-		
+				<md-icon *ngIf="session.screen.storeStatus.title === 'Open'" class="material-icons statusbar-icon">location_on</md-icon>
+			</div>
+			<div fxHide.xs>
+				<md-icon *ngIf="session.screen.storeStatus.title === 'Open'" class="material-icons" style="width:0px;position:relative;left: -29px;top:5px;color:#18b220; z-index: 0;">fiber_manual_record</md-icon>
+			</div>
+			<div fxHide.xs>
+				<md-icon *ngIf="session.screen.storeStatus.title !== 'Open'" class="material-icons statusbar-icon statusbar-icon-off">location_off</md-icon>
+			</div>
+			<div fxHide.xs>
+				<p class="statusbar-text">Store #{{session.screen.workstation.storeId}}</p>
+			</div>
 		</ng-container>
+
 		<div style="width:10px"></div>
+
 		<ng-container *ngIf="session.screen && session.screen.registerStatus && session.screen.registerStatus.enabled">
-				<div fxHide.xs>	
-			<md-icon *ngIf="session.screen.registerStatus.title === 'Open'" class="material-icons statusbar-icon">location_on</md-icon>
-		</div>
-		<div fxHide.xs>	
-			<md-icon *ngIf="session.screen.registerStatus.title === 'Open'" class="material-icons" style="width:0px;position:relative;left: -29px;top:5px;color:#18b220; z-index: 0;">fiber_manual_record</md-icon>
+			<div fxHide.xs>
+				<md-icon *ngIf="session.screen.registerStatus.title === 'Open'" class="material-icons statusbar-icon">location_on</md-icon>
 			</div>
-			<div fxHide.xs>	
-			<md-icon *ngIf="session.screen.registerStatus.title !== 'Open'" class="material-icons statusbar-icon statusbar-icon-off">location_off</md-icon>
+			<div fxHide.xs>
+				<md-icon *ngIf="session.screen.registerStatus.title === 'Open'" class="material-icons" style="width:0px;position:relative;left: -29px;top:5px;color:#18b220; z-index: 0;">fiber_manual_record</md-icon>
 			</div>
-			<div fxHide.xs>	
-			<p class="statusbar-text">Register #{{session.screen.workstation.workstationId}}</p>
+			<div fxHide.xs>
+				<md-icon *ngIf="session.screen.registerStatus.title !== 'Open'" class="material-icons statusbar-icon statusbar-icon-off">location_off</md-icon>
+			</div>
+			<div fxHide.xs>
+				<p class="statusbar-text">Register #{{session.screen.workstation.workstationId}}</p>
 			</div>
 
 		</ng-container>
@@ -47,15 +46,13 @@
 
 	<md-icon *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber" class="material-icons statusbar-icon statusbar-icon-off">receipt</md-icon>
 	<p *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber" class="statusbar-text" [style.xs]="{'font-size': '10px'}">Transaction #{{session.screen.transaction.transactionNumber}}</p>
-
-	<div fxFlex></div>
-
-	<ng-container *ngIf="session.screen.operatorName">
+    </div>
+	
+	<div *ngIf="session.screen.operatorName" fxLayout="row" >
 		<md-icon class="material-icons statusbar-icon">lock_open</md-icon>
-		<p class="statusbar-text" [style.xs]="{'font-size': '10px'}">Signed in as <span style="font-weight: bold">{{session.screen.operatorName}}</span></p>
-	</ng-container>
-
-
-
+		<p class="statusbar-text" [style.xs]="{'font-size': '10px'}">Signed in as
+			<span style="font-weight: bold">{{session.screen.operatorName}}</span>
+		</p>
+	</div>
 
 </div>

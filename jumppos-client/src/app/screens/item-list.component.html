@@ -1,8 +1,11 @@
-<div fxLayout="row" fxLayoutAlign="center center" style="margin: 16px">
-    <md-card class="sale-line-item-container">
-        <md-card-title style="margin: 10px">{{text}}</md-card-title>
-        <md-card-content class="sale-line-item-container-content" style="max-height: 850px; overflow-y: auto;">
-            <app-product-list [items]="items" (itemClick)="onItemClick($event)"></app-product-list>
-        </md-card-content>
-    </md-card>
-</div>
+
+    <div style="height: 100vh;">
+        <md-card style="height: calc(100% - 140px)">
+            <md-card-title>{{text}}</md-card-title>
+            <md-card-content style="height: calc(100% - 40px)">
+                <div class="scrollable">
+                    <app-product-list [items]="items" (itemClick)="onItemClick($event)"></app-product-list>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
