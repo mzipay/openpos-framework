@@ -1,15 +1,3 @@
 
 $app-highlight-color: #E57933;
-
-.home-screen-logo {
-    width: 400px;
-    height: 84px;
-    background-image: url(assets/Big_Lots_logo.png); 
-
-    right: 'initial'; 
-    top: 10px;
-    zoom: 40%; 
-    filter: grayscale(1) invert(1) brightness(10);
-    -webkit-filter: grayscale(1) invert(1) brightness(10);
-}
-
+$app-logo-url: url(assets/Big_Lots_logo.png);

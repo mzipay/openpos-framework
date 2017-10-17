@@ -27,6 +27,7 @@ $md-card-default-margin: 24px !default;
 
 $app-highlight-color: #2371ad;
 $app-statusbar-color: #696969;
+$app-logo-url: url(assets/jumpmart-logo.png);
 
 @import 'customer-styles';
 
@@ -76,10 +77,6 @@ md-header-cell.mat-header-cell.mat-column-_selection {
 
 .prompt-container-outer {
     height:100vh;
-}
-
-.main-menu-grid-list {
-    //height: 100vh !important;
 }
 
 ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
@@ -557,17 +554,18 @@ td {
 }
 
 .home-screen-logo {
-        width: 296px;
-        height: 74px;
-        background-image: url(assets/jumpmart-logo.png); 
-        background-repeat: no-repeat;
-        background-size: cover;
-        zoom: 70%;
-        position: absolute;
-        top:75px;
-    
-	}
-
+    width: 400px;
+    height: 84px;
+    background-image: $app-logo-url; 
+    background-repeat: no-repeat;
+    background-size: cover;
+    top: 10px;
+    zoom: 40%; 
+    position: absolute;  
+    right: 'initial'; 
+    filter: grayscale(1) invert(1) brightness(10);
+    -webkit-filter: grayscale(1) invert(1) brightness(10); 
+}
 
 .mat-column-extendedAmount {
     flex: 0, 0, 40px;
