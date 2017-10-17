@@ -11,6 +11,7 @@ export class ItemListComponent implements IScreen, OnInit {
 
     items: IItem[];
     itemActionName: string;
+    text: string;
 
     constructor(public session: SessionService) {
     }
@@ -21,6 +22,7 @@ export class ItemListComponent implements IScreen, OnInit {
     ngOnInit(): void {
         this.items = this.session.screen.items;
         this.itemActionName = this.session.screen.itemActionName;
+        this.text = this.session.screen.text;
     }
 
     onItemClick(item: IItem): void {

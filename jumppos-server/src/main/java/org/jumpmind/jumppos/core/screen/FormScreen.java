@@ -6,8 +6,8 @@ public class FormScreen extends DefaultScreen {
 
     private static final long serialVersionUID = 1L;
 
-    Form form;
-
+    private Form form;
+    
     public FormScreen() {
         setType(ScreenType.Form);
     }

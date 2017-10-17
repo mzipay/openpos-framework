@@ -11,10 +11,10 @@
     <md-card>
         <md-card-subtitle *ngIf="searchCategoriesText">{{searchCategoriesText}}</md-card-subtitle>
         <md-card-content>
-            <div fxLayout="row" fxLayoutWrap fxLayoutAlign="center" style="height: 400px; overflow-y: auto;">
-                <md-card *ngFor="let category of searchCategories; let catIdx=index">
+            <div fxLayout="row" fxLayoutWrap fxLayoutAlign="center" style="height: 525px; overflow-y: auto;">
+                <md-card *ngFor="let category of searchCategories; let catIdx=index" style="padding: 12px; margin: 12px">
                     <md-card-subtitle>{{category.attributes.name}}</md-card-subtitle>
-                    <md-card-content style="height: 250px; overflow-y: auto; width: 250px;">
+                    <md-card-content style="height: 400px; overflow-y: auto; width: 250px;">
                         <md-selection-list dense>
                             <md-list-option *ngFor="let val of searchCategoryValues[catIdx].values" (click)="onValueSelected(val, searchCategoryValues[catIdx].attributes.name)"
                                 [selected]="val.selected">

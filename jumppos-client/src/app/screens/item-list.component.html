@@ -1,5 +1,6 @@
-<div class="containerX" fxLayout="row" fxLayoutAlign="center center">
+<div fxLayout="row" fxLayoutAlign="center center" style="margin: 16px">
     <md-card class="sale-line-item-container">
+        <md-card-title style="margin: 10px">{{text}}</md-card-title>
         <md-card-content class="sale-line-item-container-content" style="max-height: 850px; overflow-y: auto;">
             <app-product-list [items]="items" (itemClick)="onItemClick($event)"></app-product-list>
         </md-card-content>
