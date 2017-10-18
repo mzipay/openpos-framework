@@ -1,15 +1,29 @@
 <md-list>
-    <md-list-item *ngFor="let i of items" class="sale-line-item" (click)="onItemClick(i)">
+    <md-list-item *ngFor="let i of items" class="sale-line-item" (click)="onItemClick(i, $event)">
         <div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
             <div fxFlex="80">
-                <div md-line class="line-item-description" >{{i.description}}</div>
+                <div md-line class="line-item-description">{{i.description}}</div>
                 <div md-line class="line-item-subtitle">{{i.subtitle}}</div>
             </div>
 
-            <div fxFlex>							
-                <h5 class="middle-align line-item-extended-amt"><span class="super-currency-symbol">$</span>{{i.amount}}</h5>
-                <md-icon class="material-icons line-item-caret">keyboard_arrow_right</md-icon>
+            <div fxFlex>
+                <h5 class="middle-align line-item-extended-amt">
+                    <span class="super-currency-symbol">$</span>{{i.amount}}
+                </h5>
+                <md-icon *ngIf="showItemIcon" class="material-icons line-item-caret">keyboard_arrow_right</md-icon>
             </div>
+            <div *ngIf="showItemMenu">
+                <button md-icon-button [mdMenuTriggerFor]="menu">
+                    <md-icon>more_vert</md-icon>
+                </button>
+                <md-menu #menu="mdMenu">
+                    <button md-menu-item *ngFor="let menuItem of menuItemActions" (click)="onMenuItemClick(i, menuItem, $event)">
+                            <app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
+                            <span>{{menuItem.title}}</span>
+                    </button>
+                </md-menu>
+            </div>
+
         </div>
     </md-list-item>
 </md-list>

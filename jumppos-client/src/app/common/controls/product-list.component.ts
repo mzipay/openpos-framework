@@ -1,3 +1,4 @@
+import { IMenuItem } from './../imenuitem';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IScreen } from '../iscreen';
 import { IItem } from '../iitem';
@@ -8,10 +9,30 @@ import { IItem } from '../iitem';
 })
 export class ProductListComponent {
     @Input() items: IItem[];
-    @Output() itemClick = new EventEmitter<IItem>();
+    @Input() menuItemActions: IMenuItem[] = [];
+    @Input() showItemIcon = true;
+    @Input() showItemMenu = false;
+    @Output() itemClick = new EventEmitter<ItemClickAction>();
+    @Output() menuItemClick = new EventEmitter<MenuClickAction>();
 
-    onItemClick(item: IItem): void {
-        console.log(`productList.onItemClick: ${item}`)
-        this.itemClick.emit(item);
+    onItemClick(item: IItem, event: any): void {
+        console.log(`productList.onItemClick: ${item}`);
+        this.itemClick.emit({item, event});
     }
+
+    onMenuItemClick(item: IItem, menuItem: IMenuItem, event: any): void {
+        console.log(`productList.onItemClick: ${menuItem}`);
+        this.menuItemClick.emit({item, menuItem, event});
+    }
+}
+
+export interface ItemClickAction {
+    item: IItem;
+    event: any;
+}
+
+export interface MenuClickAction {
+    item: IItem;
+    menuItem: IMenuItem;
+    event: any;
 }

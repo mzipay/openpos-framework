@@ -5,7 +5,7 @@
                 <md-grid-tile style="padding: 10px;" *ngFor="let menuItem of menuItems">
                     <div fxLayout="column" style="height: 200px; width:250px;" fxLayoutAlign="center center">
                         <button md-raised-button class="main-menu-item" (click)="session.onAction(menuItem.action)" fxLayoutAlign="center center">
-                            <app-icon iconName="{{menuItem.icon}}"></app-icon>
+                            <app-icon iconName="{{menuItem.icon}}" iconClass="material-icons md-64 main-menu-item-icon"></app-icon>
                             <p class="main-menu-item-text" [style.xs]="{'zoom': '150%', 'top': '10px'}">{{menuItem.title}}</p>
                         </button>
                     </div>                      

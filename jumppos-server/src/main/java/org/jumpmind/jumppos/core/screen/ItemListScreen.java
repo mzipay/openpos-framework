@@ -1,5 +1,6 @@
 package org.jumpmind.jumppos.core.screen;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class ItemListScreen extends DefaultScreen {
     private int selectedIndex = -1;
     private String itemActionName = "Item";
     private String text;
+    private List<MenuItem> itemActions = new ArrayList<>();
 
     public ItemListScreen() {
         setType(ScreenType.ItemList);
@@ -64,7 +66,23 @@ public class ItemListScreen extends DefaultScreen {
         this.itemActionName = itemActionName;
     }
 
-    static public class Item implements IItem {
+    public List<MenuItem> getItemActions() {
+        return itemActions;
+    }
+
+
+    public void setItemActions(List<MenuItem> itemActions) {
+        this.itemActions = itemActions;
+    }
+
+    public void addItemAction(MenuItem itemAction) {
+        this.getItemActions().add(itemAction);
+    }
+    
+    static public class Item implements IItem, Serializable {
+        
+        private static final long serialVersionUID = 1L;
+        
         private String id;
         private Integer index;
         private String description;
