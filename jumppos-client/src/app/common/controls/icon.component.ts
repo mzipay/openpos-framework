@@ -7,6 +7,7 @@ import { Component, Input } from '@angular/core';
 
 export class IconComponent {
     @Input() iconName: string;
+    @Input() iconClass: string;
 
     isLocalIcon(): boolean {
         return this.iconName.startsWith('local_');
