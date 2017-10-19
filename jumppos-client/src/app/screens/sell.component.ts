@@ -38,4 +38,8 @@ export class SellComponent implements AfterViewInit, DoCheck, IScreen {
     this.session.onAction('Next');
   }
 
+  onItemClick($event): void {
+    this.session.onActionWithStringPayload(this.session.screen.itemActionName, $event.item.index);
+  }
+
 }
