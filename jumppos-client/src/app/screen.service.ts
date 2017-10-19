@@ -1,3 +1,4 @@
+import { SaleRetrievalComponent } from './screens/sale-retrieval.component';
 import { BasicItemSearchComponent } from './screens/basic-item-search.component';
 import { CartComponent } from './kiosk/cart.component';
 import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component';
@@ -43,6 +44,7 @@ export class ScreenService {
     this.screens.set('SellItemDetail', SellItemDetailComponent);
     this.screens.set('SignatureCapture', SignatureCaptureComponent);
     this.screens.set('Table', StaticTableComponent);
+    this.screens.set('SaleRetrieval', SaleRetrievalComponent);
   }
 
   public resolveScreen(type: string): ComponentFactory<IScreen> {

@@ -15,6 +15,6 @@ public enum ScreenType {
     Sell,
     SellItemDetail,
     SignatureCapture,
-    Table
-    ;
+    Table,
+    SaleRetrieval
 }

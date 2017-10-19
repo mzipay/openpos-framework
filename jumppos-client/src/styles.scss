@@ -356,6 +356,15 @@ button.static-table-button.mat-raised-button {
     padding: 0px !important;
 }
 
+.sale-transaction-container {
+    height: calc(100% - 150px);
+    width: calc(100% - 16px);
+    font-size: 14px;
+    margin: 0px;
+    top: 10px;
+    padding: 0px !important;
+}
+
 .sale-line-item-container-content {
     height: 100%;
 }

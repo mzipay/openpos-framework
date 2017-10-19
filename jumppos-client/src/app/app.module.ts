@@ -1,3 +1,4 @@
+import { SaleRetrievalComponent } from './screens/sale-retrieval.component';
 import { LoaderService } from './common/loader/loader.service';
 import { LoaderComponent } from './common/loader/loader.component';
 import { InquiryComponent } from './screens/inquiry.component'; // TODO: remove when done experimenting with item search
@@ -120,7 +121,8 @@ const stompConfig: StompConfig = {
     SellComponent,
     SellItemDetailComponent,
     SignatureCaptureComponent,
-    StaticTableComponent
+    StaticTableComponent,
+    SaleRetrievalComponent
   ],
   declarations: [
     InquiryComponent, // TODO: remove when done experimenting with item search
@@ -142,6 +144,7 @@ const stompConfig: StompConfig = {
     SellItemDetailComponent,
     PaymentStatusComponent,
     StaticTableComponent,
+    SaleRetrievalComponent,
     LoaderComponent,
     FormComponent,
     HomeComponent,

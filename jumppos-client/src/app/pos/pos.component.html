@@ -2,7 +2,7 @@
 	<md-sidenav class="app-sidenav" #sidenav>
 		<div class="app-sidenav-content" *ngIf="menuActions" class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
 			<md-nav-list>
-				<a *ngFor="let m of menuActions" md-list-item (click)="session.onAction(m.action);  sidenav.close()" href="#">
+				<a *ngFor="let m of menuActions" md-list-item (click)="sidenav.close(); session.onAction(m.action);">
 					<md-icon md-list-icon class="material-icons">{{m.icon}}</md-icon>
 					<span md-line [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>
 					<md-icon class="material-icons">keyboard_arrow_right</md-icon>
