@@ -13,7 +13,7 @@
 		<md-card class="sale-transaction-container serrated-edge">
 			<md-card-content class="sale-line-item-container-content" fxLayout="column" fxLayoutAlign="space-between">
 				<div class="scrollable">
-					<md-list>
+					<md-nav-list>
 						<md-list-item *ngFor="let i of session.screen.transactions" class="sale-line-item" (click)="selected(i.transactionId)">
 							<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
 								<div fxFlex="80">
@@ -28,7 +28,7 @@
 								</div>
 							</div>
 						</md-list-item>
-					</md-list>
+					</md-nav-list>
 				</div>
 			</md-card-content>
 
