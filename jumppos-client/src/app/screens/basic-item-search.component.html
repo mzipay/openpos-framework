@@ -1,6 +1,6 @@
 <div style="height: 100vh;">
     <md-card>
-        <md-card-title>{{searchFieldForm.name}}</md-card-title>
+        <md-card-title fxHide.xs>{{searchFieldForm.name}}</md-card-title>
         <md-card-content>
             <md-form-field *ngFor="let field of searchFieldForm.formElements" style="width: 100%;">
                 <input mdInput placeholder="{{field.placeholder}}" [(ngModel)]="field.value">
