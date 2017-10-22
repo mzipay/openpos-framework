@@ -1,31 +1,31 @@
-<div style="height: 100vh;">
-    <md-card>
-        <md-card-title fxHide.xs>{{searchFieldForm.name}}</md-card-title>
-        <md-card-content>
-            <md-form-field *ngFor="let field of searchFieldForm.formElements" style="width: 100%;">
-                <input mdInput placeholder="{{field.placeholder}}" [(ngModel)]="field.value">
-            </md-form-field>
-        </md-card-content>
-        <md-card-actions>
+<div style="height: 100vh">
+    <mat-card>
+        <mat-card-title fxHide.xs>{{searchFieldForm.name}}</mat-card-title>
+        <mat-card-content>
+            <mat-form-field *ngFor="let field of searchFieldForm.formElements" style="width: 100%;">
+                <input matInput placeholder="{{field.placeholder}}" [(ngModel)]="field.value">
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions>
             <button *ngFor="let submitAction of submitActionNames" (click)="onSubmitAction(submitAction)" [color]="submitAction === defaultActionName ? 'primary':''"
-                md-raised-button>
+                mat-raised-button>
                 {{submitAction}}
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 
-    <md-card style="height: calc(100% - 470px)">
-        <md-card-content style="height: calc(100% - 40px)">
+    <mat-card style="height: calc(100% - 470px);">
+        <mat-card-content style="height: calc(100% - 40px);">
             <div fxLayout="row" fxLayoutWrap fxLayoutAlign=" center">
                 <ng-container *ngFor="let category of searchCategories; let i = index">
                     <ng-container *ngFor="let value of searchCategoryValues[i].values; let valueIndex = index">
                         <ng-container *ngIf="value.selected && value.attributes.name !== '<All>'">
-                            <button md-button (click)="onValueSelected(value, searchCategoryValues[i].attributes.name)">{{value.attributes.name}}</button>
-                            <md-icon *ngIf="i < displayCategoryIndex-1" class="material-icons">keyboard_arrow_right</md-icon>
+                            <button mat-button (click)="onValueSelected(value, searchCategoryValues[i].attributes.name)">{{value.attributes.name}}</button>
+                            <mat-icon *ngIf="i < displayCategoryIndex-1" class="material-icons">keyboard_arrow_right</mat-icon>
                         </ng-container>
                         <ng-container *ngIf="value.attributes.name === '<All>'">
-                            <button md-button (click)="onValueSelected(value, searchCategoryValues[i].attributes.name)">Department</button>
-                            <md-icon class="material-icons">keyboard_arrow_right</md-icon>
+                            <button mat-button (click)="onValueSelected(value, searchCategoryValues[i].attributes.name)">Department</button>
+                            <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
                         </ng-container>
 
                     </ng-container>
@@ -34,18 +34,18 @@
             <div class="scrollable">
                 <ng-container *ngFor="let category of searchCategories; let i = index">
                     <ng-container *ngIf="i===displayCategoryIndex">
-                        <md-nav-list>
+                        <mat-nav-list>
                             <ng-container *ngFor="let value of searchCategoryValues[i].values">
-                                <md-list-item *ngIf="value.attributes.name !== '<All>'" style="border-color: black" (click)="onValueSelected(value, searchCategoryValues[i].attributes.name)">
+                                <mat-list-item *ngIf="value.attributes.name !== '<All>'" style="border-color: black" (click)="onValueSelected(value, searchCategoryValues[i].attributes.name)">
                                     <span>{{value.attributes.name}}</span>
-                                    <md-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</md-icon>
-                                </md-list-item>
+                                    <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
+                                </mat-list-item>
                             </ng-container>
-                        </md-nav-list>
+                        </mat-nav-list>
                     </ng-container>
                 </ng-container>
             </div>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 
 </div>

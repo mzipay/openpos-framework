@@ -10,7 +10,7 @@
 			</svg>
 		</div>
 
-		<button md-raised-button class="sale-total-button" [disabled]="!session.screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')">
+		<button mat-raised-button class="sale-total-button" [disabled]="!session.screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')">
 			<div class="containerX" fxLayout="row" fxLayoutAlign="center center">
 				<div fxFlex [style.xs]="{'flex': 'initial', 'margin': '10px'}"> </div>
 				<p class="sale-total-text">
@@ -19,44 +19,44 @@
 				<div class="sale-total-checkout-container" ngClass.xs="sale-total-checkout-container-small" [ngClass]="{'sale-total-checkout-container-dimmed':items.length == 0}"
 				 fxLayout="row">
 					<p class="sale-total-checkout-text">Checkout</p>
-					<md-icon class="material-icons md-48 sale-total-icon">keyboard_arrow_right</md-icon>
+					<mat-icon class="material-icons mat-48 sale-total-icon">keyboard_arrow_right</mat-icon>
 				</div>
 			</div>
 		</button>
 
 		<div class="containerX sub-totals-outer-container" fxLayout="row" fxLayoutAlign="center center">
 			<div fxFlex>
-				<md-card class="subtotals-container">
-					<md-card-content>
+				<mat-card class="subtotals-container">
+					<mat-card-content>
 						<p class="subtotals-label">Discounts</p>
 						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">
 							<span class="super-currency-symbol">$</span>{{session.screen.discountTotal}}</p>
-					</md-card-content>
-				</md-card>
+					</mat-card-content>
+				</mat-card>
 			</div>
 			<div fxFlex style="padding:12px;">
-				<md-card class="subtotals-container" style="position:relative;">
+				<mat-card class="subtotals-container" style="position:relative;">
 
-					<md-card-content>
+					<mat-card-content>
 						<p class="subtotals-label">Tax</p>
 						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">
 							<span class="super-currency-symbol">$</span>{{session.screen.taxTotal}}</p>
-					</md-card-content>
-				</md-card>
+					</mat-card-content>
+				</mat-card>
 			</div>
 			<div fxFlex>
-				<md-card class="subtotals-container" style="position:relative;">
-					<md-card-content>
+				<mat-card class="subtotals-container" style="position:relative;">
+					<mat-card-content>
 						<p class="subtotals-label">Subtotal</p>
 						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">
 							<span class="super-currency-symbol">$</span>{{session.screen.subTotal}}</p>
-					</md-card-content>
-				</md-card>
+					</mat-card-content>
+				</mat-card>
 			</div>
 		</div>
 
-		<md-card class="sale-line-item-container serrated-edge">
-			<md-card-content class="sale-line-item-container-content" fxLayout="column" fxLayoutAlign="space-between">
+		<mat-card class="sale-line-item-container serrated-edge">
+			<mat-card-content class="sale-line-item-container-content" fxLayout="column" fxLayoutAlign="space-between">
 				<div class="scrollable">
 					<app-product-list [items]="items" (itemClick)="onItemClick($event)"></app-product-list>
 					<div *ngIf="items.length == 0" class="sale-line-item-container-no-content" [style.sm]="{'font-size': '16px'}" [style.xs]="{'font-size': '16px'}"
@@ -68,22 +68,22 @@
 						Scan something to get started.
 					</div>
 				</div>
-				<button class="lookup-customer-button" md-raised-button (click)="session.onAction('LookupCustomer')">
+				<button class="lookup-customer-button" mat-raised-button (click)="session.onAction('LookupCustomer')">
 					<div fxLayout="row" fxLayoutAlign=" center">
 						<div class="lookup-customer-icon">
-							<md-icon class="material-icons md-48" style="vertical-align: middle; margin-top: 5px;">person</md-icon>
+							<mat-icon class="material-icons mat-48" style="vertical-align: middle; margin-top: 5px;">person</mat-icon>
 						</div>
 						<div *ngIf="!session.screen.customer">Lookup Customer</div>
 						<div *ngIf="session.screen.customer">{{session.screen.customer.name}}</div>
 						<div style="width:100%"></div>
 						<div fxFlex>
-							<md-icon class="material-icons md-48">keyboard_arrow_right</md-icon>
+							<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 						</div>
 					</div>
 				</button>
-			</md-card-content>
+			</mat-card-content>
 
-		</md-card>
+		</mat-card>
 
 
 	</div>

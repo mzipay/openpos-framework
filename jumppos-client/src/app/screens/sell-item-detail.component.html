@@ -1,7 +1,7 @@
-<md-card class="line-item-detail-header-container">
-    <md-card-title class="line-item-detail-title">{{item.description}}</md-card-title>
+<mat-card class="line-item-detail-header-container">
+    <mat-card-title class="line-item-detail-title">{{item.description}}</mat-card-title>
 
-    <md-card-content>
+    <mat-card-content>
         <div fxLayout="row" fxLayoutAlign="center center" >
             
             <div fxLayout="column" class="line-item-detail-header serrated-edge serrated-edge-bottom">            
@@ -29,9 +29,9 @@
         <div fxLayout="row" fxLayoutAlign="center center">
 
         </div>
-    </md-card-content>
-    <md-card-actions *ngIf="session.screen.itemActions" class="line-item-detail-actions">
-        <button *ngFor="let m of session.screen.itemActions" md-raised-button (click)="session.onAction(m.action)">{{m.title}}</button>
-    </md-card-actions>
+    </mat-card-content>
+    <mat-card-actions *ngIf="session.screen.itemActions" class="line-item-detail-actions">
+        <button *ngFor="let m of session.screen.itemActions" mat-raised-button (click)="session.onAction(m.action)">{{m.title}}</button>
+    </mat-card-actions>
 
-</md-card>
+</mat-card>
