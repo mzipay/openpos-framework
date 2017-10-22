@@ -11,17 +11,17 @@ import { SessionService } from '../session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
 import { FocusDirective } from '../common/focus.directive';
 import { Observable } from 'rxjs/Observable';
-import { MdDialog, MdDialogRef, MdIconRegistry, MdSnackBar, MdSnackBarRef, SimpleSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MatIconRegistry, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 
 export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
-    private dialogRef: MdDialogRef<DialogComponent>;
+    private dialogRef: MatDialogRef<DialogComponent>;
 
     private previousScreenType: string;
 
     private previousScreenSequenceNumber: number;
 
-    private snackBarRef: MdSnackBarRef<SimpleSnackBar>;
+    private snackBarRef: MatSnackBarRef<SimpleSnackBar>;
 
     @ViewChild(ScreenDirective) host: ScreenDirective;
 
@@ -29,9 +29,9 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
     constructor(public screenService: ScreenService,
         public session: SessionService,
-        public dialog: MdDialog,
+        public dialog: MatDialog,
         public iconService: IconService,
-        public snackBar: MdSnackBar) {
+        public snackBar: MatSnackBar) {
     }
 
     protected abstract appName(): String;
