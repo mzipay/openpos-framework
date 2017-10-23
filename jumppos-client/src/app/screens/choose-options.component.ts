@@ -34,7 +34,6 @@ export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck {
 
 }
 
-
 export interface IOptionItem {
     displayValue: string;
     value: string;
