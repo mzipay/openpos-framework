@@ -1,4 +1,4 @@
-<div style="height: 100vh">
+<div style="height: 100vh; margin: 15px;" fxLayout="column" fxLayoutGap="15px" >
     <mat-card>
         <mat-card-title fxHide.xs>{{searchFieldForm.name}}</mat-card-title>
         <mat-card-content>
@@ -14,7 +14,7 @@
         </mat-card-actions>
     </mat-card>
 
-    <mat-card style="height: calc(100% - 470px);">
+    <mat-card style="height: calc(100% - 445px)">
         <mat-card-content style="height: calc(100% - 40px);">
             <div fxLayout="row" fxLayoutWrap fxLayoutAlign=" center">
                 <ng-container *ngFor="let category of searchCategories; let i = index">
