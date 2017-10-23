@@ -1,30 +1,30 @@
 <div *ngIf="session.screen.type === 'Table'">
-    <md-card>
-        <md-card-content>
+    <mat-card>
+        <mat-card-content>
             <label class="prompt-text">{{text}}</label>
-            <md-table #table [dataSource]="dataSource" style="max-height: 800px; overflow-y: auto;">
-                <ng-container *ngFor="let columnId of columnIds" mdColumnDef="{{columnId}}">
+            <mat-table #table [dataSource]="dataSource" style="max-height: 800px; overflow-y: auto;">
+                <ng-container *ngFor="let columnId of columnIds" matColumnDef="{{columnId}}">
                     <!-- If there is a '_selection' column present, don't add a header label for it -->
-                    <md-header-cell *mdHeaderCellDef>{{columnId !== '_selection' ? columnsById[columnId].headerLabel : ''}}</md-header-cell>
-                    <md-cell *mdCellDef="let row" (click)="onSelectRow(row.index)">
+                    <mat-header-cell *matHeaderCellDef>{{columnId !== '_selection' ? columnsById[columnId].headerLabel : ''}}</mat-header-cell>
+                    <mat-cell *matCellDef="let row" (click)="onSelectRow(row.index)">
                         <div *ngIf="columnId === '_selection'; else elseBlock"> 
-                            <md-radio-button [value]="row.index" [checked]="isRowSelected(row.index)" (click)="onSelectRow(row.index)"></md-radio-button>
+                            <mat-radio-button [value]="row.index" [checked]="isRowSelected(row.index)" (click)="onSelectRow(row.index)"></mat-radio-button>
                         </div>
                         <ng-template #elseBlock>{{row.values[columnsById[columnId].index]}}</ng-template>
-                    </md-cell>
+                    </mat-cell>
                 </ng-container>
-                <md-header-row *mdHeaderRowDef="columnIds"></md-header-row>
-                <md-row *mdRowDef="let row; columns: columnIds;"></md-row>
-            </md-table>
-        </md-card-content>
-        <md-card-actions>
+                <mat-header-row *matHeaderRowDef="columnIds"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: columnIds;"></mat-row>
+            </mat-table>
+        </mat-card-content>
+        <mat-card-actions>
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" fxLayoutWrap>
                 <div *ngFor="let m of session.screen.menuActions; let i = index">
-                    <button md-raised-button class="static-table-button"
+                    <button mat-raised-button class="static-table-button"
                     [color]="i===0?'primary':''" [disabled]="!m.enabled" [autofocus]="i===0" [appFocus]="i===0"
                      (click)="onAction(m.action)" [disabled]="!m.enabled">{{m.title}}</button>
                 </div>
             </div>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </div>

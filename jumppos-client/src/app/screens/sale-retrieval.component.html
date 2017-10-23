@@ -10,29 +10,29 @@
 			</svg>
 		</div>
 
-		<md-card class="sale-transaction-container serrated-edge">
-			<md-card-content class="sale-line-item-container-content" fxLayout="column" fxLayoutAlign="space-between">
+		<mat-card class="sale-transaction-container serrated-edge">
+			<mat-card-content class="sale-line-item-container-content" fxLayout="column" fxLayoutAlign="space-between">
 				<div class="scrollable">
-					<md-list>
-						<md-list-item *ngFor="let i of session.screen.transactions" class="sale-line-item" (click)="selected(i.transactionId)">
+					<mat-nav-list>
+						<mat-list-item *ngFor="let i of session.screen.transactions" class="sale-line-item" (click)="selected(i.transactionId)">
 							<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
 								<div fxFlex="80">
-									<div md-line class="line-item-description">{{i.transactionId}}</div>
-									<div md-line class="line-item-subtitle">{{i.description}}</div>
+									<div mat-line class="line-item-description">{{i.transactionId}}</div>
+									<div mat-line class="line-item-subtitle">{{i.description}}</div>
 								</div>
 
 								<div fxFlex>
 									<h5 class="middle-align line-item-extended-amt">
 										<span class="super-currency-symbol">$</span>{{i.grandTotal}}</h5>
-									<md-icon class="material-icons line-item-caret">keyboard_arrow_right</md-icon>
+									<mat-icon class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
 								</div>
 							</div>
-						</md-list-item>
-					</md-list>
+						</mat-list-item>
+					</mat-nav-list>
 				</div>
-			</md-card-content>
+			</mat-card-content>
 
-		</md-card>
+		</mat-card>
 
 
 	</div>

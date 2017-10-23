@@ -1,10 +1,10 @@
 <div *ngIf="session.screen.type==='Prompt' &&  session.screen.text" class="prompt-container-outer" fxLayout="row" fxLayoutAlign="center center">
-	<md-card class="prompt-container" [style.sm]="{'width': '75%'}" [style.xs]="{'width': '85%','top': 'initial'}">
-		 <md-card-content>
+	<mat-card class="prompt-container" [style.sm]="{'width': '75%'}" [style.xs]="{'width': '85%','top': 'initial'}">
+		 <mat-card-content>
 			<app-prompt-input [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
 			[promptIcon]="session.screen.promptIcon" [onEnterCallback]="promptInputCallback" [responseText]="session.screen.responseText"></app-prompt-input>
 			<div style="height:50px"></div>
 			<label class="prompt-text">{{session.screen.text}}</label>
-		</md-card-content> 
-	</md-card>
+		</mat-card-content> 
+	</mat-card>
 </div>

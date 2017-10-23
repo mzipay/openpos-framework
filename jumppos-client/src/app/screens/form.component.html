@@ -1,48 +1,48 @@
 <ng-container *ngIf="session.screen.type==='Form'">
-	<md-card>
-		<md-card-title fxLayout="row">
+	<mat-card>
+		<mat-card-title fxLayout="row">
 			<span fxFlex="<grow>">{{session.screen.form.name}}</span>
 			<div fxFlex *ngIf="itemActions && itemActions.length > 0">
-				<button md-icon-button [mdMenuTriggerFor]="menu">
-					<md-icon>more_vert</md-icon>
+				<button mat-icon-button [matMenuTriggerFor]="menu">
+					<mat-icon>more_vert</mat-icon>
 				</button>
-				<md-menu #menu="mdMenu">
-					<button md-menu-item *ngFor="let menuItem of itemActions" (click)="onItemAction(menuItem, $event)">
+				<mat-menu #menu="matMenu">
+					<button mat-menu-item *ngFor="let menuItem of itemActions" (click)="onItemAction(menuItem, $event)">
 						<app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
 						<span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
 					</button>
-				</md-menu>
+				</mat-menu>
 			</div>
-		</md-card-title>
-		<md-card-content style="max-height: 850px; overflow-y: auto;">						
+		</mat-card-title>
+		<mat-card-content style="max-height: 850px; overflow-y: auto;">						
 			<ng-container *ngFor="let formElement of session.screen.form.formElements">
 				<div *ngIf="formElement.elementType==='input'">
-					<md-input-container style="width:100%">
-						<input [(ngModel)]="formElement.value" #field="ngModel" mdInput placeholder="{{formElement.label + ' - ' + formElement.placeholder}}"
+					<mat-input-container style="width:100%">
+						<input [(ngModel)]="formElement.value" #field="ngModel" matInput placeholder="{{formElement.label + ' - ' + formElement.placeholder}}"
 						 [pattern]="formElement.pattern" required>
 						<ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
-							<md-error div *ngIf="field.errors.required">
+							<mat-error div *ngIf="field.errors.required">
 								* is required.
-							</md-error>
-							<md-error *ngIf="field.errors.pattern">
+							</mat-error>
+							<mat-error *ngIf="field.errors.pattern">
 								* did not follow the designated pattern
-							</md-error>
+							</mat-error>
 						</ng-container>
-					</md-input-container>
+					</mat-input-container>
 				</div>
 				<div *ngIf="formElement.elementType==='display'">
-					<md-input-container  style="width:100%">
+					<mat-input-container  style="width:100%">
 					    <label class="prompt-text">{{formElement.label}}</label>
-						<input [(ngModel)]="formElement.value" #field="ngModel" mdInput disabled>
-					</md-input-container>
+						<input [(ngModel)]="formElement.value" #field="ngModel" matInput disabled>
+					</mat-input-container>
 				</div>				
 			</ng-container>
 			<ng-container *ngFor="let formElement of session.screen.form.formElements">
 				<div *ngIf="formElement.elementType==='button'">
-					<button md-raised-button [color]="'primary'" (click)="session.response=form; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>
+					<button mat-raised-button [color]="'primary'" (click)="session.response=form; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>
 				</div>
 			</ng-container>
 
-		</md-card-content>
-	</md-card>
+		</mat-card-content>
+	</mat-card>
 </ng-container>

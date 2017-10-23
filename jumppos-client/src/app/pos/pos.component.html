@@ -1,25 +1,25 @@
-<md-sidenav-container style="background-color: transparent;">
-	<md-sidenav class="app-sidenav" #sidenav>
+<mat-sidenav-container style="background-color: transparent;">
+	<mat-sidenav class="app-sidenav" #sidenav>
 		<div class="app-sidenav-content" *ngIf="menuActions" class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
-			<md-nav-list>
-				<a *ngFor="let m of menuActions" md-list-item (click)="sidenav.close(); session.onAction(m.action);">
-					<md-icon md-list-icon class="material-icons">{{m.icon}}</md-icon>
-					<span md-line [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>
-					<md-icon class="material-icons">keyboard_arrow_right</md-icon>
+			<mat-nav-list>
+				<a *ngFor="let m of menuActions" mat-list-item (click)="sidenav.close(); session.onAction(m.action);">
+					<mat-icon mat-list-icon class="material-icons">{{m.icon}}</mat-icon>
+					<span mat-line [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>
+					<mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
 				</a>
-			</md-nav-list>
+			</mat-nav-list>
 		</div>
-	</md-sidenav>
+	</mat-sidenav>
 
 	<div fxLayout="row" fxLayoutAlign=" center" class="statusbar-container">
 		<button *ngIf="session.screen && session.screen.menuActions && session.screen.menuActions.length > 0" [style.xs]="{'left': '-10px'}"
 			class="statusbar-button"
-		 md-button (click)="sidenav.open()">
-			<md-icon class="material-icons">menu</md-icon>
+		 mat-button (click)="sidenav.open()">
+			<mat-icon class="material-icons">menu</mat-icon>
 		</button>
 		<app-statusbar fxFlex *ngIf="session.screen && session.screen.showStatusBar"></app-statusbar>
 	</div>
 
 	<ng-template appScreen></ng-template>
 
-</md-sidenav-container>
+</mat-sidenav-container>

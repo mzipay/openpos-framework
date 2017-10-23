@@ -1,15 +1,15 @@
 import { DomSanitizer } from '@angular/platform-browser';
 import { Injectable } from '@angular/core';
-import { MdIconRegistry } from '@angular/material';
+import { MatIconRegistry } from '@angular/material';
 
 @Injectable()
 export class IconService {
-    constructor( private iconRegistry: MdIconRegistry,
+    constructor( private iconRegistry: MatIconRegistry,
         private sanitizer: DomSanitizer) {
     }
 
     /**
-     * Registers SVG icon resources that are available locally to this app so that the md-icon directive can
+     * Registers SVG icon resources that are available locally to this app so that the Mat-icon directive can
      * access them.
      */
     registerLocalSvgIcons(): void {

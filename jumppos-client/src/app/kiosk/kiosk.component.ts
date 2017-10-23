@@ -7,7 +7,7 @@ import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
 import { FocusDirective } from '../common/focus.directive';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-pos',
@@ -19,9 +19,9 @@ export class KioskComponent extends AbstractApp implements DoCheck {
 
   constructor(public screenService: ScreenService,
     public session: SessionService,
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     public iconService: IconService,
-    public snackBar: MdSnackBar) {
+    public snackBar: MatSnackBar) {
     super(screenService, session, dialog, iconService, snackBar);
   }
 
