@@ -23,7 +23,7 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 // that you are using.
 @include angular-material-theme($app-theme);
 
-$md-card-default-margin: 24px !default;
+$mat-card-default-margin: 24px !default;
 
 $app-highlight-color: #2371ad;
 $app-statusbar-color: #696969;
@@ -33,26 +33,26 @@ $app-logo-url: url(assets/jumpmart-logo.png);
 
 html, body {
     font-family: Roboto,"Helvetica Neue",sans-serif;
-    height:100%;
-    min-height:100vh;
+    height:100vh;
+    max-height:100vh;
     margin:0;
     overflow: hidden;
 }
 
-md-card {
-    margin: $md-card-default-margin;
+mat-card {
+    margin: $mat-card-default-margin;
     display: block;
     position: relative;
 }
 
 // controls sizing of radio button column on static-table template
-md-cell.mat-cell.mat-column-_selection {
+mat-cell.mat-cell.mat-column-_selection {
     width: 30px;
     flex: 0 0 30px;
 }
 
 // controls sizing of radio button column header on static-table template
-md-header-cell.mat-header-cell.mat-column-_selection {
+mat-header-cell.mat-header-cell.mat-column-_selection {
     width: 30px;
     flex: 0 0 30px;
 }
@@ -196,19 +196,19 @@ md-header-cell.mat-header-cell.mat-column-_selection {
     min-width: 1%;
 }
 
-.material-icons.md-40 {
+.material-icons.mat-40 {
     font-size: 40px !important;
     height: 40px !important;
     width: 40px !important;
 }
 
-.material-icons.md-48 {
+.material-icons.mat-48 {
     font-size: 48px !important;
     height: 48px !important;
     width: 48px !important;
 }
 
-.material-icons.md-64 {
+.material-icons.mat-64 {
     font-size: 64px !important;
     height: 64px !important;
     width: 64px !important;
@@ -370,7 +370,7 @@ button.static-table-button.mat-raised-button {
 }
 
 .scrollable {
-    overflow-y: auto;
+    overflow: auto;
     height: 100%;
 }
 
