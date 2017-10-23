@@ -1,5 +1,5 @@
 import { IForm } from './form.component';
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit, DoCheck, HostListener } from '@angular/core';
 import { SessionService } from '../session.service';
 import { IScreen } from '../common/iscreen';
 
@@ -27,6 +27,7 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
   show(session: SessionService) {
   }
 
+  @HostListener('window:keyup.enter')
   onEnter(): void {
     this.onSubmitAction('enter');
   }
