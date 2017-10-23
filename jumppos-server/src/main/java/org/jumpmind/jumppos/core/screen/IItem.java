@@ -1,5 +1,9 @@
 package org.jumpmind.jumppos.core.screen;
 
+import java.util.List;
+
+import org.jumpmind.jumppos.core.model.FormDisplayField;
+
 public interface IItem {
     public Integer getIndex();
     public void setIndex(Integer index);
@@ -9,6 +13,8 @@ public interface IItem {
     public void setDescription(String description);
     public String getSubtitle();
     public void setSubtitle(String subtitle);
+    public List<FormDisplayField> getFields();
+    public void setFields(List<FormDisplayField> fields);
     public String getAmount();
     public void setAmount(String amount);
 }

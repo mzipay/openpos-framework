@@ -1,6 +1,19 @@
 <ng-container *ngIf="session.screen.type==='Form'">
 	<mat-card>
-		<mat-card-title>{{session.screen.form.name}}</mat-card-title>
+		<mat-card-title fxLayout="row">
+			<span fxFlex="<grow>">{{session.screen.form.name}}</span>
+			<div fxFlex *ngIf="itemActions && itemActions.length > 0">
+				<button mat-icon-button [matMenuTriggerFor]="menu">
+					<mat-icon>more_vert</mat-icon>
+				</button>
+				<mat-menu #menu="matMenu">
+					<button mat-menu-item *ngFor="let menuItem of itemActions" (click)="onItemAction(menuItem, $event)">
+						<app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
+						<span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
+					</button>
+				</mat-menu>
+			</div>
+		</mat-card-title>
 		<mat-card-content style="max-height: 850px; overflow-y: auto;">						
 			<ng-container *ngFor="let formElement of session.screen.form.formElements">
 				<div *ngIf="formElement.elementType==='input'">

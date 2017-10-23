@@ -2,7 +2,7 @@ package org.jumpmind.jumppos.core.model;
 
 import java.io.Serializable;
 
-public class FormField implements IFormElement, Serializable {
+public class FormField implements IFormElement, IField, Serializable {
     private static final long serialVersionUID = 1L;
     
     private String elementType = "input";
@@ -43,22 +43,27 @@ public class FormField implements IFormElement, Serializable {
         this.inputType = inputType;
     }
 
+    @Override
     public String getLabel() {
         return label;
     }
 
+    @Override
     public void setLabel(String label) {
         this.label = label;
     }
 
-    public String getFieldId() {
+    @Override
+    public String getId() {
         return fieldId;
     }
 
-    public void setFieldId(String fieldId) {
+    @Override
+    public void setId(String fieldId) {
         this.fieldId = fieldId;
     }
 
+    
     public String getElementType() {
         return elementType;
     }
@@ -67,10 +72,12 @@ public class FormField implements IFormElement, Serializable {
         this.elementType = elementType;
     }
 
+    @Override
     public String getValue() {
         return value;
     }
 
+    @Override
     public void setValue(String value) {
         this.value = value;
     }
@@ -90,5 +97,6 @@ public class FormField implements IFormElement, Serializable {
     public String getPattern() {
         return pattern;
     }
+
 
 }

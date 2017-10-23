@@ -118,6 +118,11 @@ mat-header-cell.mat-header-cell.mat-column-_selection {
     font-size:20px;
 }
 
+.product-list-label {
+    color: $app-highlight-color;
+    font-size:14px;
+}
+
 .prompt-input-container {
     position:relative;
     padding:0;

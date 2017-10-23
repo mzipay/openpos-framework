@@ -144,7 +144,7 @@ public class ScreenService implements IScreenService {
             for (IFormElement formElement : form.getFormElements()) {
                 if (formElement instanceof FormField) {
                     FormField formField = (FormField) formElement;
-                    String fieldId = formField.getFieldId();
+                    String fieldId = formField.getId();
                     for (Field field : lastScreen.getClass().getDeclaredFields()) {
                         FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
                         if (textFieldAnnotation != null) {
@@ -169,7 +169,7 @@ public class ScreenService implements IScreenService {
                 FormField formField = new FormField();
                 formField.setElementType("input"); // TODO support other types
                                                    // here?
-                formField.setFieldId(field.getName());
+                formField.setId(field.getName());
                 formField.setLabel(textFieldAnnotation.label());
                 formField.setPlaceholder(textFieldAnnotation.placeholder());
                 formField.setPattern(textFieldAnnotation.pattern());
