@@ -1,6 +1,5 @@
 package org.jumpmind.jumppos.core.screen;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,69 +77,6 @@ public class ItemListScreen extends DefaultScreen {
     public void addItemAction(MenuItem itemAction) {
         this.getItemActions().add(itemAction);
     }
+
     
-    static public class Item implements IItem, Serializable {
-        
-        private static final long serialVersionUID = 1L;
-        
-        private String id;
-        private Integer index;
-        private String description;
-        private String subtitle;
-        private String amount;
-        
-        public Item() {}
-        
-        public Item(String description, String subtitle, String amount) {
-            this.description = description;
-            this.subtitle = subtitle;
-            this.amount = amount;
-        }
-        
-        @Override
-        public String getDescription() {
-            return description;
-        }
-        @Override
-        public void setDescription(String description) {
-            this.description = description;
-        }
-        @Override
-        public String getSubtitle() {
-            return subtitle;
-        }
-        @Override
-        public void setSubtitle(String subtitle) {
-            this.subtitle = subtitle;
-        }
-        @Override
-        public String getAmount() {
-            return amount;
-        }
-        @Override
-        public void setAmount(String amount) {
-            this.amount = amount;
-        }
-
-        @Override
-        public Integer getIndex() {
-            return this.index;
-        }
-
-        @Override
-        public void setIndex(Integer index) {
-            this.index = index;
-        }
-
-        @Override
-        public String getID() {
-            return this.id;
-        }
-
-        @Override
-        public void setID(String id) {
-            this.id = id;
-        }
-    }
-
 }

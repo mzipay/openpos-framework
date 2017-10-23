@@ -3,11 +3,17 @@
         <div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
             <div fxFlex="80">
                 <div md-line class="line-item-description">{{i.description}}</div>
-                <div md-line class="line-item-subtitle">{{i.subtitle}}</div>
+                <div *ngIf="i.subtitle" md-line class="line-item-subtitle">{{i.subtitle}}</div>
+                <div *ngIf="i.fields">
+                    <md-form-field *ngFor="let field of i.fields" style="margin-right: 10px">
+                        <label class="product-list-label">{{field.label}}</label>
+                        <input mdInput disabled [(ngModel)]="field.value">
+                    </md-form-field>
+                </div>
             </div>
 
             <div fxFlex>
-                <h5 class="middle-align line-item-extended-amt">
+                <h5 *ngIf="i.amount" class="middle-align line-item-extended-amt">
                     <span class="super-currency-symbol">$</span>{{i.amount}}
                 </h5>
                 <md-icon *ngIf="showItemIcon" class="material-icons line-item-caret">keyboard_arrow_right</md-icon>
@@ -18,8 +24,8 @@
                 </button>
                 <md-menu #menu="mdMenu">
                     <button md-menu-item *ngFor="let menuItem of menuItemActions" (click)="onMenuItemClick(i, menuItem, $event)">
-                            <app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
-                            <span>{{menuItem.title}}</span>
+                        <app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
+                        <span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
                     </button>
                 </md-menu>
             </div>

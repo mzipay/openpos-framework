@@ -1,6 +1,9 @@
 package org.jumpmind.jumppos.core.screen;
 
 import java.io.Serializable;
+import java.util.List;
+
+import org.jumpmind.jumppos.core.model.FormDisplayField;
 
 public class SellItem implements IItem, Serializable {
     
@@ -15,6 +18,7 @@ public class SellItem implements IItem, Serializable {
     private String quantity;
     private String imageUrl;
     private String productDescription;
+    private List<FormDisplayField> fields;
     
     
     @Override
@@ -107,4 +111,15 @@ public class SellItem implements IItem, Serializable {
     public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
     }
+    
+    @Override
+    public List<FormDisplayField> getFields() {
+        return fields;
+    }
+
+    @Override
+    public void setFields(List<FormDisplayField> fields) {
+        this.fields = fields;
+    }
+    
 }

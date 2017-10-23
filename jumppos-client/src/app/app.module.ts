@@ -1,7 +1,6 @@
 import { SaleRetrievalComponent } from './screens/sale-retrieval.component';
 import { LoaderService } from './common/loader/loader.service';
 import { LoaderComponent } from './common/loader/loader.component';
-import { InquiryComponent } from './screens/inquiry.component'; // TODO: remove when done experimenting with item search
 import { CartComponent } from './kiosk/cart.component';
 import { SafePipe } from './common/safe.pipe';
 import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component';
@@ -125,7 +124,6 @@ const stompConfig: StompConfig = {
     SaleRetrievalComponent
   ],
   declarations: [
-    InquiryComponent, // TODO: remove when done experimenting with item search
     AppComponent,
     PosComponent,
     KioskComponent,

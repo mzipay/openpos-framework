@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FormDisplayField implements IFormElement, Serializable {
+public class FormDisplayField implements IFormElement, IField, Serializable {
     private static final long serialVersionUID = 1L;
     
     public enum ValueDisplayMode {
@@ -41,22 +41,27 @@ public class FormDisplayField implements IFormElement, Serializable {
         this.elementType = elementType;
     }
 
+    @Override
     public String getLabel() {
         return label;
     }
 
+    @Override
     public void setLabel(String label) {
         this.label = label;
     }
 
-    public String getFieldId() {
+    @Override
+    public String getId() {
         return fieldId;
     }
 
-    public void setFieldId(String fieldId) {
+    @Override
+    public void setId(String fieldId) {
         this.fieldId = fieldId;
     }
 
+    @Override
     public String getValue() {
         return this.getValues().get(0);
     }
@@ -65,6 +70,7 @@ public class FormDisplayField implements IFormElement, Serializable {
         return this.getValues().get(index);
     }
     
+    @Override
     public void setValue(String value) {
         this.values.clear();
         this.values.add(value);

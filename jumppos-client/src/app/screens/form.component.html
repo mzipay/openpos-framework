@@ -1,6 +1,19 @@
 <ng-container *ngIf="session.screen.type==='Form'">
 	<md-card>
-		<md-card-title>{{session.screen.form.name}}</md-card-title>
+		<md-card-title fxLayout="row">
+			<span fxFlex="<grow>">{{session.screen.form.name}}</span>
+			<div fxFlex *ngIf="itemActions && itemActions.length > 0">
+				<button md-icon-button [mdMenuTriggerFor]="menu">
+					<md-icon>more_vert</md-icon>
+				</button>
+				<md-menu #menu="mdMenu">
+					<button md-menu-item *ngFor="let menuItem of itemActions" (click)="onItemAction(menuItem, $event)">
+						<app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
+						<span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
+					</button>
+				</md-menu>
+			</div>
+		</md-card-title>
 		<md-card-content style="max-height: 850px; overflow-y: auto;">						
 			<ng-container *ngFor="let formElement of session.screen.form.formElements">
 				<div *ngIf="formElement.elementType==='input'">
