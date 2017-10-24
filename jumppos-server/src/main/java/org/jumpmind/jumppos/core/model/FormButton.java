@@ -5,18 +5,25 @@ import java.io.Serializable;
 public class FormButton implements IFormElement, Serializable {
     private static final long serialVersionUID = 1L;
     
-    private String elementType = "button";
+    private FieldElementType elementType = FieldElementType.Button;
     private String label;
     private String buttonAction;
+    private String id;
+    private boolean submitButton = false;
 
     public FormButton() {
     }
     
     public FormButton(String label, String buttonAction) {
+        this(label, label, buttonAction);
+    }
+
+    public FormButton(String id, String label, String buttonAction) {
+        this.id = id;
         this.label = label;
         this.buttonAction = buttonAction;
     }
-
+    
     public String getLabel() {
         return label;
     }
@@ -33,12 +40,28 @@ public class FormButton implements IFormElement, Serializable {
         this.buttonAction = buttonAction;
     }
 
-    public String getElementType() {
+    public FieldElementType getElementType() {
         return elementType;
     }
 
-    public void setElementType(String elementType) {
+    public void setElementType(FieldElementType elementType) {
         this.elementType = elementType;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isSubmitButton() {
+        return submitButton;
+    }
+
+    public void setSubmitButton(boolean submitButton) {
+        this.submitButton = submitButton;
     }
 
 }

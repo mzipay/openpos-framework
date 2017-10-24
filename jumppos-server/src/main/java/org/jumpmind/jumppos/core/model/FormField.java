@@ -5,13 +5,15 @@ import java.io.Serializable;
 public class FormField implements IFormElement, IField, Serializable {
     private static final long serialVersionUID = 1L;
     
-    private String elementType = "input";
-    private String inputType = "text";
+    
+    private FieldElementType elementType = FieldElementType.Input;
+    private FieldInputType inputType = FieldInputType.AlphanumericText;
     private String label;
     private String fieldId;
     private String value;
     private String placeholder;
     private String pattern;
+    private boolean required = true;
 
     public FormField() {
     }
@@ -27,7 +29,7 @@ public class FormField implements IFormElement, IField, Serializable {
         this.placeholder = placeholder;
     }
     
-    public FormField(String fieldId, String label, String elementType, String inputType, String placeholder) {
+    public FormField(String fieldId, String label, FieldElementType elementType, FieldInputType inputType, String placeholder) {
         this.fieldId = fieldId;
         this.label = label;
         this.elementType = elementType;
@@ -35,11 +37,11 @@ public class FormField implements IFormElement, IField, Serializable {
         this.placeholder = placeholder;
     }
     
-    public String getInputType() {
+    public FieldInputType getInputType() {
         return inputType;
     }
 
-    public void setInputType(String inputType) {
+    public void setInputType(FieldInputType inputType) {
         this.inputType = inputType;
     }
 
@@ -64,11 +66,11 @@ public class FormField implements IFormElement, IField, Serializable {
     }
 
     
-    public String getElementType() {
+    public FieldElementType getElementType() {
         return elementType;
     }
 
-    public void setElementType(String elementType) {
+    public void setElementType(FieldElementType elementType) {
         this.elementType = elementType;
     }
 
@@ -96,6 +98,14 @@ public class FormField implements IFormElement, IField, Serializable {
 
     public String getPattern() {
         return pattern;
+    }
+
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
 

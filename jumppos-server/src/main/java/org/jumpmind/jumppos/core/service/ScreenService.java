@@ -11,6 +11,7 @@ import org.jumpmind.jumppos.core.flow.Action;
 import org.jumpmind.jumppos.core.flow.FlowException;
 import org.jumpmind.jumppos.core.flow.IStateManager;
 import org.jumpmind.jumppos.core.flow.IStateManagerFactory;
+import org.jumpmind.jumppos.core.model.FieldElementType;
 import org.jumpmind.jumppos.core.model.Form;
 import org.jumpmind.jumppos.core.model.FormField;
 import org.jumpmind.jumppos.core.model.IFormElement;
@@ -167,7 +168,7 @@ public class ScreenService implements IScreenService {
             FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
             if (textFieldAnnotation != null) {
                 FormField formField = new FormField();
-                formField.setElementType("input"); // TODO support other types
+                formField.setElementType(FieldElementType.Input); // TODO support other types
                                                    // here?
                 formField.setId(field.getName());
                 formField.setLabel(textFieldAnnotation.label());

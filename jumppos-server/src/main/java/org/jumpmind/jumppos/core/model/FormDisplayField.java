@@ -12,7 +12,7 @@ public class FormDisplayField implements IFormElement, IField, Serializable {
         Multiple
     }
     
-    private String elementType = "display";
+    private FieldElementType elementType = FieldElementType.Display;
     private String label;
     private String fieldId;
     private List<String> values = new ArrayList<String>();
@@ -33,11 +33,11 @@ public class FormDisplayField implements IFormElement, IField, Serializable {
         this.values = new ArrayList<>(values);
     }
     
-    public String getElementType() {
+    public FieldElementType getElementType() {
         return elementType;
     }
 
-    public void setElementType(String elementType) {
+    public void setElementType(FieldElementType elementType) {
         this.elementType = elementType;
     }
 

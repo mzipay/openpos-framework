@@ -24,6 +24,10 @@ public class Form implements Serializable {
         formElements.add(formElement);
     }
     
+    public IFormElement getFormElement(String elementId) {
+        return formElements.stream().filter(f->elementId.equals(f.getId())).findFirst().orElse(null);
+    }
+    
     public void setName(String name) {
         this.name = name;
     }

@@ -14,12 +14,12 @@
 				</mat-menu>
 			</div>
 		</mat-card-title>
-		<mat-card-content style="max-height: 850px; overflow-y: auto;">						
+		<mat-card-content style="max-height: 850px; overflow-y: auto;" (keyup.enter)="onEnter($event)">						
 			<ng-container *ngFor="let formElement of session.screen.form.formElements">
-				<div *ngIf="formElement.elementType==='input'">
-					<mat-input-container style="width:100%">
-						<input [(ngModel)]="formElement.value" #field="ngModel" matInput placeholder="{{formElement.label + ' - ' + formElement.placeholder}}"
-						 [pattern]="formElement.pattern" required>
+				<div *ngIf="formElement.elementType==='Input'">
+					<mat-form-field *ngIf="['AlphanumericText', 'NumericText'].indexOf(formElement.inputType) >= 0" style="width:100%">
+						<input [(ngModel)]="formElement.value" #field="ngModel" matInput placeholder="{{getPlaceholderText(formElement)}}"
+							[pattern]="formElement.pattern" [required]="formElement.required">
 						<ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
 							<mat-error div *ngIf="field.errors.required">
 								* is required.
@@ -28,17 +28,22 @@
 								* did not follow the designated pattern
 							</mat-error>
 						</ng-container>
-					</mat-input-container>
+					</mat-form-field>
+					<mat-form-field *ngIf="formElement.inputType === 'ComboBox'">
+						<mat-select (change)="onComboBoxSelectionChange(formElement, $event)" placeholder="{{getPlaceholderText(formElement)}}">
+							<mat-option *ngFor="let value of formElement.values; let valueIndex=index" [value]="valueIndex">{{value}}</mat-option>
+						</mat-select>
+					</mat-form-field>
 				</div>
-				<div *ngIf="formElement.elementType==='display'">
-					<mat-input-container  style="width:100%">
+				<div *ngIf="formElement.elementType==='Display'">
+					<mat-form-field  style="width:100%">
 					    <label class="prompt-text">{{formElement.label}}</label>
 						<input [(ngModel)]="formElement.value" #field="ngModel" matInput disabled>
-					</mat-input-container>
+					</mat-form-field>
 				</div>				
 			</ng-container>
 			<ng-container *ngFor="let formElement of session.screen.form.formElements">
-				<div *ngIf="formElement.elementType==='button'">
+				<div *ngIf="formElement.elementType==='Button'">
 					<button mat-raised-button [color]="'primary'" (click)="session.response=form; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>
 				</div>
 			</ng-container>
