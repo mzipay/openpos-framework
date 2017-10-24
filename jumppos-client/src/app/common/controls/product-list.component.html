@@ -1,8 +1,8 @@
 <mat-nav-list>
     <mat-list-item *ngFor="let i of items" class="sale-line-item" (click)="onItemClick(i, $event)">
-        <div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
+        <div mat-line fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
             <div fxFlex="80">
-                <div mat-line class="line-item-description">{{i.description}}</div>
+                <div  class="line-item-description">{{i.description}}</div>
                 <div *ngIf="i.subtitle" mat-line class="line-item-subtitle">{{i.subtitle}}</div>
                 <div *ngIf="i.fields">
                     <mat-form-field *ngFor="let field of i.fields" style="margin-right: 10px">
