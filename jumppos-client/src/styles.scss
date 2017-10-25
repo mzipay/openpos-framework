@@ -9,8 +9,8 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
-$app-primary: mat-palette($mat-blue, A200, A100, A400);
-$app-accent:  mat-palette($mat-orange, A200, A100, A400);
+$app-primary: mat-palette($mat-orange, 800, 600, 900);
+$app-accent:  mat-palette($mat-grey, 800, 600, 900);
 
 // The warn palette is optional (defaults to red).
 $app-warn:    mat-palette($mat-red);
@@ -25,18 +25,29 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 
 $mat-card-default-margin: 24px !default;
 
-$app-highlight-color: #2371ad;
-$app-statusbar-color: #696969;
+
+
 $app-logo-url: url(assets/jumpmart-logo.png);
 
 @import 'customer-styles';
 
+$app-highlight-color: mat-color($app-primary);
+$app-statusbar-color: mat-color($app-accent);
+
 html, body {
     font-family: Roboto,"Helvetica Neue",sans-serif;
-    height:100vh;
-    max-height:100vh;
     margin:0;
+    padding:0;
+    //overflow: hidden;
+}
+
+.app {
+    height: 100vh; 
     overflow: hidden;
+}
+
+md-toolbar {
+    z-index: 10;
 }
 
 mat-card {
@@ -171,14 +182,6 @@ mat-header-cell.mat-header-cell.mat-column-_selection {
     height: 200px;
 }
 
-.statusbar-container {
-    background-color: $app-statusbar-color;     
-    color: white;
-    width: 100%;
-    height: 42px;
-    z-index: 0;
-}
-
 .statusbar-text {
     color: white;
     font-size: 12px;
@@ -197,8 +200,10 @@ mat-header-cell.mat-header-cell.mat-column-_selection {
     left: -30px;
 }
 
-.statusbar-button.mat-button {
-    min-width: 1%;
+.material-icons.mat-30 {
+    font-size: 30px !important;
+    height: 30px !important;
+    width: 30px !important;
 }
 
 .material-icons.mat-40 {
@@ -353,7 +358,7 @@ button.static-table-button.mat-raised-button {
     padding: 18px;
 }
 .sale-line-item-container {
-    height: calc(100% - 297px);
+    height: calc(100% - 317px);
     width: calc(100% - 16px);
     font-size: 14px;
     margin: 0px;
@@ -362,11 +367,11 @@ button.static-table-button.mat-raised-button {
 }
 
 .sale-transaction-container {
-    height: calc(100% - 150px);
+    height: calc(100% - 170px);
     width: calc(100% - 16px);
     font-size: 14px;
     margin: 0px;
-    top: 10px;
+    top: 4px;
     padding: 0px !important;
 }
 
@@ -558,7 +563,7 @@ td {
     background-image: $app-logo-url; 
     background-repeat: no-repeat;
     background-size: cover;
-    top: 10px;
+    top: 30px;
     zoom: 40%; 
     position: absolute;  
     right: 'initial'; 

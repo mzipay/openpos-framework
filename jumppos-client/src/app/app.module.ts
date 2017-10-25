@@ -43,9 +43,10 @@ import { FocusDirective } from './common/focus.directive';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatDialog, MatDialogRef } from '@angular/material';
 
 import {
+  MatDialog,
+  MatDialogRef,
   MatAutocompleteModule,
   MatButtonModule,
   MatButtonToggleModule,
