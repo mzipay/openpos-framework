@@ -41,8 +41,9 @@
 				</ng-container>
 			</ng-container>
 
-
-			<mat-icon *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber" class="material-icons statusbar-icon statusbar-icon-off">receipt</mat-icon>
+			<div fxHide.xs>
+			    <mat-icon *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber" class="material-icons statusbar-icon">receipt</mat-icon>
+			</div>			
 			<p *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber" class="statusbar-text" [style.xs]="{'font-size': '10px'}">Transaction #{{session.screen.transaction.transactionNumber}}</p>
 		</div>
 

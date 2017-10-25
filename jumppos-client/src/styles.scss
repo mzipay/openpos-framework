@@ -35,10 +35,9 @@ $app-highlight-color: mat-color($app-primary);
 $app-statusbar-color: mat-color($app-accent);
 
 html, body {
-    font-family: Roboto,"Helvetica Neue",sans-serif;
+    font-family: Roboto, sans-serif;
     margin:0;
     padding:0;
-    //overflow: hidden;
 }
 
 .app {

@@ -14,7 +14,7 @@
         </mat-card-actions>
     </mat-card>
 
-    <mat-card style="height: calc(100% - 465px)">
+    <mat-card style="height: calc(100% - 485px)" [style.xs]="{'height': 'calc(100% - 445px)'}">
         <mat-card-content style="height: calc(100% - 40px);">
             <div fxLayout="row" fxLayoutWrap fxLayoutAlign=" center">
                 <ng-container *ngFor="let category of searchCategories; let i = index">
