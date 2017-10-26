@@ -21,6 +21,12 @@
       "styles": [
         "styles.scss"
       ],
+      "stylePreprocessorOptions": {
+        "includePaths": [
+          "../../../mobile-server/src",
+          "styles"
+        ]
+      },      
       "scripts": [
         "../node_modules/signature_pad/dist/signature_pad.js"
       ],

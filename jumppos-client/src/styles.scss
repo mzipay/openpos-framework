@@ -43,20 +43,20 @@ html, body {
     overflow: hidden;
 }
 
-md-toolbar {
+.md-toolbar {
     z-index: 10;
 }
 
-mat-card {
-    margin: $mat-card-default-margin;
-    display: block;
-    position: relative;
+.mat-card.with-header {
+   padding: 0;
 }
 
-.xs.mat-card {
-    margin: 0;
-    display: block;
-    position: relative;
+.mat-card.with-header mat-card-content {
+    padding: 0 $mat-card-default-margin 0 $mat-card-default-margin;
+}
+
+.mat-card {
+    margin: $mat-card-default-margin;
 }
 
 // controls sizing of radio button column on static-table template

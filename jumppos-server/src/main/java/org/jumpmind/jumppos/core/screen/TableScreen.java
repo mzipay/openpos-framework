@@ -13,10 +13,22 @@ public class TableScreen extends DefaultScreen {
     private String text;
     private SelectionMode selectionMode = SelectionMode.None;
     private int selectedRow = -1;
-    private List<String> submitActionNames = new ArrayList<>();
+    List<MenuItem> buttons = new ArrayList<>();
     
     public TableScreen() {
         setType(ScreenType.Table);
+    }
+    
+    public List<MenuItem> getButtons() {
+        return buttons;
+    }
+
+    public void setButtons(List<MenuItem> buttons) {
+        this.buttons = buttons;
+    }
+    
+    public void addButton(MenuItem button) {
+        this.buttons.add(button);
     }
     
     public List<String> getHeaderLabels() {
@@ -76,18 +88,6 @@ public class TableScreen extends DefaultScreen {
     
     public int getSelectedRow() {
         return this.selectedRow;
-    }
-
-    public List<String> getSubmitActionNames() {
-        return submitActionNames;
-    }
-
-    public void setSubmitActionNames(List<String> submitActionNames) {
-        this.submitActionNames = submitActionNames;
-    }
-    
-    public void addSubmitActionName(String submitActionName) {
-        this.getSubmitActionNames().add(submitActionName);
     }
     
 }
