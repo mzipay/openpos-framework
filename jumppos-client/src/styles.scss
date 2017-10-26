@@ -25,14 +25,12 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 
 $mat-card-default-margin: 24px !default;
 
-
-
 $app-logo-url: url(assets/jumpmart-logo.png);
 
 @import 'customer-styles';
 
 $app-highlight-color: mat-color($app-primary);
-$app-statusbar-color: mat-color($app-accent);
+$app-accent-color: mat-color($app-accent);
 
 html, body {
     font-family: Roboto, sans-serif;
@@ -51,6 +49,12 @@ md-toolbar {
 
 mat-card {
     margin: $mat-card-default-margin;
+    display: block;
+    position: relative;
+}
+
+.xs.mat-card {
+    margin: 0;
     display: block;
     position: relative;
 }
@@ -235,7 +239,7 @@ mat-header-cell.mat-header-cell.mat-column-_selection {
     min-width: 56px;
     min-height: 56px;
     color: $app-highlight-color;
-    background-color: $app-statusbar-color;
+    background-color: $app-accent-color;
     margin-right: 20px;
 }
 
@@ -244,7 +248,7 @@ mat-header-cell.mat-header-cell.mat-column-_selection {
     padding-left: 0px;
     padding-right: 0px;
     width: 100%;  
-    color: $app-statusbar-color;
+    color: $app-accent-color;
     font-size: 1.8em;
 }
 
@@ -275,16 +279,8 @@ mat-header-cell.mat-header-cell.mat-column-_selection {
     right: 0px;
 }
 
-.sale-total-checkout-container.xs {
-    background-color: red;
-}
-
 button.static-table-button.mat-raised-button {
     margin: 5px;
-}
-
-.xs.sale-total-checkout-container {
-    background-color: red;
 }
 
 .sale-total-checkout-container-small {

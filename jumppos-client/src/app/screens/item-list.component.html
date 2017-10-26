@@ -1,12 +1,10 @@
-<div style="height: 100vh;">
-    <mat-card style="height: calc(100% - 140px)">
-        <mat-card-title>{{text}}</mat-card-title>
-        <mat-card-content style="height: calc(100% - 40px)">
-            <div class="scrollable">
-                <app-product-list [showItemIcon]="! isItemClickDisabled()" [items]="items" (itemClick)="isItemClickDisabled() || onItemClick($event)"
-                    [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)">
-                </app-product-list>
-            </div>
-        </mat-card-content>
-    </mat-card>
-</div>
+<mat-card style="height: calc(100% - 160px)">
+    <mat-card-title>{{text}}</mat-card-title>
+    <mat-card-content style="height: calc(100% - 40px)">
+        <div class="scrollable">
+            <app-product-list [showItemIcon]="! isItemClickDisabled()" [items]="items" (itemClick)="isItemClickDisabled() || onItemClick($event)"
+                [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)">
+            </app-product-list>
+        </div>
+    </mat-card-content>
+</mat-card>
