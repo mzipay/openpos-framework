@@ -27,11 +27,6 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
   show(session: SessionService) {
   }
 
-  @HostListener('window:keyup.enter')
-  onEnter(): void {
-    this.onSubmitAction('enter');
-  }
-
   ngOnInit(): void {
     this.searchCategories = this.session.screen.searchCategories;
     this.searchCategoryStructure = this.session.screen.searchCategoryStructure;
