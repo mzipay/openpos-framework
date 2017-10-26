@@ -22,7 +22,7 @@
     </mat-card-content>
     <mat-card-actions>
         <div fxLayout="row" fxLayoutGap="10px" fxLayoutWrap>
-            <div *ngFor="let m of session.screen.menuActions; let i = index">
+            <div *ngFor="let m of session.screen.buttons; let i = index">
                 <button mat-raised-button class="static-table-button" [color]="i===0?'primary':''" [disabled]="!m.enabled" [autofocus]="i===0"
                     [appFocus]="i===0" (click)="onAction(m.action)" [disabled]="!m.enabled">{{m.title}}</button>
             </div>
