@@ -1,13 +1,24 @@
 <div class="prompt-input-container">
     <p>
         <input #box *ngIf="responseType==='ALPHANUMERICPASSWORD'" class="prompt-input" type='password' (keyup.enter)="onEnter($event)"
-            [(ngModel)]="responseText" placeholder="{{placeholderText}}" [appFocus]="true">
+            [(ngModel)]="responseText" placeholder="{{placeholderText}}" [appFocus]="true" name="a1">
         <input #box *ngIf="responseType==='ALPHANUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)"
-            [(ngModel)]="responseText" placeholder="{{placeholderText}}"  [appFocus]="true">
+            [(ngModel)]="responseText" placeholder="{{placeholderText}}"  [appFocus]="true" name="a2">
         <input #box *ngIf="responseType==='CURRENCYTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)" [(ngModel)]="responseText"
-            placeholder="{{placeholderText}}">
+            placeholder="{{placeholderText}}" name="a3">
         <input #box *ngIf="responseType==='NUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)" [(ngModel)]="responseText"
-            placeholder="{{placeholderText}}">
+            placeholder="{{placeholderText}}" name="a4">
+        <mat-form-field *ngIf="responseType==='DATE'" class="date-prompt-input">
+            <!-- Can't use the masking component AND date picker on the same input, so use a hidden input for the picker and
+                visible in put for the masking component -->
+            <input matInput placeholder="{{placeholderText}}" name="dob" [(ngModel)]="dateText" 
+               [textMask]="{mask: dateMask, pipe: autoCorrectedDatePipe, keepCharPositions: true}" 
+               (keyup.enter)="onDateEntered($event)">
+            <input matInput hidden [matDatepicker]="picker" [(ngModel)]="datePickerValue" (dateChange)="onDatePicked($event)">
+            <mat-datepicker-toggle matPrefix [for]="picker" class="date-picker-toggle"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
     </p>
-    <mat-icon class="material-icons prompt-icon">{{promptIcon}}</mat-icon>
+    <mat-icon *ngIf="responseType !== 'DATE'" class="material-icons prompt-icon">{{promptIcon}}</mat-icon>
+    
 </div>

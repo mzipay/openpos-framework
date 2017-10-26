@@ -118,6 +118,20 @@ mat-header-cell.mat-header-cell.mat-column-_selection {
     font-size:20px;
 }
 
+.date-prompt-input {
+    @extend .prompt-input;  
+    padding-bottom: 10px;
+}
+
+.date-picker-toggle {
+    color: $app-highlight-color;
+}
+
+mat-form-field.date-prompt-input {
+   padding-left: 0px;
+   padding-bottom: 0px;
+}
+
 .product-list-label {
     color: $app-highlight-color;
     font-size:14px;

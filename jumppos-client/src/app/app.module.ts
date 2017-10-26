@@ -11,7 +11,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { StompConfig, StompService } from '@stomp/ng2-stompjs';
-import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { PosComponent } from './pos/pos.component';
@@ -78,6 +78,7 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import 'hammerjs'; // for material
+import { TextMaskModule } from 'angular2-text-mask';
 
 const stompConfig: StompConfig = {
   // Which server?
@@ -190,8 +191,8 @@ const stompConfig: StompConfig = {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
-
+    MatTooltipModule,
+    TextMaskModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -240,7 +241,8 @@ const stompConfig: StompConfig = {
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
-    }
+    },
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
