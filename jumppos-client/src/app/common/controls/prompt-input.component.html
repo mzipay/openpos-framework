@@ -1,17 +1,17 @@
 <div class="prompt-input-container">
     <p>
         <input #box *ngIf="responseType==='ALPHANUMERICPASSWORD'" class="prompt-input" type='password' (keyup.enter)="onEnter($event)"
-            [(ngModel)]="responseText" placeholder="{{placeholderText}}" [appFocus]="true" name="a1">
+            [(ngModel)]="responseText" placeholder="{{placeholderText}}" [appFocus]="true">
         <input #box *ngIf="responseType==='ALPHANUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)"
-            [(ngModel)]="responseText" placeholder="{{placeholderText}}"  [appFocus]="true" name="a2">
+            [(ngModel)]="responseText" placeholder="{{placeholderText}}"  [appFocus]="true">
         <input #box *ngIf="responseType==='CURRENCYTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)" [(ngModel)]="responseText"
-            placeholder="{{placeholderText}}" name="a3">
+            placeholder="{{placeholderText}}">
         <input #box *ngIf="responseType==='NUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)" [(ngModel)]="responseText"
-            placeholder="{{placeholderText}}" name="a4">
+            placeholder="{{placeholderText}}">
         <mat-form-field *ngIf="responseType==='DATE'" class="date-prompt-input">
             <!-- Can't use the masking component AND date picker on the same input, so use a hidden input for the picker and
                 visible input for the masking component -->
-            <input matInput placeholder="{{placeholderText}}" name="dob" [(ngModel)]="dateText" 
+            <input matInput placeholder="{{placeholderText}}" [(ngModel)]="dateText" 
                [textMask]="{mask: dateMask, pipe: autoCorrectedDatePipe, keepCharPositions: true}" 
                (keyup.enter)="onDateEntered($event)">
             <input matInput hidden [matDatepicker]="picker" [(ngModel)]="datePickerValue" (dateChange)="onDatePicked($event)">
