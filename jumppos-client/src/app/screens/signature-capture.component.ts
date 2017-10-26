@@ -74,8 +74,23 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
       const matches: RegExpMatchArray|null = dataUrl.match(/^data:.+\/(.+);base64,(.*)$/);
       encodedImage = matches && matches.length > 2 ? matches[2] : null;
     }
-    this.session.screen.signatureData = encodedImage;
-    this.session.response = JSON.stringify( {points: dataPoints, mediaType: mediaType, base64EncodedImage: encodedImage });
+    const signatureData: ISignature = {pointGroups: this.signaturePad.toData(), mediaType: mediaType, 
+      base64EncodedImage: encodedImage};
+
+    this.session.response = signatureData;
     this.session.onAction('SaveSignature');
   }
+}
+
+export interface ISignature {
+  pointGroups: IPoint[][];
+  mediaType: string;
+  base64EncodedImage: string|null;
+}
+
+export interface IPoint {
+  x: number;
+  y: number;
+  time: number;
+  color?: string;
 }

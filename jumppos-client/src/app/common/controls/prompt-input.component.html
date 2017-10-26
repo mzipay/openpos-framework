@@ -10,7 +10,7 @@
             placeholder="{{placeholderText}}" name="a4">
         <mat-form-field *ngIf="responseType==='DATE'" class="date-prompt-input">
             <!-- Can't use the masking component AND date picker on the same input, so use a hidden input for the picker and
-                visible in put for the masking component -->
+                visible input for the masking component -->
             <input matInput placeholder="{{placeholderText}}" name="dob" [(ngModel)]="dateText" 
                [textMask]="{mask: dateMask, pipe: autoCorrectedDatePipe, keepCharPositions: true}" 
                (keyup.enter)="onDateEntered($event)">
