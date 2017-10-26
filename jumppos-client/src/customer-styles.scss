@@ -1,3 +1,4 @@
 
-$app-highlight-color: #E57933;
 $app-logo-url: url(assets/Big_Lots_logo.png);
+$app-primary: mat-palette($mat-orange, 800, 600, 900);
+$app-accent:  mat-palette($mat-grey, 800, 600, 900);
