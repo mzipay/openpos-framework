@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card style="height: calc(100% - 114px)" [style.xs]="{'height': 'calc(100% - 54px)', 'margin': '0'}">
 	<mat-card-title fxLayout="row">
 		<span fxFlex="<grow>">{{session.screen.form.name}}</span>
 		<div fxFlex *ngIf="itemActions && itemActions.length > 0">

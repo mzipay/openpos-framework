@@ -1,7 +1,16 @@
-<mat-card>
-    <mat-card-content>
-        <label class="prompt-text">{{text}}</label>
-        <div style="height:calc(100vh - 236px);">
+<mat-card class="with-header" style="height: calc(100% - 114px)" [style.xs]="{'height': 'calc(100% - 54px)', 'margin': '0'}">
+    <mat-card-title>
+        <mat-toolbar color="accent">
+            {{text}}
+            <div style="width: 100%" fxLayout="row" fxLayoutAlign="end ">
+                <button style="top: 28px" *ngFor="let m of session.screen.buttons; let i = index" (click)="onAction(m.action)" [color]="i===0?'primary':''"
+                    mat-fab>
+                    <mat-icon aria-label="Add">add</mat-icon>
+                </button>
+            </div>
+        </mat-toolbar>
+    </mat-card-title>
+    <mat-card-content style="height: calc(100% - 100px)" [style.xs]="{'height': 'calc(100% - 54px)', 'margin': '0', 'padding': '0'}">
             <div class="scrollable">
                 <mat-table #table [dataSource]="dataSource">
                     <ng-container *ngFor="let columnId of columnIds" matColumnDef="{{columnId}}">
@@ -18,14 +27,5 @@
                     <mat-row *matRowDef="let row; columns: columnIds;"></mat-row>
                 </mat-table>
             </div>
-        </div>
     </mat-card-content>
-    <mat-card-actions>
-        <div fxLayout="row" fxLayoutGap="10px" fxLayoutWrap>
-            <div *ngFor="let m of session.screen.buttons; let i = index">
-                <button mat-raised-button class="static-table-button" [color]="i===0?'primary':''" [disabled]="!m.enabled" [autofocus]="i===0"
-                    [appFocus]="i===0" (click)="onAction(m.action)" [disabled]="!m.enabled">{{m.title}}</button>
-            </div>
-        </div>
-    </mat-card-actions>
 </mat-card>

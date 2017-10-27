@@ -1,9 +1,9 @@
-<mat-nav-list>
+
     <mat-list-item *ngFor="let i of items" class="sale-line-item" (click)="onItemClick(i, $event)">
-        <div mat-line fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
-            <div fxFlex="80">
-                <div  class="line-item-description">{{i.description}}</div>
-                <div *ngIf="i.subtitle" mat-line class="line-item-subtitle">{{i.subtitle}}</div>
+        <div fxLayout="row" fxLayoutAlign="start center" style="width:100%;">
+            <div fxFlex>
+                <div class="line-item-description" [style.xs]="{'font-size': '12px'}">{{i.description}}</div>
+                <div *ngIf="i.subtitle" mat-line class="line-item-subtitle" [style.xs]="{'font-size': '10px'}">{{i.subtitle}}</div>
                 <div *ngIf="i.fields">
                     <mat-form-field *ngFor="let field of i.fields" style="margin-right: 10px">
                         <label class="product-list-label">{{field.label}}</label>
@@ -11,25 +11,27 @@
                     </mat-form-field>
                 </div>
             </div>
-
             <div fxFlex>
-                <h5 *ngIf="i.amount" class="middle-align line-item-extended-amt">
-                    <span class="super-currency-symbol">$</span>{{i.amount}}
-                </h5>
-                <mat-icon *ngIf="showItemIcon" class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
+                <div fxLayout="row" fxLayoutAlign="end center">
+                    <span *ngIf="i.amount" class="line-item-extended-amt" [style.xs]="{'font-size': '14px'}">
+                        <span class="super-currency-symbol">$</span>{{i.amount}}
+                    </span>
+                    <mat-icon *ngIf="showItemIcon" class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
+                    <ng-container *ngIf="showItemMenu">
+                            <button mat-icon-button [matMenuTriggerFor]="menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item *ngFor="let menuItem of menuItemActions" (click)="onMenuItemClick(i, menuItem, $event)">
+                                    <app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
+                                    <span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
+                                </button>
+                            </mat-menu>
+                        </ng-container>
+                </div>
+
             </div>
-            <div *ngIf="showItemMenu">
-                <button mat-icon-button [matMenuTriggerFor]="menu">
-                    <mat-icon>more_vert</mat-icon>
-                </button>
-                <mat-menu #menu="matMenu">
-                    <button mat-menu-item *ngFor="let menuItem of menuItemActions" (click)="onMenuItemClick(i, menuItem, $event)">
-                            <app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
-                            <span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
-                    </button>
-                </mat-menu>
-            </div>
+
 
         </div>
     </mat-list-item>
-</mat-nav-list>

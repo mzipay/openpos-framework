@@ -1,10 +1,14 @@
-<mat-card style="height: calc(100% - 160px)">
-    <mat-card-title>{{text}}</mat-card-title>
-    <mat-card-content style="height: calc(100% - 40px)">
+<mat-card class="with-header" style="height: calc(100% - 114px)" [style.xs]="{'height': 'calc(100% - 54px)', 'margin': '0'}">
+    <mat-card-title>
+        <mat-toolbar color="accent">{{text}}</mat-toolbar>
+    </mat-card-title>
+    <mat-card-content style="height: calc(100% - 100px)" [style.xs]="{'height': 'calc(100% - 54px)', 'margin': '0', 'padding': '0'}">
         <div class="scrollable">
-            <app-product-list [showItemIcon]="! isItemClickDisabled()" [items]="items" (itemClick)="isItemClickDisabled() || onItemClick($event)"
-                [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)">
-            </app-product-list>
+            <mat-list>
+                <app-product-list [showItemIcon]="! isItemClickDisabled()" [items]="items" (itemClick)="isItemClickDisabled() || onItemClick($event)"
+                    [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)">
+                </app-product-list>
+            </mat-list>
         </div>
     </mat-card-content>
 </mat-card>

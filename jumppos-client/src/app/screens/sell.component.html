@@ -10,7 +10,8 @@
 			</svg>
 		</div>
 
-		<button mat-raised-button class="sale-total-button" [disabled]="!session.screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')">
+		<button mat-raised-button class="sale-total-button" [disabled]="!session.screen.transaction.active || items.length == 0"
+		 (click)="session.onAction('Checkout')">
 			<div class="containerX" fxLayout="row" fxLayoutAlign="center center">
 				<div fxFlex [style.xs]="{'flex': 'initial', 'margin': '10px'}"> </div>
 				<p class="sale-total-text">
@@ -58,7 +59,9 @@
 		<mat-card class="sale-line-item-container serrated-edge">
 			<mat-card-content class="sale-line-item-container-content" fxLayout="column" fxLayoutAlign="space-between">
 				<div class="scrollable">
-					<app-product-list [items]="items" (itemClick)="onItemClick($event)"></app-product-list>
+					<mat-nav-list>
+						<app-product-list [items]="items" (itemClick)="onItemClick($event)"></app-product-list>
+					</mat-nav-list>
 					<div *ngIf="items.length == 0" class="sale-line-item-container-no-content" [style.sm]="{'font-size': '16px'}" [style.xs]="{'font-size': '16px'}"
 					 fxLayout="column" fxLayoutAlign="center center">
 						<svg style="width:180px;height:180px" viewBox="0 0 25 25">
@@ -76,7 +79,7 @@
 						<div *ngIf="!session.screen.customer">Lookup Customer</div>
 						<div *ngIf="session.screen.customer">{{session.screen.customer.name}}</div>
 						<div style="width:100%"></div>
-				        <mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
+						<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 					</div>
 				</button>
 			</mat-card-content>

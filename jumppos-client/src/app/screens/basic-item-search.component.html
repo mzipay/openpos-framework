@@ -3,9 +3,9 @@
         <mat-toolbar color="accent">
             Item Search
             <div style="width: 100%" fxLayout="row" fxLayoutAlign="end ">
-                <button style="top: 32px" *ngFor="let submitAction of submitActionNames" (click)="onSubmitAction(submitAction)" [color]="submitAction === defaultActionName ? 'primary':''"
+                <button style="top: 28px" *ngFor="let submitAction of submitActionNames" (click)="onSubmitAction(submitAction)" [color]="submitAction === defaultActionName ? 'primary':''"
                     mat-fab>
-                    <mat-icon aria-label="Example icon-button with a heart icon">search</mat-icon>
+                    <mat-icon aria-label="Search Now">search</mat-icon>
                 </button>
             </div>
         </mat-toolbar>
