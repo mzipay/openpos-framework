@@ -1,53 +1,54 @@
-<mat-card style="height: calc(100% - 114px)" [style.xs]="{'height': 'calc(100% - 54px)', 'margin': '0'}">
-	<mat-card-title fxLayout="row">
-		<span fxFlex="<grow>">{{session.screen.form.name}}</span>
-		<div fxFlex *ngIf="itemActions && itemActions.length > 0">
-			<button mat-icon-button [matMenuTriggerFor]="menu">
-				<mat-icon>more_vert</mat-icon>
-			</button>
-			<mat-menu #menu="matMenu">
-				<button mat-menu-item *ngFor="let menuItem of itemActions" (click)="onItemAction(menuItem, $event)">
-					<app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
-					<span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
+<mat-card class="with-header" style="height: calc(100% - 114px)" [style.xs]="{'height': 'calc(100% - 54px)', 'margin': '0'}">
+	<mat-card-content style="padding: 0;" (keyup.enter)="onEnter($event)">
+		<mat-toolbar color="accent">
+			{{session.screen.form.name}}
+			<div *ngIf="itemActions && itemActions.length > 0">
+				<button mat-icon-button [matMenuTriggerFor]="menu">
+					<mat-icon>more_vert</mat-icon>
 				</button>
-			</mat-menu>
+				<mat-menu #menu="matMenu">
+					<button mat-menu-item *ngFor="let menuItem of itemActions" (click)="onItemAction(menuItem, $event)">
+						<app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
+						<span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
+					</button>
+				</mat-menu>
+			</div>
+		</mat-toolbar>
+		<div class="pad" style="height:calc(100vh - 220px);" [style.xs]="{'height': 'calc(100vh - 160px)'}">
+			<div class="scrollable">
+				<ng-container *ngFor="let formElement of session.screen.form.formElements">
+					<div *ngIf="formElement.elementType==='Input'">
+						<mat-form-field *ngIf="['AlphanumericText', 'NumericText'].indexOf(formElement.inputType) >= 0" style="width:100%">
+							<input [(ngModel)]="formElement.value" #field="ngModel" matInput placeholder="{{getPlaceholderText(formElement)}}" [pattern]="formElement.pattern"
+							 [required]="formElement.required">
+							<ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
+								<mat-error div *ngIf="field.errors.required">
+									* is required.
+								</mat-error>
+								<mat-error *ngIf="field.errors.pattern">
+									* did not follow the designated pattern
+								</mat-error>
+							</ng-container>
+						</mat-form-field>
+						<mat-form-field *ngIf="formElement.inputType === 'ComboBox'">
+							<mat-select (change)="onComboBoxSelectionChange(formElement, $event)" placeholder="{{getPlaceholderText(formElement)}}">
+								<mat-option *ngFor="let value of formElement.values; let valueIndex=index" [value]="valueIndex">{{value}}</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+					<div *ngIf="formElement.elementType==='Display'">
+						<mat-form-field style="width:100%">
+							<label class="prompt-text">{{formElement.label}}</label>
+							<input [(ngModel)]="formElement.value" #field="ngModel" matInput disabled>
+						</mat-form-field>
+					</div>
+				</ng-container>
+				<ng-container *ngFor="let formElement of session.screen.form.formElements">
+					<div *ngIf="formElement.elementType==='Button'">
+						<button mat-raised-button [color]="'primary'" (click)="session.response=form; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>
+					</div>
+				</ng-container>
+			</div>
 		</div>
-	</mat-card-title>
-	<mat-card-content (keyup.enter)="onEnter($event)">
-			<div style="height:calc(100vh - 216px);">
-					<div class="scrollable">
-		<ng-container *ngFor="let formElement of session.screen.form.formElements">
-			<div *ngIf="formElement.elementType==='Input'">
-				<mat-form-field *ngIf="['AlphanumericText', 'NumericText'].indexOf(formElement.inputType) >= 0" style="width:100%">
-					<input [(ngModel)]="formElement.value" #field="ngModel" matInput placeholder="{{getPlaceholderText(formElement)}}" [pattern]="formElement.pattern"
-					 [required]="formElement.required">
-					<ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
-						<mat-error div *ngIf="field.errors.required">
-							* is required.
-						</mat-error>
-						<mat-error *ngIf="field.errors.pattern">
-							* did not follow the designated pattern
-						</mat-error>
-					</ng-container>
-				</mat-form-field>
-				<mat-form-field *ngIf="formElement.inputType === 'ComboBox'">
-					<mat-select (change)="onComboBoxSelectionChange(formElement, $event)" placeholder="{{getPlaceholderText(formElement)}}">
-						<mat-option *ngFor="let value of formElement.values; let valueIndex=index" [value]="valueIndex">{{value}}</mat-option>
-					</mat-select>
-				</mat-form-field>
-			</div>
-			<div *ngIf="formElement.elementType==='Display'">
-				<mat-form-field style="width:100%">
-					<label class="prompt-text">{{formElement.label}}</label>
-					<input [(ngModel)]="formElement.value" #field="ngModel" matInput disabled>
-				</mat-form-field>
-			</div>
-		</ng-container>
-		<ng-container *ngFor="let formElement of session.screen.form.formElements">
-			<div *ngIf="formElement.elementType==='Button'">
-				<button mat-raised-button [color]="'primary'" (click)="session.response=form; session.onAction(formElement.buttonAction)">{{formElement.label}}</button>
-			</div>
-		</ng-container>
-</div></div>
 	</mat-card-content>
 </mat-card>

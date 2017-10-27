@@ -1,8 +1,8 @@
 <mat-card class="with-header" style="height: calc(100% - 114px)" [style.xs]="{'height': 'calc(100% - 54px)', 'margin': '0'}">
     <mat-card-title>
-        <mat-toolbar color="accent">{{text}}</mat-toolbar>
+        <mat-toolbar color="accent">{{text}}</mat-toolbar> 
     </mat-card-title>
-    <mat-card-content style="height: calc(100% - 100px)" [style.xs]="{'height': 'calc(100% - 54px)', 'margin': '0', 'padding': '0'}">
+    <mat-card-content style="height: calc(100vh - 220px)" [style.xs]="{'height': 'calc(100vh - 135px)', 'margin': '0', 'padding': '0'}">
         <div class="scrollable">
             <mat-list>
                 <app-product-list [showItemIcon]="! isItemClickDisabled()" [items]="items" (itemClick)="isItemClickDisabled() || onItemClick($event)"

@@ -51,12 +51,17 @@ html, body {
    padding: 0;
 }
 
+.pad {
+   padding: $mat-card-default-margin;
+}
+
 .mat-card.with-header mat-card-content {
     padding: 0 $mat-card-default-margin 0 $mat-card-default-margin;
 }
 
 .mat-card {
     margin: $mat-card-default-margin;
+    z-index: 10;
 }
 
 // controls sizing of radio button column on static-table template
@@ -83,10 +88,6 @@ mat-header-cell.mat-header-cell.mat-column-_selection {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center; 
-}
-
-.main-menu-container {
-     height:100vh;
 }
 
 .prompt-container-outer {
@@ -157,11 +158,6 @@ mat-form-field.date-prompt-input {
     margin:0;
 }
 
-.main-menu {
-    min-height: 450px;    
-    width:60%;
-}
-
 .main-menu-item {
         padding: 25px;
         height: 150px;
@@ -177,9 +173,10 @@ mat-form-field.date-prompt-input {
 }
     
 .main-menu-item-text {
-    position: relative;
-    top: 65px;
-    color: #c8c8c8;
+    // position: relative;
+    top: 10px;
+    color: white;
+    zoom: 150%;
     font-weight: normal;
 }
 
