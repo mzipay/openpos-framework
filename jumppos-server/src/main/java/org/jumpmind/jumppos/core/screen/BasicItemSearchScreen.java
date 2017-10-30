@@ -47,6 +47,7 @@ public class BasicItemSearchScreen extends DefaultScreen {
     private Form searchFieldForm;
     private List<String> submitActionNames = new ArrayList<>();
     private String defaultActionName;
+    private SearchCategoryValue selectedCategoryValue;
 
     
     public BasicItemSearchScreen() {
@@ -131,6 +132,14 @@ public class BasicItemSearchScreen extends DefaultScreen {
 
     public void setDefaultActionName(String defaultActionName) {
         this.defaultActionName = defaultActionName;
+    }
+
+    public SearchCategoryValue getSelectedCategoryValue() {
+        return selectedCategoryValue;
+    }
+
+    public void setSelectedCategoryValue(SearchCategoryValue selectedValue) {
+        this.selectedCategoryValue = selectedValue;
     }
 
     static public class SearchCategory implements Serializable {

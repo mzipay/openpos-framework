@@ -39,7 +39,10 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
 
   onValueSelected(value: ISearchCategoryValue, categoryName: string): void {
     value.selected = true;
-    this.session.response = value;
+    this.session.response = {
+      'selectedCategoryValue': value,
+      'searchFieldForm': this.searchFieldForm
+    };
     this.session.onAction(`on${categoryName}Selected`);
   }
 
@@ -62,8 +65,8 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
       for (let valueIdx = 0; valueIdx < srcSearchCategoryValues.values.length; valueIdx++) {
         const targetValue = srcSearchCategoryValues.values[valueIdx];
         if (targetValue.selected && targetValue.attributes['name'] !== '<All>') {
-        this.displayCategoryIndex = catIdx + 1;
-        console.log('setting display to ' + (catIdx + 1) + ' because ' + targetValue.attributes['name'] + ' was selected');
+          this.displayCategoryIndex = catIdx + 1;
+          console.log('setting display to ' + (catIdx + 1) + ' because ' + targetValue.attributes['name'] + ' was selected');
         }
       }
     }
