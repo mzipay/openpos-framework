@@ -1,6 +1,6 @@
 import { IScreen } from '../common/iscreen';
-import {Component, AfterViewInit, DoCheck} from '@angular/core';
-import {SessionService} from '../session.service';
+import { Component, AfterViewInit, DoCheck, HostListener } from '@angular/core';
+import { SessionService } from '../session.service';
 import 'signature_pad';
 
 @Component({
@@ -14,6 +14,7 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
   protected initialized: Boolean = false;
   protected signaturePad: SignaturePad;
   protected canvas: HTMLCanvasElement = null;
+  protected wrapper: HTMLElement;
 
   constructor(public readonly session: SessionService) {
   }
@@ -27,33 +28,35 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
 
   ngAfterViewInit(): void {
     this.initialized = true;
-    const wrapper = document.getElementById('signature-pad');
-    this.canvas = wrapper.querySelector('canvas');
-    this.canvas.height = wrapper.clientHeight;
-    this.canvas.width = wrapper.clientWidth;
+    this.wrapper = document.getElementById('signature-pad');
+    this.canvas = this.wrapper.querySelector('canvas');
+    this.canvas.height = this.wrapper.clientHeight;
+    this.canvas.width = this.wrapper.clientWidth;
     this.signaturePad = new SignaturePad(this.canvas);
-    window.addEventListener('resize', this.resizeCanvas);
-    this.resizeCanvas(null);
+    this.onResizeCanvas(null);
   }
 
-  protected resizeCanvas = (evt: Event) => {
-    // When zoomed out to less than 100%, for some very strange reason,
-    // some browsers report devicePixelRatio as less than 1
-    // and only part of the canvas is cleared then.
-    const ratio =  Math.max(window.devicePixelRatio || 1, 1);
+  @HostListener('window:resize', ['$event'])
+  onResizeCanvas(evt: Event) {
 
-    // This part causes the canvas to be cleared
-// TODO: determine if this is necessary, working better without for now
-//    this.canvas.width = this.canvas.offsetWidth * ratio;
-//    this.canvas.height = this.canvas.offsetHeight * ratio;
-//    this.canvas.getContext('2d').scale(ratio, ratio);
+      const newWidth = this.wrapper.clientWidth;
+      const newHeight = this.wrapper.clientHeight;
 
-    // This library does not listen for canvas changes, so after the canvas is automatically
-    // cleared by the browser, SignaturePad#isEmpty might still return false, even though the
-    // canvas looks empty, because the internal data of this library wasn't cleared. To make sure
-    // that the state of this library is consistent with visual state of the canvas, you
-    // have to clear it manually.
-    this.signaturePad.clear();
+      const tempCanvas = document.createElement('canvas');
+      const tempContext = tempCanvas.getContext('2d');
+      const canvasContext = this.canvas.getContext('2d');
+
+      tempCanvas.width = newWidth;
+      tempCanvas.height = newHeight;
+      tempContext.fillStyle = 'white'; // TODO: this.canvas.getAttribute('backgroundColor');
+      tempContext.fillRect(0, 0, newWidth, newHeight);
+      tempContext.drawImage(this.canvas, 0, 0);
+
+      // Don't resize original canvas until after the image has been copied
+      this.canvas.width = newWidth;
+      this.canvas.height = newHeight;
+
+      canvasContext.drawImage(tempCanvas, 0, 0);
   }
 
   onClearSignature(): void {
@@ -62,6 +65,7 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
 
   onSaveSignature(): void {
     if ( this.signaturePad.isEmpty()) {
+      console.log('Signature is empty');
       return;
     }
     const mediaType: string = this.session.screen.signatureMediaType ?

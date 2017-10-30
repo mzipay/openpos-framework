@@ -128,6 +128,10 @@ mat-header-cell.mat-header-cell.mat-column-_selection {
     font-size:48px;
 }
 
+.prompt-icon-with-label {
+    color: $app-highlight-color;
+}
+
 .prompt-text {
     color: $app-highlight-color;
     font-size:20px;
@@ -587,6 +591,11 @@ td {
 
 .signature-capture-canvas {
     background-color: white;
+}
+
+#signature-actions.mat-card-actions {
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .cart-header-stripe {
