@@ -2,9 +2,9 @@
     <mat-list-item *ngFor="let i of items" class="sale-line-item" (click)="onItemClick(i, $event)">
         <div fxLayout="row" fxLayoutAlign="start center" style="width:100%;">
             <div fxFlex>
-                <div class="line-item-description" [style.xs]="{'font-size': '12px'}">{{i.description}}</div>
+                <div class="line-item-description" mat-line [style.xs]="{'font-size': '12px'}">{{i.description}}</div>
                 <div *ngIf="i.subtitle" mat-line class="line-item-subtitle" [style.xs]="{'font-size': '10px'}">{{i.subtitle}}</div>
-                <div *ngIf="i.fields">
+                <div *ngIf="i.fields" mat-line fxLayout="row">
                     <mat-form-field *ngFor="let field of i.fields" style="margin-right: 10px">
                         <label class="product-list-label">{{field.label}}</label>
                         <input matInput disabled [(ngModel)]="field.value">
