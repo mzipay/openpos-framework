@@ -9,6 +9,7 @@ import { IScreen } from '../common/iscreen';
 })
 export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
   private lastSequenceNum: number;
+  private lastScreenName: string;
 
   searchCategories: ISearchCategory[];
   searchCategoryStructure: SearchCategoryStructure;
@@ -73,9 +74,11 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
 }
 
   ngDoCheck(): void {
-    if (this.session.screen.sequenceNumber !== this.lastSequenceNum) {
+    if (this.session.screen.type === 'BasicItemSearch'
+        && this.session.screen.sequenceNumber !== this.lastSequenceNum) {
         this.refreshContent();
         this.lastSequenceNum = this.session.screen.sequenceNumber;
+        this.lastScreenName = this.session.screen.name;
     }
   }
 
