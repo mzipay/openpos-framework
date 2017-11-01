@@ -37,6 +37,17 @@ public class DefaultScreen implements Serializable {
     public DefaultScreen() {
     }
 
+    public DefaultScreen(ScreenType type) {
+        this(type, null);
+    }
+    
+    public DefaultScreen(ScreenType type, String name) {
+        if (name != null) {
+            put("name", name);
+        }
+        this.type = type;
+    }
+    
     public DefaultScreen(String name) {
         put("name", name);
     }

@@ -142,6 +142,8 @@ export class SessionService {
       this.dialog = null;
     } else if (json.type === 'Dialog') {
       this.dialog = json;
+    } else if (json.type === 'NoOp') {
+      this.response = null;
     } else {
       this.response = null;
       this.screen = json;

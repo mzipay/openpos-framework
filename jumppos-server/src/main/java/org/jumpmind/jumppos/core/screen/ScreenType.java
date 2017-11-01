@@ -12,6 +12,7 @@ public enum ScreenType {
     PaymentStatus,
     Prompt,
     PromptWithOptions,
+    NoOp,
     Sell,
     SellItemDetail,
     SignatureCapture,
