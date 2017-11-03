@@ -1,7 +1,6 @@
 <div>
     
-        <button style="position:absolute;padding:48px;" *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled" md-button (click)="session.onAction(session.screen.backButton.action)">
-                <!-- <md-icon >arrow_back</md-icon> -->
+        <button style="position:absolute;padding:48px;" *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled" mat-button (click)="session.onAction(session.screen.backButton.action)">
                 <svg style="width:48px;height:48px" viewBox="0 0 24 24">
                         <path fill="#FFF" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
                     </svg>
@@ -12,15 +11,15 @@
 
 <div class="containerX" [fxLayout]="direction" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="center">
     <div fxFlex>
-        <md-card class="serrated-edge">
-                <md-card-content class="sale-line-item-container-content">
+        <mat-card class="serrated-edge">
+                <mat-card-content class="sale-line-item-container-content">
                     <span class="cart-header-title">{{getCartMessage()}}</span>
-                        <md-list class="sale-line-item-container-list">
-                            <md-list-item *ngFor="let item of session.screen.cart.items; let i = index" class="sale-line-item">
+                        <mat-list class="sale-line-item-container-list">
+                            <mat-list-item *ngFor="let item of session.screen.cart.items; let i = index" class="sale-line-item">
                                 <div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
                                     <div fxFlex="80">
-                                        <div md-line class="line-item-description">{{item.description}}</div>
-                                        <div md-line class="line-item-subtitle">Sku {{item.id}} {{item.quantity}}@{{item.sellingPrice}}</div>
+                                        <div mat-line class="line-item-description">{{item.description}}</div>
+                                        <div mat-line class="line-item-subtitle">Sku {{item.id}} {{item.quantity}}@{{item.sellingPrice}}</div>
                                     </div>
         
                                     <div fxFlex>
@@ -31,16 +30,16 @@
                                     </div>
                                 </div>
                                 
-                            </md-list-item>
-                        </md-list>
-                        </md-card-content>
+                            </mat-list-item>
+                        </mat-list>
+                        </mat-card-content>
 
 
-        </md-card>
+        </mat-card>
     </div>
     <div fxFlex="40">
-        <md-card >
-                <md-card-content>
+        <mat-card >
+                <mat-card-content>
                         <span class="cart-header-title">Order Summary</span>
                         <div style="height: 15px;"></div>
 		<div class="containerX cart-sub-totals-outer-container" fxLayout="row" fxLayoutAlign="center center">
@@ -65,12 +64,12 @@
     
             </div>
 
-            </md-card-content>
-            <md-card-actions fxLayoutAlign="center">
-                <button md-raised-button style="background-color:#432614;color:white" (click)="session.onAction('SendToRegister')">Send to Register</button>
-                <button md-button (click)="session.onAction('EmptyCart')">Empty Cart</button>
-            </md-card-actions>
-        </md-card>
+            </mat-card-content>
+            <mat-card-actions fxLayoutAlign="center">
+                <button mat-raised-button style="background-color:#432614;color:white" (click)="session.onAction('SendToRegister')">Send to Register</button>
+                <button mat-button (click)="session.onAction('EmptyCart')">Empty Cart</button>
+            </mat-card-actions>
+        </mat-card>
     </div>
 </div>
 </div>
