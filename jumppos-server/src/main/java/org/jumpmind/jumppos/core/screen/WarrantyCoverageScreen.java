@@ -29,6 +29,10 @@ public class WarrantyCoverageScreen extends DefaultScreen {
     public void addWarrantyItem(IItem warrantyItem) {
         this.warrantyItems.add(warrantyItem);
     }
+
+    public void clearWarrantyItems() {
+        this.warrantyItems.clear();
+    }
     
     public String getWarrantyCostTotal() {
         return warrantyCostTotal;

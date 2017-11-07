@@ -4,6 +4,7 @@ import { IScreen } from '../common/iscreen';
 import { IMenuItem } from '../common/imenuitem';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
 import { SessionService } from '../session.service';
+import { MatSelectionList, MatListOption } from '@angular/material';
 
 @Component({
   selector: 'app-warranty-coverage',
@@ -14,6 +15,7 @@ export class WarrantyCoverageComponent implements AfterViewInit, DoCheck, IScree
   text: string;
   warrantyItems: IItem[];
   warrantyCostTotal: string;
+  @ViewChild(MatSelectionList) warrantyItemsSelectionList: MatSelectionList;
 
   constructor(public session: SessionService) {
 
@@ -34,7 +36,17 @@ export class WarrantyCoverageComponent implements AfterViewInit, DoCheck, IScree
   ngAfterViewInit(): void {
   }
 
-  onItemSelected(value: string) {
+  onItemSelected(event: Event) {
+    const selectedIndexes: number[] = [];
+    if (this.warrantyItemsSelectionList.selectedOptions.hasValue) {
+      this.warrantyItemsSelectionList.selectedOptions.selected.forEach(
+        (matListOption: MatListOption, index: number, array: MatListOption[]) => {
+          selectedIndexes.push(index);
+        }
+      );
+    }
+    this.session.response = selectedIndexes;
+    this.session.onAction('SelectedItems');
     // do nothing
     // this.session.onActionWithStringPayload('Next', value);
   }

@@ -1,5 +1,5 @@
 <ng-container *ngIf="selectionMode == 'Multiple'; else otherSelectionMode">
-    <mat-list-option *ngFor="let item of items" class="sale-line-item" (click)="onItemClick(item, $event)">
+    <mat-list-option *ngFor="let item of items" class="sale-line-item" (click)="onItemClick(item, $event)" [value]="item.index">
         <ng-container *ngTemplateOutlet="productListItemDetail; context:{item: item, selectionMode: selectionMode}"></ng-container>
     </mat-list-option>
 </ng-container>
