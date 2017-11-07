@@ -1,3 +1,4 @@
+import { SelectionMode } from './../selectionmode';
 import { IMenuItem } from './../imenuitem';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IScreen } from '../iscreen';
@@ -14,6 +15,7 @@ export class ProductListComponent {
     @Input() showItemMenu = false;
     @Output() itemClick = new EventEmitter<ItemClickAction>();
     @Output() menuItemClick = new EventEmitter<MenuClickAction>();
+    @Input() selectionMode: SelectionMode = SelectionMode.Single;
 
     onItemClick(item: IItem, event: any): void {
         console.log(`productList.onItemClick: ${item}`);

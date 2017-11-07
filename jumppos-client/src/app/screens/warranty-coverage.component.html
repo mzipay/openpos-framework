@@ -39,9 +39,9 @@
 				
 			<mat-card-content class="sale-line-item-container-content" fxLayout="column" fxLayoutAlign="space-between">
 				<div class="scrollable">
-					<mat-nav-list>
-						<app-product-list [items]="warrantyItems" (itemClick)="onItemSelected()"></app-product-list>
-					</mat-nav-list>
+					<mat-selection-list>
+						<app-product-list [items]="warrantyItems" (itemClick)="onItemSelected()" [selectionMode]="'Multiple'" [showItemIcon]="false"></app-product-list>
+					</mat-selection-list>
 				</div>
 			</mat-card-content>
 

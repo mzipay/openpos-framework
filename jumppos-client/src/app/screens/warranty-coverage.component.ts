@@ -35,7 +35,8 @@ export class WarrantyCoverageComponent implements AfterViewInit, DoCheck, IScree
   }
 
   onItemSelected(value: string) {
-    this.session.onActionWithStringPayload('Next', value);
+    // do nothing
+    // this.session.onActionWithStringPayload('Next', value);
   }
 
 }

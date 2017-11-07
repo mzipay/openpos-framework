@@ -1,37 +1,44 @@
-
-    <mat-list-item *ngFor="let i of items" class="sale-line-item" (click)="onItemClick(i, $event)">
-        <div fxLayout="row" fxLayoutAlign="start center" style="width:100%;">
-            <div fxFlex>
-                <div class="line-item-description" mat-line [style.xs]="{'font-size': '12px'}">{{i.description}}</div>
-                <div *ngIf="i.subtitle" mat-line class="line-item-subtitle" [style.xs]="{'font-size': '10px'}">{{i.subtitle}}</div>
-                <div *ngIf="i.fields" mat-line fxLayout="row">
-                    <mat-form-field *ngFor="let field of i.fields" style="margin-right: 10px">
-                        <label class="product-list-label">{{field.label}}</label>
-                        <input matInput disabled [(ngModel)]="field.value">
-                    </mat-form-field>
-                </div>
-            </div>
-            <div fxFlex>
-                <div fxLayout="row" fxLayoutAlign="end center">
-                    <span *ngIf="i.amount" class="line-item-extended-amt" [style.xs]="{'font-size': '14px'}">
-                        <span class="super-currency-symbol">$</span>{{i.amount}}
-                    </span>
-                    <mat-icon *ngIf="showItemIcon" class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
-                    <ng-container *ngIf="showItemMenu">
-                            <button mat-icon-button [matMenuTriggerFor]="menu">
-                                <mat-icon>more_vert</mat-icon>
-                            </button>
-                            <mat-menu #menu="matMenu">
-                                <button mat-menu-item *ngFor="let menuItem of menuItemActions" (click)="onMenuItemClick(i, menuItem, $event)">
-                                    <app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
-                                    <span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
-                                </button>
-                            </mat-menu>
-                        </ng-container>
-                </div>
-
-            </div>
-
-
-        </div>
+<ng-container *ngIf="selectionMode == 'Multiple'; else otherSelectionMode">
+    <mat-list-option *ngFor="let item of items" class="sale-line-item" (click)="onItemClick(item, $event)">
+        <ng-container *ngTemplateOutlet="productListItemDetail; context:{item: item, selectionMode: selectionMode}"></ng-container>
+    </mat-list-option>
+</ng-container>
+<ng-template #otherSelectionMode>
+    <mat-list-item *ngFor="let item of items" class="sale-line-item" (click)="onItemClick(item, $event)">
+        <ng-container *ngTemplateOutlet="productListItemDetail; context:{item: item, selectionMode: selectionMode}"></ng-container>
     </mat-list-item>
+</ng-template>
+
+<ng-template #productListItemDetail let-item="item">
+    <div fxLayout="row" fxLayoutAlign="start center" style="width:100%;">
+        <div fxFlex>
+            <div class="line-item-description" mat-line [style.xs]="{'font-size': '12px'}">{{item.description}}</div>
+            <div *ngIf="item.subtitle" mat-line class="line-item-subtitle" [style.xs]="{'font-size': '10px'}">{{item.subtitle}}</div>
+            <div *ngIf="item.fields" mat-line fxLayout="row">
+                <mat-form-field *ngFor="let field of item.fields" style="margin-right: 10px">
+                    <label class="product-list-label">{{field.label}}</label>
+                    <input matInput disabled [(ngModel)]="field.value">
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxFlex>
+            <div fxLayout="row" fxLayoutAlign="end center">
+                <span *ngIf="item.amount" class="line-item-extended-amt" [style.xs]="{'font-size': '14px'}">
+                    <span class="super-currency-symbol">$</span>{{item.amount}}
+                </span>
+                <mat-icon *ngIf="showItemIcon" class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
+                <ng-container *ngIf="showItemMenu">
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item *ngFor="let menuItem of menuItemActions" (click)="onMenuItemClick(item, menuItem, $event)">
+                            <app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
+                            <span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
+                        </button>
+                    </mat-menu>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</ng-template>

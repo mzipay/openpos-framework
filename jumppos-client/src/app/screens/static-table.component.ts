@@ -1,6 +1,7 @@
 import { Component, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';
 import { IScreen } from './../common/iscreen';
+import { SelectionMode } from './../common/selectionmode';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -95,16 +96,6 @@ export class StaticTableComponent implements IScreen, DoCheck {
             this.session.onAction(action);
         }
     }
-}
-
-/**
- * Indicates if the table component will allow the user to
- * select no rows, a single row, or multiple rows.
- */
-export enum SelectionMode {
-    None,
-    Multiple,
-    Single
 }
 
 /**
