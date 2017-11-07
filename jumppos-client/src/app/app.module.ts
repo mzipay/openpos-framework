@@ -1,3 +1,4 @@
+import { WarrantyCoverageComponent } from './screens/warranty-coverage.component';
 import { SaleRetrievalComponent } from './screens/sale-retrieval.component';
 import { LoaderService } from './common/loader/loader.service';
 import { LoaderComponent } from './common/loader/loader.component';
@@ -123,7 +124,8 @@ const stompConfig: StompConfig = {
     SellItemDetailComponent,
     SignatureCaptureComponent,
     StaticTableComponent,
-    SaleRetrievalComponent
+    SaleRetrievalComponent,
+    WarrantyCoverageComponent
   ],
   declarations: [
     AppComponent,
@@ -152,7 +154,8 @@ const stompConfig: StompConfig = {
     EmbeddedWebPageComponent,
     FocusDirective,
     ScreenDirective,
-    SafePipe
+    SafePipe,
+    WarrantyCoverageComponent
   ],
   imports: [
     BrowserModule,

@@ -17,4 +17,7 @@ public interface IItem {
     public void setFields(List<FormDisplayField> fields);
     public String getAmount();
     public void setAmount(String amount);
+    public boolean isSelected();
+    public void setSelected(boolean selected);
+    
 }

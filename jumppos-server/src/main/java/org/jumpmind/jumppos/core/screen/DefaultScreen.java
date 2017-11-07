@@ -146,6 +146,14 @@ public class DefaultScreen implements Serializable {
         this.menuItems = menuItem;
     }
 
+    public MenuItem getMenuItemByAction(String action) {
+        return this.getMenuActions().stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
+    }
+    
+    public MenuItem getMenuItemByTitle(String title) {
+        return this.getMenuActions().stream().filter( mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
+    }
+    
     public void clearMenuItems() {
         this.menuItems.clear();
     }

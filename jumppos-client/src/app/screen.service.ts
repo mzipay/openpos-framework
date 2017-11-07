@@ -1,3 +1,4 @@
+import { WarrantyCoverageComponent } from './screens/warranty-coverage.component';
 import { SaleRetrievalComponent } from './screens/sale-retrieval.component';
 import { BasicItemSearchComponent } from './screens/basic-item-search.component';
 import { CartComponent } from './kiosk/cart.component';
@@ -45,6 +46,7 @@ export class ScreenService {
     this.screens.set('SignatureCapture', SignatureCaptureComponent);
     this.screens.set('Table', StaticTableComponent);
     this.screens.set('SaleRetrieval', SaleRetrievalComponent);
+    this.screens.set('WarrantyCoverage', WarrantyCoverageComponent);
   }
 
   public resolveScreen(type: string): ComponentFactory<IScreen> {

@@ -14,6 +14,7 @@ public class DefaultItem implements IItem, Serializable {
     private String subtitle;
     private String amount;
     private List<FormDisplayField> fields;
+    private boolean selected = false;
 
     public DefaultItem() {}
     
@@ -80,6 +81,15 @@ public class DefaultItem implements IItem, Serializable {
         this.fields = fields;
     }
     
+    @Override
+    public boolean isSelected() {
+        return this.selected;
+    }
+    
+    @Override
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 
 }
 

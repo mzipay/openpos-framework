@@ -19,6 +19,7 @@ public class SellItem implements IItem, Serializable {
     private String imageUrl;
     private String productDescription;
     private List<FormDisplayField> fields;
+    private boolean selected = false;
     
     
     @Override
@@ -120,6 +121,16 @@ public class SellItem implements IItem, Serializable {
     @Override
     public void setFields(List<FormDisplayField> fields) {
         this.fields = fields;
+    }
+
+    @Override
+    public boolean isSelected() {
+        return this.selected;
+    }
+    
+    @Override
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
     
 }

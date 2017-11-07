@@ -1,4 +1,4 @@
-package org.jumpmind.jumppos.core;
+package org.jumpmind.jumppos.util;
 
 import java.util.Collection;
 import java.util.HashMap;
