@@ -9,8 +9,6 @@ buildscript {
     }
 }
 
-
-
 processResources {
     from ('../jumppos-client/dist/') {
         into 'public'
@@ -36,3 +34,5 @@ dependencies {
         exclude module: "spring-boot-starter-logging"
     }
 }
+
+processResources.dependsOn tasks.getByPath(':jumppos-client:assemble')
