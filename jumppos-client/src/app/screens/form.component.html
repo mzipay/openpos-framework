@@ -2,17 +2,12 @@
 	<mat-card-content style="padding: 0;" (keyup.enter)="onEnter($event)">
 		<mat-toolbar color="accent">
 			{{session.screen.form.name}}
-			<div *ngIf="itemActions && itemActions.length > 0">
-				<button mat-icon-button [matMenuTriggerFor]="menu">
-					<mat-icon>more_vert</mat-icon>
-				</button>
-				<mat-menu #menu="matMenu">
-					<button mat-menu-item *ngFor="let menuItem of itemActions" (click)="onItemAction(menuItem, $event)">
-						<app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
-						<span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
-					</button>
-				</mat-menu>
-			</div>
+            <div style="width: 100%" fxLayout="row" fxLayoutAlign="end ">
+                <button style="top: 28px" *ngIf="session.screen.itemAction" (click)="onItemAction(session.screen.itemAction, $event)" color="primary"
+                    mat-fab>
+                    <mat-icon>{{session.screen.itemAction.icon}}</mat-icon>
+                </button>
+            </div>
 		</mat-toolbar>
 		<div class="pad" style="height:calc(100vh - 220px);" [style.xs]="{'height': 'calc(100vh - 160px)'}">
 			<div class="scrollable">
@@ -42,6 +37,9 @@
 							<input [(ngModel)]="formElement.value" #field="ngModel" matInput disabled>
 						</mat-form-field>
 					</div>
+					<ng-container *ngIf="formElement.elementType==='Separator'">
+						<mat-divider></mat-divider>
+					</ng-container>
 				</ng-container>
 				<ng-container *ngFor="let formElement of session.screen.form.formElements">
 					<div *ngIf="formElement.elementType==='Button'">

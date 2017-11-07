@@ -47,14 +47,14 @@ public class ScreenService implements IScreenService {
 
     @Autowired
     IStateManagerFactory stateManagerFactory;
-    
+
     int screenSequenceNumber = 0;
 
     private Map<String, Map<String, DefaultScreen>> lastScreenByAppIdByNodeId = new HashMap<>();
-    
-    @RequestMapping(method=RequestMethod.GET, value="app/{appId}/node/{nodeId}/{action}/{payload}")
-    public void getAction(@PathVariable String appId, @PathVariable String nodeId,
-            @PathVariable String action, @PathVariable String payload, HttpServletResponse resp) {
+
+    @RequestMapping(method = RequestMethod.GET, value = "app/{appId}/node/{nodeId}/{action}/{payload}")
+    public void getAction(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String action, @PathVariable String payload,
+            HttpServletResponse resp) {
         logger.info("Received a request for {} {} {} {}", appId, nodeId, action, payload);
         IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
         if (stateManager != null) {
@@ -115,7 +115,7 @@ public class ScreenService implements IScreenService {
             lastScreenByNodeId.put(nodeId, screen);
         }
     }
-    
+
     protected void publishToClients(String appId, String nodeId, Object payload) {
         this.template.convertAndSend("/topic/app/" + appId + "/node/" + nodeId, payload);
     }
@@ -127,7 +127,8 @@ public class ScreenService implements IScreenService {
             DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
             if (lastScreen != null && lastScreen.getType() != null && lastScreen.getScreenType() == ScreenType.Form) {
                 Form form = mapper.convertValue(action.getData(), Form.class);
-                if (form != null) { // A form that has display only fields won't have any data
+                if (form != null) { // A form that has display only fields won't
+                                    // have any data
                     return populateFormScreen(appId, nodeId, form);
                 }
             }
@@ -146,11 +147,16 @@ public class ScreenService implements IScreenService {
                 if (formElement instanceof FormField) {
                     FormField formField = (FormField) formElement;
                     String fieldId = formField.getId();
-                    for (Field field : lastScreen.getClass().getDeclaredFields()) {
-                        FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
-                        if (textFieldAnnotation != null) {
-                            if (field.getName().equals(fieldId)) {
-                                setFieldValue(field, lastScreen, formField.getValue());
+                    if (lastScreen instanceof FormScreen) {
+                        FormScreen formScreen = (FormScreen) lastScreen;
+                        formScreen.setForm(form);
+                    } else {
+                        for (Field field : lastScreen.getClass().getDeclaredFields()) {
+                            FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
+                            if (textFieldAnnotation != null) {
+                                if (field.getName().equals(fieldId)) {
+                                    setFieldValue(field, lastScreen, formField.getValue());
+                                }
                             }
                         }
                     }
@@ -168,8 +174,10 @@ public class ScreenService implements IScreenService {
             FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
             if (textFieldAnnotation != null) {
                 FormField formField = new FormField();
-                formField.setElementType(FieldElementType.Input); // TODO support other types
-                                                   // here?
+                formField.setElementType(FieldElementType.Input); // TODO
+                                                                  // support
+                                                                  // other types
+                // here?
                 formField.setId(field.getName());
                 formField.setLabel(textFieldAnnotation.label());
                 formField.setPlaceholder(textFieldAnnotation.placeholder());

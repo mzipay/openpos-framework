@@ -11,7 +11,6 @@ import { MatSelectChange } from '@angular/material';
 export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 
   public form: IForm;
-  itemActions: IMenuItem[];
   private lastSequenceNum: number;
 
   constructor(public session: SessionService) {
@@ -27,7 +26,6 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
   }
 
   ngOnInit(): void {
-    this.itemActions = this.session.screen.itemActions;
     this.form = this.session.screen.form;
   }
 

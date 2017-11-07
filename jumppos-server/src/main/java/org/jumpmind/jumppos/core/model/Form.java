@@ -36,4 +36,16 @@ public class Form implements Serializable {
         return name;
     }
     
+    public String getString(String id) {
+        for (IFormElement element : formElements) {
+            if (element.getId().equals(id)) {
+                if (element instanceof FormField) {
+                    return ((FormField)element).getValue();                            
+                }
+            }
+        }
+        return null;
+        
+    }
+    
 }

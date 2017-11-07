@@ -37,6 +37,23 @@ public class FormField implements IFormElement, IField, Serializable {
         this.placeholder = placeholder;
     }
     
+    public FormField(String fieldId, String label, FieldElementType elementType, FieldInputType inputType, boolean required) {
+        this.fieldId = fieldId;
+        this.label = label;
+        this.elementType = elementType;
+        this.inputType = inputType;
+        this.required = required;
+    }
+    
+    public FormField(String fieldId, String label, FieldElementType elementType, FieldInputType inputType, boolean required, String value) {
+        this.fieldId = fieldId;
+        this.label = label;
+        this.elementType = elementType;
+        this.inputType = inputType;
+        this.required = required;
+        this.value = value;
+    }    
+    
     public FieldInputType getInputType() {
         return inputType;
     }

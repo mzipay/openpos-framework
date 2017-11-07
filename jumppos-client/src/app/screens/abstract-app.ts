@@ -47,8 +47,8 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
     protected checkConnectionStatus(session: SessionService): void {
         const connected = session.connected();
        if (!connected && !this.snackBarRef) {
-           this.snackBarRef = this.snackBar.open('The server is disconnected', 'Dismiss', {
-               duration: 60000, viewContainerRef: null
+           this.snackBarRef = this.snackBar.open('The server is disconnected', undefined, {
+               duration: 0, viewContainerRef: null, verticalPosition: 'top'
             });
             this.snackBarRef.afterDismissed().subscribe(() => {
                 this.snackBarRef = null;

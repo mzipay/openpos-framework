@@ -1,16 +1,13 @@
 package org.jumpmind.jumppos.core.screen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jumpmind.jumppos.core.model.Form;
 
 public class FormScreen extends DefaultScreen {
 
     private static final long serialVersionUID = 1L;
 
-    private Form form;
-    private List<MenuItem> itemActions = new ArrayList<>();
+    private Form form = new Form();
+    private MenuItem itemAction;
 
     public FormScreen() {
         setType(ScreenType.Form);
@@ -24,17 +21,16 @@ public class FormScreen extends DefaultScreen {
         return form;
     }
 
-    public List<MenuItem> getItemActions() {
-        return itemActions;
+    public void setItemAction(MenuItem itemAction) {
+        this.itemAction = itemAction;
     }
-
-
-    public void setItemActions(List<MenuItem> itemActions) {
-        this.itemActions = itemActions;
+    
+    public MenuItem getItemAction() {
+        return itemAction;
     }
-
-    public void addItemAction(MenuItem itemAction) {
-        this.getItemActions().add(itemAction);
+    
+    public String getString(String id) {
+        return form.getString(id);
     }
     
 }
