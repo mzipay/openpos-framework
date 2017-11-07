@@ -25,7 +25,7 @@ task npmClean(type: Delete) {
 	delete "${webDir}/node"
 	delete "${webDir}/node_modules"
 	delete "${webDir}/dist"
-	delete "${webDir}/coverage"
+	delete "${webDir}/www"
 }
 
 // clean task for npm
@@ -35,25 +35,13 @@ clean.dependsOn(npmClean)
 task develop {}
 
 // build task for npm
-task build {}
-build.dependsOn(npm_install)
-build.dependsOn(npm_run_build)
-
-// check task for npm
-task check {}
-check.dependsOn(npm_run_test)
-
-// run all task
-task runAll{}
-runAll.dependsOn(npm_run_start)
-
-task buildToCordova(type: NodeTask) {
+task build(type: NodeTask) {
   dependsOn npm_install
-  script = file('/usr/local/bin/ng')
-  args = ['build', '-op', '../jumppos-cordova/www']
+  script = file('/usr/local/bin/cordova')
+  args = ['build', 'ios']
 }
+build.dependsOn(npm_install)
 
 // assemble task for npm
 task assemble {}
 assemble.dependsOn(build)
-assemble.dependsOn(buildToCordova)

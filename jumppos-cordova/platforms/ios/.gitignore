@@ -1,0 +1,12 @@
+*.mode1v3
+*.perspectivev3
+*.pbxuser
+.DS_Store
+build/
+/CordovaLib/
+/JumpPOS.xcodeproj/
+/JumpPOS.xcworkspace/
+/JumpPOS/
+/cordova/
+/platform_www/
+/www/
