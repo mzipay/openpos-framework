@@ -1,3 +1,4 @@
+import { ProductListComponent } from './../common/controls/product-list.component';
 import { IItem } from './../common/iitem';
 import { ISellItem } from '../common/isellitem';
 import { IScreen } from '../common/iscreen';
@@ -11,11 +12,13 @@ import { MatSelectionList, MatListOption } from '@angular/material';
   templateUrl: './warranty-coverage.component.html'
 })
 export class WarrantyCoverageComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
+  private lastSequenceNum: number;
 
   text: string;
   warrantyItems: IItem[];
   warrantyCostTotal: string;
   @ViewChild(MatSelectionList) warrantyItemsSelectionList: MatSelectionList;
+
 
   constructor(public session: SessionService) {
 
@@ -25,10 +28,17 @@ export class WarrantyCoverageComponent implements AfterViewInit, DoCheck, IScree
   }
 
   ngDoCheck(): void {
+    // re-init the model if the screen is being redisplayed
+    if (this.session.screen.type === 'WarrantyCoverage'
+        && this.session.screen.sequenceNumber !== this.lastSequenceNum) {
+        this.ngOnInit();
+        this.lastSequenceNum = this.session.screen.sequenceNumber;
+    }
   }
 
   ngOnInit(): void {
     this.text = this.session.screen.text;
+    this.warrantyItemsSelectionList.selectedOptions.clear();
     this.warrantyItems = this.session.screen.warrantyItems;
     this.warrantyCostTotal = this.session.screen.warrantyCostTotal;
   }
@@ -38,17 +48,25 @@ export class WarrantyCoverageComponent implements AfterViewInit, DoCheck, IScree
 
   onItemSelected(event: Event) {
     const selectedIndexes: number[] = [];
+
+    // FWIW, I've been unable to get binding directly from the mat-list-option.selected property
+    // to the warrantyItem.selected to work properly, so instead I get the select options
+    // from the warrantyItemsSelectionList.  Not ideal, but it works.
     if (this.warrantyItemsSelectionList.selectedOptions.hasValue) {
       this.warrantyItemsSelectionList.selectedOptions.selected.forEach(
         (matListOption: MatListOption, index: number, array: MatListOption[]) => {
-          selectedIndexes.push(index);
+//          console.log( `selectedIndex: ${index}`);
+//          console.log( `value: ${matListOption.value}`);
+          selectedIndexes.push(matListOption.value);
         }
       );
     }
-    this.session.response = selectedIndexes;
+
+    this.session.response = selectedIndexes.sort();
     this.session.onAction('SelectedItems');
-    // do nothing
-    // this.session.onActionWithStringPayload('Next', value);
   }
 
+  onMenuAction(action: string): void {
+    this.session.onAction(action);
+  }
 }
