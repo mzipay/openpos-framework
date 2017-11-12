@@ -9,6 +9,10 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "org.jumpmind.jumppos"
+    },
+    "phonegap-plugin-barcodescanner": {
+      "CAMERA_USAGE_DESCRIPTION": "To scan barcodes",
+      "PACKAGE_NAME": "org.jumpmind.jumppos"
     }
   },
   "dependent_plugins": {}

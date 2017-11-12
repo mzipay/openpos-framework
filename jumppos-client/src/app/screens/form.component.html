@@ -11,6 +11,9 @@
 		</mat-toolbar>
 		<div class="pad" style="height:calc(100vh - 220px);" [style.xs]="{'height': 'calc(100vh - 160px)'}">
 			<div class="scrollable">
+    <button mat-raised-button (click)="session.scan()">
+        <app-icon iconName="settings_overscan" iconClass="material-icons"></app-icon>
+    </button>			
 				<ng-container *ngFor="let formElement of session.screen.form.formElements">
 					<div *ngIf="formElement.elementType==='Input'">
 						<mat-form-field *ngIf="['AlphanumericText', 'NumericText'].indexOf(formElement.inputType) >= 0" style="width:100%">

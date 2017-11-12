@@ -8,6 +8,8 @@ import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
+declare var cordova: any;
+
 @Injectable()
 export class SessionService {
 
@@ -31,11 +33,61 @@ export class SessionService {
 
   private loading: boolean;
 
+  private cordovaReady: boolean;
+
   constructor(private stompService: StompService, private location: Location, private router: Router, private loader: LoaderService) {
+    document.addEventListener('deviceready', this.cordovaInitialized, false);
+  }
+
+  private cordovaInitialized() {
+    console.log('devices are ready');
+    this.cordovaReady = true;
+  }
+
+  public scan() {
+     if (this.cordovaReady) {
+      console.log('enabling scanning');
+      cordova.plugins.barcodeScanner.scan(
+        function (result) {
+          alert('We got a barcode\n' +
+            'Result: ' + result.text + '\n' +
+            'Format: ' + result.format + '\n' +
+            'Cancelled: ' + result.cancelled);
+        },
+        function (error) {
+          alert('Scanning failed: ' + error);
+        },
+        {
+          preferFrontCamera: false, // iOS and Android
+          showFlipCameraButton: false, // iOS and Android
+          showTorchButton: false, // iOS and Android
+          torchOn: false, // Android, launch with the torch switched on (if available)
+          saveHistory: false, // Android, save scan history (default false)
+          prompt: 'Place a barcode inside the scan area', // Android
+          resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+          formats: 'CODE_128,EAN_8,EAN_13,UPC_A,UPC_E', // default: all but PDF_417 and RSS_EXPANDED
+          orientation: 'landscape', // Android only (portrait|landscape), default unset so it rotates with the device
+          disableAnimations: false, // iOS
+          disableSuccessBeep: false // iOS and Android
+        }
+      );
+     }
   }
 
   private buildTopicName(): String {
     return '/topic/app/' + this.appId + '/node/' + this.nodeId;
+  }
+
+  private getServerUrl(): string {
+    return localStorage.getItem('serverUrl');
+  }
+
+  private getNodeId(): string {
+    return localStorage.getItem('nodeId');
+  }
+
+  public isPersonalized(): boolean {
+    return this.getServerUrl() && this.getNodeId();
   }
 
   public connected(): boolean {
@@ -132,7 +184,7 @@ export class SessionService {
     console.log('Publish action ' + action + ' with payload ' + payload);
     this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
       JSON.stringify({ name: action, data: payload }));
-      this.queueLoading();
+    this.queueLoading();
   }
 
   /** Consume a message from the stompService */

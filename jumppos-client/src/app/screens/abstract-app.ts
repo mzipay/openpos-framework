@@ -25,8 +25,6 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
     @ViewChild(ScreenDirective) host: ScreenDirective;
 
-
-
     constructor(public screenService: ScreenService,
         public session: SessionService,
         public dialog: MatDialog,
