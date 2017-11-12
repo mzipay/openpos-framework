@@ -50,7 +50,7 @@ runAll.dependsOn(npm_run_start)
 task buildToCordova(type: NodeTask) {
   dependsOn npm_install
   script = file('/usr/local/bin/ng')
-  args = ['build', '-op', '../jumppos-cordova/www']
+  args = ['build', '-op', '../openpos-cordova/www']
 }
 
 // assemble task for npm
