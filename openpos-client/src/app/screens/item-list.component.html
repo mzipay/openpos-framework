@@ -6,7 +6,7 @@
         <div class="scrollable">
             <mat-list>
                 <app-product-list [showItemIcon]="! isItemClickDisabled()" [items]="items" (itemClick)="isItemClickDisabled() || onItemClick($event)"
-                    [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)">
+                    [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)" [itemClass]="condensedListDisplay ? 'item-list-condensed' : ''">
                 </app-product-list>
             </mat-list>
         </div>
