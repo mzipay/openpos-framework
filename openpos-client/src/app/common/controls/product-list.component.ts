@@ -13,6 +13,7 @@ export class ProductListComponent {
     @Input() menuItemActions: IMenuItem[] = [];
     @Input() showItemIcon = true;
     @Input() showItemMenu = false;
+    @Input() itemClass: string;
     @Output() itemClick = new EventEmitter<ItemClickAction>();
     @Output() menuItemClick = new EventEmitter<MenuClickAction>();
     @Input() selectionMode: SelectionMode = SelectionMode.Single;

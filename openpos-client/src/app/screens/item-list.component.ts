@@ -15,6 +15,7 @@ export class ItemListComponent implements IScreen, OnInit, DoCheck {
     itemActionName: string;
     text: string;
     itemActions: IMenuItem[] = [];
+    condensedListDisplay: false;
     private lastSequenceNum: number;
 
     constructor(public session: SessionService) {
@@ -28,6 +29,7 @@ export class ItemListComponent implements IScreen, OnInit, DoCheck {
         this.itemActionName = this.session.screen.itemActionName;
         this.text = this.session.screen.text;
         this.itemActions = this.session.screen.itemActions;
+        this.condensedListDisplay = this.session.screen.condensedListDisplay;
     }
 
     ngDoCheck(): void {

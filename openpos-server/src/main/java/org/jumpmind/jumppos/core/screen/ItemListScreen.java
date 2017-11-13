@@ -14,6 +14,7 @@ public class ItemListScreen extends DefaultScreen {
     private String itemActionName = "Item";
     private String text;
     private List<MenuItem> itemActions = new ArrayList<>();
+    private boolean condensedListDisplay = false;
 
     public ItemListScreen() {
         setType(ScreenType.ItemList);
@@ -56,6 +57,16 @@ public class ItemListScreen extends DefaultScreen {
         return this.selectedIndex;
     }
     
+    public boolean isCondensedListDisplay() {
+        return condensedListDisplay;
+    }
+
+
+    public void setCondensedListDisplay(boolean condensedListDisplay) {
+        this.condensedListDisplay = condensedListDisplay;
+    }
+
+
     public String getItemActionName() {
         return itemActionName;
     }
