@@ -87,7 +87,11 @@ export class SessionService {
   }
 
   public isPersonalized(): boolean {
-    return this.getServerUrl() && this.getNodeId();
+     if (this.getServerUrl() && this.getNodeId()) {
+       return true;
+     } else {
+       return false;
+     }
   }
 
   public connected(): boolean {
