@@ -34,12 +34,25 @@ clean.dependsOn(npmClean)
 
 task develop {}
 
+task deletePlatforms(type: Delete) {
+  dependsOn npm_install
+  delete 'platforms/ios'
+}
+
+task installPlatforms(type: NodeTask) {
+  dependsOn deletePlatforms
+  script = file('/usr/local/bin/cordova')
+  args = ['platform', 'add', 'ios']
+}
+
+
 // build task for npm
 task build(type: NodeTask) {
-  dependsOn npm_install
+  dependsOn installPlatforms
   script = file('/usr/local/bin/cordova')
   args = ['build', 'ios']
 }
+
 build.dependsOn(npm_install)
 
 // assemble task for npm
