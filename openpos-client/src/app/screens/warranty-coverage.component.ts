@@ -6,6 +6,7 @@ import { IMenuItem } from '../common/imenuitem';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
 import { SessionService } from '../session.service';
 import { MatSelectionList, MatListOption } from '@angular/material';
+import { AbstractApp } from './abstract-app';
 
 @Component({
   selector: 'app-warranty-coverage',
@@ -24,7 +25,7 @@ export class WarrantyCoverageComponent implements AfterViewInit, DoCheck, IScree
 
   }
 
-  show(session: SessionService) {
+  show(session: SessionService, app: AbstractApp) {
   }
 
   ngDoCheck(): void {

@@ -34,7 +34,7 @@ export class KioskComponent extends AbstractApp implements DoCheck {
     }
   }
 
-  protected appName(): String {
+  public appName(): string {
     return 'kiosk';
   }
 

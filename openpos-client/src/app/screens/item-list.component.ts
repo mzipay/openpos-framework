@@ -4,6 +4,7 @@ import { Component, OnInit, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';
 import { IScreen } from './../common/iscreen';
 import { IItem } from './../common/iitem';
+import { AbstractApp } from './abstract-app';
 
 @Component({
     selector: 'app-item-list',
@@ -21,7 +22,7 @@ export class ItemListComponent implements IScreen, OnInit, DoCheck {
     constructor(public session: SessionService) {
     }
 
-    show(session: SessionService) {
+    show(session: SessionService, app: AbstractApp) {
     }
 
     ngOnInit(): void {

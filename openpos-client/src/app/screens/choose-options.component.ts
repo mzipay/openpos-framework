@@ -1,6 +1,7 @@
 import { IScreen } from '../common/iscreen';
 import { Component, OnInit, DoCheck } from '@angular/core';
 import {SessionService} from '../session.service';
+import { AbstractApp } from './abstract-app';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck {
   constructor(public session: SessionService) {
   }
 
-  show(session: SessionService) {
+  show(session: SessionService, app: AbstractApp) {
     console.log('Show invoked');
   }
 

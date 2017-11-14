@@ -1,6 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.jumpmind.jumppos" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.jumpmind.openpos" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>OpenPOS</name>
+    <description>
+        OpenPOS
+    </description>
+    <author email="chenson42@gmail.com" href="http://jumpmind.com">
+        JumpMind
+    </author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -13,6 +19,8 @@
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
+        <icon height="152" src="res/icon/ios/icon-72-2x.png" width="152" />
+        <icon height="120" src="res/icon/ios/icon-60-2x.png" width="120" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>

@@ -24,7 +24,7 @@ export class PosComponent extends AbstractApp implements DoCheck {
     super(screenService, session, dialog, iconService, snackBar);
   }
 
-  protected appName(): String {
+  public appName(): string {
     return 'pos';
   }
 

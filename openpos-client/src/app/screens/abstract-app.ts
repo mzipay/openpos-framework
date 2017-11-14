@@ -5,7 +5,7 @@ import { IScreen } from '../common/iscreen';
 import { ScreenService } from './../screen.service';
 import { DialogComponent } from '../screens/dialog.component';
 import { IMenuItem } from '../common/imenuitem';
-import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
+import { Component, OnInit, OnDestroy, DoCheck, sequence } from '@angular/core';
 import { Type, ViewChild, ComponentFactory } from '@angular/core';
 import { SessionService } from '../session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
@@ -23,6 +23,8 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
     private snackBarRef: MatSnackBarRef<SimpleSnackBar>;
 
+    private needsPersonalization: boolean;
+
     @ViewChild(ScreenDirective) host: ScreenDirective;
 
     constructor(public screenService: ScreenService,
@@ -32,9 +34,16 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
         public snackBar: MatSnackBar) {
     }
 
-    protected abstract appName(): String;
+    public abstract appName(): string;
 
     ngOnInit(): void {
+        this.needsPersonalization = !this.session.isPersonalized();
+        if (!this.needsPersonalization) {
+            this.initializeApplication();
+        }
+    }
+
+    public initializeApplication(): void {
         this.session.unsubscribe();
         this.session.subscribe(this.appName());
         this.iconService.registerLocalSvgIcons();
@@ -44,17 +53,17 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
     protected checkConnectionStatus(session: SessionService): void {
         const connected = session.connected();
-       if (!connected && !this.snackBarRef) {
-           this.snackBarRef = this.snackBar.open('The server is disconnected', undefined, {
-               duration: 0, viewContainerRef: null, verticalPosition: 'top'
+        if (!connected && !this.snackBarRef) {
+            this.snackBarRef = this.snackBar.open('The server is disconnected', undefined, {
+                duration: 0, viewContainerRef: null, verticalPosition: 'top'
             });
             this.snackBarRef.afterDismissed().subscribe(() => {
                 this.snackBarRef = null;
-              });
-       } else if (connected) {
-           this.snackBar.dismiss();
-           this.snackBarRef = null;
-       }
+            });
+        } else if (connected) {
+            this.snackBar.dismiss();
+            this.snackBarRef = null;
+        }
     }
 
     ngOnDestroy(): void {
@@ -71,17 +80,27 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
         }
 
         let screen: IScreen = null;
-        if (this.session.screen &&
+        if (this.needsPersonalization || (this.session.screen &&
             ((this.session.screen.sequenceNumber !== this.previousScreenSequenceNumber && this.session.screen.refreshAlways)
-                || this.session.screen.type !== this.previousScreenType)) {
-            console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
-            const componentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(this.session.screen.type);
+                || this.session.screen.type !== this.previousScreenType))) {
+
+            let screenType: string = null;
+            let sequenceNumber: number = -1;
+            if (this.session.screen && this.session.screen.type) {
+                console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
+                screenType = this.session.screen.type;
+                sequenceNumber = this.session.screen.sequenceNumber;
+            } else {
+                screenType = 'Personalization';
+            }
+            const componentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(screenType);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
             screen = viewContainerRef.createComponent(componentFactory).instance;
-            this.previousScreenType = this.session.screen.type;
-            screen.show(this.session);
-            this.previousScreenSequenceNumber = this.session.screen.sequenceNumber;
+            this.previousScreenType = screenType;
+            screen.show(this.session, this);
+            this.previousScreenSequenceNumber = sequenceNumber;
+            this.needsPersonalization = false;
         }
 
     }

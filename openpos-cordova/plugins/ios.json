@@ -8,11 +8,11 @@
   },
   "installed_plugins": {
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "org.jumpmind.jumppos"
+      "PACKAGE_NAME": "org.jumpmind.openpos"
     },
     "phonegap-plugin-barcodescanner": {
       "CAMERA_USAGE_DESCRIPTION": "To scan barcodes",
-      "PACKAGE_NAME": "org.jumpmind.jumppos"
+      "PACKAGE_NAME": "org.jumpmind.openpos"
     }
   },
   "dependent_plugins": {}

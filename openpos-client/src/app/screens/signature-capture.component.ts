@@ -2,6 +2,7 @@ import { IScreen } from '../common/iscreen';
 import { Component, AfterViewInit, DoCheck, HostListener } from '@angular/core';
 import { SessionService } from '../session.service';
 import 'signature_pad';
+import { AbstractApp } from './abstract-app';
 
 @Component({
   selector: 'app-signature-capture',
@@ -19,7 +20,7 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
   constructor(public readonly session: SessionService) {
   }
 
-  show(session: SessionService) {
+  show(session: SessionService, app: AbstractApp) {
   }
 
 

@@ -4,6 +4,7 @@ import { IMenuItem } from '../common/imenuitem';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { SessionService } from '../session.service';
 import {MediaChange, ObservableMedia} from '@angular/flex-layout';
+import { AbstractApp } from './abstract-app';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +34,7 @@ export class HomeComponent implements IScreen, OnInit {
     this.gutterSize = isLarge ? 20 : 10;
   }
 
-  show(session: SessionService) {
+  show(session: SessionService, app: AbstractApp) {
   }
 
   onEnter(value: string) {
