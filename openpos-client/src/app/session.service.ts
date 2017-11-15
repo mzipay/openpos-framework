@@ -35,7 +35,9 @@ export class SessionService {
 
   private cordovaReady: boolean;
 
-  constructor(private stompService: StompService, private location: Location, private router: Router, private loader: LoaderService) {
+  private stompService: StompService;
+
+  constructor(private location: Location, private router: Router, private loader: LoaderService) {
     document.addEventListener('deviceready', this.cordovaInitialized, false);
   }
 
@@ -45,7 +47,7 @@ export class SessionService {
   }
 
   public scan() {
-     if (this.cordovaReady) {
+    if (this.cordovaReady) {
       console.log('enabling scanning');
       cordova.plugins.barcodeScanner.scan(
         function (result) {
@@ -71,15 +73,34 @@ export class SessionService {
           disableSuccessBeep: false // iOS and Android
         }
       );
-     }
+    }
   }
 
-  private buildTopicName(): String {
+  public personalize(serverName: string, serverPort: string, storeId: string, deviceId: string) {
+    localStorage.setItem('serverName', serverName);
+    localStorage.setItem('serverPort', serverPort);
+    localStorage.setItem('nodeId', storeId + '-' + deviceId);    
+  }
+
+  private getWebsocketUrl(): string {
+    let url: string = 'ws://' + this.getServerName();
+    if (this.getServerPort()) {
+      url = url + ':' + this.getServerPort();
+    }
+    url = url + '/api/websocket';
+    return url;
+  }
+
+  private buildTopicName(): string {
     return '/topic/app/' + this.appId + '/node/' + this.nodeId;
   }
 
-  private getServerUrl(): string {
-    return localStorage.getItem('serverUrl');
+  private getServerName(): string {
+    return localStorage.getItem('serverName');
+  }
+
+  private getServerPort(): string {
+    return localStorage.getItem('serverPort');
   }
 
   private getNodeId(): string {
@@ -87,21 +108,33 @@ export class SessionService {
   }
 
   public isPersonalized(): boolean {
-     if (this.getServerUrl() && this.getNodeId()) {
-       return true;
-     } else {
-       return false;
-     }
+    if (this.getServerName() && this.getNodeId() && this.getServerPort()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public connected(): boolean {
-    return this.stompService.connected();
+    return this.stompService && this.stompService.connected();
   }
 
   public subscribe(appName: String) {
     if (this.subscribed) {
       return;
     }
+
+    this.stompService = new StompService({
+      url: this.getWebsocketUrl(),
+      headers: {
+        //    login: 'guest',
+        //    passcode: 'guest'
+      },
+      heartbeat_in: 0, // Typical value 0 - disabled
+      heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
+      reconnect_delay: 5000,
+      debug: true
+    });
 
     // Give preference to nodeId query parameter if it's present, then fallback to
     // local storage

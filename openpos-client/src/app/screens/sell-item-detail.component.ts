@@ -2,6 +2,7 @@ import { IScreen } from '../common/iscreen';
 import {Component} from '@angular/core';
 import { ISellItem } from '../common/isellitem';
 import {SessionService} from '../session.service';
+import { AbstractApp } from './abstract-app';
 
 @Component({
   selector: 'app-sell-item-detail',
@@ -15,7 +16,7 @@ export class SellItemDetailComponent implements IScreen {
     this.item = session.screen.item;
   }
 
-  show(session: SessionService) {
+  show(session: SessionService, app: AbstractApp) {
   }
 
 }

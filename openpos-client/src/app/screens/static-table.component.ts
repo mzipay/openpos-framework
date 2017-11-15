@@ -5,6 +5,7 @@ import { SelectionMode } from './../common/selectionmode';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import { AbstractApp } from './abstract-app';
 
 @Component({
     selector: 'app-static-table',
@@ -83,7 +84,7 @@ export class StaticTableComponent implements IScreen, DoCheck {
         this.selectedRow = this.session.screen.selectedRow;
     }
 
-    show(session: SessionService) {
+    show(session: SessionService, app: AbstractApp) {
     }
 
     onSelectRow(rowIndex: number) {

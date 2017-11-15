@@ -1,3 +1,4 @@
+import { TenderingComponent } from './screens/tendering.component';
 import { WarrantyCoverageComponent } from './screens/warranty-coverage.component';
 import { SaleRetrievalComponent } from './screens/sale-retrieval.component';
 import { LoaderService } from './common/loader/loader.service';
@@ -9,7 +10,7 @@ import { ScreenService } from './screen.service';
 import { ScreenDirective } from './common/screen.directive';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { StompConfig, StompService } from '@stomp/ng2-stompjs';
 import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
@@ -44,6 +45,7 @@ import { FocusDirective } from './common/focus.directive';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { HttpClientModule } from '@angular/common/http';
 
 import {
   MatDialog,
@@ -72,6 +74,7 @@ import {
   MatSidenavModule,
   MatSliderModule,
   MatSlideToggleModule,
+  MatStepperModule,
   MatSnackBarModule,
   MatSortModule,
   MatTableModule,
@@ -81,32 +84,9 @@ import {
 } from '@angular/material';
 import 'hammerjs'; // for material
 import { TextMaskModule } from 'angular2-text-mask';
-import { TenderingComponent } from './screens/tendering.component';
-
-const stompConfig: StompConfig = {
-  // Which server?
-  url: environment.apiUrl,
-
-  // Headers
-  // Typical keys: login, passcode, host
-  headers: {
-    //    login: 'guest',
-    //    passcode: 'guest'
-  },
-
-  // How often to heartbeat?
-  // Interval in milliseconds, set to 0 to disable
-  heartbeat_in: 0, // Typical value 0 - disabled
-  heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
-
-  // Wait in milliseconds before attempting auto reconnect
-  // Set to 0 to disable
-  // Typical value 5000 (5 seconds)
-  reconnect_delay: 5000,
-
-  // Will log diagnostics on console
-  debug: true
-};
+import { PersonalizationComponent } from './screens/personalization.component';
+import { FormBuilder } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @NgModule({
   entryComponents: [
@@ -120,6 +100,7 @@ const stompConfig: StompConfig = {
     ItemListComponent,
     PaymentStatusComponent,
     PromptComponent,
+    PersonalizationComponent,
     PromptWithOptionsComponent,
     SellComponent,
     SellItemDetailComponent,
@@ -148,6 +129,7 @@ const stompConfig: StompConfig = {
     SellItemDetailComponent,
     PaymentStatusComponent,
     StaticTableComponent,
+    PersonalizationComponent,
     SaleRetrievalComponent,
     LoaderComponent,
     FormComponent,
@@ -163,7 +145,9 @@ const stompConfig: StompConfig = {
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
+    HttpClientModule,
     AppRoutingModule,
     MatButtonModule,
     MatCheckboxModule,
@@ -194,6 +178,7 @@ const stompConfig: StompConfig = {
     MatSliderModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatStepperModule,
     MatSortModule,
     MatTableModule,
     MatTabsModule,
@@ -227,6 +212,7 @@ const stompConfig: StompConfig = {
     MatSliderModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatStepperModule,
     MatSortModule,
     MatTableModule,
     MatTabsModule,
@@ -235,15 +221,11 @@ const stompConfig: StompConfig = {
   ],
   providers: [
     MatDialog,
+    HttpClient,
     IconService,
     SessionService,
     LoaderService,
     ScreenService,
-    StompService,
-    {
-      provide: StompConfig,
-      useValue: stompConfig
-    },
     Location,
     {
       provide: LocationStrategy,

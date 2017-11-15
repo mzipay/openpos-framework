@@ -3,6 +3,7 @@ import { IScreen } from '../common/iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output } from '@angular/core';
 import {SessionService} from '../session.service';
 import { MatSelectChange } from '@angular/material';
+import { AbstractApp } from './abstract-app';
 
 @Component({
   selector: 'app-form',
@@ -16,7 +17,7 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
   constructor(public session: SessionService) {
   }
 
-  show(session: SessionService) {
+  show(session: SessionService, app: AbstractApp) {
   }
 
   ngDoCheck(): void {

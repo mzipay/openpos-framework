@@ -1,3 +1,4 @@
+import { PersonalizationComponent } from './screens/personalization.component';
 import { WarrantyCoverageComponent } from './screens/warranty-coverage.component';
 import { SaleRetrievalComponent } from './screens/sale-retrieval.component';
 import { BasicItemSearchComponent } from './screens/basic-item-search.component';
@@ -49,6 +50,7 @@ export class ScreenService {
     this.screens.set('SaleRetrieval', SaleRetrievalComponent);
     this.screens.set('Tendering', TenderingComponent);
     this.screens.set('WarrantyCoverage', WarrantyCoverageComponent);
+    this.screens.set('Personalization', PersonalizationComponent);
   }
 
   public resolveScreen(type: string): ComponentFactory<IScreen> {

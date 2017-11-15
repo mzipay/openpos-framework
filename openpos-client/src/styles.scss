@@ -31,6 +31,7 @@ $app-logo-url: url(assets/jumpmart-logo.png);
 
 $app-highlight-color: mat-color($app-primary);
 $app-accent-color: mat-color($app-accent);
+$app-warn-color: mat-color($app-warn);
 
 html, body {
     font-family: Roboto, sans-serif;
@@ -41,6 +42,10 @@ html, body {
 .app {
     height: 100vh; 
     overflow: hidden;
+}
+
+.warn {
+    color: $app-warn-color;
 }
 
 .md-toolbar {

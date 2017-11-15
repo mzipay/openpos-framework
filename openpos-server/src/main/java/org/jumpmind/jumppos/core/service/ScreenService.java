@@ -1,7 +1,6 @@
 package org.jumpmind.jumppos.core.service;
 
 import java.lang.reflect.Field;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +18,8 @@ import org.jumpmind.jumppos.core.model.annotations.FormButton;
 import org.jumpmind.jumppos.core.model.annotations.FormTextField;
 import org.jumpmind.jumppos.core.screen.DefaultScreen;
 import org.jumpmind.jumppos.core.screen.DialogScreen;
-import org.jumpmind.jumppos.core.screen.ScreenType;
 import org.jumpmind.jumppos.core.screen.FormScreen;
+import org.jumpmind.jumppos.core.screen.ScreenType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +27,16 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@CrossOrigin 
 @Controller
 public class ScreenService implements IScreenService {
 
@@ -51,6 +53,13 @@ public class ScreenService implements IScreenService {
     int screenSequenceNumber = 0;
 
     private Map<String, Map<String, DefaultScreen>> lastScreenByAppIdByNodeId = new HashMap<>();
+    
+    @RequestMapping(method = RequestMethod.GET, value = "ping")
+    @ResponseBody
+    public String ping() {
+        logger.info("Recevied a ping request");
+        return "{ \"pong\": \"true\" }";
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "app/{appId}/node/{nodeId}/{action}/{payload}")
     public void getAction(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String action, @PathVariable String payload,

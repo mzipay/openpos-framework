@@ -4,6 +4,7 @@ import { IMenuItem } from '../common/imenuitem';
 // import {MdButtonModule, MdCheckboxModule} from '@angular/material';
 import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { SessionService } from '../session.service';
+import { AbstractApp } from './abstract-app';
 
 @Component({
   selector: 'app-embedded-web-page',
@@ -17,7 +18,7 @@ export class EmbeddedWebPageComponent implements IScreen {
     private router: Router) {
   }
 
-  show(session: SessionService) {
+  show(session: SessionService, app: AbstractApp) {
     this.url = session.screen.url;
   }
 

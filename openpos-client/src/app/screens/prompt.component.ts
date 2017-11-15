@@ -2,6 +2,7 @@ import { PromptInputComponent } from '../common/controls/prompt-input.component'
 import { IScreen } from '../common/iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
 import {SessionService} from '../session.service';
+import { AbstractApp } from './abstract-app';
 
 @Component({
   selector: 'app-prompt',
@@ -17,7 +18,7 @@ export class PromptComponent implements OnInit, AfterViewInit, DoCheck, IScreen 
   constructor(public session: SessionService) {
   }
 
-  show(session: SessionService) {
+  show(session: SessionService, app: AbstractApp) {
   }
 
   public ngOnInit(): void {

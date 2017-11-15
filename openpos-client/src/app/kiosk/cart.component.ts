@@ -2,9 +2,10 @@ import { ISellItem } from './../common/isellitem';
 import { IScreen } from './../common/iscreen';
 import { Component } from '@angular/core';
 import { SessionService } from '../session.service';
-import {DataSource} from '@angular/cdk/collections';
-import {Observable} from 'rxjs/Observable';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import { DataSource } from '@angular/cdk/collections';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { AbstractApp } from '../screens/abstract-app';
 
 @Component({
     selector: 'app-cart',
@@ -25,11 +26,11 @@ export class CartComponent implements IScreen {
         }
     }
 
-    removeItem(index) {        
+    removeItem(index) {
         this.session.onActionWithStringPayload('RemoveItem', index);
     }
 
-    show(session: SessionService) {
+    show(session: SessionService, app: AbstractApp) {
 
     }
 }
