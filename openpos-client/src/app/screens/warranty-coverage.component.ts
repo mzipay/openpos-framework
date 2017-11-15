@@ -1,8 +1,6 @@
 import { ProductListComponent } from './../common/controls/product-list.component';
 import { IItem } from './../common/iitem';
-import { ISellItem } from '../common/isellitem';
 import { IScreen } from '../common/iscreen';
-import { IMenuItem } from '../common/imenuitem';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
 import { SessionService } from '../session.service';
 import { MatSelectionList, MatListOption } from '@angular/material';
@@ -11,7 +9,7 @@ import { MatSelectionList, MatListOption } from '@angular/material';
   selector: 'app-warranty-coverage',
   templateUrl: './warranty-coverage.component.html'
 })
-export class WarrantyCoverageComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
+export class WarrantyCoverageComponent implements DoCheck, IScreen, OnInit {
   private lastSequenceNum: number;
 
   text: string;
@@ -43,9 +41,6 @@ export class WarrantyCoverageComponent implements AfterViewInit, DoCheck, IScree
     this.warrantyCostTotal = this.session.screen.warrantyCostTotal;
   }
 
-  ngAfterViewInit(): void {
-  }
-
   onItemSelected(event: Event) {
     const selectedIndexes: number[] = [];
 
@@ -55,8 +50,6 @@ export class WarrantyCoverageComponent implements AfterViewInit, DoCheck, IScree
     if (this.warrantyItemsSelectionList.selectedOptions.hasValue) {
       this.warrantyItemsSelectionList.selectedOptions.selected.forEach(
         (matListOption: MatListOption, index: number, array: MatListOption[]) => {
-//          console.log( `selectedIndex: ${index}`);
-//          console.log( `value: ${matListOption.value}`);
           selectedIndexes.push(matListOption.value);
         }
       );

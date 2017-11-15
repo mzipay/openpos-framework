@@ -81,6 +81,7 @@ import {
 } from '@angular/material';
 import 'hammerjs'; // for material
 import { TextMaskModule } from 'angular2-text-mask';
+import { TenderingComponent } from './screens/tendering.component';
 
 const stompConfig: StompConfig = {
   // Which server?
@@ -125,6 +126,7 @@ const stompConfig: StompConfig = {
     SignatureCaptureComponent,
     StaticTableComponent,
     SaleRetrievalComponent,
+    TenderingComponent,
     WarrantyCoverageComponent
   ],
   declarations: [
@@ -155,6 +157,7 @@ const stompConfig: StompConfig = {
     FocusDirective,
     ScreenDirective,
     SafePipe,
+    TenderingComponent,
     WarrantyCoverageComponent
   ],
   imports: [

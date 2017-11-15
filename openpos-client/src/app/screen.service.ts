@@ -23,6 +23,7 @@ import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@a
 import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { TenderingComponent } from './screens/tendering.component';
 
 @Injectable()
 export class ScreenService {
@@ -46,6 +47,7 @@ export class ScreenService {
     this.screens.set('SignatureCapture', SignatureCaptureComponent);
     this.screens.set('Table', StaticTableComponent);
     this.screens.set('SaleRetrieval', SaleRetrievalComponent);
+    this.screens.set('Tendering', TenderingComponent);
     this.screens.set('WarrantyCoverage', WarrantyCoverageComponent);
   }
 
