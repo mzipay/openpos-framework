@@ -380,12 +380,24 @@ button.static-table-button.mat-raised-button {
     bottom: 32px;
 }
 
-.tender-amount-field {
-    font-size: 16px;
+.tendering-totals-container {
+    text-align: center;
+    height: 55px;
+    margin: 0px;
+    padding: 10px !important;
 }
 
-.tender-amount-input {
+.tendering-amount-field {
+    font-size: 16px;
+    width: 80%;
+}
+
+.tendering-amount-input {
     text-align: right;
+}
+
+.tendering-amount-error {
+    font-size: 12px;
 }
 
 .subtotals-amount-dimmed {

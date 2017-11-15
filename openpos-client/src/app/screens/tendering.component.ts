@@ -5,6 +5,7 @@ import { IItem } from './../common/iitem';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
 import { SessionService } from '../session.service';
 import { IScreen } from '../common/iscreen';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
 @Component({
     selector: 'app-tendering',
@@ -18,6 +19,14 @@ import { IScreen } from '../common/iscreen';
     tenderAmount: IFormElement;
     balanceDue: string;
     itemActions: IMenuItem[] = [];
+    numberMask = createNumberMask({
+        prefix: '',
+        includeThousandsSeparator: false,
+        allowDecimal: true,
+        integerLimit: 9,
+        requireDecimal: true,
+        allowNegative: false
+    });
 
     constructor(public session: SessionService) {
     }

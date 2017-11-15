@@ -2,7 +2,7 @@
         <div class="sale-trans-panel-container" fxFlex>
             <div class="containerX sub-totals-outer-container" fxLayout="row" fxLayoutAlign="center center">
                 <div fxFlex style="padding:12px;">
-                    <mat-card class="subtotals-container" style="position:relative;">
+                    <mat-card class="tendering-totals-container" style="position:relative;">
                         <mat-card-content>
                             <p class="subtotals-label">Balance Due</p>
                             <p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':tenderItems.length == 0}">
@@ -13,12 +13,23 @@
                 </div>
 
                 <div fxFlex style="padding:12px;">
-                    <mat-card class="subtotals-container" style="position:relative;">
+                    <mat-card class="tendering-totals-container" style="position:relative;">
                         <mat-card-content>
-                            <mat-form-field class="tender-amount-field">
-                                <input matInput class="tender-amount-input" (keyup.enter)="onEnterTender($event)" 
-                                  [(ngModel)]="tenderAmount.value" placeholder="{{tenderAmount.placeholder}}">
-                                <span matPrefix>$&nbsp;</span> <!-- TODO: localize symbol -->
+                            <mat-form-field class="tendering-amount-field">
+                                <input matInput #field="ngModel" class="tendering-amount-input" (keyup.enter)="onEnterTender($event)" 
+                                  [(ngModel)]="tenderAmount.value" placeholder="{{tenderAmount.placeholder}}" [pattern]="tenderAmount.pattern" [required]="tenderAmount.required"
+                                  [textMask]="{mask: numberMask}">
+
+                                <span matPrefix>$&nbsp;</span> <!-- TODO: localize symbol and errors -->
+                                <ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
+                                    <mat-error *ngIf="field.errors.required" class="tendering-amount-error">
+                                        * Value is required.
+                                    </mat-error>
+                                    <mat-error *ngIf="field.errors.pattern" class="tendering-amount-error">
+                                        * Please enter a valid amount
+                                    </mat-error>
+                                </ng-container>
+        
                             </mat-form-field>
                         </mat-card-content>
                     </mat-card>
@@ -31,7 +42,8 @@
                     <mat-toolbar color="accent">
                         {{text}}
                         <div style="width: 100%" fxLayout="row" fxLayoutAlign="end ">
-                            <button mat-fab style="top: 28px; margin-left: 10px;" *ngFor="let menuAction of session.screen.menuActions" [color]="primary" (click)="onMenuAction(menuAction.action)">
+                            <button mat-fab style="top: 28px; margin-left: 10px;" *ngFor="let menuAction of session.screen.menuActions" [color]="primary" 
+                              (click)="onMenuAction(menuAction.action)">
                                 <app-icon [iconName]="menuAction.icon"></app-icon>
                             </button>
                         </div>
