@@ -59,6 +59,9 @@ public class TenderingScreen extends DefaultScreen {
     public void setItemActions(List<MenuItem> itemActions) {
         this.itemActions = itemActions;
     }
+    public void addItemAction(MenuItem itemAction) {
+        this.itemActions.add(itemAction);
+    }
     
     
 }

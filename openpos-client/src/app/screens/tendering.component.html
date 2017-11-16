@@ -26,7 +26,7 @@
                                         * Value is required.
                                     </mat-error>
                                     <mat-error *ngIf="field.errors.pattern" class="tendering-amount-error">
-                                        * Please enter a valid amount
+                                        * Please enter a valid amount.
                                     </mat-error>
                                 </ng-container>
         
@@ -43,7 +43,7 @@
                         {{text}}
                         <div style="width: 100%" fxLayout="row" fxLayoutAlign="end ">
                             <button mat-fab style="top: 28px; margin-left: 10px;" *ngFor="let menuAction of session.screen.menuActions" [color]="primary" 
-                              (click)="onMenuAction(menuAction.action)">
+                              (click)="onMenuAction(menuAction.action)" [disabled]="! tenderAmount.value">
                                 <app-icon [iconName]="menuAction.icon"></app-icon>
                             </button>
                         </div>
@@ -54,8 +54,14 @@
                     <div class="scrollable">
                         <mat-selection-list>
                             <app-product-list [items]="tenderItems" (itemClick)="onItemSelected($event)" [selectionMode]="'Single'" 
-                              [showItemIcon]="false" [showItemMenu]="true" [menuItemActions]="itemActions"></app-product-list>
+                              [showItemIcon]="false" [showItemMenu]="false"></app-product-list>
                         </mat-selection-list>
+                        <div *ngIf="tenderItems.length == 0" class="sale-line-item-container-no-content" [style.sm]="{'font-size': '16px'}" [style.xs]="{'font-size': '16px'}"
+                        fxLayout="column" fxLayoutAlign="center center">
+                            <app-icon iconName="credit_card" style="color:#c8c8c8" iconClass="mat-128"></app-icon>
+                           Completed tenders will appear here.
+                       </div>
+   
                     </div>
                 </mat-card-content>
     
