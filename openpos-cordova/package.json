@@ -19,7 +19,7 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "phonegap-plugin-barcodescanner": {
-        "CAMERA_USAGE_DESCRIPTION": "To scan barcodes"
+        "CAMERA_USAGE_DESCRIPTION": " "
       }
     },
     "platforms": [

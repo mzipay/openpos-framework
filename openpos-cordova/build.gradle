@@ -2,7 +2,7 @@ plugins {
 	id "com.moowork.node" version "1.2.0"
 }
 
-//def generatedWebResources = "${buildDir}/generated-web-resources"
+//def generatedWebResources = "${buildDir}/generated-web-resources"  
 
 /*sourceSets {
 	main {
