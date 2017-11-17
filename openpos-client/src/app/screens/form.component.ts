@@ -57,6 +57,15 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
     }
   }
 
+  onSubmitOptionSelected(formElement: IFormElement, valueIndex: number, event: Event) {
+    if (formElement.selectedIndexes) {
+      formElement.selectedIndexes = [valueIndex];
+    }
+
+    this.session.response = this.form;
+    this.session.onAction(formElement.id);
+  }
+
   getPlaceholderText(formElement: IFormElement) {
     let text = '';
     if (formElement.label) {
@@ -81,6 +90,7 @@ export interface IFormElement {
     label: string;
     id: string;
     value: string;
+    values: string[];
     placeholder: string;
     buttonAction: string;
     submitButton: boolean;

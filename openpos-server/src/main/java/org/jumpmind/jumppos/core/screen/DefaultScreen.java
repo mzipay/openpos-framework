@@ -138,9 +138,20 @@ public class DefaultScreen implements Serializable {
     }
 
     public List<MenuItem> getMenuActions() {
-        return menuItems;
+        return this.getMenuItems();
     }
 
+    public List<MenuItem> getMenuItems() {
+        return menuItems;
+    }
+    
+    public void addMenuItem(MenuItem menuItem) {
+        if (this.menuItems == null) {
+            this.menuItems = new ArrayList<>();
+        }
+        this.menuItems.add(menuItem);
+    }
+    
     public void setMenuItems(List<MenuItem> menuItem) {
         this.menuItems = menuItem;
     }

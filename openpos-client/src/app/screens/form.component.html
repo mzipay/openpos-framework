@@ -30,6 +30,17 @@
 								<mat-option *ngFor="let value of formElement.values; let valueIndex=index" [value]="valueIndex">{{value}}</mat-option>
 							</mat-select>
 						</mat-form-field>
+						<ng-container *ngIf="formElement.inputType === 'SubmitOptionList'">
+							<label class="prompt-text">{{formElement.label}}</label>
+							<mat-nav-list>
+								<mat-list-item *ngFor="let value of formElement.values; let valueIndex=index" 
+									(click)="onSubmitOptionSelected(formElement, valueIndex, $event)" 
+									style="border-color: black">{{value}}
+									<mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
+								</mat-list-item>
+							</mat-nav-list>
+						</ng-container>
+			
 					</div>
 					<div *ngIf="formElement.elementType==='Display'">
 						<mat-form-field style="width:100%">

@@ -18,14 +18,29 @@ public class FormListField extends FormField {
         super(fieldId, placeholder);
     }
 
+    public FormListField(String fieldId, String placeholder, List<String> values) {
+        super(fieldId, placeholder);
+        this.values = values;
+    }
+    
     public FormListField(String fieldId, String label, String placeholder) {
         super(fieldId, label, placeholder);
+    }
+
+    public FormListField(String fieldId, String label, String placeholder, List<String> values) {
+        super(fieldId, label, placeholder);
+        this.values = values;
     }
     
     public FormListField(String fieldId, String label, FieldElementType elementType, FieldInputType inputType, String placeholder) {
         super(fieldId, label, elementType, inputType, placeholder);
     }
 
+    public FormListField(String fieldId, String label, FieldElementType elementType, FieldInputType inputType, String placeholder, List<String> values) {
+        super(fieldId, label, elementType, inputType, placeholder);
+        this.values = values;
+    }
+    
     public List<String> getValues() {
         return values;
     }
