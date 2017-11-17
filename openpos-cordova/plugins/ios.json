@@ -11,7 +11,7 @@
       "PACKAGE_NAME": "org.jumpmind.openpos"
     },
     "phonegap-plugin-barcodescanner": {
-      "CAMERA_USAGE_DESCRIPTION": "To scan barcodes",
+      "CAMERA_USAGE_DESCRIPTION": " ",
       "PACKAGE_NAME": "org.jumpmind.openpos"
     }
   },

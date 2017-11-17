@@ -143,7 +143,6 @@ public class ScreenService implements IScreenService {
             }
         }
         return null;
-
     }
 
     protected DefaultScreen populateFormScreen(String appId, String nodeId, Form form) {

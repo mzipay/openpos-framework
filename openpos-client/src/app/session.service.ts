@@ -1,3 +1,4 @@
+import { IMenuItem } from './common/imenuitem';
 import { LoaderService } from './common/loader/loader.service';
 import { IDialog } from './common/idialog';
 import { Observable } from 'rxjs/Observable';
@@ -7,6 +8,7 @@ import { Injectable } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { Scan } from './common/scan';
 
 declare var cordova: any;
 
@@ -33,28 +35,38 @@ export class SessionService {
 
   private loading: boolean;
 
-  private cordovaReady: boolean;
-
   private stompService: StompService;
 
   constructor(private location: Location, private router: Router, private loader: LoaderService) {
     document.addEventListener('deviceready', this.cordovaInitialized, false);
   }
 
+  public isMenuItemEnabled(m: IMenuItem): boolean {
+    let enabled = m.enabled;
+    if (m.action.startsWith('<') && !cordova) {
+         enabled = false;
+    }
+    return enabled;
+  }
+
   private cordovaInitialized() {
-    console.log('devices are ready');
-    this.cordovaReady = true;
+    console.log('cordova devices are ready');
   }
 
   public scan() {
-    if (this.cordovaReady) {
-      console.log('enabling scanning');
+    if (cordova) {
+      console.log('attempting to enable camera scanner');
+      const self = this;
       cordova.plugins.barcodeScanner.scan(
         function (result) {
-          alert('We got a barcode\n' +
-            'Result: ' + result.text + '\n' +
-            'Format: ' + result.format + '\n' +
-            'Cancelled: ' + result.cancelled);
+          if (!result.cancelled) {
+            self.response = new Scan(result.text, result.format);
+            self.onAction('Scan');
+          }
+          console.log('We got a barcode\n' +
+          'Result: ' + result.text + '\n' +
+          'Format: ' + result.format + '\n' +
+          'Cancelled: ' + result.cancelled);
         },
         function (error) {
           alert('Scanning failed: ' + error);
@@ -79,7 +91,7 @@ export class SessionService {
   public personalize(serverName: string, serverPort: string, storeId: string, deviceId: string) {
     localStorage.setItem('serverName', serverName);
     localStorage.setItem('serverPort', serverPort);
-    localStorage.setItem('nodeId', storeId + '-' + deviceId);    
+    localStorage.setItem('nodeId', storeId + '-' + deviceId);
   }
 
   private getWebsocketUrl(): string {
@@ -185,13 +197,10 @@ export class SessionService {
     this.subscribed = false;
   }
 
-  public onAction(action: String) {
-    if (action === 'SavePersonalization') {
-      this.nodeId = this.response.formElements[0].value;
-      localStorage.setItem('nodeId', '' + this.nodeId);
-      localStorage.removeItem('temporaryNodeId');
-      this.unsubscribe();
-      this.subscribe(this.appId);
+  public onAction(action: string) {
+    console.log('taking action on ' + action);
+    if (action === '<camera_scan>') {
+      this.scan();
     } else {
       console.log('Publish action ' + action);
       this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
@@ -199,6 +208,13 @@ export class SessionService {
       this.dialog = null;
       this.queueLoading();
     }
+  }
+
+  public onActionWithStringPayload(action: string, payload: any) {
+    console.log('Publish action ' + action + ' with payload ' + payload);
+    this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
+      JSON.stringify({ name: action, data: payload }));
+    this.queueLoading();
   }
 
   private queueLoading() {
@@ -215,13 +231,6 @@ export class SessionService {
   private cancelLoading() {
     this.loading = false;
     this.loader.hide();
-  }
-
-  public onActionWithStringPayload(action: String, payload: String) {
-    console.log('Publish action ' + action + ' with payload ' + payload);
-    this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
-      JSON.stringify({ name: action, data: payload }));
-    this.queueLoading();
   }
 
   /** Consume a message from the stompService */

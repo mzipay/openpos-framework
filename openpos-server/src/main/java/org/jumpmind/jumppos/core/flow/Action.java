@@ -83,6 +83,10 @@ public class Action implements Serializable {
     public void setData(Object data) {
         this.data = data;
     }
+    
+    public String toDataString() {
+        return data != null ? data.toString() : null;
+    }
 
     @Override
     public String toString() {
