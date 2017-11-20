@@ -38,59 +38,11 @@ export class SessionService {
   private stompService: StompService;
 
   constructor(private location: Location, private router: Router, private loader: LoaderService) {
-    document.addEventListener('deviceready', this.cordovaInitialized, false);
-  }
-
-  public isMenuItemEnabled(m: IMenuItem): boolean {
-    let enabled = m.enabled;
-    if (m.action.startsWith('<') && !this.isRunningInBrowser()) {
-         enabled = false;
-    }
-    return enabled;
   }
 
   public isRunningInBrowser(): boolean {
     const app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
     return !app;
-  }
-
-  private cordovaInitialized() {
-    console.log('cordova devices are ready');
-  }
-
-  public scan() {
-    if (cordova) {
-      console.log('attempting to enable camera scanner');
-      const self = this;
-      cordova.plugins.barcodeScanner.scan(
-        function (result) {
-          if (!result.cancelled) {
-            self.response = new Scan(result.text, result.format);
-            self.onAction('Scan');
-          }
-          console.log('We got a barcode\n' +
-          'Result: ' + result.text + '\n' +
-          'Format: ' + result.format + '\n' +
-          'Cancelled: ' + result.cancelled);
-        },
-        function (error) {
-          alert('Scanning failed: ' + error);
-        },
-        {
-          preferFrontCamera: false, // iOS and Android
-          showFlipCameraButton: false, // iOS and Android
-          showTorchButton: false, // iOS and Android
-          torchOn: false, // Android, launch with the torch switched on (if available)
-          saveHistory: false, // Android, save scan history (default false)
-          prompt: 'Place a barcode inside the scan area', // Android
-          resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-          formats: 'CODE_128,EAN_8,EAN_13,UPC_A,UPC_E', // default: all but PDF_417 and RSS_EXPANDED
-          orientation: 'landscape', // Android only (portrait|landscape), default unset so it rotates with the device
-          disableAnimations: false, // iOS
-          disableSuccessBeep: false // iOS and Android
-        }
-      );
-    }
   }
 
   public personalize(serverName: string, serverPort: string, storeId: string, deviceId: string) {
@@ -203,16 +155,11 @@ export class SessionService {
   }
 
   public onAction(action: string) {
-    console.log('taking action on ' + action);
-    if (action === '<camera_scan>') {
-      this.scan();
-    } else {
       console.log('Publish action ' + action);
       this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
         JSON.stringify({ name: action, data: this.response }));
       this.dialog = null;
       this.queueLoading();
-    }
   }
 
   public onActionWithStringPayload(action: string, payload: any) {

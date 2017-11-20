@@ -60,8 +60,8 @@
 				</button>
 		
 				<mat-menu #menu="matMenu">
-					<button mat-menu-item *ngFor="let m of session.screen.menuActions" (click)="session.onAction(m.action)" 
-						[disabled]="!session.isMenuItemEnabled(m)">
+					<button mat-menu-item *ngFor="let m of session.screen.menuActions" (click)="doMenuItemAction(m)" 
+						[disabled]="!isMenuItemEnabled(m)">
 						<app-icon *ngIf="m.icon" iconName="{{m.icon}}"></app-icon>
 						<span [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>
 					</button>

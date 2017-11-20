@@ -14,13 +14,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { StompConfig, StompService } from '@stomp/ng2-stompjs';
 import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
-
 import { AppComponent } from './app.component';
 import { PosComponent } from './pos/pos.component';
 import { KioskComponent } from './kiosk/kiosk.component';
-
 import { AppRoutingModule } from './app-routing.module';
-
 import { SessionService } from './services/session.service';
 import { IconService } from './services/icon.service';
 import { AbstractApp } from './screens/abstract-app';
@@ -87,6 +84,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { PersonalizationComponent } from './screens/personalization.component';
 import { FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { DeviceService } from './services/device.service';
 
 @NgModule({
   entryComponents: [
@@ -224,6 +222,7 @@ import { HttpClient } from '@angular/common/http';
     HttpClient,
     IconService,
     SessionService,
+    DeviceService,
     LoaderService,
     ScreenService,
     Location,

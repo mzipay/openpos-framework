@@ -2,29 +2,31 @@
     <mat-card-title class="line-item-detail-title">{{item.description}}</mat-card-title>
 
     <mat-card-content>
-        <div fxLayout="row" fxLayoutAlign="center center" >
-            
-            <div fxLayout="column" class="line-item-detail-header serrated-edge serrated-edge-bottom">            
-                    <img *ngIf="item.imageUrl" class="line-item-detail-image"  [style.xs]="{'width': '50%'}" [style.sm]="{'width': '50%'}" [src]="item.imageUrl" />
-                    <p>{{item.productDescription}}</p>
-                    <table style="font-size: 22px; align-content: left; text-align: left;" [style.xs]="{'font-size': '12px'}">
-                            <thead>
-                                <tr>
-                                    <th>Item ID</th>
-                                    <th>Quantity</th>
-                                    <th style="background-color: #537889;color:white">Item Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{item.id}}</td>
-                                    <td>{{item.quantity}}</td>
-                                    <td><span class="super-currency-symbol">$</span>{{item.amount}}</td>
-                                </tr>
-                            </tbody>
-                        </table>                    
+        <div fxLayout="row" fxLayoutAlign="center center">
+
+            <div fxLayout="column" class="line-item-detail-header serrated-edge serrated-edge-bottom">
+                <img *ngIf="item.imageUrl" class="line-item-detail-image" [style.xs]="{'width': '50%'}" [style.sm]="{'width': '50%'}" [src]="item.imageUrl"
+                />
+                <p>{{item.productDescription}}</p>
+                <table style="font-size: 22px; align-content: left; text-align: left;" [style.xs]="{'font-size': '12px'}">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Quantity</th>
+                            <th style="background-color: #537889;color:white">Item Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{item.id}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>
+                                <span class="super-currency-symbol">$</span>{{item.amount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            
+
         </div>
         <div fxLayout="row" fxLayoutAlign="center center">
 

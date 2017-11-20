@@ -17,9 +17,9 @@ export class CartComponent implements IScreen {
     }
 
     getCartMessage() {
-        if (this.session.screen.cart.items == null || this.session.screen.cart.items.length == 0) {
+        if (this.session.screen.cart.items === null || this.session.screen.cart.items.length === 0) {
             return 'No items in your cart yet.';
-        } else if (this.session.screen.cart.items.length == 1) {
+        } else if (this.session.screen.cart.items.length === 1) {
             return '1 item in your cart.';
         } else {
             return this.session.screen.cart.items.length + ' items in your cart.';

@@ -1,20 +1,31 @@
 import { IMenuItem } from '../common/imenuitem';
-import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
+import { Component } from '@angular/core';
 import { SessionService } from '../services/session.service';
+import { DeviceService } from '../services/device.service';
 
 @Component({
   selector: 'app-statusbar',
   templateUrl: './statusbar.component.html'
 })
-export class StatusBarComponent implements AfterViewInit, DoCheck {
+export class StatusBarComponent {
 
-  constructor(public session: SessionService) {
+  constructor(public session: SessionService, public devices: DeviceService) {
   }
 
-  ngDoCheck(): void {
+  public doMenuItemAction(menuItem: IMenuItem) {
+    if (menuItem.action === '<camera_scan>') {
+      this.devices.cameraScan();
+    } else {
+      this.session.onAction(menuItem.action);
+    }
   }
 
-  ngAfterViewInit(): void {
+  public isMenuItemEnabled(m: IMenuItem): boolean {
+    let enabled = m.enabled;
+    if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
+         enabled = false;
+    }
+    return enabled;
   }
 
 }
