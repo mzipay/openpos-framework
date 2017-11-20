@@ -109,19 +109,6 @@ export class SessionService {
     // local storage
     const urlNodeId = this.getUrlNodeId();
     this.nodeId = urlNodeId ? urlNodeId : localStorage.getItem('nodeId');
-    if (this.nodeId == null) {
-      let temporaryNodeId = localStorage.getItem('temporaryNodeId');
-      console.log('temporaryNodeId from local storage: ' + temporaryNodeId);
-      if (temporaryNodeId == null) {
-        const MIN = 999;
-        const MAX = 9999990;
-        temporaryNodeId = 'TEMPNODEID-' + Math.floor(Math.random() * (MAX - MIN + 1)) + MIN;
-        console.log('GENERATING new temporaryNodeId: ' + temporaryNodeId);
-        localStorage.setItem('temporaryNodeId', temporaryNodeId);
-      }
-      this.nodeId = temporaryNodeId;
-    }
-
     this.appId = appName;
     const currentTopic = this.buildTopicName();
 
