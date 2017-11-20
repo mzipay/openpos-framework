@@ -1,6 +1,6 @@
 import { LoaderComponent } from './common/loader/loader.component';
 import { Component } from '@angular/core';
-import { SessionService } from './session.service';
+import { SessionService } from './services/session.service';
 
 @Component({
   selector: 'app-root',

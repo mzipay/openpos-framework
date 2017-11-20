@@ -2,7 +2,7 @@ import { ISellItem } from '../common/isellitem';
 import { IScreen } from '../common/iscreen';
 import { IMenuItem } from '../common/imenuitem';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
-import {SessionService} from '../session.service';
+import {SessionService} from '../services/session.service';
 import { AbstractApp } from './abstract-app';
 
 @Component({

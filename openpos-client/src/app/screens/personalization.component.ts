@@ -1,7 +1,7 @@
 import { IMenuItem } from './../common/imenuitem';
 import { IScreen } from '../common/iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import { MatSelectChange } from '@angular/material';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';

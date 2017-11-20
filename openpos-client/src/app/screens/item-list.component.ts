@@ -1,7 +1,7 @@
 import { ItemClickAction, MenuClickAction } from './../common/controls/product-list.component';
 import { IMenuItem } from './../common/imenuitem';
 import { Component, OnInit, DoCheck } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import { IScreen } from './../common/iscreen';
 import { IItem } from './../common/iitem';
 import { AbstractApp } from './abstract-app';

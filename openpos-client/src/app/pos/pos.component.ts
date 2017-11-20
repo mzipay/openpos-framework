@@ -1,11 +1,11 @@
-import { ScreenService } from './../screen.service';
+import { ScreenService } from './../services/screen.service';
 import { AbstractApp } from '../screens/abstract-app';
 import { IMenuItem } from '../common/imenuitem';
 import { Component, DoCheck } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import { FocusDirective } from '../common/focus.directive';
 import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
-import { IconService } from './../icon.service';
+import { IconService } from './../services/icon.service';
 
 @Component({
   selector: 'app-pos',

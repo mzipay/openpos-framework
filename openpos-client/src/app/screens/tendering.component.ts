@@ -3,7 +3,7 @@ import { PromptInputComponent } from './../common/controls/prompt-input.componen
 import { IFormElement } from './form.component';
 import { IItem } from './../common/iitem';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 

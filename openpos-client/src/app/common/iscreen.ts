@@ -1,4 +1,4 @@
-import { SessionService } from './../session.service';
+import { SessionService } from '../services/session.service';
 import { AbstractApp } from '../screens/abstract-app';
 
 export interface IScreen {

@@ -1,6 +1,6 @@
 import { IMenuItem } from '../common/imenuitem';
 import { Component } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import { FocusDirective } from '../common/focus.directive';
 import { MatDialog, MatDialogRef } from '@angular/material';
 

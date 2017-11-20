@@ -6,7 +6,7 @@ import { LoaderComponent } from './common/loader/loader.component';
 import { CartComponent } from './kiosk/cart.component';
 import { SafePipe } from './common/safe.pipe';
 import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component';
-import { ScreenService } from './screen.service';
+import { ScreenService } from './services/screen.service';
 import { ScreenDirective } from './common/screen.directive';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -21,8 +21,8 @@ import { KioskComponent } from './kiosk/kiosk.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
-import { SessionService } from './session.service';
-import { IconService } from './icon.service';
+import { SessionService } from './services/session.service';
+import { IconService } from './services/icon.service';
 import { AbstractApp } from './screens/abstract-app';
 import { PromptComponent } from './screens/prompt.component';
 import { IconComponent } from './common/controls/icon.component';

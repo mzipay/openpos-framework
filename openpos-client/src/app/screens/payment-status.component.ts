@@ -1,6 +1,6 @@
 import { IScreen } from '../common/iscreen';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
-import {SessionService} from '../session.service';
+import {SessionService} from '../services/session.service';
 import { AbstractApp } from './abstract-app';
 
 @Component({

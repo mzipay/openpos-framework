@@ -1,7 +1,7 @@
 import { ISellItem } from './../common/isellitem';
 import { IScreen } from './../common/iscreen';
 import { Component } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';

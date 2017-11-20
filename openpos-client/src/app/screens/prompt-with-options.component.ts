@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import { ChooseOptionsComponent } from './choose-options.component';
 import { PromptInputComponent } from '../common/controls/prompt-input.component';
 

@@ -2,7 +2,7 @@ import { ProductListComponent } from './../common/controls/product-list.componen
 import { IItem } from './../common/iitem';
 import { IScreen } from '../common/iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import { MatSelectionList, MatListOption } from '@angular/material';
 import { AbstractApp } from './abstract-app';
 

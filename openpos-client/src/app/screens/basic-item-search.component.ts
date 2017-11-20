@@ -1,6 +1,6 @@
 import { IForm } from './form.component';
 import { Component, OnInit, DoCheck, HostListener } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
 import { AbstractApp } from './abstract-app';
 

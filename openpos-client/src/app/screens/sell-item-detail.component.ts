@@ -1,7 +1,7 @@
 import { IScreen } from '../common/iscreen';
 import {Component} from '@angular/core';
 import { ISellItem } from '../common/isellitem';
-import {SessionService} from '../session.service';
+import {SessionService} from '../services/session.service';
 import { AbstractApp } from './abstract-app';
 
 @Component({

@@ -1,6 +1,6 @@
 import { IMenuItem } from '../common/imenuitem';
 import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 
 @Component({
   selector: 'app-statusbar',

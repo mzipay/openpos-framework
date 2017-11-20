@@ -1,13 +1,13 @@
-import { IconService } from './../icon.service';
+import { IconService } from './../services/icon.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ScreenDirective } from '../common/screen.directive';
 import { IScreen } from '../common/iscreen';
-import { ScreenService } from './../screen.service';
+import { ScreenService } from './../services/screen.service';
 import { DialogComponent } from '../screens/dialog.component';
 import { IMenuItem } from '../common/imenuitem';
 import { Component, OnInit, OnDestroy, DoCheck, sequence } from '@angular/core';
 import { Type, ViewChild, ComponentFactory } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
 import { FocusDirective } from '../common/focus.directive';
 import { Observable } from 'rxjs/Observable';

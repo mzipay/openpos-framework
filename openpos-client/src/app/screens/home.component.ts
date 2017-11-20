@@ -2,7 +2,7 @@ import { IconComponent } from './../common/controls/icon.component';
 import { IScreen } from '../common/iscreen';
 import { IMenuItem } from '../common/imenuitem';
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import {MediaChange, ObservableMedia} from '@angular/flex-layout';
 import { AbstractApp } from './abstract-app';
 

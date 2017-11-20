@@ -1,10 +1,10 @@
-import { IconService } from './../icon.service';
-import { ScreenService } from './../screen.service';
+import { IconService } from './../services/icon.service';
+import { ScreenService } from './../services/screen.service';
 import { AbstractApp } from '../screens/abstract-app';
 import { DialogComponent } from '../screens/dialog.component';
 import { IMenuItem } from '../common/imenuitem';
 import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
-import { SessionService } from '../session.service';
+import { SessionService } from '../services/session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
 import { FocusDirective } from '../common/focus.directive';
 import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';

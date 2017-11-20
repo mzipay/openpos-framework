@@ -1,6 +1,6 @@
-import { IMenuItem } from './common/imenuitem';
-import { LoaderService } from './common/loader/loader.service';
-import { IDialog } from './common/idialog';
+import { IMenuItem } from '../common/imenuitem';
+import { LoaderService } from '../common/loader/loader.service';
+import { IDialog } from '../common/idialog';
 import { Observable } from 'rxjs/Observable';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs/Subscription';
@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { Scan } from './common/scan';
+import { Scan } from '../common/scan';
 
 declare var cordova: any;
 
@@ -43,10 +43,15 @@ export class SessionService {
 
   public isMenuItemEnabled(m: IMenuItem): boolean {
     let enabled = m.enabled;
-    if (m.action.startsWith('<') && !cordova) {
+    if (m.action.startsWith('<') && !this.isRunningInBrowser()) {
          enabled = false;
     }
     return enabled;
+  }
+
+  public isRunningInBrowser(): boolean {
+    const app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+    return !app;
   }
 
   private cordovaInitialized() {
