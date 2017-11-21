@@ -8,7 +8,7 @@
             placeholder="{{placeholderText}}">
         <input #box *ngIf="responseType==='NUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)" [(ngModel)]="responseText"
             placeholder="{{placeholderText}}">
-        <mat-form-field *ngIf="responseType==='DATE'" class="date-prompt-input">
+        <mat-form-field *ngIf="responseType==='DATE'" class="date-prompt-input" ngClass.xs="date-prompt-input-xs">
             <!-- Can't use the masking component AND date picker on the same input, so use a hidden input for the picker and
                 visible input for the masking component -->
             <input matInput placeholder="{{placeholderText}}" [(ngModel)]="dateText" 
