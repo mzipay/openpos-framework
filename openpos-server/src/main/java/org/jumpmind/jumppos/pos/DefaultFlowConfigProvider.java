@@ -24,19 +24,15 @@ import org.jumpmind.jumppos.core.flow.config.FlowBuilder;
 import org.jumpmind.jumppos.core.flow.config.FlowConfig;
 import org.jumpmind.jumppos.core.flow.config.IFlowConfigProvider;
 import org.jumpmind.jumppos.pos.state.HomeScreenState;
-import org.jumpmind.jumppos.pos.state.NodePersonalizationState;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JumpPosFlowConfigProvider implements IFlowConfigProvider {
+public class DefaultFlowConfigProvider implements IFlowConfigProvider {
 
     @Override
     public FlowConfig getConfig(String appId, String nodeId) {
         FlowConfig config = new FlowConfig();
-        config.setInitialState(FlowBuilder.addState(NodePersonalizationState.class)
-                .withTransition("Complete", HomeScreenState.class)
-                .build());
-        config.add(FlowBuilder.addState(HomeScreenState.class)
+        config.setInitialState(FlowBuilder.addState(HomeScreenState.class)
                 .build());
         return config;
     }
