@@ -23,8 +23,8 @@
       ],
       "stylePreprocessorOptions": {
         "includePaths": [
-          "../../../mobile-server/src",
-          "styles"
+          "styles",
+          "styles/themes"
         ]
       },      
       "scripts": [

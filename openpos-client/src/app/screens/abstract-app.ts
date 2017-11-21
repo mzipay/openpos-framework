@@ -12,6 +12,7 @@ import { StatusBarComponent } from '../screens/statusbar.component';
 import { FocusDirective } from '../common/focus.directive';
 import { Observable } from 'rxjs/Observable';
 import { MatDialog, MatDialogRef, MatIconRegistry, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
+import {OverlayContainer} from '@angular/cdk/overlay';
 
 export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
@@ -31,7 +32,8 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
         public session: SessionService,
         public dialog: MatDialog,
         public iconService: IconService,
-        public snackBar: MatSnackBar) {
+        public snackBar: MatSnackBar,
+        public overlayContainer: OverlayContainer) {
     }
 
     public abstract appName(): string;
@@ -49,6 +51,14 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
         this.iconService.registerLocalSvgIcons();
         const timer = Observable.timer(1000, 1000);
         timer.subscribe(t => this.checkConnectionStatus(this.session));
+    }
+
+    public getTheme(): string {
+        if (this.session.screen && this.session.screen.theme) {
+            return this.session.screen.theme;
+        } else {
+            return 'openpos-theme';
+        }
     }
 
     protected checkConnectionStatus(session: SessionService): void {
@@ -98,6 +108,7 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
             viewContainerRef.clear();
             screen = viewContainerRef.createComponent(componentFactory).instance;
             this.previousScreenType = screenType;
+            this.overlayContainer.getContainerElement().classList.add(this.getTheme());
             screen.show(this.session, this);
             this.previousScreenSequenceNumber = sequenceNumber;
             this.needsPersonalization = false;

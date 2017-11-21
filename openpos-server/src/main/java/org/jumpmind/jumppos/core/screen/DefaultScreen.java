@@ -27,6 +27,7 @@ public class DefaultScreen implements Serializable {
     private String userDisplayName = "Jane Doe";
     private int sequenceNumber;
     private boolean refreshAlways = false;
+    private String theme = "openpos-theme";
     
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -226,5 +227,13 @@ public class DefaultScreen implements Serializable {
 
     public <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
         return this.mapper.convertValue(actionData, convertToInstanceOf);
+    }
+    
+    public String getTheme() {
+        return theme;
+    }
+    
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 }
