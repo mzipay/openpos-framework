@@ -39,7 +39,7 @@ export class SellComponent implements AfterViewInit, DoCheck, IScreen {
       return val;
     }
     // Filter out extra characters permitted by HTML5 input type=number (for exponentials)
-    const pattern = /[e|E|\+|\-]/g;
+    const pattern = /[e|E|\+|\-|\.]/g;
 
     return val.toString().replace(pattern, '');
   }
