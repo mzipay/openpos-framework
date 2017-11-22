@@ -23,18 +23,14 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
   }
 
   onAction(action: string) {
-    if (this.promptInput.responseText) {
-      this.session.onActionWithStringPayload(action, this.promptInput.responseText);
-    }
+    this.session.onActionWithStringPayload(action, this.promptInput.responseText);
   }
 
   onPromptInputEnter($event, promptInput: PromptInputComponent): void {
-    if (promptInput.responseText) {
-      this.session.response = promptInput.responseText;
-      this.session.screen.responseText = null;
-      promptInput.responseText = null;
-      this.session.onAction(this.session.screen.action);
-      $event.target.disabled = true;
-    }
+    this.session.response = promptInput.responseText;
+    this.session.screen.responseText = null;
+    promptInput.responseText = null;
+    this.session.onAction(this.session.screen.action);
+    $event.target.disabled = true;
   }
 }
