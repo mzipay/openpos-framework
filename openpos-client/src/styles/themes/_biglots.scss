@@ -1,0 +1,21 @@
+@import 'app-theme';
+
+$biglots-app-primary: mat-palette($mat-orange, 800, 600, 900);
+$biglots-app-accent : mat-palette($mat-grey, 800, 600, 900);
+$biglots-app-warn : mat-palette($mat-red);
+$mat-card-default-margin: 24px !default;
+$app-logo-url: url(assets/Big_Lots_logo.png);
+$biglots-app-theme: mat-light-theme($biglots-app-primary, $biglots-app-accent, $biglots-app-warn);
+
+.main-background {
+    height:100vh;
+    background-image: url(assets/background.jpg); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center; 
+}
+
+.biglots-theme {
+    @include angular-material-theme($biglots-app-theme);
+    @include app-theme($biglots-app-theme);
+}
