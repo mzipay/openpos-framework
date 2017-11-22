@@ -1,4 +1,4 @@
-group = 'org.jumpmind.jumppos'
+group = 'org.jumpmind.pos'
 
 repositories {
     mavenCentral()
