@@ -1,13 +1,7 @@
-package org.jumpmind.pos.pos.screen;
+package org.jumpmind.pos.core.screen;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jumpmind.pos.core.screen.Customer;
-import org.jumpmind.pos.core.screen.PromptScreen;
-import org.jumpmind.pos.core.screen.ScreenType;
-import org.jumpmind.pos.core.screen.SellItem;
-import org.jumpmind.pos.core.screen.Transaction;
 
 public class SellItemScreen extends PromptScreen {
 

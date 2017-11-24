@@ -1,7 +1,4 @@
-package org.jumpmind.pos.pos.screen;
-
-import org.jumpmind.pos.core.screen.DefaultScreen;
-import org.jumpmind.pos.core.screen.ScreenType;
+package org.jumpmind.pos.core.screen;
 
 public class PaymentStatusScreen extends DefaultScreen {
 

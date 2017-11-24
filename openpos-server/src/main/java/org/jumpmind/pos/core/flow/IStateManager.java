@@ -23,7 +23,7 @@ package org.jumpmind.pos.core.flow;
 import java.util.Map;
 
 import org.jumpmind.pos.core.screen.DefaultScreen;
-import org.jumpmind.pos.pos.screen.translate.ITranslationManager;
+import org.jumpmind.pos.core.screen.translate.ITranslationManager;
 
 
 public interface IStateManager {

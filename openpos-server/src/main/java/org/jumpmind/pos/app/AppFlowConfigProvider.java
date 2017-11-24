@@ -18,22 +18,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.pos.pos;
+package org.jumpmind.pos.app;
 
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.IFlowConfigProvider;
-import org.jumpmind.pos.pos.state.HomeScreenState;
+import org.jumpmind.pos.core.state.HomeScreenState;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+@Primary
 @Component
-public class DefaultFlowConfigProvider implements IFlowConfigProvider {
+public class AppFlowConfigProvider implements IFlowConfigProvider {
 
     @Override
     public FlowConfig getConfig(String appId, String nodeId) {
         FlowConfig config = new FlowConfig();
-        config.setInitialState(FlowBuilder.addState(HomeScreenState.class)
-                .build());
+        config.setInitialState(FlowBuilder.addState(HomeScreenState.class).build());
         return config;
     }
 

@@ -18,43 +18,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.pos.pos.state;
+package org.jumpmind.pos.core.state;
 
-import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.jumpmind.pos.core.flow.Action;
-import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.screen.DefaultScreen;
-import org.jumpmind.pos.pos.screen.translate.ITranslationManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jumpmind.pos.core.screen.MenuItem;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TranslatorState implements IState {
-
-    final Logger logger = LoggerFactory.getLogger(getClass());
-
+public class HomeScreenState implements IState {
+    
     @Autowired
-    protected IStateManager stateManager;
-
-    @PostConstruct
-    public void init() {
-        if (stateManager.getTranslationManager() == null) {
-            throw new IllegalStateException("When using a translation state, we expect an implementation of "
-                    + ITranslationManager.class.getSimpleName() + " to be bound at the prototype scope");
-        }
-    }
+    IStateManager stateManager;
     
     @Override
     public void arrive() {
-        stateManager.getTranslationManager().showActiveScreen();
-    } 
-
-    @ActionHandler
-    public void onAnyAction(Action action, DefaultScreen screen) {
-        stateManager.getTranslationManager().doAction(stateManager.getAppId(), action, screen);
+        stateManager.showScreen(buildMenu());
     }
-
+    
+    protected DefaultScreen buildMenu() {
+        List<MenuItem> menuItems = new ArrayList<MenuItem>();
+        menuItems.add(new MenuItem("Sell", "Sell", "http://server/icon"));
+        menuItems.add(new MenuItem("ItemLookup", "Item Lookup", "http://server/icon"));
+        DefaultScreen screen = new DefaultScreen();
+        screen.setName("MainMenu");
+        screen.setType("Home");
+        screen.put("menuItems", menuItems);
+        return screen;
+    }
 }

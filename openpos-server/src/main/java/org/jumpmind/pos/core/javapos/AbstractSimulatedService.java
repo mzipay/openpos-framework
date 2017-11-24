@@ -1,4 +1,4 @@
-package org.jumpmind.pos.pos.javapos;
+package org.jumpmind.pos.core.javapos;
 
 import java.awt.Component;
 import java.awt.Container;

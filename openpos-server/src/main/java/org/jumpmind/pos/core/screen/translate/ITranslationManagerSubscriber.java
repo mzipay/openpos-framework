@@ -1,4 +1,4 @@
-package org.jumpmind.pos.pos.screen.translate;
+package org.jumpmind.pos.core.screen.translate;
 
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.screen.DefaultScreen;
