@@ -54,7 +54,7 @@
 					<span style="font-weight: bold">{{session.screen.operatorName}}</span>
 				</p>
 			</div>
-			<ng-container *ngIf="session.screen && session.screen.menuActions && session.screen.menuActions.length > 0">
+			<ng-container *ngIf="session.screen && session.screen.menuActions && session.screen.menuActions.length > 0 && session.screen.type != 'Home'">
 				<button mat-icon-button [matMenuTriggerFor]="menu">
 					<mat-icon>more_vert</mat-icon>
 				</button>

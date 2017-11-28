@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database">
+<database name="openpos">
+
+    <table name="EMPLOYEE">
+        <column name="EMPLOYEE_ID" primaryKey="true" required="true" type="BIGINT" />
+        <column name="USER_NAME" type="VARCHAR" size="120" />
+        <column name="NAME" type="VARCHAR" size="150" />
+        <column name="LAST_NAME" type="VARCHAR" size="120" />
+        <column name="FIRST_NAME" type="VARCHAR" size="120" />
+        <column name="MIDDLE_NAME" type="VARCHAR" size="120" />
+        <column name="ROLE_ID" type="BIGINT" />
+        <column name="STATUS" type="VARCHAR" size="20" />
+        <column name="LOCALE" type="VARCHAR" size="10" />
+        <column name="STORE_ID" type="VARCHAR" size="5" />
+        <column name="NEW_PASSWORD_REQUIRED_FLAG" required="true" type="CHAR" size="1" default="0" />
+        <column name="NUMB_FLD_PW" required="true" type="NUMERIC" size="22" default="0" />
+        <column name="BIRTH_DATE" type="TIMESTAMP" />
+        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+    </table>
+        
+    <table name="EMPLOYEE_PWD">
+        <column name="EMPLOYEE_ID" primaryKey="true" required="true" type="BIGINT" />
+        <column name="EMPLOYEE_PWD" required="true" type="VARCHAR" size="256" />
+        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+    </table>
+    
+    <table name="EMPLOYEE_STORE">
+        <column name="EMPLOYEE_ID" primaryKey="true" required="true" type="BIGINT" />
+        <column name="STORE_ID" primaryKey="true" required="true" type="VARCHAR" size="10" />
+        <column name="EFFECTIVE_START_TIME" primaryKey="true" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+        <column name="EFFECTIVE_END_TIME" type="TIMESTAMP" />
+        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />        
+    </table>
+    
+    <table name="APP_ROLE">
+        <column name="ROLE_ID" primaryKey="true" required="true" type="BIGINT" />
+        <column name="NAME" required="true" type="VARCHAR" size="10" />
+        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+    </table>
+    
+    <table name="APP_ROLE_FUNCTION">
+        <column name="FUNCTION_ID" primaryKey="true" required="true" type="VARCHAR" size="120" />
+        <column name="ROLE_ID" primaryKey="true" required="true" type="BIGINT" />
+        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+    </table>        
+    
+</database>

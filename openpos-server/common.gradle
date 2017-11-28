@@ -10,6 +10,10 @@ apply plugin: 'java'
 sourceCompatibility=1.8
 targetCompatibility=1.8
 
+repositories {
+maven { url "http://maven.jumpmind.com/repo" }
+}
+
 eclipse {
     classpath {
         downloadSources = true

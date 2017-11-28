@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,21 +23,20 @@ public class ActionHandlerImpl {
         Class<?> clazz = state.getClass();
 
         while (clazz != null) {
-            Method[] methods = clazz.getDeclaredMethods();
+
+            List<Method> methods = MethodUtils.getMethodsListWithAnnotation(clazz, ActionHandler.class, true, false);
 
             Method anyMethod = null;
 
             String actionName = action.getName();
             for (Method method : methods) {
-                ActionHandler actionHandlerAnnotation = method.getAnnotation(ActionHandler.class);
                 String matchingMethodName = "on" + actionName;
-                if (actionHandlerAnnotation != null) {
-                    method.setAccessible(true);
-                    if (matchingMethodName.equals(method.getName())) {
-                        invokeHandleAction(state, action, method, deserializedPayload);
-                    } else if (METHOD_ON_ANY.equals(method.getName())) {
-                        anyMethod = method;
-                    }
+                method.setAccessible(true);
+                if (matchingMethodName.equals(method.getName())) {
+                    invokeHandleAction(state, action, method, deserializedPayload);
+                    return true;
+                } else if (METHOD_ON_ANY.equals(method.getName())) {
+                    anyMethod = method;
                 }
             }
 
@@ -44,7 +44,7 @@ public class ActionHandlerImpl {
                 invokeHandleAction(state, action, anyMethod, deserializedPayload);
                 return true;
             }
-            
+
             clazz = clazz.getSuperclass();
 
         }

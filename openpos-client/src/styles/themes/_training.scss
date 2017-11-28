@@ -7,15 +7,16 @@ $mat-card-default-margin: 24px !default;
 $app-logo-url: url(assets/Big_Lots_logo.png);
 $training-app-theme: mat-light-theme($training-app-primary, $training-app-accent, $training-app-warn);
 
-.main-background {
-    height:100vh;
-    background-image: url(assets/background.jpg); 
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center; 
-}
-
 .training-theme {
+
+    .main-background {
+        height:100vh;
+        background-image: url(assets/background.jpg); 
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center; 
+    }
+    
     @include angular-material-theme($training-app-theme);
     @include app-theme($training-app-theme);
 }

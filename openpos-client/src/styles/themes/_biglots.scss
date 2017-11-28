@@ -7,15 +7,30 @@ $mat-card-default-margin: 24px !default;
 $app-logo-url: url(assets/Big_Lots_logo.png);
 $biglots-app-theme: mat-light-theme($biglots-app-primary, $biglots-app-accent, $biglots-app-warn);
 
-.main-background {
-    height:100vh;
-    background-image: url(assets/background.jpg); 
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center; 
-}
-
 .biglots-theme {
+
+    .main-background {
+        height:100vh;
+        background-image: url(assets/background.jpg); 
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center; 
+    }
+
+    .home-screen-logo {
+        width: 400px;
+        height: 84px;
+        background-image: $app-logo-url; 
+        background-repeat: no-repeat;
+        background-size: cover;
+        top: 30px;
+        zoom: 40%; 
+        position: absolute;  
+        right: 'initial'; 
+        filter: grayscale(1) invert(1) brightness(10);
+        -webkit-filter: grayscale(1) invert(1) brightness(10); 
+    }    
+
     @include angular-material-theme($biglots-app-theme);
     @include app-theme($biglots-app-theme);
 }

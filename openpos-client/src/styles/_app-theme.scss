@@ -1,10 +1,7 @@
 @import '~@angular/material/theming';
 
 @mixin app-theme($theme) {
-    //$mat-card-default-margin: 24px !default;
-
-    //$app-logo-url: url(assets/jumpmart-logo.png);
-
+    
     $app-highlight-color: mat-color(map-get($theme, primary));
     $app-accent-color: mat-color(map-get($theme, accent));
     $app-warn-color: mat-color(map-get($theme, warn));
@@ -569,20 +566,6 @@
         vertical-align: super;
         font-size: 0.5em;
         padding-right: 2px;
-    }
-
-    .home-screen-logo {
-        width: 400px;
-        height: 84px;
-        background-image: $app-logo-url; 
-        background-repeat: no-repeat;
-        background-size: cover;
-        top: 30px;
-        zoom: 40%; 
-        position: absolute;  
-        right: 'initial'; 
-        filter: grayscale(1) invert(1) brightness(10);
-        -webkit-filter: grayscale(1) invert(1) brightness(10); 
     }
 
     .mat-column-extendedAmount {

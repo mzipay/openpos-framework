@@ -18,10 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.pos.core.state;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.jumpmind.pos.app.state;
 
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
@@ -36,17 +33,17 @@ public class HomeScreenState implements IState {
     
     @Override
     public void arrive() {
-        stateManager.showScreen(buildMenu());
+        stateManager.endSession();
+        stateManager.showScreen(buildScreen());
     }
     
-    protected DefaultScreen buildMenu() {
-        List<MenuItem> menuItems = new ArrayList<MenuItem>();
-        menuItems.add(new MenuItem("Sell", "Sell", "http://server/icon"));
-        menuItems.add(new MenuItem("ItemLookup", "Item Lookup", "http://server/icon"));
+    protected DefaultScreen buildScreen() {
         DefaultScreen screen = new DefaultScreen();
+        screen.addMenuItem(new MenuItem("Sell", "Sell", "credit_card"));
+        screen.addMenuItem(new MenuItem("AdvanceSearch", "Item Search", "search"));
+        screen.addMenuItem(new MenuItem("DailyOps", "Daily Ops", "store"));
         screen.setName("MainMenu");
         screen.setType("Home");
-        screen.put("menuItems", menuItems);
         return screen;
     }
 }
