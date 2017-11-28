@@ -57,7 +57,7 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
         if (this.session.screen && this.session.screen.theme) {
             return this.session.screen.theme;
         } else {
-            return 'openpos-theme';
+            return '';
         }
     }
 

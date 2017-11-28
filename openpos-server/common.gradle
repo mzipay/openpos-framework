@@ -11,7 +11,7 @@ sourceCompatibility=1.8
 targetCompatibility=1.8
 
 repositories {
-maven { url "http://maven.jumpmind.com/repo" }
+    maven { url "http://maven.jumpmind.com/repo" }
 }
 
 eclipse {
