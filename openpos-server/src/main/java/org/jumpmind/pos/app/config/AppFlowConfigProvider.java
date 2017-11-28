@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.pos.app;
+package org.jumpmind.pos.app.config;
 
 import org.jumpmind.pos.app.state.HomeScreenState;
 import org.jumpmind.pos.app.state.SellState;
