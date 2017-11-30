@@ -27,9 +27,12 @@ import org.h2.tools.Server;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
 import org.jumpmind.db.sql.SqlException;
+import org.jumpmind.db.sql.SqlPersistenceManager;
 import org.jumpmind.db.sql.SqlTemplateSettings;
 import org.jumpmind.db.util.BasicDataSourceFactory;
+import org.jumpmind.persist.IPersistenceManager;
 import org.jumpmind.properties.TypedProperties;
+import org.jumpmind.security.ISecurityService;
 import org.jumpmind.security.SecurityServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,11 +56,15 @@ public class AppConfig {
 
     TypedProperties environmentProperties;
 
+    IPersistenceManager persistenceManager;
+    
     IDatabasePlatform databasePlatform;
 
     BasicDataSource dataSource;
 
     Server h2Server;
+    
+    ISecurityService securityService;        
 
     @Bean
     @Scope(value = "singleton")
@@ -92,14 +99,32 @@ public class AppConfig {
     public String tablePrefix() {
         return env.getProperty(EnvConstants.TABLE_PREFIX, "POS");
     }
-
+    
     @Bean
     @Scope(value = "singleton", proxyMode = ScopedProxyMode.INTERFACES)
-    public IDatabasePlatform executionDatabasePlatform() {
+    public IDatabasePlatform databasePlatform() {
         if (databasePlatform == null) {
             databasePlatform = JdbcDatabasePlatformFactory.createNewPlatformInstance(dataSource(), new SqlTemplateSettings(), false, false);
         }
         return databasePlatform;
+    }
+        
+    @Bean
+    @Scope(value = "singleton")
+    public IPersistenceManager persistenceManager() {
+        if (persistenceManager == null) {
+            persistenceManager = new SqlPersistenceManager(databasePlatform());
+        }
+        return persistenceManager;
+    }    
+    
+    @Bean
+    @Scope(value = "singleton")
+    ISecurityService securityService() {
+        if (this.securityService == null) {
+            this.securityService = SecurityServiceFactory.create();
+        }
+        return this.securityService;
     }
 
     @Bean
@@ -129,7 +154,7 @@ public class AppConfig {
                             + " '{}' and the following url: '{}' and the following user: '{}'",
                     new Object[] { properties.get(DB_POOL_DRIVER), properties.get(DB_POOL_URL), properties.get(DB_POOL_USER) });
 
-            dataSource = BasicDataSourceFactory.create(properties, SecurityServiceFactory.create());
+            dataSource = BasicDataSourceFactory.create(properties, securityService());
         }
         return dataSource;
     }

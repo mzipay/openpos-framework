@@ -2,8 +2,8 @@
 <!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database">
 <database name="openpos">
 
-    <table name="EMPLOYEE">
-        <column name="EMPLOYEE_ID" primaryKey="true" required="true" type="BIGINT" />
+    <table name="EMPL">
+        <column name="EMPL_ID" primaryKey="true" required="true" type="BIGINT" />
         <column name="USER_NAME" type="VARCHAR" size="120" />
         <column name="NAME" type="VARCHAR" size="150" />
         <column name="LAST_NAME" type="VARCHAR" size="120" />
@@ -13,41 +13,61 @@
         <column name="STATUS" type="VARCHAR" size="20" />
         <column name="LOCALE" type="VARCHAR" size="10" />
         <column name="STORE_ID" type="VARCHAR" size="5" />
-        <column name="NEW_PASSWORD_REQUIRED_FLAG" required="true" type="CHAR" size="1" default="0" />
-        <column name="NUMB_FLD_PW" required="true" type="NUMERIC" size="22" default="0" />
+        <column name="NEW_PWD_RQRD_FLAG" required="true" type="CHAR" size="1" default="0" />
         <column name="BIRTH_DATE" type="TIMESTAMP" />
         <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
         <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
     </table>
-        
-    <table name="EMPLOYEE_PWD">
-        <column name="EMPLOYEE_ID" primaryKey="true" required="true" type="BIGINT" />
-        <column name="EMPLOYEE_PWD" required="true" type="VARCHAR" size="256" />
+
+    <table name="EMPL_PWD">
+        <column name="EMPL_ID" primaryKey="true" required="true" type="BIGINT" />
+        <column name="EMPL_PWD" required="true" type="VARCHAR" size="256" />
         <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
         <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
     </table>
-    
-    <table name="EMPLOYEE_STORE">
-        <column name="EMPLOYEE_ID" primaryKey="true" required="true" type="BIGINT" />
+
+    <table name="EMPL_STORE">
+        <column name="EMPL_ID" primaryKey="true" required="true" type="BIGINT" />
         <column name="STORE_ID" primaryKey="true" required="true" type="VARCHAR" size="10" />
-        <column name="EFFECTIVE_START_TIME" primaryKey="true" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="EFFECTIVE_END_TIME" type="TIMESTAMP" />
+        <column name="EFF_START_TIME" primaryKey="true" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+        <column name="EFF_END_TIME" type="TIMESTAMP" />
         <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />        
+        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
     </table>
-    
+
     <table name="APP_ROLE">
         <column name="ROLE_ID" primaryKey="true" required="true" type="BIGINT" />
         <column name="NAME" required="true" type="VARCHAR" size="10" />
         <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
         <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
     </table>
-    
-    <table name="APP_ROLE_FUNCTION">
+
+    <table name="APP_ROLE_FUNC">
         <column name="FUNCTION_ID" primaryKey="true" required="true" type="VARCHAR" size="120" />
         <column name="ROLE_ID" primaryKey="true" required="true" type="BIGINT" />
         <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
         <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-    </table>        
-    
+    </table>
+
+    <table name="APP_INFO">
+        <column name="APP_ID" primaryKey="true" required="true" type="VARCHAR" size="120"/>
+        <column name="INSTALL_UUID" primaryKey="true" required="true" type="VARCHAR" size="36"/>
+        <column name="HOST_NAME" type="VARCHAR" size="60" required="true" primaryKey="true"  description="The host name of a workstation or server" />
+        <column name="IP_ADDRESS" type="VARCHAR" size="50" description="The ip address for the host" />
+        <column name="OS_USER" type="VARCHAR" size="50" description="The user SymmetricDS is running under" />
+        <column name="OS_NAME" type="VARCHAR" size="50" description="The name of the OS" />
+        <column name="OS_ARCH" type="VARCHAR" size="50" description="The hardware architecture of the OS" />
+        <column name="OS_VERSION" type="VARCHAR" size="50" description="The version of the OS" />
+        <column name="AVAILABLE_PROCESSORS" type="INTEGER" default="0" description="The number of processors available to use" />
+        <column name="FREE_MEMORY_BYTES" type="BIGINT" default="0" description="The amount of free memory available to the JVM" />
+        <column name="TOTAL_MEMORY_BYTES" type="BIGINT" default="0" description="The amount of total memory available to the JVM" />
+        <column name="MAX_MEMORY_BYTES" type="BIGINT" default="0" description="The max amount of memory available to the JVM" />
+        <column name="JAVA_VERSION" type="VARCHAR" size="50" description="The version of java that the app is running as" />
+        <column name="JAVA_VENDOR" type="VARCHAR" size="255" description="The vendor of java that the app is running as" />        
+        <column name="POS_VERSION_NUMBER" required="true" type="VARCHAR" size="255" default="-1" />
+        <column name="CUSTOMER_VERSION_NUMBER" required="true" type="VARCHAR" size="255" default="-1" />
+        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+    </table>
+
 </database>
