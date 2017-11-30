@@ -13,13 +13,20 @@ public class DatabaseStartupTask extends AbstractStartupTask {
 
     @Autowired
     IDatabasePlatform databasePlatform;
-    
+
     @Autowired
     String tablePrefix;
-    
+
     @Override
     protected void doTask() throws Exception {
-          new ConfigDatabaseUpgrader("/org/jumpmind/pos/app/schema.xml", databasePlatform, true, tablePrefix).upgrade();
+
+//        DatabaseScriptContainer dbUpgradeScripts = new DatabaseScriptContainer("/org/jumpmind/pos/app/upgrade", databasePlatform);
+//        String fromVersion = infoService.getLastKnownVersion();
+//        String toVersion = VersionUtils.getCurrentVersion();
+//        if (fromVersion != null && !fromVersion.equals(toVersion)) {
+//            dbUpgradeScripts.executePreInstallScripts(fromVersion, toVersion);
+//        }
+        new ConfigDatabaseUpgrader("/org/jumpmind/pos/app/schema.xml", databasePlatform, true, tablePrefix).upgrade();
     }
 
 }
