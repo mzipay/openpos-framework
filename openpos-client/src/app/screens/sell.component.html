@@ -3,7 +3,7 @@
 		
 		<div class="prompt-input-container" [style.xs]="{'margin-left': '20px', 'margin-right': '20px' }">
 			<p>
-				<input #box type="number" class="prompt-input-scan-something" 
+				<input #box class="prompt-input-scan-something" 
 				  (keyup.enter)="onEnter(box.value)" [(ngModel)]="session.response" (keydown)="onBarcodeKeydown($event)" (paste)="onBarcodePaste($event)"
 				  placeholder="Scan something">
 			</p>
