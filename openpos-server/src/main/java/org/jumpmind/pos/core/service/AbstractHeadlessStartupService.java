@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -204,15 +205,23 @@ public abstract class AbstractHeadlessStartupService<T extends IHeadlessWorkstat
     protected void startInternal(File file, String storeId, String workstationId) {
         file.mkdirs();
         String userDir = System.getProperty("user.dir");
-        String currentDir = new File(userDir).getParentFile().getName();
-        if (currentDir.equals(file.getName())) {
-            logger.info("Starting internal process for store: {}, workstation: {}", storeId, workstationId);
+        String currentNodeDirParentName = file.getParentFile().getName();
+        File appWorkingDir = new File(this.getAppWorkingDir());
+        String appDirName = appWorkingDir.getName();
+        try {
+            currentNodeDirParentName = file.getParentFile().getCanonicalFile().getName();
+            appDirName = appWorkingDir.getCanonicalFile().getName();
+        } catch (IOException ex) {
+            logger.warn("", ex);
+        }
+        if (currentNodeDirParentName.equals(appDirName)) {
+            logger.info("Starting internal process for store: {}, workstation: {} in working dir: {}", storeId, workstationId, userDir);
             generateStoreProperties(userDir, storeId, workstationId);
             this.startHeadless();
             translationManagers.put(file.getName(), this.createTranslationManagerServer());
         } else {
-            logger.info("Could not start the internal process for store: {}, workstation: {} because the working directory need to be: {}",
-                    storeId, workstationId, appWorkingDir + "/" + file.getName() + "/work");
+            logger.warn("Could not start the internal process for store: {}, workstation: {} because the node working directory needs to be: {}",
+                    storeId, workstationId, this.getAppWorkingDir() + "/" + file.getName() );
         }
     }
     
