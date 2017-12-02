@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
@@ -105,12 +106,14 @@ public abstract class AbstractHeadlessStartupService<T extends IHeadlessWorkstat
     protected abstract Class<T> getHeadlessWorkstationProcessClass();
     protected abstract String getExternalHeadlessWorkstationProcessServiceName(String storeId, String workstationId);
     protected abstract void generateStoreProperties(String directory, String storeId, String workstationId);
+    protected abstract Optional<String> getNodeWorkingSubdirectoryName();
     
     protected void startExternal(File file, String storeId, String workstationId) {
         try {
             file.mkdirs();
             logger.info("Starting external process for store: {}, workstation: {}", storeId, workstationId);
-            String workingDir = new File(file, "work").getAbsolutePath();
+            Optional<String> workingSubdir = this.getNodeWorkingSubdirectoryName();
+            String workingDir = workingSubdir.isPresent() ? new File(file, workingSubdir.get()).getAbsolutePath() : file.getAbsolutePath();
             generateStoreProperties(workingDir, storeId, workstationId);
             List<String> cmdLine = new ArrayList<>();
             String javaHome = System.getProperty("java.home");
