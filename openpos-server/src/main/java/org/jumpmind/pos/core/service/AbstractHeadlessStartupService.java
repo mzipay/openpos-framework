@@ -45,7 +45,7 @@ public abstract class AbstractHeadlessStartupService<T extends IHeadlessWorkstat
     @Value("${prefix.classpath}")
     private String prefixClassPath;
     
-    @Value("${posfix.classpath}")
+    @Value("${postfix.classpath}")
     private String postfixClasspath;
     
     private int externalProcessCount = 0;
