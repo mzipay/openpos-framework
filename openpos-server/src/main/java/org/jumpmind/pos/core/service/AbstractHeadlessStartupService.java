@@ -107,6 +107,12 @@ public abstract class AbstractHeadlessStartupService<T extends IHeadlessWorkstat
     protected abstract String getExternalHeadlessWorkstationProcessServiceName(String storeId, String workstationId);
     protected abstract void generateStoreProperties(String directory, String storeId, String workstationId);
     protected abstract Optional<String> getNodeWorkingSubdirectoryName();
+    /**
+     * Invoked after {@link AbstractHeadlessStartupService#generateStoreProperties(String, String, String)} to allow for initialization
+     * of other configuration files and data.
+     */
+    protected void initOtherHeadlessConfiguration(String directory, String storeId, String workstationId) {
+    }
     
     protected void startExternal(File file, String storeId, String workstationId) {
         try {
@@ -115,6 +121,7 @@ public abstract class AbstractHeadlessStartupService<T extends IHeadlessWorkstat
             Optional<String> workingSubdir = this.getNodeWorkingSubdirectoryName();
             String workingDir = workingSubdir.isPresent() ? new File(file, workingSubdir.get()).getAbsolutePath() : file.getAbsolutePath();
             generateStoreProperties(workingDir, storeId, workstationId);
+            initOtherHeadlessConfiguration(workingDir, storeId, workstationId);
             List<String> cmdLine = new ArrayList<>();
             String javaHome = System.getProperty("java.home");
             String os = System.getProperty("os.name");
@@ -220,6 +227,7 @@ public abstract class AbstractHeadlessStartupService<T extends IHeadlessWorkstat
         if (currentNodeDirParentName.equals(appDirName)) {
             logger.info("Starting internal process for store: {}, workstation: {} in working dir: {}", storeId, workstationId, userDir);
             generateStoreProperties(userDir, storeId, workstationId);
+            initOtherHeadlessConfiguration(userDir, storeId, workstationId);
             this.startHeadless();
             translationManagers.put(file.getName(), this.createTranslationManagerServer());
         } else {
