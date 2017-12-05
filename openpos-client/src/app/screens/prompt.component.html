@@ -1,6 +1,6 @@
 <div *ngIf="session.screen.type==='Prompt' &&  session.screen.text" class="prompt-container-outer" fxLayout="row" fxLayoutAlign="center center" fxLayoutAlign.xs="center" [style.xs]="{'height': '100%'}">
 	<mat-card class="prompt-container" ngClass.xs="prompt-container-xs" [style.md]="{'width': '65%'}" [style.sm]="{'width': '75%'}">
-		 <mat-card-content>
+		 <mat-card-content class="prompt-card-content">
 			<app-prompt-input *ngIf="session.screen.editable" [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
 			[promptIcon]="session.screen.promptIcon" [onEnterCallback]="promptInputCallback" [responseText]="session.screen.responseText" [hintText]=session.screen.text></app-prompt-input>
 			<div style="height:50px"></div>
