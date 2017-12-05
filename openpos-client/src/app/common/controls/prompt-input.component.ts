@@ -13,6 +13,8 @@ export class PromptInputComponent implements OnInit {
     @Input() responseText: string;
     @Input() promptIcon: string;
     @Input() onEnterCallback: Function;
+    @Input() hintText: string;
+    inputType: string;
     dateText: string;  // value entered by user or copied from datePickerValue
     datePickerValue: Date;  // retains value picked using datepicker
     // Configuration for date masking
@@ -40,5 +42,10 @@ export class PromptInputComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if ( this.responseType === 'ALPHANUMERICPASSWORD') {
+            this.inputType = 'password';
+        } else {
+            this.inputType = 'text';
+        }
     }
 }

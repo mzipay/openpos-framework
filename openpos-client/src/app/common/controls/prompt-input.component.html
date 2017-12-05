@@ -1,13 +1,13 @@
 <div class="prompt-input-container">
-    <p>
-        <input #box *ngIf="responseType==='ALPHANUMERICPASSWORD'" class="prompt-input" type='password' (keyup.enter)="onEnter($event)"
-            [(ngModel)]="responseText" placeholder="{{placeholderText}}" [appFocus]="true">
-        <input #box *ngIf="responseType==='ALPHANUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)"
-            [(ngModel)]="responseText" placeholder="{{placeholderText}}"  [appFocus]="true">
-        <input #box *ngIf="responseType==='CURRENCYTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)" [(ngModel)]="responseText"
-            placeholder="{{placeholderText}}">
-        <input #box *ngIf="responseType==='NUMERICTEXT'" class="prompt-input" (keyup.enter)="onEnter($event)" [(ngModel)]="responseText"
-            placeholder="{{placeholderText}}">
+    <p>        
+        <mat-form-field *ngIf="responseType!=='DATE'" class="prompt-input" ngClass.xs="prompt-input-xs">
+            <mat-icon  matPrefix *ngIf="responseType !== 'DATE'" class="material-icons prompt-icon">{{promptIcon}}</mat-icon>
+            <input #box matInput [(ngModel)]="responseText" (keyup.enter)="onEnter($event)" type="{{inputType}}"
+               [appFocus]="true"> 
+            <mat-placeholder>{{placeholderText}}</mat-placeholder>
+            <mat-hint class="prompt-text" ngClass.xs="promt-text-xs" align="start">{{hintText}}</mat-hint>
+        </mat-form-field>
+
         <mat-form-field *ngIf="responseType==='DATE'" class="date-prompt-input" ngClass.xs="date-prompt-input-xs">
             <!-- Can't use the masking component AND date picker on the same input, so use a hidden input for the picker and
                 visible input for the masking component -->
@@ -19,6 +19,6 @@
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
     </p>
-    <mat-icon *ngIf="responseType !== 'DATE'" class="material-icons prompt-icon">{{promptIcon}}</mat-icon>
+    
     
 </div>
