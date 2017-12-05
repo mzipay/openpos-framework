@@ -141,6 +141,7 @@
     }
 
     .main-menu-item {
+            flex: 1 1 auto;
             height: 150px;
             width: 150px;
             margin: 10px;
@@ -175,6 +176,13 @@
         width: 100%;
         margin:0px;
         overflow-y: scroll;
+    }
+
+    .prompt-card-content {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+        align-content: center;
     }
 
     .prompt-input-container-small {
