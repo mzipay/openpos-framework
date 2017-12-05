@@ -1,16 +1,12 @@
-<div fxLayoutAlign="center center" style="height: calc(100vh - 64px)" [style.xs]="{'height': 'calc(100vh - 56px)', 'overflow-y':'auto'}">
-    <mat-card style="width:60%" [style.xs]="{'height': 'calc(100vh - 64px)', 'width': '100%', 'overflow-y':'auto', 'margin' : '0'}">
-        <mat-card-content>
-            <mat-grid-list [gutterSize]="gutterSize" [cols]="gridColumns" rowHeight="181px">
-                <mat-grid-tile *ngFor="let menuItem of menuItems">
-                    <div fxLayout="column" fxLayoutAlign="center center">
-                        <button mat-raised-button class="main-menu-item" (click)="session.onAction(menuItem.action)" fxLayoutAlign="center center">
-                            <app-icon iconName="{{menuItem.icon}}" iconClass="material-icons mat-64 main-menu-item-icon"></app-icon>
-                            <p class="main-menu-item-text" [style.xs]="{'zoom': '150%', 'top': '10px'}">{{menuItem.title}}</p>
-                        </button>
-                    </div>
-                </mat-grid-tile>
-            </mat-grid-list>
+<div fxLayoutAlign="center center" class="prompt-container-outer" fxLayout="row" fxLayoutAlign="center center" fxLayoutAlign.xs="center">
+    <mat-card class="prompt-container" ngClass.xs="prompt-container-xs" [style.md]="{'width': '65%'}" [style.sm]="{'width': '85%'}">
+        <mat-card-content  fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around center" fxFill>
+            <div *ngFor="let menuItem of menuItems">
+                <button mat-raised-button class="main-menu-item" (click)="session.onAction(menuItem.action)" fxLayoutAlign="center center">
+                    <app-icon iconName="{{menuItem.icon}}" iconClass="material-icons mat-64 main-menu-item-icon"></app-icon>
+                    <p class="main-menu-item-text" [style.xs]="{'zoom': '150%', 'top': '10px'}">{{menuItem.title}}</p>
+                </button>
+            </div>
         </mat-card-content>
     </mat-card>
     <div class="home-screen-logo"></div>
