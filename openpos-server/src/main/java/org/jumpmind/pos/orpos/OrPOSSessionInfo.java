@@ -1,4 +1,4 @@
-package org.jumpmind.pos;
+package org.jumpmind.pos.orpos;
 
 import java.util.Optional;
 
