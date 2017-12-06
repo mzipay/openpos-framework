@@ -1,6 +1,8 @@
 <div [class]="getTheme()">
     <div class="main-background">
-        <app-statusbar></app-statusbar>
-        <ng-template appScreen></ng-template>
+            <app-statusbar></app-statusbar>
+        <div class="page-content" ngClass.xs="page-content-xs">
+            <ng-template appScreen></ng-template>
+        </div>
     </div>
 </div>
