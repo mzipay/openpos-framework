@@ -78,7 +78,6 @@
         padding-top: 10px;
         padding-bottom: 10px;
         padding-right: 10px;
-        width: calc(100% - 92px)
     }
 
     .prompt-icon {
@@ -141,11 +140,11 @@
     }
 
     .main-menu-item {
-            flex: 1 1 auto;
-            height: 150px;
-            width: 150px;
-            margin: 10px;
-            background-color: $app-highlight-color;
+        flex: 1 1 auto;
+        height: 150px;
+        width: 150px;
+        margin: 10px;
+        background-color: $app-highlight-color;
     }
         
     .main-menu-item-icon {
@@ -267,7 +266,7 @@
 
     .sale-total-button {
         height: 55px;
-        width: calc(100% - 13px);  
+        width: 160px;  
         background-color: $app-highlight-color;
     }
 
@@ -281,15 +280,11 @@
         font-weight: lighter;
     }
 
-    .sale-total-checkout-container {
+    .sale-total-checkout-container { 
+        height: 55px;   
         background-color: #40413f;
-        width: 160px;
-        min-height: 0;
-        height: 55px;
-        padding-left: 40px;
-        line-height: 28px;
-        position: absolute;
-        right: 0px;
+        margin: 0px;
+        padding: 0px;
     }
 
     button.static-table-button.mat-raised-button {
@@ -306,8 +301,7 @@
 
     .sale-trans-panel-container {
         background-color: #eff0ef;
-        height: 100vh;
-        padding-left: 14px;
+        padding:14px;
         box-shadow: 8px 10px 27px #000;
         z-index: 1;
     }
@@ -317,28 +311,20 @@
         color: white;
     }
 
-    .sub-totals-outer-container {
-        position: relative;
-        top: 4px;
-        width: calc(100% - 15px);
-    }
-
     .cart-sub-totals-outer-container {
         position: relative;
         top: 4px;
-        width: calc(100%);
     }
 
     .subtotals-container {
         text-align: center;
-        height:45px;
-        margin: 0px;
-        padding: 10px !important;
+        margin:0px;
+        height:56px;
+        padding:4px;
     }
 
     .cart-subtotals-container {
         text-align: center;
-    // height:45px;
         margin: 0px;
         padding: 12px !important;
     }
@@ -346,14 +332,13 @@
     .subtotals-label {
         color: #537889;
         font-size: 12px;
+        margin:0px;
     }
 
     .subtotals-amount {
         color: #537889;
         font-size: 32px;
         font-weight: lighter;
-        position: relative;
-        bottom: 32px;
     }
 
     .tendering-totals-container {
@@ -386,12 +371,9 @@
         padding: 18px;
     }
     .sale-line-item-container {
-        height: calc(100% - 317px);
-        width: calc(100% - 16px);
         font-size: 14px;
         margin: 0px;
-        top: 10px;
-        padding: 0px !important;
+        padding:0px;
     }
 
     .sale-transaction-container {
@@ -401,10 +383,6 @@
         margin: 0px;
         top: 4px;
         padding: 0px !important;
-    }
-
-    .sale-line-item-container-content {
-        height: 100%;
     }
 
     .scrollable {
@@ -626,5 +604,13 @@
     //     padding-top:30px;
     //     padding-bottom:30px;
     // }
+
+    .page-content{
+        height : calc(100vh - 64px);
+    }
+
+    .page-content-xs{
+        height : calc(100vh - 56px)
+    }
 
 }
