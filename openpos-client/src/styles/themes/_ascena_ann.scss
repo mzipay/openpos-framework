@@ -1,0 +1,36 @@
+@import 'app-theme';
+
+$ascena_ann-app-primary: mat-palette($mat-grey, 800, 600, 900);
+$ascena_ann-app-accent : mat-palette($mat-amber, 50);
+$ascena_ann-app-warn : mat-palette($mat-red);
+$mat-card-default-margin: 24px !default;
+$app-logo-url: url(assets/ascena_ann-logo.png);
+$ascena_ann-app-theme: mat-light-theme($ascena_ann-app-primary, $ascena_ann-app-accent, $ascena_ann-app-warn);
+
+.ascena_ann-theme {
+
+    .main-background {
+        height:100vh;
+        background-image: url(assets/ascena_ann-background.png); 
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center; 
+    }
+
+    .home-screen-logo {
+        width: 1000px;
+        height: 84px;
+        background-image: $app-logo-url; 
+        background-repeat: no-repeat;
+        background-size: cover;
+        top: 30px;
+        zoom: 40%; 
+        position: absolute;  
+        right: 'initial'; 
+        filter: grayscale(1) invert(1) brightness(10);
+        -webkit-filter: grayscale(1) invert(1) brightness(10); 
+    }    
+
+    @include angular-material-theme($ascena_ann-app-theme);
+    @include app-theme($ascena_ann-app-theme);
+}
