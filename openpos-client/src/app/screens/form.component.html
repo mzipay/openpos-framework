@@ -25,6 +25,15 @@
 								</mat-error>
 							</ng-container>
 						</mat-form-field>
+						<mat-form-field *ngIf="'AlphanumericPassword' === formElement.inputType" style="width:100%">
+							<input [(ngModel)]="formElement.value" #field="ngModel" matInput placeholder="{{getPlaceholderText(formElement)}}" 
+							[required]="formElement.required" type="password">
+							<ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
+								<mat-error div *ngIf="field.errors.required">
+									* is required.
+								</mat-error>
+							</ng-container>
+						</mat-form-field>
 						<mat-form-field *ngIf="formElement.inputType === 'ComboBox'">
 							<mat-select (change)="onComboBoxSelectionChange(formElement, $event)" placeholder="{{getPlaceholderText(formElement)}}">
 								<mat-option *ngFor="let value of formElement.values; let valueIndex=index" [value]="valueIndex">{{value}}</mat-option>

@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.model;
 
 public enum FieldInputType {
+    AlphanumericPassword,
     AlphanumericText,
     NumericText,
     ComboBox,
