@@ -4,6 +4,7 @@
     
     $app-highlight-color: mat-color(map-get($theme, primary));
     $app-accent-color: mat-color(map-get($theme, accent));
+    $app-accent-color-lighter: mat-color(map-get($theme, accent), lighter);
     $app-warn-color: mat-color(map-get($theme, warn));
 
     .warn {
@@ -263,44 +264,34 @@
         background-position: center; 
     }
 
-    .lookup-customer-icon {
-        min-width: 56px;
-        min-height: 56px;
-        color: $app-highlight-color;
-        background-color: white;
-    }
-
-    .lookup-customer-button.mat-raised-button {
-        min-height: 56px;
-        padding-left: 0px;
+    .lookup-customer-button{
+        height: 55px;
+        padding-left: 10px;
         padding-right: 0px;
         width: 100%;  
         color: $app-accent-color;
+        border-top: solid 1px lightgray;
         font-size: 1.8em;
+        vertical-align: middle;
     }
 
     .sale-trans-panel-title-bar{
         height: 55px;   
-        background-color: #40413f;
+        background-color: $app-accent-color;
         color: white;
         font-size:24px;
         margin: 0px;
-        padding: 12px;
+        padding: 0px;
         padding-left:20px;
         text-align: left;
-        vertical-align: center;
+        vertical-align: middle;
         z-index: 100;
     }
 
     .sale-total-button {
-        width: 160px;
-        height: 55px;  
-        float: right;
+        height: 55px;
         text-align: right;
         padding: 0px;
-        margin:-6px;
-        font-size:18px;
-        background-color: $app-highlight-color;
     }
 
     .sale-total-checkout-text {
@@ -310,12 +301,12 @@
 
     .sale-total-checkout-container { 
         height: 55px;   
-        background-color: #40413f;
+        background-color: $app-accent-color;
         color: white;
-        font-size:36px;
+        font-size:24px;
         margin: 0px;
-        padding: 6px;
-        text-align: center;
+        padding: 0px;
+        padding-left: 10px;
     }
 
     button.static-table-button.mat-raised-button {
@@ -643,7 +634,12 @@
 
     .content-xs{
         .page-content{
-            height : calc(100vh - 56px)
+            height : calc(100vh - 56px);
+            overflow: scroll;
         }
+    }
+
+    .action-button-icon{
+        color: $app-highlight-color
     }
 }
