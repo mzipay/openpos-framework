@@ -1,13 +1,14 @@
-<div fxLayout="row" fxLayoutAlign="center center">
+<div class="page-content"  fxLayout="row" fxLayoutAlign="start stretch">
         <div class="sale-trans-panel-container" fxFlex>
             <div class="containerX sub-totals-outer-container" fxLayout="row" fxLayoutAlign="center center">
                 <div fxFlex style="padding:12px;">
                     <mat-card class="tendering-totals-container" style="position:relative;">
-                        <mat-card-content>
-                            <p class="subtotals-label">Balance Due</p>
-                            <p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':tenderItems.length == 0}">
+                        <mat-card-title class="subtotals-label">
+                                Balance Due
+                        </mat-card-title>
+
+                        <mat-card-content class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':tenderItems.length == 0}">
                                 <span class="super-currency-symbol">$</span>{{balanceDue}}
-                            </p>
                         </mat-card-content>
                     </mat-card>
                 </div>

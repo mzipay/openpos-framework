@@ -1,14 +1,27 @@
 <div class="page-content" fxLayout="row" fxLayoutAlign="start stretch">
-	<div class="sale-trans-panel-container" fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="10px">
+	<div class="sale-trans-panel-container" fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
 		
-		<mat-card fxFlex="0 0 auto" class="sale-trans-panel-title-bar">
-			Transaction #{{session.screen.transaction.transactionNumber}}
-			<mat-card-actions style="margin-top:-26px; margin-right:10px" fxLayoutAlign="end" fxLayoutGap="10px">
-				<button mat-fab class="action-fab-button" color="none" *ngFor="let m of session.screen.menuActions" (click)="doMenuItemAction(m)"
-				[disabled]="!isMenuItemEnabled(m)">
-				<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
-				</button>
-			</mat-card-actions>
+		<mat-card fxFlex="0 0 auto" class="sale-trans-panel-title-bar" fxLayout="row" fxLayoutAlign="start center">
+				<ng-container *ngIf="session.screen.transaction.transactionNumber">
+					Transaction #{{session.screen.transaction.transactionNumber}}
+				</ng-container>
+				<ng-container *ngIf="!session.screen.transaction.transactionNumber">
+					Transaction Not Started
+				</ng-container>
+					<span fxFlex></span>
+				<ng-container *ngIf="session.screen && session.screen.menuActions && session.screen.menuActions.length > 0">
+					<button mat-icon-button [matMenuTriggerFor]="menu">
+						<mat-icon>more_vert</mat-icon>
+					</button>
+			
+					<mat-menu #menu="matMenu">
+						<button mat-menu-item *ngFor="let m of session.screen.menuActions" (click)="doMenuItemAction(m)" 
+							[disabled]="!isMenuItemEnabled(m)">
+							<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
+							<span [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>
+						</button>
+					</mat-menu>
+				</ng-container>
 		</mat-card>
 
 		<mat-card fxFlex="0 0 auto" class="prompt-input-container">
@@ -23,7 +36,7 @@
 
 		<mat-card fxFlex="1 1 auto" class="sale-line-item-container serrated-edge"  fxLayout="column" fxLayoutAlign="start">
 			<mat-card-content fxFlex="1 1 auto" class="scrollable" style="margin-bottom:0px">
-					<mat-nav-list>
+					<mat-nav-list disableRipple=true>
 						<app-product-list [items]="items" (itemClick)="onItemClick($event)"></app-product-list>
 					</mat-nav-list>
 					<div *ngIf="items.length == 0" class="sale-line-item-container-no-content" [style.sm]="{'font-size': '16px'}" [style.xs]="{'font-size': '16px'}"
@@ -35,21 +48,18 @@
 						Scan something to get started.
 					</div>
 			</mat-card-content>
-			<mat-card-content  fxFlex="0 0 auto" fxAlign="end">
-					<button class="lookup-customer-button" mat-raised-button (click)="session.onAction('LookupCustomer')">
-							<div fxLayout="row" fxLayoutAlign=" center">
-								<div class="lookup-customer-icon">
-									<mat-icon class="material-icons mat-48" style="vertical-align: middle; margin-top: 5px;">person</mat-icon>
-								</div>
-								<div *ngIf="!session.screen.customer">Lookup Customer</div>
-								<div *ngIf="session.screen.customer">{{session.screen.customer.name}}</div>
-								<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
-							</div>
-						</button>
+			<mat-card-content  class="lookup-customer-button" fxFlex="0 0 auto" fxAlign="end"  fxLayout="row" fxLayoutAlign="start center">
+					<mat-icon color="primary" class="material-icons mat-48">person</mat-icon>
+					<ng-container *ngIf="!session.screen.customer">&nbsp;Lookup&nbsp;Customer</ng-container>
+					<ng-container *ngIf="session.screen.customer">{{session.screen.customer.name}}</ng-container>
+					<span fxFlex></span>
+					<button mat-button color="primary" (click)="session.onAction('LookupCustomer')" style="text-align:right">
+						<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
+					</button>
 			</mat-card-content>
 		</mat-card>
 
-		<div fxFlex="0 0 auto" fxLayout="row" fxLayout="center center" fxLayoutGap="16px">
+		<div *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
 			<mat-card fxFlex class="subtotals-container">
 				<mat-card-title class="subtotals-label">
 						Discounts
@@ -79,13 +89,14 @@
 			</mat-card>
 		</div>
 
-		<mat-card fxFlex="0 0 auto" class="sale-total-checkout-container">
-			<span class="super-currency-symbol">$</span>
-			{{session.screen.grandTotal}}
-			<button mat-button class="sale-total-button" [disabled]="!session.screen.transaction.active || items.length == 0"
+		<mat-card *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" class="sale-total-checkout-container" fxLayout="row" fxLayoutAlign="center center">
+			Total
+			<span fxFlex style="text-align: center">			
+				<span class="super-currency-symbol">$</span>
+				{{session.screen.grandTotal}}</span>
+			<button mat-raised-button flexFill color="primary" style="height:100%" [disabled]="!session.screen.transaction.active || items.length == 0"
 			(click)="session.onAction('Checkout')">
-				Checkout
-				<mat-icon class="material-icons sale-total-icon">keyboard_arrow_right</mat-icon>
+				<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 			</button>
 		</mat-card>
 
