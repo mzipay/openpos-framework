@@ -1,5 +1,10 @@
-<div fxLayoutAlign="center center" class="prompt-container-outer" fxLayout="row" fxLayoutAlign="center center" fxLayoutAlign.xs="center">
-    <mat-card class="prompt-container" ngClass.xs="prompt-container-xs" [style.md]="{'width': '65%'}" [style.sm]="{'width': '85%'}">
+<div fxLayoutAlign="center center" 
+        class="page-content" 
+        fxLayout="row" 
+        fxLayoutAlign="center center" 
+        fxLayoutAlign.xs="center">
+    <mat-card class="prompt-container" 
+    ngClass.xs="prompt-container-xs" [style.md]="{'width': '65%'}" [style.sm]="{'width': '85%'}">
         <mat-card-content class="prompt-card-content">
             <div *ngFor="let menuItem of menuItems">
                 <button mat-raised-button class="main-menu-item" (click)="session.onAction(menuItem.action)">
