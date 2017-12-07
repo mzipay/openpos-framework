@@ -37,9 +37,10 @@ public class POSSessionInfo {
         this.operatorLoginId = operatorLoginId;
     }
     
-    public void clearOperator() {
-        setOperatorLoginId("");
-        setOperatorName("");
+    public void endSession() {
+        operatorLoginId = "";
+        operatorName = "";
+        transactionId = null;        
     }
     
     public String getOperatorName() {
