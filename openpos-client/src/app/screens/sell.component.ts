@@ -76,4 +76,16 @@ export class SellComponent implements AfterViewInit, DoCheck, IScreen {
     this.session.onActionWithStringPayload(this.session.screen.itemActionName, $event.item.index);
   }
 
+  public doMenuItemAction(menuItem: IMenuItem) {
+      this.session.onAction(menuItem.action);
+  }
+
+  public isMenuItemEnabled(m: IMenuItem): boolean {
+    let enabled = m.enabled;
+    if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
+         enabled = false;
+    }
+    return enabled;
+  }
+
 }

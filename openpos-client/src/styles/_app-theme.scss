@@ -73,11 +73,30 @@
 
     .prompt-input-scan-something {
         font-size:22px;
-        margin:10;
-        padding-left: 64px;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        padding-right: 10px;
+        padding: 0px;
+        margin-left: 10px;
+        height: 51px;
+        border: none;
+        width: calc(100% - 136px);
+    }
+    .prompt-input-scan-something:focus{
+        outline:none;
+    }
+
+    .scan-something-button{
+        width: 120px;
+        height: 55px;  
+        padding: 0px;
+        font-size:24px;
+        color:white;
+        background-color: $app-highlight-color;
+    }
+
+    .scan-icon{
+       height: 30px;
+       width: 30px;        
+       position: relative;
+       bottom: -6px;
     }
 
     .prompt-icon {
@@ -240,7 +259,6 @@
     }
 
     .sale-marketing-panel-container {
-        height:100vh;
         background-image: url(assets/marketing-image.png); 
         background-repeat: no-repeat;
         background-size: cover;
@@ -251,8 +269,7 @@
         min-width: 56px;
         min-height: 56px;
         color: $app-highlight-color;
-        background-color: $app-accent-color;
-        margin-right: 20px;
+        background-color: white;
     }
 
     .lookup-customer-button.mat-raised-button {
@@ -264,15 +281,28 @@
         font-size: 1.8em;
     }
 
-    .sale-total-button {
-        height: 55px;
-        width: 160px;  
-        background-color: $app-highlight-color;
+    .sale-trans-panel-title-bar{
+        height: 55px;   
+        background-color: #40413f;
+        color: white;
+        font-size:24px;
+        margin: 0px;
+        padding: 12px;
+        padding-left:20px;
+        text-align: left;
+        vertical-align: center;
+        z-index: 100;
     }
 
-    .sale-total-text {
-        color: white;
-        font-size: 36px;
+    .sale-total-button {
+        width: 160px;
+        height: 55px;  
+        float: right;
+        text-align: right;
+        padding: 0px;
+        margin:-6px;
+        font-size:18px;
+        background-color: $app-highlight-color;
     }
 
     .sale-total-checkout-text {
@@ -283,8 +313,11 @@
     .sale-total-checkout-container { 
         height: 55px;   
         background-color: #40413f;
+        color: white;
+        font-size:36px;
         margin: 0px;
-        padding: 0px;
+        padding: 6px;
+        text-align: center;
     }
 
     button.static-table-button.mat-raised-button {
@@ -307,7 +340,6 @@
     }
 
     .sale-total-icon {
-        padding-top: 4px;
         color: white;
     }
 
@@ -605,12 +637,15 @@
     //     padding-bottom:30px;
     // }
 
-    .page-content{
-        height : calc(100vh - 64px);
+    .content{
+        .page-content{
+            height : calc(100vh - 64px);
+        }       
     }
 
-    .page-content-xs{
-        height : calc(100vh - 56px)
+    .content-xs{
+        .page-content-xs{
+            height : calc(100vh - 56px)
+        }
     }
-
 }
