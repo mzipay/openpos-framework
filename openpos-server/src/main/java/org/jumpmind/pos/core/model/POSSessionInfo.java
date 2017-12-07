@@ -12,6 +12,7 @@ import org.jumpmind.pos.util.TypedMap.TypedMapKey;
 public class POSSessionInfo {
     public static final TypedMapKey<String> CART_NAME_ATTRIBUTE = new TypedMapKey<>("cartName");
     
+    private String transactionId;
     private String operatorName;
     private String operatorLoginId;
     private Optional<Boolean> registerOpen = Optional.empty();
@@ -83,6 +84,14 @@ public class POSSessionInfo {
     
     public <T> T remove(TypedMapKey<T> key) {
         return this.attributes.remove(key);
+    }
+    
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+    
+    public String getTransactionId() {
+        return transactionId;
     }
     
     @Override
