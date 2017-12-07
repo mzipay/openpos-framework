@@ -9,6 +9,7 @@ public enum ScreenType {
     Form,
     Home,
     ItemList,
+    Login,
     PaymentStatus,
     Prompt,
     PromptWithOptions,
