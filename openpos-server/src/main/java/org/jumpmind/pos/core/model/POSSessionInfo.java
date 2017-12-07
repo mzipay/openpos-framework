@@ -1,4 +1,4 @@
-package org.jumpmind.pos.orpos;
+package org.jumpmind.pos.core.model;
 
 import java.util.Optional;
 
@@ -7,10 +7,9 @@ import org.jumpmind.pos.util.TypedMap;
 import org.jumpmind.pos.util.TypedMap.TypedMapKey;
 
 /**
- * TODO: Move to another OrPOS-specific project
  *
  */
-public class OrPOSSessionInfo {
+public class POSSessionInfo {
     public static final TypedMapKey<String> CART_NAME_ATTRIBUTE = new TypedMapKey<>("cartName");
     
     private String operatorName;
@@ -20,19 +19,19 @@ public class OrPOSSessionInfo {
     
     private TypedMap attributes = new TypedMap();
 
-    public OrPOSSessionInfo() {
+    public POSSessionInfo() {
         operatorLoginId = "";
         operatorName = "";
     }
 
-    public OrPOSSessionInfo( OrPOSSessionInfo other ) {
+    public POSSessionInfo( POSSessionInfo other ) {
         this.operatorName = other.operatorName;
         this.operatorLoginId = other.operatorLoginId;
         this.registerOpen = other.registerOpen;
         this.storeOpen = other.storeOpen;
     }
 
-    public OrPOSSessionInfo( String operatorName, String operatorLoginId ) {
+    public POSSessionInfo( String operatorName, String operatorLoginId ) {
         this.operatorName = operatorName;
         this.operatorLoginId = operatorLoginId;
     }

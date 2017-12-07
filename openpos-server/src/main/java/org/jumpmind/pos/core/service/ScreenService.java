@@ -182,15 +182,14 @@ public class ScreenService implements IScreenService {
             FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
             if (textFieldAnnotation != null) {
                 FormField formField = new FormField();
-                formField.setElementType(FieldElementType.Input); // TODO
-                                                                  // support
-                                                                  // other types
-                // here?
+                formField.setElementType(textFieldAnnotation.fieldElementType());
+                formField.setInputType(textFieldAnnotation.fieldInputType());
                 formField.setId(field.getName());
                 formField.setLabel(textFieldAnnotation.label());
                 formField.setPlaceholder(textFieldAnnotation.placeholder());
                 formField.setPattern(textFieldAnnotation.pattern());
                 formField.setValue(getFieldValueAsString(field, screen));
+                formField.setRequired(textFieldAnnotation.required());
                 form.addFormElement(formField);
             }
             FormButton buttonAnnotation = field.getAnnotation(FormButton.class);

@@ -1,11 +1,9 @@
-package org.jumpmind.pos.orpos.screen;
+package org.jumpmind.pos.core.screen.translate;
 
 import static java.lang.String.format;
 
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.screen.DefaultScreen;
-import org.jumpmind.pos.core.screen.translate.ITranslationManager;
-import org.jumpmind.pos.core.screen.translate.ITranslationManagerSubscriber;
 import org.jumpmind.pos.core.service.IHeadlessStartupService;
 import org.jumpmind.pos.util.RMICallbackProxyManager;
 import org.slf4j.Logger;
@@ -19,8 +17,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-public class OrPOSTranslationManagerProxy implements ITranslationManager {
-    static private final Logger logger = LoggerFactory.getLogger(OrPOSTranslationManagerProxy.class);
+public class TranslationManagerProxy implements ITranslationManager {
+    static private final Logger logger = LoggerFactory.getLogger(TranslationManagerProxy.class);
 
     @Autowired
     IHeadlessStartupService headlessStartupService;

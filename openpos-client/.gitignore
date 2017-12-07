@@ -4,3 +4,4 @@
 /node/
 /.gradle/
 /dist/
+.DS_Store

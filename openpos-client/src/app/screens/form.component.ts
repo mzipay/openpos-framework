@@ -23,6 +23,7 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
   ngDoCheck(): void {
     if (this.session.screen.sequenceNumber !== this.lastSequenceNum) {
       this.ngOnInit();
+      this.lastSequenceNum = this.session.screen.sequenceNumber;
     }
   }
 

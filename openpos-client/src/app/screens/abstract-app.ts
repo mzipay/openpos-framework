@@ -95,15 +95,17 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
                 || this.session.screen.type !== this.previousScreenType))) {
 
             let screenType: string = null;
+            let screenSubtype: string = null;
             let sequenceNumber: number = -1;
             if (this.session.screen && this.session.screen.type) {
                 console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
                 screenType = this.session.screen.type;
+                screenSubtype = this.session.screen.screenSubtype;
                 sequenceNumber = this.session.screen.sequenceNumber;
             } else {
                 screenType = 'Personalization';
             }
-            const componentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(screenType);
+            const componentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(screenType, screenSubtype);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
             screen = viewContainerRef.createComponent(componentFactory).instance;

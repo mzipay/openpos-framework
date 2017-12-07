@@ -38,6 +38,7 @@ import { SellItemDetailComponent } from './screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from './screens/signature-capture.component';
 import { StaticTableComponent } from './screens/static-table.component';
 import { ItemListComponent } from './screens/item-list.component';
+import { LoginComponent } from './screens/login.component';
 import { FocusDirective } from './common/focus.directive';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
@@ -96,6 +97,7 @@ import { DeviceService } from './services/device.service';
     FormComponent,
     HomeComponent,
     ItemListComponent,
+    LoginComponent,
     PaymentStatusComponent,
     PromptComponent,
     PersonalizationComponent,
@@ -120,6 +122,7 @@ import { DeviceService } from './services/device.service';
     PromptInputComponent,
     BasicItemSearchComponent,
     ItemListComponent,
+    LoginComponent,
     ChooseOptionsComponent,
     PromptWithOptionsComponent,
     SignatureCaptureComponent,
