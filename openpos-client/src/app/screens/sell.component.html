@@ -9,13 +9,13 @@
 					Transaction Not Started
 				</ng-container>
 					<span fxFlex></span>
-				<ng-container *ngIf="session.screen && session.screen.menuActions && session.screen.menuActions.length > 0">
+				<ng-container *ngIf="session.screen && session.screen.localMenuItems && session.screen.localMenuItems.length > 0">
 					<button mat-icon-button [matMenuTriggerFor]="menu">
 						<mat-icon>more_vert</mat-icon>
 					</button>
 			
 					<mat-menu #menu="matMenu">
-						<button mat-menu-item *ngFor="let m of session.screen.menuActions" (click)="doMenuItemAction(m)" 
+						<button mat-menu-item *ngFor="let m of session.screen.localMenuItems" (click)="doMenuItemAction(m)" 
 							[disabled]="!isMenuItemEnabled(m)">
 							<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
 							<span [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>

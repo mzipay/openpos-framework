@@ -1,13 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
+import { AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
     selector: 'app-prompt-input',
     templateUrl: './prompt-input.component.html'
 })
 
-export class PromptInputComponent implements OnInit {
+export class PromptInputComponent implements OnInit, AfterContentInit {
     @Input() placeholderText: string;
     @Input() responseType: string;
     @Input() responseText: string;
@@ -48,4 +49,14 @@ export class PromptInputComponent implements OnInit {
             this.inputType = 'text';
         }
     }
+    ngAfterContentInit(): void {
+        if (this.responseType === 'DATE') {
+            // Angular doesn't like updating the date input during ngOnInit, but it's ok with this
+            if (this.responseText) {
+                this.dateText = this.responseText;
+            }
+        }
+    }
+
+
 }

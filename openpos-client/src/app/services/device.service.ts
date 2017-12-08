@@ -16,13 +16,19 @@ declare var cordova: any;
 @Injectable()
 export class DeviceService {
 
-  constructor(private session: SessionService) {
+  constructor(protected session: SessionService) {
     document.addEventListener('deviceready', function () {
       console.log('cordova devices are ready');
     }, false);
   }
 
-  public cameraScan() {
+  public scan() {
+    if (this.session.screen.scanType && this.session.screen.scanType === 'CORDOVA_CAMERA') {
+      this.cordovaCameraScan();
+    }
+  }
+
+  public cordovaCameraScan() {
     if (!this.session.isRunningInBrowser() && cordova) {
       console.log('attempting to enable camera scanner');
       const self = this;
@@ -33,9 +39,9 @@ export class DeviceService {
             self.session.onAction('Scan');
           }
           console.log('We got a barcode\n' +
-          'Result: ' + result.text + '\n' +
-          'Format: ' + result.format + '\n' +
-          'Cancelled: ' + result.cancelled);
+            'Result: ' + result.text + '\n' +
+            'Format: ' + result.format + '\n' +
+            'Cancelled: ' + result.cancelled);
         },
         function (error) {
           console.error('Scanning failed: ' + error);
