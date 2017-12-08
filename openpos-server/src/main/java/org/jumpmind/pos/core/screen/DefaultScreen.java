@@ -30,10 +30,8 @@ public class DefaultScreen implements Serializable {
     private boolean refreshAlways = false;
     private String theme = "openpos-theme";
     
-    private ObjectMapper mapper = new ObjectMapper();
-
-
     private List<MenuItem> menuItems = new ArrayList<>();
+    private List<MenuItem> localMenuItems = new ArrayList<>();
 
     public DefaultScreen() {
     }
@@ -227,7 +225,7 @@ public class DefaultScreen implements Serializable {
     }
 
     public <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
-        return this.mapper.convertValue(actionData, convertToInstanceOf);
+        return new ObjectMapper().convertValue(actionData, convertToInstanceOf);
     }
     
     public String getTheme() {
@@ -244,5 +242,17 @@ public class DefaultScreen implements Serializable {
 
     public void setScreenSubtype(String screenSubtype) {
         this.screenSubtype = screenSubtype;
+    }
+    
+    public void addLocalMenuItem(MenuItem menuItem) {
+        this.localMenuItems.add(menuItem);
+    }
+    
+    public void setLocalMenuItems(List<MenuItem> localMenuItems) {
+        this.localMenuItems = localMenuItems;
+    }
+    
+    public List<MenuItem> getLocalMenuItems() {
+        return localMenuItems;
     }
 }
