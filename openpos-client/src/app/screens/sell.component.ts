@@ -1,3 +1,4 @@
+import { DeviceService } from './../services/device.service';
 import { ISellItem } from '../common/isellitem';
 import { IScreen } from '../common/iscreen';
 import { IMenuItem } from '../common/imenuitem';
@@ -17,7 +18,7 @@ export class SellComponent implements AfterViewInit, DoCheck, IScreen {
 
   public items: ISellItem[];
 
-  constructor(public session: SessionService) {
+  constructor(public session: SessionService, devices: DeviceService) {
 
   }
 

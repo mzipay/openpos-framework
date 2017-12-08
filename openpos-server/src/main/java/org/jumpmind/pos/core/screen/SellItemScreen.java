@@ -8,6 +8,8 @@ public class SellItemScreen extends PromptScreen {
     private static final long serialVersionUID = 1L;
 
     private List<SellItem> items = new ArrayList<>();
+    
+    public enum ScanType { CAMERA_CORDOVA, NONE }
 
     private String balanceDue;
     private String discountTotal;
@@ -15,6 +17,8 @@ public class SellItemScreen extends PromptScreen {
     private String subTotal;
     private String taxTotal;
     private String itemActionName = "Item";
+    private String scanActionName = "Scan";
+    private ScanType scanType = ScanType.NONE;
 
     private Transaction transaction = new Transaction();
     private Customer customer;
@@ -94,5 +98,21 @@ public class SellItemScreen extends PromptScreen {
 
     public void setItemActionName(String itemActionName) {
         this.itemActionName = itemActionName;
+    }
+    
+    public ScanType getScanType() {
+        return scanType;
+    }
+    
+    public void setScanType(ScanType scanType) {
+        this.scanType = scanType;
+    }
+    
+    public void setScanActionName(String scanActionName) {
+        this.scanActionName = scanActionName;
+    }
+    
+    public String getScanActionName() {
+        return scanActionName;
     }
 }
