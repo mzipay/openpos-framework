@@ -32,6 +32,26 @@
         z-index: 10;
     }
 
+    // Button Styles
+    .mat-button.mat-primary-inverse{
+        color:white;
+        background-color: $app-highlight-color;
+    }
+
+    .mat-icon.mat-accent-lighter{
+        color:$app-accent-color-lighter;
+    }
+
+    h3{
+        margin:0px;
+        color:$app-accent-color;
+    }
+
+    caption{
+        text-align: left;
+        color:$app-accent-color-lighter;
+    }
+
     // controls sizing of radio button column on static-table template
     mat-cell.mat-cell.mat-column-_selection {
         width: 30px;
@@ -72,33 +92,6 @@
         width: calc(100% - 40px)
     }
 
-    .prompt-input-scan-something {
-        font-size:22px;
-        padding: 0px;
-        margin-left: 10px;
-        height: 51px;
-        border: none;
-        width: calc(100% - 136px);
-    }
-    .prompt-input-scan-something:focus{
-        outline:none;
-    }
-
-    .scan-something-button{
-        width: 120px;
-        height: 55px;  
-        padding: 0px;
-        font-size:24px;
-        color:white;
-        background-color: $app-highlight-color;
-    }
-
-    .scan-icon{
-       height: 30px;
-       width: 30px;        
-       position: relative;
-       bottom: -6px;
-    }
 
     .prompt-icon {
         position: relative;
@@ -138,14 +131,6 @@
 
     .product-list-description {
         font-size: 12px;
-    }
-
-    .product-list-subtitle {
-        font-size: 10px;
-    }
-
-    .product-list-amount {
-        font-size: 14px;
     }
 
     .item-list-condensed {
@@ -228,33 +213,39 @@
     }
 
     .material-icons.mat-30 {
-        font-size: 30px !important;
-        height: 30px !important;
-        width: 30px !important;
+        font-size: 30px;
+        height: 30px;
+        width: 30px;
     }
 
     .material-icons.mat-40 {
-        font-size: 40px !important;
-        height: 40px !important;
-        width: 40px !important;
+        font-size: 40px;
+        height: 40px;
+        width: 40px;
     }
 
     .material-icons.mat-48 {
-        font-size: 48px !important;
-        height: 48px !important;
-        width: 48px !important;
+        font-size: 48px;
+        height: 48px;
+        width: 48px;
     }
 
     .material-icons.mat-64 {
-        font-size: 64px !important;
-        height: 64px !important;
-        width: 64px !important;
+        font-size: 64px;
+        height: 64px;
+        width: 64px;
     }
 
     .material-icons.mat-128 {
-        font-size: 128px !important;
-        height: 128px !important;
-        width: 128px !important;
+        font-size: 128px;
+        height: 128px;
+        width: 128px;
+    }
+
+    .material-icons.mat-180{
+        font-size: 180px;
+        height: 180px;
+        width: 180px;
     }
 
     .sale-marketing-panel-container {
@@ -279,7 +270,7 @@
         height: 55px;   
         background-color: $app-accent-color;
         color: white;
-        font-size:24px;
+        font-size:20px;
         margin: 0px;
         padding: 0px;
         padding-left:20px;
@@ -322,6 +313,7 @@
     }
 
     .sale-trans-panel-container {
+        overflow-y: scroll;
         background-color: #eff0ef;
         padding:14px;
         box-shadow: 8px 10px 27px #000;
@@ -391,7 +383,13 @@
         border-color: #eff0ef;
         padding: 18px;
     }
+
+    .sale-line-item-xs{
+        padding: 0px;
+    }
+
     .sale-line-item-container {
+        height: 200px;
         font-size: 14px;
         margin: 0px;
         padding:0px;
@@ -411,14 +409,6 @@
         height: 100%;
     }
 
-    .sale-line-item-container-no-content {
-        overflow-y: hidden;
-        height: 95%;
-        font-size: 36px;
-        color: #537889;
-        font-weight: lighter;
-    }
-
     .line-item-caret {
         color: #c8c8c8;
         // position: relative;
@@ -426,13 +416,12 @@
         position:absolute;
         right:10px;    
     }
-
     .line-item-description {
         width: 95%;
         font-weight: bold;
     }
-
     .line-item-subtitle {
+        width: 95%;
         color: #c8c8c8;
     }
 
@@ -635,7 +624,7 @@
     .content-xs{
         .page-content{
             height : calc(100vh - 56px);
-            overflow: scroll;
+            overflow-y: scroll;
         }
     }
 

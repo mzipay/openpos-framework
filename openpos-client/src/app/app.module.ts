@@ -86,6 +86,7 @@ import { PersonalizationComponent } from './screens/personalization.component';
 import { FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DeviceService } from './services/device.service';
+import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
 
 @NgModule({
   entryComponents: [
@@ -141,7 +142,8 @@ import { DeviceService } from './services/device.service';
     ScreenDirective,
     SafePipe,
     TenderingComponent,
-    WarrantyCoverageComponent
+    WarrantyCoverageComponent,
+    ScanSomethingComponent
   ],
   imports: [
     BrowserModule,
