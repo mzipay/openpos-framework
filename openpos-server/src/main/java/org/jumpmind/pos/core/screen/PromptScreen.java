@@ -13,6 +13,7 @@ public class PromptScreen extends DefaultScreen implements IPromptScreen {
     private int minLength;
     private int maxLength;
     private String action = "Next";
+    private MenuItem actionButton = null;
 
     public PromptScreen() {
         setType(ScreenType.Prompt);
@@ -106,4 +107,12 @@ public class PromptScreen extends DefaultScreen implements IPromptScreen {
         this.action = action;
     }
 
+    public MenuItem getActionButton() {
+        return actionButton;
+    }
+
+    public void setActionButton(MenuItem actionButton) {
+        this.actionButton = actionButton;
+    }
+    
 }
