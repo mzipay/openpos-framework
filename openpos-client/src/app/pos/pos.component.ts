@@ -16,11 +16,7 @@ import {OverlayContainer} from '@angular/cdk/overlay';
 })
 export class PosComponent extends AbstractApp implements DoCheck {
 
-  // TODO these should be conflated or removed perhaps.
-  public menuItems: IMenuItem[] = [];
-  public menuActions: IMenuItem[] = [];
   public backButton: IMenuItem;
-  public isCollapsed = true;
   
   constructor(public screenService: ScreenService, public session: SessionService, public dialog: MatDialog,
     public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer) {
@@ -33,12 +29,7 @@ export class PosComponent extends AbstractApp implements DoCheck {
 
   ngDoCheck(): void {
     if (typeof this.session.screen !== 'undefined') {
-      this.menuItems = this.session.screen.menuItems;
-      this.menuActions = this.session.screen.menuActions;
       this.backButton = this.session.screen.backButton;
-      if (!this.menuActions || this.menuActions.length === 0) {
-        this.isCollapsed = true;
-      }
     }
 
     super.ngDoCheck();

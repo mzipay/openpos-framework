@@ -137,10 +137,6 @@ public class DefaultScreen implements Serializable {
         return backButton;
     }
 
-    public List<MenuItem> getMenuActions() {
-        return this.getMenuItems();
-    }
-
     public List<MenuItem> getMenuItems() {
         return menuItems;
     }
@@ -157,11 +153,11 @@ public class DefaultScreen implements Serializable {
     }
 
     public MenuItem getMenuItemByAction(String action) {
-        return this.getMenuActions().stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
+        return this. menuItems.stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
     }
     
     public MenuItem getMenuItemByTitle(String title) {
-        return this.getMenuActions().stream().filter( mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
+        return this.menuItems.stream().filter( mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
     }
     
     public void clearMenuItems() {

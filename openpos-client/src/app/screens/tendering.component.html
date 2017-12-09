@@ -43,7 +43,7 @@
                     <mat-toolbar color="accent">
                         {{text}}
                         <div style="width: 100%" fxLayout="row" fxLayoutAlign="end ">
-                            <button mat-fab style="top: 28px; margin-left: 10px;" *ngFor="let menuAction of session.screen.menuActions" [color]="primary" 
+                            <button mat-fab style="top: 28px; margin-left: 10px;" *ngFor="let menuAction of session.screen.menuItems" [color]="primary" 
                               (click)="onMenuAction(menuAction.action)" [disabled]="! tenderAmount.value">
                                 <app-icon [iconName]="menuAction.icon"></app-icon>
                             </button>

@@ -54,13 +54,13 @@
 					<span style="font-weight: bold">{{session.screen.operatorName}}</span>
 				</p>
 			</div>
-			<ng-container *ngIf="session.screen && session.screen.menuActions && session.screen.menuActions.length > 0 && session.screen.type != 'Home'">
+			<ng-container *ngIf="session.screen && session.screen.menuItems && session.screen.menuItems.length > 0 && session.screen.type != 'Home'">
 				<button mat-icon-button [matMenuTriggerFor]="menu">
 					<mat-icon>more_vert</mat-icon>
 				</button>
 		
 				<mat-menu #menu="matMenu">
-					<button mat-menu-item *ngFor="let m of session.screen.menuActions" (click)="doMenuItemAction(m)" 
+					<button mat-menu-item *ngFor="let m of session.screen.menuItems" (click)="doMenuItemAction(m)" 
 						[disabled]="!isMenuItemEnabled(m)">
 						<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
 						<span [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>

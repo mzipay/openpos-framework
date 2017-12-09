@@ -13,7 +13,7 @@
 		<mat-card-actions id="signature-actions">
 			<div fxLayout="row" fxLayoutAlign="space-between">
 				<button mat-raised-button (click)="onClearSignature()">Clear</button>
-				<div *ngFor="let m of session.screen.menuActions">
+				<div *ngFor="let m of session.screen.menuItems">
 					<button *ngIf="m.action === 'SaveSignature'; else elseBlock" mat-raised-button (click)="onSaveSignature()">{{m.title}}</button>
 					<ng-template #elseBlock><button mat-raised-button (click)="session.onAction(m.action)">{{m.title}}</button></ng-template>
 				</div>
