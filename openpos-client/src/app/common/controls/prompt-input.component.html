@@ -5,7 +5,7 @@
             <input #box matInput [(ngModel)]="responseText" (keyup.enter)="onEnter($event)" type="{{inputType}}"
                [appFocus]="true"> 
             <mat-placeholder>{{placeholderText}}</mat-placeholder>
-            <mat-hint class="prompt-text" ngClass.xs="promt-text-xs" align="start">{{hintText}}</mat-hint>
+            <mat-hint class="prompt-text" align="start">{{hintText}}</mat-hint>
         </mat-form-field>
 
         <mat-form-field *ngIf="responseType==='DATE'" class="date-prompt-input" ngClass.xs="date-prompt-input-xs">
@@ -15,6 +15,7 @@
                [textMask]="{mask: dateMask, pipe: autoCorrectedDatePipe, keepCharPositions: true}" 
                (keyup.enter)="onDateEntered($event)">
             <input matInput hidden [matDatepicker]="picker" [(ngModel)]="datePickerValue" (dateChange)="onDatePicked($event)">
+            <mat-hint class="prompt-text" align="start">{{hintText}}</mat-hint>
             <mat-datepicker-toggle matPrefix [for]="picker" class="date-picker-toggle"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>

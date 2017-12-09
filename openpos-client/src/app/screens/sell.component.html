@@ -25,30 +25,20 @@
 		</mat-card>
 
 		<mat-card fxFlex="0 0 auto" class="prompt-input-container">
-			<button mat-button class="scan-something-button">
-				<span>Scan</span>
-				<app-icon iconClass="material-icons scan-icon" iconName="local_barcode"></app-icon>
-			</button>
-			<input #box class="prompt-input-scan-something" 
-				(keyup.enter)="onEnter(box.value)" [(ngModel)]="session.response" (keydown)="onBarcodeKeydown($event)" (paste)="onBarcodePaste($event)"
-				placeholder="Scan something">
+			<app-scan-something [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan Something"></app-scan-something>
 		</mat-card>
 
-		<mat-card fxFlex="1 1 auto" class="sale-line-item-container serrated-edge"  fxLayout="column" fxLayoutAlign="start">
-			<mat-card-content fxFlex="1 1 auto" class="scrollable" style="margin-bottom:0px">
+		<mat-card fxFlex="1 0 auto" class="sale-line-item-container serrated-edge"  fxLayout="column" fxLayoutAlign="start">
+			<mat-card-content fxFlex="1 1 auto" style="margin-bottom:0px; overflow-y:scroll">
 					<mat-nav-list disableRipple=true>
 						<app-product-list [items]="items" (itemClick)="onItemClick($event)"></app-product-list>
 					</mat-nav-list>
-					<div *ngIf="items.length == 0" class="sale-line-item-container-no-content" [style.sm]="{'font-size': '16px'}" [style.xs]="{'font-size': '16px'}"
-					 fxLayout="column" fxLayoutAlign="center center">
-						<svg style="width:180px;height:180px" viewBox="0 0 25 25">
-							<path fill="#c8c8c8" d="M4,6H6V18H4V6M7,6H8V18H7V6M9,6H12V18H9V6M13,6H14V18H13V6M16,6H18V18H16V6M19,6H20V18H19V6M2,4V8H0V4A2,2 0 0,1 2,2H6V4H2M22,2A2,2 0 0,1 24,4V8H22V4H18V2H22M2,16V20H6V22H2A2,2 0 0,1 0,20V16H2M22,20V16H24V20A2,2 0 0,1 22,22H18V20H22Z"
-							/>
-						</svg>
-						Scan something to get started.
+					<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center">
+						<mat-icon color="accent-lighter" class="material-icons mat-180" svgIcon="barcode"></mat-icon>
+						<span style="font-size:18px">Scan something to get started.</span>
 					</div>
 			</mat-card-content>
-			<mat-card-content  class="lookup-customer-button" fxFlex="0 0 auto" fxAlign="end"  fxLayout="row" fxLayoutAlign="start center">
+			<mat-card-content fxFlex="0 0 auto" class="lookup-customer-button" ngStyle.xs="font-size:18px" fxAlign="end" fxLayout="row" fxLayoutAlign="start center">
 					<mat-icon color="primary" class="material-icons mat-48">person</mat-icon>
 					<ng-container *ngIf="!session.screen.customer">&nbsp;Lookup&nbsp;Customer</ng-container>
 					<ng-container *ngIf="session.screen.customer">{{session.screen.customer.name}}</ng-container>
@@ -65,7 +55,7 @@
 						Discounts
 				</mat-card-title>
 				<mat-card-content>
-					<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">
+					<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}" ngStyle.xs="font-size:24px">
 						<span class="super-currency-symbol">$</span>{{session.screen.discountTotal}}</p>
 				</mat-card-content>
 			</mat-card>
@@ -74,7 +64,7 @@
 						Tax
 				</mat-card-title>
 				<mat-card-content>
-					<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">
+					<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}" ngStyle.xs="font-size:24px">
 						<span class="super-currency-symbol">$</span>{{session.screen.taxTotal}}</p>
 				</mat-card-content>
 			</mat-card>
@@ -83,7 +73,7 @@
 						Subtotal
 				</mat-card-title>
 				<mat-card-content>
-					<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}">
+					<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':items.length == 0}" ngStyle.xs="font-size:24px"> 
 						<span class="super-currency-symbol">$</span>{{session.screen.subTotal}}</p>
 				</mat-card-content>
 			</mat-card>
@@ -94,7 +84,7 @@
 			<span fxFlex style="text-align: center">			
 				<span class="super-currency-symbol">$</span>
 				{{session.screen.grandTotal}}</span>
-			<button mat-raised-button flexFill color="primary" style="height:100%" [disabled]="!session.screen.transaction.active || items.length == 0"
+			<button mat-button flexFill color="primary-inverse" style="height:100%" [disabled]="!session.screen.transaction.active || items.length == 0"
 			(click)="session.onAction('Checkout')">
 				<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 			</button>

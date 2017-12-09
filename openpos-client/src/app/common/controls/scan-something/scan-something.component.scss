@@ -1,0 +1,25 @@
+.prompt-input-scan-something {
+    font-size:20px;
+    padding: 0px;
+    margin-left: 10px;
+    height: 51px;
+    border: none;
+    width: calc(100% - 136px);
+}
+.promt-input-scan-something-xs{
+    font-size:14px;
+}
+.prompt-input-scan-something:focus{
+    outline:none;
+}
+
+.scan-something-button{
+    width: 100px;
+    height: 55px;
+    font-size: 20px;
+}
+
+.scan-icon{
+    height: 24px;
+    width: 24px;        
+}
