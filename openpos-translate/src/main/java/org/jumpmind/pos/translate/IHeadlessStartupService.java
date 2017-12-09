@@ -1,6 +1,4 @@
-package org.jumpmind.pos.core.service;
-
-import org.jumpmind.pos.core.screen.translate.ITranslationManager;
+package org.jumpmind.pos.translate;
 
 public interface IHeadlessStartupService {
 

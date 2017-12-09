@@ -1,0 +1,56 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+
+apply from: 'common.gradle'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
+    }
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": project.name,
+                   "Implementation-Version": appVersion,
+                   "Project-Artifact": project.name,                       
+                   "Build-Version": appVersion,
+                   "Build-Time": new SimpleDateFormat("yyyyMMdd-HHmm").format(new Date()))
+    }    
+}  
+
+processResources {
+    from ('../openpos-client/dist/') {
+        into 'public'
+    }
+}
+
+dependencies {
+    compile "net.java.dev.jna:jna:$jnaVersion"
+    compile "net.java.dev.jna:jna-platform:$jnaVersion"
+    compile group: 'org.javapos', name: 'javapos', version: '1.14.1'
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.10.3'
+    compile "org.jumpmind.symmetric:symmetric-jdbc:$symmetricVersion"
+    compile "org.jumpmind.symmetric:symmetric-db:$symmetricVersion"
+    compile "org.jumpmind.symmetric:symmetric-io:$symmetricVersion"
+    compile "org.jumpmind.symmetric:symmetric-util:$symmetricVersion"
+    compile "io.springfox:springfox-swagger2:$springfoxSwaggerVersion"
+    compile "io.springfox:springfox-swagger-ui:$springfoxSwaggerVersion"
+        
+    compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion") {
+        exclude module: "spring-boot-starter-tomcat"
+        exclude module: "spring-boot-starter-logging"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty:$springBootVersion"){
+        exclude module: "spring-boot-starter-logging"
+    }
+    compile("org.springframework.boot:spring-boot-starter-websocket:$springBootVersion"){
+        exclude module: "spring-boot-starter-tomcat"
+        exclude module: "spring-boot-starter-logging"
+    }
+}
+
+processResources.dependsOn tasks.getByPath(':openpos-client:assemble')

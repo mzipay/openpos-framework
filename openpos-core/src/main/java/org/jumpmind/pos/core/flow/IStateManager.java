@@ -23,7 +23,6 @@ package org.jumpmind.pos.core.flow;
 import java.util.Map;
 
 import org.jumpmind.pos.core.screen.DefaultScreen;
-import org.jumpmind.pos.core.screen.translate.ITranslationManager;
 
 
 public interface IStateManager {
@@ -45,6 +44,6 @@ public interface IStateManager {
     public DefaultScreen getLastScreen();    
     public void refreshScreen();
     public IState getCurrentState();
-    public ITranslationManager getTranslationManager();
+    //public ITranslationManager getTranslationManager();
     
 }

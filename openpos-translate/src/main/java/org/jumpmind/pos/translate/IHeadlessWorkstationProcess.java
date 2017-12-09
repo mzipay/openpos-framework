@@ -1,6 +1,4 @@
-package org.jumpmind.pos.app;
-
-import org.jumpmind.pos.core.screen.translate.ITranslationManager;
+package org.jumpmind.pos.translate;
 
 public interface IHeadlessWorkstationProcess {
 

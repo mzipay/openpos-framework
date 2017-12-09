@@ -1,4 +1,4 @@
-package org.jumpmind.pos.core.service;
+package org.jumpmind.pos.translate;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,8 +15,6 @@ import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jumpmind.pos.app.IHeadlessWorkstationProcess;
-import org.jumpmind.pos.core.screen.translate.ITranslationManager;
 import org.jumpmind.pos.util.NodeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +31,7 @@ public abstract class AbstractHeadlessStartupService<T extends IHeadlessWorkstat
     @Value("${orpos.headless.working.dir}")
     private String appWorkingDir;
 
-    @Value("${orpos.rmi.registry.port}")
+    @Value("${rmi.registry.port}")
     private int rmiRegistryPort;
 
     /** Comma separated list of port numbers to use for remote debugging */

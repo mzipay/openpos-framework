@@ -1,10 +1,9 @@
-package org.jumpmind.pos.core.screen.translate;
+package org.jumpmind.pos.translate;
 
 import static java.lang.String.format;
 
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.screen.DefaultScreen;
-import org.jumpmind.pos.core.service.IHeadlessStartupService;
 import org.jumpmind.pos.util.RMICallbackProxyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +16,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-public class TranslationManagerProxy implements ITranslationManager {
-    static private final Logger logger = LoggerFactory.getLogger(TranslationManagerProxy.class);
+public class TranslationManagerBridge implements ITranslationManager {
+    static private final Logger logger = LoggerFactory.getLogger(TranslationManagerBridge.class);
 
     @Autowired
     IHeadlessStartupService headlessStartupService;
@@ -26,7 +25,7 @@ public class TranslationManagerProxy implements ITranslationManager {
     @Autowired
     RMICallbackProxyManager rmiCallbackProxyManager;
 
-    @Value("${orpos.rmi.registry.port}")
+    @Value("${rmi.registry.port}")
     int rmiRegistryPort;
 
     @Value("${external.process.enabled}")

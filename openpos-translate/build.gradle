@@ -1,0 +1,5 @@
+apply from: '../openpos-core/common.gradle'
+
+dependencies {
+    compile project(":openpos-core")
+}

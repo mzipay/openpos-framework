@@ -28,10 +28,7 @@ import javax.annotation.PostConstruct;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.screen.DefaultScreen;
-import org.jumpmind.pos.core.screen.translate.ITranslationManager;
-import org.jumpmind.pos.core.screen.translate.ITranslationManagerSubscriber;
 import org.jumpmind.pos.core.service.IScreenService;
-import org.jumpmind.pos.core.state.TranslatorState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +42,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component()
 @org.springframework.context.annotation.Scope("prototype")
-public class StateManager implements IStateManager, ITranslationManagerSubscriber {
+public class StateManager implements IStateManager {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -57,9 +54,6 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
 
     @Autowired
     private Injector injector;
-
-    @Autowired(required = false)
-    private ITranslationManager translationManager;
 
     private String appId;
     private String nodeId;
@@ -83,9 +77,10 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
     public void init(String appId, String nodeId) {
         this.appId = appId;
         this.nodeId = nodeId;
-        if (translationManager != null) {
-            translationManager.setTranslationManagerSubscriber(this);
-        }
+        // TODO
+//        if (translationManager != null) {
+//            translationManager.setTranslationManagerSubscriber(this);
+//        }
         transitionTo(flowConfig.getInitialState());
     }
 
@@ -114,11 +109,6 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
                     ex);
         }
         return state;
-    }
-
-    @Override
-    public boolean isInTranslateState() {
-        return currentState != null && currentState instanceof TranslatorState;
     }
 
     @Override
@@ -242,9 +232,10 @@ public class StateManager implements IStateManager, ITranslationManagerSubscribe
         return appId;
     }
 
-    @Override
-    public ITranslationManager getTranslationManager() {
-        return translationManager;
-    }
+    // TODO
+    //@Override
+//    public ITranslationManager getTranslationManager() {
+//        return translationManager;
+//    }
 
 }
