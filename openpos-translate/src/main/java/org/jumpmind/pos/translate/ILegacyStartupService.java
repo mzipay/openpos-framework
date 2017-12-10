@@ -1,6 +1,6 @@
 package org.jumpmind.pos.translate;
 
-public interface IHeadlessStartupService {
+public interface ILegacyStartupService {
 
     public void startPreviouslyStarted();
     

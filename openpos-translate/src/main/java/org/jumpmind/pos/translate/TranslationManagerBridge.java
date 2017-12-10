@@ -20,7 +20,7 @@ public class TranslationManagerBridge implements ITranslationManager {
     static private final Logger logger = LoggerFactory.getLogger(TranslationManagerBridge.class);
 
     @Autowired
-    IHeadlessStartupService headlessStartupService;
+    ILegacyStartupService headlessStartupService;
     
     @Autowired
     RMICallbackProxyManager rmiCallbackProxyManager;

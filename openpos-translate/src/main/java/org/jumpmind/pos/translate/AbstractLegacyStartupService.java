@@ -22,8 +22,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.remoting.RemoteAccessException;
 import org.springframework.remoting.rmi.RmiProxyFactoryBean;
 
-public abstract class AbstractHeadlessStartupService<T extends IHeadlessWorkstationProcess> implements IHeadlessStartupService {
-    private final static Logger logger = LoggerFactory.getLogger(AbstractHeadlessStartupService.class);
+public abstract class AbstractLegacyStartupService implements ILegacyStartupService {
+    private final static Logger logger = LoggerFactory.getLogger(AbstractLegacyStartupService.class);
 
     @Value("${external.process.enabled}")
     private boolean externalProcessEnabled;
@@ -51,6 +51,10 @@ public abstract class AbstractHeadlessStartupService<T extends IHeadlessWorkstat
     private Registry sharedRegistry;
 
     private Map<String, ITranslationManager> translationManagers = new HashMap<>();
+    
+    public static String getDefaultServiceName(String storeId, String workstationId) {
+        return String.format("%s/%s-%s", ITranslationManager.class.getSimpleName(), storeId, workstationId);
+    }
 
     @PostConstruct
     protected void init() {
@@ -101,12 +105,12 @@ public abstract class AbstractHeadlessStartupService<T extends IHeadlessWorkstat
 
     protected abstract void startHeadless();
     protected abstract ITranslationManager createTranslationManagerServer();
-    protected abstract Class<T> getHeadlessWorkstationProcessClass();
+    protected abstract Class<?> getHeadlessWorkstationProcessClass();
     protected abstract String getExternalHeadlessWorkstationProcessServiceName(String storeId, String workstationId);
     protected abstract void generateStoreProperties(String directory, String storeId, String workstationId);
     protected abstract Optional<String> getNodeWorkingSubdirectoryName();
     /**
-     * Invoked after {@link AbstractHeadlessStartupService#generateStoreProperties(String, String, String)} to allow for initialization
+     * Invoked after {@link AbstractLegacyStartupService#generateStoreProperties(String, String, String)} to allow for initialization
      * of other configuration files and data.
      */
     protected void initOtherHeadlessConfiguration(String directory, String storeId, String workstationId) {
