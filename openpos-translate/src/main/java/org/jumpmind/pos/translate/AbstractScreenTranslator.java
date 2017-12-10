@@ -10,14 +10,14 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected ILegacyScreen headlessScreen;
+    protected ILegacyScreen legacyScreen;
 
     protected T screen;
 
     protected POSSessionInfo posSessionInfo;
 
     public AbstractScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
-        this.headlessScreen = headlessScreen;
+        this.legacyScreen = headlessScreen;
         try {
             screen = screenClass.newInstance();
         } catch (Exception e) {
@@ -49,7 +49,7 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
     }
 
     public ILegacyScreen getHeadlessScreen() {
-        return headlessScreen;
+        return legacyScreen;
     }
 
     protected void resetScreen() {
