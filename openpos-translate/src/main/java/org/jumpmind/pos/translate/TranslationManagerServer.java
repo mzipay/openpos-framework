@@ -1,0 +1,225 @@
+package org.jumpmind.pos.translate;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.model.POSSessionInfo;
+import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.ScreenType;
+import org.jumpmind.pos.translate.InteractionMacro.AbortMacro;
+import org.jumpmind.pos.translate.InteractionMacro.DoOnActiveScreen;
+import org.jumpmind.pos.translate.InteractionMacro.DoOnScreen;
+import org.jumpmind.pos.translate.InteractionMacro.SendLetter;
+import org.jumpmind.pos.translate.InteractionMacro.WaitForScreen;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class TranslationManagerServer implements ILegacyScreenListener, ITranslationManager {
+
+    final Logger logger = LoggerFactory.getLogger(getClass());
+
+    private Class<?> subsystemClass;
+
+    private ILegacySubsystem headlessUiSubsystem;
+
+    private Map<String, ILegacyScreenTranslatorFactory> headlessScreenTranslatorFactory = new HashMap<>();
+
+    private Map<String, ILegacyScreenInterceptor> headlessScreenInterceptor = new HashMap<>();
+
+    private InteractionMacro activeMacro;
+
+    private Map<String, AbstractScreenTranslator<? extends DefaultScreen>> lastTranslatorByAppId = new HashMap<>();
+
+    private Map<String, ITranslationManagerSubscriber> subscriberByAppId = new HashMap<>();
+
+    private POSSessionInfo posSessionInfo = new POSSessionInfo();
+
+    public TranslationManagerServer(ILegacyScreenInterceptor interceptor, ILegacyScreenTranslatorFactory screenTranslatorFactory,
+            Class<?> subsystemClass) {
+        this.subsystemClass = subsystemClass;
+        this.posSessionInfo = new POSSessionInfo();
+        headlessScreenInterceptor.put("pos", interceptor);
+        headlessScreenTranslatorFactory.put("pos", screenTranslatorFactory);
+    }
+
+    @Override
+    public void ping() {
+    }
+
+    @Override
+    public void showActiveScreen() {
+        showHeadlessScreen(getHeadlessUISubsystem().getActiveScreen());
+    }
+
+    @Override
+    public void setTranslationManagerSubscriber(ITranslationManagerSubscriber subscriber) {
+        if (this.subscriberByAppId.get(subscriber.getAppId()) == null) {
+            this.subscriberByAppId.put(subscriber.getAppId(), subscriber);
+            getHeadlessUISubsystem().addLegacyScreenListener(this);
+        }
+    }
+
+    @Override
+    public void doAction(String appId, Action action, DefaultScreen screen) {
+        AbstractScreenTranslator<? extends DefaultScreen> lastTranslator = this.lastTranslatorByAppId.get(appId);
+        if (lastTranslator != null) {
+            lastTranslator.handleAction(subscriberByAppId.get(appId), this, action, screen);
+        } else {
+            sendAction(action.getName());
+        }
+    }
+
+    @Override
+    public void showHeadlessScreen(ILegacyScreen screen) {
+        if (screen != null && screen.isStatusUpdate()) {
+            // We don't currently handle updates to the status panel only
+            logger.info("Suppressing SHOW_STATUS_ONLY update for screen {}, sending NoOp", screen.getSpecName());
+            // Some scenarios (such as 'Print Store Address' on Item Inventory
+            // screen) end the flow with simply a status update. This
+            // would leave clients waiting for a response. Send a no-op response
+            // so that clients know the server is still alive.
+            show(new DefaultScreen(ScreenType.NoOp));
+        } else {
+            if (executeActiveMacro(screen)) {
+                translateAndShow(screen);
+            }
+        }
+    }
+
+    public void executeMacro(InteractionMacro macro) {
+        this.activeMacro = macro;
+        executeActiveMacro(null);
+    }
+
+    protected boolean executeActiveMacro(ILegacyScreen screen) {
+        boolean showScreen = true;
+        if (activeMacro != null) {
+            showScreen = false;
+            List<Object> objects = activeMacro.getInteractionQueue();
+            if (objects != null && objects.size() > 0) {
+                Object current = objects.get(0);
+                while (current != null) {
+                    if (current instanceof SendLetter) {
+                        sendAction(((SendLetter) current).getLetter());
+                        current = next(objects);
+                    } else if (current instanceof WaitForScreen && screen != null) {
+                        WaitForScreen wait = (WaitForScreen) current;
+                        String currentScreenName = null;
+                        boolean match = false;
+                        if (screen.isDialog()) {
+                            currentScreenName = screen.getDialogResourceId();
+                        } else {
+                            currentScreenName = screen.getSpecName();
+                        }
+                        match = wait.getScreenNames().contains(currentScreenName);
+                        if (!match) {
+                            break;
+                        } else {
+                            current = next(objects);
+                        }
+                    } else if (current instanceof DoOnScreen && screen != null) {
+                        Object toProcess = current;
+                        current = next(objects);
+                        ((DoOnScreen) toProcess).doOnScreen(screen);
+
+                    } else if (current instanceof DoOnActiveScreen) {
+                        Object toProcess = current;
+                        current = next(objects);
+                        ((DoOnActiveScreen) toProcess).doOnScreen(this.getActiveScreen());
+
+                    } else if (current instanceof AbortMacro && screen != null) {
+                        if (((AbortMacro) current).abort(screen)) {
+                            activeMacro = null;
+                            showScreen = true;
+                            break;
+                        } else {
+                            current = next(objects);
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                if (objects.size() == 0) {
+                    activeMacro = null;
+                }
+            } else {
+                activeMacro = null;
+            }
+        }
+        return showScreen;
+    }
+
+    private Object next(List<Object> objects) {
+        if (objects.size() > 0) {
+            objects.remove(0);
+            return objects.size() > 0 ? objects.get(0) : null;
+        } else {
+            return null;
+        }
+    }
+
+    protected void show(DefaultScreen screen) {
+        for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
+            if (screen != null && subscriber.isInTranslateState()) {
+                subscriber.showScreen(screen);
+            }
+        }
+    }
+
+    protected void translateAndShow(ILegacyScreen screen) {
+        for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
+            if (screen != null && subscriber.isInTranslateState()) {
+                AbstractScreenTranslator<?> lastTranslator = this.lastTranslatorByAppId.get(subscriber.getAppId());
+                ILegacyScreen previousScreen = lastTranslator != null ? lastTranslator.getHeadlessScreen() : null;
+                if (!headlessScreenInterceptor.get(subscriber.getAppId()).intercept(screen, previousScreen, subscriber, this,
+                        posSessionInfo)) {
+                    subscriber.showScreen(toScreen(screen, subscriber));
+                } else {
+                    this.lastTranslatorByAppId.put(subscriber.getAppId(), null);
+                }
+            }
+        }
+    }
+
+    protected DefaultScreen toScreen(ILegacyScreen headlessScreen, ITranslationManagerSubscriber subscriber) {
+        AbstractScreenTranslator<? extends DefaultScreen> lastTranslator = headlessScreenTranslatorFactory.get(subscriber.getAppId())
+                .createScreenTranslator(headlessScreen);
+        DefaultScreen screen = null;
+        if (lastTranslator != null) {
+            lastTranslator.setPosSessionInfo(posSessionInfo);
+            screen = lastTranslator.build();
+        }
+        this.lastTranslatorByAppId.put(subscriber.getAppId(), lastTranslator);
+
+        return screen;
+    }
+
+    public ILegacyScreen getActiveScreen() {
+        ILegacyScreen screen = getHeadlessUISubsystem().getActiveScreen();
+        return screen;
+    }
+
+    public ILegacySubsystem getHeadlessUISubsystem() {
+        if (headlessUiSubsystem == null) {
+            try {
+                Method method = subsystemClass.getMethod("getInstance");
+                headlessUiSubsystem = (ILegacySubsystem) method.invoke(null);
+            } catch (RuntimeException e) {
+                throw e;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return headlessUiSubsystem;
+    }
+
+    public void sendAction(String action) {
+        getHeadlessUISubsystem().sendAction(action);
+    }
+
+}

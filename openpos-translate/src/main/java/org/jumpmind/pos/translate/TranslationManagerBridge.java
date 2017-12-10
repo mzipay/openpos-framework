@@ -78,21 +78,6 @@ public class TranslationManagerBridge implements ITranslationManager {
         }
     }
     
-    @Override
-    public String getActiveScreenID() {
-        String activeScreenId = null;
-        try {
-            ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
-            activeScreenId = implementation.getActiveScreenID();
-        } catch (RemoteConnectFailureException e) {
-            headlessStartupService.start(nodeId);
-            setTranslationManagerSubscriber();
-            ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
-            activeScreenId = implementation.getActiveScreenID();
-        }
-        
-        return activeScreenId;
-    }
     
     @Override
     public void ping() {
