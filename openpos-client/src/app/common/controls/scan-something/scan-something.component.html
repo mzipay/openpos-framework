@@ -1,7 +1,9 @@
-<button mat-button color="primary-inverse" class="scan-something-button">
-    <span>Scan</span>
-    <mat-icon svgIcon="barcode"></mat-icon>
-  </button>
-  <input #box class="prompt-input-scan-something" ngClass.xs="promt-input-scan-something-xs" 
-    (keyup.enter)="onEnter(box.value)" [(ngModel)]="responseText" (keydown)="onBarcodeKeydown($event)" (paste)="onBarcodePaste($event)"
-    placeholder="{{placeholderText}}">
+<div ngClass="outer-container" fxFlexLayout="row stretch" >
+  <button fxFlex="0 0 auto" mat-button color="primary-inverse" ngClass=" text-md" ngClass.xs="text-sm">
+      <span>Scan</span>
+      <mat-icon svgIcon="barcode"></mat-icon>
+    </button>
+    <input fxFlex="1 1 auto" #box ngClass="prompt-input-scan-something text-md" ngClass.xs="prompt-input-scan-something text-sm" 
+      (keyup.enter)="onEnter(box.value)" [(ngModel)]="responseText" (keydown)="onBarcodeKeydown($event)" (paste)="onBarcodePaste($event)"
+      placeholder="{{placeholderText}}">
+  </div>

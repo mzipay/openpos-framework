@@ -1,18 +1,16 @@
-<div fxLayout="row" fxLayoutAlign="center center">
-	<div class="sale-trans-panel-container" fxFlex>
-		<div class="containerX sub-totals-outer-container" fxLayout="row" fxLayoutAlign="center center">
-			<div fxFlex style="padding:12px;">
-				<mat-card class="subtotals-container" style="position:relative;">
-					<mat-card-content>
-						<p class="subtotals-label">Total Warranty Cost</p>
-						<p class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':warrantyItems.length == 0}">
+<div class="page-content" fxLayout="row" fxLayoutAlign="start stretch">
+	<div class="sale-trans-panel-container"  fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+		<mat-card fxFlex="0 0 auto" class="page-content-card text-center">
+			<mat-card-content>
+				<mat-card-title ngClass="text-muted text-sm" ngClass="text-xs">Total Warranty Cost</mat-card-title>
+				<mat-card-content>
+						<p ngClass="text-muted text-lg" ngClass.xs="text-md">
 							<span class="super-currency-symbol">$</span>{{warrantyCostTotal}}</p>
 					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
+			</mat-card-content>
+		</mat-card>
 
-		<mat-card class="sale-transaction-container">
+		<mat-card fxFlex class="sale-transaction-container">
 			<mat-card-title>
 				<mat-toolbar color="accent">
 					{{text}}

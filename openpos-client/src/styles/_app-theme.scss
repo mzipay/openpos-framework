@@ -32,6 +32,68 @@
         z-index: 10;
     }
 
+    mat-card.page-content-card{
+        font-size: 14px;
+        margin: 0px;
+        padding: 4px;
+        color: $app-accent-color;
+
+        mat-card-title{
+            padding:4px;
+            margin:0px;
+        }
+
+        mat-card-content{
+            padding:0px;
+            margin:0px;
+        }
+        mat-card-footer{
+            border-top: 1px solid lightgray;
+            padding:0px;
+            margin:0px;
+        }
+    }
+
+    mat-card.dark{
+        background-color: $app-accent-color;
+        color: white;
+    }
+
+    mat-card.scrollable-content-card{
+        height: 100px;
+        mat-card-content{
+            margin-bottom:0px; 
+            overflow-y:auto
+        }
+    }
+    .text-xs{
+        font-size:12px;
+    }
+    
+    .text-sm{
+        font-size:18px;
+    }
+
+    .text-md{
+        font-size:24px;
+    }
+
+    .text-lg{
+        font-size:32px;
+    }
+
+    .text-xl{
+        font-size:48px;
+    }
+
+    .text-muted{
+        color:$app-accent-color-lighter;
+    }
+
+    .text-center{
+        text-align: center;
+    }
+
     // Button Styles
     .mat-button.mat-primary-inverse{
         color:white;
@@ -39,16 +101,6 @@
     }
 
     .mat-icon.mat-accent-lighter{
-        color:$app-accent-color-lighter;
-    }
-
-    h3{
-        margin:0px;
-        color:$app-accent-color;
-    }
-
-    caption{
-        text-align: left;
         color:$app-accent-color-lighter;
     }
 
@@ -75,29 +127,29 @@
         font-weight: lighter;
     }
 
+    .content{
+        .page-content{
+            height : calc(100vh - 64px);
+        }       
+    }
+
+    .content-xs{
+        .page-content{
+            height : calc(100vh - 56px);
+            overflow-y: auto;
+        }
+    }
+
     .prompt-input {
-        font-size:48px;
         margin:0;
-        padding-left: 63px;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        padding-right: 10px;
-        width: calc(100% - 73px)
+        padding:15px;
+        width: calc(100% - 30px)
     }
 
     .prompt-input-xs {
-        font-size:32px;
-        padding-left:30px;
-        width: calc(100% - 40px)
-    }
-
-
-    .prompt-icon {
-        position: relative;
-        bottom:-10px;
-        left:0px;
-        color: $app-highlight-color;
-        font-size:48px;
+        margin:0;
+        padding:15px;
+        width: calc(100% - 30px)
     }
 
     .prompt-icon-with-label {
@@ -118,11 +170,6 @@
         color: $app-highlight-color;
     }
 
-    mat-form-field.date-prompt-input {
-    padding-left: 0px;
-    padding-bottom: 0px;
-    }
-
     .product-list-label {
         color: $app-highlight-color;
         font-size:14px;
@@ -135,12 +182,6 @@
     .item-list-condensed {
         padding-top: 0px;
         padding-bottom: 0px;
-    }
-
-    .prompt-input-container {
-        position:relative;
-        padding:20px;
-        margin:0;
     }
 
     .main-menu-item {
@@ -184,13 +225,6 @@
         flex-flow: row wrap;
         justify-content: space-around;
         align-content: center;
-    }
-
-    .prompt-input-container-small {
-        top:10px;
-        min-width: 300px;
-        max-width: 570px;    
-        height: 200px;
     }
 
     .statusbar-text {
@@ -254,73 +288,15 @@
         background-position: center; 
     }
 
-    .lookup-customer-button{
-        height: 55px;
-        padding-left: 10px;
-        padding-right: 0px;
-        width: 100%;  
-        color: $app-accent-color;
-        border-top: solid 1px lightgray;
-        font-size: 1.8em;
-        vertical-align: middle;
-    }
-
-    .sale-trans-panel-title-bar{
-        height: 55px;   
-        background-color: $app-accent-color;
-        color: white;
-        font-size:20px;
-        margin: 0px;
-        padding: 0px;
-        padding-left:20px;
-        text-align: left;
-        vertical-align: middle;
-        z-index: 100;
-    }
-
-    .sale-total-button {
-        height: 55px;
-        text-align: right;
-        padding: 0px;
-    }
-
-    .sale-total-checkout-text {
-        color: white;
-        font-weight: lighter;
-    }
-
-    .sale-total-checkout-container { 
-        height: 55px;   
-        background-color: $app-accent-color;
-        color: white;
-        font-size:24px;
-        margin: 0px;
-        padding: 0px;
-        padding-left: 10px;
-    }
-
     button.static-table-button.mat-raised-button {
         margin: 5px;
     }
 
-    .sale-total-checkout-container-small {
-        width: 150px;
-    }
-
-    .sale-total-checkout-container-dimmed {
-        background-color:rgba(0, 0, 0, 0.0);
-    }
-
     .sale-trans-panel-container {
-        overflow-y: scroll;
         background-color: #eff0ef;
         padding:14px;
         box-shadow: 8px 10px 27px #000;
         z-index: 1;
-    }
-
-    .sale-total-icon {
-        color: white;
     }
 
     .cart-sub-totals-outer-container {
@@ -331,7 +307,6 @@
     .subtotals-container {
         text-align: center;
         margin:0px;
-        height:56px;
         padding:4px;
     }
 
@@ -339,18 +314,6 @@
         text-align: center;
         margin: 0px;
         padding: 12px !important;
-    }
-
-    .subtotals-label {
-        color: #537889;
-        font-size: 12px;
-        margin:0px;
-    }
-
-    .subtotals-amount {
-        color: #537889;
-        font-size: 32px;
-        font-weight: lighter;
     }
 
     .tendering-totals-container {
@@ -387,25 +350,11 @@
         padding: 0px;
     }
 
-    .sale-line-item-container {
+    .sale-transaction-container {
         height: 200px;
         font-size: 14px;
         margin: 0px;
-        padding:0px;
-    }
-
-    .sale-transaction-container {
-        height: calc(100% - 170px);
-        width: calc(100% - 16px);
-        font-size: 14px;
-        margin: 0px;
-        top: 4px;
-        padding: 0px !important;
-    }
-
-    .scrollable {
-        overflow: auto;
-        height: 100%;
+        padding: 0px;
     }
 
     .line-item-caret {
@@ -605,29 +554,5 @@
         font-family: 'Open Sans',"Helvetica Neue",sans-serif;
         font-size:1.4em;
         //color: #c8c8c8;
-    }
-
-    // .header-stripe-top {
-    //     color:white;
-    //     font-size: 70px;
-    //     padding-top:30px;
-    //     padding-bottom:30px;
-    // }
-
-    .content{
-        .page-content{
-            height : calc(100vh - 64px);
-        }       
-    }
-
-    .content-xs{
-        .page-content{
-            height : calc(100vh - 56px);
-            overflow-y: scroll;
-        }
-    }
-
-    .action-button-icon{
-        color: $app-highlight-color
     }
 }

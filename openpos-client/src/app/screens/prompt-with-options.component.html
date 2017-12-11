@@ -1,17 +1,23 @@
-<div *ngIf="session.screen.type==='PromptWithOptions'"> 
-    <mat-card>
-        <mat-card-content>
-            <label class="prompt-text">{{promptText}}</label>
+<div *ngIf="session.screen.type==='PromptWithOptions'" class="page-content" 
+fxLayout="row" fxLayoutAlign="center center"> 
+    <mat-card class="prompt-container"
+    ngClass.xs="prompt-container-xs" 
+    [style.md]="{'width': '65%'}" 
+    [style.sm]="{'width': '75%'}">
+        <mat-card-content class="prompt-card-content">
             <app-prompt-input #promptInput [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType" [responseText]="session.screen.responseText"
-                [promptIcon]="session.screen.promptIcon" [onEnterCallback]="promptInputCallback"></app-prompt-input>
-            <mat-nav-list>
-                <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
-                <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onAction(o.value)" style="border-color: black">
-                    <span *ngIf="!o.enabled; else elseBlock" class="choose-options-item-dimmed">{{o.displayValue}}</span>
-                    <ng-template #elseBlock>{{o.displayValue}}</ng-template>
-                    <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
-                </mat-list-item>
-            </mat-nav-list>
+                [promptIcon]="session.screen.promptIcon" [onEnterCallback]="promptInputCallback" [hintText]="promptText"></app-prompt-input>
+
         </mat-card-content>
+        <mat-card-actions>
+            <mat-nav-list>
+                    <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
+                    <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onAction(o.value)" style="border-color: black">
+                        <span *ngIf="!o.enabled; else elseBlock" class="choose-options-item-dimmed">{{o.displayValue}}</span>
+                        <ng-template #elseBlock>{{o.displayValue}}</ng-template>
+                        <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
+                    </mat-list-item>
+                </mat-nav-list>
+        </mat-card-actions>
     </mat-card>
 </div>

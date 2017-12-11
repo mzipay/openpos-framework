@@ -1,10 +1,9 @@
 <div class="page-content" fxLayout="row" fxLayoutAlign="start stretch">
 	<div class="sale-trans-panel-container" fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
-		<mat-card class="prompt-input-container">
-				<app-scan-something [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan a receipt or select a transaction below"></app-scan-something>
-		</mat-card>
-
-		<mat-card class="sale-transaction-container">
+		
+		<app-scan-something class="mat-elevation-z3" [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan a receipt or select a transaction below"></app-scan-something>
+		
+		<mat-card fxFlex="1 0 auto" class="sale-transaction-container">
 			<mat-card-content class="sale-line-item-container-content" fxLayout="column" fxLayoutAlign="space-between">
 				<mat-toolbar color="accent">Suspended Transactions</mat-toolbar>
 				<div class="scrollable">
