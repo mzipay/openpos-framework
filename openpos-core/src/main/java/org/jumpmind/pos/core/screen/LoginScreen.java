@@ -9,6 +9,11 @@ public class LoginScreen extends FormScreen {
 
     private static final long serialVersionUID = 1L;
 
+    private MenuItem changePasswordAction;
+    private MenuItem forgotPasswordAction;
+    
+    private MenuItem submitAction;
+    
     public LoginScreen() {
         setScreenSubtype("login");
         
@@ -25,4 +30,37 @@ public class LoginScreen extends FormScreen {
         FormButton cancelButton = new FormButton("cancelButton", "Cancel", "Cancel");
         getForm().addFormElement(cancelButton);
     }
+    
+    public MenuItem getChangePasswordAction() {
+        return changePasswordAction;
+    }
+
+    public void setChangePasswordAction(MenuItem changePasswordAction) {
+        this.changePasswordAction = changePasswordAction;
+    }
+
+    public MenuItem getForgotPasswordAction() {
+        return forgotPasswordAction;
+    }
+
+    public void setForgotPasswordAction(MenuItem forgotPasswordAction) {
+        this.forgotPasswordAction = forgotPasswordAction;
+    }
+
+    /**
+     * An alternate action that can be used if the OK button is not desired.
+     * @return The action to be used in place of the 'OK' button.
+     */
+    public MenuItem getSubmitAction() {
+        return submitAction;
+    }
+
+    /**
+     * Sets a new action that can be used in place of the OK button.
+     * @param submitAction The action to replace the function of the OK button.
+     */
+    public void setSubmitAction(MenuItem submitAction) {
+        this.submitAction = submitAction;
+    }
+    
 }

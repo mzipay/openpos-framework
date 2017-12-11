@@ -23,7 +23,18 @@ public class Form implements Serializable {
     public void addFormElement(IFormElement formElement) {
         formElements.add(formElement);
     }
+
+    public void removeFormElement(IFormElement formElement) {
+        formElements.remove(formElement);
+    }
     
+    public void removeFormElement(String elementId) {
+        IFormElement elementToRemove = this.getFormElement(elementId);
+        if (null != elementToRemove) {
+            formElements.remove(elementToRemove);
+        }
+    }
+        
     public IFormElement getFormElement(String elementId) {
         return formElements.stream().filter(f->elementId.equals(f.getId())).findFirst().orElse(null);
     }
