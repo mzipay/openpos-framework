@@ -4,4 +4,4 @@
   </button>
   <input #box class="prompt-input-scan-something" ngClass.xs="promt-input-scan-something-xs" 
     (keyup.enter)="onEnter(box.value)" [(ngModel)]="responseText" (keydown)="onBarcodeKeydown($event)" (paste)="onBarcodePaste($event)"
-    placeholder="{{placeholderText}}" type="number">
+    placeholder="{{placeholderText}}">
