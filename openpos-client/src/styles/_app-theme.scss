@@ -77,7 +77,6 @@
 
     .prompt-input {
         font-size:48px;
-    //  height:20px;
         margin:0;
         padding-left: 63px;
         padding-top: 10px;
@@ -88,7 +87,7 @@
 
     .prompt-input-xs {
         font-size:32px;
-        padding-left:20px;
+        padding-left:30px;
         width: calc(100% - 40px)
     }
 
@@ -140,7 +139,7 @@
 
     .prompt-input-container {
         position:relative;
-        padding:0;
+        padding:20px;
         margin:0;
     }
 
