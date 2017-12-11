@@ -23,6 +23,7 @@ export class DeviceService {
   }
 
   public scan() {
+    console.log('request to scan was made for: ' + this.session.screen.scanType);
     if (this.session.screen.scanType && this.session.screen.scanType === 'CORDOVA_CAMERA') {
       this.cordovaCameraScan();
     }

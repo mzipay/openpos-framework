@@ -21,6 +21,7 @@
 package org.jumpmind.pos.core.screen;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class MenuItem implements IUIAction, Serializable {
 
@@ -30,6 +31,7 @@ public class MenuItem implements IUIAction, Serializable {
     private String title;
     private String icon;
     private boolean enabled = true;
+    private List<MenuItem> children;
     
     public MenuItem() {
     }
@@ -90,6 +92,14 @@ public class MenuItem implements IUIAction, Serializable {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+    
+    public void setChildren(List<MenuItem> children) {
+        this.children = children;
+    }
+    
+    public List<MenuItem> getChildren() {
+        return children;
     }
 
 }
