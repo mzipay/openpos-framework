@@ -1,20 +1,17 @@
 <div class="page-content"  fxLayout="row" fxLayoutAlign="start stretch">
-        <div class="sale-trans-panel-container" fxFlex>
-            <div class="containerX sub-totals-outer-container" fxLayout="row" fxLayoutAlign="center center">
-                <div fxFlex style="padding:12px;">
-                    <mat-card class="tendering-totals-container" style="position:relative;">
-                        <mat-card-title class="subtotals-label">
+        <div class="sale-trans-panel-container" fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+            <div fxLayout="row" fxLayoutAlign="center stretch"  fxLayoutGap="16px">
+                    <mat-card fxFlex class="page-content-card text-center">
+                        <mat-card-title ngClass="text-muted text-sm" ngClass="text-xs">
                                 Balance Due
                         </mat-card-title>
 
-                        <mat-card-content class="subtotals-amount" [ngClass]="{'subtotals-amount-dimmed':tenderItems.length == 0}">
+                        <mat-card-content ngClass="text-muted text-lg" ngClass.xs="text-md">
                                 <span class="super-currency-symbol">$</span>{{balanceDue}}
                         </mat-card-content>
                     </mat-card>
-                </div>
 
-                <div fxFlex style="padding:12px;">
-                    <mat-card class="tendering-totals-container" style="position:relative;">
+                    <mat-card fxFlex class="page-content-card text-center">
                         <mat-card-content>
                             <mat-form-field class="tendering-amount-field">
                                 <input matInput #field="ngModel" class="tendering-amount-input" (keyup.enter)="onEnterTender($event)" 
@@ -34,11 +31,10 @@
                             </mat-form-field>
                         </mat-card-content>
                     </mat-card>
-                 </div>
                         
             </div>
     
-            <mat-card class="sale-transaction-container">
+            <mat-card fxFlex class="sale-transaction-container">
                 <mat-card-title>
                     <mat-toolbar color="accent">
                         {{text}}
