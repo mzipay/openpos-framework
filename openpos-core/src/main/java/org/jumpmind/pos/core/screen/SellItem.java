@@ -64,7 +64,7 @@ public class SellItem implements IItem, Serializable {
     
     @Override
     public String getSubtitle() {
-        String subTitle = String.format("%s %s@%s", this.getID(), this.getQuantity(), this.getSellingPrice());
+        String subTitle = String.format("SKU: %s %s@%s", this.getID(), this.getQuantity(), this.getSellingPrice());
         return subTitle;
     }
     
