@@ -22,6 +22,8 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
     private previousScreenSequenceNumber: number;
 
+    private previousScreenName: string;
+
     private snackBarRef: MatSnackBarRef<SimpleSnackBar>;
 
     private needsPersonalization: boolean;
@@ -90,26 +92,31 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
         }
 
         let screen: IScreen = null;
-        if (this.needsPersonalization || (this.session.screen &&
-            ((this.session.screen.sequenceNumber !== this.previousScreenSequenceNumber && this.session.screen.refreshAlways)
-                || this.session.screen.type !== this.previousScreenType))) {
+        if (this.needsPersonalization ||
+             (this.session.screen &&
+               (  (this.session.screen.sequenceNumber !== this.previousScreenSequenceNumber && this.session.screen.refreshAlways)
+                  || this.session.screen.type !== this.previousScreenType
+                  || this.session.screen.name !== this.previousScreenName
+               )
+             ) ) {
 
             let screenType: string = null;
-            let screenSubtype: string = null;
             let sequenceNumber: number = -1;
+            let screenName: string = null;
             if (this.session.screen && this.session.screen.type) {
                 console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
                 screenType = this.session.screen.type;
-                screenSubtype = this.session.screen.screenSubtype;
                 sequenceNumber = this.session.screen.sequenceNumber;
+                screenName = this.session.screen.name;
             } else {
                 screenType = 'Personalization';
             }
-            const componentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(screenType, screenSubtype);
+            const componentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(screenType);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
             screen = viewContainerRef.createComponent(componentFactory).instance;
             this.previousScreenType = screenType;
+            this.previousScreenName = screenName;
             this.overlayContainer.getContainerElement().classList.add(this.getTheme());
             screen.show(this.session, this);
             this.previousScreenSequenceNumber = sequenceNumber;
