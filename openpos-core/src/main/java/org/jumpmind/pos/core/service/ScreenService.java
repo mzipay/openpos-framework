@@ -10,7 +10,6 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
-import org.jumpmind.pos.core.model.FieldElementType;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
 import org.jumpmind.pos.core.model.IFormElement;
@@ -134,7 +133,8 @@ public class ScreenService implements IScreenService {
         Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
-            if (lastScreen != null && lastScreen.getType() != null && lastScreen.getScreenType() == ScreenType.Form) {
+            if (lastScreen != null && lastScreen.getType() != null && 
+                    (lastScreen.getScreenType() == ScreenType.Form || lastScreen instanceof FormScreen)) {
                 Form form = mapper.convertValue(action.getData(), Form.class);
                 if (form != null) { // A form that has display only fields won't
                                     // have any data

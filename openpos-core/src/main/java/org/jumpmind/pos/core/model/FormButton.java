@@ -9,6 +9,7 @@ public class FormButton implements IFormElement, Serializable {
     private String label;
     private String buttonAction;
     private String id;
+    private String icon;
     private boolean submitButton = false;
 
     public FormButton() {
@@ -64,4 +65,13 @@ public class FormButton implements IFormElement, Serializable {
         this.submitButton = submitButton;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    
 }

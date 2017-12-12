@@ -13,6 +13,7 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 
   public form: IForm;
   private lastSequenceNum: number;
+  formButtons: IFormElement[];
 
   constructor(public session: SessionService) {
   }
@@ -29,6 +30,7 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 
   ngOnInit(): void {
     this.form = this.session.screen.form;
+    this.formButtons = this.session.screen.form.formElements.filter((e) => e.elementType === 'Button');
   }
 
   ngAfterViewInit(): void {
@@ -49,6 +51,11 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
   onItemAction(menuItem: IMenuItem, $event): void {
     this.session.response = this.form;
     this.session.onAction(menuItem.action);
+  }
+
+  onButtonAction(action: string) {
+    this.session.response = this.form;
+    this.session.onAction(action);
   }
 
   onComboBoxSelectionChange(formElement: IFormElement, event: Event): void {

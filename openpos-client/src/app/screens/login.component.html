@@ -12,8 +12,8 @@
             </mat-form-field>
         </mat-card-content> 
         <div *ngIf="changePasswordAction || forgotPasswordAction" fxLayoutAlign="center">
-            <button *ngIf="changePasswordAction" mat-button color="primary" (click)="onChangePasswordAction()">{{changePasswordAction.title}}</button>
-            <button *ngIf="forgotPasswordAction" mat-button color="primary" (click)="onForgotPasswordAction()">{{forgotPasswordAction.title}}</button>
+            <button *ngIf="changePasswordAction" mat-button color="primary" (click)="onChangePasswordAction()" [disabled]="! changePasswordAction.enabled">{{changePasswordAction.title}}</button>
+            <button *ngIf="forgotPasswordAction" mat-button color="primary" (click)="onForgotPasswordAction()" [disabled]="! forgotPasswordAction.enabled">{{forgotPasswordAction.title}}</button>
         </div>
         <mat-card-actions *ngIf="hasSubmitAction(); else actionsElseBlock" align="end">
             <!-- TODO: handle case with text and no Icon -->
