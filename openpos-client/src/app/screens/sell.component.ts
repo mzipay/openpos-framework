@@ -2,11 +2,11 @@ import { DeviceService } from './../services/device.service';
 import { ISellItem } from '../common/isellitem';
 import { IScreen } from '../common/iscreen';
 import { IMenuItem } from '../common/imenuitem';
-import {Component, ViewChild, AfterViewInit, DoCheck, OnInit} from '@angular/core';
-import {SessionService} from '../services/session.service';
+import { Component, ViewChild, AfterViewInit, DoCheck, OnInit} from '@angular/core';
+import { SessionService } from '../services/session.service';
 import { AbstractApp } from './abstract-app';
 import { ScanSomethingComponent } from '../common/controls/scan-something/scan-something.component';
-
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 @Component({
   selector: 'app-sell',
   templateUrl: './sell.component.html',
@@ -15,19 +15,41 @@ import { ScanSomethingComponent } from '../common/controls/scan-something/scan-s
 export class SellComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 
   @ViewChild('box') vc;
-
+  @ViewChild('drawer') drawer;
   initialized = false;
   scanInputCallback: Function;
 
   public items: ISellItem[];
+  public isMobile: boolean;
+  public isWeb: boolean;
 
-  constructor(public session: SessionService, devices: DeviceService) {
+  constructor(public session: SessionService, devices: DeviceService, breakpointObserver: BreakpointObserver) {
+    this.isWeb = false;
+      breakpointObserver.observe([
+        Breakpoints.Handset
+      ]).subscribe(result => {
+          this.isMobile = result.matches;
+          if (this.drawer) {
+            if (this.isMobile) {
+              this.drawer.close();
+            }
+          }
+      });
 
-  }
+      breakpointObserver.observe([
+        Breakpoints.Web
+      ]).subscribe(result => {
+        this.isWeb = result.matches;
+          if (result.matches) {
+              this.drawer.open();
+          }
+      });
+    }
 
   public ngOnInit(): void {
     this.scanInputCallback = this.onScanInputEnter.bind(this);
   }
+
 
   show(session: SessionService, app: AbstractApp) {
   }

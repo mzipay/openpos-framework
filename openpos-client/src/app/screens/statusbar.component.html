@@ -2,56 +2,25 @@
 	<div fxFill fxLayout="row" fxLayoutAlign="space-between ">
 		<div fxLayout="row" fxLayoutAlign=" center">
 
-			<button *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled" mat-icon-button (click)="session.onAction(session.screen.backButton.action)">
-				<mat-icon class="material-icons">arrow_back</mat-icon>
-			</button>
-
-			<ng-container *ngIf="session.screen && session.screen.workstation">
-				<ng-container *ngIf="session.screen && session.screen.storeStatus && session.screen.storeStatus.enabled">
-					<div fxHide.xs>
-						<mat-icon *ngIf="session.screen.storeStatus.title === 'Open'" class="material-icons statusbar-icon">location_on</mat-icon>
-					</div>
-					<div fxHide.xs>
-						<mat-icon *ngIf="session.screen.storeStatus.title === 'Open'" class="material-icons" style="width:0px;position:relative;left: -28px;top:4px;color:#18b220; z-index: 0;">fiber_manual_record</mat-icon>
-					</div>
-					<div fxHide.xs>
-						<mat-icon *ngIf="session.screen.storeStatus.title !== 'Open'" class="material-icons statusbar-icon statusbar-icon-off">location_off</mat-icon>
-					</div>
-					<div fxHide.xs>
-						<p class="statusbar-text">Store #{{session.screen.workstation.storeId}}</p>
-					</div>
-				</ng-container>
-
-				<div style="width:10px"></div>
-
-				<ng-container *ngIf="session.screen && session.screen.registerStatus && session.screen.registerStatus.enabled">
-					<div fxHide.xs>
-						<mat-icon *ngIf="session.screen.registerStatus.title === 'Open'" class="material-icons statusbar-icon">location_on</mat-icon>
-					</div>
-					<div fxHide.xs>
-						<mat-icon *ngIf="session.screen.registerStatus.title === 'Open'" class="material-icons" style="width:0px;position:relative;left: -28px;top:4px;color:#18b220; z-index: 0;">fiber_manual_record</mat-icon>
-					</div>
-					<div fxHide.xs>
-						<mat-icon *ngIf="session.screen.registerStatus.title !== 'Open'" class="material-icons statusbar-icon statusbar-icon-off">location_off</mat-icon>
-					</div>
-					<div fxHide.xs>
-						<p class="statusbar-text">Register #{{session.screen.workstation.workstationId}}</p>
-					</div>
-
-				</ng-container>
+			<ng-container *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled" >
+				<button mat-button (click)="session.onAction(session.screen.backButton.action)">
+					<mat-icon class="material-icons">arrow_back</mat-icon>
+					<span>Back</span>
+				</button>
+				<span>&nbsp;|&nbsp;</span>
 			</ng-container>
 
-			<div fxHide.xs>
-			    <mat-icon *ngIf="session.screen && session.screen.transaction && session.screen.transaction.transactionNumber" class="material-icons statusbar-icon">receipt</mat-icon>
-			</div>			
-			<p *ngIf="session.screen && session.screen.transaction && session.screen.transaction.transactionNumber" class="statusbar-text" [style.xs]="{'font-size': '10px'}">Transaction #{{session.screen.transaction.transactionNumber}}</p>
+			<mat-icon>payment</mat-icon>
+			<span class="text-sm">&nbsp;{{session.screen.type}}</span>
 		</div>
 
 		<div fxLayout="row"  fxLayoutAlign=" center">
 			<div *ngIf="session.screen && session.screen.operatorName" fxLayout="row" fxLayoutAlign=" center">
 				<mat-icon class="material-icons">lock_open</mat-icon>
-				<p class="statusbar-text" [style.xs]="{'font-size': '10px'}">Signed in as
+				<p class="statusbar-text" [style.xs]="{'font-size': '12px'}">
 					<span style="font-weight: bold">{{session.screen.operatorName}}</span>
+					on Register
+					<span style="font-weight: bold">#{{session.screen.workstation.workstationId}}</span>
 				</p>
 			</div>
 			<ng-container *ngIf="session.screen && session.screen.menuItems && session.screen.menuItems.length > 0 && session.screen.type != 'Home'">

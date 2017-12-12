@@ -87,6 +87,7 @@ import { FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DeviceService } from './services/device.service';
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
+import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
 
 @NgModule({
   entryComponents: [
@@ -235,7 +236,9 @@ import { ScanSomethingComponent } from './common/controls/scan-something/scan-so
       provide: LocationStrategy,
       useClass: PathLocationStrategy
     },
-    DatePipe
+    DatePipe,
+    BreakpointObserver,
+    MediaMatcher
   ],
   bootstrap: [AppComponent]
 })
