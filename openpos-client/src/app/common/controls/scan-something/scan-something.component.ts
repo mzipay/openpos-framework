@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DeviceService } from '../../../services/device.service';
 
 @Component({
   selector: 'app-scan-something',
@@ -11,7 +12,7 @@ export class ScanSomethingComponent implements OnInit {
   @Input() responseText: string;
   @Input() placeholderText: string;
 
-  constructor() { }
+  constructor(public devices: DeviceService) { }
 
   ngOnInit() {
   }

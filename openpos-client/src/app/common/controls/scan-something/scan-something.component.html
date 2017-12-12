@@ -1,5 +1,5 @@
 <div ngClass="outer-container" fxFlexLayout="row stretch" >
-  <button fxFlex="0 0 auto" mat-button color="primary-inverse" ngClass=" text-md" ngClass.xs="text-sm">
+  <button fxFlex="0 0 auto" mat-button color="primary-inverse" ngClass=" text-md" ngClass.xs="text-sm" (click)="devices.scan()">
       <span>Scan</span>
       <mat-icon svgIcon="barcode"></mat-icon>
     </button>

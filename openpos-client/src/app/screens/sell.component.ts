@@ -70,7 +70,9 @@ export class SellComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
         this.session.screen.responseText = null;
         scanInput.responseText = null;
         this.session.onAction('Next');
-        $event.target.disabled = true;
+        if ($event.target && $event.target.disabled) {
+            $event.target.disabled = true;
+        }
     }
   }
 
