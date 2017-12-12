@@ -50,22 +50,30 @@ import { IMenuItem } from '../common/imenuitem';
         }
     }
 
-    onSubmitAction() {
+    onEnterPressed(): void {
+        if (this.hasSubmitAction()) {
+            this.onSubmitAction();
+        } else {
+            this.onOkButton();
+        }
+    }
+
+    onSubmitAction(): void {
         this.session.response = this.form;
         this.session.onAction(this.submitAction.action);
     }
 
-    onOkButton() {
+    onOkButton(): void {
         this.session.response = this.form;
         this.session.onAction(this.okButton.buttonAction);
     }
 
-    onChangePasswordAction() {
+    onChangePasswordAction(): void {
         this.session.response = this.form;
         this.session.onAction(this.changePasswordAction.action);
     }
 
-    onForgotPasswordAction() {
+    onForgotPasswordAction(): void {
         this.session.response = this.form;
         this.session.onAction(this.forgotPasswordAction.action);
     }
