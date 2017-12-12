@@ -4,7 +4,7 @@ import { IMenuItem } from '../common/imenuitem';
 // import {MdButtonModule, MdCheckboxModule} from '@angular/material';
 import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { SessionService } from '../services/session.service';
-import { AbstractApp } from './abstract-app';
+import { AbstractApp } from '../common/abstract-app';
 
 @Component({
   selector: 'app-embedded-web-page',

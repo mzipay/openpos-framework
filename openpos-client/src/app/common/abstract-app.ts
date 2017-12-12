@@ -12,7 +12,9 @@ import { StatusBarComponent } from '../screens/statusbar.component';
 import { FocusDirective } from '../common/focus.directive';
 import { Observable } from 'rxjs/Observable';
 import { MatDialog, MatDialogRef, MatIconRegistry, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
-import {OverlayContainer} from '@angular/cdk/overlay';
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { TemplateDirective } from './template.directive';
+import { AbstractTemplate } from './abstract-template';
 
 export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
@@ -28,7 +30,7 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
     private needsPersonalization: boolean;
 
-    @ViewChild(ScreenDirective) host: ScreenDirective;
+    @ViewChild(TemplateDirective) host: TemplateDirective;
 
     constructor(public screenService: ScreenService,
         public session: SessionService,
@@ -92,32 +94,37 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
         }
 
         let screen: IScreen = null;
+        let template: AbstractTemplate = null;
         if (this.needsPersonalization ||
-             (this.session.screen &&
-               (  (this.session.screen.sequenceNumber !== this.previousScreenSequenceNumber && this.session.screen.refreshAlways)
-                  || this.session.screen.type !== this.previousScreenType
-                  || this.session.screen.name !== this.previousScreenName
-               )
-             ) ) {
+            (this.session.screen &&
+                ((this.session.screen.sequenceNumber !== this.previousScreenSequenceNumber && this.session.screen.refreshAlways)
+                    || this.session.screen.type !== this.previousScreenType
+                    || this.session.screen.name !== this.previousScreenName
+                )
+            )) {
 
+            let templateName: string = null;
             let screenType: string = null;
             let sequenceNumber: number = -1;
             let screenName: string = null;
             if (this.session.screen && this.session.screen.type) {
                 console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
+                templateName = this.session.screen.template;
                 screenType = this.session.screen.type;
                 sequenceNumber = this.session.screen.sequenceNumber;
                 screenName = this.session.screen.name;
             } else {
                 screenType = 'Personalization';
             }
-            const componentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(screenType);
+            const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
-            screen = viewContainerRef.createComponent(componentFactory).instance;
+            template = viewContainerRef.createComponent(templateComponentFactory).instance as AbstractTemplate;
             this.previousScreenType = screenType;
             this.previousScreenName = screenName;
             this.overlayContainer.getContainerElement().classList.add(this.getTheme());
+            screen = template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
+            template.show(this.session, this);
             screen.show(this.session, this);
             this.previousScreenSequenceNumber = sequenceNumber;
             this.needsPersonalization = false;

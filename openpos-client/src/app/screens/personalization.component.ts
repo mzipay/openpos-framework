@@ -6,7 +6,7 @@ import { MatSelectChange } from '@angular/material';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { AbstractApp } from './abstract-app';
+import { AbstractApp } from '../common/abstract-app';
 
 @Component({
     selector: 'app-personalization',

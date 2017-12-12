@@ -1,9 +1,9 @@
+import { BlankComponent } from '../templates/blank/blank.component';
 import { LoginComponent } from './../screens/login.component';
 import { PersonalizationComponent } from '../screens/personalization.component';
 import { WarrantyCoverageComponent } from '../screens/warranty-coverage.component';
 import { SaleRetrievalComponent } from '../screens/sale-retrieval.component';
 import { BasicItemSearchComponent } from '../screens/basic-item-search.component';
-import { CartComponent } from '../kiosk/cart.component';
 import { EmbeddedWebPageComponent } from '../screens/embedded-web-page.component';
 import { PromptComponent } from '../screens/prompt.component';
 import { SellComponent } from '../screens/sell.component';
@@ -35,7 +35,6 @@ export class ScreenService {
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {
     // To make a screen available add it here and in entryComponents in the app.module.ts
     this.screens.set('BasicItemSearch', BasicItemSearchComponent);
-    this.screens.set('Cart', CartComponent);
     this.screens.set('ChooseOptions', ChooseOptionsComponent);
     this.screens.set('EmbeddedWebPage', EmbeddedWebPageComponent);
     this.screens.set('Form', FormComponent);
@@ -53,6 +52,7 @@ export class ScreenService {
     this.screens.set('Tendering', TenderingComponent);
     this.screens.set('WarrantyCoverage', WarrantyCoverageComponent);
     this.screens.set('Personalization', PersonalizationComponent);
+    this.screens.set('blank', BlankComponent);
   }
 
   public resolveScreen(type: string): ComponentFactory<IScreen> {

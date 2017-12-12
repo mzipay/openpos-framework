@@ -2,7 +2,7 @@ import { IScreen } from '../common/iscreen';
 import { Component, AfterViewInit, DoCheck, HostListener } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import 'signature_pad';
-import { AbstractApp } from './abstract-app';
+import { AbstractApp } from '../common/abstract-app';
 
 @Component({
   selector: 'app-signature-capture',

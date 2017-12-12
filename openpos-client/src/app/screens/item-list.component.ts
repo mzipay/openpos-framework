@@ -4,7 +4,7 @@ import { Component, OnInit, DoCheck } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { IScreen } from './../common/iscreen';
 import { IItem } from './../common/iitem';
-import { AbstractApp } from './abstract-app';
+import { AbstractApp } from '../common/abstract-app';
 
 @Component({
     selector: 'app-item-list',

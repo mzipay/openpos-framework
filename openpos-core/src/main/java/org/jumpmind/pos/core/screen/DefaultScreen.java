@@ -19,7 +19,7 @@ public class DefaultScreen implements Serializable {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private String name;
     private ScreenType type;
-    private MenuItem backButton;
+    private String template = "blank";    private MenuItem backButton;
     private Workstation workstation;
     private String operatorName;
     private MenuItem storeStatus;
@@ -66,6 +66,14 @@ public class DefaultScreen implements Serializable {
 
     public Object get(String name) {
         return additionalProperties.get(name);
+    }
+    
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+    
+    public String getTemplate() {
+        return template;
     }
 
     public void clearAdditionalProperties() {

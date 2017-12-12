@@ -4,7 +4,7 @@ import { IMenuItem } from '../common/imenuitem';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import {MediaChange, ObservableMedia} from '@angular/flex-layout';
-import { AbstractApp } from './abstract-app';
+import { AbstractApp } from '../common/abstract-app';
 
 @Component({
   selector: 'app-home',
