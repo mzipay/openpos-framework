@@ -109,7 +109,8 @@ import { TemplateDirective } from './common/template.directive';
     StaticTableComponent,
     SaleRetrievalComponent,
     TenderingComponent,
-    WarrantyCoverageComponent
+    WarrantyCoverageComponent,
+    BlankComponent
   ],
   declarations: [
     AppComponent,
