@@ -1,5 +1,5 @@
 import { ScreenService } from './../services/screen.service';
-import { AbstractApp } from '../screens/abstract-app';
+import { AbstractApp } from '../common/abstract-app';
 import { IMenuItem } from '../common/imenuitem';
 import { Component, DoCheck, ViewChild } from '@angular/core';
 import { SessionService } from '../services/session.service';

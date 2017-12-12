@@ -3,7 +3,6 @@ import { WarrantyCoverageComponent } from './screens/warranty-coverage.component
 import { SaleRetrievalComponent } from './screens/sale-retrieval.component';
 import { LoaderService } from './common/loader/loader.service';
 import { LoaderComponent } from './common/loader/loader.component';
-import { CartComponent } from './kiosk/cart.component';
 import { SafePipe } from './common/safe.pipe';
 import { EmbeddedWebPageComponent } from './screens/embedded-web-page.component';
 import { ScreenService } from './services/screen.service';
@@ -16,11 +15,10 @@ import { StompConfig, StompService } from '@stomp/ng2-stompjs';
 import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
 import { AppComponent } from './app.component';
 import { PosComponent } from './pos/pos.component';
-import { KioskComponent } from './kiosk/kiosk.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SessionService } from './services/session.service';
 import { IconService } from './services/icon.service';
-import { AbstractApp } from './screens/abstract-app';
+import { AbstractApp } from './common/abstract-app';
 import { PromptComponent } from './screens/prompt.component';
 import { IconComponent } from './common/controls/icon.component';
 import { ProductListComponent } from './common/controls/product-list.component';
@@ -88,6 +86,7 @@ import { HttpClient } from '@angular/common/http';
 import { DeviceService } from './services/device.service';
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
 import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
+import { BlankComponent } from './templates/blank.component';
 
 @NgModule({
   entryComponents: [
@@ -115,8 +114,6 @@ import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/lay
   declarations: [
     AppComponent,
     PosComponent,
-    KioskComponent,
-    CartComponent,
     DialogComponent,
     IconComponent,
     ProductListComponent,
@@ -144,7 +141,8 @@ import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/lay
     SafePipe,
     TenderingComponent,
     WarrantyCoverageComponent,
-    ScanSomethingComponent
+    ScanSomethingComponent,
+    BlankComponent
   ],
   imports: [
     BrowserModule,
