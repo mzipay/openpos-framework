@@ -15,7 +15,7 @@ public class LoginScreen extends FormScreen {
     private MenuItem submitAction;
     
     public LoginScreen() {
-        setScreenSubtype("login");
+        setType(ScreenType.Login);
         
         FormField userIdField = new FormField("userId", null, FieldElementType.Input, FieldInputType.AlphanumericText, true, "");
         userIdField.setPlaceholder("User ID");

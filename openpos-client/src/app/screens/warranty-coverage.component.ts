@@ -4,7 +4,7 @@ import { IScreen } from '../common/iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { MatSelectionList, MatListOption } from '@angular/material';
-import { AbstractApp } from './abstract-app';
+import { AbstractApp } from '../common/abstract-app';
 
 @Component({
   selector: 'app-warranty-coverage',

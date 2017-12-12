@@ -1,4 +1,4 @@
-import { BlankComponent } from '../templates/blank.component';
+import { BlankComponent } from '../templates/blank/blank.component';
 import { LoginComponent } from './../screens/login.component';
 import { PersonalizationComponent } from '../screens/personalization.component';
 import { WarrantyCoverageComponent } from '../screens/warranty-coverage.component';
@@ -38,7 +38,7 @@ export class ScreenService {
     this.screens.set('ChooseOptions', ChooseOptionsComponent);
     this.screens.set('EmbeddedWebPage', EmbeddedWebPageComponent);
     this.screens.set('Form', FormComponent);
-    this.screens.set('Form:login', LoginComponent);
+    this.screens.set('Login', LoginComponent);
     this.screens.set('Home', HomeComponent);
     this.screens.set('ItemList', ItemListComponent);
     this.screens.set('PaymentStatus', PaymentStatusComponent);
@@ -55,9 +55,8 @@ export class ScreenService {
     this.screens.set('blank', BlankComponent);
   }
 
-  public resolveScreen(type: string, subtype?: string): ComponentFactory<IScreen> {
-    const screenTypeKey = type + (subtype ? `:${subtype}` : '');
-    const screenType: Type<IScreen> = this.screens.get(screenTypeKey);
+  public resolveScreen(type: string): ComponentFactory<IScreen> {
+    const screenType: Type<IScreen> = this.screens.get(type);
     if (screenType) {
       return this.componentFactoryResolver.resolveComponentFactory(screenType);
     } else {

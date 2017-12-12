@@ -86,12 +86,12 @@ import { HttpClient } from '@angular/common/http';
 import { DeviceService } from './services/device.service';
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
 import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
-import { BlankComponent } from './templates/blank.component';
+import { BlankComponent } from './templates/blank/blank.component';
+import { TemplateDirective } from './common/template.directive';
 
 @NgModule({
   entryComponents: [
     BasicItemSearchComponent,
-    CartComponent,
     ChooseOptionsComponent,
     DialogComponent,
     EmbeddedWebPageComponent,
@@ -142,7 +142,8 @@ import { BlankComponent } from './templates/blank.component';
     TenderingComponent,
     WarrantyCoverageComponent,
     ScanSomethingComponent,
-    BlankComponent
+    BlankComponent,
+    TemplateDirective
   ],
   imports: [
     BrowserModule,

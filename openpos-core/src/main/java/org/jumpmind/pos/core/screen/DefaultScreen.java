@@ -19,9 +19,7 @@ public class DefaultScreen implements Serializable {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private String name;
     private ScreenType type;
-    private String template = "blank";
-    private String screenSubtype;
-    private MenuItem backButton;
+    private String template = "blank";    private MenuItem backButton;
     private Workstation workstation;
     private String operatorName;
     private MenuItem storeStatus;
@@ -241,14 +239,6 @@ public class DefaultScreen implements Serializable {
         this.theme = theme;
     }
 
-    public String getScreenSubtype() {
-        return screenSubtype;
-    }
-
-    public void setScreenSubtype(String screenSubtype) {
-        this.screenSubtype = screenSubtype;
-    }
-    
     public void addLocalMenuItem(MenuItem menuItem) {
         this.localMenuItems.add(menuItem);
     }

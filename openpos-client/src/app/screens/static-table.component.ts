@@ -5,7 +5,7 @@ import { SelectionMode } from './../common/selectionmode';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { AbstractApp } from './abstract-app';
+import { AbstractApp } from '../common/abstract-app';
 
 @Component({
     selector: 'app-static-table',
