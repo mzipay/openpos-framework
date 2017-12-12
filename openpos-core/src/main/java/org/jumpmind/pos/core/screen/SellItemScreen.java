@@ -22,6 +22,8 @@ public class SellItemScreen extends PromptScreen {
 
     private Transaction transaction = new Transaction();
     private Customer customer;
+    
+    private List<MenuItem> transactionMenuItems = new ArrayList<>();
 
     public SellItemScreen() {
         this.setType(ScreenType.Sell);
@@ -114,5 +116,17 @@ public class SellItemScreen extends PromptScreen {
     
     public String getScanActionName() {
         return scanActionName;
+    }
+    
+    public void addTransactionMenuItem(MenuItem menuItem) {
+        this.transactionMenuItems.add(menuItem);
+    }
+    
+    public void setTransactionMenuItems(List<MenuItem> transactionMenuItems) {
+        this.transactionMenuItems = transactionMenuItems;
+    }
+    
+    public List<MenuItem> getTransactionMenuItems() {
+        return transactionMenuItems;
     }
 }
