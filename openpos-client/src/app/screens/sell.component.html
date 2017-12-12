@@ -29,7 +29,7 @@
 		</mat-toolbar>
 
 		<mat-drawer-container fxFlex >
-			<mat-drawer #drawer position="end" [mode]="isMobile ? 'over' : 'side'" opened="isWeb" style="background-color: #eff0ef">
+			<mat-drawer #drawer position="end" [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile" style="background-color: #eff0ef">
 				<mat-nav-list>
 					<mat-list-item *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)">
 						<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>

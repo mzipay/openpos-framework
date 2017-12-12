@@ -21,28 +21,12 @@ export class SellComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 
   public items: ISellItem[];
   public isMobile: boolean;
-  public isWeb: boolean;
 
   constructor(public session: SessionService, devices: DeviceService, breakpointObserver: BreakpointObserver) {
-    this.isWeb = false;
       breakpointObserver.observe([
         Breakpoints.Handset
       ]).subscribe(result => {
           this.isMobile = result.matches;
-          if (this.drawer) {
-            if (this.isMobile) {
-              this.drawer.close();
-            }
-          }
-      });
-
-      breakpointObserver.observe([
-        Breakpoints.Web
-      ]).subscribe(result => {
-        this.isWeb = result.matches;
-          if (result.matches) {
-              this.drawer.open();
-          }
       });
     }
 
