@@ -227,6 +227,20 @@
         align-content: center;
     }
 
+    .login-card-content {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: space-around;
+        align-content: center;
+    }
+
+    .login-container-xs {
+        width: 100%;
+        height: 100%;
+        margin:0px;
+        padding:20px;
+    }
+    
     .statusbar-text {
         color: white;
         font-size: 12px;
