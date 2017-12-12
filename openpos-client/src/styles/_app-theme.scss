@@ -66,6 +66,11 @@
             overflow-y:auto
         }
     }
+
+    .scrollable{
+        overflow-y:auto;
+        height: 100%;
+    }
     .text-xs{
         font-size:12px;
     }
