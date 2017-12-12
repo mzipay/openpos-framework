@@ -1,7 +1,33 @@
-<mat-card>
-	<mat-card-content>
-		<div fxLayout="row" fxLayoutAlign="center center">
-			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
-		</div>
-	</mat-card-content>
-</mat-card>
+<div class="page-content" fxLayout="row" fxLayoutAlign="start stretch">
+	<div class="sale-trans-panel-container" fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+		
+		<mat-card fxFlex="0 0 auto" class="sale-trans-panel-title-bar" fxLayout="row" fxLayoutAlign="start center">
+					<span fxFlex></span>
+				<ng-container *ngIf="session.screen && session.screen.localMenuItems && session.screen.localMenuItems.length > 0">
+					<button mat-icon-button [matMenuTriggerFor]="menu">
+						<mat-icon>more_vert</mat-icon>
+					</button>
+			
+					<mat-menu #menu="matMenu">
+						<button mat-menu-item *ngFor="let m of session.screen.localMenuItems" (click)="doMenuItemAction(m)">
+							<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
+							<span [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>
+						</button>
+					</mat-menu>
+				</ng-container>
+		</mat-card>
+
+		<mat-card fxFlex="1 0 auto" class="sale-line-item-container" fxLayoutAlign="start">
+			<mat-card-content fxFlex="1 1 auto" style="margin-bottom:0px; overflow-y:scroll">
+				<div fxLayout="column" fxLayoutAlign="center center">
+					<app-icon iconName="credit_card" style="color:#c8c8c8" iconClass="mat-128"></app-icon>
+					<span style="font-size:18px">{{pinPadStatus}}</span>
+				</div>
+			</mat-card-content>
+		</mat-card>
+	</div>
+
+	<div class="sale-marketing-panel-container" fxFlex="40" fxHide.xs fxHide.sm>
+	</div>
+
+</div>
