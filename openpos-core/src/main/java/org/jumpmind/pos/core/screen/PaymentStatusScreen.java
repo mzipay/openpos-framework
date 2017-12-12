@@ -4,6 +4,16 @@ public class PaymentStatusScreen extends DefaultScreen {
 
     private static final long serialVersionUID = 1L;
     
+    private String pinPadStatus;
+    
+    public String getPinPadStatus() {
+        return pinPadStatus;
+    }
+
+    public void setPinPadStatus(String pinPadStatus) {
+        this.pinPadStatus = pinPadStatus;
+    }
+
     public PaymentStatusScreen() {
         setType(ScreenType.PaymentStatus);
     }
