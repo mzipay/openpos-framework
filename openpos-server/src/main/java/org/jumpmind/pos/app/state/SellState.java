@@ -13,7 +13,7 @@ public class SellState extends AbstractSecureState {
     }
 
     protected DefaultScreen buildScreen() {
-        SellItemScreen screen = new SellItemScreen();
+        DefaultScreen screen = new SellItemScreen();
         screen.setBackButton(new MenuItem("Back", "Back", true));
         return screen;
     }

@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DefaultScreen implements Serializable {
 
+    public enum ScanType { CAMERA_CORDOVA, NONE }
+
     private static final long serialVersionUID = 1L;
     public static final String TITLE_OPEN_STATUS = "Open";
     public static final String TITLE_CLOSED_STATUS = "Closed";
@@ -19,7 +21,8 @@ public class DefaultScreen implements Serializable {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private String name;
     private ScreenType type;
-    private String template = "blank";    private MenuItem backButton;
+    private String template = "blank";    
+    private MenuItem backButton;
     private Workstation workstation;
     private String operatorName;
     private MenuItem storeStatus;
@@ -29,8 +32,13 @@ public class DefaultScreen implements Serializable {
     private boolean refreshAlways = false;
     private String theme = "openpos-theme";
     
+    
     private List<MenuItem> menuItems = new ArrayList<>();
     private List<MenuItem> localMenuItems = new ArrayList<>();
+    
+    private boolean showScan = false;
+    private String scanActionName = "Scan";
+    private ScanType scanType = ScanType.NONE;
 
     public DefaultScreen() {
     }
@@ -249,5 +257,29 @@ public class DefaultScreen implements Serializable {
     
     public List<MenuItem> getLocalMenuItems() {
         return localMenuItems;
+    }
+
+    public ScanType getScanType() {
+        return scanType;
+    }
+
+    public void setScanType(ScanType scanType) {
+        this.scanType = scanType;
+    }
+
+    public void setScanActionName(String scanActionName) {
+        this.scanActionName = scanActionName;
+    }
+
+    public String getScanActionName() {
+        return scanActionName;
+    }
+    
+    public void setShowScan(boolean showScan) {
+        this.showScan = showScan;
+    }
+    
+    public boolean isShowScan() {
+        return showScan;
     }
 }
