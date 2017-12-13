@@ -1,3 +1,4 @@
+import { OptionsComponent } from './../screens/options/options.component';
 import { BlankComponent } from '../templates/blank/blank.component';
 import { LoginComponent } from './../screens/login.component';
 import { PersonalizationComponent } from '../screens/personalization.component';
@@ -53,9 +54,10 @@ export class ScreenService {
     this.screens.set('Tendering', TenderingComponent);
     this.screens.set('WarrantyCoverage', WarrantyCoverageComponent);
     this.screens.set('Personalization', PersonalizationComponent);
+    this.screens.set('Options', OptionsComponent);
 
     // Templates
-    this.screens.set('blank', BlankComponent);
+    this.screens.set('Blank', BlankComponent);
     this.screens.set('Sell', SellComponent);
   }
 

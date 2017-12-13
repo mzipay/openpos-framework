@@ -114,7 +114,7 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
                 sequenceNumber = this.session.screen.sequenceNumber;
                 screenName = this.session.screen.name;
             } else {
-                templateName = 'blank';
+                templateName = 'Blank';
                 screenType = 'Personalization';
             }
             const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName);
