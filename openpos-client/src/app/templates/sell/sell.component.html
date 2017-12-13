@@ -20,7 +20,7 @@
               {{session.screen.prompt}}
             </ng-container>
             <span fxFlex="1 1 auto"></span>
-            <span *ngIf="session.screen && session.screen.localMenuItems && session.screen.localMenuItems.length > 0">
+            <span *ngIf="session.screen && session.screen.localMenuItems">
               <button mat-icon-button (click)="drawer.toggle()">
                 <mat-icon>menu</mat-icon>
               </button>
