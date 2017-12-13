@@ -23,7 +23,6 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        screen.setName(headlessScreen.getSpecName());
     }
 
     public T build() {
