@@ -2,7 +2,7 @@
 	<div fxFill fxLayout="row" fxLayoutAlign="space-between ">
 		<div fxLayout="row" fxLayoutAlign=" center">
 
-			<ng-container *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled" >
+			<ng-container *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled">
 				<button mat-button (click)="session.onAction(session.screen.backButton.action)">
 					<mat-icon class="material-icons">arrow_back</mat-icon>
 					<span>Back</span>
@@ -14,23 +14,22 @@
 			<span class="text-sm">&nbsp;{{session.screen.name}}</span>
 		</div>
 
-		<div fxLayout="row"  fxLayoutAlign=" center">
+		<div fxLayout="row" fxLayoutAlign=" center">
 			<div *ngIf="session.screen && session.screen.operatorName" fxLayout="row" fxLayoutAlign=" center">
 				<mat-icon class="material-icons">lock_open</mat-icon>
 				<p class="text-sm">
 					<span style="font-weight: bold">{{session.screen.operatorName}}</span>
-					on Register
-					<span style="font-weight: bold">#{{session.screen.workstation.workstationId}}</span>
+					<span fxHide.xs>on Register</span>
+					<span style="font-weight: bold" fxHide.xs>#{{session.screen.workstation.workstationId}}</span>
 				</p>
 			</div>
 			<ng-container *ngIf="session.screen && session.screen.menuItems && session.screen.menuItems.length > 0 && session.screen.type != 'Home'">
 				<button mat-icon-button [matMenuTriggerFor]="menu">
 					<mat-icon>more_vert</mat-icon>
 				</button>
-		
+
 				<mat-menu #menu="matMenu">
-					<button mat-menu-item *ngFor="let m of session.screen.menuItems" (click)="doMenuItemAction(m)" 
-						[disabled]="!isMenuItemEnabled(m)">
+					<button mat-menu-item *ngFor="let m of session.screen.menuItems" (click)="doMenuItemAction(m)" [disabled]="!isMenuItemEnabled(m)">
 						<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
 						<span [ngClass]="{'accent-lighter': ! m.enabled}">{{m.title}}</span>
 					</button>
