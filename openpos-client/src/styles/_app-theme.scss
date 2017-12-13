@@ -2,572 +2,77 @@
 
 @mixin app-theme($theme) {
     
-    $app-highlight-color: mat-color(map-get($theme, primary));
-    $app-accent-color: mat-color(map-get($theme, accent));
-    $app-accent-color-lighter: mat-color(map-get($theme, accent), lighter);
-    $app-warn-color: mat-color(map-get($theme, warn));
+    $app-primary: mat-color(map-get($theme, primary));
+    $app-accent: mat-color(map-get($theme, accent));
+    $app-accent-lighter: mat-color(map-get($theme, accent), lighter);
+    $app-warn: mat-color(map-get($theme, warn));
 
     .warn {
-        color: $app-warn-color;
+        color: $app-warn;
     }
 
-    .md-toolbar {
-        z-index: 10;
+    .accent {
+        color: $app-accent;
     }
 
-    .mat-card.with-header {
-        padding: 0;
+    .accent-lighter {
+        color:$app-accent-lighter;
     }
 
-    .pad {
-        padding: $mat-card-default-margin;
-    }
-
-    .mat-card.with-header mat-card-content {
-        padding: 0 $mat-card-default-margin 0 $mat-card-default-margin;
-    }
-
-    .mat-card {
-        margin: $mat-card-default-margin;
-        z-index: 10;
-    }
-
-    mat-card.page-content-card{
-        font-size: 14px;
-        margin: 0px;
-        padding: 4px;
-        color: $app-accent-color;
-
-        mat-card-title{
-            padding:4px;
-            margin:0px;
-        }
-
-        mat-card-content{
-            padding:0px;
-            margin:0px;
-        }
-        mat-card-footer{
-            border-top: 1px solid lightgray;
-            padding:0px;
-            margin:0px;
-        }
+    .primary{
+        color:$app-primary;
     }
 
     mat-card.dark{
-        background-color: $app-accent-color;
+        background-color: $app-accent;
         color: white;
     }
 
-    mat-card.scrollable-content-card{
-        height: 100px;
-        mat-card-content{
-            margin-bottom:0px; 
-            overflow-y:auto
-        }
-    }
-
-    .scrollable{
-        overflow-y:auto;
-        height: 100%;
-    }
-    .text-xs{
-        font-size:12px;
-    }
-    
-    .text-sm{
-        font-size:18px;
-    }
-
-    .text-md{
-        font-size:24px;
-    }
-
-    .text-lg{
-        font-size:32px;
-    }
-
-    .text-xl{
-        font-size:48px;
-    }
-
-    .text-muted{
-        color:$app-accent-color-lighter;
-    }
-
-    .text-center{
-        text-align: center;
+    mat-card{
+        background-color: white;
+        color: $app-accent;
     }
 
     // Button Styles
     .mat-button.mat-primary-inverse{
         color:white;
-        background-color: $app-highlight-color;
+        background-color: $app-primary;
     }
 
     .mat-icon.mat-accent-lighter{
-        color:$app-accent-color-lighter;
-    }
-
-    // controls sizing of radio button column on static-table template
-    mat-cell.mat-cell.mat-column-_selection {
-        width: 30px;
-        flex: 0 0 30px;
-    }
-
-    // controls sizing of radio button column header on static-table template
-    mat-header-cell.mat-header-cell.mat-column-_selection {
-        width: 30px;
-        flex: 0 0 30px;
-    }
-
-    .toolbar-fill-remaining-space {
-        // This fills the remaining space, by using flexbox. 
-        // Every toolbar row uses a flexbox row layout.
-        flex: 1 1 auto;
-    }  
-
-     ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-        color:    #c8c8c8;
-        font-weight: lighter;
-    }
-
-    .content{
-        height : calc(100vh - 64px);     
-    }
-
-    .content-xs{
-        height : calc(100vh - 56px);
-        overflow-y: auto;
-    }
-
-    .prompt-input {
-        margin:0;
-        padding:15px;
-        width: calc(100% - 30px)
-    }
-
-    .prompt-input-xs {
-        margin:0;
-        padding:15px;
-        width: calc(100% - 30px)
+        color:$app-accent-lighter;
     }
 
     .prompt-icon-with-label {
-        color: $app-highlight-color;
+        color: $app-primary;
     }
 
     .prompt-text {
-        color: $app-accent-color-lighter;
+        color: $app-accent-lighter;
         font-size:60%;
     }
 
-    .date-prompt-input {
-        @extend .prompt-input;  
-        padding-bottom: 10px;
-    }
-
     .date-picker-toggle {
-        color: $app-highlight-color;
+        color: $app-primary;
     }
 
     .product-list-label {
-        color: $app-highlight-color;
+        color: $app-primary;
         font-size:14px;
-    }
-
-    .product-list-description {
-        font-size: 12px;
-    }
-
-    .item-list-condensed {
-        padding-top: 0px;
-        padding-bottom: 0px;
     }
 
     .main-menu-item {
         flex: 1 1 auto;
         height: 150px;
         width: 150px;
-        margin: 10px;
-        background-color: $app-highlight-color;
+        background-color: $app-primary;
     }
         
-    .main-menu-item-icon {
-        position: relative;
-        top: 30px;
-        color: white;
-    }
-        
-    .main-menu-item-text {
-        // position: relative;
-        top: 10px;
-        color: white;
-        zoom: 150%;
-        font-weight: normal;
-    }
-
-    .prompt-container {
-        width: 40%;
-        background-color:#f0f0f0;
-        padding: 10px;
-        margin: 0px;
-    }
-
-    .prompt-container-xs {
-        width: 100%;
-        height: 100%;
-        margin:0px;
-        padding:0px;
-    }
-
-    .prompt-card-content {
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-around;
-        align-content: center;
-    }
-
-    .login-card-content {
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: space-around;
-        align-content: center;
-    }
-
-    .login-container-xs {
-        width: 100%;
-        height: 100%;
-        margin:0px;
-        padding:20px;
-    }
-    
-    .statusbar-text {
-        color: white;
-        font-size: 12px;
-        padding-right: 20px;    
-    }
-
-    .statusbar-icon {
-        position: relative;
-        top: 6px;
-        font-size:30px;
-        z-index: 1;
-        padding-left: 10px;
-        padding-right: 7px;
-    }
-    .status-bar-logout-icon {
-        left: -30px;
-    }
-
-    .material-icons.mat-30 {
-        font-size: 30px;
-        height: 30px;
-        width: 30px;
-    }
-
-    .material-icons.mat-40 {
-        font-size: 40px;
-        height: 40px;
-        width: 40px;
-    }
-
-    .material-icons.mat-48 {
-        font-size: 48px;
-        height: 48px;
-        width: 48px;
-    }
-
-    .material-icons.mat-64 {
-        font-size: 64px;
-        height: 64px;
-        width: 64px;
-    }
-
-    .material-icons.mat-128 {
-        font-size: 128px;
-        height: 128px;
-        width: 128px;
-    }
-
-    .material-icons.mat-180{
-        font-size: 180px;
-        height: 180px;
-        width: 180px;
-    }
-
-    .sale-marketing-panel-container {
-        background-image: url(assets/marketing-image.png); 
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center; 
-    }
-
-    button.static-table-button.mat-raised-button {
-        margin: 5px;
-    }
-
-    .sale-trans-panel-container {
-        background-color: #eff0ef;
-        padding:14px;
-        box-shadow: 8px 10px 27px #000;
-        z-index: 1;
-    }
-
-    .cart-sub-totals-outer-container {
-        position: relative;
-        top: 4px;
-    }
-
-    .subtotals-container {
-        text-align: center;
-        margin:0px;
-        padding:4px;
-    }
-
-    .cart-subtotals-container {
-        text-align: center;
-        margin: 0px;
-        padding: 12px !important;
-    }
-
-    .tendering-totals-container {
-        text-align: center;
-        height: 55px;
-        margin: 0px;
-        padding: 10px !important;
-    }
-
-    .tendering-amount-field {
-        font-size: 16px;
-        width: 80%;
-    }
-
-    .tendering-amount-input {
-        text-align: right;
-    }
-
-    .tendering-amount-error {
-        font-size: 12px;
-    }
-
-    .subtotals-amount-dimmed {
-        color:    #c8c8c8;
-    }
-
-    .sale-line-item {
-        border-bottom: dashed 1px;
-        border-color: #eff0ef;
-        padding: 18px;
-    }
-
-    .sale-line-item-xs{
-        padding: 0px;
-    }
-
-    .sale-transaction-container {
-        height: 200px;
-        font-size: 14px;
-        margin: 0px;
-        padding: 0px;
-    }
-
-    .line-item-caret {
-        color: #c8c8c8;
-        // position: relative;
-        top: 12px;
-        position:absolute;
-        right:10px;    
-    }
-    .line-item-description {
-        width: 95%;
-        font-weight: bold;
-    }
-    .line-item-subtitle {
-        width: 95%;
-        color: #c8c8c8;
-    }
-
     .line-item-extended-amt {
         font-size: 1.2em;
-        color: $app-highlight-color;
+        color: $app-primary;
         margin-right:30px;
         text-align: right;
     }
 
-    .example-container {
-    width: 500px;
-    height: 300px;
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    }
-
-    .app-sidenav-content {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    }
-
-    .app-sidenav {
-    padding: 20px;
-    }
-
-    .serrated-edge {
-        position: relative;
-    }
-
-    .serrated-edge:before {
-        background:
-            linear-gradient(
-                45deg, transparent 33.333%,
-                white 33.333%, white 66.667%,
-                transparent 66.667%
-            ),
-            linear-gradient(
-                -45deg, transparent 33.333%,
-                white 33.333%, white 66.667%,
-                transparent 66.667%
-            );
-
-        background-size: 10px 20px;      
-            content: "";
-            display: block;
-            position: absolute;
-            top: -5px;
-            left: 0px;
-            width: 100%;
-            height: 10px;
-    }
-
-    .serrated-edge-bottom {
-        position: relative;
-    }
-
-    .serrated-edge-bottom:after {
-        background:
-            linear-gradient(
-                -45deg,
-                white 33.333%,
-                transparent 33.333%,
-                transparent 66.667%,
-                white 66.667%      
-            ),
-            linear-gradient(
-                45deg,
-                white 33.333%,
-                transparent 33.333%,
-                transparent 66.667%,
-                white 66.667%      
-            );
-        
-        background-size: 10px 20px;      
-        content: "";
-        display: block;
-        position: absolute;
-        bottom: -10px;
-        left: 0px;
-        width: 100%;
-        height: 10px;
-    }  
-
-    .choose-options-title {
-        color: #537889;  
-        font-size: 1.5em;
-    }
-    
-    .choose-options-item-dimmed {
-        color:    #c8c8c8;
-    }
-
-    .menu-item-dimmed {
-        color:    #c8c8c8;
-    }
-
-    .line-item-detail-title {
-        font-weight: bold;
-        text-transform: lowercase;
-        color: #537889;
-    }
-
-    .line-item-detail-header-container {
-        background-color: #eff0ef;   
-    }
-    .line-item-detail-title::first-letter {
-        text-transform: uppercase;
-    }
-
-    .line-item-detail-header {
-        background-color: white;
-        padding-left: 25px;
-        padding-right: 25px;
-        padding-top: 0px;
-        padding-bottom: 0px;
-        color: #537889;
-    }
-
-    .line-item-detail-image {
-        padding-right: 30px;
-        zoom: 50%;
-        width: 50%;
-        // width: 256px !important;
-        // height: 256px !important;
-    }
-
-    th {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    td {
-        padding: 10px;
-    }
-
-    .line-item-detail-actions {
-        text-align: right;
-    }
-
-    .mat-dialog-actions {
-        text-align: center;
-    }
-
-    .super-currency-symbol {
-        vertical-align: super;
-        font-size: 0.5em;
-        padding-right: 2px;
-    }
-
-    .mat-column-extendedAmount {
-        flex: 0, 0, 40px;
-    }
-
-    .cart-row {
-        height: 5em;
-    }
-
-    .signature-capture-canvas {
-        background-color: white;
-    }
-
-    #signature-actions.mat-card-actions {
-        margin-left: 0px;
-        margin-right: 0px;
-    }
-
-    .cart-header-stripe {
-        background-color: #432614;
-    // height: calc(100vh/7);
-        color: white;
-        font-family: 'Open Sans',"Helvetica Neue",sans-serif;
-        text-align: center;
-        width: 100%;
-        font-size: 40px;
-        padding-top:40px;
-        padding-bottom:40px;    
-    }
-
-    .cart-header-title {
-        font-family: 'Open Sans',"Helvetica Neue",sans-serif;
-        font-size:1.4em;
-        //color: #c8c8c8;
-    }
 }

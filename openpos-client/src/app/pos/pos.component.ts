@@ -12,7 +12,8 @@ import {OverlayContainer} from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-pos',
-  templateUrl: './pos.component.html'
+  templateUrl: './pos.component.html',
+  styleUrls: ['./pos.component.scss']
 })
 export class PosComponent extends AbstractApp implements DoCheck {
 

@@ -1,10 +1,7 @@
-<div *ngIf="session.screen.type==='PromptWithOptions'" class="page-content" 
-fxLayout="row" fxLayoutAlign="center center"> 
-    <mat-card class="prompt-container"
-    ngClass.xs="prompt-container-xs" 
-    [style.md]="{'width': '65%'}" 
-    [style.sm]="{'width': '75%'}">
-        <mat-card-content class="prompt-card-content">
+<div fxFlexFill *ngIf="session.screen.type==='PromptWithOptions'"
+fxLayout="column" fxLayoutAlign="center center"> 
+    <mat-card style.xl="width:30%" style.lg="width:40%" style.md="width:60%" style.sm="width:70%" style.xs="width:80%">
+        <mat-card-content>
             <app-prompt-input #promptInput [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType" [responseText]="session.screen.responseText"
                 [promptIcon]="session.screen.promptIcon" [onEnterCallback]="promptInputCallback" [hintText]="promptText"></app-prompt-input>
 
@@ -13,7 +10,7 @@ fxLayout="row" fxLayoutAlign="center center">
             <mat-nav-list>
                     <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
                     <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onAction(o.value)" style="border-color: black">
-                        <span *ngIf="!o.enabled; else elseBlock" class="choose-options-item-dimmed">{{o.displayValue}}</span>
+                        <span *ngIf="!o.enabled; else elseBlock" class="accent-lighter">{{o.displayValue}}</span>
                         <ng-template #elseBlock>{{o.displayValue}}</ng-template>
                         <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
                     </mat-list-item>

@@ -1,11 +1,7 @@
-<div *ngIf="session.screen.type==='Prompt' &&  session.screen.text" 
-	class="page-content" 
-	fxLayout="row" fxLayoutAlign="center center">
-	<mat-card class="prompt-container" 
-				ngClass.xs="prompt-container-xs" 
-				[style.md]="{'width': '65%'}" 
-				[style.sm]="{'width': '75%'}">
-		<mat-card-content class="prompt-card-content">
+<div fxFlexFill *ngIf="session.screen.type==='Prompt' &&  session.screen.text" 
+	fxLayout="column" fxLayoutAlign="center center">
+	<mat-card style.xl="width:30%" style.lg="width:40%" style.md="width:60%" style.sm="width:70%" style.xs="width:80%">
+		<mat-card-content>
 			<app-prompt-input #promptInput *ngIf="session.screen.editable" [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
 			[promptIcon]="session.screen.promptIcon" [onEnterCallback]="promptInputCallback" 
 			[responseText]="session.screen.responseText" [hintText]="session.screen.text"></app-prompt-input>

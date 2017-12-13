@@ -2,28 +2,28 @@
         <div class="sale-trans-panel-container" fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
             <div fxLayout="row" fxLayoutAlign="center stretch"  fxLayoutGap="16px">
                     <mat-card fxFlex class="page-content-card text-center">
-                        <mat-card-title ngClass="text-muted text-sm" ngClass="text-xs">
+                        <mat-card-title ngClass="accent-lighter text-sm" ngClass="text-xs">
                                 Balance Due
                         </mat-card-title>
 
-                        <mat-card-content ngClass="text-muted text-lg" ngClass.xs="text-md">
+                        <mat-card-content ngClass="accent-lighter text-lg" ngClass.xs="text-md">
                                 <span class="super-currency-symbol">$</span>{{balanceDue}}
                         </mat-card-content>
                     </mat-card>
 
                     <mat-card fxFlex class="page-content-card text-center">
                         <mat-card-content>
-                            <mat-form-field class="tendering-amount-field">
-                                <input matInput #field="ngModel" class="tendering-amount-input" (keyup.enter)="onEnterTender($event)" 
+                            <mat-form-field>
+                                <input matInput #field="ngModel" style="text-align:right" (keyup.enter)="onEnterTender($event)" 
                                   [(ngModel)]="tenderAmount.value" placeholder="{{tenderAmount.placeholder}}" [pattern]="tenderAmount.pattern" [required]="tenderAmount.required"
                                   [textMask]="{mask: numberMask}">
 
                                 <span matPrefix>$&nbsp;</span> <!-- TODO: localize symbol and errors -->
                                 <ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
-                                    <mat-error *ngIf="field.errors.required" class="tendering-amount-error">
+                                    <mat-error *ngIf="field.errors.required" class="text-sm">
                                         * Value is required.
                                     </mat-error>
-                                    <mat-error *ngIf="field.errors.pattern" class="tendering-amount-error">
+                                    <mat-error *ngIf="field.errors.pattern" class="text-sm">
                                         * Please enter a valid amount.
                                     </mat-error>
                                 </ng-container>

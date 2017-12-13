@@ -13,35 +13,35 @@
 		
 		<div *ngIf="session.screen.transaction.transactionNumber"fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
 			<mat-card fxFlex class="page-content-card text-center">
-				<mat-card-title ngClass="text-muted text-sm" ngClass="text-xs">
+				<mat-card-title ngClass="accent-lighter text-sm" ngClass="text-xs">
 						Discounts
 				</mat-card-title>
 				<mat-card-content>
-					<p ngClass="text-muted text-lg" ngClass.xs="text-md">
+					<p ngClass="accent-lighter text-lg" ngClass.xs="text-md">
 						<span class="super-currency-symbol">$</span>{{session.screen.discountTotal}}</p>
 				</mat-card-content>
 			</mat-card>
 			<mat-card fxFlex class="page-content-card  text-center">
-				<mat-card-title ngClass="text-muted text-sm" ngClass="text-xs">
+				<mat-card-title ngClass="accent-lighter text-sm" ngClass="text-xs">
 						Tax
 				</mat-card-title>
 				<mat-card-content>
-					<p ngClass="text-muted  text-lg" ngClass.xs="text-md">
+					<p ngClass="accent-lighter  text-lg" ngClass.xs="text-md">
 						<span class="super-currency-symbol">$</span>{{session.screen.taxTotal}}</p>
 				</mat-card-content>
 			</mat-card>
 			<mat-card fxFlex class="page-content-card text-center">
-				<mat-card-title ngClass="text-muted text-sm" ngClass.xs="text-xs">
+				<mat-card-title ngClass="accent-lighter text-sm" ngClass.xs="text-xs">
 						Subtotal
 				</mat-card-title>
 				<mat-card-content>
-					<p ngClass="text-muted text-lg" ngClass.xs="text-md"> 
+					<p ngClass="accent-lighter text-lg" ngClass.xs="text-md"> 
 						<span class="super-currency-symbol">$</span>{{session.screen.subTotal}}</p>
 				</mat-card-content>
 			</mat-card>
 		</div>
 		
-		<mat-card *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" class="page-content-card dark">
+		<mat-card *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" color="accent" class="page-content-card dark">
 			<mat-card-content  fxLayout="row" fxLayoutAlign="center center" ngClass="text-lg" ngClass.xs="text-md">
 					&nbsp;&nbsp;Total
 					<span fxFlex class="text-center">			

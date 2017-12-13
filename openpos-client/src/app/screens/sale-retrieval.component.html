@@ -11,8 +11,8 @@
 						<mat-list-item *ngFor="let i of session.screen.transactions" class="sale-line-item" (click)="selected(i.transactionId)">
 							<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
 								<div fxFlex="80">
-									<div mat-line class="line-item-description">{{i.transactionId}}</div>
-									<div mat-line class="line-item-subtitle">{{i.description}}</div>
+									<strong mat-line>{{i.transactionId}}</strong>
+									<div mat-line class="accent-lighter">{{i.description}}</div>
 								</div>
 
 								<div fxFlex>

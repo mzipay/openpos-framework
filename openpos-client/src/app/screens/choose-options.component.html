@@ -1,5 +1,5 @@
-<div *ngIf="session.screen.type==='ChooseOptions'"> 
-    <div fxLayoutAlign="center center" class="main-menu-container" [style.xs]="{'height': 'initial'}">
+<div  fxFlexFill *ngIf="session.screen.type==='ChooseOptions'"> 
+    <div  fxFlexFill fxLayoutAlign="center center" class="main-menu-container" [style.xs]="{'height': 'initial'}">
         <mat-card *ngIf="session.screen.displayStyle === 'ButtonGrid'; else elseBlock" class="main-menu">
             <mat-card-title>{{promptText}}</mat-card-title>
             <mat-card-content style="min-height: 460px" [style.sm]="{'min-height': 'initial'}" [style.xs]="{'right': 'initial'}">
@@ -21,12 +21,12 @@
     </div>
     <ng-template #elseBlock>
         <mat-card>
-            <mat-card-title *ngIf="promptText" class="choose-options-title">{{promptText}}</mat-card-title>
+            <mat-card-title *ngIf="promptText">{{promptText}}</mat-card-title>
             <mat-card-content>
                 <mat-nav-list>
                     <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
                     <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && session.onAction(o.value)" style="border-color: black">
-                        <span *ngIf="!o.enabled; else elseBlock" class="choose-options-item-dimmed">{{o.displayValue}}</span>
+                        <span *ngIf="!o.enabled; else elseBlock" class="accent-lighter">{{o.displayValue}}</span>
                         <ng-template #elseBlock>{{o.displayValue}}</ng-template>
                         <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
                     </mat-list-item>

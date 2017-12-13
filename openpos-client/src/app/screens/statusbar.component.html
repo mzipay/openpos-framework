@@ -17,7 +17,7 @@
 		<div fxLayout="row"  fxLayoutAlign=" center">
 			<div *ngIf="session.screen && session.screen.operatorName" fxLayout="row" fxLayoutAlign=" center">
 				<mat-icon class="material-icons">lock_open</mat-icon>
-				<p class="statusbar-text" [style.xs]="{'font-size': '12px'}">
+				<p class="text-sm">
 					<span style="font-weight: bold">{{session.screen.operatorName}}</span>
 					on Register
 					<span style="font-weight: bold">#{{session.screen.workstation.workstationId}}</span>
@@ -32,7 +32,7 @@
 					<button mat-menu-item *ngFor="let m of session.screen.menuItems" (click)="doMenuItemAction(m)" 
 						[disabled]="!isMenuItemEnabled(m)">
 						<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
-						<span [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>
+						<span [ngClass]="{'accent-lighter': ! m.enabled}">{{m.title}}</span>
 					</button>
 				</mat-menu>
 			</ng-container>

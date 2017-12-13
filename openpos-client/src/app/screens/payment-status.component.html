@@ -11,7 +11,7 @@
 					<mat-menu #menu="matMenu">
 						<button mat-menu-item *ngFor="let m of session.screen.localMenuItems" (click)="doMenuItemAction(m)">
 							<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
-							<span [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>
+							<span [ngClass]="{'accent-lighter': ! m.enabled}">{{m.title}}</span>
 						</button>
 					</mat-menu>
 				</ng-container>

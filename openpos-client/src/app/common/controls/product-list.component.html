@@ -12,8 +12,8 @@
 <ng-template #productListItemDetail let-item="item">
     <div fxLayout="row" fxLayoutAlign="start center" style="width:100%"> 
         <div fxFlex="1 1 auto">
-            <div class="line-item-description" mat-line >{{item.description}}</div>
-            <div *ngIf="item.subtitle" mat-line class="line-item-subtitle">{{item.subtitle}}</div>
+            <strong mat-line >{{item.description}}</strong>
+            <div *ngIf="item.subtitle" mat-line class="accent-lighter">{{item.subtitle}}</div>
             <div *ngIf="item.fields" mat-line fxLayout="row">
                 <mat-form-field *ngFor="let field of item.fields" style="margin-right: 10px">
                     <label class="product-list-label">{{field.label}}</label>
@@ -33,7 +33,7 @@
                 <mat-menu #menu="matMenu">
                     <button mat-menu-item *ngFor="let menuItem of menuItemActions" (click)="onMenuItemClick(item, menuItem, $event)">
                         <app-icon *ngIf="menuItem.icon" iconName="{{menuItem.icon}}"></app-icon>
-                        <span [ngClass]="{'menu-item-dimmed': ! menuItem.enabled}">{{menuItem.title}}</span>
+                        <span [ngClass]="{'accent-lighter': ! menuItem.enabled}">{{menuItem.title}}</span>
                     </button>
                 </mat-menu>
             </ng-container>

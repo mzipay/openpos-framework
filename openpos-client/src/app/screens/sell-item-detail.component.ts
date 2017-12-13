@@ -6,7 +6,8 @@ import { AbstractApp } from '../common/abstract-app';
 
 @Component({
   selector: 'app-sell-item-detail',
-  templateUrl: './sell-item-detail.component.html'
+  templateUrl: './sell-item-detail.component.html',
+  styleUrls: ['./sell-item-detail.component.scss']
 })
 
 export class SellItemDetailComponent implements IScreen {
