@@ -1,0 +1,45 @@
+<div fxFlexFill  style="background-color: white; padding:16px;" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+    <app-scan-something fxFlex="0 0 auto" [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan Something"></app-scan-something>
+    
+    <div class="sale-trans-panel-container" fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+	
+        <mat-toolbar style="background-color: #eff0ef" fxFlex="0 0 auto">
+            <ng-container *ngIf="session.screen.transaction.transactionNumber">
+              <button mat-button class="text-md" style="margin-left:-30px;" [matMenuTriggerFor]="transactionMenu">
+                <span>Transaction #{{session.screen.transaction.transactionNumber}}</span>
+                <mat-icon>expand_more</mat-icon></button>
+              <mat-menu #transactionMenu="matMenu">
+                  <button mat-menu-item *ngFor="let m of session.screen.transactionMenuItems" (click)="doMenuItemAction(m)" 
+                  [disabled]="!isMenuItemEnabled(m)">
+                  <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
+                  <span [ngClass]="{'menu-item-dimmed': ! m.enabled}">{{m.title}}</span>
+                </button>
+              </mat-menu>
+            </ng-container>
+            <ng-container *ngIf="!session.screen.transaction.transactionNumber">
+              Ready to begin
+            </ng-container>
+            <span fxFlex="1 1 auto"></span>
+            <span *ngIf="session.screen && session.screen.localMenuItems && session.screen.localMenuItems.length > 0">
+              <button mat-icon-button (click)="drawer.toggle()">
+                <mat-icon>menu</mat-icon>
+              </button>
+            </span>
+          </mat-toolbar>
+          <mat-drawer-container fxFlex >
+              <mat-drawer #drawer position="end" [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile" style="background-color: #eff0ef">
+                <mat-nav-list>
+                  <mat-list-item *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)">
+                    <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
+                    <span>&nbsp;{{m.title}}</span>
+                    <span fxFlex>&nbsp;</span>
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                  </mat-list-item>
+                </mat-nav-list>
+              </mat-drawer>
+              <mat-drawer-content>
+                  <ng-template appScreen></ng-template>
+              </mat-drawer-content>
+            </mat-drawer-container>
+    </div>
+</div>

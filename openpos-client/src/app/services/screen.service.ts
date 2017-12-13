@@ -6,7 +6,7 @@ import { SaleRetrievalComponent } from '../screens/sale-retrieval.component';
 import { BasicItemSearchComponent } from '../screens/basic-item-search.component';
 import { EmbeddedWebPageComponent } from '../screens/embedded-web-page.component';
 import { PromptComponent } from '../screens/prompt.component';
-import { SellComponent } from '../screens/sell.component';
+import { TransactionComponent } from '../screens/transaction/transaction.component';
 import { SellItemDetailComponent } from '../screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from '../screens/signature-capture.component';
 import { PaymentStatusComponent } from '../screens/payment-status.component';
@@ -26,6 +26,7 @@ import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TenderingComponent } from '../screens/tendering.component';
+import { SellComponent } from '../templates/sell/sell.component';
 
 @Injectable()
 export class ScreenService {
@@ -44,7 +45,7 @@ export class ScreenService {
     this.screens.set('PaymentStatus', PaymentStatusComponent);
     this.screens.set('Prompt', PromptComponent);
     this.screens.set('PromptWithOptions', PromptWithOptionsComponent);
-    this.screens.set('Sell', SellComponent);
+    this.screens.set('Transaction', TransactionComponent);
     this.screens.set('SellItemDetail', SellItemDetailComponent);
     this.screens.set('SignatureCapture', SignatureCaptureComponent);
     this.screens.set('Table', StaticTableComponent);
@@ -52,7 +53,10 @@ export class ScreenService {
     this.screens.set('Tendering', TenderingComponent);
     this.screens.set('WarrantyCoverage', WarrantyCoverageComponent);
     this.screens.set('Personalization', PersonalizationComponent);
+
+    // Templates
     this.screens.set('blank', BlankComponent);
+    this.screens.set('Sell', SellComponent);
   }
 
   public resolveScreen(type: string): ComponentFactory<IScreen> {

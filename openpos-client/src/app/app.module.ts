@@ -23,7 +23,7 @@ import { PromptComponent } from './screens/prompt.component';
 import { IconComponent } from './common/controls/icon.component';
 import { ProductListComponent } from './common/controls/product-list.component';
 import { PromptInputComponent } from './common/controls/prompt-input.component';
-import { SellComponent } from './screens/sell.component';
+import { TransactionComponent } from './screens/transaction/transaction.component';
 import { BasicItemSearchComponent } from './screens/basic-item-search.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
 import { PromptWithOptionsComponent } from './screens/prompt-with-options.component';
@@ -87,6 +87,7 @@ import { DeviceService } from './services/device.service';
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
 import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
 import { BlankComponent } from './templates/blank/blank.component';
+import { SellComponent } from './templates/sell/sell.component';
 import { TemplateDirective } from './common/template.directive';
 
 @NgModule({
@@ -103,14 +104,15 @@ import { TemplateDirective } from './common/template.directive';
     PromptComponent,
     PersonalizationComponent,
     PromptWithOptionsComponent,
-    SellComponent,
+    TransactionComponent,
     SellItemDetailComponent,
     SignatureCaptureComponent,
     StaticTableComponent,
     SaleRetrievalComponent,
     TenderingComponent,
     WarrantyCoverageComponent,
-    BlankComponent
+    BlankComponent,
+    SellComponent
   ],
   declarations: [
     AppComponent,
@@ -126,7 +128,7 @@ import { TemplateDirective } from './common/template.directive';
     ChooseOptionsComponent,
     PromptWithOptionsComponent,
     SignatureCaptureComponent,
-    SellComponent,
+    TransactionComponent,
     SellItemDetailComponent,
     PaymentStatusComponent,
     StaticTableComponent,
@@ -144,6 +146,7 @@ import { TemplateDirective } from './common/template.directive';
     WarrantyCoverageComponent,
     ScanSomethingComponent,
     BlankComponent,
+    SellComponent,
     TemplateDirective
   ],
   imports: [

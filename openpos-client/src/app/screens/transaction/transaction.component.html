@@ -1,0 +1,56 @@
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px" style="background-color: #eff0ef;padding-top:6px">
+	<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge"  fxLayout="column" fxLayoutAlign="start" >
+			<mat-card-content fxFlex="1 1 auto">
+					<mat-nav-list disableRipple=true>
+						<app-product-list [items]="items" (itemClick)="onItemClick($event)"></app-product-list>
+					</mat-nav-list>
+					<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center">
+						<mat-icon color="accent-lighter" class="material-icons mat-180" svgIcon="barcode"></mat-icon>
+						<span style="font-size:18px">Scan something to get started.</span>
+					</div>
+			</mat-card-content>
+		</mat-card>
+		
+		<div *ngIf="session.screen.transaction.transactionNumber"fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
+			<mat-card fxFlex class="page-content-card text-center">
+				<mat-card-title ngClass="text-muted text-sm" ngClass="text-xs">
+						Discounts
+				</mat-card-title>
+				<mat-card-content>
+					<p ngClass="text-muted text-lg" ngClass.xs="text-md">
+						<span class="super-currency-symbol">$</span>{{session.screen.discountTotal}}</p>
+				</mat-card-content>
+			</mat-card>
+			<mat-card fxFlex class="page-content-card  text-center">
+				<mat-card-title ngClass="text-muted text-sm" ngClass="text-xs">
+						Tax
+				</mat-card-title>
+				<mat-card-content>
+					<p ngClass="text-muted  text-lg" ngClass.xs="text-md">
+						<span class="super-currency-symbol">$</span>{{session.screen.taxTotal}}</p>
+				</mat-card-content>
+			</mat-card>
+			<mat-card fxFlex class="page-content-card text-center">
+				<mat-card-title ngClass="text-muted text-sm" ngClass.xs="text-xs">
+						Subtotal
+				</mat-card-title>
+				<mat-card-content>
+					<p ngClass="text-muted text-lg" ngClass.xs="text-md"> 
+						<span class="super-currency-symbol">$</span>{{session.screen.subTotal}}</p>
+				</mat-card-content>
+			</mat-card>
+		</div>
+		
+		<mat-card *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" class="page-content-card dark">
+			<mat-card-content  fxLayout="row" fxLayoutAlign="center center" ngClass="text-lg" ngClass.xs="text-md">
+					&nbsp;&nbsp;Total
+					<span fxFlex class="text-center">			
+						<span class="super-currency-symbol">$</span>
+						{{session.screen.grandTotal}}</span>
+					<button mat-button flexFill color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!session.screen.transaction.active || items.length == 0"
+					(click)="session.onAction('Checkout')">
+						<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
+					</button>
+			</mat-card-content>
+		</mat-card>
+</div>
