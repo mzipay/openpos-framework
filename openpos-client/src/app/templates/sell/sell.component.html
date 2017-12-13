@@ -1,10 +1,10 @@
 <div fxFlexFill  style="background-color: white; padding:16px;" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
-    <app-scan-something fxFlex="0 0 auto" [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan Something"></app-scan-something>
+    <app-scan-something *ngIf="session.screen.showScan" fxFlex="0 0 auto" [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan Something"></app-scan-something>
     
     <div class="sale-trans-panel-container" fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
 	
         <mat-toolbar style="background-color: #eff0ef" fxFlex="0 0 auto">
-            <ng-container *ngIf="session.screen.transaction.transactionNumber">
+            <ng-container *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber">
               <button mat-button class="text-md" style="margin-left:-30px;" [matMenuTriggerFor]="transactionMenu">
                 <span>Transaction #{{session.screen.transaction.transactionNumber}}</span>
                 <mat-icon>expand_more</mat-icon></button>
@@ -16,8 +16,8 @@
                 </button>
               </mat-menu>
             </ng-container>
-            <ng-container *ngIf="!session.screen.transaction.transactionNumber">
-              Ready to begin
+            <ng-container *ngIf="session.screen.prompt && (!session.screen.transaction || !session.screen.transaction.transactionNumber)">
+              {{session.screen.prompt}}
             </ng-container>
             <span fxFlex="1 1 auto"></span>
             <span *ngIf="session.screen && session.screen.localMenuItems && session.screen.localMenuItems.length > 0">

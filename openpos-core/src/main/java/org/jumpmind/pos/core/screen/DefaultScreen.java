@@ -20,8 +20,9 @@ public class DefaultScreen implements Serializable {
 
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private String name;
+    private String prompt;
     private ScreenType type;
-    private String template = "blank";    
+    private String template = "Blank";    
     private MenuItem backButton;
     private Workstation workstation;
     private String operatorName;
@@ -281,5 +282,13 @@ public class DefaultScreen implements Serializable {
     
     public boolean isShowScan() {
         return showScan;
+    }
+    
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
+    }
+    
+    public String getPrompt() {
+        return prompt;
     }
 }

@@ -89,6 +89,7 @@ import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/lay
 import { BlankComponent } from './templates/blank/blank.component';
 import { SellComponent } from './templates/sell/sell.component';
 import { TemplateDirective } from './common/template.directive';
+import { OptionsComponent } from './screens/options/options.component';
 
 @NgModule({
   entryComponents: [
@@ -112,7 +113,8 @@ import { TemplateDirective } from './common/template.directive';
     TenderingComponent,
     WarrantyCoverageComponent,
     BlankComponent,
-    SellComponent
+    SellComponent,
+    OptionsComponent
   ],
   declarations: [
     AppComponent,
@@ -147,7 +149,8 @@ import { TemplateDirective } from './common/template.directive';
     ScanSomethingComponent,
     BlankComponent,
     SellComponent,
-    TemplateDirective
+    TemplateDirective,
+    OptionsComponent
   ],
   imports: [
     BrowserModule,
