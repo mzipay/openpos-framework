@@ -14,7 +14,7 @@ public enum ScreenType {
     Prompt,
     PromptWithOptions,
     NoOp,
-    Sell,
+    Transaction,
     SellItemDetail,
     SignatureCapture,
     Table,

@@ -21,7 +21,7 @@ public class SellItemScreen extends PromptScreen {
     private List<MenuItem> transactionMenuItems = new ArrayList<>();
 
     public SellItemScreen() {
-        this.setType(ScreenType.Sell);
+        this.setType(ScreenType.Transaction);
     }
 
     public List<SellItem> getItems() {
