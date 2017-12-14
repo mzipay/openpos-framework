@@ -28,12 +28,17 @@
         color: white;
     }
 
-    mat-card{
-        background-color: white;
+    mat-card.light{
+        background-color: mat-color(map-get($theme, accent), A200);
         color: $app-accent;
     }
 
-    input{
+    mat-toolbar.mat-accent-light{
+        background-color: mat-color(map-get($theme, accent), A200);
+        color: $app-accent;
+    }
+
+    input.bordered{
         border-color: mat-color(map-get($theme, accent), A400);
         border-style: solid;
     }
