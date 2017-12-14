@@ -13,22 +13,18 @@ public class TableScreen extends DefaultScreen {
     private String text;
     private SelectionMode selectionMode = SelectionMode.None;
     private int selectedRow = -1;
-    List<MenuItem> buttons = new ArrayList<>();
+    private String selectAction;
     
     public TableScreen() {
         setType(ScreenType.Table);
     }
-    
-    public List<MenuItem> getButtons() {
-        return buttons;
-    }
 
-    public void setButtons(List<MenuItem> buttons) {
-        this.buttons = buttons;
+    public void setSelectAction(String selectAction) {
+        this.selectAction = selectAction;
     }
     
-    public void addButton(MenuItem button) {
-        this.buttons.add(button);
+    public String getSelectAction() {
+        return selectAction;
     }
     
     public List<String> getHeaderLabels() {
