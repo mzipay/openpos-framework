@@ -117,8 +117,8 @@
 						</ng-container>
 					</mat-form-field>
 					<mat-form-field *ngIf="formElement.inputType === 'ComboBox'">
-						<mat-select (change)="onComboBoxSelectionChange(formElement, $event)" placeholder="{{getPlaceholderText(formElement)}}">
-							<mat-option *ngFor="let value of formElement.values; let valueIndex=index" [value]="valueIndex">{{value}}</mat-option>
+						<mat-select [(ngModel)]="formElement.value" (change)="onComboBoxSelectionChange(formElement, $event)" placeholder="{{getPlaceholderText(formElement)}}">
+							<mat-option *ngFor="let value of formElement.values; let valueIndex=index" [value]="value">{{value}}</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<ng-container *ngIf="formElement.inputType === 'SubmitOptionList'">
