@@ -32,7 +32,8 @@ public class DefaultScreen implements Serializable {
     private int sequenceNumber;
     private boolean refreshAlways = false;
     private String theme = "openpos-theme";
-    
+    private String icon;  
+    private String instructions;
     
     private List<MenuItem> menuItems = new ArrayList<>();
     private List<MenuItem> localMenuItems = new ArrayList<>();
@@ -290,5 +291,21 @@ public class DefaultScreen implements Serializable {
     
     public String getPrompt() {
         return prompt;
+    }
+    
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+    
+    public String getIcon() {
+        return icon;
+    }
+    
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+    
+    public String getInstructions() {
+        return instructions;
     }
 }
