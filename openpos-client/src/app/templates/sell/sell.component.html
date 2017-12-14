@@ -1,7 +1,7 @@
-<div fxFlexFill  style="background-color: white; padding:16px;" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+<div fxFlexFill  style="background-color: white; padding:16px;overflow-y:auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
     <app-scan-something *ngIf="session.screen.showScan" fxFlex="0 0 auto" [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan Something"></app-scan-something>
     
-    <mat-card fxFlex class="light page-content-card" fxLayout="column" fxLayoutAlign="start">
+    <mat-card fxFlex class="light page-content-card min-height" fxLayout="column" fxLayoutAlign="start">
 	
         <mat-toolbar color="accent-light" fxFlex="0 0 auto">
             <ng-container *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber">
@@ -26,7 +26,7 @@
               </button>
             </span>
           </mat-toolbar>
-          <mat-drawer-container fxFlex >
+          <mat-drawer-container fxFlex>
               <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async">
                 <mat-list>
                   <mat-list-item *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)">

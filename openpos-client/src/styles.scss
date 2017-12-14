@@ -45,17 +45,13 @@ html, body {
 }
 
 mat-card.scrollable-content-card{
-    height: 100px;
-    mat-card-content{
-        margin-bottom:0px; 
-        overflow-y:auto
-    }
+    margin-bottom:0px; 
+    overflow-y:auto
 }
 
 mat-card.page-content-card{
     margin: 0px;
-    padding: 4px;
-    
+    padding: 4px; 
     mat-card-title{
         padding:4px;
         margin:0px;
