@@ -1,9 +1,9 @@
 <div fxFlexFill  style="background-color: white; padding:16px;" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
     <app-scan-something *ngIf="session.screen.showScan" fxFlex="0 0 auto" [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan Something"></app-scan-something>
     
-    <div class="sale-trans-panel-container" fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+    <mat-card fxFlex class="light page-content-card" fxLayout="column" fxLayoutAlign="start">
 	
-        <mat-toolbar style="background-color: #eff0ef" fxFlex="0 0 auto">
+        <mat-toolbar color="accent-light" fxFlex="0 0 auto">
             <ng-container *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber">
               <button mat-button class="text-md" style="margin-left:-30px;" [matMenuTriggerFor]="transactionMenu">
                 <span>Transaction #{{session.screen.transaction.transactionNumber}}</span>
@@ -27,19 +27,19 @@
             </span>
           </mat-toolbar>
           <mat-drawer-container fxFlex >
-              <mat-drawer #drawer position="end" [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile" style="background-color: #eff0ef">
-                <mat-nav-list>
+              <mat-drawer #drawer position="end" [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile">
+                <mat-list>
                   <mat-list-item *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)">
-                    <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
-                    <span>&nbsp;{{m.title}}</span>
-                    <span fxFlex>&nbsp;</span>
-                    <mat-icon>keyboard_arrow_right</mat-icon>
+                      <button mat-button color="primary">
+                          <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
+                          <span>&nbsp;{{m.title}}</span>
+                      </button>
                   </mat-list-item>
-                </mat-nav-list>
+                </mat-list>
               </mat-drawer>
               <mat-drawer-content>
                   <ng-template appScreen></ng-template>
               </mat-drawer-content>
             </mat-drawer-container>
-    </div>
+      </mat-card>
 </div>
