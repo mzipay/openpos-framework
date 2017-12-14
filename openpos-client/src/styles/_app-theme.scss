@@ -33,6 +33,11 @@
         color: $app-accent;
     }
 
+    input{
+        border-color: mat-color(map-get($theme, accent), A400);
+        border-style: solid;
+    }
+
     // Button Styles
     .mat-button.mat-primary-inverse{
         color:white;
