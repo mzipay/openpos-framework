@@ -38,6 +38,14 @@
         color: $app-accent;
     }
 
+    mat-drawer-content{
+        background-color: mat-color(map-get($theme, accent), A200);
+    }
+
+    .mat-drawer{
+        background-color: mat-color(map-get($theme, accent), A200);
+    }
+
     input.bordered{
         border-color: mat-color(map-get($theme, accent), A400);
         border-style: solid;
