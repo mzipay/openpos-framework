@@ -82,6 +82,9 @@
 	</mat-card>
 </ng-container>
 <ng-template #existingMarkupBlock>
+		<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px">
+				<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
+					<mat-card-content fxFlex="1 1 auto">
 	<div class="pad" (keyup.enter)="onEnter($event)">
 		<div style="width: 100%" fxLayout="row" fxLayoutAlign="end ">
 			<button style="top: 28px" *ngIf="session.screen.itemAction" (click)="onItemAction(session.screen.itemAction, $event)" color="primary"
@@ -156,5 +159,7 @@
 			</div>
 		</ng-template>
 	</div>
-
+</mat-card-content>
+</mat-card>
+</div>
 </ng-template>
