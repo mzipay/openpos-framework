@@ -10,7 +10,7 @@
 				<span>&nbsp;|&nbsp;</span>
 			</ng-container>
 
-			<mat-icon>payment</mat-icon>
+			<mat-icon>{{session.screen.icon ? session.screen.icon :  'payment'}}</mat-icon>
 			<span class="text-sm">&nbsp;{{session.screen.name}}</span>
 		</div>
 

@@ -2,6 +2,7 @@ package org.jumpmind.pos.core.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Form implements Serializable {
@@ -20,8 +21,16 @@ public class Form implements Serializable {
         this.formElements = formElements;
     }
     
-    public void addFormElement(IFormElement formElement) {
+    public IFormElement addFormElement(IFormElement formElement) {
         formElements.add(formElement);
+        return formElement;
+    }
+    
+    public FormListField addComboBox(String fieldId, String label, String... values) {
+        FormListField field = new FormListField(fieldId, label, FieldElementType.Input, FieldInputType.ComboBox, null, Arrays.asList(values));
+        formElements.add(field);
+        return field;
+        
     }
 
     public void removeFormElement(IFormElement formElement) {

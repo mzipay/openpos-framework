@@ -18,6 +18,12 @@ public class FormButton implements IFormElement, Serializable {
     public FormButton(String label, String buttonAction) {
         this(label, label, buttonAction);
     }
+    
+    public FormButton(String label, String icon, String buttonAction, boolean submit) {
+        this(label, label, buttonAction);
+        this.submitButton = submit;
+        this.icon = icon;
+    }
 
     public FormButton(String id, String label, String buttonAction) {
         this.id = id;

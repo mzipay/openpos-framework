@@ -10,7 +10,7 @@ import { AbstractApp } from '../../common/abstract-app';
 })
 export class OptionsComponent implements OnInit, IScreen {
 
-  constructor() { }
+  constructor(public session: SessionService) { }
 
   ngOnInit() {
   }
