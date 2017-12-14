@@ -27,7 +27,7 @@
             </span>
           </mat-toolbar>
           <mat-drawer-container fxFlex >
-              <mat-drawer #drawer position="end" [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile">
+              <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async">
                 <mat-list>
                   <mat-list-item *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)">
                       <button mat-button color="primary">
