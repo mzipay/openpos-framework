@@ -5,7 +5,7 @@
 	
         <mat-toolbar color="accent-light" fxFlex="0 0 auto">
             <ng-container *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber">
-              <button mat-button class="text-md" style="margin-left:-30px;" [matMenuTriggerFor]="transactionMenu">
+              <button mat-button ngClass="text-md" ngClass.xs="text-sm" style="margin-left:-30px;" [matMenuTriggerFor]="transactionMenu">
                 <span>Transaction #{{session.screen.transaction.transactionNumber}}</span>
                 <mat-icon>expand_more</mat-icon></button>
               <mat-menu #transactionMenu="matMenu">
@@ -16,9 +16,9 @@
                 </button>
               </mat-menu>
             </ng-container>
-            <ng-container *ngIf="session.screen.prompt && (!session.screen.transaction || !session.screen.transaction.transactionNumber)">
+            <div ngClass="text-md" ngClass.xs="text-sm" *ngIf="session.screen.prompt && (!session.screen.transaction || !session.screen.transaction.transactionNumber)">
               {{session.screen.prompt}}
-            </ng-container>
+            </div>
             <span fxFlex="1 1 auto"></span>
             <span *ngIf="session.screen && session.screen.localMenuItems">
               <button mat-icon-button (click)="drawer.toggle()">

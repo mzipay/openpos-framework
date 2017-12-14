@@ -6,8 +6,8 @@
 						<app-product-list [items]="items" (itemClick)="onItemClick($event)"></app-product-list>
 					</mat-nav-list>
 					<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center">
-						<mat-icon color="accent-lighter" class="material-icons mat-180" svgIcon="barcode"></mat-icon>
-						<span style="font-size:18px">Scan something to get started.</span>
+						<mat-icon color="accent-lighter" ngClass="material-icons mat-180" ngClass="material-icons mat-128" svgIcon="barcode"></mat-icon>
+						<span ngClass="text-md" ngClass.xs="text-sm">Scan something to get started.</span>
 					</div>
 			</mat-card-content>
 		</mat-card>
