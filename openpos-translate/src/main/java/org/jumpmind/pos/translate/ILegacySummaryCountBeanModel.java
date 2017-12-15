@@ -1,7 +1,10 @@
 package org.jumpmind.pos.translate;
 
+import java.math.BigDecimal;
+
 public interface ILegacySummaryCountBeanModel {
 
     String getLabel();
-    String getAmount();
+    String getDisplayAmount();
+    BigDecimal getAmount();
 }

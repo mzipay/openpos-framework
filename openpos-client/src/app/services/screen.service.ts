@@ -28,6 +28,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TenderingComponent } from '../screens/tendering.component';
 import { SellComponent } from '../templates/sell/sell.component';
+import { TillSummaryComponent } from '../screens/till/till-summary.component';
 
 @Injectable()
 export class ScreenService {
@@ -54,6 +55,7 @@ export class ScreenService {
     this.screens.set('Tendering', TenderingComponent);
     this.screens.set('WarrantyCoverage', WarrantyCoverageComponent);
     this.screens.set('Personalization', PersonalizationComponent);
+    this.screens.set('TillSummary', TillSummaryComponent);
     this.screens.set('Options', OptionsComponent);
 
     // Templates

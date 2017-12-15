@@ -90,6 +90,7 @@ import { BlankComponent } from './templates/blank/blank.component';
 import { SellComponent } from './templates/sell/sell.component';
 import { TemplateDirective } from './common/template.directive';
 import { OptionsComponent } from './screens/options/options.component';
+import { TillSummaryComponent } from './screens/till/till-summary.component';
 
 @NgModule({
   entryComponents: [
@@ -114,7 +115,8 @@ import { OptionsComponent } from './screens/options/options.component';
     WarrantyCoverageComponent,
     BlankComponent,
     SellComponent,
-    OptionsComponent
+    OptionsComponent,
+    TillSummaryComponent
   ],
   declarations: [
     AppComponent,
@@ -150,7 +152,8 @@ import { OptionsComponent } from './screens/options/options.component';
     BlankComponent,
     SellComponent,
     TemplateDirective,
-    OptionsComponent
+    OptionsComponent,
+    TillSummaryComponent
   ],
   imports: [
     BrowserModule,

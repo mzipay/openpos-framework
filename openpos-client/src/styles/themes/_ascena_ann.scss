@@ -1,7 +1,7 @@
 @import 'app-theme';
 
 $ascena_ann-app-primary: mat-palette($mat-grey, 800, 600, 900);
-$ascena_ann-app-accent : mat-palette($mat-indigo, 500 );
+$ascena_ann-app-accent : mat-palette($mat-indigo, 800, 600, 900 );
 $ascena_ann-app-warn : mat-palette($mat-red);
 $mat-card-default-margin: 24px !default;
 $app-logo-url: url(assets/ascena_ann-logo.png);

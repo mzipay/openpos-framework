@@ -20,6 +20,7 @@ public enum ScreenType {
     Table,
     SaleRetrieval,
     Tendering,
+    TillSummary,
     WarrantyCoverage,
-    Options
+    Options 
 }
