@@ -64,6 +64,20 @@ mat-card.page-content-card{
     }
 }
 
+.mat-drawer-container{
+    padding-bottom:6px;
+    
+    .mat-drawer-content{
+        padding-left:6px;
+        padding-right:6px;
+    }
+
+    .mat-drawer{
+        padding-right:6px;
+    }
+}
+
+
 .mat-hint{
     font-size:60%;
 }
@@ -128,6 +142,7 @@ mat-card.page-content-card{
     z-index: 10;
 }
 
+.mat-raised-button,
 .mat-button{
     app-icon{
         position: relative;
