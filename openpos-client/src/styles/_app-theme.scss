@@ -6,6 +6,9 @@
     $app-accent: mat-color(map-get($theme, accent));
     $app-accent-lighter: mat-color(map-get($theme, accent), lighter);
     $app-warn: mat-color(map-get($theme, warn));
+    
+    $foreground: map-get($theme, foreground);
+    $background: map-get($theme, background);
 
     .warn {
         color: $app-warn;
@@ -28,27 +31,25 @@
         color: white;
     }
 
-    mat-card.light{
-        background-color: mat-color(map-get($theme, accent), A200);
-        color: $app-accent;
-    }
-
-    mat-toolbar.mat-accent-light{
-        background-color: mat-color(map-get($theme, accent), A200);
-        color: $app-accent;
-    }
-
-    mat-drawer-content{
-        background-color: mat-color(map-get($theme, accent), A200);
+    .mat-drawer-content{
+        background-color: mat-color($background, app-bar);
     }
 
     .mat-drawer{
-        background-color: mat-color(map-get($theme, accent), A200);
+        background-color: mat-color($background, app-bar);
     }
 
     input.bordered{
-        border-color: mat-color(map-get($theme, accent), A400);
+        border-color: mat-color($foreground, divider);
         border-style: solid;
+    }
+
+    .mat-list.list-seperator{
+        .mat-list-item:not(:first-child){
+            .mat-list-item-content{
+                border-top: 1px dashed mat-color($foreground, divider);
+            }
+        }
     }
 
     // Button Styles
@@ -60,37 +61,4 @@
     .mat-icon.mat-accent-lighter{
         color:$app-accent-lighter;
     }
-
-    .prompt-icon-with-label {
-        color: $app-primary;
-    }
-
-    .prompt-text {
-        color: $app-accent-lighter;
-        font-size:60%;
-    }
-
-    .date-picker-toggle {
-        color: $app-primary;
-    }
-
-    .product-list-label {
-        color: $app-primary;
-        font-size:14px;
-    }
-
-    .main-menu-item {
-        flex: 1 1 auto;
-        height: 150px;
-        width: 150px;
-        background-color: $app-primary;
-    }
-        
-    .line-item-extended-amt {
-        font-size: 1.2em;
-        color: $app-primary;
-        margin-right:30px;
-        text-align: right;
-    }
-
 }

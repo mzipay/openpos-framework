@@ -3,7 +3,7 @@
                 <button fxFlex="0 0 auto" mat-raised-button color=primary style="height:150px;width:150px"
                 *ngFor="let menuItem of menuItems"
                 (click)="session.onAction(menuItem.action)">
-                    <app-icon iconName="{{menuItem.icon}}" iconClass="material-icons mat-64 main-menu-item-icon"></app-icon>
+                    <app-icon iconName="{{menuItem.icon}}" iconClass="material-icons mat-64"></app-icon>
                     <p class="text-sm">{{menuItem.title}}</p>
                 </button>
     </mat-card>

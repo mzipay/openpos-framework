@@ -2,7 +2,7 @@
     <mat-card [style.gt-sm]="{'width': '65%'}" [style.sm]="{'width': '75%'}" [style.xs]="{'width': '85%','top': 'initial'}">
 		<mat-card-content>
 			<div style="margin-bottom:10px" fxLayout="row" fxLayoutAlign=" center">
-				<mat-icon *ngIf="session.screen.textIcon" class="material-icons prompt-icon-with-label" style="margin-right:5px">{{session.screen.textIcon}}</mat-icon>
+				<mat-icon *ngIf="session.screen.textIcon" class="material-icons" color="primary" style="margin-right:5px">{{session.screen.textIcon}}</mat-icon>
 				<label class="prompt-text">{{session.screen.text}}</label>
 			</div>
 			<div id="signature-pad" fxLayout="column">

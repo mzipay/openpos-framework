@@ -51,15 +51,35 @@ mat-card.scrollable-content-card{
 
 mat-card.page-content-card{
     margin: 0px;
-    padding: 4px; 
+    padding: 0px;
+
     mat-card-title{
         padding:4px;
         margin:0px;
     }
 
     mat-card-content{
-        padding:0px;
+        padding:4px;
         margin:0px;
+    }
+}
+
+.mat-hint{
+    font-size:60%;
+}
+
+
+.mat-list.xs{
+    padding:4px;
+    .mat-list-item{
+        .mat-list-item-content{
+            padding:4px;
+        }
+    }
+    .mat-list-item.mat-2-line{
+        .mat-list-item-content{
+            height:unset;
+        }
     }
 }
 
@@ -192,6 +212,12 @@ mat-header-cell.mat-header-cell.mat-column-_selection {
     font-weight: normal;
 }
 
+.main-menu-item {
+    flex: 1 1 auto;
+    height: 150px;
+    width: 150px;
+}
+
 .sale-marketing-panel-container {
     background-image: url(assets/marketing-image.png); 
     background-repeat: no-repeat;
@@ -244,4 +270,8 @@ button.static-table-button.mat-raised-button {
     vertical-align: super;
     font-size: 0.5em;
     padding-right: 2px;
+}
+
+.prompt-text {
+    font-size:60%;
 }
