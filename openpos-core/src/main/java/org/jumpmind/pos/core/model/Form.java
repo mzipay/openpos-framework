@@ -27,7 +27,7 @@ public class Form implements Serializable {
     }
     
     public FormListField addComboBox(String fieldId, String label, String... values) {
-        FormListField field = new FormListField(fieldId, label, FieldElementType.Input, FieldInputType.ComboBox, null, Arrays.asList(values));
+        FormListField field = new FormListField(fieldId, label, FieldElementType.Input, FieldInputType.ComboBox, null, values != null && values.length > 0 ? Arrays.asList(values) : new ArrayList<>());
         formElements.add(field);
         return field;
         
