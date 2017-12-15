@@ -15,7 +15,9 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
     protected T screen;
 
     protected POSSessionInfo posSessionInfo;
+    private IScreenThemeSelector screenThemeSelector;
 
+    
     public AbstractScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         this.legacyScreen = headlessScreen;
         try {
@@ -24,8 +26,32 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
             throw new RuntimeException(e);
         }
     }
+    
+    public IScreenThemeSelector getScreenThemeSelector() {
+        return screenThemeSelector;
+        
+    }
+    
+    public void setScreenThemeSelector(IScreenThemeSelector screenThemeSelector) {
+        this.screenThemeSelector = screenThemeSelector;
+    }
+    
+    
+    protected void chooseScreenTheme() {
+        if (this.getScreenThemeSelector() != null) {
+            getScreen().setTheme(this.getScreenThemeSelector().getScreenThemeName());
+        }
+    }
 
+    protected void chooseScreenName() {
+        if (getScreen().getName() == null) {
+            getScreen().setName(this.getHeadlessScreen().getSpecName());
+        }
+    }
+    
     public T build() {
+        chooseScreenName();
+        chooseScreenTheme();
         updatePosSessionInfo();
         buildMainContent();
         return screen;
