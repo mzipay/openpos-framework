@@ -53,4 +53,3 @@ dependencies {
     }
 }
 
-processResources.dependsOn tasks.getByPath(':openpos-client:assemble')
