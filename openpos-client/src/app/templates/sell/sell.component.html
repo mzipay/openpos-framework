@@ -1,5 +1,5 @@
 <div fxFlexFill  style="background-color: white; padding:16px;overflow-y:auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
-    <app-scan-something *ngIf="session.screen.showScan" fxFlex="0 0 auto" [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan Something"></app-scan-something>
+    <app-scan-something class="mat-elevation-z3" *ngIf="session.screen.showScan" fxFlex="0 0 auto" [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan Something"></app-scan-something>
     
     <mat-card fxFlex class="page-content-card min-height" fxLayout="column" fxLayoutAlign="start">
 	        <mat-toolbar color="accent-light" fxFlex="0 0 auto">
