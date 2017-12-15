@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.screen;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.core.model.FormDisplayField;
@@ -19,6 +20,7 @@ public class SellItem implements IItem, Serializable {
     private String imageUrl;
     private String productDescription;
     private List<FormDisplayField> fields;
+    private List<MenuItem> menuItems = new ArrayList<>();
     private boolean selected = false;
     
     
@@ -133,4 +135,15 @@ public class SellItem implements IItem, Serializable {
         this.selected = selected;
     }
     
+    public void addMenuItem(MenuItem menuItem) {
+        this.menuItems.add(menuItem);
+    }
+    
+    public void setMenuItems(List<MenuItem> transactionMenuItems) {
+        this.menuItems = transactionMenuItems;
+    }
+    
+    public List<MenuItem> getMenuItems() {
+        return menuItems;
+    } 
 }
