@@ -146,7 +146,7 @@
 
 		<ng-container *ngIf="formButtons && formButtons.length === 1 && formButtons[0].icon; else buttonElseBlock">
 			<div align="end">
-				<button mat-icon-button (click)="onButtonAction(formButtons[0].buttonAction)" [appFocus]="true">
+				<button mat-icon-button (click)="onButtonAction(formButtons[0].buttonAction)">
 					<mat-icon>{{formButtons[0].icon}}</mat-icon>
 				</button>
 			</div>
