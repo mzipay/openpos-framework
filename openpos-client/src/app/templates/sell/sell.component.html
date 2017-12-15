@@ -4,7 +4,7 @@
     <mat-card fxFlex class="page-content-card min-height" fxLayout="column" fxLayoutAlign="start">
 	        <mat-toolbar color="accent-light" fxFlex="0 0 auto">
             <ng-container *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber">
-              <button mat-button ngClass="text-md" ngClass.xs="text-sm" style="margin-left:-26px;" [matMenuTriggerFor]="transactionMenu">
+              <button mat-button ngClass="text-md" ngClass.xs="text-sm" style="padding-left:0px;margin-left:-10px" [matMenuTriggerFor]="transactionMenu">
                 <span>Transaction #{{session.screen.transaction.transactionNumber}}</span>
                 <mat-icon>expand_more</mat-icon></button>
               <mat-menu #transactionMenu="matMenu">
@@ -26,15 +26,23 @@
             </span>
           </mat-toolbar>
           <mat-drawer-container fxFlex>
-              <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async">
-                <mat-list>
-                  <mat-list-item *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)">
-                      <button mat-button color="primary">
-                          <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
-                          <span>&nbsp;{{m.title}}</span>
-                      </button>
-                  </mat-list-item>
-                </mat-list>
+              <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="4px" style="overflow-x:hidden">
+                <button mat-raised-button color="primary" *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)" style="text-align: left">
+                    <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
+                    <span>&nbsp;{{m.title}}</span>
+                </button>
+                <div fxFlex></div>
+                <button mat-button *ngIf="session.screen.type === 'Transaction'"  color="accent" style="text-align: left">
+                    <ng-container *ngIf="session.screen.customer">
+                        <mat-icon>person</mat-icon>&nbsp;
+                        <span >{{session.screen.customer.name}}</span>
+                    </ng-container>
+                    <ng-container *ngIf="!session.screen.customer">
+                        <mat-icon class="accent-lighter">link</mat-icon>&nbsp;
+                        <span class="accent-lighter">No Linked Customer</span>
+                    </ng-container>
+                    
+                </button>
               </mat-drawer>
               <mat-drawer-content>
                   <ng-template appScreen></ng-template>
