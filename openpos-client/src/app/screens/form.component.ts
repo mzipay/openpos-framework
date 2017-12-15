@@ -58,13 +58,6 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
     this.session.onAction(action);
   }
 
-  onComboBoxSelectionChange(formElement: IFormElement, event: Event): void {
-    if (formElement.selectedIndexes) {
-      console.log(event);
-      formElement.selectedIndexes = [event['value']];
-    }
-  }
-
   onSubmitOptionSelected(formElement: IFormElement, valueIndex: number, event: Event) {
     if (formElement.selectedIndexes) {
       formElement.selectedIndexes = [valueIndex];
@@ -103,6 +96,7 @@ export interface IFormElement {
     buttonAction: string;
     submitButton: boolean;
     required: boolean;
+    selectedIndex: number;
     selectedIndexes:  number[];
 }
 

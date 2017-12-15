@@ -10,6 +10,7 @@ public class FormListField extends FormField {
     private List<String> values;
     private SelectionMode selectionMode = SelectionMode.Single;
     private int[] selectedIndexes = {};
+    private int selectedIndex = 0;
     
     public FormListField() {
     }
@@ -65,6 +66,12 @@ public class FormListField extends FormField {
         this.selectedIndexes = selectedIndexes;
     }
     
-    
+    public int getSelectedIndex() {
+        return selectedIndex;
+    }
+        
+    public void setSelectedIndex(int selectedIndex) {
+        this.selectedIndex = selectedIndex;
+    }    
     
 }
