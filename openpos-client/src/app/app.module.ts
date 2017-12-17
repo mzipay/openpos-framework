@@ -91,6 +91,7 @@ import { SellComponent } from './templates/sell/sell.component';
 import { TemplateDirective } from './common/template.directive';
 import { OptionsComponent } from './screens/options/options.component';
 import { TillSummaryComponent } from './screens/till/till-summary.component';
+import { FormFieldComponent } from './screens/form-field.component';
 
 @NgModule({
   entryComponents: [
@@ -153,7 +154,8 @@ import { TillSummaryComponent } from './screens/till/till-summary.component';
     SellComponent,
     TemplateDirective,
     OptionsComponent,
-    TillSummaryComponent
+    TillSummaryComponent,
+    FormFieldComponent
   ],
   imports: [
     BrowserModule,

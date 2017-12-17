@@ -1,0 +1,51 @@
+
+<ng-container>
+		<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px">
+				<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
+					<mat-card-content fxFlex="1 1 auto">
+	<div class="pad" (keyup.enter)="onEnter($event)">
+		<div class="scrollable">
+
+			<div>
+				<form>
+					<mat-form-field>
+							<input matInput style="width:100%" placeholder="placeholder" required> 
+						<mat-error>This is our error.</mat-error>
+					</mat-form-field>
+				</form>
+
+				end form
+
+
+				<form  [formGroup]="formGroup"> <!-- (ngSubmit)="onSubmit()" --> 
+
+					<div *ngFor="let formField of session.screen.form.formElements | slice:0:3;">
+						<app-form-field [formField]="formField" [formGroup]="formGroup"></app-form-field>
+					</div>
+
+				</form>
+				
+			</div>
+
+		</div>
+
+		<ng-container *ngIf="formButtons && formButtons.length === 1 && formButtons[0].icon; else buttonElseBlock">
+			<div align="end">
+				<button mat-icon-button (click)="onButtonAction(formButtons[0].buttonAction)" [appFocus]="true">
+					<mat-icon>{{formButtons[0].icon}}</mat-icon>
+				</button>
+			</div>
+		</ng-container>
+		
+		<ng-template #buttonElseBlock>
+			<div>
+				<ng-container *ngFor="let button of formButtons">
+					<button mat-raised-button [color]="'primary'" (click)="onButtonAction(button.buttonAction)">{{button.label}}</button>
+				</ng-container>
+			</div>
+		</ng-template>
+	</div>
+</mat-card-content>
+</mat-card>
+</div>
+</ng-container>

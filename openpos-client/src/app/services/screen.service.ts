@@ -12,6 +12,7 @@ import { SellItemDetailComponent } from '../screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from '../screens/signature-capture.component';
 import { PaymentStatusComponent } from '../screens/payment-status.component';
 import { FormComponent } from '../screens/form.component';
+import { DynamicFormComponent } from '../screens/dynamic-form.component';
 import { HomeComponent } from '../screens/home.component';
 import { ItemListComponent } from '../screens/item-list.component';
 import { ChooseOptionsComponent } from '../screens/choose-options.component';
@@ -41,6 +42,7 @@ export class ScreenService {
     this.screens.set('ChooseOptions', ChooseOptionsComponent);
     this.screens.set('EmbeddedWebPage', EmbeddedWebPageComponent);
     this.screens.set('Form', FormComponent);
+    this.screens.set('DynamicForm', DynamicFormComponent);
     this.screens.set('Login', LoginComponent);
     this.screens.set('Home', HomeComponent);
     this.screens.set('ItemList', ItemListComponent);
