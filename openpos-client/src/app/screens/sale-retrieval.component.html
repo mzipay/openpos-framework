@@ -1,35 +1,24 @@
-<div fxFlexFill fxLayout="row" fxLayoutAlign="start stretch">
-	<div class="sale-trans-panel-container" fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
-		
-		<app-scan-something class="mat-elevation-z3" [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan a receipt or select a transaction below"></app-scan-something>
-		
-		<mat-card fxFlex="1 0 auto" class="sale-transaction-container page-content-card">
-				<mat-toolbar color="accent">Suspended Transactions</mat-toolbar>
-				<div class="scrollable">
-					<mat-nav-list>
-						<mat-list-item *ngFor="let i of session.screen.transactions" class="sale-line-item" (click)="selected(i.transactionId)">
-							<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
-								<div fxFlex="80">
-									<strong mat-line>{{i.transactionId}}</strong>
-									<div mat-line class="accent-lighter">{{i.description}}</div>
-								</div>
-
-								<div fxFlex>
-									<h5 class="middle-align text-md primary">
-										<span class="super-currency-symbol">$</span>{{i.grandTotal}}</h5>
-									<mat-icon class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
-								</div>
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
+	<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
+		<mat-card-content fxFlex="1 1 auto">
+			<div class="scrollable">
+				<mat-nav-list>
+					<mat-list-item *ngFor="let i of session.screen.transactions" class="sale-line-item" (click)="selected(i.transactionId)">
+						<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
+							<div fxFlex="80">
+								<strong mat-line>{{i.transactionId}}</strong>
+								<div mat-line class="accent-lighter">{{i.description}}</div>
 							</div>
-						</mat-list-item>
-					</mat-nav-list>
-				</div>
-		</mat-card>
 
-
-	</div>
-
-	<div class="sale-marketing-panel-container" fxFlex="40" fxHide.xs fxHide.sm>
-
-	</div>
-
+							<div fxFlex>
+								<h5 class="middle-align text-md primary">
+									<span class="super-currency-symbol">$</span>{{i.grandTotal}}</h5>
+								<mat-icon class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
+							</div>
+						</div>
+					</mat-list-item>
+				</mat-nav-list>
+			</div>
+		</mat-card-content>
+	</mat-card>
 </div>
