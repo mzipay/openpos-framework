@@ -4,6 +4,8 @@ import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output } from '@a
 import {SessionService} from '../services/session.service';
 import { MatSelectChange } from '@angular/material';
 import { AbstractApp } from '../common/abstract-app';
+import { IFormElement } from '../common/iformfield';
+
 
 @Component({
   selector: 'app-form',
@@ -83,20 +85,5 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 export interface IForm {
     name: string;
     formElements: IFormElement[];
-}
-
-export interface IFormElement {
-    elementType: string;
-    inputType: string;
-    label: string;
-    id: string;
-    value: string;
-    values: string[];
-    placeholder: string;
-    buttonAction: string;
-    submitButton: boolean;
-    required: boolean;
-    selectedIndex: number;
-    selectedIndexes:  number[];
 }
 

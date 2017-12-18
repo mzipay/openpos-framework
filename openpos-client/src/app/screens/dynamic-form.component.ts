@@ -5,6 +5,7 @@ import {SessionService} from '../services/session.service';
 import { MatSelectChange } from '@angular/material';
 import { AbstractApp } from '../common/abstract-app';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl } from '@angular/forms';
+import { IFormElement } from '../common/iformfield';
 
 
 @Component({
@@ -120,18 +121,3 @@ export interface IForm {
     name: string;
     formElements: IFormElement[];
 }
-
-export interface IFormElement {
-    elementType: string;
-    inputType: string;
-    label: string;
-    id: string;
-    value: string;
-    values: string[];
-    placeholder: string;
-    buttonAction: string;
-    submitButton: boolean;
-    required: boolean;
-    selectedIndexes:  number[];
-}
-
