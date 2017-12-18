@@ -1,10 +1,10 @@
-import { IFormElement } from './../dynamic-form.component';
 import { IForm } from './../form.component';
 import { IMenuItem } from './../../common/imenuitem';
 import { SessionService } from './../../services/session.service';
 import { IScreen } from './../../common/iscreen';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractApp } from '../../common/abstract-app';
+import { IFormElement } from '../../common/iformfield';
 
 @Component({
   selector: 'app-till-count',
