@@ -92,6 +92,7 @@ import { TemplateDirective } from './common/template.directive';
 import { OptionsComponent } from './screens/options/options.component';
 import { TillSummaryComponent } from './screens/till/till-summary.component';
 import { FormFieldComponent } from './screens/form-field.component';
+import { TillCountComponent } from './screens/till/till-count.component';
 
 @NgModule({
   entryComponents: [
@@ -117,7 +118,8 @@ import { FormFieldComponent } from './screens/form-field.component';
     BlankComponent,
     SellComponent,
     OptionsComponent,
-    TillSummaryComponent
+    TillSummaryComponent,
+    TillCountComponent
   ],
   declarations: [
     AppComponent,
@@ -155,7 +157,8 @@ import { FormFieldComponent } from './screens/form-field.component';
     TemplateDirective,
     OptionsComponent,
     TillSummaryComponent,
-    FormFieldComponent
+    FormFieldComponent,
+    TillCountComponent
   ],
   imports: [
     BrowserModule,

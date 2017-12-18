@@ -1,6 +1,6 @@
 import { IMenuItem } from './../common/imenuitem';
 import { IScreen } from '../common/iscreen';
-import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output, EventEmitter } from '@angular/core';
 import {SessionService} from '../services/session.service';
 import { MatSelectChange } from '@angular/material';
 import { AbstractApp } from '../common/abstract-app';
@@ -14,6 +14,7 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
   public form: IForm;
   private lastSequenceNum: number;
   formButtons: IFormElement[];
+  @Output() onFieldChanged = new EventEmitter<{formElement: IFormElement, event: Event}>();
 
   constructor(public session: SessionService) {
   }
@@ -34,6 +35,10 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
   }
 
   ngAfterViewInit(): void {
+  }
+
+  onFormElementChanged(formElement: IFormElement, event: Event): void {
+    this.onFieldChanged.emit({formElement: formElement, event: event});
   }
 
   onEnter(value: string) {

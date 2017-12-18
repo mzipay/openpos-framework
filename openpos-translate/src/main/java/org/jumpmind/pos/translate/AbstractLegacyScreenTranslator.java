@@ -106,17 +106,17 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
         }
     }
     
-    protected Optional<ILegacyUIModel> getLegacyUIModel() {
+    protected ILegacyUIModel getLegacyUIModel() {
         ILegacyAssignmentSpec assignmentPanelSpec = getLegacyAssignmentSpec(WORK_PANEL_KEY);
-        Optional<ILegacyUIModel> optUIModel = Optional.empty();
+        ILegacyUIModel legacyUIModel = null;
         if (assignmentPanelSpec != null) {
             logger.trace("The work panel bean spec name was {}", assignmentPanelSpec.getBeanSpecName());
 
-            optUIModel = Optional.ofNullable(this.legacyPOSBeanService.getLegacyUIModel(legacyScreen));
+            legacyUIModel = this.legacyPOSBeanService.getLegacyUIModel(legacyScreen);
             
         }
 
-        return optUIModel;
+        return legacyUIModel;
     }
 
     protected ILegacyBus getBus() {

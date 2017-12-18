@@ -17,7 +17,7 @@
 						<div *ngIf="formElement.elementType==='Input'">
 							<mat-form-field *ngIf="['AlphanumericText', 'NumericText'].indexOf(formElement.inputType) >= 0" style="width:100%">
 								<input [(ngModel)]="formElement.value" #field="ngModel" matInput placeholder="{{getPlaceholderText(formElement)}}" [pattern]="formElement.pattern"
-								 [required]="formElement.required">
+								 [required]="formElement.required" (change)="onFormElementChanged(formElement, $event)">
 								<ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
 									<mat-error div *ngIf="field.errors.required">
 										* is required.
@@ -28,8 +28,8 @@
 								</ng-container>
 							</mat-form-field>
 							<mat-form-field *ngIf="'AlphanumericPassword' === formElement.inputType" style="width:100%">
-								<input [(ngModel)]="formElement.value" #field="ngModel" matInput placeholder="{{getPlaceholderText(formElement)}}" [required]="formElement.required"
-								 type="password">
+								<input [(ngModel)]="formElement.value" #field="ngModel" matInput placeholder="{{getPlaceholderText(formElement)}}" 
+							        [required]="formElement.required" type="password" (change)="onFormElementChanged(formElement, $event)">
 								<ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
 									<mat-error div *ngIf="field.errors.required">
 										* is required.
@@ -97,7 +97,7 @@
 				<div *ngIf="formElement.elementType==='Input'">
 					<mat-form-field *ngIf="['AlphanumericText', 'NumericText'].indexOf(formElement.inputType) >= 0" style="width:100%">
 						<input [(ngModel)]="formElement.value" #field="ngModel" matInput placeholder="{{getPlaceholderText(formElement)}}" [pattern]="formElement.pattern"
-						 [required]="formElement.required">
+						 [required]="formElement.required" (change)="onFormElementChanged(formElement, $event)">
 						<ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
 							<mat-error div *ngIf="field.errors.required">
 								* is required.
@@ -109,7 +109,7 @@
 					</mat-form-field>
 					<mat-form-field *ngIf="'AlphanumericPassword' === formElement.inputType" style="width:100%">
 						<input [(ngModel)]="formElement.value" #field="ngModel" matInput placeholder="{{getPlaceholderText(formElement)}}" [required]="formElement.required"
-						 type="password">
+						 type="password" (change)="onFormElementChanged(formElement, $event)">
 						<ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
 							<mat-error div *ngIf="field.errors.required">
 								* is required.

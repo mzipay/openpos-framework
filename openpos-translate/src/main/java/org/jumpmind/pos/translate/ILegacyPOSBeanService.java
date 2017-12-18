@@ -1,5 +1,7 @@
 package org.jumpmind.pos.translate;
 
+import java.math.BigDecimal;
+
 public interface ILegacyPOSBeanService {
 
     ILegacyAssignmentSpec getLegacyAssignmentSpec(ILegacyScreen legacyScreen, String panelKey);
@@ -16,4 +18,8 @@ public interface ILegacyPOSBeanService {
     ILegacyUIUtilities getLegacyUIUtilities();
     ILegacySummaryTenderMenuBeanModel getLegacySummaryTenderMenuBeanModel(ILegacyScreen legacyScreen);
     ILegacyStatusBeanModel getLegacyStatusBeanModel(ILegacyScreen legacyScreen);
+    ILegacyCurrencyDetailBeanModel getLegacyCurrencyDetailBeanModel(ILegacyScreen legacyScreen);
+    
+    ILegacyCurrency getLegacyCurrencyInstance(String currencyStringValue);
+    ILegacyCurrency getLegacyCurrencyInstance(BigDecimal currencyDecimalValue);
 }
