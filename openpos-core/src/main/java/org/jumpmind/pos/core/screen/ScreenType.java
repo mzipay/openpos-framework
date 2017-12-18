@@ -23,5 +23,6 @@ public enum ScreenType {
     TillCurrencyCount,
     TillSummary,
     WarrantyCoverage,
-    Options 
+    Options,
+    Blank
 }
