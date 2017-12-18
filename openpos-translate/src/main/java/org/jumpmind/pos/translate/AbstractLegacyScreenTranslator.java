@@ -201,7 +201,6 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     }
 
     protected List<ILegacyButtonSpec> getPanelButtons(String panelKey, Optional<Boolean> enabledButtonsOnlyOpt) {
-        //Optional<AssignmentSpec> assignmentPanelSpec = getLegacyAssignmentSpec(panelKey);
         ILegacyAssignmentSpec assignmentPanelSpec = getLegacyAssignmentSpec(panelKey);
         List<ILegacyButtonSpec> buttons = new ArrayList<>();
 
