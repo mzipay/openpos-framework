@@ -1,11 +1,11 @@
 import { IMenuItem } from './../common/imenuitem';
 import { PromptInputComponent } from './../common/controls/prompt-input.component';
-import { IFormElement } from './form.component';
 import { IItem } from './../common/iitem';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { IFormElement } from '../common/iformfield';
 
 @Component({
     selector: 'app-tendering',
