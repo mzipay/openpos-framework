@@ -22,5 +22,6 @@ public enum ScreenType {
     Tendering,
     TillSummary,
     WarrantyCoverage,
-    Options 
+    Options,
+    Blank
 }
