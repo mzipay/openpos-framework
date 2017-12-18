@@ -1,9 +1,9 @@
 <div ngClass="outer-container">
-  <button fxFlex="0 0 auto" mat-button color="primary-inverse" ngClass="text-md" ngClass.xs="text-sm" (click)="devices.scan()">
+  <button fxFlex="0 0 auto" mat-button color="primary-inverse" class="text-md" (click)="devices.scan()">
       <span>Scan</span>
       <mat-icon svgIcon="barcode"></mat-icon>
     </button>
-    <input fxFlexFill fxFlex="1 1 auto" #box ngClass="bordered prompt-input-scan-something text-md" ngClass.xs="bordered prompt-input-scan-something text-sm" 
+    <input fxFlexFill fxFlex="1 1 auto" #box class="bordered prompt-input-scan-something text-md" 
       (keyup.enter)="onEnter(box.value)" [(ngModel)]="responseText" (keydown)="onBarcodeKeydown($event)" (paste)="onBarcodePaste($event)"
       placeholder="{{placeholderText}}">
   </div>

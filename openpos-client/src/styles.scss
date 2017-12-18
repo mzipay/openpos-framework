@@ -77,11 +77,9 @@ mat-card.page-content-card{
     }
 }
 
-
 .mat-hint{
     font-size:60%;
 }
-
 
 .mat-list.xs{
     padding:4px;
@@ -97,10 +95,24 @@ mat-card.page-content-card{
     }
 }
 
+.mat-list.field-list{
+    .mat-list-item{
+        .mat-line:first-child{
+            @extend .text-sm;
+            @extend .accent-lighter;
+        }
+        .mat-line:nth-child(n+2){
+           @extend .text-md;
+        }
+    }
+}
+
 .scrollable{
     overflow-y:auto;
     height: 100%;
 }
+
+
 .text-xs{
     font-size:12px;
 }
@@ -119,6 +131,29 @@ mat-card.page-content-card{
 
 .text-xl{
     font-size:48px;
+}
+
+
+@media( max-width: 600px){
+    .text-xs{
+        font-size:8px;
+    }
+    
+    .text-sm{
+        font-size:14px;
+    }
+    
+    .text-md{
+        font-size:20px;
+    }
+    
+    .text-lg{
+        font-size:28px;
+    }
+    
+    .text-xl{
+        font-size:44px;
+    } 
 }
 
 .md-toolbar {

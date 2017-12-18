@@ -17,13 +17,13 @@
 				</ng-container>
 
 			<mat-icon>{{session.screen.icon ? session.screen.icon :  'payment'}}</mat-icon>
-			<span ngClass="text-sm" ngClass.xs="text-xs">&nbsp;{{session.screen.name}}</span>
+			<span class="text-sm">&nbsp;{{session.screen.name}}</span>
 		</div>
 
 		<div fxLayout="row" fxLayoutAlign=" center">
 			<div *ngIf="session.screen && session.screen.operatorName" fxLayout="row" fxLayoutAlign=" center">
 				<mat-icon class="material-icons">lock_open</mat-icon>
-				<p ngClass="text-sm" ngClass.xs="text-xs">
+				<p class="text-sm">
 					<span style="font-weight: bold">{{session.screen.operatorName}}</span>
 					<span fxHide.xs>on Register</span>
 					<span style="font-weight: bold" fxHide.xs>#{{session.screen.workstation.workstationId}}</span>

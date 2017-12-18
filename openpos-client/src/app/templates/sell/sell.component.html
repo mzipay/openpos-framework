@@ -3,9 +3,9 @@
     
     <mat-card fxFlex class="page-content-card min-height" fxLayout="column" fxLayoutAlign="start">
 	        <mat-toolbar color="accent-light" fxFlex="0 0 auto">
-            <ng-container *ngIf="session.screen.transaction && session.screen.transaction.transactionNumber">
-              <button mat-button ngClass="text-md" ngClass.xs="text-sm" style="padding-left:0px;margin-left:-10px" [matMenuTriggerFor]="transactionMenu">
-                <span>Transaction #{{session.screen.transaction.transactionNumber}}</span>
+            <ng-container *ngIf="session.screen.transactionMenuItems?.length > 0; else prompt">
+              <button mat-button class="text-md" style="padding-left:0px;margin-left:-10px" [matMenuTriggerFor]="transactionMenu">
+                <span>{{session.screen.prompt}}</span>
                 <mat-icon>expand_more</mat-icon></button>
               <mat-menu #transactionMenu="matMenu">
                   <button mat-menu-item *ngFor="let m of session.screen.transactionMenuItems" (click)="doMenuItemAction(m)" 
@@ -15,9 +15,12 @@
                 </button>
               </mat-menu>
             </ng-container>
-            <div ngClass="text-md" ngClass.xs="text-sm" *ngIf="session.screen.prompt && (!session.screen.transaction || !session.screen.transaction.transactionNumber)">
-              {{session.screen.prompt}}
-            </div>
+            <ng-template #prompt>
+              <div>
+                  {{session.screen.prompt}}
+              </div>
+            </ng-template>
+
             <span fxFlex="1 1 auto"></span>
             <span *ngIf="session.screen && session.screen.localMenuItems && session.screen.localMenuItems.length">
               <button mat-icon-button (click)="drawer.toggle()">
@@ -27,7 +30,7 @@
           </mat-toolbar>
           <mat-drawer-container fxFlex>
               <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="4px" style="overflow-x:hidden">
-                <button mat-raised-button color="primary" *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)" style="text-align: left">
+                <button mat-button color="primary" *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)" style="text-align: left">
                     <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
                     <span>&nbsp;{{m.title}}</span>
                 </button>

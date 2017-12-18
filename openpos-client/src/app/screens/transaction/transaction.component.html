@@ -2,9 +2,9 @@
 	<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
 			<mat-list class="list-seperator" ngClass.xs="xs">
 				<mat-list-item *ngFor="let item of items">
-					<strong matLine>{{item.description}}</strong>
+					<p matLine>{{item.description}}</p>
 					<p matLine class="accent-lighter">{{item.subtitle}}</p>
-					<span ngClass="primary text-md" ngClass.xs="primary text-sm">{{item.amount|currency:'USD':true:'2.2'}}</span>
+					<span class="primary text-md">{{item.amount|currency:'USD':true:'2.2'}}</span>
 					<button mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
 						<mat-icon>expand_more</mat-icon>
 					</button>
@@ -19,43 +19,43 @@
 			</mat-list>
 			<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center">
 				<mat-icon color="accent-lighter" ngClass="material-icons mat-180" ngClass="material-icons mat-128" svgIcon="barcode"></mat-icon>
-				<span ngClass="text-md" ngClass.xs="text-sm">Scan something to get started.</span>
+				<span class="text-md">Scan something to get started.</span>
 			</div>
 	</mat-card>
 
 	<div *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center center"
 	 fxLayoutGap="6px">
 		<mat-card fxFlex class="page-content-card text-center">
-			<mat-card-title ngClass="accent-lighter text-sm" ngClass.xs="text-xs">
+			<mat-card-title class="accent-lighter text-sm">
 				Discounts
 			</mat-card-title>
 			<mat-card-content>
-				<p ngClass="accent-lighter text-lg" ngClass.xs="text-md">
+				<p class="accent-lighter text-lg">
 					<span class="super-currency-symbol">$</span>{{session.screen.discountTotal}}</p>
 			</mat-card-content>
 		</mat-card>
 		<mat-card fxFlex class="page-content-card  text-center">
-			<mat-card-title ngClass="accent-lighter text-sm" ngClass.xs="text-xs">
+			<mat-card-title class="accent-lighter text-sm">
 				Tax
 			</mat-card-title>
 			<mat-card-content>
-				<p ngClass="accent-lighter  text-lg" ngClass.xs="text-md">
+				<p class="accent-lighter  text-lg">
 					<span class="super-currency-symbol">$</span>{{session.screen.taxTotal}}</p>
 			</mat-card-content>
 		</mat-card>
 		<mat-card fxFlex class="page-content-card text-center">
-			<mat-card-title ngClass="accent-lighter text-sm" ngClass.xs="text-xs">
+			<mat-card-title class="accent-lighter text-sm">
 				Subtotal
 			</mat-card-title>
 			<mat-card-content>
-				<p ngClass="accent-lighter text-lg" ngClass.xs="text-md">
+				<p class="accent-lighter text-lg">
 					<span class="super-currency-symbol">$</span>{{session.screen.subTotal}}</p>
 			</mat-card-content>
 		</mat-card>
 	</div>
 
 	<mat-card *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" color="accent" class="page-content-card dark">
-		<mat-card-content fxLayout="row" fxLayoutAlign="center center" ngClass="text-lg" ngClass.xs="text-md">
+		<mat-card-content fxLayout="row" fxLayoutAlign="center center" class="text-lg">
 			&nbsp;&nbsp;Total
 			<span fxFlex class="text-center">
 				<span class="super-currency-symbol">$</span>
