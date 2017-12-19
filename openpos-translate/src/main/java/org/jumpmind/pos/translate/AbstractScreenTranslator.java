@@ -79,7 +79,6 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
 
     protected void resetScreen() {
         this.getScreen().clearAdditionalProperties();
-        this.getScreen().clearMenuItems();
     }
 
     public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,

@@ -24,6 +24,7 @@ public class DefaultScreen implements Serializable {
     private ScreenType type;
     private String template = "Blank";    
     private MenuItem backButton;
+    private MenuItem logoutButton;
     private Workstation workstation;
     private String operatorName;
     private MenuItem storeStatus;
@@ -35,7 +36,6 @@ public class DefaultScreen implements Serializable {
     private String icon;  
     private String instructions;
     
-    private List<MenuItem> menuItems = new ArrayList<>();
     private List<MenuItem> localMenuItems = new ArrayList<>();
     
     private boolean showScan = false;
@@ -154,31 +154,12 @@ public class DefaultScreen implements Serializable {
         return backButton;
     }
 
-    public List<MenuItem> getMenuItems() {
-        return menuItems;
+    public void setLogoutButton(MenuItem logoutButton) {
+        this.logoutButton = logoutButton;
     }
     
-    public void addMenuItem(MenuItem menuItem) {
-        if (this.menuItems == null) {
-            this.menuItems = new ArrayList<>();
-        }
-        this.menuItems.add(menuItem);
-    }
-    
-    public void setMenuItems(List<MenuItem> menuItem) {
-        this.menuItems = menuItem;
-    }
-
-    public MenuItem getMenuItemByAction(String action) {
-        return this. menuItems.stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
-    }
-    
-    public MenuItem getMenuItemByTitle(String title) {
-        return this.menuItems.stream().filter( mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
-    }
-    
-    public void clearMenuItems() {
-        this.menuItems.clear();
+    public MenuItem getLogoutButton() {
+        return logoutButton;
     }
     
     public String getOperatorName() {
@@ -247,6 +228,14 @@ public class DefaultScreen implements Serializable {
     
     public void setTheme(String theme) {
         this.theme = theme;
+    }
+    
+    public MenuItem getLocalMenuItemByAction(String action) {
+        return this. localMenuItems.stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
+    }
+    
+    public MenuItem getLocalMenuItemByTitle(String title) {
+        return this.localMenuItems.stream().filter( mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
     }
 
     public void addLocalMenuItem(MenuItem menuItem) {
