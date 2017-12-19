@@ -1,5 +1,5 @@
 import { IForm } from './form.component';
-import { Component, OnInit, DoCheck, HostListener } from '@angular/core';
+import { Component, OnInit, DoCheck, HostListener, OnDestroy } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
 import { AbstractApp } from '../common/abstract-app';
@@ -8,7 +8,8 @@ import { AbstractApp } from '../common/abstract-app';
   selector: 'app-basic-item-search',
   templateUrl: './basic-item-search.component.html'
 })
-export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
+export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck, OnDestroy {
+
   private lastSequenceNum: number;
   private lastScreenName: string;
 
@@ -17,16 +18,19 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
   searchCategoryValues: ISearchCategoryValue[];
   searchFieldForm: IForm;
   searchCategoriesText: string;
-  // Name of action specified by server side which should behave like
-  // a form submission
-  submitActionNames: string[] = [];
-  defaultActionName: string;
   public displayCategoryIndex = 0;
 
   constructor(public session: SessionService) {
   }
 
   show(session: SessionService, app: AbstractApp) {
+    this.session.registerActionPayload(this.session.screen.localMenuItems[0].action, () => {
+      return this.getSearchPayload();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.session.unregisterActionPayloads();
   }
 
   ngOnInit(): void {
@@ -34,9 +38,7 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
     this.searchCategoryStructure = this.session.screen.searchCategoryStructure;
     this.searchCategoryValues = this.session.screen.searchCategoryValues;
     this.searchFieldForm = this.session.screen.searchFieldForm;
-    this.submitActionNames = this.session.screen.submitActionNames;
     this.searchCategoriesText = this.session.screen.searchCategoriesText;
-    this.defaultActionName = this.session.screen.defaultActionName;
   }
 
   onValueSelected(value: ISearchCategoryValue, categoryName: string): void {
@@ -48,14 +50,18 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
     this.session.onAction(`on${categoryName}Selected`);
   }
 
-  onSubmitAction(submitAction: string): void {
-    // Collect the field values
-    this.session.response = {
+  getSearchPayload() {
+    return {
       'searchCategories': this.searchCategories,
       'searchCategoryStructure': this.searchCategoryStructure,
       'searchCategoryValues': this.searchCategoryValues,
       'searchFieldForm': this.searchFieldForm
     };
+  }
+
+  onSubmitAction(submitAction: string): void {
+    // Collect the field values
+    this.session.response = this.getSearchPayload();
     this.session.onAction(submitAction);
   }
 
@@ -72,14 +78,14 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck {
         }
       }
     }
-}
+  }
 
   ngDoCheck(): void {
     if (this.session.screen.type === 'BasicItemSearch'
-        && this.session.screen.sequenceNumber !== this.lastSequenceNum) {
-        this.refreshContent();
-        this.lastSequenceNum = this.session.screen.sequenceNumber;
-        this.lastScreenName = this.session.screen.name;
+      && this.session.screen.sequenceNumber !== this.lastSequenceNum) {
+      this.refreshContent();
+      this.lastSequenceNum = this.session.screen.sequenceNumber;
+      this.lastScreenName = this.session.screen.name;
     }
   }
 

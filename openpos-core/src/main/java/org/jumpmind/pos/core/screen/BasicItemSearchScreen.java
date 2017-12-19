@@ -45,8 +45,6 @@ public class BasicItemSearchScreen extends DefaultScreen {
     private List<SearchCategory> searchCategories = new ArrayList<>();
     private List<SearchCategoryValue> searchCategoryValues = new ArrayList<>();
     private Form searchFieldForm;
-    private List<String> submitActionNames = new ArrayList<>();
-    private String defaultActionName;
     private SearchCategoryValue selectedCategoryValue;
 
     
@@ -108,30 +106,6 @@ public class BasicItemSearchScreen extends DefaultScreen {
 
     public void setSearchFieldForm(Form searchFieldForm) {
         this.searchFieldForm = searchFieldForm;
-    }
-    
-    public void clearSubmitActionNames() {
-        this.submitActionNames.clear();
-    }
-    
-    public List<String> getSubmitActionNames() {
-        return submitActionNames;
-    }
-
-    public void setSubmitActionNames(List<String> submitActionNames) {
-        this.submitActionNames = submitActionNames;
-    }
-    
-    public void addSubmitActionName(String submitActionName) {
-        this.getSubmitActionNames().add(submitActionName);
-    }
-
-    public String getDefaultActionName() {
-        return defaultActionName;
-    }
-
-    public void setDefaultActionName(String defaultActionName) {
-        this.defaultActionName = defaultActionName;
     }
 
     public SearchCategoryValue getSelectedCategoryValue() {

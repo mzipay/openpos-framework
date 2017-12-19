@@ -13,6 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DefaultScreen implements Serializable {
 
     public enum ScanType { CAMERA_CORDOVA, NONE }
+    
+    public static String TEMPLATE_SELL = "Sell";
+    public static String TEMPLATE_BLANK = "Blank";
 
     private static final long serialVersionUID = 1L;
     public static final String TITLE_OPEN_STATUS = "Open";

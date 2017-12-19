@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
-
+    
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     protected ILegacyScreen legacyScreen;
