@@ -1,3 +1,4 @@
+import { DynamicFormComponent } from './screens/dynamic-form/dynamic-form.component';
 import { TenderingComponent } from './screens/tendering.component';
 import { WarrantyCoverageComponent } from './screens/warranty-coverage.component';
 import { SaleRetrievalComponent } from './screens/sale-retrieval.component';
@@ -119,6 +120,7 @@ import { TillCountComponent } from './screens/till/till-count.component';
     SellComponent,
     OptionsComponent,
     TillSummaryComponent,
+    DynamicFormComponent,
     TillCountComponent
   ],
   declarations: [
@@ -129,6 +131,7 @@ import { TillCountComponent } from './screens/till/till-count.component';
     ProductListComponent,
     PromptComponent,
     PromptInputComponent,
+    DynamicFormComponent,
     BasicItemSearchComponent,
     ItemListComponent,
     LoginComponent,
