@@ -17,7 +17,7 @@ public class SellState extends AbstractSecureState {
         SellItemScreen screen = new SellItemScreen();
         screen.setLogoutButton(new MenuItem("Back", "Logout", "exit_to_app"));
         screen.setPrompt("Ready to begin");
-        screen.setTemplate("Sell");
+        screen.setTemplate(DefaultScreen.TEMPLATE_SELL);
         screen.setName("Sell");        
         enableScan(screen);
         screen.addLocalMenuItem(new MenuItem("Customer", "Customer", "person"));

@@ -1,14 +1,12 @@
-<mat-card class="with-header" style="height: calc(100% - 114px)" [style.xs]="{'height': 'calc(100% - 54px)', 'margin': '0'}">
-    <mat-card-title>
-        <mat-toolbar color="accent">{{text}}</mat-toolbar> 
-    </mat-card-title>
-    <mat-card-content style="height: calc(100vh - 220px)" [style.xs]="{'height': 'calc(100vh - 135px)', 'margin': '0', 'padding': '0'}">
-        <div class="scrollable">
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
+    <mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
+        <mat-card-content>
             <mat-list>
                 <app-product-list [showItemIcon]="! isItemClickDisabled()" [items]="items" (itemClick)="isItemClickDisabled() || onItemClick($event)"
-                    [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)" [itemClass]="condensedListDisplay ? 'item-list-condensed' : ''">
+                    [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)"
+                    [itemClass]="condensedListDisplay ? 'item-list-condensed' : ''">
                 </app-product-list>
             </mat-list>
-        </div>
-    </mat-card-content>
-</mat-card>
+        </mat-card-content>
+    </mat-card>
+</div>
