@@ -32,6 +32,41 @@ export class SellComponent extends AbstractTemplate implements OnInit {
    }
 
   public ngOnInit(): void {
+
+    if ( this.session.screen.localMenuItems.length > 0) {
+      this.initializeDrawerMediaSizeHandling();
+    } else {
+      this.drawerOpen = Observable.of(false);
+    }
+
+
+    this.scanInputCallback = this.onScanInputEnter.bind(this);
+  }
+
+  public doMenuItemAction(menuItem: IMenuItem) {
+    this.session.onAction(menuItem.action);
+}
+
+public isMenuItemEnabled(m: IMenuItem): boolean {
+  let enabled = m.enabled;
+  if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
+       enabled = false;
+  }
+  return enabled;
+}
+  onScanInputEnter($event, scanInput: ScanSomethingComponent): void {
+    if (scanInput.responseText) {
+        this.session.response = scanInput.responseText;
+        this.session.screen.responseText = null;
+        scanInput.responseText = null;
+        this.session.onAction('Next');
+        if ($event.target && $event.target.disabled) {
+            $event.target.disabled = true;
+        }
+    }
+  }
+
+  private initializeDrawerMediaSizeHandling() {
     const openMap = new Map([
       ['xs', false],
       ['sm', true],
@@ -71,29 +106,5 @@ export class SellComponent extends AbstractTemplate implements OnInit {
         return modeMap.get(change.mqAlias);
       }
     ).startWith(startMode);
-    this.scanInputCallback = this.onScanInputEnter.bind(this);
-  }
-
-  public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem.action);
-}
-
-public isMenuItemEnabled(m: IMenuItem): boolean {
-  let enabled = m.enabled;
-  if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
-       enabled = false;
-  }
-  return enabled;
-}
-  onScanInputEnter($event, scanInput: ScanSomethingComponent): void {
-    if (scanInput.responseText) {
-        this.session.response = scanInput.responseText;
-        this.session.screen.responseText = null;
-        scanInput.responseText = null;
-        this.session.onAction('Next');
-        if ($event.target && $event.target.disabled) {
-            $event.target.disabled = true;
-        }
-    }
   }
 }
