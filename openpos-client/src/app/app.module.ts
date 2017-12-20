@@ -161,7 +161,7 @@ import {
     TemplateDirective,
     OptionsComponent,
     TillSummaryComponent,
-    TillCountComponent
+    TillCountComponent,
     TillCountOtherTenderComponent
   ],
   imports: [
