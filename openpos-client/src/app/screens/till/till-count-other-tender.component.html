@@ -24,9 +24,16 @@
     <mat-card-content>
       <p ngClass="accent-lighter text-lg" ngClass.xs="text-md" style="text-align: right; padding-right: 50px">
         Total:
-        <!-- TODO: needs to be localized -->
-        <span class="super-currency-symbol"></span>{{totalAmount|currency:'USD':true:'1.2'}}
+        <span class="super-currency-symbol"></span>{{totalAmount|currency:session.getCurrencyDenomination():true:'1.2'}}
       </p>
     </mat-card-content>
   </mat-card>
+
+  <ng-container *ngIf="nextAction">
+    <div fxLayoutAlign="end">
+      <button mat-icon-button (click)="onNextAction()" [appFocus]="true">
+        <mat-icon>{{nextAction.icon}}</mat-icon>
+      </button>
+    </div>
+  </ng-container>
 </div>

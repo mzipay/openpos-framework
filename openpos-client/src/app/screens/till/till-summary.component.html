@@ -6,8 +6,7 @@
     </mat-card-title>
     <mat-card-content>
       <p ngClass="accent-lighter text-lg" ngClass.xs="text-md">
-        <!-- TODO: needs to be localized -->
-        <span class="super-currency-symbol">$</span>{{session.screen.total}}</p>
+        <span class="super-currency-symbol"></span>{{session.screen.total|currency:session.getCurrencyDenomination():true:'1.2'}}</p>
     </mat-card-content>
   </mat-card>
   <ng-container *ngIf="nextAction">
