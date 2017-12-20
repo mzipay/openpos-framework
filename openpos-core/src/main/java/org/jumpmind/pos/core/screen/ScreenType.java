@@ -7,6 +7,7 @@ public enum ScreenType {
     Dialog,
     EmbeddedWebPage,
     Form,
+    DynamicForm,
     Home,
     ItemList,
     Login,

@@ -2,16 +2,17 @@ package org.jumpmind.pos.core.screen;
 
 import org.jumpmind.pos.core.model.Form;
 
-// TODO: This could probably extend FormScreen
 public class DynamicFormScreen extends DefaultScreen {
 
     private static final long serialVersionUID = 1L;
 
     private Form form = new Form();
-    private MenuItem itemAction;
+    
+    private String submitAction = "Next";
 
     public DynamicFormScreen() {
-        setType(ScreenType.Form);
+        setType(ScreenType.DynamicForm);
+        setTemplate(DefaultScreen.TEMPLATE_SELL);
     }
 
     public void setForm(Form form) {
@@ -22,16 +23,16 @@ public class DynamicFormScreen extends DefaultScreen {
         return form;
     }
 
-    public void setItemAction(MenuItem itemAction) {
-        this.itemAction = itemAction;
-    }
-    
-    public MenuItem getItemAction() {
-        return itemAction;
-    }
-    
     public String getString(String id) {
         return form.getString(id);
+    }
+    
+    public void setSubmitAction(String submitAction) {
+        this.submitAction = submitAction;
+    }
+    
+    public String getSubmitAction() {
+        return submitAction;
     }
     
 }

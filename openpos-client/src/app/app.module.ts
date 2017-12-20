@@ -44,6 +44,22 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 
+
+import 'hammerjs'; // for material
+import { TextMaskModule } from 'angular2-text-mask';
+import { PersonalizationComponent } from './screens/personalization.component';
+import { FormBuilder } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { DeviceService } from './services/device.service';
+import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
+import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
+import { BlankComponent } from './templates/blank/blank.component';
+import { SellComponent } from './templates/sell/sell.component';
+import { TemplateDirective } from './common/template.directive';
+import { OptionsComponent } from './screens/options/options.component';
+import { TillSummaryComponent } from './screens/till/till-summary.component';
+import { TillCountComponent } from './screens/till/till-count.component';
+
 import {
   MatDialog,
   MatDialogRef,
@@ -79,21 +95,6 @@ import {
   MatToolbarModule,
   MatTooltipModule
 } from '@angular/material';
-import 'hammerjs'; // for material
-import { TextMaskModule } from 'angular2-text-mask';
-import { PersonalizationComponent } from './screens/personalization.component';
-import { FormBuilder } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { DeviceService } from './services/device.service';
-import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
-import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
-import { BlankComponent } from './templates/blank/blank.component';
-import { SellComponent } from './templates/sell/sell.component';
-import { TemplateDirective } from './common/template.directive';
-import { OptionsComponent } from './screens/options/options.component';
-import { TillSummaryComponent } from './screens/till/till-summary.component';
-import { FormFieldComponent } from './screens/form-field.component';
-import { TillCountComponent } from './screens/till/till-count.component';
 
 @NgModule({
   entryComponents: [
@@ -160,7 +161,6 @@ import { TillCountComponent } from './screens/till/till-count.component';
     TemplateDirective,
     OptionsComponent,
     TillSummaryComponent,
-    FormFieldComponent,
     TillCountComponent
   ],
   imports: [
