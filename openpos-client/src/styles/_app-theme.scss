@@ -38,6 +38,10 @@
         color: white;
     }
 
+    mat-card.lighter{
+        background-color: mat-color($background, app-bar);
+    }
+
     .mat-drawer-content{
         background-color: mat-color($background, app-bar);
     }
