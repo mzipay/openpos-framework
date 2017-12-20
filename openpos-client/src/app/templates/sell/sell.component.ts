@@ -19,8 +19,6 @@ import { ObservableMedia } from '@angular/flex-layout';
 })
 export class SellComponent extends AbstractTemplate implements OnInit {
 
-  scanInputCallback: Function;
-
   @ViewChild('drawer') drawer;
   public drawerOpen: Observable<boolean>;
 
@@ -38,9 +36,6 @@ export class SellComponent extends AbstractTemplate implements OnInit {
     } else {
       this.drawerOpen = Observable.of(false);
     }
-
-
-    this.scanInputCallback = this.onScanInputEnter.bind(this);
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
@@ -54,19 +49,12 @@ public isMenuItemEnabled(m: IMenuItem): boolean {
   }
   return enabled;
 }
-  onScanInputEnter($event, scanInput: ScanSomethingComponent): void {
-    if (scanInput.responseText) {
-        this.session.response = scanInput.responseText;
-        this.session.screen.responseText = null;
-        scanInput.responseText = null;
-        this.session.onAction('Next');
-        if ($event.target && $event.target.disabled) {
-            $event.target.disabled = true;
-        }
-    }
-  }
 
-  private initializeDrawerMediaSizeHandling() {
+onScanInputEnter( value ): void {
+    this.session.onActionWithStringPayload('Next', value);
+}
+
+private initializeDrawerMediaSizeHandling() {
     const openMap = new Map([
       ['xs', false],
       ['sm', true],

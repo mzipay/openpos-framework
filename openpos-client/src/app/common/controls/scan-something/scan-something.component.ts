@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { DeviceService } from '../../../services/device.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { DeviceService } from '../../../services/device.service';
 })
 export class ScanSomethingComponent implements OnInit {
 
-  @Input() onEnterCallback: Function;
+  @Output() enter = new EventEmitter<string>();
   @Input() responseText: string;
   @Input() placeholderText: string;
 
@@ -17,8 +17,8 @@ export class ScanSomethingComponent implements OnInit {
   ngOnInit() {
   }
 
-  public onEnter($event): void {
-    this.onEnterCallback($event, this);
+  public onEnter(value): void {
+    this.enter.emit(value);
   }
 
   private filterBarcodeValue(val: string): string {
