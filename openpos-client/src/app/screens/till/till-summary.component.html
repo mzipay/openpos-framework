@@ -10,4 +10,11 @@
         <span class="super-currency-symbol">$</span>{{session.screen.total}}</p>
     </mat-card-content>
   </mat-card>
+  <ng-container *ngIf="nextAction">
+      <div fxLayoutAlign="end">
+        <button mat-icon-button (click)="onNextAction()" [appFocus]="true" [disabled]="!nextAction.enabled">
+          <mat-icon>{{nextAction.icon}}</mat-icon>
+        </button>
+      </div>
+  </ng-container>
 </div>
