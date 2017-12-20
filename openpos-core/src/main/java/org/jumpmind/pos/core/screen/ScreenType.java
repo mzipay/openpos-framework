@@ -22,6 +22,7 @@ public enum ScreenType {
     Tendering,
     TillCurrencyCount,
     TillSummary,
+    TillOtherTenderCount,
     WarrantyCoverage,
     Options,
     Blank

@@ -94,6 +94,7 @@ import { OptionsComponent } from './screens/options/options.component';
 import { TillSummaryComponent } from './screens/till/till-summary.component';
 import { FormFieldComponent } from './screens/form-field.component';
 import { TillCountComponent } from './screens/till/till-count.component';
+import { TillCountOtherTenderComponent } from './screens/till/till-count-other-tender.component';
 
 @NgModule({
   entryComponents: [
@@ -120,8 +121,9 @@ import { TillCountComponent } from './screens/till/till-count.component';
     SellComponent,
     OptionsComponent,
     TillSummaryComponent,
-    DynamicFormComponent,
-    TillCountComponent
+    TillCountComponent,
+    TillCountOtherTenderComponent,
+    DynamicFormComponent
   ],
   declarations: [
     AppComponent,
@@ -161,7 +163,8 @@ import { TillCountComponent } from './screens/till/till-count.component';
     OptionsComponent,
     TillSummaryComponent,
     FormFieldComponent,
-    TillCountComponent
+    TillCountComponent,
+    TillCountOtherTenderComponent
   ],
   imports: [
     BrowserModule,
