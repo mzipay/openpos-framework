@@ -17,6 +17,7 @@ import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.DialogScreen;
+import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.FormScreen;
 import org.jumpmind.pos.core.screen.ScreenType;
 import org.slf4j.Logger;
@@ -35,7 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@CrossOrigin 
+@CrossOrigin
 @Controller
 public class ScreenService implements IScreenService {
 
@@ -52,7 +53,7 @@ public class ScreenService implements IScreenService {
     int screenSequenceNumber = 0;
 
     private Map<String, Map<String, DefaultScreen>> lastScreenByAppIdByNodeId = new HashMap<>();
-    
+
     @RequestMapping(method = RequestMethod.GET, value = "ping")
     @ResponseBody
     public String ping() {
@@ -106,7 +107,7 @@ public class ScreenService implements IScreenService {
             Object payload = screen;
             try {
                 applyAnnotations(screen);
-                if (screen.getType() != null && screen.getScreenType() == ScreenType.Form && !(screen instanceof FormScreen)) {
+                if (screen.isScreenOfType(ScreenType.Form) && !(screen instanceof FormScreen)) {
                     Form form = buildForm(screen);
                     screen.put("form", form);
                 }
@@ -133,8 +134,8 @@ public class ScreenService implements IScreenService {
         Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
-            if (lastScreen != null && lastScreen.getType() != null && 
-                    (lastScreen.getScreenType() == ScreenType.Form || lastScreen instanceof FormScreen)) {
+            if (lastScreen != null && 
+                    (lastScreen instanceof FormScreen || lastScreen instanceof DynamicFormScreen)) {
                 Form form = mapper.convertValue(action.getData(), Form.class);
                 if (form != null) { // A form that has display only fields won't
                                     // have any data
@@ -157,6 +158,9 @@ public class ScreenService implements IScreenService {
                     String fieldId = formField.getId();
                     if (lastScreen instanceof FormScreen) {
                         FormScreen formScreen = (FormScreen) lastScreen;
+                        formScreen.setForm(form);
+                    } else if (lastScreen instanceof DynamicFormScreen) {
+                        DynamicFormScreen formScreen = (DynamicFormScreen) lastScreen;
                         formScreen.setForm(form);
                     } else {
                         for (Field field : lastScreen.getClass().getDeclaredFields()) {

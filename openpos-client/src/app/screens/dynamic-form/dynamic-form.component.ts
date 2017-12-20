@@ -17,6 +17,7 @@ export class DynamicFormComponent implements IScreen, OnInit {
   public screenForm: IForm;
   @Output() onFieldChanged = new EventEmitter<{ formElement: IFormElement, event: Event }>();
   @Input() formFields: IFormElement[];
+  @ViewChild('form') form: NgForm;
 
   constructor(public session: SessionService, public formBuilder: FormBuilder) {
   }
@@ -42,8 +43,8 @@ export class DynamicFormComponent implements IScreen, OnInit {
     this.session.onAction(formElement.id);
   }
 
-  submitForm(form: NgForm) {
-    if (form.valid) {
+  submitForm() {
+    if (this.form.valid && !this.requiresAtLeastOneField()) {
       // could submit form.value instead which is simple name value pairs
       this.session.response = this.screenForm;
       this.session.onAction(this.session.screen.submitAction);
@@ -62,8 +63,23 @@ export class DynamicFormComponent implements IScreen, OnInit {
     return text;
   }
 
+  requiresAtLeastOneField(): Boolean {
+    if (this.screenForm.requiresAtLeastOneValue) {
+      const value = this.form.value;
+      for (const key in value) {
+        if (value[key]) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }
 
 export interface IForm {
   formElements: IFormElement[];
+  requiresAtLeastOneValue: Boolean;
 }
