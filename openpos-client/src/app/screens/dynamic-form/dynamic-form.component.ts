@@ -1,11 +1,11 @@
-import { IMenuItem } from './../common/imenuitem';
-import { IScreen } from '../common/iscreen';
+import { IMenuItem } from './../../common/imenuitem';
+import { IScreen } from '../../common/iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output, Input } from '@angular/core';
-import {SessionService} from '../services/session.service';
+import {SessionService} from '../../services/session.service';
 import { MatSelectChange } from '@angular/material';
-import { AbstractApp } from '../common/abstract-app';
+import { AbstractApp } from '../../common/abstract-app';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl } from '@angular/forms';
-import { IFormElement } from '../common/iformfield';
+import { IFormElement } from '../../common/iformfield';
 
 
 @Component({
@@ -38,7 +38,7 @@ export class DynamicFormComponent implements AfterViewInit, DoCheck, IScreen, On
   ngOnInit(): void {
     this.screenForm = this.session.screen.form;
 
-    let newGroup: any = {};
+    const newGroup: any = {};
     this.screenForm.formElements.forEach(element => {
       if (element.required) {
         newGroup[element.id] = new FormControl(element.value || '', Validators.required);

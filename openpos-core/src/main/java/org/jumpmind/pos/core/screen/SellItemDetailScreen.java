@@ -37,6 +37,6 @@ public class SellItemDetailScreen extends DefaultScreen {
 
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
-    }
+    }       
 
 }

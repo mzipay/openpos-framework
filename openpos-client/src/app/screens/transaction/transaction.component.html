@@ -1,26 +1,28 @@
-<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" ngClass="serrated-edge">
-	<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px;">
+	<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
+		<mat-card-content>
 			<mat-list class="list-seperator" ngClass.xs="xs">
-				<mat-list-item *ngFor="let item of items">
-					<p matLine>{{item.description}}</p>
-					<p matLine class="accent-lighter">{{item.subtitle}}</p>
-					<span class="primary text-md">{{item.amount|currency:'USD':true:'2.2'}}</span>
-					<button mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
-						<mat-icon>expand_more</mat-icon>
-					</button>
-					<mat-menu #itemMenu="matMenu">
-						<button mat-menu-item *ngFor="let m of item.menuItems" (click)="doMenuItemAction(m, item.index)" 
-						[disabled]="!isMenuItemEnabled(m)">
-						<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
-						<span [ngClass]="{'accent-lighter': ! m.enabled}">{{m.title}}</span>
+					<mat-list-item *ngFor="let item of items">
+						<p matLine>{{item.description}}</p>
+						<p matLine class="accent-lighter">{{item.subtitle}}</p>
+						<span class="primary text-md">{{item.amount|currency:'USD':true:'2.2'}}</span>
+						<button mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
+							<mat-icon>expand_more</mat-icon>
 						</button>
-					</mat-menu>
-				</mat-list-item>
-			</mat-list>
-			<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center">
-				<mat-icon color="accent-lighter" ngClass="material-icons mat-180" ngClass="material-icons mat-128" svgIcon="barcode"></mat-icon>
-				<span class="text-md">Scan something to get started.</span>
-			</div>
+						<mat-menu #itemMenu="matMenu">
+							<button mat-menu-item *ngFor="let m of item.menuItems" (click)="doMenuItemAction(m, item.index)" 
+							[disabled]="!isMenuItemEnabled(m)">
+							<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
+							<span [ngClass]="{'accent-lighter': ! m.enabled}">{{m.title}}</span>
+							</button>
+						</mat-menu>
+					</mat-list-item>
+				</mat-list>
+				<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center">
+					<mat-icon color="accent-lighter" ngClass="material-icons mat-180" ngClass="material-icons mat-128" svgIcon="barcode"></mat-icon>
+					<span class="text-md">Scan something to get started.</span>
+				</div>
+		</mat-card-content>
 	</mat-card>
 
 	<div *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center center"

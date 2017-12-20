@@ -45,8 +45,10 @@ html, body {
 }
 
 mat-card.scrollable-content-card{
-    margin-bottom:0px; 
-    overflow-y:auto
+    .mat-card-content{
+        margin-bottom:0px; 
+        overflow-y:auto
+    }
 }
 
 mat-card.page-content-card{
@@ -68,8 +70,9 @@ mat-card.page-content-card{
     padding-bottom:6px;
     
     .mat-drawer-content{
-        top:-6px;
-        padding:6px;
+        padding-right:6px;
+        padding-left:6px;
+        padding-bottom:6px;
     }
 
     .mat-drawer{

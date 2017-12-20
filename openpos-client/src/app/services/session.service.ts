@@ -37,6 +37,8 @@ export class SessionService {
 
   private stompService: StompService;
 
+  private actionPayloads: Map<string, Function> = new Map<string, Function>();
+
   constructor(private location: Location, private router: Router, private loader: LoaderService) {
   }
 
@@ -143,6 +145,12 @@ export class SessionService {
 
   public onAction(action: string) {
       console.log('Publish action ' + action);
+
+      // Check if we have registered action payload otherwise we will send whatever is in this.response
+      if ( this.actionPayloads.has( action ) ) {
+        this.response = this.actionPayloads.get(action)();
+      }
+
       this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
         JSON.stringify({ name: action, data: this.response }));
       this.dialog = null;
@@ -201,6 +209,18 @@ export class SessionService {
       }
     }
     return urlNodeId;
+  }
+
+  public registerActionPayload( actionName: string, actionValue: Function ) {
+     this.actionPayloads.set( actionName, actionValue );
+  }
+
+  public unregisterActionPayloads() {
+      this.actionPayloads.clear();
+  }
+
+  public getCurrencyDenomination(): string {
+      return 'USD';
   }
 }
 

@@ -76,10 +76,9 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
         logAvailableLocalMenuItems();
         buildStatusItems();
         
-        ILegacyStoreProperties storeProperties = this.getLegacyStoreProperties();
         Workstation workstation = new Workstation();
-        workstation.setStoreId(storeProperties.getStoreNumber());
-        workstation.setWorkstationId(storeProperties.getWorkstationNumber());
+        workstation.setStoreId(legacyStoreProperties.getStoreNumber());
+        workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
         screen.setWorkstation(workstation);
     }
 
@@ -182,8 +181,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                 if (storeStatus != Status.UNKNOWN) {
                     posSessionInfo.setStoreOpen(Optional.of((storeStatus == Status.OPEN)));
                 }
-            }
-            
+            }            
         }
     }
     
@@ -288,7 +286,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     @Override
     protected void chooseScreenName() {
         String screenName = null;
-        ILegacyStatusBeanModel statusModel = this.getLegacyPOSBeanService().getLegacyStatusBeanModel(legacyScreen);
+        ILegacyStatusBeanModel statusModel = this.legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);
         if (statusModel != null && statusModel.getScreenName() != null) {
             screenName = statusModel.getScreenName();
         } else {

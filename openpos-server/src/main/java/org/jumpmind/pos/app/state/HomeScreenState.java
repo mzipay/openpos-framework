@@ -23,26 +23,28 @@ package org.jumpmind.pos.app.state;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.HomeScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class HomeScreenState implements IState {
-    
+public class HomeScreenState extends AbstractState implements IState {
+
     @Autowired
     IStateManager stateManager;
-    
+
     @Override
     public void arrive() {
         stateManager.endSession();
         stateManager.showScreen(buildScreen());
     }
-    
+
     protected DefaultScreen buildScreen() {
-        DefaultScreen screen = new DefaultScreen();
+        HomeScreen screen = new HomeScreen();
         screen.addMenuItem(new MenuItem("Sell", "Sell", "credit_card"));
         screen.addMenuItem(new MenuItem("AdvanceSearch", "Item Search", "search"));
         screen.addMenuItem(new MenuItem("DailyOps", "Daily Ops", "store"));
-        screen.setName("MainMenu");
+        screen.setName("Home");
+        screen.setIcon("home");
         screen.setType("Home");
         return screen;
     }

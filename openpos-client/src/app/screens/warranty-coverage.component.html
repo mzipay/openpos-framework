@@ -1,5 +1,5 @@
-<div class="page-content" fxLayout="row" fxLayoutAlign="start stretch">
-	<div class="sale-trans-panel-container"  fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
+
 		<mat-card fxFlex="0 0 auto" class="page-content-card text-center">
 			<mat-card-content>
 				<mat-card-title ngClass="accent-lighter text-sm" ngClass="text-xs">Total Warranty Cost</mat-card-title>
@@ -10,19 +10,8 @@
 			</mat-card-content>
 		</mat-card>
 
-		<mat-card fxFlex class="sale-transaction-container">
-			<mat-card-title>
-				<mat-toolbar color="accent">
-					{{text}}
-					<div style="width: 100%" fxLayout="row" fxLayoutAlign="end ">
-						<button mat-fab style="top: 28px; margin-left: 10px;" *ngFor="let menuAction of session.screen.menuItems" [color]="primary" (click)="onMenuAction(menuAction.action)">
-							<mat-icon>{{menuAction.icon}}</mat-icon>
-						</button>
-					</div>
-				</mat-toolbar>
-			</mat-card-title>
-
-			<mat-card-content class="sale-line-item-container-content" fxLayout="column" fxLayoutAlign="space-between">
+		<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
+			<mat-card-content fxFlex="1 1 auto">
 				<div class="scrollable">
 					<mat-selection-list>
 						<app-product-list [items]="warrantyItems" (itemClick)="onItemSelected($event)" [selectionMode]="'Multiple'" [showItemIcon]="false"></app-product-list>
@@ -31,12 +20,4 @@
 			</mat-card-content>
 
 		</mat-card>
-
-
-	</div>
-
-	<div class="sale-marketing-panel-container" fxFlex="40" fxHide.xs fxHide.sm>
-
-	</div>
-
 </div>

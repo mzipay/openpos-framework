@@ -19,7 +19,7 @@ public class SellItem implements IItem, Serializable {
     private String quantity;
     private String imageUrl;
     private String productDescription;
-    private List<FormDisplayField> fields;
+    private List<FormDisplayField> fields = new ArrayList<>();
     private List<MenuItem> menuItems = new ArrayList<>();
     private boolean selected = false;
     
@@ -123,6 +123,10 @@ public class SellItem implements IItem, Serializable {
     @Override
     public void setFields(List<FormDisplayField> fields) {
         this.fields = fields;
+    }
+    
+    public void addField(FormDisplayField field) {
+        this.fields.add(field);
     }
 
     @Override
