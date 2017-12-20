@@ -3,7 +3,7 @@
 		<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
 			<mat-card-content fxFlex="1 1 auto">
 				<div class="pad">
-					<form #f="ngForm" (ngSubmit)="submitForm(f)" novalidate>
+					<form #form="ngForm" (ngSubmit)="submitForm()" novalidate>
 						<ng-container *ngFor="let formField of session.screen.form.formElements">
 								<ng-container *ngIf="formField.elementType==='Input'">
 										<mat-form-field *ngIf="['AlphanumericText', 'NumericText'].indexOf(formField.inputType) >= 0" style="width:100%">
@@ -54,6 +54,10 @@
 										<mat-divider></mat-divider>
 									</ng-container>
 						</ng-container>
+
+						<mat-error *ngIf="requiresAtLeastOneField()">
+								* requires at least one field to be filled out
+						</mat-error>
 
 						<ng-container *ngIf="session.screen.submitAction">
 							<div align="end">

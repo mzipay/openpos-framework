@@ -17,10 +17,14 @@ public class FormDisplayField implements IFormElement, IField, Serializable {
     private String fieldId;
     private List<String> values = new ArrayList<String>();
     private ValueDisplayMode valueDisplayMode = ValueDisplayMode.Single;
-    
+        
     public FormDisplayField() {
     }
-
+    
+    public FormDisplayField(FieldElementType elementType) {
+        this.elementType = elementType;
+    }
+    
     public FormDisplayField(String label, String fieldId, String value) {
         this.label = label;
         this.fieldId = fieldId;
@@ -63,7 +67,7 @@ public class FormDisplayField implements IFormElement, IField, Serializable {
 
     @Override
     public String getValue() {
-        return this.getValues().get(0);
+        return values.size() > 0 ? values.get(0) : null;
     }
     
     public String getValue(int index) {

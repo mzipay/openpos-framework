@@ -11,6 +11,8 @@ public class Form implements Serializable {
 
     private List<IFormElement> formElements = new ArrayList<IFormElement>();
     
+    private boolean requiresAtLeastOneValue = false;
+    
     private String name;
 
     public List<IFormElement> getFormElements() {
@@ -31,6 +33,10 @@ public class Form implements Serializable {
         formElements.add(field);
         return field;
         
+    }
+    
+    public void addSeparator() {
+        formElements.add(new FormDisplayField(FieldElementType.Separator));
     }
 
     public void removeFormElement(IFormElement formElement) {
@@ -54,6 +60,14 @@ public class Form implements Serializable {
     
     public String getName() {
         return name;
+    }
+    
+    public void setRequiresAtLeastOneValue(boolean requiresAtLeastOneValue) {
+        this.requiresAtLeastOneValue = requiresAtLeastOneValue;
+    }
+    
+    public boolean isRequiresAtLeastOneValue() {
+        return requiresAtLeastOneValue;
     }
     
     public String getString(String id) {
