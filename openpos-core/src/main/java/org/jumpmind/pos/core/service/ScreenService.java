@@ -107,7 +107,7 @@ public class ScreenService implements IScreenService {
             Object payload = screen;
             try {
                 applyAnnotations(screen);
-                if (screen.getType() != null && screen.getScreenType() == ScreenType.Form && !(screen instanceof FormScreen)) {
+                if (screen.isScreenOfType(ScreenType.Form) && !(screen instanceof FormScreen)) {
                     Form form = buildForm(screen);
                     screen.put("form", form);
                 }
@@ -134,8 +134,8 @@ public class ScreenService implements IScreenService {
         Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
-            if (lastScreen != null && lastScreen.getType() != null && (lastScreen.getScreenType() == ScreenType.Form
-                    || lastScreen instanceof FormScreen || lastScreen instanceof DynamicFormScreen)) {
+            if (lastScreen != null && 
+                    (lastScreen instanceof FormScreen || lastScreen instanceof DynamicFormScreen)) {
                 Form form = mapper.convertValue(action.getData(), Form.class);
                 if (form != null) { // A form that has display only fields won't
                                     // have any data

@@ -113,14 +113,10 @@ public class DefaultScreen implements Serializable {
         return this.type.name();
     }
     
-    public void setScreenType(ScreenType type) {
-        this.type = type;
+    public boolean isScreenOfType(ScreenType type) {
+        return this.type == type;
     }
     
-    public ScreenType getScreenType() {
-        return this.type;
-    }
-
     @SuppressWarnings("unchecked")
     public void addToGroup(String groupName, String dataName, Object value) {
         Object group = get(groupName);
