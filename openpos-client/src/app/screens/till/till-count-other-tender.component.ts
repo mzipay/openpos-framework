@@ -5,13 +5,14 @@ import { IScreen } from './../../common/iscreen';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractApp } from '../../common/abstract-app';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-till-count-other-tender',
   templateUrl: './till-count-other-tender.component.html',
   styleUrls: ['./till-count-other-tender.component.scss']
 })
-export class TillCountOtherTenderComponent implements OnInit, IScreen {
+export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen {
   @ViewChild('amountInput') amountField;
 
   amountValue: string;
@@ -34,12 +35,13 @@ export class TillCountOtherTenderComponent implements OnInit, IScreen {
   show(session: SessionService, app: AbstractApp) {
   }
 
+  ngOnDestroy(): void {
+  }
 
   ngOnInit(): void {
-//    this.items = this.session.screen.items;
     this.items = [];
     this.totalAmount = 0;
-    this.nextAction = this.session.screen.menuItems.find(m => m.action === 'Next');
+    this.nextAction = this.session.screen.nextAction;
   }
 
   public doMenuItemAction(menuItem: IMenuItem, payLoad: any) {
@@ -70,9 +72,5 @@ export class TillCountOtherTenderComponent implements OnInit, IScreen {
     this.session.onAction(this.nextAction.action);
   }
 
-/*
-    this.session.response = value;
-    this.session.onAction('Add');
-*/
 
 }

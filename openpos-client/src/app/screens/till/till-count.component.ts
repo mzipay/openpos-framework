@@ -25,7 +25,7 @@ export class TillCountComponent implements OnInit, IScreen {
 
   ngOnInit() {
     this.form = this.session.screen.form;
-    this.nextAction = this.session.screen.menuItems.find(m => m.action === 'Next');
+    this.nextAction = this.session.screen.nextAction;
   }
 
   onFieldChanged(eventData: {formElement: IFormElement, event: Event}) {

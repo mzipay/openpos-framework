@@ -21,7 +21,7 @@ export class TillSummaryComponent implements OnInit, IScreen {
   constructor() { }
 
   ngOnInit() {
-    this.nextAction = this.session.screen.menuItems.find(m => m.action === 'Next');
+    this.nextAction = this.session.screen.nextAction;
   }
 
   onNextAction() {
