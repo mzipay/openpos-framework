@@ -43,8 +43,6 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
-
-
 import 'hammerjs'; // for material
 import { TextMaskModule } from 'angular2-text-mask';
 import { PersonalizationComponent } from './screens/personalization.component';
@@ -59,6 +57,7 @@ import { TemplateDirective } from './common/template.directive';
 import { OptionsComponent } from './screens/options/options.component';
 import { TillSummaryComponent } from './screens/till/till-summary.component';
 import { TillCountComponent } from './screens/till/till-count.component';
+import { TillCountOtherTenderComponent } from './screens/till/till-count-other-tender.component';
 
 import {
   MatDialog,
@@ -121,8 +120,9 @@ import {
     SellComponent,
     OptionsComponent,
     TillSummaryComponent,
-    DynamicFormComponent,
-    TillCountComponent
+    TillCountComponent,
+    TillCountOtherTenderComponent,
+    DynamicFormComponent
   ],
   declarations: [
     AppComponent,
@@ -162,6 +162,7 @@ import {
     OptionsComponent,
     TillSummaryComponent,
     TillCountComponent
+    TillCountOtherTenderComponent
   ],
   imports: [
     BrowserModule,

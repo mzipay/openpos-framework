@@ -1,3 +1,4 @@
+import { TillCountOtherTenderComponent } from './../screens/till/till-count-other-tender.component';
 import { OptionsComponent } from './../screens/options/options.component';
 import { BlankComponent } from '../templates/blank/blank.component';
 import { LoginComponent } from './../screens/login.component';
@@ -59,6 +60,7 @@ export class ScreenService {
     this.screens.set('WarrantyCoverage', WarrantyCoverageComponent);
     this.screens.set('Personalization', PersonalizationComponent);
     this.screens.set('TillCurrencyCount', TillCountComponent);
+    this.screens.set('TillOtherTenderCount', TillCountOtherTenderComponent);
     this.screens.set('TillSummary', TillSummaryComponent);
     this.screens.set('Options', OptionsComponent);
 

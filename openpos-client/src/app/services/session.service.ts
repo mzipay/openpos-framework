@@ -218,6 +218,10 @@ export class SessionService {
   public unregisterActionPayloads() {
       this.actionPayloads.clear();
   }
+
+  public getCurrencyDenomination(): string {
+      return 'USD';
+  }
 }
 
 

@@ -56,7 +56,7 @@ mat-card.page-content-card{
     padding: 0px;
 
     mat-card-title{
-        padding:4px;
+        padding:0px 10px;
         margin:0px;
     }
 
@@ -115,7 +115,9 @@ mat-card.page-content-card{
     height: 100%;
 }
 
-
+.wrap-text{
+    white-space: normal;
+}
 .text-xs{
     font-size:12px;
 }
@@ -147,7 +149,7 @@ mat-card.page-content-card{
     }
     
     .text-md{
-        font-size:20px;
+        font-size:18px;
     }
     
     .text-lg{

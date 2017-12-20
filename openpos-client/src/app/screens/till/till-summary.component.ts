@@ -1,3 +1,4 @@
+import { IMenuItem } from './../../common/imenuitem';
 import { SessionService } from './../../services/session.service';
 import { IScreen } from './../../common/iscreen';
 import { Component, OnInit } from '@angular/core';
@@ -11,6 +12,7 @@ import { AbstractApp } from '../../common/abstract-app';
 export class TillSummaryComponent implements OnInit, IScreen {
 
   session: SessionService;
+  nextAction: IMenuItem;
 
   show(session: SessionService, app: AbstractApp) {
     this.session = session;
@@ -19,6 +21,11 @@ export class TillSummaryComponent implements OnInit, IScreen {
   constructor() { }
 
   ngOnInit() {
+    this.nextAction = this.session.screen.nextAction;
+  }
+
+  onNextAction() {
+    this.session.onAction(this.nextAction.action);
   }
 
 }

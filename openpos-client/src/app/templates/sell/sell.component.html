@@ -1,10 +1,10 @@
 <div fxFlexFill  style="background-color: white; padding:16px;overflow-y:auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
-    <app-scan-something class="mat-elevation-z3" *ngIf="session.screen.showScan" fxFlex="0 0 auto" [onEnterCallback]="scanInputCallback" [responseText]="session.response" placeholderText="Scan Something"></app-scan-something>
+    <app-scan-something class="mat-elevation-z3" *ngIf="session.screen.showScan" fxFlex="0 0 auto" (enter)="onScanInputEnter($event)" [responseText]="session.response" placeholderText="Scan Something"></app-scan-something>
     
-    <mat-card fxFlex class="page-content-card min-height" fxLayout="column" fxLayoutAlign="start">
-	        <mat-toolbar color="accent-light" fxFlex="0 0 auto">
+    <mat-card fxFlex class="page-content-card min-height lighter" fxLayout="column" fxLayoutAlign="start">
+	        <mat-card-title fxFlex="0 0 auto" class="text-md">
             <ng-container *ngIf="session.screen.transactionMenuItems?.length > 0; else prompt">
-              <button mat-button class="text-md" style="padding-left:0px;margin-left:-10px" [matMenuTriggerFor]="transactionMenu">
+              <button mat-button class="text-md" style="padding-left:0px;" [matMenuTriggerFor]="transactionMenu">
                 <span>{{session.screen.prompt}}</span>
                 <mat-icon>expand_more</mat-icon></button>
               <mat-menu #transactionMenu="matMenu">
@@ -16,9 +16,7 @@
               </mat-menu>
             </ng-container>
             <ng-template #prompt>
-              <div>
-                  {{session.screen.prompt}}
-              </div>
+                <span fxFlexAlign="center">{{session.screen.prompt}}</span>
             </ng-template>
 
             <span fxFlex="1 1 auto"></span>
@@ -27,7 +25,7 @@
                 <mat-icon>menu</mat-icon>
               </button>
             </span>
-          </mat-toolbar>
+          </mat-card-title>
           <mat-drawer-container fxFlex>
               <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="4px" style="overflow-x:hidden">
                 <button mat-button color="primary" *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)" style="text-align: left">
