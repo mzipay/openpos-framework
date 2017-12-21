@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
@@ -17,22 +16,7 @@ import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.IUIAction;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.Workstation;
-import org.jumpmind.pos.translate.AbstractScreenTranslator;
-import org.jumpmind.pos.translate.ILegacyAssignmentSpec;
-import org.jumpmind.pos.translate.ILegacyBeanSpec;
-import org.jumpmind.pos.translate.ILegacyBus;
-import org.jumpmind.pos.translate.ILegacyButtonSpec;
-import org.jumpmind.pos.translate.ILegacyNavigationButtonBeanModel;
-import org.jumpmind.pos.translate.ILegacyPOSBeanService;
-import org.jumpmind.pos.translate.ILegacyPromptAndResponseModel;
-import org.jumpmind.pos.translate.ILegacyRegisterStatusService;
 import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
-
-import org.jumpmind.pos.translate.ILegacyScreen;
-import org.jumpmind.pos.translate.ILegacyStatusBeanModel;
-import org.jumpmind.pos.translate.ILegacyStoreProperties;
-import org.jumpmind.pos.translate.ILegacyUIModel;
-import org.jumpmind.pos.translate.ILegacyUtilityManager;
 
 
 public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> extends AbstractScreenTranslator<T>{
@@ -46,9 +30,8 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
 
     private ILegacyUtilityManager legacyUtilityManager;
 
-    // TODO: instantiate via configuration
-    private ILegacyPOSBeanService legacyPOSBeanService;
-    private ILegacyStoreProperties legacyStoreProperties;
+    protected ILegacyPOSBeanService legacyPOSBeanService;
+    protected ILegacyStoreProperties legacyStoreProperties;
     
     public AbstractLegacyScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         super(headlessScreen, screenClass);
@@ -74,8 +57,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     protected void buildMainContent() {
         buildBackButton();
         logAvailableLocalMenuItems();
-        buildStatusItems();
-        
+        buildStatusItems();        
         Workstation workstation = new Workstation();
         workstation.setStoreId(legacyStoreProperties.getStoreNumber());
         workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
@@ -88,6 +70,22 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                 .map(registerOpen -> new MenuItem((registerOpen ? DefaultScreen.TITLE_OPEN_STATUS : DefaultScreen.TITLE_CLOSED_STATUS), "", true)).orElse(null));
         screen.setStoreStatus(posSessionInfo.isStoreOpen()
                 .map(storeOpen -> new MenuItem((storeOpen ? DefaultScreen.TITLE_OPEN_STATUS : DefaultScreen.TITLE_CLOSED_STATUS), "", true)).orElse(null));
+        screen.setName(getScreenName());
+    }
+    
+    protected String getScreenName() {
+        ILegacyStatusBeanModel statusModel =  legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);
+        if (statusModel != null && statusModel.getScreenName() != null) {
+            return statusModel.getScreenName();
+        } else {
+            ILegacyAssignmentSpec statusPanelSpec = legacyPOSBeanService.getLegacyAssignmentSpec(legacyScreen, STATUS_PANEL_KEY);
+            String labelTag = getSpecPropertyValue(statusPanelSpec, "screenNameTag", null);
+            if (labelTag != null) {                
+                return legacyPOSBeanService.getLegacyUtilityManager(legacyScreen).retrieveText("StatusPanelSpec", getResourceBundleFilename(), labelTag, labelTag);
+            } else {
+                return null;
+            }
+        }
     }
     
     protected void logAvailableLocalMenuItems() {
@@ -181,7 +179,14 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                 if (storeStatus != Status.UNKNOWN) {
                     posSessionInfo.setStoreOpen(Optional.of((storeStatus == Status.OPEN)));
                 }
-            }            
+            }          
+            
+            ILegacyBus bus =  legacyPOSBeanService.getLegacyBus(legacyScreen);
+            ILegacyCargo cargo =  bus.getLegacyCargo();
+            if (cargo != null) {
+                posSessionInfo.setOperatorName(cargo.getOperatorFirstLastName());
+            }
+            
         }
     }
     
@@ -232,26 +237,6 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
 
     public ILegacyPromptAndResponseModel getPromptAndResponseModel() {
         return this.legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
-    }
-
-    public Optional<String> getPromptText(ILegacyUIModel uiModel, ILegacyAssignmentSpec promptResponsePanel, String resourceBundleFilename) {
-        Optional<String> optPromptText = Optional.empty();
-        try {
-            ILegacyPromptAndResponseModel promptAndResponseModel = this.legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
-            
-            String promptTextTag = promptResponsePanel.getPropertyValue("promptTextTag");
-            Properties resourceBundle = this.legacyPOSBeanService.getLegacyResourceBundleUtil().getText(resourceBundleFilename, Locale.getDefault());
-            String promptTextKey = String.format("%s.%s", "PromptAndResponsePanelSpec", promptTextTag);
-            String formattedPromptText = null;
-            formattedPromptText = toFormattedString(resourceBundle, 
-                promptTextKey, 
-                promptAndResponseModel != null ? Optional.ofNullable(promptAndResponseModel.getArguments()) : Optional.empty()
-            );
-            optPromptText = Optional.ofNullable(formattedPromptText);
-        } catch (Exception ex) {
-            logger.error("Failed to get promptText for {}", uiModel.getModel().getClass());
-        }
-        return optPromptText;
     }
     
     protected String retrieveCommonText(String propName, Optional<String> defaultValue) {
