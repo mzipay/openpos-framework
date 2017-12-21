@@ -1,9 +1,9 @@
-import { IForm } from './form.component';
-import { SessionService } from './../services/session.service';
-import { IScreen } from './../common/iscreen';
+import { IForm } from '../form.component';
+import { SessionService } from '../../services/session.service';
+import { IScreen } from '../../common/iscreen';
 import { DoCheck, OnInit, Component } from '@angular/core';
-import { IMenuItem } from '../common/imenuitem';
-import { IFormElement } from '../common/iformfield';
+import { IMenuItem } from '../../common/imenuitem';
+import { IFormElement } from '../../common/iformfield';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
