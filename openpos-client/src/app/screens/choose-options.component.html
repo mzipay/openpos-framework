@@ -2,6 +2,7 @@
     <mat-card fxFlex class="page-content-card" [ngSwitch]="currentView">
         
         <ng-template ngSwitchCase="ButtonList">
+            <mat-card-title *ngIf="promptText">{{promptText}}</mat-card-title>
             <mat-card-content >
                 <mat-nav-list>
                     <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
