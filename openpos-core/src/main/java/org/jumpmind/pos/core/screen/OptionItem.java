@@ -2,6 +2,8 @@ package org.jumpmind.pos.core.screen;
 
 import java.io.Serializable;
 
+import org.jumpmind.pos.core.model.Form;
+
 public class OptionItem implements IUIAction, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -11,6 +13,8 @@ public class OptionItem implements IUIAction, Serializable {
     private boolean enabled = true;
     private boolean selected = false;
     private String icon;
+
+    private Form form = new Form();
 
     public OptionItem() {
     }
@@ -100,6 +104,14 @@ public class OptionItem implements IUIAction, Serializable {
     @Override
     public void setTitle(String title) {
         this.setDisplayValue(title);
+    }
+    
+    public void setForm(Form form) {
+        this.form = form;
+    }
+
+    public Form getForm() {
+        return form;
     }
 
 }

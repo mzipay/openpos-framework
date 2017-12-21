@@ -37,7 +37,7 @@ import { SellItemDetailComponent } from './screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from './screens/signature-capture.component';
 import { StaticTableComponent } from './screens/static-table.component';
 import { ItemListComponent } from './screens/item-list.component';
-import { LoginComponent } from './screens/login.component';
+import { LoginComponent } from './screens/login/login.component';
 import { FocusDirective } from './common/focus.directive';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
@@ -94,6 +94,7 @@ import {
   MatToolbarModule,
   MatTooltipModule
 } from '@angular/material';
+import { DynamicFormControlComponent } from './common/controls/dynamic-form-control/dynamic-form-control.component';
 
 @NgModule({
   entryComponents: [
@@ -122,7 +123,8 @@ import {
     TillSummaryComponent,
     TillCountComponent,
     TillCountOtherTenderComponent,
-    DynamicFormComponent
+    DynamicFormComponent,
+    DynamicFormControlComponent
   ],
   declarations: [
     AppComponent,
@@ -162,7 +164,8 @@ import {
     OptionsComponent,
     TillSummaryComponent,
     TillCountComponent,
-    TillCountOtherTenderComponent
+    TillCountOtherTenderComponent,
+    DynamicFormControlComponent
   ],
   imports: [
     BrowserModule,

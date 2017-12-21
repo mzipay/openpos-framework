@@ -1,7 +1,7 @@
 import { TillCountOtherTenderComponent } from './../screens/till/till-count-other-tender.component';
 import { OptionsComponent } from './../screens/options/options.component';
 import { BlankComponent } from '../templates/blank/blank.component';
-import { LoginComponent } from './../screens/login.component';
+import { LoginComponent } from './../screens/login/login.component';
 import { PersonalizationComponent } from '../screens/personalization.component';
 import { WarrantyCoverageComponent } from '../screens/warranty-coverage.component';
 import { SaleRetrievalComponent } from '../screens/sale-retrieval.component';
