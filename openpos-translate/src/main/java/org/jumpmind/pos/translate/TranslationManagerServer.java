@@ -174,7 +174,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
             if (screen != null && subscriber.isInTranslateState()) {
                 AbstractScreenTranslator<?> lastTranslator = this.lastTranslatorByAppId.get(subscriber.getAppId());
-                ILegacyScreen previousScreen = lastTranslator != null ? lastTranslator.getHeadlessScreen() : null;
+                ILegacyScreen previousScreen = lastTranslator != null ? lastTranslator.getLegacyScreen() : null;
                 if (!screenInterceptors.get(subscriber.getAppId()).intercept(screen, previousScreen, subscriber, this,
                         posSessionInfo)) {
                     subscriber.showScreen(toScreen(screen, subscriber));

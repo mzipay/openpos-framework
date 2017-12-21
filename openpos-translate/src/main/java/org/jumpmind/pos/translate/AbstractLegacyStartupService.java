@@ -78,12 +78,16 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             File[] files = workingDir.listFiles();
             for (File file : files) {
                 if (file.isDirectory() && Pattern.matches("\\d{5}-\\d{3}", file.getName())) {
-                    String storeId = file.getName().substring(0, 5);
-                    String workstationId = file.getName().substring(6);
-                    if (this.isExternalProcessEnabled()) {
-                        startExternal(file, storeId, workstationId);
+                    if (file.list().length > 0) {
+                        String storeId = file.getName().substring(0, 5);
+                        String workstationId = file.getName().substring(6);
+                        if (this.isExternalProcessEnabled()) {
+                            startExternal(file, storeId, workstationId);
+                        } else {
+                            startInternal(file, storeId, workstationId);
+                        }
                     } else {
-                        startInternal(file, storeId, workstationId);
+                        logger.warn("Found directory that has no children files.  Not starting for {}", file.getName());
                     }
                 }
             }
@@ -215,26 +219,35 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
     }
 
     protected void startInternal(File file, String storeId, String workstationId) {
-        file.mkdirs();
-        String userDir = System.getProperty("user.dir");
-        String currentNodeDirParentName = file.getParentFile().getName();
-        File appWorkingDir = new File(this.getAppWorkingDir());
-        String appDirName = appWorkingDir.getName();
-        try {
-            currentNodeDirParentName = file.getParentFile().getCanonicalFile().getName();
-            appDirName = appWorkingDir.getCanonicalFile().getName();
-        } catch (IOException ex) {
-            logger.warn("", ex);
-        }
-        if (currentNodeDirParentName.equals(appDirName)) {
-            logger.info("Starting internal process for store: {}, workstation: {} in working dir: {}", storeId, workstationId, userDir);
-            generateStoreProperties(userDir, storeId, workstationId);
-            initOtherHeadlessConfiguration(userDir, storeId, workstationId);
-            this.startHeadless();
-            translationManagers.put(file.getName(), this.createTranslationManagerServer());
+        /**
+         * Can only have one internal process
+         */
+        if (translationManagers.size() == 0) {
+            file.mkdirs();
+            String userDir = System.getProperty("user.dir");
+            String currentNodeDirParentName = file.getParentFile().getName();
+            File appWorkingDir = new File(this.getAppWorkingDir());
+            String appDirName = appWorkingDir.getName();
+            try {
+                currentNodeDirParentName = file.getParentFile().getCanonicalFile().getName();
+                appDirName = appWorkingDir.getCanonicalFile().getName();
+            } catch (IOException ex) {
+                logger.warn("", ex);
+            }
+            if (currentNodeDirParentName.equals(appDirName)) {
+                logger.info("Starting internal process for store: {}, workstation: {} in working dir: {}", storeId, workstationId, userDir);
+                generateStoreProperties(userDir, storeId, workstationId);
+                initOtherHeadlessConfiguration(userDir, storeId, workstationId);
+                this.startHeadless();
+                translationManagers.put(file.getName(), this.createTranslationManagerServer());
+            } else {
+                logger.warn(
+                        "Could not start the internal process for store: {}, workstation: {} because the node working directory needs to be: {}",
+                        storeId, workstationId, this.getAppWorkingDir() + "/" + file.getName());
+            }
         } else {
-            logger.warn("Could not start the internal process for store: {}, workstation: {} because the node working directory needs to be: {}",
-                    storeId, workstationId, this.getAppWorkingDir() + "/" + file.getName() );
+            logger.warn("Can only have one translation manager.  Registering {} under {}", file.getName(), translationManagers.keySet().iterator().next());
+            translationManagers.put(file.getName(), translationManagers.values().iterator().next());
         }
     }
     

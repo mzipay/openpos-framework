@@ -3,6 +3,7 @@ package org.jumpmind.pos.translate;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.DefaultScreen.ScanType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,7 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
 
     protected void chooseScreenName() {
         if (getScreen().getName() == null) {
-            getScreen().setName(this.getHeadlessScreen().getSpecName());
+            getScreen().setName(legacyScreen.getSpecName());
         }
     }
     
@@ -56,6 +57,10 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
         buildMainContent();
         return screen;
     }
+    
+    public ILegacyScreen getLegacyScreen() {
+        return this.legacyScreen;
+    }
 
     abstract protected void buildMainContent();
 
@@ -65,16 +70,8 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
         return screen;
     }
 
-    public POSSessionInfo getPosSessionInfo() {
-        return posSessionInfo;
-    }
-
     public void setPosSessionInfo(POSSessionInfo posSessionInfo) {
         this.posSessionInfo = posSessionInfo;
-    }
-
-    public ILegacyScreen getHeadlessScreen() {
-        return legacyScreen;
     }
 
     protected void resetScreen() {
@@ -85,5 +82,13 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
             DefaultScreen screen) {
         tmServer.sendAction(action.getName());
     }
+    
+    protected void enableScan() {
+        screen.setShowScan(true);
+        screen.setScanType(ScanType.CAMERA_CORDOVA);
+        screen.setScanActionName("Scan");
+    }
+
+
 
 }
