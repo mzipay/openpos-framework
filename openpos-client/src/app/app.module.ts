@@ -94,6 +94,7 @@ import {
   MatToolbarModule,
   MatTooltipModule
 } from '@angular/material';
+import { DynamicFormControlComponent } from './common/controls/dynamic-form-control/dynamic-form-control.component';
 
 @NgModule({
   entryComponents: [
@@ -122,7 +123,8 @@ import {
     TillSummaryComponent,
     TillCountComponent,
     TillCountOtherTenderComponent,
-    DynamicFormComponent
+    DynamicFormComponent,
+    DynamicFormControlComponent
   ],
   declarations: [
     AppComponent,
@@ -162,7 +164,8 @@ import {
     OptionsComponent,
     TillSummaryComponent,
     TillCountComponent,
-    TillCountOtherTenderComponent
+    TillCountOtherTenderComponent,
+    DynamicFormControlComponent
   ],
   imports: [
     BrowserModule,
