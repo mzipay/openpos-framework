@@ -33,6 +33,28 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     protected ILegacyPOSBeanService legacyPOSBeanService;
     protected ILegacyStoreProperties legacyStoreProperties;
     
+    public static Map<String, String> labelTagToIconMap = new HashMap<>();
+
+    static {
+        labelTagToIconMap.put("Find", "search");
+        labelTagToIconMap.put("Add", "add");
+        labelTagToIconMap.put("AddRewardClub", "add");
+        labelTagToIconMap.put("FindRewardClub", "search");
+        labelTagToIconMap.put("AddBusiness", "add");
+        labelTagToIconMap.put("Delete", "delete");
+        labelTagToIconMap.put("CustID", "keyboard");
+        labelTagToIconMap.put("EmployeeID", "keyboard");
+        labelTagToIconMap.put("CustomerInfo", "person");
+        labelTagToIconMap.put("BusinessInfo", "store");
+        labelTagToIconMap.put("TaxExemptID", "keyboard");
+        labelTagToIconMap.put("TillOptions", "attach_money");
+        labelTagToIconMap.put("ViewCurrentSales", "pageview");
+        labelTagToIconMap.put("SkipToEmail", "email");
+        labelTagToIconMap.put("Bypass", "done");
+        labelTagToIconMap.put("EmailRcptNoMKGT", "done");
+        
+    }
+    
     public AbstractLegacyScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         super(headlessScreen, screenClass);
     }
@@ -89,7 +111,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
             Arrays.stream(localNavSpec.getButtons())
                     .filter(buttonSpec -> Optional.ofNullable(enabledState.get(buttonSpec.getActionName())).orElse(buttonSpec.getEnabled()))
                     .forEachOrdered(enabledButtonSpec -> {
-                        logger.info("Available local menu action: {}", enabledButtonSpec.getActionName());
+                        logger.info("Available local menu with label tag of: {}", enabledButtonSpec.getLabelTag());
                     });
             
         }
@@ -215,7 +237,6 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                 }
             }).forEachOrdered(buttonSpec -> {
                 buttons.add(buttonSpec);
-                logger.info("Available local menu action: {}", buttonSpec.getActionName());
             });
             
         }
@@ -294,10 +315,6 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
         return states;
     }
 
-    protected  <A extends IUIAction> List<A> generateUIActionsForLocalNavButtons(Class<A> actionClass) {
-        return generateUIActionsForLocalNavButtons(actionClass, true);
-    }
-    
     protected  <A extends IUIAction> List<A> generateUIActionsForLocalNavButtons(Class<A> actionClass, boolean filterDisabledButtons) {
         List<ILegacyButtonSpec> allLocalNavButtons = this.getPanelButtons(LOCAL_NAV_PANEL_KEY, Optional.of(filterDisabledButtons));
         ILegacyAssignmentSpec localNavPanel = this.getLegacyAssignmentSpec(LOCAL_NAV_PANEL_KEY);
@@ -337,6 +354,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                         actionItem.setTitle(buttonText);
                         actionItem.setEnabled(enabledFlag);
                         actionItem.setAction(possibleModifiedSpec.getActionName());
+                        actionItem.setIcon(labelTagToIconMap.get(labelTag));
                         generatedActions.add(actionItem);
                     } catch (InstantiationException | IllegalAccessException e) {
                         logger.error( String.format("Failed to create action of type %s for action '%s'", actionClass.getName(), possibleModifiedSpec.getActionName()), e);
