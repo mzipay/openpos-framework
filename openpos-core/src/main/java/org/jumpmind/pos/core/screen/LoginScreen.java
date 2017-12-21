@@ -2,17 +2,14 @@ package org.jumpmind.pos.core.screen;
 
 import org.jumpmind.pos.core.model.FieldElementType;
 import org.jumpmind.pos.core.model.FieldInputType;
-import org.jumpmind.pos.core.model.FormButton;
 import org.jumpmind.pos.core.model.FormField;
 
-public class LoginScreen extends FormScreen {
+public class LoginScreen extends DynamicFormScreen {
 
     private static final long serialVersionUID = 1L;
 
     private MenuItem changePasswordAction;
     private MenuItem forgotPasswordAction;
-    
-    private MenuItem submitAction;
     
     public LoginScreen() {
         setType(ScreenType.Login);
@@ -25,10 +22,6 @@ public class LoginScreen extends FormScreen {
         passwordField.setPlaceholder("Password");
         getForm().addFormElement(passwordField);
         
-        FormButton okButton = new FormButton("okButton", "OK", "OK");
-        getForm().addFormElement(okButton);
-        FormButton cancelButton = new FormButton("cancelButton", "Cancel", "Cancel");
-        getForm().addFormElement(cancelButton);
     }
     
     public MenuItem getChangePasswordAction() {
@@ -47,20 +40,5 @@ public class LoginScreen extends FormScreen {
         this.forgotPasswordAction = forgotPasswordAction;
     }
 
-    /**
-     * An alternate action that can be used if the OK button is not desired.
-     * @return The action to be used in place of the 'OK' button.
-     */
-    public MenuItem getSubmitAction() {
-        return submitAction;
-    }
-
-    /**
-     * Sets a new action that can be used in place of the OK button.
-     * @param submitAction The action to replace the function of the OK button.
-     */
-    public void setSubmitAction(MenuItem submitAction) {
-        this.submitAction = submitAction;
-    }
     
 }

@@ -37,7 +37,7 @@ import { SellItemDetailComponent } from './screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from './screens/signature-capture.component';
 import { StaticTableComponent } from './screens/static-table.component';
 import { ItemListComponent } from './screens/item-list.component';
-import { LoginComponent } from './screens/login.component';
+import { LoginComponent } from './screens/login/login.component';
 import { FocusDirective } from './common/focus.directive';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
