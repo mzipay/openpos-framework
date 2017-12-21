@@ -8,7 +8,7 @@ public interface ITranslationManager {
 
     public void setTranslationManagerSubscriber(ITranslationManagerSubscriber subscriber);
     
-    public void setDeviceMessageSubscriber(IDeviceMessageSubscriber subscriber);
+//    public void setDeviceMessageSubscriber(IDeviceMessageSubscriber subscriber);
     
     public void doAction(String appId, Action action, DefaultScreen screen);
     

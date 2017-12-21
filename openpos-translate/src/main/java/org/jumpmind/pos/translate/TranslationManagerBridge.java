@@ -58,11 +58,12 @@ public class TranslationManagerBridge implements ITranslationManager, IDeviceMes
         setTranslationManagerSubscriber();
     }
 
+    /*
     @Override
     public void setDeviceMessageSubscriber(IDeviceMessageSubscriber subscriber) {
         this.deviceMessageSubscriber = subscriber;
     }
-    
+    */
 
     @Override
     public void doAction(String appId, Action action, DefaultScreen screen) {

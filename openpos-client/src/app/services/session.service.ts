@@ -33,6 +33,8 @@ export class SessionService {
 
   private messages: Observable<Message>;
 
+  private deviceRequest: Observable<string>;
+
   private loading: boolean;
 
   private stompService: StompService;
@@ -189,6 +191,8 @@ export class SessionService {
       this.dialog = json;
     } else if (json.type === 'NoOp') {
       this.response = null;
+    } else if (json.type === 'DeviceRequest') {
+      // Ignore, will be handled by DeviceService
     } else {
       this.response = null;
       this.screen = json;
@@ -222,6 +226,13 @@ export class SessionService {
   public getCurrencyDenomination(): string {
       return 'USD';
   }
+
+  public addDeviceRequestObserver(callback: (deviceRequest: string) => void) {
+  //  this.
+  }
+  /*
+  public addMessagesSubscriber(callback: (message: Message) => void ) {
+    this.messages.subscribe(callback);
+  }
+  */
 }
-
-

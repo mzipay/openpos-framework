@@ -39,7 +39,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
 
     private Map<String, ITranslationManagerSubscriber> subscriberByAppId = new HashMap<>();
     
-    private IDeviceMessageSubscriber deviceMessageSubscriber;
+//    private IDeviceMessageSubscriber deviceMessageSubscriber;
     
     private POSSessionInfo posSessionInfo = new POSSessionInfo();
 
@@ -67,12 +67,12 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
             getHeadlessUISubsystem().addLegacyScreenListener(this);
         }
     }
-
+/*
     @Override
     public void setDeviceMessageSubscriber(IDeviceMessageSubscriber subscriber) {
         this.deviceMessageSubscriber = subscriber;
     }
-
+*/
     @Override
     public void doAction(String appId, Action action, DefaultScreen screen) {
         AbstractScreenTranslator<? extends DefaultScreen> lastTranslator = this.lastTranslatorByAppId.get(appId);
@@ -173,6 +173,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
         }
     }
 
+    
     protected void show(DefaultScreen screen) {
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
             if (screen != null && subscriber.isInTranslateState()) {
@@ -235,11 +236,15 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
 
     @Override
     public IDeviceResponse sendDeviceRequest(IDeviceRequest request) {
-        if (this.deviceMessageSubscriber == null) {
-            return null;
+        // TODO: need to either pass in appId or figure out a way to get it
+        IDeviceResponse response = null;
+        for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
+            response = subscriber.sendToDevice(request);
+            break;
         }
         
-        return this.deviceMessageSubscriber.sendDeviceRequest(request);
+        return response;
+        
     }
 
 

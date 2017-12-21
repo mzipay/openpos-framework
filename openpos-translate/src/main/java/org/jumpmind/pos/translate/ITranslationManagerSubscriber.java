@@ -11,7 +11,7 @@ public interface ITranslationManagerSubscriber {
 
     public void doAction(Action action);
     
-//    public IDeviceResponse sendToDevice(IDeviceRequest request);
+    public IDeviceResponse sendToDevice(IDeviceRequest request);
 
     public boolean isInTranslateState();
 
