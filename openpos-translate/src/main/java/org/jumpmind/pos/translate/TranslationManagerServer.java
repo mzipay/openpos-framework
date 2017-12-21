@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jumpmind.pos.core.device.IDeviceMessageDispatcher;
+import org.jumpmind.pos.core.device.IDeviceMessageSubscriber;
+import org.jumpmind.pos.core.device.IDeviceRequest;
+import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.DefaultScreen;
@@ -17,7 +21,7 @@ import org.jumpmind.pos.translate.InteractionMacro.WaitForScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TranslationManagerServer implements ILegacyScreenListener, ITranslationManager {
+public class TranslationManagerServer implements ILegacyScreenListener, ITranslationManager, IDeviceMessageDispatcher {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -34,7 +38,9 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     private Map<String, AbstractScreenTranslator<? extends DefaultScreen>> lastTranslatorByAppId = new HashMap<>();
 
     private Map<String, ITranslationManagerSubscriber> subscriberByAppId = new HashMap<>();
-
+    
+    private IDeviceMessageSubscriber deviceMessageSubscriber;
+    
     private POSSessionInfo posSessionInfo = new POSSessionInfo();
 
     public TranslationManagerServer(ILegacyScreenInterceptor interceptor, ILegacyScreenTranslatorFactory screenTranslatorFactory,
@@ -60,6 +66,11 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
             this.subscriberByAppId.put(subscriber.getAppId(), subscriber);
             getHeadlessUISubsystem().addLegacyScreenListener(this);
         }
+    }
+
+    @Override
+    public void setDeviceMessageSubscriber(IDeviceMessageSubscriber subscriber) {
+        this.deviceMessageSubscriber = subscriber;
     }
 
     @Override
@@ -221,5 +232,15 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     public void sendAction(String action) {
         getHeadlessUISubsystem().sendAction(action);
     }
+
+    @Override
+    public IDeviceResponse sendDeviceRequest(IDeviceRequest request) {
+        if (this.deviceMessageSubscriber == null) {
+            return null;
+        }
+        
+        return this.deviceMessageSubscriber.sendDeviceRequest(request);
+    }
+
 
 }
