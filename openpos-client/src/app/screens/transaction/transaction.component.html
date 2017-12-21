@@ -5,7 +5,7 @@
 					<mat-list-item *ngFor="let item of items">
 						<p matLine>{{item.description}}</p>
 						<p matLine class="accent-lighter">{{item.subtitle}}</p>
-						<span class="primary text-md">{{item.amount|currency:'USD':true:'2.2'}}</span>
+						<span class="primary text-md">{{item.amount|currency:'USD':true:'1.2'}}</span>
 						<button mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
 							<mat-icon>expand_more</mat-icon>
 						</button>
