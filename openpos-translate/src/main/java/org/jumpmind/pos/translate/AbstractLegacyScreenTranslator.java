@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
@@ -21,7 +22,6 @@ import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
 
 public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> extends AbstractScreenTranslator<T>{
     
-    // TODO: Move elsewhere?
     public final static String LOCAL_NAV_PANEL_KEY = "LocalNavigationPanel";
     public final static String GLOBAL_NAV_PANEL_KEY = "GlobalNavigationPanel";
     public final static String PROMPT_RESPONSE_PANEL_KEY = "PromptAndResponsePanel";
@@ -40,18 +40,10 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     public void setLegacyPOSBeanService(ILegacyPOSBeanService beanService) {
         this.legacyPOSBeanService = beanService;
     }
-    
-    public ILegacyPOSBeanService getLegacyPOSBeanService() {
-        return this.legacyPOSBeanService;
-    }
-    
-    public ILegacyStoreProperties getLegacyStoreProperties() {
-        return legacyStoreProperties;
-    }
 
     public void setLegacyStoreProperties(ILegacyStoreProperties legacyStoreProperties) {
         this.legacyStoreProperties = legacyStoreProperties;
-    }
+    }        
 
     @Override
     protected void buildMainContent() {
@@ -355,6 +347,26 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
 
         return generatedActions;
         
+    }
+    
+    protected Optional<String> getPromptText(ILegacyUIModel uiModel, ILegacyAssignmentSpec promptResponsePanel, String resourceBundleFilename) {
+        Optional<String> optPromptText = Optional.empty();
+        try {
+            ILegacyPromptAndResponseModel promptAndResponseModel = this.legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
+            
+            String promptTextTag = promptResponsePanel.getPropertyValue("promptTextTag");
+            Properties resourceBundle = this.legacyPOSBeanService.getLegacyResourceBundleUtil().getText(resourceBundleFilename, Locale.getDefault());
+            String promptTextKey = String.format("%s.%s", "PromptAndResponsePanelSpec", promptTextTag);
+            String formattedPromptText = null;
+            formattedPromptText = toFormattedString(resourceBundle, 
+                promptTextKey, 
+                promptAndResponseModel != null ? Optional.ofNullable(promptAndResponseModel.getArguments()) : Optional.empty()
+            );
+            optPromptText = Optional.ofNullable(formattedPromptText);
+        } catch (Exception ex) {
+            logger.error("Failed to get promptText for {}", uiModel.getModel().getClass());
+        }
+        return optPromptText;
     }
    
 }
