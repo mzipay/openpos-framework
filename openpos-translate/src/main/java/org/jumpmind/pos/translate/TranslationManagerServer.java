@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.jumpmind.pos.core.device.IDeviceMessageDispatcher;
-import org.jumpmind.pos.core.device.IDeviceMessageSubscriber;
 import org.jumpmind.pos.core.device.IDeviceRequest;
 import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
@@ -38,9 +37,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     private Map<String, AbstractScreenTranslator<? extends DefaultScreen>> lastTranslatorByAppId = new HashMap<>();
 
     private Map<String, ITranslationManagerSubscriber> subscriberByAppId = new HashMap<>();
-    
-//    private IDeviceMessageSubscriber deviceMessageSubscriber;
-    
+
     private POSSessionInfo posSessionInfo = new POSSessionInfo();
 
     public TranslationManagerServer(ILegacyScreenInterceptor interceptor, ILegacyScreenTranslatorFactory screenTranslatorFactory,
@@ -67,12 +64,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
             getHeadlessUISubsystem().addLegacyScreenListener(this);
         }
     }
-/*
-    @Override
-    public void setDeviceMessageSubscriber(IDeviceMessageSubscriber subscriber) {
-        this.deviceMessageSubscriber = subscriber;
-    }
-*/
+
     @Override
     public void doAction(String appId, Action action, DefaultScreen screen) {
         AbstractScreenTranslator<? extends DefaultScreen> lastTranslator = this.lastTranslatorByAppId.get(appId);
@@ -173,7 +165,6 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
         }
     }
 
-    
     protected void show(DefaultScreen screen) {
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
             if (screen != null && subscriber.isInTranslateState()) {

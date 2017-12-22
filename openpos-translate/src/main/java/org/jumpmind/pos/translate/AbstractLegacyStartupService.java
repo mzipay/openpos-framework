@@ -2,7 +2,6 @@ package org.jumpmind.pos.translate;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -11,13 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jumpmind.pos.core.device.IDeviceMessageDispatcher;
 import org.jumpmind.pos.util.NodeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,10 +52,8 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
 
     private Map<String, ITranslationManager> translationManagers = new HashMap<>();
     
-    private Map<String, IDeviceMessageDispatcher> deviceMessageDispatchers = new HashMap<>();
-    
-    public static String getDefaultServiceName(String storeId, String workstationId, Class<?> serviceClass) {
-        return String.format("%s/%s-%s", serviceClass.getSimpleName(), storeId, workstationId);
+    public static String getDefaultServiceName(String storeId, String workstationId) {
+        return String.format("%s/%s-%s", ITranslationManager.class.getSimpleName(), storeId, workstationId);
     }
 
     @PostConstruct
@@ -115,7 +110,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
     protected abstract void startHeadless();
     protected abstract ITranslationManager createTranslationManagerServer();
     protected abstract Class<?> getHeadlessWorkstationProcessClass();
-    protected abstract String getExternalHeadlessWorkstationProcessServiceName(String storeId, String workstationId, Class<?> serviceClass);
+    protected abstract String getExternalHeadlessWorkstationProcessServiceName(String storeId, String workstationId);
     protected abstract void generateStoreProperties(String directory, String storeId, String workstationId);
     protected abstract Optional<String> getNodeWorkingSubdirectoryName();
     /**
@@ -197,13 +192,23 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             }));
             logger.info("Started process for {}", file.getName());
             if (process.isAlive()) {
-                logger.info("Getting rmi interfaces for {}", file.getName());
-                registerRemoteTranslationManager(file, storeId, workstationId, 1000);
-                // TODO: If this works, convert method above to use
-                registerRemote(file, storeId, workstationId, IDeviceMessageDispatcher.class, 333, 
-                        (r) -> this.getDeviceMessageDispatchers().put(file.getName(), r), 
-                        (e) -> this.getDeviceMessageDispatchers().remove(file.getName())  );
-
+                logger.info("Getting rmi interface for {}", file.getName());
+                for (int i = 0; i < 15; i++) {
+                    try {
+                        RmiProxyFactoryBean factory = new RmiProxyFactoryBean();
+                        factory.setServiceUrl(String.format("rmi://localhost:%d/%s", this.getRmiRegistryPort(),
+                                this.getExternalHeadlessWorkstationProcessServiceName(storeId, workstationId)));
+                        factory.setServiceInterface(ITranslationManager.class);
+                        factory.afterPropertiesSet();
+                        ITranslationManager remote = (ITranslationManager) factory.getObject();
+                        remote.ping();
+                        this.getTranslationManagers().put(file.getName(), remote);
+                    } catch (RemoteAccessException e) {
+                        this.getTranslationManagers().remove(file.getName());
+                        logger.info("The remote interface was not available.  Trying again in a second");
+                        Thread.sleep(1000);
+                    }
+                }
                 this.incrementExternalProcessCount();
             } else {
                 logger.warn("The launched process died unexpectly for {}", file.getName());
@@ -213,57 +218,6 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
         }
     }
 
-    private <T> void registerRemote(File file, String storeId, String workstationId, Class<T> classToRegister, int sleepBetweenAttemptsMs, Consumer<T> onSuccess, Consumer<Exception> onFailure) throws InterruptedException {
-        for (int i = 0; i < 15; i++) {
-            try {
-                RmiProxyFactoryBean factory = new RmiProxyFactoryBean();
-                String serviceUrl = makeRemoteServiceUrl(this.getExternalHeadlessWorkstationProcessServiceName(storeId, workstationId, classToRegister));
-                factory.setServiceUrl(serviceUrl);
-                factory.setServiceInterface(classToRegister);
-                factory.afterPropertiesSet();
-                @SuppressWarnings("unchecked")
-                T remote = (T) factory.getObject();
-                Method pingMethod; 
-                try {
-                    pingMethod = classToRegister.getMethod("ping", new Class[]{});
-                    pingMethod.invoke(remote, new Object[] {});
-                } catch (Exception ex) {
-                    logger.warn("Failed to invoke ping method for {}. Reason: {}", remote, ex.getMessage()); 
-                }
-                onSuccess.accept(remote);
-//                this.getDeviceMessageDispatchers().put(file.getName(), remote);
-            } catch (RemoteAccessException e) {
-                onFailure.accept(e);
-//                this.getDeviceMessageDispatchers().remove(file.getName());
-                logger.info("The remote interface was not available.  Trying again in {}ms", sleepBetweenAttemptsMs );
-                Thread.sleep(sleepBetweenAttemptsMs);
-            }
-        }
-    }
-
-    private void registerRemoteTranslationManager(File file, String storeId, String workstationId, int sleepBetweenAttemptsMs) throws InterruptedException {
-        for (int i = 0; i < 15; i++) {
-            try {
-                RmiProxyFactoryBean factory = new RmiProxyFactoryBean();
-                String serviceUrl = makeRemoteServiceUrl(this.getExternalHeadlessWorkstationProcessServiceName(storeId, workstationId, ITranslationManager.class));
-                factory.setServiceUrl(serviceUrl);
-                factory.setServiceInterface(ITranslationManager.class);
-                factory.afterPropertiesSet();
-                ITranslationManager remote = (ITranslationManager) factory.getObject();
-                remote.ping();
-                this.getTranslationManagers().put(file.getName(), remote);
-            } catch (RemoteAccessException e) {
-                this.getTranslationManagers().remove(file.getName());
-                logger.info("The remote interface was not available.  Trying again in a second");
-                Thread.sleep(sleepBetweenAttemptsMs);
-            }
-        }
-    }
-    
-    protected String makeRemoteServiceUrl(String serviceName) {
-        return String.format("rmi://localhost:%d/%s", this.getRmiRegistryPort(), serviceName);
-    }
-    
     protected void startInternal(File file, String storeId, String workstationId) {
         /**
          * Can only have one internal process
@@ -302,13 +256,6 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
         ITranslationManager translationManager = translationManagers.get(nodeId);
         logger.debug("Returning this translationManager for nodeId {}: {}", nodeId, translationManager);
         return translationManager;
-    }
-    
-    @Override
-    public IDeviceMessageDispatcher getDeviceMessageDispatcherRef(String nodeId) {
-        IDeviceMessageDispatcher deviceMessageDispatcher = deviceMessageDispatchers.get(nodeId);
-        logger.debug("Returning this deviceMessageDispatcher for nodeId {}: {}", nodeId, deviceMessageDispatcher);
-        return deviceMessageDispatcher;
     }
 
     public boolean isExternalProcessEnabled() {
@@ -371,14 +318,6 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
         this.translationManagers = translationManagers;
     }
 
-    protected Map<String, IDeviceMessageDispatcher> getDeviceMessageDispatchers() {
-        return deviceMessageDispatchers;
-    }
-
-    protected void setDeviceMessageDispatchers(Map<String, IDeviceMessageDispatcher> deviceMessageDispatchers) {
-        this.deviceMessageDispatchers = deviceMessageDispatchers;
-    }
-    
     protected String getPrefixClassPath() {
         return prefixClassPath;
     }

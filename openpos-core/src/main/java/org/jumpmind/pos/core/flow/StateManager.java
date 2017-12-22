@@ -28,7 +28,6 @@ import javax.annotation.PostConstruct;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.screen.DefaultScreen;
-import org.jumpmind.pos.core.service.IDeviceService;
 import org.jumpmind.pos.core.service.IScreenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
