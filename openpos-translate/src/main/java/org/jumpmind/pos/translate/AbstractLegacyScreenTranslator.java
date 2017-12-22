@@ -365,6 +365,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                         try {
                             actionItem = actionClass.newInstance();
                             actionItem.setTitle(label);
+                            actionItem.setIcon(labelTagToIconMap.get(labelTag));
                             actionItem.setEnabled(enabled);
                             actionItem.setAction(buttonSpec.getActionName());
                             generatedActions.add(actionItem);
