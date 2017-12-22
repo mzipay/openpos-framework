@@ -3,9 +3,6 @@ package org.jumpmind.pos.core.service;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.device.DefaultDeviceResponse;
@@ -18,9 +15,6 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,10 +29,14 @@ public class DeviceService implements IDeviceService {
     private ObjectMapper mapper = new ObjectMapper();
 
     
+    private String makeRequestResponseMapKey(String deviceId, String requestId) {
+        return String.format("%s-%s", deviceId, requestId);
+    }
+    
     @Override
     public CompletableFuture<IDeviceResponse> send(String appId, String nodeId, IDeviceRequest request) {
         CompletableFuture<IDeviceResponse> futureResponse = new CompletableFuture<>();
-        String mapKey = String.format("%s-%s", request.getDeviceId(), request.getRequestId());
+        String mapKey = makeRequestResponseMapKey(request.getDeviceId(), request.getRequestId());
         this.requestToResponseMap.put(mapKey, new DeviceResponseMapEntry(futureResponse));
         
         // TODO: May need to add a client id that is registered upon initial connection to the server so that the
@@ -50,26 +48,14 @@ public class DeviceService implements IDeviceService {
     // Need a receive method to receive the response
     //@RequestMapping(method = RequestMethod.GET, value = "app/{appId}/node/{nodeId}/device/{deviceId}/{deviceResponse}")
     // TODO: map this to a better URL?
-    @MessageMapping("device/app/{appId}/node/{nodeId}/device/{deviceId}/")
+    @MessageMapping("device/app/{appId}/node/{nodeId}/device/{deviceId}")
     public void onDeviceResponse(@DestinationVariable String appId, @DestinationVariable String nodeId, @DestinationVariable String deviceId, DefaultDeviceResponse response) {
-//        IDeviceResponse response = null;
         String sourceRequestId = response.getRequestId();
         
-        /*
-        try {
-            response = mapper.convertValue(deviceResponse, DefaultDeviceResponse.class);
-            sourceRequestId = response.getRequestId();
-        } catch (Exception ex) {
-            logger.error(
-                String.format("Failed to convert device response received to DeviceResponse object for device id '%s'.  response sent: %s", 
-                    deviceId, deviceResponse), 
-                ex 
-            );
-        }
-        */
         if (StringUtils.isNotBlank(sourceRequestId)) {
             // Check to ensure there is a pending request.  If found, invoke the callback and remove from the cache
-            DeviceResponseMapEntry responseEntry = this.requestToResponseMap.get(sourceRequestId);
+            String mapKey = makeRequestResponseMapKey(response.getDeviceId(), sourceRequestId);
+            DeviceResponseMapEntry responseEntry = this.requestToResponseMap.get(mapKey);
            if (responseEntry != null) {
                 this.requestToResponseMap.remove(sourceRequestId);
                 logger.trace("Invoking response callback for source requestId '{}'...", sourceRequestId);

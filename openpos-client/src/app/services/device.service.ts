@@ -73,6 +73,13 @@ export class DeviceService {
 
   public onDeviceRequest = (request: IDeviceRequest) => {
     console.log(`deviceRequest received: ${request.payload}`);
+    // TODO: For now just hardcoding a response
+    this.session.onDeviceResponse({
+      requestId: request.requestId,
+      deviceId: request.deviceId,
+      type: 'DeviceResponse',
+      payload: `Successfully processed request ${request.requestId}`
+    });
   }
 
 

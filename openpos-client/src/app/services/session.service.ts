@@ -1,3 +1,4 @@
+import { IDeviceResponse } from './../common/ideviceresponse';
 import { IDeviceRequest } from './../common/idevicerequest';
 import { IMenuItem } from '../common/imenuitem';
 import { LoaderService } from '../common/loader/loader.service';
@@ -144,6 +145,12 @@ export class SessionService {
     this.messages = null;
 
     this.subscribed = false;
+  }
+
+  public onDeviceResponse(deviceResponse: IDeviceResponse) {
+    console.log('Publish deviceResponse ' + deviceResponse);
+    this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
+      JSON.stringify(deviceResponse));
   }
 
   public onAction(action: string) {

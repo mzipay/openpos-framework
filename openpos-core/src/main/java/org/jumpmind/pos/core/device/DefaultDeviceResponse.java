@@ -7,7 +7,7 @@ public class DefaultDeviceResponse implements IDeviceResponse, Serializable {
     
     private String requestId;
     private String deviceId;
-    private String responseType;
+    private String type;
     private String payload;
     
     @Override
@@ -31,13 +31,13 @@ public class DefaultDeviceResponse implements IDeviceResponse, Serializable {
     }
     
     @Override
-    public String getResponseType() {
-        return this.responseType;
+    public String getType() {
+        return this.type;
     }
     
     @Override
-    public void setResponseType(String responseType) {
-        this.responseType = responseType;
+    public void setType(String responseType) {
+        this.type = responseType;
     }
     
     @Override

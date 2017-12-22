@@ -5,8 +5,8 @@ public interface IDeviceResponse {
     void setRequestId(String sourceRequestId);
     String getDeviceId();
     void setDeviceId(String deviceId);
-    String getResponseType();
-    void setResponseType(String responseType);
+    String getType();
+    void setType(String responseType);
     String getPayload();
     void setPayload(String payload);
 }
