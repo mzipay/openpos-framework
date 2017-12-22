@@ -1,5 +1,8 @@
 package org.jumpmind.pos.translate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.DefaultScreen;
@@ -16,7 +19,10 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
     protected T screen;
 
     protected POSSessionInfo posSessionInfo;
-    private IScreenThemeSelector screenThemeSelector;
+    
+    protected IScreenThemeSelector screenThemeSelector;
+    
+    protected Map<String, String> iconRegistry = new HashMap<>();
 
     
     public AbstractScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
@@ -27,20 +33,18 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
             throw new RuntimeException(e);
         }
     }
-    
-    public IScreenThemeSelector getScreenThemeSelector() {
-        return screenThemeSelector;
-        
+   
+    public void setIconRegistry(Map<String, String> iconRegistry) {
+        this.iconRegistry = iconRegistry;
     }
     
     public void setScreenThemeSelector(IScreenThemeSelector screenThemeSelector) {
         this.screenThemeSelector = screenThemeSelector;
-    }
-    
+    }    
     
     protected void chooseScreenTheme() {
-        if (this.getScreenThemeSelector() != null) {
-            getScreen().setTheme(this.getScreenThemeSelector().getScreenThemeName());
+        if (this.screenThemeSelector != null) {
+            getScreen().setTheme(this.screenThemeSelector.getScreenThemeName());
         }
     }
 
@@ -51,6 +55,7 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
     }
     
     public T build() {
+        screen.setIcon(iconRegistry.get(screen.getName()));
         chooseScreenName();
         chooseScreenTheme();
         updatePosSessionInfo();
