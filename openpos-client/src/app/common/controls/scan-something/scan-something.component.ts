@@ -9,16 +9,18 @@ import { DeviceService } from '../../../services/device.service';
 export class ScanSomethingComponent implements OnInit {
 
   @Output() enter = new EventEmitter<string>();
-  @Input() responseText: string;
   @Input() placeholderText: string;
+
+  public barcode: string;
 
   constructor(public devices: DeviceService) { }
 
   ngOnInit() {
   }
 
-  public onEnter(value): void {
-    this.enter.emit(value);
+  public onEnter(): void {
+    this.enter.emit(this.barcode);
+    this.barcode = '';
   }
 
   private filterBarcodeValue(val: string): string {

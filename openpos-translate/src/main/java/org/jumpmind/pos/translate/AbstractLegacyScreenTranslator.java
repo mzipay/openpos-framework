@@ -6,11 +6,13 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.lang.WordUtils;
 import org.jumpmind.pos.core.screen.DefaultScreen;
@@ -32,6 +34,28 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
 
     protected ILegacyPOSBeanService legacyPOSBeanService;
     protected ILegacyStoreProperties legacyStoreProperties;
+    
+    public static Map<String, String> labelTagToIconMap = new HashMap<>();
+
+    static {
+        labelTagToIconMap.put("Find", "search");
+        labelTagToIconMap.put("Add", "add");
+        labelTagToIconMap.put("AddRewardClub", "add");
+        labelTagToIconMap.put("FindRewardClub", "search");
+        labelTagToIconMap.put("AddBusiness", "add");
+        labelTagToIconMap.put("Delete", "delete");
+        labelTagToIconMap.put("CustID", "keyboard");
+        labelTagToIconMap.put("EmployeeID", "keyboard");
+        labelTagToIconMap.put("CustomerInfo", "person");
+        labelTagToIconMap.put("BusinessInfo", "store");
+        labelTagToIconMap.put("TaxExemptID", "keyboard");
+        labelTagToIconMap.put("TillOptions", "attach_money");
+        labelTagToIconMap.put("ViewCurrentSales", "pageview");
+        labelTagToIconMap.put("SkipToEmail", "email");
+        labelTagToIconMap.put("Bypass", "done");
+        labelTagToIconMap.put("EmailRcptNoMKGT", "done");
+        
+    }
     
     public AbstractLegacyScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         super(headlessScreen, screenClass);
@@ -89,7 +113,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
             Arrays.stream(localNavSpec.getButtons())
                     .filter(buttonSpec -> Optional.ofNullable(enabledState.get(buttonSpec.getActionName())).orElse(buttonSpec.getEnabled()))
                     .forEachOrdered(enabledButtonSpec -> {
-                        logger.info("Available local menu action: {}", enabledButtonSpec.getActionName());
+                        logger.info("Available local menu with label tag of: {}", enabledButtonSpec.getLabelTag());
                     });
             
         }
@@ -215,7 +239,6 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                 }
             }).forEachOrdered(buttonSpec -> {
                 buttons.add(buttonSpec);
-                logger.info("Available local menu action: {}", buttonSpec.getActionName());
             });
             
         }
@@ -294,59 +317,70 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
         return states;
     }
 
-    protected  <A extends IUIAction> List<A> generateUIActionsForLocalNavButtons(Class<A> actionClass) {
-        return generateUIActionsForLocalNavButtons(actionClass, true);
-    }
-    
-    protected  <A extends IUIAction> List<A> generateUIActionsForLocalNavButtons(Class<A> actionClass, boolean filterDisabledButtons) {
-        List<ILegacyButtonSpec> allLocalNavButtons = this.getPanelButtons(LOCAL_NAV_PANEL_KEY, Optional.of(filterDisabledButtons));
-        ILegacyAssignmentSpec localNavPanel = this.getLegacyAssignmentSpec(LOCAL_NAV_PANEL_KEY);
-
-        // Some Buttons/Options might be disabled dynamically.
-        //POSBaseBeanModel posModel = (POSBaseBeanModel) this.legacyScreen.getModel();
-        List<ILegacyButtonSpec> modifiedButtons = new ArrayList<>();
-        ILegacyNavigationButtonBeanModel navigationButtonBeanModel = this.legacyPOSBeanService.getLegacyPOSBaseBeanModel(legacyScreen).getLegacyLocalButtonBeanModel();
-        if (navigationButtonBeanModel != null) {
-            if (navigationButtonBeanModel.getModifyButtons() != null) {
-                modifiedButtons.addAll(Arrays.asList(navigationButtonBeanModel.getModifyButtons()));
+    protected <A extends IUIAction> List<A> generateUIActionsForLocalNavButtons(Class<A> actionClass, boolean filterDisabled, String... excludedLabelTags) {
+        Set<String> toExclude = new HashSet<>();
+        if (excludedLabelTags != null) {
+            for (String string : excludedLabelTags) {
+                toExclude.add(string);
             }
         }
+
         final List<A> generatedActions = new ArrayList<A>();
-        allLocalNavButtons.stream()
-            .forEachOrdered(localNavButton -> {
-                ILegacyButtonSpec possibleModifiedSpec = modifiedButtons.stream().filter(
-                    modifiedButton -> modifiedButton.getActionName().equals(localNavButton.getActionName())
-                ).findFirst().orElse(localNavButton);
-                
-                // If the labelTag is null, don't add the button. (That seems to be the way some sites don't show buttons)
-                String labelTag = localNavButton.getLabelTag();
-                if (possibleModifiedSpec.getLabelTag() != null) {
-                    labelTag = possibleModifiedSpec.getLabelTag();
-                }
-                Boolean enabledFlag = localNavButton.getEnabledFlag();
-                if (possibleModifiedSpec.getEnabledFlag() != null) {
-                    enabledFlag = possibleModifiedSpec.getEnabledFlag();
-                }
-                // Skip adding the button if the modified spec doesn't have a value for enabled and the label tag. (this seems
-                // to be the way OrPOS sites omit buttons)
-                if (possibleModifiedSpec.getEnabledFlag() != null || possibleModifiedSpec.getLabelTag() != null) {
-                    String buttonText = this.getLegacyUtilityManager().retrieveText(localNavPanel.getBeanSpecName(), getResourceBundleFilename(), labelTag, labelTag);
-                    A actionItem;
-                    try {
-                        actionItem = actionClass.newInstance();
-                        actionItem.setTitle(buttonText);
-                        actionItem.setEnabled(enabledFlag);
-                        actionItem.setAction(possibleModifiedSpec.getActionName());
-                        generatedActions.add(actionItem);
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        logger.error( String.format("Failed to create action of type %s for action '%s'", actionClass.getName(), possibleModifiedSpec.getActionName()), e);
+        ILegacyAssignmentSpec panelSpec = legacyPOSBeanService.getLegacyAssignmentSpec(legacyScreen, LOCAL_NAV_PANEL_KEY);
+        if (panelSpec != null) { 
+            ILegacyBeanSpec localNavSpec = legacyPOSBeanService.getLegacyBeanSpec(legacyScreen, panelSpec.getBeanSpecName());
+            ILegacyPOSBaseBeanModel model = legacyPOSBeanService.getLegacyPOSBaseBeanModel(legacyScreen);
+            ILegacyNavigationButtonBeanModel buttonModel = model.getLegacyLocalButtonBeanModel();
+            Map<String, Boolean> enabledState = parseButtonStates(panelSpec);
+            for (ILegacyButtonSpec buttonSpec : localNavSpec.getButtons()) {
+                if (buttonSpec != null && !toExclude.contains(buttonSpec.getLabelTag())) {
+                    Boolean enabled = enabledState.get(buttonSpec.getActionName());
+                    if (enabled == null) {
+                        enabled = buttonSpec.getEnabled();
                     }
+
+                    String labelTag = buttonSpec.getLabelTag();
+                    String label = labelTag;
+                    String action = buttonSpec.getActionName();
+                    try {
+                        label = legacyPOSBeanService.getLegacyUtilityManager(legacyScreen).retrieveText(panelSpec.getBeanSpecName(), getResourceBundleFilename(), labelTag, labelTag);
+                    } catch (Exception e) {
+                        logger.info("Failed to look up label for button: {}", labelTag);
+                    }
+
+                    if (buttonModel != null) {
+                        ILegacyButtonSpec[] buttonSpecs = buttonModel.getModifyButtons();
+                        if (buttonSpecs != null) {
+                            for (ILegacyButtonSpec modifiedSpec : buttonSpecs) {
+                                if (modifiedSpec.getActionName().equals(action)) {
+                                    enabled = modifiedSpec.getEnabled();
+                                }
+                            }
+                        }
+                    }
+                    if (enabled || !filterDisabled) {
+                        logger.info("adding action with label tag: {}", labelTag);
+
+                        A actionItem;
+                        try {
+                            actionItem = actionClass.newInstance();
+                            actionItem.setTitle(label);
+                            actionItem.setIcon(labelTagToIconMap.get(labelTag));
+                            actionItem.setEnabled(enabled);
+                            actionItem.setAction(buttonSpec.getActionName());
+                            generatedActions.add(actionItem);
+                        } catch (InstantiationException | IllegalAccessException e) {
+                            logger.error(String.format("Failed to create action of type %s for action '%s'", actionClass.getName(),
+                                    buttonSpec.getActionName()), e);
+                        }
+                    }
+
                 }
             }
-        );
+        }
 
         return generatedActions;
-        
+
     }
     
     protected Optional<String> getPromptText(ILegacyUIModel uiModel, ILegacyAssignmentSpec promptResponsePanel, String resourceBundleFilename) {

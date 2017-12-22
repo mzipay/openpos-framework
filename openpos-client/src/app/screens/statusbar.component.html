@@ -16,7 +16,7 @@
 					</button>
 				</ng-container>
 
-			<mat-icon>{{session.screen.icon ? session.screen.icon :  'payment'}}</mat-icon>
+			<mat-icon *ngIf="session.screen.icon">{{session.screen.icon}}</mat-icon>
 			<span fxHide.xs class="text-sm">&nbsp;{{session.screen.name}}</span>
 		</div>
 

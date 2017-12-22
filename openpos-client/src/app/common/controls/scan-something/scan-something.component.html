@@ -3,7 +3,7 @@
       <span>Scan</span>
       <mat-icon svgIcon="barcode"></mat-icon>
     </button>
-    <input fxFlexFill fxFlex="1 1 auto" #box class="bordered prompt-input-scan-something text-md" 
-      (keyup.enter)="onEnter(box.value)" [(ngModel)]="responseText" (keydown)="onBarcodeKeydown($event)" (paste)="onBarcodePaste($event)"
+    <input fxFlexFill fxFlex="1 1 auto" class="bordered prompt-input-scan-something text-md" 
+      (keyup.enter)="onEnter()" [(ngModel)]="barcode" (keydown)="onBarcodeKeydown($event)" (paste)="onBarcodePaste($event)"
       placeholder="{{placeholderText}}">
   </div>

@@ -14,6 +14,7 @@ export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck {
   public selectedOption: IOptionItem;
   public optionItems: IOptionItem[];
   private lastSequenceNum: number;
+  public promptText: string;
 
   constructor(public session: SessionService) {
   }
@@ -31,6 +32,7 @@ export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck {
       this.optionItems = this.session.screen.options;
       this.lastSequenceNum = this.session.screen.sequenceNumber;
       this.currentView = this.session.screen.displayStyle;
+      this.promptText = this.session.screen.promptText;
     }
   }
 
