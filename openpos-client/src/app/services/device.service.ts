@@ -1,3 +1,4 @@
+import { IDeviceRequest } from './../common/idevicerequest';
 import { SessionService } from './session.service';
 import { IMenuItem } from '../common/imenuitem';
 import { LoaderService } from '../common/loader/loader.service';
@@ -20,6 +21,12 @@ export class DeviceService {
     document.addEventListener('deviceready', function () {
       console.log('cordova devices are ready');
     }, false);
+
+    this.session.onDeviceRequest.subscribe({
+      next: (event: IDeviceRequest) => {
+        this.onDeviceRequest(event);
+      }
+    });
   }
 
   public scan() {
@@ -63,6 +70,11 @@ export class DeviceService {
       );
     }
   }
+
+  public onDeviceRequest = (request: IDeviceRequest) => {
+    console.log(`deviceRequest received: ${request.payload}`);
+  }
+
 
 }
 
