@@ -11,8 +11,8 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Defaul
 
     Set<String> excludeLabelTags = new HashSet<>();
 
-    public SellOptionsTranslator(ILegacyScreen headlessScreen, Class<DefaultScreen> screenClass, String icon, String... excludeActions) {
-        super(headlessScreen, screenClass);
+    public SellOptionsTranslator(ILegacyScreen headlessScreen, String icon, String... excludeActions) {
+        super(headlessScreen, DefaultScreen.class);
         if (excludeActions != null) {
             for (String string : excludeActions) {
                 this.excludeLabelTags.add(string);
