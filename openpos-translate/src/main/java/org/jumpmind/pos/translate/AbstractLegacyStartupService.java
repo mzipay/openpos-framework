@@ -164,6 +164,11 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
                 }
             }
             
+            if(StringUtils.isNotEmpty(libraryPath))
+            {
+            		cmdLine.add("-Djava.library.path=" + libraryPath);
+            }
+            
             cmdLine.add("-cp");
             if (classpath.toLowerCase().contains("100-openpos-server.jar")) {
                 // one jar
@@ -179,11 +184,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
                 cmdLine.add(classpath);
             }
             
-            if(StringUtils.isNotEmpty(libraryPath))
-            {
-            		cmdLine.add("-Djava.library.path=" + libraryPath);
-            }
-            
+
             cmdLine.add(this.getHeadlessWorkstationProcessClass().getName());
 
             ProcessBuilder pb = new ProcessBuilder(cmdLine);
