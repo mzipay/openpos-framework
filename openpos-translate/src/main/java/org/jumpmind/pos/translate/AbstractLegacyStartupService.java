@@ -45,6 +45,10 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
     
     @Value("${postfix.classpath}")
     private String postfixClasspath;
+
+    @Value("${library.path}")
+    private String libraryPath;
+
     
     private int externalProcessCount = 0;
 
@@ -170,6 +174,12 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
                 // running in IDE or development environment
                 cmdLine.add(classpath);
             }
+            
+            if(StringUtils.isNotEmpty(libraryPath))
+            {
+            		cmdLine.add("-Djava.library.path=" + libraryPath);
+            }
+            
             cmdLine.add(this.getHeadlessWorkstationProcessClass().getName());
 
             ProcessBuilder pb = new ProcessBuilder(cmdLine);
@@ -320,5 +330,13 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
     protected void setPostfixClasspath(String postfixClasspath) {
         this.postfixClasspath = postfixClasspath;
     }
+
+	protected String getLibraryPath() {
+		return libraryPath;
+	}
+
+	protected void setLibraryPath(String libraryPath) {
+		this.libraryPath = libraryPath;
+	}
 
 }
