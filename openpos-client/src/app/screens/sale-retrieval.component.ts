@@ -12,13 +12,10 @@ import { ScanSomethingComponent } from '../common/controls/scan-something/scan-s
 })
 export class SaleRetrievalComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 
-  scanInputCallback: Function;
-
   constructor(public session: SessionService) {
 
   }
   public ngOnInit(): void {
-    this.scanInputCallback = this.onScanInputEnter.bind(this);
   }
 
   show(session: SessionService, app: AbstractApp) {
@@ -32,15 +29,5 @@ export class SaleRetrievalComponent implements AfterViewInit, DoCheck, IScreen, 
 
   selected(value: string) {
     this.session.onActionWithStringPayload('Next', value);
-  }
-
-  onScanInputEnter($event, scanInput: ScanSomethingComponent): void {
-    if (scanInput.responseText) {
-        this.session.response = scanInput.responseText;
-        this.session.screen.responseText = null;
-        scanInput.responseText = null;
-        this.session.onAction('Next');
-        $event.target.disabled = true;
-    }
   }
 }
