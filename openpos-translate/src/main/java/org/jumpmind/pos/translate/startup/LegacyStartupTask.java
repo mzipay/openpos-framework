@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 public class LegacyStartupTask extends AbstractStartupTask {
 
     @Autowired
-    ILegacyStartupService headlessStartupService;
+    ILegacyStartupService legacyStartupService;
 
     @Override
     protected void doTask() throws Exception {
-        headlessStartupService.startPreviouslyStarted();
+        legacyStartupService.startPreviouslyStarted();
     }
 }

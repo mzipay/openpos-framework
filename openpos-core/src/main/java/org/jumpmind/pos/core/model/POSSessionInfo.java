@@ -17,6 +17,7 @@ public class POSSessionInfo {
     private String operatorLoginId;
     private Optional<Boolean> registerOpen = Optional.empty();
     private Optional<Boolean> storeOpen = Optional.empty();
+    private boolean trainingMode = false;
     
     private TypedMap attributes = new TypedMap();
 
@@ -95,6 +96,14 @@ public class POSSessionInfo {
         return transactionId;
     }
     
+    public boolean getTrainingMode() {
+        return trainingMode;
+    }
+
+    public void setTrainingMode(boolean trainingMode) {
+        this.trainingMode = trainingMode;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this).
