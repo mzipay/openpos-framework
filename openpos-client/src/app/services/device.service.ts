@@ -1,3 +1,7 @@
+import { IDevicePlugin } from './../common/idevice-plugin';
+import { PluginService } from './plugin.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 import { IDeviceRequest } from './../common/idevicerequest';
 import { SessionService } from './session.service';
 import { IMenuItem } from '../common/imenuitem';
@@ -16,12 +20,16 @@ declare var cordova: any;
 
 @Injectable()
 export class DeviceService {
+  public onDeviceReady: Subject<string> = new BehaviorSubject<string>(null);
 
-  constructor(protected session: SessionService) {
-    document.addEventListener('deviceready', function () {
+  constructor(protected session: SessionService, public pluginService: PluginService) {
+    document.addEventListener('deviceready', () => {
       console.log('cordova devices are ready');
-    }, false);
+      this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
+    },
+    false);
 
+    // Listen for requests made from the server targeted to a specific device
     this.session.onDeviceRequest.subscribe({
       next: (event: IDeviceRequest) => {
         this.onDeviceRequest(event);
@@ -72,17 +80,30 @@ export class DeviceService {
   }
 
   public onDeviceRequest = (request: IDeviceRequest) => {
-    console.log(`deviceRequest received: ${request.payload}`);
-    // TODO: For now just hardcoding a response
-    this.session.onDeviceResponse({
-      requestId: request.requestId,
-      deviceId: request.deviceId,
-      type: 'DeviceResponse',
-      payload: `Successfully processed request ${request.requestId}`
-    });
+    console.log(`request received for device: ${request.deviceId}`);
+    // targetted plugin is assumed to be a cordova plugin
+    const targetPlugin: IDevicePlugin = this.pluginService.getDevicePlugin(request.deviceId);
+    console.log(`targetPlugin = pluginId: ${targetPlugin.pluginId}, pluginName: ${targetPlugin.pluginName}`);
+
+    if (targetPlugin) {
+      console.log(`Sending request '${request.requestId}' to device '${request.deviceId}'...`);
+      targetPlugin.processRequest(
+        () => request.payload,
+        (response) => {
+          this.session.onDeviceResponse( {
+              requestId: request.requestId,
+              deviceId: request.deviceId,
+              type: 'DeviceResponse',
+              payload: response
+            }
+          );
+        },
+        // TODO: add error handler
+        null
+      );
+    } else {
+      console.warn(`Not handling yet for device plugin with id: ${request.deviceId}`);
+    }
   }
 
-
 }
-
-

@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.device;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 public class DefaultDeviceRequest implements IDeviceRequest, Serializable {
 
@@ -10,6 +11,7 @@ public class DefaultDeviceRequest implements IDeviceRequest, Serializable {
     private String deviceId;
     private String type = DEFAULT_TYPE;
     private String payload;
+    private long timeoutMillis = DEFAULT_TIMEOUT_MILLIS;
     
     public DefaultDeviceRequest() {
     }
@@ -58,6 +60,16 @@ public class DefaultDeviceRequest implements IDeviceRequest, Serializable {
     @Override
     public String getPayload() {
         return this.payload;
+    }
+
+    @Override
+    public void setTimeout(long timeout, TimeUnit timeoutUnits) {
+        this.timeoutMillis = timeoutUnits.toMillis(timeout);
+    }
+
+    @Override
+    public long getTimeout() {
+        return this.timeoutMillis;
     }
 
 }
