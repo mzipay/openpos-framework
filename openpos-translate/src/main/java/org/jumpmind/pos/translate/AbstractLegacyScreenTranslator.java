@@ -6,38 +6,24 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.lang.WordUtils;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.IUIAction;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.Workstation;
-import org.jumpmind.pos.translate.AbstractScreenTranslator;
-import org.jumpmind.pos.translate.ILegacyAssignmentSpec;
-import org.jumpmind.pos.translate.ILegacyBeanSpec;
-import org.jumpmind.pos.translate.ILegacyBus;
-import org.jumpmind.pos.translate.ILegacyButtonSpec;
-import org.jumpmind.pos.translate.ILegacyNavigationButtonBeanModel;
-import org.jumpmind.pos.translate.ILegacyPOSBeanService;
-import org.jumpmind.pos.translate.ILegacyPromptAndResponseModel;
-import org.jumpmind.pos.translate.ILegacyRegisterStatusService;
 import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
-
-import org.jumpmind.pos.translate.ILegacyScreen;
-import org.jumpmind.pos.translate.ILegacyStatusBeanModel;
-import org.jumpmind.pos.translate.ILegacyStoreProperties;
-import org.jumpmind.pos.translate.ILegacyUIModel;
-import org.jumpmind.pos.translate.ILegacyUtilityManager;
 
 
 public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> extends AbstractScreenTranslator<T>{
     
-    // TODO: Move elsewhere?
     public final static String LOCAL_NAV_PANEL_KEY = "LocalNavigationPanel";
     public final static String GLOBAL_NAV_PANEL_KEY = "GlobalNavigationPanel";
     public final static String PROMPT_RESPONSE_PANEL_KEY = "PromptAndResponsePanel";
@@ -46,9 +32,8 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
 
     private ILegacyUtilityManager legacyUtilityManager;
 
-    // TODO: instantiate via configuration
-    private ILegacyPOSBeanService legacyPOSBeanService;
-    private ILegacyStoreProperties legacyStoreProperties;
+    protected ILegacyPOSBeanService legacyPOSBeanService;
+    protected ILegacyStoreProperties legacyStoreProperties;
     
     public AbstractLegacyScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         super(headlessScreen, screenClass);
@@ -57,25 +42,17 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     public void setLegacyPOSBeanService(ILegacyPOSBeanService beanService) {
         this.legacyPOSBeanService = beanService;
     }
-    
-    public ILegacyPOSBeanService getLegacyPOSBeanService() {
-        return this.legacyPOSBeanService;
-    }
-    
-    public ILegacyStoreProperties getLegacyStoreProperties() {
-        return legacyStoreProperties;
-    }
 
     public void setLegacyStoreProperties(ILegacyStoreProperties legacyStoreProperties) {
         this.legacyStoreProperties = legacyStoreProperties;
-    }
+    }        
 
     @Override
     protected void buildMainContent() {
+        screen.setIcon(iconRegistry.get(legacyScreen.getSpecName()));
         buildBackButton();
         logAvailableLocalMenuItems();
-        buildStatusItems();
-        
+        buildStatusItems();        
         Workstation workstation = new Workstation();
         workstation.setStoreId(legacyStoreProperties.getStoreNumber());
         workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
@@ -88,6 +65,22 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                 .map(registerOpen -> new MenuItem((registerOpen ? DefaultScreen.TITLE_OPEN_STATUS : DefaultScreen.TITLE_CLOSED_STATUS), "", true)).orElse(null));
         screen.setStoreStatus(posSessionInfo.isStoreOpen()
                 .map(storeOpen -> new MenuItem((storeOpen ? DefaultScreen.TITLE_OPEN_STATUS : DefaultScreen.TITLE_CLOSED_STATUS), "", true)).orElse(null));
+        screen.setName(getScreenName());
+    }
+    
+    protected String getScreenName() {
+        ILegacyStatusBeanModel statusModel =  legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);
+        if (statusModel != null && statusModel.getScreenName() != null) {
+            return statusModel.getScreenName();
+        } else {
+            ILegacyAssignmentSpec statusPanelSpec = legacyPOSBeanService.getLegacyAssignmentSpec(legacyScreen, STATUS_PANEL_KEY);
+            String labelTag = getSpecPropertyValue(statusPanelSpec, "screenNameTag", null);
+            if (labelTag != null) {                
+                return legacyPOSBeanService.getLegacyUtilityManager(legacyScreen).retrieveText("StatusPanelSpec", getResourceBundleFilename(), labelTag, labelTag);
+            } else {
+                return null;
+            }
+        }
     }
     
     protected void logAvailableLocalMenuItems() {
@@ -99,7 +92,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
             Arrays.stream(localNavSpec.getButtons())
                     .filter(buttonSpec -> Optional.ofNullable(enabledState.get(buttonSpec.getActionName())).orElse(buttonSpec.getEnabled()))
                     .forEachOrdered(enabledButtonSpec -> {
-                        logger.info("Available local menu action: {}", enabledButtonSpec.getActionName());
+                        logger.info("Available local menu with label tag of: {}", enabledButtonSpec.getLabelTag());
                     });
             
         }
@@ -181,7 +174,14 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                 if (storeStatus != Status.UNKNOWN) {
                     posSessionInfo.setStoreOpen(Optional.of((storeStatus == Status.OPEN)));
                 }
-            }            
+            }          
+            
+            ILegacyBus bus =  legacyPOSBeanService.getLegacyBus(legacyScreen);
+            ILegacyCargo cargo =  bus.getLegacyCargo();
+            if (cargo != null) {
+                posSessionInfo.setOperatorName(cargo.getOperatorFirstLastName());
+            }
+            
         }
     }
     
@@ -218,7 +218,6 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                 }
             }).forEachOrdered(buttonSpec -> {
                 buttons.add(buttonSpec);
-                logger.info("Available local menu action: {}", buttonSpec.getActionName());
             });
             
         }
@@ -232,26 +231,6 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
 
     public ILegacyPromptAndResponseModel getPromptAndResponseModel() {
         return this.legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
-    }
-
-    public Optional<String> getPromptText(ILegacyUIModel uiModel, ILegacyAssignmentSpec promptResponsePanel, String resourceBundleFilename) {
-        Optional<String> optPromptText = Optional.empty();
-        try {
-            ILegacyPromptAndResponseModel promptAndResponseModel = this.legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
-            
-            String promptTextTag = promptResponsePanel.getPropertyValue("promptTextTag");
-            Properties resourceBundle = this.legacyPOSBeanService.getLegacyResourceBundleUtil().getText(resourceBundleFilename, Locale.getDefault());
-            String promptTextKey = String.format("%s.%s", "PromptAndResponsePanelSpec", promptTextTag);
-            String formattedPromptText = null;
-            formattedPromptText = toFormattedString(resourceBundle, 
-                promptTextKey, 
-                promptAndResponseModel != null ? Optional.ofNullable(promptAndResponseModel.getArguments()) : Optional.empty()
-            );
-            optPromptText = Optional.ofNullable(formattedPromptText);
-        } catch (Exception ex) {
-            logger.error("Failed to get promptText for {}", uiModel.getModel().getClass());
-        }
-        return optPromptText;
     }
     
     protected String retrieveCommonText(String propName, Optional<String> defaultValue) {
@@ -317,59 +296,90 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
         return states;
     }
 
-    protected  <A extends IUIAction> List<A> generateUIActionsForLocalNavButtons(Class<A> actionClass) {
-        return generateUIActionsForLocalNavButtons(actionClass, true);
-    }
-    
-    protected  <A extends IUIAction> List<A> generateUIActionsForLocalNavButtons(Class<A> actionClass, boolean filterDisabledButtons) {
-        List<ILegacyButtonSpec> allLocalNavButtons = this.getPanelButtons(LOCAL_NAV_PANEL_KEY, Optional.of(filterDisabledButtons));
-        ILegacyAssignmentSpec localNavPanel = this.getLegacyAssignmentSpec(LOCAL_NAV_PANEL_KEY);
-
-        // Some Buttons/Options might be disabled dynamically.
-        //POSBaseBeanModel posModel = (POSBaseBeanModel) this.legacyScreen.getModel();
-        List<ILegacyButtonSpec> modifiedButtons = new ArrayList<>();
-        ILegacyNavigationButtonBeanModel navigationButtonBeanModel = this.legacyPOSBeanService.getLegacyPOSBaseBeanModel(legacyScreen).getLegacyLocalButtonBeanModel();
-        if (navigationButtonBeanModel != null) {
-            if (navigationButtonBeanModel.getModifyButtons() != null) {
-                modifiedButtons.addAll(Arrays.asList(navigationButtonBeanModel.getModifyButtons()));
+    protected <A extends IUIAction> List<A> generateUIActionsForLocalNavButtons(Class<A> actionClass, boolean filterDisabled, String... excludedLabelTags) {
+        Set<String> toExclude = new HashSet<>();
+        if (excludedLabelTags != null) {
+            for (String string : excludedLabelTags) {
+                toExclude.add(string);
             }
         }
+
         final List<A> generatedActions = new ArrayList<A>();
-        allLocalNavButtons.stream()
-            .forEachOrdered(localNavButton -> {
-                ILegacyButtonSpec possibleModifiedSpec = modifiedButtons.stream().filter(
-                    modifiedButton -> modifiedButton.getActionName().equals(localNavButton.getActionName())
-                ).findFirst().orElse(localNavButton);
-                
-                // If the labelTag is null, don't add the button. (That seems to be the way some sites don't show buttons)
-                String labelTag = localNavButton.getLabelTag();
-                if (possibleModifiedSpec.getLabelTag() != null) {
-                    labelTag = possibleModifiedSpec.getLabelTag();
-                }
-                Boolean enabledFlag = localNavButton.getEnabledFlag();
-                if (possibleModifiedSpec.getEnabledFlag() != null) {
-                    enabledFlag = possibleModifiedSpec.getEnabledFlag();
-                }
-                // Skip adding the button if the modified spec doesn't have a value for enabled and the label tag. (this seems
-                // to be the way OrPOS sites omit buttons)
-                if (possibleModifiedSpec.getEnabledFlag() != null || possibleModifiedSpec.getLabelTag() != null) {
-                    String buttonText = this.getLegacyUtilityManager().retrieveText(localNavPanel.getBeanSpecName(), getResourceBundleFilename(), labelTag, labelTag);
-                    A actionItem;
-                    try {
-                        actionItem = actionClass.newInstance();
-                        actionItem.setTitle(buttonText);
-                        actionItem.setEnabled(enabledFlag);
-                        actionItem.setAction(possibleModifiedSpec.getActionName());
-                        generatedActions.add(actionItem);
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        logger.error( String.format("Failed to create action of type %s for action '%s'", actionClass.getName(), possibleModifiedSpec.getActionName()), e);
+        ILegacyAssignmentSpec panelSpec = legacyPOSBeanService.getLegacyAssignmentSpec(legacyScreen, LOCAL_NAV_PANEL_KEY);
+        if (panelSpec != null) { 
+            ILegacyBeanSpec localNavSpec = legacyPOSBeanService.getLegacyBeanSpec(legacyScreen, panelSpec.getBeanSpecName());
+            ILegacyPOSBaseBeanModel model = legacyPOSBeanService.getLegacyPOSBaseBeanModel(legacyScreen);
+            ILegacyNavigationButtonBeanModel buttonModel = model.getLegacyLocalButtonBeanModel();
+            Map<String, Boolean> enabledState = parseButtonStates(panelSpec);
+            for (ILegacyButtonSpec buttonSpec : localNavSpec.getButtons()) {
+                if (buttonSpec != null && !toExclude.contains(buttonSpec.getLabelTag())) {
+                    Boolean enabled = enabledState.get(buttonSpec.getActionName());
+                    if (enabled == null) {
+                        enabled = buttonSpec.getEnabled();
                     }
+
+                    String labelTag = buttonSpec.getLabelTag();
+                    String label = labelTag;
+                    String action = buttonSpec.getActionName();
+                    try {
+                        label = legacyPOSBeanService.getLegacyUtilityManager(legacyScreen).retrieveText(panelSpec.getBeanSpecName(), getResourceBundleFilename(), labelTag, labelTag);
+                    } catch (Exception e) {
+                        logger.info("Failed to look up label for button: {}", labelTag);
+                    }
+
+                    if (buttonModel != null) {
+                        ILegacyButtonSpec[] buttonSpecs = buttonModel.getModifyButtons();
+                        if (buttonSpecs != null) {
+                            for (ILegacyButtonSpec modifiedSpec : buttonSpecs) {
+                                if (modifiedSpec.getActionName().equals(action)) {
+                                    enabled = modifiedSpec.getEnabled();
+                                }
+                            }
+                        }
+                    }
+                    if (enabled || !filterDisabled) {
+                        logger.info("adding action with label tag: {}", labelTag);
+
+                        A actionItem;
+                        try {
+                            actionItem = actionClass.newInstance();
+                            actionItem.setTitle(label);
+                            actionItem.setIcon(iconRegistry.get(labelTag));
+                            actionItem.setEnabled(enabled);
+                            actionItem.setAction(buttonSpec.getActionName());
+                            generatedActions.add(actionItem);
+                        } catch (InstantiationException | IllegalAccessException e) {
+                            logger.error(String.format("Failed to create action of type %s for action '%s'", actionClass.getName(),
+                                    buttonSpec.getActionName()), e);
+                        }
+                    }
+
                 }
             }
-        );
+        }
 
         return generatedActions;
-        
+
+    }
+    
+    protected Optional<String> getPromptText(ILegacyUIModel uiModel, ILegacyAssignmentSpec promptResponsePanel, String resourceBundleFilename) {
+        Optional<String> optPromptText = Optional.empty();
+        try {
+            ILegacyPromptAndResponseModel promptAndResponseModel = this.legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
+            
+            String promptTextTag = promptResponsePanel.getPropertyValue("promptTextTag");
+            Properties resourceBundle = this.legacyPOSBeanService.getLegacyResourceBundleUtil().getText(resourceBundleFilename, Locale.getDefault());
+            String promptTextKey = String.format("%s.%s", "PromptAndResponsePanelSpec", promptTextTag);
+            String formattedPromptText = null;
+            formattedPromptText = toFormattedString(resourceBundle, 
+                promptTextKey, 
+                promptAndResponseModel != null ? Optional.ofNullable(promptAndResponseModel.getArguments()) : Optional.empty()
+            );
+            optPromptText = Optional.ofNullable(formattedPromptText);
+        } catch (Exception ex) {
+            logger.error("Failed to get promptText for {}", uiModel.getModel().getClass());
+        }
+        return optPromptText;
     }
    
 }

@@ -1,8 +1,12 @@
 package org.jumpmind.pos.translate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.DefaultScreen.ScanType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +19,10 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
     protected T screen;
 
     protected POSSessionInfo posSessionInfo;
-    private IScreenThemeSelector screenThemeSelector;
+    
+    protected IScreenThemeSelector screenThemeSelector;
+    
+    protected Map<String, String> iconRegistry = new HashMap<>();
 
     
     public AbstractScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
@@ -26,35 +33,38 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
             throw new RuntimeException(e);
         }
     }
-    
-    public IScreenThemeSelector getScreenThemeSelector() {
-        return screenThemeSelector;
-        
+   
+    public void setIconRegistry(Map<String, String> iconRegistry) {
+        this.iconRegistry = iconRegistry;
     }
     
     public void setScreenThemeSelector(IScreenThemeSelector screenThemeSelector) {
         this.screenThemeSelector = screenThemeSelector;
-    }
-    
+    }    
     
     protected void chooseScreenTheme() {
-        if (this.getScreenThemeSelector() != null) {
-            getScreen().setTheme(this.getScreenThemeSelector().getScreenThemeName());
+        if (this.screenThemeSelector != null) {
+            getScreen().setTheme(this.screenThemeSelector.getScreenThemeName());
         }
     }
 
     protected void chooseScreenName() {
         if (getScreen().getName() == null) {
-            getScreen().setName(this.getHeadlessScreen().getSpecName());
+            getScreen().setName(legacyScreen.getSpecName());
         }
     }
     
     public T build() {
+        screen.setIcon(iconRegistry.get(screen.getName()));
         chooseScreenName();
         chooseScreenTheme();
         updatePosSessionInfo();
         buildMainContent();
         return screen;
+    }
+    
+    public ILegacyScreen getLegacyScreen() {
+        return this.legacyScreen;
     }
 
     abstract protected void buildMainContent();
@@ -65,16 +75,8 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
         return screen;
     }
 
-    public POSSessionInfo getPosSessionInfo() {
-        return posSessionInfo;
-    }
-
     public void setPosSessionInfo(POSSessionInfo posSessionInfo) {
         this.posSessionInfo = posSessionInfo;
-    }
-
-    public ILegacyScreen getHeadlessScreen() {
-        return legacyScreen;
     }
 
     protected void resetScreen() {
@@ -85,5 +87,13 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
             DefaultScreen screen) {
         tmServer.sendAction(action.getName());
     }
+    
+    protected void enableScan() {
+        screen.setShowScan(true);
+        screen.setScanType(ScanType.CAMERA_CORDOVA);
+        screen.setScanActionName("Scan");
+    }
+
+
 
 }

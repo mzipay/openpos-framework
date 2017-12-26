@@ -1,9 +1,9 @@
-import { IForm } from './form.component';
-import { SessionService } from './../services/session.service';
-import { IScreen } from './../common/iscreen';
+import { IForm } from '../form.component';
+import { SessionService } from '../../services/session.service';
+import { IScreen } from '../../common/iscreen';
 import { DoCheck, OnInit, Component } from '@angular/core';
-import { IMenuItem } from '../common/imenuitem';
-import { IFormElement } from '../common/iformfield';
+import { IMenuItem } from '../../common/imenuitem';
+import { IFormElement } from '../../common/iformfield';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -15,7 +15,7 @@ import { IFormElement } from '../common/iformfield';
     public form: IForm;
     loginIdField: IFormElement;
     passwordField: IFormElement;
-    submitAction: IMenuItem;
+    submitAction: string;
     changePasswordAction: IMenuItem;
     forgotPasswordAction: IMenuItem;
     okButton: IFormElement;
@@ -62,7 +62,7 @@ import { IFormElement } from '../common/iformfield';
 
     onSubmitAction(): void {
         this.session.response = this.form;
-        this.session.onAction(this.submitAction.action);
+        this.session.onAction(this.submitAction);
     }
 
     onOkButton(): void {

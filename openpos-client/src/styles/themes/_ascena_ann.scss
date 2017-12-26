@@ -18,8 +18,8 @@ $ascena_ann-app-theme: mat-light-theme($ascena_ann-app-primary, $ascena_ann-app-
     }
 
     .home-screen-logo {
-        width: 1000px;
-        height: 84px;
+        width: 800px;
+        height: 67px;
         background-image: $app-logo-url; 
         background-repeat: no-repeat;
         background-size: cover;
@@ -30,6 +30,14 @@ $ascena_ann-app-theme: mat-light-theme($ascena_ann-app-primary, $ascena_ann-app-
         filter: grayscale(1) invert(1) brightness(10);
         -webkit-filter: grayscale(1) invert(1) brightness(10); 
     }    
+
+    @media(max-width: 600px) {
+        // Adjust size of log for small screen
+        .home-screen-logo {
+            width: 500px;
+            height: 42px;
+        }
+    }
 
     @include angular-material-theme($ascena_ann-app-theme);
     @include app-theme($ascena_ann-app-theme);

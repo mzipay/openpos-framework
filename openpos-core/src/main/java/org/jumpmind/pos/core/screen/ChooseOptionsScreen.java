@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ChooseOptionsScreen extends DefaultScreen {
+public class ChooseOptionsScreen extends DynamicFormScreen {
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

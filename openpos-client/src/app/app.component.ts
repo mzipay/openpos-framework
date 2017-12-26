@@ -1,3 +1,4 @@
+import { DeviceService } from './services/device.service';
 import { LoaderComponent } from './common/loader/loader.component';
 import { Component } from '@angular/core';
 import { SessionService } from './services/session.service';
@@ -8,7 +9,7 @@ import { SessionService } from './services/session.service';
 })
 export class AppComponent {
 
-  constructor(public session: SessionService) {
+  constructor(public session: SessionService, public deviceService: DeviceService) {
   }
 
 }

@@ -1,12 +1,20 @@
 package org.jumpmind.pos.translate.state;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import javax.annotation.PostConstruct;
 
+import org.jumpmind.pos.core.device.IDeviceRequest;
+import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.service.IDeviceService;
 import org.jumpmind.pos.translate.ITranslationManager;
 import org.jumpmind.pos.translate.ITranslationManagerSubscriber;
 import org.slf4j.Logger;
@@ -24,7 +32,10 @@ public class TranslatorState implements IState {
     protected ITranslationManager translationManager;
     
     @Autowired(required=false)
-    protected ITranslationManagerSubscriber subscriber;    
+    protected ITranslationManagerSubscriber subscriber;
+    
+    @Autowired
+    protected IDeviceService deviceService;
 
     @PostConstruct
     public void init() {
@@ -67,6 +78,19 @@ public class TranslatorState implements IState {
                 @Override
                 public void doAction(Action action) {
                     stateManager.doAction(action);                    
+                }
+
+                @Override
+                public IDeviceResponse sendToDevice(IDeviceRequest request) {
+                    IDeviceResponse response = null;
+                    CompletableFuture<IDeviceResponse> futureResponse =  deviceService.send(stateManager.getAppId(), stateManager.getNodeId(), request );
+                    // TODO: implement timeouts
+                    try {
+                        response = futureResponse.get(10, TimeUnit.SECONDS);
+                    } catch (ExecutionException | InterruptedException | TimeoutException ex) {
+                        logger.error("Failure waiting for a response", ex);
+                    }
+                    return response;
                 }
             };
             translationManager.setTranslationManagerSubscriber(subscriber);

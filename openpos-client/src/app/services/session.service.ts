@@ -1,10 +1,12 @@
+import { IDeviceResponse } from './../common/ideviceresponse';
+import { IDeviceRequest } from './../common/idevicerequest';
 import { IMenuItem } from '../common/imenuitem';
 import { LoaderService } from '../common/loader/loader.service';
 import { IDialog } from '../common/idialog';
 import { Observable } from 'rxjs/Observable';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs/Subscription';
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
@@ -32,6 +34,8 @@ export class SessionService {
   private subscription: Subscription;
 
   private messages: Observable<Message>;
+
+  public onDeviceRequest = new EventEmitter<IDeviceRequest>();
 
   private loading: boolean;
 
@@ -143,6 +147,12 @@ export class SessionService {
     this.subscribed = false;
   }
 
+  public onDeviceResponse(deviceResponse: IDeviceResponse) {
+    console.log('Publish deviceResponse ' + deviceResponse);
+    this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
+      JSON.stringify(deviceResponse));
+  }
+
   public onAction(action: string) {
       console.log('Publish action ' + action);
 
@@ -189,6 +199,8 @@ export class SessionService {
       this.dialog = json;
     } else if (json.type === 'NoOp') {
       this.response = null;
+    } else if (json.type === 'DeviceRequest') {
+      this.onDeviceRequest.emit(json);
     } else {
       this.response = null;
       this.screen = json;
@@ -222,6 +234,5 @@ export class SessionService {
   public getCurrencyDenomination(): string {
       return 'USD';
   }
+
 }
-
-

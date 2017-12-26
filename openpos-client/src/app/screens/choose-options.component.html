@@ -1,37 +1,38 @@
-<div  fxFlexFill *ngIf="session.screen.type==='ChooseOptions'"> 
-    <div  fxFlexFill fxLayoutAlign="center center" class="main-menu-container" [style.xs]="{'height': 'initial'}">
-        <mat-card *ngIf="session.screen.displayStyle === 'ButtonGrid'; else elseBlock" class="main-menu">
-            <mat-card-title>{{promptText}}</mat-card-title>
-            <mat-card-content style="min-height: 460px" [style.sm]="{'min-height': 'initial'}" [style.xs]="{'right': 'initial'}">
-                 <div fxLayout="row" fxLayoutAlign="center center" style="padding-top: 20px" fxLayoutWrap>
-                    <div *ngFor="let o of optionItems">
-                        <div fxLayout="column" style="height: 200px; width:250px;" [style.xs]="{'zoom': '50%'}" fxLayoutAlign="center center">
-                            <!-- TODO: make buttons into a component since used on both Main screen and here -->
-                            <button mat-raised-button class="main-menu-item" (click)="session.onAction(o.value)">
-                                <!-- TODO: NEED TO SUPPORT DISABLED -->
-                                <mat-icon *ngIf="o.icon.startsWith('local_')" [svgIcon]="o.icon" class="material-icons mat-64 main-menu-item-icon"></mat-icon>
-    							<mat-icon *ngIf="! o.icon.startsWith('local_')" class="material-icons mat-64 main-menu-item-icon">{{o.icon}}</mat-icon>
-                                <p class="main-menu-item-text" [style.xs]="{'zoom': '150%', 'top': '10px'}">{{o.displayValue}}</p>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
-    </div>
-    <ng-template #elseBlock>
-        <mat-card>
+<div  fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px"> 
+    <mat-card fxFlex class="page-content-card" [ngSwitch]="currentView">
+        
+        <ng-template ngSwitchCase="ButtonList">
             <mat-card-title *ngIf="promptText">{{promptText}}</mat-card-title>
-            <mat-card-content>
+            <mat-card-content >
                 <mat-nav-list>
                     <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
-                    <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && session.onAction(o.value)" style="border-color: black">
-                        <span *ngIf="!o.enabled; else elseBlock" class="accent-lighter">{{o.displayValue}}</span>
-                        <ng-template #elseBlock>{{o.displayValue}}</ng-template>
-                        <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
+                    <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onMakeOptionSelection(o)">
+                        <span ngClass="{'accent-lighter' : !o.enabled}">{{o.displayValue}}</span>
+                        <span fxFlex></span>
+                        <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
                     </mat-list-item>
                 </mat-nav-list>
             </mat-card-content>
-        </mat-card>
-    </ng-template>
+        </ng-template>
+
+        <ng-template ngSwitchCase="ButtonGrid">
+            <mat-card-content fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+                <button fxFlex="0 0 auto" mat-raised-button color=primary style="height:150px;width:150px"
+                        *ngFor="let o of optionItems"
+                        (click)="onMakeOptionSelection(o)">
+                    <div fxLayoutAlign="center center" fxLayout="column">
+                        <app-icon fxFlex="1 0 auto" iconName="{{o.icon}}" iconClass="material-icons mat-64"></app-icon>
+                        <span fxFlex="1 0 auto" class="text-sm">{{o.displayValue}}</span>
+                    </div>
+                </button>
+            </mat-card-content>
+        </ng-template>
+
+        <ng-template ngSwitchCase="OptionForm">
+            <mat-card-content style="padding:30px">
+                <app-dynamic-form-control [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"></app-dynamic-form-control>
+            </mat-card-content>
+        </ng-template>
+
+    </mat-card>  
 </div>

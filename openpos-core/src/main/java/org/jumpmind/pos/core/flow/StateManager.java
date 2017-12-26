@@ -48,7 +48,7 @@ public class StateManager implements IStateManager {
 
     @Autowired
     private IScreenService screenService;
-
+    
     @Autowired
     private ActionHandlerImpl actionHandler;
 

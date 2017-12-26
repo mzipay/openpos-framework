@@ -57,7 +57,7 @@ public class ScreenService implements IScreenService {
     @RequestMapping(method = RequestMethod.GET, value = "ping")
     @ResponseBody
     public String ping() {
-        logger.info("Recevied a ping request");
+        logger.info("Received a ping request");
         return "{ \"pong\": \"true\" }";
     }
 
