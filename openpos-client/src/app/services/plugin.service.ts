@@ -21,14 +21,22 @@ export class PluginService {
                 // TODO: handle exceptions during init
                 plugin.init();
             } else {
-                // future
+                console.log(`plugin '${pluginId}' not found`);
+                // handle future plugins here
             }
         }
         return plugin;
     }
 
+    /*
+     * Assumes plugin is in cordova.plugins data structure
+     * See plugin.xml for the plugin at /plugin/platform/js-module/clobbers[@target]
+     * @target should be set to location where the plugin can be accessed,
+     * which needs to be cordova.plugins.xyz (where xyz is the pluginId) in order
+     * for the plugin to be found.
+     */
     isCordovaPlugin(pluginId: string): boolean {
-        return cordova.plugins[pluginId];
+        return typeof cordova !== 'undefined' && cordova.plugins[pluginId];
     }
 
 }

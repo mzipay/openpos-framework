@@ -83,9 +83,9 @@ export class DeviceService {
     console.log(`request received for device: ${request.deviceId}`);
     // targetted plugin is assumed to be a cordova plugin
     const targetPlugin: IDevicePlugin = this.pluginService.getDevicePlugin(request.deviceId);
-    console.log(`targetPlugin = pluginId: ${targetPlugin.pluginId}, pluginName: ${targetPlugin.pluginName}`);
 
     if (targetPlugin) {
+      console.log(`targetPlugin = pluginId: ${targetPlugin.pluginId}, pluginName: ${targetPlugin.pluginName}`);
       console.log(`Sending request '${request.requestId}' to device '${request.deviceId}'...`);
       targetPlugin.processRequest(
         () => request.payload,
@@ -102,7 +102,7 @@ export class DeviceService {
         null
       );
     } else {
-      console.warn(`Not handling yet for device plugin with id: ${request.deviceId}`);
+      console.warn(`No handling yet for device plugin with id: ${request.deviceId}. request '${request.requestId}' will be ignored.`);
     }
   }
 
