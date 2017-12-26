@@ -44,7 +44,8 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
     
     protected void chooseScreenTheme() {
         if (this.screenThemeSelector != null) {
-            getScreen().setTheme(this.screenThemeSelector.getScreenThemeName());
+        	boolean trainingOn = posSessionInfo.getTrainingMode();
+            getScreen().setTheme(this.screenThemeSelector.getScreenThemeName(trainingOn));
         }
     }
 
@@ -57,8 +58,8 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
     public T build() {
         screen.setIcon(iconRegistry.get(screen.getName()));
         chooseScreenName();
-        chooseScreenTheme();
         updatePosSessionInfo();
+        chooseScreenTheme();
         buildMainContent();
         return screen;
     }
