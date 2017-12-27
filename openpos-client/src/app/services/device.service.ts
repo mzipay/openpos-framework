@@ -82,11 +82,13 @@ export class DeviceService {
   public onDeviceRequest = (request: IDeviceRequest) => {
     console.log(`request received for device: ${request.deviceId}`);
     // targetted plugin is assumed to be a cordova plugin
-    const targetPlugin: IDevicePlugin = this.pluginService.getDevicePlugin(request.deviceId);
+
+    const pluginLookupKey = request.pluginId ? request.pluginId : request.deviceId;
+    const targetPlugin: IDevicePlugin = this.pluginService.getDevicePlugin(pluginLookupKey);
 
     if (targetPlugin) {
       console.log(`targetPlugin = pluginId: ${targetPlugin.pluginId}, pluginName: ${targetPlugin.pluginName}`);
-      console.log(`Sending request '${request.requestId}' to device '${request.deviceId}'...`);
+      console.log(`Sending request '${request.requestId}' to device/plugin '${pluginLookupKey}'...`);
       targetPlugin.processRequest(
         () => request.payload,
         (response) => {
@@ -102,7 +104,7 @@ export class DeviceService {
         null
       );
     } else {
-      console.warn(`No handling yet for device plugin with id: ${request.deviceId}. request '${request.requestId}' will be ignored.`);
+      console.warn(`No handling yet for device/plugin with key: ${pluginLookupKey}. request '${request.requestId}' will be ignored.`);
     }
   }
 
