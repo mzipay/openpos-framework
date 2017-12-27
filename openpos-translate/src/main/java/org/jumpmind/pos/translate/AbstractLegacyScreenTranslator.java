@@ -35,28 +35,6 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     protected ILegacyPOSBeanService legacyPOSBeanService;
     protected ILegacyStoreProperties legacyStoreProperties;
     
-    public static Map<String, String> labelTagToIconMap = new HashMap<>();
-
-    static {
-        labelTagToIconMap.put("Find", "search");
-        labelTagToIconMap.put("Add", "add");
-        labelTagToIconMap.put("AddRewardClub", "add");
-        labelTagToIconMap.put("FindRewardClub", "search");
-        labelTagToIconMap.put("AddBusiness", "add");
-        labelTagToIconMap.put("Delete", "delete");
-        labelTagToIconMap.put("CustID", "keyboard");
-        labelTagToIconMap.put("EmployeeID", "keyboard");
-        labelTagToIconMap.put("CustomerInfo", "person");
-        labelTagToIconMap.put("BusinessInfo", "store");
-        labelTagToIconMap.put("TaxExemptID", "keyboard");
-        labelTagToIconMap.put("TillOptions", "attach_money");
-        labelTagToIconMap.put("ViewCurrentSales", "pageview");
-        labelTagToIconMap.put("SkipToEmail", "email");
-        labelTagToIconMap.put("Bypass", "done");
-        labelTagToIconMap.put("EmailRcptNoMKGT", "done");
-        
-    }
-    
     public AbstractLegacyScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         super(headlessScreen, screenClass);
     }
@@ -71,6 +49,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
 
     @Override
     protected void buildMainContent() {
+        screen.setIcon(iconRegistry.get(legacyScreen.getSpecName()));
         buildBackButton();
         logAvailableLocalMenuItems();
         buildStatusItems();        
@@ -365,6 +344,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                         try {
                             actionItem = actionClass.newInstance();
                             actionItem.setTitle(label);
+                            actionItem.setIcon(iconRegistry.get(labelTag));
                             actionItem.setEnabled(enabled);
                             actionItem.setAction(buttonSpec.getActionName());
                             generatedActions.add(actionItem);

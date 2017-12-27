@@ -1,5 +1,5 @@
 package org.jumpmind.pos.translate;
 
 public interface IScreenThemeSelector {
-    String getScreenThemeName();
+    String getScreenThemeName(boolean trainingOn);
 }

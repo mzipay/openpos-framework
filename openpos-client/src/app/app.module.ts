@@ -95,6 +95,7 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { DynamicFormControlComponent } from './common/controls/dynamic-form-control/dynamic-form-control.component';
+import { PluginService } from './services/plugin.service';
 
 @NgModule({
   entryComponents: [
@@ -252,6 +253,7 @@ import { DynamicFormControlComponent } from './common/controls/dynamic-form-cont
     DeviceService,
     LoaderService,
     ScreenService,
+    PluginService,
     Location,
     {
       provide: LocationStrategy,

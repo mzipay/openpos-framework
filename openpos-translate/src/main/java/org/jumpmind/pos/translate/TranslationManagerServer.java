@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jumpmind.pos.core.device.IDeviceMessageDispatcher;
+import org.jumpmind.pos.core.device.IDeviceRequest;
+import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.DefaultScreen;
@@ -17,7 +20,7 @@ import org.jumpmind.pos.translate.InteractionMacro.WaitForScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TranslationManagerServer implements ILegacyScreenListener, ITranslationManager {
+public class TranslationManagerServer implements ILegacyScreenListener, ITranslationManager, IDeviceMessageDispatcher {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -221,5 +224,19 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     public void sendAction(String action) {
         getHeadlessUISubsystem().sendAction(action);
     }
+
+    @Override
+    public IDeviceResponse sendDeviceRequest(IDeviceRequest request) {
+        // TODO: need to either pass in appId or figure out a way to get it
+        IDeviceResponse response = null;
+        for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
+            response = subscriber.sendToDevice(request);
+            break;
+        }
+        
+        return response;
+        
+    }
+
 
 }
