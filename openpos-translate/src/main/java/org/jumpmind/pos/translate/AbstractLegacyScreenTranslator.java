@@ -49,7 +49,6 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
 
     @Override
     protected void buildMainContent() {
-        screen.setIcon(iconRegistry.get(legacyScreen.getSpecName()));
         buildBackButton();
         logAvailableLocalMenuItems();
         buildStatusItems();        
