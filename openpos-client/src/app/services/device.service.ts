@@ -100,8 +100,15 @@ export class DeviceService {
             }
           );
         },
-        // TODO: add error handler
-        null
+        (error) => {
+          this.session.onDeviceResponse( {
+            requestId: request.requestId,
+            deviceId: request.deviceId,
+            type: 'DeviceErrorResponse',
+            payload: error
+          }
+        );
+      }
       );
     } else {
       console.warn(`No handling yet for device/plugin with key: ${pluginLookupKey}. request '${request.requestId}' will be ignored.`);
