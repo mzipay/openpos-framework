@@ -81,7 +81,7 @@ public class TranslatorState implements IState {
                 }
 
                 @Override
-                public IDeviceResponse sendToDevice(IDeviceRequest request) {
+                public IDeviceResponse sendDeviceRequest(IDeviceRequest request) {
                     IDeviceResponse response = null;
                     CompletableFuture<IDeviceResponse> futureResponse =  deviceService.send(stateManager.getAppId(), stateManager.getNodeId(), request );
                     // TODO: implement timeouts

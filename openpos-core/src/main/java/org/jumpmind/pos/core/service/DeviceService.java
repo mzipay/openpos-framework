@@ -16,8 +16,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Controller
 public class DeviceService implements IDeviceService {
     Logger logger = LoggerFactory.getLogger(getClass());
@@ -26,7 +24,6 @@ public class DeviceService implements IDeviceService {
     private SimpMessagingTemplate template;
 
     private HashMap<String, DeviceResponseMapEntry> requestToResponseMap = new HashMap<>();
-    private ObjectMapper mapper = new ObjectMapper();
 
     
     private String makeRequestResponseMapKey(String deviceId, String requestId) {
@@ -45,9 +42,6 @@ public class DeviceService implements IDeviceService {
         return futureResponse;
     }
     
-    // Need a receive method to receive the response
-    //@RequestMapping(method = RequestMethod.GET, value = "app/{appId}/node/{nodeId}/device/{deviceId}/{deviceResponse}")
-    // TODO: map this to a better URL?
     @MessageMapping("device/app/{appId}/node/{nodeId}/device/{deviceId}")
     public void onDeviceResponse(@DestinationVariable String appId, @DestinationVariable String nodeId, @DestinationVariable String deviceId, DefaultDeviceResponse response) {
         String sourceRequestId = response.getRequestId();
@@ -69,7 +63,7 @@ public class DeviceService implements IDeviceService {
         
     }
     
-    
+    // TODO: Need to sweep up stagnant requests
     static class DeviceResponseMapEntry {
 //        Consumer<IDeviceResponse> deviceResponseCallback;
         CompletableFuture<IDeviceResponse> futureResponse;

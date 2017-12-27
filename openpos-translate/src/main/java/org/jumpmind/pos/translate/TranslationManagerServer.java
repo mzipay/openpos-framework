@@ -230,7 +230,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
         // TODO: need to either pass in appId or figure out a way to get it
         IDeviceResponse response = null;
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
-            response = subscriber.sendToDevice(request);
+            response = subscriber.sendDeviceRequest(request);
             break;
         }
         
