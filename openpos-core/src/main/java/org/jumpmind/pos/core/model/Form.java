@@ -47,6 +47,14 @@ public class Form implements Serializable {
         return formField;
     }
     
+    public FormField addPercentField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, true);
+        formField.setPattern("\\d{1,2}(?!\\d)|100");
+        formField.setValue(value);
+        formElements.add(formField);
+        return formField;
+    }
+    
     public void addSeparator() {
         formElements.add(new FormDisplayField(FieldElementType.Separator));
     }
