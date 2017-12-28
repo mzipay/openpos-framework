@@ -15,7 +15,9 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.lang.WordUtils;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.IUIAction;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.Workstation;
@@ -35,8 +37,8 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     protected ILegacyPOSBeanService legacyPOSBeanService;
     protected ILegacyStoreProperties legacyStoreProperties;
     
-    public AbstractLegacyScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
-        super(headlessScreen, screenClass);
+    public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
+        super(legacyScreen, screenClass);
     }
 
     public void setLegacyPOSBeanService(ILegacyPOSBeanService beanService) {
@@ -46,6 +48,14 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     public void setLegacyStoreProperties(ILegacyStoreProperties legacyStoreProperties) {
         this.legacyStoreProperties = legacyStoreProperties;
     }        
+    
+    protected Form getForm(DefaultScreen screen) {
+        if (screen instanceof DynamicFormScreen) {
+            return ((DynamicFormScreen)screen).getForm();
+        } else {
+            return null;
+        }
+    }
 
     @Override
     protected void buildMainContent() {
