@@ -54,14 +54,14 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
 
     @Override
     public void showActiveScreen() {
-        showHeadlessScreen(getHeadlessUISubsystem().getActiveScreen());
+        showLegacyScreen(getLegacyUISubsystem().getActiveScreen());
     }
 
     @Override
     public void setTranslationManagerSubscriber(ITranslationManagerSubscriber subscriber) {
         if (this.subscriberByAppId.get(subscriber.getAppId()) == null) {
             this.subscriberByAppId.put(subscriber.getAppId(), subscriber);
-            getHeadlessUISubsystem().addLegacyScreenListener(this);
+            getLegacyUISubsystem().addLegacyScreenListener(this);
         }
     }
 
@@ -76,7 +76,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     }
 
     @Override
-    public void showHeadlessScreen(ILegacyScreen screen) {
+    public void showLegacyScreen(ILegacyScreen screen) {
         if (screen != null && screen.isStatusUpdate()) {
             // We don't currently handle updates to the status panel only
             logger.info("Suppressing SHOW_STATUS_ONLY update for screen {}, sending NoOp", screen.getSpecName());
@@ -202,11 +202,11 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     }
 
     public ILegacyScreen getActiveScreen() {
-        ILegacyScreen screen = getHeadlessUISubsystem().getActiveScreen();
+        ILegacyScreen screen = getLegacyUISubsystem().getActiveScreen();
         return screen;
     }
 
-    public ILegacySubsystem getHeadlessUISubsystem() {
+    public ILegacySubsystem getLegacyUISubsystem() {
         if (legacySubsystem == null) {
             try {
                 Method method = subsystemClass.getMethod("getInstance");
@@ -222,7 +222,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     }
 
     public void sendAction(String action) {
-        getHeadlessUISubsystem().sendAction(action);
+        getLegacyUISubsystem().sendAction(action);
     }
 
     @Override
