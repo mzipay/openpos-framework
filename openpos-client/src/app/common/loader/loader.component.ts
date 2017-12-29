@@ -41,10 +41,10 @@ export class LoaderComponent implements OnInit, OnDestroy {
                 this.loading = state.show;
             });
 
-        const connected = this.session.connected();
-
-        const timer = Observable.timer(1000, 1000);
-        timer.subscribe(t => this.checkConnectionStatus(this.session));
+        if (this.session.isPersonalized()) {
+            const timer = Observable.timer(1000, 1000);
+            timer.subscribe(t => this.checkConnectionStatus(this.session));
+        }
     }
 
     ngOnDestroy() {
