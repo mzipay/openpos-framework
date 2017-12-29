@@ -29,10 +29,30 @@ public class Form implements Serializable {
     }
     
     public ComboField addComboBox(String fieldId, String label, String... values) {
-        ComboField field = new ComboField(fieldId, label, null, values != null && values.length > 0 ? Arrays.asList(values) : new ArrayList<>());
+        return addComboBox(fieldId, label, values != null && values.length > 0 ? Arrays.asList(values) : new ArrayList<>());
+    }
+    
+    public ComboField addComboBox(String fieldId, String label, List<String> values) {
+        ComboField field = new ComboField(fieldId, label, null, values);
         formElements.add(field);
-        return field;
-        
+        return field;        
+
+    }
+    
+    public FormField addMoneyField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, true);
+        formField.setPattern("^(\\d{0,9}\\.\\d{0,2}|\\d{1,9})$");
+        formField.setValue(value);
+        formElements.add(formField);
+        return formField;
+    }
+    
+    public FormField addPercentField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, true);
+        formField.setPattern("\\d{1,2}(?!\\d)|100");
+        formField.setValue(value);
+        formElements.add(formField);
+        return formField;
     }
     
     public void addSeparator() {

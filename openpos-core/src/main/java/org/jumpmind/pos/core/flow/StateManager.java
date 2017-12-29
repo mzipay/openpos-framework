@@ -77,10 +77,6 @@ public class StateManager implements IStateManager {
     public void init(String appId, String nodeId) {
         this.appId = appId;
         this.nodeId = nodeId;
-        // TODO
-//        if (translationManager != null) {
-//            translationManager.setTranslationManagerSubscriber(this);
-//        }
         transitionTo(flowConfig.getInitialState());
     }
 
