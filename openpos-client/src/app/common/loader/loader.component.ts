@@ -11,7 +11,12 @@ import { LoaderState } from './loader';
 })
 export class LoaderComponent implements OnInit, OnDestroy {
 
+    LOADING_TITLE : string = "Loading...";
+    DISCONNECTED_TITLE : string = "Reconnecting to Server...";
+
     show = false;
+
+    title : string = this.LOADING_TITLE;
 
     private subscription: Subscription;
 
@@ -28,5 +33,13 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    public getLocalTheme(): string {
+        if (localStorage.getItem('theme')) {
+            return localStorage.getItem('theme');
+        } else {
+            return 'openpos-theme';
+        }
     }
 }
