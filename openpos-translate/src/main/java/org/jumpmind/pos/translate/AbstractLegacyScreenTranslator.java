@@ -74,7 +74,11 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                 .map(registerOpen -> new MenuItem((registerOpen ? DefaultScreen.TITLE_OPEN_STATUS : DefaultScreen.TITLE_CLOSED_STATUS), "", true)).orElse(null));
         screen.setStoreStatus(posSessionInfo.isStoreOpen()
                 .map(storeOpen -> new MenuItem((storeOpen ? DefaultScreen.TITLE_OPEN_STATUS : DefaultScreen.TITLE_CLOSED_STATUS), "", true)).orElse(null));
-        screen.setName(getScreenName());
+        String name = getScreenName();
+        screen.setName(name);
+        if (isBlank(screen.getIcon())) {
+            screen.setIcon(iconRegistry.get(legacyScreen.getSpecName()));
+       }
     }
     
     protected String getScreenName() {
