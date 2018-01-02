@@ -87,6 +87,7 @@ public class TranslatorState implements IState {
                     try {
                         response = futureResponse.get(request.getTimeout(), TimeUnit.MILLISECONDS);
                     } catch (ExecutionException | InterruptedException | TimeoutException ex) {
+                        futureResponse.cancel(true);
                         logger.error("Failure waiting for a response", ex);
                     }
                     return response;

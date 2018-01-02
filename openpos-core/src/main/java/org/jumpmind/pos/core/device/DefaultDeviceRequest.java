@@ -10,15 +10,20 @@ public class DefaultDeviceRequest implements IDeviceRequest, Serializable {
     private String requestId;
     private String deviceId;
     private String type = DEFAULT_TYPE;
+    private String subType;
     private String payload;
     private long timeoutMillis = DEFAULT_TIMEOUT_MILLIS;
     
     public DefaultDeviceRequest() {
     }
 
-    public DefaultDeviceRequest(String requestId, String deviceId, String payload) {
-        this.requestId = requestId;
+    public DefaultDeviceRequest(String deviceId, String payload) {
+        this(deviceId, null, payload);
+    }
+
+    public DefaultDeviceRequest(String deviceId, String subType, String payload) {
         this.deviceId = deviceId;
+        this.subType = subType;
         this.payload = payload;
     }
     
@@ -51,6 +56,17 @@ public class DefaultDeviceRequest implements IDeviceRequest, Serializable {
     public String getType() {
         return this.type;
     }
+    
+    @Override
+    public void setSubType(String subType) {
+        this.subType = subType;
+    }
+
+    @Override
+    public String getSubType() {
+        return this.subType;
+    }
+    
 
     @Override
     public void setPayload(String payload) {
@@ -71,5 +87,6 @@ public class DefaultDeviceRequest implements IDeviceRequest, Serializable {
     public long getTimeout() {
         return this.timeoutMillis;
     }
+
 
 }

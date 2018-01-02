@@ -5,12 +5,15 @@ import java.util.concurrent.TimeUnit;
 public interface IDeviceRequest {
     public static final String DEFAULT_TYPE = "DeviceRequest";
     public static final int DEFAULT_TIMEOUT_MILLIS = 10000;
-    
+
     void setRequestId(String requestId);
     String getRequestId();
     
     void setDeviceId(String targetDeviceId);
     String getDeviceId();
+
+    void setSubType(String subType);
+    String getSubType();
     
     void setType(String requestType);
     String getType();

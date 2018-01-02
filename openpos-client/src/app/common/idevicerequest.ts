@@ -3,5 +3,6 @@ export interface IDeviceRequest {
     requestId: string;
     deviceId: string;
     type: string;
+    subType: string;
     payload: string;
 }

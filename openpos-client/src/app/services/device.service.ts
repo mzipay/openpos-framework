@@ -79,7 +79,7 @@ export class DeviceService {
 
     targetPluginPromise.then( (targetPlugin: IDevicePlugin) => {
         console.log(`targetPlugin = pluginId: ${targetPlugin.pluginId}, pluginName: ${targetPlugin.pluginName}`);
-        console.log(`Sending request '${request.requestId}' to device/plugin '${pluginLookupKey}'...`);
+        console.log(`Sending request '${request.subType}:${request.requestId}' to device/plugin '${pluginLookupKey}'...`);
         targetPlugin.processRequest(
           () => request.payload,
           (response) => {
@@ -104,7 +104,7 @@ export class DeviceService {
       }
     ).catch( (error) => {
       console.warn( 'No handling yet (or plugin may not be initialized) for ' +
-        `device/plugin with key: ${pluginLookupKey}. request '${request.requestId}' will be ignored.`);
+        `device/plugin with key: ${pluginLookupKey}. request '${request.subType}:${request.requestId}' will be ignored.`);
       }
     );
   }
