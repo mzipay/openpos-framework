@@ -1,0 +1,11 @@
+{
+  "name": "openpos-cordova-log-plugin",
+  "version": "0.0.1",
+  "cordova": {
+    "id": "openpos-cordova-log-plugin",
+    "platforms": [
+      "ios"
+    ]
+  },
+  "description": "OpenPOS Cordova Log Plugin"
+}

@@ -1,3 +1,5 @@
+import { CordovaDevicePlugin } from './../common/cordova-device-plugin';
+import { CordovaPlugin } from './../common/cordova-plugin';
 import { IDevicePlugin } from './../common/idevice-plugin';
 import { IPlugin } from './../common/iplugin';
 import { Injectable } from '@angular/core';
@@ -12,30 +14,57 @@ export class PluginService {
     constructor() {
     }
 
-    getDevicePlugin(pluginId: string): IDevicePlugin {
-        let plugin: IDevicePlugin = this.plugins[pluginId];
-
-        if (! plugin) {
-            if (this.isCordovaPlugin(pluginId)) {
-                plugin = cordova.plugins[pluginId];
-                console.log(`Initializing plugin '${pluginId}'...`);
-                this.pluginInit(plugin).then(
-                  () => {
-                    this.plugins[pluginId] = plugin;
-                    console.log(`plugin '${pluginId}' initialized`);
-                  }
-                ).catch(
-                    () => {
-                      plugin = null;
-                      console.log(`plugin '${pluginId}' failed to initialize`);
-                    }
-                );
+    getPlugin(pluginId): Promise<IPlugin> {
+        return new Promise( (resolve, reject) => {
+            let plugin: IPlugin = this.plugins[pluginId];
+            if (! plugin) {
+                if (this.isCordovaPlugin(pluginId)) {
+                    const cdvPlugin = new CordovaDevicePlugin(pluginId); // cordova.plugins[pluginId];
+                    console.log(`Initializing plugin '${pluginId}'...`);
+                    this.pluginInit(cdvPlugin).then(
+                      (inittedPlugin) => {
+                        this.plugins[pluginId] = inittedPlugin;
+                        plugin = inittedPlugin;
+                        console.log(`plugin '${pluginId}' initialized`);
+                        resolve(inittedPlugin);
+                      }
+                    ).catch(
+                        (error) => {
+                            if (error) {
+                                reject(error);
+                                console.log(error);
+                            } else {
+                                const err = `plugin '${pluginId}' failed to initialize`;
+                                console.log(err);
+                                reject(err);
+                            }
+                        }
+                    );
+                } else {
+                    const msg = `plugin '${pluginId}' not found`;
+                    reject(msg);
+                    // handle future plugins here
+                }
             } else {
-                console.log(`plugin '${pluginId}' not found`);
-                // handle future plugins here
+                resolve(plugin);
             }
-        }
-        return plugin;
+        });
+    }
+
+    getDevicePlugin(pluginId: string): Promise<IDevicePlugin> {
+        return new Promise<IDevicePlugin>( (resolve, reject) => {
+                const pluginPromise: Promise<IPlugin> = this.getPlugin(pluginId);
+                pluginPromise.then(thePlugin => {
+                    if (thePlugin && (<IDevicePlugin>thePlugin).processRequest) {
+                        resolve(<IDevicePlugin> thePlugin);
+                    } else {
+                        resolve(null);
+                    }
+                }).catch(
+                    (error) => { reject(error); }
+                );
+            }
+        );
     }
 
     private pluginInit(plugin: IPlugin): Promise<IPlugin> {
@@ -43,10 +72,10 @@ export class PluginService {
           (resolve, reject) => {
             plugin.init(
                 () => {
-                    resolve();
+                    resolve(plugin);
                 },
-                () => {
-                    reject();
+                (error) => {
+                    reject(error);
                 }
             );
           }
@@ -56,13 +85,15 @@ export class PluginService {
     }
     /*
      * Assumes plugin is in cordova.plugins data structure
-     * See plugin.xml for the plugin at /plugin/platform/js-module/clobbers[@target]
+     * See plugin.xml for the plugin name at /plugin/platform/js-module/clobbers[@target]
      * @target should be set to location where the plugin can be accessed,
      * which needs to be cordova.plugins.xyz (where xyz is the pluginId) in order
      * for the plugin to be found.
      */
     isCordovaPlugin(pluginId: string): boolean {
-        return typeof cordova !== 'undefined' && cordova.plugins[pluginId];
+        return typeof cordova !== 'undefined'
+            && typeof cordova.plugins !== 'undefined'
+            && cordova.plugins[pluginId];
     }
 
 }
