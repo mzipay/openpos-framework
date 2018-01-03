@@ -37,7 +37,7 @@ gulp.task('copy-styles', () => {
  * This is a temporary solution until ngc is supported --watch mode.
  * @see: https://github.com/angular/angular/issues/12867
  */
-gulp.task('build:esm', ['inline-templates','copy-styles'], (callback) => {
+gulp.task('build:esm', ['inline-templates'], (callback) => {
   exec('npm run ngcompile', function (error, stdout, stderr) {
     console.log(stdout, stderr);
     callback(error)
