@@ -4,16 +4,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { IDeviceRequest } from './../common/idevicerequest';
 import { SessionService } from './session.service';
-import { IMenuItem } from '../common/imenuitem';
-import { LoaderService } from '../common/loader/loader.service';
-import { IDialog } from '../common/idialog';
-import { Observable } from 'rxjs/Observable';
-import { Message } from '@stomp/stompjs';
-import { Subscription } from 'rxjs/Subscription';
 import { Injectable } from '@angular/core';
-import { StompService, StompState } from '@stomp/ng2-stompjs';
-import { Location } from '@angular/common';
-import { Router } from '@angular/router';
 import { Scan } from '../common/scan';
 
 declare var cordova: any;
@@ -82,28 +73,40 @@ export class DeviceService {
   public onDeviceRequest = (request: IDeviceRequest) => {
     console.log(`request received for device: ${request.deviceId}`);
     // targetted plugin is assumed to be a cordova plugin
-    const targetPlugin: IDevicePlugin = this.pluginService.getDevicePlugin(request.deviceId);
 
-    if (targetPlugin) {
-      console.log(`targetPlugin = pluginId: ${targetPlugin.pluginId}, pluginName: ${targetPlugin.pluginName}`);
-      console.log(`Sending request '${request.requestId}' to device '${request.deviceId}'...`);
-      targetPlugin.processRequest(
-        () => request.payload,
-        (response) => {
-          this.session.onDeviceResponse( {
-              requestId: request.requestId,
-              deviceId: request.deviceId,
-              type: 'DeviceResponse',
-              payload: response
-            }
-          );
-        },
-        // TODO: add error handler
-        null
-      );
-    } else {
-      console.warn(`No handling yet for device plugin with id: ${request.deviceId}. request '${request.requestId}' will be ignored.`);
-    }
+    const pluginLookupKey = request.pluginId ? request.pluginId : request.deviceId;
+    const targetPluginPromise: Promise<IDevicePlugin> = this.pluginService.getDevicePlugin(pluginLookupKey);
+
+    targetPluginPromise.then( (targetPlugin: IDevicePlugin) => {
+        console.log(`targetPlugin = pluginId: ${targetPlugin.pluginId}, pluginName: ${targetPlugin.pluginName}`);
+        console.log(`Sending request '${request.subType}:${request.requestId}' to device/plugin '${pluginLookupKey}'...`);
+        targetPlugin.processRequest(
+          () => request.payload,
+          (response) => {
+            this.session.onDeviceResponse( {
+                requestId: request.requestId,
+                deviceId: request.deviceId,
+                type: 'DeviceResponse',
+                payload: response
+              }
+            );
+          },
+          (error) => {
+              this.session.onDeviceResponse( {
+                  requestId: request.requestId,
+                  deviceId: request.deviceId,
+                  type: 'DeviceErrorResponse',
+                  payload: error
+                }
+              );
+          }
+        );
+      }
+    ).catch( (error) => {
+      console.warn( 'No handling yet (or plugin may not be initialized) for ' +
+        `device/plugin with key: ${pluginLookupKey}. request '${request.subType}:${request.requestId}' will be ignored.`);
+      }
+    );
   }
 
 }

@@ -81,13 +81,13 @@ public class TranslatorState implements IState {
                 }
 
                 @Override
-                public IDeviceResponse sendToDevice(IDeviceRequest request) {
+                public IDeviceResponse sendDeviceRequest(IDeviceRequest request) {
                     IDeviceResponse response = null;
                     CompletableFuture<IDeviceResponse> futureResponse =  deviceService.send(stateManager.getAppId(), stateManager.getNodeId(), request );
-                    // TODO: implement timeouts
                     try {
                         response = futureResponse.get(request.getTimeout(), TimeUnit.MILLISECONDS);
                     } catch (ExecutionException | InterruptedException | TimeoutException ex) {
+                        futureResponse.cancel(true);
                         logger.error("Failure waiting for a response", ex);
                     }
                     return response;

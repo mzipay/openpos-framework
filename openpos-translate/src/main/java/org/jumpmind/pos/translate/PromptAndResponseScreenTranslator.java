@@ -8,8 +8,9 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
 
     private boolean addLocalMenuItems = false;
     
-    public PromptAndResponseScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass, boolean addLocalMenuItems) {
-        super(headlessScreen, screenClass);
+    
+    public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems) {
+        super(legacyScreen, screenClass);
         screen.setTemplate(DefaultScreen.TEMPLATE_SELL);
         this.addLocalMenuItems = addLocalMenuItems;
     }
