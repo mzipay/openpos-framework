@@ -1,0 +1,12 @@
+//need to figure out how to move this to the core project
+@import './assets/material/material-icons.css';
+
+@import 'theme';
+@import 'training';
+@import '~openpos-client-core-lib/dist/styles/core';
+@import '~openpos-client-core-lib/dist/styles/app-theme';
+
+@include openpos-core();
+@include openpos-theme();
+@include training-theme();
+ 

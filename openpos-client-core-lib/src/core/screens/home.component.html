@@ -1,0 +1,13 @@
+<div fxFlexFill fxLayoutAlign="center center" fxLayout="row" >
+    <mat-card fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+                <button fxFlex="0 0 auto" mat-raised-button color=primary style="height:150px;width:150px"
+                *ngFor="let menuItem of menuItems"
+                (click)="session.onAction(menuItem.action)" >
+                <div fxLayoutAlign="center center" fxLayout="column">
+                    <app-icon fxFlex="1 0 auto" iconName="{{menuItem.icon}}" iconClass="material-icons mat-64"></app-icon>
+                    <span fxFlex="1 0 auto" class="text-sm">{{menuItem.title}}</span>
+                </div>
+                </button>
+    </mat-card>
+    <div class="home-screen-logo"></div>
+</div>

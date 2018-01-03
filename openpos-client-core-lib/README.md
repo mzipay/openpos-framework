@@ -1,0 +1,2 @@
+#openpos-client-core-lib
+
