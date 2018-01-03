@@ -1,0 +1,64 @@
+<mat-card class="with-header" style="height: 100vh; margin: 0">
+    <mat-card-content style="padding: 0;">
+        <mat-toolbar color="accent">
+            Device Setup
+        </mat-toolbar>
+        <div class="pad" style="height:calc(100vh - 220px);" [style.xs]="{'height': 'calc(100vh - 160px)'}">
+            <mat-vertical-stepper linear='true'>
+                <mat-step [stepControl]="firstFormGroup">
+                    <form [formGroup]="firstFormGroup">
+                        <ng-template matStepLabel>Enter the server name and port</ng-template>
+                        <mat-form-field>
+                            <input matInput placeholder="Server Name" formControlName="serverName" required>
+                        </mat-form-field>                        
+                        <mat-form-field>
+                            <input matInput placeholder="Server Port" formControlName="serverPort" required>
+                        </mat-form-field>
+                        <span *ngIf="firstFormGroup.status === 'PENDING'">
+                            Trying to ping server ...
+                        </span>
+                        <span class="warn" *ngIf="firstFormGroup.errors && firstFormGroup.errors.noping ">
+                            Could not ping the server: {{firstFormGroup.errors.noping}}
+                        </span>
+                        <span class="warn" *ngIf="firstFormGroup.get('serverPort').errors && firstFormGroup.get('serverPort').errors.pattern ">
+                            The port should be numbers only
+                        </span>                        
+                        <div>
+                            <button mat-button matStepperNext color='primary'>Next</button>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="secondFormGroup">
+                    <form [formGroup]="secondFormGroup">
+                        <ng-template matStepLabel>Enter device information</ng-template>
+                        <mat-form-field>
+                            <input matInput placeholder="Store Number" formControlName="storeNumber" required>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <input matInput placeholder="Device Number" formControlName="deviceNumber" required>
+                        </mat-form-field>
+                        <span class="warn" *ngIf="secondFormGroup.get('storeNumber').errors && secondFormGroup.get('storeNumber').errors.pattern ">
+                            The store number must be a 5 digit number
+                        </span>  
+                        <span class="warn" *ngIf="secondFormGroup.get('deviceNumber').errors && secondFormGroup.get('deviceNumber').errors.pattern ">
+                            The device number must be a 3 digit number
+                        </span>  
+                        <div>
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button matStepperNext color='primary'>Next</button>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Done</ng-template>
+                    To finish the setup process press the Complete button
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext color='primary' (click)="personalize()">Complete</button>
+                    </div>
+                </mat-step>
+            </mat-vertical-stepper>
+
+        </div>
+    </mat-card-content>
+</mat-card>

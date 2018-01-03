@@ -1,0 +1,78 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+@mixin app-theme($theme) {
+
+
+    $app-primary: mat-color(map-get($theme, primary));
+    $app-accent: mat-color(map-get($theme, accent));
+    $app-accent-lighter: mat-color(map-get($theme, accent), lighter);
+    $app-warn: mat-color(map-get($theme, warn));
+
+    $foreground: map-get($theme, foreground);
+    $background: map-get($theme, background);
+
+    // this is a hack to get around a default value in angular material that they removed in future versions
+    // if we ever upgrade we can probably remove this. This allows the field to be sized by flex instead of being
+    // limited to 200px min size
+    .mat-form-field{
+        width: unset;
+    }
+
+    .warn {
+        color: $app-warn;
+    }
+
+    .accent {
+        color: $app-accent;
+    }
+
+    .accent-lighter {
+        color:$app-accent-lighter;
+    }
+
+    .primary{
+        color:$app-primary;
+    }
+
+    mat-card.dark{
+        background-color: $app-accent;
+        color: white;
+    }
+
+    mat-card.lighter{
+        background-color: mat-color($background, app-bar);
+    }
+
+    .mat-drawer-content{
+        background-color: mat-color($background, app-bar);
+    }
+
+    .mat-drawer{
+        background-color: mat-color($background, app-bar);
+    }
+
+    input.bordered{
+        border-color: mat-color($foreground, divider);
+        border-style: solid;
+    }
+
+    .mat-list.list-seperator{
+        .mat-list-item:not(:first-child){
+            .mat-list-item-content{
+                border-top: 1px dashed mat-color($foreground, divider);
+            }
+        }
+    }
+
+    // Button Styles
+    .mat-button.mat-primary-inverse{
+        color:white;
+        background-color: $app-primary;
+    }
+
+    .mat-icon.mat-accent-lighter{
+        color:$app-accent-lighter;
+    }
+}

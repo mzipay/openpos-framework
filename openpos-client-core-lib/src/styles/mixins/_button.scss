@@ -1,0 +1,12 @@
+@mixin openpos-button{
+
+  .mat-raised-button,
+  .mat-icon-button,
+  .mat-button{
+      app-icon{
+          position: relative;
+          top: 7px;
+      }
+  }
+
+}

@@ -1,0 +1,29 @@
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px">
+    <mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
+        <mat-card-content fxFlex="1 1 auto">
+            <div class="scrollable">
+                <mat-table #table [dataSource]="dataSource">
+                    <ng-container *ngFor="let columnId of columnIds" matColumnDef="{{columnId}}">
+                        <!-- If there is a '_selection' column present, don't add a header label for it -->
+                        <mat-header-cell *matHeaderCellDef>{{columnId !== '_selection' ? columnsById[columnId].headerLabel : ''}}</mat-header-cell>
+                        <mat-cell *matCellDef="let row" (click)="onSelectRow(row.index)">
+                            <div *ngIf="columnId === '_selection'; else elseBlock">
+                                <mat-radio-button [value]="row.index" [checked]="isRowSelected(row.index)" (click)="onSelectRow(row.index)"></mat-radio-button>
+                            </div>
+                            <ng-template #elseBlock>
+                                <span style="white-space: pre-wrap;">{{row.values[columnsById[columnId].index]}}</span>
+                            </ng-template>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="columnIds"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: columnIds;"></mat-row>
+                </mat-table>
+            </div>
+            <div align="end">
+                <button mat-icon-button (click)="onAction(session.screen.selectAction)" [appFocus]="true">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
