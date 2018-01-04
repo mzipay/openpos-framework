@@ -22,9 +22,7 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Defaul
             }
         }
         screen.setType(ScreenType.Options);
-        screen.setPrompt("Choose Option");
-        screen.setIcon(icon);
-        screen.setInstructions("Please select an option from the menu to the right");
+        screen.setIcon(icon);        
     }
     
     public void setUndoMacro(InteractionMacro undoMacro) {
@@ -36,6 +34,10 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Defaul
         super.buildMainContent();
         screen.setTemplate(DefaultScreen.TEMPLATE_SELL);
         screen.setLocalMenuItems(generateUIActionsForLocalNavButtons(MenuItem.class, true));
+        if (screen.getLocalMenuItems().size() > 0) {
+            screen.setPrompt("Choose Option");
+            screen.setInstructions("Please select an option from the menu to the right");
+        }
     }
     
     @Override
