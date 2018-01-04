@@ -1,3 +1,4 @@
+import { AESDKSimulatorPlugin } from './../plugins/aesdk/aesdk.simulator.plugin';
 import { CordovaDevicePlugin } from './../common/cordova-device-plugin';
 import { CordovaPlugin } from './../common/cordova-plugin';
 import { IDevicePlugin } from './../common/idevice-plugin';
@@ -12,6 +13,10 @@ export class PluginService {
     private plugins = new Map<string, IPlugin>();
 
     constructor() {
+        // TODO: remove later.  temporarily installing AESDK plugin until we can split it
+        // out into its own project
+        const tempPlugin = new AESDKSimulatorPlugin();
+        this.plugins[tempPlugin.pluginId] = tempPlugin;
     }
 
     getPlugin(pluginId): Promise<IPlugin> {

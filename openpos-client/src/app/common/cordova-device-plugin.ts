@@ -1,3 +1,4 @@
+import { IDeviceRequest } from './idevicerequest';
 import { IPlugin } from './iplugin';
 import { IDevicePlugin } from './idevice-plugin';
 
@@ -22,7 +23,7 @@ export class CordovaDevicePlugin implements IDevicePlugin {
         this.impl.init(successCallback, errorCallback);
     }
 
-    processRequest(requestSupplierCallback: () => any, successCallback: (response: string) => any, errorCallback: (error: string) => any) {
-        this.impl.processRequest(requestSupplierCallback, successCallback, errorCallback);
+    processRequest(request: IDeviceRequest, successCallback: (response: string) => any, errorCallback: (error: string) => any) {
+        this.impl.processRequest(() => request.payload, successCallback, errorCallback);
     }
 }
