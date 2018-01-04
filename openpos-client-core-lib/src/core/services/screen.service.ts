@@ -18,7 +18,7 @@ import { HomeComponent } from '../screens/home.component';
 import { ItemListComponent } from '../screens/item-list.component';
 import { ChooseOptionsComponent } from '../screens/choose-options.component';
 import { PromptWithOptionsComponent } from '../screens/prompt-with-options.component';
-//import { StaticTableComponent } from '../screens/static-table.component';
+import { StaticTableComponent } from '../screens/static-table.component';
 import { IScreen } from '../common/iscreen';
 import { IDialog } from '../common/idialog';
 import { Observable } from 'rxjs/Observable';
@@ -54,7 +54,7 @@ export class ScreenService {
     this.screens.set('Transaction', TransactionComponent);
     this.screens.set('SellItemDetail', SellItemDetailComponent);
     this.screens.set('SignatureCapture', SignatureCaptureComponent);
-    //this.screens.set('Table', StaticTableComponent);
+    this.screens.set('Table', StaticTableComponent);
     this.screens.set('SaleRetrieval', SaleRetrievalComponent);
     this.screens.set('Tendering', TenderingComponent);
     this.screens.set('WarrantyCoverage', WarrantyCoverageComponent);

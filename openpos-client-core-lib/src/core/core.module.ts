@@ -57,7 +57,7 @@ import { StatusBarComponent } from './screens/statusbar.component';
 import { PaymentStatusComponent } from './screens/payment-status.component';
 import { SellItemDetailComponent } from './screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from './screens/signature-capture.component';
-//import { StaticTableComponent } from './screens/static-table.component';
+import { StaticTableComponent } from './screens/static-table.component';
 import { ItemListComponent } from './screens/item-list.component';
 import { LoginComponent } from './screens/login/login.component';
 import { PersonalizationComponent } from './screens/personalization.component';
@@ -90,7 +90,7 @@ import { MaterialModule } from './material.module';
     TransactionComponent,
     SellItemDetailComponent,
     SignatureCaptureComponent,
-    //StaticTableComponent,
+    StaticTableComponent,
     SaleRetrievalComponent,
     TenderingComponent,
     WarrantyCoverageComponent,
@@ -119,7 +119,7 @@ import { MaterialModule } from './material.module';
     TransactionComponent,
     SellItemDetailComponent,
     PaymentStatusComponent,
-    //StaticTableComponent,
+    StaticTableComponent,
     PersonalizationComponent,
     SaleRetrievalComponent,
     LoaderComponent,
