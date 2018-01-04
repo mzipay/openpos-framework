@@ -1,27 +1,26 @@
+import { IDevicePlugin } from './../common/idevice-plugin';
+import { PluginService } from './plugin.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 import { IDeviceRequest } from './../common/idevicerequest';
 import { SessionService } from './session.service';
-import { IMenuItem } from '../common/imenuitem';
-import { LoaderService } from '../common/loader/loader.service';
-import { IDialog } from '../common/idialog';
-import { Observable } from 'rxjs/Observable';
-import { Message } from '@stomp/stompjs';
-import { Subscription } from 'rxjs/Subscription';
 import { Injectable } from '@angular/core';
-import { StompService, StompState } from '@stomp/ng2-stompjs';
-import { Location } from '@angular/common';
-import { Router } from '@angular/router';
 import { Scan } from '../common/scan';
 
 declare var cordova: any;
 
 @Injectable()
 export class DeviceService {
+  public onDeviceReady: Subject<string> = new BehaviorSubject<string>(null);
 
-  constructor(protected session: SessionService) {
-    document.addEventListener('deviceready', function () {
+  constructor(protected session: SessionService, public pluginService: PluginService) {
+    document.addEventListener('deviceready', () => {
       console.log('cordova devices are ready');
-    }, false);
+      this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
+    },
+    false);
 
+    // Listen for requests made from the server targeted to a specific device
     this.session.onDeviceRequest.subscribe({
       next: (event: IDeviceRequest) => {
         this.onDeviceRequest(event);
@@ -41,7 +40,7 @@ export class DeviceService {
       console.log('attempting to enable camera scanner');
       const self = this;
       cordova.plugins.barcodeScanner.scan(
-        function (result: any) {
+        function (result) {
           if (!result.cancelled) {
             self.session.response = new Scan(result.text, result.format);
             self.session.onAction('Scan');
@@ -51,7 +50,7 @@ export class DeviceService {
             'Format: ' + result.format + '\n' +
             'Cancelled: ' + result.cancelled);
         },
-        function (error: any) {
+        function (error) {
           console.error('Scanning failed: ' + error);
         },
         {
@@ -72,17 +71,42 @@ export class DeviceService {
   }
 
   public onDeviceRequest = (request: IDeviceRequest) => {
-    console.log(`deviceRequest received: ${request.payload}`);
-    // TODO: For now just hardcoding a response
-    this.session.onDeviceResponse({
-      requestId: request.requestId,
-      deviceId: request.deviceId,
-      type: 'DeviceResponse',
-      payload: `Successfully processed request ${request.requestId}`
-    });
+    console.log(`request received for device: ${request.deviceId}`);
+    // targetted plugin is assumed to be a cordova plugin
+
+    const pluginLookupKey = request.pluginId ? request.pluginId : request.deviceId;
+    const targetPluginPromise: Promise<IDevicePlugin> = this.pluginService.getDevicePlugin(pluginLookupKey);
+
+    targetPluginPromise.then( (targetPlugin: IDevicePlugin) => {
+        console.log(`targetPlugin = pluginId: ${targetPlugin.pluginId}, pluginName: ${targetPlugin.pluginName}`);
+        console.log(`Sending request '${request.subType}:${request.requestId}' to device/plugin '${pluginLookupKey}'...`);
+        targetPlugin.processRequest(
+          request,
+          (response) => {
+            this.session.onDeviceResponse( {
+                requestId: request.requestId,
+                deviceId: request.deviceId,
+                type: 'DeviceResponse',
+                payload: response
+              }
+            );
+          },
+          (error) => {
+              this.session.onDeviceResponse( {
+                  requestId: request.requestId,
+                  deviceId: request.deviceId,
+                  type: 'DeviceErrorResponse',
+                  payload: error
+                }
+              );
+          }
+        );
+      }
+    ).catch( (error) => {
+      console.warn( 'No handling yet (or plugin may not be initialized) for ' +
+        `device/plugin with key: ${pluginLookupKey}. request '${request.subType}:${request.requestId}' will be ignored. Error: ${error}`);
+      }
+    );
   }
 
-
 }
-
-

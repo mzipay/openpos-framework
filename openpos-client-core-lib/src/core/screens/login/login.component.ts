@@ -31,10 +31,10 @@ import { IFormElement } from '../../common/iformfield';
     ngOnInit(): void {
         this.lastSequenceNum = this.session.screen.sequenceNumber;
         this.form = this.session.screen.form;
-       // this.loginIdField = this.form.formElements.find((e) => e.id === 'userId');
-      //  this.passwordField = this.form.formElements.find((e) => e.id === 'password');
-       // this.okButton = this.form.formElements.find((e) => e.id === 'okButton');
-      //  this.cancelButton = this.form.formElements.find((e) => e.id === 'cancelButton');
+        this.loginIdField = this.form.formElements.find((e) => e.id === 'userId');
+        this.passwordField = this.form.formElements.find((e) => e.id === 'password');
+        this.okButton = this.form.formElements.find((e) => e.id === 'okButton');
+        this.cancelButton = this.form.formElements.find((e) => e.id === 'cancelButton');
         this.submitAction = this.session.screen.submitAction;
         this.forgotPasswordAction = this.session.screen.forgotPasswordAction;
         this.changePasswordAction = this.session.screen.changePasswordAction;

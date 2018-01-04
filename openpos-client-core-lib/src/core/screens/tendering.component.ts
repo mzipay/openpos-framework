@@ -6,7 +6,6 @@ import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { IFormElement } from '../common/iformfield';
-import { any } from 'bluebird';
 
 @Component({
     selector: 'app-tendering',
@@ -40,7 +39,7 @@ import { any } from 'bluebird';
         this.balanceDue = this.session.screen.balanceDue;
         this.itemActions = this.session.screen.itemActions;
 
-        this.session.screen.localMenuItems.forEach((element: any) => {
+        this.session.screen.localMenuItems.forEach(element => {
             this.session.registerActionPayload( element.action, () => this.tenderAmount.value );
         });
     }

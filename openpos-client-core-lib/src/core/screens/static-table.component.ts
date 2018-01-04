@@ -40,7 +40,7 @@ export class StaticTableComponent implements IScreen, DoCheck {
             // Initialize the list of column metadata and other convenience
             // column data structures
             this.session.screen.headerLabels.forEach(
-                (headerLabel: any) => {
+                (headerLabel) => {
                     this.columns.push(
                         { index: columnIdx++, columnId: headerLabel, headerLabel: headerLabel }
                     );

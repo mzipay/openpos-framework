@@ -29,6 +29,7 @@ import { LoaderService } from './common/loader/loader.service';
 import { ScreenService } from './services/screen.service';
 import { SessionService } from './services/session.service';
 import { IconService } from './services/icon.service';
+import { PluginService } from './services/plugin.service';
 
 // Components
 import { IconComponent } from './common/controls/icon.component';
@@ -72,6 +73,7 @@ import { BlankComponent } from './templates/blank/blank.component';
 import { SellComponent } from './templates/sell/sell.component';
 
 import { MaterialModule } from './material.module';
+import { Plugin } from 'webpack';
 
 @NgModule({
   entryComponents: [
@@ -165,6 +167,7 @@ import { MaterialModule } from './material.module';
     DeviceService,
     LoaderService,
     ScreenService,
+    PluginService,
     Location,
     {
       provide: LocationStrategy,

@@ -13,7 +13,7 @@ import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
   styleUrls: ['./till-count-other-tender.component.scss']
 })
 export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen {
-  @ViewChild('amountInput') amountField: any;
+  @ViewChild('amountInput') amountField;
 
   amountValue: string;
   totalAmount: number;

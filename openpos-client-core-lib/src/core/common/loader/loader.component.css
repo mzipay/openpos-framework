@@ -1,6 +1,7 @@
 .loader-hidden {
     visibility: hidden;
 }
+
 .loader-overlay {
     position: absolute;
     width:100%;
@@ -19,4 +20,14 @@
     background-color:#000;
     opacity: .55;
     z-index: 500000;
+}
+
+.center {
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+    width:350px;
+    text-align:center;
+    margin: 0 auto;
 }

@@ -45,7 +45,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
 
     serverValidator = (control: AbstractControl) => {
         clearTimeout(this.checkTimeout);
-        /*return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             this.checkTimeout = setTimeout(() => {
                 const serverName = control.get('serverName').value;
                 const serverPort = control.get('serverPort').value;
@@ -69,7 +69,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
                 }
 
             }, 1000);
-        });*/
+        });
     }
 
 }
