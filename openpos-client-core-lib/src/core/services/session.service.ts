@@ -4,7 +4,6 @@ import { IMenuItem } from '../common/imenuitem';
 import { LoaderService } from '../common/loader/loader.service';
 import { IDialog } from '../common/idialog';
 import { Observable } from 'rxjs/Observable';
-
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs/Subscription';
 import { Injectable, EventEmitter } from '@angular/core';
@@ -151,7 +150,7 @@ export class SessionService {
   public onDeviceResponse(deviceResponse: IDeviceResponse) {
     console.log('Publish deviceResponse ' + deviceResponse);
     this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
-     JSON.stringify(deviceResponse));
+      JSON.stringify(deviceResponse));
   }
 
   public onAction(action: string) {
@@ -162,7 +161,7 @@ export class SessionService {
         this.response = this.actionPayloads.get(action)();
       }
 
-     this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
+      this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
         JSON.stringify({ name: action, data: this.response }));
       this.dialog = null;
       this.queueLoading();

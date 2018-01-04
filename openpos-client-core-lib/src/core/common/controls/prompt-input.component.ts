@@ -24,11 +24,11 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
 
     constructor(private datePipe: DatePipe) {}
 
-    public onEnter($event: any): void {
+    public onEnter($event): void {
         this.onEnterCallback($event, this);
     }
 
-    public onDateEntered($event: any): void {
+    public onDateEntered($event): void {
         if (this.dateText) {
             this.dateText = this.dateText.replace(/_/g, '');
             if (this.dateText.length === 10) {
@@ -38,7 +38,7 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
         this.onEnterCallback($event, this);
     }
 
-    public onDatePicked($event: any): void {
+    public onDatePicked($event): void {
         this.dateText = this.datePipe.transform(this.datePickerValue, 'MM/dd/yyyy');
     }
 

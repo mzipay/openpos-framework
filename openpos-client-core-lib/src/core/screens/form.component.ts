@@ -33,7 +33,7 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 
   ngOnInit(): void {
     this.form = this.session.screen.form;
-    this.formButtons = this.session.screen.form.formElements.filter((e: any) => e.elementType === 'Button');
+    this.formButtons = this.session.screen.form.formElements.filter((e) => e.elementType === 'Button');
   }
 
   ngAfterViewInit(): void {
@@ -55,7 +55,7 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
     }
   }
 
-  onItemAction(menuItem: IMenuItem, $event: Event): void {
+  onItemAction(menuItem: IMenuItem, $event): void {
     this.session.response = this.form;
     this.session.onAction(menuItem.action);
   }

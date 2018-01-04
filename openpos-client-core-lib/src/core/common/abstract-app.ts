@@ -53,30 +53,16 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
         this.session.unsubscribe();
         this.session.subscribe(this.appName());
         this.iconService.registerLocalSvgIcons();
-        const timer = Observable.timer(1000, 1000);
-        timer.subscribe(t => this.checkConnectionStatus(this.session));
     }
 
     public getTheme(): string {
         if (this.session.screen && this.session.screen.theme) {
+            localStorage.setItem('theme', this.session.screen.theme);
             return this.session.screen.theme;
+        } else if (localStorage.getItem('theme')) {
+            return localStorage.getItem('theme');
         } else {
             return 'openpos-theme';
-        }
-    }
-
-    protected checkConnectionStatus(session: SessionService): void {
-        const connected = session.connected();
-        if (!connected && !this.snackBarRef) {
-            this.snackBarRef = this.snackBar.open('The server is disconnected', undefined, {
-                duration: 0, viewContainerRef: null, verticalPosition: 'top'
-            });
-            this.snackBarRef.afterDismissed().subscribe(() => {
-                this.snackBarRef = null;
-            });
-        } else if (connected) {
-            this.snackBar.dismiss();
-            this.snackBarRef = null;
         }
     }
 

@@ -42,7 +42,7 @@ export class PromptComponent implements OnInit, AfterViewInit, DoCheck, IScreen 
     this.session.onAction(action);
   }
 
-  onPromptInputEnter($event: any, promptInput: PromptInputComponent): void {
+  onPromptInputEnter($event, promptInput: PromptInputComponent): void {
     if (promptInput.responseText) {
         this.onAction(this.session.screen.action);
         $event.target.disabled = true;

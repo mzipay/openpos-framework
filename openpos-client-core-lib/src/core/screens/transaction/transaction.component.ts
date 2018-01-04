@@ -13,7 +13,7 @@ import { AbstractApp } from '../../common/abstract-app';
 })
 export class TransactionComponent implements AfterViewInit, DoCheck, IScreen {
 
-  @ViewChild('box') vc: any;
+  @ViewChild('box') vc;
   initialized = false;
 
   public items: ISellItem[];
