@@ -3,8 +3,8 @@
 
 @import 'theme';
 @import 'training';
-@import '~openpos-client-core-lib/dist/styles/core';
-@import '~openpos-client-core-lib/dist/styles/app-theme';
+@import '~openpos-core/styles/core';
+@import '~openpos-core/styles/app-theme';
 
 @include openpos-core();
 @include openpos-theme();
