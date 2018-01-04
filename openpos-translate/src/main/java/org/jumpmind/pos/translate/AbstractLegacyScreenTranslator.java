@@ -37,6 +37,8 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     protected ILegacyPOSBeanService legacyPOSBeanService;
     protected ILegacyStoreProperties legacyStoreProperties;
     
+    protected IUIActionOverrider actionOverrider;
+    
     public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
         super(legacyScreen, screenClass);
     }
@@ -346,11 +348,14 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                             for (ILegacyButtonSpec modifiedSpec : buttonSpecs) {
                                 if (modifiedSpec.getActionName().equals(action)) {
                                     enabled = modifiedSpec.getEnabled();
+                                    if (isNotBlank(modifiedSpec.getLabel())) {
+                                        label = modifiedSpec.getLabel();
+                                    }
                                 }
                             }
                         }
                     }
-                    if (enabled || !filterDisabled) {
+
                         logger.info("adding action with label tag: {}", labelTag);
 
                         A actionItem;
@@ -360,12 +365,17 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                             actionItem.setIcon(iconRegistry.get(labelTag));
                             actionItem.setEnabled(enabled);
                             actionItem.setAction(buttonSpec.getActionName());
-                            generatedActions.add(actionItem);
+                            if (actionOverrider != null) {
+                                actionOverrider.hideOrOverride(legacyScreen, labelTag, actionItem);
+                            }
+                            
+                            if (actionItem.isEnabled() || !filterDisabled) {
+                                generatedActions.add(actionItem);
+                            }
                         } catch (InstantiationException | IllegalAccessException e) {
                             logger.error(String.format("Failed to create action of type %s for action '%s'", actionClass.getName(),
                                     buttonSpec.getActionName()), e);
                         }
-                    }
 
                 }
             }
@@ -393,6 +403,14 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
             logger.error("Failed to get promptText for {}", uiModel.getModel().getClass());
         }
         return optPromptText;
+    }
+    
+    public void setActionOverrider(IUIActionOverrider actionOverrider) {
+        this.actionOverrider = actionOverrider;
+    }
+    
+    public interface IUIActionOverrider {
+       public boolean hideOrOverride (ILegacyScreen legacyScreen, String labelTag, IUIAction action); 
     }
    
 }
