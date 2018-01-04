@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 
-import { CoreModule } from 'openpos-client-core-lib';
+import { OpenposCoreModule } from 'openpos-core';
 
 @NgModule({
   entryComponents: [
@@ -16,7 +16,7 @@ import { CoreModule } from 'openpos-client-core-lib';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CoreModule
+    OpenposCoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
