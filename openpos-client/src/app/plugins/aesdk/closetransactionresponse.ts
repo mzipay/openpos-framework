@@ -2,10 +2,10 @@ import { Parser } from 'xml2js';
 import { ResponseBase } from './responsebase';
 
 export class CloseTransactionResponse extends ResponseBase {
-    reqType = 'CloseTransactionRequest';
+    public static readonly requestType = 'CloseTransactionRequest';
 
     protected makeResponseXml(requestJson: any): string {
-        const req: any = requestJson[this.reqType];
+        const req: any = requestJson[CloseTransactionResponse.requestType];
         const xml =
 `
 <CloseTransactionResponse>
