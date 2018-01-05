@@ -6,9 +6,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Form implements Serializable {
-    
+
+    public static final String PATTERN_EMAIL =  "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
     public static final String PATTERN_MONEY =  "^(\\d{0,9}\\.\\d{0,2}|\\d{1,9})$";
     public static final String PATTERN_PERCENT =  "\\d{1,2}(?!\\d)|100";
+    public static final String PATTERN_POSTAL_CODE =  "^[0-9a-zA-Z]{5,}$"; // Minimum 5 chars. 
     private static final long serialVersionUID = 1L;
 
     private List<IFormElement> formElements = new ArrayList<IFormElement>();
@@ -50,6 +52,32 @@ public class Form implements Serializable {
     
     public FormField addMoneyField(String fieldId, String label, String value, boolean required) {
         FormField formField = createMoneyField(fieldId, label, value, required);
+        formElements.add(formField);
+        return formField;
+    }
+    
+    public static FormField createEmailField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, true);
+        formField.setPattern(PATTERN_EMAIL);
+        formField.setValue(value);
+        return formField;
+    }
+    
+    public FormField addEmailField(String fieldId, String label, String value, boolean required) {
+        FormField formField = createEmailField(fieldId, label, value, required);
+        formElements.add(formField);
+        return formField;
+    }
+    
+    public static FormField createPostalCodeField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, true);
+        formField.setPattern(PATTERN_POSTAL_CODE);
+        formField.setValue(value);
+        return formField;
+    }
+    
+    public FormField addPostalCodeField(String fieldId, String label, String value, boolean required) {
+        FormField formField = createPostalCodeField(fieldId, label, value, required);
         formElements.add(formField);
         return formField;
     }
