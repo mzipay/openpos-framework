@@ -32,4 +32,4 @@ dependencies {
     compile project(":openpos-core")
 }
 
-processResources.dependsOn tasks.getByPath(':openpos-client:assemble')
+processResources.dependsOn tasks.getByPath(':openpos-client-seed:assemble')
