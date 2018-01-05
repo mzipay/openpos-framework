@@ -1,6 +1,9 @@
 # openpos-client-seed
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.1.
+Use this project to seed new openpos clients. 
+
+## Custom client theme
+Replace `src\styles\themes\_theme.scss` with the theme for your specific client.
 
 ## Development server
 
