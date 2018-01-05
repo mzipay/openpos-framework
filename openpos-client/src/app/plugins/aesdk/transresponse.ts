@@ -2,10 +2,10 @@ import {Parser} from 'xml2js';
 import { ResponseBase } from './responsebase';
 
 export class TransResponse extends ResponseBase {
-    reqType = 'TransRequest';
+    public static readonly requestType = 'TransRequest';
 
     protected makeResponseXml(requestJson: any): string {
-        const req: any = requestJson[this.reqType];
+        const req: any = requestJson[TransResponse.requestType];
         const xml =
 `
 <TransResponse>

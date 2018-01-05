@@ -30,3 +30,4 @@ openpos-client/.angulardoc.json
 openpos-client/package-lock.json
 /.DS_Store
 openpos-client/.vscode/settings.json
+/node/
