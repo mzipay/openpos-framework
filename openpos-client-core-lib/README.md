@@ -1,15 +1,13 @@
-# openpos-client-core-lib
+# OpenposClientCoreLib
 
-## Setup Development Environment
-Run `npm install`
-Run `npm link`
+This is the core library and demo app for openpos. The share library can is located in `src\app\openpos-core\` and contains all of the common functionality and screen for open pos. 
 
-## Build library
-Run `npm run build` to build once
-Run `npm run build:watch` to build and watch for file changes
+## Development Setup
+For development on the library you'll want to link your consumer application to the openpos-core library by the following steps.
 
-## Link Library to client app for development
-Run `npm link openpos-client-core-lib` after installing librarys with either yarn install or npm install
+Run `npm install` from `src\app\openpos-core\` to install all of the library dependencies.
+Run `npm link` from `src\app\openpos-core\` to create a link to openpos-core in your local cache
 
-## Debugging the library
-To debug typscript in the library you'll need to set your breakpoints in the `temp/src-inlined` files since this is what is linked to the client app.
+Then from your consumer application run `npm link openpos-core` to add a link to openpos-core in your consumers node_modules.
+
+Consumers of this library should be set up using the `openpos-client-seed` project.

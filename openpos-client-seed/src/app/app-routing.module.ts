@@ -1,4 +1,4 @@
-import { PosComponent } from 'openpos-client-core-lib';
+import { PosComponent } from 'openpos-core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
