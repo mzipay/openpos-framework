@@ -24,7 +24,7 @@ import org.jumpmind.pos.core.screen.Workstation;
 import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
 
 
-public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> extends AbstractScreenTranslator<T>{
+public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> extends AbstractScreenTranslator<T> implements ILegacyBeanAccessor {
     
     public final static String LOCAL_NAV_PANEL_KEY = "LocalNavigationPanel";
     public final static String GLOBAL_NAV_PANEL_KEY = "GlobalNavigationPanel";
@@ -43,13 +43,25 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
         super(legacyScreen, screenClass);
     }
 
+    @Override
     public void setLegacyPOSBeanService(ILegacyPOSBeanService beanService) {
         this.legacyPOSBeanService = beanService;
     }
 
+    @Override
+    public ILegacyPOSBeanService getLegacyPOSBeanService() {
+        return this.legacyPOSBeanService;
+    }
+    
+    @Override
     public void setLegacyStoreProperties(ILegacyStoreProperties legacyStoreProperties) {
         this.legacyStoreProperties = legacyStoreProperties;
     }        
+
+    @Override
+    public ILegacyStoreProperties getLegacyStoreProperties() {
+        return this.legacyStoreProperties;
+    }
     
     protected Form getForm(DefaultScreen screen) {
         if (screen instanceof DynamicFormScreen) {
@@ -126,6 +138,16 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
         return legacyUIModel;
     }
 
+    protected ILegacyCargo getCargo() {
+        ILegacyBus legacyBus = this.getBus();
+        ILegacyCargo legacyCargo = null;
+        if (legacyBus != null) {
+            legacyCargo = legacyBus.getLegacyCargo();
+        }
+        
+        return legacyCargo;
+    }
+    
     protected ILegacyBus getBus() {
         return this.legacyPOSBeanService.getLegacyBus(legacyScreen);
     }
