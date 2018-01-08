@@ -2,10 +2,10 @@ import { Parser } from 'xml2js';
 import { ResponseBase } from './responsebase';
 
 export class GetCardBINResponse extends ResponseBase {
-    reqType = 'GetCardBINRequest';
+    public static readonly requestType = 'GetCardBINRequest';
 
     protected makeResponseXml(requestJson: any): string {
-        const req = requestJson[this.reqType];
+        const req = requestJson[GetCardBINResponse.requestType];
         const xml =
 `
 <GetCardBINResponse>
