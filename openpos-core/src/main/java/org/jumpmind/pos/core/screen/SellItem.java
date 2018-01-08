@@ -22,6 +22,7 @@ public class SellItem implements IItem, Serializable {
     private List<FormDisplayField> fields = new ArrayList<>();
     private List<MenuItem> menuItems = new ArrayList<>();
     private boolean selected = false;
+    private boolean isGiftReceipt = false;
     
     
     @Override
@@ -132,6 +133,14 @@ public class SellItem implements IItem, Serializable {
     @Override
     public boolean isSelected() {
         return this.selected;
+    }
+    
+    public void setIsGiftReceipt( boolean giftReceipt ) {
+        this.isGiftReceipt = giftReceipt;
+    }
+    
+    public boolean getIsGiftReceipt() {
+        return this.isGiftReceipt;
     }
     
     @Override
