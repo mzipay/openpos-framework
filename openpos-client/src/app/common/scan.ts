@@ -1,4 +1,0 @@
-export class Scan {
-    constructor(public value: string, public format: string) {
-    }
-}
