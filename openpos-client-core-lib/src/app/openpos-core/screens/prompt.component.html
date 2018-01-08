@@ -1,6 +1,6 @@
 <div fxFlexFill *ngIf="session.screen.type==='Prompt' &&  session.screen.text" 
 	fxLayout="column" fxLayoutAlign="center center">
-	<mat-card style.xl="width:30%" style.lg="width:40%" style.md="width:60%" style.sm="width:70%" style.xs="width:80%">
+	<mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
 		<mat-card-content>
 			<app-prompt-input #promptInput *ngIf="session.screen.editable" [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
 			[promptIcon]="session.screen.promptIcon" [onEnterCallback]="promptInputCallback" 
