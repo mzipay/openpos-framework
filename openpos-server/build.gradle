@@ -34,4 +34,4 @@ dependencies {
     testCompile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.20.1.Final'
 }
 
-processResources.dependsOn tasks.getByPath(':openpos-client-seed:assemble')
+// processResources.dependsOn tasks.getByPath(':openpos-client-seed:assemble')
