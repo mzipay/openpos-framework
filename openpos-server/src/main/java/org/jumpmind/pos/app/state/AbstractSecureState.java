@@ -2,7 +2,7 @@ package org.jumpmind.pos.app.state;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 
-import org.jumpmind.pos.app.model.Employee;
+import org.jumpmind.pos.app.model.Empl;
 import org.jumpmind.pos.app.model.Login;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
@@ -65,7 +65,7 @@ abstract public class AbstractSecureState extends AbstractState implements IStat
         if (!login.isLoggedIn()) {
             if (isBlank(login.getUserName())) {
                 login.setUserName((String) action.getData());
-                login.setEmployee(new Employee(1, "Steve", "Rodgers"));
+                login.setEmployee(new Empl(1, "Steve", "Rodgers"));
                 promptForLogin();
             } else {
                 login.setLoggedIn(true);
