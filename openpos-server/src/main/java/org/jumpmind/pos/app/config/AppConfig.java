@@ -45,8 +45,12 @@ import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@EnableTransactionManagement
 public class AppConfig {
 
     protected static final Logger log = LoggerFactory.getLogger(AppConfig.class);
@@ -64,7 +68,9 @@ public class AppConfig {
 
     Server h2Server;
     
-    ISecurityService securityService;        
+    ISecurityService securityService;     
+    
+    PlatformTransactionManager txManager;
 
     @Bean
     @Scope(value = "singleton")
@@ -92,6 +98,15 @@ public class AppConfig {
                     .forEach(propName -> environmentProperties.setProperty(propName, env.getProperty(propName)));
         }
         return environmentProperties;
+    }
+    
+    @Bean
+    @Scope(value = "singleton")
+    public PlatformTransactionManager txManager() {
+        if (txManager == null) {
+            this.txManager = new DataSourceTransactionManager(dataSource());
+        } 
+        return txManager;
     }
 
     @Bean

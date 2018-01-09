@@ -1,4 +1,2 @@
-includeFlat 'openpos-client'
-includeFlat 'openpos-cordova'
 includeFlat 'openpos-core'
 includeFlat 'openpos-translate'
