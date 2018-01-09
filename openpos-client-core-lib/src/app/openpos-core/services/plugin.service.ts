@@ -12,12 +12,14 @@ export class PluginService {
     private plugins = new Map<string, IPlugin>();
 
     constructor() {
-        // TODO: remove later.  temporarily installing AESDK plugin until we can split it
-        // out into its own project
-        // DJK - I removed it
     }
 
-    getPlugin(pluginId): Promise<IPlugin> {
+    public addPlugin(pluginId: string, plugin: IPlugin) {
+        this.plugins[pluginId] = plugin;
+        console.log(`plugin '${pluginId}' added to the PluginService`);
+    }
+
+    public getPlugin(pluginId): Promise<IPlugin> {
         return new Promise( (resolve, reject) => {
             let plugin: IPlugin = this.plugins[pluginId];
             if (! plugin) {
@@ -54,7 +56,7 @@ export class PluginService {
         });
     }
 
-    getDevicePlugin(pluginId: string): Promise<IDevicePlugin> {
+    public getDevicePlugin(pluginId: string): Promise<IDevicePlugin> {
         return new Promise<IDevicePlugin>( (resolve, reject) => {
                 const pluginPromise: Promise<IPlugin> = this.getPlugin(pluginId);
                 pluginPromise.then(thePlugin => {
@@ -93,7 +95,7 @@ export class PluginService {
      * which needs to be cordova.plugins.xyz (where xyz is the pluginId) in order
      * for the plugin to be found.
      */
-    isCordovaPlugin(pluginId: string): boolean {
+    public isCordovaPlugin(pluginId: string): boolean {
         return typeof cordova !== 'undefined'
             && typeof cordova.plugins !== 'undefined'
             && cordova.plugins[pluginId];

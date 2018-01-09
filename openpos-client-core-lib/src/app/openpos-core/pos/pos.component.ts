@@ -1,3 +1,4 @@
+import { DeviceService } from './../services/device.service';
 import { ScreenService } from './../services/screen.service';
 import { AbstractApp } from '../common/abstract-app';
 import { IMenuItem } from '../common/imenuitem';
@@ -19,7 +20,8 @@ export class PosComponent extends AbstractApp implements DoCheck {
 
   public backButton: IMenuItem;
 
-  constructor(public screenService: ScreenService, public session: SessionService, public dialog: MatDialog,
+  constructor(public screenService: ScreenService, public session: SessionService,
+    public deviceService: DeviceService, public dialog: MatDialog,
     public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer) {
     super(screenService, session, dialog, iconService, snackBar, overlayContainer);
   }

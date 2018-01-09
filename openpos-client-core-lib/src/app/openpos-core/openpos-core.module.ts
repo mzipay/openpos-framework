@@ -15,6 +15,8 @@ import 'hammerjs'; // for material
 
 // Common
 import { AbstractApp } from './common/abstract-app';
+import { IDeviceRequest } from './common/idevicerequest';
+import { IDevicePlugin } from './common/idevice-plugin';
 
 // Pipes
 import { SafePipe } from './common/safe.pipe';
@@ -167,7 +169,6 @@ import { Plugin } from 'webpack';
     DeviceService,
     LoaderService,
     ScreenService,
-    PluginService,
     Location,
     {
       provide: LocationStrategy,
@@ -178,4 +179,14 @@ import { Plugin } from 'webpack';
     MediaMatcher
   ]
 })
-export class OpenposCoreModule { }
+// Export services below under 'providers'
+export class OpenposCoreModule {
+  static forRoot() {
+    return {
+      ngModule: OpenposCoreModule,
+      providers: [
+        PluginService
+      ]
+    };
+  }
+}

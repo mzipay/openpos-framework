@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-@Order(100)
+@Order(500)
 public class LegacyStartupTask extends AbstractStartupTask {
 
     @Autowired
