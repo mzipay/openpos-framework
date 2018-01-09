@@ -1,4 +1,3 @@
-import { PromptInputComponent } from '../common/controls/prompt-input.component';
 import { IScreen } from '../common/iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
 import {SessionService} from '../services/session.service';
@@ -9,11 +8,7 @@ import { AbstractApp } from '../common/abstract-app';
   templateUrl: './prompt.component.html'
 })
 export class PromptComponent implements OnInit, AfterViewInit, DoCheck, IScreen {
-
-  @ViewChild('promptInput') promptInput: PromptInputComponent;
-
   initialized = false;
-  promptInputCallback: Function;
 
   constructor(public session: SessionService) {
   }
@@ -22,7 +17,6 @@ export class PromptComponent implements OnInit, AfterViewInit, DoCheck, IScreen 
   }
 
   public ngOnInit(): void {
-    this.promptInputCallback = this.onPromptInputEnter.bind(this);
   }
 
   ngDoCheck(): void {
@@ -35,17 +29,10 @@ export class PromptComponent implements OnInit, AfterViewInit, DoCheck, IScreen 
     this.initialized = true;
   }
 
-  onAction(action: string) {
-    this.session.response = this.promptInput.responseText;
-    this.session.screen.responseText = null;
-    this.promptInput.responseText = null;
-    this.session.onAction(action);
-  }
-
-  onPromptInputEnter($event, promptInput: PromptInputComponent): void {
-    if (promptInput.responseText) {
-        this.onAction(this.session.screen.action);
-        $event.target.disabled = true;
+  onPromptInputEnter(responseText: String): void {
+    if (responseText) {
+      this.session.response = responseText;
+      this.session.onAction(this.session.screen.action);
     }
   }
 
