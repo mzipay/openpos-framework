@@ -6,6 +6,7 @@
 @import './mixins/list';
 @import './mixins/menu';
 @import './mixins/serrated-edge';
+@import './mixins/slide-toggle';
 @import './mixins/table';
 @import './mixins/typography';
 
@@ -21,6 +22,7 @@ $mat-card-default-margin: 24px !default;
   @include openpos-list();
   @include openpos-menu();
   @include serrated-edge();
+  @include openpos-slide-toggle();
   @include openpos-table();
   @include openpos-typography();
 
