@@ -6,6 +6,7 @@ public interface IPromptScreen {
     public static final String TYPE_CURRENCYTEXT = "CURRENCYTEXT";
     public static final String TYPE_NUMERICTEXT = "NUMERICTEXT";
     public static final String TYPE_DATE = "DATE";
+    public static final String TYPE_ONOFF = "ONOFF";
 
     public int getMinLength();
     public void setMinLength(int minLength);

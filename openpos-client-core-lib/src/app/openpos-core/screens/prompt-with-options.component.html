@@ -1,9 +1,9 @@
 <div fxFlexFill *ngIf="session.screen.type==='PromptWithOptions'"
-fxLayout="column" fxLayoutAlign="center center"> 
+fxLayout="column" fxLayoutAlign="center center">
     <mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
         <mat-card-content>
             <app-prompt-input #promptInput [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType" [responseText]="session.screen.responseText"
-                [promptIcon]="session.screen.promptIcon" [onEnterCallback]="promptInputCallback" [hintText]="promptText"></app-prompt-input>
+                [promptIcon]="session.screen.promptIcon" [hintText]="promptText"></app-prompt-input>
 
         </mat-card-content>
         <mat-card-actions>

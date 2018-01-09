@@ -1,5 +1,4 @@
 import { IMenuItem } from './../common/imenuitem';
-import { PromptInputComponent } from './../common/controls/prompt-input.component';
 import { IItem } from './../common/iitem';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, OnDestroy } from '@angular/core';
 import { SessionService } from '../services/session.service';

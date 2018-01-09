@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
 import { AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks';
@@ -13,8 +13,8 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     @Input() responseType: string;
     @Input() responseText: string;
     @Input() promptIcon: string;
-    @Input() onEnterCallback: Function;
     @Input() hintText: string;
+    @Output() enter = new EventEmitter<string>();
     inputType: string;
     dateText: string;  // value entered by user or copied from datePickerValue
     datePickerValue: Date;  // retains value picked using datepicker
@@ -22,23 +22,30 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
     autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
 
+    onOffModel: boolean;
+
     constructor(private datePipe: DatePipe) {}
 
-    public onEnter($event): void {
-        this.onEnterCallback($event, this);
+    public onEnter(): void {
+        this.enter.emit(this.responseText);
     }
 
-    public onDateEntered($event): void {
+    public onSlideChange(): void {
+      if( this.responseType === "ONOFF" )
+        this.responseText = this.onOffModel ? "ON" : "OFF";
+    }
+
+    public onDateEntered(): void {
         if (this.dateText) {
             this.dateText = this.dateText.replace(/_/g, '');
             if (this.dateText.length === 10) {
                this.responseText = this.dateText;
             }
         }
-        this.onEnterCallback($event, this);
+        this.enter.emit(this.responseText);
     }
 
-    public onDatePicked($event): void {
+    public onDatePicked(): void {
         this.dateText = this.datePipe.transform(this.datePickerValue, 'MM/dd/yyyy');
     }
 
@@ -47,6 +54,13 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
             this.inputType = 'password';
         } else {
             this.inputType = 'text';
+        }
+
+        if ( this.responseType === "ONOFF" ){
+          if( !this.responseText ) {
+            this.responseText = "OFF";
+          }
+          this.onOffModel = this.responseText === "ON";
         }
     }
     ngAfterContentInit(): void {
