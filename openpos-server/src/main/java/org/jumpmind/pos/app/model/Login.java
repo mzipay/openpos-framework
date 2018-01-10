@@ -6,13 +6,13 @@ public class Login {
     
     String userName;
 
-    Employee employee;
+    Empl employee;
 
-    public Employee getEmployee() {
+    public Empl getEmployee() {
         return employee;
     }
 
-    public void setEmployee(Employee employee) {
+    public void setEmployee(Empl employee) {
         this.employee = employee;
     }
 

@@ -18,6 +18,7 @@
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
+      "scripts": ["../node_modules/openpos-core/node_modules/signature_pad/dist/signature_pad.js"],
       "styles": [
         "styles.scss"
       ],

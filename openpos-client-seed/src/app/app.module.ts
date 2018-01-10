@@ -16,7 +16,7 @@ import { OpenposCoreModule } from 'openpos-core';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    OpenposCoreModule
+    OpenposCoreModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
