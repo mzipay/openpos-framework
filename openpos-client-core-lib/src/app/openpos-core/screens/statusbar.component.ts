@@ -44,7 +44,7 @@ export class StatusBarComponent {
       }
     }
 
-    console.log(`numClicksUnderThreshold: ${numClicksUnderThreshold}`);
+    // console.log(`numClicksUnderThreshold: ${numClicksUnderThreshold}`);
     if (numClicksUnderThreshold >= 4) {
       this.clickTimes = [];
       this.devModeEnabled = (! this.devModeEnabled);
