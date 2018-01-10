@@ -1,4 +1,4 @@
-<mat-toolbar *ngIf="session.screen" color="primary" class="mat-elevation-z10">
+<mat-toolbar *ngIf="session.screen" color="primary" class="mat-elevation-z10" (click)="onToolbarClick()">
 	<div fxFill fxLayout="row" fxLayoutAlign="space-between ">
 		<div fxLayout="row" fxLayoutAlign=" center">
 
@@ -34,6 +34,18 @@
 					<app-icon *ngIf="session.screen.logoutButton.icon" [iconName]="session.screen.logoutButton.icon"></app-icon>
 				</button>
 			</ng-container>
+			<ng-container *ngIf="devModeEnabled">
+				<button mat-button [matMenuTriggerFor]="devMenu" (click)="onDevMenuClick()">Dev</button>
+
+				<mat-menu #devMenu="matMenu">
+					<button mat-menu-item [matMenuTriggerFor]="logsMenu">Logs</button>
+				</mat-menu>
+
+				<mat-menu #logsMenu="matMenu">
+					<button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileSelected(m)">{{m}}</button> 
+				</mat-menu>
+			</ng-container>
+			
 		</div>
 
 	</div>
