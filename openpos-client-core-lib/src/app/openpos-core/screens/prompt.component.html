@@ -4,7 +4,7 @@
 		<mat-card-content>
 			<app-prompt-input #promptInput *ngIf="session.screen.editable" [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
 			[promptIcon]="session.screen.promptIcon" (enter)="onPromptInputEnter($event)"
-			[responseText]="session.screen.responseText" [hintText]="session.screen.text"></app-prompt-input>
+			[responseText]="session.screen.responseText" [hintText]="session.screen.text" [maskSpec]="session.screen.promptMask"></app-prompt-input>
 			<div style="height:50px"></div>
 		</mat-card-content>
 		<mat-card-actions *ngIf="session.screen.actionButton" align="end">

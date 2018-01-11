@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild, Output, EventEmitter } from '@angu
 import { DatePipe } from '@angular/common';
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
 import { AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { TextMask, IMaskSpec, ITextMask } from '../textmask';
 
 @Component({
     selector: 'app-prompt-input',
@@ -14,6 +15,7 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     @Input() responseText: string;
     @Input() promptIcon: string;
     @Input() hintText: string;
+    @Input() maskSpec: IMaskSpec;
     @Output() enter = new EventEmitter<string>();
     inputType: string;
     dateText: string;  // value entered by user or copied from datePickerValue
@@ -23,6 +25,7 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
 
     onOffModel: boolean;
+    _textMask: ITextMask; // Mask object built for text-mask
 
     constructor(private datePipe: DatePipe) {}
 
@@ -55,6 +58,10 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
         } else {
             this.inputType = 'text';
         }
+        if (this.maskSpec) {
+            const newMask = TextMask.instance(this.maskSpec);
+            this._textMask = newMask;
+        }
 
         if ( this.responseType === "ONOFF" ){
           if( !this.responseText ) {
@@ -71,6 +78,4 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
             }
         }
     }
-
-
 }

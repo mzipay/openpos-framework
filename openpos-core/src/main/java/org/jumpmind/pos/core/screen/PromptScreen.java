@@ -1,5 +1,8 @@
 package org.jumpmind.pos.core.screen;
 
+
+import org.jumpmind.pos.core.model.IMaskSpec;
+
 public class PromptScreen extends DefaultScreen implements IPromptScreen {
 
     private static final long serialVersionUID = 1L;
@@ -14,6 +17,7 @@ public class PromptScreen extends DefaultScreen implements IPromptScreen {
     private int maxLength;
     private String action = "Next";
     private MenuItem actionButton = null;
+    private IMaskSpec promptMask;
 
     public PromptScreen() {
         setType(ScreenType.Prompt);
@@ -113,6 +117,14 @@ public class PromptScreen extends DefaultScreen implements IPromptScreen {
 
     public void setActionButton(MenuItem actionButton) {
         this.actionButton = actionButton;
+    }
+    
+    public IMaskSpec getPromptMask() {
+        return this.promptMask;
+    }
+    
+    public void setPromptMask(IMaskSpec mask) {
+        this.promptMask = mask;
     }
     
 }
