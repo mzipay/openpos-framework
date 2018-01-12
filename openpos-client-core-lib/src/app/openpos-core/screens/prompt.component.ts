@@ -1,3 +1,4 @@
+import { PromptInputComponent } from './../common/controls/prompt-input.component';
 import { IScreen } from '../common/iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
 import {SessionService} from '../services/session.service';
@@ -8,6 +9,7 @@ import { AbstractApp } from '../common/abstract-app';
   templateUrl: './prompt.component.html'
 })
 export class PromptComponent implements OnInit, AfterViewInit, DoCheck, IScreen {
+  @ViewChild('promptInput') promptInput: PromptInputComponent;
   initialized = false;
 
   constructor(public session: SessionService) {
@@ -20,13 +22,17 @@ export class PromptComponent implements OnInit, AfterViewInit, DoCheck, IScreen 
   }
 
   ngDoCheck(): void {
-    // if (this.initialized && this.vc && this.vc.nativeElement) {
-    //   setTimeout(this.vc.nativeElement.focus(), 0);
-    // }
   }
 
   ngAfterViewInit(): void {
     this.initialized = true;
+  }
+
+  onAction(action: string) {
+    this.session.response = this.promptInput.responseText;
+    this.session.screen.responseText = null;
+    this.promptInput.responseText = null;
+    this.session.onAction(action);
   }
 
   onPromptInputEnter(responseText: String): void {
