@@ -38,7 +38,6 @@ public class NumberMaskSpec implements IMaskSpec {
        boolean allowLeadingZeroes,
        Integer integerLimit
             ) {
-        this();
         this.prefix = prefix;
         this.suffix = suffix;
         this.includeThousandsSeparator = includeThousandsSeparator;

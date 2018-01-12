@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jumpmind.pos.core.model.MaskElement.MaskElementType;
+
 /**
  * Provides a means for creation of a field mask on the server-side which conforms to the masking functionality provided by the
  * text-mask project.  
@@ -16,6 +18,22 @@ import java.util.List;
 
 public class GenericMaskSpec implements IMaskSpec {
     private static final long serialVersionUID = 1L;
+    public static final GenericMaskSpec DEFAULT_PHONE_SPEC = new GenericMaskSpec(true, 
+        new MaskElement(MaskElementType.String, "("),
+        new MaskElement(MaskElementType.RegExp, "[1-9]"),
+        new MaskElement(MaskElementType.RegExp, "\\d"),
+        new MaskElement(MaskElementType.RegExp, "\\d"),
+        new MaskElement(MaskElementType.String, ")"),
+        new MaskElement(MaskElementType.RegExp, "\\d"),
+        new MaskElement(MaskElementType.RegExp, "\\d"),
+        new MaskElement(MaskElementType.RegExp, "\\d"),
+        new MaskElement(MaskElementType.String, "-"),
+        new MaskElement(MaskElementType.RegExp, "\\d"),
+        new MaskElement(MaskElementType.RegExp, "\\d"),
+        new MaskElement(MaskElementType.RegExp, "\\d"),
+        new MaskElement(MaskElementType.RegExp, "\\d")
+    );
+    
     private MaskSpecType type = MaskSpecType.GenericMask;
     
     private boolean guide = false;
