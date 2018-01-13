@@ -18,7 +18,7 @@ public interface ILegacyScreen {
     
     public String getDialogResourceId();
     
-    public <T> T getAssignmentSpec(String panelKey);
+    public <T> T getAsgnmntSpec(String panelKey);
     
     public boolean isStatusUpdate();
     
