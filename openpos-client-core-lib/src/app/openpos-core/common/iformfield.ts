@@ -1,3 +1,4 @@
+import { IMaskSpec } from './textmask';
 export interface IFormElement {
     elementType: string;
     inputType: string;
@@ -10,5 +11,7 @@ export interface IFormElement {
     submitButton: boolean;
     required: boolean;
     selectedIndexes:  number[];
+    valueChangedAction: string;
+    mask: IMaskSpec;
 }
 

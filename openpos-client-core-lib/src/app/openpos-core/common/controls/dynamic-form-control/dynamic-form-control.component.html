@@ -3,7 +3,7 @@
         <ng-container *ngIf="formField.elementType==='Input'">
             <mat-form-field *ngIf="['AlphanumericText', 'NumericText'].indexOf(formField.inputType) >= 0" style="width:100%">
               <input matInput [(ngModel)]="formField.value" ngModel [name]="formField.id" #field="ngModel" placeholder="{{getPlaceholderText(formField)}}"
-                [pattern]="formField.pattern" [required]="formField.required">
+                [pattern]="formField.pattern" [required]="formField.required" [textMask]="getFormFieldMask(formField)">
               <ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
                 <mat-error div *ngIf="field.errors.required">
                   * is required.
@@ -23,9 +23,15 @@
               </ng-container>
             </mat-form-field>
             <mat-form-field *ngIf="formField.inputType === 'ComboBox'">
-              <mat-select  ngModel [name]="formField.id" [(ngModel)]="formField.value" placeholder="{{getPlaceholderText(formField)}}">
+              <mat-select  #field="ngModel" ngModel [name]="formField.id" [(ngModel)]="formField.value" placeholder="{{getPlaceholderText(formField)}}" [required]="formField.required"
+                 (change)="onFormElementChanged(formField, $event)">
                 <mat-option *ngFor="let value of formField.values" [value]="value">{{value}}</mat-option>
               </mat-select>
+              <ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
+                <mat-error div *ngIf="field.errors.required">
+                  * is required.
+                </mat-error>
+              </ng-container>
             </mat-form-field>
             <ng-container *ngIf="formField.inputType === 'SubmitOptionList'">
               <label class="prompt-text">{{formField.label}}</label>

@@ -24,6 +24,7 @@ public class GenericMaskSpec implements IMaskSpec {
         new MaskElement(MaskElementType.RegExp, "\\d"),
         new MaskElement(MaskElementType.RegExp, "\\d"),
         new MaskElement(MaskElementType.String, ")"),
+        new MaskElement(MaskElementType.String, " "),
         new MaskElement(MaskElementType.RegExp, "\\d"),
         new MaskElement(MaskElementType.RegExp, "\\d"),
         new MaskElement(MaskElementType.RegExp, "\\d"),
@@ -41,6 +42,18 @@ public class GenericMaskSpec implements IMaskSpec {
 
     public static GenericMaskSpec get() {
         return new GenericMaskSpec();
+    }
+    
+    /**
+     * Returns a mask that can be used to enforce a maximum length on a field with the stipulation that all of the
+     * characters in the mask conform to the type of the given MaskElement.
+     */
+    public static GenericMaskSpec maxLengthMask(MaskElement elementToRepeat, int maxLen) {
+        GenericMaskSpec returnSpec = new GenericMaskSpec();
+        for (int i = 0; i < maxLen; i++) {
+            returnSpec.addMaskElement(elementToRepeat);
+        }
+        return returnSpec;
     }
     
     public GenericMaskSpec() {

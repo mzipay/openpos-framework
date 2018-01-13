@@ -11,6 +11,8 @@ public class MaskElement implements Serializable {
         RegExp
     }
     
+    public static final MaskElement DIGIT_ELEMENT = new MaskElement(MaskElementType.RegExp, "\\d");
+    
     private MaskElementType type;
     private String value;
     

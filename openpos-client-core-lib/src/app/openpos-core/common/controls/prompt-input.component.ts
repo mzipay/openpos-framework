@@ -61,6 +61,8 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
         if (this.maskSpec) {
             const newMask = TextMask.instance(this.maskSpec);
             this._textMask = newMask;
+        } else {
+            this._textMask = TextMask.NO_MASK;
         }
 
         if ( this.responseType === "ONOFF" ){

@@ -1,3 +1,4 @@
+import { ITextMask, TextMask } from './../../textmask';
 import { IMenuItem } from '../../imenuitem';
 import { IScreen } from '../../iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output, Input, EventEmitter } from '@angular/core';
@@ -26,6 +27,10 @@ export class DynamicFormControlComponent implements OnInit {
 
   onFormElementChanged(formElement: IFormElement, event: Event): void {
     this.onFieldChanged.emit({ formElement: formElement, event: event });
+    if (formElement.inputType === 'ComboBox' && formElement.valueChangedAction) {
+      this.session.response = this.screenForm;
+      this.session.onAction(formElement.valueChangedAction);
+    }
   }
 
   onSubmitOptionSelected(formElement: IFormElement, valueIndex: number, event: Event) {
@@ -42,6 +47,14 @@ export class DynamicFormControlComponent implements OnInit {
       // could submit form.value instead which is simple name value pairs
       this.session.response = this.screenForm;
       this.session.onAction(this.submitAction);
+    }
+  }
+
+  getFormFieldMask(formElement: IFormElement): ITextMask {
+    if (formElement.mask) {
+      return TextMask.instance(formElement.mask);
+    } else  {
+      return TextMask.NO_MASK;
     }
   }
 

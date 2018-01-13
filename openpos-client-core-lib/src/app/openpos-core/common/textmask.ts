@@ -43,8 +43,14 @@ export interface ITextMask {
  * Builds an instance of the javascript object needed for text-mask
  */
 export class TextMask implements ITextMask {
-    mask: (string|RegExp)[];
+    public static NO_MASK: TextMask = new TextMask(() => false);
+
+    mask: ((string|RegExp)[] | (() => any));
     guide: boolean;
+
+    constructor(mask?: (string|RegExp)[] | (() => any)) {
+        this.mask = mask;
+    }
 
     static instance(maskSpec: IMaskSpec): TextMask {
         const inst: TextMask = new TextMask();
@@ -61,7 +67,6 @@ export class TextMask implements ITextMask {
         }
         return inst;
     }
-
 
     protected toTextMaskElement(elem: IMaskElement): string|RegExp {
         if (elem.type === 'String') {

@@ -14,27 +14,15 @@
 
     <mat-slide-toggle *ngSwitchCase="'ONOFF'" [(ngModel)]="onOffModel" (change)="onSlideChange()" color="primary" ngClass="text-lg">
         {{placeholderText}} {{onOffModel===true ? 'On' : 'Off'}}
-      </mat-slide-toggle>
+    </mat-slide-toggle>
 
-    <!-- TODO: See if this can be improved.  Even though I only want to optionally bind a textMask, if I put my container around
-        the input only angular complains about the model (specifically the mat-hint) being updated after initialization -->
-    <ng-container *ngIf="maskSpec; else noMask">
-        <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-xl">
-            <mat-icon  matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
-            <input #box matInput [(ngModel)]="responseText" (keyup.enter)="onEnter()" type="{{inputType}}" [appFocus]="true" 
-                [textMask]="_textMask">
-            <mat-placeholder>{{placeholderText}}</mat-placeholder>
-            <mat-hint align="start">{{hintText}}</mat-hint>
-        </mat-form-field>
-    </ng-container>
-    <ng-template #noMask>
-        <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-xl">
-            <mat-icon  matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
-            <input #box matInput [(ngModel)]="responseText" (keyup.enter)="onEnter()" type="{{inputType}}" [appFocus]="true">
-            <mat-placeholder>{{placeholderText}}</mat-placeholder>
-            <mat-hint align="start">{{hintText}}</mat-hint>
-        </mat-form-field>
-    </ng-template>        
+    <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-xl">
+        <mat-icon  matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
+        <input #box matInput [(ngModel)]="responseText" (keyup.enter)="onEnter()" type="{{inputType}}" [appFocus]="true" 
+            [textMask]="_textMask">
+        <mat-placeholder>{{placeholderText}}</mat-placeholder>
+        <mat-hint align="start">{{hintText}}</mat-hint>
+    </mat-form-field>
 </ng-container>
 
 

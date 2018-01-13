@@ -2,6 +2,9 @@ package org.jumpmind.pos.core.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class FormField implements IFormElement, IField, Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -14,6 +17,8 @@ public class FormField implements IFormElement, IField, Serializable {
     private String placeholder;
     private String pattern;
     private boolean required = true;
+    @JsonIgnore  // ignore for deserialization from client to server (see https://goo.gl/Gjehox)
+    private IMaskSpec mask;
 
     public FormField() {
     }
@@ -123,6 +128,16 @@ public class FormField implements IFormElement, IField, Serializable {
 
     public void setRequired(boolean required) {
         this.required = required;
+    }
+
+    @JsonProperty
+    public IMaskSpec getMask() {
+        return mask;
+    }
+
+    @JsonIgnore  // Ignore on deserialization  (see https://goo.gl/Gjehox)
+    public void setMask(IMaskSpec mask) {
+        this.mask = mask;
     }
 
 

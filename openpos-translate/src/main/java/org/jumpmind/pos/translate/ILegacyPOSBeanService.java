@@ -19,6 +19,7 @@ public interface ILegacyPOSBeanService {
     ILegacyStatusBeanModel getLegacyStatusBeanModel(ILegacyScreen legacyScreen);
     ILegacyCurrencyDetailBeanModel getLegacyCurrencyDetailBeanModel(ILegacyScreen legacyScreen);
     ILegacyOtherTenderDetailBeanModel getLegacyOtherTenderDetailBeanModel(ILegacyScreen legacyScreen);
+    ILegacyCheckEntryBeanModel getLegacyCheckEntryBeanModel(ILegacyScreen legacyScreen);
     
     ILegacyCurrency getLegacyCurrencyInstance(String currencyStringValue);
     ILegacyCurrency getLegacyCurrencyInstance(BigDecimal currencyDecimalValue);
