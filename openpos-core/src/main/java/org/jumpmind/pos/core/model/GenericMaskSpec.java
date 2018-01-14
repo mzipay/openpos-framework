@@ -2,9 +2,9 @@ package org.jumpmind.pos.core.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import org.jumpmind.pos.core.model.MaskElement.MaskElementType;
 
 /**
  * Provides a means for creation of a field mask on the server-side which conforms to the masking functionality provided by the
@@ -18,23 +18,7 @@ import org.jumpmind.pos.core.model.MaskElement.MaskElementType;
 
 public class GenericMaskSpec implements IMaskSpec {
     private static final long serialVersionUID = 1L;
-    public static final GenericMaskSpec DEFAULT_PHONE_SPEC = new GenericMaskSpec(true, 
-        new MaskElement(MaskElementType.String, "("),
-        new MaskElement(MaskElementType.RegExp, "[1-9]"),
-        new MaskElement(MaskElementType.RegExp, "\\d"),
-        new MaskElement(MaskElementType.RegExp, "\\d"),
-        new MaskElement(MaskElementType.String, ")"),
-        new MaskElement(MaskElementType.String, " "),
-        new MaskElement(MaskElementType.RegExp, "\\d"),
-        new MaskElement(MaskElementType.RegExp, "\\d"),
-        new MaskElement(MaskElementType.RegExp, "\\d"),
-        new MaskElement(MaskElementType.String, "-"),
-        new MaskElement(MaskElementType.RegExp, "\\d"),
-        new MaskElement(MaskElementType.RegExp, "\\d"),
-        new MaskElement(MaskElementType.RegExp, "\\d"),
-        new MaskElement(MaskElementType.RegExp, "\\d")
-    );
-    
+
     private MaskSpecType type = MaskSpecType.GenericMask;
     
     private boolean guide = false;
@@ -104,5 +88,43 @@ public class GenericMaskSpec implements IMaskSpec {
         this.mask = mask;
     }
     
+    public static class ImmutableGenericMaskSpec extends GenericMaskSpec {
+        private static final long serialVersionUID = 1L;
+
+        public ImmutableGenericMaskSpec(MaskElement... maskElems) {
+            super(false, maskElems);
+        }
+        
+        public ImmutableGenericMaskSpec(boolean guide, MaskElement... maskElems) {
+            super(guide, maskElems);
+        }
+        
+        @Override
+        public ImmutableGenericMaskSpec guide(boolean guide) {
+            return this;
+        }
+        
+        @Override
+        public void setMask(List<MaskElement> mask) {
+            // don't allow changing the mask elements
+        }
+        
+        @Override
+        public List<MaskElement> getMask() {
+            return Collections.unmodifiableList(super.getMask());
+        }
+        
+        @Override
+        public ImmutableGenericMaskSpec addMaskElement(MaskElement maskElem) {
+            // add not supported
+            return this;
+        }
+
+        @Override
+        public void setGuide(boolean guide) {
+            // can't change the guide setting
+        }
+        
+    }
 
 }

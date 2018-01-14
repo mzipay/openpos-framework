@@ -12,6 +12,8 @@ public interface ILegacyCheckEntryBeanModel {
     void setIDNumber(String idNumber);
     
     List<String> getCountryNames();
+    String getCountryCode(int countryIndex);
+    String getCountryCode(String country);
     int getSelectedCountryIndex();
     void setSelectedCountry(String country);
     
