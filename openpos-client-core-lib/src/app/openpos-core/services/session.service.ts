@@ -70,11 +70,11 @@ export class SessionService {
     return '/topic/app/' + this.appId + '/node/' + this.nodeId;
   }
 
-  private getServerName(): string {
+  public getServerName(): string {
     return localStorage.getItem('serverName');
   }
 
-  private getServerPort(): string {
+  public getServerPort(): string {
     return localStorage.getItem('serverPort');
   }
 
