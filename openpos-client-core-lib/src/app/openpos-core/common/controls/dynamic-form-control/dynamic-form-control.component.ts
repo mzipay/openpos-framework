@@ -23,6 +23,10 @@ export class DynamicFormControlComponent implements OnInit {
   constructor( public session: SessionService) { }
 
   ngOnInit() {
+    this.session.screen.alternateSubmitActions.forEach(action => {
+      this.session.registerActionPayload( action, () => this.session.response = this.screenForm )
+    });
+
   }
 
   onFormElementChanged(formElement: IFormElement, event: Event): void {
