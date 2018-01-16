@@ -1,5 +1,9 @@
 package org.jumpmind.pos.core.screen;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jumpmind.pos.core.model.Form;
 
 public class DynamicFormScreen extends DefaultScreen {
@@ -9,6 +13,8 @@ public class DynamicFormScreen extends DefaultScreen {
     private Form form = new Form();
     
     private String submitAction = "Next";
+    
+    private List<String> alternateSubmitActions = new ArrayList<String>();
 
     public DynamicFormScreen() {
         setType(ScreenType.DynamicForm);
@@ -33,6 +39,18 @@ public class DynamicFormScreen extends DefaultScreen {
     
     public String getSubmitAction() {
         return submitAction;
+    }
+    
+    public void addAlternateSubmitAction(String action) {
+        this.alternateSubmitActions.add( action );
+    }
+
+    public List<String> getAlternateSubmitActions() {
+        return alternateSubmitActions;
+    }
+
+    public void setAlternateSubmitActions(List<String> alternateActions) {
+        this.alternateSubmitActions = alternateActions;
     }
     
 }
