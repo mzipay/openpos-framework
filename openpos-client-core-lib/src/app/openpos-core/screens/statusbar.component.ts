@@ -15,6 +15,7 @@ export class StatusBarComponent {
   protected clickTimes: number[] = [];
 
   constructor(public session: SessionService, public pluginService: PluginService) {
+    this.devModeEnabled = localStorage.getItem('devMode') === 'true';
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
@@ -48,6 +49,7 @@ export class StatusBarComponent {
     if (numClicksUnderThreshold >= 4) {
       this.clickTimes = [];
       this.devModeEnabled = (! this.devModeEnabled);
+      localStorage.setItem('devMode', `${this.devModeEnabled}`);
     }
   }
 
@@ -67,6 +69,14 @@ export class StatusBarComponent {
         }
       }
     );
+  }
+
+  protected onDevRefreshView() {
+    this.session.refreshApp();
+  }
+
+  protected onDevClearLocalStorage() {
+    localStorage.clear();
   }
 
   protected onLogfileSelected(logFilename: string): void {

@@ -70,16 +70,20 @@ export class SessionService {
     return '/topic/app/' + this.appId + '/node/' + this.nodeId;
   }
 
-  private getServerName(): string {
+  public getServerName(): string {
     return localStorage.getItem('serverName');
   }
 
-  private getServerPort(): string {
+  public getServerPort(): string {
     return localStorage.getItem('serverPort');
   }
 
   private getNodeId(): string {
     return localStorage.getItem('nodeId');
+  }
+
+  public refreshApp() {
+    window.location.href = 'index.html';
   }
 
   public isPersonalized(): boolean {
@@ -175,6 +179,7 @@ export class SessionService {
   }
 
   private queueLoading() {
+    
     this.loading = true;
     setTimeout(() => this.showLoading(), 100);
   }

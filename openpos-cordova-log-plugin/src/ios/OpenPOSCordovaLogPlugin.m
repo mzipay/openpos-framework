@@ -5,6 +5,11 @@
 @interface OpenPOSCordovaLogPlugin()
 @property (strong, nonatomic) UIDocumentInteractionController *documentInteractionController;
 @property (strong, nonatomic) UIActivityViewController *activityViewController;
+/* Date components for last time date was checked in order to know when to roll the current log file. */
+@property (strong, nonatomic) NSDateComponents *_lastCheckedDateParts;
+
+@property (strong, nonatomic) NSString *_curLogFileName;
+@property (nonatomic) FILE *_curLogFile;
 
 - (NSString *) getOrCreateLogsDir;
 - (NSString *) logFileNameUsingDate: (NSDate *)someDate;
@@ -59,7 +64,6 @@
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:logFilePath];
     if (fileExists) {
         NSURL *logFileURL = [NSURL fileURLWithPath:logFilePath];
-//        BOOL shareSuccess = [self shareViaOptionsMenu: logFileURL];
         BOOL shareSuccess = [self shareViaActivityView: logFileURL];
         if (! shareSuccess) {
             NSString *msg = @"Failed to resolve an app that can share a text file";
@@ -74,6 +78,32 @@
     }
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+/* ***************************************************************
+   Cordova overridden methods
+   ***************************************************************
+*/
+- (void)pluginInitialize {
+
+    /* Start thread to check when it's time to roll the current log file. */
+    if ([self isCapturingLogOutputEnabled]) {
+        [self startRollLogCheckTask];
+    }
+    NSLog(@"OpenPOSCordovaLogPlugin intializing...");
+    
+    // Hook into the notification for when the application launch finishes, so
+    // that we can divert logging to our own file
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    
+    NSLog(@"OpenPOSCordovaLogPlugin initialization complete.");
+}
+
+- (void) finishLaunching:(NSNotification *)notification {
+    // Only redirect if stderr isn't already associated with a 'terminal' (e.g., a console)
+    if ([self isCapturingLogOutputEnabled]) {
+        [self captureConsoleOutputToOpenPOSLogFile];
+    }
 }
 
 /* ***************************************************************
@@ -125,35 +155,23 @@
     return openInSuccess;
 }
 
-- (void)pluginInitialize {
-    NSLog(@"OpenPOSCordovaLogPlugin intializing...");
-    
-    // Hook into the notification for when the application launch finishes, so
-    // that we can divert logging to our own file
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
-    
-    NSLog(@"OpenPOSCordovaLogPlugin initialization complete.");
+/* Checks if there is a tty console that we're logging to.  If so, returns false. */
+- (BOOL) isCapturingLogOutputEnabled {
+    return isatty(STDERR_FILENO) != 1;
 }
 
-- (void)finishLaunching:(NSNotification *)notification {
-    // Only redirect if stderr isn't already associated with a 'terminal' (e.g., a console)
-    if (! isatty(STDERR_FILENO)) {
-        [self captureConsoleOutputToOpenPOSLogFile];
-    }
-}
 
 - (NSString *) getOrCreateLogsDir {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
     
-    // TODO: ensure Logs dir exists
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *logsDirectory = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",@"Logs"]];
     
     NSError *error = nil;
     [[NSFileManager defaultManager] createDirectoryAtPath:logsDirectory
-                              withIntermediateDirectories:YES
-                                               attributes:nil
-                                                    error:&error];
+                                    withIntermediateDirectories:YES
+                                    attributes:nil
+                                    error:&error];
     if (error != nil) {
         NSLog(@"Error creating Logs directory at %@: %@", logsDirectory, error);
     }
@@ -161,6 +179,7 @@
     return logsDirectory;
 }
 
+/* Returns a fully qualified log file name based on the given date. */
 - (NSString *) logFileNameUsingDate: (NSDate *)someDate {
     NSString *logsDirectory = [self getOrCreateLogsDir];
     
@@ -177,23 +196,53 @@
     return logFilePath;
 }
 
+/* Makes a temp copy of the current log file, redirects output to a new file whose name is based on the current date,
+   and renames the temp copy of the current log to its prior name. */
+- (void) rollOpenPOSLogFile {
+    if (self._curLogFile != nil) {
+        NSString *logFilePathCurrentDate = [self logFileNameUsingDate: [NSDate date]];
+        
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString *tempFileName = [NSString stringWithFormat:@"%@%@", self._curLogFileName, @".2"];
+        [fileManager copyItemAtPath:self._curLogFileName toPath:tempFileName  error:NULL];
+        self._curLogFile = freopen([logFilePathCurrentDate cStringUsingEncoding:NSASCIIStringEncoding],"a+",self._curLogFile);
+        [fileManager moveItemAtPath:tempFileName toPath:self._curLogFileName error:NULL];
+        self._curLogFileName = logFilePathCurrentDate;
+    }
+    // TODO? Could also prune log files older than X days here
+}
 
 - (void) captureConsoleOutputToOpenPOSLogFile {
     // Get log file for current date
     NSString *logFilePathCurrentDate = [self logFileNameUsingDate: [NSDate date]];
     
-    // NSLog sends output to stderr, so we redirect stderr
-    // to our file
-    freopen([logFilePathCurrentDate cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+    // redirect stderr to log file
+    self._curLogFile = freopen([logFilePathCurrentDate cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+    self._curLogFileName = logFilePathCurrentDate;
 }
 
-- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
+- (UIViewController *) documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
     return self.viewController;
-    /*
-    UIViewController *rootViewController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    return rootViewController;
-     */
 }
 
+- (void)startRollLogCheckTask {
+    [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(backgroundCheckToRollLog) userInfo:nil repeats:YES];
+}
 
+- (void)backgroundCheckToRollLog {
+    if ([self isCapturingLogOutputEnabled]) {
+        NSDateComponents *currentDateParts = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
+        if (self._lastCheckedDateParts == nil) {
+            self._lastCheckedDateParts = currentDateParts;
+        }
+        // If the day changed, need to roll the log file to a new file
+        if ([currentDateParts day] != [self._lastCheckedDateParts day]) {
+            self._lastCheckedDateParts = currentDateParts;
+            NSLog(@"Date has changed, rolling the log file...");
+            [self rollOpenPOSLogFile]; // roll the log file
+        }
+
+    }
+}
+    
 @end
