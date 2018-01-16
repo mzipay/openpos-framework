@@ -82,6 +82,10 @@ export class SessionService {
     return localStorage.getItem('nodeId');
   }
 
+  public refreshApp() {
+    window.location.href = 'index.html';
+  }
+
   public isPersonalized(): boolean {
     if (this.getServerName() && this.getNodeId() && this.getServerPort()) {
       return true;
