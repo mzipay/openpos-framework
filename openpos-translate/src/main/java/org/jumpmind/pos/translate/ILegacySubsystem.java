@@ -6,5 +6,7 @@ public interface ILegacySubsystem {
     
     public void sendAction(String action);
     
+    public void sendAction(String action, int number);
+    
     public void addLegacyScreenListener(ILegacyScreenListener listener);
 }
