@@ -175,6 +175,7 @@ export class SessionService {
   }
 
   private queueLoading() {
+    console.log('loading queued');
     this.loading = true;
     setTimeout(() => this.showLoading(), 100);
   }
