@@ -33,6 +33,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
+        console.log('ngOnInit');
         this.subscription = this.loaderService.loaderState
             .subscribe((state: LoaderState) => {
                 this.title = this.LOADING_TITLE;
@@ -49,6 +50,14 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    public getHiddenClass(): string {
+        if (this.show) {
+            return '';
+        } else {
+            return 'loader-hidden';
+        }
     }
 
     public getLocalTheme(): string {
