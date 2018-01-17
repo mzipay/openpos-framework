@@ -17,6 +17,7 @@ export class DeviceService {
     document.addEventListener('deviceready', () => {
       console.log('cordova devices are ready');
       this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
+      this.initializeInAppBrowserPlugin();
     },
     false);
 
@@ -26,6 +27,12 @@ export class DeviceService {
         this.onDeviceRequest(event);
       }
     });
+  }
+
+  protected initializeInAppBrowserPlugin(): void {
+    if (cordova.InAppBrowser) {
+      window.open = cordova.InAppBrowser.open;
+    }
   }
 
   public scan() {
