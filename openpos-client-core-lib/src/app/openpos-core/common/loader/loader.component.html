@@ -1,4 +1,4 @@
-<div [class]="getLocalTheme()" [class.loader-hidden]="!show">
+<div [class]="getLocalTheme() + ' ' + getHiddenClass()">
     <mat-card class="loader-overlay center">
             <mat-card-title>
                 {{title}}

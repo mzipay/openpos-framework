@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.WordUtils;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DefaultScreen;
@@ -344,8 +345,18 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
             ILegacyBeanSpec localNavSpec = legacyPOSBeanService.getLegacyBeanSpec(legacyScreen, panelSpec.getBeanSpecName());
             ILegacyPOSBaseBeanModel model = legacyPOSBeanService.getLegacyPOSBaseBeanModel(legacyScreen);
             ILegacyNavigationButtonBeanModel buttonModel = model.getLegacyLocalButtonBeanModel();
-            Map<String, Boolean> enabledState = parseButtonStates(panelSpec);
-            for (ILegacyButtonSpec buttonSpec : localNavSpec.getButtons()) {
+            Map<String, Boolean> enabledState = parseButtonStates(panelSpec);        
+                        
+            ILegacyButtonSpec[] buttonSpecs;
+            
+            if( buttonModel != null ) {
+                buttonSpecs = ((ILegacyButtonSpec[])  ArrayUtils.addAll( localNavSpec.getButtons(), buttonModel.getNewButtons()));
+            }
+            else {
+                buttonSpecs = localNavSpec.getButtons();
+            }
+            
+            for (ILegacyButtonSpec buttonSpec : buttonSpecs) {
                 if (buttonSpec != null && !toExclude.contains(buttonSpec.getLabelTag())) {
                     Boolean enabled = enabledState.get(buttonSpec.getActionName());
                     if (enabled == null) {
@@ -363,9 +374,12 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                     }
 
                     if (buttonModel != null) {
-                        ILegacyButtonSpec[] buttonSpecs = buttonModel.getModifyButtons();
-                        if (buttonSpecs != null) {
-                            for (ILegacyButtonSpec modifiedSpec : buttonSpecs) {
+                        
+                        // Modify existing buttons
+                        ILegacyButtonSpec[] modifyButtonSpecs = buttonModel.getModifyButtons();
+                        
+                        if (modifyButtonSpecs != null ) {
+                            for (ILegacyButtonSpec modifiedSpec : modifyButtonSpecs) {
                                 if (modifiedSpec.getActionName().equals(action)) {
                                     enabled = modifiedSpec.getEnabled();
                                     if (isNotBlank(modifiedSpec.getLabel())) {
@@ -374,6 +388,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                                 }
                             }
                         }
+
                     }
 
                     logger.info("adding action with label tag: {}", labelTag);
@@ -384,17 +399,19 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                         actionItem.setTitle(label);
                         actionItem.setIcon(iconRegistry.get(labelTag));
                         actionItem.setEnabled(enabled);
-                        actionItem.setAction(buttonSpec.getActionName());
+                        actionItem.setAction(action);
                         if (actionOverrider != null) {
                             actionOverrider.hideOrOverride(legacyScreen, labelTag, actionItem);
                         }
 
                         if (actionItem.isEnabled() || !filterDisabled) {
                             generatedActions.add(actionItem);
+                        } else {
+                            logger.info("not generating action '{}' because it is disabled", labelTag);
                         }
                     } catch (InstantiationException | IllegalAccessException e) {
                         logger.error(String.format("Failed to create action of type %s for action '%s'", actionClass.getName(),
-                                buttonSpec.getActionName()), e);
+                                action), e);
                     }
 
                 }

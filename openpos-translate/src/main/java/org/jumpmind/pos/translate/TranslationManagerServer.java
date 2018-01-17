@@ -224,6 +224,10 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     public void sendAction(String action) {
         getLegacyUISubsystem().sendAction(action);
     }
+    
+    public void sendAction(String action, int number) {
+        getLegacyUISubsystem().sendAction(action, number);
+    }
 
     @Override
     public IDeviceResponse sendDeviceRequest(IDeviceRequest request) {
