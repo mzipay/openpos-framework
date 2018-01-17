@@ -69,6 +69,7 @@ import { OptionsComponent } from './screens/options/options.component';
 import { TillSummaryComponent } from './screens/till/till-summary.component';
 import { TillCountComponent } from './screens/till/till-count.component';
 import { TillCountOtherTenderComponent } from './screens/till/till-count-other-tender.component';
+import { ChangeComponent } from './screens/change/change.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -105,7 +106,8 @@ import { Plugin } from 'webpack';
     TillCountComponent,
     TillCountOtherTenderComponent,
     DynamicFormComponent,
-    DynamicFormControlComponent
+    DynamicFormControlComponent,
+    ChangeComponent
   ],
   declarations: [
     DialogComponent,
@@ -145,7 +147,8 @@ import { Plugin } from 'webpack';
     TillCountComponent,
     TillCountOtherTenderComponent,
     DynamicFormControlComponent,
-    PosComponent
+    PosComponent,
+    ChangeComponent
   ],
   imports: [
     BrowserModule,
