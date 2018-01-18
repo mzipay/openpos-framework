@@ -32,6 +32,7 @@ import { TenderingComponent } from '../screens/tendering.component';
 import { SellComponent } from '../templates/sell/sell.component';
 import { TillSummaryComponent } from '../screens/till/till-summary.component';
 import { TillCountComponent } from '../screens/till/till-count.component';
+import { ChangeComponent } from '../screens/change/change.component';
 
 @Injectable()
 export class ScreenService {
@@ -63,6 +64,7 @@ export class ScreenService {
     this.screens.set('TillOtherTenderCount', TillCountOtherTenderComponent);
     this.screens.set('TillSummary', TillSummaryComponent);
     this.screens.set('Options', OptionsComponent);
+    this.screens.set('Change', ChangeComponent);
 
     // Templates
     this.screens.set('Blank', BlankComponent);

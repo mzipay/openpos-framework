@@ -96,8 +96,12 @@ public class POSSessionInfo {
         return transactionId;
     }
     
+    public boolean isTrainingMode() {
+        return this.trainingMode;
+    }
+    
     public boolean getTrainingMode() {
-        return trainingMode;
+        return this.isTrainingMode();
     }
 
     public void setTrainingMode(boolean trainingMode) {

@@ -26,5 +26,6 @@ public enum ScreenType {
     TillOtherTenderCount,
     WarrantyCoverage,
     Options,
-    Blank
+    Blank,
+    Change
 }

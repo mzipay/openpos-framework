@@ -18,6 +18,10 @@ export class CordovaPlugin implements IPlugin {
     }
 
     init(successCallback: () => void, errorCallback: (error?: string) => void): void {
-        this.impl.init(successCallback, errorCallback);
+        if (typeof this.impl.init !== 'undefined') {
+            this.impl.init(successCallback, errorCallback);
+        } else {
+            successCallback();
+        }
     }
 }

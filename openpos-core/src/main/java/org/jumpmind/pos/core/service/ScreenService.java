@@ -113,7 +113,11 @@ public class ScreenService implements IScreenService {
                 }
                 logger.info("Show screen on nodeId " + nodeId + "\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(payload));
             } catch (JsonProcessingException ex) {
-                logger.error("Failed to write screen to JSON", ex);
+                if (ex.toString().contains("org.jumpmind.pos.core.screen.ChangeScreen")) {
+                    logger.error("Failed to write screen to JSON. Verify the screen type has been configured by calling setType() on the screen object.", ex);
+                } else {
+                    logger.error("Failed to write screen to JSON", ex);
+                }
             }
             publishToClients(appId, nodeId, payload);
             Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);

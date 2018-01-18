@@ -79,6 +79,10 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
         return screen;
     }
 
+    public POSSessionInfo getPOSSessionInfo() {
+        return this.posSessionInfo;
+    }
+    
     public void setPosSessionInfo(POSSessionInfo posSessionInfo) {
         this.posSessionInfo = posSessionInfo;
     }

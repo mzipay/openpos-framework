@@ -24,7 +24,13 @@ export class PluginService {
             let plugin: IPlugin = this.plugins[pluginId];
             if (! plugin) {
                 if (this.isCordovaPlugin(pluginId)) {
-                    const cdvPlugin = new CordovaDevicePlugin(pluginId); // cordova.plugins[pluginId];
+                    let cdvPlugin = null;
+                    if (typeof cordova.plugins[pluginId].processRequest !== 'undefined') {
+                        cdvPlugin = new CordovaDevicePlugin(pluginId);
+                    } else {
+                        cdvPlugin = new CordovaPlugin(pluginId);
+                    }
+
                     console.log(`Initializing plugin '${pluginId}'...`);
                     this.pluginInit(cdvPlugin).then(
                       (inittedPlugin) => {
