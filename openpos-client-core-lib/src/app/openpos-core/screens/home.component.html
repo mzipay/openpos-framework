@@ -1,5 +1,5 @@
 <div fxFlexFill fxLayout="row" fxLayoutAlign="center" fxLayoutWrap >
-    <mat-card *ngFor="let menuItem of menuItems" fxFlexAlign="center">
+      <mat-card *ngFor="let menuItem of menuItems" fxFlexAlign="center" fxHide.xs>
           <button mat-raised-button color=primary style="height:150px;width:150px"
           (click)="onMenuItemClick(menuItem)" >
           <div fxLayoutAlign="center center" fxLayout="column">
@@ -8,5 +8,15 @@
           </div>
           </button>
     </mat-card>
-    <div class="home-screen-logo"></div>
+    <mat-card fxFlex fxHide fxShow.xs>
+      <mat-nav-list>
+          <mat-list-item *ngFor="let menuItem of menuItems" (click)="onMenuItemClick(menuItem)">
+            <app-icon  class="primary text-lg" iconName="{{menuItem.icon}}" iconClass="material-icons" ></app-icon>
+            <span  class="primary text-lg">&nbsp;{{menuItem.title}}</span>
+            <span fxFlex></span>
+            <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
+          </mat-list-item>
+      </mat-nav-list>
+    </mat-card>
+  <div class="home-screen-logo"></div>
 </div>
