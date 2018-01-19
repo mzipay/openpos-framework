@@ -27,6 +27,6 @@ export class SaleRetrievalComponent implements AfterViewInit, DoCheck, IScreen, 
   }
 
   selected(value: string) {
-    this.session.onActionWithStringPayload('Next', value);
+    this.session.onAction('Next', value);
   }
 }

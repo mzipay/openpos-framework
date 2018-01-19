@@ -31,6 +31,7 @@ public class MenuItem implements IUIAction, Serializable {
     private String title;
     private String icon;
     private boolean enabled = true;
+    private String confirmationMessage;
     private List<MenuItem> children;
     
     public MenuItem() {
@@ -46,6 +47,11 @@ public class MenuItem implements IUIAction, Serializable {
     public MenuItem(String action, String title, IIcon icon) {
         this(action, title, icon.getName());
     }
+    
+    public MenuItem(String action, String title, String icon, String confirmationMessage) {
+        this(action, title, icon );
+        this.confirmationMessage = confirmationMessage;
+    }  
     
     public MenuItem(String title, String action, boolean enabled) {
         super();
@@ -100,6 +106,14 @@ public class MenuItem implements IUIAction, Serializable {
     
     public List<MenuItem> getChildren() {
         return children;
+    }
+    
+    public String getConfirmationMessage() {
+        return this.confirmationMessage;
+    }
+    
+    public void setConfirmationMessage( String confirmationMessage) {
+        this.confirmationMessage = confirmationMessage;
     }
 
 }

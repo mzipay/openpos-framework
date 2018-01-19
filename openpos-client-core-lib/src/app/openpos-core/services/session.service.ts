@@ -11,6 +11,9 @@ import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Scan } from '../common/scan';
+import { FunctionActionIntercepter, ActionIntercepter } from '../common/actionIntercepter';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confirmation-dialog.component';
 
 declare var cordova: any;
 
@@ -42,8 +45,9 @@ export class SessionService {
   private stompService: StompService;
 
   private actionPayloads: Map<string, Function> = new Map<string, Function>();
+  private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
-  constructor(private location: Location, private router: Router, private loader: LoaderService) {
+  constructor(private location: Location, private router: Router, private loader: LoaderService, public dialogService: MatDialog) {
   }
 
   public isRunningInBrowser(): boolean {
@@ -157,29 +161,50 @@ export class SessionService {
       JSON.stringify(deviceResponse));
   }
 
-  public onAction(action: string) {
-      console.log('Publish action ' + action);
+  public async onAction(action: string, payload?: any, confirm?: string) {
+    if ( confirm ) {
+      console.log('Confirming action');
+      const dialogRef = this.dialogService.open( ConfirmationDialogComponent, { disableClose: true});
+      dialogRef.componentInstance.title = confirm;
+      const result = await dialogRef.afterClosed().toPromise();
 
-      // Check if we have registered action payload otherwise we will send whatever is in this.response
-      if ( this.actionPayloads.has( action ) ) {
-        this.response = this.actionPayloads.get(action)();
+      // if we didn't confirm return and don't send the action to the server
+      if ( !result ) {
+        console.log('Canceling action');
+        return;
       }
+    }
 
+    console.log('Publish action ' + action);
+
+    // First we will use the payload passed into this function then
+    // Check if we have registered action payload
+    // Otherwise we will send whatever is in this.response
+    if ( payload != null ) {
+      this.response = payload;
+    } else if ( this.actionPayloads.has( action ) ) {
+      this.response = this.actionPayloads.get(action)();
+    }
+
+    const sendToServer: Function = () => {
       this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
-        JSON.stringify({ name: action, data: this.response }));
-      this.dialog = null;
-      this.queueLoading();
-  }
+      JSON.stringify({ name: action, data: this.response }))
+    };
 
-  public onActionWithStringPayload(action: string, payload: any) {
-    console.log('Publish action ' + action + ' with payload ' + payload);
-    this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
-      JSON.stringify({ name: action, data: payload }));
+    // see if we have any intercepters registered
+    // otherwise just send the action
+    if( this.actionIntercepters.has( action ) ) {
+      this.actionIntercepters.get( action ).intercept( this.response, sendToServer );
+    } else {
+      sendToServer();
+    }
+
+    this.dialog = null;
     this.queueLoading();
   }
 
   private queueLoading() {
-    
+
     this.loading = true;
     setTimeout(() => this.showLoading(), 100);
   }
@@ -229,11 +254,19 @@ export class SessionService {
   }
 
   public registerActionPayload( actionName: string, actionValue: Function ) {
-     this.actionPayloads.set( actionName, actionValue );
+    this.actionPayloads.set( actionName, actionValue );
   }
 
   public unregisterActionPayloads() {
-      this.actionPayloads.clear();
+    this.actionPayloads.clear();
+  }
+
+  public registerActionIntercepter( actionName: string, actionIntercepter: ActionIntercepter ){
+    this.actionIntercepters.set( actionName, actionIntercepter );
+  }
+
+  public unregisterActionIntercepters() {
+    this.actionIntercepters.clear();
   }
 
   public getCurrencyDenomination(): string {

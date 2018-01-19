@@ -36,11 +36,7 @@ export class TransactionComponent implements AfterViewInit, DoCheck, IScreen {
   }
 
   public doMenuItemAction(menuItem: IMenuItem, payLoad: any) {
-    if (payLoad !== undefined) {
-      this.session.onActionWithStringPayload(menuItem.action, payLoad);
-    } else {
-      this.session.onAction(menuItem.action);
-    }
+      this.session.onAction(menuItem.action, payLoad, menuItem.confirmationMessage);
 }
 
   onEnter(value: string) {
