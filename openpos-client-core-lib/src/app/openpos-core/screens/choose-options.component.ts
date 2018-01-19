@@ -1,15 +1,16 @@
 import { IScreen } from '../common/iscreen';
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import {SessionService} from '../services/session.service';
 import { AbstractApp } from '../common/abstract-app';
 import { IForm } from './form.component';
+import { ActionIntercepter, ActionIntercepterBehavior } from '../common/actionIntercepter';
 
 
 @Component({
   selector: 'app-choose-options',
   templateUrl: './choose-options.component.html'
 })
-export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck {
+export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck, OnDestroy {
   public currentView: string;
   public selectedOption: IOptionItem;
   public optionItems: IOptionItem[];
@@ -36,13 +37,22 @@ export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck {
     }
   }
 
+  ngOnDestroy() {
+    this.session.unregisterActionIntercepters();
+  }
+
   onMakeOptionSelection( option: IOptionItem): void {
     if ( option.form.formElements.length > 0 ) {
       this.selectedOption = option;
       this.currentView = 'OptionForm';
+      this.session.registerActionIntercepter("undo", new ActionIntercepter(this.onBackButtonPressed, ActionIntercepterBehavior.block));
     } else {
       this.session.onAction( option.value );
     }
+  }
+
+  onBackButtonPressed(): void {
+    this.currentView = this.session.screen.displayStyle;
   }
 
 }

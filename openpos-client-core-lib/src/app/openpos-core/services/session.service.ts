@@ -11,6 +11,7 @@ import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Scan } from '../common/scan';
+import { FunctionActionIntercepter, ActionIntercepter } from '../common/actionIntercepter';
 
 declare var cordova: any;
 
@@ -42,6 +43,7 @@ export class SessionService {
   private stompService: StompService;
 
   private actionPayloads: Map<string, Function> = new Map<string, Function>();
+  private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
   constructor(private location: Location, private router: Router, private loader: LoaderService) {
   }
@@ -157,29 +159,42 @@ export class SessionService {
       JSON.stringify(deviceResponse));
   }
 
-  public onAction(action: string) {
+  public onAction(action: string, payload?: any) {
       console.log('Publish action ' + action);
 
-      // Check if we have registered action payload otherwise we will send whatever is in this.response
-      if ( this.actionPayloads.has( action ) ) {
+      // First we will use the payload passed into this function then
+      // Check if we have registered action payload
+      // Otherwise we will send whatever is in this.response
+      if ( payload ) {
+        this.response = payload;
+      } else if ( this.actionPayloads.has( action ) ) {
         this.response = this.actionPayloads.get(action)();
       }
 
-      this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
-        JSON.stringify({ name: action, data: this.response }));
+      let sendToServer: Function = () => {
+        this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
+        JSON.stringify({ name: action, data: this.response }))
+      };
+
+      // see if we have any intercepters registered
+      // otherwise just send the action
+      if( this.actionIntercepters.has( action ) ) {
+        this.actionIntercepters.get( action ).intercept( this.response, sendToServer );
+      } else {
+        sendToServer();
+      }
+
       this.dialog = null;
       this.queueLoading();
   }
 
   public onActionWithStringPayload(action: string, payload: any) {
     console.log('Publish action ' + action + ' with payload ' + payload);
-    this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
-      JSON.stringify({ name: action, data: payload }));
-    this.queueLoading();
+    this.onAction( action, payload );
   }
 
   private queueLoading() {
-    
+
     this.loading = true;
     setTimeout(() => this.showLoading(), 100);
   }
@@ -229,11 +244,19 @@ export class SessionService {
   }
 
   public registerActionPayload( actionName: string, actionValue: Function ) {
-     this.actionPayloads.set( actionName, actionValue );
+    this.actionPayloads.set( actionName, actionValue );
   }
 
   public unregisterActionPayloads() {
-      this.actionPayloads.clear();
+    this.actionPayloads.clear();
+  }
+
+  public registerActionIntercepter( actionName: string, actionIntercepter: ActionIntercepter ){
+    this.actionIntercepters.set( actionName, actionIntercepter );
+  }
+
+  public unregisterActionIntercepters() {
+    this.actionIntercepters.clear();
   }
 
   public getCurrencyDenomination(): string {

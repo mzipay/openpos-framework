@@ -1,10 +1,11 @@
+import { IMenuItem } from './../common/imenuitem';
 import { IconComponent } from './../common/controls/icon.component';
 import { IScreen } from '../common/iscreen';
-import { IMenuItem } from '../common/imenuitem';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import {MediaChange, ObservableMedia} from '@angular/flex-layout';
 import { AbstractApp } from '../common/abstract-app';
+import { IUrlMenuItem } from '../common/iurlmenuitem';
 
 @Component({
   selector: 'app-home',
@@ -44,5 +45,14 @@ export class HomeComponent implements IScreen, OnInit {
   getClass(): String {
     // return 'main-menu-grid-list';
     return 'foo';
+  }
+
+  onMenuItemClick(menuItem: IMenuItem) {
+    if (menuItem.hasOwnProperty('url')) {
+      const urlMenuItem = <IUrlMenuItem> menuItem;
+      window.open(urlMenuItem.url, urlMenuItem.targetMode);
+    } else {
+      this.session.onAction(menuItem.action);
+    }
   }
 }
