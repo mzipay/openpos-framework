@@ -39,7 +39,7 @@ export class SellComponent extends AbstractTemplate implements OnInit {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem.action);
+    this.session.onAction(menuItem.action, null, menuItem.confirmationMessage);
 }
 
 public isMenuItemEnabled(m: IMenuItem): boolean {
@@ -51,7 +51,7 @@ public isMenuItemEnabled(m: IMenuItem): boolean {
 }
 
 onScanInputEnter( value ): void {
-    this.session.onActionWithStringPayload('Next', value);
+    this.session.onAction('Next', value);
 }
 
 private initializeDrawerMediaSizeHandling() {

@@ -3,4 +3,5 @@ export interface IMenuItem {
     action: string;
     title: string;
     icon: string;
+    confirmationMessage: string;
 }

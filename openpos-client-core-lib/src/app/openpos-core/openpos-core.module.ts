@@ -39,6 +39,7 @@ import { LoaderComponent } from './common/loader/loader.component';
 import { DynamicFormControlComponent } from './common/controls/dynamic-form-control/dynamic-form-control.component';
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
 import { PosComponent } from './pos/pos.component';
+import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 
 // Screens
 import { DynamicFormComponent } from './screens/dynamic-form/dynamic-form.component';
@@ -107,7 +108,8 @@ import { Plugin } from 'webpack';
     TillCountOtherTenderComponent,
     DynamicFormComponent,
     DynamicFormControlComponent,
-    ChangeComponent
+    ChangeComponent,
+    ConfirmationDialogComponent
   ],
   declarations: [
     DialogComponent,
@@ -148,7 +150,8 @@ import { Plugin } from 'webpack';
     TillCountOtherTenderComponent,
     DynamicFormControlComponent,
     PosComponent,
-    ChangeComponent
+    ChangeComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,

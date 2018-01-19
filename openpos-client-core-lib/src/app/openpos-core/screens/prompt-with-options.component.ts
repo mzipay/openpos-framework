@@ -17,8 +17,8 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
   }
 
   onAction( action: string ): void {
-    if( this.promptInput.responseText ){
-      this.session.onActionWithStringPayload( action, this.promptInput.responseText);
+    if ( this.promptInput.responseText ) {
+      this.session.onAction( action, this.promptInput.responseText);
     }
   }
 }
