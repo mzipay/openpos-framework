@@ -162,14 +162,14 @@ export class SessionService {
   }
 
   public async onAction(action: string, payload?: any, confirm?: string) {
-    if ( confirm ){
+    if ( confirm ) {
       console.log('Confirming action');
-      let dialogRef = this.dialogService.open( ConfirmationDialogComponent, { disableClose: true});
+      const dialogRef = this.dialogService.open( ConfirmationDialogComponent, { disableClose: true});
       dialogRef.componentInstance.title = confirm;
-      let result = await dialogRef.afterClosed().toPromise();
+      const result = await dialogRef.afterClosed().toPromise();
 
       // if we didn't confirm return and don't send the action to the server
-      if( !result ){
+      if ( !result ) {
         console.log('Canceling action');
         return;
       }
@@ -186,7 +186,7 @@ export class SessionService {
       this.response = this.actionPayloads.get(action)();
     }
 
-    let sendToServer: Function = () => {
+    const sendToServer: Function = () => {
       this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
       JSON.stringify({ name: action, data: this.response }))
     };

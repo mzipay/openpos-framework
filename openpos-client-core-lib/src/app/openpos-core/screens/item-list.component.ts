@@ -48,7 +48,7 @@ export class ItemListComponent implements IScreen, OnInit, DoCheck {
 
     onMenuItemClick(itemInfo: MenuClickAction): void {
         this.session.response = itemInfo.item;
-        this.session.onAction(itemInfo.menuItem.action);
+        this.session.onAction(itemInfo.menuItem.action, null, itemInfo.menuItem.confirmationMessage );
     }
 
     isItemClickDisabled(): boolean {

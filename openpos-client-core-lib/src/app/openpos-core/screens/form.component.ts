@@ -57,7 +57,7 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 
   onItemAction(menuItem: IMenuItem, $event): void {
     this.session.response = this.form;
-    this.session.onAction(menuItem.action);
+    this.session.onAction(menuItem.action, null, menuItem.confirmationMessage);
   }
 
   onButtonAction(action: string) {
