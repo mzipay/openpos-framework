@@ -15,6 +15,7 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 @Configuration
@@ -25,6 +26,17 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     
     @Autowired
     MutableBoolean initialized;
+    
+    /*
+     * TODO: This was added to increase the acceptable message size after adding the ItemSearchScreen.
+     * This screen has multiple combo boxes with a lot of options. This is most likely what is causing the message size to blow up.
+     * We should consider changing the way we populate large comboboxes.
+     */
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+        registration.setMessageSizeLimit(80000); //75681
+        registration.setSendBufferSizeLimit(80000);
+    }
     
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
