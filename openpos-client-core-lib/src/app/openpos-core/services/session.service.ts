@@ -188,12 +188,12 @@ export class SessionService {
 
     const sendToServer: Function = () => {
       this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
-      JSON.stringify({ name: action, data: this.response }))
+      JSON.stringify({ name: action, data: this.response }));
     };
 
     // see if we have any intercepters registered
     // otherwise just send the action
-    if( this.actionIntercepters.has( action ) ) {
+    if ( this.actionIntercepters.has( action ) ) {
       this.actionIntercepters.get( action ).intercept( this.response, sendToServer );
     } else {
       sendToServer();
@@ -261,7 +261,7 @@ export class SessionService {
     this.actionPayloads.clear();
   }
 
-  public registerActionIntercepter( actionName: string, actionIntercepter: ActionIntercepter ){
+  public registerActionIntercepter( actionName: string, actionIntercepter: ActionIntercepter ) {
     this.actionIntercepters.set( actionName, actionIntercepter );
   }
 
