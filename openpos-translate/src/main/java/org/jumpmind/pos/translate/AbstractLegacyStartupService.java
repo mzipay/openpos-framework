@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
@@ -116,7 +115,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
     protected abstract Class<?> getHeadlessWorkstationProcessClass();
     protected abstract String getExternalHeadlessWorkstationProcessServiceName(String storeId, String workstationId);
     protected abstract void generateStoreProperties(String directory, String storeId, String workstationId);
-    protected abstract Optional<String> getNodeWorkingSubdirectoryName();
+    
     /**
      * Invoked after {@link AbstractLegacyStartupService#generateStoreProperties(String, String, String)} to allow for initialization
      * of other configuration files and data.
@@ -128,8 +127,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
         try {
             file.mkdirs();
             logger.info("Starting external process for store: {}, workstation: {}", storeId, workstationId);
-            Optional<String> workingSubdir = this.getNodeWorkingSubdirectoryName();
-            String workingDir = workingSubdir.isPresent() ? new File(file, workingSubdir.get()).getAbsolutePath() : file.getAbsolutePath();
+            String workingDir = file.getAbsolutePath();
             generateStoreProperties(workingDir, storeId, workstationId);
             initOtherHeadlessConfiguration(workingDir, storeId, workstationId);
             List<String> cmdLine = new ArrayList<>();
