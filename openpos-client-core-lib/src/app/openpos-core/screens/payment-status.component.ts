@@ -32,7 +32,7 @@ export class PaymentStatusComponent implements AfterViewInit, DoCheck, IScreen {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem.action);
+    this.session.onAction(menuItem.action, null, menuItem.confirmationMessage );
   }
 
 }

@@ -52,7 +52,7 @@ export class HomeComponent implements IScreen, OnInit {
       const urlMenuItem = <IUrlMenuItem> menuItem;
       window.open(urlMenuItem.url, urlMenuItem.targetMode);
     } else {
-      this.session.onAction(menuItem.action);
+      this.session.onAction(menuItem.action, null, menuItem.confirmationMessage );
     }
   }
 }
