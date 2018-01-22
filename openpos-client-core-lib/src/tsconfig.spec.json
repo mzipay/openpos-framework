@@ -14,7 +14,10 @@
     "test.ts"
   ],
   "include": [
+    "../openpos-core/**/*.spec.ts",
+    "../openpos-core/**/*.d.ts",
     "**/*.spec.ts",
-    "**/*.d.ts"
+    "**/*.d.ts",
+    "../openpos-core/node_modules/@stomp/ng2-stompjs/index.ts"
   ]
 }
