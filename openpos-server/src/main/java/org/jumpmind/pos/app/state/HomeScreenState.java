@@ -20,6 +20,7 @@
  */
 package org.jumpmind.pos.app.state;
 
+import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.screen.DefaultScreen;
@@ -33,7 +34,7 @@ public class HomeScreenState extends AbstractState implements IState {
     IStateManager stateManager;
 
     @Override
-    public void arrive() {
+    public void arrive(Action action) {
         stateManager.endSession();
         stateManager.showScreen(buildScreen());
     }

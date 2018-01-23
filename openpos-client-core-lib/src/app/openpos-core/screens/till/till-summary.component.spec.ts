@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TillReconcileComponent } from './till-reconcile.component';
+import { TillSummaryComponent } from './till-summary.component';
 
-describe('TillReconcileComponent', () => {
-  let component: TillReconcileComponent;
-  let fixture: ComponentFixture<TillReconcileComponent>;
+describe('TillSummaryComponent', () => {
+  let component: TillSummaryComponent;
+  let fixture: ComponentFixture<TillSummaryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TillReconcileComponent ]
+      declarations: [ TillSummaryComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TillReconcileComponent);
+    fixture = TestBed.createComponent(TillSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

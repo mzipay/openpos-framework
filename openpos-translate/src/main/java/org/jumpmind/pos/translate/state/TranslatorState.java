@@ -46,7 +46,7 @@ public class TranslatorState implements IState {
     }
     
     @Override
-    public void arrive() {
+    public void arrive(Action action) {
         subscribe();
         translationManager.showActiveScreen();                
     } 

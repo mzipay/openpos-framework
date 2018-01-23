@@ -22,4 +22,13 @@ describe('ScanSomethingComponent', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('onBarcodeKeydown', () => {
+    it('should filter out e E + - and . and allow numbers', () => {
+      const event = new KeyboardEvent( 'e');
+      const result = component.onBarcodeKeydown(event);
+      expect(result).toBeFalsy();
+    });
+  });
+
 });
