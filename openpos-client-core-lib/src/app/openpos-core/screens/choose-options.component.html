@@ -7,7 +7,7 @@
                 <mat-nav-list>
                     <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
                     <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onMakeOptionSelection(o)">
-                        <span ngClass="{'accent-lighter' : !o.enabled}">{{o.displayValue}}</span>
+                        <span [ngClass]="{'accent-lighter' : !o.enabled}">{{o.displayValue}}</span>
                         <span fxFlex></span>
                         <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
                     </mat-list-item>
