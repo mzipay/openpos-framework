@@ -23,6 +23,6 @@ package org.jumpmind.pos.core.flow;
 
 public interface IState {
     
-    public void arrive();
+    public void arrive(Action action);
     
 }
