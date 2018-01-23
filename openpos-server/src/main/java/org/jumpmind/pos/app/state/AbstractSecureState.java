@@ -18,7 +18,7 @@ abstract public class AbstractSecureState extends AbstractState implements IStat
     protected Login login;
 
     @Override
-    public void arrive() {
+    public void arrive(Action action) {
         if (login == null) {
             login = new Login();
             stateManager.setSessionScope("login", login);
