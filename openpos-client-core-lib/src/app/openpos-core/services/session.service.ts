@@ -234,6 +234,7 @@ export class SessionService {
     } else {
       this.response = null;
       this.screen = json;
+      this.dialog = null;
     }
     this.cancelLoading();
   }
