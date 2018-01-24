@@ -166,7 +166,8 @@ import { Plugin } from 'webpack';
   ],
   exports: [
     PosComponent,
-    LoaderComponent
+    LoaderComponent,
+    MaterialModule
     ],
   providers: [
     HttpClient,
