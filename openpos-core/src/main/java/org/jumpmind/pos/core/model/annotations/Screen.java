@@ -12,6 +12,6 @@ import org.jumpmind.pos.core.screen.ScreenType;
 public @interface Screen {
     
     String name();
-    ScreenType type();
+    String type();
 
 }

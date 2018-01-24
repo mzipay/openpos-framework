@@ -18,9 +18,11 @@ import { AbstractTemplate } from './abstract-template';
 
 export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
-    private dialogRef: MatDialogRef<DialogComponent>;
+    private dialogRef: MatDialogRef<IScreen>;
 
     private previousScreenType: string;
+
+    private previousDialogType: string;
 
     private previousScreenSequenceNumber: number;
 
@@ -71,8 +73,17 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
     }
 
     ngDoCheck(): void {
-        if (this.session.dialog && !this.dialogRef) {
+
+        if (this.session.dialog) {
+          const dialogType = this.screenService.hasScreen(this.session.dialog.subType) ? this.session.dialog.subType : 'Dialog';
+          if (!this.dialogRef || this.previousDialogType !== dialogType) {
+            if ( this.dialogRef ) {
+              console.log('closing dialog');
+              this.dialogRef.close();
+              this.dialogRef = null;
+            }
             setTimeout(() => this.openDialog(), 0);
+          }
         } else if (!this.session.dialog && this.dialogRef) {
             console.log('closing dialog');
             this.dialogRef.close();
@@ -120,12 +131,22 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
     }
 
     openDialog() {
-        this.dialogRef = this.dialog.open(DialogComponent, { disableClose: true });
-        this.dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.session.onAction(result);
-                this.dialogRef = null;
-            }
-        });
+      const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(this.session.dialog.subType);
+      let dialogComponent = DialogComponent;
+      this.previousDialogType = 'Dialog';
+      // if we resolved a specific screen type use that otherwise just use the default DialogComponent
+      if ( dialogComponentFactory ) {
+        dialogComponent = dialogComponentFactory.componentType;
+        this.previousDialogType = this.session.dialog.subType;
+      }
+
+      this.dialogRef = this.dialog.open(dialogComponent, { disableClose: true });
+      this.dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+              this.session.onAction(result);
+              this.dialogRef = null;
+          }
+      });
+
     }
 }
