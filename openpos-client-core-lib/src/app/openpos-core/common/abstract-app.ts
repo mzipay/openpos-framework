@@ -24,6 +24,8 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
     private previousDialogType: string;
 
+    private dialogOpening: boolean;
+
     private previousScreenSequenceNumber: number;
 
     private previousScreenName: string;
@@ -76,12 +78,14 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
         if (this.session.dialog) {
           const dialogType = this.screenService.hasScreen(this.session.dialog.subType) ? this.session.dialog.subType : 'Dialog';
-          if (!this.dialogRef || this.previousDialogType !== dialogType) {
+          if (!this.dialogOpening && (!this.dialogRef || this.previousDialogType !== dialogType)) {
             if ( this.dialogRef ) {
               console.log('closing dialog');
               this.dialogRef.close();
               this.dialogRef = null;
             }
+            console.log('opening dialog \'' + dialogType + '\'' );
+            this.dialogOpening = true;
             setTimeout(() => this.openDialog(), 0);
           }
         } else if (!this.session.dialog && this.dialogRef) {
@@ -141,6 +145,8 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
       }
 
       this.dialogRef = this.dialog.open(dialogComponent, { disableClose: true });
+      this.dialogOpening = false;
+      console.log('Dialog \'' + this.previousDialogType + '\' opened');
       this.dialogRef.afterClosed().subscribe(result => {
           if (result) {
               this.session.onAction(result);
