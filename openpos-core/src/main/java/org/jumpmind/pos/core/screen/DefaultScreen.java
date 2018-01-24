@@ -24,7 +24,7 @@ public class DefaultScreen implements Serializable {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private String name;
     private String prompt;
-    private ScreenType type;
+    private String type;
     private String template = "Blank";    
     private MenuItem backButton;
     private MenuItem logoutButton;
@@ -48,19 +48,15 @@ public class DefaultScreen implements Serializable {
     public DefaultScreen() {
     }
 
-    public DefaultScreen(ScreenType type) {
+    public DefaultScreen(String type) {
         this(type, null);
     }
     
-    public DefaultScreen(ScreenType type, String name) {
+    public DefaultScreen(String type, String name) {
         if (name != null) {
             put("name", name);
         }
         this.type = type;
-    }
-    
-    public DefaultScreen(String name) {
-        put("name", name);
     }
 
     @JsonAnyGetter
@@ -102,18 +98,14 @@ public class DefaultScreen implements Serializable {
     }
 
     public void setType(String type) {
-        this.type = ScreenType.valueOf(type);
-    }
-
-    public void setType(ScreenType type) {
         this.type = type;
     }
     
     public String getType() {
-        return this.type.name();
+        return this.type;
     }
     
-    public boolean isScreenOfType(ScreenType type) {
+    public boolean isScreenOfType(String type) {
         return this.type == type;
     }
     

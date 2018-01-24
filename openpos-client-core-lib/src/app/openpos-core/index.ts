@@ -1,3 +1,6 @@
 export { PosComponent } from './pos';
 export { OpenposCoreModule } from './openpos-core.module';
-export { PluginService } from './services';
+export { MaterialModule } from './material.module';
+export * from './services';
+export * from './common';
+

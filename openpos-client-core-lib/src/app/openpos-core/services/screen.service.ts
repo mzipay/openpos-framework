@@ -71,6 +71,14 @@ export class ScreenService {
     this.screens.set('Sell', SellComponent);
   }
 
+  public addScreen( name: string, type: Type<IScreen> ): void {
+    this.screens.set(name, type);
+  }
+
+  public hasScreen( name: string ): boolean {
+    return this.screens.has( name );
+  }
+
   public resolveScreen(type: string): ComponentFactory<IScreen> {
     const screenType: Type<IScreen> = this.screens.get(type);
     if (screenType) {

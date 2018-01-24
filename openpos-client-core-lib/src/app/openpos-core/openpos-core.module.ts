@@ -166,7 +166,8 @@ import { Plugin } from 'webpack';
   ],
   exports: [
     PosComponent,
-    LoaderComponent
+    LoaderComponent,
+    MaterialModule
     ],
   providers: [
     HttpClient,
@@ -174,7 +175,6 @@ import { Plugin } from 'webpack';
     SessionService,
     DeviceService,
     LoaderService,
-    ScreenService,
     Location,
     {
       provide: LocationStrategy,
@@ -191,7 +191,8 @@ export class OpenposCoreModule {
     return {
       ngModule: OpenposCoreModule,
       providers: [
-        PluginService
+        PluginService,
+        ScreenService
       ]
     };
   }
