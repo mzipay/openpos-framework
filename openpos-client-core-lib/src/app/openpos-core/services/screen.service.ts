@@ -33,13 +33,15 @@ import { SellComponent } from '../templates/sell/sell.component';
 import { TillSummaryComponent } from '../screens/till/till-summary.component';
 import { TillCountComponent } from '../screens/till/till-count.component';
 import { ChangeComponent } from '../screens/change/change.component';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { SessionService } from '../services/session.service';
 
 @Injectable()
 export class ScreenService {
 
   private screens = new Map<string, Type<IScreen>>();
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) {
+  constructor(private componentFactoryResolver: ComponentFactoryResolver, private http: HttpClient, private sessionService : SessionService) {
     // To make a screen available add it here and in entryComponents in the app.module.ts
     this.screens.set('BasicItemSearch', BasicItemSearchComponent);
     this.screens.set('ChooseOptions', ChooseOptionsComponent);
@@ -78,6 +80,15 @@ export class ScreenService {
     } else {
       return null;
     }
+  }
+
+  public getFieldValues(fieldId: string) : Observable<any> {
+    let url : string = this.sessionService.getApiServerBaseURL() + "/app/" 
+                        + this.sessionService.getAppId() + "/node/"
+                        + this.sessionService.getNodeId() + "/control/"
+                        + fieldId;
+
+    return this.http.get(url, {});
   }
 
 }

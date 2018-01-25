@@ -7,6 +7,8 @@ import { MatSelectChange } from '@angular/material';
 import { AbstractApp } from '../../abstract-app';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl, NgForm } from '@angular/forms';
 import { IFormElement } from '../../iformfield';
+import { Observable } from 'rxjs/Observable';
+import { ScreenService } from '../../../services/screen.service';
 
 @Component({
   selector: 'app-dynamic-form-control',
@@ -16,17 +18,22 @@ import { IFormElement } from '../../iformfield';
 export class DynamicFormControlComponent implements OnInit {
 
   @Input() screenForm: IForm;
+  @Input() formField: IFormElement;
+
   @Input() submitAction: string;
   @Output() onFieldChanged = new EventEmitter<{ formElement: IFormElement, event: Event }>();
   @ViewChild('form') form: NgForm;
 
-  constructor( public session: SessionService) { }
+  public values: Observable<String[]>
+
+  constructor( public session: SessionService, public screenService: ScreenService) { }
 
   ngOnInit() {
+    this.values = this.screenService.getFieldValues(this.formField.id);
+
     this.session.screen.alternateSubmitActions.forEach(action => {
       this.session.registerActionPayload( action, () => this.session.response = this.screenForm )
     });
-
   }
 
   onFormElementChanged(formElement: IFormElement, event: Event): void {
@@ -44,14 +51,6 @@ export class DynamicFormControlComponent implements OnInit {
 
     this.session.response = this.screenForm;
     this.session.onAction(formElement.id);
-  }
-
-  submitForm() {
-    if (this.form.valid && !this.requiresAtLeastOneField()) {
-      // could submit form.value instead which is simple name value pairs
-      this.session.response = this.screenForm;
-      this.session.onAction(this.submitAction);
-    }
   }
 
   getFormFieldMask(formElement: IFormElement): ITextMask {
@@ -72,20 +71,6 @@ export class DynamicFormControlComponent implements OnInit {
     }
 
     return text;
-  }
-
-  requiresAtLeastOneField(): Boolean {
-    if (this.screenForm.requiresAtLeastOneValue) {
-      const value = this.form.value;
-      for (const key in value) {
-        if (value[key]) {
-          return false;
-        }
-      }
-      return true;
-    } else {
-      return false;
-    }
   }
 }
 

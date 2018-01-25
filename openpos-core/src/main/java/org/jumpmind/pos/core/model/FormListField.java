@@ -4,10 +4,16 @@ import java.util.List;
 
 import org.jumpmind.pos.core.screen.SelectionMode;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class FormListField extends FormField {
     private static final long serialVersionUID = 1L;
 
-    private List<String> values;
+    // Use @JsonIgnore annotation since the jackson serializer 
+    // ignores the transient keyword.
+    @JsonIgnore
+    transient private List<String> values;
+    
     private SelectionMode selectionMode = SelectionMode.Single;
     private int[] selectedIndexes = {};
     private int selectedIndex = 0;
