@@ -60,7 +60,7 @@
 	<mat-card *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" color="accent" class="page-content-card dark">
 		<mat-card-content fxLayout="row" fxLayoutAlign="center center" class="text-lg">
 			&nbsp;&nbsp;Total
-			<span fxFlex class="text-center">
+			<span fxFlex class="text-center" (click)="session.onAction('Checkout','special')">
 				<span class="super-currency-symbol">$</span>
 				{{session.screen.grandTotal}}</span>
 			<button mat-button flexFill color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!session.screen.transaction.active || items.length == 0"
