@@ -4,5 +4,6 @@ import java.util.Locale;
 import java.util.Properties;
 
 public interface ILegacyResourceBundleUtil {
-    public Properties getText(String bundleName, Locale locale);
+    Properties getText(String bundleName, Locale locale);
+    Properties getGroupText(String groupName, String[] bundleNames, Locale locale);
 }

@@ -110,8 +110,17 @@ export class DeviceService {
         );
       }
     ).catch( (error) => {
-      console.warn( 'No handling yet (or plugin may not be initialized) for ' +
-        `device/plugin with key: ${pluginLookupKey}. request '${request.subType}:${request.requestId}' will be ignored. Error: ${error}`);
+        const msg = 'No handling yet (or plugin may not be initialized) for ' +
+          `device/plugin with key: ${pluginLookupKey}. request '${request.subType}:${request.requestId}' will be ignored. Error: ${error}`;
+		
+        this.session.onDeviceResponse( {
+            requestId: request.requestId,
+            deviceId: request.deviceId,
+            type: 'DeviceErrorResponse',
+            payload: msg
+          }
+        );
+        console.log(msg);
       }
     );
   }

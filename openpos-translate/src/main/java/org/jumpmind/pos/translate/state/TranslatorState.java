@@ -46,12 +46,12 @@ public class TranslatorState implements IState {
     }
     
     @Override
-    public void arrive() {
+    public void arrive( Action action ) {
         subscribe();
-        translationManager.showActiveScreen();                
+        translationManager.showActiveScreen();              
     } 
     
-    private void subscribe() {
+    protected void subscribe() {
         if (subscriber == null) {
             ITranslationManagerSubscriber subscriber = new ITranslationManagerSubscriber() {
                 
@@ -94,6 +94,7 @@ public class TranslatorState implements IState {
                 }
             };
             translationManager.setTranslationManagerSubscriber(subscriber);
+            stateManager.setNodeScope("translationManager", translationManager);
             stateManager.setNodeScope("subscriber", subscriber);
         }
     }

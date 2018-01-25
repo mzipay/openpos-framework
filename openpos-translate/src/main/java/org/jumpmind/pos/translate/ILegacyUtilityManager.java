@@ -1,6 +1,7 @@
 package org.jumpmind.pos.translate;
 
 public interface ILegacyUtilityManager {
-    public String retrieveText(String specName, String bundleName, String propName, String defaultValue);
-    public String getPhoneValidationRegexp(String countryCode);
+    String retrieveText(String specName, String bundleName, String propName, String defaultValue);
+    String getPhoneValidationRegexp(String countryCode);
+    String retrieveDialogText(String propName, String defaultValue);
 }

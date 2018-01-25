@@ -77,15 +77,15 @@ public class StateManager implements IStateManager {
     public void init(String appId, String nodeId) {
         this.appId = appId;
         this.nodeId = nodeId;
-        transitionTo(flowConfig.getInitialState());
+        transitionTo(null, flowConfig.getInitialState());
     }
 
-    protected void transitionTo(StateConfig stateConfig) {
+    protected void transitionTo(Action action, StateConfig stateConfig) {
         IState newState = buildState(stateConfig);
-        transitionTo(newState);
+        transitionTo(action, newState);
     }
 
-    protected void transitionTo(IState newState) {
+    protected void transitionTo(Action action, IState newState) {
         if (currentState != newState) {
             logger.info("Transition from " + currentState + " to " + newState);
         }
@@ -93,7 +93,7 @@ public class StateManager implements IStateManager {
         extraScope.put("stateManager", new ScopeValue(this));
         injector.performInjections(newState, scope, extraScope);
         currentState = newState;
-        currentState.arrive();
+        currentState.arrive(action);
     }
 
     protected IState buildState(StateConfig stateConfig) {
@@ -143,7 +143,7 @@ public class StateManager implements IStateManager {
         if (newStateName != null) {
             StateConfig newStateConfig = flowConfig.getStateConfig(newStateName);
             if (newStateConfig != null) {
-                transitionTo(newStateConfig);
+                transitionTo(action, newStateConfig);
             } else {
                 throw new FlowException("No State found for name " + newStateName);
             }
@@ -166,7 +166,7 @@ public class StateManager implements IStateManager {
     @Override
     public void endConversation() {
         scope.clearConversationScope();
-        transitionTo(flowConfig.getInitialState());
+        transitionTo(null, flowConfig.getInitialState());
     }
 
     @Override

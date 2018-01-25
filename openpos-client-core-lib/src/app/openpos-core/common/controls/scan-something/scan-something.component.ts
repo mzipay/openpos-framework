@@ -34,11 +34,6 @@ export class ScanSomethingComponent implements OnInit {
   }
 
   onBarcodeKeydown(event: KeyboardEvent) {
-    /*
-    console.log(`[onBarcodeKeydown] key: ${event.key}`);
-    console.log(`[onBarcodeKeydown] fromCharCode: ${String.fromCharCode(event.keyCode)}`);
-    console.log(`[onBarcodeKeydown] keyCode: ${event.keyCode}`);
-    */
     if (event.altKey || event.ctrlKey || event.metaKey ) {
       return true;
     }
@@ -49,7 +44,6 @@ export class ScanSomethingComponent implements OnInit {
 
   onBarcodePaste(event: ClipboardEvent) {
     const content = event.clipboardData.getData('text/plain');
-    // console.log(`[onBarcodePaste]: ${content}`);
     const filteredContent = this.filterBarcodeValue(content);
     if (filteredContent !== content) {
       console.log(`Clipboard data contains invalid characters for barcode, suppressing pasted content '${content}'`);
