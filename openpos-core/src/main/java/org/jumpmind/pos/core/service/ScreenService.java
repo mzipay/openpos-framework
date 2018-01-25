@@ -1,7 +1,10 @@
 package org.jumpmind.pos.core.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +15,7 @@ import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
+import org.jumpmind.pos.core.model.FormListField;
 import org.jumpmind.pos.core.model.IFormElement;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
@@ -33,7 +37,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @CrossOrigin
@@ -70,6 +76,29 @@ public class ScreenService implements IScreenService {
             logger.info("Calling stateManager.doAction with: {}", action);
             stateManager.doAction(new Action(action, payload));
         }
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{nodeId}/control/{controlId}")
+    @ResponseBody
+    public String getComponentValues(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String controlId) {
+        DefaultScreen defaultScreen = getLastScreen(appId, nodeId);
+        DynamicFormScreen dynamicScreen = null;
+        if (defaultScreen instanceof DynamicFormScreen) {
+            dynamicScreen = (DynamicFormScreen) defaultScreen;
+            IFormElement formElement = dynamicScreen.getForm().getFormElement(controlId);
+            if (formElement instanceof FormListField) {
+                List<String> valueList = ((FormListField) formElement).getValues();
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    mapper.writeValue(out, valueList);
+                } catch (IOException e) {
+                    throw new RuntimeException("Error while serializing the component values.", e);
+                }
+                return new String(out.toByteArray());
+            }
+        }
+        return "{}";
     }
 
     @MessageMapping("action/app/{appId}/node/{nodeId}")

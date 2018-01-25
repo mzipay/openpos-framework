@@ -78,11 +78,15 @@ export class SessionService {
     return localStorage.getItem('serverName');
   }
 
+  public getAppId(): String {
+    return this.appId;
+  }
+
   public getServerPort(): string {
     return localStorage.getItem('serverPort');
   }
 
-  private getNodeId(): string {
+  public getNodeId(): string {
     return localStorage.getItem('nodeId');
   }
 
@@ -273,5 +277,13 @@ export class SessionService {
   public getCurrencyDenomination(): string {
       return 'USD';
   }
-
+  
+  public getApiServerBaseURL() : string {
+      let url: string = 'http://' + this.getServerName();
+      if (this.getServerPort()) {
+        url = url + ':' + this.getServerPort();
+      }
+      url = url + '/api';
+      return url;
+  }
 }
