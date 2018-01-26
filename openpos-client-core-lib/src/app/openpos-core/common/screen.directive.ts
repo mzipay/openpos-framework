@@ -4,5 +4,7 @@ import { Directive, ViewContainerRef } from '@angular/core';
     selector: '[appScreen]'
 })
 export class ScreenDirective {
-    constructor(public viewContainerRef: ViewContainerRef) { }
+    constructor(public viewContainerRef: ViewContainerRef) {
+      console.log('We have a screen');
+    }
 }
