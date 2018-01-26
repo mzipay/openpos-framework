@@ -36,7 +36,7 @@
     <ng-container *ngIf="formField.inputType === 'SubmitOptionList'">
       <label class="prompt-text">{{formField.label}}</label>
       <mat-nav-list>
-        <mat-list-item *ngFor="let value of formField.values; let valueIndex=index" (click)="onSubmitOptionSelected(formField, valueIndex, $event)"
+        <mat-list-item *ngFor="let value of values | async; let valueIndex=index" (click)="onSubmitOptionSelected(formField, valueIndex, $event)"
           style="border-color: black">{{value}}
           <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
         </mat-list-item>
