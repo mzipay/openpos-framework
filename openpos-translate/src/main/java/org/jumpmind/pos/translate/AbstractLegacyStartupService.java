@@ -168,7 +168,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             }
             
             cmdLine.add("-cp");
-            if (classpath.toLowerCase().contains("100-openpos-server.jar")) {
+            if (classpath.toLowerCase().contains("openpos-server.jar")) {
                 // one jar
                 String[] paths = classpath.split(System.getProperty("path.separator"));
                 StringBuilder newPath = new StringBuilder();

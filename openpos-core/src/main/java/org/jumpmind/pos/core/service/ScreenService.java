@@ -13,6 +13,7 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
+import org.jumpmind.pos.core.model.ComboField;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
 import org.jumpmind.pos.core.model.FormListField;
@@ -37,9 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @CrossOrigin
@@ -86,8 +85,15 @@ public class ScreenService implements IScreenService {
         if (defaultScreen instanceof DynamicFormScreen) {
             dynamicScreen = (DynamicFormScreen) defaultScreen;
             IFormElement formElement = dynamicScreen.getForm().getFormElement(controlId);
+            
+            // TODO: Look at combining FormListField and ComboField or at least inheriting off of each other.
+            List<String> valueList = null;
             if (formElement instanceof FormListField) {
-                List<String> valueList = ((FormListField) formElement).getValues();
+                valueList = ((FormListField) formElement).getValues();
+            } else if (formElement instanceof ComboField) {
+                valueList = ((ComboField) formElement).getValues();
+            }
+            if (valueList != null) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 ObjectMapper mapper = new ObjectMapper();
                 try {
