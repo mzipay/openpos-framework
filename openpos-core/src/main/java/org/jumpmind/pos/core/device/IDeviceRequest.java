@@ -18,8 +18,8 @@ public interface IDeviceRequest {
     void setType(String requestType);
     String getType();
     
-    void setPayload(String payload);
-    String getPayload();
+    void setPayload(Object payload);
+    Object getPayload();
     
     default void setTimeout(long timeoutMillis) {
         setTimeout(timeoutMillis, TimeUnit.MILLISECONDS);

@@ -11,17 +11,17 @@ public class DefaultDeviceRequest implements IDeviceRequest, Serializable {
     private String deviceId;
     private String type = DEFAULT_TYPE;
     private String subType;
-    private String payload;
+    private Object payload;
     private long timeoutMillis = DEFAULT_TIMEOUT_MILLIS;
     
     public DefaultDeviceRequest() {
     }
 
-    public DefaultDeviceRequest(String deviceId, String payload) {
+    public DefaultDeviceRequest(String deviceId, Object payload) {
         this(deviceId, null, payload);
     }
 
-    public DefaultDeviceRequest(String deviceId, String subType, String payload) {
+    public DefaultDeviceRequest(String deviceId, String subType, Object payload) {
         this.deviceId = deviceId;
         this.subType = subType;
         this.payload = payload;
@@ -69,12 +69,12 @@ public class DefaultDeviceRequest implements IDeviceRequest, Serializable {
     
 
     @Override
-    public void setPayload(String payload) {
+    public void setPayload(Object payload) {
         this.payload = payload;
     }
 
     @Override
-    public String getPayload() {
+    public Object getPayload() {
         return this.payload;
     }
 

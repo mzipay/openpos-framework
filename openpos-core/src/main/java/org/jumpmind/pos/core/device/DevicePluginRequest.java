@@ -5,11 +5,11 @@ public class DevicePluginRequest extends DefaultDeviceRequest implements IDevice
     private static final long serialVersionUID = 1L;
     private String pluginId;
 
-    public DevicePluginRequest(String pluginId, String deviceId, String payload) {
+    public DevicePluginRequest(String pluginId, String deviceId, Object payload) {
         this(pluginId, deviceId, null, payload);
     }
     
-    public DevicePluginRequest(String pluginId, String deviceId, String subType, String payload) {
+    public DevicePluginRequest(String pluginId, String deviceId, String subType, Object payload) {
         super(deviceId, subType, payload);
         this.pluginId = pluginId;
     }

@@ -4,5 +4,5 @@ export interface IDeviceRequest {
     deviceId: string;
     type: string;
     subType: string;
-    payload: string;
+    payload: any;
 }
