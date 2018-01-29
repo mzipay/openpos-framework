@@ -22,7 +22,7 @@ export class SessionService {
 
   public screen: any;
 
-  public dialog: IDialog;
+  public dialog: any;
 
   public response: any;
 
