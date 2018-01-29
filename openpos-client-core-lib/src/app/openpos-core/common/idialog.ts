@@ -5,4 +5,5 @@ export interface IDialog {
     buttons: IMenuItem[];
     subType: string;
     message: string[];
+    data: any;
 }

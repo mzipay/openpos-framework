@@ -277,8 +277,8 @@ export class SessionService {
   public getCurrencyDenomination(): string {
       return 'USD';
   }
-  
-  public getApiServerBaseURL() : string {
+
+  public getApiServerBaseURL(): string {
       let url: string = 'http://' + this.getServerName();
       if (this.getServerPort()) {
         url = url + ':' + this.getServerPort();
