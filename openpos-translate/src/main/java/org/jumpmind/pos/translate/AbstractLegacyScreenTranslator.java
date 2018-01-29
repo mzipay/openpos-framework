@@ -77,10 +77,12 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
         buildBackButton();
         logAvailableLocalMenuItems();
         buildStatusItems();
-        Workstation workstation = new Workstation();
-        workstation.setStoreId(legacyStoreProperties.getStoreNumber());
-        workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
-        screen.setWorkstation(workstation);
+        if (legacyStoreProperties != null) {
+            Workstation workstation = new Workstation();
+            workstation.setStoreId(legacyStoreProperties.getStoreNumber());
+            workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
+            screen.setWorkstation(workstation);
+        }
     }
 
     protected void buildStatusItems() {
