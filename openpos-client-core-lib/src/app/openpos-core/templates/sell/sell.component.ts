@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { OverlayContainer } from '@angular/cdk/overlay';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/takeWhile';
@@ -24,8 +23,8 @@ export class SellComponent extends AbstractTemplate implements OnInit {
 
   public drawerMode: Observable<string>;
 
-  constructor( public overlayContainer: OverlayContainer, public session: SessionService, private observableMedia: ObservableMedia) {
-    super(overlayContainer);
+  constructor( public session: SessionService, private observableMedia: ObservableMedia) {
+    super();
 
    }
 
