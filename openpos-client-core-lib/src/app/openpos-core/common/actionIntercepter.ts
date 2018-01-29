@@ -6,6 +6,7 @@ export class ActionIntercepter {
 
   constructor( intercepter: FunctionActionIntercepter, behavior: ActionIntercepterBehavior ) {
     this.intercepter = intercepter;
+    this.behavior = behavior;
   }
 
   public intercept( payload: any,  continueWith: Function) {
