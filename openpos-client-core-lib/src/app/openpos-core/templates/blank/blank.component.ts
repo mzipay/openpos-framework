@@ -13,9 +13,8 @@ import { AbstractTemplate } from '../../common/abstract-template';
 })
 export class BlankComponent extends AbstractTemplate implements OnInit {
 
-  constructor(
-    public overlayContainer: OverlayContainer) {
-      super(overlayContainer);
+  constructor(public overlayContainer: OverlayContainer) {
+      super();
   }
 
   ngOnInit() {
