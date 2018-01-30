@@ -5,6 +5,7 @@
 @import './mixins/icon';
 @import './mixins/list';
 @import './mixins/menu';
+@import './mixins/progress-bar';
 @import './mixins/serrated-edge';
 @import './mixins/slide-toggle';
 @import './mixins/table';
@@ -21,6 +22,7 @@ $mat-card-default-margin: 24px !default;
   @include openpos-icon();
   @include openpos-list();
   @include openpos-menu();
+  @include openpos-progress-bar();
   @include serrated-edge();
   @include openpos-slide-toggle();
   @include openpos-table();
