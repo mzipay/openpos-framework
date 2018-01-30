@@ -1,9 +1,20 @@
 apply from: '../openpos-core/common.gradle'
 
+
 dependencies {
- 	compile (group:"org.jumpmind.symmetric", name:"symmetric-wrapper", version:"$symmetricVersion", changing:true) {
+ 	compile (group:"org.jumpmind.symmetric", name:"symmetric-wrapper", version:"$symmetricVersion") {
        exclude group:"bouncycastle"
        exclude group:"log4j"
        exclude group:"org.slf4j"
     }
 }
+
+int i = 0;
+String classpathVar = configurations.compile.collect { (i++==0?String.format("%0\$-50s", it.getName()):String.format("%0\$-62s", it.getName()))   }.join(" ");
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.jumpmind.pos.wrapper.ServiceWrapper',
+        'Class-Path': classpathVar
+    }
+}
+
