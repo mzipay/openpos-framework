@@ -23,6 +23,7 @@ public class GenericMaskSpec implements IMaskSpec {
     
     private boolean guide = false;
     private List<MaskElement> mask;
+    private PipeName pipeName = null;
 
     public static GenericMaskSpec get() {
         return new GenericMaskSpec();
@@ -48,13 +49,13 @@ public class GenericMaskSpec implements IMaskSpec {
     }
     
     public GenericMaskSpec(boolean guide, MaskElement... maskElems) {
-        this.guide = guide;
-        mask = Arrays.asList(maskElems);
+        this(guide, null, maskElems);
     }
     
-    public GenericMaskSpec guide(boolean guide) {
-        this.setGuide(guide);
-        return this;
+    public GenericMaskSpec(boolean guide, PipeName pipeName, MaskElement... maskElems) {
+        this.guide = guide;
+        this.pipeName = pipeName;
+        mask = Arrays.asList(maskElems);
     }
 
     @Override
@@ -62,6 +63,11 @@ public class GenericMaskSpec implements IMaskSpec {
         return this.type;
     }
 
+    public GenericMaskSpec guide(boolean guide) {
+        this.setGuide(guide);
+        return this;
+    }
+    
     public boolean isGuide() {
         return guide;
     }
@@ -88,6 +94,19 @@ public class GenericMaskSpec implements IMaskSpec {
         this.mask = mask;
     }
     
+    
+    public GenericMaskSpec pipeName(PipeName pipeName) {
+        this.setPipeName(pipeName);
+        return this;
+    }
+    public PipeName getPipeName() {
+        return pipeName;
+    }
+
+    public void setPipeName(PipeName pipeName) {
+        this.pipeName = pipeName;
+    }
+
     public static class ImmutableGenericMaskSpec extends GenericMaskSpec {
         private static final long serialVersionUID = 1L;
 
@@ -98,9 +117,20 @@ public class GenericMaskSpec implements IMaskSpec {
         public ImmutableGenericMaskSpec(boolean guide, MaskElement... maskElems) {
             super(guide, maskElems);
         }
+
+        public ImmutableGenericMaskSpec(boolean guide, PipeName pipeName, MaskElement... maskElems) {
+            super(guide, pipeName, maskElems);
+        }
         
         @Override
         public ImmutableGenericMaskSpec guide(boolean guide) {
+            // don't allow change of the guide
+            return this;
+        }
+
+        @Override
+        public ImmutableGenericMaskSpec pipeName(PipeName pipeName) {
+            // don't allow change of the pipeName
             return this;
         }
         
@@ -123,6 +153,11 @@ public class GenericMaskSpec implements IMaskSpec {
         @Override
         public void setGuide(boolean guide) {
             // can't change the guide setting
+        }
+
+        @Override
+        public void setPipeName(PipeName pipeName) {
+            // can't change the pipeName setting
         }
         
     }

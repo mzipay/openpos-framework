@@ -16,6 +16,7 @@ export interface IMaskSpec {
 export interface IGenericMaskSpec extends IMaskSpec {
     mask: IMaskElement[];
     guide: boolean;
+    pipeName: string;
 }
 
 export interface INumberMaskSpec extends IMaskSpec {
@@ -37,6 +38,7 @@ export interface INumberMaskSpec extends IMaskSpec {
 export interface ITextMask {
     mask: ((string|RegExp)[] | (() => any)); // Array of strings/RegExs or function
     guide: boolean;
+    pipe: Function;
 }
 
 /**
@@ -47,6 +49,7 @@ export class TextMask implements ITextMask {
 
     mask: ((string|RegExp)[] | (() => any));
     guide: boolean;
+    pipe: Function;
 
     constructor(mask?: (string|RegExp)[] | (() => any)) {
         this.mask = mask;
@@ -61,6 +64,9 @@ export class TextMask implements ITextMask {
                 inst.mask.push(inst.toTextMaskElement(elem));
             }
             inst.guide = genericMaskSpec.guide;
+            if (genericMaskSpec.pipeName) {
+                inst.pipe = Pipes.instance.getPipe(genericMaskSpec.pipeName);
+            }
         } else if (maskSpec.type === 'NumberMask') {
             const numMaskSpec = <INumberMaskSpec> maskSpec;
             inst.mask = createNumberMask(numMaskSpec);
@@ -75,4 +81,31 @@ export class TextMask implements ITextMask {
             return new RegExp(elem.value);
         }
     }
+}
+
+/**
+ * A Class to provide access to text-mask Pipe functions which are implemented
+ * per the specs documented here: https://github.com/text-mask/text-mask/blob/master/componentDocumentation.md#pipe
+ */
+class Pipes {
+    private static _instance: Pipes;
+    private pipeMap: Map<string, Function> = new Map<string, Function>();
+
+    private toUpper: Function = (conformedValue, config) => {
+        return conformedValue.toUpperCase();
+    }
+
+    private constructor() {
+        this.pipeMap.set('ToUpper', this.toUpper);
+        // Add new pipes here
+    }
+
+    public static get instance() {
+        return this._instance || (this._instance = new this());
+    }
+
+    public getPipe(pipeName: string): Function {
+        return this.pipeMap.get(pipeName);
+    }
+
 }
