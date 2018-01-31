@@ -77,6 +77,8 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
     @Override
     public void startPreviouslyStarted() {
         File workingDir = new File(this.getAppWorkingDir());
+        logger.info("The applicaiton working directory is set to {}", workingDir.getAbsolutePath());
+        workingDir.mkdirs();
         if (workingDir.exists()) {
             File[] files = workingDir.listFiles();
             for (File file : files) {
@@ -94,7 +96,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
                     }
                 }
             }
-        }
+        } 
     }
 
     @Override
@@ -162,8 +164,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
                 }
             }
             
-            if(StringUtils.isNotEmpty(libraryPath))
-            {
+            if(StringUtils.isNotEmpty(libraryPath)) {
             		cmdLine.add("-Djava.library.path=" + libraryPath);
             }
             
@@ -176,7 +177,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
                     newPath.append(new File(path).getAbsolutePath()).append(System.getProperty("path.separator"));
                 }
                 cmdLine.add(newPath.toString());
-                cmdLine.add("org.springframework.boot.loader.JarLauncher");                
+                cmdLine.add(getClassToLaunch());                
             } else {
                 // running in IDE or development environment
                 cmdLine.add(classpath);
@@ -202,7 +203,8 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             logger.info("Started process for {}", file.getName());
             if (process.isAlive()) {
                 logger.info("Getting rmi interface for {}", file.getName());
-                for (int i = 0; i < 15; i++) {
+                final int MAX_TRIES = 30;
+                for (int i = 0; i < MAX_TRIES; i++) {
                     try {
                         RmiProxyFactoryBean factory = new RmiProxyFactoryBean();
                         factory.setServiceUrl(String.format("rmi://localhost:%d/%s", this.getRmiRegistryPort(),
@@ -212,9 +214,14 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
                         ITranslationManager remote = (ITranslationManager) factory.getObject();
                         remote.ping();
                         this.getTranslationManagers().put(file.getName(), remote);
+                        logger.info("Established a connection with the remote interface for {}:{}", storeId, workingDir);
                     } catch (RemoteAccessException e) {
                         this.getTranslationManagers().remove(file.getName());
-                        logger.info("The remote interface was not available.  Trying again in a second");
+                        if (i == 0) {
+                            logger.info("The remote interface was not available.  Trying again in a second");
+                        } else if (i == MAX_TRIES-1) {
+                            logger.warn("Failed to established a connection with the remote interface for {}:{}", storeId, workingDir);
+                        }
                         Thread.sleep(1000);
                     }
                 }
@@ -225,6 +232,10 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
         } catch (Exception e) {
             logger.error("Failed to start process", e);
         }
+    }
+    
+    protected String getClassToLaunch() {
+        return "org.springframework.boot.loader.JarLauncher";
     }
 
     protected void startInternal(File file, String storeId, String workstationId) {

@@ -17,7 +17,7 @@ public class ServiceWrapper {
 
         String appHomeDir = getHomeDir();
 
-        WrapperHelper.run(args, appHomeDir, appHomeDir + File.separator + configFileName, "../lib/openpos-server.jar");
+        WrapperHelper.run(args, appHomeDir, appHomeDir + File.separator + configFileName, "../lib/openpos-wrapper.jar");
     }
 
 
