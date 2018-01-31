@@ -32,8 +32,13 @@
       }
 
       mat-card-content{
-          padding:4px;
+          padding:10px;
           margin:0px;
+      }
+
+      mat-card-footer{
+          margin:0px;
+          padding:10px;
       }
   }
 }

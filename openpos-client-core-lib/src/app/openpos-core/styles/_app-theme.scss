@@ -71,6 +71,11 @@
         color:white;
         background-color: $app-primary;
     }
+    
+    .mat-raised-button.mat-primary-inverse{
+        color:$app-primary;
+        background-color: white;
+    }
 
     .mat-icon.mat-accent-lighter{
         color:$app-accent-lighter;
