@@ -60,9 +60,7 @@
 
     .mat-list.list-seperator{
         .mat-list-item:not(:first-child){
-            .mat-list-item-content{
-                border-top: 1px dashed mat-color($foreground, divider);
-            }
+            border-top: 1px dashed mat-color($foreground, divider);
         }
     }
 
@@ -83,5 +81,14 @@
 
     .mat-progress-bar-buffer{
         background-color:mat-color($background, app-bar); 
+    }
+
+    .mat-button-toggle {
+        color:$app-accent-lighter;
+    }
+
+    .mat-button-toggle-checked{
+        background: $app-accent-lighter;
+        color: white;
     }
 }
