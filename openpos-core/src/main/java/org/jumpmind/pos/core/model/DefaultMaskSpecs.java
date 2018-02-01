@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.jumpmind.pos.core.model.GenericMaskSpec.ImmutableGenericMaskSpec;
+import org.jumpmind.pos.core.model.IMaskSpec.PipeName;
 import org.jumpmind.pos.core.model.MaskElement.MaskElementType;
 
 public class DefaultMaskSpecs {
@@ -24,7 +25,19 @@ public class DefaultMaskSpecs {
             new MaskElement(MaskElementType.RegExp, "\\d"),
             new MaskElement(MaskElementType.RegExp, "\\d")
         );
-
+    private static final MaskElement PRICECODE_CHAR_MASK = new MaskElement(MaskElementType.RegExp, "[b-df-hj-mB-DF-HJ-M]");
+    public static final ImmutableGenericMaskSpec DEFAULT_PRICECODE_SPEC = new ImmutableGenericMaskSpec(false, PipeName.ToUpper,
+            PRICECODE_CHAR_MASK,
+            PRICECODE_CHAR_MASK,
+            PRICECODE_CHAR_MASK,
+            PRICECODE_CHAR_MASK,
+            PRICECODE_CHAR_MASK,
+            PRICECODE_CHAR_MASK,
+            PRICECODE_CHAR_MASK,
+            PRICECODE_CHAR_MASK
+        );
+    
+    // b-m,e,i
     protected final static Map<String,ImmutableGenericMaskSpec> countryCodeToPhoneSpec = new HashMap<>();
     static {
         countryCodeToPhoneSpec.put(Locale.US.getCountry(), DEFAULT_PHONE_SPEC);

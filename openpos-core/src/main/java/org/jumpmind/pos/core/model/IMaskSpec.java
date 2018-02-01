@@ -8,5 +8,9 @@ public interface IMaskSpec extends Serializable {
         NumberMask
     }
     
+    enum PipeName {
+        ToUpper
+    }
+    
     MaskSpecType getType();
 }
