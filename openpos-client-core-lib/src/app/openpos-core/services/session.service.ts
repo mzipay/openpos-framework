@@ -218,9 +218,8 @@ export class SessionService {
   }
 
   private queueLoading() {
-
     this.loading = true;
-    setTimeout(() => this.showLoading(), 100);
+    setTimeout(() => this.showLoading(), 1000);
   }
 
   private showLoading() {
@@ -241,6 +240,10 @@ export class SessionService {
       this.dialog = null;
     } else if (json.type === 'Dialog') {
       this.dialog = json;
+    } else if (json.type === 'Loading') {
+      this.loader.setLoaderText(json.title, json.message);
+      this.queueLoading();
+      return;
     } else if (json.type === 'NoOp') {
       this.response = null;
     } else if (json.type === 'DeviceRequest') {

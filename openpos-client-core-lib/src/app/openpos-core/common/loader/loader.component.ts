@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Observable';
 @Component({
     selector: 'app-loader',
     templateUrl: 'loader.component.html',
-    styleUrls: ['loader.component.css']
+    styleUrls: ['loader.component.scss']
 })
 export class LoaderComponent implements OnInit, OnDestroy {
 
@@ -20,6 +20,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
     show = false;
     title : string = this.LOADING_TITLE;
+    message : string = null;
 
     connected = true;
     loading = false;
@@ -36,7 +37,8 @@ export class LoaderComponent implements OnInit, OnDestroy {
         console.log('ngOnInit');
         this.subscription = this.loaderService.loaderState
             .subscribe((state: LoaderState) => {
-                this.title = this.LOADING_TITLE;
+                this.title = state.title ? state.title : this.LOADING_TITLE;
+                this.message = state.message;
                 this.show = state.show;
                 this.connected = !state.show;
                 this.loading = state.show;
