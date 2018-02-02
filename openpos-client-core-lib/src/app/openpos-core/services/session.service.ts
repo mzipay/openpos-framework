@@ -204,23 +204,24 @@ export class SessionService {
     }
 
     this.dialog = null;
-    this.queueLoading();
+    //this.queueLoading();
   }
 
   private queueLoading() {
-
     this.loading = true;
     setTimeout(() => this.showLoading(), 1000);
   }
 
   private showLoading() {
     if (this.loading) {
+      console.log("Showing Loader");
       this.loader.show();
     }
   }
 
   private cancelLoading() {
     this.loading = false;
+    console.log("Hiding Loader");
     this.loader.hide();
   }
 
@@ -233,7 +234,7 @@ export class SessionService {
       this.dialog = json;
     } else if (json.type === 'Loading') {
       this.loader.setLoaderText(json.title, json.message);
-      this.showLoading();
+      this.queueLoading();
       return;
     } else if (json.type === 'NoOp') {
       this.response = null;

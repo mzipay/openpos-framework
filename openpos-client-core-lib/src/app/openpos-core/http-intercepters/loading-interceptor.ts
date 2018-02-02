@@ -11,13 +11,24 @@ export class LoadingInterceptor implements HttpInterceptor {
     constructor( private loaderService: LoaderService){
 
     }
+    private loading: boolean = false;
     intercept( req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
   
-        setTimeout(() => this.loaderService.show(), 1000);
+        console.log("Show loader from interceptor");
+        this.loading = true;
+        setTimeout(() => this.show(), 1000);
         return next.handle(req).pipe(
             finalize(() => {
+                console.log("Hide Loader from intercepter");
+                this.loading = false;
                 this.loaderService.hide();
               })
         );
+    }
+
+    private show(){
+        if( this.loading ){
+            this.loaderService.show();
+        }
     }
 }
