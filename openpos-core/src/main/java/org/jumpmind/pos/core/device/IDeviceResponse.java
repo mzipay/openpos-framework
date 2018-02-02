@@ -1,6 +1,9 @@
 package org.jumpmind.pos.core.device;
 
 public interface IDeviceResponse {
+    public final static String DEVICE_ERROR_RESPONSE_TYPE = "DeviceErrorResponse";
+    public final static String DEVICE_TIMEOUT_RESPONSE_TYPE = "DeviceTimeoutResponse";
+    
     String getRequestId();
     void setRequestId(String sourceRequestId);
     String getDeviceId();
