@@ -18,10 +18,14 @@
 
     <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-xl">
         <mat-icon  matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
-        <input #box matInput [(ngModel)]="responseText" (keyup.enter)="onEnter()" type="{{inputType}}" [appFocus]="true" 
-            [textMask]="_textMask">
+        <input #box matInput [(ngModel)]="responseText"   (keyup.enter)="onEnter($event)" type="{{inputType}}" [appFocus]="true" 
+            [textMask]="_textMask" minlength="{{minLength}}" maxlength="{{maxLength}}" #promptInput="ngModel">
         <mat-placeholder>{{placeholderText}}</mat-placeholder>
         <mat-hint align="start">{{hintText}}</mat-hint>
+        <ng-container *ngIf="promptInput.invalid && promptInput.touched && promptInput.dirty">
+            <mat-error *ngIf="minLength && promptInput.errors.minlength">minimum length is {{minLength}}</mat-error>
+            <mat-error *ngIf="maxLength && promptInput.errors.maxlength">maximum length is {{maxLength}}</mat-error>
+        </ng-container>
     </mat-form-field>
 </ng-container>
 

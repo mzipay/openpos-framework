@@ -160,9 +160,19 @@ export class SessionService {
   }
 
   public onDeviceResponse(deviceResponse: IDeviceResponse) {
-    console.log('Publish deviceResponse ' + deviceResponse);
-    this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
-      JSON.stringify(deviceResponse));
+    const sendResponseBackToServer: Function = () => {
+      console.log('Publish deviceResponse ' + deviceResponse);
+      this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
+        JSON.stringify(deviceResponse));
+    };
+
+    // see if we have any intercepters registered for the type of this deviceResponse
+    // otherwise just send the response
+    if ( this.actionIntercepters.has(deviceResponse.type) ) {
+      this.actionIntercepters.get(deviceResponse.type).intercept(deviceResponse, sendResponseBackToServer);
+    } else {
+      sendResponseBackToServer();
+    }
   }
 
   public async onAction(action: string, payload?: any, confirm?: string) {

@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
+import { Component, Input, OnInit, ViewChild, Output, EventEmitter} from '@angular/core';
 import { DatePipe } from '@angular/common';
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
 import { AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks';
@@ -16,7 +17,11 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     @Input() promptIcon: string;
     @Input() hintText: string;
     @Input() maskSpec: IMaskSpec;
+    @Input() minLength: number;
+    @Input() maxLength: number;
     @Output() enter = new EventEmitter<string>();
+    @ViewChild('promptInput') promptInput;
+
     inputType: string;
     dateText: string;  // value entered by user or copied from datePickerValue
     datePickerValue: Date;  // retains value picked using datepicker
@@ -29,8 +34,16 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
 
     constructor(private datePipe: DatePipe) {}
 
-    public onEnter(): void {
-        this.enter.emit(this.responseText);
+    public onEnter(event): void {
+        // Force validity check in order to show errors, if any.  Without this
+        // errors will only be shown when losing focus
+        this.promptInput.control.updateValueAndValidity();
+        if (this.promptInput.invalid) {
+            this.promptInput.control.markAsDirty();
+            this.promptInput.control.markAsTouched();
+        } else {
+            this.enter.emit(this.responseText);
+        }
     }
 
     public onSlideChange(): void {

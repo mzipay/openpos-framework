@@ -1,3 +1,4 @@
+import { DEVICE_ERROR_RESPONSE_TYPE, DEVICE_RESPONSE_TYPE, DEVICE_DNE_RESPONSE_TYPE } from './../common/ideviceresponse';
 import { IDevicePlugin } from './../common/idevice-plugin';
 import { PluginService } from './plugin.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -93,7 +94,7 @@ export class DeviceService {
             this.session.onDeviceResponse( {
                 requestId: request.requestId,
                 deviceId: request.deviceId,
-                type: 'DeviceResponse',
+                type: DEVICE_RESPONSE_TYPE,
                 payload: response
               }
             );
@@ -102,7 +103,7 @@ export class DeviceService {
               this.session.onDeviceResponse( {
                   requestId: request.requestId,
                   deviceId: request.deviceId,
-                  type: 'DeviceErrorResponse',
+                  type: DEVICE_ERROR_RESPONSE_TYPE,
                   payload: error
                 }
               );
@@ -112,11 +113,11 @@ export class DeviceService {
     ).catch( (error) => {
         const msg = 'No handling yet (or plugin may not be initialized) for ' +
           `device/plugin with key: ${pluginLookupKey}. request '${request.subType}:${request.requestId}' will be ignored. Error: ${error}`;
-		
+
         this.session.onDeviceResponse( {
             requestId: request.requestId,
             deviceId: request.deviceId,
-            type: 'DeviceErrorResponse',
+            type: DEVICE_DNE_RESPONSE_TYPE,
             payload: msg
           }
         );

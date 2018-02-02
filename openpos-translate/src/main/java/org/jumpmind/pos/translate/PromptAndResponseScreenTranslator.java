@@ -15,10 +15,16 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
     }
 
     public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems, IMaskSpec promptMask) {
+        this(legacyScreen, screenClass, addLocalMenuItems, promptMask, null, null);
+    }
+
+    public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems, IMaskSpec promptMask, Integer minLength, Integer maxLength) {
         super(legacyScreen, screenClass);
-        screen.setTemplate(DefaultScreen.TEMPLATE_SELL);
+        getScreen().setTemplate(DefaultScreen.TEMPLATE_SELL);
         this.addLocalMenuItems = addLocalMenuItems;
-        screen.setPromptMask(promptMask);
+        getScreen().setPromptMask(promptMask);
+        getScreen().setMinLength(minLength);
+        getScreen().setMaxLength(maxLength);
     }
     
     @Override

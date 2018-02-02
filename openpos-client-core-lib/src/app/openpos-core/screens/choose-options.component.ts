@@ -3,7 +3,7 @@ import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import {SessionService} from '../services/session.service';
 import { AbstractApp } from '../common/abstract-app';
 import { IForm } from './form.component';
-import { ActionIntercepter, ActionIntercepterBehavior } from '../common/actionIntercepter';
+import { ActionIntercepter, ActionIntercepterBehaviorType } from '../common/actionIntercepter';
 
 
 @Component({
@@ -45,7 +45,7 @@ export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck, OnDestr
     if ( option.form.formElements.length > 0 ) {
       this.selectedOption = option;
       this.currentView = 'OptionForm';
-      this.session.registerActionIntercepter("undo", new ActionIntercepter(this.onBackButtonPressed, ActionIntercepterBehavior.block));
+      this.session.registerActionIntercepter("undo", new ActionIntercepter(this.onBackButtonPressed, ActionIntercepterBehaviorType.block));
     } else {
       this.session.onAction( option.value );
     }
