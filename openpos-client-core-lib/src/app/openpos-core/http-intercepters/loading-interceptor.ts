@@ -14,12 +14,10 @@ export class LoadingInterceptor implements HttpInterceptor {
     private loading: boolean = false;
     intercept( req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
   
-        console.log("Show loader from interceptor");
         this.loading = true;
         setTimeout(() => this.show(), 1000);
         return next.handle(req).pipe(
             finalize(() => {
-                console.log("Hide Loader from intercepter");
                 this.loading = false;
                 this.loaderService.hide();
               })

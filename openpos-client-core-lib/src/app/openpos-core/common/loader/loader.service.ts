@@ -15,14 +15,12 @@ export class LoaderService {
     constructor() { }
 
     show() {
-        console.log("Show loader from service");
         this.currentLoaderState.show = true;
 
         this.loaderSubject.next(this.currentLoaderState);
     }
 
     hide() {
-        console.log("Hide loader from service");
         this.currentLoaderState.show = false;
         this.currentLoaderState.message = null;
         this.currentLoaderState.title = null;

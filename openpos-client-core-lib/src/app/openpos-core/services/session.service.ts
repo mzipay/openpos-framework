@@ -204,7 +204,7 @@ export class SessionService {
     }
 
     this.dialog = null;
-    //this.queueLoading();
+    this.queueLoading();
   }
 
   private queueLoading() {
@@ -214,14 +214,12 @@ export class SessionService {
 
   private showLoading() {
     if (this.loading) {
-      console.log("Showing Loader");
       this.loader.show();
     }
   }
 
   private cancelLoading() {
     this.loading = false;
-    console.log("Hiding Loader");
     this.loader.hide();
   }
 
