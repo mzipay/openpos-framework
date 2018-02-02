@@ -163,7 +163,7 @@ export class SessionService {
     console.log('Publish deviceResponse ' + deviceResponse);
     this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
       JSON.stringify(deviceResponse));
-  }
+}
 
   public async onAction(action: string, payload?: any, confirm?: string) {
     if ( confirm ) {
@@ -171,7 +171,7 @@ export class SessionService {
       const dialogRef = this.dialogService.open( ConfirmationDialogComponent, { disableClose: true});
       dialogRef.componentInstance.title = confirm;
       const result = await dialogRef.afterClosed().toPromise();
-
+      
       // if we didn't confirm return and don't send the action to the server
       if ( !result ) {
         console.log('Canceling action');
@@ -210,7 +210,7 @@ export class SessionService {
   private queueLoading() {
 
     this.loading = true;
-    setTimeout(() => this.showLoading(), 100);
+    setTimeout(() => this.showLoading(), 1000);
   }
 
   private showLoading() {
@@ -231,6 +231,10 @@ export class SessionService {
       this.dialog = null;
     } else if (json.type === 'Dialog') {
       this.dialog = json;
+    } else if (json.type === 'Loading') {
+      this.loader.setLoaderText(json.title, json.message);
+      this.showLoading();
+      return;
     } else if (json.type === 'NoOp') {
       this.response = null;
     } else if (json.type === 'DeviceRequest') {

@@ -78,6 +78,7 @@ import { SellComponent } from './templates/sell/sell.component';
 
 import { MaterialModule } from './material.module';
 import { Plugin } from 'webpack';
+import { httpInterceptorProviders } from './http-intercepters';
 
 @NgModule({
   entryComponents: [
@@ -176,7 +177,6 @@ import { Plugin } from 'webpack';
     IconService,
     SessionService,
     DeviceService,
-    LoaderService,
     Location,
     {
       provide: LocationStrategy,
@@ -184,7 +184,8 @@ import { Plugin } from 'webpack';
     },
     DatePipe,
     BreakpointObserver,
-    MediaMatcher
+    MediaMatcher,
+    httpInterceptorProviders
   ]
 })
 // Export services below under 'providers'
@@ -194,7 +195,8 @@ export class OpenposCoreModule {
       ngModule: OpenposCoreModule,
       providers: [
         PluginService,
-        ScreenService
+        ScreenService,
+        LoaderService
       ]
     };
   }
