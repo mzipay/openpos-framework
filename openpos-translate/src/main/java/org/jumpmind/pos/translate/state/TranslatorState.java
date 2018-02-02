@@ -7,6 +7,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.annotation.PostConstruct;
 
+import org.jumpmind.pos.core.device.DefaultDeviceResponse;
 import org.jumpmind.pos.core.device.IDeviceRequest;
 import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
@@ -86,9 +87,14 @@ public class TranslatorState implements IState {
                     CompletableFuture<IDeviceResponse> futureResponse =  deviceService.send(stateManager.getAppId(), stateManager.getNodeId(), request );
                     try {
                         response = futureResponse.get(request.getTimeout(), TimeUnit.MILLISECONDS);
-                    } catch (ExecutionException | InterruptedException | TimeoutException ex) {
+                    } catch (TimeoutException ex) {
                         futureResponse.cancel(true);
-                        logger.error("Failure waiting for a response", ex);
+                        response = new DefaultDeviceResponse(request.getRequestId(), request.getDeviceId(), IDeviceResponse.DEVICE_TIMEOUT_RESPONSE_TYPE, "Timeout reached. " + ex.getMessage());
+                    } catch (Exception ex) {
+                        futureResponse.cancel(true);
+                        String msg = String.format("Failure waiting for a response. Error: {}", ex.getMessage());
+                        response = new DefaultDeviceResponse(request.getRequestId(), request.getDeviceId(), IDeviceResponse.DEVICE_ERROR_RESPONSE_TYPE, msg);
+                        logger.error(msg);
                     }
                     return response;
                 }

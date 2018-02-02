@@ -9,7 +9,7 @@ public class Form implements Serializable {
 
     public static final String PATTERN_EMAIL =  "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
     public static final String PATTERN_MONEY =  "^(\\d{0,9}\\.\\d{0,2}|\\d{1,9})$";
-    public static final String PATTERN_PERCENT =  "\\d{1,2}(?!\\d)|100";
+    public static final String PATTERN_PERCENT =  "^100$|^\\d{0,2}(\\.\\d{1,2})?$|^\\d{0,2}(\\.)?"; // 100-0, Only two decimal places allowed.
     public static final String PATTERN_POSTAL_CODE =  "^[0-9a-zA-Z]{5,}$"; // Minimum 5 chars. 
     private static final long serialVersionUID = 1L;
 
