@@ -12,7 +12,7 @@ export class RequireAtleastOneValidatorDirective implements Validator {
     validate(form: FormGroup): ValidationErrors {
       if(!this.requiresAtleastOne) return null;
   
-      const message = {
+      /*const message = {
         'requireAtleastOne' : {
           'message': 'Atleast one field is required'
         }
@@ -24,6 +24,8 @@ export class RequireAtleastOneValidatorDirective implements Validator {
         }
       }
   
-      return message;
+      return message;*/
+
+      return null;
     }
 }
