@@ -18,7 +18,7 @@
         <mat-card-actions *ngIf="hasSubmitAction(); else actionsElseBlock" align="end">
             <!-- TODO: handle case with text and no Icon -->
             <button mat-icon-button (click)="onSubmitAction()" [appFocus]="true">
-                <mat-icon *ngIf="submitAction">keyboard_arrow_right</mat-icon>
+                <mat-icon *ngIf="submitAction">arrow_forward</mat-icon>
             </button>
         </mat-card-actions>
         <ng-template #actionsElseBlock>
