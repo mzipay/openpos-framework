@@ -38,7 +38,7 @@ export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck, OnDestr
   }
 
   ngOnDestroy() {
-    this.session.unregisterActionIntercepters();
+    this.session.unregisterActionIntercepter('undo');
   }
 
   onMakeOptionSelection( option: IOptionItem): void {
