@@ -79,6 +79,8 @@ import { SellComponent } from './templates/sell/sell.component';
 import { MaterialModule } from './material.module';
 import { Plugin } from 'webpack';
 import { httpInterceptorProviders } from './http-intercepters';
+import { ShowErrorsComponent } from './common/controls/show-errors.component';
+import { RequireAtleastOneValidatorDirective } from './common/validators/require-atleast-one.directive';
 
 @NgModule({
   entryComponents: [
@@ -152,7 +154,9 @@ import { httpInterceptorProviders } from './http-intercepters';
     DynamicFormControlComponent,
     PosComponent,
     ChangeComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    ShowErrorsComponent,
+    RequireAtleastOneValidatorDirective
   ],
   imports: [
     BrowserModule,
