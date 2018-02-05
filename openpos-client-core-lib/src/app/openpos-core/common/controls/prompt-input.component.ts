@@ -1,9 +1,10 @@
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup, FormGroupDirective, NgForm } from '@angular/forms';
 import { Component, Input, OnInit, ViewChild, Output, EventEmitter} from '@angular/core';
 import { DatePipe } from '@angular/common';
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
 import { AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { TextMask, IMaskSpec, ITextMask } from '../textmask';
+import { ErrorStateMatcher } from '@angular/material';
 
 @Component({
     selector: 'app-prompt-input',
@@ -21,6 +22,9 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     @Input() maxLength: number;
     @Output() enter = new EventEmitter<string>();
     @ViewChild('promptInput') promptInput;
+    @Input() promptFormGroup: FormGroup;
+    allowPromptInputValidation = false; // Determines when errors are permitted to be shown or not
+    promptInputErrorStateMatcher: PromptInputErrorStateMatcher;
 
     inputType: string;
     dateText: string;  // value entered by user or copied from datePickerValue
@@ -32,18 +36,12 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     onOffModel: boolean;
     _textMask: ITextMask; // Mask object built for text-mask
 
-    constructor(private datePipe: DatePipe) {}
+    constructor(private datePipe: DatePipe) {
+        this.promptInputErrorStateMatcher = new PromptInputErrorStateMatcher(() => this.allowPromptInputValidation);
+    }
 
     public onEnter(event): void {
-        // Force validity check in order to show errors, if any.  Without this
-        // errors will only be shown when losing focus
-        this.promptInput.control.updateValueAndValidity();
-        if (this.promptInput.invalid) {
-            this.promptInput.control.markAsDirty();
-            this.promptInput.control.markAsTouched();
-        } else {
-            this.enter.emit(this.responseText);
-        }
+        this.enter.emit(this.responseText);
     }
 
     public onSlideChange(): void {
@@ -92,5 +90,15 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
                 this.dateText = this.responseText;
             }
         }
+    }
+}
+
+class PromptInputErrorStateMatcher implements ErrorStateMatcher {
+
+    constructor(public isErrorStateFunc: () => boolean) {
+    }
+
+    isErrorState(control: FormControl, form: FormGroupDirective | NgForm): boolean {
+        return this.isErrorStateFunc();
     }
 }

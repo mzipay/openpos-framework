@@ -279,12 +279,20 @@ export class SessionService {
     this.actionPayloads.clear();
   }
 
+  public unregisterActionPayload(actionName: string) {
+    this.actionPayloads.delete(actionName);
+  }
+
   public registerActionIntercepter( actionName: string, actionIntercepter: ActionIntercepter ) {
     this.actionIntercepters.set( actionName, actionIntercepter );
   }
 
   public unregisterActionIntercepters() {
     this.actionIntercepters.clear();
+  }
+
+  public unregisterActionIntercepter(actionName: string) {
+    this.actionIntercepters.delete(actionName);
   }
 
   public getCurrencyDenomination(): string {

@@ -1,5 +1,7 @@
 package org.jumpmind.pos.translate;
 
+import java.util.List;
+
 import org.jumpmind.pos.core.model.IMaskSpec;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
@@ -33,8 +35,10 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
         screen.setRefreshAlways(true);
         this.configureScreenResponseField();
         if (addLocalMenuItems) {
-            screen.setLocalMenuItems(generateUIActionsForLocalNavButtons(MenuItem.class, true));    
+            List<MenuItem> localNavButtons = generateUIActionsForLocalNavButtons(MenuItem.class, true);
+                screen.setLocalMenuItems(localNavButtons);
         }
+        getScreen().setActionButton(new MenuItem("Next", "Next", "arrow_forward"));
         
     }
 
