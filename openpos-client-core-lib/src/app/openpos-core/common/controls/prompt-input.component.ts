@@ -90,6 +90,8 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
                 this.dateText = this.responseText;
             }
         }
+
+        this.promptInput.focus();
     }
 }
 
