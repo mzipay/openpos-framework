@@ -11,7 +11,7 @@
 			<div style="height:50px"></div>
 		</mat-card-content>
 		<mat-card-actions *ngIf="session.screen.actionButton" align="end">
-			<button mat-icon-button (click)="onAction(session.screen.actionButton.action)" [appFocus]="true">
+			<button mat-icon-button (click)="onAction(session.screen.actionButton.action)">
 				<mat-icon *ngIf="session.screen.actionButton.icon">{{session.screen.actionButton.icon}}</mat-icon>
 			</button>
 	   </mat-card-actions>
