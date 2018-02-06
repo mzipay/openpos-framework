@@ -13,7 +13,7 @@
             <mat-card fxFlex class="page-content-card text-center">
                 <mat-card-content fxLayout="column" fxLayoutAlign="end">
                     <mat-form-field>
-                        <input matInput #field="ngModel" style="text-align:right"
+                        <input matInput #input #field="ngModel" style="text-align:right"
                             [(ngModel)]="tenderAmount.value"
                             placeholder="{{tenderAmount.placeholder}}"
                             [required]="tenderAmount.required"
