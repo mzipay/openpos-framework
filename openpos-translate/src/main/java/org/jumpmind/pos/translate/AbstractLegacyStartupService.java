@@ -47,7 +47,6 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
 
     @Value("${library.path}")
     private String libraryPath;
-
     
     private int externalProcessCount = 0;
 
@@ -203,7 +202,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             logger.info("Started process for {}", file.getName());
             if (process.isAlive()) {
                 logger.info("Getting rmi interface for {}", file.getName());
-                final int MAX_TRIES = 30;
+                final int MAX_TRIES = 120;
                 for (int i = 0; i < MAX_TRIES; i++) {
                     try {
                         RmiProxyFactoryBean factory = new RmiProxyFactoryBean();
@@ -221,6 +220,8 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
                             logger.info("The remote interface was not available.  Trying again in a second");
                         } else if (i == MAX_TRIES-1) {
                             logger.warn("Failed to established a connection with the remote interface for {}:{}", storeId, workingDir);
+                            process.destroy();
+                            break;
                         }
                         Thread.sleep(1000);
                     }
