@@ -1,4 +1,4 @@
-export {LoaderComponent} from './loader';
+export {LoaderComponent, LoaderService } from './loader';
 export {IDevicePlugin} from  './idevice-plugin';
 export {IDeviceRequest} from  './idevicerequest';
 export {IPlugin} from  './iplugin';
@@ -7,5 +7,5 @@ export {AbstractApp} from './abstract-app';
 export {AbstractTemplate} from './abstract-template';
 export {ScreenDirective} from './screen.directive';
 export {IDialog} from './idialog';
-export {ActionIntercepter, ActionIntercepterBehavior} from './actionIntercepter';
+export {ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType} from './actionIntercepter';
 export * from './controls';

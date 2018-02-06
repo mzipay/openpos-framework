@@ -13,8 +13,8 @@ public class PromptScreen extends DefaultScreen implements IPromptScreen {
     private String responseText;
     private boolean editable = true;
     private String responseType;
-    private int minLength;
-    private int maxLength;
+    private Integer minLength;
+    private Integer maxLength;
     private String action = "Next";
     private MenuItem actionButton = null;
     private IMaskSpec promptMask;
@@ -64,22 +64,22 @@ public class PromptScreen extends DefaultScreen implements IPromptScreen {
     }
 
     @Override
-    public int getMinLength() {
+    public Integer getMinLength() {
         return minLength;
     }
 
     @Override
-    public void setMinLength(int minLength) {
+    public void setMinLength(Integer minLength) {
         this.minLength = minLength;
     }
 
     @Override
-    public int getMaxLength() {
+    public Integer getMaxLength() {
         return maxLength;
     }
 
     @Override
-    public void setMaxLength(int maxLength) {
+    public void setMaxLength(Integer maxLength) {
         this.maxLength = maxLength;
     }
 

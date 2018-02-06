@@ -19,6 +19,8 @@ public class SellItem implements IItem, Serializable {
     private String quantity;
     private String imageUrl;
     private String productDescription;
+    private String discountAmount;
+    private List<String> labels = new ArrayList<>();
     private List<FormDisplayField> fields = new ArrayList<>();
     private List<MenuItem> menuItems = new ArrayList<>();
     private boolean selected = false;
@@ -158,5 +160,25 @@ public class SellItem implements IItem, Serializable {
     
     public List<MenuItem> getMenuItems() {
         return menuItems;
-    } 
+    }
+
+	public String getDiscountAmount() {
+		return discountAmount;
+	}
+
+	public void setDiscountAmount(String discountAmount) {
+		this.discountAmount = discountAmount;
+	}
+
+	public List<String> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(List<String> labels) {
+		this.labels = labels;
+	} 
+	
+	public void addLabel( String label ) {
+		this.labels.add( label );
+	}
 }

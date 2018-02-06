@@ -160,9 +160,19 @@ export class SessionService {
   }
 
   public onDeviceResponse(deviceResponse: IDeviceResponse) {
-    console.log('Publish deviceResponse ' + deviceResponse);
-    this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
-      JSON.stringify(deviceResponse));
+    const sendResponseBackToServer: Function = () => {
+      console.log('Publish deviceResponse ' + deviceResponse);
+      this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
+        JSON.stringify(deviceResponse));
+    };
+
+    // see if we have any intercepters registered for the type of this deviceResponse
+    // otherwise just send the response
+    if ( this.actionIntercepters.has(deviceResponse.type) ) {
+      this.actionIntercepters.get(deviceResponse.type).intercept(deviceResponse, sendResponseBackToServer);
+    } else {
+      sendResponseBackToServer();
+    }
   }
 
   public async onAction(action: string, payload?: any, confirm?: string) {
@@ -208,9 +218,8 @@ export class SessionService {
   }
 
   private queueLoading() {
-
     this.loading = true;
-    setTimeout(() => this.showLoading(), 100);
+    setTimeout(() => this.showLoading(), 1000);
   }
 
   private showLoading() {
@@ -231,6 +240,10 @@ export class SessionService {
       this.dialog = null;
     } else if (json.type === 'Dialog') {
       this.dialog = json;
+    } else if (json.type === 'Loading') {
+      this.loader.setLoaderText(json.title, json.message);
+      this.queueLoading();
+      return;
     } else if (json.type === 'NoOp') {
       this.response = null;
     } else if (json.type === 'DeviceRequest') {
@@ -266,12 +279,20 @@ export class SessionService {
     this.actionPayloads.clear();
   }
 
+  public unregisterActionPayload(actionName: string) {
+    this.actionPayloads.delete(actionName);
+  }
+
   public registerActionIntercepter( actionName: string, actionIntercepter: ActionIntercepter ) {
     this.actionIntercepters.set( actionName, actionIntercepter );
   }
 
   public unregisterActionIntercepters() {
     this.actionIntercepters.clear();
+  }
+
+  public unregisterActionIntercepter(actionName: string) {
+    this.actionIntercepters.delete(actionName);
   }
 
   public getCurrencyDenomination(): string {
