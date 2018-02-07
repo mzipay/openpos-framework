@@ -24,7 +24,9 @@ export class PromptComponent implements OnInit, AfterViewInit, DoCheck, IScreen 
   }
 
   public ngOnInit(): void {
-    this.submitButtonAction = this.session.screen.actionButton.action;
+    if (this.session.screen.actionButton) {
+      this.submitButtonAction = this.session.screen.actionButton.action;
+    }
   }
 
   ngDoCheck(): void {
