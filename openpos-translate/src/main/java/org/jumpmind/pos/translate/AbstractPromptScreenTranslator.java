@@ -99,16 +99,20 @@ public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> ex
         return responseFieldType;
     }
 
+    protected void handleNextAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action, DefaultScreen screen) {
+        String prompt = (action != null && action.getData() != null) ? action.getData().toString() : null;
+        if (isNotBlank(prompt)) {
+            setScreenResponseText(action.toDataString());
+            tmServer.sendAction(action.getName());
+        } else {
+            super.handleAction(subscriber, tmServer, action, screen);
+        }
+    }
+    
     @Override
     public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action, DefaultScreen screen) {
         if ("Next".equalsIgnoreCase(action.getName())) {
-            String prompt = (action != null && action.getData() != null) ? action.getData().toString() : null;
-            if (isNotBlank(prompt)) {
-                setScreenResponseText(action.toDataString());
-                tmServer.sendAction(action.getName());
-            } else {
-                super.handleAction(subscriber, tmServer, action, screen);
-            }
+            handleNextAction(subscriber, tmServer, action, screen);
         } else {
             super.handleAction(subscriber, tmServer, action, screen);
         }

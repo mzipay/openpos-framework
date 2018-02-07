@@ -54,6 +54,7 @@ import { TransactionComponent } from './screens/transaction/transaction.componen
 import { BasicItemSearchComponent } from './screens/basic-item-search.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
 import { PromptWithOptionsComponent } from './screens/prompt-with-options.component';
+import { PromptWithInfoComponent } from './screens/prompt-with-info.component';
 import { DialogComponent } from './screens/dialog.component';
 import { FormComponent } from './screens/form.component';
 import { HomeComponent } from './screens/home.component';
@@ -97,6 +98,7 @@ import { OverFlowListComponent } from './common/controls/overflow-list/overflow-
     PromptComponent,
     PersonalizationComponent,
     PromptWithOptionsComponent,
+    PromptWithInfoComponent,
     TransactionComponent,
     SellItemDetailComponent,
     SignatureCaptureComponent,
@@ -127,6 +129,7 @@ import { OverFlowListComponent } from './common/controls/overflow-list/overflow-
     LoginComponent,
     ChooseOptionsComponent,
     PromptWithOptionsComponent,
+    PromptWithInfoComponent,
     SignatureCaptureComponent,
     TransactionComponent,
     SellItemDetailComponent,

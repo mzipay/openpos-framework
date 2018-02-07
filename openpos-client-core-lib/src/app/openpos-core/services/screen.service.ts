@@ -18,6 +18,7 @@ import { HomeComponent } from '../screens/home.component';
 import { ItemListComponent } from '../screens/item-list.component';
 import { ChooseOptionsComponent } from '../screens/choose-options.component';
 import { PromptWithOptionsComponent } from '../screens/prompt-with-options.component';
+import { PromptWithInfoComponent } from '../screens/prompt-with-info.component';
 import { StaticTableComponent } from '../screens/static-table.component';
 import { IScreen } from '../common/iscreen';
 import { IDialog } from '../common/idialog';
@@ -41,7 +42,8 @@ export class ScreenService {
 
   private screens = new Map<string, Type<IScreen>>();
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver, private http: HttpClient, private sessionService : SessionService) {
+  constructor(private componentFactoryResolver: ComponentFactoryResolver, private http: HttpClient, 
+    private sessionService: SessionService) {
     // To make a screen available add it here and in entryComponents in the app.module.ts
     this.screens.set('BasicItemSearch', BasicItemSearchComponent);
     this.screens.set('ChooseOptions', ChooseOptionsComponent);
@@ -54,6 +56,7 @@ export class ScreenService {
     this.screens.set('PaymentStatus', PaymentStatusComponent);
     this.screens.set('Prompt', PromptComponent);
     this.screens.set('PromptWithOptions', PromptWithOptionsComponent);
+    this.screens.set('PromptWithInfo', PromptWithInfoComponent);
     this.screens.set('Transaction', TransactionComponent);
     this.screens.set('SellItemDetail', SellItemDetailComponent);
     this.screens.set('SignatureCapture', SignatureCaptureComponent);
@@ -90,10 +93,10 @@ export class ScreenService {
     }
   }
 
-  public getFieldValues(fieldId: string) : Observable<any> {
-    let url : string = this.sessionService.getApiServerBaseURL() + "/app/" 
-                        + this.sessionService.getAppId() + "/node/"
-                        + this.sessionService.getNodeId() + "/control/"
+  public getFieldValues(fieldId: string): Observable<any> {
+    const url: string = this.sessionService.getApiServerBaseURL() + '/app/'
+                        + this.sessionService.getAppId() + '/node/'
+                        + this.sessionService.getNodeId() + '/control/'
                         + fieldId;
 
     return this.http.get(url, {});
