@@ -9,12 +9,18 @@ export class LoaderService {
 
     private loaderSubject = new Subject<LoaderState>();
     private currentLoaderState: LoaderState = { show : false, message:null, title:null};
+    private oneTimeLoaderScreenBlock: boolean = false;
 
     loaderState = this.loaderSubject.asObservable();
 
     constructor() { }
 
     show() {
+        if( this.oneTimeLoaderScreenBlock ){
+            this.oneTimeLoaderScreenBlock = false;
+            return;
+        }
+        
         this.currentLoaderState.show = true;
 
         this.loaderSubject.next(this.currentLoaderState);
@@ -33,5 +39,9 @@ export class LoaderService {
         this.currentLoaderState.title = title;
 
         this.loaderSubject.next( this.currentLoaderState );
+    }
+
+    setOneTimeLoaderScreenBlock(): void {
+        this.oneTimeLoaderScreenBlock = true;
     }
 }
