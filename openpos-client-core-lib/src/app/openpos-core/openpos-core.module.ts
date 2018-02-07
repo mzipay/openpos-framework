@@ -82,6 +82,7 @@ import { Plugin } from 'webpack';
 import { httpInterceptorProviders } from './http-intercepters';
 import { ShowErrorsComponent } from './common/controls/show-errors.component';
 import { RequireAtleastOneValidatorDirective } from './common/validators/require-atleast-one.directive';
+import { OverFlowListComponent } from './common/controls/overflow-list/overflow-list.component';
 
 @NgModule({
   entryComponents: [
@@ -159,7 +160,8 @@ import { RequireAtleastOneValidatorDirective } from './common/validators/require
     ChangeComponent,
     ConfirmationDialogComponent,
     ShowErrorsComponent,
-    RequireAtleastOneValidatorDirective
+    RequireAtleastOneValidatorDirective,
+    OverFlowListComponent
   ],
   imports: [
     BrowserModule,
