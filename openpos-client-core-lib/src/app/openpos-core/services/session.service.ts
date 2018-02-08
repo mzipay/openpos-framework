@@ -242,7 +242,8 @@ export class SessionService {
       this.dialog = json;
     } else if (json.type === 'Loading') {
       this.loader.setLoaderText(json.title, json.message);
-      this.queueLoading();
+      this.loading = true;
+      this.showLoading();
       return;
     } else if (json.type === 'NoOp') {
       this.response = null;
