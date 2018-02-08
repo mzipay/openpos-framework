@@ -179,7 +179,8 @@ import { OverFlowListComponent } from './common/controls/overflow-list/overflow-
     LoaderComponent,
     MaterialModule,
     IconComponent,
-    ScreenDirective
+    ScreenDirective,
+    ReactiveFormsModule
     ],
   providers: [
     HttpClient,
