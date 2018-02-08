@@ -35,6 +35,10 @@
         color:$app-primary;
     }
 
+    .success{
+        color:green;
+    }
+
     mat-card.dark{
         background-color: $app-accent;
         color: white;
