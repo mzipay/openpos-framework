@@ -33,7 +33,7 @@
 		</mat-card-content>
 	</mat-card>
 
-	<app-overflow-list fxFlex="0 0 auto"  *ngIf="session.screen.transaction.transactionNumber" [numberItemsToShow]="'3'" [items]="session.screen.totals" ></app-overflow-list>
+	<app-overflow-list fxFlex="0 0 auto"  *ngIf="session.screen.transaction.transactionNumber" [numberItemsToShow]="overFlowListSize | async" [items]="session.screen.totals" ></app-overflow-list>
 
 	<mat-card *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" color="accent" class="page-content-card dark">
 		<mat-card-content fxLayout="row" fxLayoutAlign="center center" class="text-lg">

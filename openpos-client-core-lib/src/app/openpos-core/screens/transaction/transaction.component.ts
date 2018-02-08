@@ -5,6 +5,9 @@ import { IMenuItem } from '../../common/imenuitem';
 import { Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import { SessionService } from '../../services/session.service';
 import { AbstractApp } from '../../common/abstract-app';
+import { ObservableMedia } from '@angular/flex-layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-transaction',
@@ -16,9 +19,11 @@ export class TransactionComponent implements AfterViewInit, DoCheck, IScreen {
   @ViewChild('box') vc;
   initialized = false;
 
+  public overFlowListSize: Observable<number>;
+
   public items: ISellItem[];
 
-  constructor(public session: SessionService, devices: DeviceService) {
+  constructor(public session: SessionService, devices: DeviceService, private observableMedia: ObservableMedia) {
 
     }
 
@@ -33,6 +38,26 @@ export class TransactionComponent implements AfterViewInit, DoCheck, IScreen {
 
   ngAfterViewInit(): void {
     this.initialized = true;
+
+    const sizeMap = new Map([
+      ['xs', 3],
+      ['sm', 3],
+      ['md', 4],
+      ['lg', 5],
+      ['xl', 5]
+    ]);
+
+    let startSize: number;
+    sizeMap.forEach((size, mqAlias) => {
+      if( this.observableMedia.isActive(mqAlias)){
+        startSize = size;
+      }
+    });
+    this.overFlowListSize = this.observableMedia.asObservable().map(
+      change => {
+        return sizeMap.get(change.mqAlias);
+      }
+    ).startWith(startSize);
   }
 
   public doMenuItemAction(menuItem: IMenuItem, payLoad: any) {
