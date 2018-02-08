@@ -2,6 +2,7 @@ package org.jumpmind.pos.translate;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ProcessBuilder.Redirect;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -188,6 +189,8 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             ProcessBuilder pb = new ProcessBuilder(cmdLine);
             pb.redirectErrorStream(true);
             pb.directory(new File(workingDir));
+            // Redirect subprocess's input stream to this parent process's input stream.
+            pb.redirectInput(Redirect.INHERIT);
             File redirectLogFile = new File(workingDir, "logs/process.log");
             redirectLogFile.getParentFile().mkdirs();
             pb.redirectOutput(redirectLogFile);
