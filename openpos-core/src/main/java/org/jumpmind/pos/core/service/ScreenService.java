@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @CrossOrigin
@@ -175,44 +176,43 @@ public class ScreenService implements IScreenService {
             DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
             if (lastScreen != null && 
                     (lastScreen instanceof FormScreen || lastScreen instanceof DynamicFormScreen)) {
-                Form form = mapper.convertValue(action.getData(), Form.class);
-                if (form != null) { // A form that has display only fields won't
+                HashMap<String,String> formValues = mapper.convertValue(action.getData(), new TypeReference<HashMap<String,String>>(){});
+                if (formValues != null) { // A form that has display only fields won't
                                     // have any data
-                    return populateFormScreen(appId, nodeId, form);
+                    return populateFormScreen(appId, nodeId, formValues);
                 }
             }
         }
         return null;
     }
 
-    protected DefaultScreen populateFormScreen(String appId, String nodeId, Form form) {
+    protected DefaultScreen populateFormScreen(String appId, String nodeId, HashMap<String,String> formValues) {
         DefaultScreen lastScreen = null;
         Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             lastScreen = lastScreenByNodeId.get(nodeId);
-
-            for (IFormElement formElement : form.getFormElements()) {
-                if (formElement instanceof FormField) {
-                    FormField formField = (FormField) formElement;
-                    String fieldId = formField.getId();
-                    if (lastScreen instanceof FormScreen) {
-                        FormScreen formScreen = (FormScreen) lastScreen;
-                        formScreen.setForm(form);
-                    } else if (lastScreen instanceof DynamicFormScreen) {
-                        DynamicFormScreen formScreen = (DynamicFormScreen) lastScreen;
-                        formScreen.setForm(form);
-                    } else {
-                        for (Field field : lastScreen.getClass().getDeclaredFields()) {
-                            FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
-                            if (textFieldAnnotation != null) {
-                                if (field.getName().equals(fieldId)) {
-                                    setFieldValue(field, lastScreen, formField.getValue());
-                                }
+            
+            for( String key : formValues.keySet() ) {        
+                if (lastScreen instanceof FormScreen) {
+                    FormScreen formScreen = (FormScreen) lastScreen;
+                    formScreen.getForm().getFormField(key).setValue(formValues.get(key));
+                } else if (lastScreen instanceof DynamicFormScreen) {
+                    DynamicFormScreen formScreen = (DynamicFormScreen) lastScreen;
+                    formScreen.getForm().getFormField(key).setValue(formValues.get(key));
+                } else {
+    		
+                    for (Field field : lastScreen.getClass().getDeclaredFields()) {
+                        FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
+                        if (textFieldAnnotation != null) {
+                            if (field.getName().equals(key)) {
+                                setFieldValue(field, lastScreen, formValues.get(key));
                             }
                         }
                     }
                 }
             }
+
+
         }
 
         return lastScreen;
