@@ -352,7 +352,13 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
             ILegacyButtonSpec[] buttonSpecs;
             
             if( buttonModel != null ) {
-                buttonSpecs = ((ILegacyButtonSpec[])  ArrayUtils.addAll( localNavSpec.getButtons(), buttonModel.getNewButtons()));
+                // If we have newButtons, replace all buttons in the nav panel with those buttons.  I believe this matches the
+                // logic in vendor specific impl of the GlobalNavigationButtonBean
+                if (buttonModel.getNewButtons() != null && buttonModel.getNewButtons().length > 0) {
+                    buttonSpecs = buttonModel.getNewButtons();
+                } else {
+                    buttonSpecs = ((ILegacyButtonSpec[]) ArrayUtils.addAll(localNavSpec.getButtons(), buttonModel.getNewButtons()));
+                }
             }
             else {
                 buttonSpecs = localNavSpec.getButtons();
@@ -383,7 +389,13 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
                         if (modifyButtonSpecs != null ) {
                             for (ILegacyButtonSpec modifiedSpec : modifyButtonSpecs) {
                                 if (modifiedSpec.getActionName().equals(action)) {
-                                    enabled = modifiedSpec.getEnabled();
+                                    if (modifiedSpec.getEnabledFlag() != null) {
+                                        // Discovered while implementing the GET_AMOUNT_FOR_GIFT_CARD screen that the enabledFlag
+                                        // may be null in the modified spec, which causes getEnabled() to return false.  Hoping
+                                        // that if I only override the enabled value when the enabledFlag is non-null, that
+                                        // it will yield better results.
+                                        enabled = modifiedSpec.getEnabledFlag();
+                                    }
                                     if (isNotBlank(modifiedSpec.getLabel())) {
                                         label = modifiedSpec.getLabel();
                                     }
