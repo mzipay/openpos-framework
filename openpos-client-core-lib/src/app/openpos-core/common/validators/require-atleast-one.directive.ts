@@ -12,20 +12,19 @@ export class RequireAtleastOneValidatorDirective implements Validator {
     validate(form: FormGroup): ValidationErrors {
       if(!this.requiresAtleastOne) return null;
   
-      /*const message = {
+      const message = {
         'requireAtleastOne' : {
           'message': 'Atleast one field is required'
         }
       };
-  
-      for( let control of Object.values(form.controls)){
-        if( control.value != ""){
+ 
+      for( let name of Object.getOwnPropertyNames(form.value)){
+        let value = form.value[name];
+        if( value != ""){
           return null;
         }
       }
   
-      return message;*/
-
-      return null;
+      return message;
     }
 }
