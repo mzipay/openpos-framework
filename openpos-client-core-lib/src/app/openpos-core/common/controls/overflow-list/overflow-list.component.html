@@ -12,7 +12,7 @@
                <span class="super-currency-symbol">$</span>{{total.amount}}</p>
        </mat-card-content>
    </mat-card>
-   <button *ngIf="overflowItems.length > 0" mat-icon-button color="accent" [matMenuTriggerFor]="totalsMenu">
+   <button *ngIf="showOverflowList()" mat-icon-button color="accent" [matMenuTriggerFor]="totalsMenu">
        <mat-icon>more_vert</mat-icon>
    </button>
    <mat-menu #totalsMenu="matMenu" overlapTrigger=false class="overflow-menu-panel" panelClass="overflow-menu-panel">
