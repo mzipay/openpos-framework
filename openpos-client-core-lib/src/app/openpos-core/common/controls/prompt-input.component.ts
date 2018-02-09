@@ -1,5 +1,5 @@
 import { FormControl, Validators, FormGroup, FormGroupDirective, NgForm } from '@angular/forms';
-import { Component, Input, OnInit, ViewChild, Output, EventEmitter, ElementRef, AfterViewInit, AfterContentInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, Output, EventEmitter, AfterContentInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
 import { TextMask, IMaskSpec, ITextMask } from '../textmask';
@@ -10,7 +10,7 @@ import { ErrorStateMatcher } from '@angular/material';
     templateUrl: './prompt-input.component.html'
 })
 
-export class PromptInputComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class PromptInputComponent implements OnInit, AfterContentInit {
     @Input() placeholderText: string;
     @Input() responseType: string;
     @Input() responseText: string;
@@ -20,7 +20,6 @@ export class PromptInputComponent implements OnInit, AfterContentInit, AfterView
     @Input() minLength: number;
     @Input() maxLength: number;
     @Output() enter = new EventEmitter<string>();
-    @ViewChild('box') promptInput : ElementRef;
     @Input() promptFormGroup: FormGroup;
     allowPromptInputValidation = false; // Determines when errors are permitted to be shown or not
     promptInputErrorStateMatcher: PromptInputErrorStateMatcher;
@@ -89,11 +88,6 @@ export class PromptInputComponent implements OnInit, AfterContentInit, AfterView
                 this.dateText = this.responseText;
             }
         }
-    }
-
-    ngAfterViewInit(): void {
-        this.promptInput.nativeElement.focus();
-        this.promptInput.nativeElement.select();
     }
 }
 

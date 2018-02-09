@@ -1,6 +1,8 @@
 <form (ngSubmit)="submitForm()" [formGroup]="form" novalidate fxLayout="column" [requireAtleastOne]="screenForm.requiresAtLeastOneValue" [markDirtyOnSubmit]="form">
   <app-dynamic-form-field *ngFor="let field of screenForm.formElements" [formGroup]="form" [formField]="field"></app-dynamic-form-field>
-  <app-show-errors [control]="form"></app-show-errors>					
+  <mat-error>
+      <app-show-errors [control]="form"></app-show-errors>	
+  </mat-error>				
   <ng-container *ngIf="session.screen.submitAction">
     <div align="end">
       <button type="submit" mat-icon-button>
