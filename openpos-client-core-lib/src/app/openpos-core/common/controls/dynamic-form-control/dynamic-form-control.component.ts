@@ -53,7 +53,9 @@ export class DynamicFormControlComponent implements OnInit {
   submitForm() {
     if (this.form.valid) {
       this.screenForm.formElements.forEach( element => {
-        element.value = this.form.value[element.id];
+        if (element.hasOwnProperty('value')) {
+          element.value = this.form.value[element.id];
+        }
       });
 
       this.session.response = this.screenForm;

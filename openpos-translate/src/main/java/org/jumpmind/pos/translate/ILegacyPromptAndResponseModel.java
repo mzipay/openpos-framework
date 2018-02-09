@@ -6,4 +6,5 @@ public interface ILegacyPromptAndResponseModel {
     public String getMinLength();
     public String getMaxLength();
     public String getResponseText();
+    public String getPromptText();
 }
