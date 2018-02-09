@@ -2,18 +2,27 @@
 
 
 <ng-container *ngIf="formField.elementType==='Input'">
-    <mat-form-field *ngIf="['AlphanumericText', 'NumericText'].indexOf(formField.inputType) >= 0" style="width:100%">
-        <input matInput [formControlName]="formField.id" placeholder="{{getPlaceholderText(formField)}}" [textMask]="getFormFieldMask()">
-    </mat-form-field>
-    <mat-form-field *ngIf="'AlphanumericPassword' === formField.inputType" style="width:100%">
-    <input matInput  [formControlName]="formField.id"  placeholder="{{getPlaceholderText(formField)}}"
-        type="password">
-    </mat-form-field>
 
-    <mat-form-field *ngIf="formField.inputType === 'ComboBox'">
-        <mat-select [formControlName]="formField.id" placeholder="{{getPlaceholderText(formField)}}" (change)="onFormElementChanged(formField, $event)">
-        <mat-option *ngFor="let value of values | async" [value]="value">{{value}}</mat-option>
-        </mat-select>
+    <mat-form-field style="width:100%">
+        <ng-container *ngIf="['AlphanumericText', 'NumericText'].indexOf(formField.inputType) >= 0" >
+            <input matInput [formControlName]="formField.id" placeholder="{{getPlaceholderText(formField)}}" [textMask]="getFormFieldMask()">
+        </ng-container>
+
+        <ng-container *ngIf="'AlphanumericPassword' === formField.inputType">
+            <input matInput  [formControlName]="formField.id"  placeholder="{{getPlaceholderText(formField)}}"
+            type="password">
+        </ng-container>
+
+        <ng-container *ngIf="formField.inputType === 'ComboBox'">
+            <mat-select [formControlName]="formField.id" placeholder="{{getPlaceholderText(formField)}}" (change)="onFormElementChanged(formField, $event)">
+                    <mat-option *ngFor="let value of values | async" [value]="value">{{value}}</mat-option>
+            </mat-select>
+        </ng-container>
+
+        <mat-error>
+            <app-show-errors [control]="formField"></app-show-errors>
+        </mat-error>
+
     </mat-form-field>
 
     <!--We should probably deprectate this since it is only used for the void options screen on biglots and 
@@ -39,5 +48,4 @@
 <ng-container *ngIf="formField.elementType==='Separator'">
     <mat-divider></mat-divider>
 </ng-container>
-<app-show-errors [control]="formGroup.get(formField.id)"></app-show-errors>
 </div>
