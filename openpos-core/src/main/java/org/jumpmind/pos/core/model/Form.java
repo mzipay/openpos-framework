@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class Form implements Serializable {
 
@@ -26,15 +24,7 @@ public class Form implements Serializable {
     public List<IFormElement> getFormElements() {
         return formElements;
     }
-    
-    public List<IField> getFormFields() {
-    		return formElements.stream().filter(isFormField()).map( f -> (IField)f ).collect(Collectors.toList());
-    }
 
-    private static Predicate<IFormElement> isFormField(){
-        return p -> p instanceof IField;
-    }
-    
     public void setFormElements(List<IFormElement> formElements) {
         this.formElements = formElements;
     }
@@ -132,10 +122,6 @@ public class Form implements Serializable {
         
     public IFormElement getFormElement(String elementId) {
         return formElements.stream().filter(f->elementId.equals(f.getId())).findFirst().orElse(null);
-    }
-    
-    public IField getFormField(String elementId ) {
-    		return getFormFields().stream().filter(f->elementId.equals(f.getId())).findFirst().orElse(null);
     }
     
     public void setName(String name) {
