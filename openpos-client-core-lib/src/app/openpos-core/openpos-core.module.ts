@@ -84,6 +84,7 @@ import { ShowErrorsComponent } from './common/controls/show-errors.component';
 import { RequireAtleastOneValidatorDirective } from './common/validators/require-atleast-one.directive';
 import { OverFlowListComponent } from './common/controls/overflow-list/overflow-list.component';
 import { DynamicFormFieldComponent } from './common/controls/dynamic-form-field/dynamic-form-field.component';
+import { MarkDirtyOnSubmit } from './common/mark-dirty-onSubmit.directive';
 
 @NgModule({
   entryComponents: [
@@ -164,6 +165,7 @@ import { DynamicFormFieldComponent } from './common/controls/dynamic-form-field/
     ConfirmationDialogComponent,
     ShowErrorsComponent,
     RequireAtleastOneValidatorDirective,
+    MarkDirtyOnSubmit,
     OverFlowListComponent
   ],
   imports: [
