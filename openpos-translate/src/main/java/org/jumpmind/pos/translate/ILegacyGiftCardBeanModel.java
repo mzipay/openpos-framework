@@ -5,5 +5,6 @@ import java.math.BigDecimal;
 public interface ILegacyGiftCardBeanModel {
     String getGiftCardNumber();
     BigDecimal getGiftCardAmount();
-    public String getGiftCardAmountLabel();
+    String getGiftCardAmountLabel();
+    void setGiftCardAmount(BigDecimal amount);
 }
