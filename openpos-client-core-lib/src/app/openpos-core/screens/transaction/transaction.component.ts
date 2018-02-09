@@ -2,7 +2,7 @@ import { DeviceService } from '../../services/device.service';
 import { ISellItem } from '../../common/isellitem';
 import { IScreen } from '../../common/iscreen';
 import { IMenuItem } from '../../common/imenuitem';
-import { Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
+import { Component, ViewChild, AfterViewInit, AfterContentInit, DoCheck, OnInit} from '@angular/core';
 import { SessionService } from '../../services/session.service';
 import { AbstractApp } from '../../common/abstract-app';
 import { ObservableMedia } from '@angular/flex-layout';
@@ -14,7 +14,8 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './transaction.component.html',
   styleUrls: ['./transaction.component.scss']
 })
-export class TransactionComponent implements AfterViewInit, DoCheck, IScreen {
+export class TransactionComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
+
 
   @ViewChild('box') vc;
   initialized = false;
@@ -36,9 +37,7 @@ export class TransactionComponent implements AfterViewInit, DoCheck, IScreen {
     }
   }
 
-  ngAfterViewInit(): void {
-    this.initialized = true;
-
+  ngOnInit(): void {
     const sizeMap = new Map([
       ['xs', 3],
       ['sm', 3],
@@ -47,7 +46,7 @@ export class TransactionComponent implements AfterViewInit, DoCheck, IScreen {
       ['xl', 5]
     ]);
 
-    let startSize: number;
+    let startSize: number = 3;
     sizeMap.forEach((size, mqAlias) => {
       if( this.observableMedia.isActive(mqAlias)){
         startSize = size;
@@ -58,6 +57,11 @@ export class TransactionComponent implements AfterViewInit, DoCheck, IScreen {
         return sizeMap.get(change.mqAlias);
       }
     ).startWith(startSize);
+  }
+
+
+  ngAfterViewInit(): void {
+    this.initialized = true;
   }
 
   public doMenuItemAction(menuItem: IMenuItem, payLoad: any) {
