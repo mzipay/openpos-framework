@@ -13,7 +13,6 @@ export class AutoSelectOnFocus {
     }
 
     onFocus($event: Event){
-        //this.element.nativeElement.select()
         setTimeout(() => this.element.nativeElement.select(), 100);
     }
 }
