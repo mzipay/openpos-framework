@@ -140,6 +140,8 @@ public class Form implements Serializable {
         return requiresAtLeastOneValue;
     }
     
+    // TODO: Move this off the form and onto the element. 
+    // This means different things to different elements. 
     public String getString(String id) {
         for (IFormElement element : formElements) {
             if (element.getId().equals(id)) {
@@ -149,7 +151,6 @@ public class Form implements Serializable {
             }
         }
         return null;
-        
     }
     
 }
