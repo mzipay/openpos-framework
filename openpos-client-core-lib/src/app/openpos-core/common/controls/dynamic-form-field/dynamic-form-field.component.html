@@ -19,15 +19,14 @@
             </mat-select>
         </ng-container>
 
+        <ng-container *ngIf="formField.inputType === 'TextArea'">
+            <textarea style="width:50%" [value]="formField.value" [name]="formField.id" placeholder="{{getPlaceholderText(formField)}}" 
+                matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled"></textarea>
+        </ng-container>
+        
         <mat-error>
             <app-show-errors [control]="formField"></app-show-errors>
         </mat-error>
-
-    </mat-form-field>
-
-    <mat-form-field *ngIf="formField.inputType === 'TextArea'" style="width:50%">
-      <textarea [value]="formField.value" [name]="formField.id" placeholder="{{getPlaceholderText(formField)}}" 
-        matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled"></textarea>
     </mat-form-field>
 
     <!--We should probably deprectate this since it is only used for the void options screen on biglots and 
@@ -45,8 +44,8 @@
 
 <ng-container *ngIf="formField.elementType==='Display'">
     <mat-form-field style="width:100%">
-    <label class="prompt-text">{{formField.label}}</label>
-    <input [value]="formField.value" [name]="formField.id" matInput disabled>
+        <label class="prompt-text">{{formField.label}}</label>
+        <input [value]="formField.value" [name]="formField.id" matInput disabled>
     </mat-form-field>
 </ng-container>
 
