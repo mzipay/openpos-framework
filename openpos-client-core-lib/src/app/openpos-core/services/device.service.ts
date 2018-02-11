@@ -1,3 +1,4 @@
+import { DEVICE_ERROR_RESPONSE_TYPE, DEVICE_RESPONSE_TYPE, DEVICE_DNE_RESPONSE_TYPE } from './../common/ideviceresponse';
 import { IDevicePlugin } from './../common/idevice-plugin';
 import { PluginService } from './plugin.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -68,7 +69,7 @@ export class DeviceService {
           saveHistory: false, // Android, save scan history (default false)
           prompt: 'Place a barcode inside the scan area', // Android
           resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-          formats: 'CODE_128,EAN_8,EAN_13,UPC_A,UPC_E', // default: all but PDF_417 and RSS_EXPANDED
+          formats: 'CODE_128,CODE_39,EAN_8,EAN_13,UPC_A,UPC_E,QR_CODE,DATA_MATRIX', // default: all but PDF_417 and RSS_EXPANDED
           orientation: 'landscape', // Android only (portrait|landscape), default unset so it rotates with the device
           disableAnimations: false, // iOS
           disableSuccessBeep: false // iOS and Android
@@ -93,7 +94,7 @@ export class DeviceService {
             this.session.onDeviceResponse( {
                 requestId: request.requestId,
                 deviceId: request.deviceId,
-                type: 'DeviceResponse',
+                type: DEVICE_RESPONSE_TYPE,
                 payload: response
               }
             );
@@ -102,7 +103,7 @@ export class DeviceService {
               this.session.onDeviceResponse( {
                   requestId: request.requestId,
                   deviceId: request.deviceId,
-                  type: 'DeviceErrorResponse',
+                  type: DEVICE_ERROR_RESPONSE_TYPE,
                   payload: error
                 }
               );
@@ -112,11 +113,11 @@ export class DeviceService {
     ).catch( (error) => {
         const msg = 'No handling yet (or plugin may not be initialized) for ' +
           `device/plugin with key: ${pluginLookupKey}. request '${request.subType}:${request.requestId}' will be ignored. Error: ${error}`;
-		
+
         this.session.onDeviceResponse( {
             requestId: request.requestId,
             deviceId: request.deviceId,
-            type: 'DeviceErrorResponse',
+            type: DEVICE_DNE_RESPONSE_TYPE,
             payload: msg
           }
         );

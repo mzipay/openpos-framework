@@ -160,10 +160,20 @@ export class SessionService {
   }
 
   public onDeviceResponse(deviceResponse: IDeviceResponse) {
-    console.log('Publish deviceResponse ' + deviceResponse);
-    this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
-      JSON.stringify(deviceResponse));
-}
+    const sendResponseBackToServer: Function = () => {
+      console.log('Publish deviceResponse ' + deviceResponse);
+      this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
+        JSON.stringify(deviceResponse));
+    };
+
+    // see if we have any intercepters registered for the type of this deviceResponse
+    // otherwise just send the response
+    if ( this.actionIntercepters.has(deviceResponse.type) ) {
+      this.actionIntercepters.get(deviceResponse.type).intercept(deviceResponse, sendResponseBackToServer);
+    } else {
+      sendResponseBackToServer();
+    }
+  }
 
   public async onAction(action: string, payload?: any, confirm?: string) {
     if ( confirm ) {
@@ -171,7 +181,7 @@ export class SessionService {
       const dialogRef = this.dialogService.open( ConfirmationDialogComponent, { disableClose: true});
       dialogRef.componentInstance.title = confirm;
       const result = await dialogRef.afterClosed().toPromise();
-      
+
       // if we didn't confirm return and don't send the action to the server
       if ( !result ) {
         console.log('Canceling action');
@@ -232,7 +242,8 @@ export class SessionService {
       this.dialog = json;
     } else if (json.type === 'Loading') {
       this.loader.setLoaderText(json.title, json.message);
-      this.queueLoading();
+      this.loading = true;
+      this.showLoading();
       return;
     } else if (json.type === 'NoOp') {
       this.response = null;
@@ -269,12 +280,20 @@ export class SessionService {
     this.actionPayloads.clear();
   }
 
+  public unregisterActionPayload(actionName: string) {
+    this.actionPayloads.delete(actionName);
+  }
+
   public registerActionIntercepter( actionName: string, actionIntercepter: ActionIntercepter ) {
     this.actionIntercepters.set( actionName, actionIntercepter );
   }
 
   public unregisterActionIntercepters() {
     this.actionIntercepters.clear();
+  }
+
+  public unregisterActionIntercepter(actionName: string) {
+    this.actionIntercepters.delete(actionName);
   }
 
   public getCurrencyDenomination(): string {

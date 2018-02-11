@@ -8,11 +8,11 @@ public interface IPromptScreen {
     public static final String TYPE_DATE = "DATE";
     public static final String TYPE_ONOFF = "ONOFF";
 
-    public int getMinLength();
-    public void setMinLength(int minLength);
+    public Integer getMinLength();
+    public void setMinLength(Integer minLength);
 
-    public int getMaxLength();
-    public void setMaxLength(int maxLength);
+    public Integer getMaxLength();
+    public void setMaxLength(Integer maxLength);
 
     public String getPromptIcon();
     public void setPromptIcon(String promptIcon);

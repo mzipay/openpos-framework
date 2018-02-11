@@ -3,6 +3,8 @@ package org.jumpmind.pos.core.screen;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jumpmind.pos.core.model.Total;
+
 public class SellItemScreen extends PromptScreen {
 
     private static final long serialVersionUID = 1L;
@@ -17,6 +19,7 @@ public class SellItemScreen extends PromptScreen {
     private String itemActionName = "Item";
     private Transaction transaction = new Transaction();
     private Customer customer;
+    private List<Total> totals = new ArrayList<>();
     
     private List<MenuItem> transactionMenuItems = new ArrayList<>();
 
@@ -111,4 +114,16 @@ public class SellItemScreen extends PromptScreen {
     public List<MenuItem> getTransactionMenuItems() {
         return transactionMenuItems;
     }
+
+	public List<Total> getTotals() {
+		return totals;
+	}
+
+	public void setTotals(List<Total> totals) {
+		this.totals = totals;
+	}
+	
+	public void addTotal(String name, String amount) {
+		this.totals.add(new Total(name, amount ));
+	}
 }

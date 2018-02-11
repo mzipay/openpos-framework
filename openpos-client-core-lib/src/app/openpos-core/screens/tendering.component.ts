@@ -1,6 +1,6 @@
 import { IMenuItem } from './../common/imenuitem';
 import { IItem } from './../common/iitem';
-import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, DoCheck, OnInit, OnDestroy } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';

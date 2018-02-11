@@ -4,7 +4,6 @@
 
 @mixin app-theme($theme) {
 
-
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));
     $app-accent-lighter: mat-color(map-get($theme, accent), lighter);
@@ -34,6 +33,10 @@
 
     .primary{
         color:$app-primary;
+    }
+
+    .success{
+        color:green;
     }
 
     mat-card.dark{
@@ -91,4 +94,9 @@
         background: $app-accent-lighter;
         color: white;
     }
+    
+    .overflow-menu-panel{
+        background: transparent;
+        box-shadow: unset;
+    } 
 }

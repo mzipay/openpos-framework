@@ -2,9 +2,12 @@
 fxLayout="column" fxLayoutAlign="center center">
     <mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
         <mat-card-content>
-            <app-prompt-input #promptInput [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType" [responseText]="session.screen.responseText"
-                [promptIcon]="session.screen.promptIcon" [hintText]="promptText"></app-prompt-input>
-
+            <form [formGroup]="promptFormGroup">
+                <app-prompt-input #promptInput [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType" 
+                    [responseText]="session.screen.responseText" [promptIcon]="session.screen.promptIcon" [hintText]="promptText" 
+                    [maskSpec]="session.screen.promptMask" [minLength]="session.screen.minLength" [maxLength]="session.screen.maxLength"
+                    [promptFormGroup]="promptFormGroup"></app-prompt-input>
+            </form>
         </mat-card-content>
         <mat-card-actions>
             <mat-nav-list>

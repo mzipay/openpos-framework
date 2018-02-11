@@ -54,6 +54,7 @@ import { TransactionComponent } from './screens/transaction/transaction.componen
 import { BasicItemSearchComponent } from './screens/basic-item-search.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
 import { PromptWithOptionsComponent } from './screens/prompt-with-options.component';
+import { PromptWithInfoComponent } from './screens/prompt-with-info.component';
 import { DialogComponent } from './screens/dialog.component';
 import { FormComponent } from './screens/form.component';
 import { HomeComponent } from './screens/home.component';
@@ -79,6 +80,12 @@ import { SellComponent } from './templates/sell/sell.component';
 import { MaterialModule } from './material.module';
 import { Plugin } from 'webpack';
 import { httpInterceptorProviders } from './http-intercepters';
+import { ShowErrorsComponent } from './common/controls/show-errors.component';
+import { RequireAtleastOneValidatorDirective } from './common/validators/require-atleast-one.directive';
+import { OverFlowListComponent } from './common/controls/overflow-list/overflow-list.component';
+import { DynamicFormFieldComponent } from './common/controls/dynamic-form-field/dynamic-form-field.component';
+import { MarkDirtyOnSubmit } from './common/mark-dirty-onSubmit.directive';
+import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
 
 @NgModule({
   entryComponents: [
@@ -94,6 +101,7 @@ import { httpInterceptorProviders } from './http-intercepters';
     PromptComponent,
     PersonalizationComponent,
     PromptWithOptionsComponent,
+    PromptWithInfoComponent,
     TransactionComponent,
     SellItemDetailComponent,
     SignatureCaptureComponent,
@@ -109,6 +117,7 @@ import { httpInterceptorProviders } from './http-intercepters';
     TillCountOtherTenderComponent,
     DynamicFormComponent,
     DynamicFormControlComponent,
+    DynamicFormFieldComponent,
     ChangeComponent,
     ConfirmationDialogComponent
   ],
@@ -124,6 +133,7 @@ import { httpInterceptorProviders } from './http-intercepters';
     LoginComponent,
     ChooseOptionsComponent,
     PromptWithOptionsComponent,
+    PromptWithInfoComponent,
     SignatureCaptureComponent,
     TransactionComponent,
     SellItemDetailComponent,
@@ -150,9 +160,15 @@ import { httpInterceptorProviders } from './http-intercepters';
     TillCountComponent,
     TillCountOtherTenderComponent,
     DynamicFormControlComponent,
+    DynamicFormFieldComponent,
     PosComponent,
     ChangeComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    ShowErrorsComponent,
+    RequireAtleastOneValidatorDirective,
+    MarkDirtyOnSubmit,
+    AutoSelectOnFocus,
+    OverFlowListComponent
   ],
   imports: [
     BrowserModule,
@@ -170,7 +186,8 @@ import { httpInterceptorProviders } from './http-intercepters';
     LoaderComponent,
     MaterialModule,
     IconComponent,
-    ScreenDirective
+    ScreenDirective,
+    ReactiveFormsModule
     ],
   providers: [
     HttpClient,

@@ -1,64 +1,13 @@
-  <ng-container *ngIf="formField.elementType==='Input'">
-
-    <mat-form-field *ngIf="['AlphanumericText', 'NumericText'].indexOf(formField.inputType) >= 0" style="width:100%">
-      <input matInput [(ngModel)]="formField.value" ngModel [name]="formField.id" #field="ngModel" placeholder="{{getPlaceholderText(formField)}}"
-        [pattern]="formField.pattern" [required]="formField.required" [textMask]="getFormFieldMask(formField)">
-      <ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
-        <mat-error div *ngIf="field.errors.required">
-          * is required.
-        </mat-error>
-        <mat-error *ngIf="field.errors.pattern">
-          * did not follow the designated pattern
-        </mat-error>
-      </ng-container>
-    </mat-form-field>
-
-    <mat-form-field *ngIf="'AlphanumericPassword' === formField.inputType" style="width:100%">
-      <input matInput [(ngModel)]="formField.value" ngModel [name]="formField.id" #field="ngModel" placeholder="{{getPlaceholderText(formField)}}" [required]="formField.required"
-        type="password" (change)="onformFieldChanged(formField, $event)">
-      <ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
-        <mat-error div *ngIf="field.errors.required">
-          * is required.
-        </mat-error>
-      </ng-container>
-    </mat-form-field>
-
-    <mat-form-field *ngIf="formField.inputType === 'ComboBox'">
-        <mat-select  #field="ngModel" ngModel [name]="formField.id" [(ngModel)]="formField.value" placeholder="{{getPlaceholderText(formField)}}" [required]="formField.required"
-          (change)="onFormElementChanged(formField, $event)">
-          <mat-option *ngFor="let value of values | async" [value]="value">{{value}}</mat-option>
-        </mat-select>
-        <ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
-          <mat-error div *ngIf="field.errors.required">
-            * is required.
-          </mat-error>
-        </ng-container>
-    </mat-form-field>
-
-    <mat-form-field *ngIf="formField.inputType === 'TextArea'" style="width:50%">
-      <textarea [value]="formField.value" [name]="formField.id" placeholder="{{getPlaceholderText(formField)}}" 
-        matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled"></textarea>
-    </mat-form-field>
-
-    <ng-container *ngIf="formField.inputType === 'SubmitOptionList'">
-      <label class="prompt-text">{{formField.label}}</label>
-      <mat-nav-list>
-        <mat-list-item *ngFor="let value of values | async; let valueIndex=index" (click)="onSubmitOptionSelected(formField, valueIndex, $event)"
-          style="border-color: black">{{value}}
-          <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
-        </mat-list-item>
-      </mat-nav-list>
-    </ng-container>	
-
+<form (ngSubmit)="submitForm()" [formGroup]="form" novalidate fxLayout="column" [requireAtleastOne]="screenForm.requiresAtLeastOneValue" [markDirtyOnSubmit]="form">
+  <app-dynamic-form-field *ngFor="let field of screenForm.formElements" [formGroup]="form" [formField]="field"></app-dynamic-form-field>
+  <mat-error>
+      <app-show-errors [control]="form"></app-show-errors>	
+  </mat-error>				
+  <ng-container *ngIf="session.screen.submitAction">
+    <div align="end">
+      <button type="submit" mat-icon-button>
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
   </ng-container>
-
-  <ng-container *ngIf="formField.elementType==='Display'">
-    <mat-form-field style="width:100%">
-      <label class="prompt-text">{{formField.label}}</label>
-      <input [value]="formField.value" [name]="formField.id" matInput disabled>
-    </mat-form-field>
-  </ng-container>
-
-  <ng-container *ngIf="formField.elementType==='Separator'">
-    <mat-divider></mat-divider>
-  </ng-container>
+</form>

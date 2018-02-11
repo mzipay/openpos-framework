@@ -271,6 +271,8 @@ public abstract class WrapperService {
                     System.exit(code);
                 }
             }.start();
+        } else {
+        	logger.log(Level.INFO, "Shutdown was requested, but it should have already been shutdown");
         }
     }
 
@@ -319,6 +321,7 @@ public abstract class WrapperService {
         String quote = getWrapperCommandQuote();
         cmd.add(quote + config.getJavaCommand() + quote);
         cmd.add("-Djava.io.tmpdir=" + quote + System.getProperty("java.io.tmpdir") + quote);
+        cmd.add("-Duser.dir=" + quote + System.getProperty("user.dir") + quote);
         cmd.add("-jar");
         cmd.add(quote + config.getWrapperJarPath() + quote);
         cmd.add(arg);

@@ -2,60 +2,38 @@
 	<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
 		<mat-card-content>
 			<mat-list class="list-seperator" ngClass.xs="xs">
-					<mat-list-item *ngFor="let item of items">
-						<p matLine>{{item.description}}</p>
-            <p matLine class="accent-lighter">{{item.subtitle}}</p>
-            <span [hidden]="!item.isGiftReceipt"><mat-icon color="accent-lighter">redeem</mat-icon></span>
-						<span class="primary text-md">{{item.amount|currency:'USD':true:'1.2'}}</span>
-						<button mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
-							<mat-icon>expand_more</mat-icon>
-						</button>
-						<mat-menu #itemMenu="matMenu">
-							<button mat-menu-item *ngFor="let m of item.menuItems" (click)="doMenuItemAction(m, item.index)"
+				<mat-list-item *ngFor="let item of items">
+					<p matLine>{{item.description}}</p>
+					<p matLine class="accent-lighter">
+						<mat-chip-list>
+							{{item.subtitle}}&nbsp;
+							<mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
+						</mat-chip-list>
+					</p>
+
+            		<span [hidden]="!item.isGiftReceipt"><mat-icon color="accent-lighter">redeem</mat-icon></span>
+					<span class="primary text-md">{{item.amount|currency:'USD':true:'1.2'}}<br>
+						<p [hidden]="item.discountAmount != null" class="accent-lighter text-xs" style="text-align: right; margin:0px">-{{item.discountAmount|currency:'USD':true:'1.2'}}</p></span>
+					<button mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
+						<mat-icon>expand_more</mat-icon>
+					</button>
+					<mat-menu #itemMenu="matMenu">
+						<button mat-menu-item *ngFor="let m of item.menuItems" (click)="doMenuItemAction(m, item.index)"
 							[disabled]="!isMenuItemEnabled(m)">
 							<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
 							<span [ngClass]="{'accent-lighter': ! m.enabled}">{{m.title}}</span>
-							</button>
-						</mat-menu>
-					</mat-list-item>
-				</mat-list>
-				<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center">
-					<mat-icon color="accent-lighter" ngClass="material-icons mat-180" ngClass="material-icons mat-128" svgIcon="barcode"></mat-icon>
-					<span class="text-md">Scan something to get started.</span>
-				</div>
+						</button>
+					</mat-menu>
+				</mat-list-item>
+			</mat-list>
+			<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center">
+				<mat-icon color="accent-lighter" ngClass="material-icons mat-180" ngClass="material-icons mat-128" svgIcon="barcode"></mat-icon>
+				<span class="text-md">Scan something to get started.</span>
+			</div>
 		</mat-card-content>
 	</mat-card>
 
-	<div *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center center"
-	 fxLayoutGap="6px">
-		<mat-card fxFlex class="page-content-card text-center">
-			<mat-card-title class="accent-lighter text-sm">
-				Discounts
-			</mat-card-title>
-			<mat-card-content>
-				<p class="accent-lighter text-lg">
-					<span class="super-currency-symbol">$</span>{{session.screen.discountTotal}}</p>
-			</mat-card-content>
-		</mat-card>
-		<mat-card fxFlex class="page-content-card  text-center">
-			<mat-card-title class="accent-lighter text-sm">
-				Tax
-			</mat-card-title>
-			<mat-card-content>
-				<p class="accent-lighter  text-lg">
-					<span class="super-currency-symbol">$</span>{{session.screen.taxTotal}}</p>
-			</mat-card-content>
-		</mat-card>
-		<mat-card fxFlex class="page-content-card text-center">
-			<mat-card-title class="accent-lighter text-sm">
-				Subtotal
-			</mat-card-title>
-			<mat-card-content>
-				<p class="accent-lighter text-lg">
-					<span class="super-currency-symbol">$</span>{{session.screen.subTotal}}</p>
-			</mat-card-content>
-		</mat-card>
-	</div>
+	<app-overflow-list fxFlex="0 0 auto"  *ngIf="session.screen.transaction.transactionNumber" [numberItemsToShow]="overFlowListSize | async" [items]="session.screen.totals" ></app-overflow-list>
 
 	<mat-card *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" color="accent" class="page-content-card dark">
 		<mat-card-content fxLayout="row" fxLayoutAlign="center center" class="text-lg">

@@ -13,11 +13,13 @@ public class ServiceWrapper {
 
     public static void main(String[] args) throws Exception {
 
-        String configFileName = "config/openpos_service.conf";
-
-        String appHomeDir = getHomeDir();
-
-        WrapperHelper.run(args, appHomeDir, appHomeDir + File.separator + configFileName, "../lib/openpos-wrapper.jar");
+    	String configFileName = null;
+    	if (args.length >= 2) {
+    		configFileName = args[1];
+    	} else {
+    		configFileName = getHomeDir() + File.separator + "config/openpos_service.conf";
+    	}
+        WrapperHelper.run(args, getHomeDir(), configFileName, "../lib/openpos-wrapper.jar");
     }
 
 

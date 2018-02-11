@@ -1,7 +1,10 @@
 package org.jumpmind.pos.translate;
 
 public interface ILegacyUIUtilities {
-    public String retrieveCommonText(String propName, String defaultValue);
+    String retrieveCommonText(String propName, String defaultValue);
 
-    public String retrieveCommonText(String propName);
+    String retrieveCommonText(String propName);
+
+    String retrieveText(String specName, String bundleName, String propName);
+    String retrieveText(String specName, String bundleName, String propName, String defaultValue);
 }

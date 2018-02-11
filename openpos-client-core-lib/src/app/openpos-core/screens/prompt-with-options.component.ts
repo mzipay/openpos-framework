@@ -1,3 +1,4 @@
+import { FormGroup, FormControl } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { ChooseOptionsComponent } from './choose-options.component';
@@ -8,6 +9,9 @@ import { PromptInputComponent } from '../common/controls/prompt-input.component'
 })
 export class PromptWithOptionsComponent extends ChooseOptionsComponent implements OnInit {
   @ViewChild(PromptInputComponent)  promptInput: PromptInputComponent;
+  promptFormGroup = new FormGroup({
+    promptInputControl: new FormControl('promptInputControl')
+  });
 
   constructor(public session: SessionService) {
     super(session);

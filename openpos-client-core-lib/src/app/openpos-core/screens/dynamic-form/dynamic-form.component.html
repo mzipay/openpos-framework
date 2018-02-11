@@ -4,24 +4,9 @@
 			<mat-card-content fxFlex="1 1 auto">
 				<div class="pad">
 
-					<form #form="ngForm" (ngSubmit)="submitForm(form)" novalidate fxLayout="column" >
-						<!-- Do we need to set the full from and submitAction anymore if we are only setting formElements in the control? -->
-						<app-dynamic-form-control *ngFor="let formField of session.screen.form.formElements"
-							[screenForm]="session.screen.form" [submitAction]="session.screen.submitAction"
-							[formField]="formField"></app-dynamic-form-control>
-
-						<mat-error *ngIf="requiresAtLeastOneField()">
-							* requires at least one field to be filled out
-						</mat-error>
-					
-						<ng-container *ngIf="session.screen.submitAction">
-							<div align="end">
-								<button type="submit" mat-icon-button>
-									<mat-icon>arrow_forward</mat-icon>
-								</button>
-							</div>
-						</ng-container>
-					</form>
+					<app-dynamic-form-control
+						[screenForm]="session.screen.form" [submitAction]="session.screen.submitAction">
+					</app-dynamic-form-control>
 
 				</div>
 			</mat-card-content>

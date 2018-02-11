@@ -2,6 +2,7 @@ package org.jumpmind.pos.translate;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ProcessBuilder.Redirect;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -47,7 +48,6 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
 
     @Value("${library.path}")
     private String libraryPath;
-
     
     private int externalProcessCount = 0;
 
@@ -189,6 +189,8 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             ProcessBuilder pb = new ProcessBuilder(cmdLine);
             pb.redirectErrorStream(true);
             pb.directory(new File(workingDir));
+            // Redirect subprocess's input stream to this parent process's input stream.
+            pb.redirectInput(Redirect.INHERIT);
             File redirectLogFile = new File(workingDir, "logs/process.log");
             redirectLogFile.getParentFile().mkdirs();
             pb.redirectOutput(redirectLogFile);
@@ -203,7 +205,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             logger.info("Started process for {}", file.getName());
             if (process.isAlive()) {
                 logger.info("Getting rmi interface for {}", file.getName());
-                final int MAX_TRIES = 30;
+                final int MAX_TRIES = 120;
                 for (int i = 0; i < MAX_TRIES; i++) {
                     try {
                         RmiProxyFactoryBean factory = new RmiProxyFactoryBean();
@@ -221,6 +223,8 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
                             logger.info("The remote interface was not available.  Trying again in a second");
                         } else if (i == MAX_TRIES-1) {
                             logger.warn("Failed to established a connection with the remote interface for {}:{}", storeId, workingDir);
+                            process.destroy();
+                            break;
                         }
                         Thread.sleep(1000);
                     }
