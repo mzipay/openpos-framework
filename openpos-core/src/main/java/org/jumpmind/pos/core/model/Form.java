@@ -112,6 +112,24 @@ public class Form implements Serializable {
         return formField;
     }
     
+    public FormField getTextField(String fieldId) {
+        IFormElement formElement = this.getFormElement(fieldId);
+        if (formElement != null && formElement instanceof FormField) {
+            return (FormField) formElement;
+        }
+        
+        return null;
+    }
+
+    public ComboField getComboField(String fieldId) {
+        IFormElement formElement = this.getFormElement(fieldId);
+        if (formElement != null && formElement instanceof ComboField) {
+            return (ComboField) formElement;
+        }
+        
+        return null;
+    }
+    
     public void addSeparator() {
         formElements.add(new FormDisplayField(FieldElementType.Separator));
     }
