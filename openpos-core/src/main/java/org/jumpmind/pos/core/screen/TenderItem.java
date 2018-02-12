@@ -38,24 +38,22 @@ public class TenderItem implements IItem, Serializable {
 
     @Override
     public String getDescription() {
-        // Not implemented
-        return "";
+        return this.getType();
     }
 
     @Override
     public void setDescription(String description) {
-        // Not implemented
+        this.setType(description);
     }
 
     @Override
     public String getSubtitle() {
-        // Not implemented
-        return "";
+        return this.getNumber();
     }
 
     @Override
     public void setSubtitle(String subtitle) {
-        // Not implemented
+        this.setNumber(subtitle);
     }
 
     @Override
