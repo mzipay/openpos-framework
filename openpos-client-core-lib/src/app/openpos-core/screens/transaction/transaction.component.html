@@ -13,7 +13,9 @@
 
             		<span [hidden]="!item.isGiftReceipt"><mat-icon color="accent-lighter">redeem</mat-icon></span>
 					<span class="primary text-md">{{item.amount|currency:'USD':true:'1.2'}}<br>
-						<p [hidden]="item.discountAmount != null" class="accent-lighter text-xs" style="text-align: right; margin:0px">-{{item.discountAmount|currency:'USD':true:'1.2'}}</p></span>
+						<p [hidden]="item.discountAmount === '0.00'" class="accent-lighter text-xs" style="text-align: right; margin:0px; text-decoration:line-through">{{item.originalAmount|currency:'USD':true:'1.2'}}</p>
+						<p [hidden]="item.discountAmount === '0.00'" class="accent-lighter text-xs" style="text-align: right; margin:0px">( -{{item.discountAmount|currency:'USD':true:'1.2'}} )</p>
+					</span>
 					<button mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
 						<mat-icon>expand_more</mat-icon>
 					</button>

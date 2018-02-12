@@ -15,6 +15,7 @@ public class SellItem implements IItem, Serializable {
     private String posItemId;
     private String description;
     private String amount;
+    private String originalAmount;
     private String sellingPrice;
     private String quantity;
     private String imageUrl;
@@ -169,6 +170,14 @@ public class SellItem implements IItem, Serializable {
 	public void setDiscountAmount(String discountAmount) {
 		this.discountAmount = discountAmount;
 	}
+    
+    public String getOriginalAmount() {
+    	return this.originalAmount;
+    }
+    
+    public void setOriginalAmount(String originalAmount) {
+    	this.originalAmount = originalAmount;
+    }
 
 	public List<String> getLabels() {
 		return labels;
