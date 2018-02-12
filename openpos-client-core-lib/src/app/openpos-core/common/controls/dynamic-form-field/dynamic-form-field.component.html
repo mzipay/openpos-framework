@@ -1,55 +1,57 @@
 <div [formGroup]="formGroup">
 
+    <ng-container *ngIf="formField.elementType==='Input'">
 
-<ng-container *ngIf="formField.elementType==='Input'">
+        <mat-form-field style="width:100%">
+            <ng-container *ngIf="['AlphanumericText', 'NumericText'].indexOf(formField.inputType) >= 0" >
+                <input matInput [formControlName]="formField.id" placeholder="{{getPlaceholderText(formField)}}" [textMask]="getFormFieldMask()">
+            </ng-container>
 
-    <mat-form-field style="width:100%">
-        <ng-container *ngIf="['AlphanumericText', 'NumericText'].indexOf(formField.inputType) >= 0" >
-            <input matInput [formControlName]="formField.id" placeholder="{{getPlaceholderText(formField)}}" [textMask]="getFormFieldMask()">
-        </ng-container>
+            <ng-container *ngIf="'AlphanumericPassword' === formField.inputType">
+                <input matInput  [formControlName]="formField.id"  placeholder="{{getPlaceholderText(formField)}}"
+                type="password">
+            </ng-container>
 
-        <ng-container *ngIf="'AlphanumericPassword' === formField.inputType">
-            <input matInput  [formControlName]="formField.id"  placeholder="{{getPlaceholderText(formField)}}"
-            type="password">
-        </ng-container>
+            <ng-container *ngIf="formField.inputType === 'ComboBox'">
+                <mat-select [formControlName]="formField.id" placeholder="{{getPlaceholderText(formField)}}" (change)="onFormElementChanged(formField, $event)">
+                        <mat-option *ngFor="let value of values | async" [value]="value">{{value}}</mat-option>
+                </mat-select>
+            </ng-container>
 
-        <ng-container *ngIf="formField.inputType === 'ComboBox'">
-            <mat-select [formControlName]="formField.id" placeholder="{{getPlaceholderText(formField)}}" (change)="onFormElementChanged(formField, $event)">
-                    <mat-option *ngFor="let value of values | async" [value]="value">{{value}}</mat-option>
-            </mat-select>
-        </ng-container>
+            <ng-container *ngIf="formField.inputType === 'TextArea'">
+                <textarea style="width:50%" [value]="formField.value" [name]="formField.id" placeholder="{{getPlaceholderText(formField)}}" 
+                    matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled"></textarea>
+            </ng-container>
 
-        <ng-container *ngIf="formField.inputType === 'TextArea'">
-            <textarea style="width:50%" [value]="formField.value" [name]="formField.id" placeholder="{{getPlaceholderText(formField)}}" 
-                matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled"></textarea>
-        </ng-container>
-        
-        <mat-error>
-            <app-show-errors [control]="formField"></app-show-errors>
-        </mat-error>
-    </mat-form-field>
+            <!--We should probably deprectate this since it is only used for the void options screen on biglots and 
+            there is probably a better way to do it now.-->
+            <ng-container *ngIf="formField.inputType === 'SubmitOptionList'">
+                <label class="prompt-text">{{formField.label}}</label>
+                <mat-nav-list>
+                    <mat-list-item *ngFor="let value of values | async; let valueIndex=index" (click)="onSubmitOptionSelected(formField, valueIndex, $event)"
+                    style="border-color: black">{{value}}
+                    <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
+                    </mat-list-item>
+                </mat-nav-list>
+            </ng-container>
+            
+            <mat-error>
+                <app-show-errors [control]="formField"></app-show-errors>
+            </mat-error>
+        </mat-form-field>
 
-    <!--We should probably deprectate this since it is only used for the void options screen on biglots and 
-        there is probably a better way to do it now-->
-    <ng-container *ngIf="formField.inputType === 'SubmitOptionList'">
-        <label class="prompt-text">{{formField.label}}</label>
-        <mat-nav-list>
-            <mat-list-item *ngFor="let value of values | async; let valueIndex=index" (click)="onSubmitOptionSelected(formField, valueIndex, $event)"
-            style="border-color: black">{{value}}
-            <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
-            </mat-list-item>
-        </mat-nav-list>
-    </ng-container>									
-</ng-container>
+								
+    </ng-container>
 
-<ng-container *ngIf="formField.elementType==='Display'">
-    <mat-form-field style="width:100%">
-        <label class="prompt-text">{{formField.label}}</label>
-        <input [value]="formField.value" [name]="formField.id" matInput disabled>
-    </mat-form-field>
-</ng-container>
+    <ng-container *ngIf="formField.elementType==='Display'">
+        <mat-form-field style="width:100%">
+            <label class="prompt-text">{{formField.label}}</label>
+            <input [value]="formField.value" [name]="formField.id" matInput disabled>
+        </mat-form-field>
+    </ng-container>
 
-<ng-container *ngIf="formField.elementType==='Separator'">
-    <mat-divider></mat-divider>
-</ng-container>
+    <ng-container *ngIf="formField.elementType==='Separator'">
+        <mat-divider></mat-divider>
+    </ng-container>
+
 </div>
