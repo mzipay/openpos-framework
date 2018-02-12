@@ -13,5 +13,6 @@ export interface IFormElement {
     selectedIndexes:  number[];
     valueChangedAction: string;
     mask: IMaskSpec;
+    pattern: string;
 }
 

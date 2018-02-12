@@ -17,11 +17,4 @@ export class DynamicFormComponent implements IScreen {
   show(session: SessionService, app: AbstractApp) {
   }
 
-  submitForm(form: NgForm) {
-    if (form.valid) {
-      // could submit form.value instead which is simple name value pairs
-      this.session.response = this.session.screen.form;
-      this.session.onAction(this.session.screen.submitAction);
-    }
-  }
 }

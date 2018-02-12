@@ -83,6 +83,9 @@ import { httpInterceptorProviders } from './http-intercepters';
 import { ShowErrorsComponent } from './common/controls/show-errors.component';
 import { RequireAtleastOneValidatorDirective } from './common/validators/require-atleast-one.directive';
 import { OverFlowListComponent } from './common/controls/overflow-list/overflow-list.component';
+import { DynamicFormFieldComponent } from './common/controls/dynamic-form-field/dynamic-form-field.component';
+import { MarkDirtyOnSubmit } from './common/mark-dirty-onSubmit.directive';
+import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
 
 @NgModule({
   entryComponents: [
@@ -114,6 +117,7 @@ import { OverFlowListComponent } from './common/controls/overflow-list/overflow-
     TillCountOtherTenderComponent,
     DynamicFormComponent,
     DynamicFormControlComponent,
+    DynamicFormFieldComponent,
     ChangeComponent,
     ConfirmationDialogComponent
   ],
@@ -156,11 +160,14 @@ import { OverFlowListComponent } from './common/controls/overflow-list/overflow-
     TillCountComponent,
     TillCountOtherTenderComponent,
     DynamicFormControlComponent,
+    DynamicFormFieldComponent,
     PosComponent,
     ChangeComponent,
     ConfirmationDialogComponent,
     ShowErrorsComponent,
     RequireAtleastOneValidatorDirective,
+    MarkDirtyOnSubmit,
+    AutoSelectOnFocus,
     OverFlowListComponent
   ],
   imports: [

@@ -35,6 +35,10 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
         }
     }
 
+    public Map<String, String> getIconRegistry() {
+        return this.iconRegistry;
+    }
+    
     public void setIconRegistry(Map<String, String> iconRegistry) {
         this.iconRegistry = iconRegistry;
     }

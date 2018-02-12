@@ -13,22 +13,16 @@
             <mat-card fxFlex class="page-content-card text-center">
                 <mat-card-content fxLayout="column" fxLayoutAlign="end">
                     <mat-form-field>
-                        <input matInput #input #field="ngModel" style="text-align:right"
+                        <input matInput #input #field="ngModel" [appFocus]="true" autoSelectOnFocus style="text-align:right"
                             [(ngModel)]="tenderAmount.value"
                             placeholder="{{tenderAmount.placeholder}}"
                             [required]="tenderAmount.required"
                             [textMask]="{mask: numberMask}">
 
                         <span matPrefix>$&nbsp;</span> <!-- TODO: localize symbol and errors -->
-                        <ng-container *ngIf="field.invalid && (field.dirty || field.touched)">
-                            <mat-error *ngIf="field.errors.required" class="text-sm">
-                                * Value is required.
-                            </mat-error>
-                            <mat-error *ngIf="field.errors.pattern" class="text-sm">
-                                * Please enter a valid amount.
-                            </mat-error>
-                        </ng-container>
-
+                        <mat-error>
+                                <app-show-errors [control]="field"></app-show-errors>
+                        </mat-error>
                     </mat-form-field>
                 </mat-card-content>
             </mat-card>

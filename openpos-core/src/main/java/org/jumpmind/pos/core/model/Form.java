@@ -46,7 +46,7 @@ public class Form implements Serializable {
     }
     
     public static FormField createMoneyField(String fieldId, String label, String value, boolean required) {
-        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, true);
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
         formField.setPattern(PATTERN_MONEY);
         formField.setValue(value);
         return formField;
@@ -59,7 +59,7 @@ public class Form implements Serializable {
     }
     
     public static FormField createEmailField(String fieldId, String label, String value, boolean required) {
-        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, true);
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
         formField.setPattern(PATTERN_EMAIL);
         formField.setValue(value);
         return formField;
@@ -72,7 +72,7 @@ public class Form implements Serializable {
     }
     
     public static FormField createPostalCodeField(String fieldId, String label, String value, boolean required) {
-        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, true);
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
         formField.setPattern(PATTERN_POSTAL_CODE);
         formField.setValue(value);
         return formField;
@@ -85,7 +85,7 @@ public class Form implements Serializable {
     }
     
     public static FormField createPhoneField(String fieldId, String label, String value, boolean required) {
-        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, true);
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
         formField.setPattern(PATTERN_US_PHONE_NUMBER);
         formField.setValue(value);
         return formField;
@@ -98,11 +98,36 @@ public class Form implements Serializable {
     }
     
     public FormField addPercentField(String fieldId, String label, String value, boolean required) {
-        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, true);
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
         formField.setPattern(PATTERN_PERCENT);
         formField.setValue(value);
         formElements.add(formField);
         return formField;
+    }
+    
+    public FormField addTextField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.AlphanumericText, required);
+        formField.setValue(value);
+        formElements.add(formField);
+        return formField;
+    }
+    
+    public FormField getTextField(String fieldId) {
+        IFormElement formElement = this.getFormElement(fieldId);
+        if (formElement != null && formElement instanceof FormField) {
+            return (FormField) formElement;
+        }
+        
+        return null;
+    }
+
+    public ComboField getComboField(String fieldId) {
+        IFormElement formElement = this.getFormElement(fieldId);
+        if (formElement != null && formElement instanceof ComboField) {
+            return (ComboField) formElement;
+        }
+        
+        return null;
     }
     
     public void addSeparator() {
@@ -140,6 +165,8 @@ public class Form implements Serializable {
         return requiresAtLeastOneValue;
     }
     
+    // TODO: Move this off the form and onto the element. 
+    // This means different things to different elements. 
     public String getString(String id) {
         for (IFormElement element : formElements) {
             if (element.getId().equals(id)) {
@@ -149,7 +176,6 @@ public class Form implements Serializable {
             }
         }
         return null;
-        
     }
     
 }

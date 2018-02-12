@@ -17,6 +17,7 @@ public class FormField implements IFormElement, IField, Serializable {
     private String placeholder;
     private String pattern;
     private boolean required = true;
+    private boolean disabled = false;
     @JsonIgnore  // ignore for deserialization from client to server (see https://goo.gl/Gjehox)
     private IMaskSpec mask;
 
@@ -140,5 +141,12 @@ public class FormField implements IFormElement, IField, Serializable {
         this.mask = mask;
     }
 
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
 
 }

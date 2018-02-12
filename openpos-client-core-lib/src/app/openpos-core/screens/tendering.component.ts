@@ -1,6 +1,6 @@
 import { IMenuItem } from './../common/imenuitem';
 import { IItem } from './../common/iitem';
-import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, ViewChild, DoCheck, OnInit, OnDestroy } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
@@ -10,11 +10,9 @@ import { IFormElement } from '../common/iformfield';
     selector: 'app-tendering',
     templateUrl: './tendering.component.html'
   })
-  export class TenderingComponent implements DoCheck, IScreen, OnInit, OnDestroy, AfterViewInit {
+  export class TenderingComponent implements DoCheck, IScreen, OnInit, OnDestroy {
 
     private lastSequenceNum: number;
-
-    @ViewChild('input') field: ElementRef;
 
     text: string;
     tenderItems: IItem[];
@@ -43,11 +41,6 @@ import { IFormElement } from '../common/iformfield';
         this.session.screen.localMenuItems.forEach(element => {
             this.session.registerActionPayload( element.action, () => this.tenderAmount.value );
         });
-    }
-
-    ngAfterViewInit(): void {
-        this.field.nativeElement.focus();
-        this.field.nativeElement.select();
     }
 
     ngDoCheck(): void {

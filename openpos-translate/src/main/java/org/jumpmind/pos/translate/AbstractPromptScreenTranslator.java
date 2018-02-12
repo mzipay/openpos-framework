@@ -2,10 +2,9 @@ package org.jumpmind.pos.translate;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-import java.util.Locale;
 import java.util.Optional;
-import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.IPromptScreen;
@@ -72,14 +71,19 @@ public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> ex
         Optional<String> optPromptText = Optional.empty();
         try {
             ILegacyPromptAndResponseModel promptAndResponseModel = this.legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
-
+            
             String promptTextTag = promptResponsePanel.getPropertyValue("promptTextTag");
-            Properties resourceBundle = this.legacyPOSBeanService.getLegacyResourceBundleUtil().getText(resourceBundleFilename,
-                    Locale.getDefault());
-            String promptTextKey = String.format("%s.%s", "PromptAndResponsePanelSpec", promptTextTag);
-            String formattedPromptText = null;
-            formattedPromptText = toFormattedString(resourceBundle, promptTextKey,
-                    promptAndResponseModel != null ? Optional.ofNullable(promptAndResponseModel.getArguments()) : Optional.empty());
+            String resourceText = this.legacyPOSBeanService.getLegacyUIUtilities().retrieveText("PromptAndResponsePanelSpec", resourceBundleFilename, promptTextTag);
+            String formattedPromptText = toFormattedString(resourceText, promptAndResponseModel != null ? promptAndResponseModel.getArguments() : null);
+
+            // if for some reason above didn't yield some text OR there are still a placeholder in the string, try to get the
+            // prompt text from the model itself.  In some cases, like EnterRedeemAmountUISite, the PromptText is set on the model that way.
+            if (StringUtils.isEmpty(formattedPromptText) || formattedPromptText.matches(".*\\{\\d+\\}.*") ) {
+                if (promptAndResponseModel != null) {
+                    // If the model already has the text, it's hopefully formatted and ready to go
+                    formattedPromptText = promptAndResponseModel.getPromptText();
+                }
+            }
             optPromptText = Optional.ofNullable(formattedPromptText);
         } catch (Exception ex) {
             logger.error("Failed to get promptText for {}", uiModel.getModel().getClass());
