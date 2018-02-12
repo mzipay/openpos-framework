@@ -4,11 +4,11 @@
 
         <mat-form-field style="width:100%">
             <ng-container *ngIf="['AlphanumericText', 'NumericText'].indexOf(formField.inputType) >= 0" >
-                <input matInput [formControlName]="formField.id" placeholder="{{getPlaceholderText(formField)}}" [textMask]="getFormFieldMask()">
+                <input matInput [formControlName]="formField.id" [formControl]="formGroup.controls[formField.id]" placeholder="{{getPlaceholderText(formField)}}" [textMask]="getFormFieldMask()">
             </ng-container>
 
             <ng-container *ngIf="'AlphanumericPassword' === formField.inputType">
-                <input matInput  [formControlName]="formField.id"  placeholder="{{getPlaceholderText(formField)}}"
+                <input matInput [formControlName]="formField.id"  placeholder="{{getPlaceholderText(formField)}}"
                 type="password">
             </ng-container>
 
@@ -36,7 +36,7 @@
             </ng-container>
             
             <mat-error>
-                <app-show-errors [control]="formField"></app-show-errors>
+                <app-show-errors [control]="formGroup.controls[formField.id]"></app-show-errors>
             </mat-error>
         </mat-form-field>
 
