@@ -5,17 +5,17 @@
         <mat-form-field style="width:100%">
             <ng-container *ngIf="['AlphanumericText', 'NumericText'].indexOf(formField.inputType) >= 0" >
                 <input matInput [formControlName]="formField.id" [formControl]="formGroup.controls[formField.id]" placeholder="{{getPlaceholderText(formField)}}" 
-                    [textMask]="getFormFieldMask()" [maxlength]="formField.maxLength" [minlength]="formField.minLength">
+                    [textMask]="getFormFieldMask()" [maxlength]="formField.maxLength" [minlength]="formField.minLength" [required]="formField.required" >
             </ng-container>
 
             <ng-container *ngIf="'AlphanumericPassword' === formField.inputType">
                 <input matInput [formControlName]="formField.id"  placeholder="{{getPlaceholderText(formField)}}"
-                type="password" [disabled]="formField.disabled" [maxlength]="formField.maxLength" [minlength]="formField.minLength">
+                type="password" [disabled]="formField.disabled" [maxlength]="formField.maxLength" [minlength]="formField.minLength" [required]="formField.required">
             </ng-container>
 
             <ng-container *ngIf="formField.inputType === 'ComboBox'">
                 <mat-select [formControlName]="formField.id" placeholder="{{getPlaceholderText(formField)}}" 
-                    (change)="onFormElementChanged(formField, $event)" [disabled]="formField.disabled">
+                    (change)="onFormElementChanged(formField, $event)" [disabled]="formField.disabled" [required]="formField.required">
                         <mat-option *ngFor="let value of values | async" [value]="value">{{value}}</mat-option>
                 </mat-select>
             </ng-container>
@@ -23,7 +23,7 @@
             <ng-container *ngIf="formField.inputType === 'TextArea'">
                 <textarea style="width:50%" [value]="formField.value" [name]="formField.id" placeholder="{{getPlaceholderText(formField)}}" 
                     matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled" 
-                    [attr.minlength]="formField.minLength" [attr.maxlength]="formField.maxLength"></textarea>
+                    [attr.minlength]="formField.minLength" [attr.maxlength]="formField.maxLength" [required]="formField.required"></textarea>
             </ng-container>
 
             <!--We should probably deprectate this since it is only used for the void options screen on biglots and 
