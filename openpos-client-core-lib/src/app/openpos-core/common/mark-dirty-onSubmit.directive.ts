@@ -15,6 +15,9 @@ export class MarkDirtyOnSubmit {
     }
 
     onSubmit($event: Event): void{
-        this.formGroup.markAsDirty();
+        Object.getOwnPropertyNames(this.formGroup.controls).forEach( control => {
+            this.formGroup.controls[control].markAsTouched();
+            this.formGroup.controls[control].markAsDirty();
+        });
     }
 }
