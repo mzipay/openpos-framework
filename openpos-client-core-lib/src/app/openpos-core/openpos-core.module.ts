@@ -86,6 +86,7 @@ import { OverFlowListComponent } from './common/controls/overflow-list/overflow-
 import { DynamicFormFieldComponent } from './common/controls/dynamic-form-field/dynamic-form-field.component';
 import { MarkDirtyOnSubmit } from './common/mark-dirty-onSubmit.directive';
 import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
+import { PhoneInputComponent } from './common/controls/phone-input/phone-input.component';
 
 @NgModule({
   entryComponents: [
@@ -168,7 +169,8 @@ import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
     RequireAtleastOneValidatorDirective,
     MarkDirtyOnSubmit,
     AutoSelectOnFocus,
-    OverFlowListComponent
+    OverFlowListComponent,
+    PhoneInputComponent
   ],
   imports: [
     BrowserModule,
