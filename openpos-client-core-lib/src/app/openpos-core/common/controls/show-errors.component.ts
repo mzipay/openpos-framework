@@ -6,7 +6,7 @@ import { AbstractControlDirective, AbstractControl } from '@angular/forms';
     template: `
     <div *ngIf="shouldShowErrors()">
         <span *ngFor="let error of listOfErrors()">
-        {{error}}
+        {{error}}<br/>
         </span>
     </div>
     `,
