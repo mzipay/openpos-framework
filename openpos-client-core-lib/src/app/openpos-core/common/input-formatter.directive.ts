@@ -1,6 +1,7 @@
-import { Directive, Input, ElementRef, forwardRef, Renderer2 } from '@angular/core';
+import { Directive, Input, ElementRef, forwardRef, Renderer2, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IFormatter } from './formatters/iformatter';
+import { FormattersService } from './../services/formatters.service';
 
 export const FORMATTED_INPUT_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -16,19 +17,25 @@ export const FORMATTED_INPUT_VALUE_ACCESSOR: any = {
      },
      providers: [FORMATTED_INPUT_VALUE_ACCESSOR]
 })
-export class FormattedInputValueAccessor implements ControlValueAccessor {
+export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit {
 
-    @Input() InputFormatter: IFormatter;
+    @Input() InputFormatter: string;
+
+    private formatter: IFormatter;
 
     onChange = (value: string) => {};
     onTouched = () => {};
 
-    constructor(private renderer: Renderer2, private elRef: ElementRef )  {
+    constructor(private renderer: Renderer2, private elRef: ElementRef, private formatterService: FormattersService )  {
+    }
+
+    ngOnInit(): void {
+        this.formatter = this.formatterService.getFormatter(this.InputFormatter);
     }
 
     writeValue(value: string): void {
         if( value ){
-            this.renderer.setProperty( this.elRef.nativeElement, 'value', this.InputFormatter.formatValue(value));
+            this.renderer.setProperty( this.elRef.nativeElement, 'value', this.formatter.formatValue(value));
         }
     }
 
@@ -41,15 +48,15 @@ export class FormattedInputValueAccessor implements ControlValueAccessor {
     }
 
     handleInput(value: string){
-        let cleanValue = this.InputFormatter.unFormatValue(value);
-        this.renderer.setProperty( this.elRef.nativeElement, 'value', this.InputFormatter.formatValue(cleanValue));
+        let cleanValue = this.formatter.unFormatValue(value);
+        this.renderer.setProperty( this.elRef.nativeElement, 'value', this.formatter.formatValue(cleanValue));
         this.onChange(cleanValue);
     }
 
     onKeyPress(event: any){
         let inputChar = String.fromCharCode(event.charCode);
 
-        if(!this.InputFormatter.keyFilter.test(inputChar) && event.charCode != 13){
+        if(!this.formatter.keyFilter.test(inputChar) && event.charCode != 13){
             event.preventDefault();
         }
     }

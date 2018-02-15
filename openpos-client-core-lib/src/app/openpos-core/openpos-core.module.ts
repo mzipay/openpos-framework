@@ -32,6 +32,7 @@ import { ScreenService } from './services/screen.service';
 import { SessionService } from './services/session.service';
 import { IconService } from './services/icon.service';
 import { PluginService } from './services/plugin.service';
+import { FormattersService } from './services/formatters.service';
 
 // Components
 import { IconComponent } from './common/controls/icon.component';
@@ -204,7 +205,9 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
     DatePipe,
     BreakpointObserver,
     MediaMatcher,
-    httpInterceptorProviders
+    httpInterceptorProviders,
+    FormattersService
+
   ]
 })
 // Export services below under 'providers'
