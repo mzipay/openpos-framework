@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { IFormatter } from 'openpos-core/common/formatters/iformatter';
-import { PhoneFormatter } from 'openpos-core/common/formatters/phone-formatter';
+import { IFormatter } from '../common/formatters/iformatter';
+import { PhoneFormatter } from '../common/formatters/phone-formatter';
+import { DoNothingFormatter } from '../common/formatters/donothing-formatter';
 
 
 @Injectable()
@@ -8,12 +9,17 @@ export class FormattersService {
     private formatters = new Map<string, IFormatter>();
 
     constructor() {
-        this.formatters.set("PHONE", new PhoneFormatter());
+        this.formatters.set("phoneus", new PhoneFormatter());
     }
     
 
     getFormatter( name: string): IFormatter{
-        return this.formatters.get(name);
+        let lname = name.toLowerCase();
+        if(this.formatters.has(lname)){
+            return this.formatters.get(lname);
+        }
+
+        return new DoNothingFormatter();
     }
 
  
