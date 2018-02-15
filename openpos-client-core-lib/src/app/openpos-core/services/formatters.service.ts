@@ -8,7 +8,7 @@ export class FormattersService {
     private formatters = new Map<string, IFormatter>();
 
     constructor() {
-        this.formatters.set("phone", new PhoneFormatter());
+        this.formatters.set("PHONE", new PhoneFormatter());
     }
     
 

@@ -10,7 +10,7 @@ export const FORMATTED_INPUT_VALUE_ACCESSOR: any = {
   };
 
 @Directive({
-    selector: 'input[InputFormatter]',
+    selector: 'input[formatterName]',
     host: { 
         '(onKeyPress)': 'onKeyPress($event)',
         '(input)': 'handleInput($event.target.value)'
@@ -19,7 +19,7 @@ export const FORMATTED_INPUT_VALUE_ACCESSOR: any = {
 })
 export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit {
 
-    @Input() InputFormatter: string;
+    @Input() formatterName: string;
 
     private formatter: IFormatter;
 
@@ -30,7 +30,7 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
     }
 
     ngOnInit(): void {
-        this.formatter = this.formatterService.getFormatter(this.InputFormatter);
+        this.formatter = this.formatterService.getFormatter(this.formatterName);
     }
 
     writeValue(value: string): void {

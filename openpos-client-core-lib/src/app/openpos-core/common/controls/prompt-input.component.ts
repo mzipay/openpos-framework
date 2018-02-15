@@ -30,6 +30,7 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
 
     onOffModel: boolean;
+    formatter: string;
     _textMask: ITextMask; // Mask object built for text-mask
 
     constructor(private datePipe: DatePipe) {
@@ -58,6 +59,7 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
             this.inputType = 'password';
         } else {
             this.inputType = 'text';
+            this.formatter = this.responseType;
         }
         if (this.maskSpec) {
             const newMask = TextMask.instance(this.maskSpec);
