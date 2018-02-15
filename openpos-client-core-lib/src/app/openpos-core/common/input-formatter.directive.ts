@@ -56,7 +56,7 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
     onKeyPress(event: any){
         let inputChar = String.fromCharCode(event.charCode);
 
-        if(!this.formatter.keyFilter.test(inputChar) && event.charCode != 13){
+        if(this.formatter.keyFilter && !this.formatter.keyFilter.test(inputChar) && event.charCode != 13){
             event.preventDefault();
         }
     }
