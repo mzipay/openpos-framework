@@ -1,4 +1,4 @@
-<ng-container [ngSwitch]="responseType">
+<ng-container  [ngSwitch]="responseType">
     <div [formGroup]="promptFormGroup">
         <mat-form-field fxFlexFill *ngSwitchCase="'DATE'" ngClass="text-xl">
             <!-- Can't use the masking component AND date picker on the same input, so use a hidden input for the picker and
@@ -11,25 +11,30 @@
             <mat-datepicker-toggle matPrefix [for]="picker" class="primary"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-
+    
+        <mat-form-field fxFlexFill *ngSwitchCase="'PHONE'" ngClass="text-xl">
+            <mat-icon  matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
+            <input matInput [formControlName]="'promptInputControl'" [InputFormatter]="'phone'" [appFocus]="true" autoSelectOnFocus>
+            <mat-placeholder>{{placeholderText}}</mat-placeholder>
+            <mat-hint align="start">{{hintText}}</mat-hint>
+            <mat-error>
+                <app-show-errors [control]="promptFormGroup.controls['promptInputControl']"></app-show-errors>
+            </mat-error>
+        </mat-form-field>
+    
         <mat-slide-toggle *ngSwitchCase="'ONOFF'" [(ngModel)]="onOffModel" (change)="onSlideChange()" color="primary" ngClass="text-lg">
             {{placeholderText}} {{onOffModel===true ? 'On' : 'Off'}}
         </mat-slide-toggle>
-
+    
         <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-xl">
             <mat-icon  matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
-            <input #box matInput [formControlName]="'promptInputControl'" [errorStateMatcher]="promptInputErrorStateMatcher" 
-                [(ngModel)]="responseText" (keyup.enter)="onEnter($event)" type="{{inputType}}" [appFocus]="true" autoSelectOnFocus
-                [textMask]="_textMask" minlength="{{minLength}}" maxlength="{{maxLength}}">
+            <input matInput [formControlName]="'promptInputControl'" [appFocus]="true" autoSelectOnFocus 
+                type="{{inputType}}" [textMask]="_textMask" minlength="{{minLength}}" maxlength="{{maxLength}}">
             <mat-placeholder>{{placeholderText}}</mat-placeholder>
             <mat-hint align="start">{{hintText}}</mat-hint>
-
-            <mat-error *ngIf="promptFormGroup.controls.promptInputControl.invalid && minLength && promptFormGroup.controls.promptInputControl.errors.minlength">minimum length is {{minLength}}</mat-error>
-            <mat-error *ngIf="promptFormGroup.controls.promptInputControl.invalid && maxLength && promptFormGroup.controls.promptInputControl.errors.maxlength">maximum length is {{maxLength}}</mat-error>
+            <mat-error>
+                <app-show-errors [control]="promptFormGroup.controls['promptInputControl']"></app-show-errors>
+            </mat-error>
         </mat-form-field>
-    </div>
+    </div>        
 </ng-container>
-
-
-
-

@@ -3,6 +3,7 @@ package org.jumpmind.pos.core.screen;
 public interface IPromptScreen {
     public static final String TYPE_ALPHANUMERICTEXT = "ALPHANUMERICTEXT";
     public static final String TYPE_ALPHANUMERICPASSWORD = "ALPHANUMERICPASSWORD";
+    public static final String TYPE_PHONE = "PHONE";
     public static final String TYPE_CURRENCYTEXT = "CURRENCYTEXT";
     public static final String TYPE_NUMERICTEXT = "NUMERICTEXT";
     public static final String TYPE_DATE = "DATE";

@@ -11,12 +11,18 @@ import org.jumpmind.pos.core.screen.IPromptScreen;
 
 public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> extends AbstractLegacyScreenTranslator<T> {
 
+	private String overrideLegacyResponseType = "";
+	
     public AbstractPromptScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         super(headlessScreen, screenClass);
         if (!IPromptScreen.class.isAssignableFrom(screenClass)) {
             throw new IllegalArgumentException(String.format("screenClass %s must be assignable from %s", screenClass.getSimpleName(),
                     IPromptScreen.class.getSimpleName()));
         }
+    }
+    
+    public void OverrideLegacyResponseType( String type ) {
+    		overrideLegacyResponseType = type;
     }
 
     protected void configureScreenResponseField() {
@@ -46,7 +52,12 @@ public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> ex
             if (enterData) {
                 promptScreen.setResponseText(promptAndResponseBeanModel.getResponseText());
                 promptScreen.setEditable(true);
-                promptScreen.setResponseType(responseFieldType);
+                if(overrideLegacyResponseType.equals("") ) {
+                    promptScreen.setResponseType(responseFieldType);
+                } else {
+                		promptScreen.setResponseType(overrideLegacyResponseType);
+                }
+                
                 if (promptAndResponseBeanModel.getMinLength() != null) {
                     promptScreen.setMinLength(Integer.parseInt(minLength));
                 }
@@ -59,7 +70,10 @@ public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> ex
 
             if (IPromptScreen.TYPE_ALPHANUMERICPASSWORD.equals(promptScreen.getResponseType())) {
                 promptScreen.setPromptIcon("lock");
-            } else {
+            } else if( IPromptScreen.TYPE_PHONE.equals(promptScreen.getResponseType())) {
+            		promptScreen.setPromptIcon("phone");
+            }
+            else {
                 promptScreen.setPromptIcon("question_answer");
             }
         }

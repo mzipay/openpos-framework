@@ -1,21 +1,19 @@
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { PromptInputComponent } from './../common/controls/prompt-input.component';
 import { IScreen } from '../common/iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
 import {SessionService} from '../services/session.service';
 import { AbstractApp } from '../common/abstract-app';
+import { PhoneUSValidatorDirective } from '../common/validators/phone.directive';
+import { OpenPosValidators } from '../common/validators/openpos-validators';
 
 @Component({
   selector: 'app-prompt',
   templateUrl: './prompt.component.html'
 })
-export class PromptComponent implements OnInit, AfterViewInit, DoCheck, IScreen {
-  @ViewChild('promptInput') promptInput: PromptInputComponent;
+export class PromptComponent implements AfterViewInit, IScreen, OnInit {
   initialized = false;
-  promptFormGroup = new FormGroup({
-    promptInputControl: new FormControl('promptInputControl')
-  });
-  submitButtonAction: string;
+  promptFormGroup: FormGroup;
 
   constructor(public session: SessionService) {
   }
@@ -23,40 +21,28 @@ export class PromptComponent implements OnInit, AfterViewInit, DoCheck, IScreen 
   show(session: SessionService, app: AbstractApp) {
   }
 
-  public ngOnInit(): void {
-    if (this.session.screen.actionButton) {
-      this.submitButtonAction = this.session.screen.actionButton.action;
+  ngOnInit(): void {
+    let group: any = {};
+    let validators: ValidatorFn[] = [];
+    validators.push(Validators.required);
+    if(this.session.screen.responseType == "PHONE"){
+      validators.push(OpenPosValidators.PhoneUS);
     }
-  }
-
-  ngDoCheck(): void {
+    group["promptInputControl"] = new FormControl(this.session.screen.responseText, validators);
+    this.promptFormGroup = new FormGroup(group);
   }
 
   ngAfterViewInit(): void {
     this.initialized = true;
   }
 
-  onAction(action: string) {
-    if (action === this.submitButtonAction) {
-      this.onPromptInputEnter(this.promptInput.responseText);
-    } else {
-      this.session.response = this.promptInput.responseText;
-      this.session.screen.responseText = null;
-      this.promptInput.responseText = null;
-      this.session.onAction(action);
-    }
-  }
-
   onFormSubmit(): void {
-    this.onPromptInputEnter(this.promptInput.responseText);
-  }
-
-  onPromptInputEnter(responseText: String): void {
-    if (responseText) {
-      this.promptInput.allowPromptInputValidation = true;
-      if (this.promptFormGroup.valid) {
-        this.session.response = responseText;
-        this.session.onAction(this.session.screen.action);
+    if (this.promptFormGroup.valid) {
+      let payload = this.promptFormGroup.value["promptInputControl"];
+      if( this.session.screen.actionButton ){
+        this.session.onAction(this.session.screen.actionButton.action, payload);
+      } else {
+        this.session.onAction(this.session.screen.action, payload );
       }
     }
   }

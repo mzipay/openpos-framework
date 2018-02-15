@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
 import { TextMask, IMaskSpec, ITextMask } from '../textmask';
 import { ErrorStateMatcher } from '@angular/material';
+import { PhoneFormatter } from '../formatters/phone-formatter';
 
 @Component({
     selector: 'app-prompt-input',
@@ -19,10 +20,7 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     @Input() maskSpec: IMaskSpec;
     @Input() minLength: number;
     @Input() maxLength: number;
-    @Output() enter = new EventEmitter<string>();
     @Input() promptFormGroup: FormGroup;
-    allowPromptInputValidation = false; // Determines when errors are permitted to be shown or not
-    promptInputErrorStateMatcher: PromptInputErrorStateMatcher;
 
     inputType: string;
     dateText: string;  // value entered by user or copied from datePickerValue
@@ -35,11 +33,6 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     _textMask: ITextMask; // Mask object built for text-mask
 
     constructor(private datePipe: DatePipe) {
-        this.promptInputErrorStateMatcher = new PromptInputErrorStateMatcher(() => this.allowPromptInputValidation);
-    }
-
-    public onEnter(event): void {
-        this.enter.emit(this.responseText);
     }
 
     public onSlideChange(): void {
@@ -54,7 +47,6 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
                this.responseText = this.dateText;
             }
         }
-        this.enter.emit(this.responseText);
     }
 
     public onDatePicked(): void {
@@ -88,15 +80,5 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
                 this.dateText = this.responseText;
             }
         }
-    }
-}
-
-class PromptInputErrorStateMatcher implements ErrorStateMatcher {
-
-    constructor(public isErrorStateFunc: () => boolean) {
-    }
-
-    isErrorState(control: FormControl, form: FormGroupDirective | NgForm): boolean {
-        return this.isErrorStateFunc();
     }
 }
