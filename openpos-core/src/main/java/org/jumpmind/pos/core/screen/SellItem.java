@@ -70,7 +70,7 @@ public class SellItem implements IItem, Serializable {
     
     @Override
     public String getSubtitle() {
-        String subTitle = String.format("%s %s@%s", this.getPosItemId(), this.getQuantity(), this.getSellingPrice());
+        String subTitle = String.format("Item: %s %s@%s", this.getPosItemId(), this.getQuantity(), this.getSellingPrice());
         return subTitle;
     }
     
