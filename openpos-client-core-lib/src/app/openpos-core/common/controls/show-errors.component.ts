@@ -15,7 +15,10 @@ export class ShowErrorsComponent {
     private static readonly errorMessages = {
         'requireAtleastOne': () => 'Atleast one field is required',
         'pattern': () => 'Input did not match specified pattern',
-        'required': () => 'This field is required'
+        'required': () => 'This field is required',
+        'minlength': () => 'Length is invalid',
+        'maxlength': () => 'Length is invlaid',
+        'phoneUS' : () => 'Phone number is invalid'
     };
 
     @Input()
@@ -33,6 +36,10 @@ export class ShowErrorsComponent {
     }
 
     private getMessage(type: string, params: any) {
-        return ShowErrorsComponent.errorMessages[type](params);
+        if( Object.keys(ShowErrorsComponent.errorMessages).includes(type)){
+            return ShowErrorsComponent.errorMessages[type](params);
+        } else {
+            return "Invalid input";
+        }
     }
 }

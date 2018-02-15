@@ -1,4 +1,4 @@
-<form (ngSubmit)="submitForm()" [formGroup]="form" novalidate fxLayout="column" [requireAtleastOne]="screenForm.requiresAtLeastOneValue" [markDirtyOnSubmit]="form">
+<form (ngSubmit)="submitForm()" [formGroup]="form" novalidate fxLayout="column" [markDirtyOnSubmit]="form">
   <app-dynamic-form-field *ngFor="let field of screenForm.formElements" [formGroup]="form" [formField]="field"></app-dynamic-form-field>
   <mat-error>
       <app-show-errors [control]="form"></app-show-errors>	

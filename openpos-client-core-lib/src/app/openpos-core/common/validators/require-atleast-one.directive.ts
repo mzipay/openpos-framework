@@ -1,30 +1,9 @@
-import { Directive, Input }  from '@angular/core';
-import { NG_VALIDATORS, Validator, ValidationErrors, FormGroup } from '@angular/forms';
+import { Directive }  from '@angular/core';
+import { NG_VALIDATORS, Validator  } from '@angular/forms';
+import { OpenPosValidators } from './openpos-validators';
 
 @Directive({
     selector: '[requireAtleastOne]',
-    providers: [{provide: NG_VALIDATORS, useExisting: RequireAtleastOneValidatorDirective, multi: true}]
+    providers: [{provide: NG_VALIDATORS, useExisting: OpenPosValidators.RequireAtleastOne, multi: true}]
 })
-export class RequireAtleastOneValidatorDirective implements Validator {
-
-    @Input("requireAtleastOne") requiresAtleastOne: boolean;
-
-    validate(form: FormGroup): ValidationErrors {
-      if(!this.requiresAtleastOne) return null;
-  
-      const message = {
-        'requireAtleastOne' : {
-          'message': 'Atleast one field is required'
-        }
-      };
- 
-      for( let name of Object.getOwnPropertyNames(form.value)){
-        let value = form.value[name];
-        if( value != ""){
-          return null;
-        }
-      }
-  
-      return message;
-    }
-}
+export class RequireAtleastOneValidatorDirective {}

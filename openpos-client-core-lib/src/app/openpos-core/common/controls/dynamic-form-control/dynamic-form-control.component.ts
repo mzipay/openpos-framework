@@ -9,6 +9,7 @@ import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormCon
 import { IFormElement } from '../../iformfield';
 import { Observable } from 'rxjs/Observable';
 import { ScreenService } from '../../../services/screen.service';
+import { OpenPosValidators } from '../../validators/openpos-validators';
 
 @Component({
   selector: 'app-dynamic-form-control',
@@ -46,7 +47,8 @@ export class DynamicFormControlComponent implements OnInit {
       group[element.id] = new FormControl(element.value, validators);
     });
 
-    this.form = new FormGroup(group);
+
+    this.form = new FormGroup(group, (this.screenForm.requiresAtLeastOneValue) ? OpenPosValidators.RequireAtleastOne : null );
 
   }
 
