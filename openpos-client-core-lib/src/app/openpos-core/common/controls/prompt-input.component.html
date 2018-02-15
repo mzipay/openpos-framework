@@ -12,7 +12,7 @@
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
     
-        <mat-form-field fxFlexFill *ngSwitchCase="'PHONE'" ngClass="text-xl">
+        <mat-form-field fxFlexFill *ngSwitchCase="'phoneUS'" ngClass="text-xl">
             <mat-icon  matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
             <input matInput [formControlName]="'promptInputControl'" [formatterName]="formatter" [appFocus]="true" autoSelectOnFocus>
             <mat-placeholder>{{placeholderText}}</mat-placeholder>

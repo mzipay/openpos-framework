@@ -25,7 +25,7 @@ export class PromptComponent implements AfterViewInit, IScreen, OnInit {
     let group: any = {};
     let validators: ValidatorFn[] = [];
     validators.push(Validators.required);
-    if(this.session.screen.responseType == "PHONE"){
+    if(this.session.screen.responseType == "phoneUS"){
       validators.push(OpenPosValidators.PhoneUS);
     }
     group["promptInputControl"] = new FormControl(this.session.screen.responseText, validators);

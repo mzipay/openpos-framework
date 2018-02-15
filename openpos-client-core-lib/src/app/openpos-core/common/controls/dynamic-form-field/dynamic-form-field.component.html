@@ -2,30 +2,20 @@
 
     <ng-container *ngIf="formField.elementType==='Input'">
 
-        <mat-form-field style="width:100%">
-            <ng-container *ngIf="['AlphanumericText', 'NumericText'].indexOf(formField.inputType) >= 0" >
-                <input matInput [formControlName]="formField.id" [formControl]="formGroup.controls[formField.id]" placeholder="{{getPlaceholderText(formField)}}" [textMask]="getFormFieldMask()">
-            </ng-container>
-
-            <ng-container *ngIf="'AlphanumericPassword' === formField.inputType">
-                <input matInput [formControlName]="formField.id"  placeholder="{{getPlaceholderText(formField)}}"
+        <mat-form-field style="width:100%" [ngSwitch]="formField.inputType">
+            <input *ngSwitchDefault matInput [formControlName]="formField.id" [formControl]="formGroup.controls[formField.id]" 
+                [placeholder]="getPlaceholderText(formField)" [formatterName]="formField.inputType">
+            <input *ngSwitchCase="'AlphanumericPassword'" matInput [formControlName]="formField.id"  [placeholder]="getPlaceholderText(formField)"
                 type="password">
-            </ng-container>
-
-            <ng-container *ngIf="formField.inputType === 'ComboBox'">
-                <mat-select [formControlName]="formField.id" placeholder="{{getPlaceholderText(formField)}}" (change)="onFormElementChanged(formField, $event)">
-                        <mat-option *ngFor="let value of values | async" [value]="value">{{value}}</mat-option>
-                </mat-select>
-            </ng-container>
-
-            <ng-container *ngIf="formField.inputType === 'TextArea'">
-                <textarea style="width:50%" [value]="formField.value" [name]="formField.id" placeholder="{{getPlaceholderText(formField)}}" 
-                    matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled"></textarea>
-            </ng-container>
+            <mat-select  *ngSwitchCase="'ComboBox'" [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)" (change)="onFormElementChanged(formField, $event)">
+                <mat-option *ngFor="let value of values | async" [value]="value">{{value}}</mat-option>
+            </mat-select>
+            <textarea *ngSwitchCase="'TextArea'" style="width:50%" [value]="formField.value" [name]="formField.id" [placeholder]="getPlaceholderText(formField)" 
+                matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled"></textarea>
 
             <!--We should probably deprectate this since it is only used for the void options screen on biglots and 
             there is probably a better way to do it now.-->
-            <ng-container *ngIf="formField.inputType === 'SubmitOptionList'">
+            <ng-container *ngSwitchCase="'SubmitOptionList'">
                 <label class="prompt-text">{{formField.label}}</label>
                 <mat-nav-list>
                     <mat-list-item *ngFor="let value of values | async; let valueIndex=index" (click)="onSubmitOptionSelected(formField, valueIndex, $event)"
