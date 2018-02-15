@@ -55,12 +55,8 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     }
 
     ngOnInit(): void {
-        if ( this.responseType === 'ALPHANUMERICPASSWORD') {
-            this.inputType = 'password';
-        } else {
-            this.inputType = 'text';
-            this.formatter = this.responseType;
-        }
+        this.formatter = this.responseType;
+
         if (this.maskSpec) {
             const newMask = TextMask.instance(this.maskSpec);
             this._textMask = newMask;

@@ -12,7 +12,7 @@
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
     
-        <mat-form-field fxFlexFill *ngSwitchCase="'phoneUS'" ngClass="text-xl">
+        <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-xl">
             <mat-icon  matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
             <input matInput [formControlName]="'promptInputControl'" [formatterName]="formatter" [appFocus]="true" autoSelectOnFocus>
             <mat-placeholder>{{placeholderText}}</mat-placeholder>
@@ -26,10 +26,10 @@
             {{placeholderText}} {{onOffModel===true ? 'On' : 'Off'}}
         </mat-slide-toggle>
     
-        <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-xl">
+        <mat-form-field fxFlexFill *ngSwitchCase="'ALPHANUMERICPASSWORD'" ngClass="text-xl">
             <mat-icon  matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
             <input matInput [formControlName]="'promptInputControl'" [appFocus]="true" autoSelectOnFocus
-                [attr.type]="inputType" [textMask]="_textMask" [attr.minlength]="minLength" [attr.maxlength]="maxLength">
+                type="password" [textMask]="_textMask" [attr.minlength]="minLength" [attr.maxlength]="maxLength">
             <mat-placeholder>{{placeholderText}}</mat-placeholder>
             <mat-hint class="text-sm" align="start">{{hintText}}</mat-hint>
             <mat-error class="text-sm">
