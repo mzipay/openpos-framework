@@ -49,7 +49,25 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
 
     handleInput(value: string){
         let cleanValue = this.formatter.unFormatValue(value);
+        let caret = this.elRef.nativeElement.selectionStart;
+
+        let beforeCaretClean = this.formatter.unFormatValue(value.slice(0,caret));
+        let beforeCaretFormatted = this.formatter.formatValue(beforeCaretClean);
+        let newCaret = 0;
+        let i = 0
+
+        while( newCaret < beforeCaretFormatted.length && i < beforeCaretClean.length ){
+            if( beforeCaretClean[i] === beforeCaretFormatted[newCaret] ){
+                ++newCaret;
+                ++i;
+            } else {
+                ++newCaret;
+            }
+        }
+
         this.renderer.setProperty( this.elRef.nativeElement, 'value', this.formatter.formatValue(cleanValue));
+        this.renderer.setProperty( this.elRef.nativeElement, 'selectionStart', newCaret);
+        this.renderer.setProperty( this.elRef.nativeElement, 'selectionEnd', newCaret);
         this.onChange(cleanValue);
     }
 
