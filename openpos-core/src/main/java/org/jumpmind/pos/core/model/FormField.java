@@ -18,6 +18,10 @@ public class FormField implements IFormElement, IField, Serializable {
     private String pattern;
     private boolean required = true;
     private boolean disabled = false;
+    
+    private Integer minLength;
+    private Integer maxLength;
+    
     @JsonIgnore  // ignore for deserialization from client to server (see https://goo.gl/Gjehox)
     private IMaskSpec mask;
 
@@ -147,6 +151,22 @@ public class FormField implements IFormElement, IField, Serializable {
 
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public Integer getMinLength() {
+        return minLength;
+    }
+
+    public void setMinLength(Integer minLength) {
+        this.minLength = minLength;
+    }
+
+    public Integer getMaxLength() {
+        return maxLength;
+    }
+
+    public void setMaxLength(Integer maxLength) {
+        this.maxLength = maxLength;
     }
 
 }

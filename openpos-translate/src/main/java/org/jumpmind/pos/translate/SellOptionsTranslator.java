@@ -1,6 +1,8 @@
 package org.jumpmind.pos.translate;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.jumpmind.pos.core.flow.Action;
@@ -33,7 +35,7 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Defaul
     protected void buildMainContent() {
         super.buildMainContent();
         screen.setTemplate(DefaultScreen.TEMPLATE_SELL);
-        screen.setLocalMenuItems(generateUIActionsForLocalNavButtons(MenuItem.class, true));
+        screen.setLocalMenuItems(generateUIActionsForLocalNavButtons(MenuItem.class, true, excludeLabelTags.toArray(new String[]{})));
         if (screen.getLocalMenuItems().size() > 0) {
             screen.setPrompt("Choose Option");
             screen.setInstructions("Please select an option from the menu to the right");
@@ -49,5 +51,4 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Defaul
             super.handleAction(subscriber, tmServer, action, screen);
         }
     }
-
 }

@@ -11,8 +11,9 @@ public class Form implements Serializable {
     public static final String PATTERN_MONEY =  "^(\\d{0,9}\\.\\d{0,2}|\\d{1,9})$";
     public static final String PATTERN_PERCENT =  "^100$|^\\d{0,2}(\\.\\d{1,2})?$|^\\d{0,2}(\\.)?"; // 100-0, Only two decimal places allowed.
     public static final String PATTERN_POSTAL_CODE =  "^[0-9a-zA-Z]{5,}$"; // Minimum 5 chars. 
+    public static final String PATTERN_DATE = "^(\\d{2})/(\\d{2})/(\\d{4}$)";
     // TODO: This pattern may be too restrictive. 
-    public static final String PATTERN_US_PHONE_NUMBER = "^(\\+0?1\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}$";
+    public static final String PATTERN_US_PHONE_NUMBER = "^\\d{10}$";
     private static final long serialVersionUID = 1L;
 
     private List<IFormElement> formElements = new ArrayList<IFormElement>();
@@ -43,6 +44,19 @@ public class Form implements Serializable {
         formElements.add(field);
         return field;        
 
+    }
+    
+    public static FormField createDateField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.AlphanumericText, required);
+        formField.setPattern(PATTERN_DATE);
+        formField.setValue(value);
+        return formField;
+    }
+    
+    public FormField addDateField(String fieldId, String label, String value, boolean required) {
+        FormField formField = createDateField(fieldId, label, value, required);
+        formElements.add(formField);
+        return formField;
     }
     
     public static FormField createMoneyField(String fieldId, String label, String value, boolean required) {
