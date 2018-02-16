@@ -221,7 +221,7 @@ export class SessionService {
 
     const sendToServer: Function = () => {
       this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
-      JSON.stringify({ name: action, data: this.response }));
+      JSON.stringify({ name: actionString, data: this.response }));
     };
 
     // see if we have any intercepters registered
