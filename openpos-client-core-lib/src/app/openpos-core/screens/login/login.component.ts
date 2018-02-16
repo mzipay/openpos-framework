@@ -77,7 +77,7 @@ import { IFormElement } from '../../common/iformfield';
 
     onForgotPasswordAction(): void {
         this.session.response = this.form;
-        this.session.onAction(this.forgotPasswordAction.action);
+        this.session.onAction(this.forgotPasswordAction);
     }
 }
 
