@@ -48,11 +48,6 @@ export class HomeComponent implements IScreen, OnInit {
   }
 
   onMenuItemClick(menuItem: IMenuItem) {
-    if (menuItem.hasOwnProperty('url')) {
-      const urlMenuItem = <IUrlMenuItem> menuItem;
-      window.open(urlMenuItem.url, urlMenuItem.targetMode);
-    } else {
-      this.session.onAction(menuItem.action, null, menuItem.confirmationMessage );
-    }
+      this.session.onAction(menuItem, null, menuItem.confirmationMessage );
   }
 }

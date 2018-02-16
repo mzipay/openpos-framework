@@ -14,6 +14,7 @@ import { Scan } from '../common/scan';
 import { FunctionActionIntercepter, ActionIntercepter } from '../common/actionIntercepter';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confirmation-dialog.component';
+import { IUrlMenuItem } from '../common/iurlmenuitem';
 
 declare var cordova: any;
 
@@ -175,7 +176,25 @@ export class SessionService {
     }
   }
 
-  public async onAction(action: string, payload?: any, confirm?: string) {
+  public async onAction(action: string | IMenuItem, payload?: any, confirm?: string) {
+    let actionString = ""
+    //we need to figure out if we are a menuItem or just a string
+    if( action.hasOwnProperty('action') ){
+      let menuItem = <IMenuItem>(action);
+      
+      //check to see if we are a IURLMenuItem
+      if( menuItem.hasOwnProperty('url')){
+        let urlMenuItem = <IUrlMenuItem> menuItem;
+        window.open(urlMenuItem.url, urlMenuItem.targetMode);
+        return;
+      } else {
+        actionString = menuItem.action;
+      }
+      
+    } else {
+      actionString = <string>action;
+    }
+
     if ( confirm ) {
       console.log('Confirming action');
       const dialogRef = this.dialogService.open( ConfirmationDialogComponent, { disableClose: true});
@@ -189,15 +208,15 @@ export class SessionService {
       }
     }
 
-    console.log('Publish action ' + action);
+    console.log('Publish action ' + actionString);
 
     // First we will use the payload passed into this function then
     // Check if we have registered action payload
     // Otherwise we will send whatever is in this.response
     if ( payload != null ) {
       this.response = payload;
-    } else if ( this.actionPayloads.has( action ) ) {
-      this.response = this.actionPayloads.get(action)();
+    } else if ( this.actionPayloads.has( actionString ) ) {
+      this.response = this.actionPayloads.get(actionString)();
     }
 
     const sendToServer: Function = () => {
@@ -207,8 +226,8 @@ export class SessionService {
 
     // see if we have any intercepters registered
     // otherwise just send the action
-    if ( this.actionIntercepters.has( action ) ) {
-      this.actionIntercepters.get( action ).intercept( this.response, sendToServer );
+    if ( this.actionIntercepters.has( actionString ) ) {
+      this.actionIntercepters.get( actionString ).intercept( this.response, sendToServer );
     } else {
       sendToServer();
     }
