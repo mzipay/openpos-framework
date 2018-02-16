@@ -16,9 +16,11 @@ export class FormattersService {
     
 
     getFormatter( name: string): IFormatter{
-        let lname = name.toLowerCase();
-        if(this.formatters.has(lname)){
-            return this.formatters.get(lname);
+        if( name ){
+            let lname = name.toLowerCase();
+            if(this.formatters.has(lname)){
+                return this.formatters.get(lname);
+            }
         }
 
         return new DoNothingFormatter();
