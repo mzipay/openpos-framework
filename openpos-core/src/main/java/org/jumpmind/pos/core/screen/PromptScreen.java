@@ -18,6 +18,8 @@ public class PromptScreen extends DefaultScreen implements IPromptScreen {
     private String action = "Next";
     private MenuItem actionButton = null;
     private IMaskSpec promptMask;
+    private String comments = "";
+    private boolean showComments = false;
 
     public PromptScreen() {
         setType(ScreenType.Prompt);
@@ -126,5 +128,21 @@ public class PromptScreen extends DefaultScreen implements IPromptScreen {
     public void setPromptMask(IMaskSpec mask) {
         this.promptMask = mask;
     }
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	public boolean isShowComments() {
+		return showComments;
+	}
+
+	public void setShowComments(boolean showComments) {
+		this.showComments = showComments;
+	}
     
 }

@@ -28,12 +28,24 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
       validators.push(OpenPosValidators.PhoneUS);
     }
     group["promptInputControl"] = new FormControl(this.session.screen.responseText, validators);
+
+    if(this.session.screen.showComments){
+      group["comments"] = new FormControl(this.session.screen.comments, Validators.required);
+    }
     this.promptFormGroup = new FormGroup(group);
   }
 
   onAction( action: string ): void {
     if ( this.promptFormGroup.valid ) {
-      this.session.onAction( action, this.promptFormGroup.value["promptInputControl"]);
-    }
+      if( this.session.screen.showComments ){
+        this.session.onAction( action, 
+          { 
+            response: this.promptFormGroup.value["promptInputControl"],
+            comment: this.promptFormGroup.value["comments"]
+          });
+      } else {
+        this.session.onAction( action, this.promptFormGroup.value["promptInputControl"]);
+      }
+     }
   }
 }

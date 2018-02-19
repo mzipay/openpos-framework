@@ -9,6 +9,7 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.DefaultScreen.ScanType;
+import org.jumpmind.pos.core.screen.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,6 +99,10 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
     public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,
             DefaultScreen screen) {
         tmServer.sendAction(action.getName());
+    } 
+    
+    public void setBackButton(String action) {
+    		this.screen.setBackButton(new MenuItem("Back", action, true));
     }
 
     protected void enableScan() {
