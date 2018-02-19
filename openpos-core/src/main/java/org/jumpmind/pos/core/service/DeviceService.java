@@ -50,8 +50,6 @@ public class DeviceService implements IDeviceService {
         String mapKey = makeRequestResponseMapKey(appId, nodeId, request.getDeviceId(), request.getRequestId());
         this.requestToResponseMap.put(mapKey, new DeviceResponseMapEntry(futureResponse));
         
-        // TODO: May need to add a client id that is registered upon initial connection to the server so that the
-        // message is only handled by one client
         this.template.convertAndSend(String.format("/topic/app/%s/node/%s", appId, nodeId), request);
         return futureResponse;
     }

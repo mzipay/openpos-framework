@@ -10,6 +10,9 @@
 /* Reads and returns the contents of a given log file */
 - (NSString *)readLogFileContents:(CDVInvokedUrlCommand *)command;
 
+/* Returns path to given log file */
+- (NSString *)getLogFilePath:(CDVInvokedUrlCommand *)command;
+
 /* Shares a log file using platform standard file sharing UI */
 - (void) shareLogFile:(CDVInvokedUrlCommand *)command;
 

@@ -10,9 +10,14 @@ export class CordovaPlugin implements IPlugin {
     constructor(pluginId: string) {
         this.pluginId = pluginId;
         if (typeof cordova !== 'undefined') {
-            if (cordova.plugins[pluginId]) {
+            if (cordova.plugins && cordova.plugins[pluginId]) {
                 this.impl = cordova.plugins[pluginId];
                 this.pluginName = this.impl.pluginName;
+            } else if (cordova[pluginId]) {
+                this.impl = cordova[pluginId];
+                this.pluginName = pluginId;
+            } else {
+                console.log(`Unable to locate cordova '${pluginId}' plugin.`);
             }
         }
     }

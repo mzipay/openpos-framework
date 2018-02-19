@@ -13,4 +13,7 @@ final public class NodeUtils {
         return nodeId.substring(6);
     }
 
+    public static String makeNodeId(String storeId, String workStationId) {
+        return String.format("%s-%s", storeId, workStationId);
+    }
 }

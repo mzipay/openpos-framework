@@ -33,6 +33,7 @@ import { SessionService } from './services/session.service';
 import { IconService } from './services/icon.service';
 import { PluginService } from './services/plugin.service';
 import { FormattersService } from './services/formatters.service';
+import { FileUploadService } from './services/file-upload.service';
 
 // Components
 import { IconComponent } from './common/controls/icon.component';
@@ -206,7 +207,8 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
     BreakpointObserver,
     MediaMatcher,
     httpInterceptorProviders,
-    FormattersService
+    FormattersService,
+    FileUploadService
 
   ]
 })

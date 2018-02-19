@@ -231,7 +231,6 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
 
     @Override
     public IDeviceResponse sendDeviceRequest(IDeviceRequest request) {
-        // TODO: need to either pass in appId or figure out a way to get it
         IDeviceResponse response = null;
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
             response = subscriber.sendDeviceRequest(request);
@@ -239,7 +238,6 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
         }
         
         return response;
-        
     }
 
 

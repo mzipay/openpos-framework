@@ -34,6 +34,25 @@
     return logFileNames;
 }
 
+/* Returns path to given log file */
+- (NSString *)getLogFilePath:(CDVInvokedUrlCommand *)command {
+    NSString* logFilename = [command.arguments objectAtIndex:0];
+    NSString* logFilePath = [self logFileName:logFilename];
+    CDVPluginResult *result;
+
+    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:logFilePath];
+    if (fileExists) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:logFilePath];
+    } else {
+        NSString* errorMsg = [NSString stringWithFormat:@"Log file '%@' not found.",logFilename];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMsg];
+        logFilePath = nil;
+    }
+
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    return logFilePath;
+}
+
 - (NSString *)readLogFileContents:(CDVInvokedUrlCommand *)command {
     NSString* logFilename = [command.arguments objectAtIndex:0];
     NSString* logFilePath = [self logFileName:logFilename];

@@ -12,6 +12,20 @@ export class PluginService {
     private plugins = new Map<string, IPlugin>();
 
     constructor() {
+        document.addEventListener('deviceready', () => {
+            console.log('cordova devices are ready');
+            // cordova file plugin doesn't put itself in cordova.plugins, so add it there if present.
+            // Makes it possible for us to access plugins dynamically by name.
+            // There apparently is not a consistent way to access references to
+            // cordova plugins.
+            if (cordova.file) {
+            		if (! cordova.plugins || ! cordova.plugins['file']) {
+                    cordova.plugins['file'] = cordova.file;
+                    console.log('PluginService added cordova-plugin-file to cordova.plugins');
+                }
+            }
+          },
+          false);
     }
 
     public addPlugin(pluginId: string, plugin: IPlugin) {
@@ -25,7 +39,8 @@ export class PluginService {
             if (! plugin) {
                 if (this.isCordovaPlugin(pluginId)) {
                     let cdvPlugin = null;
-                    if (typeof cordova.plugins[pluginId].processRequest !== 'undefined') {
+                    if (cordova.plugins && cordova.plugins[pluginId]
+                        && typeof cordova.plugins[pluginId].processRequest !== 'undefined') {
                         cdvPlugin = new CordovaDevicePlugin(pluginId);
                     } else {
                         cdvPlugin = new CordovaPlugin(pluginId);
@@ -104,7 +119,7 @@ export class PluginService {
     public isCordovaPlugin(pluginId: string): boolean {
         return typeof cordova !== 'undefined'
             && typeof cordova.plugins !== 'undefined'
-            && cordova.plugins[pluginId];
+            && (cordova.plugins[pluginId]);
     }
 
 }

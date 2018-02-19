@@ -1,3 +1,5 @@
+import { MatSnackBar } from '@angular/material';
+import { FileUploadService } from './../services/file-upload.service';
 import { IPlugin } from './../common/iplugin';
 import { IMenuItem } from '../common/imenuitem';
 import { Component } from '@angular/core';
@@ -14,7 +16,9 @@ export class StatusBarComponent {
   protected devModeEnabled = false;
   protected clickTimes: number[] = [];
 
-  constructor(public session: SessionService, public pluginService: PluginService) {
+  constructor(private session: SessionService,
+    private pluginService: PluginService, private fileUploadService: FileUploadService,
+    public snackBar: MatSnackBar ) {
     this.devModeEnabled = localStorage.getItem('devMode') === 'true';
   }
 
@@ -84,6 +88,31 @@ export class StatusBarComponent {
       this.logPlugin.impl.shareLogFile(
         logFilename,
         () => {
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+  }
+
+  protected onLogfileUpload(logFilename: string): void {
+    if (this.logPlugin && this.logPlugin.impl) {
+      this.logPlugin.impl.getLogFilePath(
+        logFilename,
+        (logfilePath) => {
+          this.fileUploadService.uploadLocalDeviceFileToServer('log', logFilename, 'text/plain', logfilePath)
+            .then((result: {success: boolean, message: string}) => {
+              // TODO: display a dialog with success.
+              this.snackBar.open(result.message, 'Dismiss', {
+                duration: 5000
+              });
+            })
+            .catch((result: {success: boolean, message: string}) => {
+              this.snackBar.open(result.message, 'Dismiss', {
+                duration: 5000
+              });
+            });
         },
         (error) => {
           console.log(error);
