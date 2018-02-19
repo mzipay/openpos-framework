@@ -175,10 +175,17 @@ public class ScreenService implements IScreenService {
             DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
             if (lastScreen != null && 
                     (lastScreen instanceof FormScreen || lastScreen instanceof DynamicFormScreen)) {
-                Form form = mapper.convertValue(action.getData(), Form.class);
-                if (form != null) { // A form that has display only fields won't
-                                    // have any data
-                    return populateFormScreen(appId, nodeId, form);
+                Form form = null;
+                try {
+                    form = mapper.convertValue(action.getData(), Form.class);
+                    if (form != null) { // A form that has display only fields won't
+                        // have any data
+                        return populateFormScreen(appId, nodeId, form);
+                    }
+                } catch (IllegalArgumentException ex) {
+                    // We should not assume a form will always be returned by the DynamicFormScreen.
+                    // The barcode scanner can also return a value.
+                    // TODO: Allow serializing more than the form on an action.
                 }
             }
         }
