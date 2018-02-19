@@ -7,4 +7,5 @@ public interface ILegacyPromptAndResponseModel {
     public String getMaxLength();
     public String getResponseText();
     public String getPromptText();
+    public void setScanned(boolean value);
 }
