@@ -30,7 +30,7 @@ processResources {
 
 dependencies {
     compile project(":openpos-core")
-    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '2.0.2.RELEASE'
+    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.13.10.RELEASE'
     testCompile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.20.1.Final'
 }
 
