@@ -1,0 +1,12 @@
+include 'openpos-core'
+include 'openpos-translate'
+
+rootProject.children.each { project ->
+    if (project.projectDir.getName().equals('openpos-client-core-lib')) {
+        project.projectDir = new File(openposDir + project.projectDir.getName() + '/src/app/openpos-core')
+    } else {
+        project.projectDir = new File(openposDir + project.projectDir.getName())
+    }    
+}
+
+includeFlat 'openpos-server'
