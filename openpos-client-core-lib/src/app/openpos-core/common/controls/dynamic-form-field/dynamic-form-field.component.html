@@ -34,8 +34,7 @@
 
     <ng-container *ngIf="formField.elementType==='Display'">
         <mat-form-field style="width:100%">
-            <label class="prompt-text">{{formField.label}}</label>
-            <input [value]="formField.value" [name]="formField.id" matInput disabled>
+            <input [value]="formField.value" [name]="formField.id" [placeholder]="formField.label" matInput readonly=true>
         </mat-form-field>
     </ng-container>
 

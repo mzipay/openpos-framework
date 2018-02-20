@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     id="openpos-cordova-log-plugin"
-    version="0.0.3">
+    version="0.0.4">
     
     <!-- For documentation on the cordova plugin XML spec see: 
       https://cordova.apache.org/docs/en/latest/plugin_ref/spec.html -->

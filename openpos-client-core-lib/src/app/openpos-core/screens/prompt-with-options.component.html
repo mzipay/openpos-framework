@@ -7,6 +7,13 @@ fxLayout="column" fxLayoutAlign="center center">
                     [responseText]="session.screen.responseText" [promptIcon]="session.screen.promptIcon" [hintText]="promptText" 
                     [maskSpec]="session.screen.promptMask" [minLength]="session.screen.minLength" [maxLength]="session.screen.maxLength"
                     [promptFormGroup]="promptFormGroup"></app-prompt-input>
+                <mat-form-field fxFlexFill *ngIf="session.screen.showComments" >
+                    <textarea #box matInput [formControlName]="'comments'" placeholder="Comments"></textarea> 
+                    <mat-error>
+                        <app-show-errors [control]="box"></app-show-errors>
+                    </mat-error>
+
+                </mat-form-field>
             </form>
         </mat-card-content>
         <mat-card-actions>

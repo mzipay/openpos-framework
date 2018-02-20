@@ -41,6 +41,7 @@ import { LoaderComponent } from './common/loader/loader.component';
 import { DynamicFormControlComponent } from './common/controls/dynamic-form-control/dynamic-form-control.component';
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
 import { PosComponent } from './pos/pos.component';
+import { SelfCheckoutComponent } from './selfcheckout/selfcheckout.component';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 
 // Screens
@@ -89,6 +90,9 @@ import { DynamicFormFieldComponent } from './common/controls/dynamic-form-field/
 import { MarkDirtyOnSubmit } from './common/mark-dirty-onSubmit.directive';
 import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
 import { FormattedInputValueAccessor } from './common/input-formatter.directive';
+
+// On Screen Keyboard
+import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 
 @NgModule({
   entryComponents: [
@@ -165,6 +169,7 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
     DynamicFormControlComponent,
     DynamicFormFieldComponent,
     PosComponent,
+    SelfCheckoutComponent,
     ChangeComponent,
     ConfirmationDialogComponent,
     ShowErrorsComponent,
@@ -183,12 +188,15 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
     FlexLayoutModule,
     BrowserAnimationsModule,
     MaterialModule,
+    MatKeyboardModule,
     TextMaskModule
   ],
   exports: [
     PosComponent,
+    SelfCheckoutComponent,
     LoaderComponent,
     MaterialModule,
+    MatKeyboardModule,
     IconComponent,
     ScreenDirective,
     ReactiveFormsModule

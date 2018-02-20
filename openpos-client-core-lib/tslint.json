@@ -121,13 +121,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "openpos",
+      "app",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "openpos",
+      "app",
       "kebab-case"
     ],
     "no-output-on-prefix": true,

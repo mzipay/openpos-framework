@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.WordUtils;
+import org.jumpmind.pos.core.ModeConstants;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
@@ -38,9 +39,28 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     protected ILegacyStoreProperties legacyStoreProperties;
 
     protected IUIActionOverrider actionOverrider;
+    
+    protected String appId;
 
     public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
         super(legacyScreen, screenClass);
+    }
+    
+    public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, String appId) {
+        super(legacyScreen, screenClass);
+        this.appId = appId;
+    }    
+    
+    protected boolean isPOS() {
+        return ModeConstants.POS.equals(appId);
+    }
+    
+    protected boolean isSelfCheckout() {
+        return ModeConstants.SELFCHECKOUT.equals(appId);
+    }
+    
+    protected boolean isCustomerDisplay() {
+        return ModeConstants.CUSTOMERDISPLY.equals(appId);
     }
 
     @Override

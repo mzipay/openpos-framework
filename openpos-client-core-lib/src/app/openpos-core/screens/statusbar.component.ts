@@ -1,4 +1,4 @@
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { FileUploadService } from './../services/file-upload.service';
 import { IPlugin } from './../common/iplugin';
 import { IMenuItem } from '../common/imenuitem';
@@ -105,12 +105,12 @@ export class StatusBarComponent {
             .then((result: {success: boolean, message: string}) => {
               // TODO: display a dialog with success.
               this.snackBar.open(result.message, 'Dismiss', {
-                duration: 5000
+                duration: 5000, verticalPosition: 'top'
               });
             })
             .catch((result: {success: boolean, message: string}) => {
               this.snackBar.open(result.message, 'Dismiss', {
-                duration: 5000
+                duration: 5000, verticalPosition: 'top'
               });
             });
         },
