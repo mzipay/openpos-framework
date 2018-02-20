@@ -91,6 +91,9 @@ import { MarkDirtyOnSubmit } from './common/mark-dirty-onSubmit.directive';
 import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
 import { FormattedInputValueAccessor } from './common/input-formatter.directive';
 
+// On Screen Keyboard
+import { MatKeyboardModule } from '@ngx-material-keyboard/core';
+
 @NgModule({
   entryComponents: [
     BasicItemSearchComponent,
@@ -185,6 +188,7 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
     FlexLayoutModule,
     BrowserAnimationsModule,
     MaterialModule,
+    MatKeyboardModule,
     TextMaskModule
   ],
   exports: [
@@ -192,6 +196,7 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
     SelfCheckoutComponent,
     LoaderComponent,
     MaterialModule,
+    MatKeyboardModule,
     IconComponent,
     ScreenDirective,
     ReactiveFormsModule
