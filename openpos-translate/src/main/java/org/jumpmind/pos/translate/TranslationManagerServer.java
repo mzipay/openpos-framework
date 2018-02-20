@@ -188,7 +188,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     }
 
     protected DefaultScreen toScreen(ILegacyScreen headlessScreen, ITranslationManagerSubscriber subscriber) {
-        AbstractScreenTranslator<? extends DefaultScreen> lastTranslator = screenTranslatorFactory.createScreenTranslator(headlessScreen);
+        AbstractScreenTranslator<? extends DefaultScreen> lastTranslator = screenTranslatorFactory.createScreenTranslator(headlessScreen, subscriber.getAppId());
         DefaultScreen screen = null;
         if (lastTranslator != null) {
             lastTranslator.setPosSessionInfo(posSessionInfo);
