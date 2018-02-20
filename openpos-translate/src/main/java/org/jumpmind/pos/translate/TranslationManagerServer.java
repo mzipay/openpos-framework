@@ -28,9 +28,9 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
 
     private ILegacySubsystem legacySubsystem;
 
-    private Map<String, ILegacyScreenTranslatorFactory> screenTranslatorFactories = new HashMap<>();
+    private ILegacyScreenTranslatorFactory screenTranslatorFactory;
 
-    private Map<String, ILegacyScreenInterceptor> screenInterceptors = new HashMap<>();
+    private ILegacyScreenInterceptor screenInterceptor;
 
     private InteractionMacro activeMacro;
 
@@ -44,8 +44,8 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
             Class<?> subsystemClass) {
         this.subsystemClass = subsystemClass;
         this.posSessionInfo = new POSSessionInfo();
-        screenInterceptors.put("pos", interceptor);
-        this.screenTranslatorFactories.put("pos", screenTranslatorFactory);        
+        this.screenInterceptor = interceptor;
+        this.screenTranslatorFactory = screenTranslatorFactory;
     }
 
     @Override
@@ -178,8 +178,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
             if (screen != null && subscriber.isInTranslateState()) {
                 AbstractScreenTranslator<?> lastTranslator = this.lastTranslatorByAppId.get(subscriber.getAppId());
                 ILegacyScreen previousScreen = lastTranslator != null ? lastTranslator.getLegacyScreen() : null;
-                if (!screenInterceptors.get(subscriber.getAppId()).intercept(screen, previousScreen, subscriber, this,
-                        posSessionInfo)) {
+                if (!screenInterceptor.intercept(screen, previousScreen, subscriber, this, posSessionInfo)) {
                     subscriber.showScreen(toScreen(screen, subscriber));
                 } else {
                     this.lastTranslatorByAppId.put(subscriber.getAppId(), null);
@@ -189,8 +188,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     }
 
     protected DefaultScreen toScreen(ILegacyScreen headlessScreen, ITranslationManagerSubscriber subscriber) {
-        AbstractScreenTranslator<? extends DefaultScreen> lastTranslator = screenTranslatorFactories.get(subscriber.getAppId())
-                .createScreenTranslator(headlessScreen);
+        AbstractScreenTranslator<? extends DefaultScreen> lastTranslator = screenTranslatorFactory.createScreenTranslator(headlessScreen);
         DefaultScreen screen = null;
         if (lastTranslator != null) {
             lastTranslator.setPosSessionInfo(posSessionInfo);
@@ -224,7 +222,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     public void sendAction(String action) {
         getLegacyUISubsystem().sendAction(action);
     }
-    
+
     public void sendAction(String action, int number) {
         getLegacyUISubsystem().sendAction(action, number);
     }
@@ -236,9 +234,8 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
             response = subscriber.sendDeviceRequest(request);
             break;
         }
-        
+
         return response;
     }
-
 
 }
