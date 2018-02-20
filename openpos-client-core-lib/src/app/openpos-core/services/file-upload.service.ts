@@ -56,7 +56,19 @@ export class FileUploadService {
                                     err => {
                                         const msg = `Upload Error occurred: ${JSON.stringify(err)}`;
                                         console.log(msg);
-                                        reject({success: false, message: msg});
+                                        const statusCode = err.status || (err.error ? err.error.status : null);
+                                        let errMsg = '';
+                                        if (err.error) {
+                                            if (err.error.error) {
+                                                errMsg += err.error.error;
+                                            }
+                                            if (err.error.message) {
+                                                errMsg += (errMsg ? '; ' : '') + err.error.message;
+                                            }
+                                        }
+                                        const returnMsg = `${statusCode ? statusCode + ': ' : ''}` +
+                                           (errMsg ? errMsg : 'Check client and server logs');
+                                        reject({success: false, message: returnMsg});
                                     });
                                 };
                                 reader.readAsArrayBuffer(file);
