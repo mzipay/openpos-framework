@@ -38,7 +38,7 @@ public class DefaultScreen implements Serializable {
     private String theme = "openpos-theme";
     private String icon;  
     private String instructions;
-    private boolean ignoreDefaultKeyboard = false;
+    private boolean useOnScreenKeyboard = false;
     
     private List<MenuItem> localMenuItems = new ArrayList<>();
     
@@ -290,11 +290,11 @@ public class DefaultScreen implements Serializable {
         return instructions;
     }
 
-	public boolean isIgnoreDefaultKeyboard() {
-		return ignoreDefaultKeyboard;
+	public boolean isUseOnScreenKeyboard() {
+		return useOnScreenKeyboard;
 	}
 
-	public void setIgnoreDefaultKeyboard(boolean ignoreDefaultKeyboard) {
-		this.ignoreDefaultKeyboard = ignoreDefaultKeyboard;
+	public void setUseOnScreenKeyboard(boolean useOnScreenKeyboard) {
+		this.useOnScreenKeyboard = useOnScreenKeyboard;
 	}
 }
