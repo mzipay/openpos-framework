@@ -8,5 +8,38 @@
                 </mat-list-item>
             </mat-list>
         </mat-card-content>
-    </mat-card>
+    </mat-card>	
+    
+    <mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
+		<mat-card-content>
+
+            <mat-table #table [dataSource]="promosDataSource">
+                <ng-container matColumnDef="desc">
+                    <mat-header-cell *matHeaderCellDef> Promotion Description </mat-header-cell>
+                    <mat-cell *matCellDef="let promo"> {{promo.description}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="price">
+                    <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+                    <mat-cell *matCellDef="let promo"> {{promo.price}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="disc">
+                    <mat-header-cell *matHeaderCellDef> Discount </mat-header-cell>
+                    <mat-cell *matCellDef="let promo"> {{promo.discount}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="ext">
+                    <mat-header-cell *matHeaderCellDef> Ext Price </mat-header-cell>
+                    <mat-cell *matCellDef="let promo"> {{promo.extPrice}} </mat-cell>
+                </ng-container>
+                
+                <mat-header-row *matHeaderRowDef="['desc', 'price', 'disc', 'ext']"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: ['desc', 'price', 'disc', 'ext'];"></mat-row>
+            </mat-table>
+	
+            <!-- //.length does not work with a datasource
+                <div *ngIf="promos.length == 0" fxLayout="column" fxLayoutAlign="center center">
+                <span class="text-md">No promotion items.</span>
+            </div> -->
+		</mat-card-content>
+	</mat-card>
 </div>
+

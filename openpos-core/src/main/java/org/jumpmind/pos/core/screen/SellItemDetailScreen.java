@@ -10,6 +10,7 @@ public class SellItemDetailScreen extends DefaultScreen {
     private SellItem item = new SellItem();
     private List<MenuItem> itemActions = new ArrayList<>();
     private Transaction transaction = new Transaction();
+    private List<PromoItem> promos = new ArrayList<>();
 
     public SellItemDetailScreen() {
         setType(ScreenType.SellItemDetail);
@@ -37,6 +38,14 @@ public class SellItemDetailScreen extends DefaultScreen {
 
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
-    }       
+    }
+
+	public List<PromoItem> getPromos() {
+		return promos;
+	}
+
+	public void setPromos(List<PromoItem> promos) {
+		this.promos = promos;
+	}
 
 }
