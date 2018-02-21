@@ -5,8 +5,8 @@
                 visible input for the masking component -->
             <input matInput placeholder="{{placeholderText}}" [(ngModel)]="dateText"
                 [textMask]="{mask: dateMask, pipe: autoCorrectedDatePipe, keepCharPositions: true}"
-                (keyup.enter)="onDateEntered()">
-            <input matInput hidden [matDatepicker]="picker" [(ngModel)]="datePickerValue" (dateChange)="onDatePicked()">
+                (keyup.enter)="onDateEntered()" [formControlName]="'promptInputControl'">
+            <input matInput hidden [matDatepicker]="picker" [(ngModel)]="datePickerValue" (dateChange)="onDatePicked()" [formControlName]="'promptInputHiddenDateControl'">
             <mat-hint align="start">{{hintText}}</mat-hint>
             <mat-datepicker-toggle matPrefix [for]="picker" class="primary"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>

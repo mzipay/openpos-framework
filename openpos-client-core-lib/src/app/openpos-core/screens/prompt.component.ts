@@ -28,7 +28,12 @@ export class PromptComponent implements AfterViewInit, IScreen, OnInit {
     if(this.session.screen.responseType == "phoneUS"){
       validators.push(OpenPosValidators.PhoneUS);
     }
-    group["promptInputControl"] = new FormControl(this.session.screen.responseText, validators);
+    group['promptInputControl'] = new FormControl(this.session.screen.responseText, validators);
+    // When showing a DATE, there is also a hidden field to handle picking of dates using
+    // a date picker, need to add a FormControl for that also.
+    if (this.session.screen.responseType === 'DATE') {
+      group['promptInputHiddenDateControl'] = new FormControl();
+    }
     this.promptFormGroup = new FormGroup(group);
   }
 
