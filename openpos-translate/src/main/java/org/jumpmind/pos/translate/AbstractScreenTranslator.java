@@ -3,6 +3,7 @@ package org.jumpmind.pos.translate;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.jumpmind.pos.core.flow.Action;
@@ -65,6 +66,7 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
         if (isBlank(screen.getIcon())) {
             screen.setIcon(iconRegistry.get(screen.getName()));
         }
+        chooseLocale();
         chooseScreenName();
         updatePosSessionInfo();
         chooseScreenTheme();
@@ -84,6 +86,10 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
         return screen;
     }
 
+    protected void chooseLocale() {
+        getScreen().setLocale(Locale.getDefault().toLanguageTag());
+    }
+    
     public POSSessionInfo getPOSSessionInfo() {
         return this.posSessionInfo;
     }

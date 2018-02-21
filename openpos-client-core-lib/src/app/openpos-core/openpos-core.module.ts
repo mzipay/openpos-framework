@@ -34,6 +34,8 @@ import { IconService } from './services/icon.service';
 import { PluginService } from './services/plugin.service';
 import { FormattersService } from './services/formatters.service';
 import { FileUploadService } from './services/file-upload.service';
+import { LocaleService, LocaleServiceImpl } from './services/locale.service';
+
 
 // Components
 import { IconComponent } from './common/controls/icon.component';
@@ -196,6 +198,7 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
   providers: [
     HttpClient,
     IconService,
+    { provide: LocaleService, useClass: LocaleServiceImpl },
     SessionService,
     DeviceService,
     Location,
@@ -208,8 +211,7 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
     MediaMatcher,
     httpInterceptorProviders,
     FormattersService,
-    FileUploadService
-
+    FileUploadService,
   ]
 })
 // Export services below under 'providers'

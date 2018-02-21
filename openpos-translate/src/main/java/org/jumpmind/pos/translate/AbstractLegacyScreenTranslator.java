@@ -299,6 +299,11 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     }
 
     @Override
+    protected void chooseLocale() {
+        getScreen().setLocale(this.getLegacyPOSBeanService().getLegacyLocaleUtilities().getCurrentLocale().toLanguageTag());
+    }
+    
+    @Override
     protected void chooseScreenName() {
         String screenName = null;
         ILegacyStatusBeanModel statusModel = this.legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);

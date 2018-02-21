@@ -38,6 +38,7 @@ public class DefaultScreen implements Serializable {
     private String theme = "openpos-theme";
     private String icon;  
     private String instructions;
+    private String locale;
     
     private List<MenuItem> localMenuItems = new ArrayList<>();
     
@@ -287,5 +288,13 @@ public class DefaultScreen implements Serializable {
     
     public String getInstructions() {
         return instructions;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 }

@@ -15,12 +15,12 @@ import { FunctionActionIntercepter, ActionIntercepter } from '../common/actionIn
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confirmation-dialog.component';
 import { IUrlMenuItem } from '../common/iurlmenuitem';
+import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 
 declare var cordova: any;
 
 @Injectable()
-export class SessionService {
-
+export class SessionService implements ILocaleService {
   public screen: any;
 
   public dialog: any;
@@ -327,4 +327,13 @@ export class SessionService {
       url = url + '/api';
       return url;
   }
+
+  getLocale(): string {
+    let returnLocale: string;
+    if (this.screen) {
+      returnLocale = this.screen.locale;
+    }
+    return returnLocale || DEFAULT_LOCALE;
+  }
+
 }
