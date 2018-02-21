@@ -13,6 +13,7 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
+import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.ComboField;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
@@ -92,6 +93,8 @@ public class ScreenService implements IScreenService {
                 valueList = ((FormListField) formElement).getValues();
             } else if (formElement instanceof ComboField) {
                 valueList = ((ComboField) formElement).getValues();
+            } else if (formElement instanceof ToggleField) {
+                valueList = ((ToggleField) formElement).getValues();
             }
             if (valueList != null) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();

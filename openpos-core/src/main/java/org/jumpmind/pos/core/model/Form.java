@@ -46,6 +46,12 @@ public class Form implements Serializable {
 
     }
     
+    public ToggleField addToggleButton(String fieldId, String label, List<String> values, String defaultVal) {
+    		ToggleField field = new ToggleField(fieldId, label, values, defaultVal);
+    		formElements.add(field);
+    		return field;
+    }
+    
     public static FormField createDateField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.AlphanumericText, required);
         formField.setPattern(PATTERN_DATE);

@@ -1,7 +1,11 @@
 <div [formGroup]="formGroup">
 
-    <ng-container *ngIf="formField.elementType==='Input'">
-
+    <mat-button-toggle-group *ngIf="formField.inputType==='ToggleButton'" [formControlName]="formField.id">
+        <mat-button-toggle *ngFor="let value of values | async" [value]="value">
+          {{value}}
+        </mat-button-toggle>
+    </mat-button-toggle-group> 
+    <ng-container *ngIf="formField.elementType==='Input' && formField.inputType != 'ToggleButton'">
         <mat-form-field style="width:100%" [ngSwitch]="formField.inputType">
             <input *ngSwitchDefault matInput [formControlName]="formField.id" [formControl]="formGroup.controls[formField.id]" 
                 [placeholder]="getPlaceholderText(formField)" [formatterName]="formField.inputType">

@@ -9,5 +9,6 @@ public enum FieldInputType {
     SubmitOptionList,
     TextArea,
     Phone,
-    Money
+    Money,
+    ToggleButton
 }
