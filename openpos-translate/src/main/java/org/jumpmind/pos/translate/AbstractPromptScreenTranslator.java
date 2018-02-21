@@ -13,8 +13,12 @@ public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> ex
 
 	private String overrideLegacyResponseType = "";
 	
-    public AbstractPromptScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
-        super(headlessScreen, screenClass);
+	public AbstractPromptScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
+	    this(legacyScreen, screenClass, null);
+	}
+	
+    public AbstractPromptScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, String appId) {
+        super(legacyScreen, screenClass, appId);
         if (!IPromptScreen.class.isAssignableFrom(screenClass)) {
             throw new IllegalArgumentException(String.format("screenClass %s must be assignable from %s", screenClass.getSimpleName(),
                     IPromptScreen.class.getSimpleName()));
@@ -86,8 +90,8 @@ public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> ex
         try {
             ILegacyPromptAndResponseModel promptAndResponseModel = this.legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
             
-            String promptTextTag = promptResponsePanel.getPropertyValue("promptTextTag");
-            String resourceText = this.legacyPOSBeanService.getLegacyUIUtilities().retrieveText("PromptAndResponsePanelSpec", resourceBundleFilename, promptTextTag);
+            String promptTextTag = promptResponsePanel.getPropertyValue("promptTextTag");            
+            String resourceText = this.legacyPOSBeanService.getLegacyUIUtilities().retrieveText(promptResponsePanel.getBeanSpecName(), resourceBundleFilename, promptTextTag);
             String formattedPromptText = toFormattedString(resourceText, promptAndResponseModel != null ? promptAndResponseModel.getArguments() : null);
 
             // if for some reason above didn't yield some text OR there are still a placeholder in the string, try to get the
