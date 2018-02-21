@@ -1,5 +1,5 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" class="serrated-edge">
-    <mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
+    <mat-card fxFlex="none" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
         <mat-card-content>
             <mat-list class="list-seperator field-list" ngClass="xs">
                 <mat-list-item *ngFor="let field of session.screen.item.fields">
@@ -10,7 +10,7 @@
         </mat-card-content>
     </mat-card>	
     
-    <mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
+    <mat-card fxFlex="shrink" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
 		<mat-card-content>
 
             <mat-table #table [dataSource]="promosDataSource">
