@@ -41,14 +41,17 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     protected IUIActionOverrider actionOverrider;
     
     protected String appId;
+    
+    protected Properties properties;
 
     public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
         super(legacyScreen, screenClass);
     }
     
-    public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, String appId) {
+    public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, String appId, Properties properties) {
         super(legacyScreen, screenClass);
         this.appId = appId;
+        this.properties = properties;
     }    
     
     protected boolean isPOS() {
