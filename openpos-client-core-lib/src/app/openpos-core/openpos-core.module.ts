@@ -95,6 +95,7 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
 
 // On Screen Keyboard
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
+import { KeyboardDirective } from './common/keyboard.directive'
 
 @NgModule({
   entryComponents: [
@@ -179,7 +180,8 @@ import { MatKeyboardModule } from '@ngx-material-keyboard/core';
     MarkDirtyOnSubmit,
     AutoSelectOnFocus,
     OverFlowListComponent,
-    FormattedInputValueAccessor
+    FormattedInputValueAccessor,
+    KeyboardDirective
   ],
   imports: [
     BrowserModule,

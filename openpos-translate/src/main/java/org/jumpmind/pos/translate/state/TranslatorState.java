@@ -1,8 +1,11 @@
 package org.jumpmind.pos.translate.state;
 
+import java.util.Arrays;
+import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 
@@ -20,6 +23,10 @@ import org.jumpmind.pos.translate.ITranslationManagerSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.AbstractEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.MutablePropertySources;
 
 public class TranslatorState implements IState {
 
@@ -27,15 +34,18 @@ public class TranslatorState implements IState {
 
     @Autowired
     protected IStateManager stateManager;
-    
-    @Autowired 
+
+    @Autowired
     protected ITranslationManager translationManager;
-    
-    @Autowired(required=false)
+
+    @Autowired(required = false)
     protected ITranslationManagerSubscriber subscriber;
-    
+
     @Autowired
     protected IDeviceService deviceService;
+
+    @Autowired
+    protected Environment env;
 
     @PostConstruct
     public void init() {
@@ -44,55 +54,72 @@ public class TranslatorState implements IState {
                     + ITranslationManager.class.getSimpleName() + " to be bound at the prototype scope");
         }
     }
-    
+
     @Override
-    public void arrive( Action action ) {
+    public void arrive(Action action) {
         subscribe();
-        translationManager.showActiveScreen();              
-    } 
-    
+        translationManager.showActiveScreen();
+    }
+
     protected void subscribe() {
         if (subscriber == null) {
             ITranslationManagerSubscriber subscriber = new ITranslationManagerSubscriber() {
-                
+
+                Properties properties;
+
                 @Override
                 public void showScreen(DefaultScreen screen) {
-                   stateManager.showScreen(screen);                    
+                    stateManager.showScreen(screen);
                 }
-                
+
                 @Override
-                public boolean isInTranslateState() {                   
+                public boolean isInTranslateState() {
                     return stateManager.getCurrentState() instanceof TranslatorState;
                 }
-                
+
                 @Override
                 public String getNodeId() {
                     return stateManager.getNodeId();
                 }
-                
+
                 @Override
                 public String getAppId() {
                     return stateManager.getAppId();
                 }
-                
+
+                @Override
+                public Properties getProperties() {
+                    if (properties == null) {
+                        properties = new Properties();
+                        MutablePropertySources propSrcs = ((AbstractEnvironment) env).getPropertySources();
+                        StreamSupport.stream(propSrcs.spliterator(), false).filter(ps -> ps instanceof EnumerablePropertySource)
+                                .map(ps -> ((EnumerablePropertySource<?>) ps).getPropertyNames()).flatMap(Arrays::<String> stream)
+                                .forEach(propName -> properties.setProperty(propName, env.getProperty(propName)));
+                    }
+                    return properties;
+                }
+
                 @Override
                 public void doAction(Action action) {
-                    stateManager.doAction(action);                    
+                    stateManager.doAction(action);
                 }
 
                 @Override
                 public IDeviceResponse sendDeviceRequest(IDeviceRequest request) {
                     IDeviceResponse response = null;
-                    CompletableFuture<IDeviceResponse> futureResponse =  deviceService.send(stateManager.getAppId(), stateManager.getNodeId(), request );
+                    CompletableFuture<IDeviceResponse> futureResponse = deviceService.send(stateManager.getAppId(), stateManager.getNodeId(),
+                            request);
                     try {
                         response = futureResponse.get(request.getTimeout(), TimeUnit.MILLISECONDS);
                     } catch (TimeoutException ex) {
                         futureResponse.cancel(true);
-                        response = new DefaultDeviceResponse(request.getRequestId(), request.getDeviceId(), IDeviceResponse.DEVICE_TIMEOUT_RESPONSE_TYPE, "Timeout reached. " + ex.getMessage());
+                        response = new DefaultDeviceResponse(request.getRequestId(), request.getDeviceId(),
+                                IDeviceResponse.DEVICE_TIMEOUT_RESPONSE_TYPE, "Timeout reached. " + ex.getMessage());
                     } catch (Exception ex) {
                         futureResponse.cancel(true);
                         String msg = String.format("Failure waiting for a response. Error: {}", ex.getMessage());
-                        response = new DefaultDeviceResponse(request.getRequestId(), request.getDeviceId(), IDeviceResponse.DEVICE_ERROR_RESPONSE_TYPE, msg);
+                        response = new DefaultDeviceResponse(request.getRequestId(), request.getDeviceId(),
+                                IDeviceResponse.DEVICE_ERROR_RESPONSE_TYPE, msg);
                         logger.error(msg);
                     }
                     return response;

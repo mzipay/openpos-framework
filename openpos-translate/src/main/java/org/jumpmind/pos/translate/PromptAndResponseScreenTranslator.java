@@ -1,6 +1,7 @@
 package org.jumpmind.pos.translate;
 
 import java.util.List;
+import java.util.Properties;
 
 import org.jumpmind.pos.core.model.IMaskSpec;
 import org.jumpmind.pos.core.screen.DefaultScreen;
@@ -15,8 +16,8 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
         this(legacyScreen, screenClass, addLocalMenuItems, (IMaskSpec) null);
     }
 
-    public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems, String appId) {
-        this(legacyScreen, screenClass, addLocalMenuItems, null, null, null, appId);
+    public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems, String appId, Properties properties) {
+        this(legacyScreen, screenClass, addLocalMenuItems, null, null, null, appId, properties);
     }
 
     public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems,
@@ -26,12 +27,12 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
 
     public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems,
             IMaskSpec promptMask, Integer minLength, Integer maxLength) {
-        this(legacyScreen, screenClass, addLocalMenuItems, promptMask, minLength, maxLength, null);
+        this(legacyScreen, screenClass, addLocalMenuItems, promptMask, minLength, maxLength, null, null);
     }
 
     public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems,
-            IMaskSpec promptMask, Integer minLength, Integer maxLength, String appId) {
-        super(legacyScreen, screenClass);
+            IMaskSpec promptMask, Integer minLength, Integer maxLength, String appId, Properties properties) {
+        super(legacyScreen, screenClass, appId, properties);
         getScreen().setTemplate(DefaultScreen.TEMPLATE_SELL);
         this.addLocalMenuItems = addLocalMenuItems;
         getScreen().setPromptMask(promptMask);
