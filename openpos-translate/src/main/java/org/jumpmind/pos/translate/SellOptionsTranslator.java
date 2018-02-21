@@ -1,8 +1,7 @@
 package org.jumpmind.pos.translate;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import org.jumpmind.pos.core.flow.Action;
@@ -16,8 +15,8 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Defaul
     
     InteractionMacro undoMacro;
 
-    public SellOptionsTranslator(ILegacyScreen headlessScreen, String icon, String... excludeActions) {
-        super(headlessScreen, DefaultScreen.class);
+    public SellOptionsTranslator(ILegacyScreen headlessScreen, String icon, String appId, Properties properties, String... excludeActions) {
+        super(headlessScreen, DefaultScreen.class, appId, properties);
         if (excludeActions != null) {
             for (String string : excludeActions) {
                 this.excludeLabelTags.add(string);

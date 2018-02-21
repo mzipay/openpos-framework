@@ -1,19 +1,41 @@
-import { IFormatter, IKeyFilter } from './iformatter';
+import { IFormatter } from './iformatter';
 
-export class PhoneFormatter implements IFormatter, IKeyFilter {
-    static readonly US_FILTER_REGEX = [/[2-9]/, /[0-8]/, /[0-9]/, /[2-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/];
-    static readonly CA_FILTER_REGEX = [/[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/];
+export class PhoneFormatter implements IFormatter {
+    static readonly DEFAULT_FILTER_REGEX = /^[2-9]$|^[2-9][0-8]$|^[2-9][0-8][0-9]$|^[2-9][0-8][0-9][2-9]$|^[2-9][0-8][0-9][2-9][0-9]$|^[2-9][0-8][0-9][2-9][0-9]{2}$|^[2-9][0-8][0-9][2-9][0-9]{3}$|^[2-9][0-8][0-9][2-9][0-9]{4}$|^[2-9][0-8][0-9][2-9][0-9]{5}$|^[2-9][0-8][0-9][2-9][0-9]{6}$/;
+    static readonly LOCALE_FILTER_MAP = new Map<string, RegExp>([
+        ['us', PhoneFormatter.DEFAULT_FILTER_REGEX],
+        ['ca', /^[0-9]{1,10}$/]
+    ]);
 
-    locale: string;
-    keyFilter: IKeyFilter;
-    // keyFilter = /[0-9\ ]/;
+    private _locale: string;
+
+    private keyFilter = /[0-9]/;
+    private newValueFilter = PhoneFormatter.DEFAULT_FILTER_REGEX;
     constructor() {
-        this.keyFilter = this;
+    }
+
+    set locale(locl: string) {
+        this._locale = locl;
+        // cache the formater we'll use
+        if (locl) {
+            PhoneFormatter.LOCALE_FILTER_MAP.forEach((value, mapLocaleKey) => {
+                // If given at least a portion of the mapkey is contained in the set locale,
+                // that is the filter regex we will choose.
+                if (mapLocaleKey.indexOf(this._locale.toLowerCase()) >= 0) {
+                    this.newValueFilter = value;
+                }
+            });
+        } else {
+            this.newValueFilter = PhoneFormatter.DEFAULT_FILTER_REGEX;
+        }
+
+    }
+
+    get locale(): string {
+        return this._locale;
     }
 
     formatValue(value: string): string {
-        // this.keyFilter = this;
-
         if (!value) {
             return '';
         }
@@ -30,31 +52,11 @@ export class PhoneFormatter implements IFormatter, IKeyFilter {
     }
 
     unFormatValue(value: string): string {
-        let returnValue = value.replace(/\D/g, '');
-        if (returnValue && this.filter(returnValue.slice(0, -1), returnValue.slice(-1))) {
-            returnValue = value.slice(0, -1);
-        }
-        return returnValue;
-        /*
         let n = value.replace(/\D/g, "");
         return n;
-        */
     }
 
-    filter(valueBefore: string, inputChar: string): boolean {
-        const index = (valueBefore ? valueBefore.length : 0) + (inputChar ? inputChar.length : 0) - 1;
-        let regExFilter: RegExp[];
-        if (this.locale.toLowerCase().indexOf('ca') >= 0) {
-            regExFilter = PhoneFormatter.CA_FILTER_REGEX;
-        } else {
-            regExFilter = PhoneFormatter.US_FILTER_REGEX;
-        }
-
-        if (index >= 0 && index < regExFilter.length) {
-            const regEx = regExFilter[index];
-            const match = regEx.test(inputChar);
-            return ! match;
-        }
-        return false;
+    allowKey(key: string, newValue: string) {
+        return this.newValueFilter.test(newValue);
     }
 }

@@ -2,6 +2,8 @@ import { IFormatter } from "./iformatter";
 
 export class DoNothingFormatter implements IFormatter {
    
+    locale?: string;
+
     formatValue(value: string): string {
         if( !value ) return "";
         return value;
@@ -11,5 +13,7 @@ export class DoNothingFormatter implements IFormatter {
         return value;
     }
 
-    keyFilter = null;
+    allowKey(key: string, newValue: string) {
+        return true;
+    }
 }

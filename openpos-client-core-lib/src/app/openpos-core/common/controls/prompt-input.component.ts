@@ -37,8 +37,9 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     }
 
     public onSlideChange(): void {
-      if( this.responseType === "ONOFF" )
+      if( this.responseType === "ONOFF" ) {
         this.responseText = this.onOffModel ? "ON" : "OFF";
+      }
     }
 
     public onDateEntered(): void {

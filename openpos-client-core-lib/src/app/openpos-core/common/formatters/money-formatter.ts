@@ -2,6 +2,8 @@ import { IFormatter } from "./iformatter";
 
 export class MoneyFormatter implements IFormatter {
    
+    locale?: string;
+
     formatValue(value: string): string {
         if( !value ) return "";
 
@@ -19,5 +21,9 @@ export class MoneyFormatter implements IFormatter {
         return n;
     }
 
-    keyFilter = /[0-9\ | \.]/;
+    allowKey(key: string, newValue: string): boolean {
+        return this.keyFilter.test(key);
+    }
+
+     private keyFilter = /[0-9\ | \.]/;
 }
