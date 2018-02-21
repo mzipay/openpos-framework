@@ -39,6 +39,7 @@ public class DefaultScreen implements Serializable {
     private String icon;  
     private String instructions;
     private String locale;
+    private boolean ignoreDefaultKeyboard = false;
     
     private List<MenuItem> localMenuItems = new ArrayList<>();
     
@@ -297,4 +298,12 @@ public class DefaultScreen implements Serializable {
     public void setLocale(String locale) {
         this.locale = locale;
     }
+
+	public boolean isIgnoreDefaultKeyboard() {
+		return ignoreDefaultKeyboard;
+	}
+
+	public void setIgnoreDefaultKeyboard(boolean ignoreDefaultKeyboard) {
+		this.ignoreDefaultKeyboard = ignoreDefaultKeyboard;
+	}
 }

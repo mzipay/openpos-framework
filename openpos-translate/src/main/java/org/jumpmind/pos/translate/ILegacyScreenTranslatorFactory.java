@@ -4,6 +4,6 @@ import org.jumpmind.pos.core.screen.DefaultScreen;
 
 public interface ILegacyScreenTranslatorFactory {
 
-    public AbstractScreenTranslator<? extends DefaultScreen> createScreenTranslator(ILegacyScreen orposScreen);
+    public AbstractScreenTranslator<? extends DefaultScreen> createScreenTranslator(ILegacyScreen orposScreen, String appId);
     
 }
