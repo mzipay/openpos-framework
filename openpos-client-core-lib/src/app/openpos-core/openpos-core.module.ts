@@ -34,6 +34,8 @@ import { IconService } from './services/icon.service';
 import { PluginService } from './services/plugin.service';
 import { FormattersService } from './services/formatters.service';
 import { FileUploadService } from './services/file-upload.service';
+import { LocaleService, LocaleServiceImpl } from './services/locale.service';
+
 
 // Components
 import { IconComponent } from './common/controls/icon.component';
@@ -206,6 +208,7 @@ import { KeyboardDirective } from './common/keyboard.directive'
   providers: [
     HttpClient,
     IconService,
+    { provide: LocaleService, useClass: LocaleServiceImpl },
     SessionService,
     DeviceService,
     Location,
@@ -218,8 +221,7 @@ import { KeyboardDirective } from './common/keyboard.directive'
     MediaMatcher,
     httpInterceptorProviders,
     FormattersService,
-    FileUploadService
-
+    FileUploadService,
   ]
 })
 // Export services below under 'providers'

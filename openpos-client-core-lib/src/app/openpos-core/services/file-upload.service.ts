@@ -67,7 +67,7 @@ export class FileUploadService {
                                             }
                                         }
                                         const returnMsg = `${statusCode ? statusCode + ': ' : ''}` +
-                                           (errMsg ? errMsg : 'Check client and server logs');
+                                           (errMsg ? errMsg : 'Upload failed. Check client and server logs.');
                                         reject({success: false, message: returnMsg});
                                     });
                                 };

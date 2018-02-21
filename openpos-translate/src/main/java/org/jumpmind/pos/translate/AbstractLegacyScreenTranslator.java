@@ -41,14 +41,17 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     protected IUIActionOverrider actionOverrider;
     
     protected String appId;
+    
+    protected Properties properties;
 
     public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
         super(legacyScreen, screenClass);
     }
     
-    public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, String appId) {
+    public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, String appId, Properties properties) {
         super(legacyScreen, screenClass);
         this.appId = appId;
+        this.properties = properties;
     }    
     
     protected boolean isPOS() {
@@ -128,7 +131,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
             ILegacyAssignmentSpec statusPanelSpec = legacyPOSBeanService.getLegacyAssignmentSpec(legacyScreen, STATUS_PANEL_KEY);
             String labelTag = getSpecPropertyValue(statusPanelSpec, "screenNameTag", null);
             if (labelTag != null) {
-                return legacyPOSBeanService.getLegacyUtilityManager(legacyScreen).retrieveText("StatusPanelSpec", getResourceBundleFilename(),
+                return legacyPOSBeanService.getLegacyUtilityManager(legacyScreen).retrieveText(statusPanelSpec.getBeanSpecName(), getResourceBundleFilename(),
                         labelTag, labelTag);
             } else {
                 return null;
@@ -318,6 +321,11 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
         return spec;
     }
 
+    @Override
+    protected void chooseLocale() {
+        getScreen().setLocale(this.getLegacyPOSBeanService().getLegacyLocaleUtilities().getCurrentLocale().toLanguageTag());
+    }
+    
     @Override
     protected void chooseScreenName() {
         String screenName = null;
