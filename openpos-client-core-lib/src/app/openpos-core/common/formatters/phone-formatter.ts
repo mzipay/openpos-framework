@@ -43,13 +43,15 @@ export class PhoneFormatter implements IFormatter, IKeyFilter {
 
     filter(valueBefore: string, inputChar: string): boolean {
         const index = (valueBefore ? valueBefore.length : 0) + (inputChar ? inputChar.length : 0) - 1;
-        if (index >= 0) {
-            let regEx: RegExp;
-            if (this.locale.toLowerCase().indexOf('ca') >= 0) {
-                regEx = PhoneFormatter.CA_FILTER_REGEX[index];
-            } else {
-                regEx = PhoneFormatter.US_FILTER_REGEX[index];
-            }
+        let regExFilter: RegExp[];
+        if (this.locale.toLowerCase().indexOf('ca') >= 0) {
+            regExFilter = PhoneFormatter.CA_FILTER_REGEX;
+        } else {
+            regExFilter = PhoneFormatter.US_FILTER_REGEX;
+        }
+
+        if (index >= 0 && index < regExFilter.length) {
+            const regEx = regExFilter[index];
             const match = regEx.test(inputChar);
             return ! match;
         }
