@@ -1,3 +1,4 @@
+import { GiftCodeFormatter } from './../common/formatters/giftcode-formatter';
 import { PhoneFormatter } from './../common/formatters/phone-formatter';
 import { ILocaleService } from './locale.service';
 import { Injectable } from '@angular/core';
@@ -11,8 +12,9 @@ export class FormattersService {
     private _locale: string;
 
     constructor() {
-        this.formatters.set("phone", new PhoneFormatter());
-        this.formatters.set("money", new MoneyFormatter());
+        this.formatters.set('phone', new PhoneFormatter());
+        this.formatters.set('money', new MoneyFormatter());
+        this.formatters.set('giftcode', new GiftCodeFormatter());
 
     }
     get locale(): string {
