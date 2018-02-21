@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class OpenPosValidators{
     
     static PhoneUS(c: FormControl) {
-        let regex = /[2-9][0-8]\d[2-9]{6}/
+        let regex = /^[2-9][0-8][0-9][2-9][0-9]{6}$/
     
         return regex.test(c.value) ? null : {
             'phoneUS': {
