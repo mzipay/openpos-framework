@@ -6,7 +6,7 @@ import { MatKeyboardRef, MatKeyboardService, MatKeyboardComponent } from '@ngx-m
 import { SessionService } from '../services/session.service';
 
 @Directive({
-    selector: 'input, textarea'
+    selector: 'input:not([type=checkbox]), textarea'
 })
 export class KeyboardDirective implements OnDestroy {
 
