@@ -8,13 +8,12 @@
         </mat-form-field>
     </mat-card>
     <mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
-        <form [formGroup]="promptFormGroup" (ngSubmit)="onFormSubmit()">
+        <form [formGroup]="promptFormGroup" (ngSubmit)="onFormSubmit()" novalidate [markDirtyOnSubmit]="promptFormGroup">
             <mat-card-content>		    
-                     <app-prompt-input #promptInput [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
-                    [promptIcon]="session.screen.promptIcon" [responseText]="session.screen.responseText" [hintText]="session.screen.text" [maskSpec]="session.screen.promptMask" 
-                    [minLength]="session.screen.minLength" [maxLength]="session.screen.maxLength"
+                    <app-prompt-input #promptInput *ngIf="session.screen.editable" [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
+					[promptIcon]="session.screen.promptIcon" [responseText]="session.screen.responseText" [hintText]="session.screen.text" [maskSpec]="session.screen.promptMask" 
+					[minLength]="session.screen.minLength" [maxLength]="session.screen.maxLength"
                     [promptFormGroup]="promptFormGroup"></app-prompt-input>
-
             </mat-card-content>
             <mat-card-actions *ngIf="session.screen.actionButton" align="end">
                 <button mat-icon-button type="submit">
