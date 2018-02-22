@@ -5,17 +5,22 @@
           {{value}}
         </mat-button-toggle>
     </mat-button-toggle-group> 
+
     <ng-container *ngIf="formField.elementType==='Input' && formField.inputType != 'ToggleButton'">
         <mat-form-field style="width:100%" [ngSwitch]="formField.inputType">
+
             <input *ngSwitchDefault matInput [formControlName]="formField.id" [formControl]="formGroup.controls[formField.id]" 
-                [placeholder]="getPlaceholderText(formField)" [formatterName]="formField.inputType">
+                [placeholder]="getPlaceholderText(formField)" [formatterName]="formField.inputType" [required]="formField.required">
+
             <input *ngSwitchCase="'AlphanumericPassword'" matInput [formControlName]="formField.id"  [placeholder]="getPlaceholderText(formField)"
-                type="password">
-            <mat-select  *ngSwitchCase="'ComboBox'" [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)" (change)="onFormElementChanged(formField, $event)">
+                type="password" [required]="formField.required">
+
+            <mat-select  *ngSwitchCase="'ComboBox'" [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)" (change)="onFormElementChanged(formField, $event)" [required]="formField.required">
                 <mat-option *ngFor="let value of values | async" [value]="value">{{value}}</mat-option>
             </mat-select>
+
             <textarea *ngSwitchCase="'TextArea'" style="width:50%" [value]="formField.value" [name]="formField.id" [placeholder]="getPlaceholderText(formField)" 
-                matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled"></textarea>
+                matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled" [required]="formField.required"></textarea>
 
             <!--We should probably deprectate this since it is only used for the void options screen on biglots and 
             there is probably a better way to do it now.-->
