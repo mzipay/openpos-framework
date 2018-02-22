@@ -4,7 +4,6 @@ import { DatePipe } from '@angular/common';
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
 import { TextMask, IMaskSpec, ITextMask } from '../textmask';
 import { ErrorStateMatcher } from '@angular/material';
-import { PhoneFormatter } from '../formatters/phone-formatter';
 
 @Component({
     selector: 'app-prompt-input',

@@ -2,7 +2,6 @@ import { Directive, Input, ElementRef, forwardRef, Renderer2, OnInit } from '@an
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IFormatter } from './formatters/iformatter';
 import { FormattersService } from './../services/formatters.service';
-import { LocaleService } from '../services/locale.service';
 
 export const FORMATTED_INPUT_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -27,12 +26,11 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
     onChange = (value: string) => {};
     onTouched = () => {};
 
-    constructor(private renderer: Renderer2, private elRef: ElementRef, private formatterService: FormattersService,
-        private localeService: LocaleService )  {
+    constructor(private renderer: Renderer2, private elRef: ElementRef, private formatterService: FormattersService)  {
     }
 
     ngOnInit(): void {
-        this.formatter = this.formatterService.getFormatter(this.formatterName, this.localeService.getLocale());
+        this.formatter = this.formatterService.getFormatter(this.formatterName);
     }
 
     writeValue(value: string): void {
