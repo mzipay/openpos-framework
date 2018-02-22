@@ -96,6 +96,7 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
 // On Screen Keyboard
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { KeyboardDirective } from './common/keyboard.directive'
+import { ValidatorsService } from './services/validators.service';
 
 @NgModule({
   entryComponents: [
@@ -221,6 +222,7 @@ import { KeyboardDirective } from './common/keyboard.directive'
     MediaMatcher,
     httpInterceptorProviders,
     FormattersService,
+    ValidatorsService,
     FileUploadService,
   ]
 })

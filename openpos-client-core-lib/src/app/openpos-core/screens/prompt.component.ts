@@ -6,6 +6,7 @@ import {SessionService} from '../services/session.service';
 import { AbstractApp } from '../common/abstract-app';
 import { PhoneUSValidatorDirective } from '../common/validators/phone.directive';
 import { OpenPosValidators } from '../common/validators/openpos-validators';
+import { ValidatorsService } from '../services/validators.service';
 
 @Component({
   selector: 'app-prompt',
@@ -15,7 +16,7 @@ export class PromptComponent implements AfterViewInit, IScreen, OnInit {
   initialized = false;
   promptFormGroup: FormGroup;
 
-  constructor(public session: SessionService) {
+  constructor(public session: SessionService, private validatorsService: ValidatorsService) {
   }
 
   show(session: SessionService, app: AbstractApp) {
@@ -25,9 +26,8 @@ export class PromptComponent implements AfterViewInit, IScreen, OnInit {
     let group: any = {};
     let validators: ValidatorFn[] = [];
     validators.push(Validators.required);
-    if(this.session.screen.responseType == "phone"){
-      validators.push(OpenPosValidators.PhoneUS);
-    }
+    validators.push(this.validatorsService.getValidator(this.session.screen.responseType));
+
     group['promptInputControl'] = new FormControl(this.session.screen.responseText, validators);
     // When showing a DATE, there is also a hidden field to handle picking of dates using
     // a date picker, need to add a FormControl for that also.
