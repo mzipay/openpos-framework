@@ -19,18 +19,20 @@ export class ValidatorsService {
 
     getValidator( name: string ): ValidatorFn{
         let locale = this.localeService.getLocale();
-        
-        // see if we have a validator map for the current locale
-        //  and that locale has the validator we need
-        if( this.validators.get(locale) && this.validators.get(locale).get(name)){
-            return this.validators.get(locale).get(name);
-        }
+        if( name ){
 
-        if( this.validators.get('NO-LOCALE') && this.validators.get('NO-LOCALE').get(name)){
-            return this.validators.get('NO-LOCALE').get(name);
-        }
+            let lname = name.toLowerCase();
+            // see if we have a validator map for the current locale
+            //  and that locale has the validator we need
+            if( this.validators.get(locale) && this.validators.get(locale).get(lname)){
+                return this.validators.get(locale).get(lname);
+            }
 
-        console.error( `No validator found for locale ${locale} validator name ${name}. Using and always valid validator`);
+            if( this.validators.get('NO-LOCALE') && this.validators.get('NO-LOCALE').get(lname)){
+                return this.validators.get('NO-LOCALE').get(lname);
+            }
+        }
+        console.log( `No validator found for locale ${locale} validator name ${name}. Using and always valid validator`);
         return () => { return null };
     }
 

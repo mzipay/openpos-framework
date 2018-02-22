@@ -44,7 +44,7 @@ export class FormattersService {
             }
         }
 
-        console.error( `No formatter found for locale ${locale} formatter name ${name}. Using and Do Nothing formatter`);
+        console.log( `No formatter found for locale ${locale} formatter name ${name}. Using and Do Nothing formatter`);
         return new DoNothingFormatter();
     }
 

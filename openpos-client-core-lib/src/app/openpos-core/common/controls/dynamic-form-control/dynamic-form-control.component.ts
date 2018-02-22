@@ -10,6 +10,7 @@ import { IFormElement } from '../../iformfield';
 import { Observable } from 'rxjs/Observable';
 import { ScreenService } from '../../../services/screen.service';
 import { OpenPosValidators } from '../../validators/openpos-validators';
+import { ValidatorsService } from '../../../services/validators.service';
 
 @Component({
   selector: 'app-dynamic-form-control',
@@ -24,7 +25,7 @@ export class DynamicFormControlComponent implements OnInit {
   
   form: FormGroup;
 
-  constructor( public session: SessionService, public screenService: ScreenService) { }
+  constructor( public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) { }
 
   ngOnInit() {
 
@@ -43,6 +44,8 @@ export class DynamicFormControlComponent implements OnInit {
       if(element.pattern){
         validators.push(Validators.pattern(element.pattern));
       }
+
+      validators.push(this.validatorService.getValidator(element.inputType));
 
       group[element.id] = new FormControl(element.value, validators);
     });

@@ -6,6 +6,7 @@ import { PromptInputComponent } from '../common/controls/prompt-input.component'
 
 import { PhoneUSValidatorDirective } from '../common/validators/phone.directive';
 import { OpenPosValidators } from '../common/validators/openpos-validators';
+import { ValidatorsService } from '../services/validators.service';
 
 @Component({
   selector: 'app-prompt-with-options',
@@ -15,7 +16,7 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
 
   promptFormGroup: FormGroup;
 
-  constructor(public session: SessionService) {
+  constructor(public session: SessionService, private validatorsService: ValidatorsService) {
     super(session);
   }
 
@@ -24,9 +25,8 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
     let group: any = {};
     let validators: ValidatorFn[] = [];
     validators.push(Validators.required);
-    if(this.session.screen.responseType == "phoneUS"){
-      validators.push(OpenPosValidators.PhoneUS);
-    }
+    validators.push(this.validatorsService.getValidator(this.session.screen.responseType));
+
     group["promptInputControl"] = new FormControl(this.session.screen.responseText, validators);
 
     if(this.session.screen.showComments){
