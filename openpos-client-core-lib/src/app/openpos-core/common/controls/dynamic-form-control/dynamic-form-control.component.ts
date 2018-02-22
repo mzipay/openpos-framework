@@ -41,8 +41,17 @@ export class DynamicFormControlComponent implements OnInit {
       if(element.required){
         validators.push(Validators.required);
       }
+      
       if(element.pattern){
         validators.push(Validators.pattern(element.pattern));
+      }
+
+      if(element.minLength){
+        validators.push(Validators.minLength(element.minLength));
+      }
+
+      if(element.maxLength){
+        validators.push(Validators.maxLength(element.maxLength));
       }
 
       validators.push(this.validatorService.getValidator(element.inputType));
