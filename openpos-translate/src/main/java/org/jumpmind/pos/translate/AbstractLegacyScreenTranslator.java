@@ -32,6 +32,8 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     public final static String PROMPT_RESPONSE_PANEL_KEY = "PromptAndResponsePanel";
     public final static String WORK_PANEL_KEY = "WorkPanel";
     public final static String STATUS_PANEL_KEY = "StatusPanel";
+    
+    public final static String USE_ON_SCREEN_KEYBOARD = "use.on.screen.keyboard";
 
     private ILegacyUtilityManager legacyUtilityManager;
 
@@ -106,6 +108,14 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
             workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
             screen.setWorkstation(workstation);
         }
+        setScreenProperties();
+    }
+    
+    protected void setScreenProperties() {
+    	if (properties != null && screen != null) {
+    		boolean useOnScreenKeyboard = Boolean.valueOf((String) properties.get(USE_ON_SCREEN_KEYBOARD));
+    		screen.setUseOnScreenKeyboard(useOnScreenKeyboard);
+    	}
     }
 
     protected void buildStatusItems() {
