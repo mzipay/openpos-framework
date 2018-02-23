@@ -15,10 +15,11 @@
             <button *ngIf="changePasswordAction" mat-button color="primary" (click)="onChangePasswordAction()" [disabled]="! changePasswordAction.enabled">{{changePasswordAction.title}}</button>
             <button *ngIf="forgotPasswordAction" mat-button color="primary" (click)="onForgotPasswordAction()" [disabled]="! forgotPasswordAction.enabled">{{forgotPasswordAction.title}}</button>
         </div>
-        <mat-card-actions *ngIf="hasSubmitAction(); else actionsElseBlock" align="end">
-            <!-- TODO: handle case with text and no Icon -->
-            <button mat-icon-button (click)="onSubmitAction()" [appFocus]="true">
-                <mat-icon *ngIf="submitAction">arrow_forward</mat-icon>
+        <br>
+        <mat-card-actions *ngIf="hasSubmitAction(); else actionsElseBlock" align=end>
+            <button type="submit" (click)="onSubmitAction()"  mat-raised-button color=primary>
+                <span>Next</span>
+                <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
             </button>
         </mat-card-actions>
         <ng-template #actionsElseBlock>

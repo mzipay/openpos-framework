@@ -28,8 +28,8 @@
 					</mat-menu>
 				</mat-list-item>
 			</mat-list>
-			<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center">
-				<mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" svgIcon="barcode"></mat-icon>
+			<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
+				<mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
 				<span class="text-md">Scan something to get started.</span>
 			</div>
 		</mat-card-content>
