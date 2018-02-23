@@ -4,8 +4,7 @@
 
 			<ng-container *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled">
 				<button fxHide.xs  mat-button style="margin-left:-20px" (click)="session.onAction(session.screen.backButton.action)">
-					<mat-icon class="material-icons">keyboard_arrow_left</mat-icon>
-					<span>Esc</span>
+					<mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
 				</button>
 				<span fxHide.xs >&nbsp;|&nbsp;</span>
 			</ng-container>
