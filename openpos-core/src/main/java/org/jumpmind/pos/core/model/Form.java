@@ -65,6 +65,18 @@ public class Form implements Serializable {
         return formField;
     }
     
+    public FormField addNumericField(String fieldId, String label, String value, boolean required) {
+        FormField formField = createNumericField(fieldId, label, value, required);
+        formElements.add(formField);
+        return formField;
+    }
+    
+    public static FormField createNumericField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
+        formField.setValue(value);
+        return formField;
+    }
+    
     public static FormField createMoneyField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Money, required);
         formField.setPattern(PATTERN_MONEY);
@@ -79,7 +91,7 @@ public class Form implements Serializable {
     }
     
     public static FormField createEmailField(String fieldId, String label, String value, boolean required) {
-        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.AlphanumericText, required);
         formField.setPattern(PATTERN_EMAIL);
         formField.setValue(value);
         return formField;

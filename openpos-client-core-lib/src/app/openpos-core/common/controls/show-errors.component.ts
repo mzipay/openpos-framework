@@ -17,7 +17,7 @@ export class ShowErrorsComponent {
         'pattern': () => 'Input did not match specified pattern',
         'required': () => 'This field is required',
         'minlength': () => 'Length is invalid',
-        'maxlength': () => 'Length is invlaid',
+        'maxlength': () => 'Length is invalid',
         'phoneUS' : () => 'Phone number is invalid'
     };
 

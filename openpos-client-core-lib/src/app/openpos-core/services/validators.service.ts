@@ -10,10 +10,12 @@ export class ValidatorsService {
 
     constructor( private localeService: LocaleService) {
         let USValidators = new Map<string, ValidatorFn>();
-        USValidators.set('phone', OpenPosValidators.PhoneUS);
-        USValidators.set('giftcode', OpenPosValidators.GiftCode);
-
         let NOLOCALEValidators = new Map<string, ValidatorFn>();
+
+        USValidators.set('phone', OpenPosValidators.PhoneUS);
+        
+        NOLOCALEValidators.set('giftcode', OpenPosValidators.GiftCode);
+
         this.validators.set('en-US', USValidators);
         this.validators.set('NO-LOCALE', NOLOCALEValidators);
     }
