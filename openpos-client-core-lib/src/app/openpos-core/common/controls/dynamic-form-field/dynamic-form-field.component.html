@@ -10,7 +10,8 @@
         <mat-form-field style="width:100%" [ngSwitch]="formField.inputType">
 
             <input *ngSwitchDefault matInput [formControlName]="formField.id" [formControl]="formGroup.controls[formField.id]" 
-                [placeholder]="getPlaceholderText(formField)" [formatterName]="formField.inputType" [required]="formField.required">
+                [placeholder]="getPlaceholderText(formField)" [formatterName]="formField.inputType" [required]="formField.required"
+                (change)="onFormElementChanged(formField)">
 
             <input *ngSwitchCase="'AlphanumericPassword'" matInput [formControlName]="formField.id"  [placeholder]="getPlaceholderText(formField)"
                 type="password" [required]="formField.required">

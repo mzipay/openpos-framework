@@ -18,7 +18,8 @@ public class FormField implements IFormElement, IField, Serializable {
     private String pattern;
     private boolean required = true;
     private boolean disabled = false;
-    
+    private String valueChangedAction;
+
     private Integer minLength;
     private Integer maxLength;
     
@@ -169,4 +170,17 @@ public class FormField implements IFormElement, IField, Serializable {
         this.maxLength = maxLength;
     }
 
+    public String getValueChangedAction() {
+        return valueChangedAction;
+    }
+
+    /**
+     * When this value is set, the client will call back upon the selected value changing with an action whose name is the same 
+     * as the one given
+     * @param valueChangedAction The name of an action to generate when the Combo box selected value changes.
+     */
+    public void setValueChangedAction(String valueChangedAction) {
+        this.valueChangedAction = valueChangedAction;
+    }
+   
 }
