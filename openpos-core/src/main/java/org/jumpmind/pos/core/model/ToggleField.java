@@ -9,6 +9,11 @@ public class ToggleField extends FormField {
     
     private String valueChangedAction;
     
+    public ToggleField() {
+    		setInputType(FieldInputType.ToggleButton);
+        setElementType(FieldElementType.Input);
+    }
+    
     public ToggleField(String fieldId, String label, List<String> values, String defaultValue) {
         super(fieldId, label, null);
         setInputType(FieldInputType.ToggleButton);
