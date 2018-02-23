@@ -79,7 +79,12 @@ export class DynamicFormControlComponent implements OnInit {
 
   onFieldChanged(formElement:IFormElement) {
     if(formElement.valueChangedAction) {
-      this.session.onAction(formElement.valueChangedAction, this.form.value[formElement.id]);
+      this.screenForm.formElements.forEach( element => {
+        if (element.hasOwnProperty('value')) {
+          element.value = this.form.value[element.id];
+        }
+      });
+      this.session.onAction(formElement.valueChangedAction, this.screenForm);
     }    
   }
 }
