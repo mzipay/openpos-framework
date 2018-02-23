@@ -1,11 +1,11 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
     <div fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center"  fxLayoutGap="16px">
             <mat-card fxFlex class="page-content-card text-center">
-                <mat-card-title class="accent-lighter text-sm">
+                <mat-card-title class="muted-color text-sm">
                     <div>Balance Due</div>
                 </mat-card-title>
 
-                <mat-card-content class="accent-lighter text-md">
+                <mat-card-content class="muted-color text-md">
                         <span class="super-currency-symbol">$</span>{{balanceDue}}
                 </mat-card-content>
             </mat-card>
@@ -42,7 +42,7 @@
             </mat-list>
             <div *ngIf="tenderItems.length == 0" class="text-md"
             fxLayout="column" fxLayoutAlign="center center">
-                <app-icon iconName="credit_card" class="accent-lighter" iconClass="mat-128"></app-icon>
+                <app-icon iconName="credit_card" class="muted-color" iconClass="mat-128"></app-icon>
                 Completed tenders will appear here.
             </div>
         </mat-card-content>

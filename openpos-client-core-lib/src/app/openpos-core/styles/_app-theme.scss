@@ -6,7 +6,6 @@
 
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));
-    $app-accent-lighter: mat-color(map-get($theme, accent), lighter);
     $app-warn: mat-color(map-get($theme, warn));
 
     $foreground: map-get($theme, foreground);
@@ -27,10 +26,6 @@
         color: $app-accent;
     }
 
-    .accent-lighter {
-        color:$app-accent-lighter;
-    }
-
     .primary{
         color:$app-primary;
     }
@@ -39,8 +34,12 @@
         color:green;
     }
 
+    .muted-color {
+        color:mat-color($foreground, disabled);
+    }
+
     mat-card.dark{
-        background-color: $app-accent;
+        background-color: mat-color($foreground, icon);
         color: white;
     }
 
@@ -78,20 +77,12 @@
         background-color: white;
     }
 
-    .mat-icon.mat-accent-lighter{
-        color:$app-accent-lighter;
-    }
-
     .mat-progress-bar-buffer{
         background-color:mat-color($background, app-bar); 
     }
 
-    .mat-button-toggle {
-        color:$app-accent-lighter;
-    }
-
     .mat-button-toggle-checked{
-        background: $app-accent-lighter;
+        background: $app-accent;
         color: white;
     }
     
