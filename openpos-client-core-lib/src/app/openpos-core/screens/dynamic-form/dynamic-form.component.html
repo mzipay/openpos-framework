@@ -1,15 +1,3 @@
-<ng-container>
-	<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px">
-		<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
-			<mat-card-content fxFlex="1 1 auto">
-				<div class="pad">
-
-					<app-dynamic-form-control
-						[screenForm]="session.screen.form" [submitAction]="session.screen.submitAction">
-					</app-dynamic-form-control>
-
-				</div>
-			</mat-card-content>
-		</mat-card>
-	</div>
-</ng-container>
+	<app-dynamic-form-control fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px"
+		[screenForm]="session.screen.form" [submitAction]="session.screen.submitAction">
+	</app-dynamic-form-control>

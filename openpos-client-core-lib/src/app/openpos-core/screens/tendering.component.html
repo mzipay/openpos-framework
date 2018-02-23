@@ -12,14 +12,12 @@
 
             <mat-card fxFlex class="page-content-card text-center">
                 <mat-card-content fxLayout="column" fxLayoutAlign="end">
-                    <mat-form-field>
+                    <mat-form-field ngClass="text-md" >
                         <input matInput #input #field="ngModel" [appFocus]="true" autoSelectOnFocus style="text-align:right"
                             [(ngModel)]="tenderAmount.value"
                             placeholder="{{tenderAmount.placeholder}}"
                             [required]="tenderAmount.required"
-                            [textMask]="{mask: numberMask}">
-
-                        <span matPrefix>$&nbsp;</span> <!-- TODO: localize symbol and errors -->
+                            [formatterName]="'money'">
                         <mat-error>
                                 <app-show-errors [control]="field"></app-show-errors>
                         </mat-error>

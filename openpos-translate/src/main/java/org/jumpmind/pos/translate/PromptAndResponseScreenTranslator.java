@@ -49,7 +49,7 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
             List<MenuItem> localNavButtons = generateUIActionsForLocalNavButtons(MenuItem.class, true);
             screen.setLocalMenuItems(localNavButtons);
         }
-        getScreen().setActionButton(new MenuItem("Next", "Next", "arrow_forward"));
+        getScreen().setActionButton(new MenuItem("Next", "Next", "keyboard_arrow_right"));
 
     }
 

@@ -7,8 +7,8 @@
               <button mat-button class="text-md" style="padding-left:0px;" [matMenuTriggerFor]="transactionMenu">
                 <span>{{session.screen.prompt}}</span>
                 <mat-icon>expand_more</mat-icon></button>
-              <mat-menu #transactionMenu="matMenu">
-                  <button mat-menu-item *ngFor="let m of session.screen.transactionMenuItems" (click)="doMenuItemAction(m)" 
+              <mat-menu #transactionMenu="matMenu" >
+                  <button color=primary mat-menu-item *ngFor="let m of session.screen.transactionMenuItems" (click)="doMenuItemAction(m)" 
                   [disabled]="!isMenuItemEnabled(m)">
                   <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
                   <span [ngClass]="{'muted-color': ! m.enabled}">{{m.title}}</span>
