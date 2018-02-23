@@ -20,7 +20,7 @@ export class DynamicFormFieldComponent implements OnInit {
   @Input() formField: IFormElement;
   @Input() formGroup: FormGroup;
 
-  @Output() onFieldChanged = new EventEmitter<{ formElement: IFormElement, event: Event }>();
+  @Output() onFieldChanged = new EventEmitter<IFormElement>();
  
   public values: Observable<String[]>
 
@@ -30,12 +30,8 @@ export class DynamicFormFieldComponent implements OnInit {
     this.values = this.screenService.getFieldValues(this.formField.id);
   }
 
-  onFormElementChanged(formElement: IFormElement, event: Event): void {
-    this.onFieldChanged.emit({ formElement: formElement, event: event });
-   /// if (formElement.inputType === 'ComboBox' && formElement.valueChangedAction) {
-   //   this.session.response = this.screenForm;
-   //   this.session.onAction(formElement.valueChangedAction);
-   // }
+  onFormElementChanged(formElement: IFormElement): void {
+    this.onFieldChanged.emit(formElement);
   }
 
   getFormFieldMask(): ITextMask {

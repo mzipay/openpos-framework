@@ -1,6 +1,6 @@
 <div [formGroup]="formGroup">
 
-    <mat-button-toggle-group *ngIf="formField.inputType==='ToggleButton'" [formControlName]="formField.id">
+    <mat-button-toggle-group *ngIf="formField.inputType==='ToggleButton'" [formControlName]="formField.id" (change)="onFormElementChanged(formField)" >
         <mat-button-toggle *ngFor="let value of values | async" [value]="value">
           {{value}}
         </mat-button-toggle>
@@ -15,7 +15,7 @@
             <input *ngSwitchCase="'AlphanumericPassword'" matInput [formControlName]="formField.id"  [placeholder]="getPlaceholderText(formField)"
                 type="password" [required]="formField.required">
 
-            <mat-select  *ngSwitchCase="'ComboBox'" [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)" (change)="onFormElementChanged(formField, $event)" [required]="formField.required">
+            <mat-select  *ngSwitchCase="'ComboBox'" [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)" (change)="onFormElementChanged(formField)" [required]="formField.required">
                 <mat-option *ngFor="let value of values | async" [value]="value">{{value}}</mat-option>
             </mat-select>
 
