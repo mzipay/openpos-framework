@@ -79,7 +79,7 @@ public class Form implements Serializable {
     }
     
     public static FormField createEmailField(String fieldId, String label, String value, boolean required) {
-        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.AlphanumericText, required);
         formField.setPattern(PATTERN_EMAIL);
         formField.setValue(value);
         return formField;
