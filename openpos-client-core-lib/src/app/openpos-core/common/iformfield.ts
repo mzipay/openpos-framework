@@ -14,5 +14,7 @@ export interface IFormElement {
     valueChangedAction: string;
     mask: IMaskSpec;
     pattern: string;
+    minLength: number;
+    maxLength: number;
 }
 

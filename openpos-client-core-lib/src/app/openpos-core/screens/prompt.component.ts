@@ -28,6 +28,14 @@ export class PromptComponent implements AfterViewInit, IScreen, OnInit {
     validators.push(Validators.required);
     validators.push(this.validatorsService.getValidator(this.session.screen.responseType));
 
+    if( this.session.screen.minLength ){
+      validators.push(Validators.minLength(this.session.screen.minLength));
+    }
+
+    if( this.session.screen.maxLength ){
+      validators.push(Validators.maxLength(this.session.screen.maxLength));
+    }
+
     group['promptInputControl'] = new FormControl(this.session.screen.responseText, validators);
     // When showing a DATE, there is also a hidden field to handle picking of dates using
     // a date picker, need to add a FormControl for that also.
