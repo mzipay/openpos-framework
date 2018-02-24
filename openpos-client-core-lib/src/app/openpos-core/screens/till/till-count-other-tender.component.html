@@ -1,12 +1,12 @@
 <div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding: 0 16px 0 16px">
   <input fxFlexFill fxFlex #amountInput class="bordered text-md" style="text-align: right" (keyup.enter)="onEnterAmount($event)"
-    [(ngModel)]="amountValue" placeholder="{{session.screen.promptPlaceHolderText}}" [textMask]="{mask: numberMask}">
+    [(ngModel)]="amountValue" placeholder="{{session.screen.promptPlaceHolderText}}" [formatterName]="'money'" [attr.maxlength]="10">
   <mat-card fxFlex="0 0 auto" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
     <mat-list *ngIf="items.length > 0" class="list-seperator" ngClass.xs="xs">
       <mat-list-item *ngFor="let item of items">
         <p matLine>{{item.description}}</p>
         <p matLine class="muted-color">{{item.subtitle}}</p>
-        <span class="primary text-md">{{item.amount|currency:'USD':true:'1.2'}}</span>
+        <span class="primary text-md">{{item.amount|currency:'USD':'symbol':'1.2'}}</span>
         <button mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
           <mat-icon>expand_more</mat-icon>
         </button>
@@ -24,16 +24,17 @@
     <mat-card-content>
       <p ngClass="muted-color text-lg" ngClass.xs="text-md" style="text-align: right; padding-right: 50px">
         Total:
-        <span class="super-currency-symbol"></span>{{totalAmount|currency:session.getCurrencyDenomination():true:'1.2'}}
+        <span class="super-currency-symbol"></span>{{totalAmount|currency:session.getCurrencyDenomination():'symbol':'1.2'}}
       </p>
     </mat-card-content>
   </mat-card>
 
   <ng-container *ngIf="nextAction">
     <div fxLayoutAlign="end">
-      <button mat-icon-button (click)="onNextAction()" [appFocus]="true">
-        <mat-icon>{{nextAction.icon}}</mat-icon>
-      </button>
+      <button type="submit" mat-button color="primary-inverse" (click)="onNextAction()" [appFocus]="true">
+          <span>Next</span>
+          <mat-icon class="material-icons">{{nextAction.icon}}</mat-icon>
+      </button>      
     </div>
   </ng-container>
 </div>
