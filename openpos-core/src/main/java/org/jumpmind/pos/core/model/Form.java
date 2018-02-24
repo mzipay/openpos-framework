@@ -131,8 +131,7 @@ public class Form implements Serializable {
     }
     
     public FormField addPercentField(String fieldId, String label, String value, boolean required) {
-        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
-        formField.setPattern(PATTERN_PERCENT);
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Percent, required);
         formField.setValue(value);
         formElements.add(formField);
         return formField;

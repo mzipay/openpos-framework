@@ -1,3 +1,4 @@
+import { PercentageFormatter } from './../common/formatters/percentage-formatter';
 import { GiftCodeFormatter } from './../common/formatters/giftcode-formatter';
 import { LocaleService } from './locale.service';
 import { Injectable } from '@angular/core';
@@ -36,7 +37,8 @@ export class FormattersService {
         NOLOCALEFormatters.set('giftcode', new GiftCodeFormatter());
         // Use USD formatter as default
         NOLOCALEFormatters.set('money', new MoneyFormatter());
-        NOLOCALEFormatters.set('phone', defaultPhoneFormatter)
+        NOLOCALEFormatters.set('phone', defaultPhoneFormatter);
+        NOLOCALEFormatters.set('percent', new PercentageFormatter());
     }
 
     getFormatter( name: string ): IFormatter{
