@@ -118,7 +118,8 @@ public class Form implements Serializable {
     
     public static FormField createPhoneField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Phone, required);
-        formField.setPattern(PATTERN_US_PHONE_NUMBER);
+        // Client-side Validators are now used for validation 
+        // formField.setPattern(PATTERN_US_PHONE_NUMBER);
         formField.setValue(value);
         return formField;
     }
