@@ -63,6 +63,7 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
     }
 
     public T build() {
+        logger.info("{} is building a screen of type '{}'", getClass().getSimpleName(), getScreen().getType());
         if (isBlank(screen.getIcon())) {
             screen.setIcon(iconRegistry.get(screen.getName()));
         }
