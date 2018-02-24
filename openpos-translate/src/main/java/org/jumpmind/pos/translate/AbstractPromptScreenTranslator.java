@@ -12,8 +12,6 @@ import org.jumpmind.pos.core.screen.IPromptScreen;
 
 public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> extends AbstractLegacyScreenTranslator<T> {
 
-	private String overrideLegacyResponseType = "";
-	
 	public AbstractPromptScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
 	    this(legacyScreen, screenClass, null, null);
 	}
@@ -24,10 +22,6 @@ public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> ex
             throw new IllegalArgumentException(String.format("screenClass %s must be assignable from %s", screenClass.getSimpleName(),
                     IPromptScreen.class.getSimpleName()));
         }
-    }
-    
-    public void OverrideLegacyResponseType( String type ) {
-    		overrideLegacyResponseType = type;
     }
 
     protected void configureScreenResponseField() {
@@ -57,10 +51,9 @@ public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> ex
             if (enterData) {
                 promptScreen.setResponseText(promptAndResponseBeanModel.getResponseText());
                 promptScreen.setEditable(true);
-                if(overrideLegacyResponseType.equals("") ) {
+                // If the reponseType has already been set before getting here, don't override it.
+                if(StringUtils.isEmpty(promptScreen.getResponseType()) ) {
                     promptScreen.setResponseType(responseFieldType);
-                } else {
-                		promptScreen.setResponseType(overrideLegacyResponseType);
                 }
                 
                 if (promptAndResponseBeanModel.getMinLength() != null) {
