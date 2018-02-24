@@ -9,33 +9,39 @@ export class ValidatorsService {
     private validators = new Map<string, Map<string, ValidatorFn>>();
 
     constructor( private localeService: LocaleService) {
-        let USValidators = new Map<string, ValidatorFn>();
-        let NOLOCALEValidators = new Map<string, ValidatorFn>();
+        const USValidators = new Map<string, ValidatorFn>();
+        const NOLOCALEValidators = new Map<string, ValidatorFn>();
+        const CAValidators = new Map<string, ValidatorFn>();
 
         USValidators.set('phone', OpenPosValidators.PhoneUS);
-        
+        CAValidators.set('phone', OpenPosValidators.PhoneCA);
+
         NOLOCALEValidators.set('giftcode', OpenPosValidators.GiftCode);
 
-        this.validators.set('en-US', USValidators);
+        this.validators.set('en-us', USValidators);
+        this.validators.set('us', USValidators);
+        this.validators.set('ca', CAValidators);
+
         this.validators.set('NO-LOCALE', NOLOCALEValidators);
     }
 
     getValidator( name: string ): ValidatorFn{
-        let locale = this.localeService.getLocale();
-        if( name ){
+        const locale = this.localeService.getLocale();
+        if( name && locale ){
 
-            let lname = name.toLowerCase();
+            const lname = name.toLowerCase();
+            const llocale = locale.toLowerCase();
             // see if we have a validator map for the current locale
             //  and that locale has the validator we need
-            if( this.validators.get(locale) && this.validators.get(locale).get(lname)){
-                return this.validators.get(locale).get(lname);
+            if( this.validators.get(llocale) && this.validators.get(llocale).get(lname)){
+                return this.validators.get(llocale).get(lname);
             }
 
             if( this.validators.get('NO-LOCALE') && this.validators.get('NO-LOCALE').get(lname)){
                 return this.validators.get('NO-LOCALE').get(lname);
             }
         }
-        console.log( `No validator found for locale ${locale} validator name ${name}. Using and always valid validator`);
+        console.log( `No validator found for locale '${locale}' validator name '${name}'. Using an 'always valid' validator`);
         return () => { return null };
     }
 
