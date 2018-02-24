@@ -14,7 +14,8 @@
     
         <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-xl">
             <mat-icon  matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
-            <input matInput [formControlName]="'promptInputControl'" [formatterName]="formatter" [appFocus]="true" autoSelectOnFocus>
+            <input matInput [formControlName]="'promptInputControl'" [formatterName]="formatter" [appFocus]="true" 
+                   [attr.minlength]="minLength" [attr.maxlength]="maxLength" autoSelectOnFocus>
             <mat-placeholder>{{placeholderText}}</mat-placeholder>
             <mat-hint class="text-sm" align="start">{{hintText}}</mat-hint>
             <mat-error class="text-sm">
