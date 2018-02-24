@@ -13,18 +13,21 @@ export class FormattersService {
     private formatters = new Map<string, Map<string,IFormatter>>();
 
     constructor( private localeService: LocaleService ) {
-        let USFormatters = new Map<string, IFormatter>();
-        USFormatters.set('phone', new PhoneUSFormatter());
-        this.formatters.set('en-US', USFormatters);
+        const USFormatters = new Map<string, IFormatter>();
+        const defaultPhoneFormatter = new PhoneUSFormatter();
 
-        let CAFormatters = new Map<string, IFormatter>();
+        USFormatters.set('phone', defaultPhoneFormatter);
+        this.formatters.set('en-us', USFormatters);
+        this.formatters.set('us', USFormatters);
+
+        const CAFormatters = new Map<string, IFormatter>();
         CAFormatters.set('phone', new PhoneCAFormatter());
-        // Some screens are dependent on 'ca' value, don't change.  If you have other
-        // ca formatters, add a second entry in the map for them.
+        // Some screens are dependent on 'ca' value, so don't change.  If you have other
+        // ca formatters that are language specific, add a second entry in the map for them.
         this.formatters.set('ca', CAFormatters);
 
         // If there isn't a specific formatter for a given locale, we fall back these
-        let NOLOCALEFormatters = new Map<string, IFormatter>();
+        const NOLOCALEFormatters = new Map<string, IFormatter>();
         this.formatters.set('NO-LOCALE', NOLOCALEFormatters);
         // Default formatters if no locale specific
         const numericFormatter = new NumericFormatter();
@@ -33,18 +36,20 @@ export class FormattersService {
         NOLOCALEFormatters.set('giftcode', new GiftCodeFormatter());
         // Use USD formatter as default
         NOLOCALEFormatters.set('money', new MoneyFormatter());
+        NOLOCALEFormatters.set('phone', defaultPhoneFormatter)
     }
 
     getFormatter( name: string ): IFormatter{
 
-        let locale = this.localeService.getLocale();
-        if( name ){
+        const locale = this.localeService.getLocale();
+        if( name && locale){
 
-            let lname = name.toLowerCase();
+            const lname = name.toLowerCase();
+            const llocale = locale.toLowerCase();
             // see if we have a validator map for the current locale
             //  and that locale has the validator we need
-            if( this.formatters.get(locale) && this.formatters.get(locale).get(lname)) {
-                return this.formatters.get(locale).get(lname);
+            if( this.formatters.get(llocale) && this.formatters.get(llocale).get(lname)) {
+                return this.formatters.get(llocale).get(lname);
             }
 
             if( this.formatters.get('NO-LOCALE') && this.formatters.get('NO-LOCALE').get(lname)){
@@ -52,7 +57,7 @@ export class FormattersService {
             }
         }
 
-        console.log( `No formatter found for locale ${locale} formatter name ${name}. Using and Do Nothing formatter`);
+        console.log( `No formatter found for locale '${locale}' formatter name '${name}'. Using a 'Do Nothing' formatter`);
         return new DoNothingFormatter();
     }
 

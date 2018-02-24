@@ -3,13 +3,31 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class OpenPosValidators {
 
     static PhoneUS(c: FormControl) {
-        let regex = /^[2-9][0-8][0-9][2-9][0-9]{6}$/
+        const regex = /^[2-9][0-8][0-9][2-9][0-9]{6}$/;
 
-        return regex.test(c.value) ? null : {
-            'phoneUS': {
-                valid: false
-            }
-        };
+        if (c.value) {
+            return regex.test(c.value) ? null : {
+                'phoneUS': {
+                    valid: false
+                }
+            };
+        } else {
+            return null;
+        }
+    }
+
+    static PhoneCA(c: FormControl) {
+        const regex = /^[0-9]{10}$/;
+
+        if (c.value) {
+            return regex.test(c.value) ? null : {
+                'phone': {
+                    valid: false
+                }
+            };
+         } else {
+            return null;
+        }
     }
 
     static GiftCode(c: FormControl) {
