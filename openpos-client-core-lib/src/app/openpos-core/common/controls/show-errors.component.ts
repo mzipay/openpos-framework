@@ -13,12 +13,13 @@ import { AbstractControlDirective, AbstractControl } from '@angular/forms';
 })
 export class ShowErrorsComponent {
     private static readonly errorMessages = {
-        'requireAtleastOne': () => 'Atleast one field is required',
+        'requireAtleastOne': () => 'At least one field is required',
         'pattern': () => 'Input did not match specified pattern',
         'required': () => 'This field is required',
         'minlength': () => 'Length is invalid',
         'maxlength': () => 'Length is invalid',
-        'phoneUS' : () => 'Phone number is invalid'
+        'phoneUS' : () => 'Phone number is invalid',
+        'phone' : () => 'Phone number is invalid'
     };
 
     @Input()
