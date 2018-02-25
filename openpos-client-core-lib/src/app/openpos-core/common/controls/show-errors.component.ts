@@ -19,7 +19,8 @@ export class ShowErrorsComponent {
         'minlength': () => 'Length is invalid',
         'maxlength': () => 'Length is invalid',
         'phoneUS' : () => 'Phone number is invalid',
-        'phone' : () => 'Phone number is invalid'
+        'phone' : () => 'Phone number is invalid',
+        'date': () => 'Date is invalid'
     };
 
     @Input()

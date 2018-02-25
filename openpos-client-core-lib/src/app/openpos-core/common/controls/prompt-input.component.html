@@ -10,6 +10,9 @@
             <mat-hint align="start">{{hintText}}</mat-hint>
             <mat-datepicker-toggle matPrefix [for]="picker" class="primary"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
+            <mat-error class="text-sm">
+                    <app-show-errors [control]="promptFormGroup.controls['promptInputControl']"></app-show-errors>
+                </mat-error>
         </mat-form-field>
     
         <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-xl">

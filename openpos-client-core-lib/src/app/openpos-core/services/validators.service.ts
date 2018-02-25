@@ -17,6 +17,7 @@ export class ValidatorsService {
         CAValidators.set('phone', OpenPosValidators.PhoneCA);
 
         NOLOCALEValidators.set('giftcode', OpenPosValidators.GiftCode);
+        NOLOCALEValidators.set('date', OpenPosValidators.DateMMDDYYYY);
 
         this.validators.set('en-us', USValidators);
         this.validators.set('us', USValidators);

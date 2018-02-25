@@ -44,11 +44,42 @@ export class OpenPosValidators {
             if( value != ""){
               return null;
             }
-          }
-          return { 
-              'requireAtleastOne': {
+        }
+        return {
+            'requireAtleastOne': {
                 valid: false
             }
         };
+    }
+
+    static DateMMDDYYYY(c: FormControl) {
+        if (c.value) {
+            const dateParts = c.value.split('/');
+            if (dateParts.length !== 3) {
+                return {
+                    'date': {
+                        valid: false
+                    }
+                };
+            } else {
+                const month = Number(dateParts[0]);
+                const dayOfMonth = Number(dateParts[1]);
+                const year = Number(dateParts[2]);
+                const date = new Date(year, month - 1, dayOfMonth);
+                // console.log(`Checking validity of entered date '${month}/${dayOfMonth}/${year}' ` +
+                // `vs. parsed date '${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}'`);
+                if (month === date.getMonth() + 1 && dayOfMonth === date.getDate() && year === date.getFullYear() ) {
+                    // console.log('Date is valid');
+                    return null;
+                } else {
+                    // console.log('Date is not valid');
+                    return {
+                        'date': {
+                            valid: false
+                        }
+                    };
+                }
+            }
+        }
     }
 }
