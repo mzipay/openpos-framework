@@ -56,6 +56,7 @@ import { PromptComponent } from './screens/prompt.component';
 import { ProductListComponent } from './common/controls/product-list.component';
 import { PromptInputComponent } from './common/controls/prompt-input.component';
 import { TransactionComponent } from './screens/transaction/transaction.component';
+import { SelfCheckoutTransactionComponent } from './screens/self-checkout-transaction/self-checkout-transaction.component';
 import { BasicItemSearchComponent } from './screens/basic-item-search.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
 import { PromptWithOptionsComponent } from './screens/prompt-with-options.component';
@@ -114,6 +115,7 @@ import { ValidatorsService } from './services/validators.service';
     PromptWithOptionsComponent,
     PromptWithInfoComponent,
     TransactionComponent,
+    SelfCheckoutTransactionComponent,
     SellItemDetailComponent,
     SignatureCaptureComponent,
     StaticTableComponent,
@@ -147,6 +149,7 @@ import { ValidatorsService } from './services/validators.service';
     PromptWithInfoComponent,
     SignatureCaptureComponent,
     TransactionComponent,
+    SelfCheckoutTransactionComponent,
     SellItemDetailComponent,
     PaymentStatusComponent,
     StaticTableComponent,

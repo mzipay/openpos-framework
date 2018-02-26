@@ -1,0 +1,61 @@
+<div fxFlexFill style="background-color:white; padding:16px" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+	<app-scan-something class="mat-elevation-z3" *ngIf="session.screen.showScan" fxFlex="0 0 auto" (enter)="onScanInputEnter($event)"
+	 placeholderText="Scan Something"></app-scan-something>
+
+	<div fxFlexFill fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="16px">
+		<mat-card fxFlex="1 1 80%" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
+			<mat-card-content>
+				<mat-list class="list-seperator" ngClass.xs="xs">
+					<mat-list-item *ngFor="let item of items">
+						<p matLine>{{item.description}}</p>
+						<p matLine class="accent-lighter">
+							<mat-chip-list>
+								{{item.subtitle}}&nbsp;
+								<mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
+							</mat-chip-list>
+						</p>
+						<span [hidden]="!item.isGiftReceipt">
+							<mat-icon color="accent-lighter">redeem</mat-icon>
+						</span>
+						<span class="primary text-md">{{item.amount|currency:'USD':true:'1.2'}}
+							<br>
+							<p [hidden]="item.discountAmount === '0.00'" class="accent-lighter text-xs" style="text-align: right; margin:0px; text-decoration:line-through">{{item.originalAmount|currency:'USD':true:'1.2'}}</p>
+							<p [hidden]="item.discountAmount === '0.00'" class="accent-lighter text-xs" style="text-align: right; margin:0px">( -{{item.discountAmount|currency:'USD':true:'1.2'}} )</p>
+						</span>
+					</mat-list-item>
+				</mat-list>
+				<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center">
+					<mat-icon color="accent-lighter" ngClass="material-icons mat-180" ngClass="material-icons mat-128" svgIcon="barcode"></mat-icon>
+					<span class="text-md">Scan something to get started.</span>
+				</div>
+			</mat-card-content>
+		</mat-card>
+
+		<mat-card fxFlex="1 1 20%" class="page-content-card dark" fxLayout="column" fxLayoutAlign="start">
+			<mat-card-content>
+				<div fxFlexFill fxFlex="0 0 auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+					<mat-card fxFlex *ngFor="let total of session.screen.totals" class="page-content-card text-center">
+						<mat-card-title class="primary text-sm">
+							{{total.name}}
+						</mat-card-title>
+						<mat-card-content>
+							<p class="primary text-lg">
+								<span class="super-currency-symbol">$</span>{{total.amount}}</p>
+						</mat-card-content>
+					</mat-card>
+					<mat-card fxFlex *ngIf="session.screen.transaction.transactionNumber" class="page-content-card text-center">
+						<mat-card-title class="primary text-sm"> Total </mat-card-title>
+						<mat-card-content>
+							<p class="primary text-lg">
+								<span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</p>
+						</mat-card-content>
+					</mat-card>
+					<button mat-button fxFlex="1 1 auto" color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!session.screen.transaction.active || items.length == 0"
+					 (click)="session.onAction('Checkout')" class="text-lg"> Checkout
+						<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
+					</button>
+				</div>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</div>
