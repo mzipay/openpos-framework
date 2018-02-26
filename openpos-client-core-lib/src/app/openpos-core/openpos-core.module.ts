@@ -44,6 +44,7 @@ import { DynamicFormControlComponent } from './common/controls/dynamic-form-cont
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
 import { PosComponent } from './pos/pos.component';
 import { SelfCheckoutComponent } from './selfcheckout/selfcheckout.component';
+import { CustomerDisplayComponent } from './customerdisplay/customerdisplay.component';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 
 // Screens
@@ -174,6 +175,7 @@ import { ValidatorsService } from './services/validators.service';
     DynamicFormFieldComponent,
     PosComponent,
     SelfCheckoutComponent,
+    CustomerDisplayComponent,
     ChangeComponent,
     ConfirmationDialogComponent,
     ShowErrorsComponent,
@@ -199,6 +201,7 @@ import { ValidatorsService } from './services/validators.service';
   exports: [
     PosComponent,
     SelfCheckoutComponent,
+    CustomerDisplayComponent,
     LoaderComponent,
     MaterialModule,
     MatKeyboardModule,
