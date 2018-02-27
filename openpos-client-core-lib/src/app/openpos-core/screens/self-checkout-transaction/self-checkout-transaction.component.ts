@@ -59,7 +59,6 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck,
     ).startWith(startSize);
   }
 
-
   ngAfterViewInit(): void {
     this.initialized = true;
   }
@@ -73,16 +72,8 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck,
     this.session.onAction('Next');
   }
 
-  onScanInputEnter( value ): void {
+  onScanInputEnter(value): void {
     this.session.onAction('Next', value);
-  }
-
-  public isMenuItemEnabled(m: IMenuItem): boolean {
-    let enabled = m.enabled;
-    if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
-      enabled = false;
-    }
-    return enabled;
   }
 
 }

@@ -46,6 +46,7 @@ import { PosComponent } from './pos/pos.component';
 import { SelfCheckoutComponent } from './selfcheckout/selfcheckout.component';
 import { CustomerDisplayComponent } from './customerdisplay/customerdisplay.component';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
+import { CheckoutListItemComponent} from './common/controls/checkout-list-item/checkout-list-item.component';
 
 // Screens
 import { DynamicFormComponent } from './screens/dynamic-form/dynamic-form.component';
@@ -133,7 +134,8 @@ import { ValidatorsService } from './services/validators.service';
     DynamicFormControlComponent,
     DynamicFormFieldComponent,
     ChangeComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    CheckoutListItemComponent
   ],
   declarations: [
     DialogComponent,
@@ -181,6 +183,7 @@ import { ValidatorsService } from './services/validators.service';
     CustomerDisplayComponent,
     ChangeComponent,
     ConfirmationDialogComponent,
+    CheckoutListItemComponent,
     ShowErrorsComponent,
     RequireAtleastOneValidatorDirective,
     MarkDirtyOnSubmit,
