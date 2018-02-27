@@ -168,6 +168,9 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             		cmdLine.add("-Djava.library.path=" + libraryPath);
             }
             
+            cmdLine.add("-Djava.net.preferIPv4Stack=true");
+            
+            
             // If you need to output where log4j is loading its config from, use this
             // cmdLine.add("-Dlog4j.debug");
             
