@@ -1,9 +1,10 @@
 <mat-card fxFlex="1 1 100%" class="page-content-card" fxLayoutAlign="start">
-    <mat-card-content fxFlex>
-        <img width="180px" height="270px" src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+    <mat-card-content fxFlexFill fxFlex>
+        <img height="300px" src="{{item.imageUrl}}" alt="{{item.description}}">
         <div fxFlexFill fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="stretch" fxLayoutGap="16px" style="padding:16px">
             <div fxFlex="1 1 auto">
-                <p>{{item.description}}</p>
+                <p class="primary text-md" style="margin-top: 8px">{{item.description}}</p>
+                <p>{{item.productDescription}}</p>
                 <p class="muted-color">
                     <mat-chip-list>
                         {{item.subtitle}}&nbsp;
@@ -11,12 +12,12 @@
                     </mat-chip-list>
                 </p>
             </div>
-            <span fxFlex="0 0 auto" class="primary text-md">{{item.amount|currency:'USD':true:'1.2'}}
+            <span fxFlex="0 1 auto" class="primary text-md" style="padding-top: 8px">{{item.amount|currency:'USD':true:'1.2'}}
                 <br>
                 <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">{{item.originalAmount|currency:'USD':true:'1.2'}}</p>
                 <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">( -{{item.discountAmount|currency:'USD':true:'1.2'}} )</p>
             </span>
-            <button mat-icon-button fxFlex="0 0 auto" color="primary">
+            <button mat-icon-button fxFlex="1 1 100px" color="primary"> Remove
                 <mat-icon>delete</mat-icon>
             </button>
         </div>
