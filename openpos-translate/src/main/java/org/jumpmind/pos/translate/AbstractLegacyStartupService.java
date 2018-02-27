@@ -77,7 +77,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
     @Override
     public void startPreviouslyStarted() {
         File workingDir = new File(this.getAppWorkingDir());
-        logger.info("The applicaiton working directory is set to {}", workingDir.getAbsolutePath());
+        logger.info("The application working directory is set to {}", workingDir.getAbsolutePath());
         workingDir.mkdirs();
         if (workingDir.exists()) {
             File[] files = workingDir.listFiles();
@@ -167,6 +167,9 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             if(StringUtils.isNotEmpty(libraryPath)) {
             		cmdLine.add("-Djava.library.path=" + libraryPath);
             }
+            
+            // If you need to output where log4j is loading its config from, use this
+            // cmdLine.add("-Dlog4j.debug");
             
             cmdLine.add("-cp");
             if (classpath.toLowerCase().contains("openpos-server.jar")) {

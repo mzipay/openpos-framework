@@ -179,18 +179,17 @@ export class SessionService implements ILocaleService {
   public async onAction(action: string | IMenuItem, payload?: any, confirm?: string) {
     let actionString = ""
     //we need to figure out if we are a menuItem or just a string
-    if( action.hasOwnProperty('action') ){
+    if( action.hasOwnProperty('action') ) {
       let menuItem = <IMenuItem>(action);
       
-      //check to see if we are a IURLMenuItem
-      if( menuItem.hasOwnProperty('url')){
+      actionString = menuItem.action;
+      //check to see if we are an IURLMenuItem
+      if( menuItem.hasOwnProperty('url')) {
         let urlMenuItem = <IUrlMenuItem> menuItem;
         window.open(urlMenuItem.url, urlMenuItem.targetMode);
-        return;
-      } else {
-        actionString = menuItem.action;
+        if (!actionString || 0 === actionString.length) 
+          return;
       }
-      
     } else {
       actionString = <string>action;
     }

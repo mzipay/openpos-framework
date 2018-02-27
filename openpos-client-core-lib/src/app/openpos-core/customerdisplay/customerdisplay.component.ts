@@ -27,7 +27,7 @@ export class CustomerDisplayComponent extends AbstractApp implements DoCheck {
   }
 
   public appName(): string {
-    return 'selfcheckout';
+    return 'customerdisplay';
   }
 
   ngDoCheck(): void {

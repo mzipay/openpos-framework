@@ -1,5 +1,8 @@
 package org.jumpmind.pos.core.javapos;
 
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
@@ -29,7 +32,11 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
     protected int recLineSpacing;
     protected int rotateSpecial;
     protected boolean slpLetterQuality;
+    protected Map<Integer, InMemoryBitmap> inMemoryBitmaps;
 
+    public SimulatedPOSPrinterService() {
+        logger.trace(String.format("%s created", this.getClass()));
+    }
     @Override
     public void reset() {
     }
@@ -847,8 +854,208 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
     public boolean getCapServiceAllowManagement() throws JposException {
         return false;
     }
-
-    public void printNormalWithEscapeSequences(int station, String data) throws JposException {
+    
+    public Map<Integer, InMemoryBitmap> getInMemoryBitmaps() {
+        return inMemoryBitmaps;
     }
 
+    public void printNormalWithEscapeSequences(int station, String data) throws JposException {
+        // Add additional escape sequence classes here to be filtered on.
+        IEscapeSequence[] checkSequences = new IEscapeSequence[] { 
+                new PrintBitmapEscapeSequence(),
+                new PrintLineFeedEscapeSequence()};
+        
+        // Capture the length - 1 so that all comparisons are against 0 based index
+        int indexedLength = data.length() - 1;
+        
+        int nextFilterPosition = indexedLength;
+        int previousPrintPosition = 0;
+        
+        do {
+            nextFilterPosition = indexedLength;
+            IEscapeSequence seqToPrint = null;
+            
+            // Find the position of next escape sequence
+            for (int i = 0; i < checkSequences.length; i++) {
+                int currentFilterEndPosition = checkSequences[i].findNext(data, previousPrintPosition);
+                
+                
+                if (currentFilterEndPosition >= 0 && currentFilterEndPosition <= nextFilterPosition) {
+                    // We found a sequence match that occurs sooner than what we had before
+                    nextFilterPosition = currentFilterEndPosition;
+                    seqToPrint = checkSequences[i];
+                }
+            }
+            if (nextFilterPosition <= indexedLength) {
+                int endPrintPosition = seqToPrint == null ? data.length() - 1 : nextFilterPosition - (seqToPrint.getSequenceLength() - 1);
+                
+                // print normal text 
+                if (previousPrintPosition >= 0 && endPrintPosition >= previousPrintPosition) {
+                    // Check if we are at last piece of text, if so just print remaining.
+                    String text = endPrintPosition == indexedLength 
+                                        ? data.substring(previousPrintPosition) 
+                                        : data.substring(previousPrintPosition, endPrintPosition);
+                    
+                    String[] replacedChars = {"|N", "|bC", "|rA"};
+                    for (int i = 0; i < replacedChars.length ; i++) {
+                        text = StringUtils.replace(text, replacedChars[i], "");
+                    }
+                    appendText(station, text);
+                }
+                
+                if (seqToPrint != null) {
+                    // print the escape
+                    seqToPrint.print(this, station);
+                }
+            }           
+            previousPrintPosition = nextFilterPosition + 1;
+        } while (nextFilterPosition  < indexedLength);
+    }
+
+    
+    public interface IEscapeSequence {
+        public void print(SimulatedPOSPrinterService service, int station) throws JposException;
+        
+        public int findNext(String data, int startPosition);
+        
+        public int getSequenceLength();
+        
+        public String getPrefix();
+        
+        public String getSuffix();
+    }
+
+    public abstract class AbstractEscapeSequence implements IEscapeSequence {
+        private String prefix = Character.toString('\u001B') + "x";
+
+        public String getPrefix() {
+            return prefix;
+        }
+        
+    }    
+    public class PrintBitmapEscapeSequence extends AbstractEscapeSequence {
+        private int bitmapNumber;
+            
+        public void print(SimulatedPOSPrinterService printerService, int station) throws JposException {
+            if (printerService.getInMemoryBitmaps() == null || 
+                    !printerService.getInMemoryBitmaps().containsKey(new Integer(bitmapNumber))) {
+                
+                logger.error("Unable to print bitmap from memory, it was not found.  " +
+                        "Ensure setBitmap() was called to load it.");
+            }
+            else {
+                InMemoryBitmap memoryBMap = printerService.getInMemoryBitmaps().get(new Integer(bitmapNumber));
+                printerService.printBitmap(memoryBMap.getStation(), memoryBMap.getFileName(), 
+                        memoryBMap.getWidth(), memoryBMap.getAlignment());
+            }
+        }
+
+        public int findNext(String data, int startPosition) {
+            int current = data.indexOf(getPrefix(), startPosition);
+            if (current >= 0) {
+                int beginSeqPosition = current + getPrefix().length();
+                int endSeqPosition = data.indexOf(getSuffix(), beginSeqPosition);
+                if (endSeqPosition > 0) {
+                    bitmapNumber = new Integer(data.substring(beginSeqPosition, endSeqPosition)).intValue();
+                } 
+                else {
+                    current = -1;
+                }
+                current = endSeqPosition;
+            }
+            return current;
+        }   
+        
+        public int getSequenceLength() {
+            int length = 0;
+            if (bitmapNumber > 0) {
+                length = new String(getPrefix() + (new Integer(bitmapNumber).toString()) + getSuffix()).length();
+            }
+            return length;
+        }
+        
+        public String getSuffix() {
+            return "B";
+        }
+    }
+    
+    public class PrintLineFeedEscapeSequence extends AbstractEscapeSequence {
+        private int lineFeedNumber;
+        
+        public int findNext(String data, int startPosition) {
+            int current = data.indexOf(getPrefix(), startPosition);
+            if (current >= 0) {
+                int beginSeqPosition = current + getPrefix().length();
+                int endSeqPosition = data.indexOf(getSuffix(), beginSeqPosition);
+                if (endSeqPosition > 0) {
+                    lineFeedNumber = new Integer(data.substring(beginSeqPosition, endSeqPosition)).intValue();
+                    current = endSeqPosition + getSuffix().length() - 1;
+                } 
+                else {
+                    current = -1;
+                }
+                
+            }
+            return current;
+        }
+
+        public int getSequenceLength() {
+            int length = 0;
+            if (lineFeedNumber > 0) {
+                length = new String(getPrefix() + (new Integer(lineFeedNumber).toString()) + getSuffix()).length();
+            }
+            return length;
+        }
+
+        public String getSuffix() {
+            return "lF";
+        }
+
+        public void print(SimulatedPOSPrinterService service, int station) throws JposException {
+            for (int i = 0; i < lineFeedNumber; i++) {
+                service.printNormal(station, "\n");
+            }
+        }
+        
+
+    }    
+    
+    public class InMemoryBitmap {
+        private int station;
+        private String fileName;
+        private int width;
+        private int alignment;
+        
+        public InMemoryBitmap(int station, String fileName, int width, int alignment) {
+            this.station = station;
+            this.fileName = fileName;
+            this.width = width;
+            this.alignment = alignment;         
+        }
+        public int getStation() {
+            return station;
+        }
+        public void setStation(int station) {
+            this.station = station;
+        }
+        public String getFileName() {
+            return fileName;
+        }
+        public void setFileName(String fileName) {
+            this.fileName = fileName;
+        }
+        public int getWidth() {
+            return width;
+        }
+        public void setWidth(int width) {
+            this.width = width;
+        }
+        public int getAlignment() {
+            return alignment;
+        }
+        public void setAlignment(int alignment) {
+            this.alignment = alignment;
+        }
+    }
+    
 }
