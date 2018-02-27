@@ -1,7 +1,6 @@
 import { DeviceService } from '../../services/device.service';
 import { ISellItem } from '../../common/isellitem';
 import { IScreen } from '../../common/iscreen';
-import { IMenuItem } from '../../common/imenuitem';
 import { Component, ViewChild, AfterViewInit, AfterContentInit, DoCheck, OnInit } from '@angular/core';
 import { SessionService } from '../../services/session.service';
 import { AbstractApp } from '../../common/abstract-app';
@@ -61,10 +60,6 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck,
 
   ngAfterViewInit(): void {
     this.initialized = true;
-  }
-
-  public doMenuItemAction(menuItem: IMenuItem, payLoad: any) {
-    this.session.onAction(menuItem.action, payLoad, menuItem.confirmationMessage);
   }
 
   onEnter(value: string) {

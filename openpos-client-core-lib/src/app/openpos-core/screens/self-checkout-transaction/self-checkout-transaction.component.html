@@ -6,7 +6,7 @@
 		<mat-card fxFlex="0 0 80%" class="page-content-card lighter scrollable-content-card mat-elevation-z3" fxLayout="column" fxLayoutAlign="start">
 			<mat-card-content>
 
-				<app-checkout-list-item *ngFor="let i of items" [item]=i></app-checkout-list-item>
+				<app-checkout-list-item *ngFor="let i of items" [item]=i [session]=session></app-checkout-list-item>
 
 				<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center">
 					<mat-icon color="accent-lighter" ngClass="material-icons mat-180" ngClass="material-icons mat-128" svgIcon="barcode"></mat-icon>
