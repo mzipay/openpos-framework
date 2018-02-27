@@ -7,12 +7,6 @@ import java.util.Properties;
 
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
-import org.jumpmind.pos.core.screen.URLMenuItem;
-import org.jumpmind.pos.translate.AbstractLegacyScreenTranslator;
-import org.jumpmind.pos.translate.ILegacyAssignmentSpec;
-import org.jumpmind.pos.translate.ILegacyBeanSpec;
-import org.jumpmind.pos.translate.ILegacyDialogBeanModel;
-import org.jumpmind.pos.translate.ILegacyScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +18,10 @@ public abstract class AbstractLegacyDialogScreenTranslator extends AbstractLegac
 
     public AbstractLegacyDialogScreenTranslator(ILegacyScreen headlessScreen, Class<DialogScreen> screenClass) {
         super(headlessScreen, screenClass);
+    }
+    
+    public AbstractLegacyDialogScreenTranslator(ILegacyScreen headlessScreen, Class<DialogScreen> screenClass, String appId, Properties properties) {
+    		super(headlessScreen, screenClass, appId, properties);
     }
 
     protected void buildMainContent() {
