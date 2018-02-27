@@ -17,6 +17,7 @@ public interface ScreenType {
     public static final String PromptWithInfo = "PromptWithInfo";
     public static final String NoOp = "NoOp";
     public static final String Transaction = "Transaction";
+    public static final String SelfCheckoutTransaction = "SelfCheckoutTransaction";
     public static final String SellItemDetail = "SellItemDetail";
     public static final String SignatureCapture = "SignatureCapture";
     public static final String Table = "Table";
