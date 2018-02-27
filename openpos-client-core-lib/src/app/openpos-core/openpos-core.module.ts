@@ -44,6 +44,7 @@ import { DynamicFormControlComponent } from './common/controls/dynamic-form-cont
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
 import { PosComponent } from './pos/pos.component';
 import { SelfCheckoutComponent } from './selfcheckout/selfcheckout.component';
+import { CustomerDisplayComponent } from './customerdisplay/customerdisplay.component';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 
 // Screens
@@ -56,6 +57,7 @@ import { PromptComponent } from './screens/prompt.component';
 import { ProductListComponent } from './common/controls/product-list.component';
 import { PromptInputComponent } from './common/controls/prompt-input.component';
 import { TransactionComponent } from './screens/transaction/transaction.component';
+import { SelfCheckoutTransactionComponent } from './screens/self-checkout-transaction/self-checkout-transaction.component';
 import { BasicItemSearchComponent } from './screens/basic-item-search.component';
 import { ChooseOptionsComponent } from './screens/choose-options.component';
 import { PromptWithOptionsComponent } from './screens/prompt-with-options.component';
@@ -95,7 +97,7 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
 
 // On Screen Keyboard
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
-import { KeyboardDirective } from './common/keyboard.directive'
+import { KeyboardDirective } from './common/keyboard.directive';
 import { ValidatorsService } from './services/validators.service';
 
 @NgModule({
@@ -114,6 +116,7 @@ import { ValidatorsService } from './services/validators.service';
     PromptWithOptionsComponent,
     PromptWithInfoComponent,
     TransactionComponent,
+    SelfCheckoutTransactionComponent,
     SellItemDetailComponent,
     SignatureCaptureComponent,
     StaticTableComponent,
@@ -147,6 +150,7 @@ import { ValidatorsService } from './services/validators.service';
     PromptWithInfoComponent,
     SignatureCaptureComponent,
     TransactionComponent,
+    SelfCheckoutTransactionComponent,
     SellItemDetailComponent,
     PaymentStatusComponent,
     StaticTableComponent,
@@ -174,6 +178,7 @@ import { ValidatorsService } from './services/validators.service';
     DynamicFormFieldComponent,
     PosComponent,
     SelfCheckoutComponent,
+    CustomerDisplayComponent,
     ChangeComponent,
     ConfirmationDialogComponent,
     ShowErrorsComponent,
@@ -199,6 +204,7 @@ import { ValidatorsService } from './services/validators.service';
   exports: [
     PosComponent,
     SelfCheckoutComponent,
+    CustomerDisplayComponent,
     LoaderComponent,
     MaterialModule,
     MatKeyboardModule,

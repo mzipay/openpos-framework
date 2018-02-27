@@ -9,6 +9,7 @@ import { BasicItemSearchComponent } from '../screens/basic-item-search.component
 import { EmbeddedWebPageComponent } from '../screens/embedded-web-page.component';
 import { PromptComponent } from '../screens/prompt.component';
 import { TransactionComponent } from '../screens/transaction/transaction.component';
+import { SelfCheckoutTransactionComponent } from '../screens/self-checkout-transaction/self-checkout-transaction.component';
 import { SellItemDetailComponent } from '../screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from '../screens/signature-capture.component';
 import { PaymentStatusComponent } from '../screens/payment-status.component';
@@ -58,6 +59,7 @@ export class ScreenService {
     this.screens.set('PromptWithOptions', PromptWithOptionsComponent);
     this.screens.set('PromptWithInfo', PromptWithInfoComponent);
     this.screens.set('Transaction', TransactionComponent);
+    this.screens.set('SelfCheckoutTransaction', SelfCheckoutTransactionComponent);
     this.screens.set('SellItemDetail', SellItemDetailComponent);
     this.screens.set('SignatureCapture', SignatureCaptureComponent);
     this.screens.set('Table', StaticTableComponent);
