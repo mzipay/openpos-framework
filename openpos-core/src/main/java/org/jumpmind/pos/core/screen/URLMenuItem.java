@@ -65,6 +65,11 @@ public class URLMenuItem extends MenuItem {
         this.url = url;
     }
     
+    public URLMenuItem(String url, String title, String action, boolean enabled) {
+        super(title, action, enabled);
+        this.url = url;
+    }
+    
     public String getUrl() {
         return url;
     }
