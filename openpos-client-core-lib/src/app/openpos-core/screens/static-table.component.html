@@ -19,9 +19,11 @@
                     <mat-row *matRowDef="let row; columns: columnIds;"></mat-row>
                 </mat-table>
             </div>
+            <br>
             <div align="end">
-                <button mat-icon-button (click)="onAction(session.screen.selectAction)" [appFocus]="true">
-                    <mat-icon>arrow_forward</mat-icon>
+                <button mat-button color="primary-inverse" (click)="onAction(session.screen.selectAction)">
+                        <span>Next</span>
+                        <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
                 </button>
             </div>
         </mat-card-content>
