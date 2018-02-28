@@ -10,6 +10,7 @@ public interface ScreenType {
     public static final String DynamicForm = "DynamicForm";
     public static final String Home = "Home";
     public static final String ItemList = "ItemList";
+    public static final String Loading = "Loading";
     public static final String Login = "Login";
     public static final String PaymentStatus = "PaymentStatus";
     public static final String Prompt = "Prompt";

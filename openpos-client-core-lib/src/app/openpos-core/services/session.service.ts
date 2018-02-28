@@ -267,6 +267,10 @@ export class SessionService implements ILocaleService {
       this.response = null;
     } else if (json.type === 'DeviceRequest') {
       this.onDeviceRequest.emit(json);
+      // Return explicitly in the case that the prior
+      // screen shown was a 'loading' screen, don't want to dismiss
+      // that prematurely
+      return;
     } else {
       this.response = null;
       this.screen = json;
