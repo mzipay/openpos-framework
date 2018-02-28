@@ -106,7 +106,7 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
             let templateName: string = null;
             let screenType: string = null;
-            let sequenceNumber: number = -1;
+            let sequenceNumber  = -1;
             let screenName: string = null;
             if (this.session.screen && this.session.screen.type) {
                 console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
