@@ -44,6 +44,7 @@ public class DefaultScreen implements Serializable {
     private List<MenuItem> localMenuItems = new ArrayList<>();
     
     private boolean showScan = false;
+    private boolean isReadOnly = false;
     private String scanActionName = "Scan";
     private ScanType scanType = ScanType.NONE;
 
@@ -266,6 +267,14 @@ public class DefaultScreen implements Serializable {
     public boolean isShowScan() {
         return showScan;
     }
+    
+	public void setReadOnly(boolean isReadOnly) {
+		this.isReadOnly = isReadOnly;
+	}
+
+	public boolean isReadOnly() {
+		return isReadOnly;
+	}
     
     public void setPrompt(String prompt) {
         this.prompt = prompt;

@@ -16,7 +16,7 @@
 						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">{{item.originalAmount|currency:'USD':true:'1.2'}}</p>
 						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">( -{{item.discountAmount|currency:'USD':true:'1.2'}} )</p>
 					</span>
-					<button mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
+					<button *ngIf ="!session.screen.readOnly" mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
 						<mat-icon>expand_more</mat-icon>
 					</button>
 					<mat-menu #itemMenu="matMenu">
@@ -40,10 +40,10 @@
 	<mat-card *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" color="accent" class="page-content-card dark">
 		<mat-card-content fxLayout="row" fxLayoutAlign="center center" class="text-lg">
 			&nbsp;&nbsp;Total
-			<span fxFlex class="text-center" (click)="session.onAction('Checkout','special')">
+			<span fxFlex [ngClass]="{'text-center': !session.screen.readOnly, 'text-right': session.screen.readOnly}" (click)="!session.screen.readOnly ? session.onAction('Checkout','special') : false">
 				<span class="super-currency-symbol">$</span>
 				{{session.screen.grandTotal}}</span>
-			<button mat-button flexFill color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!session.screen.transaction.active || items.length == 0"
+			<button *ngIf="!session.screen.readOnly" mat-button flexFill color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!session.screen.transaction.active || items.length == 0"
 			 (click)="session.onAction('Checkout')">
 				<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 			</button>
