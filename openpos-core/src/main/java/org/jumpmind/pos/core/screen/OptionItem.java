@@ -68,6 +68,10 @@ public class OptionItem implements IUIAction, Serializable {
         this.enabled = enabled;
     }
 
+    public void disable() {
+        this.setEnabled(false);
+    }
+    
     public boolean isSelected() {
         return selected;
     }

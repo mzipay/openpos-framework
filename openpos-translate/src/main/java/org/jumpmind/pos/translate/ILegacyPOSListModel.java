@@ -9,6 +9,7 @@ public interface ILegacyPOSListModel {
     public int getSelectedIndex();
     public void setSelectedIndex(int index);
     
+    public Object[] toArray();
     public Object firstElement();
     public boolean isEmpty();
 }
