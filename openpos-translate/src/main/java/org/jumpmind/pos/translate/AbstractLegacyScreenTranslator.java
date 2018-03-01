@@ -211,14 +211,18 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
 
     }
 
-    protected String getWorkPanelPropertyValue(String propertyName) {
-        String propertyValue = propertyName; // default to propertyName
+    protected String getWorkPanelPropertyValue(String propertyName, String defaultValue) {
+        String propertyValue = defaultValue;
         ILegacyAssignmentSpec assignmentSpec = this.getLegacyAssignmentSpec();
         if (assignmentSpec != null) {
             propertyValue = this.getLegacyUtilityManager().retrieveText(assignmentSpec.getBeanSpecName(), getResourceBundleFilename(),
-                    propertyName, propertyName);
+                    propertyName, defaultValue);
         }
         return propertyValue;
+    }
+    
+    protected String getWorkPanelPropertyValue(String propertyName) {
+        return this.getPanelPropertyValue(propertyName, propertyName);
     }
 
     protected String getSpecPropertyValue(ILegacyAssignmentSpec spec, String key, String modelValue) {
