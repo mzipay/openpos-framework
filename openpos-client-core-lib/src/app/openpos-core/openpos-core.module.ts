@@ -101,6 +101,7 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { KeyboardDirective } from './common/keyboard.directive';
 import { ValidatorsService } from './services/validators.service';
+import { PrintPreviewComponent } from './screens/print-preview.component';
 
 @NgModule({
   entryComponents: [
@@ -136,7 +137,8 @@ import { ValidatorsService } from './services/validators.service';
     DynamicFormFieldComponent,
     ChangeComponent,
     ConfirmationDialogComponent,
-    CheckoutListItemComponent
+    CheckoutListItemComponent,
+    PrintPreviewComponent
   ],
   declarations: [
     DialogComponent,
@@ -192,7 +194,8 @@ import { ValidatorsService } from './services/validators.service';
     AutoSelectOnFocus,
     OverFlowListComponent,
     FormattedInputValueAccessor,
-    KeyboardDirective
+    KeyboardDirective,
+    PrintPreviewComponent
   ],
   imports: [
     BrowserModule,

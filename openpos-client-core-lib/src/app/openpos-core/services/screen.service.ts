@@ -37,6 +37,7 @@ import { TillCountComponent } from '../screens/till/till-count.component';
 import { ChangeComponent } from '../screens/change/change.component';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { SessionService } from '../services/session.service';
+import { PrintPreviewComponent } from '../screens/print-preview.component';
 
 @Injectable()
 export class ScreenService {
@@ -72,6 +73,7 @@ export class ScreenService {
     this.screens.set('TillSummary', TillSummaryComponent);
     this.screens.set('Options', OptionsComponent);
     this.screens.set('Change', ChangeComponent);
+    this.screens.set('PrintPreview', PrintPreviewComponent);
 
     // Templates
     this.screens.set('Blank', BlankComponent);
