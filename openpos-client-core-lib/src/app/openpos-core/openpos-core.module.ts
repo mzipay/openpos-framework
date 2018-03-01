@@ -67,6 +67,7 @@ import { DialogComponent } from './screens/dialog.component';
 import { FormComponent } from './screens/form.component';
 import { HomeComponent } from './screens/home.component';
 import { StatusBarComponent } from './screens/statusbar.component';
+import { SelfCheckoutStatusBarComponent } from './screens/self-checkout-statusbar/self-checkout-statusbar.component';
 import { PaymentStatusComponent } from './screens/payment-status.component';
 import { SellItemDetailComponent } from './screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from './screens/signature-capture.component';
@@ -164,6 +165,7 @@ import { PrintPreviewComponent } from './screens/print-preview.component';
     FormComponent,
     HomeComponent,
     StatusBarComponent,
+    SelfCheckoutStatusBarComponent,
     EmbeddedWebPageComponent,
     FocusDirective,
     ScreenDirective,
