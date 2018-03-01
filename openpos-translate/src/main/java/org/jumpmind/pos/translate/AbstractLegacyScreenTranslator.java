@@ -501,5 +501,10 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     public interface IUIActionOverrider {
         public boolean hideOrOverride(ILegacyScreen legacyScreen, String labelTag, IUIAction action);
     }
+    
+    protected void addLocalMenuButtons() {
+        List<MenuItem> localNavButtons = generateUIActionsForLocalNavButtons(MenuItem.class, true);
+        screen.setLocalMenuItems(localNavButtons);
+    }
 
 }
