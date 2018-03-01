@@ -222,7 +222,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     }
     
     protected String getWorkPanelPropertyValue(String propertyName) {
-        return this.getPanelPropertyValue(propertyName, propertyName);
+        return this.getPanelPropertyValue(WORK_PANEL_KEY, propertyName);
     }
 
     protected String getSpecPropertyValue(ILegacyAssignmentSpec spec, String key, String modelValue) {
