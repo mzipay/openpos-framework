@@ -144,6 +144,15 @@ public class Form implements Serializable {
         return formField;
     }
     
+    public FormField addDisplayField( String fieldId, String label, String value, FieldInputType type ) {
+    		FormField formField = new FormField(fieldId, label, null );
+    		formField.setElementType(FieldElementType.Display);
+    		formField.setInputType(type);
+    		formField.setValue(value);
+    		formElements.add(formField);
+    		return formField;
+    }
+    
     public FormField getTextField(String fieldId) {
         IFormElement formElement = this.getFormElement(fieldId);
         if (formElement != null && formElement instanceof FormField) {
