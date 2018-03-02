@@ -204,7 +204,7 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *fileName = [NSString stringWithFormat:@"openpos_%@.log",[dateFormatter stringFromDate: someDate]];
+    NSString *fileName = [NSString stringWithFormat:@"openpos-client_%@.log",[dateFormatter stringFromDate: someDate]];
     NSString *logFilePath = [logsDirectory stringByAppendingPathComponent: fileName];
     return logFilePath;
 }
