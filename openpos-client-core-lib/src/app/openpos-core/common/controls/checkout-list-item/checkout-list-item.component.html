@@ -17,11 +17,13 @@
                 <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">{{item.originalAmount|currency:'USD':true:'1.2'}}</p>
                 <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">( -{{item.discountAmount|currency:'USD':true:'1.2'}} )</p>
             </span>
-            <button mat-icon-button fxFlex="1 1 100px" color="primary" *ngFor="let m of item.menuItems" (click)="doMenuItemAction(m, item.index)"
+            <div *ngIf="isReadOnly === false" >
+           	<button mat-icon-button fxFlex="1 1 100px" color="primary" *ngFor="let m of item.menuItems" (click)="doMenuItemAction(m, item.index)"
                 [disabled]="!isMenuItemEnabled(m)">
                 <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
                 <span [ngClass]="{'muted-color': ! m.enabled}">{{m.title}}</span>
-            </button>
+           	</button>
+            </div>
         </div>
     </mat-card-content>
 </mat-card>
