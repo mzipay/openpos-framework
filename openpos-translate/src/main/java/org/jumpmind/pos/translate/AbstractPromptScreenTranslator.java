@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.IPromptScreen;
 
@@ -71,6 +72,11 @@ public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> ex
                 promptScreen.setPromptIcon("lock");
             } else if( IPromptScreen.TYPE_PHONE.equals(promptScreen.getResponseType())) {
             		promptScreen.setPromptIcon("phone");
+            } else if(FieldInputType.Money.name().equalsIgnoreCase(promptScreen.getResponseType())) {
+                // TODO: I'd like to use cash icon here, but needs to have adjustment to styling for case when using
+                // a local icon.  just use default icon for now
+                // promptScreen.setPromptIcon(new LocalIcon("cash-multiple").getName());
+                promptScreen.setPromptIcon("question_answer");
             }
             else {
                 promptScreen.setPromptIcon("question_answer");

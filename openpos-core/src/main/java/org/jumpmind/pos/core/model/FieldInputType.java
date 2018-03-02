@@ -11,5 +11,6 @@ public enum FieldInputType {
     Percent,
     Phone,
     Money,
+    Date,
     ToggleButton
 }

@@ -30,7 +30,11 @@ export class DynamicFormControlComponent implements OnInit {
   ngOnInit() {
 
     this.session.screen.alternateSubmitActions.forEach(action => {
-      this.session.registerActionPayload( action, () => this.session.response = this.form.value )
+
+      this.session.registerActionPayload( action, () => {
+        this.buildFormPayload();
+        return this.session.response = this.screenForm;
+       });
     });
 
     let group: any = {};
@@ -66,26 +70,25 @@ export class DynamicFormControlComponent implements OnInit {
 
   submitForm() {
     if (this.form.valid) {
-      this.screenForm.formElements.forEach( element => {
-        if (element.hasOwnProperty('value')) {
-          element.value = this.form.value[element.id];
-        }
-      });
 
-      this.session.response = this.screenForm;
-      this.session.onAction(this.submitAction);
+      this.buildFormPayload();
+      this.session.onAction(this.submitAction, this.screenForm);
     }
   }
 
   onFieldChanged(formElement:IFormElement) {
     if(formElement.valueChangedAction) {
-      this.screenForm.formElements.forEach( element => {
-        if (element.hasOwnProperty('value')) {
-          element.value = this.form.value[element.id];
-        }
-      });
+      this.buildFormPayload();
       this.session.onAction(formElement.valueChangedAction, this.screenForm);
     }    
+  }
+
+  private buildFormPayload()  {
+    this.screenForm.formElements.forEach( element => {
+      if (element.hasOwnProperty('value')) {
+        element.value = this.form.value[element.id];
+      }
+    });
   }
 }
 

@@ -8,7 +8,13 @@ import org.jumpmind.pos.core.model.FormDisplayField;
 
 public class PromptWithInfoScreen extends PromptScreen {
     private static final long serialVersionUID = 1L;
+
+    public enum PromptPosition {
+        Bottom,
+        Top
+    }
     
+    private PromptPosition promptPosition = PromptPosition.Bottom;
     private Form form;
 
     public PromptWithInfoScreen() {
@@ -33,6 +39,14 @@ public class PromptWithInfoScreen extends PromptScreen {
 
     public void setForm(Form form) {
         this.form = form;
+    }
+
+    public PromptPosition getPromptPosition() {
+        return promptPosition;
+    }
+
+    public void setPromptPosition(PromptPosition promptPosition) {
+        this.promptPosition = promptPosition;
     }
     
 
