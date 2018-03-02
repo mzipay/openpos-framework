@@ -35,9 +35,8 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
         try {
             if (stateManager == null) {
                 stateManager = stateManagerFactory.create(appId, nodeId);
-            } else {
-                stateManager.refreshScreen();
-            }
+            } 
+            stateManager.refreshScreen();
         } catch (Exception ex) {
             StompHeaderAccessor headerAccessor = StompHeaderAccessor.create(StompCommand.ERROR);
             headerAccessor.setMessage(String.format("[%s] %s; Is %s a valid topic/app/node?", ex.getClass().getName(), ex.getMessage(), topicName));
