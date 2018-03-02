@@ -246,7 +246,7 @@ export class SessionService implements ILocaleService {
     }
   }
 
-  private cancelLoading() {
+  public cancelLoading() {
     this.loading = false;
     this.loader.hide();
   }

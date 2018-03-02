@@ -1,4 +1,14 @@
-<div fxFlexFill *ngIf="session.screen.type==='PromptWithInfo'" fxLayout="column" fxLayoutAlign="center center">
+
+<div *ngIf="session.screen.type==='PromptWithInfo'" fxLayout="column" fxLayoutAlign="center center">
+    <ng-container *ngIf="session.screen.promptPosition === 'Top'; else formCard">
+        <ng-container *ngTemplateOutlet="promptCard"></ng-container>
+    </ng-container>
+    <ng-container *ngIf="session.screen.promptPosition === 'Top'; else promptCard">
+        <ng-container *ngTemplateOutlet="formCard"></ng-container>
+    </ng-container>
+</div>
+
+<ng-template #formCard>
     <mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
         <mat-form-field *ngFor="let formField of session.screen.form.formElements" style="width:100%">
             <ng-container *ngIf="formField.elementType==='Display'">
@@ -7,19 +17,22 @@
             </ng-container>
         </mat-form-field>
     </mat-card>
+</ng-template>
+<ng-template #promptCard>
     <mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
         <form [formGroup]="promptFormGroup" (ngSubmit)="onFormSubmit()" novalidate [markDirtyOnSubmit]="promptFormGroup">
             <mat-card-content>		    
                     <app-prompt-input #promptInput *ngIf="session.screen.editable" [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
-					[promptIcon]="session.screen.promptIcon" [responseText]="session.screen.responseText" [hintText]="session.screen.text" [maskSpec]="session.screen.promptMask" 
-					[minLength]="session.screen.minLength" [maxLength]="session.screen.maxLength"
+                    [promptIcon]="session.screen.promptIcon" [responseText]="session.screen.responseText" [hintText]="session.screen.text" [maskSpec]="session.screen.promptMask" 
+                    [minLength]="session.screen.minLength" [maxLength]="session.screen.maxLength"
                     [promptFormGroup]="promptFormGroup"></app-prompt-input>
             </mat-card-content>
             <mat-card-actions *ngIf="session.screen.actionButton" align="end">
-                <button mat-icon-button type="submit">
-                    <mat-icon *ngIf="session.screen.actionButton.icon">{{session.screen.actionButton.icon}}</mat-icon>
+                <button mat-raised-button type="submit" color=primary>
+                    <span>{{session.screen.actionButton.title ? session.screen.actionButton.title : 'Next'}}</span>
+                    <mat-icon *ngIf="session.screen.actionButton.icon" class="material-icons">{{session.screen.actionButton.icon}}</mat-icon>
                 </button>
             </mat-card-actions>
         </form>
     </mat-card>
-</div>
+</ng-template>

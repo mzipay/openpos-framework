@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.screen;
 
 
+import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.IMaskSpec;
 
 public class PromptScreen extends DefaultScreen implements IPromptScreen {
@@ -60,6 +61,10 @@ public class PromptScreen extends DefaultScreen implements IPromptScreen {
         return responseType;
     }
 
+    public void setResponseType(FieldInputType responseType) {
+        this.responseType = responseType.name();
+    }
+    
     @Override
     public void setResponseType(String responseType) {
         this.responseType = responseType;
