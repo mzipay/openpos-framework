@@ -29,13 +29,11 @@ export class SessionService implements ILocaleService {
 
   private appId: String;
 
-  public nodeId: String = '05243-013';
-
   private subscribed: boolean;
 
   public state: Observable<string>;
 
-  private subscription: Subscription;
+  private subscription: any;
 
   private messages: Observable<Message>;
 
@@ -72,7 +70,11 @@ export class SessionService implements ILocaleService {
   }
 
   private buildTopicName(): string {
-    return '/topic/app/' + this.appId + '/node/' + this.nodeId;
+    return '/topic/app/' + this.appId + '/node/' + this.getNodeId();
+  }
+
+  public setServerName(name: string) {
+    localStorage.setItem('serverName', name);
   }
 
   public getServerName(): string {
@@ -83,12 +85,20 @@ export class SessionService implements ILocaleService {
     return this.appId;
   }
 
+  public setServerPort(port: string) {
+    localStorage.setItem('serverPort', port);
+  }
+
   public getServerPort(): string {
     return localStorage.getItem('serverPort');
   }
 
   public getNodeId(): string {
     return localStorage.getItem('nodeId');
+  }
+
+  public setNodeId(id: string) {
+    localStorage.setItem('nodeId', id);
   }
 
   public refreshApp() {
@@ -126,8 +136,6 @@ export class SessionService implements ILocaleService {
 
     // Give preference to nodeId query parameter if it's present, then fallback to
     // local storage
-    const urlNodeId = this.getUrlNodeId();
-    this.nodeId = urlNodeId ? urlNodeId : localStorage.getItem('nodeId');
     this.appId = appName;
     const currentTopic = this.buildTopicName();
 
@@ -163,7 +171,7 @@ export class SessionService implements ILocaleService {
   public onDeviceResponse(deviceResponse: IDeviceResponse) {
     const sendResponseBackToServer: Function = () => {
       console.log('Publish deviceResponse ' + deviceResponse);
-      this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
+      this.stompService.publish(`/app/device/app/${this.appId}/node/${this.getNodeId()}/device/${deviceResponse.deviceId}`,
         JSON.stringify(deviceResponse));
     };
 
@@ -177,18 +185,19 @@ export class SessionService implements ILocaleService {
   }
 
   public async onAction(action: string | IMenuItem, payload?: any, confirm?: string) {
-    let actionString = ""
-    //we need to figure out if we are a menuItem or just a string
-    if( action.hasOwnProperty('action') ) {
-      let menuItem = <IMenuItem>(action);
-      
+    let actionString = '';
+    // we need to figure out if we are a menuItem or just a string
+    if ( action.hasOwnProperty('action') ) {
+      const menuItem = <IMenuItem>(action);
+
       actionString = menuItem.action;
-      //check to see if we are an IURLMenuItem
-      if( menuItem.hasOwnProperty('url')) {
-        let urlMenuItem = <IUrlMenuItem> menuItem;
+      // check to see if we are an IURLMenuItem
+      if ( menuItem.hasOwnProperty('url')) {
+        const urlMenuItem = <IUrlMenuItem> menuItem;
         window.open(urlMenuItem.url, urlMenuItem.targetMode);
-        if (!actionString || 0 === actionString.length) 
+        if (!actionString || 0 === actionString.length) {
           return;
+        }
       }
     } else {
       actionString = <string>action;
@@ -219,7 +228,7 @@ export class SessionService implements ILocaleService {
     }
 
     const sendToServer: Function = () => {
-      this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
+      this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
       JSON.stringify({ name: actionString, data: this.response }));
     };
 

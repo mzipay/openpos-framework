@@ -38,7 +38,7 @@ export class KeyboardDirective implements OnDestroy {
 
     @HostListener('focus', ['$event'])
     private _showKeyboard() {
-        if (this.session.screen.useOnScreenKeyboard) {
+        if (this.session.screen && this.session.screen.useOnScreenKeyboard) {
             this._keyboardRef = this._keyboardService.open(this.matKeyboard, {
                 darkTheme: this.darkTheme,
                 duration: this.duration,

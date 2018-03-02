@@ -15,6 +15,7 @@ import { MatDialog, MatDialogRef, MatIconRegistry, MatSnackBar, MatSnackBarRef, 
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { TemplateDirective } from './template.directive';
 import { AbstractTemplate } from './abstract-template';
+import { Router } from '@angular/router';
 
 export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
 
@@ -41,7 +42,8 @@ export abstract class AbstractApp implements OnInit, OnDestroy, DoCheck {
         public dialog: MatDialog,
         public iconService: IconService,
         public snackBar: MatSnackBar,
-        public overlayContainer: OverlayContainer) {
+        public overlayContainer: OverlayContainer,
+        protected router: Router) {
     }
 
     public abstract appName(): string;

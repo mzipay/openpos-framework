@@ -19,7 +19,7 @@ export class PluginService {
             // There apparently is not a consistent way to access references to
             // cordova plugins.
             if (cordova.file) {
-            		if (! cordova.plugins || ! cordova.plugins['file']) {
+                if (! cordova.plugins || ! cordova.plugins['file']) {
                     cordova.plugins['file'] = cordova.file;
                     console.log('PluginService added cordova-plugin-file to cordova.plugins');
                 }
