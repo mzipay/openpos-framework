@@ -44,7 +44,7 @@ export class ScreenService {
 
   private screens = new Map<string, Type<IScreen>>();
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver, private http: HttpClient, 
+  constructor(private componentFactoryResolver: ComponentFactoryResolver, private http: HttpClient,
     private sessionService: SessionService) {
     // To make a screen available add it here and in entryComponents in the app.module.ts
     this.screens.set('BasicItemSearch', BasicItemSearchComponent);
@@ -80,12 +80,12 @@ export class ScreenService {
     this.screens.set('Sell', SellComponent);
   }
 
-  public addScreen( name: string, type: Type<IScreen> ): void {
+  public addScreen(name: string, type: Type<IScreen>): void {
     this.screens.set(name, type);
   }
 
-  public hasScreen( name: string ): boolean {
-    return this.screens.has( name );
+  public hasScreen(name: string): boolean {
+    return this.screens.has(name);
   }
 
   public resolveScreen(type: string): ComponentFactory<IScreen> {
@@ -99,9 +99,9 @@ export class ScreenService {
 
   public getFieldValues(fieldId: string): Observable<any> {
     const url: string = this.sessionService.getApiServerBaseURL() + '/app/'
-                        + this.sessionService.getAppId() + '/node/'
-                        + this.sessionService.getNodeId() + '/control/'
-                        + fieldId;
+      + this.sessionService.getAppId() + '/node/'
+      + this.sessionService.getNodeId() + '/control/'
+      + fieldId;
 
     return this.http.get(url, {});
   }

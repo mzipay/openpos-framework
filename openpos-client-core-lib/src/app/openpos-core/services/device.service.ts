@@ -16,7 +16,7 @@ export class DeviceService {
 
   constructor(protected session: SessionService, public pluginService: PluginService) {
     document.addEventListener('deviceready', () => {
-      console.log('cordova devices are ready');
+      console.log('cordova devices are ready for the device service');
       this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
       this.initializeInAppBrowserPlugin();
     },

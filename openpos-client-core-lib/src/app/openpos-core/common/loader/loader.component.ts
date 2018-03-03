@@ -15,17 +15,17 @@ import { Observable } from 'rxjs/Observable';
 })
 export class LoaderComponent implements OnInit, OnDestroy {
 
-    LOADING_TITLE : string = "Loading...";
-    DISCONNECTED_TITLE : string = "Reconnecting to Server...";
+    LOADING_TITLE = 'Loading...';
+    DISCONNECTED_TITLE = 'Reconnecting to Server...';
 
     show = false;
-    title : string = this.LOADING_TITLE;
-    message : string = null;
+    title: string = this.LOADING_TITLE;
+    message: string = null;
 
     connected = true;
     loading = false;
 
-    private subscription: Subscription;
+    private subscription: any;
 
     constructor(
         private loaderService: LoaderService,
@@ -33,8 +33,6 @@ export class LoaderComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
-
-        console.log('ngOnInit');
         this.subscription = this.loaderService.loaderState
             .subscribe((state: LoaderState) => {
                 this.title = state.title ? state.title : this.LOADING_TITLE;

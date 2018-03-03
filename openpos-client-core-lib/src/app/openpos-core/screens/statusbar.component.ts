@@ -79,6 +79,10 @@ export class StatusBarComponent {
     this.session.refreshApp();
   }
 
+  protected onPersonalize() {
+    this.session.showScreen(this.session.getPersonalizationScreen());
+  }
+
   protected onDevClearLocalStorage() {
     localStorage.clear();
   }

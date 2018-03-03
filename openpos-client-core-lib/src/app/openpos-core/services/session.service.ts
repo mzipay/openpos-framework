@@ -12,10 +12,11 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Scan } from '../common/scan';
 import { FunctionActionIntercepter, ActionIntercepter } from '../common/actionIntercepter';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confirmation-dialog.component';
 import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 declare var cordova: any;
 
@@ -39,6 +40,12 @@ export class SessionService implements ILocaleService {
 
   public onDeviceRequest = new EventEmitter<IDeviceRequest>();
 
+  public onScreenChange = new EventEmitter<any>();
+
+  private screenSource = new BehaviorSubject<any>(null);
+
+  observableScreen = this.screenSource.asObservable();
+
   private loading: boolean;
 
   private stompService: StompService;
@@ -50,7 +57,7 @@ export class SessionService implements ILocaleService {
   }
 
   public isRunningInBrowser(): boolean {
-    const app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+    const app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
     return !app;
   }
 
@@ -71,6 +78,19 @@ export class SessionService implements ILocaleService {
 
   private buildTopicName(): string {
     return '/topic/app/' + this.appId + '/node/' + this.getNodeId();
+  }
+
+  public showScreen(screen: any) {
+    this.screen = screen;
+    this.screenSource.next(this.screen);
+  }
+
+  public getPersonalizationScreen(): any {
+    return { template: 'Blank', type: 'Personalization', sequenceNumber: 999999, name: 'Device Setup' };
+  }
+
+  public setTheme(theme: string) {
+    localStorage.setItem('theme', theme);
   }
 
   public setServerName(name: string) {
@@ -177,7 +197,7 @@ export class SessionService implements ILocaleService {
 
     // see if we have any intercepters registered for the type of this deviceResponse
     // otherwise just send the response
-    if ( this.actionIntercepters.has(deviceResponse.type) ) {
+    if (this.actionIntercepters.has(deviceResponse.type)) {
       this.actionIntercepters.get(deviceResponse.type).intercept(deviceResponse, sendResponseBackToServer);
     } else {
       sendResponseBackToServer();
@@ -187,13 +207,13 @@ export class SessionService implements ILocaleService {
   public async onAction(action: string | IMenuItem, payload?: any, confirm?: string) {
     let actionString = '';
     // we need to figure out if we are a menuItem or just a string
-    if ( action.hasOwnProperty('action') ) {
+    if (action.hasOwnProperty('action')) {
       const menuItem = <IMenuItem>(action);
 
       actionString = menuItem.action;
       // check to see if we are an IURLMenuItem
-      if ( menuItem.hasOwnProperty('url')) {
-        const urlMenuItem = <IUrlMenuItem> menuItem;
+      if (menuItem.hasOwnProperty('url')) {
+        const urlMenuItem = <IUrlMenuItem>menuItem;
         window.open(urlMenuItem.url, urlMenuItem.targetMode);
         if (!actionString || 0 === actionString.length) {
           return;
@@ -203,14 +223,14 @@ export class SessionService implements ILocaleService {
       actionString = <string>action;
     }
 
-    if ( confirm ) {
+    if (confirm) {
       console.log('Confirming action');
-      const dialogRef = this.dialogService.open( ConfirmationDialogComponent, { disableClose: true});
+      const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
       dialogRef.componentInstance.title = confirm;
       const result = await dialogRef.afterClosed().toPromise();
 
       // if we didn't confirm return and don't send the action to the server
-      if ( !result ) {
+      if (!result) {
         console.log('Canceling action');
         return;
       }
@@ -221,21 +241,21 @@ export class SessionService implements ILocaleService {
     // First we will use the payload passed into this function then
     // Check if we have registered action payload
     // Otherwise we will send whatever is in this.response
-    if ( payload != null ) {
+    if (payload != null) {
       this.response = payload;
-    } else if ( this.actionPayloads.has( actionString ) ) {
+    } else if (this.actionPayloads.has(actionString)) {
       this.response = this.actionPayloads.get(actionString)();
     }
 
     const sendToServer: Function = () => {
       this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
-      JSON.stringify({ name: actionString, data: this.response }));
+        JSON.stringify({ name: actionString, data: this.response }));
     };
 
     // see if we have any intercepters registered
     // otherwise just send the action
-    if ( this.actionIntercepters.has( actionString ) ) {
-      this.actionIntercepters.get( actionString ).intercept( this.response, sendToServer );
+    if (this.actionIntercepters.has(actionString)) {
+      this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
     } else {
       sendToServer();
     }
@@ -284,6 +304,7 @@ export class SessionService implements ILocaleService {
       this.response = null;
       this.screen = json;
       this.dialog = null;
+      this.screenSource.next(this.screen);
     }
     this.cancelLoading();
   }
@@ -303,8 +324,8 @@ export class SessionService implements ILocaleService {
     return urlNodeId;
   }
 
-  public registerActionPayload( actionName: string, actionValue: Function ) {
-    this.actionPayloads.set( actionName, actionValue );
+  public registerActionPayload(actionName: string, actionValue: Function) {
+    this.actionPayloads.set(actionName, actionValue);
   }
 
   public unregisterActionPayloads() {
@@ -315,8 +336,8 @@ export class SessionService implements ILocaleService {
     this.actionPayloads.delete(actionName);
   }
 
-  public registerActionIntercepter( actionName: string, actionIntercepter: ActionIntercepter ) {
-    this.actionIntercepters.set( actionName, actionIntercepter );
+  public registerActionIntercepter(actionName: string, actionIntercepter: ActionIntercepter) {
+    this.actionIntercepters.set(actionName, actionIntercepter);
   }
 
   public unregisterActionIntercepters() {
@@ -328,16 +349,16 @@ export class SessionService implements ILocaleService {
   }
 
   public getCurrencyDenomination(): string {
-      return 'USD';
+    return 'USD';
   }
 
   public getApiServerBaseURL(): string {
-      let url: string = 'http://' + this.getServerName();
-      if (this.getServerPort()) {
-        url = url + ':' + this.getServerPort();
-      }
-      url = url + '/api';
-      return url;
+    let url: string = 'http://' + this.getServerName();
+    if (this.getServerPort()) {
+      url = url + ':' + this.getServerPort();
+    }
+    url = url + '/api';
+    return url;
   }
 
   getLocale(): string {

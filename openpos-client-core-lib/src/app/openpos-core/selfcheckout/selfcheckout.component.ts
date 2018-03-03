@@ -2,7 +2,7 @@ import { DeviceService } from './../services/device.service';
 import { ScreenService } from './../services/screen.service';
 import { AbstractApp } from '../common/abstract-app';
 import { IMenuItem } from '../common/imenuitem';
-import { Component, DoCheck, ViewChild } from '@angular/core';
+import { Component, DoCheck, ViewChild, NgZone } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { FocusDirective } from '../common/focus.directive';
 import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
@@ -23,8 +23,8 @@ export class SelfCheckoutComponent extends AbstractApp implements DoCheck {
   constructor(public screenService: ScreenService, public session: SessionService,
     public deviceService: DeviceService, public dialog: MatDialog,
     public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
-    protected router: Router) {
-    super(screenService, session, dialog, iconService, snackBar, overlayContainer, router);
+    protected router: Router, public zone: NgZone) {
+    super(screenService, session, dialog, iconService, snackBar, overlayContainer, router, zone);
   }
 
   public appName(): string {
