@@ -265,6 +265,7 @@ export class SessionService implements ILocaleService {
       return;
     } else if (json.type === 'NoOp') {
       this.response = null;
+      return; // As with DeviceRequest, return to avoid dismissing loading screen
     } else if (json.type === 'DeviceRequest') {
       this.onDeviceRequest.emit(json);
       // Return explicitly in the case that the prior

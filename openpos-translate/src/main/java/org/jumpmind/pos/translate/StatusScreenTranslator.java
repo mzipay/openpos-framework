@@ -6,11 +6,24 @@ import java.util.List;
 import org.jumpmind.pos.core.screen.LoadingScreen;
 
 public class StatusScreenTranslator extends AbstractLegacyScreenTranslator<LoadingScreen> {
-
+    public enum Mode {
+        /** Displays the given title and message or uses values from legacy resources if title and message not given. */
+        Default,
+        /** Moves the message text to the title area and eliminates the message text. */
+        UseMessageForTitle 
+    }
+    
+    private Mode mode = Mode.Default;
+    
     public StatusScreenTranslator(ILegacyScreen legacyScreen) {
-        this(legacyScreen, null);
+        this(legacyScreen, Mode.Default);
     }
 
+    public StatusScreenTranslator(ILegacyScreen legacyScreen, Mode mode) {
+        this(legacyScreen, (String) null);
+        this.mode = mode;
+    }
+    
     public StatusScreenTranslator(ILegacyScreen legacyScreen, String title) {
         this(legacyScreen, title, (String)null);
     }
@@ -33,12 +46,39 @@ public class StatusScreenTranslator extends AbstractLegacyScreenTranslator<Loadi
     @Override
     public void buildMainContent() {
        super.buildMainContent();
+       
        String statusText = this.getPromptText(this.getLegacyUIModel(), this.getLegacyAssignmentSpec(PROMPT_RESPONSE_PANEL_KEY), 
-                this.getResourceBundleFilename()).orElse(null);
-       // If a message hasn't already been set, just use what might be available as the Prompt text
-       if (getScreen().getMessage().size() == 0) {
-           getScreen().setMessage(statusText);
-       }
-        
+               this.getResourceBundleFilename()).orElse(null);
+       
+       if (getMode() == Mode.UseMessageForTitle) {
+           getScreen().setTitle(this.hasMessage() ? getScreen().getMessage().get(0) : statusText);
+           getScreen().setMessage((String) null);
+       } else { // Default
+           
+           if (getScreen().getTitle() == null) {
+               getScreen().setTitle(this.getScreenName());
+           }
+           
+           // If a message hasn't already been set, just use what might be available as the Prompt text
+           if (! this.hasMessage()) {
+               getScreen().setMessage(statusText);
+           }
+       }        
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+    
+    protected boolean hasTitle() {
+        return getScreen().getTitle() != null;
+    }
+    
+    protected boolean hasMessage() {
+        return getScreen().getMessage().size() != 0;
     }
 }
