@@ -9,6 +9,7 @@ public enum FieldInputType {
     SubmitOptionList,
     TextArea,
     Percent,
+    PostalCode,
     Phone,
     Money,
     Date,
