@@ -73,6 +73,11 @@ public class FormField implements IFormElement, IField, Serializable {
         this.inputType = inputType;
     }
 
+    public FormField inputType(FieldInputType inputType) {
+        this.setInputType(inputType);
+        return this;
+    }
+    
     @Override
     public String getLabel() {
         return label;
@@ -82,6 +87,12 @@ public class FormField implements IFormElement, IField, Serializable {
     public void setLabel(String label) {
         this.label = label;
     }
+    
+    public FormField label(String label) {
+        this.setLabel(label);
+        return this;
+    }
+    
 
     @Override
     public String getId() {
@@ -93,6 +104,10 @@ public class FormField implements IFormElement, IField, Serializable {
         this.fieldId = fieldId;
     }
 
+    public String id(String fieldId) {
+        this.setId(fieldId);
+        return this.fieldId;
+    }
     
     public FieldElementType getElementType() {
         return elementType;
@@ -102,6 +117,11 @@ public class FormField implements IFormElement, IField, Serializable {
         this.elementType = elementType;
     }
 
+    public FormField elementType(FieldElementType elementType) {
+        this.setElementType(elementType);
+        return this;
+    }
+    
     @Override
     public String getValue() {
         return value;
@@ -112,6 +132,11 @@ public class FormField implements IFormElement, IField, Serializable {
         this.value = value;
     }
 
+    public FormField value(String value) {
+        this.setValue(value);
+        return this;
+    }
+    
     public String getPlaceholder() {
         return placeholder;
     }
@@ -120,6 +145,11 @@ public class FormField implements IFormElement, IField, Serializable {
         this.placeholder = placeholder;
     }
 
+    public FormField placeholder(String placeholder) {
+        this.setPlaceholder(placeholder);
+        return this;
+    }
+    
     public void setPattern(String pattern) {
         this.pattern = pattern;
     }
@@ -128,6 +158,11 @@ public class FormField implements IFormElement, IField, Serializable {
         return pattern;
     }
 
+    public FormField pattern(String pattern) {
+        this.setPattern(pattern);
+        return this;
+    }
+    
     public boolean isRequired() {
         return required;
     }
@@ -136,11 +171,24 @@ public class FormField implements IFormElement, IField, Serializable {
         this.required = required;
     }
 
+    public FormField required(boolean required) {
+        this.setRequired(required);
+        return this;
+    }
+    
+    /**
+     * @deprecated Use client-side formatters instead
+     */
+    @Deprecated
     @JsonProperty
     public IMaskSpec getMask() {
         return mask;
     }
 
+    /**
+     * @deprecated Use client-side formatters instead
+     */
+    @Deprecated
     @JsonIgnore  // Ignore on deserialization  (see https://goo.gl/Gjehox)
     public void setMask(IMaskSpec mask) {
         this.mask = mask;
@@ -154,6 +202,11 @@ public class FormField implements IFormElement, IField, Serializable {
         this.disabled = disabled;
     }
 
+    public FormField disabled(boolean disabled) {
+        this.setDisabled(disabled);
+        return this;
+    }
+    
     public Integer getMinLength() {
         return minLength;
     }
@@ -162,6 +215,11 @@ public class FormField implements IFormElement, IField, Serializable {
         this.minLength = minLength;
     }
 
+    public FormField minLength(Integer minLength) {
+        this.setMinLength(minLength);
+        return this;
+    }
+    
     public Integer getMaxLength() {
         return maxLength;
     }
@@ -170,6 +228,11 @@ public class FormField implements IFormElement, IField, Serializable {
         this.maxLength = maxLength;
     }
 
+    public FormField maxLength(Integer maxLength) {
+        this.setMaxLength(maxLength);
+        return this;
+    }
+    
     public String getValueChangedAction() {
         return valueChangedAction;
     }
@@ -181,6 +244,11 @@ public class FormField implements IFormElement, IField, Serializable {
      */
     public void setValueChangedAction(String valueChangedAction) {
         this.valueChangedAction = valueChangedAction;
+    }
+    
+    public FormField valueChangedAction(String valueChangedAction) {
+        this.setValueChangedAction(valueChangedAction);
+        return this;
     }
    
 }

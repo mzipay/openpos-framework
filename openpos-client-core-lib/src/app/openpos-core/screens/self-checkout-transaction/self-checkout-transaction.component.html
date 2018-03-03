@@ -6,7 +6,7 @@
 		<mat-card fxFlex="0 0 80%" class="page-content-card lighter scrollable-content-card mat-elevation-z8" fxLayout="column" fxLayoutAlign="start">
 			<mat-card-content>
 
-				<app-checkout-list-item *ngFor="let i of items" [item]=i [session]=session></app-checkout-list-item>
+				<app-checkout-list-item *ngFor="let i of items" [item]=i [session]=session [isReadOnly]=this.session.screen.readOnly></app-checkout-list-item>
 
 				<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
 					<mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
@@ -34,7 +34,7 @@
 								<span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</p>
 						</mat-card-content>
 					</mat-card>
-					<button mat-button fxFlex="1 1 auto" color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!session.screen.transaction.active || items.length == 0"
+					<button mat-button *ngIf="!session.screen.readOnly" fxFlex="1 1 auto" color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!session.screen.transaction.active || items.length == 0"
 					 (click)="session.onAction('Checkout')" class="text-lg"> Checkout
 						<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 					</button>
