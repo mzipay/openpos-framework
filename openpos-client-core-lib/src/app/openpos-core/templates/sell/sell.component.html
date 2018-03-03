@@ -28,9 +28,9 @@
           </mat-card-title>
           <mat-drawer-container fxFlex>
               <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="4px" style="overflow-x:hidden">
-                <button mat-button color="primary" *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)" style="text-align: left">
+                <button mat-button color="primary" *ngFor="let m of session.screen.localMenuItems"  (click)="doMenuItemAction(m)" style="text-align: left" [disabled]="!isMenuItemEnabled(m)">
                     <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
-                    <span>&nbsp;{{m.title}}</span>
+                    <span [ngClass]="{'muted-color': ! m.enabled}">&nbsp;{{m.title}}</span>
                 </button>
                 <div fxFlex></div>
                 <button mat-button *ngIf="session.screen.type === 'Transaction'"  color="accent" style="text-align: left">
