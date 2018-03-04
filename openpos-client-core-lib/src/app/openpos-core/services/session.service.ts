@@ -90,6 +90,15 @@ export class SessionService implements ILocaleService {
     this.screenSource.next(this.screen);
   }
 
+  public showDialog(dialogObj: any) {
+    if (dialogObj.type && dialogObj.type === 'Dialog') {
+      this.dialog = dialogObj;
+      this.showScreen(this.screen);
+    } else {
+      console.log('dialogObj is not a dialog, cannot show it.');
+    }
+  }
+
   public getPersonalizationScreen(): any {
     return { template: 'Blank', type: 'Personalization', sequenceNumber: 999999, name: 'Device Setup' };
   }
@@ -292,8 +301,7 @@ export class SessionService implements ILocaleService {
       this.dialog = null;
       this.showScreen(this.screen);
     } else if (json.type === 'Dialog') {
-      this.dialog = json;
-      this.showScreen(this.screen);
+      this.showDialog(json);
     } else if (json.type === 'Loading') {
       this.loader.setLoaderText(json.title, json.message);
       this.loading = true;
