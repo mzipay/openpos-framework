@@ -395,7 +395,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
             
             if( buttonModel != null ) {
                 // If we have newButtons, replace all buttons in the nav panel with those buttons.  I believe this matches the
-                // logic in vendor specific impl of the GlobalNavigationButtonBean
+                // logic in retailer specific impl of the GlobalNavigationButtonBean
                 if (buttonModel.getNewButtons() != null && buttonModel.getNewButtons().length > 0) {
                     buttonSpecs = buttonModel.getNewButtons();
                 } else {
