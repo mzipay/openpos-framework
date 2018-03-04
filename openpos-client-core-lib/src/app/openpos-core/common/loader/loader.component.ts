@@ -70,12 +70,11 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
     protected checkConnectionStatus(session: SessionService): void {
         const sessionConnected = session.connected();
-
-        if (!sessionConnected && this.connected) {
+        if (!sessionConnected && this.connected && session.isPersonalized()) {
             this.connected = sessionConnected;
             this.show = true;
             this.title = this.DISCONNECTED_TITLE;
-        } else if (sessionConnected && !this.loading && !this.connected) {
+        } else if (!session.isPersonalized() || (sessionConnected && !this.loading && !this.connected)) {
             this.connected = sessionConnected;
             this.show = false;
         }

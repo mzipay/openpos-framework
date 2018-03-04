@@ -57,6 +57,7 @@ export class StatusBarComponent {
     }
   }
 
+  // TODO the dev menu needs to be removed from here
   protected onDevMenuClick(): void {
     this.pluginService.getPlugin('openPOSCordovaLogPlugin').then(
       (plugin: IPlugin) => {

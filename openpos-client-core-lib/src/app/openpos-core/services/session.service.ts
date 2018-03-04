@@ -67,6 +67,11 @@ export class SessionService implements ILocaleService {
     localStorage.setItem('nodeId', storeId + '-' + deviceId);
   }
 
+  public dePersonalize() {
+    localStorage.clear();
+    this.unsubscribe();
+  }
+
   private getWebsocketUrl(): string {
     let url: string = 'ws://' + this.getServerName();
     if (this.getServerPort()) {
@@ -285,8 +290,10 @@ export class SessionService implements ILocaleService {
     const json = JSON.parse(message.body);
     if (json.clearDialog) {
       this.dialog = null;
+      this.showScreen(this.screen);
     } else if (json.type === 'Dialog') {
       this.dialog = json;
+      this.showScreen(this.screen);
     } else if (json.type === 'Loading') {
       this.loader.setLoaderText(json.title, json.message);
       this.loading = true;
@@ -305,7 +312,7 @@ export class SessionService implements ILocaleService {
       this.response = null;
       this.screen = json;
       this.dialog = null;
-      this.screenSource.next(this.screen);
+      this.showScreen(this.screen);
     }
     this.cancelLoading();
   }
