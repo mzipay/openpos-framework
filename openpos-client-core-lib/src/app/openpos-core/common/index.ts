@@ -9,3 +9,4 @@ export {ScreenDirective} from './screen.directive';
 export {IDialog} from './idialog';
 export {ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType} from './actionIntercepter';
 export * from './controls';
+export {IFormatter} from './formatters/iformatter';
