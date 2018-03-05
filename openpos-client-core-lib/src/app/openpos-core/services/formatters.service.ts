@@ -64,4 +64,12 @@ export class FormattersService {
         console.log( `No formatter found for locale '${locale}' formatter name '${name}'. Using a 'Do Nothing' formatter`);
         return new DoNothingFormatter();
     }
+
+    setFormatter( name: string, formatter: IFormatter, locale?: string ){
+        if( !locale ){
+            locale = 'NO-LOCALE';
+        }
+
+        this.formatters.get(locale).set(name, formatter);
+    }
 }
