@@ -13,12 +13,12 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
-import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.ComboField;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
 import org.jumpmind.pos.core.model.FormListField;
 import org.jumpmind.pos.core.model.IFormElement;
+import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
 import org.jumpmind.pos.core.screen.DefaultScreen;
@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@SuppressWarnings("deprecation")
 @CrossOrigin
 @Controller
 public class ScreenService implements IScreenService {

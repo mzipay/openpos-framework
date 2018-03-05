@@ -10,7 +10,6 @@ public class Form implements Serializable {
     public static final String PATTERN_EMAIL =  "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
     public static final String PATTERN_MONEY =  "^(\\d{0,9}\\.\\d{0,2}|\\d{1,9})$";
     public static final String PATTERN_PERCENT =  "^100$|^\\d{0,2}(\\.\\d{1,2})?$|^\\d{0,2}(\\.)?"; // 100-0, Only two decimal places allowed.
-    public static final String PATTERN_POSTAL_CODE =  "^[0-9a-zA-Z]{5,}$"; // Minimum 5 chars. 
     public static final String PATTERN_DATE = "^(\\d{2})/(\\d{2})/(\\d{4}$)";
     // TODO: This pattern may be too restrictive. 
     public static final String PATTERN_US_PHONE_NUMBER = "^\\d{10}$";
@@ -104,8 +103,7 @@ public class Form implements Serializable {
     }
     
     public static FormField createPostalCodeField(String fieldId, String label, String value, boolean required) {
-        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
-        formField.setPattern(PATTERN_POSTAL_CODE);
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.PostalCode, required);
         formField.setValue(value);
         return formField;
     }
@@ -118,8 +116,6 @@ public class Form implements Serializable {
     
     public static FormField createPhoneField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Phone, required);
-        // Client-side Validators are now used for validation 
-        // formField.setPattern(PATTERN_US_PHONE_NUMBER);
         formField.setValue(value);
         return formField;
     }

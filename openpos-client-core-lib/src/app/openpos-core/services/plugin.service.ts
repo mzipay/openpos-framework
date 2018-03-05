@@ -13,13 +13,13 @@ export class PluginService {
 
     constructor() {
         document.addEventListener('deviceready', () => {
-            console.log('cordova devices are ready');
+            console.log('cordova devices are ready for the plugin service');
             // cordova file plugin doesn't put itself in cordova.plugins, so add it there if present.
             // Makes it possible for us to access plugins dynamically by name.
             // There apparently is not a consistent way to access references to
             // cordova plugins.
             if (cordova.file) {
-            		if (! cordova.plugins || ! cordova.plugins['file']) {
+                if (! cordova.plugins || ! cordova.plugins['file']) {
                     cordova.plugins['file'] = cordova.file;
                     console.log('PluginService added cordova-plugin-file to cordova.plugins');
                 }

@@ -44,6 +44,5 @@ public interface IStateManager {
     public DefaultScreen getLastScreen();    
     public void refreshScreen();
     public IState getCurrentState();
-    //public ITranslationManager getTranslationManager();
     
 }

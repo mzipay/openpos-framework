@@ -12,10 +12,11 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Scan } from '../common/scan';
 import { FunctionActionIntercepter, ActionIntercepter } from '../common/actionIntercepter';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confirmation-dialog.component';
 import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 declare var cordova: any;
 
@@ -29,17 +30,21 @@ export class SessionService implements ILocaleService {
 
   private appId: String;
 
-  public nodeId: String = '05243-013';
-
   private subscribed: boolean;
 
   public state: Observable<string>;
 
-  private subscription: Subscription;
+  private subscription: any;
 
   private messages: Observable<Message>;
 
   public onDeviceRequest = new EventEmitter<IDeviceRequest>();
+
+  public onScreenChange = new EventEmitter<any>();
+
+  private screenSource = new BehaviorSubject<any>(null);
+
+  observableScreen = this.screenSource.asObservable();
 
   private loading: boolean;
 
@@ -52,7 +57,7 @@ export class SessionService implements ILocaleService {
   }
 
   public isRunningInBrowser(): boolean {
-    const app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+    const app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
     return !app;
   }
 
@@ -60,6 +65,11 @@ export class SessionService implements ILocaleService {
     localStorage.setItem('serverName', serverName);
     localStorage.setItem('serverPort', serverPort);
     localStorage.setItem('nodeId', storeId + '-' + deviceId);
+  }
+
+  public dePersonalize() {
+    localStorage.clear();
+    this.unsubscribe();
   }
 
   private getWebsocketUrl(): string {
@@ -72,7 +82,33 @@ export class SessionService implements ILocaleService {
   }
 
   private buildTopicName(): string {
-    return '/topic/app/' + this.appId + '/node/' + this.nodeId;
+    return '/topic/app/' + this.appId + '/node/' + this.getNodeId();
+  }
+
+  public showScreen(screen: any) {
+    this.screen = screen;
+    this.screenSource.next(this.screen);
+  }
+
+  public showDialog(dialogObj: any) {
+    if (dialogObj.type && dialogObj.type === 'Dialog') {
+      this.dialog = dialogObj;
+      this.showScreen(this.screen);
+    } else {
+      console.log('dialogObj is not a dialog, cannot show it.');
+    }
+  }
+
+  public getPersonalizationScreen(): any {
+    return { template: 'Blank', type: 'Personalization', sequenceNumber: 999999, name: 'Device Setup' };
+  }
+
+  public setTheme(theme: string) {
+    localStorage.setItem('theme', theme);
+  }
+
+  public setServerName(name: string) {
+    localStorage.setItem('serverName', name);
   }
 
   public getServerName(): string {
@@ -83,12 +119,20 @@ export class SessionService implements ILocaleService {
     return this.appId;
   }
 
+  public setServerPort(port: string) {
+    localStorage.setItem('serverPort', port);
+  }
+
   public getServerPort(): string {
     return localStorage.getItem('serverPort');
   }
 
   public getNodeId(): string {
     return localStorage.getItem('nodeId');
+  }
+
+  public setNodeId(id: string) {
+    localStorage.setItem('nodeId', id);
   }
 
   public refreshApp() {
@@ -126,8 +170,6 @@ export class SessionService implements ILocaleService {
 
     // Give preference to nodeId query parameter if it's present, then fallback to
     // local storage
-    const urlNodeId = this.getUrlNodeId();
-    this.nodeId = urlNodeId ? urlNodeId : localStorage.getItem('nodeId');
     this.appId = appName;
     const currentTopic = this.buildTopicName();
 
@@ -163,13 +205,13 @@ export class SessionService implements ILocaleService {
   public onDeviceResponse(deviceResponse: IDeviceResponse) {
     const sendResponseBackToServer: Function = () => {
       console.log('Publish deviceResponse ' + deviceResponse);
-      this.stompService.publish(`/app/device/app/${this.appId}/node/${this.nodeId}/device/${deviceResponse.deviceId}`,
+      this.stompService.publish(`/app/device/app/${this.appId}/node/${this.getNodeId()}/device/${deviceResponse.deviceId}`,
         JSON.stringify(deviceResponse));
     };
 
     // see if we have any intercepters registered for the type of this deviceResponse
     // otherwise just send the response
-    if ( this.actionIntercepters.has(deviceResponse.type) ) {
+    if (this.actionIntercepters.has(deviceResponse.type)) {
       this.actionIntercepters.get(deviceResponse.type).intercept(deviceResponse, sendResponseBackToServer);
     } else {
       sendResponseBackToServer();
@@ -177,31 +219,32 @@ export class SessionService implements ILocaleService {
   }
 
   public async onAction(action: string | IMenuItem, payload?: any, confirm?: string) {
-    let actionString = ""
-    //we need to figure out if we are a menuItem or just a string
-    if( action.hasOwnProperty('action') ) {
-      let menuItem = <IMenuItem>(action);
-      
+    let actionString = '';
+    // we need to figure out if we are a menuItem or just a string
+    if (action.hasOwnProperty('action')) {
+      const menuItem = <IMenuItem>(action);
+
       actionString = menuItem.action;
-      //check to see if we are an IURLMenuItem
-      if( menuItem.hasOwnProperty('url')) {
-        let urlMenuItem = <IUrlMenuItem> menuItem;
+      // check to see if we are an IURLMenuItem
+      if (menuItem.hasOwnProperty('url')) {
+        const urlMenuItem = <IUrlMenuItem>menuItem;
         window.open(urlMenuItem.url, urlMenuItem.targetMode);
-        if (!actionString || 0 === actionString.length) 
+        if (!actionString || 0 === actionString.length) {
           return;
+        }
       }
     } else {
       actionString = <string>action;
     }
 
-    if ( confirm ) {
+    if (confirm) {
       console.log('Confirming action');
-      const dialogRef = this.dialogService.open( ConfirmationDialogComponent, { disableClose: true});
+      const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
       dialogRef.componentInstance.title = confirm;
       const result = await dialogRef.afterClosed().toPromise();
 
       // if we didn't confirm return and don't send the action to the server
-      if ( !result ) {
+      if (!result) {
         console.log('Canceling action');
         return;
       }
@@ -212,21 +255,21 @@ export class SessionService implements ILocaleService {
     // First we will use the payload passed into this function then
     // Check if we have registered action payload
     // Otherwise we will send whatever is in this.response
-    if ( payload != null ) {
+    if (payload != null) {
       this.response = payload;
-    } else if ( this.actionPayloads.has( actionString ) ) {
+    } else if (this.actionPayloads.has(actionString)) {
       this.response = this.actionPayloads.get(actionString)();
     }
 
     const sendToServer: Function = () => {
-      this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.nodeId,
-      JSON.stringify({ name: actionString, data: this.response }));
+      this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
+        JSON.stringify({ name: actionString, data: this.response }));
     };
 
     // see if we have any intercepters registered
     // otherwise just send the action
-    if ( this.actionIntercepters.has( actionString ) ) {
-      this.actionIntercepters.get( actionString ).intercept( this.response, sendToServer );
+    if (this.actionIntercepters.has(actionString)) {
+      this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
     } else {
       sendToServer();
     }
@@ -256,8 +299,9 @@ export class SessionService implements ILocaleService {
     const json = JSON.parse(message.body);
     if (json.clearDialog) {
       this.dialog = null;
+      this.showScreen(this.screen);
     } else if (json.type === 'Dialog') {
-      this.dialog = json;
+      this.showDialog(json);
     } else if (json.type === 'Loading') {
       this.loader.setLoaderText(json.title, json.message);
       this.loading = true;
@@ -265,6 +309,7 @@ export class SessionService implements ILocaleService {
       return;
     } else if (json.type === 'NoOp') {
       this.response = null;
+      return; // As with DeviceRequest, return to avoid dismissing loading screen
     } else if (json.type === 'DeviceRequest') {
       this.onDeviceRequest.emit(json);
       // Return explicitly in the case that the prior
@@ -275,6 +320,7 @@ export class SessionService implements ILocaleService {
       this.response = null;
       this.screen = json;
       this.dialog = null;
+      this.showScreen(this.screen);
     }
     this.cancelLoading();
   }
@@ -294,8 +340,8 @@ export class SessionService implements ILocaleService {
     return urlNodeId;
   }
 
-  public registerActionPayload( actionName: string, actionValue: Function ) {
-    this.actionPayloads.set( actionName, actionValue );
+  public registerActionPayload(actionName: string, actionValue: Function) {
+    this.actionPayloads.set(actionName, actionValue);
   }
 
   public unregisterActionPayloads() {
@@ -306,8 +352,8 @@ export class SessionService implements ILocaleService {
     this.actionPayloads.delete(actionName);
   }
 
-  public registerActionIntercepter( actionName: string, actionIntercepter: ActionIntercepter ) {
-    this.actionIntercepters.set( actionName, actionIntercepter );
+  public registerActionIntercepter(actionName: string, actionIntercepter: ActionIntercepter) {
+    this.actionIntercepters.set(actionName, actionIntercepter);
   }
 
   public unregisterActionIntercepters() {
@@ -319,16 +365,16 @@ export class SessionService implements ILocaleService {
   }
 
   public getCurrencyDenomination(): string {
-      return 'USD';
+    return 'USD';
   }
 
   public getApiServerBaseURL(): string {
-      let url: string = 'http://' + this.getServerName();
-      if (this.getServerPort()) {
-        url = url + ':' + this.getServerPort();
-      }
-      url = url + '/api';
-      return url;
+    let url: string = 'http://' + this.getServerName();
+    if (this.getServerPort()) {
+      url = url + ':' + this.getServerPort();
+    }
+    url = url + '/api';
+    return url;
   }
 
   getLocale(): string {

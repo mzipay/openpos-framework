@@ -8,10 +8,11 @@ import { MoneyFormatter } from '../common/formatters/money-formatter';
 import { PhoneUSFormatter } from '../common/formatters/phoneUS-formatter';
 import { PhoneCAFormatter } from '../common/formatters/phoneCA-formatter';
 import { NumericFormatter } from '../common/formatters/numeric-formatter';
+import { PostalCodeFormatter } from '../common/formatters/postalcode-formatter';
 
 @Injectable()
 export class FormattersService {
-    private formatters = new Map<string, Map<string,IFormatter>>();
+    private formatters = new Map<string, Map<string, IFormatter>>();
 
     constructor( private localeService: LocaleService ) {
         const USFormatters = new Map<string, IFormatter>();
@@ -39,22 +40,23 @@ export class FormattersService {
         NOLOCALEFormatters.set('money', new MoneyFormatter());
         NOLOCALEFormatters.set('phone', defaultPhoneFormatter);
         NOLOCALEFormatters.set('percent', new PercentageFormatter());
+        NOLOCALEFormatters.set('postalcode', new PostalCodeFormatter());
     }
 
-    getFormatter( name: string ): IFormatter{
+    getFormatter( name: string ): IFormatter {
 
         const locale = this.localeService.getLocale();
-        if( name && locale){
+        if (name && locale) {
 
             const lname = name.toLowerCase();
             const llocale = locale.toLowerCase();
             // see if we have a validator map for the current locale
             //  and that locale has the validator we need
-            if( this.formatters.get(llocale) && this.formatters.get(llocale).get(lname)) {
+            if (this.formatters.get(llocale) && this.formatters.get(llocale).get(lname)) {
                 return this.formatters.get(llocale).get(lname);
             }
 
-            if( this.formatters.get('NO-LOCALE') && this.formatters.get('NO-LOCALE').get(lname)){
+            if (this.formatters.get('NO-LOCALE') && this.formatters.get('NO-LOCALE').get(lname)) {
                 return this.formatters.get('NO-LOCALE').get(lname);
             }
         }
@@ -62,6 +64,4 @@ export class FormattersService {
         console.log( `No formatter found for locale '${locale}' formatter name '${name}'. Using a 'Do Nothing' formatter`);
         return new DoNothingFormatter();
     }
-
- 
 }

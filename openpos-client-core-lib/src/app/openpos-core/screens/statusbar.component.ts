@@ -57,6 +57,7 @@ export class StatusBarComponent {
     }
   }
 
+  // TODO the dev menu needs to be removed from here
   protected onDevMenuClick(): void {
     this.pluginService.getPlugin('openPOSCordovaLogPlugin').then(
       (plugin: IPlugin) => {
@@ -77,6 +78,10 @@ export class StatusBarComponent {
 
   protected onDevRefreshView() {
     this.session.refreshApp();
+  }
+
+  protected onPersonalize() {
+    this.session.showScreen(this.session.getPersonalizationScreen());
   }
 
   protected onDevClearLocalStorage() {

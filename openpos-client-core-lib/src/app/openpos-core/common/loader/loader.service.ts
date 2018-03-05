@@ -8,13 +8,13 @@ import { LoaderState } from './loader';
 export class LoaderService {
 
     private loaderSubject = new Subject<LoaderState>();
-    private currentLoaderState: LoaderState = { show : false, message:null, title:null};
+    private currentLoaderState: LoaderState = { show: false, message: null, title: null };
 
     loaderState = this.loaderSubject.asObservable();
 
     constructor() { }
 
-    show() {        
+    show() {
         this.currentLoaderState.show = true;
 
         this.loaderSubject.next(this.currentLoaderState);
@@ -28,10 +28,10 @@ export class LoaderService {
         this.loaderSubject.next(this.currentLoaderState);
     }
 
-    setLoaderText(title?: string, message?: string ){
+    setLoaderText(title?: string, message?: string) {
         this.currentLoaderState.message = message;
         this.currentLoaderState.title = title;
 
-        this.loaderSubject.next( this.currentLoaderState );
+        this.loaderSubject.next(this.currentLoaderState);
     }
 }

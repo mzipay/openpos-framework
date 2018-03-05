@@ -24,6 +24,8 @@ public interface ILegacyPOSBeanService {
     ILegacyGiftCardBeanModel getLegacyGiftCardBeanModel(ILegacyScreen legacyScreen);
     ILegacyGiftPriceBeanModel getLegacyGiftPriceBeanModel(ILegacyScreen legacyScreen);
     ILegacyTenderBeanModel getLegacyTenderBeanModel(ILegacyScreen legacyScreen);
+    ILegacyReasonBeanModel getLegacyReasonBeanModel(ILegacyScreen legacyScreen);
+    ILegacyBooleanWithReasonBeanModel getLegacyBooleanWithReasonBeanModel(ILegacyScreen legacyScreen);
     
     <T> T toILegacyInstance(Object legacyObject);
     

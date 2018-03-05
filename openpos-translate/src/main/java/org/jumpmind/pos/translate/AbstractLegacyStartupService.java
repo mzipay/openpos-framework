@@ -36,8 +36,11 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
 
     /** Comma separated list of port numbers to use for remote debugging */
     @Value("${external.process.debug.ports:}")
-    protected String remoteDebugPortValues;
+    private String remoteDebugPortValues;
 
+    @Value("${external.process.extra.vm.args}")
+    private String externalProcessExtraVmArgs;
+    
     private String[] remoteDebugPorts = {};
 
     @Value("${prefix.classpath}")
@@ -170,6 +173,10 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             
             cmdLine.add("-Djava.net.preferIPv4Stack=true");
             
+            if (StringUtils.isNotBlank(this.externalProcessExtraVmArgs)) {
+                logger.trace("Adding VM arguments: [{}]", this.getExternalProcessExtraVmArgs());
+                cmdLine.add(this.externalProcessExtraVmArgs);
+            }
             
             // If you need to output where log4j is loading its config from, use this
             // cmdLine.add("-Dlog4j.debug");
@@ -208,7 +215,6 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
                     process.destroy();
                 }
             }));
-            logger.info("Started process for {}", file.getName());
             if (process.isAlive()) {
                 logger.info("Getting rmi interface for {}", file.getName());
                 final int MAX_TRIES = 120;
@@ -371,5 +377,13 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
 	protected void setLibraryPath(String libraryPath) {
 		this.libraryPath = libraryPath;
 	}
+
+    public String getExternalProcessExtraVmArgs() {
+        return externalProcessExtraVmArgs;
+    }
+
+    public void setExternalProcessExtraVmArgs(String externalProcessExtraVmArgs) {
+        this.externalProcessExtraVmArgs = externalProcessExtraVmArgs;
+    }
 
 }

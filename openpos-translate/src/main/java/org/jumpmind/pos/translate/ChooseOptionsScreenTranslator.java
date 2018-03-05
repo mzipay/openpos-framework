@@ -4,14 +4,17 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.screen.ChooseOptionsScreen;
+import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.OptionItem;
 import org.jumpmind.pos.core.screen.ScreenType;
 
 public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extends AbstractLegacyScreenTranslator<T> { 
     
     protected Function<OptionItem, Boolean> optionItemEvalFunc = null;
-    
+    protected InteractionMacro undoMacro;
+
     public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         this(headlessScreen, screenClass, null);
     }
@@ -28,6 +31,10 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
         super(headlessScreen, screenClass);
         this.optionItemEvalFunc = optionFilter;
         getScreen().setType(ScreenType.ChooseOptions);
+    }
+    
+    public void setUndoMacro(InteractionMacro undoMacro) {
+        this.undoMacro = undoMacro;
     }
     
     @Override
@@ -47,4 +54,15 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
         }
         getScreen().setOptions(options);
     }
+    
+    @Override
+    public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,
+            DefaultScreen screen) {
+        if ("Undo".equals(action.getName()) && undoMacro != null) {
+            tmServer.executeMacro(undoMacro);
+        } else {
+            super.handleAction(subscriber, tmServer, action, screen);
+        }
+    }
+    
 }

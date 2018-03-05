@@ -31,7 +31,7 @@ export class FileUploadService {
 
             const httpClient = this.httpClient;
             const formData = new FormData();
-            formData.append('nodeId', this.sessionService.nodeId.toString());
+            formData.append('nodeId', this.sessionService.getNodeId().toString());
             formData.append('targetContext', context);
             formData.append('filename', filename);
 
