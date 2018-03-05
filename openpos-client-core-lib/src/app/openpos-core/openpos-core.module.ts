@@ -81,6 +81,7 @@ import { TillSummaryComponent } from './screens/till/till-summary.component';
 import { TillCountComponent } from './screens/till/till-count.component';
 import { TillCountOtherTenderComponent } from './screens/till/till-count-other-tender.component';
 import { ChangeComponent } from './screens/change/change.component';
+import { WaitComponent } from './screens/wait/wait.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -138,7 +139,8 @@ import { PrintPreviewComponent } from './screens/print-preview.component';
     ChangeComponent,
     ConfirmationDialogComponent,
     CheckoutListItemComponent,
-    PrintPreviewComponent
+    PrintPreviewComponent,
+    WaitComponent
   ],
   declarations: [
     DialogComponent,
@@ -195,7 +197,8 @@ import { PrintPreviewComponent } from './screens/print-preview.component';
     OverFlowListComponent,
     FormattedInputValueAccessor,
     KeyboardDirective,
-    PrintPreviewComponent
+    PrintPreviewComponent,
+    WaitComponent
   ],
   imports: [
     BrowserModule,
