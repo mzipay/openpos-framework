@@ -38,7 +38,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
     @Value("${external.process.debug.ports:}")
     private String remoteDebugPortValues;
 
-    @Value("${external.process.extra.vm.args}")
+    @Value("${external.process.extra.vm.args:}")
     private String externalProcessExtraVmArgs;
     
     private String[] remoteDebugPorts = {};
