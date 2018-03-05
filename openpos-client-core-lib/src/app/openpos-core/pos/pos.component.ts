@@ -77,15 +77,18 @@ export class PosComponent extends AbstractApp implements DoCheck {
 
   protected onDevRefreshView() {
     this.session.refreshApp();
+    this.devMenu.closeMenu();
   }
 
   protected onPersonalize() {
     this.session.dePersonalize();
     this.session.showScreen(this.session.getPersonalizationScreen());
+    this.devMenu.closeMenu();
   }
 
   protected onDevClearLocalStorage() {
     localStorage.clear();
+    this.devMenu.closeMenu();
   }
 
   protected onLogfileSelected(logFilename: string): void {
@@ -99,6 +102,7 @@ export class PosComponent extends AbstractApp implements DoCheck {
         }
       );
     }
+    this.devMenu.closeMenu();
   }
 
   protected onLogfileUpload(logFilename: string): void {
@@ -124,6 +128,7 @@ export class PosComponent extends AbstractApp implements DoCheck {
         }
       );
     }
+    this.devMenu.closeMenu();
   }
 
   // TODO should this come from the route name instead?

@@ -83,7 +83,7 @@ export class ScreenService {
   public addScreen(name: string, type: Type<IScreen>): void {
     if (this.screens.get(name)) {
       // tslint:disable-next-line:max-line-length
-      console.log(`registering screen of type ${this.screens.get(name).name} with ${type.name} for the key of ${name} in the screen service`);
+      console.log(`replacing registration for screen of type ${this.screens.get(name).name} with ${type.name} for the key of ${name} in the screen service`);
       this.screens.delete(name);
     }
     this.screens.set(name, type);

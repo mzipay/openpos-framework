@@ -68,8 +68,10 @@ export class SessionService implements ILocaleService {
   }
 
   public dePersonalize() {
-    localStorage.clear();
     this.unsubscribe();
+    const theme = this.getTheme();
+    localStorage.clear();
+    this.setTheme(theme);
   }
 
   private getWebsocketUrl(): string {
@@ -100,7 +102,12 @@ export class SessionService implements ILocaleService {
   }
 
   public getPersonalizationScreen(): any {
-    return { template: 'Blank', type: 'Personalization', sequenceNumber: 999999, name: 'Device Setup' };
+    // tslint:disable-next-line:max-line-length
+    return { template: 'Blank', type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 20) , name: 'Device Setup', refreshAlways: true };
+  }
+
+  public getTheme(): string {
+    return localStorage.getItem('theme');
   }
 
   public setTheme(theme: string) {
