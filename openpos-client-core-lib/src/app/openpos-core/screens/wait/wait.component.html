@@ -1,11 +1,14 @@
-<form fxFlexFill fxLayout="column" fxLayoutAlign="center center">
-	<mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
-		<mat-card-title>
-			{{instructions}}
-        </mat-card-title>
-        <mat-card-content>
-            <mat-icon style="width:200px; height:200px;">{{icon}}</mat-icon>
-        </mat-card-content>
-		
-	</mat-card>
-</form>
+<div fxFlexFill style="background-color:white; padding:16px" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+        <form fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+                <mat-card fxFlex="0 0 30%" class="page-content-card lighter scrollable-content-card mat-elevation-z8" fxLayout="column" fxLayoutAlign="start">
+                        <mat-card-content>
+                            <div fxLayout="column" fxLayoutAlign="center center" class="muted-color">
+                                <span class="text-md">{{instructions}}</span>
+                                <mat-icon ngClass="material-icons mat-180" color=icon>{{icon}}</mat-icon>
+                            </div>
+                        </mat-card-content>
+                </mat-card>
+        </form>
+</div>
+
+
