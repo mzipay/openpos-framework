@@ -1,7 +1,7 @@
+import { LoaderState } from './../common/loader/loader';
 import { IDeviceResponse } from './../common/ideviceresponse';
 import { IDeviceRequest } from './../common/idevicerequest';
 import { IMenuItem } from '../common/imenuitem';
-import { LoaderService } from '../common/loader/loader.service';
 import { IDialog } from '../common/idialog';
 import { Observable } from 'rxjs/Observable';
 import { Message } from '@stomp/stompjs';
@@ -51,9 +51,13 @@ export class SessionService implements ILocaleService {
   private stompService: StompService;
 
   private actionPayloads: Map<string, Function> = new Map<string, Function>();
+
   private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
-  constructor(private location: Location, private router: Router, private loader: LoaderService, public dialogService: MatDialog) {
+  loaderState: LoaderState;
+
+  constructor(private location: Location, private router: Router, public dialogService: MatDialog) {
+    this.loaderState = new LoaderState(this);
   }
 
   public isRunningInBrowser(): boolean {
@@ -287,18 +291,18 @@ export class SessionService implements ILocaleService {
 
   private queueLoading() {
     this.loading = true;
-    setTimeout(() => this.showLoading(), 1000);
+    setTimeout(() => this.showLoading(LoaderState.LOADING_TITLE), 1000);
   }
 
-  private showLoading() {
+  private showLoading(title: string, message?: string) {
     if (this.loading) {
-      this.loader.show();
+      this.loaderState.setVisible(true, title, message);
     }
   }
 
   public cancelLoading() {
     this.loading = false;
-    this.loader.hide();
+    this.loaderState.setVisible(false);
   }
 
   /** Consume a message from the stompService */
@@ -310,9 +314,8 @@ export class SessionService implements ILocaleService {
     } else if (json.type === 'Dialog') {
       this.showDialog(json);
     } else if (json.type === 'Loading') {
-      this.loader.setLoaderText(json.title, json.message);
       this.loading = true;
-      this.showLoading();
+      this.showLoading(json.title, json.message);
       return;
     } else if (json.type === 'NoOp') {
       this.response = null;
@@ -393,3 +396,5 @@ export class SessionService implements ILocaleService {
   }
 
 }
+
+

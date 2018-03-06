@@ -1,32 +1,35 @@
+import { SessionService } from './../services/session.service';
 import { Injectable } from '@angular/core';
 import {
     HttpEvent, HttpInterceptor, HttpHandler, HttpRequest
 } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { LoaderService } from '../common/loader/loader.service';
+import { LoaderState } from '../common/loader/loader';
 import { finalize } from 'rxjs/operators';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
-    constructor( private loaderService: LoaderService){
 
+    constructor(private session: SessionService) {
     }
-    private loading: boolean = false;
-    intercept( req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-  
+
+    private loading = false;
+
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
         this.loading = true;
         setTimeout(() => this.show(), 1000);
         return next.handle(req).pipe(
             finalize(() => {
                 this.loading = false;
-                this.loaderService.hide();
-              })
+                this.session.loaderState.setVisible(false);
+            })
         );
     }
 
-    private show(){
-        if( this.loading ){
-            this.loaderService.show();
+    private show() {
+        if (this.loading) {
+            this.session.loaderState.setVisible(true);
         }
     }
 }

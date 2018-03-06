@@ -27,7 +27,6 @@ import { TemplateDirective } from './common/template.directive';
 import { FocusDirective } from './common/focus.directive';
 
 // Services
-import { LoaderService } from './common/loader/loader.service';
 import { ScreenService } from './services/screen.service';
 import { SessionService } from './services/session.service';
 import { IconService } from './services/icon.service';
@@ -247,8 +246,7 @@ export class OpenposCoreModule {
       ngModule: OpenposCoreModule,
       providers: [
         PluginService,
-        ScreenService,
-        LoaderService
+        ScreenService
       ]
     };
   }

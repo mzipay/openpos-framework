@@ -36,8 +36,11 @@ export class PosComponent extends AbstractApp implements DoCheck {
   constructor(public screenService: ScreenService, public session: SessionService,
     public deviceService: DeviceService, public dialog: MatDialog,
     public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
-    protected router: Router, public zone: NgZone, private pluginService: PluginService, private fileUploadService: FileUploadService) {
+    protected router: Router, public zone: NgZone, private pluginService: PluginService,
+    private fileUploadService: FileUploadService) {
+
     super(screenService, session, dialog, iconService, snackBar, overlayContainer, router, zone);
+
   }
 
   @HostListener('document:click', ['$event'])
@@ -50,7 +53,6 @@ export class PosComponent extends AbstractApp implements DoCheck {
     this.clickCount = ++this.clickCount;
 
     if (this.clickCount === 5) {
-      console.log('got it');
       this.onDevMenuClick();
       this.clickCount = 0;
     }
@@ -72,7 +74,15 @@ export class PosComponent extends AbstractApp implements DoCheck {
         }
       }
     );
+    this.session.loaderState.setEnabled(false);
     this.devMenu.openMenu();
+
+    setTimeout(() => {
+      if (this.devMenu.menuOpen) {
+        this.session.loaderState.setEnabled(true);
+        this.devMenu.closeMenu();
+      }
+    }, 10000);
   }
 
   protected onDevRefreshView() {
