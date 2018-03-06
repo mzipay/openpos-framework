@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { LoaderState } from './loader';
+import { LoaderState } from './loader-state';
 
 import { SessionService } from '../../services/session.service';
 

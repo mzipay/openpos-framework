@@ -1,4 +1,4 @@
-import { LoaderState } from './../common/loader/loader';
+import { LoaderState } from './../common/loader/loader-state';
 import { IDeviceResponse } from './../common/ideviceresponse';
 import { IDeviceRequest } from './../common/idevicerequest';
 import { IMenuItem } from '../common/imenuitem';

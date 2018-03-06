@@ -7,3 +7,10 @@
     height : calc(100vh - 56px);
     overflow-y: auto;
 }
+
+.float {
+    top:10px;
+    right: 10px;
+    position:absolute;     
+    z-index: 1000;
+}

@@ -21,8 +21,6 @@ import { Router } from '@angular/router';
 })
 export class PosComponent extends AbstractApp implements DoCheck {
 
-  @ViewChild(MatMenuTrigger) devMenu: MatMenuTrigger;
-
   public backButton: IMenuItem;
 
   firstClickTime = Date.now();
@@ -32,6 +30,8 @@ export class PosComponent extends AbstractApp implements DoCheck {
   logFilenames: string[];
 
   logPlugin: IPlugin;
+
+  showDevMenu = false;
 
   constructor(public screenService: ScreenService, public session: SessionService,
     public deviceService: DeviceService, public dialog: MatDialog,
@@ -59,46 +59,38 @@ export class PosComponent extends AbstractApp implements DoCheck {
   }
 
   protected onDevMenuClick(): void {
-    this.pluginService.getPlugin('openPOSCordovaLogPlugin').then(
-      (plugin: IPlugin) => {
-        this.logPlugin = plugin;
-        if (this.logPlugin && this.logPlugin.impl) {
-          this.logPlugin.impl.listLogFiles(
-            (fileNames) => {
-              this.logFilenames = fileNames;
-            },
-            (error) => {
-              this.logFilenames = [];
-            }
-          );
+    if (!this.showDevMenu) {
+      this.pluginService.getPlugin('openPOSCordovaLogPlugin').then(
+        (plugin: IPlugin) => {
+          this.logPlugin = plugin;
+          if (this.logPlugin && this.logPlugin.impl) {
+            this.logPlugin.impl.listLogFiles(
+              (fileNames) => {
+                this.logFilenames = fileNames;
+              },
+              (error) => {
+                this.logFilenames = [];
+              }
+            );
+          }
         }
-      }
-    );
-    this.session.loaderState.setEnabled(false);
-    this.devMenu.openMenu();
+      );
+    }
+    this.showDevMenu = !this.showDevMenu;
 
-    setTimeout(() => {
-      if (this.devMenu.menuOpen) {
-        this.session.loaderState.setEnabled(true);
-        this.devMenu.closeMenu();
-      }
-    }, 10000);
   }
 
   protected onDevRefreshView() {
     this.session.refreshApp();
-    this.devMenu.closeMenu();
   }
 
   protected onPersonalize() {
     this.session.dePersonalize();
     this.session.showScreen(this.session.getPersonalizationScreen());
-    this.devMenu.closeMenu();
   }
 
   protected onDevClearLocalStorage() {
     localStorage.clear();
-    this.devMenu.closeMenu();
   }
 
   protected onLogfileSelected(logFilename: string): void {
@@ -112,7 +104,6 @@ export class PosComponent extends AbstractApp implements DoCheck {
         }
       );
     }
-    this.devMenu.closeMenu();
   }
 
   protected onLogfileUpload(logFilename: string): void {
@@ -138,7 +129,6 @@ export class PosComponent extends AbstractApp implements DoCheck {
         }
       );
     }
-    this.devMenu.closeMenu();
   }
 
   // TODO should this come from the route name instead?

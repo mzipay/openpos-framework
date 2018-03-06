@@ -1,2 +1,2 @@
 export * from './loader.component';
-export * from './loader';
+export * from './loader-state';

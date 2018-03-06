@@ -4,7 +4,7 @@ import {
     HttpEvent, HttpInterceptor, HttpHandler, HttpRequest
 } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { LoaderState } from '../common/loader/loader';
+import { LoaderState } from '../common/loader/loader-state';
 import { finalize } from 'rxjs/operators';
 
 @Injectable()

@@ -71,7 +71,7 @@ export abstract class AbstractApp implements OnDestroy, DoCheck, OnInit {
     }
 
     public registerWithServer(): boolean {
-        if (!this.registered && this.isPersonalized()) {
+        if (!this.registered &&  this.isPersonalized()) {
             console.log('initializing the application');
             this.session.unsubscribe();
             this.session.subscribe(this.appName());
