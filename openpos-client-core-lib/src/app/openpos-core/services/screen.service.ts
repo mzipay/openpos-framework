@@ -109,7 +109,7 @@ export class ScreenService {
       + this.sessionService.getAppId() + '/node/'
       + this.sessionService.getNodeId() + '/control/'
       + fieldId;
-
+      console.log(`Requesting field values from the server using url: ${url}`);
     return this.http.get(url, {});
   }
 
