@@ -82,6 +82,8 @@ public class ScreenService implements IScreenService {
     @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{nodeId}/control/{controlId}")
     @ResponseBody
     public String getComponentValues(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String controlId) {
+    	logger.info("Received a request to load component values for {} {} {}", appId, nodeId, controlId);
+    	
         DefaultScreen defaultScreen = getLastScreen(appId, nodeId);
         DynamicFormScreen dynamicScreen = null;
         if (defaultScreen instanceof DynamicFormScreen) {
@@ -105,7 +107,9 @@ public class ScreenService implements IScreenService {
                 } catch (IOException e) {
                     throw new RuntimeException("Error while serializing the component values.", e);
                 }
-                return new String(out.toByteArray());
+                String result = new String(out.toByteArray());
+                logger.info("Responding to request to load component values {} {} {} with values \n{}", appId, nodeId, controlId, result);
+                return result;
             }
         }
         return "{}";
