@@ -1,9 +1,9 @@
 <div [ngClass]="getTheme()">
     <div class="main-background">
         <app-statusbar></app-statusbar>
-        <div [matMenuTriggerFor]="devMenu" style="z-index: 999999999">
-            <mat-menu #devMenu="matMenu"  style="z-index: 999999999">
-                <button mat-menu-item style="z-index: 999999999" (click)="onDevClearLocalStorage()">Clear Local Storage</button>
+        <div [matMenuTriggerFor]="devMenu">
+            <mat-menu #devMenu="matMenu">
+                <button mat-menu-item (click)="onDevClearLocalStorage()">Clear Local Storage</button>
                 <button mat-menu-item [matMenuTriggerFor]="logsMenu">Logs</button>
                 <button mat-menu-item (click)="onDevRefreshView()">Refresh View</button>
                 <button mat-menu-item (click)="onPersonalize()">Personalize</button>

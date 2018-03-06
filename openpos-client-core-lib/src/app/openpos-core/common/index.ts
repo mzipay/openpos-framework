@@ -1,4 +1,5 @@
-export {LoaderComponent, LoaderService } from './loader';
+export { LoaderState } from './loader/loader';
+export {LoaderComponent } from './loader';
 export {IDevicePlugin} from  './idevice-plugin';
 export {IDeviceRequest} from  './idevicerequest';
 export {IPlugin} from  './iplugin';
@@ -9,3 +10,4 @@ export {ScreenDirective} from './screen.directive';
 export {IDialog} from './idialog';
 export {ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType} from './actionIntercepter';
 export * from './controls';
+export {IFormatter} from './formatters/iformatter';

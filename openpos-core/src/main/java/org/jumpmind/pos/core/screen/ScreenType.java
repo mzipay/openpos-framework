@@ -32,4 +32,5 @@ public interface ScreenType {
     public static final String Blank = "Blank";
     public static final String Change = "Change";
     public static final String PrintPreview = "PrintPreview";
+    public static final String Wait = "Wait";
 }
