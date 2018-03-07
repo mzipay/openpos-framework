@@ -45,7 +45,7 @@ export class KeyboardDirective implements OnDestroy {
     if (this.session.screen.useOnScreenKeyboard) {
 
       this._keyboardRef = this._keyboardService.open(this.matKeyboard, {
-        darkTheme: this.darkTheme,
+        darkTheme: true,
         duration: this.duration,
         isDebug: this.isDebug
       });
