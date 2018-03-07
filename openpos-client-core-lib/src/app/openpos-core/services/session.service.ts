@@ -219,6 +219,9 @@ export class SessionService implements ILocaleService {
     // There are two subscriptions - one created explicitly, the other created in the template by use of 'async'
     this.subscription.unsubscribe();
     this.subscription = null;
+
+    this.stompService.disconnect();
+    this.stompService = null;
     this.messages = null;
 
     this.subscribed = false;
