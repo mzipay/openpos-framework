@@ -37,11 +37,6 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck,
     this.initialized = true;
   }
 
-  onEnter(value: string) {
-    this.session.response = value;
-    this.session.onAction('Next');
-  }
-
   onScanInputEnter(value): void {
     this.session.onAction('Next', value);
   }

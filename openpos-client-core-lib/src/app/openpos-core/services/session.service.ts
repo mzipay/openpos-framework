@@ -69,9 +69,12 @@ export class SessionService implements ILocaleService {
   }
 
   public personalize(serverName: string, serverPort: string, storeId: string, deviceId: string) {
+    const nodeId = storeId + '-' + deviceId;
+    console.log(`personalizing with server: ${serverName}, port: ${serverPort}, nodeid: ${nodeId}`);
     localStorage.setItem('serverName', serverName);
     localStorage.setItem('serverPort', serverPort);
-    localStorage.setItem('nodeId', storeId + '-' + deviceId);
+    localStorage.setItem('nodeId', nodeId);
+    this.refreshApp();
   }
 
   public dePersonalize() {
@@ -178,8 +181,10 @@ export class SessionService implements ILocaleService {
       return;
     }
 
+    const url = this.getWebsocketUrl();
+    console.log('creating new stomp service at: ' + url);
     this.stompService = new StompService({
-      url: this.getWebsocketUrl(),
+      url: url,
       headers: {
         //    login: 'guest',
         //    passcode: 'guest'
@@ -195,7 +200,7 @@ export class SessionService implements ILocaleService {
     this.appId = appName;
     const currentTopic = this.buildTopicName();
 
-    console.log('subscribing to server at ...' + currentTopic);
+    console.log('subscribing to server at: ' + currentTopic);
 
     this.messages = this.stompService.subscribe(currentTopic as string);
 
@@ -213,13 +218,14 @@ export class SessionService implements ILocaleService {
       return;
     }
 
-    console.log('unsubscribing from server ...');
+    console.log('unsubscribing from stomp service ...');
 
     // This will internally unsubscribe from Stomp Broker
     // There are two subscriptions - one created explicitly, the other created in the template by use of 'async'
     this.subscription.unsubscribe();
     this.subscription = null;
 
+    console.log('disconnecting from stomp service');
     this.stompService.disconnect();
     this.stompService = null;
     this.messages = null;
