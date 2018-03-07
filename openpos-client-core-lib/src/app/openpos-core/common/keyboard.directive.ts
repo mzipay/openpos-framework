@@ -47,7 +47,15 @@ export class KeyboardDirective implements OnDestroy {
         duration: this.duration,
         isDebug: this.isDebug
       });
-  
+
+      // Massive HACK!!!! this is to fix a but in the Mat Keyboard library we are using
+      // and should be removed whenever it gets fixed.
+      if( !this._elementRef.nativeElement.value ){
+        this._elementRef.nativeElement.value = "";
+        let inputEvent = new Event("input");
+        this._elementRef.nativeElement.dispatchEvent(inputEvent);
+      }
+
       // reference the input element
       this._keyboardRef.instance.setInputInstance(this._elementRef);
   
