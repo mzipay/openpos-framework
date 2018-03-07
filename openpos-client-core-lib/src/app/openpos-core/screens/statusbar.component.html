@@ -13,37 +13,10 @@
 		<span *ngIf="session.screen && session.screen.operatorName"  class="text-sm" fxHide.xs>
 			{{session.screen.operatorName}}&nbsp;on Register&nbsp;#{{session.screen.workstation.workstationId}}
 		</span>
-		<span *ngIf="session.screen && session.screen.operatorName"  class="text-sm" fxShow.xs>
-				{{session.screen.operatorName}}
-			</span>		
 		<button mat-icon-button *ngIf="session.screen && session.screen.logoutButton && session.screen.type != 'Home'"
 			(click)="doMenuItemAction(session.screen.logoutButton)" [disabled]="!isMenuItemEnabled(session.screen.logoutButton)">
 			<app-icon *ngIf="session.screen.logoutButton.icon" [iconName]="session.screen.logoutButton.icon"></app-icon>
 		</button>
-		<ng-container *ngIf="devModeEnabled">
-				<button mat-icon-button [matMenuTriggerFor]="devMenu" (click)="onDevMenuClick()"><mat-icon>code</mat-icon></button>
-	
-				<mat-menu #devMenu="matMenu">
-					<button mat-menu-item (click)="onDevClearLocalStorage()">Clear Local Storage</button>
-					<button mat-menu-item [matMenuTriggerFor]="logsMenu">Logs</button>
-					<button mat-menu-item (click)="onDevRefreshView()">Refresh View</button>
-					<button mat-menu-item (click)="onPersonalize()">Personalize</button>
-				</mat-menu>
-	
-				<mat-menu #logsMenu="matMenu">
-					<button mat-menu-item [matMenuTriggerFor]="logShareMenu">Share</button>
-					<button mat-menu-item [matMenuTriggerFor]="logUploadMenu">Upload</button>
-				</mat-menu>
-	
-				<mat-menu #logShareMenu="matMenu">
-					<button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileSelected(m)">{{m}}</button> 
-				</mat-menu>
-									
-				<mat-menu #logUploadMenu="matMenu">
-					<button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileUpload(m)">{{m}}</button> 
-				</mat-menu>
-	
-			</ng-container>
 	</span>
 			
 </mat-toolbar>
