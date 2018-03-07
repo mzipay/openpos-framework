@@ -126,7 +126,7 @@ export class PluginService {
                     }
                 );
             } else {
-                console.log(`Init of plugin '${pluginId}' not required yet.`);
+                console.log(`Init of plugin '${pluginId}' not required.`);
                 resolve(targetPlugin);
             }
         });
