@@ -23,6 +23,8 @@ export class SellComponent extends AbstractTemplate implements OnInit {
 
   public drawerMode: Observable<string>;
 
+  public time = Date.now();
+
   constructor( public session: SessionService, private observableMedia: ObservableMedia) {
     super();
 
