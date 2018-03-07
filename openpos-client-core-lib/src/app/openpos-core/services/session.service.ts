@@ -22,6 +22,7 @@ declare var cordova: any;
 
 @Injectable()
 export class SessionService implements ILocaleService {
+
   public screen: any;
 
   public dialog: any;
@@ -29,6 +30,8 @@ export class SessionService implements ILocaleService {
   public response: any;
 
   private appId: String;
+
+  private deviceName: string;
 
   private subscribed: boolean;
 
@@ -124,6 +127,14 @@ export class SessionService implements ILocaleService {
 
   public getServerName(): string {
     return localStorage.getItem('serverName');
+  }
+
+  public getDeviceName(): string {
+    return localStorage.getItem('deviceName');
+  }
+
+  public setDeviceName(deviceName: string): void {
+    localStorage.setItem('deviceName', deviceName);
   }
 
   public getAppId(): String {
