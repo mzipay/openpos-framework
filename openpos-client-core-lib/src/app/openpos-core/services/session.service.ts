@@ -80,7 +80,10 @@ export class SessionService implements ILocaleService {
   public dePersonalize() {
     this.unsubscribe();
     const theme = this.getTheme();
-    localStorage.clear();
+    localStorage.removeItem('serverName');
+    localStorage.removeItem('serverPort');
+    localStorage.removeItem('nodeId');
+    localStorage.removeItem('theme');
     this.setTheme(theme);
   }
 
