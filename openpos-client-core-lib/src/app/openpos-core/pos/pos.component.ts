@@ -46,7 +46,9 @@ export class PosComponent extends AbstractApp implements DoCheck {
   @HostListener('document:click', ['$event'])
   @HostListener('document:touchstart', ['$event'])
   documentClick(event: MouseEvent) {
-    if (this.clickCount === 0 || Date.now() - this.firstClickTime > 1000) {
+    const screenWidth = window.screen.availWidth;
+    if (this.clickCount === 0 || Date.now() - this.firstClickTime > 1000 ||
+      (event.clientX < screenWidth - 100 && event.clientY > 100)) {
       this.firstClickTime = Date.now();
       this.clickCount = 0;
     }
