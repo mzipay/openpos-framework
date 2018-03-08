@@ -33,6 +33,7 @@ export class DeviceService {
   protected initializeInAppBrowserPlugin(): void {
     if (cordova.InAppBrowser) {
       window.open = cordova.InAppBrowser.open;
+      console.log('InAppBrowserPlugin initialized.');
     }
   }
 

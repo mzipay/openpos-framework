@@ -2,8 +2,7 @@
     <div class="main-background">
         <app-statusbar></app-statusbar>
 
-        <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="warn" [matMenuTriggerFor]="devMenu"><mat-icon aria-label="Development Menu">code</mat-icon>
-        </button>
+        <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu"><mat-icon>code</mat-icon></button>
 
         <div [matMenuTriggerFor]="devMenu">
             <mat-menu #devMenu="matMenu">

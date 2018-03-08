@@ -90,4 +90,11 @@
         background: transparent;
         box-shadow: unset;
     } 
+
+    app-statusbar{
+        .mat-toolbar{
+            background-color: black;
+            color: whitesmoke;
+        }
+    }
 }
