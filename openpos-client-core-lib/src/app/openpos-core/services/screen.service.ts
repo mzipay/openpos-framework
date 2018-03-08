@@ -39,6 +39,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { SessionService } from '../services/session.service';
 import { PrintPreviewComponent } from '../screens/print-preview.component';
 import { WaitComponent } from '../screens/wait/wait.component';
+import { CustomerSearchResultsComponent } from '../screens/customer-search-results/customer-search-results.component';
 
 @Injectable()
 export class ScreenService {
@@ -76,6 +77,7 @@ export class ScreenService {
     this.screens.set('Change', ChangeComponent);
     this.screens.set('PrintPreview', PrintPreviewComponent);
     this.screens.set('Wait', WaitComponent);
+    this.screens.set('CustomerSearch', CustomerSearchResultsComponent);
 
     // Templates
     this.screens.set('Blank', BlankComponent);
