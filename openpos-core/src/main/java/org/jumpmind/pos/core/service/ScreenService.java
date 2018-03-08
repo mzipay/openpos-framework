@@ -22,9 +22,9 @@ import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
 import org.jumpmind.pos.core.screen.DefaultScreen;
-import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.FormScreen;
+import org.jumpmind.pos.core.screen.IHasForm;
 import org.jumpmind.pos.core.screen.ScreenType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,7 +123,7 @@ public class ScreenService implements IScreenService {
             logger.error("Failed to write action to JSON", ex);
         }
         DefaultScreen lastScreen = getLastScreen(appId, nodeId);
-        if (lastScreen instanceof DialogScreen) {
+        if (ScreenType.Dialog.equals(lastScreen.getType())) {
             publishToClients(appId, nodeId, "{\"clearDialog\":true }");
         }
         IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
@@ -177,19 +177,14 @@ public class ScreenService implements IScreenService {
     }
 
     @Override
-    public DefaultScreen deserializeScreenPayload(String appId, String nodeId, Action action) {
+    public Form deserializeScreenPayload(String appId, String nodeId, Action action) {
+        Form form = null;
         Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
-            if (lastScreen != null && 
-                    (lastScreen instanceof FormScreen || lastScreen instanceof DynamicFormScreen)) {
-                Form form = null;
+            if (lastScreen != null && lastScreen instanceof IHasForm) {
                 try {
                     form = mapper.convertValue(action.getData(), Form.class);
-                    if (form != null) { // A form that has display only fields won't
-                        // have any data
-                        return populateFormScreen(appId, nodeId, form);
-                    }
                 } catch (IllegalArgumentException ex) {
                     // We should not assume a form will always be returned by the DynamicFormScreen.
                     // The barcode scanner can also return a value.
@@ -197,40 +192,11 @@ public class ScreenService implements IScreenService {
                 }
             }
         }
-        return null;
-    }
-
-    protected DefaultScreen populateFormScreen(String appId, String nodeId, Form form) {
-        DefaultScreen lastScreen = null;
-        Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
-        if (lastScreenByNodeId != null) {
-            lastScreen = lastScreenByNodeId.get(nodeId);
-
-            for (IFormElement formElement : form.getFormElements()) {
-                if (formElement instanceof FormField) {
-                    FormField formField = (FormField) formElement;
-                    String fieldId = formField.getId();
-                    if (lastScreen instanceof FormScreen) {
-                        FormScreen formScreen = (FormScreen) lastScreen;
-                        formScreen.setForm(form);
-                    } else if (lastScreen instanceof DynamicFormScreen) {
-                        DynamicFormScreen formScreen = (DynamicFormScreen) lastScreen;
-                        formScreen.setForm(form);
-                    } else {
-                        for (Field field : lastScreen.getClass().getDeclaredFields()) {
-                            FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
-                            if (textFieldAnnotation != null) {
-                                if (field.getName().equals(fieldId)) {
-                                    setFieldValue(field, lastScreen, formField.getValue());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        
+        if (form == null) {
+            form = new Form();
         }
-
-        return lastScreen;
+        return form;
     }
 
     protected Form buildForm(DefaultScreen screen) {

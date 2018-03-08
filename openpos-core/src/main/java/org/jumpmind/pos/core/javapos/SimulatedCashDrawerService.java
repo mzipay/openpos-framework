@@ -31,7 +31,11 @@ public class SimulatedCashDrawerService extends AbstractSimulatedService impleme
     }
 
     public void waitForDrawerClose(int arg0, int arg1, int arg2, int arg3) throws JposException {
-
+    	try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     }
 
     public void compareFirmwareVersion(String arg0, int[] arg1) throws JposException {

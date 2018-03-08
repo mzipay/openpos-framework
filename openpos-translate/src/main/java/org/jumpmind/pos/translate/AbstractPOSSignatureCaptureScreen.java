@@ -3,8 +3,8 @@ package org.jumpmind.pos.translate;
 import java.util.Optional;
 
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.Signature;
-import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SignatureCaptureScreen;
 import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
@@ -32,13 +32,14 @@ public abstract class AbstractPOSSignatureCaptureScreen extends AbstractScreenTr
     }
 
     abstract protected void handleSignatureCancelAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,
-            DefaultScreen screen);
+            Form form);
+    
     abstract protected void handleSignatureSaveAction(Signature signatureData, ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,
-            DefaultScreen screen);
+            Form form);
     
     @Override
     public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,
-            DefaultScreen screen) {
+            Form formResults) {
         if ("SaveSignature".equals(action.getName())) {
             Signature signatureData = null;
             if (action.getData() != null) {
@@ -46,7 +47,7 @@ public abstract class AbstractPOSSignatureCaptureScreen extends AbstractScreenTr
                 logger.debug("Returned signature data = {}", signatureData);
             }
             
-            this.handleSignatureSaveAction(signatureData, subscriber, tmServer, action, screen);
+            this.handleSignatureSaveAction(signatureData, subscriber, tmServer, action, formResults);
             /*
             // Points format is available, but OrPOS now uses TIFF format
             // String signaturePoints = TranslationUtils.toPointsString(signatureData);
@@ -66,10 +67,10 @@ public abstract class AbstractPOSSignatureCaptureScreen extends AbstractScreenTr
 */
 //            tmServer.executeMacro(new InteractionMacro().sendLetter("Continue").waitForScreen("VerifySignature").sendLetter("Yes"));
         } else if ("Cancel".equals(action.getName())) {
-            this.handleSignatureCancelAction(subscriber, tmServer, action, screen);
+            this.handleSignatureCancelAction(subscriber, tmServer, action, formResults);
             // super.handleAction(subscriber, tmServer, action, screen);
         } else {
-            super.handleAction(subscriber, tmServer, action, screen);
+            super.handleAction(subscriber, tmServer, action, formResults);
         }
 
     }

@@ -5,8 +5,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.ChooseOptionsScreen;
-import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.OptionItem;
 import org.jumpmind.pos.core.screen.ScreenType;
 
@@ -57,11 +57,11 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
     
     @Override
     public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,
-            DefaultScreen screen) {
+            Form formResults) {
         if ("Undo".equals(action.getName()) && undoMacro != null) {
             tmServer.executeMacro(undoMacro);
         } else {
-            super.handleAction(subscriber, tmServer, action, screen);
+            super.handleAction(subscriber, tmServer, action, formResults);
         }
     }
     

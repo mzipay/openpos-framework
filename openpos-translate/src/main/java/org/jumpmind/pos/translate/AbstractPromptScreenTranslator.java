@@ -9,6 +9,7 @@ import java.util.Properties;
 import org.apache.commons.lang.StringUtils;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.FieldInputType;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.IPromptScreen;
 
@@ -118,22 +119,22 @@ public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> ex
         return responseFieldType;
     }
 
-    protected void handleNextAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action, DefaultScreen screen) {
+    protected void handleNextAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action, Form formResults) {
         String prompt = (action != null && action.getData() != null) ? action.getData().toString() : null;
         if (isNotBlank(prompt)) {
             setScreenResponseText(action.toDataString());
             tmServer.sendAction(action.getName());
         } else {
-            super.handleAction(subscriber, tmServer, action, screen);
+            super.handleAction(subscriber, tmServer, action, formResults);
         }
     }
     
     @Override
-    public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action, DefaultScreen screen) {
+    public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action, Form formResults) {
         if ("Next".equalsIgnoreCase(action.getName())) {
-            handleNextAction(subscriber, tmServer, action, screen);
+            handleNextAction(subscriber, tmServer, action, formResults);
         } else {
-            super.handleAction(subscriber, tmServer, action, screen);
+            super.handleAction(subscriber, tmServer, action, formResults);
         }
     }
 

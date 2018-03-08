@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.DefaultScreen.ScanType;
@@ -104,7 +105,7 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
     }
 
     public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,
-            DefaultScreen screen) {
+            Form formResults) {
         tmServer.sendAction(action.getName());
     } 
     

@@ -212,7 +212,7 @@ public class DefaultScreen implements Serializable {
         return refreshAlways;
     }
 
-    public <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
+    public static <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
         return new ObjectMapper().convertValue(actionData, convertToInstanceOf);
     }
     

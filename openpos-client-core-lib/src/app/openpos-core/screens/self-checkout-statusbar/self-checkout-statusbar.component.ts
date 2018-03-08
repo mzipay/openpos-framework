@@ -25,4 +25,8 @@ export class SelfCheckoutStatusBarComponent {
     return enabled;
   }
 
+  public onAdminLogin() {
+    this.session.onAction('ShowLogin');
+  }
+
 }

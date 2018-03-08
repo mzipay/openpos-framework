@@ -3,7 +3,7 @@ package org.jumpmind.pos.translate;
 import static java.lang.String.format;
 
 import org.jumpmind.pos.core.flow.Action;
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.util.RMICallbackProxyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,15 +53,15 @@ public class TranslationManagerBridge implements ITranslationManager {
     }
 
     @Override
-    public void doAction(String appId, Action action, DefaultScreen screen) {
+    public void doAction(String appId, Action action, Form formResults) {
         try {
             ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
-            implementation.doAction(appId, action, screen);
+            implementation.doAction(appId, action, formResults);
         } catch (RemoteConnectFailureException e) {
             headlessStartupService.start(nodeId);
             setTranslationManagerSubscriber();
             ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
-            implementation.doAction(appId, action, screen);
+            implementation.doAction(appId, action, formResults);
         }
     }
 
