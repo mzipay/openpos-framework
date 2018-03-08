@@ -5,10 +5,6 @@ import java.util.Optional;
 
 import org.jumpmind.pos.core.screen.OptionItem;
 import org.jumpmind.pos.core.screen.PromptWithOptionsScreen;
-import org.jumpmind.pos.translate.AbstractPromptScreenTranslator;
-import org.jumpmind.pos.translate.ILegacyAssignmentSpec;
-import org.jumpmind.pos.translate.ILegacyButtonSpec;
-import org.jumpmind.pos.translate.ILegacyScreen;
 
 /**
  * General purpose translator that results in rendering a screen with the OrPOS

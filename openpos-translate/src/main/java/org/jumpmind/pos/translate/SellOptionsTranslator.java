@@ -5,6 +5,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.ScreenType;
@@ -43,11 +44,11 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Defaul
     
     @Override
     public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,
-            DefaultScreen screen) {
+            Form formResults) {
         if ("Undo".equals(action.getName()) && undoMacro != null) {
             tmServer.executeMacro(undoMacro);
         } else {
-            super.handleAction(subscriber, tmServer, action, screen);
+            super.handleAction(subscriber, tmServer, action, formResults);
         }
     }
 }

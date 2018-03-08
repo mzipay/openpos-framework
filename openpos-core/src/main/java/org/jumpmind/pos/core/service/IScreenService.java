@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.service;
 
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 
 public interface IScreenService {
@@ -11,6 +12,6 @@ public interface IScreenService {
     
     public DefaultScreen getLastScreen(String appId, String nodeId);
     
-    public DefaultScreen deserializeScreenPayload(String appId, String nodeId, Action action);
+    public Form deserializeScreenPayload(String appId, String nodeId, Action action);
 
 }
