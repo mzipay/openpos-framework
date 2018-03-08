@@ -178,12 +178,13 @@ public class ScreenService implements IScreenService {
 
     @Override
     public Form deserializeScreenPayload(String appId, String nodeId, Action action) {
+        Form form = null;
         Map<String, DefaultScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             DefaultScreen lastScreen = lastScreenByNodeId.get(nodeId);
             if (lastScreen != null && lastScreen instanceof IHasForm) {
                 try {
-                    return mapper.convertValue(action.getData(), Form.class);
+                    form = mapper.convertValue(action.getData(), Form.class);
                 } catch (IllegalArgumentException ex) {
                     // We should not assume a form will always be returned by the DynamicFormScreen.
                     // The barcode scanner can also return a value.
@@ -191,7 +192,11 @@ public class ScreenService implements IScreenService {
                 }
             }
         }
-        return null;
+        
+        if (form == null) {
+            form = new Form();
+        }
+        return form;
     }
 
     protected Form buildForm(DefaultScreen screen) {
