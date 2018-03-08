@@ -2,96 +2,154 @@
 <!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database">
 <database name="openpos">
 
-    <table name="EMPL">
-        <column name="EMPL_ID" primaryKey="true" required="true" type="BIGINT" />
-        <column name="USER_NAME" type="VARCHAR" size="120" />
-        <column name="NAME" type="VARCHAR" size="150" />
-        <column name="LAST_NAME" type="VARCHAR" size="120" />
-        <column name="FIRST_NAME" type="VARCHAR" size="120" />
-        <column name="MIDDLE_NAME" type="VARCHAR" size="120" />
-        <column name="ROLE_ID" type="BIGINT" />
-        <column name="STATUS" type="VARCHAR" size="20" />
-        <column name="LOCALE" type="VARCHAR" size="10" />
-        <column name="STORE_ID" type="VARCHAR" size="5" />
-        <column name="NEW_PWD_RQRD" required="true" type="CHAR" size="1" default="0" />
-        <column name="BIRTH_DATE" type="TIMESTAMP" />
-        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-    </table>
+<?xml version="1.0"?>
+<!--
 
-    <table name="EMPL_PWD">
-        <column name="EMPL_ID" primaryKey="true" required="true" type="BIGINT" />
-        <column name="EMPL_PWD" required="true" type="VARCHAR" size="256" />
-        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-    </table>
+    Licensed to JumpMind Inc under one or more contributor
+    license agreements.  See the NOTICE file distributed
+    with this work for additional information regarding
+    copyright ownership.  JumpMind Inc licenses this file
+    to you under the GNU General Public License, version 3.0 (GPLv3)
+    (the "License"); you may not use this file except in compliance
+    with the License.
 
-    <table name="EMPL_STORE">
-        <column name="EMPL_ID" primaryKey="true" required="true" type="BIGINT" />
-        <column name="STORE_ID" primaryKey="true" required="true" type="VARCHAR" size="10" />
-        <column name="EFF_START_TIME" primaryKey="true" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="EFF_END_TIME" type="TIMESTAMP" />
-        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-    </table>
+    You should have received a copy of the GNU General Public License,
+    version 3.0 (GPLv3) along with this library; if not, see
+    <http://www.gnu.org/licenses/>.
 
-    <table name="APP_ROLE">
-        <column name="ROLE_ID" primaryKey="true" required="true" type="BIGINT" />
-        <column name="NAME" required="true" type="VARCHAR" size="10" />
-        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-    </table>
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
 
-    <table name="APP_ROLE_FUNC">
-        <column name="FUNCTION_ID" primaryKey="true" required="true" type="VARCHAR" size="120" />
-        <column name="ROLE_ID" primaryKey="true" required="true" type="BIGINT" />
-        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+-->
+<!DOCTYPE database SYSTEM "database.dtd">
+<database name="openpos">
+    <!-- Access Control -->
+    <table name="operator" description="Security Identifier granting and denying access to the systems of the retail enterprise, and recorded upon the transaction originating from those systems.">
+        <column name="id" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned key used to identify an operator." />
+        <column name="user_name" type="VARCHAR" size="50" description="The short human readable name used as an alternate ID for Operator. " />
+        <column name="password" type="VARCHAR" size="64" description="A hashed security password entered by an operator and used to verify his/her identity when signing on to a Workstation." />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
     </table>
-
-    <table name="APP_INFO">
-        <column name="APP_ID" primaryKey="true" required="true" type="VARCHAR" size="120" />
-        <column name="INSTALL_UUID" primaryKey="true" required="true" type="VARCHAR" size="36" />
-        <column name="HOST_NAME" type="VARCHAR" size="60" required="true" primaryKey="true"
-            description="The host name of a workstation or server" />
-        <column name="IP_ADDRESS" type="VARCHAR" size="50" description="The ip address for the host" />
-        <column name="OS_USER" type="VARCHAR" size="50" description="The user SymmetricDS is running under" />
-        <column name="OS_NAME" type="VARCHAR" size="50" description="The name of the OS" />
-        <column name="OS_ARCH" type="VARCHAR" size="50" description="The hardware architecture of the OS" />
-        <column name="OS_VERSION" type="VARCHAR" size="50" description="The version of the OS" />
-        <column name="AVAILABLE_PROCESSORS" type="INTEGER" default="0" description="The number of processors available to use" />
-        <column name="FREE_MEMORY_BYTES" type="BIGINT" default="0" description="The amount of free memory available to the JVM" />
-        <column name="TOTAL_MEMORY_BYTES" type="BIGINT" default="0" description="The amount of total memory available to the JVM" />
-        <column name="MAX_MEMORY_BYTES" type="BIGINT" default="0" description="The max amount of memory available to the JVM" />
-        <column name="JAVA_VERSION" type="VARCHAR" size="50" description="The version of java that the app is running as" />
-        <column name="JAVA_VENDOR" type="VARCHAR" size="255" description="The vendor of java that the app is running as" />
-        <column name="APP_VERSION_NUMBER" required="true" type="VARCHAR" size="255" default="-1" />
-        <column name="CUSTOMER_VERSION_NUMBER" required="true" type="VARCHAR" size="255" default="-1" />
-        <column name="CREATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="LAST_UPDATE_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+    <table name="security_question" description="A question that is put ot the Customer or Operator when they have forgotten their Password and the system is trying to verify their identity.">
+        <column name="id" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned key used to identify a security question." />
+        <column name="question" type="VARCHAR" size="255" description="A question that is put to a Customer or Operator when they have forgotten their Password and the system is trying to verify their identity and allow a new Password to be set" />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
     </table>
-
-    <table name="APP_PARAMETER">
-        <column name="CATEGORY" primaryKey="true" required="true" type="VARCHAR" size="20" />
-        <column name="SUB_CATEGORY" primaryKey="true" required="true" type="VARCHAR" size="100" />
-        <column name="PARAM_NAME" primaryKey="true" required="true" type="VARCHAR" size="80" />
-        <column name="PARAM_LEVEL_ID" primaryKey="true" required="true" type="VARCHAR" size="15" default="GLOBAL" />
-        <column name="PARAM_LEVEL_VALUE" primaryKey="true" required="true" type="VARCHAR" size="20" />
-        <column name="BRAND" primaryKey="true" required="true" type="VARCHAR" size="100" default="ANY" />
-        <column name="PARAM_ORDER" primaryKey="true" required="true" type="NUMERIC" size="22" default="0" />
-        <column name="PARAM_VALUE" type="VARCHAR" size="3800" />
-        <column name="EFF_START_TIME" primaryKey="true" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="EFF_END_TIME" type="TIMESTAMP" />
-        <column name="CREATED_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="LAST_UPDATED_TIME" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
-        <column name="MIN_VERSION" type="VARCHAR" size="20" />
-        <column name="MAX_VERSION" type="VARCHAR" size="20" />
-        <index name="IDX_APP_PARAMETER">
-            <index-column name="EFF_START_TIME" />
-            <index-column name="EFF_END_TIME" />
-            <index-column name="PARAM_LEVEL_ID" />
-            <index-column name="BRAND" />
+    <table name="operator_security_question" description="A record of the Operator's answer to a security question that is put to the Operator when they have forgotten their Password and the system is trying to verify their identity and allow a new Password to be set">
+        <column name="operator_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding Operator id." />
+        <column name="security_question_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding SecurityQuestion id." />
+        <column name="answer" type="VARCHAR" size="255" description="A record of the Operator's answer to the indicated SecurityQuestion." />
+        <column name="effective_time" type="TIMESTAMP" description="The date and time at which this OperatorSecurityHint was chosen by the Operator." />
+        <column name="expiration_time" type="TIMESTAMP" description="The date and time at which this OperatorSecurityHint ceases to be valie because a new SecurityHint has been chosen." />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
+        <foreign-key foreignTable="operator" name="fk_opr_scr_ques_2_opr">
+            <reference local="operator_id" foreign="id" />
+        </foreign-key>    
+        <foreign-key foreignTable="security_question" name="fk_opr_scr_ques_2_scr_ques">
+            <reference local="security_question_id" foreign="id" />
+        </foreign-key>                
+    </table>
+    <table name="password_history" description="A history of secret terms which are used to authenticate an Operator identification and thereby permits the Operator to access specific Resources and Workstation within the enterprise.">
+        <column name="id" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned key used to identify eacg successive password chosen by the Operator." />
+        <column name="operator_id" type="CHAR" size="16" required="true" description="The corresponding Operator id." />
+        <column name="password" type="VARCHAR" size="64" description="The password which permits the Operator to access specific Resources and Workstation within the enterprise." />
+        <column name="expiration_time" type="TIMESTAMP" description="The date and time afterwhich this password can no longer be used to sign on." />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
+        <foreign-key foreignTable="operator_id" name="fk_pwd_hst_2_opr">
+            <reference local="operator_id" foreign="id" />
+        </foreign-key>            
+    </table>
+    <table name="workgroup" description="A group within a workforce that normally works together and has similar access control permissions.">
+        <column name="id" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned key used to identify a Workgroup." />
+        <column name="parent_workgroup_id" type="CHAR" SIZE="16" required="false" description="The Workgroup id that is the parent of this Workkgroup.  Used for hierarchical workgroups with casscading permissions." />        
+        <column name="description" type="VARCHAR" SIZE="255" required="true" description="A description for the Workgroup." />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
+        <!--  didn't include the foreign key to itself here for simplicity in initial loading, etc.  -->
+    </table>
+    <table name="operator_workgroup" description="A many to many table that associates operators with respective workgroups.">
+        <column name="operator_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding Operator id." />
+        <column name="workgroup_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding Workgroup id." />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
+        <foreign-key foreignTable="operator" name="fk_opr_wrkgrp_2_opr">
+            <reference local="operator_id" foreign="id" />
+        </foreign-key>    
+        <foreign-key foreignTable="workgroup" name="fk_opr_wrkgrp_2_wrkgrp">
+            <reference local="workgroup_id" foreign="id" />
+        </foreign-key>                
+    </table>
+    <table name="resource" description="An application, function, screen and/or field avaialbe for Workgroup access permissions.">
+        <column name="id" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned key used to identify a Resource." />
+        <column name="parent_resource_id" type="CHAR" SIZE="16" required="false" description="The Resource id that is the parent of this Resource.  Used for hierarchical workgroups with casscading permissions." />        
+        <column name="description" type="VARCHAR" SIZE="255" required="true" description="A description for the resource." />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
+        <!--  didn't include the foreign key to itself here for simplicity in initial loading, etc.  -->
+    </table>    
+    <table name="workgroup_resource_access" description="A table that associates workgroups with resources and specifies their access level.">
+        <column name="workgroup_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding Workgroup id." />
+        <column name="resource_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding Resource id." />
+        <column name="access_permissions" type="VARCHAR" size="5" required="true" description="The access permissions for the Workgroup to the Resource. Linux style permissions string with some additional attributes Read/Write/Delete/Admin/Execute (RWDAX)." />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
+        <foreign-key foreignTable="resource" name="fk_wrkgrp_rsrc_accss_2_rsrc">
+            <reference local="resource_id" foreign="id" />
+        </foreign-key>    
+        <foreign-key foreignTable="workgroup" name="fk_wrkgrp_rsrc_accss_2_wrkgrp">
+            <reference local="workgroup_id" foreign="id" />
+        </foreign-key>                
+    </table>
+    <!-- Place -->
+    
+    
+    <!-- Misc -->
+    <table name="app_parameter">
+        <column name="category" primaryKey="true" required="true" type="VARCHAR" size="20" />
+        <column name="sub_category" primaryKey="true" required="true" type="VARCHAR" size="100" />
+        <column name="name" primaryKey="true" required="true" type="VARCHAR" size="80" />
+        <column name="level_id" primaryKey="true" required="true" type="VARCHAR" size="15" default="GLOBAL" />
+        <column name="level_value" primaryKey="true" required="true" type="VARCHAR" size="20" />
+        <column name="brand" primaryKey="true" required="true" type="VARCHAR" size="100" default="ANY" />
+        <column name="order" primaryKey="true" required="true" type="NUMERIC" size="22" default="0" />
+        <column name="value" type="VARCHAR" size="3800" />
+        <column name="effective_time" primaryKey="true" required="true" type="TIMESTAMP" default="CURRENT_TIMESTAMP" />
+        <column name="expiration_time" type="TIMESTAMP" />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
+        <column name="min_version" type="VARCHAR" size="20" />
+        <column name="max_version" type="VARCHAR" size="20" />
+        <index name=idx_app_parameter">
+            <index-column name="effective_time" />
+            <index-column name="expiration_time" />
+            <index-column name="level_id" />
+            <index-column name="brand" />
         </index>
-    </table>
-
+    </table>   
 </database>
