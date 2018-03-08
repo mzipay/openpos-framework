@@ -48,7 +48,7 @@
                         <span class="muted-color">No Linked Customer</span>
                     </ng-container>
                 </button>
-                <div fxFlex="0 1 auto" class="sell-screen-logo"></div>
+                <div *ngIf="session.screen.type === 'Transaction'" fxFlex="0 1 auto" class="sell-screen-logo"></div>
               </mat-drawer>
               <mat-drawer-content>
                   <ng-template appScreen></ng-template>
