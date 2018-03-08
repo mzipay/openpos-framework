@@ -36,8 +36,6 @@ public class SimulatedCashDrawerService extends AbstractSimulatedService impleme
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-    	// Simulate the drawer being manually closed by the user
-    	toggleDrawer(false);
     }
 
     public void compareFirmwareVersion(String arg0, int[] arg1) throws JposException {
