@@ -6,9 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jumpmind.pos.util.TypedMap;
 import org.jumpmind.pos.util.TypedMap.TypedMapKey;
 
-/**
- *
- */
 public class POSSessionInfo {
     public static final TypedMapKey<String> CART_NAME_ATTRIBUTE = new TypedMapKey<>("cartName");
     

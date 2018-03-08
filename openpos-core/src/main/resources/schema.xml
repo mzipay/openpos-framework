@@ -24,52 +24,101 @@
 <!DOCTYPE database SYSTEM "database.dtd">
 
 <database name="openpos">
-    <table name="pa_opr" description="Operator:Security Identifier granting and denying access to the systems of the retail enterprise, and recorded upon the transaction originating from those systems">
-        <column name="id_opr" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned number used to identify a Workstation Operator." />
-        <column name="pw_acs_opr" type="CHAR" size="64" description="A hashed security password entered by an operator and used to verify his/her identity when signing on to a Workstation." />
-        <column name="nm_usr" type="VARCHAR" size="40" description="The short human readable name used as an alternate ID for Operator. " />
+    <table name="operator" description="Security Identifier granting and denying access to the systems of the retail enterprise, and recorded upon the transaction originating from those systems.">
+        <column name="id" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned key used to identify an operator." />
+        <column name="user_name" type="VARCHAR" size="50" description="The short human readable name used as an alternate ID for Operator. " />
+        <column name="password" type="VARCHAR" size="64" description="A hashed security password entered by an operator and used to verify his/her identity when signing on to a Workstation." />
         <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
         <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
         <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
         <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
     </table>
-    <table name="do_qn_scty_hnt" description="SecurityHintQuestion:A question that is put ot the Customer or Operator when they have forgotten their Password and the system is trying to verify their identity">
-        <column name="id_scty_qn" type="CHAR" size="16" required="true" primaryKey="true" description="A unique system assigned identifier for a question that is put to the Customer or Operator when they have forgotten their Password and the system is trying to verify their identity" />
-        <column name="de_qn" type="VARCHAR" size="255" description="A question that is put to a Customer or Operator when they have forgotten their Password and the system is trying to verify their identity and allow a new Password to be set" />
+    <table name="security_question" description="A question that is put ot the Customer or Operator when they have forgotten their Password and the system is trying to verify their identity.">
+        <column name="id" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned key used to identify a security question." />
+        <column name="question" type="VARCHAR" size="255" description="A question that is put to a Customer or Operator when they have forgotten their Password and the system is trying to verify their identity and allow a new Password to be set" />
         <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
         <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
         <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
         <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
     </table>
-    <table name="co_scty_hnt_opr" description="OperatorSecurityHint:A record of the Operator's answer to a security hint question that is put to the Operator when they have forgotten their Password and the system is trying to verify their identity and allow a new Password to be set">
-        <column name="id_opr" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned number used to identify a workstation OPERATOR." />
-        <column name="id_scty_qn" type="CHAR" size="16" required="true" primaryKey="true" description="A unique system assigned identifier for a question that is put to the Customer or Operator when they have forgotten their Password and the system is trying to verify their identity" />
-        <column name="ai_opr_scty_hnt" type="INTEGER" required="true" primaryKey="true" description="A unique system assigned sequence number for each successive OperatorSecurityHint answer chosen by the Operator." />
-        <column name="de_ans" type="VARCHAR" size="255" description="A record of the Operator's answer to the indicated SecurityHintQuestion." />
-        <column name="dc_ef" type="TIMESTAMP" description="The date and time at which this OperatorSecurityHint was chosen by the Operator." />
-        <column name="dc_ep" type="TIMESTAMP" description="The date and time at which this OperatorSecurityHint ceases to be valie because a new SecurityHint has been chosen." />
+    <table name="operator_security_question" description="A record of the Operator's answer to a security question that is put to the Operator when they have forgotten their Password and the system is trying to verify their identity and allow a new Password to be set">
+        <column name="operator_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding Operator id." />
+        <column name="security_question_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding SecurityQuestion id." />
+        <column name="answer" type="VARCHAR" size="255" description="A record of the Operator's answer to the indicated SecurityQuestion." />
+        <column name="effective_date" type="TIMESTAMP" description="The date and time at which this OperatorSecurityHint was chosen by the Operator." />
+        <column name="expiration_date" type="TIMESTAMP" description="The date and time at which this OperatorSecurityHint ceases to be valie because a new SecurityHint has been chosen." />
         <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
         <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
         <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
         <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
-        <foreign-key foreignTable="pa_opr" name="fk_co_scty_hnt_opr_2_pa_opr">
-            <reference local="id_opr" foreign="id_opr" />
+        <foreign-key foreignTable="operator" name="fk_opr_scr_ques_2_opr">
+            <reference local="operator_id" foreign="id" />
         </foreign-key>    
-        <foreign-key foreignTable="do_qn_scty_hnt" name="fk_co_scty_hnt_opr_2_do_qn_scty_hnt">
-            <reference local="id_opr" foreign="id_opr" />
+        <foreign-key foreignTable="security_question" name="fk_opr_scr_ques_2_scr_ques">
+            <reference local="security_question_id" foreign="id" />
         </foreign-key>                
     </table>
-    <table name="co_acs_pswd" description="AccessPassword:A secret term which is used to authenticate an Operator identification and thereby permits the Operator to access specific Resources and Workstation within the enterprise.">
-        <column name="id_opr" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned number used to identify a workstation OPERATOR." />
-        <column name="ai_acs_pswd" type="INTEGER" required="true" primaryKey="true" description="A unique system assigned sequence number for each successive AccessPassword chosen by the Operator." />
-        <column name="ps_acs_opr" type="VARCHAR" size="64" description="The password which permits the Operator to access specific Resources and Workstation within the enterprise." />
-        <column name="ts_ep" type="TIMESTAMP" description="The date and time afterwhich this AccessPassword can no longer be used to sign on." />
+    <table name="password_history" description="A history of secret terms which are used to authenticate an Operator identification and thereby permits the Operator to access specific Resources and Workstation within the enterprise.">
+        <column name="id" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned key used to identify eacg successive password chosen by the Operator." />
+        <column name="operator_id" type="CHAR" size="16" required="true" description="The corresponding Operator id." />
+        <column name="password" type="VARCHAR" size="64" description="The password which permits the Operator to access specific Resources and Workstation within the enterprise." />
+        <column name="expiration_date" type="TIMESTAMP" description="The date and time afterwhich this password can no longer be used to sign on." />
         <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
         <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
         <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
         <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
-        <foreign-key foreignTable="pa_opr" name="fk_co_acs_pswd_2_pa_opr">
-            <reference local="id_opr" foreign="id_opr" />
+        <foreign-key foreignTable="operator_id" name="fk_pwd_hst_2_opr">
+            <reference local="operator_id" foreign="id" />
         </foreign-key>            
+    </table>
+    <table name="workgroup" description="A group within a workforce that normally works together and has similar access control permissions.">
+        <column name="id" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned key used to identify a Workgroup." />
+        <column name="parent_workgroup_id" type="CHAR" SIZE="16" required="false" description="The Workgroup id that is the parent of this Workkgroup.  Used for hierarchical workgroups with casscading permissions." />        
+        <column name="description" type="VARCHAR" SIZE="255" required="true" description="A description for the Workgroup." />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
+        <!--  didn't include the foreign key to itself here for simplicity in initial loading, etc.  -->
+    </table>
+    <table name="operator_workgroup" description="A many to many table that associates operators with respective workgroups.">
+        <column name="operator_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding Operator id." />
+        <column name="workgroup_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding Workgroup id." />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
+        <foreign-key foreignTable="operator" name="fk_opr_wrkgrp_2_opr">
+            <reference local="operator_id" foreign="id" />
+        </foreign-key>    
+        <foreign-key foreignTable="workgroup" name="fk_opr_wrkgrp_2_wrkgrp">
+            <reference local="workgroup_id" foreign="id" />
+        </foreign-key>                
+    </table>
+    <table name="resource" description="An application, function, screen and/or field avaialbe for Workgroup access permissions.">
+        <column name="id" type="CHAR" size="16" required="true" primaryKey="true" description="A unique, automatically assigned key used to identify a Resource." />
+        <column name="parent_resource_id" type="CHAR" SIZE="16" required="false" description="The Resource id that is the parent of this Resource.  Used for hierarchical workgroups with casscading permissions." />        
+        <column name="description" type="VARCHAR" SIZE="255" required="true" description="A description for the resource." />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
+        <!--  didn't include the foreign key to itself here for simplicity in initial loading, etc.  -->
     </table>    
+    <table name="workgroup_resource_access" description="A table that associates workgroups with resources and specifies their access level.">
+        <column name="workgroup_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding Workgroup id." />
+        <column name="resource_id" type="CHAR" size="16" required="true" primaryKey="true" description="The corresponding Resource id." />
+        <column name="access_permissions" type="VARCHAR" size="5" required="true" description="The access permissions for the Workgroup to the Resource. Linux style permissions string with some additional attributes Read/Write/Delete/Admin/Execute (RWDAX)." />
+        <column name="create_time" type="TIMESTAMP" description="Timestamp when this entry was created." />
+        <column name="create_by" type="VARCHAR" size="50" description="The user who last updated this entry." />
+        <column name="last_update_by" type="VARCHAR" size="50" description="The user who created this entry." />
+        <column name="last_update_time" type="TIMESTAMP" description="Timestamp when a user last updated this entry." />
+        <foreign-key foreignTable="resource" name="fk_wrkgrp_rsrc_accss_2_rsrc">
+            <reference local="resource_id" foreign="id" />
+        </foreign-key>    
+        <foreign-key foreignTable="workgroup" name="fk_wrkgrp_rsrc_accss_2_wrkgrp">
+            <reference local="workgroup_id" foreign="id" />
+        </foreign-key>                
+    </table>
+    <!--  not including operator_resource_access because I think we should force everything to a workgroup vs individual operator -->    
 </database>

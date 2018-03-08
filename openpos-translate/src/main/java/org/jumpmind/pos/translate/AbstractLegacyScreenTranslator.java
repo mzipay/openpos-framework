@@ -119,7 +119,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     }
 
     protected void buildStatusItems() {
-        screen.setOperatorName(WordUtils.capitalizeFully(posSessionInfo.getOperatorName()));
+        screen.setOperatorName(WordUtils.capitalizeFully(posSessionInfo.getOperatorLoginId()));
         screen.setRegisterStatus(posSessionInfo.isRegisterOpen().map(
                 registerOpen -> new MenuItem((registerOpen ? DefaultScreen.TITLE_OPEN_STATUS : DefaultScreen.TITLE_CLOSED_STATUS), "", true))
                 .orElse(null));
@@ -254,6 +254,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
             ILegacyCargo cargo = bus.getLegacyCargo();
             if (cargo != null) {
                 posSessionInfo.setOperatorName(cargo.getOperatorFirstLastName());
+                posSessionInfo.setOperatorLoginId(cargo.getOperatorLoginId());
             }
 
         }

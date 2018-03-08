@@ -1,6 +1,9 @@
 <div [ngClass]="getTheme()">
     <div class="main-background">
         <app-statusbar></app-statusbar>
+
+        <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu"><mat-icon>code</mat-icon></button>
+
         <div [matMenuTriggerFor]="devMenu">
             <mat-menu #devMenu="matMenu">
                 <button mat-menu-item (click)="onDevClearLocalStorage()">Clear Local Storage</button>
@@ -21,11 +24,11 @@
             <mat-menu #logUploadMenu="matMenu">
                 <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileUpload(m)">{{m}}</button>
             </mat-menu>
-        </div>        
+        </div>
+
         <div class="content" ngClass.xs="content-xs">
             <ng-template appTemplate></ng-template>
         </div>
-
 
     </div>
 </div>

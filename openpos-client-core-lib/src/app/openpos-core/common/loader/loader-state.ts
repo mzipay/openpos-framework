@@ -61,7 +61,7 @@ export class LoaderState {
     }
 
     protected checkConnectionStatus(): void {
-        if (!this.sessionService.isPersonalized() && this._show) {
+        if (!this.sessionService.isPersonalized()) {
             this.setVisible(false);
         } else {
             const sessionConnected = this.sessionService.connected();
