@@ -1,4 +1,4 @@
-<mat-toolbar *ngIf="session.screen" color="primary" class="mat-elevation-z10" (click)="onToolbarClick()">
+<mat-toolbar *ngIf="session.screen" color="primary" class="mat-elevation-z10">
 	<div fxFill fxLayout="row" fxLayoutAlign="space-between ">
 		<div fxLayout="row" fxLayoutAlign=" center">
 			<ng-container *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled">
@@ -31,7 +31,7 @@
 				<mat-icon>help outline</mat-icon>
 			</button>
 			<mat-menu #itemMenu="matMenu">
-				<button mat-menu-item>
+				<button mat-menu-item (click)="onAdminLogin()">
 					<mat-icon>person</mat-icon>
 					<span>Admin Login</span>
 				</button>

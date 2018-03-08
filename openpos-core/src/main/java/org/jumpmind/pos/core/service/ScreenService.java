@@ -123,7 +123,7 @@ public class ScreenService implements IScreenService {
             logger.error("Failed to write action to JSON", ex);
         }
         DefaultScreen lastScreen = getLastScreen(appId, nodeId);
-        if (lastScreen instanceof DialogScreen) {
+        if (ScreenType.Dialog.equals(lastScreen.getType())) {
             publishToClients(appId, nodeId, "{\"clearDialog\":true }");
         }
         IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
