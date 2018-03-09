@@ -103,6 +103,7 @@ import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { KeyboardDirective } from './common/keyboard.directive';
 import { ValidatorsService } from './services/validators.service';
 import { PrintPreviewComponent } from './screens/print-preview.component';
+import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selection-list.directive';
 
 @NgModule({
   entryComponents: [
@@ -200,7 +201,8 @@ import { PrintPreviewComponent } from './screens/print-preview.component';
     KeyboardDirective,
     PrintPreviewComponent,
     WaitComponent,
-    CustomerSearchResultsComponent
+    CustomerSearchResultsComponent,
+    MatExclusiveSelectionListDirective
   ],
   imports: [
     BrowserModule,

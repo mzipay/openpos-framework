@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 
 import { IScreen } from '../../common/iscreen';
 import { SessionService } from '../../services/session.service';
@@ -12,7 +12,9 @@ import { ICustomer } from '../../common/icustomer';
 })
 export class CustomerSearchResultsComponent implements IScreen, OnInit {
 
+  @Input() submitAction: string;
   public customers: ICustomer[];
+  selectedOptions: ICustomer[];
 
   constructor(public session: SessionService) { }
 
@@ -22,4 +24,5 @@ export class CustomerSearchResultsComponent implements IScreen, OnInit {
   ngOnInit() {   
     this.customers = this.session.screen.customers;
   }
+
 }

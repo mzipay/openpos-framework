@@ -1,25 +1,21 @@
 
-<div fxFlexFill style="background-color:white; padding:16px" fxLayoutAlign="start" fxLayoutGap="16px">
+<div fxFlexFill fxLayout="column" style="background-color:white; padding:16px" fxLayoutAlign="start" fxLayoutGap="16px">
 <mat-card fxFlexFill class="page-content-card lighter scrollable-content-card mat-elevation-z8">
-        <mat-card-content>
-            <div *ngFor="let customer of customers" style="padding:3px">
-                <mat-card fxFlex="1 1 100%" class="page-content-card scrollable-content-card">
-                    <mat-card-title class="text-sm">{{customer.firstName}} {{customer.lastName}}</mat-card-title>
-                    <mat-card-content>
-                        <div class="customer-grid-container">
-                            <div class="grid-item col1"><b>Address:</b></div>
-                            <div class="grid-item col2">{{customer.fullAddress}}</div>
-                            <div class="grid-item col1"><b>Email:</b></div>
-                            <div class="grid-item col2">{{customer.email}}</div>
-                            <div class="grid-item col1"><b>Birthday:</b></div>
-                            <div class="grid-item col2">{{customer.birthday}}</div>
-                            <div class="grid-item col1"><b>LoyaltyID:</b></div>
-                            <div class="grid-item col2">{{customer.loyaltyId }}</div>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
-            </div>
-        </mat-card-content>     
+        <mat-selection-list exclusiveSelect [(ngModel)]="selectedOptions">
+            <mat-list-option fxLayout="column" *ngFor="let customer of customers" style="height:150px; padding:3px;" [value]= "customer">
+                <div class="text-sm" style="padding-bottom:10px;"><b>{{customer.firstName}} {{customer.lastName}}</b></div>    
+                <div class="customer-grid-container">       
+                            <div class="grid-item col1 text-xs"><b>Address:</b></div>
+                            <div class="grid-item col2 text-xs">{{customer.fullAddress}}</div>
+                            <div class="grid-item col1 text-xs"><b>Email:</b></div>
+                            <div class="grid-item col2 text-xs">{{customer.email}}</div>
+                            <div class="grid-item col1 text-xs"><b>Birthday:</b></div>
+                            <div class="grid-item col2 text-xs">{{customer.birthday}}</div>
+                            <div class="grid-item col1 text-xs"><b>LoyaltyID:</b></div>
+                            <div class="grid-item col2 text-xs">{{customer.loyaltyId }}</div>
+                    </div>
+            </mat-list-option>
+        </mat-selection-list>
         <mat-card-actions align=end style="padding:30px">
             <button type="submit" mat-button color="primary-inverse" *ngIf="session.screen.submitAction">
                 <span>Next</span>
