@@ -9,6 +9,7 @@ import org.jumpmind.pos.core.device.IDeviceMessageDispatcher;
 import org.jumpmind.pos.core.device.IDeviceRequest;
 import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.ScreenType;
@@ -66,10 +67,10 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     }
 
     @Override
-    public void doAction(String appId, Action action, DefaultScreen screen) {
+    public void doAction(String appId, Action action, Form formResults) {
         AbstractScreenTranslator<? extends DefaultScreen> lastTranslator = this.lastTranslatorByAppId.get(appId);
         if (lastTranslator != null) {
-            lastTranslator.handleAction(subscriberByAppId.get(appId), this, action, screen);
+            lastTranslator.handleAction(subscriberByAppId.get(appId), this, action, formResults);
         } else {
             sendAction(action.getName());
         }

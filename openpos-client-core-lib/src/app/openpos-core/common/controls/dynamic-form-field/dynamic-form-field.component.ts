@@ -27,7 +27,11 @@ export class DynamicFormFieldComponent implements OnInit {
   constructor( public session: SessionService, public screenService: ScreenService) { }
 
   ngOnInit() {
-    this.values = this.screenService.getFieldValues(this.formField.id);
+    if( this.formField.inputType === "ComboBox" || 
+        this.formField.inputType === "SubmitOptionList" ||
+        this.formField.inputType === "ToggleButton" ){
+      this.values = this.screenService.getFieldValues(this.formField.id);
+    }
   }
 
   onFormElementChanged(formElement: IFormElement): void {

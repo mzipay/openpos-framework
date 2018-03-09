@@ -13,6 +13,7 @@ import { IFormElement } from '../../common/iformfield';
 
     private lastSequenceNum: number;
     public form: IForm;
+    public screen: any;
     loginIdField: IFormElement;
     passwordField: IFormElement;
     submitAction: string;
@@ -29,15 +30,23 @@ import { IFormElement } from '../../common/iformfield';
     }
 
     ngOnInit(): void {
-        this.lastSequenceNum = this.session.screen.sequenceNumber;
-        this.form = this.session.screen.form;
+        if (this.session.dialog) {
+            this.screen = this.session.dialog;
+        } else {
+            this.screen = this.session.screen;
+        }
+        this.lastSequenceNum = this.screen.sequenceNumber;
+        this.form = this.screen.form;
         this.loginIdField = this.form.formElements.find((e) => e.id === 'userId');
+        if (!this.loginIdField.pattern) {
+            this.loginIdField.pattern = '[0-9]*';
+        }
         this.passwordField = this.form.formElements.find((e) => e.id === 'password');
         this.okButton = this.form.formElements.find((e) => e.id === 'okButton');
         this.cancelButton = this.form.formElements.find((e) => e.id === 'cancelButton');
-        this.submitAction = this.session.screen.submitAction;
-        this.forgotPasswordAction = this.session.screen.forgotPasswordAction;
-        this.changePasswordAction = this.session.screen.changePasswordAction;
+        this.submitAction = this.screen.submitAction;
+        this.forgotPasswordAction = this.screen.forgotPasswordAction;
+        this.changePasswordAction = this.screen.changePasswordAction;
         this.title = this.form.name;
     }
 
@@ -46,9 +55,9 @@ import { IFormElement } from '../../common/iformfield';
     }
 
     ngDoCheck(): void {
-        if (this.session.screen.sequenceNumber !== this.lastSequenceNum) {
+        if (this.screen.sequenceNumber !== this.lastSequenceNum) {
             this.ngOnInit();
-            this.lastSequenceNum = this.session.screen.sequenceNumber;
+            this.lastSequenceNum = this.screen.sequenceNumber;
         }
     }
 

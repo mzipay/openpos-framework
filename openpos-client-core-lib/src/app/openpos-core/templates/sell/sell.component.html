@@ -43,10 +43,12 @@
                         <mat-icon>person</mat-icon>&nbsp;
                         <span >{{session.screen.customer.name}}</span>
                     </ng-container>
-                    <ng-container *ngIf="!session.screen.customer">
+                    <ng-container *ngIf="!session.screen.customer && !session.screen.noCustomerText">
                         <mat-icon class="muted-color">link</mat-icon>&nbsp;
                         <span class="muted-color">No Linked Customer</span>
                     </ng-container>
+                    <div fxFlex="1 1 150px" style="white-space: pre-wrap" *ngIf="session.screen.noCustomerText && !session.screen.customer" 
+                    class="muted-color text-center">{{session.screen.noCustomerText}}</div>
                 </button>
                 <div *ngIf="session.screen.type === 'Transaction'" fxFlex="0 1 auto" class="sell-screen-logo"></div>
               </mat-drawer>

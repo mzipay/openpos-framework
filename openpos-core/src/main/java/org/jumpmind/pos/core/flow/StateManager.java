@@ -27,6 +27,7 @@ import javax.annotation.PostConstruct;
 
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.service.IScreenService;
 import org.slf4j.Logger;
@@ -149,9 +150,9 @@ public class StateManager implements IStateManager {
             }
         } else {
             IState savedCurrentState = currentState;
-            DefaultScreen deserializedScreen = screenService.deserializeScreenPayload(appId, nodeId, action);
+            Form form = screenService.deserializeScreenPayload(appId, nodeId, action);
 
-            boolean handled = actionHandler.handleAction(currentState, action, deserializedScreen);
+            boolean handled = actionHandler.handleAction(currentState, action, form);
             if (handled) {
                 if (savedCurrentState == currentState) {
                     // state did not change, reassert the current state.

@@ -19,6 +19,7 @@ public class SellItemScreen extends PromptScreen {
     private String itemActionName = "Item";
     private Transaction transaction = new Transaction();
     private Customer customer;
+    private String noCustomerText;
     private List<Total> totals = new ArrayList<>();
     
     private List<MenuItem> transactionMenuItems = new ArrayList<>();
@@ -125,5 +126,13 @@ public class SellItemScreen extends PromptScreen {
 	
 	public void addTotal(String name, String amount) {
 		this.totals.add(new Total(name, amount ));
+	}
+
+	public String getNoCustomerText() {
+		return noCustomerText;
+	}
+
+	public void setNoCustomerText(String noCustomerText) {
+		this.noCustomerText = noCustomerText;
 	}
 }

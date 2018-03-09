@@ -16,6 +16,7 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.service.IDeviceService;
 import org.jumpmind.pos.translate.ITranslationManager;
@@ -132,8 +133,8 @@ public class TranslatorState implements IState {
     }
 
     @ActionHandler
-    public void onAnyAction(Action action, DefaultScreen screen) {
-        translationManager.doAction(stateManager.getAppId(), action, screen);
+    public void onAnyAction(Action action, Form form) {
+        translationManager.doAction(stateManager.getAppId(), action, form);
     }
 
 }

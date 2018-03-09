@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormDisplayField;
 import org.jumpmind.pos.core.screen.DefaultScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
@@ -68,7 +69,7 @@ public class SellItemDetailsScreenTranslator extends AbstractLegacyScreenTransla
     }
 
     @Override
-    public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action, DefaultScreen screen)  {
+    public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action, Form formResults)  {
         if (action.getName().equals("Remove")) {
             ILegacyPOSListModel legacyPOSListModel = this.getLegacyPOSBeanService().getLegacyPOSListModel(this.getLegacyScreen());
 
@@ -81,7 +82,7 @@ public class SellItemDetailsScreenTranslator extends AbstractLegacyScreenTransla
                 }).sendLetter("Clear"));
             }
         } else {
-            super.handleAction(subscriber, tmServer, action, screen);
+            super.handleAction(subscriber, tmServer, action, formResults);
         }
     }
     

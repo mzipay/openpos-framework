@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.jumpmind.pos.core.model.Form;
 
-public class DynamicFormScreen extends DefaultScreen {
+public class DynamicFormScreen extends DefaultScreen implements IHasForm {
 
     private static final long serialVersionUID = 1L;
 
