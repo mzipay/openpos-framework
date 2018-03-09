@@ -3,8 +3,8 @@
         <mat-card-title *ngIf="title">{{title}}</mat-card-title>
 		<mat-card-content class="login-card-content">
             <mat-form-field style="width:100%">
-                <input [(ngModel)]="loginIdField.value" #loginField="ngModel" matInput placeholder="{{loginIdField.placeholder}}" [pattern]="loginIdField.pattern"
-                    [required]="loginIdField.required" (keyup.enter)="onEnterPressed()">
+                <input type="tel" [(ngModel)]="loginIdField.value" #loginField="ngModel" matInput placeholder="{{loginIdField.placeholder}}" [pattern]="loginIdField.pattern"
+                    [required]="loginIdField.required" (keyup.enter)="onEnterPressed()" novalidate>
             </mat-form-field>
             <mat-form-field style="width:100%">
                 <input type="password" [(ngModel)]="passwordField.value" #passwdField="ngModel" matInput placeholder="{{passwordField.placeholder}}" [pattern]="passwordField.pattern"
