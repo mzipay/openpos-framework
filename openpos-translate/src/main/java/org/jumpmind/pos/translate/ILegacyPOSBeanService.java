@@ -26,6 +26,7 @@ public interface ILegacyPOSBeanService {
     ILegacyTenderBeanModel getLegacyTenderBeanModel(ILegacyScreen legacyScreen);
     ILegacyReasonBeanModel getLegacyReasonBeanModel(ILegacyScreen legacyScreen);
     ILegacyBooleanWithReasonBeanModel getLegacyBooleanWithReasonBeanModel(ILegacyScreen legacyScreen);
+    ILegacyParameterManager getLegacyParameterManager(ILegacyScreen legacyScreen);
     
     <T> T toILegacyInstance(Object legacyObject);
     
