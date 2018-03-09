@@ -93,7 +93,7 @@
 
     app-statusbar{
         .mat-toolbar{
-            background-color: black;
+            background-color: $app-primary;
             color: whitesmoke;
         }
     }

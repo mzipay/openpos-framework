@@ -38,6 +38,9 @@ import { IFormElement } from '../../common/iformfield';
         this.lastSequenceNum = this.screen.sequenceNumber;
         this.form = this.screen.form;
         this.loginIdField = this.form.formElements.find((e) => e.id === 'userId');
+        if (!this.loginIdField.pattern) {
+            this.loginIdField.pattern = '[0-9]*';
+        }
         this.passwordField = this.form.formElements.find((e) => e.id === 'password');
         this.okButton = this.form.formElements.find((e) => e.id === 'okButton');
         this.cancelButton = this.form.formElements.find((e) => e.id === 'cancelButton');
