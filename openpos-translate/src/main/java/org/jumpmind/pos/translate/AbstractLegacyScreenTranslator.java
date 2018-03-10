@@ -120,12 +120,6 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
 
     protected void buildStatusItems() {
         screen.setOperatorName(WordUtils.capitalizeFully(posSessionInfo.getOperatorLoginId()));
-        screen.setRegisterStatus(posSessionInfo.isRegisterOpen().map(
-                registerOpen -> new MenuItem((registerOpen ? DefaultScreen.TITLE_OPEN_STATUS : DefaultScreen.TITLE_CLOSED_STATUS), "", true))
-                .orElse(null));
-        screen.setStoreStatus(posSessionInfo.isStoreOpen()
-                .map(storeOpen -> new MenuItem((storeOpen ? DefaultScreen.TITLE_OPEN_STATUS : DefaultScreen.TITLE_CLOSED_STATUS), "", true))
-                .orElse(null));
         String name = getScreenName();
         screen.setName(name);
         if (isBlank(screen.getIcon())) {

@@ -1,39 +1,25 @@
 package org.jumpmind.pos.core.screen;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DefaultScreen implements Serializable {
+public class DefaultScreen extends AbstractScreen {
+
+    private static final long serialVersionUID = 1L;
 
     public enum ScanType { CAMERA_CORDOVA, NONE }
     
     public static String TEMPLATE_SELL = "Sell";
     public static String TEMPLATE_BLANK = "Blank";
 
-    private static final long serialVersionUID = 1L;
-    public static final String TITLE_OPEN_STATUS = "Open";
-    public static final String TITLE_CLOSED_STATUS = "Closed";
-
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private String name;
     private String prompt;
-    private String type;
-    private String template = "Blank";    
-    private MenuItem backButton;
-    private MenuItem logoutButton;
     private Workstation workstation;
     private String operatorName;
-    private MenuItem storeStatus;
-    private MenuItem registerStatus;
     private String userDisplayName = "Jane Doe";
-    private int sequenceNumber;
     private boolean refreshAlways = false;
     private String theme = "openpos-theme";
     private String icon;  
@@ -52,64 +38,7 @@ public class DefaultScreen implements Serializable {
     }
 
     public DefaultScreen(String type) {
-        this(type, null);
-    }
-    
-    public DefaultScreen(String type, String name) {
-        if (name != null) {
-            put("name", name);
-        }
-        this.type = type;
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> any() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void put(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
-    public boolean contains(String name) {
-        return this.additionalProperties.containsKey(name);
-    }
-
-    public Object get(String name) {
-        return additionalProperties.get(name);
-    }
-    
-    public void setTemplate(String template) {
-        this.template = template;
-    }
-    
-    public String getTemplate() {
-        return template;
-    }
-
-    public void clearAdditionalProperties() {
-        this.additionalProperties.clear();
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-    
-    public String getType() {
-        return this.type;
-    }
-    
-    public boolean isScreenOfType(String type) {
-        return this.type == type;
+        super(null, type);
     }
     
     @SuppressWarnings("unchecked")
@@ -139,22 +68,6 @@ public class DefaultScreen implements Serializable {
             list.add(value);
         }
     }
-
-    public void setBackButton(MenuItem backButton) {
-        this.backButton = backButton;
-    }
-
-    public MenuItem getBackButton() {
-        return backButton;
-    }
-
-    public void setLogoutButton(MenuItem logoutButton) {
-        this.logoutButton = logoutButton;
-    }
-    
-    public MenuItem getLogoutButton() {
-        return logoutButton;
-    }
     
     public String getOperatorName() {
         return operatorName;
@@ -172,22 +85,6 @@ public class DefaultScreen implements Serializable {
         this.workstation = workstation;
     }
 
-    public MenuItem getStoreStatus() {
-        return storeStatus;
-    }
-
-    public void setStoreStatus(MenuItem storeStatus) {
-        this.storeStatus = storeStatus;
-    }
-
-    public MenuItem getRegisterStatus() {
-        return registerStatus;
-    }
-
-    public void setRegisterStatus(MenuItem registerStatus) {
-        this.registerStatus = registerStatus;
-    }
-
     public String getUserDisplayName() {
         return userDisplayName;
     }
@@ -196,14 +93,6 @@ public class DefaultScreen implements Serializable {
         this.userDisplayName = userDisplayName;
     }
 
-    public void setSequenceNumber(int sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
-    }
-    
-    public int getSequenceNumber() {
-        return sequenceNumber;
-    }
-    
     public void setRefreshAlways(boolean refreshAlways) {
         this.refreshAlways = refreshAlways;
     }

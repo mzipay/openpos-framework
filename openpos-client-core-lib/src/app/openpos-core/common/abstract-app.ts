@@ -27,8 +27,6 @@ export abstract class AbstractApp implements OnDestroy, DoCheck, OnInit {
 
     private dialogOpening: boolean;
 
-    private previousScreenSequenceNumber: number;
-
     private previousScreenName: string;
 
     private snackBarRef: MatSnackBarRef<SimpleSnackBar>;
@@ -132,7 +130,7 @@ export abstract class AbstractApp implements OnDestroy, DoCheck, OnInit {
         let template: AbstractTemplate = null;
         if (
             (this.session.screen &&
-                ((this.session.screen.sequenceNumber !== this.previousScreenSequenceNumber && this.session.screen.refreshAlways)
+                ((this.session.screen.refreshAlways)
                     || this.session.screen.type !== this.previousScreenType
                     || this.session.screen.name !== this.previousScreenName
                 )
@@ -140,13 +138,11 @@ export abstract class AbstractApp implements OnDestroy, DoCheck, OnInit {
 
             let templateName: string = null;
             let screenType: string = null;
-            let sequenceNumber = -1;
             let screenName: string = null;
             if (this.session.screen && this.session.screen.type) {
                 console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
                 templateName = this.session.screen.template;
                 screenType = this.session.screen.type;
-                sequenceNumber = this.session.screen.sequenceNumber;
                 screenName = this.session.screen.name;
             }
             const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName);
@@ -159,7 +155,6 @@ export abstract class AbstractApp implements OnDestroy, DoCheck, OnInit {
             screen = template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
             template.show(this.session, this);
             screen.show(this.session, this);
-            this.previousScreenSequenceNumber = sequenceNumber;
         }
 
     }
