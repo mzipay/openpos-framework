@@ -110,6 +110,8 @@ public class ScreenService implements IScreenService {
                 String result = new String(out.toByteArray());
                 logger.info("Responding to request to load component values {} {} {} with values \n{}", appId, nodeId, controlId, result);
                 return result;
+            } else {
+            	logger.info("Unable to find the valueList for the requested component {} {} {}.", appId, nodeId, controlId);
             }
         }
         return "{}";
