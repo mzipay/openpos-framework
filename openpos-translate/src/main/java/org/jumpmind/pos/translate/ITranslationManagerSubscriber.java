@@ -4,11 +4,11 @@ import java.util.Properties;
 
 import org.jumpmind.pos.core.device.IDeviceMessageDispatcher;
 import org.jumpmind.pos.core.flow.Action;
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.SellScreen;
 
 public interface ITranslationManagerSubscriber extends IDeviceMessageDispatcher {
 
-    public void showScreen(DefaultScreen screen);
+    public void showScreen(SellScreen screen);
 
     public void doAction(Action action);
     

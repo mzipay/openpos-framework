@@ -7,37 +7,24 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DefaultScreen extends AbstractScreen {
+public class SellScreen extends AbstractScreen {
 
     private static final long serialVersionUID = 1L;
 
     public enum ScanType { CAMERA_CORDOVA, NONE }
     
-    public static String TEMPLATE_SELL = "Sell";
-    public static String TEMPLATE_BLANK = "Blank";
-
     private String prompt;
     private Workstation workstation;
     private String operatorName;
-    private String userDisplayName = "Jane Doe";
-    private boolean refreshAlways = false;
-    private String theme = "openpos-theme";
-    private String icon;  
-    private String instructions;
-    private String locale;
-    private boolean useOnScreenKeyboard = false;
+    private String icon;    
+    private boolean showScan = false;
     
     private List<MenuItem> localMenuItems = new ArrayList<>();
     
-    private boolean showScan = false;
-    private boolean isReadOnly = false;
-    private String scanActionName = "Scan";
-    private ScanType scanType = ScanType.NONE;
-
-    public DefaultScreen() {
+    public SellScreen() {
     }
 
-    public DefaultScreen(String type) {
+    public SellScreen(String type) {
         super(null, type);
     }
     
@@ -85,34 +72,10 @@ public class DefaultScreen extends AbstractScreen {
         this.workstation = workstation;
     }
 
-    public String getUserDisplayName() {
-        return userDisplayName;
-    }
-
-    public void setUserDisplayName(String userDisplayName) {
-        this.userDisplayName = userDisplayName;
-    }
-
-    public void setRefreshAlways(boolean refreshAlways) {
-        this.refreshAlways = refreshAlways;
-    }
-    
-    public boolean isRefreshAlways() {
-        return refreshAlways;
-    }
-
     public static <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
         return new ObjectMapper().convertValue(actionData, convertToInstanceOf);
     }
-    
-    public String getTheme() {
-        return theme;
-    }
-    
-    public void setTheme(String theme) {
-        this.theme = theme;
-    }
-    
+        
     public MenuItem getLocalMenuItemByAction(String action) {
         return this. localMenuItems.stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
     }
@@ -133,22 +96,14 @@ public class DefaultScreen extends AbstractScreen {
         return localMenuItems;
     }
 
-    public ScanType getScanType() {
-        return scanType;
-    }
-
     public void setScanType(ScanType scanType) {
-        this.scanType = scanType;
+        put("scanType", scanType);
     }
 
     public void setScanActionName(String scanActionName) {
-        this.scanActionName = scanActionName;
+        put("scanActionName", scanActionName);
     }
 
-    public String getScanActionName() {
-        return scanActionName;
-    }
-    
     public void setShowScan(boolean showScan) {
         this.showScan = showScan;
     }
@@ -156,14 +111,6 @@ public class DefaultScreen extends AbstractScreen {
     public boolean isShowScan() {
         return showScan;
     }
-    
-	public void setReadOnly(boolean isReadOnly) {
-		this.isReadOnly = isReadOnly;
-	}
-
-	public boolean isReadOnly() {
-		return isReadOnly;
-	}
     
     public void setPrompt(String prompt) {
         this.prompt = prompt;
@@ -182,26 +129,7 @@ public class DefaultScreen extends AbstractScreen {
     }
     
     public void setInstructions(String instructions) {
-        this.instructions = instructions;
+        this.put("instructions", instructions);
     }
     
-    public String getInstructions() {
-        return instructions;
-    }
-
-    public String getLocale() {
-        return locale;
-    }
-
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
-
-	public boolean isUseOnScreenKeyboard() {
-		return useOnScreenKeyboard;
-	}
-
-	public void setUseOnScreenKeyboard(boolean useOnScreenKeyboard) {
-		this.useOnScreenKeyboard = useOnScreenKeyboard;
-	}
 }

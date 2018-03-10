@@ -9,13 +9,13 @@ import java.util.Map;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
-import org.jumpmind.pos.core.screen.DefaultScreen;
-import org.jumpmind.pos.core.screen.DefaultScreen.ScanType;
+import org.jumpmind.pos.core.screen.SellScreen;
+import org.jumpmind.pos.core.screen.SellScreen.ScanType;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
+abstract public class AbstractScreenTranslator<T extends SellScreen> {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 

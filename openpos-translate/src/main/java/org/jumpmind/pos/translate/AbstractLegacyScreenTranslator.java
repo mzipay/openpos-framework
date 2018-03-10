@@ -18,14 +18,14 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.WordUtils;
 import org.jumpmind.pos.core.ModeConstants;
 import org.jumpmind.pos.core.model.Form;
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.IUIAction;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.Workstation;
 import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
 
-public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> extends AbstractScreenTranslator<T> implements ILegacyBeanAccessor {
+public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> extends AbstractScreenTranslator<T> implements ILegacyBeanAccessor {
 
     public final static String LOCAL_NAV_PANEL_KEY = "LocalNavigationPanel";
     public final static String GLOBAL_NAV_PANEL_KEY = "GlobalNavigationPanel";
@@ -89,7 +89,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     }
     
 
-    protected Form getForm(DefaultScreen screen) {
+    protected Form getForm(SellScreen screen) {
         if (screen instanceof DynamicFormScreen) {
             return ((DynamicFormScreen) screen).getForm();
         } else {
@@ -112,10 +112,12 @@ public abstract class AbstractLegacyScreenTranslator <T extends DefaultScreen> e
     }
     
     protected void setScreenProperties() {
-    	if (properties != null && screen != null) {
-    		boolean useOnScreenKeyboard = Boolean.valueOf((String) properties.get(USE_ON_SCREEN_KEYBOARD));
-    		screen.setUseOnScreenKeyboard(useOnScreenKeyboard);
-    	}
+        if (properties != null && screen != null) {
+            boolean useOnScreenKeyboard = Boolean.valueOf((String) properties.get(USE_ON_SCREEN_KEYBOARD));
+            if (useOnScreenKeyboard) {
+                screen.setUseOnScreenKeyboard(useOnScreenKeyboard);
+            }
+        }
     }
 
     protected void buildStatusItems() {

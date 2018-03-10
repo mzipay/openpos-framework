@@ -17,7 +17,7 @@ import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.model.Form;
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.service.IDeviceService;
 import org.jumpmind.pos.translate.ITranslationManager;
 import org.jumpmind.pos.translate.ITranslationManagerSubscriber;
@@ -69,7 +69,7 @@ public class TranslatorState implements IState {
                 Properties properties;
 
                 @Override
-                public void showScreen(DefaultScreen screen) {
+                public void showScreen(SellScreen screen) {
                     stateManager.showScreen(screen);
                 }
 

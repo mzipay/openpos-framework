@@ -5,7 +5,7 @@ import java.util.Properties;
 
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.IMaskSpec;
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
 
@@ -51,7 +51,7 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
     public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems,
             FieldInputType responseType, Integer minLength, Integer maxLength, String appId, Properties properties) {
         super(legacyScreen, screenClass, appId, properties);
-        getScreen().setTemplate(DefaultScreen.TEMPLATE_SELL);
+        getScreen().setTemplate(SellScreen.TEMPLATE_SELL);
         this.addLocalMenuItems = addLocalMenuItems;
         getScreen().setResponseType(responseType != null ? responseType.name() : null);
         getScreen().setMinLength(minLength);
@@ -77,7 +77,7 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
     public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems,
             IMaskSpec promptMask, Integer minLength, Integer maxLength, String appId, Properties properties) {
         super(legacyScreen, screenClass, appId, properties);
-        getScreen().setTemplate(DefaultScreen.TEMPLATE_SELL);
+        getScreen().setTemplate(SellScreen.TEMPLATE_SELL);
         this.addLocalMenuItems = addLocalMenuItems;
         getScreen().setPromptMask(promptMask);
         getScreen().setMinLength(minLength);

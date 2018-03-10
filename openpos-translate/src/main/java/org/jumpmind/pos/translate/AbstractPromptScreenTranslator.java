@@ -10,10 +10,10 @@ import org.apache.commons.lang.StringUtils;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.Form;
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.IPromptScreen;
 
-public abstract class AbstractPromptScreenTranslator<T extends DefaultScreen> extends AbstractLegacyScreenTranslator<T> {
+public abstract class AbstractPromptScreenTranslator<T extends SellScreen> extends AbstractLegacyScreenTranslator<T> {
 
 	public AbstractPromptScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
 	    this(legacyScreen, screenClass, null, null);

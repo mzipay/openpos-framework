@@ -6,18 +6,18 @@ import java.util.Set;
 
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.ScreenType;
 
-public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<DefaultScreen> {
+public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<SellScreen> {
 
     Set<String> excludeLabelTags = new HashSet<>();
     
     InteractionMacro undoMacro;
 
     public SellOptionsTranslator(ILegacyScreen headlessScreen, String icon, String appId, Properties properties, String... excludeActions) {
-        super(headlessScreen, DefaultScreen.class, appId, properties);
+        super(headlessScreen, SellScreen.class, appId, properties);
         if (excludeActions != null) {
             for (String string : excludeActions) {
                 this.excludeLabelTags.add(string);
@@ -34,7 +34,7 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Defaul
     @Override
     protected void buildMainContent() {
         super.buildMainContent();
-        screen.setTemplate(DefaultScreen.TEMPLATE_SELL);
+        screen.setTemplate(SellScreen.TEMPLATE_SELL);
         screen.setLocalMenuItems(generateUIActionsForLocalNavButtons(MenuItem.class, true, excludeLabelTags.toArray(new String[]{})));
         if (screen.getLocalMenuItems().size() > 0) {
             screen.setPrompt("Choose Option");
