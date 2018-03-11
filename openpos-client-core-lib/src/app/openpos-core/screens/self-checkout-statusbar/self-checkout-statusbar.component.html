@@ -1,18 +1,20 @@
 <mat-toolbar *ngIf="session.screen" color="primary" class="mat-elevation-z10">
 	<div fxFill fxLayout="row" fxLayoutAlign="space-between ">
 		<div fxLayout="row" fxLayoutAlign=" center">
-			<ng-container *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled">
+			<ng-container *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled; else checkForLogoutButton">
 				<button mat-button style="margin-left:-20px" (click)="doMenuItemAction(session.screen.backButton)">
 					<mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
 				</button>
 			</ng-container>
 
-			<ng-container *ngIf="session.screen && session.screen.logoutButton && session.screen.type != 'Home'">
+			<ng-template #checkForLogoutButton>
+				<ng-container *ngIf="session.screen && session.screen.logoutButton && session.screen.type != 'Home'">
 					<button mat-button style="margin-left:-20px" (click)="doMenuItemAction(session.screen.logoutButton)">
-							<mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
-						</button>						
-			</ng-container>
-			
+						<mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
+					</button>
+				</ng-container>
+			</ng-template>
+
 		</div>
 
 		<div class="home-screen-logo"></div>
