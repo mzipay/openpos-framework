@@ -17,7 +17,7 @@
                 <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">{{item.originalAmount|currency:'USD':true:'1.2'}}</p>
                 <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">( -{{item.discountAmount|currency:'USD':true:'1.2'}} )</p>
             </span>
-            <div *ngIf="isReadOnly === false" >
+            <div *ngIf="!isReadOnly" >
            	<button mat-icon-button fxFlex="1 1 100px" color="primary" *ngFor="let m of item.menuItems" (click)="doMenuItemAction(m, item.index)"
                 [disabled]="!isMenuItemEnabled(m)">
                 <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
