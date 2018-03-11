@@ -22,30 +22,30 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
 
   public ngOnInit(): void {
 
-    let group: any = {};
-    let validators: ValidatorFn[] = [];
+    const group: any = {};
+    const validators: ValidatorFn[] = [];
     validators.push(Validators.required);
     validators.push(this.validatorsService.getValidator(this.session.screen.responseType));
 
-    group["promptInputControl"] = new FormControl(this.session.screen.responseText, validators);
+    group['promptInputControl'] = new FormControl(this.session.screen.responseText, validators);
 
-    if(this.session.screen.showComments){
-      group["comments"] = new FormControl(this.session.screen.comments, Validators.required);
+    if (this.session.screen.showComments) {
+      group['comments'] = new FormControl(this.session.screen.comments, Validators.required);
     }
     this.promptFormGroup = new FormGroup(group);
   }
 
-  onAction( action: string ): void {
-    if ( this.promptFormGroup.valid ) {
-      if( this.session.screen.showComments ){
-        this.session.onAction( action, 
-          { 
-            response: this.promptFormGroup.value["promptInputControl"],
-            comment: this.promptFormGroup.value["comments"]
+  onAction(action: string): void {
+    if (this.promptFormGroup.valid) {
+      if (this.session.screen.showComments) {
+        this.session.onAction(action,
+          {
+            response: this.promptFormGroup.value['promptInputControl'],
+            comment: this.promptFormGroup.value['comments']
           });
       } else {
-        this.session.onAction( action, this.promptFormGroup.value["promptInputControl"]);
+        this.session.onAction(action, this.promptFormGroup.value['promptInputControl']);
       }
-     }
+    }
   }
 }
