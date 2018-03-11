@@ -8,6 +8,9 @@
 		<mat-icon *ngIf="session.screen.icon">{{session.screen.icon}}</mat-icon>
 		<span class="text-sm">&nbsp;{{session.screen.name}}</span>
 	</span>
+	
+	<div *ngIf="session.screen.type==='Home'" class="home-screen-logo"></div>
+
 	<span fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
 		<mat-icon *ngIf="session.screen && session.screen.operatorName"  class="material-icons">lock_open</mat-icon>
 		<span *ngIf="session.screen && session.screen.operatorName"  class="text-sm" fxHide.xs>
