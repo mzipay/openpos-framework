@@ -61,13 +61,12 @@ export class PosComponent extends AbstractApp implements DoCheck {
   }
 
   protected onDevMenuClick(): void {
-    this.logsAvailable = this.pluginService.pluginExists('openPOSCordovaLogPlugin');
-
     if (!this.showDevMenu) {
       this.pluginService.getPlugin('openPOSCordovaLogPlugin').then(
         (plugin: IPlugin) => {
           this.logPlugin = plugin;
           if (this.logPlugin && this.logPlugin.impl) {
+            this.logsAvailable = true;
             this.logPlugin.impl.listLogFiles(
               (fileNames) => {
                 this.logFilenames = fileNames;
@@ -76,9 +75,13 @@ export class PosComponent extends AbstractApp implements DoCheck {
                 this.logFilenames = [];
               }
             );
+          } else {
+            this.logsAvailable = false;
           }
         }
-      );
+      ).catch( error => {
+        this.logsAvailable = false;
+      });
     }
     this.showDevMenu = !this.showDevMenu;
 
