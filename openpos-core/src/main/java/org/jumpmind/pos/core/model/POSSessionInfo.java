@@ -15,6 +15,7 @@ public class POSSessionInfo {
     private Optional<Boolean> registerOpen = Optional.empty();
     private Optional<Boolean> storeOpen = Optional.empty();
     private boolean trainingMode = false;
+    private boolean adminMode = false;
     
     private TypedMap attributes = new TypedMap();
 
@@ -103,6 +104,14 @@ public class POSSessionInfo {
 
     public void setTrainingMode(boolean trainingMode) {
         this.trainingMode = trainingMode;
+    }
+    
+    public void setAdminMode(boolean adminMode) {
+        this.adminMode = adminMode;
+    }
+    
+    public boolean isAdminMode() {
+        return adminMode;
     }
 
     @Override

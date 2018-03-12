@@ -28,9 +28,16 @@ abstract public class AbstractScreenTranslator<T extends SellScreen> {
     protected IScreenThemeSelector screenThemeSelector;
 
     protected Map<String, String> iconRegistry = new HashMap<>();
+    
+    protected Class<T> screenClass;
 
     public AbstractScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         this.legacyScreen = headlessScreen;
+        this.screenClass = screenClass;
+        newScreen();
+    }
+    
+    protected void newScreen() {
         try {
             screen = screenClass.newInstance();
         } catch (Exception e) {
