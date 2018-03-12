@@ -42,7 +42,7 @@
 			<span fxFlex class="text-md">{{items.length}} Items</span>
 			<span fxFlex="1 1 auto"></span>
 			<span fxFlex class="text-right">Total</span>
-			<span fxFlex [ngClass]="{'text-center': !session.screen.readOnly, 'text-right': session.screen.readOnly}" (click)="!session.screen.readOnly ? session.onAction('Checkout','special') : false">
+			<span fxFlex [ngClass]="{'text-center': !session.screen.readOnly, 'text-right': session.screen.readOnly}">
 				<span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</span>
 			<button fxFlex="0 1 auto" *ngIf="!session.screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!session.screen.transaction.active || items.length == 0"
 			 (click)="session.onAction('Checkout')">
