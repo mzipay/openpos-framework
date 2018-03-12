@@ -32,6 +32,7 @@ export class PosComponent extends AbstractApp implements DoCheck {
   logPlugin: IPlugin;
 
   showDevMenu = false;
+  logsAvailable = false;
 
   constructor(public screenService: ScreenService, public session: SessionService,
     public deviceService: DeviceService, public dialog: MatDialog,
@@ -40,7 +41,6 @@ export class PosComponent extends AbstractApp implements DoCheck {
     private fileUploadService: FileUploadService) {
 
     super(screenService, session, dialog, iconService, snackBar, overlayContainer, router, zone);
-
   }
 
   @HostListener('document:click', ['$event'])
@@ -61,6 +61,8 @@ export class PosComponent extends AbstractApp implements DoCheck {
   }
 
   protected onDevMenuClick(): void {
+    this.logsAvailable = this.pluginService.pluginExists('openPOSCordovaLogPlugin');
+
     if (!this.showDevMenu) {
       this.pluginService.getPlugin('openPOSCordovaLogPlugin').then(
         (plugin: IPlugin) => {

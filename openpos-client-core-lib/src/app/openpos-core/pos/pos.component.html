@@ -7,9 +7,13 @@
         <div [matMenuTriggerFor]="devMenu">
             <mat-menu #devMenu="matMenu">
                 <button mat-menu-item (click)="onDevClearLocalStorage()">Clear Local Storage</button>
-                <button mat-menu-item [matMenuTriggerFor]="logsMenu">Logs</button>
-                <button mat-menu-item (click)="onDevRefreshView()">Refresh View</button>
+                <mat-divider></mat-divider>
                 <button mat-menu-item (click)="onPersonalize()">Personalize</button>
+                <button mat-menu-item (click)="onDevRefreshView()">Refresh View</button>
+                <ng-container *ngIf="logsAvailable">
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item [matMenuTriggerFor]="logsMenu">Logs</button>
+                </ng-container>
             </mat-menu>
 
             <mat-menu #logsMenu="matMenu">
