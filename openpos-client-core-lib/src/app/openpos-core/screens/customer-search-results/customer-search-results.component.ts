@@ -23,6 +23,15 @@ export class CustomerSearchResultsComponent implements IScreen, OnInit {
 
   ngOnInit() {   
     this.customers = this.session.screen.customers;
+    this.submitAction = this.session.screen.submitAction;
+  }
+
+  onSubmitAction(): void {
+    this.session.onAction(this.submitAction, this.selectedOptions);
+  }
+
+  isSelectedOptionsEmpty(): boolean {
+    return Boolean(typeof this.selectedOptions === "undefined" || this.selectedOptions.length === 0);
   }
 
 }

@@ -6,7 +6,7 @@ import java.util.List;
 public class CustomerSearchResultsScreen extends DefaultScreen {
 
     private static final long serialVersionUID = 1L;
-    private String submitAction = "Next";
+    private String submitAction = "Link";
     
     private List<Customer> customers = new ArrayList<>();
     
