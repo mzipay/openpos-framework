@@ -1,6 +1,6 @@
 package org.jumpmind.pos.core.screen;
 
-public class EmbeddedWebPageScreen extends DefaultScreen {
+public class EmbeddedWebPageScreen extends SellScreen {
 
     private static final long serialVersionUID = 1L;
     

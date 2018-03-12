@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormDisplayField;
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SellItem;
 import org.jumpmind.pos.core.screen.SellItemDetailScreen;
@@ -24,7 +24,7 @@ public class SellItemDetailsScreenTranslator extends AbstractLegacyScreenTransla
         
         ILegacyPOSListModel legacyPOSListModel = this.getLegacyPOSBeanService().getLegacyPOSListModel(this.getLegacyScreen());
        
-        screen.setTemplate(DefaultScreen.TEMPLATE_SELL);
+        screen.setTemplate(SellScreen.TEMPLATE_SELL);
         
         if (!legacyPOSListModel.isEmpty()) {
             ILegacySaleReturnLineItem saleItem = this.legacyPOSBeanService.toILegacyInstance(legacyPOSListModel.firstElement());

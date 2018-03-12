@@ -37,8 +37,12 @@ public class MenuItem implements IUIAction, Serializable {
     public MenuItem() {
     }
     
+    
+    public MenuItem(String action) {
+        this.action = action;    
+    }
+    
     public MenuItem(String action, String title, String icon) {
-        super();
         this.action = action;
         this.title = title;
         this.icon = icon;

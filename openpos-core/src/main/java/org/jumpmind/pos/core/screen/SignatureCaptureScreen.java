@@ -1,6 +1,6 @@
 package org.jumpmind.pos.core.screen;
 
-public class SignatureCaptureScreen extends DefaultScreen {
+public class SignatureCaptureScreen extends SellScreen {
     private static final long serialVersionUID = 1L;
 
     private String text;

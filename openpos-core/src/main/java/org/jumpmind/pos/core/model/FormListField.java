@@ -10,9 +10,8 @@ public class FormListField extends FormField {
     private static final long serialVersionUID = 1L;
 
     // Use @JsonIgnore annotation since the jackson serializer 
-    // ignores the transient keyword.
     @JsonIgnore
-    transient private List<String> values;
+    private List<String> values;
     
     private SelectionMode selectionMode = SelectionMode.Single;
     private int[] selectedIndexes = {};

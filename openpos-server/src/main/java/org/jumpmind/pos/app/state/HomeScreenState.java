@@ -23,7 +23,7 @@ package org.jumpmind.pos.app.state;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.HomeScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class HomeScreenState extends AbstractState implements IState {
         stateManager.showScreen(buildScreen());
     }
 
-    protected DefaultScreen buildScreen() {
+    protected SellScreen buildScreen() {
         HomeScreen screen = new HomeScreen();
         screen.addMenuItem(new MenuItem("Sell", "Sell", "credit_card"));
         screen.addMenuItem(new MenuItem("AdvanceSearch", "Item Search", "search"));

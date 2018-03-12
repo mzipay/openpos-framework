@@ -9,13 +9,13 @@ import java.util.Map;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
-import org.jumpmind.pos.core.screen.DefaultScreen;
-import org.jumpmind.pos.core.screen.DefaultScreen.ScanType;
+import org.jumpmind.pos.core.screen.SellScreen;
+import org.jumpmind.pos.core.screen.SellScreen.ScanType;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
+abstract public class AbstractScreenTranslator<T extends SellScreen> {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -28,9 +28,16 @@ abstract public class AbstractScreenTranslator<T extends DefaultScreen> {
     protected IScreenThemeSelector screenThemeSelector;
 
     protected Map<String, String> iconRegistry = new HashMap<>();
+    
+    protected Class<T> screenClass;
 
     public AbstractScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         this.legacyScreen = headlessScreen;
+        this.screenClass = screenClass;
+        newScreen();
+    }
+    
+    protected void newScreen() {
         try {
             screen = screenClass.newInstance();
         } catch (Exception e) {

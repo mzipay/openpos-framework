@@ -32,6 +32,7 @@ export class PosComponent extends AbstractApp implements DoCheck {
   logPlugin: IPlugin;
 
   showDevMenu = false;
+  logsAvailable = false;
 
   constructor(public screenService: ScreenService, public session: SessionService,
     public deviceService: DeviceService, public dialog: MatDialog,
@@ -40,7 +41,6 @@ export class PosComponent extends AbstractApp implements DoCheck {
     private fileUploadService: FileUploadService) {
 
     super(screenService, session, dialog, iconService, snackBar, overlayContainer, router, zone);
-
   }
 
   @HostListener('document:click', ['$event'])
@@ -66,6 +66,7 @@ export class PosComponent extends AbstractApp implements DoCheck {
         (plugin: IPlugin) => {
           this.logPlugin = plugin;
           if (this.logPlugin && this.logPlugin.impl) {
+            this.logsAvailable = true;
             this.logPlugin.impl.listLogFiles(
               (fileNames) => {
                 this.logFilenames = fileNames;
@@ -74,9 +75,13 @@ export class PosComponent extends AbstractApp implements DoCheck {
                 this.logFilenames = [];
               }
             );
+          } else {
+            this.logsAvailable = false;
           }
         }
-      );
+      ).catch( error => {
+        this.logsAvailable = false;
+      });
     }
     this.showDevMenu = !this.showDevMenu;
 

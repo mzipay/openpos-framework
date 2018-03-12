@@ -11,7 +11,7 @@ import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.ScreenType;
 import org.jumpmind.pos.translate.InteractionMacro.AbortMacro;
 import org.jumpmind.pos.translate.InteractionMacro.DoOnActiveScreen;
@@ -35,7 +35,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
 
     private InteractionMacro activeMacro;
 
-    private Map<String, AbstractScreenTranslator<? extends DefaultScreen>> lastTranslatorByAppId = new HashMap<>();
+    private Map<String, AbstractScreenTranslator<? extends SellScreen>> lastTranslatorByAppId = new HashMap<>();
 
     private Map<String, ITranslationManagerSubscriber> subscriberByAppId = new HashMap<>();
 
@@ -68,7 +68,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
 
     @Override
     public void doAction(String appId, Action action, Form formResults) {
-        AbstractScreenTranslator<? extends DefaultScreen> lastTranslator = this.lastTranslatorByAppId.get(appId);
+        AbstractScreenTranslator<? extends SellScreen> lastTranslator = this.lastTranslatorByAppId.get(appId);
         if (lastTranslator != null) {
             lastTranslator.handleAction(subscriberByAppId.get(appId), this, action, formResults);
         } else {
@@ -85,7 +85,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
             // screen) end the flow with simply a status update. This
             // would leave clients waiting for a response. Send a no-op response
             // so that clients know the server is still alive.
-            show(new DefaultScreen(ScreenType.NoOp));
+            show(new SellScreen(ScreenType.NoOp));
         } else {
             if (executeActiveMacro(screen)) {
                 translateAndShow(screen);
@@ -166,7 +166,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
         }
     }
 
-    protected void show(DefaultScreen screen) {
+    protected void show(SellScreen screen) {
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
             if (screen != null && subscriber.isInTranslateState()) {
                 subscriber.showScreen(screen);
@@ -188,9 +188,9 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
         }
     }
 
-    protected DefaultScreen toScreen(ILegacyScreen headlessScreen, ITranslationManagerSubscriber subscriber) {
-        AbstractScreenTranslator<? extends DefaultScreen> lastTranslator = screenTranslatorFactory.createScreenTranslator(headlessScreen, subscriber.getAppId(), subscriber.getProperties());
-        DefaultScreen screen = null;
+    protected SellScreen toScreen(ILegacyScreen headlessScreen, ITranslationManagerSubscriber subscriber) {
+        AbstractScreenTranslator<? extends SellScreen> lastTranslator = screenTranslatorFactory.createScreenTranslator(headlessScreen, subscriber.getAppId(), subscriber.getProperties());
+        SellScreen screen = null;
         if (lastTranslator != null) {
             lastTranslator.setPosSessionInfo(posSessionInfo);
             screen = lastTranslator.build();

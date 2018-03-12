@@ -3,7 +3,7 @@ package org.jumpmind.pos.core.screen;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerSearchResultsScreen extends DefaultScreen {
+public class CustomerSearchResultsScreen extends SellScreen {
 
     private static final long serialVersionUID = 1L;
     private String submitAction = "Link";

@@ -4,7 +4,7 @@ package org.jumpmind.pos.core.screen;
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.IMaskSpec;
 
-public class PromptScreen extends DefaultScreen implements IPromptScreen {
+public class PromptScreen extends SellScreen implements IPromptScreen {
 
     private static final long serialVersionUID = 1L;
     

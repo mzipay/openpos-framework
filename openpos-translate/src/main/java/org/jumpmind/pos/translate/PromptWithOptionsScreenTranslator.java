@@ -1,7 +1,7 @@
 package org.jumpmind.pos.translate;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Properties;
 
 import org.jumpmind.pos.core.screen.OptionItem;
 import org.jumpmind.pos.core.screen.PromptWithOptionsScreen;
@@ -11,11 +11,15 @@ import org.jumpmind.pos.core.screen.PromptWithOptionsScreen;
  * prompt text, an input text field, and a list of mutually exclusive options
  * for the cashier to select.
  */
-public class PromptWithOptionsScreenTranslator<T extends PromptWithOptionsScreen> extends AbstractPromptScreenTranslator<T> {
+public class PromptWithOptionsScreenTranslator extends AbstractPromptScreenTranslator<PromptWithOptionsScreen> {
 
-    public PromptWithOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
-        super(headlessScreen, screenClass);
+    public PromptWithOptionsScreenTranslator(ILegacyScreen legacyScreen, Class<PromptWithOptionsScreen> screenClass) {
+        super(legacyScreen, screenClass);
     }
+    
+    public PromptWithOptionsScreenTranslator(ILegacyScreen legacyScreen, String appId, Properties properties) {
+        super(legacyScreen, PromptWithOptionsScreen.class, appId, properties);
+    }    
 
     @Override
     protected void buildMainContent() {
@@ -26,15 +30,7 @@ public class PromptWithOptionsScreenTranslator<T extends PromptWithOptionsScreen
     }
 
     protected void buildOptions() {
-        List<ILegacyButtonSpec> allOptions = this.getPanelButtons(LOCAL_NAV_PANEL_KEY, Optional.of(true));
-        ILegacyAssignmentSpec localNavPanel = legacyPOSBeanService.getLegacyAssignmentSpec(legacyScreen, LOCAL_NAV_PANEL_KEY);
-
-        allOptions.stream().forEach(t -> {
-            String buttonText = legacyPOSBeanService.getLegacyUtilityManager(legacyScreen).retrieveText(localNavPanel.getBeanSpecName(),
-                    getResourceBundleFilename(), t.getLabelTag(), t.getLabelTag());
-            OptionItem i = new OptionItem(t.getActionName(), buttonText, t.getEnabled());
-            screen.addOption(i);
-        });
-
+        List<OptionItem> options = generateUIActionsForLocalNavButtons(OptionItem.class, true);
+        screen.setOptions(options);
     }
 }

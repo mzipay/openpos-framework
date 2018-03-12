@@ -1,9 +1,9 @@
 package org.jumpmind.pos.core.flow;
 
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.AbstractScreen;
 
 public interface IScreenInterceptor {
 
-    DefaultScreen intercept(DefaultScreen screen);
+    AbstractScreen intercept(AbstractScreen screen);
     
 }

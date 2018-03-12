@@ -28,7 +28,7 @@ import javax.annotation.PostConstruct;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.model.Form;
-import org.jumpmind.pos.core.screen.DefaultScreen;
+import org.jumpmind.pos.core.screen.AbstractScreen;
 import org.jumpmind.pos.core.service.IScreenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,7 +114,7 @@ public class StateManager implements IStateManager {
     }
 
     @Override
-    public DefaultScreen getLastScreen() {
+    public AbstractScreen getLastScreen() {
         return screenService.getLastScreen(appId, nodeId);
     }
 
@@ -203,7 +203,7 @@ public class StateManager implements IStateManager {
     }
 
     @Override
-    public void showScreen(DefaultScreen screen) {
+    public void showScreen(AbstractScreen screen) {
         if (this.currentState != null && this.currentState instanceof IScreenInterceptor) {
             screen = ((IScreenInterceptor)this.currentState).intercept(screen);            
         }

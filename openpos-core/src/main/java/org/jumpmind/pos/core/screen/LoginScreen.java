@@ -10,28 +10,29 @@ public class LoginScreen extends DynamicFormScreen {
 
     private MenuItem changePasswordAction;
     private MenuItem forgotPasswordAction;
-    
+
     private String subType;
-    
+
     public LoginScreen() {
         setType(ScreenType.Login);
         setSubType(ScreenType.Login);
-        
+
         FormField userIdField = new FormField("userId", null, FieldElementType.Input, FieldInputType.AlphanumericText, true, "");
         userIdField.setPlaceholder("User ID");
         getForm().addFormElement(userIdField);
-        
-        FormField passwordField = new FormField( "password", null, FieldElementType.Input, FieldInputType.AlphanumericPassword, true, "");
+
+        FormField passwordField = new FormField("password", null, FieldElementType.Input, FieldInputType.AlphanumericPassword, true, "");
         passwordField.setPlaceholder("Password");
         getForm().addFormElement(passwordField);
-        
+
     }
-    
+
     public LoginScreen asDialog() {
-    	setType(ScreenType.Dialog);
-    	return this;
+        setType(ScreenType.Dialog);
+        setSubmitAction("Login");
+        return this;
     }
-    
+
     public MenuItem getChangePasswordAction() {
         return changePasswordAction;
     }
@@ -48,13 +49,12 @@ public class LoginScreen extends DynamicFormScreen {
         this.forgotPasswordAction = forgotPasswordAction;
     }
 
-	public String getSubType() {
-		return subType;
-	}
+    public String getSubType() {
+        return subType;
+    }
 
-	public void setSubType(String subType) {
-		this.subType = subType;
-	}
+    public void setSubType(String subType) {
+        this.subType = subType;
+    }
 
-    
 }

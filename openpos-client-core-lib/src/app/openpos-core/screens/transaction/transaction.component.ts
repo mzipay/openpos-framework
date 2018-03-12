@@ -46,7 +46,7 @@ export class TransactionComponent implements AfterViewInit, DoCheck, IScreen, On
       ['xl', 5]
     ]);
 
-    let startSize: number = 3;
+    let startSize = 3;
     sizeMap.forEach((size, mqAlias) => {
       if( this.observableMedia.isActive(mqAlias)){
         startSize = size;
