@@ -21,7 +21,7 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
   constructor(public session: SessionService) {
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
   ngDoCheck(): void {

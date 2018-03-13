@@ -20,7 +20,7 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
   constructor(public readonly session: SessionService) {
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
 

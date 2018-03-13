@@ -23,7 +23,7 @@ export class WarrantyCoverageComponent implements DoCheck, IScreen, OnInit {
 
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
   ngDoCheck(): void {

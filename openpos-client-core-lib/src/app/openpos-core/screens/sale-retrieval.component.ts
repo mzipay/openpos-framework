@@ -17,7 +17,7 @@ export class SaleRetrievalComponent implements AfterViewInit, DoCheck, IScreen, 
   public ngOnInit(): void {
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
   ngDoCheck(): void {

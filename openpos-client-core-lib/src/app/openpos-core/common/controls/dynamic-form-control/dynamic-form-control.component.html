@@ -1,6 +1,6 @@
 <form fxFlex="1 1 auto" (ngSubmit)="submitForm()" [formGroup]="form" novalidate [markDirtyOnSubmit]="form" fxLayout="column" >
-    <mat-card fxFlex style="margin:2px; padding-left:2px" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start stretch">
-        <mat-card-content>
+        <mat-card fxFlex="1 1 auto" style="margin:2px; padding-left:2px" class="scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
+                <mat-card-content fxFlex="1 1 auto"  fxLayout="column" >
                 <app-dynamic-form-field *ngFor="let field of screenForm.formElements" [formGroup]="form" [formField]="field" (onFieldChanged)="onFieldChanged($event)"></app-dynamic-form-field>
                 <mat-error>
                     <app-show-errors [control]="form"></app-show-errors>	

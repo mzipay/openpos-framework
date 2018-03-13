@@ -11,14 +11,13 @@ import { AbstractApp } from '../../common/abstract-app';
 })
 export class TillSummaryComponent implements OnInit, IScreen {
 
-  session: SessionService;
   nextAction: IMenuItem;
 
-  show(session: SessionService, app: AbstractApp) {
-    this.session = session;
+  constructor(public session: SessionService) {
   }
 
-  constructor() { }
+  show(screen: any, app: AbstractApp) {
+  }
 
   ngOnInit() {
     this.nextAction = this.session.screen.nextAction;

@@ -21,7 +21,7 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck,
   constructor(public session: SessionService, devices: DeviceService, private observableMedia: ObservableMedia) {
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
   ngDoCheck(): void {

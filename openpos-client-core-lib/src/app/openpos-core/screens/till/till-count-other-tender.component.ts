@@ -32,7 +32,7 @@ export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen
   constructor(public session: SessionService) {
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
   ngOnDestroy(): void {

@@ -24,8 +24,8 @@ export class CustomerDisplayComponent extends AbstractApp implements DoCheck {
   constructor(public screenService: ScreenService, public session: SessionService,
     public deviceService: DeviceService, public dialog: MatDialog,
     public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
-    protected router: Router, public zone: NgZone) {
-    super(screenService, session, dialog, iconService, snackBar, overlayContainer, router, zone);
+    protected router: Router) {
+    super(screenService, session, dialog, iconService, snackBar, overlayContainer, router);
   }
 
   public appName(): string {
@@ -36,8 +36,6 @@ export class CustomerDisplayComponent extends AbstractApp implements DoCheck {
     if (typeof this.session.screen !== 'undefined') {
       this.backButton = this.session.screen.backButton;
     }
-
-    super.ngDoCheck();
   }
 
 }

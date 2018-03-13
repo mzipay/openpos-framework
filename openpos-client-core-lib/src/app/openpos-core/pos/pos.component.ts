@@ -37,10 +37,10 @@ export class PosComponent extends AbstractApp implements DoCheck {
   constructor(public screenService: ScreenService, public session: SessionService,
     public deviceService: DeviceService, public dialog: MatDialog,
     public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
-    protected router: Router, public zone: NgZone, private pluginService: PluginService,
+    protected router: Router, private pluginService: PluginService,
     private fileUploadService: FileUploadService) {
 
-    super(screenService, session, dialog, iconService, snackBar, overlayContainer, router, zone);
+    super(screenService, session, dialog, iconService, snackBar, overlayContainer, router);
   }
 
   @HostListener('document:click', ['$event'])
@@ -147,8 +147,6 @@ export class PosComponent extends AbstractApp implements DoCheck {
     if (typeof this.session.screen !== 'undefined') {
       this.backButton = this.session.screen.backButton;
     }
-
-    super.ngDoCheck();
   }
 
 }

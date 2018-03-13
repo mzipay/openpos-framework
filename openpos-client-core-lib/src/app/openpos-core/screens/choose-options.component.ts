@@ -11,6 +11,8 @@ import { ActionIntercepter, ActionIntercepterBehaviorType } from '../common/acti
   templateUrl: './choose-options.component.html'
 })
 export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck, OnDestroy {
+
+  static readonly UNDO = 'Undo';
   public currentView: string;
   public selectedOption: IOptionItem;
   public optionItems: IOptionItem[];
@@ -20,7 +22,7 @@ export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck, OnDestr
   constructor(public session: SessionService) {
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
     console.log('Show invoked');
   }
 
@@ -38,14 +40,15 @@ export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck, OnDestr
   }
 
   ngOnDestroy() {
-    this.session.unregisterActionIntercepter('undo');
+    this.session.unregisterActionIntercepter(ChooseOptionsComponent.UNDO);
   }
 
   onMakeOptionSelection( option: IOptionItem): void {
     if ( option.form.formElements.length > 0 ) {
       this.selectedOption = option;
       this.currentView = 'OptionForm';
-      this.session.registerActionIntercepter("undo", new ActionIntercepter(this.onBackButtonPressed, ActionIntercepterBehaviorType.block));
+      this.session.registerActionIntercepter(ChooseOptionsComponent.UNDO,
+        new ActionIntercepter((payload) => { this.onBackButtonPressed(); }, ActionIntercepterBehaviorType.block));
     } else {
       this.session.onAction( option.value );
     }
@@ -53,6 +56,7 @@ export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck, OnDestr
 
   onBackButtonPressed(): void {
     this.currentView = this.session.screen.displayStyle;
+    this.session.unregisterActionIntercepter(ChooseOptionsComponent.UNDO);
   }
 
 }

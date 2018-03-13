@@ -23,7 +23,7 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck, OnDes
   constructor(public session: SessionService) {
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
     this.session.registerActionPayload(this.session.screen.localMenuItems[0].action, () => {
       return this.getSearchPayload();
     });

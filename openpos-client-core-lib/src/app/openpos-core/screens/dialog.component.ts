@@ -16,7 +16,7 @@ export class DialogComponent implements IScreen {
   constructor(public session: SessionService, public dialogRef: MatDialogRef<DialogComponent>) {
   }
 
-  show(session: SessionService, app: AbstractApp): void {
+  show(screen: any, app: AbstractApp): void {
 
   }
 

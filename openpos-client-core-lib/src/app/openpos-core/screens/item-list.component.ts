@@ -22,7 +22,7 @@ export class ItemListComponent implements IScreen, OnInit, DoCheck {
     constructor(public session: SessionService) {
     }
 
-    show(session: SessionService, app: AbstractApp) {
+    show(screen: any, app: AbstractApp) {
     }
 
     ngOnInit(): void {

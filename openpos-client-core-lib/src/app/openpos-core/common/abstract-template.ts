@@ -18,7 +18,7 @@ export abstract class AbstractTemplate implements IScreen {
         return viewContainerRef.createComponent(screenComponentFactory).instance;
     }
 
-    show(session: SessionService, app: AbstractApp) {
+    show(screen: any, app: AbstractApp) {
 
 
     }

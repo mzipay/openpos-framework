@@ -35,7 +35,7 @@ export class HomeComponent implements IScreen, OnInit {
     this.gutterSize = isLarge ? 20 : 10;
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
   onEnter(value: string) {

@@ -33,7 +33,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
         });
     }
 
-    show(session: SessionService, app: AbstractApp): void {
+    show(screen: any, app: AbstractApp): void {
         this.app = app;
     }
 

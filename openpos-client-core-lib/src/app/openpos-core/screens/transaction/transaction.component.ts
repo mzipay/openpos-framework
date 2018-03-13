@@ -28,7 +28,7 @@ export class TransactionComponent implements AfterViewInit, DoCheck, IScreen, On
 
     }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
   ngDoCheck(): void {

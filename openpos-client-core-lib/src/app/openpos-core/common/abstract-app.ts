@@ -17,7 +17,7 @@ import { TemplateDirective } from './template.directive';
 import { AbstractTemplate } from './abstract-template';
 import { Router } from '@angular/router';
 
-export abstract class AbstractApp implements OnDestroy, DoCheck, OnInit {
+export abstract class AbstractApp implements OnDestroy, OnInit {
 
     private dialogRef: MatDialogRef<IScreen>;
 
@@ -43,29 +43,19 @@ export abstract class AbstractApp implements OnDestroy, DoCheck, OnInit {
         public iconService: IconService,
         public snackBar: MatSnackBar,
         public overlayContainer: OverlayContainer,
-        protected router: Router,
-        public zone: NgZone) {
-
-        console.log('creating ' + this.constructor.name);
-
+        protected router: Router) {
     }
 
     public abstract appName(): string;
 
     ngOnInit(): void {
 
-        this.session.observableScreen.subscribe(
-            screen => this.zone.run(() => this.updateTemplateAndScreens())
-        );
+        const self = this;
+        this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreens(screen));
 
         if (!this.registerWithServer()) {
             this.updateTemplateAndScreens();
         }
-    }
-
-
-    ngDoCheck(): void {
-        // this.updateTemplateAndScreens();
     }
 
     public registerWithServer(): boolean {
@@ -101,7 +91,7 @@ export abstract class AbstractApp implements OnDestroy, DoCheck, OnInit {
         return this.personalized;
     }
 
-    updateTemplateAndScreens(): void {
+    updateTemplateAndScreens(screen?: any): void {
         this.registerWithServer();
         if (this.session.dialog) {
             const dialogType = this.screenService.hasScreen(this.session.dialog.subType) ? this.session.dialog.subType : 'Dialog';
@@ -126,7 +116,6 @@ export abstract class AbstractApp implements OnDestroy, DoCheck, OnInit {
             this.session.screen = this.session.getPersonalizationScreen();
         }
 
-        let screen: IScreen = null;
         let template: AbstractTemplate = null;
         if (
             (this.session.screen &&
@@ -154,7 +143,7 @@ export abstract class AbstractApp implements OnDestroy, DoCheck, OnInit {
             this.overlayContainer.getContainerElement().classList.add(this.getTheme());
             screen = template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
             template.show(this.session, this);
-            screen.show(this.session, this);
+            screen.show(this.session.screen, this);
         }
 
     }

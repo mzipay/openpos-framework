@@ -6,7 +6,7 @@ import { IDialog } from '../common/idialog';
 import { Observable } from 'rxjs/Observable';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs/Subscription';
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, NgZone } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
@@ -43,11 +43,9 @@ export class SessionService implements ILocaleService {
 
   public onDeviceRequest = new EventEmitter<IDeviceRequest>();
 
-  public onScreenChange = new EventEmitter<any>();
-
   private screenSource = new BehaviorSubject<any>(null);
 
-  observableScreen = this.screenSource.asObservable();
+  private observableScreen = this.screenSource.asObservable();
 
   private loading: boolean;
 
@@ -59,8 +57,15 @@ export class SessionService implements ILocaleService {
 
   loaderState: LoaderState;
 
-  constructor(private location: Location, private router: Router, public dialogService: MatDialog) {
+  constructor(private location: Location, private router: Router, public dialogService: MatDialog,
+    public zone: NgZone) {
     this.loaderState = new LoaderState(this);
+  }
+
+  public subscribeForScreenUpdates(callback: (screen: any) => any) {
+    this.observableScreen.subscribe(
+      screen => this.zone.run(() => callback(screen))
+  );
   }
 
   public isRunningInBrowser(): boolean {
@@ -306,10 +311,9 @@ export class SessionService implements ILocaleService {
       this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
     } else {
       sendToServer();
+      this.dialog = null;
+      this.queueLoading();
     }
-
-    this.dialog = null;
-    this.queueLoading();
   }
 
   private queueLoading() {

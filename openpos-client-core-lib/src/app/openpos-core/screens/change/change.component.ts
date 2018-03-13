@@ -26,7 +26,7 @@ export class ChangeComponent implements AfterViewInit, DoCheck, IScreen {
 
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
   ngDoCheck(): void {

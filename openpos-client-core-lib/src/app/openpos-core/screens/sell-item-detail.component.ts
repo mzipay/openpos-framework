@@ -21,7 +21,7 @@ export class SellItemDetailComponent implements IScreen {
     this.item = session.screen.item;
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
   ngDoCheck(): void {

@@ -84,7 +84,7 @@ export class StaticTableComponent implements IScreen, DoCheck {
         this.selectedRow = this.session.screen.selectedRow;
     }
 
-    show(session: SessionService, app: AbstractApp) {
+    show(screen: any, app: AbstractApp) {
     }
 
     onSelectRow(rowIndex: number) {

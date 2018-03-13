@@ -14,7 +14,7 @@ export class WaitComponent implements OnInit {
 
   constructor(public session: SessionService) { }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
   ngOnInit() {

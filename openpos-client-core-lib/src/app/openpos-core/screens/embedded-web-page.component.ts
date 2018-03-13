@@ -15,7 +15,7 @@ export class EmbeddedWebPageComponent implements IScreen {
     private router: Router) {
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
 }

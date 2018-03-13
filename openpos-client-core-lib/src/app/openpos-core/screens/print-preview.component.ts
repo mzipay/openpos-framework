@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {SessionService} from '../services/session.service';
+import { SessionService } from '../services/session.service';
 import { AbstractApp } from '../common/abstract-app';
 import { IScreen } from '..';
 
@@ -8,12 +8,12 @@ import { IScreen } from '..';
   selector: 'app-print-preview',
   templateUrl: './print-preview.component.html'
 })
-export class PrintPreviewComponent implements IScreen{
+export class PrintPreviewComponent implements IScreen {
 
-  constructor(public session: SessionService ) {
+  constructor(public session: SessionService) {
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
   }
 
 

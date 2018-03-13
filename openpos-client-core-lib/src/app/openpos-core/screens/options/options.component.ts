@@ -15,7 +15,7 @@ export class OptionsComponent implements OnInit, IScreen {
   ngOnInit() {
   }
 
-  show(session: SessionService, app: AbstractApp) {
+  show(screen: any, app: AbstractApp) {
 
   }
 
