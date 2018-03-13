@@ -512,4 +512,12 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
         screen.setLocalMenuItems(localNavButtons);
     }
 
+    protected String getPromptTextFromBeanSpec(String defaultValue) {
+        ILegacyAssignmentSpec promptAndResponseBeanPanelSpec = legacyPOSBeanService.getLegacyAssignmentSpec(legacyScreen, PROMPT_RESPONSE_PANEL_KEY);
+        ILegacyPromptAndResponseModel promptAndResponseBeanModel = legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
+        String promptTextTag = promptAndResponseBeanPanelSpec.getPropertyValue("promptTextTag");            
+        String resourceText = this.legacyPOSBeanService.getLegacyUIUtilities().retrieveText(promptAndResponseBeanPanelSpec.getBeanSpecName(), legacyScreen.getResourceBundleFilename(), promptTextTag);
+        String formattedPromptText = toFormattedString(resourceText, promptAndResponseBeanModel != null ? promptAndResponseBeanModel.getArguments() : null);
+        return formattedPromptText;
+    }
 }
