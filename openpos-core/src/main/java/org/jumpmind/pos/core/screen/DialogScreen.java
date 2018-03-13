@@ -35,6 +35,10 @@ public class DialogScreen extends SellScreen {
         this.buttons = buttons;
     }
     
+    public void addButton(MenuItem button) {
+        this.buttons.add(button);
+    }
+    
     public String getTitle() {
         return title;
     }
