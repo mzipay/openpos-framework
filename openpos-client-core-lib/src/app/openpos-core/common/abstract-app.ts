@@ -59,7 +59,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     }
 
     public registerWithServer(): boolean {
-        if (!this.registered &&  this.isPersonalized()) {
+        if (!this.registered && this.isPersonalized()) {
             console.log('initializing the application');
             this.session.unsubscribe();
             this.session.subscribe(this.appName());
@@ -114,6 +114,8 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         if (!this.isPersonalized() && !this.session.screen) {
             console.log('setting up the personalization screen');
             this.session.screen = this.session.getPersonalizationScreen();
+        } else if (!this.session.screen) {
+            this.session.screen = { type: 'Blank', template: 'Blank' };
         }
 
         let template: AbstractTemplate = null;
