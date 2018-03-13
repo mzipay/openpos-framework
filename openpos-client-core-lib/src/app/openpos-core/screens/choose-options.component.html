@@ -1,7 +1,7 @@
-<div  fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px"> 
-    <mat-card fxFlex class="page-content-card" [ngSwitch]="currentView">
-        
-        <ng-template ngSwitchCase="ButtonList">
+<div  fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" [ngSwitch]="currentView"> 
+
+    <ng-template ngSwitchCase="ButtonList">
+        <mat-card fxFlex class="page-content-card">
             <mat-card-title *ngIf="promptText">{{promptText}}</mat-card-title>
             <mat-card-content >
                 <mat-nav-list>
@@ -13,26 +13,27 @@
                     </mat-list-item>
                 </mat-nav-list>
             </mat-card-content>
+        </mat-card>  
         </ng-template>
 
         <ng-template ngSwitchCase="ButtonGrid">
-            <mat-card-content fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutGap="30px">
-                <button fxFlex="0 0 auto" mat-raised-button color=primary style="height:150px;width:150px"
-                        *ngFor="let o of optionItems"
-                        (click)="onMakeOptionSelection(o)">
-                    <div fxLayoutAlign="center center" fxLayout="column">
-                        <app-icon fxFlex="1 0 auto" iconName="{{o.icon}}" iconClass="material-icons mat-64"></app-icon>
-                        <span fxFlex="1 0 auto" class="text-sm">{{o.displayValue}}</span>
-                    </div>
-                </button>
-            </mat-card-content>
+            <mat-card fxFlex class="page-content-card">
+                <mat-card-content fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+                    <button fxFlex="0 0 auto" mat-raised-button color=primary style="height:150px;width:150px"
+                            *ngFor="let o of optionItems"
+                            (click)="onMakeOptionSelection(o)">
+                        <div fxLayoutAlign="center center" fxLayout="column">
+                            <app-icon fxFlex="1 0 auto" iconName="{{o.icon}}" iconClass="material-icons mat-64"></app-icon>
+                            <span fxFlex="1 0 auto" class="text-sm">{{o.displayValue}}</span>
+                        </div>
+                    </button>
+                </mat-card-content>
+            </mat-card>  
         </ng-template>
 
         <ng-template ngSwitchCase="OptionForm">
-            <mat-card-content style="padding:30px">
-                <app-dynamic-form-control [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"></app-dynamic-form-control>
-            </mat-card-content>
+            <app-dynamic-form-control fxFlex [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"></app-dynamic-form-control>
         </ng-template>
 
-    </mat-card>  
+
 </div>
