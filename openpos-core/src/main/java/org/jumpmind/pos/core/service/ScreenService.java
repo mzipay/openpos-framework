@@ -125,7 +125,7 @@ public class ScreenService implements IScreenService {
             logger.error("Failed to write action to JSON", ex);
         }
         AbstractScreen lastScreen = getLastScreen(appId, nodeId);
-        if (ScreenType.Dialog.equals(lastScreen.getType())) {
+        if (lastScreen != null && ScreenType.Dialog.equals(lastScreen.getType())) {
             publishToClients(appId, nodeId, "{\"clearDialog\":true }");
         }
         IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
