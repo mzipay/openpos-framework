@@ -46,8 +46,6 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         protected router: Router) {
     }
 
-    public abstract appName(): string;
-
     ngOnInit(): void {
 
         const self = this;
@@ -63,7 +61,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         if (!this.registered && this.isPersonalized()) {
             console.log('initializing the application');
             this.session.unsubscribe();
-            this.session.subscribe(this.appName());
+            this.session.subscribe(this.router.url.substring(1));
             this.registered = true;
         }
         return this.registered;

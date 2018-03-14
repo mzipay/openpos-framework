@@ -138,11 +138,6 @@ export class PosComponent extends AbstractApp implements DoCheck {
     }
   }
 
-  // TODO should this come from the route name instead?
-  public appName(): string {
-    return 'pos';
-  }
-
   ngDoCheck(): void {
     if (typeof this.session.screen !== 'undefined') {
       this.backButton = this.session.screen.backButton;

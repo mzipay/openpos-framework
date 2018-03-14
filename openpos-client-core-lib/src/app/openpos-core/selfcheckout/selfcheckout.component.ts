@@ -27,10 +27,6 @@ export class SelfCheckoutComponent extends AbstractApp implements DoCheck {
     super(screenService, session, dialog, iconService, snackBar, overlayContainer, router);
   }
 
-  public appName(): string {
-    return 'selfcheckout';
-  }
-
   ngDoCheck(): void {
     if (typeof this.session.screen !== 'undefined') {
       this.backButton = this.session.screen.backButton;
