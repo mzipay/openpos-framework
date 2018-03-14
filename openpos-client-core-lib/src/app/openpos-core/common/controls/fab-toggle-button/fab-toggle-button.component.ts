@@ -9,16 +9,16 @@ import { MatButtonToggleChange } from '@angular/material';
 export class FabToggleButtonComponent{
 
     @Input()
-    name: string;
-
-    @Input()
     icon: string;
 
     @Input()
     value: string;
 
-    @Output()
+    @Input()
     selected: boolean;
+
+    @Output()
+    selectedChange = new EventEmitter();
 
     @Output()
     change: EventEmitter<FabToggleChange> = new EventEmitter<FabToggleChange>();
@@ -28,8 +28,14 @@ export class FabToggleButtonComponent{
   }
 
   onClick(){
-    this.selected = !this.selected;
+    this.setSelected(!this.selected);
     this.change.emit(new FabToggleChange(this, this.value));
+    
+  }
+
+  setSelected(value: boolean){
+    this.selected = value;
+    this.selectedChange.emit(this.selected);
   }
 
 }

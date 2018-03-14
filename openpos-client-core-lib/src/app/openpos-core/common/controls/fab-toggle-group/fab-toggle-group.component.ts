@@ -25,7 +25,7 @@ export class FabToggleGroupComponent implements AfterViewInit {
   onToggleChange( source: FabToggleButtonComponent, value: any){
     if( source.selected ){
       this.valueChange.emit(value);
-      this.toggleButtons.filter(button => button.name != source.name).forEach(button => button.selected = false);
+      this.toggleButtons.filter(button => button.value != source.value).forEach(button => button.setSelected(false));
     } else if (this.toggleButtons.filter(button => button.selected == true).length < 1) {
       this.valueChange.emit(null);
     }
