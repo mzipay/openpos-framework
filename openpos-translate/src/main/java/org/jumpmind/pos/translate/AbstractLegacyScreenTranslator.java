@@ -381,6 +381,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
         if (excludedLabelTags != null) {
             for (String string : excludedLabelTags) {
                 toExclude.add(string);
+                logger.info("action will not be generated for labelTag '{}' because it is excluded", string);
             }
         }
 
