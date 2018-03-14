@@ -1,0 +1,5 @@
+@import 'fab-toggle-button';
+
+@mixin component-theme-mixins($theme){
+    @include fab-toggle-button($theme);
+}

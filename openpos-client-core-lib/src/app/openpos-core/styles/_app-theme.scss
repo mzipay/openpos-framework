@@ -1,8 +1,11 @@
 @import '~@angular/material/theming';
+@import './themes/component-theme-mixins';
 
 @include mat-core();
 
 @mixin app-theme($theme) {
+
+    @include component-theme-mixins($theme);
 
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));
@@ -90,6 +93,10 @@
         background: transparent;
         box-shadow: unset;
     } 
+
+    .mat-expansion-indicator::after{
+        color:$app-primary;
+    }
 
     app-statusbar{
         .mat-toolbar{

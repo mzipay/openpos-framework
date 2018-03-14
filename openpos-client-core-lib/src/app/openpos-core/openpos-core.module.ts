@@ -82,6 +82,8 @@ import { TillCountOtherTenderComponent } from './screens/till/till-count-other-t
 import { ChangeComponent } from './screens/change/change.component';
 import { WaitComponent } from './screens/wait/wait.component';
 import { CustomerSearchResultsComponent } from './screens/customer-search-results/customer-search-results.component';
+import { FabToggleGroupComponent } from './common/controls/fab-toggle-group/fab-toggle-group.component';
+import { FabToggleButtonComponent } from './common/controls/fab-toggle-button/fab-toggle-button.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -202,7 +204,9 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     PrintPreviewComponent,
     WaitComponent,
     CustomerSearchResultsComponent,
-    MatExclusiveSelectionListDirective
+    MatExclusiveSelectionListDirective,
+    FabToggleGroupComponent,
+    FabToggleButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -225,7 +229,9 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     MatKeyboardModule,
     IconComponent,
     ScreenDirective,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FabToggleGroupComponent,
+    FabToggleButtonComponent
     ],
   providers: [
     HttpClient,
