@@ -512,7 +512,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
         screen.setLocalMenuItems(localNavButtons);
     }
 
-    protected String getPromptTextFromBeanSpec(String defaultValue) {
+    protected String getPromptTextFromBeanSpec() {
         ILegacyAssignmentSpec promptAndResponseBeanPanelSpec = legacyPOSBeanService.getLegacyAssignmentSpec(legacyScreen, PROMPT_RESPONSE_PANEL_KEY);
         ILegacyPromptAndResponseModel promptAndResponseBeanModel = legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
         String promptTextTag = promptAndResponseBeanPanelSpec.getPropertyValue("promptTextTag");            
