@@ -27,6 +27,8 @@ export class SessionService implements ILocaleService {
 
   public dialog: any;
 
+  public state: Observable<string>;
+
   public response: any;
 
   private appId: String;
@@ -34,8 +36,6 @@ export class SessionService implements ILocaleService {
   private deviceName: string;
 
   private subscribed: boolean;
-
-  public state: Observable<string>;
 
   private subscription: any;
 
@@ -45,7 +45,7 @@ export class SessionService implements ILocaleService {
 
   private screenSource = new BehaviorSubject<any>(null);
 
-  private observableScreen = this.screenSource.asObservable();
+  private dialogSource = new BehaviorSubject<any>(null);
 
   private loading: boolean;
 
@@ -63,8 +63,14 @@ export class SessionService implements ILocaleService {
   }
 
   public subscribeForScreenUpdates(callback: (screen: any) => any) {
-    this.observableScreen.subscribe(
+    this.screenSource.asObservable().subscribe(
       screen => this.zone.run(() => callback(screen))
+  );
+  }
+
+  public subscribeForDialogUpdates(callback: (dialog: any) => any) {
+    this.dialogSource.asObservable().subscribe(
+      dialog => this.zone.run(() => callback(dialog))
   );
   }
 
@@ -113,7 +119,7 @@ export class SessionService implements ILocaleService {
   public showDialog(dialogObj: any) {
     if (dialogObj.type && dialogObj.type === 'Dialog') {
       this.dialog = dialogObj;
-      this.showScreen(this.screen);
+      this.dialogSource.next(this.dialog);
     } else {
       console.log('dialogObj is not a dialog, cannot show it.');
     }
@@ -121,7 +127,7 @@ export class SessionService implements ILocaleService {
 
   public getPersonalizationScreen(): any {
     // tslint:disable-next-line:max-line-length
-    return { template: 'Blank', type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 20) , name: 'Device Setup', refreshAlways: true };
+    return { template: 'Blank', type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000) , name: 'Device Setup', refreshAlways: true };
   }
 
   public getTheme(): string {

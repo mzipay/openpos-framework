@@ -51,10 +51,11 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     ngOnInit(): void {
 
         const self = this;
-        this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreens(screen));
+        this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
+        this.session.subscribeForDialogUpdates((dialog: any): void => self.updateDialog(dialog));
 
         if (!this.registerWithServer()) {
-            this.updateTemplateAndScreens();
+            this.updateTemplateAndScreen();
         }
     }
 
@@ -91,10 +92,10 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         return this.personalized;
     }
 
-    updateTemplateAndScreens(screen?: any): void {
+    public updateDialog(dialog?: any): void {
         this.registerWithServer();
-        if (this.session.dialog) {
-            const dialogType = this.screenService.hasScreen(this.session.dialog.subType) ? this.session.dialog.subType : 'Dialog';
+        if (dialog) {
+            const dialogType = this.screenService.hasScreen(dialog.subType) ? dialog.subType : 'Dialog';
             if (!this.dialogOpening && (!this.dialogRef || this.previousDialogType !== dialogType)) {
                 if (this.dialogRef) {
                     console.log('closing dialog');
@@ -105,11 +106,15 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
                 this.dialogOpening = true;
                 setTimeout(() => this.openDialog(), 0);
             }
-        } else if (!this.session.dialog && this.dialogRef) {
+        } else if (!dialog && this.dialogRef) {
             console.log('closing dialog');
             this.dialogRef.close();
             this.dialogRef = null;
         }
+    }
+
+    updateTemplateAndScreen(screen?: any): void {
+        this.registerWithServer();
 
         if (!this.isPersonalized() && !this.session.screen) {
             console.log('setting up the personalization screen');
@@ -119,13 +124,12 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         }
 
         let template: AbstractTemplate = null;
-        if (
-            (this.session.screen &&
-                ((this.session.screen.refreshAlways)
-                    || this.session.screen.type !== this.previousScreenType
-                    || this.session.screen.name !== this.previousScreenName
-                )
-            )) {
+        if (this.session.screen &&
+            ((this.session.screen.refreshAlways)
+                || this.session.screen.type !== this.previousScreenType
+                || this.session.screen.name !== this.previousScreenName
+            )
+        ) {
 
             let templateName: string = null;
             let screenType: string = null;
@@ -143,9 +147,9 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             this.previousScreenType = screenType;
             this.previousScreenName = screenName;
             this.overlayContainer.getContainerElement().classList.add(this.getTheme());
-            screen = template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
+            const installedScreen = template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
             template.show(this.session, this);
-            screen.show(this.session.screen, this);
+            installedScreen.show(this.session.screen, this);
         }
 
     }
@@ -161,6 +165,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         }
 
         this.dialogRef = this.dialog.open(dialogComponent, { disableClose: true });
+        this.dialogRef.componentInstance.show(this.dialog, this);
         this.dialogOpening = false;
         console.log('Dialog \'' + this.previousDialogType + '\' opened');
         this.dialogRef.afterClosed().subscribe(result => {
