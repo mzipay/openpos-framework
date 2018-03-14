@@ -117,11 +117,9 @@ export class SessionService implements ILocaleService {
   }
 
   public showDialog(dialogObj: any) {
-    if (dialogObj.type && dialogObj.type === 'Dialog') {
+    if (dialogObj && dialogObj.type && dialogObj.type === 'Dialog') {
       this.dialog = dialogObj;
       this.dialogSource.next(this.dialog);
-    } else {
-      console.log('dialogObj is not a dialog, cannot show it.');
     }
   }
 
@@ -342,8 +340,7 @@ export class SessionService implements ILocaleService {
   public onNextMessage = (message: Message) => {
     const json = JSON.parse(message.body);
     if (json.clearDialog) {
-      this.dialog = null;
-      this.showScreen(this.screen);
+      this.showDialog(null);
     } else if (json.type === 'Dialog') {
       this.showDialog(json);
     } else if (json.type === 'Loading') {
@@ -361,9 +358,8 @@ export class SessionService implements ILocaleService {
       return;
     } else {
       this.response = null;
-      this.screen = json;
-      this.dialog = null;
-      this.showScreen(this.screen);
+      this.showScreen(json);
+      this.showDialog(null);
     }
     this.cancelLoading();
   }
