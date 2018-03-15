@@ -381,6 +381,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
         if (excludedLabelTags != null) {
             for (String string : excludedLabelTags) {
                 toExclude.add(string);
+                logger.info("action will not be generated for labelTag '{}' because it is excluded", string);
             }
         }
 
@@ -512,4 +513,12 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
         screen.setLocalMenuItems(localNavButtons);
     }
 
+    protected String getPromptTextFromBeanSpec() {
+        ILegacyAssignmentSpec promptAndResponseBeanPanelSpec = legacyPOSBeanService.getLegacyAssignmentSpec(legacyScreen, PROMPT_RESPONSE_PANEL_KEY);
+        ILegacyPromptAndResponseModel promptAndResponseBeanModel = legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
+        String promptTextTag = promptAndResponseBeanPanelSpec.getPropertyValue("promptTextTag");            
+        String resourceText = this.legacyPOSBeanService.getLegacyUIUtilities().retrieveText(promptAndResponseBeanPanelSpec.getBeanSpecName(), legacyScreen.getResourceBundleFilename(), promptTextTag);
+        String formattedPromptText = toFormattedString(resourceText, promptAndResponseBeanModel != null ? promptAndResponseBeanModel.getArguments() : null);
+        return formattedPromptText;
+    }
 }

@@ -32,6 +32,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TenderingComponent } from '../screens/tendering.component';
 import { SellComponent } from '../templates/sell/sell.component';
+import { SelfCheckoutWithBarComponent } from '../templates/selfcheckout-with-bar/selfcheckout-with-bar.component';
 import { TillSummaryComponent } from '../screens/till/till-summary.component';
 import { TillCountComponent } from '../screens/till/till-count.component';
 import { ChangeComponent } from '../screens/change/change.component';
@@ -82,6 +83,7 @@ export class ScreenService {
     // Templates
     this.screens.set('Blank', BlankComponent);
     this.screens.set('Sell', SellComponent);
+    this.screens.set('SelfCheckout', SelfCheckoutWithBarComponent);
   }
 
   public addScreen(name: string, type: Type<IScreen>): void {

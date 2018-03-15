@@ -88,6 +88,7 @@ import { FabToggleButtonComponent } from './common/controls/fab-toggle-button/fa
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
 import { SellComponent } from './templates/sell/sell.component';
+import { SelfCheckoutWithBarComponent } from './templates/selfcheckout-with-bar/selfcheckout-with-bar.component';
 
 import { MaterialModule } from './material.module';
 import { Plugin } from 'webpack';
@@ -131,6 +132,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     TenderingComponent,
     WarrantyCoverageComponent,
     BlankComponent,
+    SelfCheckoutWithBarComponent,
     SellComponent,
     OptionsComponent,
     TillSummaryComponent,
@@ -180,6 +182,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     WarrantyCoverageComponent,
     ScanSomethingComponent,
     BlankComponent,
+    SelfCheckoutWithBarComponent,
     SellComponent,
     TemplateDirective,
     OptionsComponent,

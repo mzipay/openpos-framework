@@ -1,3 +1,4 @@
+import { SelfCheckoutWithBarComponent } from './templates/selfcheckout-with-bar/selfcheckout-with-bar.component';
 export { PosComponent } from './pos';
 export { SelfCheckoutComponent } from './selfcheckout';
 export { CustomerDisplayComponent } from './customerdisplay';
