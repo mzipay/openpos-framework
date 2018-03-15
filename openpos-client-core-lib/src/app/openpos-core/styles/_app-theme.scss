@@ -46,7 +46,7 @@
         color: white;
     }
 
-    mat-card.lighter{
+    .lighter{
         background-color: mat-color($background, app-bar);
     }
 
@@ -104,4 +104,12 @@
             color: whitesmoke;
         }
     }
+
+    app-self-checkout-statusbar{
+        .mat-toolbar{
+            background-color: white;
+            color: $app-primary;
+        }
+    }
+    
 }
