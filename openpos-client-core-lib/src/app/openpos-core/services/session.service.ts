@@ -341,7 +341,7 @@ export class SessionService implements ILocaleService {
     const json = JSON.parse(message.body);
     if (json.clearDialog) {
       this.showDialog(null);
-    } else if (json.type === 'Dialog') {
+    } else if (json.type === 'Dialog' || json.template === 'Dialog') {
       this.showDialog(json);
     } else if (json.type === 'Loading') {
       this.loading = true;
