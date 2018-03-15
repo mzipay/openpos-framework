@@ -4,8 +4,8 @@ import { SessionService } from '../../services/session.service';
 
 @Component({
     selector: 'app-sell',
-    templateUrl: './sell.component.html',
-    styleUrls: ['./sell.component.scss']
+    templateUrl: './dialog.template.component.html',
+    styleUrls: ['./dialog.template.component.scss']
 })
 export class DialogTemplateComponent extends AbstractTemplate implements OnInit {
 

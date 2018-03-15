@@ -153,10 +153,25 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     }
 
     openDialog() {
-        const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(this.session.dialog.subType);
+        let dialogComponentFactory: ComponentFactory<IScreen>;
         let dialogComponent = DialogComponent;
         this.previousDialogType = 'Dialog';
-        // if we resolved a specific screen type use that otherwise just use the default DialogComponent
+
+        if (this.session.dialog && this.session.dialog.template === 'Dialog') {
+            const viewContainerRef = this.host.viewContainerRef;
+            // Resolve the Dialog template
+            const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen('Dialog');
+            const template = viewContainerRef.createComponent(templateComponentFactory).instance as AbstractTemplate;
+            // Install the screen into the template
+            const screenType = this.session.dialog.type;
+            const dialog = template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
+            dialogComponent = templateComponentFactory.componentType;
+            this.previousDialogType = screenType;
+        } else {
+            dialogComponentFactory = this.screenService.resolveScreen(this.session.dialog.subType);
+        }
+
+        // if we resolved a specific screen type use that otherwise just use the dialog template or the default DialogComponent
         if (dialogComponentFactory) {
             dialogComponent = dialogComponentFactory.componentType;
             this.previousDialogType = this.session.dialog.subType;

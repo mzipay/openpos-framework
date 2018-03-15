@@ -117,7 +117,7 @@ export class SessionService implements ILocaleService {
   }
 
   public showDialog(dialogObj: any) {
-    if (dialogObj && dialogObj.type && dialogObj.type === 'Dialog') {
+    if (dialogObj && dialogObj.type && (dialogObj.type === 'Dialog' || dialogObj.template === 'Dialog')) {
       this.dialog = dialogObj;
       this.dialogSource.next(this.dialog);
     }
