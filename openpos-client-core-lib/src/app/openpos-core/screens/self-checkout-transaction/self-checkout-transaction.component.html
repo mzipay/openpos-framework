@@ -1,42 +1,44 @@
-<div fxFlexFill style="background-color:white; padding:16px" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
-	<app-scan-something #scanInput class="mat-elevation-z3" *ngIf="session.screen.showScan" fxFlex="0 0 auto" (enter)="onScanInputEnter($event)"
-	 placeholderText="Scan Something"></app-scan-something>
+<div fxFlexFill style="padding:16px" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
 
 	<div fxFlexFill fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="16px">
-		<mat-card fxFlex="1 1 80%" class="page-content-card lighter scrollable-content-card mat-elevation-z8" fxLayout="column" fxLayoutAlign="start">
-			<mat-card-content>
+		<div fxFlex="1 1 80%" style="overflow-y: scroll">
 
-				<app-checkout-list-item *ngFor="let i of items" [item]=i [session]=session [isReadOnly]=this.session.screen.readOnly></app-checkout-list-item>
+			<app-checkout-list-item *ngFor="let i of items" [item]=i [session]=session [isReadOnly]=this.session.screen.readOnly></app-checkout-list-item>
 
-				<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
-					<mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
-					<span class="text-md">Scan something to get started.</span>
-				</div>
-			</mat-card-content>
-		</mat-card>
+			<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
+				<mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
+				<span class="text-md">Scan something to get started.</span>
+			</div>
+		</div>
 
-		<mat-card fxFlex="1 1 20%" class="page-content-card dark scrollable-content-card mat-elevation-z8" fxLayout="column" fxLayoutAlign="start">
-			<mat-card-content>
-				<div fxFlexFill fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="8px">
-					<mat-card fxFlex *ngFor="let total of session.screen.totals" class="page-content-card text-center mat-elevation-z1">
-						<mat-card-title class="primary text-sm">
-							{{total.name}}
-						</mat-card-title>
-						<mat-card-content>
-							<p class="primary text-lg">
-								<span class="super-currency-symbol">$</span>{{total.amount}}</p>
-						</mat-card-content>
-					</mat-card>
-					<mat-card fxFlex class="page-content-card text-center mat-elevation-z1">
-						<mat-card-title class="primary text-sm"> Total </mat-card-title>
-						<mat-card-content>
-							<p class="primary text-lg">
-								<span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</p>
-						</mat-card-content>
-					</mat-card>
-					<button mat-button *ngIf="!session.screen.readOnly" fxFlex="1 1 auto" color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!session.screen.transaction.active || items.length == 0"
+		<mat-card fxFlex="1 1 20%" class="page-content-card dark scrollable-content-card mat-elevation-z0">
+			<mat-card-content fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="0px">
+				<mat-card *ngFor="let total of session.screen.totals" class="page-content-card text-center mat-elevation-z0">
+					<mat-card-title class="primary text-sm">
+						{{total.name}}
+					</mat-card-title>
+					<mat-card-content>
+						<p class="primary text-lg">
+							<span class="super-currency-symbol">$</span>{{total.amount}}</p>
+					</mat-card-content>
+				</mat-card>
+				<mat-card class="page-content-card text-center mat-elevation-z0">
+					<mat-card-title class="primary text-sm"> Total </mat-card-title>
+					<mat-card-content>
+						<p class="primary text-lg">
+							<span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</p>
+					</mat-card-content>
+				</mat-card>
+
+				<div>
+					<button mat-button *ngIf="!session.screen.readOnly" color="primary-inverse" style="width: 100%; margin-top: 16px;" [disabled]="!session.screen.transaction.active || items.length == 0"
 					 (click)="session.onAction('Checkout')" class="text-lg"> Checkout
 						<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
+					</button>
+					<button mat-button *ngIf="!session.screen.readOnly" color="primary" style="border-style:solid; border-width: 1px; border-color:black; width: 100%; margin-top: 16px;"
+					 [disabled]="!session.screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')" class="text-lg">
+					Cancel
+						<mat-icon class="material-icons mat-48">close</mat-icon>
 					</button>
 				</div>
 			</mat-card-content>
