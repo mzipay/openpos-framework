@@ -1,5 +1,5 @@
 <div [ngClass]="getTheme()">
-    <div class="main-background">
+    <div [ngClass]="session.screen.name==='Home'?'main-background':'lighter'">
         <app-statusbar></app-statusbar>
 
         <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu"><mat-icon>code</mat-icon></button>
