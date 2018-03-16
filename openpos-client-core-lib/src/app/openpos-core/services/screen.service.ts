@@ -42,6 +42,7 @@ import { PrintPreviewComponent } from '../screens/print-preview.component';
 import { WaitComponent } from '../screens/wait/wait.component';
 import { CustomerSearchResultsComponent } from '../screens/customer-search-results/customer-search-results.component';
 import { DialogTemplateComponent } from '../templates/dialog/dialog.template.component';
+import { SelfCheckoutLoyaltyComponent } from '../selfcheckout/selfcheckout-loyalty/selfcheckout-loyalty.component';
 
 @Injectable()
 export class ScreenService {
@@ -80,6 +81,7 @@ export class ScreenService {
     this.screens.set('PrintPreview', PrintPreviewComponent);
     this.screens.set('Wait', WaitComponent);
     this.screens.set('CustomerSearch', CustomerSearchResultsComponent);
+    this.screens.set('SelfCheckoutLoyalty', SelfCheckoutLoyaltyComponent);
 
     // Templates
     this.screens.set('Blank', BlankComponent);

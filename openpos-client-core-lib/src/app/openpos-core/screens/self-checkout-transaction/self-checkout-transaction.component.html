@@ -11,33 +11,34 @@
 			</div>
 		</div>
 
-		<mat-card fxFlex="1 1 20%" class="page-content-card dark scrollable-content-card mat-elevation-z0">
-			<mat-card-content fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="0px">
+		<mat-card fxFlex="1 1 20%" class="page-content-card grey-background scrollable-content-card mat-elevation-z0">
+			<mat-card-content fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="end stretch" fxLayoutGap="0px">
 				<mat-card *ngFor="let total of session.screen.totals" class="page-content-card text-center mat-elevation-z0">
 					<mat-card-title class="primary text-sm">
 						{{total.name}}
 					</mat-card-title>
 					<mat-card-content>
-						<p class="primary text-lg">
+						<p class="primary text-md">
 							<span class="super-currency-symbol">$</span>{{total.amount}}</p>
 					</mat-card-content>
 				</mat-card>
 				<mat-card class="page-content-card text-center mat-elevation-z0">
-					<mat-card-title class="primary text-sm"> Total </mat-card-title>
+					<mat-card-title class="primary text-md"> Total </mat-card-title>
 					<mat-card-content>
 						<p class="primary text-lg">
 							<span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</p>
 					</mat-card-content>
 				</mat-card>
 
+				<div fxFlex="1 1 auto"></div>
+
 				<div>
-					<button mat-button *ngIf="!session.screen.readOnly" color="primary-inverse" style="width: 100%; margin-top: 16px;" [disabled]="!session.screen.transaction.active || items.length == 0"
-					 (click)="session.onAction('Checkout')" class="text-lg"> Checkout
+					<button mat-button *ngIf="!session.screen.readOnly" [disabled]="!session.screen.transaction.active || items.length == 0"
+					 (click)="session.onAction('Checkout')" class="green-button text-lg">Checkout
 						<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 					</button>
-					<button mat-button *ngIf="!session.screen.readOnly" color="primary" style="border-style:solid; border-width: 1px; border-color:black; width: 100%; margin-top: 16px;"
-					 [disabled]="!session.screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')" class="text-lg">
-					Cancel
+					<button mat-button *ngIf="!session.screen.readOnly" color="primary" (click)="doMenuItemAction(session.screen.backButton)"
+					 class="border-button text-lg">Cancel
 						<mat-icon class="material-icons mat-48">close</mat-icon>
 					</button>
 				</div>

@@ -1,7 +1,7 @@
-<mat-toolbar *ngIf="session.screen" class="mat-elevation-z8">
+<mat-toolbar *ngIf="session.screen" class="mat-elevation-z8 large-statusbar" ngClass.xs="small-statusbar">
 	<div fxFill fxLayout="row" fxLayoutAlign="space-between ">
 		<div fxLayout="row" fxLayoutAlign=" center">
-			<ng-container *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled; else checkForLogoutButton">
+			<ng-container *ngIf="session.screen && session.screen.type !='SelfCheckoutTransaction' && session.screen.backButton && session.screen.backButton.enabled; else checkForLogoutButton">
 				<button mat-button style="margin-left:-20px" (click)="doMenuItemAction(session.screen.backButton)">
 					<mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
 				</button>
@@ -17,11 +17,11 @@
 
 		</div>
 
-		<div class="home-screen-logo"></div>
+		<div class="self-checkout-logo"></div>
 
 		<div fxLayout="row" fxLayoutAlign=" center">
 			<button mat-button [matMenuTriggerFor]="itemMenu">
-				<mat-icon class="material-icons mat-48">help outline</mat-icon>
+				<mat-icon class="material-icons mat-48">search_id_code</mat-icon>
 			</button>
 			<mat-menu #itemMenu="matMenu">
 				<button mat-menu-item (click)="onAdminLogin()">

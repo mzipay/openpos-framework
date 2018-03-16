@@ -7,7 +7,9 @@ import { SessionService } from '../services/session.service';
 
 export abstract class AbstractTemplate implements IScreen {
 
-  @ViewChild(ScreenDirective) host: ScreenDirective;
+    @ViewChild(ScreenDirective) host: ScreenDirective;
+
+    screen: any;
 
     constructor() {
     }
@@ -22,5 +24,6 @@ export abstract class AbstractTemplate implements IScreen {
         // Should this be calling show method of IScreen object currently being returned from installScreen?
         // I think so.
 
+        this.screen = screen;
     }
 }
