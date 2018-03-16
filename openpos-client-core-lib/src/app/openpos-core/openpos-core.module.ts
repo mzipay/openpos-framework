@@ -263,7 +263,8 @@ export class OpenposCoreModule {
       ngModule: OpenposCoreModule,
       providers: [
         PluginService,
-        ScreenService
+        ScreenService,
+        IconService
       ]
     };
   }
