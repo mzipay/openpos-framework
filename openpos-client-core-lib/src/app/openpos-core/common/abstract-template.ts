@@ -19,7 +19,8 @@ export abstract class AbstractTemplate implements IScreen {
     }
 
     show(screen: any, app: AbstractApp) {
-
+        // Should this be calling show method of IScreen object currently being returned from installScreen?
+        // I think so.
 
     }
 }

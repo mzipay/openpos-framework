@@ -1,3 +1,4 @@
+import { DialogTemplateComponent } from './../templates/dialog/dialog.template.component';
 import { IconService } from './../services/icon.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ScreenDirective } from '../common/screen.directive';
@@ -157,14 +158,20 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         let dialogComponent = DialogComponent;
         this.previousDialogType = 'Dialog';
 
+        let dialogTemplateChild: IScreen = null;
+
         if (this.session.dialog && this.session.dialog.template === 'Dialog') {
             const viewContainerRef = this.host.viewContainerRef;
             // Resolve the Dialog template
+            // Confused on what to do here: I think I really want to create the dialog template as a child of the
+            // mat dialog 'view' and not as a child of the host viewContainerRef.  So how do I get the viewContainerRef
+            // of the mat dialog??
             const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen('Dialog');
-            const template = viewContainerRef.createComponent(templateComponentFactory).instance as AbstractTemplate;
+            const dialogTemplate = viewContainerRef.createComponent(templateComponentFactory).instance as DialogTemplateComponent;
             // Install the screen into the template
             const screenType = this.session.dialog.type;
-            const dialog = template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
+            dialogTemplateChild = dialogTemplate.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
+            dialogTemplate.dialogChild = dialogTemplateChild;
             dialogComponent = templateComponentFactory.componentType;
             this.previousDialogType = screenType;
         } else {
@@ -178,7 +185,11 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         }
 
         this.dialogRef = this.dialog.open(dialogComponent, { disableClose: true });
+
         this.dialogRef.componentInstance.show(this.dialog, this);
+        if (dialogTemplateChild) {
+            dialogTemplateChild.show(this.session.dialog, this);
+        }
         this.dialogOpening = false;
         console.log('Dialog \'' + this.previousDialogType + '\' opened');
         this.dialogRef.afterClosed().subscribe(result => {
