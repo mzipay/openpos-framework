@@ -16,7 +16,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confirmation-dialog.component';
 import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 declare var cordova: any;
 
@@ -65,13 +65,13 @@ export class SessionService implements ILocaleService {
   public subscribeForScreenUpdates(callback: (screen: any) => any) {
     this.screenSource.asObservable().subscribe(
       screen => this.zone.run(() => callback(screen))
-  );
+    );
   }
 
   public subscribeForDialogUpdates(callback: (dialog: any) => any) {
     this.dialogSource.asObservable().subscribe(
       dialog => this.zone.run(() => callback(dialog))
-  );
+    );
   }
 
   public isRunningInBrowser(): boolean {
@@ -117,18 +117,18 @@ export class SessionService implements ILocaleService {
   }
 
   public showDialog(dialogObj: any) {
-    if (! dialogObj) {
+    if (!dialogObj) {
       this.dialog = null;
-    } else  if (dialogObj.type && dialogObj.type === 'Dialog') {
+    } else if (dialogObj.type && dialogObj.type === 'Dialog') {
       this.dialog = dialogObj;
       this.response = null;
-      this.dialogSource.next(this.dialog);
     }
+    this.dialogSource.next(this.dialog);
   }
 
   public getPersonalizationScreen(): any {
     // tslint:disable-next-line:max-line-length
-    return { template: 'Blank', type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000) , name: 'Device Setup', refreshAlways: true };
+    return { template: 'Blank', type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000), name: 'Device Setup', refreshAlways: true };
   }
 
   public getTheme(): string {
@@ -318,7 +318,7 @@ export class SessionService implements ILocaleService {
       this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
     } else {
       sendToServer();
-      this.dialog = null;
+      this.showDialog(null);
       this.queueLoading();
     }
   }
