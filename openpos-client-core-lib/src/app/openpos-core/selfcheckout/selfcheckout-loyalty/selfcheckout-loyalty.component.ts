@@ -68,4 +68,5 @@ export interface IOptionItem {
     enabled: boolean;
     selected: boolean;
     form: IForm;
+    icon: string;
 }
