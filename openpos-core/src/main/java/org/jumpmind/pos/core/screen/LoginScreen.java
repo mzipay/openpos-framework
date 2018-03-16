@@ -11,8 +11,6 @@ public class LoginScreen extends DynamicFormScreen {
     private MenuItem changePasswordAction;
     private MenuItem forgotPasswordAction;
 
-    private String subType;
-
     public LoginScreen() {
         setType(ScreenType.Login);
 
@@ -46,14 +44,6 @@ public class LoginScreen extends DynamicFormScreen {
 
     public void setForgotPasswordAction(MenuItem forgotPasswordAction) {
         this.forgotPasswordAction = forgotPasswordAction;
-    }
-
-    public String getSubType() {
-        return subType;
-    }
-
-    public void setSubType(String subType) {
-        this.subType = subType;
     }
 
 }
