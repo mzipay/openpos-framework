@@ -16,6 +16,7 @@ import { PaymentStatusComponent } from '../screens/payment-status.component';
 import { FormComponent } from '../screens/form.component';
 import { DynamicFormComponent } from '../screens/dynamic-form/dynamic-form.component';
 import { HomeComponent } from '../screens/home.component';
+import { SelfCheckoutHomeComponent } from '../screens/self-checkout-home/self-checkout-home.component';
 import { ItemListComponent } from '../screens/item-list.component';
 import { ChooseOptionsComponent } from '../screens/choose-options.component';
 import { PromptWithOptionsComponent } from '../screens/prompt-with-options.component';
@@ -58,6 +59,7 @@ export class ScreenService {
     this.screens.set('DynamicForm', DynamicFormComponent);
     this.screens.set('Login', LoginComponent);
     this.screens.set('Home', HomeComponent);
+    this.screens.set('SelfCheckoutHome', SelfCheckoutHomeComponent);
     this.screens.set('ItemList', ItemListComponent);
     this.screens.set('PaymentStatus', PaymentStatusComponent);
     this.screens.set('Prompt', PromptComponent);

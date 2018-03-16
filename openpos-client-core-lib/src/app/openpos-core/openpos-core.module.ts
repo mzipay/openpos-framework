@@ -65,6 +65,7 @@ import { PromptWithInfoComponent } from './screens/prompt-with-info.component';
 import { DialogComponent } from './screens/dialog.component';
 import { FormComponent } from './screens/form.component';
 import { HomeComponent } from './screens/home.component';
+import { SelfCheckoutHomeComponent } from './screens/self-checkout-home/self-checkout-home.component';
 import { StatusBarComponent } from './screens/statusbar.component';
 import { SelfCheckoutStatusBarComponent } from './screens/self-checkout-statusbar/self-checkout-statusbar.component';
 import { PaymentStatusComponent } from './screens/payment-status.component';
@@ -117,6 +118,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     EmbeddedWebPageComponent,
     FormComponent,
     HomeComponent,
+    SelfCheckoutHomeComponent,
     ItemListComponent,
     LoginComponent,
     PaymentStatusComponent,
@@ -174,6 +176,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     LoaderComponent,
     FormComponent,
     HomeComponent,
+    SelfCheckoutHomeComponent,
     StatusBarComponent,
     SelfCheckoutStatusBarComponent,
     EmbeddedWebPageComponent,
