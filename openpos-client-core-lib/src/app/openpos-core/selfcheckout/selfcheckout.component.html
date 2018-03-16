@@ -1,7 +1,5 @@
 <div [ngClass]="getTheme()">
-    <div [ngClass]="session.screen.name==='Home'?'main-background':'lighter'">
-        <div class="content" ngClass.xs="content-xs">
-           <ng-template appTemplate></ng-template>
-        </div>
+    <div [ngClass]="session.screen.type==='Home'?'main-background':'lighter'">
+        <ng-template appTemplate></ng-template>
     </div>
 </div>
