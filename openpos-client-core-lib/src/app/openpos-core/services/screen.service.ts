@@ -41,7 +41,6 @@ import { SessionService } from '../services/session.service';
 import { PrintPreviewComponent } from '../screens/print-preview.component';
 import { WaitComponent } from '../screens/wait/wait.component';
 import { CustomerSearchResultsComponent } from '../screens/customer-search-results/customer-search-results.component';
-import { DialogTemplateComponent } from '../templates/dialog/dialog.template.component';
 import { SelfCheckoutLoyaltyComponent } from '../selfcheckout/selfcheckout-loyalty/selfcheckout-loyalty.component';
 
 @Injectable()
@@ -87,7 +86,6 @@ export class ScreenService {
     this.screens.set('Blank', BlankComponent);
     this.screens.set('Sell', SellComponent);
     this.screens.set('SelfCheckout', SelfCheckoutWithBarComponent);
-    this.screens.set('Dialog', DialogTemplateComponent);
   }
 
   public addScreen(name: string, type: Type<IScreen>): void {

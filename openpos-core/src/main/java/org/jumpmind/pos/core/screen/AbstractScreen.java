@@ -13,7 +13,6 @@ public abstract class AbstractScreen implements Serializable {
 
     public static String TEMPLATE_SELL = "Sell";
     public static String TEMPLATE_BLANK = "Blank";
-    public static String TEMPLATE_DIALOG = "Dialog";
 
     /**
      * Put properties in this map if they are optional. When not set, they don't
@@ -28,6 +27,7 @@ public abstract class AbstractScreen implements Serializable {
     private String template = "Blank";
     private int sequenceNumber;
     private String locale;
+    private String subType;
 
     public AbstractScreen() {
     }
@@ -37,6 +37,22 @@ public abstract class AbstractScreen implements Serializable {
         this.type = type;
     }
 
+    /**
+     * Allows this screen content to be displayed in a Dialog on the client side.
+     */
+    public void asDialog() {
+        this.setType(ScreenType.Dialog);
+        this.setSubType(this.getType());
+    }
+    
+    public String getSubType() {
+        return subType;
+    }
+
+    public void setSubType(String subType) {
+        this.subType = subType;
+    }
+    
     @JsonAnyGetter
     public Map<String, Object> any() {
         return this.optionalProperties;

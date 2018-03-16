@@ -90,7 +90,6 @@ import { SelfCheckoutLoyaltyComponent } from './selfcheckout/selfcheckout-loyalt
 import { BlankComponent } from './templates/blank/blank.component';
 import { SellComponent } from './templates/sell/sell.component';
 import { SelfCheckoutWithBarComponent } from './templates/selfcheckout-with-bar/selfcheckout-with-bar.component';
-import { DialogTemplateComponent } from './templates/dialog/dialog.template.component';
 
 import { MaterialModule } from './material.module';
 import { Plugin } from 'webpack';
@@ -136,7 +135,6 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     BlankComponent,
     SelfCheckoutWithBarComponent,
     SellComponent,
-    DialogTemplateComponent,
     OptionsComponent,
     TillSummaryComponent,
     TillCountComponent,
@@ -188,7 +186,6 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     BlankComponent,
     SelfCheckoutWithBarComponent,
     SellComponent,
-    DialogTemplateComponent,
     TemplateDirective,
     OptionsComponent,
     TillSummaryComponent,
