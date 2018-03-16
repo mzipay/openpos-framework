@@ -22,7 +22,9 @@ export class DynamicFormControlComponent implements OnInit {
   @Input() screenForm: IForm;
 
   @Input() submitAction: string;
-  
+
+  @Input() submitButtonText: string = 'Next';
+
   form: FormGroup;
 
   constructor( public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) { }

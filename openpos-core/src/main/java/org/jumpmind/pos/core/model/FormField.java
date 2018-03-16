@@ -19,6 +19,7 @@ public class FormField implements IFormElement, IField, Serializable {
     private boolean required = true;
     private boolean disabled = false;
     private String valueChangedAction;
+    private String iconName;
 
     private Integer minLength;
     private Integer maxLength;
@@ -63,7 +64,17 @@ public class FormField implements IFormElement, IField, Serializable {
         this.inputType = inputType;
         this.required = required;
         this.value = value;
-    }    
+    }   
+    
+    public FormField(String fieldId, String label, FieldElementType elementType, FieldInputType inputType, boolean required, String value, String iconName) {
+        this.fieldId = fieldId;
+        this.label = label;
+        this.elementType = elementType;
+        this.inputType = inputType;
+        this.required = required;
+        this.value = value;
+        this.iconName = iconName;
+    } 
     
     public FieldInputType getInputType() {
         return inputType;
@@ -249,6 +260,14 @@ public class FormField implements IFormElement, IField, Serializable {
     public FormField valueChangedAction(String valueChangedAction) {
         this.setValueChangedAction(valueChangedAction);
         return this;
+    }
+    
+    public String getIconName() {
+    		return iconName;
+    }
+    
+    public void setIconName(String iconName) {
+    		this.iconName = iconName;
     }
    
 }

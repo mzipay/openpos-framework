@@ -16,5 +16,6 @@ export interface IFormElement {
     pattern: string;
     minLength: number;
     maxLength: number;
+    iconName: string;
 }
 
