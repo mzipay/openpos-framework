@@ -34,4 +34,5 @@ public interface ScreenType {
     public static final String PrintPreview = "PrintPreview";
     public static final String Wait = "Wait";
     public static final String CustomerSearch = "CustomerSearch";
+    public static final String SelfCheckoutLoyalty = "SelfCheckoutLoyalty";
 }

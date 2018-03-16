@@ -84,6 +84,7 @@ import { WaitComponent } from './screens/wait/wait.component';
 import { CustomerSearchResultsComponent } from './screens/customer-search-results/customer-search-results.component';
 import { FabToggleGroupComponent } from './common/controls/fab-toggle-group/fab-toggle-group.component';
 import { FabToggleButtonComponent } from './common/controls/fab-toggle-button/fab-toggle-button.component';
+import { SelfCheckoutLoyaltyComponent } from './selfcheckout/selfcheckout-loyalty/selfcheckout-loyalty.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -146,7 +147,8 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     CheckoutListItemComponent,
     PrintPreviewComponent,
     WaitComponent,
-    CustomerSearchResultsComponent
+    CustomerSearchResultsComponent,
+    SelfCheckoutLoyaltyComponent
   ],
   declarations: [
     DialogComponent,
@@ -209,7 +211,8 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     CustomerSearchResultsComponent,
     MatExclusiveSelectionListDirective,
     FabToggleGroupComponent,
-    FabToggleButtonComponent
+    FabToggleButtonComponent,
+    SelfCheckoutLoyaltyComponent
   ],
   imports: [
     BrowserModule,
