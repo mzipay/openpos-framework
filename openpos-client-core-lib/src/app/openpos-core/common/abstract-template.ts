@@ -5,9 +5,11 @@ import { ScreenDirective } from './screen.directive';
 import { AbstractApp } from '../common/abstract-app';
 import { SessionService } from '../services/session.service';
 
-export abstract class AbstractTemplate implements IScreen {
+export abstract class AbstractTemplate<T> implements IScreen {
 
-  @ViewChild(ScreenDirective) host: ScreenDirective;
+    @ViewChild(ScreenDirective) host: ScreenDirective;
+
+    screen: T;
 
     constructor() {
     }
@@ -19,7 +21,6 @@ export abstract class AbstractTemplate implements IScreen {
     }
 
     show(screen: any, app: AbstractApp) {
-
-
+        this.screen = screen;
     }
 }
