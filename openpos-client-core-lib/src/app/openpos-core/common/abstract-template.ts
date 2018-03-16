@@ -5,11 +5,11 @@ import { ScreenDirective } from './screen.directive';
 import { AbstractApp } from '../common/abstract-app';
 import { SessionService } from '../services/session.service';
 
-export abstract class AbstractTemplate<T> implements IScreen {
+export abstract class AbstractTemplate implements IScreen {
 
     @ViewChild(ScreenDirective) host: ScreenDirective;
 
-    screen: T;
+    screen: any;
 
     constructor() {
     }
