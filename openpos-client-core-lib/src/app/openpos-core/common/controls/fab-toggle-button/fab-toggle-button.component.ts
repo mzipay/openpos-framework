@@ -17,6 +17,9 @@ export class FabToggleButtonComponent{
     @Input()
     selected: boolean;
 
+    @Input()
+    disabled: boolean;
+
     @Output()
     selectedChange = new EventEmitter();
 
