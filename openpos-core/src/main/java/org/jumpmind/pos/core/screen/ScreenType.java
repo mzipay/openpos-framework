@@ -9,6 +9,7 @@ public interface ScreenType {
     public static final String Form = "Form";
     public static final String DynamicForm = "DynamicForm";
     public static final String Home = "Home";
+    public static final String SelfCheckoutHome = "SelfCheckoutHome";
     public static final String ItemList = "ItemList";
     public static final String Loading = "Loading";
     public static final String Login = "Login";
@@ -34,4 +35,5 @@ public interface ScreenType {
     public static final String PrintPreview = "PrintPreview";
     public static final String Wait = "Wait";
     public static final String CustomerSearch = "CustomerSearch";
+    public static final String SelfCheckoutLoyalty = "SelfCheckoutLoyalty";
 }

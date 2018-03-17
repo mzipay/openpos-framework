@@ -31,8 +31,8 @@ abstract public class AbstractScreenTranslator<T extends SellScreen> {
     
     protected Class<T> screenClass;
 
-    public AbstractScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
-        this.legacyScreen = headlessScreen;
+    public AbstractScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
+        this.legacyScreen = legacyScreen;
         this.screenClass = screenClass;
         newScreen();
     }

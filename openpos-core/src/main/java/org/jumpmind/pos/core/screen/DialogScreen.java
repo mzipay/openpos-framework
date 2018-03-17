@@ -7,8 +7,6 @@ public class DialogScreen extends SellScreen {
 
     private static final long serialVersionUID = 1L;
     
-    String subType;
-    
     List<MenuItem> buttons = new ArrayList<>();
     
     String title;
@@ -19,14 +17,6 @@ public class DialogScreen extends SellScreen {
         setType(ScreenType.Dialog);
     }
     
-    public void setSubType(String subType) {
-        this.subType = subType;
-    }
-    
-    public String getSubType() {
-        return subType;
-    }
-
     public List<MenuItem> getButtons() {
         return buttons;
     }

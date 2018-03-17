@@ -6,7 +6,9 @@ import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-self-checkout-statusbar',
-  templateUrl: './self-checkout-statusbar.component.html'
+  templateUrl: './self-checkout-statusbar.component.html',
+  styleUrls: ['./self-checkout-statusbar.component.scss']
+
 })
 export class SelfCheckoutStatusBarComponent {
 

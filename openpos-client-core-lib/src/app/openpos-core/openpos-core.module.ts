@@ -65,6 +65,7 @@ import { PromptWithInfoComponent } from './screens/prompt-with-info.component';
 import { DialogComponent } from './screens/dialog.component';
 import { FormComponent } from './screens/form.component';
 import { HomeComponent } from './screens/home.component';
+import { SelfCheckoutHomeComponent } from './screens/self-checkout-home/self-checkout-home.component';
 import { StatusBarComponent } from './screens/statusbar.component';
 import { SelfCheckoutStatusBarComponent } from './screens/self-checkout-statusbar/self-checkout-statusbar.component';
 import { PaymentStatusComponent } from './screens/payment-status.component';
@@ -84,6 +85,7 @@ import { WaitComponent } from './screens/wait/wait.component';
 import { CustomerSearchResultsComponent } from './screens/customer-search-results/customer-search-results.component';
 import { FabToggleGroupComponent } from './common/controls/fab-toggle-group/fab-toggle-group.component';
 import { FabToggleButtonComponent } from './common/controls/fab-toggle-button/fab-toggle-button.component';
+import { SelfCheckoutLoyaltyComponent } from './selfcheckout/selfcheckout-loyalty/selfcheckout-loyalty.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -116,6 +118,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     EmbeddedWebPageComponent,
     FormComponent,
     HomeComponent,
+    SelfCheckoutHomeComponent,
     ItemListComponent,
     LoginComponent,
     PaymentStatusComponent,
@@ -146,7 +149,8 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     CheckoutListItemComponent,
     PrintPreviewComponent,
     WaitComponent,
-    CustomerSearchResultsComponent
+    CustomerSearchResultsComponent,
+    SelfCheckoutLoyaltyComponent
   ],
   declarations: [
     DialogComponent,
@@ -172,6 +176,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     LoaderComponent,
     FormComponent,
     HomeComponent,
+    SelfCheckoutHomeComponent,
     StatusBarComponent,
     SelfCheckoutStatusBarComponent,
     EmbeddedWebPageComponent,
@@ -209,7 +214,8 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     CustomerSearchResultsComponent,
     MatExclusiveSelectionListDirective,
     FabToggleGroupComponent,
-    FabToggleButtonComponent
+    FabToggleButtonComponent,
+    SelfCheckoutLoyaltyComponent
   ],
   imports: [
     BrowserModule,
@@ -263,7 +269,8 @@ export class OpenposCoreModule {
       ngModule: OpenposCoreModule,
       providers: [
         PluginService,
-        ScreenService
+        ScreenService,
+        IconService
       ]
     };
   }

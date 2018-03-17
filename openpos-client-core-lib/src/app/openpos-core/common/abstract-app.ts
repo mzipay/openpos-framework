@@ -146,8 +146,8 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             this.previousScreenName = screenName;
             this.overlayContainer.getContainerElement().classList.add(this.getTheme());
             const installedScreen = template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
-            template.show(this.session, this);
-            installedScreen.show(this.session.screen, this);
+            template.show(screen, this);
+            installedScreen.show(screen, this);
         }
 
     }

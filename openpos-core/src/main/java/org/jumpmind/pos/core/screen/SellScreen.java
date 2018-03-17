@@ -104,6 +104,15 @@ public class SellScreen extends AbstractScreen {
         put("scanActionName", scanActionName);
     }
 
+    /**
+     * Indicator for marking the screen as "Customer Facing", meaning that the screen is intended for the customer to 
+     * complete.
+     * @param customerFacing <code>true</code> if the customer should use the screen.
+     */
+    public void setCustomerFacing(Boolean customerFacing) {
+        put("customerFacing", customerFacing);
+    }
+    
     public void setShowScan(boolean showScan) {
         this.showScan = showScan;
     }

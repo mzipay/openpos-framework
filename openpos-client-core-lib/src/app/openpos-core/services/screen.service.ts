@@ -16,6 +16,7 @@ import { PaymentStatusComponent } from '../screens/payment-status.component';
 import { FormComponent } from '../screens/form.component';
 import { DynamicFormComponent } from '../screens/dynamic-form/dynamic-form.component';
 import { HomeComponent } from '../screens/home.component';
+import { SelfCheckoutHomeComponent } from '../screens/self-checkout-home/self-checkout-home.component';
 import { ItemListComponent } from '../screens/item-list.component';
 import { ChooseOptionsComponent } from '../screens/choose-options.component';
 import { PromptWithOptionsComponent } from '../screens/prompt-with-options.component';
@@ -41,6 +42,7 @@ import { SessionService } from '../services/session.service';
 import { PrintPreviewComponent } from '../screens/print-preview.component';
 import { WaitComponent } from '../screens/wait/wait.component';
 import { CustomerSearchResultsComponent } from '../screens/customer-search-results/customer-search-results.component';
+import { SelfCheckoutLoyaltyComponent } from '../selfcheckout/selfcheckout-loyalty/selfcheckout-loyalty.component';
 
 @Injectable()
 export class ScreenService {
@@ -57,6 +59,7 @@ export class ScreenService {
     this.screens.set('DynamicForm', DynamicFormComponent);
     this.screens.set('Login', LoginComponent);
     this.screens.set('Home', HomeComponent);
+    this.screens.set('SelfCheckoutHome', SelfCheckoutHomeComponent);
     this.screens.set('ItemList', ItemListComponent);
     this.screens.set('PaymentStatus', PaymentStatusComponent);
     this.screens.set('Prompt', PromptComponent);
@@ -79,6 +82,7 @@ export class ScreenService {
     this.screens.set('PrintPreview', PrintPreviewComponent);
     this.screens.set('Wait', WaitComponent);
     this.screens.set('CustomerSearch', CustomerSearchResultsComponent);
+    this.screens.set('SelfCheckoutLoyalty', SelfCheckoutLoyaltyComponent);
 
     // Templates
     this.screens.set('Blank', BlankComponent);

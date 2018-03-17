@@ -1,27 +1,9 @@
-<mat-toolbar *ngIf="session.screen" class="mat-elevation-z8">
+<mat-toolbar *ngIf="session.screen" class="mat-elevation-z8 large-statusbar" ngClass.xs="small-statusbar">
 	<div fxFill fxLayout="row" fxLayoutAlign="space-between ">
 		<div fxLayout="row" fxLayoutAlign=" center">
-			<ng-container *ngIf="session.screen && session.screen.backButton && session.screen.backButton.enabled; else checkForLogoutButton">
-				<button mat-button style="margin-left:-20px" (click)="doMenuItemAction(session.screen.backButton)">
-					<mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
-				</button>
-			</ng-container>
 
-			<ng-template #checkForLogoutButton>
-				<ng-container *ngIf="session.screen && session.screen.logoutButton && session.screen.type != 'Home'">
-					<button mat-button style="margin-left:-20px" (click)="doMenuItemAction(session.screen.logoutButton)">
-						<mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
-					</button>
-				</ng-container>
-			</ng-template>
-
-		</div>
-
-		<div class="home-screen-logo"></div>
-
-		<div fxLayout="row" fxLayoutAlign=" center">
-			<button mat-button [matMenuTriggerFor]="itemMenu">
-				<mat-icon class="material-icons mat-48">help outline</mat-icon>
+			<button *ngIf="session.screen.showHelp" mat-button [matMenuTriggerFor]="itemMenu">
+				<mat-icon class="material-icons mat-48">help</mat-icon>
 			</button>
 			<mat-menu #itemMenu="matMenu">
 				<button mat-menu-item (click)="onAdminLogin()">
@@ -29,6 +11,21 @@
 					<span>Admin Login</span>
 				</button>
 			</mat-menu>
+
+			<ng-container *ngIf="session.screen && session.screen.type !='SelfCheckoutTransaction' && session.screen.backButton && session.screen.backButton.enabled; else checkForLogoutButton">
+				<button mat-button style="margin-left:-20px" (click)="doMenuItemAction(session.screen.backButton)">
+					<app-icon iconName="local_exit"></app-icon>
+				</button>
+			</ng-container>
+
+		</div>
+
+		<div class="self-checkout-logo"></div>
+
+		<div fxLayout="row" fxLayoutAlign=" center">
+			<button *ngIf="session.screen.showSkip" mat-button (click)="this.session.onAction('Skip')">
+				<h2>SKIP</h2>
+			</button>
 		</div>
 
 	</div>
