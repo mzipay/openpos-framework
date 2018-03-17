@@ -6,8 +6,6 @@
 			<app-checkout-list-item *ngFor="let i of items" [item]=i [session]=session [isReadOnly]=this.session.screen.readOnly></app-checkout-list-item>
 
 			<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
-				<mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
-				<span class="text-md">Scan something to get started.</span>
 			</div>
 		</div>
 
