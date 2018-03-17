@@ -11,8 +11,9 @@ import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
+import org.jumpmind.pos.core.screen.AbstractScreen;
+import org.jumpmind.pos.core.screen.NoOpScreen;
 import org.jumpmind.pos.core.screen.SellScreen;
-import org.jumpmind.pos.core.screen.ScreenType;
 import org.jumpmind.pos.translate.InteractionMacro.AbortMacro;
 import org.jumpmind.pos.translate.InteractionMacro.DoOnActiveScreen;
 import org.jumpmind.pos.translate.InteractionMacro.DoOnScreen;
@@ -40,6 +41,8 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     private Map<String, ITranslationManagerSubscriber> subscriberByAppId = new HashMap<>();
 
     private POSSessionInfo posSessionInfo = new POSSessionInfo();
+    
+    private boolean lastScreenWasNoOp = false;
 
     public TranslationManagerServer(ILegacyScreenInterceptor interceptor, ILegacyScreenTranslatorFactory screenTranslatorFactory,
             Class<?> subsystemClass) {
@@ -79,16 +82,22 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     @Override
     public void showLegacyScreen(ILegacyScreen screen) {
         if (screen != null && screen.isStatusUpdate()) {
-            // We don't currently handle updates to the status panel only
-            logger.info("Suppressing SHOW_STATUS_ONLY update for screen {}, sending NoOp", screen.getSpecName());
-            // Some scenarios (such as 'Print Store Address' on Item Inventory
-            // screen) end the flow with simply a status update. This
-            // would leave clients waiting for a response. Send a no-op response
-            // so that clients know the server is still alive.
-            show(new SellScreen(ScreenType.NoOp));
+            if (!this.lastScreenWasNoOp) {
+                // We don't currently handle updates to the status panel only
+                logger.info("Suppressing SHOW_STATUS_ONLY update for screen {}, sending NoOp", screen.getSpecName());
+                /*
+                 * Some scenarios (such as 'Print Store Address' on Item
+                 * Inventory screen) end the flow with simply a status update.
+                 * This would leave clients waiting for a response. Send a no-op
+                 * response so that clients know the server is still alive.
+                 */
+                show(new NoOpScreen());
+                this.lastScreenWasNoOp = true;
+            }
         } else {
             if (executeActiveMacro(screen)) {
                 translateAndShow(screen);
+                lastScreenWasNoOp = false;
             }
         }
     }
@@ -166,7 +175,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
         }
     }
 
-    protected void show(SellScreen screen) {
+    protected void show(AbstractScreen screen) {
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
             if (screen != null && subscriber.isInTranslateState()) {
                 subscriber.showScreen(screen);
