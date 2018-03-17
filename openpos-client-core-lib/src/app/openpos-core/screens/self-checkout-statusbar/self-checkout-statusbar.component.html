@@ -3,7 +3,7 @@
 		<div fxLayout="row" fxLayoutAlign=" center">
 
 			<button *ngIf="session.screen.showHelp" mat-button [matMenuTriggerFor]="itemMenu">
-				<mat-icon class="material-icons mat-48">help outline</mat-icon>
+				<mat-icon class="material-icons mat-48">help</mat-icon>
 			</button>
 			<mat-menu #itemMenu="matMenu">
 				<button mat-menu-item (click)="onAdminLogin()">
@@ -18,13 +18,6 @@
 				</button>
 			</ng-container>
 
-			<ng-template #checkForLogoutButton>
-				<ng-container *ngIf="session.screen && session.screen.logoutButton && session.screen.type != 'Home'">
-					<button mat-button style="margin-left:-20px" (click)="doMenuItemAction(session.screen.logoutButton)">
-						<app-icon iconName="local_exit"></app-icon>
-					</button>
-				</ng-container>
-			</ng-template>
 		</div>
 
 		<div class="self-checkout-logo"></div>

@@ -35,11 +35,10 @@
 				<div>
 					<button mat-button *ngIf="!session.screen.readOnly" [disabled]="!session.screen.transaction.active || items.length == 0"
 					 (click)="session.onAction('Checkout')" class="green-button text-lg">Checkout
-						<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 					</button>
-					<button mat-button *ngIf="!session.screen.readOnly" color="primary" (click)="doMenuItemAction(session.screen.backButton)"
-					 class="border-button text-lg">Cancel
-						<mat-icon class="material-icons mat-48">close</mat-icon>
+					<button mat-button *ngIf="!session.screen.readOnly" color="primary" (click)="doMenuItemAction(session.screen.logoutButton)"
+					 class="border-button text-lg"><span>
+					  <app-icon [iconName]="session.screen.logoutButton.icon" class="top"></app-icon>{{session.screen.logoutButton.title}}</span>
 					</button>
 				</div>
 			</mat-card-content>
