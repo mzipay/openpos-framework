@@ -1,4 +1,4 @@
-import { Component, ContentChildren, QueryList, AfterViewInit, Input, Output, EventEmitter, Directive } from '@angular/core';
+import { Component, ContentChildren, QueryList, AfterViewInit, Input, Output, EventEmitter, Directive, DoCheck } from '@angular/core';
 import { FabToggleChange, FabToggleButtonComponent } from '../fab-toggle-button/fab-toggle-button.component';
 
 @Component({
@@ -6,7 +6,7 @@ import { FabToggleChange, FabToggleButtonComponent } from '../fab-toggle-button/
   templateUrl: './fab-toggle-group.component.html',
   styleUrls: ['./fab-toggle-group.component.scss']
 })
-export class FabToggleGroupComponent implements AfterViewInit {
+export class FabToggleGroupComponent implements AfterViewInit, DoCheck {
 
 
   @Input() value;
@@ -19,7 +19,20 @@ export class FabToggleGroupComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.toggleButtons.forEach( button => button.change.subscribe(event => this.onToggleChange(event.source, event.value)))
+    this.toggleButtons.forEach( button => {
+      button.change.subscribe(event => this.onToggleChange(event.source, event.value));
+    });
+  }
+
+  ngDoCheck(): void {
+    if(!this.toggleButtons) return;
+    this.toggleButtons.forEach( button => {
+      if( button.value == this.value ){
+        button.selected = true;
+      }else{
+        button.selected = false;
+      }
+    });
   }
 
   onToggleChange( source: FabToggleButtonComponent, value: any){

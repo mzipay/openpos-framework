@@ -84,6 +84,13 @@
         background-color:mat-color($background, app-bar); 
     }
 
+    .mat-button-toggle{
+        background-color: white;
+        border: solid mat-color(map-get($theme, primary)) 1px;
+        color: mat-color(map-get($theme, primary));
+        text-align: center;
+    }
+
     .mat-button-toggle-checked{
         background: $app-accent;
         color: white;
