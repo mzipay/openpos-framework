@@ -16,8 +16,7 @@ public class SellScreen extends AbstractScreen {
     private String prompt;
     private Workstation workstation;
     private String operatorName;
-    private String icon;    
-    private boolean showScan = false;
+    private String icon;
     
     private List<MenuItem> localMenuItems = new ArrayList<>();
     
@@ -114,11 +113,7 @@ public class SellScreen extends AbstractScreen {
     }
     
     public void setShowScan(boolean showScan) {
-        this.showScan = showScan;
-    }
-    
-    public boolean isShowScan() {
-        return showScan;
+        put("showScan", showScan);
     }
     
     public void setPrompt(String prompt) {
