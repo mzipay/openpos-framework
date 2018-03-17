@@ -1,3 +1,4 @@
+
 // Angular Includes
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -86,6 +87,7 @@ import { CustomerSearchResultsComponent } from './screens/customer-search-result
 import { FabToggleGroupComponent } from './common/controls/fab-toggle-group/fab-toggle-group.component';
 import { FabToggleButtonComponent } from './common/controls/fab-toggle-button/fab-toggle-button.component';
 import { SelfCheckoutLoyaltyComponent } from './selfcheckout/selfcheckout-loyalty/selfcheckout-loyalty.component';
+import { FullPageImageComponent } from './screens/full-page-image/full-page-image.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -150,7 +152,8 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     PrintPreviewComponent,
     WaitComponent,
     CustomerSearchResultsComponent,
-    SelfCheckoutLoyaltyComponent
+    SelfCheckoutLoyaltyComponent,
+    FullPageImageComponent
   ],
   declarations: [
     DialogComponent,
@@ -215,7 +218,8 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     MatExclusiveSelectionListDirective,
     FabToggleGroupComponent,
     FabToggleButtonComponent,
-    SelfCheckoutLoyaltyComponent
+    SelfCheckoutLoyaltyComponent,
+    FullPageImageComponent
   ],
   imports: [
     BrowserModule,

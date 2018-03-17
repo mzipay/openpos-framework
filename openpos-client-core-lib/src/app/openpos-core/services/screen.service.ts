@@ -1,3 +1,4 @@
+import { FullPageImageComponent } from './../screens/full-page-image/full-page-image.component';
 import { TillCountOtherTenderComponent } from './../screens/till/till-count-other-tender.component';
 import { OptionsComponent } from './../screens/options/options.component';
 import { BlankComponent } from '../templates/blank/blank.component';
@@ -83,6 +84,7 @@ export class ScreenService {
     this.screens.set('Wait', WaitComponent);
     this.screens.set('CustomerSearch', CustomerSearchResultsComponent);
     this.screens.set('SelfCheckoutLoyalty', SelfCheckoutLoyaltyComponent);
+    this.screens.set('FullPageImage', FullPageImageComponent);
 
     // Templates
     this.screens.set('Blank', BlankComponent);

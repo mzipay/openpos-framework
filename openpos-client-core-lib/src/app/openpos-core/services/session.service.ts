@@ -11,7 +11,7 @@ import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Scan } from '../common/scan';
-import { FunctionActionIntercepter, ActionIntercepter } from '../common/actionIntercepter';
+import { FunctionActionIntercepter, ActionIntercepter } from '../common/action-intercepter';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confirmation-dialog.component';
 import { IUrlMenuItem } from '../common/iurlmenuitem';

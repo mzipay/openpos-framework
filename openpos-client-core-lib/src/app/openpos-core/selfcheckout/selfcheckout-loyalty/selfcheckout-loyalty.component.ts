@@ -2,7 +2,7 @@ import { IScreen } from '../../common/iscreen';
 import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import {SessionService} from '../../services/session.service';
 import { AbstractApp } from '../../common/abstract-app';
-import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../common/actionIntercepter';
+import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../common/action-intercepter';
 import { IForm } from '../../screens/form.component';
 
 

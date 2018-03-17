@@ -3,7 +3,7 @@ import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import {SessionService} from '../services/session.service';
 import { AbstractApp } from '../common/abstract-app';
 import { IForm } from './form.component';
-import { ActionIntercepter, ActionIntercepterBehaviorType } from '../common/actionIntercepter';
+import { ActionIntercepter, ActionIntercepterBehaviorType } from '../common/action-intercepter';
 
 
 @Component({
