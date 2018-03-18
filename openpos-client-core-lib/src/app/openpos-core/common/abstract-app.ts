@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ScreenDirective } from '../common/screen.directive';
 import { IScreen } from '../common/iscreen';
 import { ScreenService } from './../services/screen.service';
-import { DialogComponent } from '../screens/dialog.component';
+import { DialogComponent } from '../screens/dialog/dialog.component';
 import { IMenuItem } from '../common/imenuitem';
 import { Component, OnInit, OnDestroy, DoCheck, sequence, AfterViewInit, NgZone } from '@angular/core';
 import { Type, ViewChild, ComponentFactory } from '@angular/core';

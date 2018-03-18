@@ -1,10 +1,10 @@
-import { IMenuItem } from '../common/imenuitem';
+import { IMenuItem } from '../../common/imenuitem';
 import { Component } from '@angular/core';
-import { SessionService } from '../services/session.service';
-import { FocusDirective } from '../common/focus.directive';
+import { SessionService } from '../../services/session.service';
+import { FocusDirective } from '../../common/focus.directive';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { IScreen } from '../common/iscreen';
-import { AbstractApp } from '../index';
+import { IScreen } from '../../common/iscreen';
+import { AbstractApp } from '../../index';
 
 @Component({
   selector: 'app-dialog',

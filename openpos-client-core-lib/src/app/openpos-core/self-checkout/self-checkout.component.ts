@@ -12,9 +12,9 @@ import { Router } from '@angular/router';
 
 
 @Component({
-  selector: 'app-selfcheckout',
-  templateUrl: './selfcheckout.component.html',
-  styleUrls: ['./selfcheckout.component.scss']
+  selector: 'app-self-checkout',
+  templateUrl: './self-checkout.component.html',
+  styleUrls: ['./self-checkout.component.scss']
 })
 export class SelfCheckoutComponent extends AbstractApp implements DoCheck {
 

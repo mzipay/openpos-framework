@@ -1,7 +1,7 @@
 import { FormGroup, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SessionService } from '../services/session.service';
-import { ChooseOptionsComponent } from './choose-options.component';
+import { ChooseOptionsComponent } from './choose-options/choose-options.component';
 import { PromptInputComponent } from '../common/controls/prompt-input.component';
 
 import { PhoneUSValidatorDirective } from '../common/validators/phone.directive';

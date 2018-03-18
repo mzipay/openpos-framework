@@ -10,16 +10,16 @@ import { BasicItemSearchComponent } from '../screens/basic-item-search.component
 import { EmbeddedWebPageComponent } from '../screens/embedded-web-page.component';
 import { PromptComponent } from '../screens/prompt.component';
 import { TransactionComponent } from '../screens/transaction/transaction.component';
-import { SelfCheckoutTransactionComponent } from '../screens/self-checkout-transaction/self-checkout-transaction.component';
+import { SelfCheckoutTransactionComponent } from '../self-checkout/self-checkout-transaction/self-checkout-transaction.component';
 import { SellItemDetailComponent } from '../screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from '../screens/signature-capture.component';
 import { PaymentStatusComponent } from '../screens/payment-status.component';
 import { FormComponent } from '../screens/form.component';
 import { DynamicFormComponent } from '../screens/dynamic-form/dynamic-form.component';
 import { HomeComponent } from '../screens/home.component';
-import { SelfCheckoutHomeComponent } from '../screens/self-checkout-home/self-checkout-home.component';
+import { SelfCheckoutHomeComponent } from '../self-checkout/self-checkout-home/self-checkout-home.component';
 import { ItemListComponent } from '../screens/item-list.component';
-import { ChooseOptionsComponent } from '../screens/choose-options.component';
+import { ChooseOptionsComponent } from '../screens/choose-options/choose-options.component';
 import { PromptWithOptionsComponent } from '../screens/prompt-with-options.component';
 import { PromptWithInfoComponent } from '../screens/prompt-with-info.component';
 import { StaticTableComponent } from '../screens/static-table.component';
@@ -43,7 +43,7 @@ import { SessionService } from '../services/session.service';
 import { PrintPreviewComponent } from '../screens/print-preview.component';
 import { WaitComponent } from '../screens/wait/wait.component';
 import { CustomerSearchResultsComponent } from '../screens/customer-search-results/customer-search-results.component';
-import { SelfCheckoutLoyaltyComponent } from '../selfcheckout/selfcheckout-loyalty/selfcheckout-loyalty.component';
+import { SelfCheckoutLoyaltyComponent } from '../self-checkout/self-checkout-loyalty/self-checkout-loyalty.component';
 
 @Injectable()
 export class ScreenService {

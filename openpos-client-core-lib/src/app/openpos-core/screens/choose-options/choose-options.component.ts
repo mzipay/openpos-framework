@@ -2,16 +2,15 @@ import { IScreen } from '../../common/iscreen';
 import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import {SessionService} from '../../services/session.service';
 import { AbstractApp } from '../../common/abstract-app';
+import { IForm } from './../form.component';
 import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../common/action-intercepter';
-import { IForm } from '../../screens/form.component';
 
 
 @Component({
-  selector: 'app-selfcheckout-loyalty',
-  templateUrl: './selfcheckout-loyalty.component.html',
-  styleUrls: ['./selfcheckout-loyalty.component.scss']
+  selector: 'app-choose-options',
+  templateUrl: './choose-options.component.html'
 })
-export class SelfCheckoutLoyaltyComponent implements IScreen, OnInit, DoCheck, OnDestroy {
+export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck, OnDestroy {
 
   static readonly UNDO = 'Undo';
   public currentView: string;
@@ -36,19 +35,19 @@ export class SelfCheckoutLoyaltyComponent implements IScreen, OnInit, DoCheck, O
       this.optionItems = this.session.screen.options;
       this.lastSequenceNum = this.session.screen.sequenceNumber;
       this.currentView = this.session.screen.displayStyle;
-      this.promptText = this.session.screen.prompt;
+      this.promptText = this.session.screen.promptText;
     }
   }
 
   ngOnDestroy() {
-    this.session.unregisterActionIntercepter(SelfCheckoutLoyaltyComponent.UNDO);
+    this.session.unregisterActionIntercepter(ChooseOptionsComponent.UNDO);
   }
 
   onMakeOptionSelection( option: IOptionItem): void {
     if ( option.form.formElements.length > 0 ) {
       this.selectedOption = option;
       this.currentView = 'OptionForm';
-      this.session.registerActionIntercepter(SelfCheckoutLoyaltyComponent.UNDO,
+      this.session.registerActionIntercepter(ChooseOptionsComponent.UNDO,
         new ActionIntercepter((payload) => { this.onBackButtonPressed(); }, ActionIntercepterBehaviorType.block));
     } else {
       this.session.onAction( option.value );
@@ -57,7 +56,7 @@ export class SelfCheckoutLoyaltyComponent implements IScreen, OnInit, DoCheck, O
 
   onBackButtonPressed(): void {
     this.currentView = this.session.screen.displayStyle;
-    this.session.unregisterActionIntercepter(SelfCheckoutLoyaltyComponent.UNDO);
+    this.session.unregisterActionIntercepter(ChooseOptionsComponent.UNDO);
   }
 
 }
@@ -68,5 +67,4 @@ export interface IOptionItem {
     enabled: boolean;
     selected: boolean;
     form: IForm;
-    icon: string;
 }
