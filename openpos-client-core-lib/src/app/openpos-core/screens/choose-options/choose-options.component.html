@@ -31,7 +31,7 @@
     </ng-template>
 
     <ng-template ngSwitchCase="OptionForm">
-        <app-dynamic-form-control fxFlex [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"></app-dynamic-form-control>
+        <app-dynamic-form-control fxFlex [screen]="session.screen" [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"></app-dynamic-form-control>
     </ng-template>
 
 

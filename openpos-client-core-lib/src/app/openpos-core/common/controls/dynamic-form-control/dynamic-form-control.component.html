@@ -1,5 +1,6 @@
 <form fxFlex="1 1 auto" (ngSubmit)="submitForm()" [formGroup]="form" novalidate [markDirtyOnSubmit]="form" fxLayout="column" >
-        <mat-card fxFlex="1 1 auto" class="scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
+    <mat-card-title *ngIf="screen.prompt && screen.template === 'Blank'" [ngClass]="{'warn':screen.customerFacing}">{{screen.prompt}}</mat-card-title>    
+    <mat-card fxFlex="1 1 auto" class="scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
                 <mat-card-content fxFlex="1 1 auto"  fxLayout="column" >
                 <app-dynamic-form-field *ngFor="let field of screenForm.formElements" [formGroup]="form" [formField]="field" (onFieldChanged)="onFieldChanged($event)"></app-dynamic-form-field>
                 <mat-error>

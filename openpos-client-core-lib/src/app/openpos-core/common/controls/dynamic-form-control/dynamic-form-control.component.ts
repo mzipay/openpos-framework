@@ -25,13 +25,15 @@ export class DynamicFormControlComponent implements OnInit {
 
   @Input() submitButtonText: string = 'Next';
 
+  @Input() screen: any;
+
   form: FormGroup;
 
   constructor( public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) { }
 
   ngOnInit() {
 
-    this.session.screen.alternateSubmitActions.forEach(action => {
+    this.screen.alternateSubmitActions.forEach(action => {
 
       this.session.registerActionPayload( action, () => {
         this.buildFormPayload();
