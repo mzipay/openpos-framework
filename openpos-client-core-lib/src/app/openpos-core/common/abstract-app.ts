@@ -163,7 +163,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         }
 
         this.dialogRef = this.dialog.open(dialogComponent, { disableClose: true });
-        this.dialogRef.componentInstance.show(this.dialog, this);
+        this.dialogRef.componentInstance.show(this.session.dialog, this);
         this.dialogOpening = false;
         console.log('Dialog \'' + this.previousDialogType + '\' opened');
         this.dialogRef.afterClosed().subscribe(result => {
