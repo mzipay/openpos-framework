@@ -13,6 +13,7 @@ public abstract class AbstractScreen implements Serializable {
 
     public static String TEMPLATE_SELL = "Sell";
     public static String TEMPLATE_BLANK = "Blank";
+    public static String TEMPLATE_SELF_CHECOUT = "SelfCheckout";
 
     /**
      * Put properties in this map if they are optional. When not set, they don't

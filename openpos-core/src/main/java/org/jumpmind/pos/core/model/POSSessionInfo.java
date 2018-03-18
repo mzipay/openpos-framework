@@ -1,9 +1,10 @@
 package org.jumpmind.pos.core.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.jumpmind.pos.util.TypedMap;
 import org.jumpmind.pos.util.TypedMap.TypedMapKey;
 
 public class POSSessionInfo {
@@ -17,7 +18,7 @@ public class POSSessionInfo {
     private boolean trainingMode = false;
     private boolean adminMode = false;
     
-    private TypedMap attributes = new TypedMap();
+    private Map<String, Object> attributes = new HashMap<>();
 
     public POSSessionInfo() {
         operatorLoginId = "";
@@ -75,15 +76,26 @@ public class POSSessionInfo {
     }
 
     public <T> void put(TypedMapKey<T> key, T value) {
+        this.attributes.put(key.toString(), value);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <T> T get(TypedMapKey<T> key) {
+        return (T)this.attributes.get(key.toString());
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <T> T remove(TypedMapKey<T> key) {
+        return (T)this.attributes.remove(key.toString());
+    }
+    
+    public void put(String key, Object value) {
         this.attributes.put(key, value);
     }
     
-    public <T> T get(TypedMapKey<T> key) {
-        return this.attributes.get(key);
-    }
-    
-    public <T> T remove(TypedMapKey<T> key) {
-        return this.attributes.remove(key);
+    public boolean is(String key) {
+        Object value = this.attributes.get(key);
+        return value != null && value.equals(Boolean.TRUE);
     }
     
     public void setTransactionId(String transactionId) {
