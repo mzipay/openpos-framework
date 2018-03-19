@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, Optional } from '@angular/core';
 import { DeviceService } from '../../../services/device.service';
 import { SessionService } from '../../../services/session.service';
 import { MatDialogRef } from '@angular/material';
@@ -12,7 +12,7 @@ export class ScanSomethingComponent implements OnInit {
 
   public barcode: string;
 
-  constructor(private session: SessionService, public devices: DeviceService, public dialogRef: MatDialogRef<ScanSomethingComponent>) { }
+  constructor(private session: SessionService, public devices: DeviceService, @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>) { }
 
   ngOnInit() {
   }
