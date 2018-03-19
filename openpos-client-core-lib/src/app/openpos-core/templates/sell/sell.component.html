@@ -1,7 +1,6 @@
 <div fxFlexFill  style="padding:16px;overflow-y:auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-        <app-scan-something fxFlex="1 1 auto" class="mat-elevation-z3" *ngIf="session.screen.showScan"
-        (enter)="onScanInputEnter($event)" placeholderText="Scan/Enter Something"></app-scan-something>
+        <app-scan-something fxFlex="1 1 auto" class="mat-elevation-z3" *ngIf="session.screen.showScan"></app-scan-something>
         <div *ngIf="session.screen.type === 'Transaction'" fxHide.xs fxFlex="0 1 auto" class="text-center" >{{time|date:'MM/dd/yyyy'}}<br>{{time|date:'shortTime'}}</div>
     </div>
     <mat-card fxFlex class="page-content-card min-height lighter" fxLayout="column" fxLayoutAlign="start">

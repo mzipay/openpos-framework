@@ -1,0 +1,14 @@
+<div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+    <div fxFlex="0 1 auto" fxLayoutAlign="center center" style="padding: 32px;">
+        <span class="text-md text-center" style="padding-right: 8px;">Order Total:</span> 
+        <span class="text-md text-center" style="font-weight: bold">{{balanceDue|currency:'USD':true:'1.2'}}</span>
+    </div>
+    <div fxFlex="0 1 auto" fxLayoutAlign="center center">  
+        <span class="text-md text-center" style="font-weight: bold; padding: 32px;">{{instructions}}</span>
+    </div>
+    <div fxFlex="1 1 auto">
+    <mat-card class="mat-elevation-z0" style="padding: 0px;">
+        <div class="payment-auth-icon"> </div>
+    </mat-card>
+    </div>
+</div>

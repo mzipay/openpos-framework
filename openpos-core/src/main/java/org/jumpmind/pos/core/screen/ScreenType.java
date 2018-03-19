@@ -14,6 +14,7 @@ public interface ScreenType {
     public static final String Loading = "Loading";
     public static final String Login = "Login";
     public static final String PaymentStatus = "PaymentStatus";
+    public static final String SelfCheckoutPaymentStatus = "SelfCheckoutPaymentStatus";
     public static final String Prompt = "Prompt";
     public static final String PromptWithOptions = "PromptWithOptions";
     public static final String PromptWithInfo = "PromptWithInfo";

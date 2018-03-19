@@ -14,6 +14,7 @@ import { SelfCheckoutTransactionComponent } from '../self-checkout/self-checkout
 import { SellItemDetailComponent } from '../screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from '../screens/signature-capture.component';
 import { PaymentStatusComponent } from '../screens/payment-status.component';
+import { SelfCheckoutPaymentStatusComponent } from '../self-checkout/self-checkout-payment-status/self-checkout-payment-status.component';
 import { FormComponent } from '../screens/form.component';
 import { DynamicFormComponent } from '../screens/dynamic-form/dynamic-form.component';
 import { HomeComponent } from '../screens/home.component';
@@ -63,6 +64,7 @@ export class ScreenService {
     this.screens.set('SelfCheckoutHome', SelfCheckoutHomeComponent);
     this.screens.set('ItemList', ItemListComponent);
     this.screens.set('PaymentStatus', PaymentStatusComponent);
+    this.screens.set('SelfCheckoutPaymentStatus', SelfCheckoutPaymentStatusComponent);
     this.screens.set('Prompt', PromptComponent);
     this.screens.set('PromptWithOptions', PromptWithOptionsComponent);
     this.screens.set('PromptWithInfo', PromptWithInfoComponent);
