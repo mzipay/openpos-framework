@@ -20,7 +20,9 @@ export class ScanSomethingComponent implements OnInit {
   public onEnter(): void {
     this.session.onAction('Next', this.barcode);
     this.barcode = '';
-    this.dialogRef.close();
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
   }
 
   private filterBarcodeValue(val: string): string {
