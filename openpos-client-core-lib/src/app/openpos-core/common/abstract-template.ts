@@ -11,6 +11,8 @@ export abstract class AbstractTemplate implements IScreen {
 
     screen: any;
 
+    private actionDisablers = new Map<string, actionShouldBeDisabled>();
+
     constructor() {
     }
 
@@ -26,4 +28,18 @@ export abstract class AbstractTemplate implements IScreen {
 
         this.screen = screen;
     }
+
+    registerActionDisabler( action: string, actionShouldBeDisabled ){
+        this.actionDisablers.set( action, actionShouldBeDisabled);
+    }
+
+    actionIsDisabled( action: string ) : boolean {
+        if( this.actionDisablers.has(action) ){
+            return this.actionDisablers.get(action)();
+        }
+
+        return false;
+    }
 }
+
+export type actionShouldBeDisabled = () => boolean;

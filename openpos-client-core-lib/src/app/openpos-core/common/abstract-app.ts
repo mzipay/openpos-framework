@@ -151,7 +151,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
 
         }            
         this.template.show(screen, this);
-        this.installedScreen.show(screen, this);
+        this.installedScreen.show(screen, this, this.template);
 
     }
 
