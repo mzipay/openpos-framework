@@ -5,5 +5,5 @@
     </button>
     <input #input fxFlexFill fxFlex="1 1 auto" class="bordered prompt-input-scan-something text-md" 
       (keyup.enter)="onEnter()" [(ngModel)]="barcode" (keydown)="onBarcodeKeydown($event)" (paste)="onBarcodePaste($event)"
-      placeholder="{{placeholderText}}" autofocus novalidate type="tel" pattern="[0-9]*">
+      placeholder="Scan/Enter Something" autofocus novalidate type="tel" pattern="[0-9]*">
   </div>

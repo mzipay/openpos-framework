@@ -138,6 +138,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     SaleRetrievalComponent,
     TenderingComponent,
     WarrantyCoverageComponent,
+    ScanSomethingComponent,
     BlankComponent,
     SelfCheckoutWithBarComponent,
     SellComponent,

@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { DeviceService } from '../../../services/device.service';
+import { SessionService } from '../../../services/session.service';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-scan-something',
@@ -8,19 +10,17 @@ import { DeviceService } from '../../../services/device.service';
 })
 export class ScanSomethingComponent implements OnInit {
 
-  @Output() enter = new EventEmitter<string>();
-  @Input() placeholderText: string;
-
   public barcode: string;
 
-  constructor(public devices: DeviceService) { }
+  constructor(private session: SessionService, public devices: DeviceService, public dialogRef: MatDialogRef<ScanSomethingComponent>) { }
 
   ngOnInit() {
   }
 
   public onEnter(): void {
-    this.enter.emit(this.barcode);
+    this.session.onAction('Next', this.barcode);
     this.barcode = '';
+    this.dialogRef.close();
   }
 
   private filterBarcodeValue(val: string): string {

@@ -38,10 +38,6 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck,
     this.initialized = true;
   }
 
-  onScanInputEnter(value): void {
-    this.session.onAction('Next', value);
-  }
-
   public doMenuItemAction(menuItem: IMenuItem) {
     this.session.onAction(menuItem.action, null, menuItem.confirmationMessage);
   }
