@@ -7,6 +7,7 @@ import { PromptInputComponent } from '../common/controls/prompt-input.component'
 import { PhoneUSValidatorDirective } from '../common/validators/phone.directive';
 import { OpenPosValidators } from '../common/validators/openpos-validators';
 import { ValidatorsService } from '../services/validators.service';
+import { IMenuItem } from '..';
 
 @Component({
   selector: 'app-prompt-with-options',
@@ -14,6 +15,7 @@ import { ValidatorsService } from '../services/validators.service';
 })
 export class PromptWithOptionsComponent extends ChooseOptionsComponent implements OnInit {
 
+  actionButton: IMenuItem;
   promptFormGroup: FormGroup;
 
   constructor(public session: SessionService, private validatorsService: ValidatorsService) {
@@ -33,6 +35,7 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
       group['comments'] = new FormControl(this.session.screen.comments, Validators.required);
     }
     this.promptFormGroup = new FormGroup(group);
+    this.actionButton = this.session.screen.actionButton;
   }
 
   onAction(action: string): void {
@@ -48,4 +51,9 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
       }
     }
   }
+
+  onFormSubmit(): void {
+    this.onAction(this.actionButton.action);
+  }
+
 }

@@ -7,4 +7,6 @@ public interface ILegacyTenderBeanModel {
     List<ILegacyTenderLineItem> getTenderLineItems();
 
     ILegacyCurrency getBalanceDue();
+
+    ILegacyNavigationButtonBeanModel getGlobalButtonBeanModel();
 }
