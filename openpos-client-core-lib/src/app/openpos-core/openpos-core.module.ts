@@ -70,6 +70,7 @@ import { SelfCheckoutHomeComponent } from './self-checkout/self-checkout-home/se
 import { StatusBarComponent } from './screens/statusbar.component';
 import { SelfCheckoutStatusBarComponent } from './self-checkout/self-checkout-statusbar/self-checkout-statusbar.component';
 import { PaymentStatusComponent } from './screens/payment-status.component';
+import { SelfCheckoutPaymentStatusComponent } from './self-checkout/self-checkout-payment-status/self-checkout-payment-status.component';
 import { SellItemDetailComponent } from './screens/sell-item-detail.component';
 import { SignatureCaptureComponent } from './screens/signature-capture.component';
 import { StaticTableComponent } from './screens/static-table.component';
@@ -124,6 +125,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     ItemListComponent,
     LoginComponent,
     PaymentStatusComponent,
+    SelfCheckoutPaymentStatusComponent,
     PromptComponent,
     PersonalizationComponent,
     PromptWithOptionsComponent,
@@ -173,6 +175,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     SelfCheckoutTransactionComponent,
     SellItemDetailComponent,
     PaymentStatusComponent,
+    SelfCheckoutPaymentStatusComponent,
     StaticTableComponent,
     PersonalizationComponent,
     SaleRetrievalComponent,
