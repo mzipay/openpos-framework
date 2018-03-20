@@ -7,11 +7,13 @@ public class DialogScreen extends SellScreen {
 
     private static final long serialVersionUID = 1L;
     
-    List<MenuItem> buttons = new ArrayList<>();
+    private List<MenuItem> buttons = new ArrayList<>();
     
-    String title;
+    private String title;
     
-    List<String> message = new ArrayList<>();
+    private List<String> message = new ArrayList<>();
+    
+    private DialogProperties dialogProperties;
 
     public DialogScreen() {
         setType(ScreenType.Dialog);
@@ -43,6 +45,14 @@ public class DialogScreen extends SellScreen {
     
     public List<String> getMessage() {
         return message;
+    }
+
+    protected DialogProperties getDialogProperties() {
+        return dialogProperties;
+    }
+
+    protected void setDialogProperties(DialogProperties dialogProperties) {
+        this.dialogProperties = dialogProperties;
     }
     
 }
