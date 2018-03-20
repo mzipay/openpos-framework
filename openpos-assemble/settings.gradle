@@ -1,5 +1,6 @@
 include 'openpos-core'
 include 'openpos-translate'
+include 'openpos-service'
 
 rootProject.children.each { project ->
     if (project.projectDir.getName().equals('openpos-client-core-lib')) {
