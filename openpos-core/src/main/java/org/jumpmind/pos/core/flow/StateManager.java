@@ -25,6 +25,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.model.Form;
@@ -46,6 +47,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class StateManager implements IStateManager {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
+    final Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
 
     @Autowired
     private IScreenService screenService;
@@ -87,9 +89,7 @@ public class StateManager implements IStateManager {
     }
 
     protected void transitionTo(Action action, IState newState) {
-        if (currentState != newState) {
-            logger.info("Transition from " + currentState + " to " + newState);
-        }
+        logStateTransition(currentState, newState);
         Map<String, ScopeValue> extraScope = new HashMap<>();
         extraScope.put("stateManager", new ScopeValue(this));
         injector.performInjections(newState, scope, extraScope);
@@ -228,6 +228,87 @@ public class StateManager implements IStateManager {
     public String getAppId() {
         return appId;
     }
+    
+    protected void logStateTransition(IState oldState, IState newState) {
+        if (currentState == newState) {
+            return;
+        }
+        if (loggerGraphical.isInfoEnabled()) {            
+            String oldStateName = oldState != null ? oldState.getClass().getSimpleName() : "<no state>";
+            String newStateName = newState.getClass().getSimpleName();
+            int box1Width = Math.max(oldStateName.length(), 20);
+            int box2Width = Math.max(newStateName.length(), 20);
+            
+            StringBuilder buff = new StringBuilder(256);
+            
+            int LINE_COUNT = 5;
+            for (int i = 0; i < LINE_COUNT; i++) {
+                switch (i) {
+                    case 0:
+                        buff.append(drawTop(box1Width, box2Width));
+                        break;
+                    case 1:
+                    case 3:
+                        buff.append(drawFillerLine(box1Width, box2Width));
+                        break;
+                    case 2:
+                        buff.append(drawTitleLine(box1Width, box2Width, oldStateName, newStateName));
+                        break;                    
+                    case 4:
+                        buff.append(drawBottom(box1Width, box2Width));
+                        break;                    
+                        
+                }
+            }
+            
+            logger.info("Transition from " + currentState + " to " + newState + "\n" + buff.toString());
+        } else {
+            logger.info("Transition from " + currentState + " to " + newState);
+        }
+    }
+
+    final int SPACES_BETWEWEN = 10;
+
+    protected String drawTop(int box1Width, int box2Width) {
+        StringBuilder buff = new StringBuilder();
+        
+        buff.append("┌").append(StringUtils.repeat('─', box1Width-2)).append("┐");
+        buff.append(StringUtils.repeat(' ', SPACES_BETWEWEN));
+        buff.append("┌").append(StringUtils.repeat('─', box2Width-2)).append("┐");
+        buff.append("\r\n");
+        return buff.toString();
+    }
+    
+    protected String drawFillerLine(int box1Width, int box2Width) {
+        StringBuilder buff = new StringBuilder();
+        
+        buff.append("│").append(StringUtils.repeat(' ', box1Width-2)).append("│");
+        buff.append(StringUtils.repeat(' ', SPACES_BETWEWEN));
+        buff.append("│").append(StringUtils.repeat(' ', box2Width-2)).append("│");
+        buff.append("\r\n");
+        return buff.toString();
+    }
+    
+    protected String drawTitleLine(int box1Width, int box2Width, String oldStateName, String newStateName) {
+        StringBuilder buff = new StringBuilder();
+        buff.append("│").append(StringUtils.center(oldStateName, box1Width-2)).append("│");
+        buff.append(" ───────> ");
+        buff.append("│").append(StringUtils.center(newStateName, box2Width-2)).append("│");
+        buff.append("\r\n");
+        return buff.toString();
+    }
+    
+    protected String drawBottom(int box1Width, int box2Width) {
+        StringBuilder buff = new StringBuilder();
+        
+        buff.append("└").append(StringUtils.repeat('─', box1Width-2)).append("┘");
+        buff.append(StringUtils.repeat(' ', SPACES_BETWEWEN));
+        buff.append("└").append(StringUtils.repeat('─', box2Width-2)).append("┘");
+        buff.append("\r\n");
+        return buff.toString();
+    }    
+
+
 
     // TODO
     //@Override
