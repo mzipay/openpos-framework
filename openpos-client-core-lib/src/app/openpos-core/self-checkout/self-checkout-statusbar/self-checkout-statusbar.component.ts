@@ -1,8 +1,9 @@
-import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { FileUploadService } from '../../services/file-upload.service';
 import { IMenuItem } from '../../common/imenuitem';
 import { Component } from '@angular/core';
 import { SessionService } from '../../services/session.service';
+import { ScanSomethingComponent } from '../../common/controls/scan-something/scan-something.component';
 
 @Component({
   selector: 'app-self-checkout-statusbar',
@@ -12,7 +13,7 @@ import { SessionService } from '../../services/session.service';
 })
 export class SelfCheckoutStatusBarComponent {
 
-  constructor(private session: SessionService, public snackBar: MatSnackBar) {
+  constructor(private session: SessionService, public snackBar: MatSnackBar, public dialogService: MatDialog) {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
@@ -29,6 +30,10 @@ export class SelfCheckoutStatusBarComponent {
 
   public onAdminLogin() {
     this.session.onAction('ShowLogin');
+  }
+
+  public showScan() {
+    this.dialogService.open(ScanSomethingComponent);
   }
 
 }

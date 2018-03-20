@@ -51,10 +51,6 @@ public isMenuItemEnabled(m: IMenuItem): boolean {
   return enabled;
 }
 
-onScanInputEnter( value ): void {
-    this.session.onAction('Next', value);
-}
-
 private initializeDrawerMediaSizeHandling() {
     const openMap = new Map([
       ['xs', false],

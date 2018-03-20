@@ -35,6 +35,9 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
 
     private registered: boolean;
 
+    private installedScreen: IScreen;
+    private template: AbstractTemplate;
+
     @ViewChild(TemplateDirective) host: TemplateDirective;
 
     constructor(public screenService: ScreenService,
@@ -121,7 +124,6 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             this.session.screen = { type: 'Blank', template: 'Blank' };
         }
 
-        let template: AbstractTemplate = null;
         if (this.session.screen &&
             ((this.session.screen.refreshAlways)
                 || this.session.screen.type !== this.previousScreenType
@@ -141,14 +143,15 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
-            template = viewContainerRef.createComponent(templateComponentFactory).instance as AbstractTemplate;
+            this.template = viewContainerRef.createComponent(templateComponentFactory).instance as AbstractTemplate;
             this.previousScreenType = screenType;
             this.previousScreenName = screenName;
             this.overlayContainer.getContainerElement().classList.add(this.getTheme());
-            const installedScreen = template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
-            template.show(screen, this);
-            installedScreen.show(screen, this);
-        }
+            this.installedScreen = this.template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
+
+        }            
+        this.template.show(screen, this);
+        this.installedScreen.show(screen, this, this.template);
 
     }
 

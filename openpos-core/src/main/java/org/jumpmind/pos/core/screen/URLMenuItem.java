@@ -16,6 +16,7 @@ public class URLMenuItem extends MenuItem {
         System("_system");
         
         private String value;
+        
         private URLTargetMode(String value) {
             this.value = value;
         }
@@ -42,6 +43,7 @@ public class URLMenuItem extends MenuItem {
     }
     
     private URLTargetMode targetMode = URLTargetMode.Blank;
+    
     private String url;
 
     public URLMenuItem() {
@@ -52,24 +54,15 @@ public class URLMenuItem extends MenuItem {
         setIcon(icon);
         this.url = url;
     }
+    
+    public URLMenuItem(String url, String title, String icon, URLTargetMode target) {
+        setTitle(title);
+        setIcon(icon);
+        this.url = url;
+        this.targetMode = target;
+    }
+    
 
-    public URLMenuItem(String url, String title, IIcon icon) {
-        setTitle(title);
-        setIcon(icon.getName());
-        this.url = url;
-    }
-    
-    public URLMenuItem(String url, String title, boolean enabled) {
-        setTitle(title);
-        setEnabled(enabled);
-        this.url = url;
-    }
-    
-    public URLMenuItem(String url, String title, String action, boolean enabled) {
-        super(title, action, enabled);
-        this.url = url;
-    }
-    
     public String getUrl() {
         return url;
     }
