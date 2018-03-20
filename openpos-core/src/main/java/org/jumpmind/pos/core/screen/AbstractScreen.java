@@ -42,8 +42,19 @@ public abstract class AbstractScreen implements Serializable {
      * Allows this screen content to be displayed in a Dialog on the client side.
      */
     public AbstractScreen asDialog() {
+        return this.asDialog(null);
+    }
+
+    /**
+     * Allows this screen content to be displayed in a Dialog on the client side.
+     * @param dialogProperties Additional properties that can control dialog behavior and rendering on the server side.
+     */
+    public AbstractScreen asDialog(DialogProperties dialogProperties) {
         this.setSubType(this.getType());
         this.setType(ScreenType.Dialog);
+        if (dialogProperties != null) {
+            this.put("dialogProperties", dialogProperties);
+        }
         return this;
     }
     

@@ -12,7 +12,8 @@ export class ScanSomethingComponent implements OnInit {
 
   public barcode: string;
 
-  constructor(private session: SessionService, public devices: DeviceService, @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>) { }
+  constructor(private session: SessionService, public devices: DeviceService,
+    @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>) { }
 
   ngOnInit() {
   }

@@ -34,6 +34,16 @@ public class Form implements Serializable {
         return formElement;
     }
     
+    public CheckboxField addCheckbox(String id, String label) {
+        return this.addCheckbox(id, label, false);
+    }
+    
+    public CheckboxField addCheckbox(String id, String label, boolean checked) {
+        CheckboxField field = new CheckboxField(id, label, checked);
+        formElements.add(field);
+        return field;
+    }
+    
     public ComboField addComboBox(String fieldId, String label, String... values) {
         return addComboBox(fieldId, label, values != null && values.length > 0 ? Arrays.asList(values) : new ArrayList<>());
     }

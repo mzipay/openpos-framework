@@ -11,7 +11,7 @@ import { SessionService } from '../services/session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
 import { FocusDirective } from '../common/focus.directive';
 import { Observable } from 'rxjs/Observable';
-import { MatDialog, MatDialogRef, MatIconRegistry, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MatIconRegistry, MatSnackBar, MatSnackBarRef, SimpleSnackBar, MatDialogConfig } from '@angular/material';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { TemplateDirective } from './template.directive';
 import { AbstractTemplate } from './abstract-template';
@@ -159,13 +159,24 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(this.session.dialog.subType);
         let dialogComponent = DialogComponent;
         this.previousDialogType = 'Dialog';
+        const dialogProperties: MatDialogConfig = { disableClose: true };
+
         // if we resolved a specific screen type use that otherwise just use the default DialogComponent
         if (dialogComponentFactory) {
             dialogComponent = dialogComponentFactory.componentType;
             this.previousDialogType = this.session.dialog.subType;
         }
+        if (this.session.dialog.dialogProperties) {
+            // Merge in any dialog properties provided on the screen
+            for (const key in this.session.dialog.dialogProperties) {
+                if (this.session.dialog.dialogProperties.hasOwnProperty(key)) {
+                    dialogProperties[key] = this.session.dialog.dialogProperties[key];
+                }
+            }
+            console.log(JSON.stringify(dialogProperties));
+        }
 
-        this.dialogRef = this.dialog.open(dialogComponent, { disableClose: true });
+        this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
         this.dialogRef.componentInstance.show(this.session.dialog, this);
         this.dialogOpening = false;
         console.log('Dialog \'' + this.previousDialogType + '\' opened');
