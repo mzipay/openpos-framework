@@ -6,7 +6,7 @@
         </mat-button-toggle>
     </mat-button-toggle-group> 
 
-    <ng-container *ngIf="formField.elementType==='Input' && formField.inputType != 'ToggleButton'">
+    <ng-container *ngIf="formField.elementType==='Input' && ['ToggleButton', 'Checkbox'].indexOf(formField.inputType) < 0">
         <mat-form-field style="width:100%" [ngSwitch]="formField.inputType">
             <app-icon matPrefix iconName="{{formField.iconName}}" iconClass="material-icons"></app-icon>
             <input *ngSwitchDefault matInput [formControlName]="formField.id" [formControl]="formGroup.controls[formField.id]" 
@@ -39,14 +39,17 @@
                 <app-show-errors [control]="formGroup.controls[formField.id]"></app-show-errors>
             </mat-error>
         </mat-form-field>
-			
+    </ng-container>
+    <ng-container *ngIf="formField.inputType==='Checkbox'">
+        <mat-checkbox [formControlName]="formField.id" [required]="formField.required" [value]="value"
+            [labelPosition]="formField.labelPosition" [attr.disabled]="formField.disabled" [checked]="formField.checked">{{formField.label}}</mat-checkbox>
     </ng-container>
 
     <ng-container *ngIf="formField.elementType==='Display'">
         
         <mat-form-field style="width:100%"  [ngSwitch]="formField.valueDisplayMode">
             <input *ngSwitchDefault [value]="formField.value" [name]="formField.id" [placeholder]="formField.label" matInput readonly=true>
-            <textarea *ngSwitchCase="'Multiple'" [name]="formField.id" [placeholder]="formField.label" matTextareaAutosize matInput readonly=true>{{formField.values.join()}}</textarea>
+            <textarea *ngSwitchCase="'Multiple'" [name]="formField.id" [placeholder]="formField.label" matTextareaAutosize matInput readonly=true>{{formField.values.join('')}}</textarea>
         </mat-form-field>
     </ng-container>
 
