@@ -2,20 +2,26 @@ package org.jumpmind.pos.app.state;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 
-import org.jumpmind.pos.app.model.Empl;
+import java.util.Arrays;
+
 import org.jumpmind.pos.app.model.Login;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
+import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.IPromptScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
+import org.jumpmind.pos.user.model.AuthenticationResult;
+import org.jumpmind.pos.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 abstract public class AbstractSecureState extends AbstractState implements IState {
 
     @Autowired(required=false)
     protected Login login;
+    @Autowired
+    private UserService userService;
 
     @Override
     public void arrive(Action action) {
@@ -32,7 +38,7 @@ abstract public class AbstractSecureState extends AbstractState implements IStat
     }
 
     protected void promptForLogin() {
-        if (login.getEmployee() == null) {
+        if (login.getUserName() == null) {
             PromptScreen screen = new PromptScreen();
             screen.setRefreshAlways(true);
             screen.setResponseType(IPromptScreen.TYPE_ALPHANUMERICTEXT);
@@ -65,18 +71,38 @@ abstract public class AbstractSecureState extends AbstractState implements IStat
         if (!login.isLoggedIn()) {
             if (isBlank(login.getUserName())) {
                 login.setUserName((String) action.getData());
-                login.setEmployee(new Empl(1, "Steve", "Rodgers"));
                 promptForLogin();
             } else {
-                login.setLoggedIn(true);
-                secureArrive();
+                String password = (String) action.getData();
+                AuthenticationResult result = userService.authenticate(login.getUserName(), password);
+                if (result.getResultStatus().equals("SUCCESS")) {
+                    login.setUser(result.getUser());
+                    login.setLoggedIn(true);
+                    secureArrive();                    
+                } else {
+                    login.setUserName(null);
+                    login.setLoggedIn(false);
+                    
+                    DialogScreen screen = new DialogScreen();
+                    screen.setTitle(result.getResultMessage());
+                    screen.setRefreshAlways(true);
+                    screen.setButtons(Arrays.asList(new MenuItem("Ok", "Acknowledge", true) ));
+                    screen.setName("LoginFailed");
+                    stateManager.showScreen(screen);
+                }
             }
         }
+    }
+    
+    @ActionHandler
+    public void onAcknowledge(Action action) {
+        promptForLogin();
     }
 
     @ActionHandler
     public void onBackToUserPrompt() {
-        login.setEmployee(null);
+        login.setUser(null);
+        login.setUserName(null);
         promptForLogin();
     }
 

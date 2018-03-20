@@ -1,16 +1,16 @@
-package org.jumpmind.pos.login.service;
+package org.jumpmind.pos.user.service;
 
-import org.jumpmind.pos.login.model.AuthenticationResult;
 import org.jumpmind.pos.service.EndpointDispatcher;
 import org.jumpmind.pos.service.ServiceResultImpl;
+import org.jumpmind.pos.user.model.AuthenticationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/logintest")
-public class LoginServiceTest {
+@RequestMapping("/user")
+public class UserService {
     
     @Autowired
     private EndpointDispatcher endpointDispatcher;
@@ -28,6 +28,5 @@ public class LoginServiceTest {
             @RequestParam(value="oldPassword", defaultValue="") String oldPassword,
             @RequestParam(value="newPassword", defaultValue="") String newPassword) {
         return endpointDispatcher.dispatch("/changePassword", username, oldPassword, newPassword);
-    }    
-
+    }  
 }
