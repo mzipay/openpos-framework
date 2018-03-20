@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SellScreen extends AbstractScreen {
 
@@ -69,10 +68,6 @@ public class SellScreen extends AbstractScreen {
 
     public void setWorkstation(Workstation workstation) {
         this.workstation = workstation;
-    }
-
-    public static <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
-        return new ObjectMapper().convertValue(actionData, convertToInstanceOf);
     }
         
     public MenuItem getLocalMenuItemByAction(String action) {
