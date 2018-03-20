@@ -3,12 +3,13 @@ package org.jumpmind.pos.core.screen;
 import java.io.Serializable;
 /**
  * Refer to MatDialogConfig properties defined <a href="https://material.angular.io/components/dialog/api#MatDialogConfig">here</a>  
- * for list of properties that can be supported as needed.
+ * for list of properties that can be supported as needed.  Also includes OpenPOS specific properties
  */
 public class DialogProperties implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String width;
+    private Boolean executeActionBeforeClose;
 
     public DialogProperties() {
     }
@@ -25,5 +26,17 @@ public class DialogProperties implements Serializable {
         this.setWidth(width);
         return this;
     }
+
+    public Boolean getExecuteActionBeforeClose() {
+        return executeActionBeforeClose;
+    }
+
+    public void setExecuteActionBeforeClose(Boolean executeActionBeforeClose) {
+        this.executeActionBeforeClose = executeActionBeforeClose;
+    }
     
+    public DialogProperties executeActionBeforeClose(boolean execBeforeClose) {
+        this.setExecuteActionBeforeClose(execBeforeClose);
+        return this;
+    }
 }

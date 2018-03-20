@@ -1,5 +1,7 @@
 package org.jumpmind.pos.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class CheckboxField extends FormField {
     private static final long serialVersionUID = 1L;
     
@@ -31,6 +33,7 @@ public class CheckboxField extends FormField {
         return getValue() != null;
     }
     
+    @JsonIgnore
     public boolean isNotChecked() {
         return ! isChecked();
     }
@@ -40,6 +43,7 @@ public class CheckboxField extends FormField {
         return this;
     }
     
+    @JsonIgnore
     public CheckboxField notChecked() {
         this.setChecked(false);
         return this;
