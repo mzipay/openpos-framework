@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
-public class AuthenticateEndpoint {
+public class AuthenticateEndpointTest {
 
     @Autowired
     UserStore userStore;

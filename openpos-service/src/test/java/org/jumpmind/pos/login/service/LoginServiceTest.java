@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/login")
-public class LoginService {
+@RequestMapping("/logintest")
+public class LoginServiceTest {
     
     @Autowired
     private EndpointDispatcher endpointDispatcher;

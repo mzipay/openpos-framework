@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("configService")
-public class ConfigService implements IConfigService {
+@RestController
+public class ConfigServiceTest implements IConfigService {
     
     final String THIRTY_MINUTES= "1800000";
     
-    @RequestMapping("/config/{configName}?asDate=true") 
+    @RequestMapping("/configtest/{configName}?asDate=true") 
     public Date getDate(@PathVariable String configName) {
         Configuration configuration = getConfig(configName);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-ddTHH:mm:SS");
@@ -25,19 +25,19 @@ public class ConfigService implements IConfigService {
         }      
     }
     
-    @RequestMapping("/config/{configName}?asInt=true")
+    @RequestMapping("/configtest/{configName}?asInt=true")
     public int getInt(@PathVariable String configName) {
         Configuration configuration = getConfig(configName);
         return Integer.valueOf(configuration.getConfigValue());
     }
     
-    @RequestMapping("/config/{configName}?asLong=true")
+    @RequestMapping("/configtest/{configName}?asLong=true")
     public long getLong(@PathVariable String configName) {
         Configuration configuration = getConfig(configName);
         return Long.valueOf(configuration.getConfigValue());
     }
     
-    @RequestMapping("/config/{configName}")
+    @RequestMapping("/configtest/{configName}")
     public Configuration getConfig(@PathVariable String configName) {
             
         switch (configName) {

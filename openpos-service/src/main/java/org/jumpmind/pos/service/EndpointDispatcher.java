@@ -2,6 +2,7 @@ package org.jumpmind.pos.service;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,26 +22,27 @@ public class EndpointDispatcher {
         Object result = null;
         
         if (overrideEndpointDefinition != null) {
-            result = invokeOverrideEndpoint(baseEndpointDefinition, overrideEndpointDefinition, args);
+            result = invokeEndpoint(overrideEndpointDefinition, baseEndpointDefinition, args);
         } else if (baseEndpointDefinition != null) {
-            result = invokeBaseEndpoint(baseEndpointDefinition, args);
+            result = invokeEndpoint(baseEndpointDefinition, null, args);
         } else {
             throw noEndpointFound(path);
         }
         
         return (T)result;
     }
-
-    protected Object invokeOverrideEndpoint(EndpointDefinition baseEndpointDefinition, 
-            EndpointDefinition overrideEndpointDefinition, Object...args) {
-        
-        Method method = overrideEndpointDefinition.getEndpointMethod();
+    
+    protected Object invokeEndpoint(EndpointDefinition invokeEndpointDefinition,
+            EndpointDefinition baseEndpointDefinition,
+            Object...args) {
+        Method method = invokeEndpointDefinition.getEndpointMethod();
         
         List<Object> parameters = new ArrayList<>();
         
         int index = 0;
         for (Class<?> expectedType : method.getParameterTypes()) {
-            if (expectedType.isAssignableFrom(baseEndpointDefinition.getEndpointInstance().getClass())) {
+            if (baseEndpointDefinition != null 
+                    && expectedType.isAssignableFrom(baseEndpointDefinition.getEndpointInstance().getClass())) {
                 parameters.add(baseEndpointDefinition.getEndpointInstance());
                 index--;
             } else if (index < args.length) {
@@ -52,40 +54,19 @@ public class EndpointDispatcher {
         
         Object result;
         try {
-            result = method.invoke(overrideEndpointDefinition.getEndpointInstance(), parameters.toArray());
+            result = method.invoke(invokeEndpointDefinition.getEndpointInstance(), parameters.toArray());
         } catch (Exception ex) {
-            throw new PosServerException(String.format("Failed to invoke override endpoint method %s", method), ex);
+            throw failedToInvokeEndpoint(invokeEndpointDefinition, parameters, ex);
         }
         
         return result;
     }
 
-    
-    protected Object invokeBaseEndpoint(EndpointDefinition baseEndpointDefinition, Object...args) {
+    protected RuntimeException failedToInvokeEndpoint(EndpointDefinition baseEndpointDefinition, List<Object> parameters, Exception cause) {
         Method method = baseEndpointDefinition.getEndpointMethod();
-        
-        List<Object> parameters = new ArrayList<>();
-        
-        int index = 0;
-        for (Class<?> expectedType : method.getParameterTypes()) {
-            if (expectedType.isAssignableFrom(baseEndpointDefinition.getEndpointInstance().getClass())) {
-                parameters.add(baseEndpointDefinition.getEndpointInstance());
-                index--;
-            } else if (index < args.length) {
-                parameters.add(args[index]);
-            }
-            
-            index++;
-        }
-        
-        Object result;
-        try {
-            result = method.invoke(baseEndpointDefinition.getEndpointInstance(), parameters);
-        } catch (Exception ex) {
-            throw new PosServerException(String.format("Failed to invoke override endpoint method %s", method), ex);
-        }
-        
-        return result;
+        String msg = String.format("Failed to invoke endpoint method \"%s\".\nExected argument types %s\nActual parameters %s",
+                method, Arrays.asList(method.getParameterTypes()), parameters);
+        throw new PosServerException(msg, cause);
     }
 
     protected RuntimeException noEndpointFound(String path) {

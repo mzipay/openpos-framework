@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
-public class ChangePasswordEndpoint {
+public class ChangePasswordEndpointTest {
 
     @RequestMapping("/changePassword")
     public ServiceResultImpl changePassword(

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @ComponentScan(
-        basePackages = { "org.jumpmind.pos.core", "org.jumpmind.pos.app" })
+        basePackages = { "org.jumpmind.pos", "org.jumpmind.pos.core", "org.jumpmind.pos.app" })
 @PropertySource(value = { "classpath:openpos-defaults.properties", "file:./conf/openpos.properties" }, ignoreResourceNotFound = true)
 public class AppServer {
 

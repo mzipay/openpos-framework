@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import org.jumpmind.pos.login.model.AuthenticationResult;
 import org.jumpmind.pos.login.model.User;
-import org.jumpmind.pos.login.service.AuthenticateEndpoint;
+import org.jumpmind.pos.login.service.AuthenticateEndpointTest;
 import org.jumpmind.pos.service.EndpointOverride;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +14,7 @@ public class CST_AuthenticateEndpoint {
 
     @EndpointOverride("/authenticate")
     public AuthenticationResult authenticate(
-            AuthenticateEndpoint baseEndpoint,
+            AuthenticateEndpointTest baseEndpoint,
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="password", defaultValue="") String password) {
     
