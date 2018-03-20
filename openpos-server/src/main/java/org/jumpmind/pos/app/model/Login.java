@@ -1,19 +1,20 @@
 package org.jumpmind.pos.app.model;
 
+import org.jumpmind.pos.login.model.User;
+
 public class Login {
 
     boolean loggedIn;
     
     String userName;
-
-    Empl employee;
-
-    public Empl getEmployee() {
-        return employee;
+    private User user;
+    
+    public User getUser() {
+        return user;
     }
 
-    public void setEmployee(Empl employee) {
-        this.employee = employee;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public boolean isLoggedIn() {

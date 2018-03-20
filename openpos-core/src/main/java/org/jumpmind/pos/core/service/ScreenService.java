@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IStateManager;
@@ -48,6 +49,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ScreenService implements IScreenService {
 
     Logger logger = LoggerFactory.getLogger(getClass());
+    Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
 
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -149,22 +151,21 @@ public class ScreenService implements IScreenService {
     public void showScreen(String appId, String nodeId, AbstractScreen screen) {
         if (screen != null) {
             screen.setSequenceNumber(++this.screenSequenceNumber);
-            Object payload = screen;
             try {
                 applyAnnotations(screen);
                 if (screen.isScreenOfType(ScreenType.Form) && !(screen instanceof FormScreen)) {
                     Form form = buildForm(screen);
                     screen.put("form", form);
                 }
-                logger.info("Show screen on nodeId " + nodeId + "\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(payload));
-            } catch (JsonProcessingException ex) {
+                logScreenTransition(nodeId, screen);
+            } catch (Exception ex) {
                 if (ex.toString().contains("org.jumpmind.pos.core.screen.ChangeScreen")) {
                     logger.error("Failed to write screen to JSON. Verify the screen type has been configured by calling setType() on the screen object.", ex);
                 } else {
                     logger.error("Failed to write screen to JSON", ex);
                 }
             }
-            publishToClients(appId, nodeId, payload);
+            publishToClients(appId, nodeId, screen);
             Map<String, AbstractScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
             if (lastScreenByNodeId == null) {
                 lastScreenByNodeId = new HashMap<>();
@@ -269,4 +270,89 @@ public class ScreenService implements IScreenService {
             throw new FlowException("Field to get value for field " + field + " from target " + target, ex);
         }
     }
+    
+    protected void logScreenTransition(String nodeId, AbstractScreen screen) throws JsonProcessingException {
+        if (loggerGraphical.isInfoEnabled()) {            
+            logger.info("Show screen on node \"" + nodeId + "\"\n" + 
+                drawBox(screen.getName()) +    
+                mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
+        } else {
+            logger.info("Show screen on node \"" + nodeId + "\"\n" +     
+                    mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
+        }
+    }
+
+    protected String drawBox(String name) {
+        name = name != null ? name : "not named";
+        int boxWidth = Math.max(name.length(), 28);
+        final int LINE_COUNT = 8;
+        StringBuilder buff = new StringBuilder(256);
+        for (int i = 0; i < LINE_COUNT; i++) {
+            switch (i) {
+                case 0:
+                    buff.append(drawTop1(boxWidth));
+                    break;
+                case 1:
+                    buff.append(drawTop2(boxWidth));
+                    break;
+                case 2:
+                case 4:
+                    buff.append(drawFillerLine(boxWidth));
+                    break;
+                case 3:
+                    buff.append(drawTitleLine(boxWidth, name));
+                    break;                    
+                case 5:
+                    buff.append(drawBottom1(boxWidth));
+                    break;                    
+                case 6:
+                    buff.append(drawBottom2(boxWidth));
+                    break;                    
+            }
+        }
+        return buff.toString();
+    }
+
+    protected String drawTop1(int boxWidth) {
+        StringBuilder buff = new StringBuilder();
+        buff.append("┌").append(StringUtils.repeat('─', boxWidth-2)).append("┐");
+        buff.append("\r\n");
+        return buff.toString();
+    }
+    
+    protected String drawTop2(int boxWidth) {
+        StringBuilder buff = new StringBuilder();
+        buff.append("|┌").append(StringUtils.repeat('─', boxWidth-4)).append("┐|");
+        buff.append("\r\n");
+        return buff.toString();
+    }
+    
+    protected String drawFillerLine(int boxWidth) {
+        StringBuilder buff = new StringBuilder();
+        buff.append("||").append(StringUtils.repeat(' ', boxWidth-4)).append("||");
+        buff.append("\r\n");
+        return buff.toString();
+    }
+    
+    protected String drawTitleLine(int boxWidth, String name) {
+        StringBuilder buff = new StringBuilder();
+        buff.append("││").append(StringUtils.center(name, boxWidth-4)).append("││");
+        buff.append("\r\n");
+        return buff.toString();
+    }
+    protected String drawBottom1(int boxWidth) {
+        StringBuilder buff = new StringBuilder();
+        buff.append("|└").append(StringUtils.repeat('─', boxWidth-4)).append("┘|");
+        buff.append("\r\n");
+        return buff.toString();
+    }
+    
+    protected String drawBottom2(int boxWidth) {
+        StringBuilder buff = new StringBuilder();
+        buff.append("└").append(StringUtils.repeat('─', boxWidth-2)).append("┘");
+        buff.append("\r\n");
+        return buff.toString();
+    }    
+
+
 }

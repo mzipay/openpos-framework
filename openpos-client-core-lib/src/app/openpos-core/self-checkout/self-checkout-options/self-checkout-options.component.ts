@@ -7,11 +7,11 @@ import { IForm } from '../../screens/form.component';
 
 
 @Component({
-  selector: 'app-self-checkout-loyalty',
-  templateUrl: './self-checkout-loyalty.component.html',
-  styleUrls: ['./self-checkout-loyalty.component.scss']
+  selector: 'app-self-checkout-options',
+  templateUrl: './self-checkout-options.component.html',
+  styleUrls: ['./self-checkout-options.component.scss']
 })
-export class SelfCheckoutLoyaltyComponent implements IScreen, OnInit, DoCheck, OnDestroy {
+export class SelfCheckoutOptionsComponent implements IScreen, OnInit, DoCheck, OnDestroy {
 
   static readonly UNDO = 'Undo';
   public currentView: string;
@@ -41,14 +41,14 @@ export class SelfCheckoutLoyaltyComponent implements IScreen, OnInit, DoCheck, O
   }
 
   ngOnDestroy() {
-    this.session.unregisterActionIntercepter(SelfCheckoutLoyaltyComponent.UNDO);
+    this.session.unregisterActionIntercepter(SelfCheckoutOptionsComponent.UNDO);
   }
 
   onMakeOptionSelection( option: IOptionItem): void {
     if ( option.form.formElements.length > 0 ) {
       this.selectedOption = option;
       this.currentView = 'OptionForm';
-      this.session.registerActionIntercepter(SelfCheckoutLoyaltyComponent.UNDO,
+      this.session.registerActionIntercepter(SelfCheckoutOptionsComponent.UNDO,
         new ActionIntercepter((payload) => { this.onBackButtonPressed(); }, ActionIntercepterBehaviorType.block));
     } else {
       this.session.onAction( option.value );
@@ -57,7 +57,7 @@ export class SelfCheckoutLoyaltyComponent implements IScreen, OnInit, DoCheck, O
 
   onBackButtonPressed(): void {
     this.currentView = this.session.screen.displayStyle;
-    this.session.unregisterActionIntercepter(SelfCheckoutLoyaltyComponent.UNDO);
+    this.session.unregisterActionIntercepter(SelfCheckoutOptionsComponent.UNDO);
   }
 
 }
