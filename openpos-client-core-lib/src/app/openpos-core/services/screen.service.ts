@@ -44,7 +44,7 @@ import { SessionService } from '../services/session.service';
 import { PrintPreviewComponent } from '../screens/print-preview.component';
 import { WaitComponent } from '../screens/wait/wait.component';
 import { CustomerSearchResultsComponent } from '../screens/customer-search-results/customer-search-results.component';
-import { SelfCheckoutLoyaltyComponent } from '../self-checkout/self-checkout-loyalty/self-checkout-loyalty.component';
+import { SelfCheckoutOptionsComponent } from '../self-checkout/self-checkout-options/self-checkout-options.component';
 
 @Injectable()
 export class ScreenService {
@@ -85,7 +85,7 @@ export class ScreenService {
     this.screens.set('PrintPreview', PrintPreviewComponent);
     this.screens.set('Wait', WaitComponent);
     this.screens.set('CustomerSearch', CustomerSearchResultsComponent);
-    this.screens.set('SelfCheckoutLoyalty', SelfCheckoutLoyaltyComponent);
+    this.screens.set('SelfCheckoutOptions', SelfCheckoutOptionsComponent);
     this.screens.set('FullPageImage', FullPageImageComponent);
 
     // Templates

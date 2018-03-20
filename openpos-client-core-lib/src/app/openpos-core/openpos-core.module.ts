@@ -87,7 +87,7 @@ import { WaitComponent } from './screens/wait/wait.component';
 import { CustomerSearchResultsComponent } from './screens/customer-search-results/customer-search-results.component';
 import { FabToggleGroupComponent } from './common/controls/fab-toggle-group/fab-toggle-group.component';
 import { FabToggleButtonComponent } from './common/controls/fab-toggle-button/fab-toggle-button.component';
-import { SelfCheckoutLoyaltyComponent } from './self-checkout/self-checkout-loyalty/self-checkout-loyalty.component';
+import { SelfCheckoutOptionsComponent } from './self-checkout/self-checkout-options/self-checkout-options.component';
 import { FullPageImageComponent } from './screens/full-page-image/full-page-image.component';
 
 // Templates
@@ -155,7 +155,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     PrintPreviewComponent,
     WaitComponent,
     CustomerSearchResultsComponent,
-    SelfCheckoutLoyaltyComponent,
+    SelfCheckoutOptionsComponent,
     FullPageImageComponent
   ],
   declarations: [
@@ -222,7 +222,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     MatExclusiveSelectionListDirective,
     FabToggleGroupComponent,
     FabToggleButtonComponent,
-    SelfCheckoutLoyaltyComponent,
+    SelfCheckoutOptionsComponent,
     FullPageImageComponent
   ],
   imports: [
