@@ -37,6 +37,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
+import org.jumpmind.pos.core.flow.ui.UIManager;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.AbstractScreen;
 import org.jumpmind.pos.core.service.IScreenService;
@@ -69,6 +70,9 @@ public class StateManager implements IStateManager {
     
     @Autowired
     private List<? extends IStateInterceptor> stateInterceptors;    
+    
+    @Autowired
+    UIManager uiManager;
 
     private String appId;
     private String nodeId;
@@ -92,6 +96,7 @@ public class StateManager implements IStateManager {
     public void init(String appId, String nodeId) {
         this.appId = appId;
         this.nodeId = nodeId;
+        this.uiManager.setStateManager(this);
         transitionTo(null, flowConfig.getInitialState());
     }
 
@@ -366,9 +371,12 @@ public class StateManager implements IStateManager {
         buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box2Width-2)).append(LOWER_RIGHT_CORNER);
         buff.append("\r\n");
         return buff.toString();
+    }
+
+    @Override
+    public IUI getUI() {
+        return uiManager;
     }    
-
-
 
     // TODO
     //@Override

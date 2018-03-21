@@ -5,12 +5,11 @@ import java.util.Arrays;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
-import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.StateManager;
+import org.jumpmind.pos.core.flow.ui.PromptConfig;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.IPromptScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
-import org.jumpmind.pos.core.screen.PromptScreen;
 import org.jumpmind.pos.login.model.User;
 import org.jumpmind.pos.user.model.AuthenticationResult;
 import org.jumpmind.pos.user.service.UserService;
@@ -41,18 +40,11 @@ public class UserLoginState implements IState {
     }
 
     protected void promptForLogin() {
-        PromptScreen screen = new PromptScreen();
-        screen.setRefreshAlways(true);
-        screen.setResponseType(IPromptScreen.TYPE_ALPHANUMERICTEXT);
-        screen.setBackButton(new MenuItem("Back", "Back", true));
-        screen.setPromptIcon("lock");
-        screen.setIcon("lock");
-        screen.setName("Username");
-        screen.setPlaceholderText("User ID");
-        screen.setText("Type your User ID and press enter to continue.");
-        screen.setAction("Next");
-        screen.setActionButton(new MenuItem("Next", "UsernameEntered", true));
-        stateManager.showScreen(screen);
+        stateManager.getUI().prompt(new PromptConfig()
+                .placeholder("User Id")
+                .promptText("Type your User ID and press enter to continue.")
+                .icon("lock")
+                .action("Next", "UsernameEntered"));
     }
 
 
@@ -63,17 +55,13 @@ public class UserLoginState implements IState {
     }
 
     protected void promptForPassword() {
-        PromptScreen screen = new PromptScreen();
-        screen.setRefreshAlways(true);
-        screen.setBackButton(new MenuItem("Back", "BackToUserPrompt", true));
-        screen.setPromptIcon("lock");
-        screen.setIcon("lock");
-        screen.setName("Password");
-        screen.setResponseType(IPromptScreen.TYPE_ALPHANUMERICPASSWORD);
-        screen.setPlaceholderText("Password");
-        screen.setText("Type your Password and press enter.");
-        screen.setActionButton(new MenuItem("Next", "PasswordEntered", true));
-        stateManager.showScreen(screen);        
+        stateManager.getUI().prompt(new PromptConfig()
+                .placeholder("Password")
+                .promptText("Type your Password and press enter.")
+                .promptType(IPromptScreen.TYPE_ALPHANUMERICPASSWORD)
+                .icon("lock")
+                .action("Next", "PasswordEntered")
+                .backAction("BackToUserPrompt"));        
     }
 
     @ActionHandler
