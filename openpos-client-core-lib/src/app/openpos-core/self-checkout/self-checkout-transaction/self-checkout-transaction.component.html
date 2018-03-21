@@ -3,15 +3,22 @@
 	<div fxFlexFill fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="16px">
 		<div fxFlex="1 1 80%" style="overflow-y: auto">
 
-			<app-checkout-list-item *ngFor="let i of items" [item]=i [session]=session [isReadOnly]=this.session.screen.readOnly></app-checkout-list-item>
+			<app-checkout-list-item *ngFor="let i of items" [item]=i [session]=session [isReadOnly]=session.screen.readOnly></app-checkout-list-item>
 
-			<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
+			<div *ngIf="items.length == 0 && !session.screen.readOnly" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+				<div class="primary text-md" style="padding: 16px;">
+					<b>{{this.session.screen.prompt}}</b>
+				</div>
+				<div class="primary text-sm">{{this.session.screen.instructions}}</div>
+				<div *ngIf="session.screen.icon">
+					<app-icon [iconName]="session.screen.icon" iconClass="mat-128" class="muted-color"></app-icon>
+				</div>
 			</div>
 		</div>
 
-		<mat-card fxFlex="1 1 20%" class="page-content-card grey-background scrollable-content-card mat-elevation-z0">
+		<mat-card fxFlex="1 1 20%" class="page-content-card grey-background scrollable-content-card">
 			<mat-card-content fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="end stretch" fxLayoutGap="0px">
-				<mat-card *ngFor="let total of session.screen.totals" class="page-content-card text-center mat-elevation-z0">
+				<mat-card *ngFor="let total of session.screen.totals" class="page-content-card text-center">
 					<mat-card-title class="primary text-sm">
 						{{total.name}}
 					</mat-card-title>
@@ -20,7 +27,7 @@
 							<span class="super-currency-symbol">$</span>{{total.amount}}</p>
 					</mat-card-content>
 				</mat-card>
-				<mat-card class="page-content-card text-center mat-elevation-z0">
+				<mat-card class="page-content-card text-center">
 					<mat-card-title class="primary text-md"> Total </mat-card-title>
 					<mat-card-content>
 						<p class="primary text-lg">
@@ -35,8 +42,9 @@
 					 (click)="session.onAction('Checkout')" class="green-button text-lg">Checkout
 					</button>
 					<button mat-button *ngIf="!session.screen.readOnly" color="primary" (click)="doMenuItemAction(session.screen.logoutButton)"
-					 class="border-button text-lg"><span>
-					  <app-icon [iconName]="session.screen.logoutButton.icon" class="top"></app-icon>{{session.screen.logoutButton.title}}</span>
+					 class="border-button text-lg">
+						<span>
+							<app-icon [iconName]="session.screen.logoutButton.icon" class="top"></app-icon>{{session.screen.logoutButton.title}}</span>
 					</button>
 				</div>
 			</mat-card-content>

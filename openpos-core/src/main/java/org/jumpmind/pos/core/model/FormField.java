@@ -23,9 +23,6 @@ public class FormField implements IFormElement, IField, Serializable {
 
     private Integer minLength;
     private Integer maxLength;
-    
-    @JsonIgnore  // ignore for deserialization from client to server (see https://goo.gl/Gjehox)
-    private IMaskSpec mask;
 
     public FormField() {
     }
@@ -185,25 +182,7 @@ public class FormField implements IFormElement, IField, Serializable {
     public FormField required(boolean required) {
         this.setRequired(required);
         return this;
-    }
-    
-    /**
-     * @deprecated Use client-side formatters instead
-     */
-    @Deprecated
-    @JsonProperty
-    public IMaskSpec getMask() {
-        return mask;
-    }
-
-    /**
-     * @deprecated Use client-side formatters instead
-     */
-    @Deprecated
-    @JsonIgnore  // Ignore on deserialization  (see https://goo.gl/Gjehox)
-    public void setMask(IMaskSpec mask) {
-        this.mask = mask;
-    }
+    }   
 
     public boolean isDisabled() {
         return disabled;
