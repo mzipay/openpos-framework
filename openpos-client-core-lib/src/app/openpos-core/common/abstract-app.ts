@@ -106,7 +106,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
                 }
                 console.log('opening dialog \'' + dialogType + '\'');
                 this.dialogOpening = true;
-                setTimeout(() => this.openDialog(), 0);
+                setTimeout(() => this.openDialog(dialog), 0);
             } else {
                 console.log(`Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}, dialogRef: ${this.dialogRef}, ` +
                 `dialogType: ${dialogType}, previousDialogType: ${this.previousDialogType}`);
@@ -159,8 +159,8 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
 
     }
 
-    openDialog() {
-        const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(this.session.dialog.subType);
+    openDialog(dialog: any) {
+        const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(dialog.subType);
         let dialogComponent = DialogComponent;
         this.previousDialogType = 'Dialog';
         const dialogProperties: OpenPOSDialogConfig = { disableClose: true };
@@ -168,20 +168,20 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         // if we resolved a specific screen type use that otherwise just use the default DialogComponent
         if (dialogComponentFactory) {
             dialogComponent = dialogComponentFactory.componentType;
-            this.previousDialogType = this.session.dialog.subType;
+            this.previousDialogType = dialog.subType;
         }
-        if (this.session.dialog.dialogProperties) {
+        if (dialog.dialogProperties) {
             // Merge in any dialog properties provided on the screen
-            for (const key in this.session.dialog.dialogProperties) {
-                if (this.session.dialog.dialogProperties.hasOwnProperty(key)) {
-                    dialogProperties[key] = this.session.dialog.dialogProperties[key];
+            for (const key in dialog.dialogProperties) {
+                if (dialog.dialogProperties.hasOwnProperty(key)) {
+                    dialogProperties[key] = dialog.dialogProperties[key];
                 }
             }
             console.log(`Dialog options: ${JSON.stringify(dialogProperties)}`);
         }
 
         this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
-        this.dialogRef.componentInstance.show(this.session.dialog, this);
+        this.dialogRef.componentInstance.show(dialog, this);
         this.dialogOpening = false;
         console.log('Dialog \'' + this.previousDialogType + '\' opened');
         if (dialogProperties.executeActionBeforeClose) {
