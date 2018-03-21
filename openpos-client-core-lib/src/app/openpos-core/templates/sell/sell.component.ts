@@ -10,6 +10,7 @@ import { IMenuItem } from '../../common/imenuitem';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ScanSomethingComponent } from '../../common/controls/scan-something/scan-something.component';
 import { ObservableMedia } from '@angular/flex-layout';
+import { ISellScreen, AbstractApp } from '../..';
 
 @Component({
   selector: 'app-sell',
@@ -17,6 +18,8 @@ import { ObservableMedia } from '@angular/flex-layout';
   styleUrls: ['./sell.component.scss']
 })
 export class SellComponent extends AbstractTemplate implements OnInit {
+
+  screen : ISellScreen;
 
   @ViewChild('drawer') drawer;
   public drawerOpen: Observable<boolean>;
@@ -29,6 +32,10 @@ export class SellComponent extends AbstractTemplate implements OnInit {
     super();
 
    }
+   
+   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
+  }
 
   public ngOnInit(): void {
 

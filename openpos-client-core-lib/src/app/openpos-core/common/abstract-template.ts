@@ -9,8 +9,6 @@ export abstract class AbstractTemplate implements IScreen {
 
     @ViewChild(ScreenDirective) host: ScreenDirective;
 
-    screen: any;
-
     private actionDisablers = new Map<string, actionShouldBeDisabled>();
 
     constructor() {
@@ -22,12 +20,7 @@ export abstract class AbstractTemplate implements IScreen {
         return viewContainerRef.createComponent(screenComponentFactory).instance;
     }
 
-    show(screen: any, app: AbstractApp) {
-        // Should this be calling show method of IScreen object currently being returned from installScreen?
-        // I think so.
-
-        this.screen = screen;
-    }
+    abstract show(screen: any, app: AbstractApp);
 
     registerActionDisabler( action: string, actionShouldBeDisabled ){
         this.actionDisablers.set( action, actionShouldBeDisabled);
