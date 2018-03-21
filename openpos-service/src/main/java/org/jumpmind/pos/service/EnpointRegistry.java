@@ -2,6 +2,7 @@ package org.jumpmind.pos.service;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class EnpointRegistry {
 
     @Autowired
     private ConfigurableApplicationContext applicationContext;
-    
+        
     private Map<String, EndpointDefinition> baseEndpoints = new HashMap<>();
     private Map<String, EndpointDefinition> overrideEndpoints = new HashMap<>();
     

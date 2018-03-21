@@ -20,12 +20,20 @@
  */
 package org.jumpmind.pos.core.flow;
 
+import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_LINE;
+import static org.jumpmind.pos.util.BoxLogging.LOWER_LEFT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.LOWER_RIGHT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.UPPER_LEFT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.UPPER_RIGHT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
+
 import java.util.HashMap;
-import static org.jumpmind.pos.util.BoxLogging.*;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
@@ -58,6 +66,9 @@ public class StateManager implements IStateManager {
 
     @Autowired
     private Injector injector;
+    
+    @Autowired
+    private List<? extends IStateInterceptor> stateInterceptors;    
 
     private String appId;
     private String nodeId;
@@ -89,13 +100,34 @@ public class StateManager implements IStateManager {
         transitionTo(action, newState);
     }
 
-    protected void transitionTo(Action action, IState newState) {
+    public void transitionTo(Action action, IState newState) {
         logStateTransition(currentState, newState, action);
+        
+        IState modifiedState = runStateInterceptors(currentState, newState, action);
+        if (modifiedState != null && modifiedState != newState) {
+            newState = modifiedState;
+            logStateTransition(currentState, modifiedState, action);
+        }
+        
         Map<String, ScopeValue> extraScope = new HashMap<>();
         extraScope.put("stateManager", new ScopeValue(this));
         injector.performInjections(newState, scope, extraScope);
+        
         currentState = newState;
         currentState.arrive(action);
+
+    }
+
+    private IState runStateInterceptors(IState currentState, IState newState, Action action) {
+        if (!CollectionUtils.isEmpty(stateInterceptors)) {
+            for (IStateInterceptor interceptor : stateInterceptors) {
+                IState changedState = interceptor.intercept(this, currentState, newState, action);
+                if (changedState != null) {
+                    return changedState;
+                }
+            }
+        }
+        return null;
     }
 
     protected IState buildState(StateConfig stateConfig) {
@@ -141,6 +173,7 @@ public class StateManager implements IStateManager {
     @Override
     public void doAction(Action action) {
         StateConfig stateConfig = flowConfig.getStateConfig(currentState);
+        validateStateConfig(currentState, stateConfig);
         String newStateName = stateConfig.getActionToStateMapping().get(action.getName());
         if (newStateName != null) {
             StateConfig newStateConfig = flowConfig.getStateConfig(newStateName);
@@ -165,6 +198,13 @@ public class StateManager implements IStateManager {
         }
     }
 
+    protected void validateStateConfig(IState state, StateConfig stateConfig) {
+        if (stateConfig == null) {
+            throw new FlowException("No configuration found for state. \"" + 
+                    state + "\" This state needs to be mapped in a IFlowConfigProvider implementation. ");
+        }
+    }
+
     @Override
     public void endConversation() {
         scope.clearConversationScope();
@@ -176,9 +216,15 @@ public class StateManager implements IStateManager {
         scope.clearSessionScope();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public ScopeValue getScopeValue(String name) {
-        return scope.resolve(name);
+    public <T> T getScopeValue(String name) {
+        ScopeValue value = scope.resolve(name);
+        if (value != null) {
+            return (T) value.getValue();
+        } else {
+            return null;
+        }
     }
 
     @Override
