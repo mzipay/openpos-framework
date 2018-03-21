@@ -21,6 +21,7 @@
 package org.jumpmind.pos.core.flow;
 
 import java.util.HashMap;
+import static org.jumpmind.pos.util.BoxLogging.*;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -272,9 +273,9 @@ public class StateManager implements IStateManager {
     protected String drawTop(int box1Width, int box2Width) {
         StringBuilder buff = new StringBuilder();
         
-        buff.append("┌").append(StringUtils.repeat('─', box1Width-2)).append("┐");
+        buff.append(UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box1Width-2)).append(UPPER_RIGHT_CORNER);
         buff.append(StringUtils.repeat(' ', SPACES_BETWEWEN));
-        buff.append("┌").append(StringUtils.repeat('─', box2Width-2)).append("┐");
+        buff.append(UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box2Width-2)).append(UPPER_RIGHT_CORNER);
         buff.append("\r\n");
         return buff.toString();
     }
@@ -282,18 +283,18 @@ public class StateManager implements IStateManager {
     protected String drawFillerLine(int box1Width, int box2Width) {
         StringBuilder buff = new StringBuilder();
         
-        buff.append("│").append(StringUtils.repeat(' ', box1Width-2)).append("│");
+        buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box1Width-2)).append(VERITCAL_LINE);
         buff.append(StringUtils.repeat(' ', SPACES_BETWEWEN));
-        buff.append("│").append(StringUtils.repeat(' ', box2Width-2)).append("│");
+        buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box2Width-2)).append(VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
     
     protected String drawTitleLine(int box1Width, int box2Width, String oldStateName, String newStateName) {
         StringBuilder buff = new StringBuilder();
-        buff.append("│").append(StringUtils.center(oldStateName, box1Width-2)).append("│");
-        buff.append(" ───────> ");
-        buff.append("│").append(StringUtils.center(newStateName, box2Width-2)).append("│");
+        buff.append(VERITCAL_LINE).append(StringUtils.center(oldStateName, box1Width-2)).append(VERITCAL_LINE);
+        buff.append(" ").append(StringUtils.repeat(HORIZONTAL_LINE, 7)).append("> ");
+        buff.append(VERITCAL_LINE).append(StringUtils.center(newStateName, box2Width-2)).append(VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
@@ -301,9 +302,9 @@ public class StateManager implements IStateManager {
     protected String drawBottom(int box1Width, int box2Width) {
         StringBuilder buff = new StringBuilder();
         
-        buff.append("└").append(StringUtils.repeat('─', box1Width-2)).append("┘");
+        buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box1Width-2)).append(LOWER_RIGHT_CORNER);
         buff.append(StringUtils.repeat(' ', SPACES_BETWEWEN));
-        buff.append("└").append(StringUtils.repeat('─', box2Width-2)).append("┘");
+        buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box2Width-2)).append(LOWER_RIGHT_CORNER);
         buff.append("\r\n");
         return buff.toString();
     }    

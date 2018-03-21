@@ -1,6 +1,9 @@
 package org.jumpmind.pos.core.service;
 
 import java.io.ByteArrayOutputStream;
+
+import static org.jumpmind.pos.util.BoxLogging.*;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -315,41 +318,41 @@ public class ScreenService implements IScreenService {
 
     protected String drawTop1(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append("┌").append(StringUtils.repeat('─', boxWidth-2)).append("┐");
+        buff.append(UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth-2)).append(UPPER_RIGHT_CORNER);
         buff.append("\r\n");
         return buff.toString();
     }
     
     protected String drawTop2(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append("|┌").append(StringUtils.repeat('─', boxWidth-4)).append("┐|");
+        buff.append(VERITCAL_LINE + UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth-4)).append(UPPER_RIGHT_CORNER + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
     
     protected String drawFillerLine(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append("||").append(StringUtils.repeat(' ', boxWidth-4)).append("||");
+        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.repeat(' ', boxWidth-4)).append(VERITCAL_LINE + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
     
     protected String drawTitleLine(int boxWidth, String name) {
         StringBuilder buff = new StringBuilder();
-        buff.append("││").append(StringUtils.center(name, boxWidth-4)).append("││");
+        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center(name, boxWidth-4)).append(VERITCAL_LINE + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
     protected String drawBottom1(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append("|└").append(StringUtils.repeat('─', boxWidth-4)).append("┘|");
+        buff.append(VERITCAL_LINE + LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth-4)).append(LOWER_RIGHT_CORNER + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
     
     protected String drawBottom2(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append("└").append(StringUtils.repeat('─', boxWidth-2)).append("┘");
+        buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth-2)).append(LOWER_RIGHT_CORNER);
         buff.append("\r\n");
         return buff.toString();
     }    
