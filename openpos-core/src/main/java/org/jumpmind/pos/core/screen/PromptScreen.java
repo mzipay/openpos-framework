@@ -2,7 +2,6 @@ package org.jumpmind.pos.core.screen;
 
 
 import org.jumpmind.pos.core.model.FieldInputType;
-import org.jumpmind.pos.core.model.IMaskSpec;
 
 public class PromptScreen extends SellScreen implements IPromptScreen {
 
@@ -18,7 +17,6 @@ public class PromptScreen extends SellScreen implements IPromptScreen {
     private Integer maxLength;
     private String action = "Next";
     private MenuItem actionButton = null;
-    private IMaskSpec promptMask;
     private String comments = "";
     private boolean showComments = false;
 
@@ -124,14 +122,6 @@ public class PromptScreen extends SellScreen implements IPromptScreen {
 
     public void setActionButton(MenuItem actionButton) {
         this.actionButton = actionButton;
-    }
-    
-    public IMaskSpec getPromptMask() {
-        return this.promptMask;
-    }
-    
-    public void setPromptMask(IMaskSpec mask) {
-        this.promptMask = mask;
     }
 
 	public String getComments() {
