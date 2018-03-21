@@ -41,7 +41,7 @@
         </mat-form-field>
     </ng-container>
     <ng-container *ngIf="formField.inputType==='Checkbox'">
-        <mat-checkbox [formControlName]="formField.id" [required]="formField.required" [value]="value"
+        <mat-checkbox [formControlName]="formField.id" [required]="formField.required" [value]="formField.value"
             [labelPosition]="formField.labelPosition" [attr.disabled]="formField.disabled" [checked]="formField.checked">{{formField.label}}</mat-checkbox>
     </ng-container>
 

@@ -2,11 +2,11 @@ package org.jumpmind.pos.user.service;
 
 import java.util.Date;
 
-import org.jumpmind.pos.login.model.AuthenticationResult;
 import org.jumpmind.pos.login.model.User;
 import org.jumpmind.pos.login.model.UserStore;
 import org.jumpmind.pos.service.Endpoint;
-import org.jumpmind.pos.service.config.ConfigService;
+import org.jumpmind.pos.service.config.ConfigServiceTest;
+import org.jumpmind.pos.user.model.AuthenticationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +17,7 @@ public class AuthenticateEndpoint {
     @Autowired
     UserStore userStore;
     @Autowired
-    ConfigService configService;
+    ConfigServiceTest configService;
 
     @Endpoint("/authenticate")
     public AuthenticationResult authenticate(

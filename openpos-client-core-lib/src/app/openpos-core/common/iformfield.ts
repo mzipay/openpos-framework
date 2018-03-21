@@ -19,3 +19,9 @@ export interface IFormElement {
     iconName: string;
 }
 
+export type LabelPositionType = 'before' | 'after';
+export interface ICheckboxField extends IFormElement {
+    labelPosition: LabelPositionType;
+    checked: boolean;
+}
+

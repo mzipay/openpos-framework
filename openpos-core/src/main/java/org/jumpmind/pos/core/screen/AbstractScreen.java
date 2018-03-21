@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class AbstractScreen implements Serializable {
 
@@ -38,6 +39,10 @@ public abstract class AbstractScreen implements Serializable {
         this.type = type;
     }
 
+    public static <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
+        return new ObjectMapper().convertValue(actionData, convertToInstanceOf);
+    }
+    
     /**
      * Allows this screen content to be displayed in a Dialog on the client side.
      */
