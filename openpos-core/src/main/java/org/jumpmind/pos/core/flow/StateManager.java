@@ -90,7 +90,7 @@ public class StateManager implements IStateManager {
     }
 
     protected void transitionTo(Action action, IState newState) {
-        logStateTransition(currentState, newState);
+        logStateTransition(currentState, newState, action);
         Map<String, ScopeValue> extraScope = new HashMap<>();
         extraScope.put("stateManager", new ScopeValue(this));
         injector.performInjections(newState, scope, extraScope);
@@ -134,7 +134,7 @@ public class StateManager implements IStateManager {
     public void doAction(String actionName, Map<String, String> params) {
         // TODO this needs to be put on the action event queue and processed
         // on main run loop thread.
-        Action action = new Action(actionName, null, params);
+        Action action = new Action(actionName, params);
         doAction(action);
     }
 
@@ -230,7 +230,7 @@ public class StateManager implements IStateManager {
         return appId;
     }
     
-    protected void logStateTransition(IState oldState, IState newState) {
+    protected void logStateTransition(IState oldState, IState newState, Action action) {
         if (currentState == newState) {
             return;
         }
@@ -240,23 +240,27 @@ public class StateManager implements IStateManager {
             int box1Width = Math.max(oldStateName.length(), 20);
             int box2Width = Math.max(newStateName.length(), 20);
             
+            int inbetweenWidth = action != null ? Math.max(action.getName().length()+2, 10) : 10;
+            
             StringBuilder buff = new StringBuilder(256);
             
             int LINE_COUNT = 5;
             for (int i = 0; i < LINE_COUNT; i++) {
                 switch (i) {
                     case 0:
-                        buff.append(drawTop(box1Width, box2Width));
+                        buff.append(drawTop(box1Width, box2Width, inbetweenWidth));
                         break;
                     case 1:
-                    case 3:
-                        buff.append(drawFillerLine(box1Width, box2Width));
+                        buff.append(drawFillerLine(box1Width, box2Width, inbetweenWidth));
                         break;
                     case 2:
-                        buff.append(drawTitleLine(box1Width, box2Width, oldStateName, newStateName));
+                        buff.append(drawTitleLine(box1Width, box2Width,inbetweenWidth, oldStateName, newStateName));
                         break;                    
+                    case 3:
+                        buff.append(drawEventLine(box1Width, box2Width,inbetweenWidth, action != null ? action.getName() : ""));
+                        break;
                     case 4:
-                        buff.append(drawBottom(box1Width, box2Width));
+                        buff.append(drawBottom(box1Width, box2Width, inbetweenWidth));
                         break;                    
                         
                 }
@@ -268,42 +272,51 @@ public class StateManager implements IStateManager {
         }
     }
 
-    final int SPACES_BETWEWEN = 10;
-
-    protected String drawTop(int box1Width, int box2Width) {
+    protected String drawTop(int box1Width, int box2Width, int inbetweenWidth) {
         StringBuilder buff = new StringBuilder();
         
         buff.append(UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box1Width-2)).append(UPPER_RIGHT_CORNER);
-        buff.append(StringUtils.repeat(' ', SPACES_BETWEWEN));
+        buff.append(StringUtils.repeat(' ', inbetweenWidth));
         buff.append(UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box2Width-2)).append(UPPER_RIGHT_CORNER);
         buff.append("\r\n");
         return buff.toString();
     }
     
-    protected String drawFillerLine(int box1Width, int box2Width) {
+    protected String drawFillerLine(int box1Width, int box2Width, int inbetweenWidth) {
         StringBuilder buff = new StringBuilder();
         
         buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box1Width-2)).append(VERITCAL_LINE);
-        buff.append(StringUtils.repeat(' ', SPACES_BETWEWEN));
+        buff.append(StringUtils.repeat(' ', inbetweenWidth));
         buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box2Width-2)).append(VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
     
-    protected String drawTitleLine(int box1Width, int box2Width, String oldStateName, String newStateName) {
+    protected String drawEventLine(int box1Width, int box2Width, int inbetweenWidth, String actionName) {
+        StringBuilder buff = new StringBuilder();
+        
+        buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box1Width-2)).append(VERITCAL_LINE);
+        buff.append(StringUtils.center(actionName, inbetweenWidth));
+        buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box2Width-2)).append(VERITCAL_LINE);
+        buff.append("\r\n");
+        return buff.toString();
+    }
+    
+    
+    protected String drawTitleLine(int box1Width, int box2Width, int inbetweenWidth, String oldStateName, String newStateName) {
         StringBuilder buff = new StringBuilder();
         buff.append(VERITCAL_LINE).append(StringUtils.center(oldStateName, box1Width-2)).append(VERITCAL_LINE);
-        buff.append(" ").append(StringUtils.repeat(HORIZONTAL_LINE, 7)).append("> ");
+        buff.append(" ").append(StringUtils.repeat(HORIZONTAL_LINE, inbetweenWidth-3)).append("> ");
         buff.append(VERITCAL_LINE).append(StringUtils.center(newStateName, box2Width-2)).append(VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
     
-    protected String drawBottom(int box1Width, int box2Width) {
+    protected String drawBottom(int box1Width, int box2Width, int inbetweenWidth) {
         StringBuilder buff = new StringBuilder();
         
         buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box1Width-2)).append(LOWER_RIGHT_CORNER);
-        buff.append(StringUtils.repeat(' ', SPACES_BETWEWEN));
+        buff.append(StringUtils.repeat(' ', inbetweenWidth));
         buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box2Width-2)).append(LOWER_RIGHT_CORNER);
         buff.append("\r\n");
         return buff.toString();

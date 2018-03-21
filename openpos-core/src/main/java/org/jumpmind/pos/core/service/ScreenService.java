@@ -277,7 +277,7 @@ public class ScreenService implements IScreenService {
     protected void logScreenTransition(String nodeId, AbstractScreen screen) throws JsonProcessingException {
         if (loggerGraphical.isInfoEnabled()) {            
             logger.info("Show screen on node \"" + nodeId + "\"\n" + 
-                drawBox(screen.getName()) +    
+                drawBox(screen.getName(), screen.getType()) +    
                 mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
         } else {
             logger.info("Show screen on node \"" + nodeId + "\"\n" +     
@@ -285,9 +285,9 @@ public class ScreenService implements IScreenService {
         }
     }
 
-    protected String drawBox(String name) {
+    protected String drawBox(String name, String typeName) {
         name = name != null ? name : "not named";
-        int boxWidth = Math.max(name.length(), 28);
+        int boxWidth = Math.max(Math.max(name.length()+2, 28), typeName.length()+4);
         final int LINE_COUNT = 8;
         StringBuilder buff = new StringBuilder(256);
         for (int i = 0; i < LINE_COUNT; i++) {
@@ -299,12 +299,14 @@ public class ScreenService implements IScreenService {
                     buff.append(drawTop2(boxWidth));
                     break;
                 case 2:
-                case 4:
                     buff.append(drawFillerLine(boxWidth));
                     break;
                 case 3:
                     buff.append(drawTitleLine(boxWidth, name));
                     break;                    
+                case 4:
+                    buff.append(drawTypeLine(boxWidth, typeName));
+                    break;
                 case 5:
                     buff.append(drawBottom1(boxWidth));
                     break;                    
@@ -340,6 +342,12 @@ public class ScreenService implements IScreenService {
     protected String drawTitleLine(int boxWidth, String name) {
         StringBuilder buff = new StringBuilder();
         buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center(name, boxWidth-4)).append(VERITCAL_LINE + VERITCAL_LINE);
+        buff.append("\r\n");
+        return buff.toString();
+    }
+    protected String drawTypeLine(int boxWidth, String typeName) {
+        StringBuilder buff = new StringBuilder();
+        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center("[" + typeName + "]", boxWidth-4)).append(VERITCAL_LINE + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }

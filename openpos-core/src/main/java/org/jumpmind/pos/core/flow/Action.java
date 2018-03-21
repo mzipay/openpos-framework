@@ -29,7 +29,6 @@ public class Action implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private String name;
-    private String stateHash;
     private Map<String, String> parameters = new HashMap<>();
     private Object data;
 
@@ -38,17 +37,16 @@ public class Action implements Serializable {
     }
     
     public Action(String actionName) {
-        this(actionName, null, null);
+        this(actionName, null);
     }
     
     public Action(String actionName, Object data) {
-        this(actionName, null, null);
+        this(actionName, null);
         this.data = data;
     }
 
-    public Action(String actionName, String stateHash, Map<String, String> parameters) {
+    public Action(String actionName, Map<String, String> parameters) {
         this.name = actionName;
-        this.stateHash = stateHash;
         this.parameters = parameters;
     }
     
@@ -58,14 +56,6 @@ public class Action implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getStateHash() {
-        return stateHash;
-    }
-
-    public void setStateHash(String stateHash) {
-        this.stateHash = stateHash;
     }
 
     public Map<String, String> getParameters() {
@@ -90,6 +80,6 @@ public class Action implements Serializable {
 
     @Override
     public String toString() {
-        return "Action [name=" + name + ", stateHash=" + stateHash + ", parameters=" + parameters + "]";
+        return "Action [name=" + name + ", parameters=" + parameters + "]";
     }
 }
