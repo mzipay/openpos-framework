@@ -107,6 +107,9 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
                 console.log('opening dialog \'' + dialogType + '\'');
                 this.dialogOpening = true;
                 setTimeout(() => this.openDialog(), 0);
+            } else {
+                console.log(`Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}, dialogRef: ${this.dialogRef}, ` +
+                `dialogType: ${dialogType}, previousDialogType: ${this.previousDialogType}`);
             }
         } else if (!dialog && this.dialogRef) {
             console.log('closing dialog');
@@ -186,20 +189,17 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             // they close so that actionPayloads can be included with the action
             // before the dialog is destroyed.
             this.dialogRef.beforeClose().subscribe(result => {
-                this.onDialogClose(result);
-            });
-        } else {
-            this.dialogRef.afterClosed().subscribe(result => {
-                this.onDialogClose(result);
+                this.session.onAction(result);
             });
         }
 
-    }
-
-    onDialogClose(value: any) {
-        if (value) {
-            this.session.onAction(value);
-            this.dialogRef = null;
-        }
+        this.dialogRef.afterClosed().subscribe(result => {
+                if (!dialogProperties.executeActionBeforeClose) {
+                    this.session.onAction(result);
+                }
+                this.dialogRef = null;
+            }
+        );
     }
 }
+

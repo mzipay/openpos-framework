@@ -117,6 +117,7 @@ export class SessionService implements ILocaleService {
   }
 
   public showDialog(dialogObj: any) {
+    console.log(`SessionService.showDialog invoked. dialogObj: ${dialogObj}`);
     if (!dialogObj) {
       this.dialog = null;
     } else if (dialogObj.type && dialogObj.type === 'Dialog') {
@@ -305,6 +306,7 @@ export class SessionService implements ILocaleService {
     if (payload != null) {
       this.response = payload;
     } else if (this.actionPayloads.has(actionString)) {
+      console.log(`Using registered action payload for ${actionString}`);
       this.response = this.actionPayloads.get(actionString)();
     }
 
