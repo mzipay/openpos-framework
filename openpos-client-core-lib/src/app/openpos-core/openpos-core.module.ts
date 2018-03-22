@@ -89,6 +89,7 @@ import { FabToggleGroupComponent } from './common/controls/fab-toggle-group/fab-
 import { FabToggleButtonComponent } from './common/controls/fab-toggle-button/fab-toggle-button.component';
 import { SelfCheckoutOptionsComponent } from './self-checkout/self-checkout-options/self-checkout-options.component';
 import { FullPageImageComponent } from './screens/full-page-image/full-page-image.component';
+import { CallForAuthorizationComponent } from './screens/call-for-authorization/call-for-authorization.component'
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -156,7 +157,8 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     WaitComponent,
     CustomerSearchResultsComponent,
     SelfCheckoutOptionsComponent,
-    FullPageImageComponent
+    FullPageImageComponent,
+    CallForAuthorizationComponent
   ],
   declarations: [
     DialogComponent,
@@ -223,7 +225,8 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     FabToggleGroupComponent,
     FabToggleButtonComponent,
     SelfCheckoutOptionsComponent,
-    FullPageImageComponent
+    FullPageImageComponent,
+    CallForAuthorizationComponent
   ],
   imports: [
     BrowserModule,
