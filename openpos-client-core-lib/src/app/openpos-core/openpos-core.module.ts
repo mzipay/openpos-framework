@@ -266,7 +266,6 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     MediaMatcher,
     httpInterceptorProviders,
     FormattersService,
-    ValidatorsService,
     FileUploadService,
   ]
 })
@@ -278,7 +277,8 @@ export class OpenposCoreModule {
       providers: [
         PluginService,
         ScreenService,
-        IconService
+        IconService,
+        ValidatorsService
       ]
     };
   }
