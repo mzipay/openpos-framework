@@ -18,7 +18,7 @@
               </mat-menu>
             </ng-container>
             <ng-template #prompt>
-                <span fxFlexAlign="center">{{session.screen.prompt}}</span>
+                <span fxFlexAlign="center" [ngClass]="{'warn':session.screen.customerFacing}">{{session.screen.prompt}}</span>
             </ng-template>
 
             <span fxFlex="1 1 auto"></span>

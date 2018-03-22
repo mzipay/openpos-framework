@@ -45,6 +45,7 @@ import { PrintPreviewComponent } from '../screens/print-preview.component';
 import { WaitComponent } from '../screens/wait/wait.component';
 import { CustomerSearchResultsComponent } from '../screens/customer-search-results/customer-search-results.component';
 import { SelfCheckoutOptionsComponent } from '../self-checkout/self-checkout-options/self-checkout-options.component';
+import { CallForAuthorizationComponent } from '../screens/call-for-authorization/call-for-authorization.component'
 
 @Injectable()
 export class ScreenService {
@@ -87,6 +88,7 @@ export class ScreenService {
     this.screens.set('CustomerSearch', CustomerSearchResultsComponent);
     this.screens.set('SelfCheckoutOptions', SelfCheckoutOptionsComponent);
     this.screens.set('FullPageImage', FullPageImageComponent);
+    this.screens.set('CallForAuthorization', CallForAuthorizationComponent);
 
     // Templates
     this.screens.set('Blank', BlankComponent);

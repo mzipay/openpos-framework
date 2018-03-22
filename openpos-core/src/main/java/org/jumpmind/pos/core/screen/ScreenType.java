@@ -37,4 +37,6 @@ public interface ScreenType {
     public static final String Wait = "Wait";
     public static final String CustomerSearch = "CustomerSearch";
     public static final String SelfCheckoutOptions = "SelfCheckoutOptions";
+    public static final String CallForAuthorization = "CallForAuthorization";
+
 }

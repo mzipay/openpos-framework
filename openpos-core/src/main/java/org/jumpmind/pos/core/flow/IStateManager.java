@@ -35,7 +35,7 @@ public interface IStateManager {
     public void doAction(Action action);    
     public void endConversation();
     public void endSession();
-    public ScopeValue getScopeValue(String name);
+    public <T> T getScopeValue(String name);
     public void setNodeScope(String name, Object value);
     public void setSessionScope(String name, Object value);
     public void setConversationScope(String name, Object value);
@@ -44,5 +44,6 @@ public interface IStateManager {
     public AbstractScreen getLastScreen();    
     public void refreshScreen();
     public IState getCurrentState();
+    public IUI getUI();
     
 }

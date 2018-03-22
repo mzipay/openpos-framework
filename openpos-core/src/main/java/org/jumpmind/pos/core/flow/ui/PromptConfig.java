@@ -1,0 +1,71 @@
+package org.jumpmind.pos.core.flow.ui;
+
+import org.jumpmind.pos.core.screen.IPromptScreen;
+import org.jumpmind.pos.core.screen.MenuItem;
+
+public class PromptConfig {
+    
+    private String name;
+    private String promptText;
+    private String backAction = "Back";
+    private String promptType = IPromptScreen.TYPE_ALPHANUMERICTEXT;
+    private String icon;
+    private String placeholder;
+    private MenuItem actionMenuItem = new MenuItem("Next", "Next", true);   
+    
+    public PromptConfig named(String name) {
+        this.name = name;
+        return this;
+    }
+    public PromptConfig promptText(String promptText) {
+        this.promptText = promptText;
+        return this;
+    }
+    public PromptConfig backAction(String backAction) {
+        this.backAction = backAction;
+        return this;
+    }    
+    public PromptConfig icon(String icon) {
+        this.icon = icon;
+        return this;
+    }    
+    public PromptConfig placeholder(String placeholder) {
+        this.placeholder = placeholder;
+        return this;
+    }    
+    public PromptConfig promptType(String promptType) {
+        this.promptType = promptType;
+        return this;
+    } 
+    public PromptConfig action(String title, String actionName) {
+        this.actionMenuItem = new MenuItem(title, actionName, true);
+        return this;
+    }
+    public PromptConfig actionMenuItem(MenuItem actionMenuItem) {
+        this.actionMenuItem = actionMenuItem;
+        return this;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    public String getPromptText() {
+        return promptText;
+    }
+    public String getBackAction() {
+        return backAction;
+    }
+    public String getPromptType() {
+        return promptType;
+    }
+    public String getIcon() {
+        return icon;
+    }
+    public String getPlaceholder() {
+        return placeholder;
+    }
+    public MenuItem getActionMenuItem() {
+        return actionMenuItem;
+    }
+ 
+}

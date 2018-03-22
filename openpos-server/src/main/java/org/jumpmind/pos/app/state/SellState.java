@@ -1,15 +1,21 @@
 package org.jumpmind.pos.app.state;
 
 import org.jumpmind.pos.core.screen.SellScreen;
+import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.flow.IState;
+import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SellItemScreen;
 import org.jumpmind.pos.core.screen.SellScreen.ScanType;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class SellState extends AbstractSecureState {
+public class SellState implements IState {
 
+    @Autowired
+    IStateManager stateManager;
     
     @Override
-    protected void secureArrive() {
+    public void arrive(Action action) {
         stateManager.showScreen(buildScreen());
     }
 
