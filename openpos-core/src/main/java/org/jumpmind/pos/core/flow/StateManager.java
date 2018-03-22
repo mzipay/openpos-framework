@@ -68,7 +68,7 @@ public class StateManager implements IStateManager {
     @Autowired
     private Injector injector;
     
-    @Autowired
+    @Autowired(required=false)
     private List<? extends IStateInterceptor> stateInterceptors;    
     
     @Autowired
