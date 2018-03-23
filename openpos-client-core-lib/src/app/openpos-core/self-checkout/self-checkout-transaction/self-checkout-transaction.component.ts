@@ -2,7 +2,7 @@ import { DeviceService } from '../../services/device.service';
 import { ISellItem } from '../../common/isellitem';
 import { IScreen } from '../../common/iscreen';
 import { IMenuItem } from '../../common/imenuitem';
-import { Component, ViewChild, AfterViewInit, AfterContentInit, DoCheck, OnInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, AfterContentInit, AfterViewChecked, ElementRef, DoCheck, OnInit } from '@angular/core';
 import { SessionService } from '../../services/session.service';
 import { AbstractApp } from '../../common/abstract-app';
 import { ObservableMedia } from '@angular/flex-layout';
@@ -14,6 +14,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   styleUrls: ['./self-checkout-transaction.component.scss']
 })
 export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
+
+  @ViewChild('scrollList') private scrollList: ElementRef;
 
   initialized = false;
 
@@ -32,6 +34,11 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck,
   }
 
   ngOnInit(): void {
+    this.scrollToBottom();
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
   }
 
   ngAfterViewInit(): void {
@@ -40,6 +47,12 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck,
 
   public doMenuItemAction(menuItem: IMenuItem) {
     this.session.onAction(menuItem.action, null, menuItem.confirmationMessage);
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.scrollList.nativeElement.scrollTop = this.scrollList.nativeElement.scrollHeight;
+    } catch (err) { }
   }
 
 }
