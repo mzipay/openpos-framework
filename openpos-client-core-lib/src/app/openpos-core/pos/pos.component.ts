@@ -98,6 +98,7 @@ export class PosComponent extends AbstractApp implements DoCheck {
 
   protected onDevClearLocalStorage() {
     localStorage.clear();
+    this.session.refreshApp();
   }
 
   protected onLogfileSelected(logFilename: string): void {
