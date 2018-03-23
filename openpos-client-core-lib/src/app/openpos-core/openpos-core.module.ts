@@ -252,7 +252,8 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     ReactiveFormsModule,
     FabToggleGroupComponent,
     FabToggleButtonComponent,
-    DynamicFormControlComponent
+    DynamicFormControlComponent,
+    FocusDirective
     ],
   providers: [
     HttpClient,

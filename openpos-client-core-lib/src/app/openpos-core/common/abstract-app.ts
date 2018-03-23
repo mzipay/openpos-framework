@@ -161,7 +161,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
 
     openDialog(dialog: any) {
         const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(dialog.subType);
-        let dialogComponent = DialogComponent;
+        let dialogComponent = this.screenService.resolveScreen('Dialog').componentType;
         this.previousDialogType = 'Dialog';
         const dialogProperties: OpenPOSDialogConfig = { disableClose: true };
 

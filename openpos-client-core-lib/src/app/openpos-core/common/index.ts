@@ -14,3 +14,4 @@ export {ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorT
 export * from './controls';
 export * from './screen-interfaces';
 export {IFormatter} from './formatters/iformatter';
+export { FocusDirective } from './focus.directive'
