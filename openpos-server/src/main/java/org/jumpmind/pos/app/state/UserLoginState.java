@@ -1,17 +1,16 @@
 package org.jumpmind.pos.app.state;
 
-import java.util.Arrays;
-
+import org.apache.commons.collections.CollectionUtils;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.StateManager;
 import org.jumpmind.pos.core.flow.ui.PromptConfig;
-import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.IPromptScreen;
-import org.jumpmind.pos.core.screen.MenuItem;
-import org.jumpmind.pos.login.model.User;
+import org.jumpmind.pos.service.ServiceResultImpl;
 import org.jumpmind.pos.user.model.AuthenticationResult;
+import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.UserMessage;
 import org.jumpmind.pos.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,6 +24,10 @@ public class UserLoginState implements IState {
     private UserService userService;    
 
     private String enteredUserName;
+    private int userMessageIndex = 0;
+    private AuthenticationResult result;
+    private String oldPassword;
+    private String newPassword1;
 
     private IState sourceState;
     private IState targetState;
@@ -67,17 +70,37 @@ public class UserLoginState implements IState {
     @ActionHandler
     public void onPasswordEntered(Action action) {
         String password = (String) action.getData();
-        AuthenticationResult result = userService.authenticate(enteredUserName, password);
+        oldPassword = password;
+        result = userService.authenticate(enteredUserName, password);
+        userMessageIndex = 0;
+        showUserMessages();
+    }
+
+    protected void processResult() {
         if (result.getResultStatus().equals("SUCCESS")) {
             stateManager.setSessionScope("currentUser", result.getUser());
             stateManager.transitionTo(null, targetState);
         } else {
-            DialogScreen screen = new DialogScreen();
-            screen.setTitle(result.getResultMessage());
-            screen.setRefreshAlways(true);
-            screen.setButtons(Arrays.asList(new MenuItem("Ok", "FailuedAcknowledged", true) ));
-            screen.setName("LoginFailed");
-            stateManager.showScreen(screen);
+            if (CollectionUtils.isEmpty(result.getUserMessages())) {                
+                stateManager.getUI().notify(result.getResultMessage(), "FailureAcknowledged");
+            }
+        }
+    }
+
+    protected void showUserMessages() {
+        if (CollectionUtils.isEmpty(result.getUserMessages()) 
+                || userMessageIndex >= result.getUserMessages().size()) {
+            processResult();
+            return;
+        }
+
+        UserMessage userMessage = result.getUserMessages().get(userMessageIndex++);
+        switch (userMessage.getMessageCode()) {
+            case "PASSWORD_EXPIRED":
+            case "PASSWORD_EXPIRY_WARNING":
+                stateManager.getUI().askYesNo(userMessage.getMessage() + 
+                        " Would you like to change your password now?", "ChangePasswordYes", "ChangePasswordNo");
+                break;
         }
     }
 
@@ -92,7 +115,64 @@ public class UserLoginState implements IState {
     }
 
     @ActionHandler
-    public void onFailuedAcknowledged(Action action) {
+    public void onFailureAcknowledged(Action action) {
         promptForLogin();
+    }
+    
+    @ActionHandler
+    public void onChangePasswordYes(Action action) {
+        stateManager.getUI().prompt(new PromptConfig()
+                .placeholder("New Password")
+                .promptText("Type your New Password and press enter.")
+                .promptType(IPromptScreen.TYPE_ALPHANUMERICPASSWORD)
+                .icon("lock")
+                .action("Next", "NewPassword1Entered")
+                .backAction("BackToUserPrompt"));   
+    }
+    
+    @ActionHandler
+    public void onNewPassword1Entered(Action action) {
+        newPassword1 = (String) action.getData();
+        stateManager.getUI().prompt(new PromptConfig()
+                .placeholder("New Password Again")
+                .promptText("Type your New Password again and press enter.")
+                .promptType(IPromptScreen.TYPE_ALPHANUMERICPASSWORD)
+                .icon("lock")
+                .action("Next", "NewPassword2Entered")
+                .backAction("BackToUserPrompt"));        
+    }
+    
+    @ActionHandler
+    public void onNewPassword2Entered(Action action) {
+        String newPassword2 = (String) action.getData();
+        
+        ServiceResultImpl changePasswordResult = 
+                userService.changePassword(result.getUser().getUsername(), oldPassword, newPassword1, newPassword2);
+        if (changePasswordResult.getResultStatus().equals("SUCCESS")) {
+            stateManager.getUI().notify("Your password was changed succesful.", "PasswordChangeAcknowledged");
+        } else {
+            stateManager.getUI().notify(changePasswordResult.getResultMessage(), "ChangePasswordYes");
+        }
+    
+    }
+    
+    @ActionHandler
+    public void onPasswordChangeAcknowledged(Action action) {
+        stateManager.setSessionScope("currentUser", result.getUser());
+        stateManager.transitionTo(null, targetState);
+    }
+    
+    @ActionHandler
+    public void onChangePasswordNo(Action action) {
+        if (result.getResultStatus().equals("SUCCESS")) {            
+            processResult();
+        } else {
+            promptForLogin();
+        }
+    }
+
+    @ActionHandler
+    public void onMessageAcknowledged(Action action) {
+        showUserMessages();
     }
 }

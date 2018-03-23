@@ -2,11 +2,14 @@ package org.jumpmind.pos.user.service;
 
 import java.util.Date;
 
-import org.jumpmind.pos.login.model.User;
-import org.jumpmind.pos.login.model.UserStore;
+import org.apache.commons.collections4.CollectionUtils;
 import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.service.config.ConfigServiceTest;
 import org.jumpmind.pos.user.model.AuthenticationResult;
+import org.jumpmind.pos.user.model.PasswordHistory;
+import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.UserMessage;
+import org.jumpmind.pos.user.model.UserStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,10 +36,10 @@ public class AuthenticateEndpoint {
                 return failAuthentication(user, "Incorrect Password", "PASSWORD_INCORRECT");
             } else if (checkLockout(user)) {
                 return failAuthentication(user, "User locked out.", "USER_LOCKOUT");
-            } else if (user.isPasswordExpiredFlag()){
-                return failAuthentication(user, "Password expired.", "PASSWORD_EXPIRED");
-            } else {                    
-                return new AuthenticationResult("SUCCESS", user);
+            } else if (user.isPasswordExpiredFlag()) {
+                return handlePasswordExpired(user);
+            } else {
+                return handleSuccess(user);
             }
         }
         else  {
@@ -44,12 +47,39 @@ public class AuthenticateEndpoint {
         }
     }
 
+    private AuthenticationResult handleSuccess(User user) {
+        AuthenticationResult result =  new AuthenticationResult("SUCCESS", user);
+        long expiresInDays = passwordExpiresInDays(user);
+        if (expiresInDays > 0 && expiresInDays <= configService.getInt("openpos.user.warn.password.expires.days")) {
+            UserMessage message = new UserMessage();
+            message.setMessageCode("PASSWORD_EXPIRY_WARNING");
+            message.setMessage(String.format("Your password exires in %s days.", expiresInDays));
+            result.getUserMessages().add(message);
+            
+        }
+        return result;
+    }
+
+    private AuthenticationResult handlePasswordExpired(User user) {
+        UserMessage message = new UserMessage();
+        long expiresInDays = Math.abs(passwordExpiresInDays(user));
+        message.setMessageCode("PASSWORD_EXPIRED");
+        if (expiresInDays > 0) {                    
+            message.setMessage(String.format("Your password expired %s day(s) ago.", expiresInDays));                
+        } else {
+            message.setMessage(String.format("Your password has expired.", expiresInDays));
+        }
+        AuthenticationResult result = failAuthentication(user, "Password expired.", "PASSWORD_EXPIRED");
+        result.getUserMessages().add(message);
+        return result;
+    }
+
     protected boolean checkPassword(User user, String password) {
         if (password.length() < 3) {
             user.setPasswordFailedAttempts(user.getPasswordFailedAttempts()+1);
             user.setLastPasswordAttempt(new Date());
 
-            if (user.getPasswordFailedAttempts() > configService.getInt("openpos.max.login.attempts")) {
+            if (user.getPasswordFailedAttempts() > configService.getInt("openpos.user.max.login.attempts")) {
                 user.setLockedOutFlag(true);
             }
             userStore.save(user);
@@ -60,11 +90,15 @@ public class AuthenticateEndpoint {
 
     protected boolean checkLockout(User user) {
         if (user.isLockedOutFlag()) {
-            Date passwordAttemptsResetDate = new Date(System.currentTimeMillis()-configService.getLong("openpos.login.attempts.reset.period.ms"));
-            if (user.getLastLogin().after(passwordAttemptsResetDate)) {
-                user.setLockedOutFlag(false);
-                user.setPasswordFailedAttempts(0);
-                userStore.save(user);
+            Date lastPasswordAttempt = user.getLastPasswordAttempt();
+            if (lastPasswordAttempt != null) {                
+                Date passwordAttemptsResetDate = new Date(lastPasswordAttempt.getTime() + configService.getLong("openpos.user.attempts.reset.period.ms"));
+                Date now = new Date();
+                if (now.after(passwordAttemptsResetDate)) {                    
+                    user.setLockedOutFlag(false);
+                    user.setPasswordFailedAttempts(0);
+                    userStore.save(user);
+                }
             }
         }
         return user.isLockedOutFlag();
@@ -74,7 +108,23 @@ public class AuthenticateEndpoint {
         AuthenticationResult result = new AuthenticationResult("FAILURE");
         result.setAuthenticationCode(code);
         result.setResultMessage(message);
+        result.setUser(user);
         return result;       
+    }
+    
+    protected long passwordExpiresInDays(User user) {
+        if (CollectionUtils.isEmpty(user.getPasswordHistory())) {
+            return -1;
+        }
+        
+        PasswordHistory passwordHistory = user.getPasswordHistory().get(0);
+        if (passwordHistory.getExpirationTime() != null) {
+            Date now = new Date(); // TODO the server may not be the same timezone as client.
+            long diffDays = org.jumpmind.pos.service.util.DateUtils.daysBetween(now, passwordHistory.getExpirationTime());
+            return diffDays;
+        }
+        
+        return -1;
     }
 
 }

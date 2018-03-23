@@ -1,12 +1,15 @@
 package org.jumpmind.pos.user.model;
 
-import org.jumpmind.pos.login.model.User;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jumpmind.pos.service.ServiceResultImpl;
 
 public class AuthenticationResult extends ServiceResultImpl {
     
     private String authenticationCode;
     private User user;
+    private List<UserMessage> userMessages = new ArrayList<>();
 
     public AuthenticationResult() {
         
@@ -34,6 +37,14 @@ public class AuthenticationResult extends ServiceResultImpl {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<UserMessage> getUserMessages() {
+        return userMessages;
+    }
+
+    public void setUserMessages(List<UserMessage> userMessages) {
+        this.userMessages = userMessages;
     }
 
 }
