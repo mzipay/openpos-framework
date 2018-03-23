@@ -5,7 +5,7 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateInterceptor;
 import org.jumpmind.pos.core.flow.StateManager;
-import org.jumpmind.pos.login.model.User;
+import org.jumpmind.pos.user.model.User;
 import org.springframework.stereotype.Component;
 
 @Component

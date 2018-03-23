@@ -26,7 +26,8 @@ public class UserService {
     public ServiceResultImpl changePassword(
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="oldPassword", defaultValue="") String oldPassword,
-            @RequestParam(value="newPassword", defaultValue="") String newPassword) {
-        return endpointDispatcher.dispatch("/changePassword", username, oldPassword, newPassword);
+            @RequestParam(value="newPassword1", defaultValue="") String newPassword1,
+            @RequestParam(value="newPassword2", defaultValue="") String newPassword2) {
+        return endpointDispatcher.dispatch("/changePassword", username, oldPassword, newPassword1, newPassword2);
     }  
 }

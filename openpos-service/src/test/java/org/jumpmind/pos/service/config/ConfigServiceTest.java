@@ -41,8 +41,9 @@ public class ConfigServiceTest implements IConfigService {
     public Configuration getConfig(@PathVariable String configName) {
             
         switch (configName) {
-            case "openpos.max.login.attempts":  return new Configuration(configName, "4");
-            case "openpos.login.attempts.reset.period.ms":  return new Configuration(configName, THIRTY_MINUTES);
+            case "openpos.user.max.login.attempts":  return new Configuration(configName, "4");
+            case "openpos.user.attempts.reset.period.ms":  return new Configuration(configName, THIRTY_MINUTES);
+            case "openpos.user.warn.password.expires.days":  return new Configuration(configName, "7");
             default: 
                 Configuration config = new Configuration("", "");
                 config.setResultMessage("Cannot find configuration for name $configName");

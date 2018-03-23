@@ -37,6 +37,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     private registered: boolean;
 
     private installedScreen: IScreen;
+
     private template: AbstractTemplate;
 
     @ViewChild(TemplateDirective) host: TemplateDirective;

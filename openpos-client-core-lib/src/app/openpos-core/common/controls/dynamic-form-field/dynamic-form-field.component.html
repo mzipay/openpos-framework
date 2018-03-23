@@ -13,10 +13,10 @@
             <input *ngSwitchDefault matInput [formControlName]="formField.id" [formControl]="formGroup.controls[formField.id]" 
                 [placeholder]="getPlaceholderText(formField)" [formatterName]="formField.inputType" [required]="formField.required"
                 (change)="onFormElementChanged(formField)" [attr.minlength]="formField.minLength" [attr.maxlength]="formField.maxLength" 
-                [readonly]="formField.disabled" autoSelectOnFocus>
+                [readonly]="formField.disabled">
 
             <input *ngSwitchCase="'AlphanumericPassword'" matInput [formControlName]="formField.id"  [placeholder]="getPlaceholderText(formField)"
-                type="password" [required]="formField.required" autoSelectOnFocus>
+                type="password" [required]="formField.required">
 
             <mat-select  *ngSwitchCase="'ComboBox'" [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)" (change)="onFormElementChanged(formField)" [required]="formField.required">
                 <mat-option *ngFor="let value of values | async" [value]="value">{{value}}</mat-option>

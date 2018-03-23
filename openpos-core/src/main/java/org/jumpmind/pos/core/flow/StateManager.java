@@ -198,7 +198,8 @@ public class StateManager implements IStateManager {
                     // transitionTo(currentState);
                 }
             } else {
-                logger.warn("Unexpected action {}", action);
+                logger.warn("Unexpected action \"{}\". No " + currentState.getClass().getName() + ".on" + action + "() found.", action);
+                currentState.arrive(action); // TODO, we are in an undefined state he really.
             }
         }
     }

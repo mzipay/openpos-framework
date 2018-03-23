@@ -1,6 +1,6 @@
 package org.jumpmind.pos.app.model;
 
-import org.jumpmind.pos.login.model.User;
+import org.jumpmind.pos.user.model.User;
 
 public class Login {
 
