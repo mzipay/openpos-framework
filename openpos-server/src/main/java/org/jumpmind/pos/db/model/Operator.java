@@ -25,19 +25,34 @@ import java.sql.JDBCType;
 import org.jumpmind.pos.db.Column;
 import org.jumpmind.pos.db.Table;
 
-@Table(name="operator",description="Security Identifier granting and denying access to the systems of the retail enterprise, and recorded upon the transaction originating from those systems.")
+@Table(
+        name = "operator",
+        description = "Security Identifier granting and denying access to the systems of the retail enterprise, and recorded upon the transaction originating from those systems.")
 public class Operator extends AbstractObject {
 
-    @Column(name="id",primaryKey=true, required=true, type=JDBCType.VARCHAR, size="16",
-            description="A unique, automatically assigned key used to identify an operator.")
+    @Column(
+            name = "id",
+            primaryKey = true,
+            required = true,
+            type = JDBCType.VARCHAR,
+            size = "16",
+            description = "A unique, automatically assigned key used to identify an operator.")
     private String id;
-    
-    @Column(name="user_name", required=true, type=JDBCType.VARCHAR, size="50",
-            description="The short human readable name used as an alternate ID for Operator.")
+
+    @Column(
+            name = "user_name",
+            required = true,
+            type = JDBCType.VARCHAR,
+            size = "50",
+            description = "The short human readable name used as an alternate ID for Operator.")
     private String userName;
-    
-    @Column(name="password", required=true, type=JDBCType.VARCHAR, size="50",
-            description="A hashed security password entered by an operator and used to verify his/her identity when signing on to a Workstation.")
+
+    @Column(
+            name = "password",
+            required = true,
+            type = JDBCType.VARCHAR,
+            size = "50",
+            description = "A hashed security password entered by an operator and used to verify his/her identity when signing on to a Workstation.")
     private String password;
 
 }

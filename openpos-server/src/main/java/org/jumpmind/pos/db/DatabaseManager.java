@@ -9,6 +9,8 @@ import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Database;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
+import org.jumpmind.db.platform.IDdlBuilder;
+import org.jumpmind.db.sql.SqlScript;
 import org.jumpmind.pos.app.config.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +23,14 @@ public class DatabaseManager {
     protected static final Logger log = LoggerFactory.getLogger(AppConfig.class);
 
     IDatabasePlatform platform;
+    final static String DB_MODEL_PACKAGE = "org.jumpmind.pos.db.model";
+    final static String DB_MODEL_EXTENSION_PACKAGE = "org.jumpmind.pos.db.model.extension";
     
     public DatabaseManager(IDatabasePlatform platform) {
             this.platform = platform;
     }
     
-    public Database readDatabaseFromClasses(String basePackageName, String extensionPackageName) {
+    protected Database readDatabaseFromClasses(String basePackageName, String extensionPackageName) {
         Database db = new Database();
         addTablesToDatabase(db, basePackageName);
         updateDatabaseWithExtensions(db, extensionPackageName);        
@@ -99,10 +103,45 @@ public class DatabaseManager {
             dbCol.setDescription(colAnnotation.description());
             dbCol.setJdbcTypeCode(colAnnotation.type().getVendorTypeNumber());
             dbCol.setJdbcTypeName(colAnnotation.type().getName());
-            dbCol.setSize(colAnnotation.size());
+            if (colAnnotation.size() != null & !colAnnotation.size().equalsIgnoreCase("")) {
+                dbCol.setSize(colAnnotation.size());
+            }
             dbCol.setPrimaryKey(colAnnotation.primaryKey());
             dbCol.setRequired(colAnnotation.required());
         }        
         return dbCol;
     }
+    
+    public boolean createAndUpgrade(String tablePrefix) {
+        try {
+            log.info("Checking if config tables need created or altered");
+            Database modelFromSource = this.readDatabaseFromClasses(DB_MODEL_PACKAGE, DB_MODEL_EXTENSION_PACKAGE);
+            
+            platform.prefixDatabase(tablePrefix, modelFromSource);
+            Database modelFromDatabase = platform.readFromDatabase(modelFromSource.getTables());
+
+            IDdlBuilder builder = platform.getDdlBuilder();
+            if (builder.isAlterDatabase(modelFromDatabase, modelFromSource)) {
+                log.info("There are config tables that needed altered");
+                String delimiter = platform.getDatabaseInfo().getSqlCommandDelimiter();
+                String alterSql = builder.alterDatabase(modelFromDatabase, modelFromSource);
+                log.debug("Alter SQL generated: {}", alterSql);
+
+                SqlScript script = new SqlScript(alterSql, platform.getSqlTemplate(), true, false, false, delimiter, null);
+                //TODO: add sql listener
+                // if (logOutput) {
+                // script.setListener(new LogSqlResultsListener(log));
+                // }
+                script.execute(platform.getDatabaseInfo().isRequiresAutoCommitForDdl());
+                log.info("Done with auto update of config tables");
+                return true;
+            } else {
+                return false;
+            }
+        } catch (RuntimeException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }    
 }
