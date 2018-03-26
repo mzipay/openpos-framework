@@ -10,6 +10,7 @@ import { NgControl } from '@angular/forms';
 import { SessionService } from '../services/session.service';
 
 @Directive({
+  // tslint:disable-next-line:directive-selector
   selector: 'input:not([type=checkbox]), textarea'
 })
 export class KeyboardDirective implements OnDestroy {
@@ -53,8 +54,8 @@ export class KeyboardDirective implements OnDestroy {
       // Massive HACK!!!! this is to fix a but in the Mat Keyboard library we are using
       // and should be removed whenever it gets fixed.
       if (!this._elementRef.nativeElement.value) {
-        this._elementRef.nativeElement.value = "";
-        let inputEvent = new Event("input");
+        this._elementRef.nativeElement.value = '';
+        const inputEvent = new Event('input');
         this._elementRef.nativeElement.dispatchEvent(inputEvent);
       }
 
@@ -68,15 +69,15 @@ export class KeyboardDirective implements OnDestroy {
 
       // connect outputs
       this._keyboardRef.instance.enterClick.subscribe(() => {
-        let event = new Event("submit", { cancelable: true, bubbles: true });
+        const event = new Event('submit', { cancelable: true, bubbles: true });
         if (this._elementRef.nativeElement.form) {
           this._elementRef.nativeElement.form.dispatchEvent(event);
         }
-        let enterPressedEvent = new KeyboardEvent("keypress", { key: "Enter", code: "Enter", cancelable: true, bubbles: true });
+        const enterPressedEvent = new KeyboardEvent('keypress', { key: 'Enter', code: 'Enter', cancelable: true, bubbles: true });
         this._elementRef.nativeElement.dispatchEvent(enterPressedEvent);
-        let enterDownEvent = new KeyboardEvent("keydown", { key: "Enter", code: "Enter", cancelable: true, bubbles: true });
+        const enterDownEvent = new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', cancelable: true, bubbles: true });
         this._elementRef.nativeElement.dispatchEvent(enterDownEvent);
-        let enterUpEvent = new KeyboardEvent("keyup", { key: "Enter", code: "Enter", cancelable: true, bubbles: true });
+        const enterUpEvent = new KeyboardEvent('keyup', { key: 'Enter', code: 'Enter', cancelable: true, bubbles: true });
         this._elementRef.nativeElement.dispatchEvent(enterUpEvent);
 
         this.enterClick.next();
