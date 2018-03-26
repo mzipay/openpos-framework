@@ -12,7 +12,7 @@
 
             <input *ngSwitchDefault matInput [formControlName]="formField.id" [formControl]="formGroup.controls[formField.id]" [placeholder]="getPlaceholderText(formField)"
                 [formatterName]="formField.inputType" [required]="formField.required" (change)="onFormElementChanged(formField)"
-                [attr.minlength]="formField.minLength" [attr.maxlength]="formField.maxLength" [readonly]="formField.disabled" [matKeyboard]="keyboardLayout">
+                [attr.minlength]="formField.minLength" [attr.maxlength]="formField.maxLength" [readonly]="formField.disabled" [keyboardLayout]="keyboardLayout">
 
             <input *ngSwitchCase="'AlphanumericPassword'" matInput [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)"
                 type="password" [required]="formField.required">
