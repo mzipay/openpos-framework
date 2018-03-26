@@ -41,35 +41,70 @@ export class DynamicFormControlComponent implements OnInit {
        });
     });
 
-    let group: any = {};
+    const group: any = {};
 
     this.screenForm.formElements.forEach( element => {
 
-      let validators: ValidatorFn[] = [];
-      if(element.required){
-        validators.push(Validators.required);
-      }
-      
-      if(element.pattern){
-        validators.push(Validators.pattern(element.pattern));
-      }
-
-      if(element.minLength){
-        validators.push(Validators.minLength(element.minLength));
-      }
-
-      if(element.maxLength){
-        validators.push(Validators.maxLength(element.maxLength));
-      }
-
-      validators.push(this.validatorService.getValidator(element.inputType));
-
-      group[element.id] = new FormControl(element.value, validators);
+      const ctlValidators: ValidatorFn[] = this.createControlValidators(element);
+      group[element.id] = new FormControl(element.value, ctlValidators);
     });
 
+    const grpValidators: ValidatorFn[] = this.createFormLevelValidators();
+    this.form = new FormGroup(group, grpValidators);
 
-    this.form = new FormGroup(group, (this.screenForm.requiresAtLeastOneValue) ? OpenPosValidators.RequireAtleastOne : null );
+  }
 
+  /**
+   * Since an individual validator cannot be added after construction, this method
+   * provides a way to add extra validators onto those already provided by the form.
+   * A list of validators is returned which include the provided list of extraValidators.
+   * The returned list of validators can then be set on the form. See the setValidators method
+   * on the FormGroup class.
+   *
+   * @param extraValidators Optional additional validators to be added to the form.
+   */
+  createFormLevelValidators(extraValidators: ValidatorFn[] = []): ValidatorFn[] {
+    let validators: ValidatorFn[] = [];
+    if (this.screenForm.requiresAtLeastOneValue) {
+      validators.push(OpenPosValidators.RequireAtleastOne);
+    }
+
+    validators = validators.concat(extraValidators);
+    return validators;
+  }
+
+  /**
+   * Since an individual validator cannot be added after construction, this method
+   * provides a way to add extra validators onto those already normally assigned to the
+   * IFormElement.
+   * A list of validators is returned which include the provided list of extraValidators.
+   * The returned list of validators can then be set on the form. See the setValidators method
+   * on the FormComponent class.
+   *
+   * @param extraValidators Optional additional validators to be added to the form.
+   */
+  createControlValidators(element: IFormElement, extraValidators: ValidatorFn[] = []): ValidatorFn[] {
+    let validators: ValidatorFn[] = [];
+    if (element.required) {
+      validators.push(Validators.required);
+    }
+
+    if (element.pattern) {
+      validators.push(Validators.pattern(element.pattern));
+    }
+
+    if (element.minLength) {
+      validators.push(Validators.minLength(element.minLength));
+    }
+
+    if (element.maxLength) {
+      validators.push(Validators.maxLength(element.maxLength));
+    }
+
+    validators.push(this.validatorService.getValidator(element.inputType));
+
+    validators = validators.concat(extraValidators);
+    return validators;
   }
 
   submitForm() {
