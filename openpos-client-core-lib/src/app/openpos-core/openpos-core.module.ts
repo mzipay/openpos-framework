@@ -146,6 +146,9 @@ const customLayouts: IKeyboardLayouts = {
     'name': 'Numeric',
     'keys': [
       [
+        [KeyboardClassKey.Bksp]
+      ],
+      [
         ['7'],['8'],['9']
       ],
       [
@@ -153,6 +156,9 @@ const customLayouts: IKeyboardLayouts = {
       ],
       [
         ['1'],['2'],['3']
+      ],
+      [
+       ['0'],['.'],[KeyboardClassKey.Enter]
       ]
     ],
     'lang': ['numeric']

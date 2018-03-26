@@ -1,12 +1,7 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Optional, Output, Self } from '@angular/core';
 import { MatInput } from '@angular/material';
-
 import { MatKeyboardRef, MatKeyboardService, MatKeyboardComponent } from '@ngx-material-keyboard/core';
-
 import { NgControl } from '@angular/forms';
-
-
-
 import { SessionService } from '../services/session.service';
 
 @Directive({
@@ -17,7 +12,7 @@ export class KeyboardDirective implements OnDestroy {
 
   private _keyboardRef: MatKeyboardRef<MatKeyboardComponent>;
 
-  @Input() matKeyboard: string;
+  @Input() keyboardLayout: string;
 
   @Input() darkTheme: boolean;
 
@@ -45,7 +40,7 @@ export class KeyboardDirective implements OnDestroy {
   private _showKeyboard() {
     if (this.session.screen.useOnScreenKeyboard) {
 
-      this._keyboardRef = this._keyboardService.open(this.matKeyboard, {
+      this._keyboardRef = this._keyboardService.open(this.keyboardLayout, {
         darkTheme: true,
         duration: this.duration,
         isDebug: this.isDebug
