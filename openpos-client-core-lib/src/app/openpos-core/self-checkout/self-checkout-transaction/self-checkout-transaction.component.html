@@ -10,9 +10,9 @@
 					<b>{{this.session.screen.prompt}}</b>
 				</div>
 				<div class="primary text-sm">{{this.session.screen.instructions}}</div>
-				<div *ngIf="session.screen.icon">
-					<app-icon [iconName]="session.screen.icon" iconClass="mat-128" class="muted-color"></app-icon>
-				</div>
+				<mat-card>
+					<div class="scan-item-icon"></div>
+				</mat-card>
 			</div>
 		</div>
 
