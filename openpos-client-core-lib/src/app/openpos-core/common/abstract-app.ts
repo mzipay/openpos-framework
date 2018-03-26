@@ -110,7 +110,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
                 setTimeout(() => this.openDialog(dialog), 0);
             } else {
                 console.log(`Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}, dialogRef: ${this.dialogRef}, ` +
-                `dialogType: ${dialogType}, previousDialogType: ${this.previousDialogType}`);
+                    `dialogType: ${dialogType}, previousDialogType: ${this.previousDialogType}`);
             }
         } else if (!dialog && this.dialogRef) {
             console.log('closing dialog');
@@ -154,7 +154,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             this.overlayContainer.getContainerElement().classList.add(this.getTheme());
             this.installedScreen = this.template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
 
-        }            
+        }
         this.template.show(screen, this);
         this.installedScreen.show(screen, this, this.template);
 
@@ -195,11 +195,11 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         }
 
         this.dialogRef.afterClosed().subscribe(result => {
-                if (!dialogProperties.executeActionBeforeClose) {
-                    this.session.onAction(result);
-                }
-                this.dialogRef = null;
+            if (!dialogProperties.executeActionBeforeClose) {
+                this.session.onAction(result);
             }
+            this.dialogRef = null;
+        }
         );
     }
 }

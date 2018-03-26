@@ -36,16 +36,16 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
     }
 
     public onSlideChange(): void {
-      if( this.responseType === "ONOFF" ) {
-        this.responseText = this.onOffModel ? "ON" : "OFF";
-      }
+        if (this.responseType === 'ONOFF') {
+            this.responseText = this.onOffModel ? 'ON' : 'OFF';
+        }
     }
 
     public onDateEntered(): void {
         if (this.dateText) {
             this.dateText = this.dateText.replace(/_/g, '');
             if (this.dateText.length === 10) {
-               this.responseText = this.dateText;
+                this.responseText = this.dateText;
             }
         }
     }
@@ -64,11 +64,11 @@ export class PromptInputComponent implements OnInit, AfterContentInit {
             this._textMask = TextMask.NO_MASK;
         }
 
-        if ( this.responseType === "ONOFF" ){
-          if( !this.responseText ) {
-            this.responseText = "OFF";
-          }
-          this.onOffModel = this.responseText === "ON";
+        if (this.responseType === 'ONOFF') {
+            if (!this.responseText) {
+                this.responseText = 'OFF';
+            }
+            this.onOffModel = this.responseText === 'ON';
         }
     }
     ngAfterContentInit(): void {
