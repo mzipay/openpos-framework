@@ -2,9 +2,10 @@ package org.jumpmind.pos.user.service;
 
 import java.util.Date;
 
+
+import org.jumpmind.pos.config.service.ConfigService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jumpmind.pos.service.Endpoint;
-import org.jumpmind.pos.service.config.ConfigServiceTest;
 import org.jumpmind.pos.user.model.AuthenticationResult;
 import org.jumpmind.pos.user.model.PasswordHistory;
 import org.jumpmind.pos.user.model.User;
@@ -20,7 +21,7 @@ public class AuthenticateEndpoint {
     @Autowired
     UserStore userStore;
     @Autowired
-    ConfigServiceTest configService;
+    ConfigService configService;
 
     @Endpoint("/authenticate")
     public AuthenticationResult authenticate(
