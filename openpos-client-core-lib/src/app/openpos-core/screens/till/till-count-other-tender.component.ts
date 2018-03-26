@@ -2,7 +2,7 @@ import { IMenuItem } from './../../common/imenuitem';
 import { IItem } from './../../common/iitem';
 import { SessionService } from './../../services/session.service';
 import { IScreen } from './../../common/iscreen';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AbstractApp } from '../../common/abstract-app';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
@@ -13,9 +13,10 @@ import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
   styleUrls: ['./till-count-other-tender.component.scss']
 })
 export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen {
-  @ViewChild('amountInput') amountField;
 
-  amountValue: string;
+  @ViewChild('amountInput') amountField: ElementRef;
+
+  amountValue = undefined;
   totalAmount: number;
   nextAction: IMenuItem;
 
@@ -52,8 +53,9 @@ export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen
   }
 
   onEnterAmount(event: Event) {
-
-      this.items.push( {
+    const amount = Number(this.amountValue);
+    if (!isNaN(amount) && amount !== 0) {
+      this.items.push({
         id: `amount${this.items.length}`,
         index: this.items.length,
         amount: this.amountValue,
@@ -64,7 +66,8 @@ export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen
       });
 
       this.totalAmount += Number(this.amountValue);
-      this.amountValue = '';
+    }
+    this.amountValue = '0.00';
   }
 
   onNextAction() {
