@@ -9,6 +9,7 @@ public interface ILegacyTransactionSummary {
     
     public LocalDate getBusinessDate();
     public String getStoreId();
+    public String getStoreLocation();
     public List<ILegacyItemSummary> getItemSummaries();
     public ILegacyCurrency getTransactionGrandTotal();
 
