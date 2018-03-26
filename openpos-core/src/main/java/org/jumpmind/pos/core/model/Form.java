@@ -74,6 +74,12 @@ public class Form implements Serializable {
         return formField;
     }
     
+    public FormField addIncomeField(String fieldId, String label, String value, boolean required) {
+        FormField formField = createIncomeField(fieldId, label, value, required);
+        formElements.add(formField);
+        return formField;
+    }
+    
     public FormField addNumericField(String fieldId, String label, String value, boolean required) {
         FormField formField = createNumericField(fieldId, label, value, required);
         formElements.add(formField);
@@ -82,6 +88,12 @@ public class Form implements Serializable {
     
     public static FormField createNumericField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
+        formField.setValue(value);
+        return formField;
+    }
+    
+    public static FormField createIncomeField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Income, required);
         formField.setValue(value);
         return formField;
     }
@@ -194,6 +206,16 @@ public class Form implements Serializable {
         
     public IFormElement getFormElement(String elementId) {
         return formElements.stream().filter(f->elementId.equals(f.getId())).findFirst().orElse(null);
+    }
+    
+    public String getFormElementValue(String elementId) {
+        String returnValue = null;
+        IFormElement formElement = this.getFormElement(elementId);
+        if (formElement != null && formElement instanceof FormField) {
+            returnValue = ((FormField) formElement).getValue();
+        }
+        
+        return returnValue;
     }
     
     public void setName(String name) {

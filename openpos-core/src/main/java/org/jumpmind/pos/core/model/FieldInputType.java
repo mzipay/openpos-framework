@@ -13,6 +13,7 @@ public enum FieldInputType {
     PostalCode,
     Phone,
     Money,
+    Income,
     Date,
     ToggleButton
 }
