@@ -38,7 +38,8 @@ public abstract class AbstractPromptScreenTranslator<T extends SellScreen> exten
 
             String responseFieldType = getResponseFieldType(promptResponseSpec);
 
-            boolean enterData = "true".equals(promptResponseSpec.getPropertyValue("enterData").toLowerCase());
+            String enterDataValue = promptResponseSpec.getPropertyValue("enterData");
+            boolean enterData = "true".equals(enterDataValue != null ? enterDataValue.toLowerCase() : "false");
 
             String minLength = getSpecPropertyValue(promptResponseSpec, "minLength", promptAndResponseBeanModel.getMinLength());
             String maxLength = getSpecPropertyValue(promptResponseSpec, "maxLength", promptAndResponseBeanModel.getMaxLength());
