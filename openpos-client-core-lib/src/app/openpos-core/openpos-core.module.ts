@@ -108,11 +108,56 @@ import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
 import { FormattedInputValueAccessor } from './common/input-formatter.directive';
 
 // On Screen Keyboard
-import { MatKeyboardModule } from '@ngx-material-keyboard/core';
+import { IKeyboardLayouts, KeyboardClassKey, keyboardLayouts, MAT_KEYBOARD_LAYOUTS, MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { KeyboardDirective } from './common/keyboard.directive';
 import { ValidatorsService } from './services/validators.service';
 import { PrintPreviewComponent } from './screens/print-preview.component';
 import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selection-list.directive';
+
+// Keyboard Layouts
+const customLayouts: IKeyboardLayouts = {
+  'US Standard': {
+    'name': 'US Standard',
+    'keys': [
+      [
+        ['`', '~'],['1', '!'],['2', '@'],['3', '#'],['4', '$'],['5', '%'],['6', '^'],['7', '&'],['8', '*'],['9', '('],['0', ')'],['-', '_'],['=', '+'],
+        [KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp]
+      ],
+      [
+        [KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab],
+        ['q', 'Q'],['w', 'W'],['e', 'E'],['r', 'R'],['t', 'T'],['y', 'Y'],['u', 'U'],['i', 'I'],['o', 'O'],['p', 'P'],['[', '{'],[']', '}'],['\\', '|']
+      ],
+      [
+        [KeyboardClassKey.Caps, KeyboardClassKey.Caps, KeyboardClassKey.Caps, KeyboardClassKey.Caps],
+        ['a', 'A'],['s', 'S'],['d', 'D'],['f', 'F'],['g', 'G'],['h', 'H'],['j', 'J'],['k', 'K'],['l', 'L'],[';', ':'],['\'', '"'],
+        [KeyboardClassKey.Enter, KeyboardClassKey.Enter, KeyboardClassKey.Enter, KeyboardClassKey.Enter]
+      ],
+      [
+        [KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift],
+        ['z', 'Z'],['x', 'X'],['c', 'C'],['v', 'V'],['b', 'B'],['n', 'N'],['m', 'M'],[',', '<'],['.', '>'],['/', '?'],['@', '@']
+      ],
+      [
+        [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space]
+      ]
+    ],
+    'lang': ['en-US'],
+  },
+  'Numeric': {
+    'name': 'Numeric',
+    'keys': [
+      [
+        ['7'],['8'],['9']
+      ],
+      [
+        ['4'],['5'],['6']
+      ],
+      [
+        ['1'],['2'],['3']
+      ]
+    ],
+    'lang': ['numeric']
+  }
+};
 
 @NgModule({
   entryComponents: [
@@ -272,6 +317,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
     httpInterceptorProviders,
     FormattersService,
     FileUploadService,
+    { provide: MAT_KEYBOARD_LAYOUTS, useValue: customLayouts }
   ]
 })
 // Export services below under 'providers'
