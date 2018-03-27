@@ -11,7 +11,9 @@
                     <p *ngIf="item.discountAmount" class="text-sm" style="margin:0px">( -{{item.discountAmount|currency:'USD':true:'1.2'}} )</p>
                 </div>
                 <div>
-                    <p class="muted-color">
+                    <p *ngIf="item.color" class="muted-color text-sm" style="margin: 4px">Color: {{item.color}}</p>
+                    <p *ngIf="item.size" class="muted-color text-sm" style="margin: 4px">Size: {{item.size}}</p>
+                    <p class="muted-color text-sm" style="margin: 4px">
                         <mat-chip-list>
                             {{item.subtitle}}&nbsp;
                             <mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
