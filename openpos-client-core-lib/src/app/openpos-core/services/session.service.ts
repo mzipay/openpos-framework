@@ -268,7 +268,7 @@ export class SessionService implements ILocaleService {
   public async onAction(action: string | IMenuItem, payload?: any, confirm?: string) {
     let actionString = '';
     // we need to figure out if we are a menuItem or just a string
-    if (action.hasOwnProperty('action')) {
+    if (action && action.hasOwnProperty('action')) {
       const menuItem = <IMenuItem>(action);
 
       actionString = menuItem.action;

@@ -14,7 +14,7 @@ public class DialogScreen extends SellScreen {
     private List<String> message = new ArrayList<>();
     
     private DialogProperties dialogProperties;
-
+    
     public DialogScreen() {
         setType(ScreenType.Dialog);
     }

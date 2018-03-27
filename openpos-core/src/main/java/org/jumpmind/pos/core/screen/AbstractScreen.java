@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class AbstractScreen implements Serializable {
@@ -30,6 +31,9 @@ public abstract class AbstractScreen implements Serializable {
     private int sequenceNumber;
     private String locale;
     private String subType;
+    
+    @JsonIgnore
+    private transient boolean rememberAsLastScreen = true;
 
     public AbstractScreen() {
     }
@@ -169,5 +173,11 @@ public abstract class AbstractScreen implements Serializable {
         this.optionalProperties.put("refreshAlways", refreshAlways);
     }
     
-
+    public boolean isRememberAsLastScreen() {
+        return rememberAsLastScreen;
+    }
+    
+    public void setRememberAsLastScreen(boolean rememberAsLastScreen) {
+        this.rememberAsLastScreen = rememberAsLastScreen;
+    }
 }

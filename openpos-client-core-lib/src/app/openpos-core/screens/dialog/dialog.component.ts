@@ -12,12 +12,27 @@ import { AbstractApp } from '../../index';
 })
 export class DialogComponent implements IScreen {
 
+  screen: any;
+
+  version: string = require( '../../../../package.json').version;
+
 
   constructor(public session: SessionService, public dialogRef: MatDialogRef<DialogComponent>) {
   }
 
   show(screen: any, app: AbstractApp): void {
+    this.screen = screen;
+  }
 
+  get messages(): string[] {
+    const targetMessages: Array<string> = new Array;
+    const sourceMessages = this.screen.message;
+    if (sourceMessages) {
+      for (let i = 0; i < sourceMessages.length; i++) {
+        targetMessages.push(sourceMessages[i].replace('$version$', this.version));
+      }
+    }
+    return targetMessages;
   }
 
 }

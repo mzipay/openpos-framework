@@ -3,7 +3,7 @@
     <h4 mat-dialog-title>{{session.dialog.title}}</h4>
   </div>
   <div mat-dialog-content>
-    <p *ngFor="let m of session.dialog.message">{{m}}</p>
+    <p *ngFor="let m of messages">{{m}}</p>
     <mat-progress-bar *ngIf="session.dialog.subType === 'Progress'" mode="indeterminate"></mat-progress-bar>
   </div>
   <div mat-dialog-actions>
