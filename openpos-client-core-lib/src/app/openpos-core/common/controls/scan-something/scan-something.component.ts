@@ -19,13 +19,13 @@ export class ScanSomethingComponent implements OnInit {
   }
 
   public onEnter(): void {
-    if (this.barcode && this.barcode.length > 0) {
-    this.session.onAction('Next', this.barcode);
-    this.barcode = '';
-    if (this.dialogRef) {
-      this.dialogRef.close();
+    if (this.barcode && this.barcode.trim().length > 0) {
+      this.session.onAction('Next', this.barcode);
+      this.barcode = '';
+      if (this.dialogRef) {
+        this.dialogRef.close();
+      }
     }
-  }
   }
 
   private filterBarcodeValue(val: string): string {
@@ -39,7 +39,7 @@ export class ScanSomethingComponent implements OnInit {
   }
 
   onBarcodeKeydown(event: KeyboardEvent) {
-    if (event.altKey || event.ctrlKey || event.metaKey ) {
+    if (event.altKey || event.ctrlKey || event.metaKey) {
       return true;
     }
     const filteredKey = this.filterBarcodeValue(event.key);
