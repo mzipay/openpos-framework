@@ -17,7 +17,6 @@ task build {}
 build.dependsOn(link)
 
 task develop {}
-develop.dependsOn link
 
 task check {}
 
