@@ -20,6 +20,7 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck,
   initialized = false;
 
   public items: ISellItem[];
+  public size: number = -1;
 
   constructor(public session: SessionService, devices: DeviceService, private observableMedia: ObservableMedia) {
   }
@@ -36,9 +37,12 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck,
   ngOnInit(): void {
     this.scrollToBottom();
   }
-
+  
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    if (this.items && this.size !== this.items.length) {
+      this.scrollToBottom();
+      this.size = this.items.length;
+    }
   }
 
   ngAfterViewInit(): void {
