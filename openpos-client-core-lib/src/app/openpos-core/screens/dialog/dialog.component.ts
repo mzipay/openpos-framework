@@ -14,7 +14,7 @@ export class DialogComponent implements IScreen {
 
   screen: any;
 
-  version: string = require( '../../../../package.json').version;
+  // version: string = require( '../../../../package.json').version;
 
 
   constructor(public session: SessionService, public dialogRef: MatDialogRef<DialogComponent>) {
@@ -29,7 +29,7 @@ export class DialogComponent implements IScreen {
     const sourceMessages = this.screen.message;
     if (sourceMessages) {
       for (let i = 0; i < sourceMessages.length; i++) {
-        targetMessages.push(sourceMessages[i].replace('$version$', this.version));
+        targetMessages.push(sourceMessages[i].replace('$version$', 'todo'));
       }
     }
     return targetMessages;
