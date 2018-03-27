@@ -1,4 +1,4 @@
-import { MatDialog, MatDialogRef, MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatDialogRef, MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { FileUploadService } from '../../services/file-upload.service';
 import { IMenuItem } from '../../common/imenuitem';
 import { Component } from '@angular/core';
@@ -33,7 +33,8 @@ export class SelfCheckoutStatusBarComponent {
   }
 
   public showScan() {
-    this.dialogService.open(ScanSomethingComponent);
+    const dialogConfig: MatDialogConfig = { autoFocus: false };
+    this.dialogService.open(ScanSomethingComponent, dialogConfig);
   }
 
 }

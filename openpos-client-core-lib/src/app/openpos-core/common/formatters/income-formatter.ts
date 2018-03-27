@@ -9,29 +9,21 @@ export class IncomeFormatter implements IFormatter {
     }
 
     formatValue(value: string): string {
-
-        return value;
-        /*
-        let formattedValue = '';
-        let strippedValue = value.replace(',', '');
-        if (value.length <= 3) {
-            strippedValue = strippedValue + '000';
-        }
-
-        let count = value.length;
-        for (let idx = strippedValue.length - 1; idx >= 0; idx--) {
-            if (count % 4 === 0 && strippedValue.charAt(idx) !== ',') {
-                formattedValue = ',' + formattedValue;
+        if (! value) {
+            return '';
+        } else {
+            let count = 1;
+            let formattedValue = '';
+            for (let idx = value.length - 1; idx >= 0; idx--) {
+                formattedValue = `${(count % 3 === 0 && count < value.length ? ',' : '')}${value.charAt(idx)}${formattedValue}`;
+                count++;
             }
-            formattedValue = strippedValue.charAt(idx) + formattedValue;
-            count--;
+            return `$${formattedValue},000`;
         }
-
-        return formattedValue;
-        */
     }
 
     unFormatValue(value: string): string {
-        return value;
+        const newValue = value.replace(/,000$/, '').replace(/\$|,/g, '');
+        return newValue;
     }
 }
