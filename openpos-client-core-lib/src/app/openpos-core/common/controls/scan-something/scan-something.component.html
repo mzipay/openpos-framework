@@ -5,5 +5,5 @@
     </button>
     <input #input [keyboardLayout]="'Numeric'" fxFlexFill fxFlex="1 1 auto" class="bordered prompt-input-scan-something text-md" 
       (keyup.enter)="onEnter()" [(ngModel)]="barcode" (keydown)="onBarcodeKeydown($event)" (paste)="onBarcodePaste($event)"
-      placeholder="Scan/Enter Something" autofocus novalidate type="tel" pattern="[0-9]*">
+      placeholder="Scan/Enter Something" [appFocus]="true" novalidate type="tel" pattern="[0-9]*">
   </div>
