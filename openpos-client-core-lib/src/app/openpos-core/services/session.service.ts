@@ -18,8 +18,6 @@ import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-declare var cordova: any;
-
 @Injectable()
 export class SessionService implements ILocaleService {
 
