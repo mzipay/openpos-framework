@@ -18,7 +18,7 @@
 
 		<mat-card fxFlex="0 0 300px" class="page-content-card grey-background scrollable-content-card">
 			<mat-card-content fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="end stretch" fxLayoutGap="0px" style="padding: 16px">
-				<mat-card *ngFor="let total of session.screen.totals" class="page-content-card text-center">
+				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center stretch" *ngFor="let total of session.screen.totals" class="page-content-card text-center">
 					<mat-card-title class="primary text-sm">
 						{{total.name}}
 					</mat-card-title>
@@ -27,7 +27,7 @@
 							<span class="super-currency-symbol">$</span>{{total.amount}}</p>
 					</mat-card-content>
 				</mat-card>
-				<mat-card class="page-content-card text-center">
+				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center stretch" class="page-content-card text-center">
 					<mat-card-title class="primary text-md"> Total </mat-card-title>
 					<mat-card-content>
 						<p class="primary text-lg">
@@ -35,7 +35,7 @@
 					</mat-card-content>
 				</mat-card>
 
-				<div fxFlex="1 1 auto"></div>
+				<div fxFlex="2 1 auto"></div>
 
 				<div>
 					<button mat-button *ngIf="!session.screen.readOnly" [disabled]="!session.screen.transaction.active || items.length == 0"
