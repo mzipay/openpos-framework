@@ -25,7 +25,7 @@ export class DynamicFormFieldComponent implements OnInit {
   dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
 
-  public keyboardLayout: string = "en-US";
+  public keyboardLayout = 'en-US';
 
   // tslint:disable-next-line:no-output-on-prefix
   @Output() onFieldChanged = new EventEmitter<IFormElement>();
@@ -40,10 +40,10 @@ export class DynamicFormFieldComponent implements OnInit {
       this.formField.inputType === 'ToggleButton') {
       this.values = this.screenService.getFieldValues(this.formField.id);
     }
-    if ( this.formField.inputType === "NumericText" || 
-      this.formField.inputType === "Phone" || 
-      this.formField.inputType === "PostalCode") {
-      this.keyboardLayout = "Numeric";
+    if (this.formField.inputType === 'NumericText' ||
+      this.formField.inputType === 'Phone' ||
+      this.formField.inputType === 'PostalCode') {
+      this.keyboardLayout = 'Numeric';
     }
   }
 

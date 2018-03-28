@@ -2,9 +2,6 @@ package org.jumpmind.pos.core.model;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class FormField implements IFormElement, IField, Serializable {
     private static final long serialVersionUID = 1L;
     
