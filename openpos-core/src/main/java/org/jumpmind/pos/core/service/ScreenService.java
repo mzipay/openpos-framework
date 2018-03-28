@@ -174,9 +174,7 @@ public class ScreenService implements IScreenService {
                 lastScreenByNodeId = new HashMap<>();
                 lastScreenByAppIdByNodeId.put(appId, lastScreenByNodeId);
             }
-            if (screen.isRememberAsLastScreen()) {
-                lastScreenByNodeId.put(nodeId, screen);
-            }
+            lastScreenByNodeId.put(nodeId, screen);
         }
     }
 
