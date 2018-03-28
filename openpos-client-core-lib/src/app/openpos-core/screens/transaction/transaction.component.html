@@ -12,9 +12,9 @@
 					</p>
 
             		<span [hidden]="!item.isGiftReceipt"><mat-icon color="muted-color">redeem</mat-icon></span>
-					<span class="primary text-md">{{item.amount|currency:'USD':true:'1.2'}}<br>
-						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">{{item.originalAmount|currency:'USD':true:'1.2'}}</p>
-						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">( -{{item.discountAmount|currency:'USD':true:'1.2'}} )</p>
+					<span class="primary text-md"><span class="super-currency-symbol">$</span>{{item.amount}}<br>
+						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through"><span class="super-currency-symbol">$</span>{{item.originalAmount}}</p>
+						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">( -<span class="super-currency-symbol">$</span>{{item.discountAmount}} )</p>
 					</span>
 					<button *ngIf ="!session.screen.readOnly" mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
 						<mat-icon>expand_more</mat-icon>
