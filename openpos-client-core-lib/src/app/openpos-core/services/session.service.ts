@@ -264,63 +264,67 @@ export class SessionService implements ILocaleService {
   }
 
   public async onAction(action: string | IMenuItem, payload?: any, confirm?: string) {
-    let actionString = '';
-    // we need to figure out if we are a menuItem or just a string
-    if (action && action.hasOwnProperty('action')) {
-      const menuItem = <IMenuItem>(action);
+    if (action) {
+      let actionString = '';
+      // we need to figure out if we are a menuItem or just a string
+      if (action.hasOwnProperty('action')) {
+        const menuItem = <IMenuItem>(action);
 
-      actionString = menuItem.action;
-      // check to see if we are an IURLMenuItem
-      if (menuItem.hasOwnProperty('url')) {
-        const urlMenuItem = <IUrlMenuItem>menuItem;
-        console.log(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode} `);
-        window.open(urlMenuItem.url, urlMenuItem.targetMode);
-        if (!actionString || 0 === actionString.length) {
+        actionString = menuItem.action;
+        // check to see if we are an IURLMenuItem
+        if (menuItem.hasOwnProperty('url')) {
+          const urlMenuItem = <IUrlMenuItem>menuItem;
+          console.log(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode} `);
+          window.open(urlMenuItem.url, urlMenuItem.targetMode);
+          if (!actionString || 0 === actionString.length) {
+            return;
+          }
+        }
+      } else {
+        actionString = <string>action;
+      }
+
+      if (confirm) {
+        console.log('Confirming action');
+        const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
+        dialogRef.componentInstance.title = confirm;
+        const result = await dialogRef.afterClosed().toPromise();
+
+        // if we didn't confirm return and don't send the action to the server
+        if (!result) {
+          console.log('Canceling action');
           return;
         }
       }
-    } else {
-      actionString = <string>action;
-    }
 
-    if (confirm) {
-      console.log('Confirming action');
-      const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
-      dialogRef.componentInstance.title = confirm;
-      const result = await dialogRef.afterClosed().toPromise();
+      console.log('Publish action ' + actionString);
 
-      // if we didn't confirm return and don't send the action to the server
-      if (!result) {
-        console.log('Canceling action');
-        return;
+      // First we will use the payload passed into this function then
+      // Check if we have registered action payload
+      // Otherwise we will send whatever is in this.response
+      if (payload != null) {
+        this.response = payload;
+      } else if (this.actionPayloads.has(actionString)) {
+        console.log(`Using registered action payload for ${actionString}`);
+        this.response = this.actionPayloads.get(actionString)();
       }
-    }
 
-    console.log('Publish action ' + actionString);
+      const sendToServer: Function = () => {
+        this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
+          JSON.stringify({ name: actionString, data: this.response }));
+      };
 
-    // First we will use the payload passed into this function then
-    // Check if we have registered action payload
-    // Otherwise we will send whatever is in this.response
-    if (payload != null) {
-      this.response = payload;
-    } else if (this.actionPayloads.has(actionString)) {
-      console.log(`Using registered action payload for ${actionString}`);
-      this.response = this.actionPayloads.get(actionString)();
-    }
-
-    const sendToServer: Function = () => {
-      this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
-        JSON.stringify({ name: actionString, data: this.response }));
-    };
-
-    // see if we have any intercepters registered
-    // otherwise just send the action
-    if (this.actionIntercepters.has(actionString)) {
-      this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
+      // see if we have any intercepters registered
+      // otherwise just send the action
+      if (this.actionIntercepters.has(actionString)) {
+        this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
+      } else {
+        sendToServer();
+        this.showDialog(null);
+        this.queueLoading();
+      }
     } else {
-      sendToServer();
-      this.showDialog(null);
-      this.queueLoading();
+      console.log(`received an invalid action ${action}`);
     }
   }
 
