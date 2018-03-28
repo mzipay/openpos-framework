@@ -36,9 +36,9 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
         super(legacyScreen, screenClass, appId, properties);
         getScreen().setTemplate(SellScreen.TEMPLATE_SELL);
         this.addLocalMenuItems = addLocalMenuItems;
-        getScreen().setResponseType(responseType != null ? responseType.name() : null);
-        getScreen().setMinLength(minLength);
-        getScreen().setMaxLength(maxLength);
+        screen.setResponseType(responseType != null ? responseType.name() : null);
+        screen.setMinLength(minLength);
+        screen.setMaxLength(maxLength);
     }   
     
     @Override

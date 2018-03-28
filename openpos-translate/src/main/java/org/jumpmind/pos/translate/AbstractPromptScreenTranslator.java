@@ -91,6 +91,7 @@ public abstract class AbstractPromptScreenTranslator<T extends SellScreen> exten
             String resourceBundleFilename) {
         Optional<String> optPromptText = Optional.empty();
         try {
+          
             ILegacyPromptAndResponseModel promptAndResponseModel = this.legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
             
             String formattedPromptText = promptAndResponseModel.getPromptText();
