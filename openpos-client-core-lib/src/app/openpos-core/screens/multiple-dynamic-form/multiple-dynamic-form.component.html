@@ -1,0 +1,13 @@
+<mat-tab-group>
+    <mat-tab *ngFor="let formOption of screen.forms">
+        <ng-template mat-tab-label>
+            <div fxLayoutAlign="start center">
+                <mat-icon>{{formOption.icon}}</mat-icon><span>{{formOption.name}}</span>
+            </div>
+        </ng-template>
+        <div>
+            {{formOption.instructions}}
+        </div>
+        <app-dynamic-form [screenForm]="formOption.form" [submitAction]="formOption.submitAction"></app-dynamic-form>
+    </mat-tab>
+</mat-tab-group>

@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import { ScreenService } from '../../../services/screen.service';
 import { OpenPosValidators } from '../../validators/openpos-validators';
 import { ValidatorsService } from '../../../services/validators.service';
+import { IForm } from '../../iform';
 
 @Component({
   selector: 'app-dynamic-form-control',
@@ -33,13 +34,15 @@ export class DynamicFormControlComponent implements OnInit {
 
   ngOnInit() {
 
-    this.screen.alternateSubmitActions.forEach(action => {
+    if( this.screen.alternateSubmitActions ){
+      this.screen.alternateSubmitActions.forEach(action => {
 
-      this.session.registerActionPayload( action, () => {
-        this.buildFormPayload();
-        return this.session.response = this.screenForm;
-       });
-    });
+        this.session.registerActionPayload( action, () => {
+          this.buildFormPayload();
+          return this.session.response = this.screenForm;
+         });
+      });
+    }
 
     const group: any = {};
 
@@ -129,10 +132,5 @@ export class DynamicFormControlComponent implements OnInit {
       }
     });
   }
-}
-
-export interface IForm {
-  formElements: IFormElement[];
-  requiresAtLeastOneValue: Boolean;
 }
 

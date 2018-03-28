@@ -31,8 +31,12 @@
     </ng-template>
 
     <ng-template ngSwitchCase="OptionForm">
-        <app-dynamic-form-control fxFlex [screen]="session.screen" [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"></app-dynamic-form-control>
-    </ng-template>
+        <mat-card fxFlex class="page-content-card">
+            <mat-card-content>
+                <app-dynamic-form-control [screen]="session.screen" [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"></app-dynamic-form-control>
+            </mat-card-content>
+          </mat-card>
+     </ng-template>
 
 
 </div>

@@ -13,6 +13,10 @@ public class MultipleDynamicFormScreen extends SellScreen implements IHasForm{
 
 	private List<MultipleFormOption> forms = new ArrayList<MultipleFormOption>();
 	private Form submittedForm;
+	
+	public MultipleDynamicFormScreen() {
+		setType(ScreenType.MultipleDynamicForm);
+	}
 
 	public List<MultipleFormOption> getForms() {
 		return forms;
