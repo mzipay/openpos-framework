@@ -10,8 +10,11 @@ node {
 	nodeModulesDir = file("./")
 }
 
+npm_link.dependsOn(npm_install)
+
 task link {}
 link.dependsOn(npm_link)
+
 
 task build {}
 build.dependsOn(link)
