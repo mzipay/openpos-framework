@@ -12,6 +12,8 @@ public interface IScreenService {
     
     public AbstractScreen getLastScreen(String appId, String nodeId);
     
+    public AbstractScreen getLastDialog(String appId, String nodeId);
+    
     public Form deserializeScreenPayload(String appId, String nodeId, Action action);
 
 }
