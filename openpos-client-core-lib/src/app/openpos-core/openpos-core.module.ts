@@ -113,6 +113,7 @@ import { KeyboardDirective } from './common/keyboard.directive';
 import { ValidatorsService } from './services/validators.service';
 import { PrintPreviewComponent } from './screens/print-preview.component';
 import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selection-list.directive';
+import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/multiple-dynamic-form.component';
 
 // Keyboard Layouts
 const customLayouts: IKeyboardLayouts = {
@@ -209,7 +210,8 @@ const customLayouts: IKeyboardLayouts = {
     CustomerSearchResultsComponent,
     SelfCheckoutOptionsComponent,
     FullPageImageComponent,
-    CallForAuthorizationComponent
+    CallForAuthorizationComponent,
+    MultipleDynamicFormComponent
   ],
   declarations: [
     DialogComponent,
@@ -277,7 +279,8 @@ const customLayouts: IKeyboardLayouts = {
     FabToggleButtonComponent,
     SelfCheckoutOptionsComponent,
     FullPageImageComponent,
-    CallForAuthorizationComponent
+    CallForAuthorizationComponent,
+    MultipleDynamicFormComponent
   ],
   imports: [
     BrowserModule,
