@@ -14,6 +14,7 @@ public abstract class AbstractScreen implements Serializable {
 
     public static String TEMPLATE_SELL = "Sell";
     public static String TEMPLATE_BLANK = "Blank";
+    public static String TEMPLATE_BLANK_WITH_BAR = "BlankWithBar";
     public static String TEMPLATE_SELF_CHECKOUT = "SelfCheckout";
 
     /**

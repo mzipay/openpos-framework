@@ -94,6 +94,7 @@ import { CallForAuthorizationComponent } from './screens/call-for-authorization/
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
+import { BlankWithBarComponent } from './templates/blank-with-bar/blank-with-bar.component';
 import { SellComponent } from './templates/sell/sell.component';
 import { SelfCheckoutWithBarComponent } from './templates/selfcheckout-with-bar/selfcheckout-with-bar.component';
 
@@ -196,6 +197,7 @@ const customLayouts: IKeyboardLayouts = {
     WarrantyCoverageComponent,
     ScanSomethingComponent,
     BlankComponent,
+    BlankWithBarComponent,
     SelfCheckoutWithBarComponent,
     SellComponent,
     OptionsComponent,
@@ -252,6 +254,7 @@ const customLayouts: IKeyboardLayouts = {
     WarrantyCoverageComponent,
     ScanSomethingComponent,
     BlankComponent,
+    BlankWithBarComponent,
     SelfCheckoutWithBarComponent,
     SellComponent,
     TemplateDirective,
