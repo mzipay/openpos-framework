@@ -25,10 +25,7 @@ public abstract class AbstractScreen implements Serializable {
 
     private String name;
     private String type;
-    private MenuItem backButton;
-    private MenuItem logoutButton;
-    private String template = "Blank";
-    private int sequenceNumber;
+    private String template = TEMPLATE_BLANK_WITH_BAR;
     private String locale;
     private String subType;
     
@@ -115,19 +112,11 @@ public abstract class AbstractScreen implements Serializable {
     }
 
     public void setBackButton(MenuItem backButton) {
-        this.backButton = backButton;
-    }
-
-    public MenuItem getBackButton() {
-        return backButton;
+        put("backButton", backButton);
     }
 
     public void setLogoutButton(MenuItem logoutButton) {
-        this.logoutButton = logoutButton;
-    }
-
-    public MenuItem getLogoutButton() {
-        return logoutButton;
+        put("logoutButton", logoutButton);
     }
 
     public void setTemplate(String template) {
@@ -139,11 +128,7 @@ public abstract class AbstractScreen implements Serializable {
     }
 
     public void setSequenceNumber(int sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
-    }
-
-    public int getSequenceNumber() {
-        return sequenceNumber;
+        put("sequenceNumber", sequenceNumber);
     }
 
     public void setTheme(String theme) {
