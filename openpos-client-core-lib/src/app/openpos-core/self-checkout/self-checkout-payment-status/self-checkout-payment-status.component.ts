@@ -11,6 +11,7 @@ export class SelfCheckoutPaymentStatusComponent implements OnInit {
 
   balanceDue: string = "0.00";
   instructions: string = "";
+  additionalInstructions: string = "";
 
   constructor(public session: SessionService) { }
 
@@ -20,5 +21,8 @@ export class SelfCheckoutPaymentStatusComponent implements OnInit {
   ngOnInit() {
     this.balanceDue = this.session.screen.balanceDue;
     this.instructions = this.session.screen.instructions;
+    if (this.session.screen.additionalInstructions) {
+      this.additionalInstructions = this.session.screen.additionalInstructions;
+    }
   }
 }
