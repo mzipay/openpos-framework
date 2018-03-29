@@ -2,15 +2,9 @@
 	<div fxFill fxLayout="row" fxLayoutAlign="space-between ">
 		<div fxLayout="row" fxLayoutAlign=" center">
 
-			<button *ngIf="session.screen.showHelp" mat-button [matMenuTriggerFor]="itemMenu">
-				<mat-icon class="material-icons mat-48">help</mat-icon>
+			<button *ngIf="session.screen.showScan" mat-button (click)="showScan()">
+				<mat-icon svgIcon="local_search_id_code" class="icon-statusbar"></mat-icon>
 			</button>
-			<mat-menu #itemMenu="matMenu">
-				<button mat-menu-item (click)="onAdminLogin()">
-					<mat-icon>person</mat-icon>
-					<span>Admin Login</span>
-				</button>
-			</mat-menu>
 
 			<ng-container *ngIf="session.screen && session.screen.type !='SelfCheckoutTransaction' && session.screen.backButton && session.screen.backButton.enabled; else checkForLogoutButton">
 				<button mat-button style="margin-left:-20px" (click)="doMenuItemAction(session.screen.backButton)">
@@ -28,9 +22,9 @@
 			</button>
 		</div>
 
-		<button *ngIf="session.screen.showScan" mat-button (click)="showScan()">
-			<mat-icon svgIcon="local_search_id_code" class="icon-statusbar"></mat-icon>
-		</button>		
+		<button *ngIf="session.screen.showHelp" mat-button (click)="onAdminLogin()">
+			<mat-icon svgIcon="local_admin" class="icon-statusbar"></mat-icon>
+		</button>
 
 	</div>
 </mat-toolbar>
