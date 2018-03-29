@@ -6,7 +6,8 @@
             <mat-card-content>
                 <mat-nav-list>
                     <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
-                    <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onMakeOptionSelection(o)">
+                    <mat-list-item *ngFor="let o of optionItems" fxLayoutGap="10px" (click)="o.enabled && onMakeOptionSelection(o)">
+                        <mat-icon>{{o.icon}}</mat-icon>
                         <span [ngClass]="{'muted-color' : !o.enabled}">{{o.displayValue}}</span>
                         <span fxFlex></span>
                         <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
@@ -33,7 +34,7 @@
     <ng-template ngSwitchCase="OptionForm">
         <mat-card fxFlex class="page-content-card">
             <mat-card-content>
-                <app-dynamic-form-control [screen]="session.screen" [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"></app-dynamic-form-control>
+                <app-dynamic-form-control [screen]="screen" [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"></app-dynamic-form-control>
             </mat-card-content>
           </mat-card>
      </ng-template>
