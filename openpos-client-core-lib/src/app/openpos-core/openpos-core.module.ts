@@ -44,8 +44,6 @@ import { LoaderComponent } from './common/loader/loader.component';
 import { DynamicFormControlComponent } from './common/controls/dynamic-form-control/dynamic-form-control.component';
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
 import { PosComponent } from './pos/pos.component';
-import { SelfCheckoutComponent } from './self-checkout/self-checkout.component';
-import { CustomerDisplayComponent } from './customerdisplay/customerdisplay.component';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 import { CheckoutListItemComponent} from './common/controls/checkout-list-item/checkout-list-item.component';
 
@@ -265,8 +263,6 @@ const customLayouts: IKeyboardLayouts = {
     DynamicFormControlComponent,
     DynamicFormFieldComponent,
     PosComponent,
-    SelfCheckoutComponent,
-    CustomerDisplayComponent,
     ChangeComponent,
     ConfirmationDialogComponent,
     CheckoutListItemComponent,
@@ -303,8 +299,6 @@ const customLayouts: IKeyboardLayouts = {
   ],
   exports: [
     PosComponent,
-    SelfCheckoutComponent,
-    CustomerDisplayComponent,
     LoaderComponent,
     MaterialModule,
     MatKeyboardModule,
