@@ -1,9 +1,13 @@
 package org.jumpmind.pos.core.service;
 
+import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_LINE;
+import static org.jumpmind.pos.util.BoxLogging.LOWER_LEFT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.LOWER_RIGHT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.UPPER_LEFT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.UPPER_RIGHT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
+
 import java.io.ByteArrayOutputStream;
-
-import static org.jumpmind.pos.util.BoxLogging.*;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;

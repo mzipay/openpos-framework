@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.core.model.Total;
+import org.jumpmind.pos.core.template.SellTemplate;
 
 public class SellItemScreen extends PromptScreen {
 
@@ -26,7 +27,7 @@ public class SellItemScreen extends PromptScreen {
 
     public SellItemScreen() {
         this.setType(ScreenType.Transaction);
-        this.setTemplate(SellScreen.TEMPLATE_SELL);
+        this.setTemplate(new SellTemplate());
         this.setShowScan(true);
         this.setScanType(ScanType.CAMERA_CORDOVA);
     }
