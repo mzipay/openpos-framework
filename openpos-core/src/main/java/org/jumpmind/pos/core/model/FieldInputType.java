@@ -15,5 +15,6 @@ public enum FieldInputType {
     Money,
     Income,
     Date,
-    ToggleButton
+    ToggleButton,
+    AutoComplete
 }
