@@ -12,6 +12,7 @@ import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/lay
 
 import { StompConfig, StompService } from '@stomp/ng2-stompjs';
 import { TextMaskModule } from 'angular2-text-mask';
+import { SearchSelectModule } from '@oasisdigital/angular-material-search-select';
 import 'hammerjs'; // for material
 
 // Common
@@ -120,11 +121,13 @@ const customLayouts: IKeyboardLayouts = {
     'name': 'US Standard',
     'keys': [
       [
+        // tslint:disable-next-line:max-line-length
         ['`', '~'],['1', '!'],['2', '@'],['3', '#'],['4', '$'],['5', '%'],['6', '^'],['7', '&'],['8', '*'],['9', '('],['0', ')'],['-', '_'],['=', '+'],
         [KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp]
       ],
       [
         [KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab],
+        // tslint:disable-next-line:max-line-length
         ['q', 'Q'],['w', 'W'],['e', 'E'],['r', 'R'],['t', 'T'],['y', 'Y'],['u', 'U'],['i', 'I'],['o', 'O'],['p', 'P'],['[', '{'],[']', '}'],['\\', '|']
       ],
       [
@@ -289,7 +292,8 @@ const customLayouts: IKeyboardLayouts = {
     BrowserAnimationsModule,
     MaterialModule,
     MatKeyboardModule,
-    TextMaskModule
+    TextMaskModule,
+    SearchSelectModule
   ],
   exports: [
     PosComponent,

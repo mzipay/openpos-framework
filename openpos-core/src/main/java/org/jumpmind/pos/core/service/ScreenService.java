@@ -87,15 +87,16 @@ public class ScreenService implements IScreenService {
     @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{nodeId}/control/{controlId}")
     @ResponseBody
     public String getComponentValues(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String controlId) {
-    	logger.info("Received a request to load component values for {} {} {}", appId, nodeId, controlId);
-    	
+        logger.info("Received a request to load component values for {} {} {}", appId, nodeId, controlId);
+
         AbstractScreen defaultScreen = getLastScreen(appId, nodeId);
         DynamicFormScreen dynamicScreen = null;
         if (defaultScreen instanceof DynamicFormScreen) {
             dynamicScreen = (DynamicFormScreen) defaultScreen;
             IFormElement formElement = dynamicScreen.getForm().getFormElement(controlId);
-            
-            // TODO: Look at combining FormListField and ComboField or at least inheriting off of each other.
+
+            // TODO: Look at combining FormListField and ComboField or at least
+            // inheriting off of each other.
             List<String> valueList = null;
             if (formElement instanceof FormListField) {
                 valueList = ((FormListField) formElement).getValues();
@@ -113,10 +114,11 @@ public class ScreenService implements IScreenService {
                     throw new RuntimeException("Error while serializing the component values.", e);
                 }
                 String result = new String(out.toByteArray());
-                logger.info("Responding to request to load component values {} {} {} with values \n{}", appId, nodeId, controlId, result);
+                logger.info("Responding to request to load component values {} {} {} with {} values", appId, nodeId, controlId,
+                        valueList.size());
                 return result;
             } else {
-            	logger.info("Unable to find the valueList for the requested component {} {} {}.", appId, nodeId, controlId);
+                logger.info("Unable to find the valueList for the requested component {} {} {}.", appId, nodeId, controlId);
             }
         }
         return "{}";

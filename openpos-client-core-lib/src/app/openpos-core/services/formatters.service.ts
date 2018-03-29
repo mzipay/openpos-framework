@@ -15,7 +15,7 @@ import { IncomeFormatter } from '../common/formatters/income-formatter';
 export class FormattersService {
     private formatters = new Map<string, Map<string, IFormatter>>();
 
-    constructor( private localeService: LocaleService ) {
+    constructor(private localeService: LocaleService) {
         const USFormatters = new Map<string, IFormatter>();
         const defaultPhoneFormatter = new PhoneUSFormatter();
 
@@ -45,7 +45,7 @@ export class FormattersService {
         NOLOCALEFormatters.set('income', new IncomeFormatter());
     }
 
-    getFormatter( name: string ): IFormatter {
+    getFormatter(name: string): IFormatter {
 
         const locale = this.localeService.getLocale();
         if (name && locale) {
@@ -63,12 +63,12 @@ export class FormattersService {
             }
         }
 
-        console.log( `No formatter found for locale '${locale}' formatter name '${name}'. Using a 'Do Nothing' formatter`);
+        console.log(`No formatter found for locale '${locale}' formatter name '${name}'. Using a 'Do Nothing' formatter`);
         return new DoNothingFormatter();
     }
 
-    setFormatter( name: string, formatter: IFormatter, locale?: string ){
-        if( !locale ){
+    setFormatter(name: string, formatter: IFormatter, locale?: string) {
+        if (!locale) {
             locale = 'NO-LOCALE';
         }
 
