@@ -2,6 +2,7 @@ import { FullPageImageComponent } from './../screens/full-page-image/full-page-i
 import { TillCountOtherTenderComponent } from './../screens/till/till-count-other-tender.component';
 import { OptionsComponent } from './../screens/options/options.component';
 import { BlankComponent } from '../templates/blank/blank.component';
+import { BlankWithBarComponent } from '../templates/blank-with-bar/blank-with-bar.component';
 import { LoginComponent } from './../screens/login/login.component';
 import { PersonalizationComponent } from '../screens/personalization.component';
 import { WarrantyCoverageComponent } from '../screens/warranty-coverage.component';
@@ -98,6 +99,7 @@ export class ScreenService {
 
     // Templates
     this.screens.set('Blank', BlankComponent);
+    this.screens.set('BlankWithBar', BlankWithBarComponent);
     this.screens.set('Sell', SellComponent);
     this.screens.set('SelfCheckout', SelfCheckoutWithBarComponent);
   }

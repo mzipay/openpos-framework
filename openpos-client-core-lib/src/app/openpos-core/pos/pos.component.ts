@@ -145,4 +145,26 @@ export class PosComponent extends AbstractApp implements DoCheck {
     }
   }
 
+  protected getClasses(): string {
+    let classes: string = '';
+    switch (this.router.url.substring(1)) {
+      case 'pos':
+        if (this.session.screen.type==='Home') {
+          classes = 'main-background';
+        }
+        break;
+      case 'selfcheckout':
+        if (this.session.screen.type==='SelfCheckoutHome') {
+          classes = 'main-background selfcheckout';
+        } else {
+          classes = 'lighter selfcheckout';
+        }
+        break;
+      case 'customerdisplay':
+        classes = 'selfcheckout';
+        break;
+    }
+    return classes;
+  }
+
 }

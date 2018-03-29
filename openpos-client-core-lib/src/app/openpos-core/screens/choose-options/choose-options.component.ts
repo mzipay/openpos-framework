@@ -1,42 +1,37 @@
 import { IScreen } from '../../common/iscreen';
-import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {SessionService} from '../../services/session.service';
 import { AbstractApp } from '../../common/abstract-app';
 import { IForm } from './../form.component';
 import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../common/action-intercepter';
+import { IChooseOptionsScreen, DisplayStyle } from './ichooseOptionsScreen';
 
 
 @Component({
   selector: 'app-choose-options',
   templateUrl: './choose-options.component.html'
 })
-export class ChooseOptionsComponent implements IScreen, OnInit, DoCheck, OnDestroy {
+export class ChooseOptionsComponent implements IScreen, OnInit,  OnDestroy {
 
   static readonly UNDO = 'Undo';
   public currentView: string;
   public selectedOption: IOptionItem;
   public optionItems: IOptionItem[];
-  private lastSequenceNum: number;
   public promptText: string;
+
+  screen: IChooseOptionsScreen;
 
   constructor(public session: SessionService) {
   }
 
   show(screen: any, app: AbstractApp) {
-    console.log('Show invoked');
+    this.screen = screen;
+    this.optionItems = this.screen.options;
+    this.currentView = this.screen.displayStyle;
+    this.promptText = this.screen.promptText;
   }
 
   ngOnInit(): void {
-  }
-
-  ngDoCheck(): void {
-    if (this.session.screen.sequenceNumber !== this.lastSequenceNum) {
-      // Screen changed, re-init
-      this.optionItems = this.session.screen.options;
-      this.lastSequenceNum = this.session.screen.sequenceNumber;
-      this.currentView = this.session.screen.displayStyle;
-      this.promptText = this.session.screen.promptText;
-    }
   }
 
   ngOnDestroy() {

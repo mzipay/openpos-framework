@@ -44,8 +44,6 @@ import { LoaderComponent } from './common/loader/loader.component';
 import { DynamicFormControlComponent } from './common/controls/dynamic-form-control/dynamic-form-control.component';
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
 import { PosComponent } from './pos/pos.component';
-import { SelfCheckoutComponent } from './self-checkout/self-checkout.component';
-import { CustomerDisplayComponent } from './customerdisplay/customerdisplay.component';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 import { CheckoutListItemComponent} from './common/controls/checkout-list-item/checkout-list-item.component';
 
@@ -94,6 +92,7 @@ import { CallForAuthorizationComponent } from './screens/call-for-authorization/
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
+import { BlankWithBarComponent } from './templates/blank-with-bar/blank-with-bar.component';
 import { SellComponent } from './templates/sell/sell.component';
 import { SelfCheckoutWithBarComponent } from './templates/selfcheckout-with-bar/selfcheckout-with-bar.component';
 
@@ -196,6 +195,7 @@ const customLayouts: IKeyboardLayouts = {
     WarrantyCoverageComponent,
     ScanSomethingComponent,
     BlankComponent,
+    BlankWithBarComponent,
     SelfCheckoutWithBarComponent,
     SellComponent,
     OptionsComponent,
@@ -252,6 +252,7 @@ const customLayouts: IKeyboardLayouts = {
     WarrantyCoverageComponent,
     ScanSomethingComponent,
     BlankComponent,
+    BlankWithBarComponent,
     SelfCheckoutWithBarComponent,
     SellComponent,
     TemplateDirective,
@@ -262,8 +263,6 @@ const customLayouts: IKeyboardLayouts = {
     DynamicFormControlComponent,
     DynamicFormFieldComponent,
     PosComponent,
-    SelfCheckoutComponent,
-    CustomerDisplayComponent,
     ChangeComponent,
     ConfirmationDialogComponent,
     CheckoutListItemComponent,
@@ -300,8 +299,6 @@ const customLayouts: IKeyboardLayouts = {
   ],
   exports: [
     PosComponent,
-    SelfCheckoutComponent,
-    CustomerDisplayComponent,
     LoaderComponent,
     MaterialModule,
     MatKeyboardModule,
