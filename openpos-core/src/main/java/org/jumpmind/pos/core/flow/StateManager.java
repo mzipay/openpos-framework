@@ -152,13 +152,9 @@ public class StateManager implements IStateManager {
     }
 
     @Override
-    public AbstractScreen getLastScreen() {
-        return screenService.getLastScreen(appId, nodeId);
-    }
-
-    @Override
     public void refreshScreen() {
-        showScreen(getLastScreen());
+        showScreen(screenService.getLastScreen(appId, nodeId));
+        showScreen(screenService.getLastDialog(appId, nodeId));
     }
 
     // Could come from a UI or a running state..

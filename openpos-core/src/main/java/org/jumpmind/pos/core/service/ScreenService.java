@@ -1,9 +1,13 @@
 package org.jumpmind.pos.core.service;
 
+import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_LINE;
+import static org.jumpmind.pos.util.BoxLogging.LOWER_LEFT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.LOWER_RIGHT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.UPPER_LEFT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.UPPER_RIGHT_CORNER;
+import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
+
 import java.io.ByteArrayOutputStream;
-
-import static org.jumpmind.pos.util.BoxLogging.*;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -65,6 +69,8 @@ public class ScreenService implements IScreenService {
     int screenSequenceNumber = 0;
 
     private Map<String, Map<String, AbstractScreen>> lastScreenByAppIdByNodeId = new HashMap<>();
+    
+    private Map<String, Map<String, AbstractScreen>> lastDialogByAppIdByNodeId = new HashMap<>();
 
     @RequestMapping(method = RequestMethod.GET, value = "ping")
     @ResponseBody
@@ -88,11 +94,20 @@ public class ScreenService implements IScreenService {
     @ResponseBody
     public String getComponentValues(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String controlId) {
         logger.info("Received a request to load component values for {} {} {}", appId, nodeId, controlId);
-
-        AbstractScreen defaultScreen = getLastScreen(appId, nodeId);
-        DynamicFormScreen dynamicScreen = null;
-        if (defaultScreen instanceof DynamicFormScreen) {
-            dynamicScreen = (DynamicFormScreen) defaultScreen;
+        String result = getComponentValues(appId, nodeId, controlId, getLastScreen(appId, nodeId));
+        if (result == null) {
+            result = getComponentValues(appId, nodeId, controlId, getLastDialog(appId, nodeId));
+        }
+        if (result == null) {
+            result = "{}";
+        }
+        return result;
+    }
+    
+    private String getComponentValues(String appId, String nodeId, String controlId, AbstractScreen screen) {
+        String result = null;
+        if (screen instanceof DynamicFormScreen) {
+            DynamicFormScreen dynamicScreen = (DynamicFormScreen) screen;
             IFormElement formElement = dynamicScreen.getForm().getFormElement(controlId);
 
             // TODO: Look at combining FormListField and ComboField or at least
@@ -113,15 +128,14 @@ public class ScreenService implements IScreenService {
                 } catch (IOException e) {
                     throw new RuntimeException("Error while serializing the component values.", e);
                 }
-                String result = new String(out.toByteArray());
+                result = new String(out.toByteArray());
                 logger.info("Responding to request to load component values {} {} {} with {} values", appId, nodeId, controlId,
                         valueList.size());
-                return result;
             } else {
                 logger.info("Unable to find the valueList for the requested component {} {} {}.", appId, nodeId, controlId);
             }
         }
-        return "{}";
+        return result;
     }
 
     @MessageMapping("action/app/{appId}/node/{nodeId}")
@@ -131,14 +145,34 @@ public class ScreenService implements IScreenService {
         } catch (JsonProcessingException ex) {
             logger.error("Failed to write action to JSON", ex);
         }
-        AbstractScreen lastScreen = getLastScreen(appId, nodeId);
-        if (lastScreen != null && ScreenType.Dialog.equals(lastScreen.getType())) {
+        AbstractScreen lastDialog = removeLastDialog(appId, nodeId);
+        if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getType())) {
             publishToClients(appId, nodeId, "{\"clearDialog\":true }");
         }
         IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
         if (stateManager != null) {
             logger.info("Posting action of {}", action);
             stateManager.doAction(action);
+        }
+    }
+    
+    
+    protected AbstractScreen removeLastDialog(String appId, String nodeId) {
+        Map<String, AbstractScreen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
+        if (lastScreenByNodeId != null) {
+            return lastScreenByNodeId.remove(nodeId);
+        } else {
+            return null;
+        }
+    }
+    
+    @Override
+    public AbstractScreen getLastDialog(String appId, String nodeId) {
+        Map<String, AbstractScreen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
+        if (lastScreenByNodeId != null) {
+            return lastScreenByNodeId.get(nodeId);
+        } else {
+            return null;
         }
     }
 
@@ -171,13 +205,21 @@ public class ScreenService implements IScreenService {
                 }
             }
             publishToClients(appId, nodeId, screen);
-            Map<String, AbstractScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
-            if (lastScreenByNodeId == null) {
-                lastScreenByNodeId = new HashMap<>();
-                lastScreenByAppIdByNodeId.put(appId, lastScreenByNodeId);
+            if (screen.getTemplate().isDialog()) {
+                recordLastScreen(appId, nodeId, screen, lastDialogByAppIdByNodeId);
+            } else {
+                recordLastScreen(appId, nodeId, screen, lastScreenByAppIdByNodeId);
             }
-            lastScreenByNodeId.put(nodeId, screen);
         }
+    }
+    
+    private void recordLastScreen(String appId, String nodeId, AbstractScreen screen, Map<String, Map<String, AbstractScreen>> lastScreenByAppIdByNodeId) {
+        Map<String, AbstractScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+        if (lastScreenByNodeId == null) {
+            lastScreenByNodeId = new HashMap<>();
+            lastScreenByAppIdByNodeId.put(appId, lastScreenByNodeId);
+        }                        
+        lastScreenByNodeId.put(nodeId, screen);
     }
 
     protected void publishToClients(String appId, String nodeId, Object payload) {

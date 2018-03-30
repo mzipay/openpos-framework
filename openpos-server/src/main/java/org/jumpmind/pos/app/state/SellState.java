@@ -1,12 +1,13 @@
 package org.jumpmind.pos.app.state;
 
-import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SellItemScreen;
+import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.SellScreen.ScanType;
+import org.jumpmind.pos.core.template.SellTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class SellState implements IState {
@@ -23,7 +24,7 @@ public class SellState implements IState {
         SellItemScreen screen = new SellItemScreen();
         screen.setLogoutButton(new MenuItem("Back", "Logout", "exit_to_app"));
         screen.setPrompt("Ready to begin");
-        screen.setTemplate(SellScreen.TEMPLATE_SELL);
+        screen.setTemplate(new SellTemplate());
         screen.setName("Sell");        
         enableScan(screen);
         screen.addLocalMenuItem(new MenuItem("Customer", "Customer", "person"));

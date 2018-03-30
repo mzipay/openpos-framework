@@ -21,7 +21,6 @@
 package org.jumpmind.pos.core.flow.config;
 
 import java.util.HashMap;
-
 import java.util.Map;
 
 import org.jumpmind.pos.core.flow.IState;

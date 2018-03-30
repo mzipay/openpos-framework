@@ -40,8 +40,7 @@ public interface IStateManager {
     public void setSessionScope(String name, Object value);
     public void setConversationScope(String name, Object value);
     public String toJSONPretty(Object o);
-    public void showScreen(AbstractScreen screen);    
-    public AbstractScreen getLastScreen();    
+    public void showScreen(AbstractScreen screen);
     public void refreshScreen();
     public IState getCurrentState();
     public IUI getUI();

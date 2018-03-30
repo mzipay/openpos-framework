@@ -16,9 +16,6 @@ export class DialogComponent implements IScreen {
 
   screen: any;
 
-  // version: string = require( '../../../../package.json').version;
-
-
   constructor(public session: SessionService, public dialogRef: MatDialogRef<DialogComponent>) {
   }
 

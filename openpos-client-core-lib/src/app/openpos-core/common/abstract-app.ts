@@ -126,25 +126,19 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             console.log('setting up the personalization screen');
             this.session.screen = this.session.getPersonalizationScreen();
         } else if (!this.session.screen) {
-            this.session.screen = { type: 'Blank', template: 'Blank' };
+            this.session.screen = { type: 'Blank', template: { type: 'Blank', dialog: false}};
         }
 
+        console.log(this.session.screen);
         if (this.session.screen &&
-            ((this.session.screen.refreshAlways)
+            (this.session.screen.refreshAlways
                 || this.session.screen.type !== this.previousScreenType
-                || this.session.screen.name !== this.previousScreenName
-            )
+                || this.session.screen.name !== this.previousScreenName)
         ) {
-
-            let templateName: string = null;
-            let screenType: string = null;
-            let screenName: string = null;
-            if (this.session.screen && this.session.screen.type) {
-                console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
-                templateName = this.session.screen.template;
-                screenType = this.session.screen.type;
-                screenName = this.session.screen.name;
-            }
+            console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
+            const templateName = this.session.screen.template.type;
+            const screenType = this.session.screen.type;
+            const screenName = this.session.screen.name;
             const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
@@ -153,7 +147,6 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             this.previousScreenName = screenName;
             this.overlayContainer.getContainerElement().classList.add(this.getTheme());
             this.installedScreen = this.template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
-
         }
         this.template.show(screen, this);
         this.installedScreen.show(screen, this, this.template);
@@ -161,17 +154,11 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     }
 
     openDialog(dialog: any) {
-        const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(dialog.subType);
-        let dialogComponent = this.screenService.resolveScreen('Dialog').componentType;
-        this.previousDialogType = 'Dialog';
+        const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(dialog.type);
+        this.previousDialogType = dialog.type;
         const dialogProperties: OpenPOSDialogConfig = { disableClose: true, autoFocus: false };
-
-        // if we resolved a specific screen type use that otherwise just use the default DialogComponent
-        if (dialogComponentFactory) {
-            dialogComponent = dialogComponentFactory.componentType;
-            this.previousDialogType = dialog.subType;
-        }
-        if (dialog.dialogProperties) {
+        const dialogComponent = dialogComponentFactory.componentType;
+        if (dialog.template.dialogProperties) {
             // Merge in any dialog properties provided on the screen
             for (const key in dialog.dialogProperties) {
                 if (dialog.dialogProperties.hasOwnProperty(key)) {
