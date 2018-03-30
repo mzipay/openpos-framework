@@ -156,7 +156,11 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     openDialog(dialog: any) {
         const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(dialog.type);
         this.previousDialogType = dialog.type;
-        const dialogProperties: OpenPOSDialogConfig = { disableClose: true, autoFocus: false };
+        let closeable: boolean = false;
+        if (dialog.template.dialogProperties) {
+            closeable = dialog.template.dialogProperties.closeable;
+        }
+        const dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: false };
         const dialogComponent = dialogComponentFactory.componentType;
         if (dialog.template.dialogProperties) {
             // Merge in any dialog properties provided on the screen

@@ -48,7 +48,7 @@ public abstract class AbstractScreen implements Serializable {
     public AbstractScreen asDialog(DialogProperties dialogProperties) {
         this.template.setDialog(true);        
         if (dialogProperties != null) {
-            this.put("dialogProperties", dialogProperties);
+        	this.template.setDialogProperties(dialogProperties);
         }
         return this;
     }
