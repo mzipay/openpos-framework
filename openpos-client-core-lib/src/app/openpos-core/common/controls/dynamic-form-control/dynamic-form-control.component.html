@@ -2,6 +2,7 @@
     <app-dynamic-form-field *ngFor="let field of screenForm.formElements" [formGroup]="form" [formField]="field" (onFieldChanged)="onFieldChanged($event)"></app-dynamic-form-field>
     <mat-error>
         <app-show-errors [control]="form"></app-show-errors>	
+        <div *ngFor="let error of screenForm.formErrors">{{error}}</div>
     </mat-error>	
     <div fxFlex="1 1 auto"></div>
     <div fxLayoutAlign="end">

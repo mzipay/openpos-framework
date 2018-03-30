@@ -18,6 +18,8 @@ public class Form implements Serializable {
 
     private List<IFormElement> formElements = new ArrayList<IFormElement>();
     
+    private List<String> formErrors = new ArrayList<String>();
+    
     private boolean requiresAtLeastOneValue = false;
     
     private String name;
@@ -260,5 +262,17 @@ public class Form implements Serializable {
         }
         return null;
     }
+
+	public List<String> getFormErrors() {
+		return formErrors;
+	}
+
+	public void setFormErrors(List<String> formErrors) {
+		this.formErrors = formErrors;
+	}
+	
+	public void addFormError(String error) {
+		formErrors.add(error);
+	}
     
 }

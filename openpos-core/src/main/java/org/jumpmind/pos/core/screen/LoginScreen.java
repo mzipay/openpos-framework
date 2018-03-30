@@ -30,6 +30,13 @@ public class LoginScreen extends DynamicFormScreen {
         setSubmitAction("Login");
         return this;
     }
+    
+    @Override
+    public AbstractScreen asDialog(DialogProperties dialogProperties) {
+        super.asDialog(dialogProperties);
+        setSubmitAction("Login");
+        return this;
+    }
 
     public MenuItem getChangePasswordAction() {
         return changePasswordAction;
