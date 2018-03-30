@@ -69,7 +69,7 @@ public class ScreenService implements IScreenService {
     int screenSequenceNumber = 0;
 
     private Map<String, Map<String, AbstractScreen>> lastScreenByAppIdByNodeId = new HashMap<>();
-    
+
     private Map<String, Map<String, AbstractScreen>> lastDialogByAppIdByNodeId = new HashMap<>();
 
     @RequestMapping(method = RequestMethod.GET, value = "ping")
@@ -89,7 +89,7 @@ public class ScreenService implements IScreenService {
             stateManager.doAction(new Action(action, payload));
         }
     }
-    
+
     @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{nodeId}/control/{controlId}")
     @ResponseBody
     public String getComponentValues(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String controlId) {
@@ -103,7 +103,7 @@ public class ScreenService implements IScreenService {
         }
         return result;
     }
-    
+
     private String getComponentValues(String appId, String nodeId, String controlId, AbstractScreen screen) {
         String result = null;
         if (screen instanceof DynamicFormScreen) {
@@ -145,6 +145,8 @@ public class ScreenService implements IScreenService {
         } catch (JsonProcessingException ex) {
             logger.error("Failed to write action to JSON", ex);
         }
+        
+        deserializeForm(appId, nodeId, action);
         AbstractScreen lastDialog = removeLastDialog(appId, nodeId);
         if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getType())) {
             publishToClients(appId, nodeId, "{\"clearDialog\":true }");
@@ -155,8 +157,7 @@ public class ScreenService implements IScreenService {
             stateManager.doAction(action);
         }
     }
-    
-    
+
     protected AbstractScreen removeLastDialog(String appId, String nodeId) {
         Map<String, AbstractScreen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
@@ -165,7 +166,7 @@ public class ScreenService implements IScreenService {
             return null;
         }
     }
-    
+
     @Override
     public AbstractScreen getLastDialog(String appId, String nodeId) {
         Map<String, AbstractScreen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
@@ -199,7 +200,9 @@ public class ScreenService implements IScreenService {
                 logScreenTransition(nodeId, screen);
             } catch (Exception ex) {
                 if (ex.toString().contains("org.jumpmind.pos.core.screen.ChangeScreen")) {
-                    logger.error("Failed to write screen to JSON. Verify the screen type has been configured by calling setType() on the screen object.", ex);
+                    logger.error(
+                            "Failed to write screen to JSON. Verify the screen type has been configured by calling setType() on the screen object.",
+                            ex);
                 } else {
                     logger.error("Failed to write screen to JSON", ex);
                 }
@@ -212,13 +215,14 @@ public class ScreenService implements IScreenService {
             }
         }
     }
-    
-    private void recordLastScreen(String appId, String nodeId, AbstractScreen screen, Map<String, Map<String, AbstractScreen>> lastScreenByAppIdByNodeId) {
+
+    private void recordLastScreen(String appId, String nodeId, AbstractScreen screen,
+            Map<String, Map<String, AbstractScreen>> lastScreenByAppIdByNodeId) {
         Map<String, AbstractScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId == null) {
             lastScreenByNodeId = new HashMap<>();
             lastScreenByAppIdByNodeId.put(appId, lastScreenByNodeId);
-        }                        
+        }
         lastScreenByNodeId.put(nodeId, screen);
     }
 
@@ -226,27 +230,41 @@ public class ScreenService implements IScreenService {
         this.template.convertAndSend("/topic/app/" + appId + "/node/" + nodeId, payload);
     }
 
-    @Override
-    public Form deserializeScreenPayload(String appId, String nodeId, Action action) {
-        Form form = null;
-        Map<String, AbstractScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+    protected void deserializeForm(String appId, String nodeId, Action action) {
+        if (hasForm(appId, nodeId)) {
+            try {
+                Form form = mapper.convertValue(action.getData(), Form.class);
+                if (form != null) {
+                    action.setData(form);
+                }
+            } catch (IllegalArgumentException ex) {
+                // We should not assume a form will always be returned by
+                // the DynamicFormScreen.
+                // The barcode scanner can also return a value.
+                // TODO: Allow serializing more than the form on an action.
+            }
+        }
+    }
+
+    private boolean hasForm(String appId, String nodeId) {
+        Map<String, AbstractScreen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             AbstractScreen lastScreen = lastScreenByNodeId.get(nodeId);
             if (lastScreen != null && lastScreen instanceof IHasForm) {
-                try {
-                    form = mapper.convertValue(action.getData(), Form.class);
-                } catch (IllegalArgumentException ex) {
-                    // We should not assume a form will always be returned by the DynamicFormScreen.
-                    // The barcode scanner can also return a value.
-                    // TODO: Allow serializing more than the form on an action.
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
+            if (lastScreenByNodeId != null) {
+                AbstractScreen lastScreen = lastScreenByNodeId.get(nodeId);
+                if (lastScreen != null && lastScreen instanceof IHasForm) {
+                    return true;
                 }
             }
         }
-        
-        if (form == null) {
-            form = new Form();
-        }
-        return form;
+        return false;
     }
 
     protected Form buildForm(AbstractScreen screen) {
@@ -317,21 +335,19 @@ public class ScreenService implements IScreenService {
             throw new FlowException("Field to get value for field " + field + " from target " + target, ex);
         }
     }
-    
+
     protected void logScreenTransition(String nodeId, AbstractScreen screen) throws JsonProcessingException {
-        if (loggerGraphical.isInfoEnabled()) {            
-            logger.info("Show screen on node \"" + nodeId + "\"\n" + 
-                drawBox(screen.getName(), screen.getType()) +    
-                mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
+        if (loggerGraphical.isInfoEnabled()) {
+            logger.info("Show screen on node \"" + nodeId + "\"\n" + drawBox(screen.getName(), screen.getType())
+                    + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
         } else {
-            logger.info("Show screen on node \"" + nodeId + "\"\n" +     
-                    mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
+            logger.info("Show screen on node \"" + nodeId + "\"\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
         }
     }
 
     protected String drawBox(String name, String typeName) {
         name = name != null ? name : "not named";
-        int boxWidth = Math.max(Math.max(name.length()+2, 28), typeName.length()+4);
+        int boxWidth = Math.max(Math.max(name.length() + 2, 28), typeName.length() + 4);
         final int LINE_COUNT = 8;
         StringBuilder buff = new StringBuilder(256);
         for (int i = 0; i < LINE_COUNT; i++) {
@@ -347,16 +363,16 @@ public class ScreenService implements IScreenService {
                     break;
                 case 3:
                     buff.append(drawTitleLine(boxWidth, name));
-                    break;                    
+                    break;
                 case 4:
                     buff.append(drawTypeLine(boxWidth, typeName));
                     break;
                 case 5:
                     buff.append(drawBottom1(boxWidth));
-                    break;                    
+                    break;
                 case 6:
                     buff.append(drawBottom2(boxWidth));
-                    break;                    
+                    break;
             }
         }
         return buff.toString();
@@ -364,50 +380,54 @@ public class ScreenService implements IScreenService {
 
     protected String drawTop1(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append(UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth-2)).append(UPPER_RIGHT_CORNER);
+        buff.append(UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth - 2)).append(UPPER_RIGHT_CORNER);
         buff.append("\r\n");
         return buff.toString();
     }
-    
+
     protected String drawTop2(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth-4)).append(UPPER_RIGHT_CORNER + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth - 4))
+                .append(UPPER_RIGHT_CORNER + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
-    
+
     protected String drawFillerLine(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.repeat(' ', boxWidth-4)).append(VERITCAL_LINE + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.repeat(' ', boxWidth - 4)).append(VERITCAL_LINE + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
-    
+
     protected String drawTitleLine(int boxWidth, String name) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center(name, boxWidth-4)).append(VERITCAL_LINE + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center(name, boxWidth - 4)).append(VERITCAL_LINE + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
+
     protected String drawTypeLine(int boxWidth, String typeName) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center("[" + typeName + "]", boxWidth-4)).append(VERITCAL_LINE + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center("[" + typeName + "]", boxWidth - 4))
+                .append(VERITCAL_LINE + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
+
     protected String drawBottom1(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth-4)).append(LOWER_RIGHT_CORNER + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth - 4))
+                .append(LOWER_RIGHT_CORNER + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
-    
+
     protected String drawBottom2(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth-2)).append(LOWER_RIGHT_CORNER);
+        buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth - 2)).append(LOWER_RIGHT_CORNER);
         buff.append("\r\n");
         return buff.toString();
-    }    
-
+    }
 
 }
