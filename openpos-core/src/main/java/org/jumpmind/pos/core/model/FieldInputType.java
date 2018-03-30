@@ -17,5 +17,5 @@ public enum FieldInputType {
     Date,
     ToggleButton,
     AutoComplete,
-    BirthDate
+    NoYearDate
 }

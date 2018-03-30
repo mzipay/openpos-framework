@@ -6,7 +6,7 @@
         </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <ng-container *ngIf="formField.elementType==='Input' && ['ToggleButton', 'Checkbox', 'AutoComplete', 'Date', 'BirthDate'].indexOf(formField.inputType) < 0">
+    <ng-container *ngIf="formField.elementType==='Input' && ['ToggleButton', 'Checkbox', 'AutoComplete', 'Date', 'NoYearDate'].indexOf(formField.inputType) < 0">
         <mat-form-field fxFlexFill [ngSwitch]="formField.inputType">
             <app-icon *ngIf="formField.iconName" matPrefix iconName="{{formField.iconName}}" iconClass="material-icons"></app-icon>
 
@@ -44,7 +44,7 @@
         </mat-form-field>
     </ng-container>
 
-    <ng-container *ngIf="formField.inputType ==='Date' || formField.inputType ==='BirthDate'">
+    <ng-container *ngIf="formField.inputType ==='Date' || formField.inputType ==='NoYearDate'">
         <app-dynamic-date-form-field [formField]="formField" [formGroup]="formGroup"></app-dynamic-date-form-field>
     </ng-container>
 

@@ -19,16 +19,11 @@ import { MatSelectChange, MatDatepickerInputEvent } from "@angular/material";
     dateMask = [/\d/, /\d/, '/', /\d/, /\d/,'/', /\d/, /\d/, /\d/, /\d/];
     autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
     format = 'MM/dd/yyyy';
-    public keyboardLayout = 'en-US';
-
-    @Output() onFieldChanged = new EventEmitter<IFormElement>();
-  
-    public values: Array<string> = [];
   
     constructor(@Optional() private datePipe: DatePipe) {}
   
     ngOnInit() {
-        if(this.formField.inputType === 'BirthDate') {
+        if(this.formField.inputType === 'NoYearDate') {
             this.dateMask = [/\d/, /\d/, '/', /\d/, /\d/];
             this.autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd');
             this.format = 'MM/dd';
