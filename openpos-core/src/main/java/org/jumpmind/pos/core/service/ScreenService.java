@@ -145,7 +145,7 @@ public class ScreenService implements IScreenService {
         } catch (JsonProcessingException ex) {
             logger.error("Failed to write action to JSON", ex);
         }
-        
+
         deserializeForm(appId, nodeId, action);
         AbstractScreen lastDialog = removeLastDialog(appId, nodeId);
         if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getType())) {
@@ -248,13 +248,8 @@ public class ScreenService implements IScreenService {
 
     private boolean hasForm(String appId, String nodeId) {
         Map<String, AbstractScreen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
-        if (lastScreenByNodeId != null) {
-            AbstractScreen lastScreen = lastScreenByNodeId.get(nodeId);
-            if (lastScreen != null && lastScreen instanceof IHasForm) {
-                return true;
-            } else {
-                return false;
-            }
+        if (lastScreenByNodeId != null && lastScreenByNodeId.get(nodeId) != null) {
+            return lastScreenByNodeId.get(nodeId) instanceof IHasForm;
         } else {
             lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
             if (lastScreenByNodeId != null) {
