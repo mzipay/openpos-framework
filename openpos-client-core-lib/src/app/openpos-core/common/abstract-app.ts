@@ -126,7 +126,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             console.log('setting up the personalization screen');
             this.session.screen = this.session.getPersonalizationScreen();
         } else if (!this.session.screen) {
-            this.session.screen = { type: 'Blank', template: { type: 'Blank', dialog: false}};
+            this.session.screen = { type: 'Blank', template: { type: 'Blank', dialog: false } };
         }
 
         console.log(this.session.screen);
@@ -156,7 +156,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     openDialog(dialog: any) {
         const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(dialog.type);
         this.previousDialogType = dialog.type;
-        let closeable: boolean = false;
+        let closeable = false;
         if (dialog.template.dialogProperties) {
             closeable = dialog.template.dialogProperties.closeable;
         }
