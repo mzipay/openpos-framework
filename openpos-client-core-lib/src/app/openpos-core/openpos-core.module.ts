@@ -308,7 +308,8 @@ const customLayouts: IKeyboardLayouts = {
     FabToggleGroupComponent,
     FabToggleButtonComponent,
     DynamicFormControlComponent,
-    FocusDirective
+    FocusDirective,
+    StatusBarComponent
     ],
   providers: [
     HttpClient,
