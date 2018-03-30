@@ -1,0 +1,10 @@
+<mat-form-field fxFlexFill>
+    <div [formGroup]="formGroup" fxLayout="row">
+        <input matInput [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)" [textMask]="{mask: dateMask, pipe: autoCorrectedDatePipe, keepCharPositions: true}"
+            (keyup.enter)="onDateEntered()">
+        <input matInput hidden [matDatepicker]="picker" (dateChange)="onDatePicked($event)">
+        <mat-datepicker-toggle matSuffix [for]="picker" class="primary"></mat-datepicker-toggle>
+        <mat-datepicker #picker touchUi="true"></mat-datepicker>
+    </div>
+</mat-form-field>
+

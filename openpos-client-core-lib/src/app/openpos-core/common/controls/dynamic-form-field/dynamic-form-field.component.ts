@@ -1,18 +1,18 @@
 import { ITextMask, TextMask } from './../../textmask';
 import { IMenuItem } from '../../imenuitem';
 import { IScreen } from '../../iscreen';
-import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, 
-  Output, Input, EventEmitter, Optional, ElementRef } from '@angular/core';
+import {
+  Component, ViewChild, AfterViewInit, DoCheck, OnInit,
+  Output, Input, EventEmitter, Optional, ElementRef
+} from '@angular/core';
 import { SessionService } from '../../../services/session.service';
-import { MatSelectChange, MatDatepickerInputEvent } from '@angular/material';
+import { MatSelectChange} from '@angular/material';
 import { AbstractApp } from '../../abstract-app';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl, NgForm } from '@angular/forms';
 import { IFormElement } from '../../iformfield';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { ScreenService } from '../../../services/screen.service';
-import { DatePipe } from '@angular/common';
-import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
 import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-select';
 
 @Component({
@@ -24,9 +24,6 @@ export class DynamicFormFieldComponent implements OnInit {
 
   @Input() formField: IFormElement;
   @Input() formGroup: FormGroup;
-
-  dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-  autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
 
   public keyboardLayout = 'en-US';
 
@@ -45,8 +42,7 @@ export class DynamicFormFieldComponent implements OnInit {
 
   public values: Array<string> = [];
 
-  constructor(public session: SessionService, public screenService: ScreenService,
-    @Optional() private datePipe: DatePipe) { }
+  constructor(public session: SessionService, public screenService: ScreenService) { }
 
   ngOnInit() {
     if (this.formField.inputType === 'ComboBox' || this.formField.inputType === 'SubmitOptionList' ||
@@ -56,12 +52,12 @@ export class DynamicFormFieldComponent implements OnInit {
         console.log('asynchronously received ' + this.values.length + ' items for ' + this.formField.id);
       });
     }
+    
     if (this.formField.inputType === 'NumericText' ||
       this.formField.inputType === 'Phone' ||
       this.formField.inputType === 'PostalCode') {
       this.keyboardLayout = 'Numeric';
     }
-
 
     if (this.formField.inputType === 'AutoComplete') {
       this.updateAutoCompleteDataSource();
@@ -109,18 +105,6 @@ export class DynamicFormFieldComponent implements OnInit {
       return TextMask.NO_MASK;
     }
   }
-
-  public onDateEntered(): void {
-    if (this.formField.value) {
-      this.formField.value = this.formField.value.replace(/_/g, '');
-    }
-  }
-
-  public onDatePicked(event: MatDatepickerInputEvent<Date>): void {
-    this.formField.value = this.datePipe.transform(event.value, 'MM/dd/yyyy');
-    this.formGroup.get(this.formField.id).setValue(this.formField.value);
-  }
-
 
   onSubmitOptionSelected(formElement: IFormElement, valueIndex: number, event: Event) {
     if (formElement.selectedIndexes) {

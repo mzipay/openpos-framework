@@ -62,6 +62,13 @@ public class URLMenuItem extends MenuItem {
         this.targetMode = target;
     }
     
+    public URLMenuItem(String url, String title, URLTargetMode target, String action) {
+        setTitle(title);
+        this.setAction(action);
+        this.url = url;
+        this.targetMode = target;
+    }    
+    
 
     public String getUrl() {
         return url;

@@ -6,7 +6,7 @@
         </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <ng-container *ngIf="formField.elementType==='Input' && ['ToggleButton', 'Checkbox', 'AutoComplete'].indexOf(formField.inputType) < 0">
+    <ng-container *ngIf="formField.elementType==='Input' && ['ToggleButton', 'Checkbox', 'AutoComplete', 'Date', 'NoYearDate'].indexOf(formField.inputType) < 0">
         <mat-form-field fxFlexFill [ngSwitch]="formField.inputType">
             <app-icon *ngIf="formField.iconName" matPrefix iconName="{{formField.iconName}}" iconClass="material-icons"></app-icon>
 
@@ -21,7 +21,7 @@
             <mat-select *ngSwitchCase="'ComboBox'" [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)" (change)="onFormElementChanged(formField)"
                 [required]="formField.required">
                 <mat-option *ngFor="let value of values" [value]="value">{{value}}</mat-option>
-            </mat-select>                
+            </mat-select>
 
             <textarea *ngSwitchCase="'TextArea'" style="width:50%" [value]="formField.value" [name]="formField.id" [placeholder]="getPlaceholderText(formField)"
                 matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled" [required]="formField.required"></textarea>
@@ -36,17 +36,7 @@
                         <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
                     </mat-list-item>
                 </mat-nav-list>
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'Date'">
-                <div fxLayout="row">
-                    <input matInput [placeholder]="getPlaceholderText(formField)" [textMask]="{mask: dateMask, pipe: autoCorrectedDatePipe, keepCharPositions: true}"
-                        (keyup.enter)="onDateEntered()" [formControlName]="formField.id">
-                    <input matInput hidden [matDatepicker]="picker" (dateChange)="onDatePicked($event)">
-                    <mat-datepicker-toggle matSuffix [for]="picker" class="primary"></mat-datepicker-toggle>
-                    <mat-datepicker #picker touchUi="true"></mat-datepicker>
-                </div>
-            </ng-container>
+            </ng-container>         
 
             <mat-error>
                 <app-show-errors [control]="formGroup.controls[formField.id]"></app-show-errors>
@@ -54,8 +44,12 @@
         </mat-form-field>
     </ng-container>
 
-    <search-select *ngIf="formField.inputType==='AutoComplete'" width='100%' [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)" (change)="onFormElementChanged(formField)"
-     [dataSource]="autoCompleteDataSource"></search-select>
+    <ng-container *ngIf="formField.inputType ==='Date' || formField.inputType ==='NoYearDate'">
+        <app-dynamic-date-form-field [formField]="formField" [formGroup]="formGroup"></app-dynamic-date-form-field>
+    </ng-container>
+
+    <search-select *ngIf="formField.inputType==='AutoComplete'" width='100%' [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)"
+        (change)="onFormElementChanged(formField)" [dataSource]="autoCompleteDataSource"></search-select>
 
     <ng-container *ngIf="formField.inputType==='Checkbox'">
         <mat-checkbox [formControlName]="formField.id" [required]="formField.required" [value]="formField.value" [labelPosition]="formField.labelPosition"

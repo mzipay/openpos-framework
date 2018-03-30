@@ -106,6 +106,7 @@ import { DynamicFormFieldComponent } from './common/controls/dynamic-form-field/
 import { MarkDirtyOnSubmit } from './common/mark-dirty-onSubmit.directive';
 import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
 import { FormattedInputValueAccessor } from './common/input-formatter.directive';
+import { DynamicDateFormFieldComponent } from './common/controls/dynamic-date-form-field/dynamic-date-form-field.component';
 
 // On Screen Keyboard
 import { IKeyboardLayouts, KeyboardClassKey, keyboardLayouts, MAT_KEYBOARD_LAYOUTS, MatKeyboardModule } from '@ngx-material-keyboard/core';
@@ -214,7 +215,8 @@ const customLayouts: IKeyboardLayouts = {
     SelfCheckoutOptionsComponent,
     FullPageImageComponent,
     CallForAuthorizationComponent,
-    MultipleDynamicFormComponent
+    MultipleDynamicFormComponent,
+    DynamicDateFormFieldComponent
   ],
   declarations: [
     DialogComponent,
@@ -282,7 +284,8 @@ const customLayouts: IKeyboardLayouts = {
     SelfCheckoutOptionsComponent,
     FullPageImageComponent,
     CallForAuthorizationComponent,
-    MultipleDynamicFormComponent
+    MultipleDynamicFormComponent,
+    DynamicDateFormFieldComponent
   ],
   imports: [
     BrowserModule,
