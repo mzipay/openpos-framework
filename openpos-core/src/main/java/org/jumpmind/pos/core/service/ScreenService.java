@@ -256,7 +256,7 @@ public class ScreenService implements IScreenService {
                 return false;
             }
         } else {
-            lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
+            lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
             if (lastScreenByNodeId != null) {
                 AbstractScreen lastScreen = lastScreenByNodeId.get(nodeId);
                 if (lastScreen != null && lastScreen instanceof IHasForm) {
