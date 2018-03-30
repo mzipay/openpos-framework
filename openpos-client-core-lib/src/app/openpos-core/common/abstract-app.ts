@@ -113,7 +113,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
                     `dialogType: ${dialogType}, previousDialogType: ${this.previousDialogType}`);
             }
         } else if (!dialog && this.dialogRef) {
-            console.log('closing dialog');
+            console.log('closing dialog ref');
             this.dialogRef.close();
             this.dialogRef = null;
         }
@@ -189,7 +189,6 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             if (!dialogProperties.executeActionBeforeClose) {
                 this.session.onAction(result);
             }
-            this.dialogRef = null;
         }
         );
     }
