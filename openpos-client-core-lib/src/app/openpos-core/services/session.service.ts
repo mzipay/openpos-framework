@@ -349,13 +349,13 @@ export class SessionService implements ILocaleService {
     const json = JSON.parse(message.body);
     if (json.clearDialog) {
       this.showDialog(null);
-    } else if (json.template && json.template.dialog) {
-      this.showDialog(json);
-    } else if (json.type === 'Loading') {
+    } else if (json.type === 'Loading') { ///This is just a temporary hack
       this.loading = true;
       this.showLoading(json.title, json.message);
       return;
-    } else if (json.type === 'NoOp') {
+    } else if (json.template && json.template.dialog) {
+      this.showDialog(json);
+    }  else if (json.type === 'NoOp') {
       this.response = null;
       return; // As with DeviceRequest, return to avoid dismissing loading screen
     } else if (json.type === 'DeviceRequest') {
