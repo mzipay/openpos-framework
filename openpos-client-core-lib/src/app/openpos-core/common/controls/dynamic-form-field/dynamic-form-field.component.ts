@@ -1,8 +1,10 @@
 import { ITextMask, TextMask } from './../../textmask';
 import { IMenuItem } from '../../imenuitem';
 import { IScreen } from '../../iscreen';
-import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, 
-  Output, Input, EventEmitter, Optional, ElementRef } from '@angular/core';
+import {
+  Component, ViewChild, AfterViewInit, DoCheck, OnInit,
+  Output, Input, EventEmitter, Optional, ElementRef
+} from '@angular/core';
 import { SessionService } from '../../../services/session.service';
 import { MatSelectChange, MatDatepickerInputEvent } from '@angular/material';
 import { AbstractApp } from '../../abstract-app';
@@ -56,12 +58,12 @@ export class DynamicFormFieldComponent implements OnInit {
         console.log('asynchronously received ' + this.values.length + ' items for ' + this.formField.id);
       });
     }
+    
     if (this.formField.inputType === 'NumericText' ||
       this.formField.inputType === 'Phone' ||
       this.formField.inputType === 'PostalCode') {
       this.keyboardLayout = 'Numeric';
     }
-
 
     if (this.formField.inputType === 'AutoComplete') {
       this.updateAutoCompleteDataSource();
