@@ -297,7 +297,7 @@ export class SessionService implements ILocaleService {
         }
       }
 
-      console.log('Publish action ' + actionString);
+      let processAction = true;
 
       // First we will use the payload passed into this function then
       // Check if we have registered action payload
@@ -305,24 +305,32 @@ export class SessionService implements ILocaleService {
       if (payload != null) {
         this.response = payload;
       } else if (this.actionPayloads.has(actionString)) {
-        console.log(`Using registered action payload for ${actionString}`);
-        this.response = this.actionPayloads.get(actionString)();
+        console.log(`Checking registered action payload for ${actionString}`);
+        try {
+          this.response = this.actionPayloads.get(actionString)();
+        } catch (e) {
+          console.log(`invalid action payload for ${actionString}`);
+          processAction = false;
+        }
       }
 
-      const sendToServer: Function = () => {
-        this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
-          JSON.stringify({ name: actionString, data: this.response }));
-      };
+      if (processAction) {
+        const sendToServer: Function = () => {
+          this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
+            JSON.stringify({ name: actionString, data: this.response }));
+        };
 
-      // see if we have any intercepters registered
-      // otherwise just send the action
-      if (this.actionIntercepters.has(actionString)) {
-        this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
-      } else {
-        sendToServer();
-        this.showDialog(null);
-        this.queueLoading();
+        // see if we have any intercepters registered
+        // otherwise just send the action
+        if (this.actionIntercepters.has(actionString)) {
+          this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
+        } else {
+          sendToServer();
+          this.showDialog(null);
+          this.queueLoading();
+        }
       }
+
     } else {
       console.log(`received an invalid action ${action}`);
     }
@@ -355,7 +363,7 @@ export class SessionService implements ILocaleService {
       return;
     } else if (json.template && json.template.dialog) {
       this.showDialog(json);
-    }  else if (json.type === 'NoOp') {
+    } else if (json.type === 'NoOp') {
       this.response = null;
       return; // As with DeviceRequest, return to avoid dismissing loading screen
     } else if (json.type === 'DeviceRequest') {
