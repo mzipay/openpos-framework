@@ -6,7 +6,7 @@ import {
   Output, Input, EventEmitter, Optional, ElementRef
 } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
-import { MatSelectChange} from '@angular/material';
+import { MatSelectChange } from '@angular/material';
 import { AbstractApp } from '../../abstract-app';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl, NgForm } from '@angular/forms';
 import { IFormElement } from '../../iformfield';
@@ -52,7 +52,7 @@ export class DynamicFormFieldComponent implements OnInit {
         console.log('asynchronously received ' + this.values.length + ' items for ' + this.formField.id);
       });
     }
-    
+
     if (this.formField.inputType === 'NumericText' ||
       this.formField.inputType === 'Phone' ||
       this.formField.inputType === 'PostalCode') {

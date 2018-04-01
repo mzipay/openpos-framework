@@ -23,8 +23,8 @@
                 <mat-option *ngFor="let value of values" [value]="value">{{value}}</mat-option>
             </mat-select>
 
-            <textarea *ngSwitchCase="'TextArea'" style="width:50%" [value]="formField.value" [name]="formField.id" [placeholder]="getPlaceholderText(formField)"
-                matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled" [required]="formField.required"></textarea>
+            <textarea *ngSwitchCase="'TextArea'" style="width:50%" [value]="formField.value" [formControlName]="formField.id" [name]="formField.id" [placeholder]="getPlaceholderText(formField)"
+                matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled" [required]="formField.required" (change)="onFormElementChanged(formField)"></textarea>
 
             <!--We should probably deprectate this since it is only used for the void options screen on biglots and 
             there is probably a better way to do it now.-->
