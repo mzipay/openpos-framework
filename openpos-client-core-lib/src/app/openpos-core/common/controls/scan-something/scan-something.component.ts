@@ -17,8 +17,10 @@ export class ScanSomethingComponent implements OnInit {
   public barcode: string;
 
   constructor(private session: SessionService, public devices: DeviceService,
-    @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>, @Optional() @Inject(MAT_DIALOG_DATA) public data: ScanSomethingData) { 
-    if( data ){
+    @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: ScanSomethingData) {
+
+    if (data) {
       this.scanSomethingData = data;
     }
   }
@@ -50,7 +52,7 @@ export class ScanSomethingComponent implements OnInit {
       return true;
     }
     const filteredKey = this.filterBarcodeValue(event.key);
-    console.log(`[onBarcodeKeydown] filtered key: ${filteredKey}`);
+    // console.log(`[onBarcodeKeydown] filtered key: ${filteredKey}`);
     return filteredKey !== null && filteredKey.length !== 0;
   }
 
