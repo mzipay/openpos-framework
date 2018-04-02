@@ -30,7 +30,7 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
     public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass, Function<OptionItem, Boolean> optionFilter) {
         super(headlessScreen, screenClass);
         this.optionItemEvalFunc = optionFilter;
-        getScreen().setType(ScreenType.ChooseOptions);
+        screen.setType(ScreenType.ChooseOptions);
     }
     
     public void setUndoMacro(InteractionMacro undoMacro) {
@@ -44,7 +44,7 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
        
         String formattedPromptText = this.getPromptText(this.getLegacyUIModel(), this.getLegacyAssignmentSpec(PROMPT_RESPONSE_PANEL_KEY), 
                 legacyScreen.getResourceBundleFilename()).orElse(null);
-        getScreen().setPromptText(formattedPromptText);
+        screen.setPromptText(formattedPromptText);
     }
     
     protected void buildOptions() {
@@ -52,7 +52,7 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
         if (this.optionItemEvalFunc != null) {
             options = options.stream().filter(o -> { return this.optionItemEvalFunc.apply(o); }).collect(Collectors.toList());
         }
-        getScreen().setOptions(options);
+        screen.setOptions(options);
     }
     
     @Override

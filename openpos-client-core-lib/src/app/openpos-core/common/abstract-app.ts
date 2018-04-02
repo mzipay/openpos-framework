@@ -113,7 +113,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
                     `dialogType: ${dialogType}, previousDialogType: ${this.previousDialogType}`);
             }
         } else if (!dialog && this.dialogRef) {
-            console.log('closing dialog');
+            console.log('closing dialog ref');
             this.dialogRef.close();
             this.dialogRef = null;
         }
@@ -126,7 +126,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             console.log('setting up the personalization screen');
             this.session.screen = this.session.getPersonalizationScreen();
         } else if (!this.session.screen) {
-            this.session.screen = { type: 'Blank', template: { type: 'Blank', dialog: false}};
+            this.session.screen = { type: 'Blank', template: { type: 'Blank', dialog: false } };
         }
 
         console.log(this.session.screen);
@@ -156,7 +156,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     openDialog(dialog: any) {
         const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(dialog.type);
         this.previousDialogType = dialog.type;
-        let closeable: boolean = false;
+        let closeable = false;
         if (dialog.template.dialogProperties) {
             closeable = dialog.template.dialogProperties.closeable;
         }
@@ -189,7 +189,6 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             if (!dialogProperties.executeActionBeforeClose) {
                 this.session.onAction(result);
             }
-            this.dialogRef = null;
         }
         );
     }

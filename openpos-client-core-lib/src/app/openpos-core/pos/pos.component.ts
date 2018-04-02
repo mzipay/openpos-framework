@@ -46,13 +46,20 @@ export class PosComponent extends AbstractApp implements DoCheck {
   @HostListener('document:click', ['$event'])
   @HostListener('document:touchstart', ['$event'])
   documentClick(event: MouseEvent) {
-    const screenWidth = window.screen.availWidth;
+    const screenWidth = window.innerWidth;
     if (this.clickCount === 0 || Date.now() - this.firstClickTime > 1000 ||
       (event.clientX < screenWidth - 100 && event.clientY > 100)) {
       this.firstClickTime = Date.now();
       this.clickCount = 0;
     }
-    this.clickCount = ++this.clickCount;
+
+    if (event.clientX < screenWidth - 100 && event.clientY > 100) {
+      this.showDevMenu = false;
+    }
+
+    if (event.clientX > screenWidth - 100 && event.clientY < 100) {
+      this.clickCount = ++this.clickCount;
+    }
 
     if (this.clickCount === 5) {
       this.onDevMenuClick();
@@ -79,7 +86,7 @@ export class PosComponent extends AbstractApp implements DoCheck {
             this.logsAvailable = false;
           }
         }
-      ).catch( error => {
+      ).catch(error => {
         this.logsAvailable = false;
       });
     }
@@ -149,12 +156,12 @@ export class PosComponent extends AbstractApp implements DoCheck {
     let classes: string = '';
     switch (this.router.url.substring(1)) {
       case 'pos':
-        if (this.session.screen.type==='Home') {
+        if (this.session.screen.type === 'Home') {
           classes = 'main-background';
         }
         break;
       case 'selfcheckout':
-        if (this.session.screen.type==='SelfCheckoutHome') {
+        if (this.session.screen.type === 'SelfCheckoutHome') {
           classes = 'main-background selfcheckout';
         } else {
           classes = 'lighter selfcheckout';

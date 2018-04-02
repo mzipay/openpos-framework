@@ -5,7 +5,10 @@ import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output, Input, Ev
 import { SessionService } from '../../../services/session.service';
 import { MatSelectChange } from '@angular/material';
 import { AbstractApp } from '../../abstract-app';
-import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl, NgForm, ValidatorFn, NG_VALIDATORS } from '@angular/forms';
+import {
+  FormArray, FormBuilder, FormGroup, Validators, AbstractControl,
+  FormControl, NgForm, ValidatorFn, NG_VALIDATORS
+} from '@angular/forms';
 import { IFormElement } from '../../iformfield';
 import { Observable } from 'rxjs/Observable';
 import { ScreenService } from '../../../services/screen.service';
@@ -24,29 +27,33 @@ export class DynamicFormControlComponent implements OnInit {
 
   @Input() submitAction: string;
 
-  @Input() submitButtonText: string = 'Next';
+  @Input() submitButtonText = 'Next';
 
   @Input() screen: any;
 
   form: FormGroup;
 
-  constructor( public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) { }
+  constructor(public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) { }
 
   ngOnInit() {
 
-    if( this.screen.alternateSubmitActions ){
+    if (this.screen.alternateSubmitActions) {
       this.screen.alternateSubmitActions.forEach(action => {
 
-        this.session.registerActionPayload( action, () => {
-          this.buildFormPayload();
-          return this.session.response = this.screenForm;
-         });
+        this.session.registerActionPayload(action, () => {
+          if (this.form.valid) {
+              this.buildFormPayload();
+              return this.session.response = this.screenForm;
+          } else {
+              throw Error('form is invalid');
+          }
+        });
       });
     }
 
     const group: any = {};
 
-    this.screenForm.formElements.forEach( element => {
+    this.screenForm.formElements.forEach(element => {
 
       const ctlValidators: ValidatorFn[] = this.createControlValidators(element);
       group[element.id] = new FormControl(element.value, ctlValidators);
@@ -118,15 +125,15 @@ export class DynamicFormControlComponent implements OnInit {
     }
   }
 
-  onFieldChanged(formElement:IFormElement) {
-    if(formElement.valueChangedAction) {
+  onFieldChanged(formElement: IFormElement) {
+    if (formElement.valueChangedAction) {
       this.buildFormPayload();
       this.session.onAction(formElement.valueChangedAction, this.screenForm);
-    }    
+    }
   }
 
-  private buildFormPayload()  {
-    this.screenForm.formElements.forEach( element => {
+  private buildFormPayload() {
+    this.screenForm.formElements.forEach(element => {
       if (element.hasOwnProperty('value')) {
         element.value = this.form.value[element.id];
       }
