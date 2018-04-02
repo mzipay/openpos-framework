@@ -127,7 +127,7 @@ export class SessionService implements ILocaleService {
 
   public getPersonalizationScreen(): any {
     // tslint:disable-next-line:max-line-length
-    return { template: 'Blank', type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000), name: 'Device Setup', refreshAlways: true };
+    return { type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000), name: 'Device Setup', refreshAlways: true, template: { type: 'Blank', dialog: false } };
   }
 
   public getTheme(): string {
@@ -357,7 +357,7 @@ export class SessionService implements ILocaleService {
     const json = JSON.parse(message.body);
     if (json.clearDialog) {
       this.showDialog(null);
-    } else if (json.type === 'Loading') { ///This is just a temporary hack
+    } else if (json.type === 'Loading') { // This is just a temporary hack
       this.loading = true;
       this.showLoading(json.title, json.message);
       return;
