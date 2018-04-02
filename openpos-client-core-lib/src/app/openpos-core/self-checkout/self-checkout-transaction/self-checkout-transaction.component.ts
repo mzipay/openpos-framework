@@ -13,8 +13,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   templateUrl: './self-checkout-transaction.component.html',
   styleUrls: ['./self-checkout-transaction.component.scss']
 })
-export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
+export class SelfCheckoutTransactionComponent implements AfterViewInit, IScreen, OnInit {
 
+  screen: any;
   @ViewChild('scrollList') private scrollList: ElementRef;
 
   initialized = false;
@@ -26,12 +27,9 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, DoCheck,
   }
 
   show(screen: any, app: AbstractApp) {
-  }
+    this.screen = screen;
 
-  ngDoCheck(): void {
-    if (typeof this.session.screen !== 'undefined') {
-      this.items = this.session.screen.items;
-    }
+    this.items = this.screen.items;
   }
 
   ngOnInit(): void {

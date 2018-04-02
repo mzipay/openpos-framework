@@ -5,6 +5,8 @@ import { IScreen } from '../../common/iscreen';
 import { SessionService } from '../../services/session.service';
 import { AbstractApp } from '../../common/abstract-app';
 import { AbstractTemplate } from '../../common/abstract-template';
+import { StatusBarData } from '../../common/screen-interfaces/iStatusBarData';
+import { SellScreenUtils } from '../../common/screen-interfaces/iSellScreen';
 
 @Component({
   selector: 'app-blank-with-bar',
@@ -13,7 +15,8 @@ import { AbstractTemplate } from '../../common/abstract-template';
 })
 export class BlankWithBarComponent extends AbstractTemplate implements OnInit {
 
-  screen: any;
+  template: any;
+  statusBar : StatusBarData;
 
   constructor(public overlayContainer: OverlayContainer) {
       super();
@@ -22,8 +25,9 @@ export class BlankWithBarComponent extends AbstractTemplate implements OnInit {
   ngOnInit() {
   }
 
-  show(screen: any, app: AbstractApp) {
-    this.screen = screen;
+  show(template: any, app: AbstractApp) {
+    this.template = template;
+    this.statusBar = SellScreenUtils.getStatusBar(template);
   }
 
 }

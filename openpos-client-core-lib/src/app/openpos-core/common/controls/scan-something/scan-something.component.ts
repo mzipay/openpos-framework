@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, Output, EventEmitter, Optional } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, Optional, Inject } from '@angular/core';
 import { DeviceService } from '../../../services/device.service';
 import { SessionService } from '../../../services/session.service';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ScanSomethingData } from './scanSomthingData';
 
 @Component({
   selector: 'app-scan-something',
@@ -10,11 +11,17 @@ import { MatDialogRef } from '@angular/material';
 })
 export class ScanSomethingComponent implements OnInit {
 
+  @Input()
+  scanSomethingdata: ScanSomethingData;
+
   public barcode: string;
 
   constructor(private session: SessionService, public devices: DeviceService,
-    @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>) { }
-
+    @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>, @Optional() @Inject(MAT_DIALOG_DATA) public data: ScanSomethingData) { 
+    if( data ){
+      this.scanSomethingdata = data;
+    }
+  }
   ngOnInit() {
   }
 

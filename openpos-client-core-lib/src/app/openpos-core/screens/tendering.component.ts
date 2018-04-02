@@ -5,15 +5,16 @@ import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { IFormElement } from '../common/iformfield';
+import { AbstractApp, AbstractTemplate } from '..';
 
 @Component({
     selector: 'app-tendering',
     templateUrl: './tendering.component.html'
   })
-  export class TenderingComponent implements DoCheck, IScreen, OnInit, OnDestroy {
+  export class TenderingComponent implements IScreen, OnInit, OnDestroy {
 
-    private lastSequenceNum: number;
 
+    screen: any;
     text: string;
     tenderItems: IItem[];
     tenderAmount: IFormElement;
@@ -32,30 +33,25 @@ import { IFormElement } from '../common/iformfield';
     }
 
     ngOnInit(): void {
-        this.text = this.session.screen.text;
-        this.tenderItems = this.session.screen.tenderItems;
-        this.tenderAmount = this.session.screen.tenderAmount;
-        this.balanceDue = this.session.screen.balanceDue;
-        this.itemActions = this.session.screen.itemActions;
 
-        this.session.screen.localMenuItems.forEach(element => {
-            this.session.registerActionPayload( element.action, () => this.tenderAmount.value );
-        });
-    }
-
-    ngDoCheck(): void {
-        // re-init the model if the screen is being redisplayed
-        if (this.session.screen.type === 'Tendering'
-            && this.session.screen.sequenceNumber !== this.lastSequenceNum) {
-            this.ngOnInit();
-            this.lastSequenceNum = this.session.screen.sequenceNumber;
-        }
     }
 
     ngOnDestroy(): void {
         this.session.unregisterActionPayloads();
     }
 
-    show(session: SessionService) {
+    show(screen: any, app: AbstractApp, template?: AbstractTemplate): void {
+        this.screen = screen;
+
+        this.text = this.screen.text;
+        this.tenderItems = this.screen.tenderItems;
+        this.tenderAmount = this.screen.tenderAmount;
+        this.balanceDue = this.screen.balanceDue;
+        this.itemActions = this.screen.itemActions;
+
+        this.screen.localMenuItems.forEach(element => {
+            this.session.registerActionPayload( element.action, () => this.tenderAmount.value );
+        });
     }
+
 }

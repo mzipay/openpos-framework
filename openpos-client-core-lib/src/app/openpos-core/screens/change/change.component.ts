@@ -18,21 +18,21 @@ export class ChangeComponent implements AfterViewInit, DoCheck, IScreen {
   total : string;
   tendered : string;
   balanceDue : string;
+  screen : any
 
   itemsDataSource : MatTableDataSource<ITenderItem>;
-  // public items: ITenderItem[];
 
   constructor(public session: SessionService, devices: DeviceService) {
 
   }
 
   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
   }
 
   ngDoCheck(): void {
-      if (typeof this.session.screen !== 'undefined') {
-        // this.items = this.session.screen.items;
-        this.itemsDataSource = new MatTableDataSource(this.session.screen.items);
+      if (typeof this.screen !== 'undefined') {
+        this.itemsDataSource = new MatTableDataSource(this.screen.items);
       }
   }
 

@@ -10,8 +10,9 @@ import { AbstractApp } from '../common/abstract-app';
     selector: 'app-item-list',
     templateUrl: './item-list.component.html'
 })
-export class ItemListComponent implements IScreen, OnInit, DoCheck {
+export class ItemListComponent implements IScreen, OnInit {
 
+    screen: any;
     items: IItem[];
     itemActionName: string;
     text: string;
@@ -24,23 +25,17 @@ export class ItemListComponent implements IScreen, OnInit, DoCheck {
     }
 
     show(screen: any, app: AbstractApp) {
+        this.screen = screen;
+
+        this.items = this.screen.items;
+        this.itemActionName = this.screen.itemActionName;
+        this.text = this.screen.text;
+        this.itemActions = this.screen.itemActions;
+        this.condensedListDisplay = this.screen.condensedListDisplay;
+        this.selectionMode = this.screen.selectionMode;
     }
 
     ngOnInit(): void {
-        this.items = this.session.screen.items;
-        this.itemActionName = this.session.screen.itemActionName;
-        this.text = this.session.screen.text;
-        this.itemActions = this.session.screen.itemActions;
-        this.condensedListDisplay = this.session.screen.condensedListDisplay;
-        this.selectionMode = this.session.screen.selectionMode;
-    }
-
-    ngDoCheck(): void {
-        if (this.session.screen.type === 'ItemList'
-            && this.session.screen.sequenceNumber !== this.lastSequenceNum) {
-          this.ngOnInit();
-          this.lastSequenceNum = this.session.screen.sequenceNumber;
-        }
     }
 
     onItemClick(itemInfo: ItemClickAction): void {

@@ -2,15 +2,19 @@ import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { FileUploadService } from './../services/file-upload.service';
 import { IPlugin } from './../common/iplugin';
 import { IMenuItem } from '../common/imenuitem';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { PluginService } from './../services/plugin.service';
+import { StatusBarData } from '../common/screen-interfaces/iStatusBarData';
 
 @Component({
   selector: 'app-statusbar',
   templateUrl: './statusbar.component.html'
 })
 export class StatusBarComponent {
+  @Input()
+  data: StatusBarData;
+  
   logFilenames: string[];
   logPlugin: IPlugin;
   protected devModeEnabled = false;

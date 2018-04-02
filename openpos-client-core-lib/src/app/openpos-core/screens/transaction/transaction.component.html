@@ -16,7 +16,7 @@
 						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through"><span class="super-currency-symbol">$</span>{{item.originalAmount}}</p>
 						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">( -<span class="super-currency-symbol">$</span>{{item.discountAmount}} )</p>
 					</span>
-					<button *ngIf ="!session.screen.readOnly" mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
+					<button *ngIf ="!screen.readOnly" mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
 						<mat-icon>expand_more</mat-icon>
 					</button>
 					<mat-menu #itemMenu="matMenu">
@@ -35,16 +35,16 @@
 		</mat-card-content>
 	</mat-card>
 
-	<app-overflow-list fxFlex="0 0 auto"  *ngIf="session.screen.transaction.transactionNumber" [numberItemsToShow]="overFlowListSize | async" [items]="session.screen.totals" ></app-overflow-list>
+	<app-overflow-list fxFlex="0 0 auto"  *ngIf="screen.transaction.transactionNumber" [numberItemsToShow]="overFlowListSize | async" [items]="screen.totals" ></app-overflow-list>
 
-	<mat-card *ngIf="session.screen.transaction.transactionNumber" fxFlex="0 0 auto" class="page-content-card dark">
+	<mat-card *ngIf="screen.transaction.transactionNumber" fxFlex="0 0 auto" class="page-content-card dark">
 		<mat-card-content fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" class="text-lg">
 			<span fxFlex class="text-md">{{items.length}} Items</span>
 			<span fxFlex="1 1 auto"></span>
 			<span fxFlex class="text-right">Total</span>
-			<span fxFlex [ngClass]="{'text-center': !session.screen.readOnly, 'text-right': session.screen.readOnly}">
-				<span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</span>
-			<button fxFlex="0 1 auto" *ngIf="!session.screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!session.screen.transaction.active || items.length == 0"
+			<span fxFlex [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
+				<span class="super-currency-symbol">$</span>{{screen.grandTotal}}</span>
+			<button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!screen.transaction.active || items.length == 0"
 			 (click)="session.onAction('Checkout')">
 				<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 			</button>

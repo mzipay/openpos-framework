@@ -16,7 +16,7 @@ import { Observable } from 'rxjs/Observable';
 })
 export class TransactionComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 
-
+  screen: any;
   @ViewChild('box') vc;
   initialized = false;
 
@@ -29,11 +29,12 @@ export class TransactionComponent implements AfterViewInit, DoCheck, IScreen, On
     }
 
   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
   }
 
   ngDoCheck(): void {
-    if (typeof this.session.screen !== 'undefined') {
-      this.items = this.session.screen.items;
+    if (typeof this.screen !== 'undefined') {
+      this.items = this.screen.items;
     }
   }
 

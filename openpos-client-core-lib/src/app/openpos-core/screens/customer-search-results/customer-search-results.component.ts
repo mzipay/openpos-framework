@@ -19,11 +19,12 @@ export class CustomerSearchResultsComponent implements IScreen, OnInit {
   constructor(public session: SessionService) { }
 
   show(screen: any, app: AbstractApp) {
+
+    this.customers = screen.customers;
+    this.submitAction = screen.submitAction;
   }
 
   ngOnInit() {   
-    this.customers = this.session.screen.customers;
-    this.submitAction = this.session.screen.submitAction;
   }
 
   onSubmitAction(): void {
