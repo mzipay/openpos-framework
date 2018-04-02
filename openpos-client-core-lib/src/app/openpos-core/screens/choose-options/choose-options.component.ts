@@ -19,7 +19,7 @@ export class ChooseOptionsComponent implements IScreen, OnInit,  OnDestroy {
   public optionItems: IOptionItem[];
   public promptText: string;
 
-  screen: IChooseOptionsScreen;
+  screen: any;
 
   constructor(public session: SessionService) {
   }

@@ -1,12 +1,12 @@
-<div fxFlexFill *ngIf="session.screen.type==='PromptWithOptions'" fxLayout="column" fxLayoutAlign="center center">
+<div fxFlexFill *ngIf="screen.type==='PromptWithOptions'" fxLayout="column" fxLayoutAlign="center center">
     <mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
         <form [formGroup]="promptFormGroup" (ngSubmit)="onFormSubmit()">
             <mat-card-content>
-                <app-prompt-input #promptInput [placeholderText]="session.screen.placeholderText" [responseType]="session.screen.responseType"
-                    [responseText]="session.screen.responseText" [promptIcon]="session.screen.promptIcon" [hintText]="promptText"
-                    [maskSpec]="session.screen.promptMask" [minLength]="session.screen.minLength" [maxLength]="session.screen.maxLength"
+                <app-prompt-input #promptInput [placeholderText]="screen.placeholderText" [responseType]="screen.responseType"
+                    [responseText]="screen.responseText" [promptIcon]="screen.promptIcon" [hintText]="promptText"
+                    [maskSpec]="screen.promptMask" [minLength]="screen.minLength" [maxLength]="screen.maxLength"
                     [promptFormGroup]="promptFormGroup"></app-prompt-input>
-                <mat-form-field fxFlexFill *ngIf="session.screen.showComments">
+                <mat-form-field fxFlexFill *ngIf="screen.showComments">
                     <textarea #box matInput [formControlName]="'comments'" placeholder="Comments"></textarea>
                     <mat-error>
                         <app-show-errors [control]="box"></app-show-errors>

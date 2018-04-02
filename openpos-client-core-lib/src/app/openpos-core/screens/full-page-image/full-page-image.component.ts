@@ -10,11 +10,14 @@ import { AbstractApp } from '../../common/abstract-app';
 })
 export class FullPageImageComponent implements IScreen {
 
+  screen: any;
+
   constructor(private session: SessionService,
     private router: Router) {
   }
 
   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
   }
 
 }

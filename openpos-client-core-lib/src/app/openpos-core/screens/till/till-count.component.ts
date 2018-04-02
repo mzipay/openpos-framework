@@ -12,7 +12,7 @@ import { IFormElement } from '../../common/iformfield';
   styleUrls: ['./till-count.component.scss']
 })
 export class TillCountComponent implements OnInit, IScreen {
-
+  screen: any;
   nextAction: IMenuItem;
   public form: IForm;
   @ViewChild('tillForm') tillForm;
@@ -21,21 +21,22 @@ export class TillCountComponent implements OnInit, IScreen {
   }
 
   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
   }
 
   ngOnInit() {
-    this.form = this.session.screen.form;
-    this.nextAction = this.session.screen.nextAction;
+    this.form = this.screen.form;
+    this.nextAction = this.screen.nextAction;
   }
 
   onFieldChanged(eventData: {formElement: IFormElement, event: Event}) {
-    this.form = this.session.screen.form;
+    this.form = this.screen.form;
     this.session.response = this.form;
     this.session.onAction('formChanged');
   }
 
   onNextAction() {
-    this.session.response = this.session.screen.form;
+    this.session.response = this.screen.form;
     this.session.onAction(this.nextAction.action);
   }
 

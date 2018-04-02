@@ -34,7 +34,7 @@
     </ng-container>
 
     <ng-container *ngIf="responseType ==='DATE' || responseType ==='NOYEARDATE'" >
-        <app-dynamic-date-form-field [controlName]="'promptInputControl'" [form]="promptFormGroup"
+        <app-dynamic-date-form-field [controlName]="'promptInputControl'" [hiddenControl]="'promptInputHiddenDateControl'" [form]="promptFormGroup"
         [type]="responseType" [(value)]="responseText" [placeholder]="placeholderText" [isPrompt]=true [hintText]="hintText"></app-dynamic-date-form-field>
         <mat-error class="text-sm">
             <app-show-errors [control]="promptFormGroup.controls['promptInputControl']"></app-show-errors>

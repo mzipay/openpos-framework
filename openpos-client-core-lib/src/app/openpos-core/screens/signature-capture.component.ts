@@ -12,6 +12,7 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
 
   static readonly DEFAULT_MEDIA_TYPE = 'image/jpeg';
 
+  screen:any;
   protected initialized: Boolean = false;
   protected signaturePad: SignaturePad;
   protected canvas: HTMLCanvasElement = null;
@@ -21,6 +22,7 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
   }
 
   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
   }
 
 
@@ -69,8 +71,8 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
       console.log('Signature is empty');
       return;
     }
-    const mediaType: string = this.session.screen.signatureMediaType ?
-        this.session.screen.signatureMediaType : SignatureCaptureComponent.DEFAULT_MEDIA_TYPE;
+    const mediaType: string = this.screen.signatureMediaType ?
+        this.screen.signatureMediaType : SignatureCaptureComponent.DEFAULT_MEDIA_TYPE;
 
     const dataUrl: string|null = this.signaturePad.toDataURL(mediaType);
     const dataPoints = this.signaturePad.toData();

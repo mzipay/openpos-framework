@@ -11,8 +11,9 @@ import { AbstractApp } from '../common/abstract-app';
     selector: 'app-static-table',
     templateUrl: './static-table.component.html'
 })
-export class StaticTableComponent implements IScreen, DoCheck {
-    private lastSequenceNum: number;
+export class StaticTableComponent implements IScreen {
+    
+    screen: any;
     rowData: RowDatabase;
     dataSource: RowDataSource | null;
 
@@ -36,10 +37,10 @@ export class StaticTableComponent implements IScreen, DoCheck {
         this.columnsById = {};
         // Create the list of column definitions
         let columnIdx = 0;
-        if (this.session.screen.headerLabels) {
+        if (this.screen.headerLabels) {
             // Initialize the list of column metadata and other convenience
             // column data structures
-            this.session.screen.headerLabels.forEach(
+            this.screen.headerLabels.forEach(
                 (headerLabel) => {
                     this.columns.push(
                         { index: columnIdx++, columnId: headerLabel, headerLabel: headerLabel }
@@ -66,25 +67,16 @@ export class StaticTableComponent implements IScreen, DoCheck {
         return this.selectedRow === rowIndex ;
     }
 
-    ngDoCheck(): void {
-        if (this.session.screen.sequenceNumber !== this.lastSequenceNum) {
-            // Screen changed, re-init
-            this.init();
-            this.lastSequenceNum = this.session.screen.sequenceNumber;
-        }
-    }
+    show(screen: any, app: AbstractApp) {
+        this.screen = screen;
 
-    init(): void {
-        this.selectionMode = SelectionMode[this.session.screen.selectionMode as string];
+        this.selectionMode = SelectionMode[this.screen.selectionMode as string];
         this.initColumnDefs();
-        this.rowData = new RowDatabase(this.session.screen.tableData);
+        this.rowData = new RowDatabase(this.screen.tableData);
 
         this.dataSource = new RowDataSource(this.rowData);
-        this.text = this.session.screen.text;
-        this.selectedRow = this.session.screen.selectedRow;
-    }
-
-    show(screen: any, app: AbstractApp) {
+        this.text = this.screen.text;
+        this.selectedRow = this.screen.selectedRow;
     }
 
     onSelectRow(rowIndex: number) {

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, Optional } from "@angular/core";
 import createAutoCorrectedDatePipe from "text-mask-addons/dist/createAutoCorrectedDatePipe";
 import { IFormElement } from "../../iformfield";
-import { FormGroup } from "@angular/forms";
+import { FormGroup, FormControl } from "@angular/forms";
 import { DatePipe } from "@angular/common";
 import { MatSelectChange, MatDatepickerInputEvent } from "@angular/material";
 
@@ -19,6 +19,7 @@ import { MatSelectChange, MatDatepickerInputEvent } from "@angular/material";
     @Input() isPrompt: boolean = false;
     @Input() hintText: string ='';
     @Input() controlName: string;
+    @Input() hiddenControl: string;
     @Input() form: FormGroup;
 
     @Output() valueChange = new EventEmitter<any>();
@@ -26,6 +27,7 @@ import { MatSelectChange, MatDatepickerInputEvent } from "@angular/material";
     dateMask = [/\d/, /\d/, '/', /\d/, /\d/,'/', /\d/, /\d/, /\d/, /\d/];
     autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
     format = 'MM/dd/yyyy';
+    dateValue: Date;
   
     constructor(@Optional() private datePipe: DatePipe) {}
   
@@ -47,6 +49,23 @@ import { MatSelectChange, MatDatepickerInputEvent } from "@angular/material";
       this.value = this.datePipe.transform(event.value, this.format);
       this.form.get(this.controlName).setValue(this.value);
       this.valueChange.emit(this.value);
+    }
+
+    public onDateChange(): void {
+      let dates = this.value.split("/");
+      if(dates.length > 1){
+        //JavaScript counts months from 0 to 11. January is 0. December is 11.
+        let month = parseInt(dates[0]) - 1; 
+        let day = parseInt(dates[1]);
+        let year = (new Date()).getFullYear;
+        if(dates.length > 2) {
+          let year = parseInt(dates[2]);      
+          this.dateValue = new Date(year, month, day, 0, 0, 0, 0);
+        } else {
+          let todayYear = (new Date()).getFullYear();
+          this.dateValue = new Date(todayYear, month, day, 0, 0, 0, 0);
+        }
+      }
     }
   
   }

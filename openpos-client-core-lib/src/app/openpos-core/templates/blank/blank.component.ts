@@ -13,7 +13,7 @@ import { AbstractTemplate } from '../../common/abstract-template';
 })
 export class BlankComponent extends AbstractTemplate implements OnInit {
 
-  screen: any;
+  template: any;
 
   constructor(public overlayContainer: OverlayContainer) {
       super();
@@ -22,8 +22,8 @@ export class BlankComponent extends AbstractTemplate implements OnInit {
   ngOnInit() {
   }
 
-  show(screen: any, app: AbstractApp) {
-    this.screen = screen;
+  show(template: any, app: AbstractApp) {
+    this.template = template;
   }
 
 }

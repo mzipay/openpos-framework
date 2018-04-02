@@ -23,7 +23,7 @@ export class SessionService implements ILocaleService {
 
   public screen: any;
 
-  public dialog: any;
+  private dialog: any;
 
   public state: Observable<string>;
 

@@ -11,14 +11,16 @@ export class WaitComponent implements OnInit {
 
   instructions: string = "";
   icon: string = "";
+  screen: any;
 
   constructor(public session: SessionService) { }
 
   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
   }
 
   ngOnInit() {
-    this.instructions = this.session.screen.instructions;
-    this.icon = this.session.screen.icon;
+    this.instructions = this.screen.instructions;
+    this.icon = this.screen.icon;
   }
 }

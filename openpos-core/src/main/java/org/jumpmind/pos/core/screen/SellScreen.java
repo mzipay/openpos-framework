@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class SellScreen extends AbstractScreen {
 
     private static final long serialVersionUID = 1L;
@@ -52,7 +51,8 @@ public class SellScreen extends AbstractScreen {
         if (!list.contains(value)) {
             list.add(value);
         }
-    }
+    }    
+    
     
     public String getOperatorName() {
         return operatorName;
@@ -130,5 +130,4 @@ public class SellScreen extends AbstractScreen {
     public void setInstructions(String instructions) {
         this.put("instructions", instructions);
     }
-    
 }

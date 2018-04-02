@@ -27,20 +27,20 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
     const group: any = {};
     const validators: ValidatorFn[] = [];
     validators.push(Validators.required);
-    validators.push(this.validatorsService.getValidator(this.session.screen.responseType));
+    validators.push(this.validatorsService.getValidator(this.screen.responseType));
 
-    group['promptInputControl'] = new FormControl(this.session.screen.responseText, validators);
+    group['promptInputControl'] = new FormControl(this.screen.responseText, validators);
 
-    if (this.session.screen.showComments) {
-      group['comments'] = new FormControl(this.session.screen.comments, Validators.required);
+    if (this.screen.showComments) {
+      group['comments'] = new FormControl(this.screen.comments, Validators.required);
     }
     this.promptFormGroup = new FormGroup(group);
-    this.actionButton = this.session.screen.actionButton;
+    this.actionButton = this.screen.actionButton;
   }
 
   onAction(action: string): void {
     if (this.promptFormGroup.valid) {
-      if (this.session.screen.showComments) {
+      if (this.screen.showComments) {
         this.session.onAction(action,
           {
             response: this.promptFormGroup.value['promptInputControl'],

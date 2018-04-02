@@ -15,19 +15,21 @@ import {MatTableDataSource} from '@angular/material';
 export class SellItemDetailComponent implements IScreen {
   public item: ISellItem;
 
+  screen: any;
   promosDataSource : MatTableDataSource<IPromoItem>;
 
   constructor(public session: SessionService ) {
-    this.item = session.screen.item;
   }
 
   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
+    this.item = screen.item;
   }
 
   ngDoCheck(): void {
-      if (typeof this.session.screen !== 'undefined') {
-        // this.items = this.session.screen.items;
-        this.promosDataSource = new MatTableDataSource(this.session.screen.promos);
+      if (typeof this.screen !== 'undefined') {
+        // this.items = this.screen.items;
+        this.promosDataSource = new MatTableDataSource(this.screen.promos);
       }
   }
 

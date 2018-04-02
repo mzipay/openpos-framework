@@ -11,33 +11,26 @@ import { IForm } from '../../screens/form.component';
   templateUrl: './self-checkout-options.component.html',
   styleUrls: ['./self-checkout-options.component.scss']
 })
-export class SelfCheckoutOptionsComponent implements IScreen, OnInit, DoCheck, OnDestroy {
+export class SelfCheckoutOptionsComponent implements IScreen, OnInit, OnDestroy {
 
+  screen: any;
   static readonly UNDO = 'Undo';
   public currentView: string;
   public selectedOption: IOptionItem;
   public optionItems: IOptionItem[];
-  private lastSequenceNum: number;
   public promptText: string;
 
   constructor(public session: SessionService) {
   }
 
   show(screen: any, app: AbstractApp) {
-    console.log('Show invoked');
+    this.screen = screen;
+    this.optionItems = this.screen.options;
+    this.currentView = this.screen.displayStyle;
+    this.promptText = this.screen.prompt;
   }
 
   ngOnInit(): void {
-  }
-
-  ngDoCheck(): void {
-    if (this.session.screen.sequenceNumber !== this.lastSequenceNum) {
-      // Screen changed, re-init
-      this.optionItems = this.session.screen.options;
-      this.lastSequenceNum = this.session.screen.sequenceNumber;
-      this.currentView = this.session.screen.displayStyle;
-      this.promptText = this.session.screen.prompt;
-    }
   }
 
   ngOnDestroy() {
@@ -56,7 +49,7 @@ export class SelfCheckoutOptionsComponent implements IScreen, OnInit, DoCheck, O
   }
 
   onBackButtonPressed(): void {
-    this.currentView = this.session.screen.displayStyle;
+    this.currentView = this.screen.displayStyle;
     this.session.unregisterActionIntercepter(SelfCheckoutOptionsComponent.UNDO);
   }
 
