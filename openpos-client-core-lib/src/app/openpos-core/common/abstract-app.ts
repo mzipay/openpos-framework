@@ -5,7 +5,7 @@ import { IScreen } from '../common/iscreen';
 import { ScreenService } from './../services/screen.service';
 import { DialogComponent } from '../screens/dialog/dialog.component';
 import { IMenuItem } from '../common/imenuitem';
-import { Component, OnInit, OnDestroy, DoCheck, sequence, AfterViewInit, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, DoCheck, sequence, AfterViewInit, NgZone, ComponentRef } from '@angular/core';
 import { Type, ViewChild, ComponentFactory } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
@@ -35,6 +35,8 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     private registered: boolean;
 
     private installedScreen: IScreen;
+
+    private currentTemplateRef: ComponentRef<IScreen>;
 
     private template: AbstractTemplate;
 
@@ -139,7 +141,11 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
-            this.template = viewContainerRef.createComponent(templateComponentFactory).instance as AbstractTemplate;
+            if (this.currentTemplateRef) {
+                this.currentTemplateRef.destroy();
+            }
+            this.currentTemplateRef = viewContainerRef.createComponent(templateComponentFactory);
+            this.template = this.currentTemplateRef.instance as AbstractTemplate;
             this.previousScreenType = screenType;
             this.previousScreenName = screenName;
             this.overlayContainer.getContainerElement().classList.add(this.getTheme());
@@ -156,7 +162,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         if (dialog.template.dialogProperties) {
             closeable = dialog.template.dialogProperties.closeable;
         }
-        let dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: false };
+        const dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: false };
         const dialogComponent = dialogComponentFactory.componentType;
         if (dialog.template.dialogProperties) {
             // Merge in any dialog properties provided on the screen
