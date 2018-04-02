@@ -12,14 +12,14 @@ import { ScanSomethingData } from './scanSomthingData';
 export class ScanSomethingComponent implements OnInit {
 
   @Input()
-  scanSomethingdata: ScanSomethingData;
+  scanSomethingData: ScanSomethingData;
 
   public barcode: string;
 
   constructor(private session: SessionService, public devices: DeviceService,
     @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>, @Optional() @Inject(MAT_DIALOG_DATA) public data: ScanSomethingData) { 
     if( data ){
-      this.scanSomethingdata = data;
+      this.scanSomethingData = data;
     }
   }
   ngOnInit() {

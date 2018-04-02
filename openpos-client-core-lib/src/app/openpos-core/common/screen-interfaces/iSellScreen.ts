@@ -21,7 +21,7 @@ export interface ISellScreen{
     showSkip: boolean;
     localMenuItems : IMenuItem[];
     theme : string;
-    scanPlaceholderText : string;
+    placeholderText : string;
 }
 
 
@@ -48,13 +48,13 @@ export class SellScreenUtils{
         statusBar.showHelp = screen.showHelp;
         statusBar.showScan = screen.showScan;
         statusBar.showSkip = screen.showSkip;
-        statusBar.scanPlaceholderText = screen.scanPlaceholderText;
+        statusBar.scanPlaceholderText = screen.placeholderText;
         return statusBar;
     }
 
     public static getScanSomethingData(screen: ISellScreen): ScanSomethingData{
         let scanSomethingData = new ScanSomethingData();
-        scanSomethingData.placeholderText = screen.scanPlaceholderText;
+        scanSomethingData.placeholderText = screen.placeholderText;
 
         return scanSomethingData;
     }
