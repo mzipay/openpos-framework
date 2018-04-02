@@ -50,7 +50,7 @@ export class ChooseOptionsComponent implements IScreen, OnInit,  OnDestroy {
   }
 
   onBackButtonPressed(): void {
-    this.currentView = this.session.screen.displayStyle;
+    this.currentView = this.screen.displayStyle;
     this.session.unregisterActionIntercepter(ChooseOptionsComponent.UNDO);
   }
 
