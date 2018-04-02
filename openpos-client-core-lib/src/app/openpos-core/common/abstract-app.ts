@@ -24,8 +24,6 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
 
     private previousScreenType: string;
 
-    private previousDialogType: string;
-
     private dialogOpening: boolean;
 
     private previousScreenName: string;
@@ -99,7 +97,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         this.registerWithServer();
         if (dialog) {
             const dialogType = this.screenService.hasScreen(dialog.subType) ? dialog.subType : 'Dialog';
-            if (!this.dialogOpening && (!this.dialogRef || this.previousDialogType !== dialogType)) {
+            if (!this.dialogOpening) {
                 if (this.dialogRef) {
                     console.log('closing dialog');
                     this.dialogRef.close();
@@ -109,8 +107,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
                 this.dialogOpening = true;
                 setTimeout(() => this.openDialog(dialog), 0);
             } else {
-                console.log(`Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}, dialogRef: ${this.dialogRef}, ` +
-                    `dialogType: ${dialogType}, previousDialogType: ${this.previousDialogType}`);
+                console.log(`Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}`);
             }
         } else if (!dialog && this.dialogRef) {
             console.log('closing dialog ref');
@@ -155,7 +152,6 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
 
     openDialog(dialog: any) {
         const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(dialog.type);
-        this.previousDialogType = dialog.type;
         let closeable = false;
         if (dialog.template.dialogProperties) {
             closeable = dialog.template.dialogProperties.closeable;
@@ -175,7 +171,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
         this.dialogRef.componentInstance.show(dialog, this);
         this.dialogOpening = false;
-        console.log('Dialog \'' + this.previousDialogType + '\' opened');
+        console.log('Dialog \'' + dialog.type + '\' opened');
         if (dialogProperties.executeActionBeforeClose) {
             // Some dialogs may need to execute the chosen action before
             // they close so that actionPayloads can be included with the action
