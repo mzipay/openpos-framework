@@ -13,8 +13,15 @@ import { MatSelectChange, MatDatepickerInputEvent } from "@angular/material";
   })
   export class DynamicDateFormFieldComponent implements OnInit {
   
-    @Input() formField: IFormElement;
-    @Input() formGroup: FormGroup;
+    @Input() type: string;
+    @Input() value: string;
+    @Input() placeholder: string;
+    @Input() isPrompt: boolean = false;
+    @Input() hintText: string ='';
+    @Input() controlName: string;
+    @Input() form: FormGroup;
+
+    @Output() valueChange = new EventEmitter<any>();
   
     dateMask = [/\d/, /\d/, '/', /\d/, /\d/,'/', /\d/, /\d/, /\d/, /\d/];
     autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
@@ -23,34 +30,25 @@ import { MatSelectChange, MatDatepickerInputEvent } from "@angular/material";
     constructor(@Optional() private datePipe: DatePipe) {}
   
     ngOnInit() {
-        if(this.formField.inputType === 'NoYearDate') {
+        if(this.type === 'NoYearDate' || this.type === 'NOYEARDATE') {
             this.dateMask = [/\d/, /\d/, '/', /\d/, /\d/];
             this.autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd');
             this.format = 'MM/dd';
         }
     }
     public onDateEntered(): void {
-      if (this.formField.value) {
-        this.formField.value = this.formField.value.replace(/_/g, '');
+      if (this.value) {
+        this.value = this.value.replace(/_/g, '');
+        this.valueChange.emit(this.value);
       }
     }
   
     public onDatePicked(event: MatDatepickerInputEvent<Date>): void {
-      this.formField.value = this.datePipe.transform(event.value, this.format);
-      this.formGroup.get(this.formField.id).setValue(this.formField.value);
+      this.value = this.datePipe.transform(event.value, this.format);
+      this.form.get(this.controlName).setValue(this.value);
+      this.valueChange.emit(this.value);
     }
   
-    getPlaceholderText(formElement: IFormElement) {
-        let text = '';
-        if (formElement.label) {
-          text += formElement.label;
-        }
-        if (text && formElement.placeholder) {
-          text = `${text} - ${formElement.placeholder}`;
-        }
-    
-        return text;
-      }
   }
   
   

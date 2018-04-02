@@ -45,7 +45,10 @@
     </ng-container>
 
     <ng-container *ngIf="formField.inputType ==='Date' || formField.inputType ==='NoYearDate'">
-        <app-dynamic-date-form-field [formField]="formField" [formGroup]="formGroup"></app-dynamic-date-form-field>
+        <app-dynamic-date-form-field [type]="formField.inputType" [(value)]="formField.value" [placeholder]="getPlaceholderText(formField)" [controlName]="formField.id" [form]="formGroup"></app-dynamic-date-form-field>
+        <mat-error>
+            <app-show-errors [control]="formGroup.controls[formField.id]"></app-show-errors>
+        </mat-error>
     </ng-container>
 
     <search-select *ngIf="formField.inputType==='AutoComplete'" width='100%' [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)"
