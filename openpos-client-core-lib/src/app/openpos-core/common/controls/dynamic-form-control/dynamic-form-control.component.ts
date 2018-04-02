@@ -57,6 +57,11 @@ export class DynamicFormControlComponent implements OnInit {
 
       const ctlValidators: ValidatorFn[] = this.createControlValidators(element);
       group[element.id] = new FormControl(element.value, ctlValidators);
+      // For a DATE type element, there is also a hidden field to handle picking of dates using
+      // a date picker, need to add a FormControl for that hidden input also.
+      if(element.inputType === 'Date' || element.inputType === 'NoYearDate') {
+        group[element.id+'Hidden'] = new FormControl();
+      }
     });
 
     const grpValidators: ValidatorFn[] = this.createFormLevelValidators();
