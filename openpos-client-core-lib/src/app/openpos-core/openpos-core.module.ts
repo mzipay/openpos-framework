@@ -115,6 +115,8 @@ import { ValidatorsService } from './services/validators.service';
 import { PrintPreviewComponent } from './screens/print-preview.component';
 import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selection-list.directive';
 import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/multiple-dynamic-form.component';
+import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
+import { DialogService } from './services/dialog.service';
 
 // Keyboard Layouts
 const customLayouts: IKeyboardLayouts = {
@@ -173,6 +175,7 @@ const customLayouts: IKeyboardLayouts = {
   entryComponents: [
     BasicItemSearchComponent,
     ChooseOptionsComponent,
+    ChooseOptionsDialogComponent,
     DialogComponent,
     EmbeddedWebPageComponent,
     FormComponent,
@@ -216,7 +219,7 @@ const customLayouts: IKeyboardLayouts = {
     FullPageImageComponent,
     CallForAuthorizationComponent,
     MultipleDynamicFormComponent,
-    DynamicDateFormFieldComponent
+    DynamicDateFormFieldComponent,
   ],
   declarations: [
     DialogComponent,
@@ -229,6 +232,7 @@ const customLayouts: IKeyboardLayouts = {
     ItemListComponent,
     LoginComponent,
     ChooseOptionsComponent,
+    ChooseOptionsDialogComponent,
     PromptWithOptionsComponent,
     PromptWithInfoComponent,
     SignatureCaptureComponent,
@@ -342,6 +346,7 @@ export class OpenposCoreModule {
       providers: [
         PluginService,
         ScreenService,
+        DialogService,
         IconService,
         ValidatorsService
       ]

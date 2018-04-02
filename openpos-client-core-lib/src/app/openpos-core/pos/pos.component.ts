@@ -12,6 +12,7 @@ import { MatDialog, MatDialogRef, MatSnackBar, MatMenuTrigger } from '@angular/m
 import { IconService } from './../services/icon.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
+import { DialogService } from './../services/dialog.service';
 
 
 @Component({
@@ -34,13 +35,13 @@ export class PosComponent extends AbstractApp implements DoCheck {
   showDevMenu = false;
   logsAvailable = false;
 
-  constructor(public screenService: ScreenService, public session: SessionService,
+  constructor(public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
     public deviceService: DeviceService, public dialog: MatDialog,
     public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
     protected router: Router, private pluginService: PluginService,
     private fileUploadService: FileUploadService) {
 
-    super(screenService, session, dialog, iconService, snackBar, overlayContainer, router);
+    super(screenService, dialogService, session, dialog, iconService, snackBar, overlayContainer, router);
   }
 
   @HostListener('document:click', ['$event'])

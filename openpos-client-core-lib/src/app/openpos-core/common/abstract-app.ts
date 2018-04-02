@@ -17,6 +17,7 @@ import { TemplateDirective } from './template.directive';
 import { AbstractTemplate } from './abstract-template';
 import { Router } from '@angular/router';
 import { OpenPOSDialogConfig } from './idialog';
+import { DialogService } from '../services/dialog.service';
 
 export abstract class AbstractApp implements OnDestroy, OnInit {
 
@@ -41,6 +42,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     @ViewChild(TemplateDirective) host: TemplateDirective;
 
     constructor(public screenService: ScreenService,
+        public dialogService: DialogService,
         public session: SessionService,
         public dialog: MatDialog,
         public iconService: IconService,
@@ -96,7 +98,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     public updateDialog(dialog?: any): void {
         this.registerWithServer();
         if (dialog) {
-            const dialogType = this.screenService.hasScreen(dialog.subType) ? dialog.subType : 'Dialog';
+            const dialogType = this.dialogService.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
             if (!this.dialogOpening) {
                 if (this.dialogRef) {
                     console.log('closing dialog');
@@ -151,7 +153,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     }
 
     openDialog(dialog: any) {
-        const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(dialog.type);
+        const dialogComponentFactory: ComponentFactory<IScreen> = this.dialogService.resolveDialog(dialog.type);
         let closeable = false;
         if (dialog.template.dialogProperties) {
             closeable = dialog.template.dialogProperties.closeable;
