@@ -36,7 +36,9 @@ export class SellScreenUtils{
         statusBar.screenIcon = screen.icon;
         statusBar.screenName = screen.name;
         statusBar.screenType = screen.type;
-        statusBar.workstationId = screen.workstation.workstationId;
+        if( screen.workstation ){
+            statusBar.workstationId = screen.workstation.workstationId;
+        }
 
         return statusBar;
     }
