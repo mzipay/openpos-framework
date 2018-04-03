@@ -1,8 +1,9 @@
+import { Subscription } from 'rxjs/Subscription';
 import { ITextMask, TextMask } from './../../textmask';
 import { IMenuItem } from '../../imenuitem';
 import { IScreen } from '../../iscreen';
 import {
-  Component, ViewChild, AfterViewInit, DoCheck, OnInit,
+  Component, ViewChild, AfterViewInit, DoCheck, OnInit, OnDestroy,
   Output, Input, EventEmitter, Optional, ElementRef
 } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
@@ -20,12 +21,14 @@ import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-s
   templateUrl: './dynamic-form-field.component.html',
   styleUrls: ['./dynamic-form-field.component.scss']
 })
-export class DynamicFormFieldComponent implements OnInit {
+export class DynamicFormFieldComponent implements OnInit, OnDestroy {
 
   @Input() formField: IFormElement;
   @Input() formGroup: FormGroup;
 
   public keyboardLayout = 'en-US';
+
+  valuesSubscription: Subscription;
 
   autoCompleteDataSource: DataSource = {
     displayValue(value: any): Observable<OptionEntry | null> {
@@ -47,7 +50,7 @@ export class DynamicFormFieldComponent implements OnInit {
   ngOnInit() {
     if (this.formField.inputType === 'ComboBox' || this.formField.inputType === 'SubmitOptionList' ||
       this.formField.inputType === 'ToggleButton') {
-      this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
+        this.valuesSubscription = this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
         this.values = data;
         console.log('asynchronously received ' + this.values.length + ' items for ' + this.formField.id);
       });
@@ -64,8 +67,15 @@ export class DynamicFormFieldComponent implements OnInit {
     }
   }
 
+
+  ngOnDestroy(): void {
+    if (this.valuesSubscription) {
+      this.valuesSubscription.unsubscribe();
+    }
+  }
+
   updateAutoCompleteDataSource() {
-    this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
+    this.valuesSubscription = this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
       const values: Array<string> = data;
       console.log('asynchronously received ' + values.length + ' items for ' + this.formField.id);
       this.formGroup.get(this.formField.id).setValue(this.formField.value);

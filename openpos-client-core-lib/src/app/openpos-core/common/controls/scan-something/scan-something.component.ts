@@ -47,15 +47,6 @@ export class ScanSomethingComponent implements OnInit {
     return val.toString().replace(pattern, '');
   }
 
-  onBarcodeKeydown(event: KeyboardEvent) {
-    if (event.altKey || event.ctrlKey || event.metaKey) {
-      return true;
-    }
-    const filteredKey = this.filterBarcodeValue(event.key);
-    // console.log(`[onBarcodeKeydown] filtered key: ${filteredKey}`);
-    return filteredKey !== null && filteredKey.length !== 0;
-  }
-
   onBarcodePaste(event: ClipboardEvent) {
     const content = event.clipboardData.getData('text/plain');
     const filteredContent = this.filterBarcodeValue(content);
