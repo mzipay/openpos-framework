@@ -1,0 +1,7 @@
+@mixin openpos-tabs(){
+    mat-tab-group{
+        .mat-tab-label{
+            min-width: 60px;
+        }
+    }
+}

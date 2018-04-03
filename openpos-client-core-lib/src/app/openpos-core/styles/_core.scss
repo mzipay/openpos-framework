@@ -10,6 +10,7 @@
 @import './mixins/slide-toggle';
 @import './mixins/table';
 @import './mixins/typography';
+@import './mixins/tabs';
 
 $mat-card-default-margin: 24px !default;
 
@@ -27,6 +28,7 @@ $mat-card-default-margin: 24px !default;
   @include openpos-slide-toggle();
   @include openpos-table();
   @include openpos-typography();
+  @include openpos-tabs();
 
   html, body {
     font-family: Roboto, sans-serif;

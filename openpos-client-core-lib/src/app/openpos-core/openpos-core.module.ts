@@ -117,6 +117,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
 import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/multiple-dynamic-form.component';
 import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
 import { DialogService } from './services/dialog.service';
+import { MultipleDynamicFormDialogComponent } from './dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 
 // Keyboard Layouts
 const customLayouts: IKeyboardLayouts = {
@@ -219,6 +220,7 @@ const customLayouts: IKeyboardLayouts = {
     FullPageImageComponent,
     CallForAuthorizationComponent,
     MultipleDynamicFormComponent,
+    MultipleDynamicFormDialogComponent,
     DynamicDateFormFieldComponent,
   ],
   declarations: [
@@ -289,6 +291,7 @@ const customLayouts: IKeyboardLayouts = {
     FullPageImageComponent,
     CallForAuthorizationComponent,
     MultipleDynamicFormComponent,
+    MultipleDynamicFormDialogComponent,
     DynamicDateFormFieldComponent
   ],
   imports: [

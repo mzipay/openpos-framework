@@ -3,6 +3,7 @@ import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@a
 import { SessionService } from '../services/session.service';
 import { ChooseOptionsDialogComponent } from '../dialogs/choose-options/choose-options-dialog.component';
 import { ScreenService } from '.';
+import { MultipleDynamicFormDialogComponent } from '../dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 
 @Injectable()
 export class DialogService {
@@ -14,6 +15,7 @@ export class DialogService {
 
     // To make a dialog screen available add it here and in entryComponents in the app.module.ts
     this.dialogs.set('ChooseOptions', ChooseOptionsDialogComponent);
+    this.dialogs.set('MultipleDynamicForm', MultipleDynamicFormDialogComponent);
   }
 
   public addDialog(name: string, type: Type<IScreen>): void {
