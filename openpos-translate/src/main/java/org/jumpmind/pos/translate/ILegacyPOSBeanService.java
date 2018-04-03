@@ -31,6 +31,7 @@ public interface ILegacyPOSBeanService {
     <T> T toILegacyInstance(Object legacyObject);
     
     ILegacyPOSListModel getLegacyPOSListModel(ILegacyScreen legacyScreen);
+    ILegacyListBeanModel getLegacyListBeanModel(ILegacyScreen legacyScreen);
 
     ILegacySellItemUtils getLegacySellItemUtils();
     
