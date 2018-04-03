@@ -34,7 +34,7 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
     public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems,
             FieldInputType responseType, Integer minLength, Integer maxLength, String appId, Properties properties) {
         super(legacyScreen, screenClass, appId, properties);
-        getScreen().setTemplate(new SellTemplate());
+        screen.setTemplate(new SellTemplate());
         this.addLocalMenuItems = addLocalMenuItems;
         screen.setResponseType(responseType != null ? responseType.name() : null);
         screen.setMinLength(minLength);
@@ -50,8 +50,11 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
             List<MenuItem> localNavButtons = generateUIActionsForLocalNavButtons(MenuItem.class, true);
             screen.setLocalMenuItems(localNavButtons);
         }
-        getScreen().setActionButton(new MenuItem("Next", "Next", "keyboard_arrow_right"));
-
+        addActionButton();
+    }
+    
+    protected void addActionButton() {
+        screen.setActionButton(new MenuItem("Next", "Next", "keyboard_arrow_right"));
     }
 
 }

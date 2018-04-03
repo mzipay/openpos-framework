@@ -26,11 +26,15 @@ public class PromptWithOptionsScreenTranslator extends AbstractPromptScreenTrans
         super.buildMainContent();
         this.buildOptions();
         this.configureScreenResponseField();
-        getScreen().setPrompt(getScreen().getText());
+        screen.setPrompt(screen.getText());
     }
 
     protected void buildOptions() {
         List<OptionItem> options = generateUIActionsForLocalNavButtons(OptionItem.class, true);
         screen.setOptions(options);
+    }
+    
+    protected void addActionButton() {
+        
     }
 }
