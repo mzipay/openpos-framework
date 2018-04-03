@@ -5,7 +5,12 @@
         <div *ngFor="let error of screenForm.formErrors">{{error}}</div>
     </mat-error>	
     <div fxFlex="1 1 auto"></div>
-    <div fxLayoutAlign="end">
+    <div>
+        <button mat-button color="primary" *ngFor="let button of buttons" (click)="onButtonClick(button)">
+            <span>{{button.label}}</span>
+            <mat-icon>{{button.icon}}</mat-icon>
+        </button>
+        <div fxFlex="1 1 auto"></div>
         <button type="submit" mat-raised-button color=primary *ngIf="submitAction">
             <span>{{submitButtonText}}</span>
             <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
