@@ -1,7 +1,7 @@
 import { IMenuItem } from "../imenuitem";
-import { StatusBarData } from "./iStatusBarData";
+import { StatusBarData } from "./statusBarData";
 import { IWorkStation } from "../iworkstation";
-import { SelfCheckoutStatusBarData } from "./iSelfCheckoutStatusBarData";
+import { SelfCheckoutStatusBarData } from "./selfCheckoutStatusBarData";
 import { ScanSomethingData } from "../controls/scan-something/scanSomthingData";
 
 export interface ISellScreen{

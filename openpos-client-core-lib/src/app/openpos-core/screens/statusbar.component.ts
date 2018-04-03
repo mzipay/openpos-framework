@@ -5,7 +5,7 @@ import { IMenuItem } from '../common/imenuitem';
 import { Component, Input } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { PluginService } from './../services/plugin.service';
-import { StatusBarData } from '../common/screen-interfaces/iStatusBarData';
+import { StatusBarData } from '../common/screen-interfaces/statusBarData';
 
 @Component({
   selector: 'app-statusbar',

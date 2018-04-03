@@ -5,7 +5,7 @@ import { IScreen } from '../../common/iscreen';
 import { SessionService } from '../../services/session.service';
 import { AbstractApp } from '../../common/abstract-app';
 import { AbstractTemplate } from '../../common/abstract-template';
-import { StatusBarData } from '../../common/screen-interfaces/iStatusBarData';
+import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
 import { SellScreenUtils } from '../../common/screen-interfaces/iSellScreen';
 
 @Component({

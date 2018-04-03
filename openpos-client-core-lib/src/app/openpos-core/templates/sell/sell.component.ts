@@ -11,7 +11,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ScanSomethingComponent } from '../../common/controls/scan-something/scan-something.component';
 import { ObservableMedia } from '@angular/flex-layout';
 import { ISellScreen, AbstractApp } from '../..';
-import { StatusBarData } from '../../common/screen-interfaces/iStatusBarData';
+import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
 import { SellScreenUtils } from '../../common/screen-interfaces/iSellScreen';
 import { ScanSomethingData } from '../../common/controls/scan-something/scanSomthingData';
 

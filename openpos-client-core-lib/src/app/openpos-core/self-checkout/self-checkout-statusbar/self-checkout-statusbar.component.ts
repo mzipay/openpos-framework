@@ -4,8 +4,7 @@ import { IMenuItem } from '../../common/imenuitem';
 import { Component, Input } from '@angular/core';
 import { SessionService } from '../../services/session.service';
 import { ScanSomethingComponent } from '../../common/controls/scan-something/scan-something.component';
-import { StatusBarData } from '../../common/screen-interfaces/iStatusBarData';
-import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/iSelfCheckoutStatusBarData';
+import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
 import { ScanSomethingData } from '../../common/controls/scan-something/scanSomthingData';
 
 @Component({
