@@ -11,21 +11,20 @@
 						</mat-chip-list>
 					</p>
 
-            		<span [hidden]="!item.isGiftReceipt"><mat-icon color="muted-color">redeem</mat-icon></span>
-					<span class="primary text-md"><span class="super-currency-symbol">$</span>{{item.amount}}<br>
-						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through"><span class="super-currency-symbol">$</span>{{item.originalAmount}}</p>
-						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">( -<span class="super-currency-symbol">$</span>{{item.discountAmount}} )</p>
+					<span [hidden]="!item.isGiftReceipt">
+						<mat-icon color="muted-color">redeem</mat-icon>
 					</span>
-					<button *ngIf ="!screen.readOnly" mat-icon-button color="primary" [matMenuTriggerFor]="itemMenu">
-						<mat-icon>expand_more</mat-icon>
+					<span class="primary text-md">
+						<span class="super-currency-symbol">$</span>{{item.amount}}
+						<br>
+						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">
+							<span class="super-currency-symbol">$</span>{{item.originalAmount}}</p>
+						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">( -
+							<span class="super-currency-symbol">$</span>{{item.discountAmount}} )</p>
+					</span>
+					<button *ngIf="!screen.readOnly" mat-icon-button color="primary" (click)="openItemDialog(item)">
+						<mat-icon>more_vert</mat-icon>
 					</button>
-					<mat-menu #itemMenu="matMenu">
-						<button mat-menu-item *ngFor="let m of item.menuItems" (click)="doMenuItemAction(m, item.index)"
-							[disabled]="!isMenuItemEnabled(m)">
-							<app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
-							<span [ngClass]="{'muted-color': ! m.enabled}">{{m.title}}</span>
-						</button>
-					</mat-menu>
 				</mat-list-item>
 			</mat-list>
 			<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
@@ -35,7 +34,8 @@
 		</mat-card-content>
 	</mat-card>
 
-	<app-overflow-list fxFlex="0 0 auto"  *ngIf="screen.transaction.transactionNumber" [numberItemsToShow]="overFlowListSize | async" [items]="screen.totals" ></app-overflow-list>
+	<app-overflow-list fxFlex="0 0 auto" *ngIf="screen.transaction.transactionNumber" [numberItemsToShow]="overFlowListSize | async"
+	 [items]="screen.totals"></app-overflow-list>
 
 	<mat-card *ngIf="screen.transaction.transactionNumber" fxFlex="0 0 auto" class="page-content-card dark">
 		<mat-card-content fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" class="text-lg">

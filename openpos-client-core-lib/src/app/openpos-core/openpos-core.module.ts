@@ -1,3 +1,4 @@
+import { NavListComponent } from './dialogs/nav-list/nav-list.component';
 
 // Angular Includes
 import { NgModule } from '@angular/core';
@@ -222,6 +223,7 @@ const customLayouts: IKeyboardLayouts = {
     MultipleDynamicFormComponent,
     MultipleDynamicFormDialogComponent,
     DynamicDateFormFieldComponent,
+    NavListComponent
   ],
   declarations: [
     DialogComponent,
@@ -292,7 +294,8 @@ const customLayouts: IKeyboardLayouts = {
     CallForAuthorizationComponent,
     MultipleDynamicFormComponent,
     MultipleDynamicFormDialogComponent,
-    DynamicDateFormFieldComponent
+    DynamicDateFormFieldComponent,
+    NavListComponent
   ],
   imports: [
     BrowserModule,
