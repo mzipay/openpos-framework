@@ -14,10 +14,7 @@
                     <div *ngIf="item.color" class="muted-color text-sm">Color: {{item.color}}</div>
                     <div *ngIf="item.size" class="muted-color text-sm" style="margin-top: 8px">Size: {{item.size}}</div>
                     <div class="muted-color text-sm" style="margin-top: 8px">
-                        <mat-chip-list>
-                            {{item.subtitle}}&nbsp;
-                            <mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
-                        </mat-chip-list>
+                        Quantity: {{item.quantity}}
                     </div>
                 </div>
             </div>

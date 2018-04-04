@@ -38,13 +38,18 @@
 				<div fxFlex="2 1 auto"></div>
 
 				<div>
-					<button mat-button *ngIf="!screen.readOnly" [disabled]="!screen.transaction.active || items.length == 0"
-					 (click)="session.onAction('Checkout')" class="green-button text-lg">Checkout
+					<button mat-button *ngIf="screen.loyaltyButton" (click)="doMenuItemAction(screen.loyaltyButton)" class="border-button text-lg" style="height: 100%; width: 100%; padding: 16px;">
+						<div>{{screen.loyaltyButton.title}}</div>
+						<mat-icon [svgIcon]="screen.loyaltyButton.icon" class="top" style="height: 100%; width: 100%;"></mat-icon>
 					</button>
-					<button mat-button *ngIf="!screen.readOnly" color="primary" (click)="doMenuItemAction(screen.logoutButton)"
-					 class="border-button text-lg">
+					<button mat-button *ngIf="!screen.readOnly" [disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')"
+					 class="green-button text-lg">Checkout
+					</button>
+					<button mat-button *ngIf="!screen.readOnly" color="primary" (click)="doMenuItemAction(screen.logoutButton)" class="border-button text-lg">
 						<span>
-							<app-icon [iconName]="screen.logoutButton.icon" class="top"></app-icon>{{screen.logoutButton.title}}</span>
+							<app-icon [iconName]="screen.logoutButton.icon" class="top"></app-icon>
+							{{screen.logoutButton.title}}
+						</span>
 					</button>
 				</div>
 			</mat-card-content>
