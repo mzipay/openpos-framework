@@ -5,12 +5,16 @@ import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output, Input, Ev
 import { SessionService } from '../../../services/session.service';
 import { MatSelectChange } from '@angular/material';
 import { AbstractApp } from '../../abstract-app';
-import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl, NgForm, ValidatorFn, NG_VALIDATORS } from '@angular/forms';
+import {
+  FormArray, FormBuilder, FormGroup, Validators, AbstractControl,
+  FormControl, NgForm, ValidatorFn, NG_VALIDATORS
+} from '@angular/forms';
 import { IFormElement } from '../../iformfield';
 import { Observable } from 'rxjs/Observable';
 import { ScreenService } from '../../../services/screen.service';
 import { OpenPosValidators } from '../../validators/openpos-validators';
 import { ValidatorsService } from '../../../services/validators.service';
+import { IForm } from '../../iform';
 
 @Component({
   selector: 'app-dynamic-form-control',
@@ -23,30 +27,50 @@ export class DynamicFormControlComponent implements OnInit {
 
   @Input() submitAction: string;
 
-  @Input() submitButtonText: string = 'Next';
+  @Input() submitButtonText = 'Next';
 
   @Input() screen: any;
 
   form: FormGroup;
+  
+  buttons: IFormElement[];
 
-  constructor( public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) { }
+  constructor(public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) { }
 
   ngOnInit() {
 
-    this.screen.alternateSubmitActions.forEach(action => {
 
-      this.session.registerActionPayload( action, () => {
-        this.buildFormPayload();
-        return this.session.response = this.screenForm;
-       });
-    });
+    if (this.screen.alternateSubmitActions) {
+      this.screen.alternateSubmitActions.forEach(action => {
+
+        this.session.registerActionPayload(action, () => {
+          if (this.form.valid) {
+              this.buildFormPayload();
+              return this.session.response = this.screenForm;
+          } else {
+              throw Error('form is invalid');
+          }
+        });
+      });
+    }
 
     const group: any = {};
 
-    this.screenForm.formElements.forEach( element => {
+    this.buttons = new Array<IFormElement>();
+
+    this.screenForm.formElements.forEach(element => {
 
       const ctlValidators: ValidatorFn[] = this.createControlValidators(element);
       group[element.id] = new FormControl(element.value, ctlValidators);
+      // For a DATE type element, there is also a hidden field to handle picking of dates using
+      // a date picker, need to add a FormControl for that hidden input also.
+      if(element.inputType === 'Date' || element.inputType === 'NoYearDate') {
+        group[element.id+'Hidden'] = new FormControl();
+      }
+
+      if(element.elementType === 'Button' ){
+        this.buttons.push( element );
+      }
     });
 
     const grpValidators: ValidatorFn[] = this.createFormLevelValidators();
@@ -115,24 +139,23 @@ export class DynamicFormControlComponent implements OnInit {
     }
   }
 
-  onFieldChanged(formElement:IFormElement) {
-    if(formElement.valueChangedAction) {
+  onFieldChanged(formElement: IFormElement) {
+    if (formElement.valueChangedAction) {
       this.buildFormPayload();
       this.session.onAction(formElement.valueChangedAction, this.screenForm);
-    }    
+    }
   }
 
-  private buildFormPayload()  {
-    this.screenForm.formElements.forEach( element => {
+  onButtonClick(formElement: IFormElement){
+    this.session.onAction(formElement.buttonAction);
+  }
+
+  private buildFormPayload() {
+    this.screenForm.formElements.forEach(element => {
       if (element.hasOwnProperty('value')) {
         element.value = this.form.value[element.id];
       }
     });
   }
-}
-
-export interface IForm {
-  formElements: IFormElement[];
-  requiresAtLeastOneValue: Boolean;
 }
 

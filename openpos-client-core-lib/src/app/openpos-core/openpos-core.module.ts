@@ -1,3 +1,4 @@
+import { NavListComponent } from './dialogs/nav-list/nav-list.component';
 
 // Angular Includes
 import { NgModule } from '@angular/core';
@@ -12,6 +13,7 @@ import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/lay
 
 import { StompConfig, StompService } from '@stomp/ng2-stompjs';
 import { TextMaskModule } from 'angular2-text-mask';
+import { SearchSelectModule } from '@oasisdigital/angular-material-search-select';
 import 'hammerjs'; // for material
 
 // Common
@@ -43,8 +45,6 @@ import { LoaderComponent } from './common/loader/loader.component';
 import { DynamicFormControlComponent } from './common/controls/dynamic-form-control/dynamic-form-control.component';
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
 import { PosComponent } from './pos/pos.component';
-import { SelfCheckoutComponent } from './self-checkout/self-checkout.component';
-import { CustomerDisplayComponent } from './customerdisplay/customerdisplay.component';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 import { CheckoutListItemComponent} from './common/controls/checkout-list-item/checkout-list-item.component';
 
@@ -93,6 +93,7 @@ import { CallForAuthorizationComponent } from './screens/call-for-authorization/
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
+import { BlankWithBarComponent } from './templates/blank-with-bar/blank-with-bar.component';
 import { SellComponent } from './templates/sell/sell.component';
 import { SelfCheckoutWithBarComponent } from './templates/selfcheckout-with-bar/selfcheckout-with-bar.component';
 
@@ -106,6 +107,7 @@ import { DynamicFormFieldComponent } from './common/controls/dynamic-form-field/
 import { MarkDirtyOnSubmit } from './common/mark-dirty-onSubmit.directive';
 import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
 import { FormattedInputValueAccessor } from './common/input-formatter.directive';
+import { DynamicDateFormFieldComponent } from './common/controls/dynamic-date-form-field/dynamic-date-form-field.component';
 
 // On Screen Keyboard
 import { IKeyboardLayouts, KeyboardClassKey, keyboardLayouts, MAT_KEYBOARD_LAYOUTS, MatKeyboardModule } from '@ngx-material-keyboard/core';
@@ -113,6 +115,10 @@ import { KeyboardDirective } from './common/keyboard.directive';
 import { ValidatorsService } from './services/validators.service';
 import { PrintPreviewComponent } from './screens/print-preview.component';
 import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selection-list.directive';
+import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/multiple-dynamic-form.component';
+import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
+import { DialogService } from './services/dialog.service';
+import { MultipleDynamicFormDialogComponent } from './dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 
 // Keyboard Layouts
 const customLayouts: IKeyboardLayouts = {
@@ -120,11 +126,13 @@ const customLayouts: IKeyboardLayouts = {
     'name': 'US Standard',
     'keys': [
       [
+        // tslint:disable-next-line:max-line-length
         ['`', '~'],['1', '!'],['2', '@'],['3', '#'],['4', '$'],['5', '%'],['6', '^'],['7', '&'],['8', '*'],['9', '('],['0', ')'],['-', '_'],['=', '+'],
         [KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp]
       ],
       [
         [KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab],
+        // tslint:disable-next-line:max-line-length
         ['q', 'Q'],['w', 'W'],['e', 'E'],['r', 'R'],['t', 'T'],['y', 'Y'],['u', 'U'],['i', 'I'],['o', 'O'],['p', 'P'],['[', '{'],[']', '}'],['\\', '|']
       ],
       [
@@ -169,6 +177,7 @@ const customLayouts: IKeyboardLayouts = {
   entryComponents: [
     BasicItemSearchComponent,
     ChooseOptionsComponent,
+    ChooseOptionsDialogComponent,
     DialogComponent,
     EmbeddedWebPageComponent,
     FormComponent,
@@ -192,6 +201,7 @@ const customLayouts: IKeyboardLayouts = {
     WarrantyCoverageComponent,
     ScanSomethingComponent,
     BlankComponent,
+    BlankWithBarComponent,
     SelfCheckoutWithBarComponent,
     SellComponent,
     OptionsComponent,
@@ -209,7 +219,11 @@ const customLayouts: IKeyboardLayouts = {
     CustomerSearchResultsComponent,
     SelfCheckoutOptionsComponent,
     FullPageImageComponent,
-    CallForAuthorizationComponent
+    CallForAuthorizationComponent,
+    MultipleDynamicFormComponent,
+    MultipleDynamicFormDialogComponent,
+    DynamicDateFormFieldComponent,
+    NavListComponent
   ],
   declarations: [
     DialogComponent,
@@ -222,6 +236,7 @@ const customLayouts: IKeyboardLayouts = {
     ItemListComponent,
     LoginComponent,
     ChooseOptionsComponent,
+    ChooseOptionsDialogComponent,
     PromptWithOptionsComponent,
     PromptWithInfoComponent,
     SignatureCaptureComponent,
@@ -247,6 +262,7 @@ const customLayouts: IKeyboardLayouts = {
     WarrantyCoverageComponent,
     ScanSomethingComponent,
     BlankComponent,
+    BlankWithBarComponent,
     SelfCheckoutWithBarComponent,
     SellComponent,
     TemplateDirective,
@@ -257,8 +273,6 @@ const customLayouts: IKeyboardLayouts = {
     DynamicFormControlComponent,
     DynamicFormFieldComponent,
     PosComponent,
-    SelfCheckoutComponent,
-    CustomerDisplayComponent,
     ChangeComponent,
     ConfirmationDialogComponent,
     CheckoutListItemComponent,
@@ -277,7 +291,11 @@ const customLayouts: IKeyboardLayouts = {
     FabToggleButtonComponent,
     SelfCheckoutOptionsComponent,
     FullPageImageComponent,
-    CallForAuthorizationComponent
+    CallForAuthorizationComponent,
+    MultipleDynamicFormComponent,
+    MultipleDynamicFormDialogComponent,
+    DynamicDateFormFieldComponent,
+    NavListComponent
   ],
   imports: [
     BrowserModule,
@@ -289,12 +307,11 @@ const customLayouts: IKeyboardLayouts = {
     BrowserAnimationsModule,
     MaterialModule,
     MatKeyboardModule,
-    TextMaskModule
+    TextMaskModule,
+    SearchSelectModule
   ],
   exports: [
     PosComponent,
-    SelfCheckoutComponent,
-    CustomerDisplayComponent,
     LoaderComponent,
     MaterialModule,
     MatKeyboardModule,
@@ -304,7 +321,8 @@ const customLayouts: IKeyboardLayouts = {
     FabToggleGroupComponent,
     FabToggleButtonComponent,
     DynamicFormControlComponent,
-    FocusDirective
+    FocusDirective,
+    StatusBarComponent
     ],
   providers: [
     HttpClient,
@@ -334,6 +352,7 @@ export class OpenposCoreModule {
       providers: [
         PluginService,
         ScreenService,
+        DialogService,
         IconService,
         ValidatorsService
       ]

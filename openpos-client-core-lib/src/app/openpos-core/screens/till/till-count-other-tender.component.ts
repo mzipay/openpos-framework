@@ -19,6 +19,7 @@ export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen
   amountValue = undefined;
   totalAmount: number;
   nextAction: IMenuItem;
+  screen: any;
 
   items: IItem[];
   numberMask = createNumberMask({
@@ -34,6 +35,7 @@ export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen
   }
 
   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
   }
 
   ngOnDestroy(): void {
@@ -42,7 +44,7 @@ export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen
   ngOnInit(): void {
     this.items = [];
     this.totalAmount = 0;
-    this.nextAction = this.session.screen.nextAction;
+    this.nextAction = this.screen.nextAction;
   }
 
   public doMenuItemAction(menuItem: IMenuItem, payLoad: any) {

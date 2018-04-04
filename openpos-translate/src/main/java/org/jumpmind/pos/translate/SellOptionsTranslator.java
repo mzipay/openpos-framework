@@ -6,9 +6,10 @@ import java.util.Set;
 
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
-import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.ScreenType;
+import org.jumpmind.pos.core.screen.SellScreen;
+import org.jumpmind.pos.core.template.SellTemplate;
 
 public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<SellScreen> {
 
@@ -34,7 +35,7 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<SellSc
     @Override
     protected void buildMainContent() {
         super.buildMainContent();
-        screen.setTemplate(SellScreen.TEMPLATE_SELL);
+        screen.setTemplate(new SellTemplate());
         screen.setLocalMenuItems(generateUIActionsForLocalNavButtons(MenuItem.class, true, excludeLabelTags.toArray(new String[]{})));
         if (screen.getLocalMenuItems().size() > 0) {
             screen.setPrompt("Choose Option");

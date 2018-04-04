@@ -1,20 +1,5 @@
-<ng-container  [ngSwitch]="responseType">
-    <div [formGroup]="promptFormGroup">
-        <mat-form-field fxFlexFill *ngSwitchCase="'DATE'" ngClass="text-xl">
-            <!-- Can't use the masking component AND date picker on the same input, so use a hidden input for the picker and
-                visible input for the masking component -->
-            <input matInput placeholder="{{placeholderText}}" [(ngModel)]="dateText"
-                [textMask]="{mask: dateMask, pipe: autoCorrectedDatePipe, keepCharPositions: true}"
-                (keyup.enter)="onDateEntered()" [formControlName]="'promptInputControl'">
-            <input matInput hidden [matDatepicker]="picker" [(ngModel)]="datePickerValue" (dateChange)="onDatePicked()" [formControlName]="'promptInputHiddenDateControl'">
-            <mat-hint align="start">{{hintText}}</mat-hint>
-            <mat-datepicker-toggle matPrefix [for]="picker" class="primary"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error class="text-sm">
-                    <app-show-errors [control]="promptFormGroup.controls['promptInputControl']"></app-show-errors>
-                </mat-error>
-        </mat-form-field>
-    
+<div [formGroup]="promptFormGroup">
+    <ng-container  *ngIf="responseType!='DATE'&& responseType!='NOYEARDATE'"[ngSwitch]="responseType">   
         <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-xl">
             <!-- Was using this:
                 <mat-icon matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
@@ -45,5 +30,14 @@
                 <app-show-errors [control]="promptFormGroup.controls['promptInputControl']"></app-show-errors>
             </mat-error>
         </mat-form-field>
-    </div>        
-</ng-container>
+       
+    </ng-container>
+
+    <ng-container *ngIf="responseType ==='DATE' || responseType ==='NOYEARDATE'" >
+        <app-dynamic-date-form-field [controlName]="'promptInputControl'" [hiddenControl]="'promptInputHiddenDateControl'" [form]="promptFormGroup"
+        [type]="responseType" [(value)]="responseText" [placeholder]="placeholderText" [isPrompt]=true [hintText]="hintText"></app-dynamic-date-form-field>
+        <mat-error class="text-sm">
+            <app-show-errors [control]="promptFormGroup.controls['promptInputControl']"></app-show-errors>
+        </mat-error>
+    </ng-container>
+</div> 

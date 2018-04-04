@@ -9,12 +9,14 @@ import { PhoneUSFormatter } from '../common/formatters/phoneUS-formatter';
 import { PhoneCAFormatter } from '../common/formatters/phoneCA-formatter';
 import { NumericFormatter } from '../common/formatters/numeric-formatter';
 import { PostalCodeFormatter } from '../common/formatters/postalcode-formatter';
+import { IncomeFormatter } from '../common/formatters/income-formatter';
+import { StateIDNumberFormatter } from '../common/formatters/stateidnumber-formatter';
 
 @Injectable()
 export class FormattersService {
     private formatters = new Map<string, Map<string, IFormatter>>();
 
-    constructor( private localeService: LocaleService ) {
+    constructor(private localeService: LocaleService) {
         const USFormatters = new Map<string, IFormatter>();
         const defaultPhoneFormatter = new PhoneUSFormatter();
 
@@ -41,9 +43,11 @@ export class FormattersService {
         NOLOCALEFormatters.set('phone', defaultPhoneFormatter);
         NOLOCALEFormatters.set('percent', new PercentageFormatter());
         NOLOCALEFormatters.set('postalcode', new PostalCodeFormatter());
+        NOLOCALEFormatters.set('income', new IncomeFormatter());
+        NOLOCALEFormatters.set('stateidnumber', new StateIDNumberFormatter());
     }
 
-    getFormatter( name: string ): IFormatter {
+    getFormatter(name: string): IFormatter {
 
         const locale = this.localeService.getLocale();
         if (name && locale) {
@@ -61,12 +65,12 @@ export class FormattersService {
             }
         }
 
-        console.log( `No formatter found for locale '${locale}' formatter name '${name}'. Using a 'Do Nothing' formatter`);
+        console.log(`No formatter found for locale '${locale}' formatter name '${name}'. Using a 'Do Nothing' formatter`);
         return new DoNothingFormatter();
     }
 
-    setFormatter( name: string, formatter: IFormatter, locale?: string ){
-        if( !locale ){
+    setFormatter(name: string, formatter: IFormatter, locale?: string) {
+        if (!locale) {
             locale = 'NO-LOCALE';
         }
 

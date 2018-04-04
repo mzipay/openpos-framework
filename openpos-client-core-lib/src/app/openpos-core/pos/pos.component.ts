@@ -12,6 +12,7 @@ import { MatDialog, MatDialogRef, MatSnackBar, MatMenuTrigger } from '@angular/m
 import { IconService } from './../services/icon.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
+import { DialogService } from './../services/dialog.service';
 
 
 @Component({
@@ -34,25 +35,40 @@ export class PosComponent extends AbstractApp implements DoCheck {
   showDevMenu = false;
   logsAvailable = false;
 
-  constructor(public screenService: ScreenService, public session: SessionService,
+  constructor(public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
     public deviceService: DeviceService, public dialog: MatDialog,
     public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
     protected router: Router, private pluginService: PluginService,
     private fileUploadService: FileUploadService) {
 
-    super(screenService, session, dialog, iconService, snackBar, overlayContainer, router);
+    super(screenService, dialogService, session, dialog, iconService, snackBar, overlayContainer, router);
   }
 
   @HostListener('document:click', ['$event'])
   @HostListener('document:touchstart', ['$event'])
-  documentClick(event: MouseEvent) {
-    const screenWidth = window.screen.availWidth;
+  documentClick(event: any) {
+    const screenWidth = window.innerWidth;
+    let x = event.clientX;
+    let y = event.clientY;
+    if (event.type === 'touchstart') {
+       console.log(event);
+       x = event.changedTouches[0].pageX;
+       y = event.changedTouches[0].pageY;
+    }
+    // console.log(`${screenWidth} ${x} ${y}`);
     if (this.clickCount === 0 || Date.now() - this.firstClickTime > 1000 ||
-      (event.clientX < screenWidth - 100 && event.clientY > 100)) {
+      (x < screenWidth - 100 && y > 100)) {
       this.firstClickTime = Date.now();
       this.clickCount = 0;
     }
-    this.clickCount = ++this.clickCount;
+
+    if (x < screenWidth - 100 && y > 100) {
+      this.showDevMenu = false;
+    }
+
+    if (x > screenWidth - 100 && y < 100) {
+      this.clickCount = ++this.clickCount;
+    }
 
     if (this.clickCount === 5) {
       this.onDevMenuClick();
@@ -79,7 +95,7 @@ export class PosComponent extends AbstractApp implements DoCheck {
             this.logsAvailable = false;
           }
         }
-      ).catch( error => {
+      ).catch(error => {
         this.logsAvailable = false;
       });
     }
@@ -143,6 +159,28 @@ export class PosComponent extends AbstractApp implements DoCheck {
     if (typeof this.session.screen !== 'undefined') {
       this.backButton = this.session.screen.backButton;
     }
+  }
+
+  protected getClasses(): string {
+    let classes: string = '';
+    switch (this.router.url.substring(1)) {
+      case 'pos':
+        if (this.session.screen.type === 'Home') {
+          classes = 'main-background';
+        }
+        break;
+      case 'selfcheckout':
+        if (this.session.screen.type === 'SelfCheckoutHome') {
+          classes = 'main-background selfcheckout';
+        } else {
+          classes = 'lighter selfcheckout';
+        }
+        break;
+      case 'customerdisplay':
+        classes = 'selfcheckout';
+        break;
+    }
+    return classes;
   }
 
 }

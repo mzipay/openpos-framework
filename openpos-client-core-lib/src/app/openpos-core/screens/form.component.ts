@@ -13,6 +13,7 @@ import { IFormElement } from '../common/iformfield';
 })
 export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 
+  screen: any;
   public form: IForm;
   private lastSequenceNum: number;
   formButtons: IFormElement[];
@@ -22,18 +23,19 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
   }
 
   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
   }
 
   ngDoCheck(): void {
-    if (this.session.screen.sequenceNumber !== this.lastSequenceNum) {
+    if (this.screen.sequenceNumber !== this.lastSequenceNum) {
       this.ngOnInit();
-      this.lastSequenceNum = this.session.screen.sequenceNumber;
+      this.lastSequenceNum = this.screen.sequenceNumber;
     }
   }
 
   ngOnInit(): void {
-    this.form = this.session.screen.form;
-    this.formButtons = this.session.screen.form.formElements.filter((e) => e.elementType === 'Button');
+    this.form = this.screen.form;
+    this.formButtons = this.screen.form.formElements.filter((e) => e.elementType === 'Button');
   }
 
   ngAfterViewInit(): void {

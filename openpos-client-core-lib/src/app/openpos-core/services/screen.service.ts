@@ -2,6 +2,7 @@ import { FullPageImageComponent } from './../screens/full-page-image/full-page-i
 import { TillCountOtherTenderComponent } from './../screens/till/till-count-other-tender.component';
 import { OptionsComponent } from './../screens/options/options.component';
 import { BlankComponent } from '../templates/blank/blank.component';
+import { BlankWithBarComponent } from '../templates/blank-with-bar/blank-with-bar.component';
 import { LoginComponent } from './../screens/login/login.component';
 import { PersonalizationComponent } from '../screens/personalization.component';
 import { WarrantyCoverageComponent } from '../screens/warranty-coverage.component';
@@ -47,6 +48,7 @@ import { CustomerSearchResultsComponent } from '../screens/customer-search-resul
 import { SelfCheckoutOptionsComponent } from '../self-checkout/self-checkout-options/self-checkout-options.component';
 import { CallForAuthorizationComponent } from '../screens/call-for-authorization/call-for-authorization.component'
 import { DialogComponent } from '../screens/dialog/dialog.component';
+import { MultipleDynamicFormComponent } from '../screens/multiple-dynamic-form/multiple-dynamic-form.component';
 
 @Injectable()
 export class ScreenService {
@@ -90,12 +92,14 @@ export class ScreenService {
     this.screens.set('SelfCheckoutOptions', SelfCheckoutOptionsComponent);
     this.screens.set('FullPageImage', FullPageImageComponent);
     this.screens.set('CallForAuthorization', CallForAuthorizationComponent);
+    this.screens.set('MultipleDynamicForm', MultipleDynamicFormComponent);
 
     // Default Dialog 
     this.screens.set('Dialog', DialogComponent);
 
     // Templates
     this.screens.set('Blank', BlankComponent);
+    this.screens.set('BlankWithBar', BlankWithBarComponent);
     this.screens.set('Sell', SellComponent);
     this.screens.set('SelfCheckout', SelfCheckoutWithBarComponent);
   }

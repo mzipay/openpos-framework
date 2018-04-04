@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, Output, EventEmitter, Optional } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, Optional, Inject } from '@angular/core';
 import { DeviceService } from '../../../services/device.service';
 import { SessionService } from '../../../services/session.service';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ScanSomethingData } from './scanSomthingData';
 
 @Component({
   selector: 'app-scan-something',
@@ -10,22 +11,30 @@ import { MatDialogRef } from '@angular/material';
 })
 export class ScanSomethingComponent implements OnInit {
 
+  @Input()
+  scanSomethingData: ScanSomethingData;
+
   public barcode: string;
 
   constructor(private session: SessionService, public devices: DeviceService,
-    @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>) { }
+    @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: ScanSomethingData) {
 
+    if (data) {
+      this.scanSomethingData = data;
+    }
+  }
   ngOnInit() {
   }
 
   public onEnter(): void {
-    if (this.barcode && this.barcode.length > 0) {
-    this.session.onAction('Next', this.barcode);
-    this.barcode = '';
-    if (this.dialogRef) {
-      this.dialogRef.close();
+    if (this.barcode && this.barcode.trim().length > 0) {
+      this.session.onAction('Next', this.barcode);
+      this.barcode = '';
+      if (this.dialogRef) {
+        this.dialogRef.close();
+      }
     }
-  }
   }
 
   private filterBarcodeValue(val: string): string {
@@ -36,15 +45,6 @@ export class ScanSomethingComponent implements OnInit {
     const pattern = /[e|E|\+|\-|\.]/g;
 
     return val.toString().replace(pattern, '');
-  }
-
-  onBarcodeKeydown(event: KeyboardEvent) {
-    if (event.altKey || event.ctrlKey || event.metaKey ) {
-      return true;
-    }
-    const filteredKey = this.filterBarcodeValue(event.key);
-    console.log(`[onBarcodeKeydown] filtered key: ${filteredKey}`);
-    return filteredKey !== null && filteredKey.length !== 0;
   }
 
   onBarcodePaste(event: ClipboardEvent) {

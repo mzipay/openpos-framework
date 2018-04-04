@@ -15,12 +15,13 @@ import { IUrlMenuItem } from '../../common/iurlmenuitem';
 })
 export class SelfCheckoutHomeComponent implements IScreen, OnInit {
 
+  screen: any;
   public menuItems: IMenuItem[];
   gutterSize = 40;
   gridColumns = 3;
 
   constructor(public session: SessionService, public media: ObservableMedia) {
-    this.menuItems = session.screen.menuItems;
+
   }
 
   ngOnInit() {
@@ -38,6 +39,8 @@ export class SelfCheckoutHomeComponent implements IScreen, OnInit {
   }
 
   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
+    this.menuItems = screen.menuItems;
   }
 
   onEnter(value: string) {

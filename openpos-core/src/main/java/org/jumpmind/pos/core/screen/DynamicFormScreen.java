@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.core.model.Form;
+import org.jumpmind.pos.core.template.SellTemplate;
 
 public class DynamicFormScreen extends SellScreen implements IHasForm {
 
@@ -18,7 +19,7 @@ public class DynamicFormScreen extends SellScreen implements IHasForm {
 
     public DynamicFormScreen() {
         setType(ScreenType.DynamicForm);
-        setTemplate(SellScreen.TEMPLATE_SELL);
+        setTemplate(new SellTemplate());
     }
 
     public void setForm(Form form) {

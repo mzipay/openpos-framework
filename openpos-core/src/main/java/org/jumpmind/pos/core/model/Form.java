@@ -11,11 +11,14 @@ public class Form implements Serializable {
     public static final String PATTERN_MONEY =  "^(\\d{0,9}\\.\\d{0,2}|\\d{1,9})$";
     public static final String PATTERN_PERCENT =  "^100$|^\\d{0,2}(\\.\\d{1,2})?$|^\\d{0,2}(\\.)?"; // 100-0, Only two decimal places allowed.
     public static final String PATTERN_DATE = "^(\\d{2})/(\\d{2})/(\\d{4}$)";
+    public static final String PATTERN_NO_YEAR_DATE = "^(\\d{2})/(\\d{2})$";
     // TODO: This pattern may be too restrictive. 
     public static final String PATTERN_US_PHONE_NUMBER = "^\\d{10}$";
     private static final long serialVersionUID = 1L;
 
     private List<IFormElement> formElements = new ArrayList<IFormElement>();
+    
+    private List<String> formErrors = new ArrayList<String>();
     
     private boolean requiresAtLeastOneValue = false;
     
@@ -74,6 +77,25 @@ public class Form implements Serializable {
         return formField;
     }
     
+    public static FormField createBirthdateField(String fieldId, String label, String value, boolean required) {
+    		FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NoYearDate, required);
+    		formField.setPattern(PATTERN_NO_YEAR_DATE);
+    		formField.setValue(value);
+    		return formField;
+    }
+    
+    public FormField addBirthdateField(String fieldId, String label, String value, boolean required) {
+    		FormField formField = createBirthdateField(fieldId, label, value, required);
+    		formElements.add(formField);
+    		return formField;
+    }
+    
+    public FormField addIncomeField(String fieldId, String label, String value, boolean required) {
+        FormField formField = createIncomeField(fieldId, label, value, required);
+        formElements.add(formField);
+        return formField;
+    }
+    
     public FormField addNumericField(String fieldId, String label, String value, boolean required) {
         FormField formField = createNumericField(fieldId, label, value, required);
         formElements.add(formField);
@@ -82,6 +104,12 @@ public class Form implements Serializable {
     
     public static FormField createNumericField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NumericText, required);
+        formField.setValue(value);
+        return formField;
+    }
+    
+    public static FormField createIncomeField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Income, required);
         formField.setValue(value);
         return formField;
     }
@@ -196,6 +224,16 @@ public class Form implements Serializable {
         return formElements.stream().filter(f->elementId.equals(f.getId())).findFirst().orElse(null);
     }
     
+    public String getFormElementValue(String elementId) {
+        String returnValue = null;
+        IFormElement formElement = this.getFormElement(elementId);
+        if (formElement != null && formElement instanceof FormField) {
+            returnValue = ((FormField) formElement).getValue();
+        }
+        
+        return returnValue;
+    }
+    
     public void setName(String name) {
         this.name = name;
     }
@@ -224,5 +262,17 @@ public class Form implements Serializable {
         }
         return null;
     }
+
+	public List<String> getFormErrors() {
+		return formErrors;
+	}
+
+	public void setFormErrors(List<String> formErrors) {
+		this.formErrors = formErrors;
+	}
+	
+	public void addFormError(String error) {
+		formErrors.add(error);
+	}
     
 }

@@ -1,3 +1,9 @@
-	<app-dynamic-form-control fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px"
-		[screenForm]="screen.form" [submitAction]="screen.submitAction" [screen]="screen">
-	</app-dynamic-form-control>
+    
+<mat-card fxFlex="1 1 auto" class="scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
+	<mat-card-title *ngIf="screen.prompt && screen.template === 'Blank'" [ngClass]="{'warn':screen.customerFacing}">{{screen.prompt}}</mat-card-title>		
+	<mat-card-content fxFlex="1 1 auto"  fxLayout="column" >
+		<app-dynamic-form-control fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px"
+			[screenForm]="screen.form" [submitAction]="screen.submitAction" [screen]="screen">
+		</app-dynamic-form-control>
+	</mat-card-content>
+</mat-card>

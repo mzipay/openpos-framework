@@ -10,6 +10,7 @@ public class DialogProperties implements Serializable {
 
     private String width;
     private Boolean executeActionBeforeClose;
+    private Boolean closeable;
 
     public DialogProperties() {
     }
@@ -39,4 +40,12 @@ public class DialogProperties implements Serializable {
         this.setExecuteActionBeforeClose(execBeforeClose);
         return this;
     }
+
+	public Boolean getCloseable() {
+		return closeable;
+	}
+
+	public void setCloseable(Boolean closeable) {
+		this.closeable = closeable;
+	}
 }

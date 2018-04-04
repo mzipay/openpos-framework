@@ -152,13 +152,9 @@ public class StateManager implements IStateManager {
     }
 
     @Override
-    public AbstractScreen getLastScreen() {
-        return screenService.getLastScreen(appId, nodeId);
-    }
-
-    @Override
     public void refreshScreen() {
-        showScreen(getLastScreen());
+        showScreen(screenService.getLastScreen(appId, nodeId));
+        showScreen(screenService.getLastDialog(appId, nodeId));
     }
 
     // Could come from a UI or a running state..
@@ -189,9 +185,8 @@ public class StateManager implements IStateManager {
             }
         } else {
             IState savedCurrentState = currentState;
-            Form form = screenService.deserializeScreenPayload(appId, nodeId, action);
 
-            boolean handled = actionHandler.handleAction(currentState, action, form);
+            boolean handled = actionHandler.handleAction(currentState, action, action.getData() instanceof Form ? ((Form)action.getData()) : new Form());
             if (handled) {
                 if (savedCurrentState == currentState) {
                     // state did not change, reassert the current state.

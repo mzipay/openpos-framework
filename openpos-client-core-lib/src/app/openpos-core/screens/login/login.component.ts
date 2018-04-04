@@ -4,6 +4,7 @@ import { IScreen } from '../../common/iscreen';
 import { DoCheck, OnInit, Component } from '@angular/core';
 import { IMenuItem } from '../../common/imenuitem';
 import { IFormElement } from '../../common/iformfield';
+import { AbstractApp, AbstractTemplate } from '../..';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -26,16 +27,8 @@ import { IFormElement } from '../../common/iformfield';
     constructor(public session: SessionService) {
     }
 
-    show(session: SessionService) {
-    }
-
-    ngOnInit(): void {
-        if (this.session.dialog) {
-            this.screen = this.session.dialog;
-        } else {
-            this.screen = this.session.screen;
-        }
-        this.lastSequenceNum = this.screen.sequenceNumber;
+    show(screen: any, app: AbstractApp, template?: AbstractTemplate): void {
+        this.screen = screen;
         this.form = this.screen.form;
         this.loginIdField = this.form.formElements.find((e) => e.id === 'userId');
         if (!this.loginIdField.pattern) {
@@ -48,6 +41,9 @@ import { IFormElement } from '../../common/iformfield';
         this.forgotPasswordAction = this.screen.forgotPasswordAction;
         this.changePasswordAction = this.screen.changePasswordAction;
         this.title = this.form.name;
+    }
+
+    ngOnInit(): void {
     }
 
     hasSubmitAction(): boolean {

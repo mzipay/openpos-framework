@@ -12,7 +12,7 @@ import { IFormElement } from '../../common/iformfield';
   styleUrls: ['./till-count.component.scss']
 })
 export class TillCountComponent implements OnInit, IScreen {
-
+  screen: any;
   nextAction: IMenuItem;
   public form: IForm;
   @ViewChild('tillForm') tillForm;
@@ -21,21 +21,29 @@ export class TillCountComponent implements OnInit, IScreen {
   }
 
   show(screen: any, app: AbstractApp) {
+    // After screen is initialized, all we need to do is
+    // get an updated total from the server.  This saves
+    // unnecessary rebuilding of the screen
+    if (! this.screen) {
+      this.screen = screen;
+      this.form = this.screen.form;
+      this.nextAction = this.screen.nextAction;
+    } else {
+      this.screen.total = screen.total;
+    }
   }
 
   ngOnInit() {
-    this.form = this.session.screen.form;
-    this.nextAction = this.session.screen.nextAction;
   }
 
   onFieldChanged(eventData: {formElement: IFormElement, event: Event}) {
-    this.form = this.session.screen.form;
+    this.form = this.screen.form;
     this.session.response = this.form;
     this.session.onAction('formChanged');
   }
 
   onNextAction() {
-    this.session.response = this.session.screen.form;
+    this.session.response = this.screen.form;
     this.session.onAction(this.nextAction.action);
   }
 

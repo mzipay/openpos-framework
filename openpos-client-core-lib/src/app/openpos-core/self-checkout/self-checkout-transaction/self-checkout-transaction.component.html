@@ -1,24 +1,24 @@
 <div fxFlexFill style="padding:16px" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
 
 	<div fxFlexFill fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="16px">
-		<div #scrollList fxFlex="1 1 80%" style="overflow-y: auto">
+		<div #scrollList fxFlex="1 1 auto" style="overflow-y: auto; overflow-x: hidden;">
 
-			<app-checkout-list-item *ngFor="let i of items" [item]=i [session]=session [isReadOnly]=session.screen.readOnly></app-checkout-list-item>
+			<app-checkout-list-item *ngFor="let i of items" [item]=i [session]=session [isReadOnly]=screen.readOnly></app-checkout-list-item>
 
-			<div *ngIf="items.length == 0 && !session.screen.readOnly" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+			<div *ngIf="items.length == 0 && !screen.readOnly" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
 				<div class="primary text-md" style="padding: 16px;">
-					<b>{{this.session.screen.prompt}}</b>
+					<b>{{this.screen.prompt}}</b>
 				</div>
-				<div class="primary text-sm">{{this.session.screen.instructions}}</div>
-				<div *ngIf="session.screen.icon">
-					<app-icon [iconName]="session.screen.icon" iconClass="mat-128" class="muted-color"></app-icon>
-				</div>
+				<div class="primary text-sm">{{this.screen.instructions}}</div>
+				<mat-card>
+					<div class="scan-item-icon"></div>
+				</mat-card>
 			</div>
 		</div>
 
-		<mat-card fxFlex="1 1 20%" class="page-content-card grey-background scrollable-content-card">
-			<mat-card-content fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="end stretch" fxLayoutGap="0px">
-				<mat-card *ngFor="let total of session.screen.totals" class="page-content-card text-center">
+		<mat-card fxFlex="0 0 300px" class="page-content-card grey-background scrollable-content-card">
+			<mat-card-content fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="end stretch" fxLayoutGap="0px" style="padding: 16px">
+				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center stretch" *ngFor="let total of screen.totals" class="page-content-card text-center">
 					<mat-card-title class="primary text-sm">
 						{{total.name}}
 					</mat-card-title>
@@ -27,24 +27,29 @@
 							<span class="super-currency-symbol">$</span>{{total.amount}}</p>
 					</mat-card-content>
 				</mat-card>
-				<mat-card class="page-content-card text-center">
+				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center stretch" class="page-content-card text-center">
 					<mat-card-title class="primary text-md"> Total </mat-card-title>
 					<mat-card-content>
 						<p class="primary text-lg">
-							<span class="super-currency-symbol">$</span>{{session.screen.grandTotal}}</p>
+							<span class="super-currency-symbol">$</span>{{screen.grandTotal}}</p>
 					</mat-card-content>
 				</mat-card>
 
-				<div fxFlex="1 1 auto"></div>
+				<div fxFlex="2 1 auto"></div>
 
 				<div>
-					<button mat-button *ngIf="!session.screen.readOnly" [disabled]="!session.screen.transaction.active || items.length == 0"
-					 (click)="session.onAction('Checkout')" class="green-button text-lg">Checkout
+					<button mat-button *ngIf="screen.loyaltyButton" (click)="doMenuItemAction(screen.loyaltyButton)" class="loyalty-button text-lg">
+						<div>{{screen.loyaltyButton.title}}</div>
+						<mat-icon [svgIcon]="screen.loyaltyButton.icon" class="top" style="height: 50%; width: 100%;"></mat-icon>
 					</button>
-					<button mat-button *ngIf="!session.screen.readOnly" color="primary" (click)="doMenuItemAction(session.screen.logoutButton)"
-					 class="border-button text-lg">
+					<button mat-button *ngIf="!screen.readOnly" [disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')"
+					 class="green-button text-lg">Checkout
+					</button>
+					<button mat-button *ngIf="!screen.readOnly" color="primary" (click)="doMenuItemAction(screen.logoutButton)" class="border-button text-lg">
 						<span>
-							<app-icon [iconName]="session.screen.logoutButton.icon" class="top"></app-icon>{{session.screen.logoutButton.title}}</span>
+							<app-icon [iconName]="screen.logoutButton.icon" class="top"></app-icon>
+							{{screen.logoutButton.title}}
+						</span>
 					</button>
 				</div>
 			</mat-card-content>

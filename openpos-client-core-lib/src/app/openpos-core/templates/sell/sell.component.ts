@@ -11,6 +11,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ScanSomethingComponent } from '../../common/controls/scan-something/scan-something.component';
 import { ObservableMedia } from '@angular/flex-layout';
 import { ISellScreen, AbstractApp } from '../..';
+import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
+import { SellScreenUtils } from '../../common/screen-interfaces/iSellScreen';
+import { ScanSomethingData } from '../../common/controls/scan-something/scanSomthingData';
 
 @Component({
   selector: 'app-sell',
@@ -19,7 +22,9 @@ import { ISellScreen, AbstractApp } from '../..';
 })
 export class SellComponent extends AbstractTemplate implements OnInit {
 
-  screen : ISellScreen;
+  template : ISellScreen;
+  statusBar : StatusBarData;
+  scanSomethingData: ScanSomethingData;
 
   @ViewChild('drawer') drawer;
   public drawerOpen: Observable<boolean>;
@@ -33,13 +38,15 @@ export class SellComponent extends AbstractTemplate implements OnInit {
 
    }
    
-   show(screen: any, app: AbstractApp) {
-    this.screen = screen;
+   show(template: any, app: AbstractApp) {
+    this.template = template;
+    this.statusBar = SellScreenUtils.getStatusBar(template);
+    this.scanSomethingData = SellScreenUtils.getScanSomethingData(template);
   }
 
   public ngOnInit(): void {
 
-    if ( this.session.screen.localMenuItems.length > 0) {
+    if ( this.template.localMenuItems.length > 0) {
       this.initializeDrawerMediaSizeHandling();
     } else {
       this.drawerOpen = Observable.of(false);

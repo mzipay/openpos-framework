@@ -11,12 +11,15 @@ public class DialogScreen extends SellScreen {
     
     private String title;
     
+    private String subType;
+    
     private List<String> message = new ArrayList<>();
     
     private DialogProperties dialogProperties;
-
+    
     public DialogScreen() {
         setType(ScreenType.Dialog);
+        getTemplate().setDialog(true);
     }
     
     public List<MenuItem> getButtons() {
@@ -53,6 +56,14 @@ public class DialogScreen extends SellScreen {
 
     protected void setDialogProperties(DialogProperties dialogProperties) {
         this.dialogProperties = dialogProperties;
+    }
+    
+    public void setSubType(String subType) {
+        this.subType = subType;
+    }
+    
+    public String getSubType() {
+        return subType;
     }
     
 }

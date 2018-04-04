@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jumpmind.pos.core.template.AbstractTemplate;
+import org.jumpmind.pos.core.template.BlankWithBarTemplate;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,11 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class AbstractScreen implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    public static String TEMPLATE_SELL = "Sell";
-    public static String TEMPLATE_BLANK = "Blank";
-    public static String TEMPLATE_SELF_CHECKOUT = "SelfCheckout";
-
+    
     /**
      * Put properties in this map if they are optional. When not set, they don't
      * show up in the json which means less overhead.
@@ -24,23 +23,15 @@ public abstract class AbstractScreen implements Serializable {
 
     private String name;
     private String type;
-    private MenuItem backButton;
-    private MenuItem logoutButton;
-    private String template = "Blank";
-    private int sequenceNumber;
-    private String locale;
-    private String subType;
-
+    private AbstractTemplate template = new BlankWithBarTemplate();
+    private String locale;    
+    
     public AbstractScreen() {
     }
 
     public AbstractScreen(String name, String type) {
-        this.name = name;
         this.type = type;
-    }
-
-    public static <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
-        return new ObjectMapper().convertValue(actionData, convertToInstanceOf);
+        this.name = name;
     }
     
     /**
@@ -55,21 +46,17 @@ public abstract class AbstractScreen implements Serializable {
      * @param dialogProperties Additional properties that can control dialog behavior and rendering on the server side.
      */
     public AbstractScreen asDialog(DialogProperties dialogProperties) {
-        this.setSubType(this.getType());
-        this.setType(ScreenType.Dialog);
+        this.template.setDialog(true);        
         if (dialogProperties != null) {
-            this.put("dialogProperties", dialogProperties);
+        	this.template.setDialogProperties(dialogProperties);
         }
         return this;
     }
-    
-    public String getSubType() {
-        return subType;
-    }
 
-    public void setSubType(String subType) {
-        this.subType = subType;
-    }
+    // TODO i don't really like this method here
+    public static <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
+        return new ObjectMapper().convertValue(actionData, convertToInstanceOf);
+    }    
     
     @JsonAnyGetter
     public Map<String, Object> any() {
@@ -96,7 +83,7 @@ public abstract class AbstractScreen implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
+    
     public String getName() {
         return name;
     }
@@ -114,35 +101,23 @@ public abstract class AbstractScreen implements Serializable {
     }
 
     public void setBackButton(MenuItem backButton) {
-        this.backButton = backButton;
-    }
-
-    public MenuItem getBackButton() {
-        return backButton;
+        put("backButton", backButton);
     }
 
     public void setLogoutButton(MenuItem logoutButton) {
-        this.logoutButton = logoutButton;
+        put("logoutButton", logoutButton);
     }
-
-    public MenuItem getLogoutButton() {
-        return logoutButton;
-    }
-
-    public void setTemplate(String template) {
+    
+    public void setTemplate(AbstractTemplate template) {
         this.template = template;
     }
-
-    public String getTemplate() {
+    
+    public AbstractTemplate getTemplate() {
         return template;
     }
 
     public void setSequenceNumber(int sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
-    }
-
-    public int getSequenceNumber() {
-        return sequenceNumber;
+        put("sequenceNumber", sequenceNumber);
     }
 
     public void setTheme(String theme) {
@@ -169,5 +144,4 @@ public abstract class AbstractScreen implements Serializable {
         this.optionalProperties.put("refreshAlways", refreshAlways);
     }
     
-
 }

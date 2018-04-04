@@ -1,9 +1,11 @@
-import { MatDialog, MatDialogRef, MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatDialogRef, MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { FileUploadService } from '../../services/file-upload.service';
 import { IMenuItem } from '../../common/imenuitem';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SessionService } from '../../services/session.service';
 import { ScanSomethingComponent } from '../../common/controls/scan-something/scan-something.component';
+import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
+import { ScanSomethingData } from '../../common/controls/scan-something/scanSomthingData';
 
 @Component({
   selector: 'app-self-checkout-statusbar',
@@ -12,6 +14,9 @@ import { ScanSomethingComponent } from '../../common/controls/scan-something/sca
 
 })
 export class SelfCheckoutStatusBarComponent {
+
+  @Input()
+  data : SelfCheckoutStatusBarData;
 
   constructor(private session: SessionService, public snackBar: MatSnackBar, public dialogService: MatDialog) {
   }
@@ -33,7 +38,10 @@ export class SelfCheckoutStatusBarComponent {
   }
 
   public showScan() {
-    this.dialogService.open(ScanSomethingComponent);
+    let scanData = new ScanSomethingData();
+    scanData.placeholderText = this.data.scanPlaceholderText;
+    const dialogConfig: MatDialogConfig = { autoFocus: true, data: scanData };
+    this.dialogService.open(ScanSomethingComponent, dialogConfig);
   }
 
 }

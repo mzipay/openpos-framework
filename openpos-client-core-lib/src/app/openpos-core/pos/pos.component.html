@@ -1,8 +1,9 @@
-<div [ngClass]="getTheme()">
-    <div [ngClass]="session.screen.name==='Home'?'main-background':'lighter'">
-        <app-statusbar></app-statusbar>
+<div [ngClass]="getTheme()" >
+    <div [ngClass]="getClasses()" style="height: 100vh">
 
-        <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu"><mat-icon>code</mat-icon></button>
+        <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu">
+            <mat-icon>code</mat-icon>
+        </button>
 
         <div [matMenuTriggerFor]="devMenu">
             <mat-menu #devMenu="matMenu">
@@ -29,9 +30,7 @@
             </mat-menu>
         </div>
 
-        <div class="content" ngClass.xs="content-xs">
-            <ng-template appTemplate></ng-template>
-        </div>
+        <ng-template appTemplate></ng-template>
 
     </div>
 </div>

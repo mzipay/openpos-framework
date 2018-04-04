@@ -1,7 +1,7 @@
 <div fxFlexFill fxLayout="row" fxLayoutAlign="center center">
     <div fxFlexFill fxFlex="1 1 60%" fxLayout="column" fxLayoutAlign="center stretch" [ngSwitch]="currentView">
         <ng-template ngSwitchCase="ButtonList">
-            <div fxFlex="1 1 auto" class="text-md text-center" *ngIf="promptText" style="padding-top: 32px;">
+            <div fxFlex="1 1 auto" fxLayoutAlign="center center" class="text-md" *ngIf="promptText" style="padding-top: 32px;">
                 <b>{{promptText}}</b>
             </div>
             <mat-nav-list fxFlex="1 0 auto">
@@ -15,8 +15,10 @@
 
         <ng-template ngSwitchCase="OptionForm">
             <!-- <div class="text-md" fxLayoutAlign="center center" *ngIf="promptText" style="padding-top:60pt;"><b>{{promptText}}</b></div> -->
-            <app-dynamic-form-control class="prompt" [submitButtonText]="'Enter'" [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"
-                [screen]="session.screen"></app-dynamic-form-control>
+            <mat-card fxFlex="0 0 30%">
+                <app-dynamic-form-control fxFlexFill class="prompt" [submitButtonText]="'Enter'" [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"
+                    [screen]="screen"></app-dynamic-form-control>
+            </mat-card>
         </ng-template>
     </div>
 </div>

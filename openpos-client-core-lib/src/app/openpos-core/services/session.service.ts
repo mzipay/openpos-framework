@@ -18,14 +18,12 @@ import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-declare var cordova: any;
-
 @Injectable()
 export class SessionService implements ILocaleService {
 
   public screen: any;
 
-  public dialog: any;
+  private dialog: any;
 
   public state: Observable<string>;
 
@@ -120,7 +118,7 @@ export class SessionService implements ILocaleService {
     console.log(`SessionService.showDialog invoked. dialogObj: ${dialogObj}`);
     if (!dialogObj) {
       this.dialog = null;
-    } else if (dialogObj.type && dialogObj.type === 'Dialog') {
+    } else if (dialogObj.template.dialog) {
       this.dialog = dialogObj;
       this.response = null;
     }
@@ -129,7 +127,7 @@ export class SessionService implements ILocaleService {
 
   public getPersonalizationScreen(): any {
     // tslint:disable-next-line:max-line-length
-    return { template: 'Blank', type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000), name: 'Device Setup', refreshAlways: true };
+    return { type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000), name: 'Device Setup', refreshAlways: true, template: { type: 'Blank', dialog: false } };
   }
 
   public getTheme(): string {
@@ -266,63 +264,75 @@ export class SessionService implements ILocaleService {
   }
 
   public async onAction(action: string | IMenuItem, payload?: any, confirm?: string) {
-    let actionString = '';
-    // we need to figure out if we are a menuItem or just a string
-    if (action.hasOwnProperty('action')) {
-      const menuItem = <IMenuItem>(action);
+    if (action) {
+      let actionString = '';
+      // we need to figure out if we are a menuItem or just a string
+      if (action.hasOwnProperty('action')) {
+        const menuItem = <IMenuItem>(action);
 
-      actionString = menuItem.action;
-      // check to see if we are an IURLMenuItem
-      if (menuItem.hasOwnProperty('url')) {
-        const urlMenuItem = <IUrlMenuItem>menuItem;
-        console.log(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode} `);
-        window.open(urlMenuItem.url, urlMenuItem.targetMode);
-        if (!actionString || 0 === actionString.length) {
+        actionString = menuItem.action;
+        // check to see if we are an IURLMenuItem
+        if (menuItem.hasOwnProperty('url')) {
+          const urlMenuItem = <IUrlMenuItem>menuItem;
+          console.log(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode} `);
+          window.open(urlMenuItem.url, urlMenuItem.targetMode);
+          if (!actionString || 0 === actionString.length) {
+            return;
+          }
+        }
+      } else {
+        actionString = <string>action;
+      }
+
+      if (confirm) {
+        console.log('Confirming action');
+        const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
+        dialogRef.componentInstance.title = confirm;
+        const result = await dialogRef.afterClosed().toPromise();
+
+        // if we didn't confirm return and don't send the action to the server
+        if (!result) {
+          console.log('Canceling action');
           return;
         }
       }
-    } else {
-      actionString = <string>action;
-    }
 
-    if (confirm) {
-      console.log('Confirming action');
-      const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
-      dialogRef.componentInstance.title = confirm;
-      const result = await dialogRef.afterClosed().toPromise();
+      let processAction = true;
 
-      // if we didn't confirm return and don't send the action to the server
-      if (!result) {
-        console.log('Canceling action');
-        return;
+      // First we will use the payload passed into this function then
+      // Check if we have registered action payload
+      // Otherwise we will send whatever is in this.response
+      if (payload != null) {
+        this.response = payload;
+      } else if (this.actionPayloads.has(actionString)) {
+        console.log(`Checking registered action payload for ${actionString}`);
+        try {
+          this.response = this.actionPayloads.get(actionString)();
+        } catch (e) {
+          console.log(`invalid action payload for ${actionString}`);
+          processAction = false;
+        }
       }
-    }
 
-    console.log('Publish action ' + actionString);
+      if (processAction) {
+        const sendToServer: Function = () => {
+          this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
+            JSON.stringify({ name: actionString, data: this.response }));
+        };
 
-    // First we will use the payload passed into this function then
-    // Check if we have registered action payload
-    // Otherwise we will send whatever is in this.response
-    if (payload != null) {
-      this.response = payload;
-    } else if (this.actionPayloads.has(actionString)) {
-      console.log(`Using registered action payload for ${actionString}`);
-      this.response = this.actionPayloads.get(actionString)();
-    }
+        // see if we have any intercepters registered
+        // otherwise just send the action
+        if (this.actionIntercepters.has(actionString)) {
+          this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
+        } else {
+          sendToServer();
+          this.showDialog(null);
+          this.queueLoading();
+        }
+      }
 
-    const sendToServer: Function = () => {
-      this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
-        JSON.stringify({ name: actionString, data: this.response }));
-    };
-
-    // see if we have any intercepters registered
-    // otherwise just send the action
-    if (this.actionIntercepters.has(actionString)) {
-      this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
     } else {
-      sendToServer();
-      this.showDialog(null);
-      this.queueLoading();
+      console.log(`received an invalid action ${action}`);
     }
   }
 
@@ -347,12 +357,12 @@ export class SessionService implements ILocaleService {
     const json = JSON.parse(message.body);
     if (json.clearDialog) {
       this.showDialog(null);
-    } else if (json.type === 'Dialog' || json.template === 'Dialog') {
-      this.showDialog(json);
-    } else if (json.type === 'Loading') {
+    } else if (json.type === 'Loading') { // This is just a temporary hack
       this.loading = true;
       this.showLoading(json.title, json.message);
       return;
+    } else if (json.template && json.template.dialog) {
+      this.showDialog(json);
     } else if (json.type === 'NoOp') {
       this.response = null;
       return; // As with DeviceRequest, return to avoid dismissing loading screen

@@ -8,8 +8,9 @@ import { AbstractApp } from '../common/abstract-app';
   selector: 'app-basic-item-search',
   templateUrl: './basic-item-search.component.html'
 })
-export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck, OnDestroy {
+export class BasicItemSearchComponent implements IScreen, OnInit, OnDestroy {
 
+  screen: any;
   private lastSequenceNum: number;
   private lastScreenName: string;
 
@@ -24,9 +25,18 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck, OnDes
   }
 
   show(screen: any, app: AbstractApp) {
-    this.session.registerActionPayload(this.session.screen.localMenuItems[0].action, () => {
+    this.screen = screen;
+    this.session.registerActionPayload(this.screen.localMenuItems[0].action, () => {
       return this.getSearchPayload();
     });
+
+    this.searchCategories = this.screen.searchCategories;
+    this.searchCategoryStructure = this.screen.searchCategoryStructure;
+    this.searchCategoryValues = this.screen.searchCategoryValues;
+    this.searchFieldForm = this.screen.searchFieldForm;
+    this.searchCategoriesText = this.screen.searchCategoriesText;
+
+    this.refreshContent();
   }
 
   ngOnDestroy(): void {
@@ -34,11 +44,6 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck, OnDes
   }
 
   ngOnInit(): void {
-    this.searchCategories = this.session.screen.searchCategories;
-    this.searchCategoryStructure = this.session.screen.searchCategoryStructure;
-    this.searchCategoryValues = this.session.screen.searchCategoryValues;
-    this.searchFieldForm = this.session.screen.searchFieldForm;
-    this.searchCategoriesText = this.session.screen.searchCategoriesText;
   }
 
   onValueSelected(value: ISearchCategoryValue, categoryName: string): void {
@@ -68,8 +73,8 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck, OnDes
   protected refreshContent(): void {
     // Loop over each category to determine if the values need updated
     // Screen changed, re-init
-    for (let catIdx = 0; catIdx < this.session.screen.searchCategoryValues.length; catIdx++) {
-      const srcSearchCategoryValues = this.session.screen.searchCategoryValues[catIdx];
+    for (let catIdx = 0; catIdx < this.screen.searchCategoryValues.length; catIdx++) {
+      const srcSearchCategoryValues = this.screen.searchCategoryValues[catIdx];
       for (let valueIdx = 0; valueIdx < srcSearchCategoryValues.values.length; valueIdx++) {
         const targetValue = srcSearchCategoryValues.values[valueIdx];
         if (targetValue.selected && targetValue.attributes['name'] !== '<All>') {
@@ -79,16 +84,6 @@ export class BasicItemSearchComponent implements IScreen, OnInit, DoCheck, OnDes
       }
     }
   }
-
-  ngDoCheck(): void {
-    if (this.session.screen.type === 'BasicItemSearch'
-      && this.session.screen.sequenceNumber !== this.lastSequenceNum) {
-      this.refreshContent();
-      this.lastSequenceNum = this.session.screen.sequenceNumber;
-      this.lastScreenName = this.session.screen.name;
-    }
-  }
-
 }
 
 

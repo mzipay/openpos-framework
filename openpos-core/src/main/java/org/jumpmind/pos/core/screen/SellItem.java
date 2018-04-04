@@ -2,9 +2,14 @@ package org.jumpmind.pos.core.screen;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jumpmind.pos.core.model.FormDisplayField;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 
 public class SellItem implements IItem, Serializable {
     
@@ -18,8 +23,6 @@ public class SellItem implements IItem, Serializable {
     private String originalAmount;
     private String sellingPrice;
     private String quantity;
-    private String imageUrl;
-    private String productDescription;
     private String discountAmount;
     private List<String> labels = new ArrayList<>();
     private List<FormDisplayField> fields = new ArrayList<>();
@@ -27,6 +30,11 @@ public class SellItem implements IItem, Serializable {
     private boolean selected = false;
     private boolean isGiftReceipt = false;
     
+    /**
+     * Put properties in this map if they are optional. When not set, they don't
+     * show up in the json which means less overhead.
+     */
+    private Map<String, Object> optionalProperties = new HashMap<String, Object>();
     
     @Override
     public String getID() {
@@ -103,22 +111,6 @@ public class SellItem implements IItem, Serializable {
         return sellingPrice;
     }
     
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-    
-    public String getImageUrl() {
-        return imageUrl;
-    }
-    
-    public String getProductDescription() {
-        return productDescription;
-    }
-    
-    public void setProductDescription(String productDescription) {
-        this.productDescription = productDescription;
-    }
-    
     @Override
     public List<FormDisplayField> getFields() {
         return fields;
@@ -190,4 +182,22 @@ public class SellItem implements IItem, Serializable {
 	public void addLabel( String label ) {
 		this.labels.add( label );
 	}
+	
+    @JsonAnyGetter
+    public Map<String, Object> any() {
+        return this.optionalProperties;
+    }
+
+    @JsonAnySetter
+    public void put(String name, Object value) {
+        this.optionalProperties.put(name, value);
+    }
+
+    public boolean contains(String name) {
+        return this.optionalProperties.containsKey(name);
+    }
+
+    public Object get(String name) {
+        return optionalProperties.get(name);
+    }
 }

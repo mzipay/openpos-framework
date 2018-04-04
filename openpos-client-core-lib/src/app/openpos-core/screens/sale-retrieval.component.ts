@@ -11,6 +11,7 @@ import { AbstractApp } from '../common/abstract-app';
 })
 export class SaleRetrievalComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 
+  screen: any;
   constructor(public session: SessionService) {
 
   }
@@ -18,6 +19,7 @@ export class SaleRetrievalComponent implements AfterViewInit, DoCheck, IScreen, 
   }
 
   show(screen: any, app: AbstractApp) {
+    this.screen = screen;
   }
 
   ngDoCheck(): void {

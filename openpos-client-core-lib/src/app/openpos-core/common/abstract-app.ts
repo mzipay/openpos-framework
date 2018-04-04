@@ -5,7 +5,7 @@ import { IScreen } from '../common/iscreen';
 import { ScreenService } from './../services/screen.service';
 import { DialogComponent } from '../screens/dialog/dialog.component';
 import { IMenuItem } from '../common/imenuitem';
-import { Component, OnInit, OnDestroy, DoCheck, sequence, AfterViewInit, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, DoCheck, sequence, AfterViewInit, NgZone, ComponentRef } from '@angular/core';
 import { Type, ViewChild, ComponentFactory } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { StatusBarComponent } from '../screens/statusbar.component';
@@ -17,14 +17,13 @@ import { TemplateDirective } from './template.directive';
 import { AbstractTemplate } from './abstract-template';
 import { Router } from '@angular/router';
 import { OpenPOSDialogConfig } from './idialog';
+import { DialogService } from '../services/dialog.service';
 
 export abstract class AbstractApp implements OnDestroy, OnInit {
 
     private dialogRef: MatDialogRef<IScreen>;
 
     private previousScreenType: string;
-
-    private previousDialogType: string;
 
     private dialogOpening: boolean;
 
@@ -38,11 +37,14 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
 
     private installedScreen: IScreen;
 
+    private currentTemplateRef: ComponentRef<IScreen>;
+
     private template: AbstractTemplate;
 
     @ViewChild(TemplateDirective) host: TemplateDirective;
 
     constructor(public screenService: ScreenService,
+        public dialogService: DialogService,
         public session: SessionService,
         public dialog: MatDialog,
         public iconService: IconService,
@@ -98,8 +100,8 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     public updateDialog(dialog?: any): void {
         this.registerWithServer();
         if (dialog) {
-            const dialogType = this.screenService.hasScreen(dialog.subType) ? dialog.subType : 'Dialog';
-            if (!this.dialogOpening && (!this.dialogRef || this.previousDialogType !== dialogType)) {
+            const dialogType = this.dialogService.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
+            if (!this.dialogOpening) {
                 if (this.dialogRef) {
                     console.log('closing dialog');
                     this.dialogRef.close();
@@ -109,11 +111,10 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
                 this.dialogOpening = true;
                 setTimeout(() => this.openDialog(dialog), 0);
             } else {
-                console.log(`Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}, dialogRef: ${this.dialogRef}, ` +
-                    `dialogType: ${dialogType}, previousDialogType: ${this.previousDialogType}`);
+                console.log(`Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}`);
             }
         } else if (!dialog && this.dialogRef) {
-            console.log('closing dialog');
+            console.log('closing dialog ref');
             this.dialogRef.close();
             this.dialogRef = null;
         }
@@ -126,34 +127,31 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             console.log('setting up the personalization screen');
             this.session.screen = this.session.getPersonalizationScreen();
         } else if (!this.session.screen) {
-            this.session.screen = { type: 'Blank', template: 'Blank' };
+            this.session.screen = { type: 'Blank', template: { type: 'Blank', dialog: false } };
         }
 
+        console.log(this.session.screen);
         if (this.session.screen &&
-            ((this.session.screen.refreshAlways)
+            (this.session.screen.refreshAlways
                 || this.session.screen.type !== this.previousScreenType
-                || this.session.screen.name !== this.previousScreenName
-            )
+                || this.session.screen.name !== this.previousScreenName)
         ) {
-
-            let templateName: string = null;
-            let screenType: string = null;
-            let screenName: string = null;
-            if (this.session.screen && this.session.screen.type) {
-                console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
-                templateName = this.session.screen.template;
-                screenType = this.session.screen.type;
-                screenName = this.session.screen.name;
-            }
+            console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
+            const templateName = this.session.screen.template.type;
+            const screenType = this.session.screen.type;
+            const screenName = this.session.screen.name;
             const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
-            this.template = viewContainerRef.createComponent(templateComponentFactory).instance as AbstractTemplate;
+            if (this.currentTemplateRef) {
+                this.currentTemplateRef.destroy();
+            }
+            this.currentTemplateRef = viewContainerRef.createComponent(templateComponentFactory);
+            this.template = this.currentTemplateRef.instance as AbstractTemplate;
             this.previousScreenType = screenType;
             this.previousScreenName = screenName;
             this.overlayContainer.getContainerElement().classList.add(this.getTheme());
             this.installedScreen = this.template.installScreen(this.screenService.resolveScreen(screenType), this.session, this);
-
         }
         this.template.show(screen, this);
         this.installedScreen.show(screen, this, this.template);
@@ -161,21 +159,18 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
     }
 
     openDialog(dialog: any) {
-        const dialogComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(dialog.subType);
-        let dialogComponent = this.screenService.resolveScreen('Dialog').componentType;
-        this.previousDialogType = 'Dialog';
-        const dialogProperties: OpenPOSDialogConfig = { disableClose: true };
-
-        // if we resolved a specific screen type use that otherwise just use the default DialogComponent
-        if (dialogComponentFactory) {
-            dialogComponent = dialogComponentFactory.componentType;
-            this.previousDialogType = dialog.subType;
+        const dialogComponentFactory: ComponentFactory<IScreen> = this.dialogService.resolveDialog(dialog.type);
+        let closeable = false;
+        if (dialog.template.dialogProperties) {
+            closeable = dialog.template.dialogProperties.closeable;
         }
-        if (dialog.dialogProperties) {
+        const dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: false };
+        const dialogComponent = dialogComponentFactory.componentType;
+        if (dialog.template.dialogProperties) {
             // Merge in any dialog properties provided on the screen
-            for (const key in dialog.dialogProperties) {
-                if (dialog.dialogProperties.hasOwnProperty(key)) {
-                    dialogProperties[key] = dialog.dialogProperties[key];
+            for (const key in dialog.template.dialogProperties) {
+                if (dialog.template.dialogProperties.hasOwnProperty(key)) {
+                    dialogProperties[key] = dialog.template.dialogProperties[key];
                 }
             }
             console.log(`Dialog options: ${JSON.stringify(dialogProperties)}`);
@@ -184,7 +179,7 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
         this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
         this.dialogRef.componentInstance.show(dialog, this);
         this.dialogOpening = false;
-        console.log('Dialog \'' + this.previousDialogType + '\' opened');
+        console.log('Dialog \'' + dialog.type + '\' opened');
         if (dialogProperties.executeActionBeforeClose) {
             // Some dialogs may need to execute the chosen action before
             // they close so that actionPayloads can be included with the action
@@ -198,7 +193,6 @@ export abstract class AbstractApp implements OnDestroy, OnInit {
             if (!dialogProperties.executeActionBeforeClose) {
                 this.session.onAction(result);
             }
-            this.dialogRef = null;
         }
         );
     }

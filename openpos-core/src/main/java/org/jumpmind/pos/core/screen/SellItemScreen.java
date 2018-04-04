@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.core.model.Total;
+import org.jumpmind.pos.core.template.SellTemplate;
 
 public class SellItemScreen extends PromptScreen {
 
@@ -23,10 +24,12 @@ public class SellItemScreen extends PromptScreen {
     private List<Total> totals = new ArrayList<>();
     
     private List<MenuItem> transactionMenuItems = new ArrayList<>();
+    
+    private MenuItem loyaltyButton;
 
     public SellItemScreen() {
         this.setType(ScreenType.Transaction);
-        this.setTemplate(SellScreen.TEMPLATE_SELL);
+        this.setTemplate(new SellTemplate());
         this.setShowScan(true);
         this.setScanType(ScanType.CAMERA_CORDOVA);
     }
@@ -134,5 +137,13 @@ public class SellItemScreen extends PromptScreen {
 
 	public void setNoCustomerText(String noCustomerText) {
 		this.noCustomerText = noCustomerText;
+	}
+
+	public MenuItem getLoyaltyButton() {
+		return loyaltyButton;
+	}
+
+	public void setLoyaltyButton(MenuItem loyaltyButton) {
+		this.loyaltyButton = loyaltyButton;
 	}
 }

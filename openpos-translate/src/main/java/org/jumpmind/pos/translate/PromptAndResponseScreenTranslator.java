@@ -6,7 +6,7 @@ import java.util.Properties;
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
-import org.jumpmind.pos.core.screen.SellScreen;
+import org.jumpmind.pos.core.template.SellTemplate;
 
 public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends AbstractPromptScreenTranslator<T> {
 
@@ -34,11 +34,11 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
     public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems,
             FieldInputType responseType, Integer minLength, Integer maxLength, String appId, Properties properties) {
         super(legacyScreen, screenClass, appId, properties);
-        getScreen().setTemplate(SellScreen.TEMPLATE_SELL);
+        screen.setTemplate(new SellTemplate());
         this.addLocalMenuItems = addLocalMenuItems;
-        getScreen().setResponseType(responseType != null ? responseType.name() : null);
-        getScreen().setMinLength(minLength);
-        getScreen().setMaxLength(maxLength);
+        screen.setResponseType(responseType != null ? responseType.name() : null);
+        screen.setMinLength(minLength);
+        screen.setMaxLength(maxLength);
     }   
     
     @Override
@@ -50,8 +50,11 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
             List<MenuItem> localNavButtons = generateUIActionsForLocalNavButtons(MenuItem.class, true);
             screen.setLocalMenuItems(localNavButtons);
         }
-        getScreen().setActionButton(new MenuItem("Next", "Next", "keyboard_arrow_right"));
-
+        addActionButton();
+    }
+    
+    protected void addActionButton() {
+        screen.setActionButton(new MenuItem("Next", "Next", "keyboard_arrow_right"));
     }
 
 }

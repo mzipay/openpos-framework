@@ -1,3 +1,5 @@
+import { NavListComponent } from './../../dialogs/nav-list/nav-list.component';
+import { MatDialog } from '@angular/material';
 import { DeviceService } from '../../services/device.service';
 import { ISellItem } from '../../common/isellitem';
 import { IScreen } from '../../common/iscreen';
@@ -14,9 +16,9 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './transaction.component.html',
   styleUrls: ['./transaction.component.scss']
 })
-export class TransactionComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
+export class TransactionComponent implements AfterViewInit, IScreen, OnInit {
 
-
+  screen: any;
   @ViewChild('box') vc;
   initialized = false;
 
@@ -24,17 +26,14 @@ export class TransactionComponent implements AfterViewInit, DoCheck, IScreen, On
 
   public items: ISellItem[];
 
-  constructor(public session: SessionService, devices: DeviceService, private observableMedia: ObservableMedia) {
+  constructor(public session: SessionService, devices: DeviceService, 
+    private observableMedia: ObservableMedia, protected dialog: MatDialog) {
 
     }
 
   show(screen: any, app: AbstractApp) {
-  }
-
-  ngDoCheck(): void {
-    if (typeof this.session.screen !== 'undefined') {
-      this.items = this.session.screen.items;
-    }
+    this.screen = screen;
+    this.items = this.screen.items;
   }
 
   ngOnInit(): void {
@@ -59,26 +58,29 @@ export class TransactionComponent implements AfterViewInit, DoCheck, IScreen, On
     ).startWith(startSize);
   }
 
-
   ngAfterViewInit(): void {
     this.initialized = true;
   }
-
-  public doMenuItemAction(menuItem: IMenuItem, payLoad: any) {
-      this.session.onAction(menuItem.action, payLoad, menuItem.confirmationMessage);
-}
 
   onEnter(value: string) {
     this.session.response = value;
     this.session.onAction('Next');
   }
 
-  public isMenuItemEnabled(m: IMenuItem): boolean {
-    let enabled = m.enabled;
-    if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
-         enabled = false;
-    }
-    return enabled;
+  openItemDialog(item: ISellItem) {
+    this.session.response = item.index;
+    const dialogRef = this.dialog.open(NavListComponent, {
+      width: '70%',
+      data: {
+        optionItems: item.menuItems,
+        disableClose: false,
+        autoFocus: false
+     }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
 }
