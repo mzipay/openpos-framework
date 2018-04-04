@@ -342,6 +342,7 @@ public class ScreenService implements IScreenService {
 
     protected String drawBox(String name, String typeName) {
         name = name != null ? name : "not named";
+        typeName = typeName != null ? typeName : "undefined";
         int boxWidth = Math.max(Math.max(name.length() + 2, 28), typeName.length() + 4);
         final int LINE_COUNT = 8;
         StringBuilder buff = new StringBuilder(256);
