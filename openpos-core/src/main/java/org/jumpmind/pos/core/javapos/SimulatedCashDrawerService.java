@@ -1,9 +1,13 @@
 package org.jumpmind.pos.core.javapos;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import jpos.JposException;
 import jpos.services.CashDrawerService19;
 
 public class SimulatedCashDrawerService extends AbstractSimulatedService implements CashDrawerService19 {
+    protected final Log logger = LogFactory.getLog(getClass());
 
     private long cashDrawerOpened = 1;
 
@@ -33,6 +37,7 @@ public class SimulatedCashDrawerService extends AbstractSimulatedService impleme
     public void waitForDrawerClose(int arg0, int arg1, int arg2, int arg3) throws JposException {
     	try {
 			Thread.sleep(2000);
+			logger.info("The simulated cash drawer was closed");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
