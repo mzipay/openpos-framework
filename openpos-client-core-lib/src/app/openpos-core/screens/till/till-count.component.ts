@@ -21,12 +21,19 @@ export class TillCountComponent implements OnInit, IScreen {
   }
 
   show(screen: any, app: AbstractApp) {
-    this.screen = screen;
+    // After screen is initialized, all we need to do is
+    // get an updated total from the server.  This saves
+    // unnecessary rebuilding of the screen
+    if (! this.screen) {
+      this.screen = screen;
+      this.form = this.screen.form;
+      this.nextAction = this.screen.nextAction;
+    } else {
+      this.screen.total = screen.total;
+    }
   }
 
   ngOnInit() {
-    this.form = this.screen.form;
-    this.nextAction = this.screen.nextAction;
   }
 
   onFieldChanged(eventData: {formElement: IFormElement, event: Event}) {
