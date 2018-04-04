@@ -116,6 +116,7 @@ import { PrintPreviewComponent } from './screens/print-preview.component';
 import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selection-list.directive';
 import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/multiple-dynamic-form.component';
 import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
+import { DynamicFormDialogComponent } from './dialogs/dynamic-form/dynamic-form-dialog.component';
 import { DialogService } from './services/dialog.service';
 
 // Keyboard Layouts
@@ -176,6 +177,7 @@ const customLayouts: IKeyboardLayouts = {
     BasicItemSearchComponent,
     ChooseOptionsComponent,
     ChooseOptionsDialogComponent,
+    DynamicFormDialogComponent,
     DialogComponent,
     EmbeddedWebPageComponent,
     FormComponent,
@@ -233,6 +235,7 @@ const customLayouts: IKeyboardLayouts = {
     LoginComponent,
     ChooseOptionsComponent,
     ChooseOptionsDialogComponent,
+    DynamicFormDialogComponent,
     PromptWithOptionsComponent,
     PromptWithInfoComponent,
     SignatureCaptureComponent,

@@ -77,15 +77,15 @@ public class Form implements Serializable {
         return formField;
     }
     
-    public static FormField createBirthdateField(String fieldId, String label, String value, boolean required) {
+    public static FormField createNoYearDateField(String fieldId, String label, String value, boolean required) {
     		FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NoYearDate, required);
     		formField.setPattern(PATTERN_NO_YEAR_DATE);
     		formField.setValue(value);
     		return formField;
     }
     
-    public FormField addBirthdateField(String fieldId, String label, String value, boolean required) {
-    		FormField formField = createBirthdateField(fieldId, label, value, required);
+    public FormField addNoYearDateField(String fieldId, String label, String value, boolean required) {
+    		FormField formField = createNoYearDateField(fieldId, label, value, required);
     		formElements.add(formField);
     		return formField;
     }
@@ -176,6 +176,13 @@ public class Form implements Serializable {
         formField.setValue(value);
         formElements.add(formField);
         return formField;
+    }
+    
+    public FormField addTextAreaField(String fieldId, String label, String value, boolean required) {
+    		FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.TextArea, required);
+    		formField.setValue(value);
+    		formElements.add(formField);
+    		return formField;
     }
     
     public FormField addDisplayField( String fieldId, String label, String value, FieldInputType type ) {

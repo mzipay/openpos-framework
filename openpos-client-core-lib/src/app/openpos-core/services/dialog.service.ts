@@ -2,6 +2,7 @@ import { IScreen } from '../common/iscreen';
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { ChooseOptionsDialogComponent } from '../dialogs/choose-options/choose-options-dialog.component';
+import { DynamicFormDialogComponent } from '../dialogs/dynamic-form/dynamic-form-dialog.component';
 import { ScreenService } from '.';
 
 @Injectable()
@@ -14,6 +15,7 @@ export class DialogService {
 
     // To make a dialog screen available add it here and in entryComponents in the app.module.ts
     this.dialogs.set('ChooseOptions', ChooseOptionsDialogComponent);
+    this.dialogs.set('DynamicForm', DynamicFormDialogComponent);
   }
 
   public addDialog(name: string, type: Type<IScreen>): void {
