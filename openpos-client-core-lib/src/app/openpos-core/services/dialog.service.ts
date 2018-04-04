@@ -57,7 +57,6 @@ export class DialogService {
     this.dialogs.set('BasicItemSearch', BasicItemSearchComponent);
     this.dialogs.set('EmbeddedWebPage', EmbeddedWebPageComponent);
     this.dialogs.set('Form', FormComponent);
-    this.dialogs.set('DynamicForm', DynamicFormComponent);
     this.dialogs.set('Login', LoginComponent);
     this.dialogs.set('Home', HomeComponent);
     this.dialogs.set('SelfCheckoutHome', SelfCheckoutHomeComponent);

@@ -1,19 +1,8 @@
-<div mat-dialog-content fxFlex="1 1 auto" class="scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
-    <h1 mat-dialog-title  *ngIf="screen.prompt" class="text-md text-center" [ngClass]="{'warn':screen.customerFacing}" >
-        {{screen.prompt}}
-    </h1>
-    <div fxFlex="1 1 auto" fxLayout="column">
+<h1 mat-dialog-title  *ngIf="screen.prompt" class="text-md text-left" [ngClass]="{'warn':screen.customerFacing}" >
+    {{screen.prompt}}
+</h1>
+<div mat-dialog-content>
         <app-dynamic-form-control fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px"
-        [screenForm]="screen.form" [submitAction]="screen.submitAction" [screen]="screen">
+        [screenForm]="screen.form" [submitAction]="screen.submitAction" [submitButtonText]="screen.submitButtonText" [screen]="screen">
         </app-dynamic-form-control>
-    </div>
-</div>    
-
-<!-- <mat-card fxFlex="auto auto auto" class="scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
-	<mat-card-title *ngIf="screen.prompt" [ngClass]="{'warn':screen.customerFacing}">{{screen.prompt}}</mat-card-title>		
-	<mat-card-content fxFlex="1 1 auto"  fxLayout="column" >
-		<app-dynamic-form-control fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px"
-			[screenForm]="screen.form" [submitAction]="screen.submitAction" [screen]="screen">
-		</app-dynamic-form-control>
-	</mat-card-content>
-</mat-card> -->
+</div>

@@ -15,6 +15,8 @@ public class DynamicFormScreen extends SellScreen implements IHasForm {
     
     private String submitAction = "Next";
     
+    private String submitButtonText = "Next";
+    
     private List<String> alternateSubmitActions = new ArrayList<String>();
 
     public DynamicFormScreen() {
@@ -53,5 +55,13 @@ public class DynamicFormScreen extends SellScreen implements IHasForm {
     public void setAlternateSubmitActions(List<String> alternateActions) {
         this.alternateSubmitActions = alternateActions;
     }
+
+	public String getSubmitButtonText() {
+		return submitButtonText;
+	}
+
+	public void setSubmitButtonText(String submitButtonText) {
+		this.submitButtonText = submitButtonText;
+	}
     
 }
