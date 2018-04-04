@@ -10,6 +10,7 @@ import { PhoneCAFormatter } from '../common/formatters/phoneCA-formatter';
 import { NumericFormatter } from '../common/formatters/numeric-formatter';
 import { PostalCodeFormatter } from '../common/formatters/postalcode-formatter';
 import { IncomeFormatter } from '../common/formatters/income-formatter';
+import { StateIDNumberFormatter } from '../common/formatters/stateidnumber-formatter';
 
 @Injectable()
 export class FormattersService {
@@ -43,6 +44,7 @@ export class FormattersService {
         NOLOCALEFormatters.set('percent', new PercentageFormatter());
         NOLOCALEFormatters.set('postalcode', new PostalCodeFormatter());
         NOLOCALEFormatters.set('income', new IncomeFormatter());
+        NOLOCALEFormatters.set('stateidnumber', new StateIDNumberFormatter());
     }
 
     getFormatter(name: string): IFormatter {
