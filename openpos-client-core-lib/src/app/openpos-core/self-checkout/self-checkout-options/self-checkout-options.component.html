@@ -1,7 +1,10 @@
 <div fxFlexFill fxLayout="row" fxLayoutAlign="center center">
     <div fxFlexFill fxFlex="1 1 60%" fxLayout="column" fxLayoutAlign="center stretch" [ngSwitch]="currentView">
         <ng-template ngSwitchCase="ButtonList">
-            <div fxFlex="1 1 auto" fxLayoutAlign="center center" class="text-md" *ngIf="promptText" style="padding-top: 32px;">
+            <div fxFlex="1 0 auto" fxLayoutAlign="center center" *ngIf="screen.icon">
+                <mat-icon [svgIcon]="screen.icon" class="top" style="width: 200px; height: 100px;"></mat-icon>
+            </div>
+            <div fxFlex="1 0 auto" fxLayoutAlign="center center" class="text-md text-center" *ngIf="promptText" style="padding-top: 32px; padding-bottom: 32px;">
                 <b>{{promptText}}</b>
             </div>
             <mat-nav-list fxFlex="1 0 auto">
