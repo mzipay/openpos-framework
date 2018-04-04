@@ -38,7 +38,7 @@
 				<div fxFlex="2 1 auto"></div>
 
 				<div>
-					<button mat-button *ngIf="screen.loyaltyButton" (click)="doMenuItemAction(screen.loyaltyButton)" class="border-button text-lg" style="height: 115px; width: 100%; padding: 16px;">
+					<button mat-button *ngIf="screen.loyaltyButton" (click)="doMenuItemAction(screen.loyaltyButton)" class="loyalty-button text-lg">
 						<div>{{screen.loyaltyButton.title}}</div>
 						<mat-icon [svgIcon]="screen.loyaltyButton.icon" class="top" style="height: 50%; width: 100%;"></mat-icon>
 					</button>
