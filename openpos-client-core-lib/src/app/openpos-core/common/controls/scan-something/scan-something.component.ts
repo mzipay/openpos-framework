@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, Optional, Inject } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, Optional, Inject, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { DeviceService } from '../../../services/device.service';
 import { SessionService } from '../../../services/session.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -9,12 +9,18 @@ import { ScanSomethingData } from './scanSomthingData';
   templateUrl: './scan-something.component.html',
   styleUrls: ['./scan-something.component.scss']
 })
-export class ScanSomethingComponent implements OnInit {
+export class ScanSomethingComponent implements AfterViewInit {
+
+  @ViewChild('input')
+  input: ElementRef;
 
   @Input()
   scanSomethingData: ScanSomethingData;
 
   public barcode: string;
+
+  @Input()
+  public autoFocus: boolean;
 
   constructor(private session: SessionService, public devices: DeviceService,
     @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>,
@@ -24,8 +30,13 @@ export class ScanSomethingComponent implements OnInit {
       this.scanSomethingData = data;
     }
   }
-  ngOnInit() {
+
+  ngAfterViewInit(): void {
+    if (this.autoFocus) {
+      this.input.nativeElement.focus();
+    }
   }
+
 
   public onEnter(): void {
     if (this.barcode && this.barcode.trim().length > 0) {

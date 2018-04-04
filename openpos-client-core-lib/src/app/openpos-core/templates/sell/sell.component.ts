@@ -22,8 +22,9 @@ import { ScanSomethingData } from '../../common/controls/scan-something/scanSomt
 })
 export class SellComponent extends AbstractTemplate implements OnInit {
 
-  template : ISellScreen;
-  statusBar : StatusBarData;
+  template: ISellScreen;
+  statusBar: StatusBarData;
+  autoFocusOnScan: boolean;
   scanSomethingData: ScanSomethingData;
 
   @ViewChild('drawer') drawer;
@@ -33,20 +34,21 @@ export class SellComponent extends AbstractTemplate implements OnInit {
 
   public time = Date.now();
 
-  constructor( public session: SessionService, private observableMedia: ObservableMedia) {
+  constructor(public session: SessionService, private observableMedia: ObservableMedia) {
     super();
 
-   }
-   
-   show(template: any, app: AbstractApp) {
+  }
+
+  show(template: any, app: AbstractApp) {
     this.template = template;
     this.statusBar = SellScreenUtils.getStatusBar(template);
     this.scanSomethingData = SellScreenUtils.getScanSomethingData(template);
+    this.autoFocusOnScan = template.template.autoFocusOnScan;
   }
 
   public ngOnInit(): void {
 
-    if ( this.template.localMenuItems.length > 0) {
+    if (this.template.localMenuItems.length > 0) {
       this.initializeDrawerMediaSizeHandling();
     } else {
       this.drawerOpen = Observable.of(false);
@@ -55,17 +57,17 @@ export class SellComponent extends AbstractTemplate implements OnInit {
 
   public doMenuItemAction(menuItem: IMenuItem) {
     this.session.onAction(menuItem.action, null, menuItem.confirmationMessage);
-}
-
-public isMenuItemEnabled(m: IMenuItem): boolean {
-  let enabled = m.enabled;
-  if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
-       enabled = false;
   }
-  return enabled;
-}
 
-private initializeDrawerMediaSizeHandling() {
+  public isMenuItemEnabled(m: IMenuItem): boolean {
+    let enabled = m.enabled;
+    if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
+      enabled = false;
+    }
+    return enabled;
+  }
+
+  private initializeDrawerMediaSizeHandling() {
     const openMap = new Map([
       ['xs', false],
       ['sm', true],
@@ -76,7 +78,7 @@ private initializeDrawerMediaSizeHandling() {
 
     let startOpen: boolean;
     openMap.forEach((open, mqAlias) => {
-      if ( this.observableMedia.isActive(mqAlias)) {
+      if (this.observableMedia.isActive(mqAlias)) {
         startOpen = open;
       }
     });
@@ -96,7 +98,7 @@ private initializeDrawerMediaSizeHandling() {
 
     let startMode: string;
     modeMap.forEach((mode, mqAlias) => {
-      if ( this.observableMedia.isActive(mqAlias)) {
+      if (this.observableMedia.isActive(mqAlias)) {
         startMode = mode;
       }
     });

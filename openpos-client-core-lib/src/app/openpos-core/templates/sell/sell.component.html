@@ -3,7 +3,7 @@
     <div fxFlex="1 1 auto" style="padding:16px;overflow-y:auto" fxLayout="column" fxLayoutAlign="start"
         fxLayoutGap="16px">
         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-            <app-scan-something fxFlex="1 1 auto" class="mat-elevation-z3" *ngIf="template.showScan" [scanSomethingData]="scanSomethingData"></app-scan-something>
+            <app-scan-something fxFlex="1 1 auto" class="mat-elevation-z3" *ngIf="template.showScan" [scanSomethingData]="scanSomethingData" [autoFocus]="autoFocusOnScan"></app-scan-something>
             <div *ngIf="template.type === 'Transaction'" fxHide.xs fxFlex="0 1 auto" class="text-center">{{time|date:'MM/dd/yyyy'}}
                 <br>{{time|date:'shortTime'}}</div>
         </div>
