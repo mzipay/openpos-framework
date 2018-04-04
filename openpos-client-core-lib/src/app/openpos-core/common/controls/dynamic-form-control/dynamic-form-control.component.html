@@ -6,7 +6,7 @@
     </mat-error>	
     <div fxFlex="1 1 auto"></div>
     <div>
-        <button mat-button mat-raised-button color="primary-inverse" *ngFor="let button of buttons" (click)="onButtonClick(button)">
+        <button mat-button mat-raised-button type="button" color="primary-inverse" *ngFor="let button of buttons" (click)="onButtonClick(button)">
             <span>{{button.label}}</span>
             <mat-icon>{{button.icon}}</mat-icon>
         </button>
