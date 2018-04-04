@@ -24,6 +24,8 @@ public class SellItemScreen extends PromptScreen {
     private List<Total> totals = new ArrayList<>();
     
     private List<MenuItem> transactionMenuItems = new ArrayList<>();
+    
+    private MenuItem loyaltyButton;
 
     public SellItemScreen() {
         this.setType(ScreenType.Transaction);
@@ -135,5 +137,13 @@ public class SellItemScreen extends PromptScreen {
 
 	public void setNoCustomerText(String noCustomerText) {
 		this.noCustomerText = noCustomerText;
+	}
+
+	public MenuItem getLoyaltyButton() {
+		return loyaltyButton;
+	}
+
+	public void setLoyaltyButton(MenuItem loyaltyButton) {
+		this.loyaltyButton = loyaltyButton;
 	}
 }

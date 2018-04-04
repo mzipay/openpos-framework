@@ -32,10 +32,13 @@ export class DynamicFormControlComponent implements OnInit {
   @Input() screen: any;
 
   form: FormGroup;
+  
+  buttons: IFormElement[];
 
   constructor(public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) { }
 
   ngOnInit() {
+
 
     if (this.screen.alternateSubmitActions) {
       this.screen.alternateSubmitActions.forEach(action => {
@@ -53,6 +56,8 @@ export class DynamicFormControlComponent implements OnInit {
 
     const group: any = {};
 
+    this.buttons = new Array<IFormElement>();
+
     this.screenForm.formElements.forEach(element => {
 
       const ctlValidators: ValidatorFn[] = this.createControlValidators(element);
@@ -61,6 +66,10 @@ export class DynamicFormControlComponent implements OnInit {
       // a date picker, need to add a FormControl for that hidden input also.
       if(element.inputType === 'Date' || element.inputType === 'NoYearDate') {
         group[element.id+'Hidden'] = new FormControl();
+      }
+
+      if(element.elementType === 'Button' ){
+        this.buttons.push( element );
       }
     });
 
@@ -135,6 +144,10 @@ export class DynamicFormControlComponent implements OnInit {
       this.buildFormPayload();
       this.session.onAction(formElement.valueChangedAction, this.screenForm);
     }
+  }
+
+  onButtonClick(formElement: IFormElement){
+    this.session.onAction(formElement.buttonAction);
   }
 
   private buildFormPayload() {

@@ -1,3 +1,4 @@
+import { NavListComponent } from './dialogs/nav-list/nav-list.component';
 
 // Angular Includes
 import { NgModule } from '@angular/core';
@@ -118,6 +119,7 @@ import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/mu
 import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
 import { DynamicFormDialogComponent } from './dialogs/dynamic-form/dynamic-form-dialog.component';
 import { DialogService } from './services/dialog.service';
+import { MultipleDynamicFormDialogComponent } from './dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 
 // Keyboard Layouts
 const customLayouts: IKeyboardLayouts = {
@@ -221,7 +223,9 @@ const customLayouts: IKeyboardLayouts = {
     FullPageImageComponent,
     CallForAuthorizationComponent,
     MultipleDynamicFormComponent,
+    MultipleDynamicFormDialogComponent,
     DynamicDateFormFieldComponent,
+    NavListComponent
   ],
   declarations: [
     DialogComponent,
@@ -292,7 +296,9 @@ const customLayouts: IKeyboardLayouts = {
     FullPageImageComponent,
     CallForAuthorizationComponent,
     MultipleDynamicFormComponent,
-    DynamicDateFormFieldComponent
+    MultipleDynamicFormDialogComponent,
+    DynamicDateFormFieldComponent,
+    NavListComponent
   ],
   imports: [
     BrowserModule,

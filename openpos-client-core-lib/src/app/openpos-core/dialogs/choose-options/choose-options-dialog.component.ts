@@ -4,6 +4,10 @@ import { ChooseOptionsComponent } from '../../screens/choose-options/choose-opti
 
 @Component({
   selector: 'app-choose-options-dialog',
-  templateUrl: './choose-options-dialog.component.html'
+  templateUrl: './choose-options-dialog.component.html',
+  styleUrls: ['./choose-options-dialog.component.scss']
 })
-export class ChooseOptionsDialogComponent extends ChooseOptionsComponent {}
+export class ChooseOptionsDialogComponent extends ChooseOptionsComponent {
+
+  
+}
