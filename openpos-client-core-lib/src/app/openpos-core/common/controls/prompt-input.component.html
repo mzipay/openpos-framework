@@ -1,6 +1,6 @@
 <div [formGroup]="promptFormGroup">
     <ng-container  *ngIf="responseType!='DATE'&& responseType!='NOYEARDATE'"[ngSwitch]="responseType">   
-        <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-xl">
+        <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-lg">
             <!-- Was using this:
                 <mat-icon matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
                 but want to be able to use local icons.  TODO: problem with styling however, sizing not working
@@ -20,7 +20,7 @@
             {{placeholderText}} {{onOffModel===true ? 'On' : 'Off'}}
         </mat-slide-toggle>
     
-        <mat-form-field fxFlexFill *ngSwitchCase="'ALPHANUMERICPASSWORD'" ngClass="text-xl">
+        <mat-form-field fxFlexFill *ngSwitchCase="'ALPHANUMERICPASSWORD'" ngClass="text-lg">
             <mat-icon  matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
             <input matInput [formControlName]="'promptInputControl'" [appFocus]="true" autoSelectOnFocus
                 type="password" [textMask]="_textMask" [attr.minlength]="minLength" [attr.maxlength]="maxLength">
