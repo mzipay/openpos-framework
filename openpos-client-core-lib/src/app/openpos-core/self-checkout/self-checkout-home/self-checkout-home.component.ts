@@ -1,9 +1,9 @@
 import { IMenuItem } from '../../common/imenuitem';
 import { IconComponent } from '../../common/controls/icon.component';
 import { IScreen } from '../../common/iscreen';
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, HostListener } from '@angular/core';
 import { SessionService } from '../../services/session.service';
-import {MediaChange, ObservableMedia} from '@angular/flex-layout';
+import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { AbstractApp } from '../../common/abstract-app';
 import { IUrlMenuItem } from '../../common/iurlmenuitem';
 
@@ -13,29 +13,20 @@ import { IUrlMenuItem } from '../../common/iurlmenuitem';
   styleUrls: ['./self-checkout-home.component.scss']
 
 })
-export class SelfCheckoutHomeComponent implements IScreen, OnInit {
+export class SelfCheckoutHomeComponent implements IScreen {
 
   screen: any;
   public menuItems: IMenuItem[];
-  gutterSize = 40;
-  gridColumns = 3;
 
   constructor(public session: SessionService, public media: ObservableMedia) {
-
   }
 
-  ngOnInit() {
-    this.updateGrid();
-    this.media.subscribe(() => {
-        this.updateGrid();
-    });
-  }
-
-  private updateGrid(): void {
-    const isLarge = (this.media.isActive('xl') || this.media.isActive('lg') || this.media.isActive('md'));
-    const isSmall = (this.media.isActive('sm'));
-    this.gridColumns = isLarge ? 3 : (isSmall ? 2 : 1);
-    this.gutterSize = isLarge ? 20 : 10;
+  @HostListener('document:click', ['$event'])
+  @HostListener('document:touchstart', ['$event'])
+  begin() {
+    if (this.menuItems && this.menuItems.length > 0) {
+      this.onMenuItemClick(this.menuItems[0]);
+    }
   }
 
   show(screen: any, app: AbstractApp) {
@@ -53,6 +44,6 @@ export class SelfCheckoutHomeComponent implements IScreen, OnInit {
   }
 
   onMenuItemClick(menuItem: IMenuItem) {
-      this.session.onAction(menuItem, null, menuItem.confirmationMessage );
+    this.session.onAction(menuItem, null, menuItem.confirmationMessage);
   }
 }
