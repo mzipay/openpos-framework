@@ -17,6 +17,7 @@ export class SelfCheckoutHomeComponent implements IScreen {
 
   screen: any;
   public menuItems: IMenuItem[];
+  private actionSent = false;
 
   constructor(public session: SessionService, public media: ObservableMedia) {
   }
@@ -44,6 +45,9 @@ export class SelfCheckoutHomeComponent implements IScreen {
   }
 
   onMenuItemClick(menuItem: IMenuItem) {
-    this.session.onAction(menuItem, null, menuItem.confirmationMessage);
+    if (!this.actionSent) {
+      this.session.onAction(menuItem, null, menuItem.confirmationMessage);
+      this.actionSent = true;
+    }
   }
 }

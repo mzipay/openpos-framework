@@ -162,7 +162,7 @@ export class PosComponent extends AbstractApp implements DoCheck {
   }
 
   protected getClasses(): string {
-    let classes: string = '';
+    let classes = '';
     switch (this.router.url.substring(1)) {
       case 'pos':
         if (this.session.screen.type === 'Home') {
