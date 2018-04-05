@@ -58,6 +58,14 @@ public class Form implements Serializable {
 
     }
     
+    public ComboField addComboBox(String fieldId, String label, List<String> values, boolean required) {
+        ComboField field = new ComboField(fieldId, label, null, values);
+        field.setRequired(required);
+        formElements.add(field);
+        return field;        
+
+    }
+    
     public FormListField addListField(String fieldId, String label, String placeholder, boolean required, List<String> values) {
     		FormListField field = new FormListField(fieldId, label, placeholder, values);
     		field.setRequired(required);
