@@ -13,9 +13,7 @@
                 <div>
                     <div *ngIf="item.color" class="muted-color text-sm">Color: {{item.color}}</div>
                     <div *ngIf="item.size" class="muted-color text-sm" style="margin-top: 8px">Size: {{item.size}}</div>
-                    <div class="muted-color text-sm" style="margin-top: 8px">
-                        Quantity: {{item.quantity}}
-                    </div>
+                    <div *ngIf="item.id" class="muted-color text-sm" style="margin-top: 8px">Item ID: {{item.id}}</div>
                 </div>
             </div>
             <div fxFlex="0 0 auto" fxLayout="column">
