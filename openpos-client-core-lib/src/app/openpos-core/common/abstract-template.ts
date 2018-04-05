@@ -1,8 +1,8 @@
+import { DynamicScreenComponent } from './../screens/dynamic-screen/dynamic-screen.component';
 import { IScreen } from './iscreen';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { ViewChild, ComponentFactory, ViewContainerRef, ComponentRef } from '@angular/core';
 import { ScreenDirective } from './screen.directive';
-import { AbstractApp } from '../common/abstract-app';
 import { SessionService } from '../services/session.service';
 
 export abstract class AbstractTemplate implements IScreen {
@@ -16,7 +16,7 @@ export abstract class AbstractTemplate implements IScreen {
     constructor() {
     }
 
-    public installScreen(screenComponentFactory: ComponentFactory<IScreen>, session: SessionService, app: AbstractApp): IScreen {
+    public installScreen(screenComponentFactory: ComponentFactory<IScreen>, session: SessionService): IScreen {
         const viewContainerRef = this.host.viewContainerRef;
         viewContainerRef.clear();
         if (this.currentScreenRef) {
@@ -26,7 +26,7 @@ export abstract class AbstractTemplate implements IScreen {
         return this.currentScreenRef.instance;
     }
 
-    abstract show(screen: any, app: AbstractApp);
+    abstract show(screen: any);
 
     // tslint:disable-next-line:no-shadowed-variable
     registerActionDisabler(action: string, actionShouldBeDisabled) {

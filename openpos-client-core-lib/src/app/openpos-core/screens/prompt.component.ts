@@ -3,7 +3,6 @@ import { PromptInputComponent } from './../common/controls/prompt-input.componen
 import { IScreen } from '../common/iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit } from '@angular/core';
 import { SessionService } from '../services/session.service';
-import { AbstractApp } from '../common/abstract-app';
 import { PhoneUSValidatorDirective } from '../common/validators/phone.directive';
 import { OpenPosValidators } from '../common/validators/openpos-validators';
 import { ValidatorsService } from '../services/validators.service';
@@ -20,7 +19,7 @@ export class PromptComponent implements AfterViewInit, IScreen, OnInit {
   constructor(public session: SessionService, private validatorsService: ValidatorsService) {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
   }
 

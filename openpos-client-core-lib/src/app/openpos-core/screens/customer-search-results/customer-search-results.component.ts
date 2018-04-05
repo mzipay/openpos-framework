@@ -1,8 +1,7 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { IScreen } from '../../common/iscreen';
 import { SessionService } from '../../services/session.service';
-import { AbstractApp } from '../../common/abstract-app';
 import { ICustomer } from '../../common/icustomer';
 
 @Component({
@@ -10,7 +9,7 @@ import { ICustomer } from '../../common/icustomer';
   templateUrl: './customer-search-results.component.html',
   styleUrls: ['./customer-search-results.component.scss']
 })
-export class CustomerSearchResultsComponent implements IScreen, OnInit {
+export class CustomerSearchResultsComponent implements IScreen {
 
   @Input() submitAction: string;
   public customers: ICustomer[];
@@ -18,13 +17,10 @@ export class CustomerSearchResultsComponent implements IScreen, OnInit {
 
   constructor(public session: SessionService) { }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
 
     this.customers = screen.customers;
     this.submitAction = screen.submitAction;
-  }
-
-  ngOnInit() {   
   }
 
   onSubmitAction(): void {
@@ -32,7 +28,7 @@ export class CustomerSearchResultsComponent implements IScreen, OnInit {
   }
 
   isSelectedOptionsEmpty(): boolean {
-    return Boolean(typeof this.selectedOptions === "undefined" || this.selectedOptions.length === 0);
+    return Boolean(typeof this.selectedOptions === 'undefined' || this.selectedOptions.length === 0);
   }
 
 }

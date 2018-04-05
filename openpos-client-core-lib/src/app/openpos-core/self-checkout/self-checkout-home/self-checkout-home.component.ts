@@ -4,7 +4,6 @@ import { IScreen } from '../../common/iscreen';
 import { Component, ViewChild, OnInit, HostListener } from '@angular/core';
 import { SessionService } from '../../services/session.service';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-import { AbstractApp } from '../../common/abstract-app';
 import { IUrlMenuItem } from '../../common/iurlmenuitem';
 
 @Component({
@@ -30,7 +29,7 @@ export class SelfCheckoutHomeComponent implements IScreen {
     }
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
     this.menuItems = screen.menuItems;
   }

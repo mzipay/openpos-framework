@@ -3,7 +3,6 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
 import { IScreen } from '../../common/iscreen';
 import { SessionService } from '../../services/session.service';
-import { AbstractApp } from '../../common/abstract-app';
 import { AbstractTemplate } from '../../common/abstract-template';
 import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
 import { SellScreenUtils } from '../../common/screen-interfaces/iSellScreen';
@@ -25,7 +24,7 @@ export class SelfCheckoutWithBarComponent extends AbstractTemplate implements On
   ngOnInit() {
   }
 
-  show(template: any, app: AbstractApp) {
+  show(template: any) {
     this.template = template;
     this.statusBar = SellScreenUtils.getSelfCheckoutStatusBar( template );
   }

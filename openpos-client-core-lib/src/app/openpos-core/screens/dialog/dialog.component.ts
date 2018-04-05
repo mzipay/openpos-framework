@@ -4,7 +4,6 @@ import { SessionService } from '../../services/session.service';
 import { FocusDirective } from '../../common/focus.directive';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { IScreen } from '../../common/iscreen';
-import { AbstractApp } from '../../index';
 
 declare var version: any;
 
@@ -19,7 +18,7 @@ export class DialogComponent implements IScreen {
   constructor(public session: SessionService, public dialogRef: MatDialogRef<DialogComponent>) {
   }
 
-  show(screen: any, app: AbstractApp): void {
+  show(screen: any): void {
     this.screen = screen;
   }
 

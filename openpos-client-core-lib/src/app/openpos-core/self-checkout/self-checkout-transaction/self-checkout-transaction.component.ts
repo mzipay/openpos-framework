@@ -4,7 +4,6 @@ import { IScreen } from '../../common/iscreen';
 import { IMenuItem } from '../../common/imenuitem';
 import { Component, ViewChild, AfterViewInit, AfterContentInit, AfterViewChecked, ElementRef, DoCheck, OnInit } from '@angular/core';
 import { SessionService } from '../../services/session.service';
-import { AbstractApp } from '../../common/abstract-app';
 import { ObservableMedia } from '@angular/flex-layout';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
@@ -26,7 +25,7 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, AfterVie
   constructor(public session: SessionService, devices: DeviceService, private observableMedia: ObservableMedia) {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
 
     this.items = this.screen.items;

@@ -2,7 +2,6 @@ import { IScreen } from '../common/iscreen';
 import {Component} from '@angular/core';
 import { ISellItem } from '../common/isellitem';
 import {SessionService} from '../services/session.service';
-import { AbstractApp } from '../common/abstract-app';
 import { IPromoItem } from '../common/ipromoitem';
 import {MatTableDataSource} from '@angular/material';
 
@@ -21,16 +20,10 @@ export class SellItemDetailComponent implements IScreen {
   constructor(public session: SessionService ) {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
     this.item = screen.item;
-  }
-
-  ngDoCheck(): void {
-      if (typeof this.screen !== 'undefined') {
-        // this.items = this.screen.items;
-        this.promosDataSource = new MatTableDataSource(this.screen.promos);
-      }
+    this.promosDataSource = new MatTableDataSource(this.screen.promos);
   }
 
 }

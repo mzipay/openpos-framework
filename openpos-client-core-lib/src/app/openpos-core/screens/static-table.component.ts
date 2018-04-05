@@ -5,14 +5,13 @@ import { SelectionMode } from './../common/selectionmode';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { AbstractApp } from '../common/abstract-app';
 
 @Component({
     selector: 'app-static-table',
     templateUrl: './static-table.component.html'
 })
 export class StaticTableComponent implements IScreen {
-    
+
     screen: any;
     rowData: RowDatabase;
     dataSource: RowDataSource | null;
@@ -20,7 +19,7 @@ export class StaticTableComponent implements IScreen {
     /** Table columns */
     columns: Array<ColumnDef> = [];
     columnIds: Array<string> = [];
-    columnsById: {[key: string]: ColumnDef} = {};
+    columnsById: { [key: string]: ColumnDef } = {};
 
     selectionMode: SelectionMode;
     selectedRow: number;
@@ -64,10 +63,10 @@ export class StaticTableComponent implements IScreen {
     }
 
     isRowSelected(rowIndex: number) {
-        return this.selectedRow === rowIndex ;
+        return this.selectedRow === rowIndex;
     }
 
-    show(screen: any, app: AbstractApp) {
+    show(screen: any) {
         this.screen = screen;
 
         this.selectionMode = SelectionMode[this.screen.selectionMode as string];
@@ -135,25 +134,25 @@ export class RowDatabase {
         const copiedData = this.data.slice();
         copiedData.push(this.createNewRow(row));
         this.dataChange.next(copiedData);
-      }
+    }
 
     private createNewRow(row: Array<string>): TableRow {
         return {
-          index: this.data.length,
-          values: row
+            index: this.data.length,
+            values: row
         };
     }
 }
 
 export class RowDataSource extends DataSource<any> {
     constructor(private _rowDatabase: RowDatabase) {
-      super();
+        super();
     }
 
     /** Connect function called by the table to retrieve one stream containing the data to render. */
     connect(): Observable<TableRow[]> {
-      return this._rowDatabase.dataChange;
+        return this._rowDatabase.dataChange;
     }
 
-    disconnect() {}
+    disconnect() { }
 }

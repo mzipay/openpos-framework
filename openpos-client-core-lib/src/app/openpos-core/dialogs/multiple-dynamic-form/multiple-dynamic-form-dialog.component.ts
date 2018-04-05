@@ -1,5 +1,5 @@
 import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
-import { IScreen, AbstractApp, AbstractTemplate } from '../..';
+import { IScreen, AbstractTemplate } from '../..';
 import { MultipleDynamicFormComponent } from '../../screens/multiple-dynamic-form/multiple-dynamic-form.component';
 
 

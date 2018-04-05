@@ -1,7 +1,6 @@
 import { SessionService } from './../../services/session.service';
 import { IScreen } from './../../common/iscreen';
 import { Component, OnInit } from '@angular/core';
-import { AbstractApp } from '../../common/abstract-app';
 
 @Component({
   selector: 'app-options',
@@ -17,7 +16,7 @@ export class OptionsComponent implements OnInit, IScreen {
   ngOnInit() {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
   }
 

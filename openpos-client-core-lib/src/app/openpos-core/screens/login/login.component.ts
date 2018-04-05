@@ -4,7 +4,6 @@ import { IScreen } from '../../common/iscreen';
 import { DoCheck, OnInit, Component } from '@angular/core';
 import { IMenuItem } from '../../common/imenuitem';
 import { IFormElement } from '../../common/iformfield';
-import { AbstractApp, AbstractTemplate } from '../..';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -27,7 +26,7 @@ import { AbstractApp, AbstractTemplate } from '../..';
     constructor(public session: SessionService) {
     }
 
-    show(screen: any, app: AbstractApp, template?: AbstractTemplate): void {
+    show(screen: any): void {
         this.screen = screen;
         this.form = this.screen.form;
         this.loginIdField = this.form.formElements.find((e) => e.id === 'userId');

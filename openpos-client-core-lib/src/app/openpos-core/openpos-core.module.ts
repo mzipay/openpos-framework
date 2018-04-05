@@ -17,7 +17,6 @@ import { SearchSelectModule } from '@oasisdigital/angular-material-search-select
 import 'hammerjs'; // for material
 
 // Common
-import { AbstractApp } from './common/abstract-app';
 import { IDeviceRequest } from './common/idevicerequest';
 import { IDevicePlugin } from './common/idevice-plugin';
 
