@@ -1,26 +1,26 @@
-import { IPlugin } from './../common/iplugin';
-import { PluginService } from '../services/plugin.service';
-import { FileUploadService } from './../services/file-upload.service';
-import { DeviceService } from './../services/device.service';
-import { ScreenService } from './../services/screen.service';
-import { AbstractApp } from '../common/abstract-app';
-import { IMenuItem } from '../common/imenuitem';
+import { IPlugin } from './../../common/iplugin';
+import { PluginService } from './../../services/plugin.service';
+import { FileUploadService } from './../../services/file-upload.service';
+import { DeviceService } from './../../services/device.service';
+import { ScreenService } from './../../services/screen.service';
+import { AbstractApp } from './../../common/abstract-app';
+import { IMenuItem } from './../../common/imenuitem';
 import { Component, DoCheck, ViewChild, NgZone, HostListener } from '@angular/core';
-import { SessionService } from '../services/session.service';
-import { FocusDirective } from '../common/focus.directive';
+import { SessionService } from './../../services/session.service';
+import { FocusDirective } from './../../common/focus.directive';
 import { MatDialog, MatDialogRef, MatSnackBar, MatMenuTrigger } from '@angular/material';
-import { IconService } from './../services/icon.service';
+import { IconService } from './../../services/icon.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
-import { DialogService } from './../services/dialog.service';
+import { DialogService } from './../../services/dialog.service';
 
 
 @Component({
-  selector: 'app-pos',
-  templateUrl: './pos.component.html',
-  styleUrls: ['./pos.component.scss']
+  selector: 'app-dynamic-screen',
+  templateUrl: './dynamic-screen.component.html',
+  styleUrls: ['./dynamic-screen.component.scss']
 })
-export class PosComponent extends AbstractApp implements DoCheck {
+export class DynamicScreenComponent extends AbstractApp implements DoCheck {
 
   public backButton: IMenuItem;
 
