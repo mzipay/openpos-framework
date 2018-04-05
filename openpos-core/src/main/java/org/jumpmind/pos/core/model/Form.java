@@ -58,6 +58,13 @@ public class Form implements Serializable {
 
     }
     
+    public FormListField addListField(String fieldId, String label, String placeholder, boolean required, List<String> values) {
+    		FormListField field = new FormListField(fieldId, label, placeholder, values);
+    		field.setRequired(required);
+    		formElements.add(field);
+    		return field;
+    }
+    
     public ToggleField addToggleButton(String fieldId, String label, List<String> values, String defaultVal) {
     		ToggleField field = new ToggleField(fieldId, label, values, defaultVal);
     		formElements.add(field);

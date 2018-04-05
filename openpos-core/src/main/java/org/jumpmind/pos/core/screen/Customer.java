@@ -34,6 +34,14 @@ public class Customer implements Serializable {
     		this.fullName = firstName + " " + lastName;
     }
     
+    public Customer(String firstName, String lastName, String loyaltyId) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.fullName = firstName + " " + lastName;
+		this.loyaltyId = loyaltyId;
+}
+    
     public Customer(String fullName, String addressLine, String city, String state, String postalCode, String email, String birthday, String loyaltyId) {
     		super();
     		this.fullName = fullName;
