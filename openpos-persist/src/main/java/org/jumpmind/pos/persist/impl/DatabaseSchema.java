@@ -32,8 +32,7 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder;
 
-@Component
-@Scope("prototype")
+
 public class DatabaseSchema {
 
     protected static final Logger log = LoggerFactory.getLogger(DatabaseSchema.class);

@@ -1,4 +1,4 @@
-package org.jumpmind.pos.persist.cars;
+package org.jumpmind.pos.persist;
 
 import java.util.Map;
 

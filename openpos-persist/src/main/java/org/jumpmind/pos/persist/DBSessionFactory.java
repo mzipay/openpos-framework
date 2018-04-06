@@ -21,7 +21,6 @@ import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.SecurityServiceFactory;
 import org.jumpmind.security.SecurityServiceFactory.SecurityServiceType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jndi.JndiObjectFactoryBean;
@@ -33,7 +32,6 @@ public class DBSessionFactory {
     
     private static Logger logger = Logger.getLogger(DBSessionFactory.class);
 
-    @Autowired
     private DatabaseSchema databaseSchema;
     
     private Map<String, QueryTemplate> queryTemplates;
@@ -45,6 +43,7 @@ public class DBSessionFactory {
     public void init(Properties connectionProperties, Map<String, String> sessionContext, 
             List<Class<?>> entities, QueryTemplates queryTemplatesObject) {
         
+        this.databaseSchema = new DatabaseSchema();
         this.queryTemplates = buildQueryTemplatesMap(queryTemplatesObject);
         this.sessionContext = sessionContext;
         
@@ -140,7 +139,9 @@ public class DBSessionFactory {
     
     protected Map<String, QueryTemplate> buildQueryTemplatesMap(QueryTemplates queryTemplates) {
         Map<String, QueryTemplate> queryTemplatesMap = new HashMap<>();
-        queryTemplates.getQueries().stream().forEach((q) -> queryTemplatesMap.put(q.getName(), q));
+        if (queryTemplates != null) {            
+            queryTemplates.getQueries().stream().forEach((q) -> queryTemplatesMap.put(q.getName(), q));
+        }
         return queryTemplatesMap;
     }    
     

@@ -16,10 +16,10 @@ public class DBSessionTransactionTest {
     @Before
     public void setup() {
         sessionFactory.init(
-                PeristTestUtil.getH2TestProperties(), 
-                PeristTestUtil.getSessionContext(), 
+                PersistTestUtil.getH2TestProperties(), 
+                PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class),
-                PeristTestUtil.getQueryTempaltes());                
+                PersistTestUtil.getQueryTempaltes());                
     }
     
     @Test(expected = PersistException.class)

@@ -21,17 +21,11 @@ import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.sql.DmlStatement;
 import org.jumpmind.db.sql.DmlStatement.DmlType;
 import org.jumpmind.db.sql.Row;
-import org.jumpmind.pos.persist.cars.EntityId;
-import org.jumpmind.pos.persist.cars.ServiceInvoice;
-import org.jumpmind.pos.persist.cars.ServiceInvoiceId;
 import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.jumpmind.pos.persist.impl.DefaultMapper;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
-import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.jumpmind.pos.persist.impl.Transaction;
-import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 
 public class DBSession {
 
@@ -383,7 +377,9 @@ public class DBSession {
         return String.format("row_id = ?");
     }
 
-
-
-
+    public void saveAll(List<? extends Entity> entities) {
+        for (Entity entity : entities) {
+            save(entity);
+        }
+    }
 }

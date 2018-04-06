@@ -19,6 +19,8 @@ public class User extends Entity {
     @Column
     private String firstName;
     @Column
+    private String goesByName;    
+    @Column
     private Date lastLogin;
     @Column
     private boolean lockedOutFlag;
@@ -49,12 +51,25 @@ public class User extends Entity {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+    public String getGoesByName() {
+        return goesByName;
+    }
+    public void setGoesByName(String goesByName) {
+        this.goesByName = goesByName;
+    }
     public List<PasswordHistory> getPasswordHistory() {
         return passwordHistory;
     }
     public void setPasswordHistory(List<PasswordHistory> passwordHistory) {
         this.passwordHistory = passwordHistory;
     }
+    
+    public void addPasswordHistory(PasswordHistory passwordHistoryEntry) {
+        passwordHistoryEntry.setUsername(this.getUsername());
+        passwordHistoryEntry.setPasswordSequence(passwordHistory.size()+1);
+        passwordHistory.add(passwordHistoryEntry);
+    }
+    
     public Date getLastLogin() {
         return lastLogin;
     }

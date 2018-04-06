@@ -40,8 +40,8 @@ public class DBSessionQueryTest {
         QueryTemplates queryTemplates = new Yaml(new Constructor(QueryTemplates.class)).load(queryYamlStream);
         
         sessionFactory.init(
-                PeristTestUtil.getH2TestProperties(), 
-                PeristTestUtil.getSessionContext(), 
+                PersistTestUtil.getH2TestProperties(), 
+                PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class), 
                 queryTemplates);
         

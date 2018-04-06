@@ -2,43 +2,53 @@ package org.jumpmind.pos.user.model;
 
 import java.util.Date;
 
-public class PasswordHistory {
+import org.jumpmind.pos.persist.Column;
+import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.Table;
+
+@Table
+public class PasswordHistory extends Entity {
     
-    private String id;
-    private String operatorId;
-    private String password;
+    @Column
+    private String userRowId;
+    @Column(naturalKey=true)
+    private String username;
+    @Column(naturalKey=true)
+    private int passwordSequence;
+    @Column(size="254")
+    private String hashedPassword;
+    @Column
     private Date expirationTime;
-    private Date createTime;
     
-    public String getId() {
-        return id;
+    public String getUserRowId() {
+        return userRowId;
     }
-    public void setId(String id) {
-        this.id = id;
+    public void setUserRowId(String userRowId) {
+        this.userRowId = userRowId;
     }
-    public String getOperatorId() {
-        return operatorId;
+    public String getUsername() {
+        return username;
     }
-    public void setOperatorId(String operatorId) {
-        this.operatorId = operatorId;
+    public void setUsername(String username) {
+        this.username = username;
     }
-    public String getPassword() {
-        return password;
+    public int getPasswordSequence() {
+        return passwordSequence;
     }
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordSequence(int passwordSequence) {
+        this.passwordSequence = passwordSequence;
+    }
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
     public Date getExpirationTime() {
         return expirationTime;
     }
     public void setExpirationTime(Date expirationTime) {
         this.expirationTime = expirationTime;
-    }
-    public Date getCreateTime() {
-        return createTime;
-    }
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
     }
     
 }

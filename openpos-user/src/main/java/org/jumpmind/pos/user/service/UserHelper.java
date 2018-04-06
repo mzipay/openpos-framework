@@ -9,7 +9,7 @@ public class UserHelper {
 
     public String getCurrentPassword(User user) {
         if (!CollectionUtils.isEmpty(user.getPasswordHistory())) {            
-            return user.getPasswordHistory().get(0).getPassword();
+            return user.getPasswordHistory().get(0).getHashedPassword();
         } else {
             return null;
         }

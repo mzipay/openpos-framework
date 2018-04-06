@@ -26,10 +26,10 @@ public class DBSessionTest {
     public void setup() {
         sessionFactory.setDatabaseSchema(new DatabaseSchema());
         sessionFactory.init(
-                PeristTestUtil.getH2TestProperties(), 
-                PeristTestUtil.getSessionContext(), 
+                PersistTestUtil.getH2TestProperties(), 
+                PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class),
-                PeristTestUtil.getQueryTempaltes());                
+                PersistTestUtil.getQueryTempaltes());                
     }    
 
     @Test

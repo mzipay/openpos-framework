@@ -2,6 +2,8 @@ package org.jumpmind.pos.persist.cars;
 
 import java.util.Date;
 
+import org.jumpmind.pos.persist.EntityId;
+
 public class ServiceInvoiceId implements EntityId {
     
     private Date invoiceDate;

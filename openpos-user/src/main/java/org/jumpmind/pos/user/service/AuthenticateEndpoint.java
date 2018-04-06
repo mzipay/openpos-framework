@@ -26,8 +26,6 @@ public class AuthenticateEndpoint {
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="password", defaultValue="") String password) {
 
-        System.out.println("Processing authentication service.");
-
         User user = userRepository.findUser(username);
 
         if (user != null) {
@@ -107,7 +105,6 @@ public class AuthenticateEndpoint {
         AuthenticationResult result = new AuthenticationResult("FAILURE");
         result.setAuthenticationCode(code);
         result.setResultMessage(message);
-        result.setUser(user);
         return result;       
     }
     
