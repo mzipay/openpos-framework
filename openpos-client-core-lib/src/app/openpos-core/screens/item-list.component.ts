@@ -1,3 +1,4 @@
+import { SelectionMode } from './../common/selectionmode';
 import { ItemClickAction, MenuClickAction } from './../common/controls/product-list.component';
 import { IMenuItem } from './../common/imenuitem';
 import { Component, OnInit, DoCheck } from '@angular/core';
@@ -38,6 +39,13 @@ export class ItemListComponent implements IScreen, OnInit {
     ngOnInit(): void {
     }
 
+    getSelectionModeAsEnum(): SelectionMode {
+        if (this.selectionMode) {
+            return SelectionMode[this.selectionMode];
+        } else {
+            return SelectionMode.Single;
+        }
+    }
     onItemClick(itemInfo: ItemClickAction): void {
         this.session.response = itemInfo.item;
         this.session.onAction(this.itemActionName);
@@ -49,6 +57,6 @@ export class ItemListComponent implements IScreen, OnInit {
     }
 
     isItemClickDisabled(): boolean {
-        return this.itemActionName === null;
+        return this.itemActionName === null || this.getSelectionModeAsEnum() === SelectionMode.Multiple;
     }
 }

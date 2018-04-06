@@ -27,6 +27,10 @@ export class ProductListComponent {
         console.log(`productList.onItemClick: ${menuItem}`);
         this.menuItemClick.emit({item, menuItem, event});
     }
+
+    isMultipleSelectionMode(): boolean {
+        return this.selectionMode === SelectionMode.Multiple;
+    }
 }
 
 export interface ItemClickAction {

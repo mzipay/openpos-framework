@@ -7,17 +7,16 @@
                 </mat-nav-list>
             </ng-container>
             <ng-template #elseblock>
-                <mat-list>
+                <!-- Angular will not allow a mat-selection-list here, get  "NullInjectorError: No provider for MatSelectionList!" -->
                     <ng-container *ngTemplateOutlet="itemsList"></ng-container>
-                </mat-list>
             </ng-template>
         </mat-card-content>
     </mat-card>
 </div>
 
 <ng-template #itemsList>
-    <app-product-list [showItemIcon]="! isItemClickDisabled()" [items]="items" (itemClick)="isItemClickDisabled() || onItemClick($event)"
+    <app-product-list [showItemIcon]="! isItemClickDisabled() && selectionMode ==='Single'" [items]="items" (itemClick)="isItemClickDisabled() || onItemClick($event)"
         [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)"
-        [itemClass]="condensedListDisplay ? 'item-list-condensed' : ''">
+        [itemClass]="condensedListDisplay ? 'item-list-condensed' : ''" [selectionMode]='getSelectionModeAsEnum()'>
     </app-product-list>
 </ng-template>
