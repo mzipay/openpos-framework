@@ -6,11 +6,9 @@ import java.util.Date;
 import org.jumpmind.pos.config.service.ConfigService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jumpmind.pos.service.Endpoint;
-import org.jumpmind.pos.user.model.AuthenticationResult;
 import org.jumpmind.pos.user.model.PasswordHistory;
 import org.jumpmind.pos.user.model.User;
-import org.jumpmind.pos.user.model.UserMessage;
-import org.jumpmind.pos.user.model.UserStore;
+import org.jumpmind.pos.user.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AuthenticateEndpoint {
 
     @Autowired
-    UserStore userStore;
+    UserRepository userRepository;
     @Autowired
     ConfigService configService;
 
@@ -30,7 +28,7 @@ public class AuthenticateEndpoint {
 
         System.out.println("Processing authentication service.");
 
-        User user = userStore.findUser(username);
+        User user = userRepository.findUser(username);
 
         if (user != null) {
             if (!checkPassword(user, password)) {
@@ -83,7 +81,7 @@ public class AuthenticateEndpoint {
             if (user.getPasswordFailedAttempts() > configService.getInt("openpos.user.max.login.attempts")) {
                 user.setLockedOutFlag(true);
             }
-            userStore.save(user);
+            userRepository.save(user);
             return false;
         }
         return true;
@@ -98,7 +96,7 @@ public class AuthenticateEndpoint {
                 if (now.after(passwordAttemptsResetDate)) {                    
                     user.setLockedOutFlag(false);
                     user.setPasswordFailedAttempts(0);
-                    userStore.save(user);
+                    userRepository.save(user);
                 }
             }
         }

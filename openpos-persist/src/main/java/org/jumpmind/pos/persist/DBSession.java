@@ -26,9 +26,12 @@ import org.jumpmind.pos.persist.cars.ServiceInvoice;
 import org.jumpmind.pos.persist.cars.ServiceInvoiceId;
 import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.jumpmind.pos.persist.impl.DefaultMapper;
+import org.jumpmind.pos.persist.impl.QueryTemplate;
+import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.jumpmind.pos.persist.impl.Transaction;
+import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
-
+import org.springframework.stereotype.Component;
 
 public class DBSession {
 
@@ -40,9 +43,10 @@ public class DBSession {
     private IDatabasePlatform databasePlatform;
     private JdbcTemplate jdbcTemplate;
     private Map<String, String> sessionContext;
+    private Map<String, QueryTemplate> queryTemplates;
 
     public DBSession(String catalogName, String schemaName, DatabaseSchema databaseSchema, IDatabasePlatform databasePlatform,
-            Map<String, String> sessionContext) {
+            Map<String, String> sessionContext, Map<String, QueryTemplate> queryTemplates) {
         super();
         this.catalogName = catalogName;
         this.schemaName = schemaName;
@@ -50,6 +54,7 @@ public class DBSession {
         this.databasePlatform = databasePlatform;
         this.sessionContext = sessionContext;
         this.jdbcTemplate = new JdbcTemplate(databasePlatform.getDataSource());
+        this.queryTemplates = queryTemplates;
     }
 
     public <T> List<T> findAll(Class<T> clazz) {
@@ -91,7 +96,7 @@ public class DBSession {
     public <T extends Entity> T findByNaturalId(Class<T> entityClass, EntityId id) {
         Map<String, String> naturalColumnsToFields = databaseSchema.getNaturalColumnsToFields(entityClass);
 
-        Query<T> query = new Query<T>().retrieve(entityClass);        
+        QueryTemplate queryTemplate = new QueryTemplate();
 
         try {
             Map<String, Object> params = new HashMap<>();
@@ -99,7 +104,7 @@ public class DBSession {
             
             for (String columnName : naturalColumnsToFields.keySet()) {   
                 String fieldName = naturalColumnsToFields.get(columnName);
-                query.optionalWhere(String.format("%s = ${%s}", columnName, fieldName));
+                queryTemplate.optionalWhere(String.format("%s = ${%s}", columnName, fieldName));
                 if (fieldValues != null) {
                     Object value = fieldValues.get(fieldName);
                     params.put(fieldName, value);
@@ -111,6 +116,8 @@ public class DBSession {
                 }
             }
 
+            Query<T> query = new Query<T>().result(entityClass);
+            query.setQueryTemplate(queryTemplate);
             List<T> results = query(query, params);
 
             if (results != null) {
@@ -131,15 +138,19 @@ public class DBSession {
     public int executeSql(String sql, Object... params) {
         return jdbcTemplate.update(sql, params);
     }
+    
+    public <T> List<T> query(Query<T> query) {
+        return query(query, (Map<String, Object>)null);
+    }
 
     @SuppressWarnings("unchecked")
-    public <T> List<T> query(Query<T> query, Object singleParam) {
+    public <T> List<T> query(Query<T> query, String singleParam) {
         populdateDefaultSelect(query);
         try {
             SqlStatement sqlStatement = query.generateSQL(singleParam);
-            return (List<T>) queryInternal(query.getTarget(), sqlStatement.getSql(), Arrays.asList(singleParam));
+            return (List<T>) queryInternal(query.getResultClass(), sqlStatement.getSql(), Arrays.asList(singleParam));
         } catch (Exception ex) {
-            throw new PersistException("Failed to query target class " + query.getTarget(), ex);
+            throw new PersistException("Failed to query target class " + query.getResultClass(), ex);
         }
     }
 
@@ -148,23 +159,32 @@ public class DBSession {
         populdateDefaultSelect(query);
         try {
             SqlStatement sqlStatement = query.generateSQL(params);
-            return (List<T>) queryInternal(query.getTarget(), sqlStatement.getSql(), sqlStatement.getValues());
+            return (List<T>) queryInternal(query.getResultClass(), sqlStatement.getSql(), sqlStatement.getValues());
         } catch (Exception ex) {
-            throw new PersistException("Failed to query target class " + query.getTarget(), ex);
+            throw new PersistException("Failed to query result class " + query.getResultClass(), ex);
         }
     }
 
     @SuppressWarnings("unchecked")
     protected <T> void populdateDefaultSelect(Query<T> query) {
-        if (StringUtils.isEmpty(query.getSelectSql())
-                && Entity.class.isAssignableFrom(query.getTarget())) {
-            Class<? extends Entity> entityClass = (Class<? extends Entity>) query.getTarget();
-            query.setSelectSql(getSelectSql(entityClass));
+        boolean isEntityResult = Entity.class.isAssignableFrom(query.getResultClass()); 
+        
+        if (query.getQueryTemplate() == null) {
+            if (!StringUtils.isEmpty(query.getName())) {                
+                query.setQueryTemplate(queryTemplates.get(query.getName()));
+            } else {
+                query.setQueryTemplate(new QueryTemplate());
+            }
+        }
+        
+        if (isEntityResult
+            && StringUtils.isEmpty(query.getQueryTemplate().getSelect())) {
+            Class<? extends Entity> entityClass = (Class<? extends Entity>) query.getResultClass();
+            query.getQueryTemplate().setSelect(getSelectSql(entityClass));
         }
     }
 
     // TODO support transactions.
-
     public void startTransaction() {
         checkTransactionNotStarted();
         currentTransaction = new Transaction();

@@ -43,8 +43,10 @@ public class DatabaseSchema {
     private List<Class<?>> entityExtensionClasses;
     private Map<Class<?>, EntityMetaData> classMetadata = new HashMap<>();
     private Database db;
+    private String tablePrefix;
 
-    public void init(IDatabasePlatform platform, List<Class<?>> entityClasses, List<Class<?>> entityExtensionClasses) {
+    public void init(String tablePrefix, IDatabasePlatform platform, List<Class<?>> entityClasses, List<Class<?>> entityExtensionClasses) {
+        this.tablePrefix = tablePrefix;
         this.platform = platform;
         this.entityClasses = entityClasses;
         this.entityExtensionClasses = entityExtensionClasses;
@@ -66,9 +68,9 @@ public class DatabaseSchema {
         }
     }
     
-    public boolean createAndUpgrade(String tablePrefix) {
+    public boolean createAndUpgrade() {
         try {
-            log.info("Checking if config tables need created or altered");
+            log.info("Checking if database tables need created or altered");
             Database desiredModel = db;
 
             platform.prefixDatabase(tablePrefix, desiredModel);
@@ -76,10 +78,10 @@ public class DatabaseSchema {
 
             IDdlBuilder builder = platform.getDdlBuilder();
             if (builder.isAlterDatabase(actualModel, desiredModel)) {
-                log.info("There are config tables that needed altered");
+                log.info("There are database tables that needed altered");
                 String delimiter = platform.getDatabaseInfo().getSqlCommandDelimiter();
                 String alterSql = builder.alterDatabase(actualModel, desiredModel);
-                log.info("Alter SQL generated: {}", alterSql);
+                log.info("SQL generated:\r\n{}", alterSql);
 
                 SqlScript script = new SqlScript(alterSql, platform.getSqlTemplate(), true, false, false, delimiter, null);
                 //TODO: add sql listener
@@ -125,7 +127,7 @@ public class DatabaseSchema {
     }
 
     protected void validateTable(Table table) {
-        validateName(table.getName(), "table");
+        validateName(tablePrefix + "_" + table.getName(), "table");
         for (Column column : table.getColumns()) {
             validateName(column.getName(), "column");
         }
@@ -202,7 +204,11 @@ public class DatabaseSchema {
         EntityMetaData meta = new EntityMetaData();
         Table dbTable = new Table();
         org.jumpmind.pos.persist.Table tblAnnotation = entityClass.getAnnotation(org.jumpmind.pos.persist.Table.class);
-        dbTable.setName(tblAnnotation.name());
+        if (!StringUtils.isEmpty(tblAnnotation.name())) {            
+            dbTable.setName(tblAnnotation.name());
+        } else {
+            dbTable.setName(camelToSnakeCase(entityClass.getSimpleName()));
+        }
         dbTable.setDescription(tblAnnotation.description());        
 
         Class<?> currentClass = entityClass; 
@@ -326,13 +332,15 @@ public class DatabaseSchema {
     
     public static String camelToSnakeCase(String camelCase) {
         StringBuilder buff = new StringBuilder();
+        int index = 0;
         for (char c : camelCase.toCharArray()) {
-            if (Character.isUpperCase(c)) {
+            if (Character.isUpperCase(c) && index > 0) {
                 buff.append('_');
                 buff.append(Character.toLowerCase(c));
             } else {
                 buff.append(c);
             }
+            index++;
         }
         
         return buff.toString();

@@ -1,9 +1,10 @@
-package org.jumpmind.pos.user.model;
+package org.jumpmind.pos.user.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.service.ServiceResultImpl;
+import org.jumpmind.pos.user.model.User;
 
 public class AuthenticationResult extends ServiceResultImpl {
     

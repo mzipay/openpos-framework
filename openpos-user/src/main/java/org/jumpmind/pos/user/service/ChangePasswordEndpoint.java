@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.service.ServiceResultImpl;
 import org.jumpmind.pos.user.model.User;
-import org.jumpmind.pos.user.model.UserStore;
+import org.jumpmind.pos.user.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ChangePasswordEndpoint {
     
     @Autowired
-    private UserStore userStore;
+    private UserRepository userRepository;
     @Autowired
     private UserHelper userHelper;
 
@@ -24,7 +24,7 @@ public class ChangePasswordEndpoint {
             @RequestParam(value="newPassword1", defaultValue="") String newPassword1,
             @RequestParam(value="newPassword2", defaultValue="") String newPassword2) {
         
-        User user = userStore.findUser(username);
+        User user = userRepository.findUser(username);
 
         if (user != null) {
             ServiceResultImpl serviceResult = new ServiceResultImpl();

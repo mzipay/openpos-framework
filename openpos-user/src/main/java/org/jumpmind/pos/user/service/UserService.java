@@ -2,7 +2,6 @@ package org.jumpmind.pos.user.service;
 
 import org.jumpmind.pos.service.EndpointDispatcher;
 import org.jumpmind.pos.service.ServiceResultImpl;
-import org.jumpmind.pos.user.model.AuthenticationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
