@@ -1,7 +1,7 @@
 <div class="selectable" *ngFor="let item of itemsToShow" style="margin:5px 0px;padding:15px;"
-[class.selected]="selectedItem === item"
-[class.mat-elevation-z0]="selectedItem != item" 
-[class.mat-elevation-z15]="selectedItem === item"
+[class.selected]="isItemSelected(item)"
+[class.mat-elevation-z0]="!isItemSelected(item)" 
+[class.mat-elevation-z15]="isItemSelected(item)"
 (click)="onItemClick(item)">
     <ng-template ngFor let-item [ngForOf]="[item]" [ngForTemplate]="itemTemplate"></ng-template>
 </div>
