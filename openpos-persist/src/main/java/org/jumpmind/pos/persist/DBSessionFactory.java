@@ -1,5 +1,6 @@
 package org.jumpmind.pos.persist;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -11,11 +12,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
-import org.jumpmind.db.platform.h2.H2DatabasePlatform;
 import org.jumpmind.db.sql.LogSqlBuilder;
 import org.jumpmind.db.sql.SqlTemplateSettings;
 import org.jumpmind.db.util.BasicDataSourceFactory;
 import org.jumpmind.pos.persist.impl.DatabaseSchema;
+import org.jumpmind.pos.persist.impl.QueryTemplate;
+import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.SecurityServiceFactory;
 import org.jumpmind.security.SecurityServiceFactory.SecurityServiceType;
@@ -34,29 +36,30 @@ public class DBSessionFactory {
     @Autowired
     private DatabaseSchema databaseSchema;
     
+    private Map<String, QueryTemplate> queryTemplates;
+    
     private IDatabasePlatform databasePlatform;
     
     private Map<String, String> sessionContext;
     
-    public void init(Properties connectionProperties, Map<String, String> sessionContext, List<Class<?>> entities) {
-        // TOOD support creating IDatabasePlatform from SymmetricDS.
+    public void init(Properties connectionProperties, Map<String, String> sessionContext, 
+            List<Class<?>> entities, QueryTemplates queryTemplatesObject) {
         
+        this.queryTemplates = buildQueryTemplatesMap(queryTemplatesObject);
         this.sessionContext = sessionContext;
         
         databasePlatform = createDatabasePlatform(connectionProperties);
         
-        databaseSchema.init(databasePlatform, 
+        databaseSchema.init(sessionContext.get("module.tablePrefix"), 
+                databasePlatform, 
                 entities.stream().filter(e -> e.getAnnotation(Table.class) != null).collect(Collectors.toList()), 
                 entities.stream().filter(e -> e.getAnnotation(Extends.class) != null).collect(Collectors.toList()));
-        databaseSchema.createAndUpgrade("car");
-    }
-    
-    public void init(Properties connectionProperties, String packageToScan) {
         
+        databaseSchema.createAndUpgrade();
     }
-    
+
     public DBSession createDbSession() {
-        return new DBSession(null, null, databaseSchema, databasePlatform, sessionContext);
+        return new DBSession(null, null, databaseSchema, databasePlatform, sessionContext, queryTemplates);
     }
     
     protected IDatabasePlatform createDatabasePlatform(Properties properties) {
@@ -133,6 +136,12 @@ public class DBSessionFactory {
 
     public void setDatabaseSchema(DatabaseSchema databaseSchema) {
         this.databaseSchema = databaseSchema;
+    }
+    
+    protected Map<String, QueryTemplate> buildQueryTemplatesMap(QueryTemplates queryTemplates) {
+        Map<String, QueryTemplate> queryTemplatesMap = new HashMap<>();
+        queryTemplates.getQueries().stream().forEach((q) -> queryTemplatesMap.put(q.getName(), q));
+        return queryTemplatesMap;
     }    
     
 }

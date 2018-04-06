@@ -1,5 +1,5 @@
-<div [ngClass]="getTheme()" >
-    <div [ngClass]="getClasses()" style="height: 100vh">
+<div [ngClass]="session.getTheme()" >
+    <div [ngClass]="classes" style="height: 100vh">
 
         <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu">
             <mat-icon>code</mat-icon>

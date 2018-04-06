@@ -1,5 +1,6 @@
 package org.jumpmind.pos.persist;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,64 +9,72 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.apache.commons.text.lookup.StringLookup;
-import org.jumpmind.pos.persist.cars.CarEntity;
+import org.jumpmind.pos.persist.impl.QueryTemplate;
+import org.jumpmind.pos.persist.impl.QueryTemplates;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 public class Query<T> {
     
-    private Class<? extends T> target;
-    private String selectSql; // Optional if target is an Entity.
-    private List<String> optionalWhereClauses = new ArrayList<>();
-    private String groupByClause;
-    private String whereClause;
-    private String orderByClause;
+    private Class<? extends T> resultClass;
+    private String name;
+    private QueryTemplate queryTemplate;
+    
+    
+//    private String selectSql; // Optional if target is an Entity.
+//    private List<String> optionalWhereClauses = new ArrayList<>();
+//    private String groupByClause;
+//    private String whereClause;
+//    private String orderByClause;
 
-    public Query<T> retrieve(Class<? extends T> target) {
-        this.target = target;
+    public Query<T> result(Class<? extends T> resultClass) {
+        this.resultClass = resultClass;
         return this;
     }
     
-    public Query<T> select(String selectSql) {
-        this.selectSql = selectSql;
-        return this;
-    }
-    
-    public Query<T> where(String whereClause) {
-        this.whereClause = whereClause;
-        return this;
-    }            
-    public Query<T> orderBy(String orderByClause) {
-        this.orderByClause = orderByClause;
-        return this;
-    }                
-    
-    public Query<T> optionalWhere(String whereClause) {
-        optionalWhereClauses.add(whereClause);
-        return this;
+//    public Query<T> select(String selectSql) {
+//        this.selectSql = selectSql;
+//        return this;
+//    }
+//    
+//    public Query<T> where(String whereClause) {
+//        this.whereClause = whereClause;
+//        return this;
+//    }
+//    
+//    public Query<T> orderBy(String orderByClause) {
+//        this.orderByClause = orderByClause;
+//        return this;
+//    }                
+//    
+//    public Query<T> optionalWhere(String whereClause) {
+//        optionalWhereClauses.add(whereClause);
+//        return this;
+//    }
+
+    public Class<? extends T> getResultClass() {
+        return resultClass;
     }
 
-    public Class<? extends T> getTarget() {
-        return target;
+    public void setResultClass(Class<? extends T> resultClass) {
+        this.resultClass = resultClass;
     }
 
-    public void setTarget(Class<? extends T> target) {
-        this.target = target;
-    }
-
-    public String getSelectSql() {
-        return selectSql;
-    }
-
-    public void setSelectSql(String selectSql) {
-        this.selectSql = selectSql;
-    }
-
-    public String getWhereClause() {
-        return whereClause;
-    }
-
-    public void setWhereClause(String whereClause) {
-        this.whereClause = whereClause;
-    }
+//    public String getSelectSql() {
+//        return selectSql;
+//    }
+//
+//    public void setSelectSql(String selectSql) {
+//        this.selectSql = selectSql;
+//    }
+//
+//    public String getWhereClause() {
+//        return whereClause;
+//    }
+//
+//    public void setWhereClause(String whereClause) {
+//        this.whereClause = whereClause;
+//    }
     
     public SqlStatement generateSQL(Map<String, Object> params) {
         List<String> keys = new ArrayList<>();
@@ -78,8 +87,8 @@ public class Query<T> {
             }
         });
         
-        String preppedSelectClause = sub.replace(selectSql);
-        String preppedWhereClause = sub.replace(whereClause);
+        String preppedSelectClause = sub.replace(queryTemplate.getSelect());
+        String preppedWhereClause = sub.replace(queryTemplate.getWhere());
         
         StringBuilder buff = new StringBuilder();
         preppedSelectClause = stripWhere(preppedSelectClause);
@@ -93,7 +102,7 @@ public class Query<T> {
             buff.append(preppedWhereClause);    
         } 
         
-        for (String optionalWhereClause : optionalWhereClauses) {
+        for (String optionalWhereClause : queryTemplate.getOptionalWhereClauses()) {
             List<String> optionalWhereClauseKeys = new ArrayList<>();
             StringSubstitutor optionalSubstitution = new StringSubstitutor(new StringLookup() {
                 @Override
@@ -124,14 +133,14 @@ public class Query<T> {
             }
         }
         
-        if (!StringUtils.isEmpty(groupByClause)) {
+        if (!StringUtils.isEmpty(queryTemplate.getGroupBy())) {
             buff.append(" GROUP BY ");
-            buff.append(groupByClause);    
+            buff.append(queryTemplate.getGroupBy());    
         }
         
-        if (!StringUtils.isEmpty(orderByClause)) {
+        if (!StringUtils.isEmpty(queryTemplate.getOrderBy())) {
             buff.append(" ORDER BY ");
-            buff.append(orderByClause);    
+            buff.append(queryTemplate.getOrderBy());    
         }
         
         SqlStatement sqlStatement = new SqlStatement();
@@ -168,10 +177,31 @@ public class Query<T> {
         return generateSQL(params);
     }
 
-    public Query<T> groupBy(String groupByClause) {
-        this.groupByClause = groupByClause;
+    public Query<T> named(String name) {
+        this.name = name;
         return this;
     }
+
+    public QueryTemplate getQueryTemplate() {
+        return queryTemplate;
+    }
+
+    public void setQueryTemplate(QueryTemplate queryTemplate) {
+        this.queryTemplate = queryTemplate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+//    public Query<T> groupBy(String groupByClause) {
+//        this.groupByClause = groupByClause;
+//        return this;
+//    }
     
 //    public String generateSQL(Object singleParam) {
 //        StringSubstitutor sub = new StringSubstitutor(new StringLookup() {

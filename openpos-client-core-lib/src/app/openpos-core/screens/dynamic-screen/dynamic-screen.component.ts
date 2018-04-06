@@ -57,7 +57,9 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
   private currentTemplateRef: ComponentRef<IScreen>;
 
-  private template: AbstractTemplate;
+  private installedTemplate: AbstractTemplate;
+
+  protected classes = '';
 
   @ViewChild(TemplateDirective) host: TemplateDirective;
 
@@ -201,18 +203,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     return this.registered;
   }
 
-  getTheme(): string {
-    if (this.session.screen && this.session.screen.theme) {
-      localStorage.setItem('theme', this.session.screen.theme);
-      return this.session.screen.theme;
-    } else if (localStorage.getItem('theme')) {
-      return localStorage.getItem('theme');
-    } else {
-      return 'openpos-theme';
-    }
-  }
-
-
   isPersonalized(): boolean {
     if (!this.personalized && this.session.isPersonalized()) {
       this.personalized = true;
@@ -247,23 +237,23 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
   updateTemplateAndScreen(screen?: any): void {
     this.registerWithServer();
 
-    if (!this.isPersonalized() && !this.session.screen) {
+    if (!this.isPersonalized() && !screen) {
       console.log('setting up the personalization screen');
-      this.session.screen = this.session.getPersonalizationScreen();
-    } else if (!this.session.screen) {
-      this.session.screen = { type: 'Blank', template: { type: 'Blank', dialog: false } };
+      screen = this.session.getPersonalizationScreen();
+    } else if (!screen) {
+      screen = { type: 'Blank', template: { type: 'Blank', dialog: false } };
     }
 
-    console.log(this.session.screen);
-    if (this.session.screen &&
-      (this.session.screen.refreshAlways
-        || this.session.screen.type !== this.previousScreenType
-        || this.session.screen.name !== this.previousScreenName)
+    console.log(screen);
+    if (screen &&
+      (screen.refreshAlways
+        || screen.type !== this.previousScreenType
+        || screen.name !== this.previousScreenName)
     ) {
-      console.log(`Switching screens from ${this.previousScreenType} to ${this.session.screen.type}`);
-      const templateName = this.session.screen.template.type;
-      const screenType = this.session.screen.type;
-      const screenName = this.session.screen.name;
+      console.log(`Switching screens from ${this.previousScreenType} to ${screen.type}`);
+      const templateName = screen.template.type;
+      const screenType = screen.type;
+      const screenName = screen.name;
       const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName);
       const viewContainerRef = this.host.viewContainerRef;
       viewContainerRef.clear();
@@ -271,17 +261,42 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.currentTemplateRef.destroy();
       }
       this.currentTemplateRef = viewContainerRef.createComponent(templateComponentFactory);
-      this.template = this.currentTemplateRef.instance as AbstractTemplate;
+      this.installedTemplate = this.currentTemplateRef.instance as AbstractTemplate;
       this.previousScreenType = screenType;
       this.previousScreenName = screenName;
-      this.overlayContainer.getContainerElement().classList.add(this.getTheme());
-      this.installedScreen = this.template.installScreen(this.screenService.resolveScreen(screenType), this.session);
+      this.overlayContainer.getContainerElement().classList.add(this.session.getTheme());
+      this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(screenType), this.session);
     }
-    this.template.show(screen);
-    this.installedScreen.show(screen, this, this.template);
+    this.installedTemplate.show(screen);
+    this.installedScreen.show(screen, this, this.installedTemplate);
 
-    this.backButton = this.session.screen.backButton;
+    this.backButton = screen.backButton;
 
+    this.updateClasses(screen);
+
+  }
+
+  updateClasses(screen: any) {
+    if (screen) {
+      this.classes = '';
+      switch (this.session.getAppId()) {
+        case 'pos':
+          if (screen.type === 'Home') {
+            this.classes = 'main-background';
+          }
+          break;
+        case 'selfcheckout':
+          if (screen.type === 'SelfCheckoutHome') {
+            this.classes = 'main-background selfcheckout';
+          } else {
+            this.classes = 'lighter selfcheckout';
+          }
+          break;
+        case 'customerdisplay':
+        this.classes = 'selfcheckout';
+          break;
+      }
+    }
   }
 
   openDialog(dialog: any) {
@@ -321,29 +336,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       }
     }
     );
-  }
-
-
-  protected getClasses(): string {
-    let classes = '';
-    switch (this.router.url.substring(1)) {
-      case 'pos':
-        if (this.session.screen.type === 'Home') {
-          classes = 'main-background';
-        }
-        break;
-      case 'selfcheckout':
-        if (this.session.screen.type === 'SelfCheckoutHome') {
-          classes = 'main-background selfcheckout';
-        } else {
-          classes = 'lighter selfcheckout';
-        }
-        break;
-      case 'customerdisplay':
-        classes = 'selfcheckout';
-        break;
-    }
-    return classes;
   }
 
 }

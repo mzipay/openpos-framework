@@ -8,9 +8,9 @@ import org.jumpmind.pos.core.flow.StateManager;
 import org.jumpmind.pos.core.flow.ui.PromptConfig;
 import org.jumpmind.pos.core.screen.IPromptScreen;
 import org.jumpmind.pos.service.ServiceResultImpl;
-import org.jumpmind.pos.user.model.AuthenticationResult;
 import org.jumpmind.pos.user.model.User;
-import org.jumpmind.pos.user.model.UserMessage;
+import org.jumpmind.pos.user.service.AuthenticationResult;
+import org.jumpmind.pos.user.service.UserMessage;
 import org.jumpmind.pos.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Subscription';
 import { DEVICE_ERROR_RESPONSE_TYPE, DEVICE_RESPONSE_TYPE, DEVICE_DNE_RESPONSE_TYPE } from './../common/ideviceresponse';
 import { IDevicePlugin } from './../common/idevice-plugin';
 import { PluginService } from './plugin.service';
@@ -12,9 +13,15 @@ declare var cordova: any;
 
 @Injectable()
 export class DeviceService {
+
   public onDeviceReady: Subject<string> = new BehaviorSubject<string>(null);
 
+  private screen: any;
+
+  private screenSubscription: Subscription;
+
   constructor(protected session: SessionService, public pluginService: PluginService) {
+    this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
     document.addEventListener('deviceready', () => {
       console.log('cordova devices are ready for the device service');
       this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
@@ -38,8 +45,8 @@ export class DeviceService {
   }
 
   public scan() {
-    console.log('request to scan was made for: ' + this.session.screen.scanType);
-    if (this.session.screen.scanType && this.session.screen.scanType === 'CAMERA_CORDOVA') {
+    console.log('request to scan was made for: ' + this.screen.scanType);
+    if (this.screen.scanType && this.screen.scanType === 'CAMERA_CORDOVA') {
       this.cordovaCameraScan();
     }
   }

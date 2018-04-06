@@ -1,4 +1,4 @@
-package org.jumpmind.pos.user.model;
+package org.jumpmind.pos.user.service;
 
 
 public class UserMessage {

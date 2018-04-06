@@ -34,7 +34,8 @@ public class DBSessionNaturalIdTest {
         sessionFactory.init(
                 PeristTestUtil.getH2TestProperties(), 
                 PeristTestUtil.getSessionContext(), 
-                Arrays.asList(CarEntity.class, ServiceInvoice.class));
+                Arrays.asList(CarEntity.class, ServiceInvoice.class),
+                PeristTestUtil.getQueryTempaltes());
         
         {            
             DBSession db = sessionFactory.createDbSession();

@@ -25,10 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.mapstruct.Qualifier;
+
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.FIELD})
+@Qualifier
 public @interface Table {
-    String name();
+    String name() default "";
     String description() default "";
     boolean definesPrimaryKey() default false;
 }

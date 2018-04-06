@@ -21,7 +21,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Injectable()
 export class SessionService implements ILocaleService {
 
-  public screen: any;
+  private screen: any;
 
   private dialog: any;
 
@@ -60,14 +60,14 @@ export class SessionService implements ILocaleService {
     this.loaderState = new LoaderState(this);
   }
 
-  public subscribeForScreenUpdates(callback: (screen: any) => any) {
-    this.screenSource.asObservable().subscribe(
+  public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
+    return this.screenSource.asObservable().subscribe(
       screen => this.zone.run(() => callback(screen))
     );
   }
 
-  public subscribeForDialogUpdates(callback: (dialog: any) => any) {
-    this.dialogSource.asObservable().subscribe(
+  public subscribeForDialogUpdates(callback: (dialog: any) => any): Subscription {
+    return this.dialogSource.asObservable().subscribe(
       dialog => this.zone.run(() => callback(dialog))
     );
   }
@@ -111,6 +111,9 @@ export class SessionService implements ILocaleService {
 
   public showScreen(screen: any) {
     this.screen = screen;
+    if (screen && screen.theme) {
+        this.setTheme(screen.theme);
+    }
     this.screenSource.next(this.screen);
   }
 
@@ -131,7 +134,11 @@ export class SessionService implements ILocaleService {
   }
 
   public getTheme(): string {
-    return localStorage.getItem('theme');
+    if (this.screen && this.screen.theme) {
+      return this.screen.theme;
+    } else {
+       return localStorage.getItem('theme');
+    }
   }
 
   public setTheme(theme: string) {

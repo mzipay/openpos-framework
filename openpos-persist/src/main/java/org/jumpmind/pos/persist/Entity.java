@@ -9,11 +9,9 @@ public abstract class Entity {
     
     private static final long serialVersionUID = 1L;
     
-    // This default primary key can be circumvented with the @Table(definesPrimaryKey=true)
-    @Column(name = "row_id",
-            primaryKey = true,
+    @Column(primaryKey = true,
             size = "36",
-            description = "A unique, automatically assigned key used to identify an operator.")
+            description = "A unique, automatically assigned key used to identify a row.")
     private String rowId;
     
     @Column(required=true,
@@ -64,10 +62,6 @@ public abstract class Entity {
 
     public void setLastUpdateBy(String lastUpdateBy) {
         this.lastUpdateBy = lastUpdateBy;
-    }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
     }
 
     public String getRowId() {

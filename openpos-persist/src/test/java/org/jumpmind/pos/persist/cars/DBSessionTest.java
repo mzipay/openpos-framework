@@ -28,7 +28,8 @@ public class DBSessionTest {
         sessionFactory.init(
                 PeristTestUtil.getH2TestProperties(), 
                 PeristTestUtil.getSessionContext(), 
-                Arrays.asList(CarEntity.class));
+                Arrays.asList(CarEntity.class),
+                PeristTestUtil.getQueryTempaltes());                
     }    
 
     @Test

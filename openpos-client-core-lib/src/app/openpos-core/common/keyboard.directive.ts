@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Subscription';
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Optional, Output, Self } from '@angular/core';
 import { MatInput } from '@angular/material';
 import { MatKeyboardRef, MatKeyboardService, MatKeyboardComponent } from '@ngx-material-keyboard/core';
@@ -11,6 +12,10 @@ import { SessionService } from '../services/session.service';
 export class KeyboardDirective implements OnDestroy {
 
   private _keyboardRef: MatKeyboardRef<MatKeyboardComponent>;
+
+  private screen: any;
+
+  private screenSubscription: Subscription;
 
   @Input() keyboardLayout: string;
 
@@ -30,15 +35,18 @@ export class KeyboardDirective implements OnDestroy {
 
   constructor(public session: SessionService, private _elementRef: ElementRef,
     private _keyboardService: MatKeyboardService,
-    @Optional() @Self() private _control?: NgControl) { }
+    @Optional() @Self() private _control?: NgControl) {
+      this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
+    }
 
   ngOnDestroy() {
     this._hideKeyboard();
+    this.screenSubscription.unsubscribe();
   }
 
   @HostListener('focus', ['$event'])
   private _showKeyboard() {
-    if (this.session.screen.useOnScreenKeyboard) {
+    if (this.screen && this.screen.useOnScreenKeyboard) {
 
       this._keyboardRef = this._keyboardService.open(this.keyboardLayout, {
         darkTheme: true,

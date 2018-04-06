@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,12 +15,15 @@ import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.Query;
 import org.jumpmind.pos.persist.impl.DatabaseSchema;
+import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes= {TestConfig.class})
@@ -31,10 +35,15 @@ public class DBSessionQueryTest {
     @Before
     public void setup() {
         sessionFactory.setDatabaseSchema(new DatabaseSchema());
+        
+        InputStream queryYamlStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("query.yaml");
+        QueryTemplates queryTemplates = new Yaml(new Constructor(QueryTemplates.class)).load(queryYamlStream);
+        
         sessionFactory.init(
                 PeristTestUtil.getH2TestProperties(), 
                 PeristTestUtil.getSessionContext(), 
-                Arrays.asList(CarEntity.class));
+                Arrays.asList(CarEntity.class), 
+                queryTemplates);
         
         {            
             DBSession db = sessionFactory.createDbSession();
@@ -78,12 +87,11 @@ public class DBSessionQueryTest {
     public void testSingleParamQuery() {
         DBSession db = sessionFactory.createDbSession();
 
-        Query<CarEntity> byMakes = new Query<CarEntity>()
-                .retrieve(CarEntity.class)
-                .where("make = ${make}")
-                .orderBy("model_year");
+        Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
+                .named("byMakeAndModel")
+                .result(CarEntity.class);
 
-        List<CarEntity> hyundais = db.query(byMakes, "Hyundai");
+        List<CarEntity> hyundais = db.query(byMakeAndModel, "Hyundai");
         assertEquals(3, hyundais.size());
 
         {
@@ -108,9 +116,8 @@ public class DBSessionQueryTest {
         DBSession db = sessionFactory.createDbSession();
         
         Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
-                .retrieve(CarEntity.class)
-                .where("make = ${make} and model = ${model} ")
-                .orderBy("model_year");
+                .named("byMakeAndModel")
+                .result(CarEntity.class);
         
         Map<String, Object> params = new HashMap<>();
         params.put("make", "Hyundai");
@@ -134,11 +141,8 @@ public class DBSessionQueryTest {
         DBSession db = sessionFactory.createDbSession();
         
         Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
-                .retrieve(CarEntity.class)
-                .where("make = ${make}")
-                .optionalWhere("model = ${model}")
-                .orderBy("model_year");
-        
+                .named("byMakeAndModel")
+                .result(CarEntity.class);        
         
         {
             Map<String, Object> params = new HashMap<>();
@@ -167,15 +171,16 @@ public class DBSessionQueryTest {
         }
     }
     
+    private void result(Class<CarEntity> class1) {
+    }
+
     @Test
     public void testNoResults() {
         DBSession db = sessionFactory.createDbSession();
         
         Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
-                .retrieve(CarEntity.class)
-                .where("make = ${make}")
-                .optionalWhere("model = ${model}")
-                .orderBy("model_year");
+                .named("byMakeAndModel")
+                .result(CarEntity.class);
         
         {
             Map<String, Object> params = new HashMap<>();
@@ -192,10 +197,10 @@ public class DBSessionQueryTest {
         DBSession db = sessionFactory.createDbSession();
         
         Query<CarEntity> allCars = new Query<CarEntity>()
-                .retrieve(CarEntity.class);
+                .result(CarEntity.class);
         
         {
-            List<CarEntity> cars = db.query(allCars, null);
+            List<CarEntity> cars = db.query(allCars);
             assertEquals(3, cars.size());
         }
     }
@@ -205,10 +210,8 @@ public class DBSessionQueryTest {
         DBSession db = sessionFactory.createDbSession();
         
         Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
-                .retrieve(CarEntity.class)
-                .optionalWhere("make = ${make}")
-                .optionalWhere("model = ${model}")
-                .orderBy("model_year");
+                .named("byMakeAndModel")
+                .result(CarEntity.class);
         
         {
             Map<String, Object> params = new HashMap<>();
@@ -242,10 +245,8 @@ public class DBSessionQueryTest {
         DBSession db = sessionFactory.createDbSession();
         
         Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
-                .retrieve(CarEntity.class)
-                .where("make = ${make}")
-                .optionalWhere("model = ${model}")
-                .orderBy("model_year");
+                .named("byMakeAndModel")
+                .result(CarEntity.class);
         
         Map<String, Object> params = new HashMap<>();
         db.query(byMakeAndModel, params);
@@ -255,8 +256,8 @@ public class DBSessionQueryTest {
     public void testAdHocQueryOnePartStatement() {
         DBSession db = sessionFactory.createDbSession();
         Query<CarStats> modelCounts = new Query<CarStats>()
-                .retrieve(CarStats.class)
-                .select("select count(*) as count, model from car_car where make = ${make} group by model order by model");
+                .named("carCountByModel")
+                .result(CarStats.class);
         
         List<CarStats> carStats = db.query(modelCounts, "Hyundai");
         
@@ -265,17 +266,52 @@ public class DBSessionQueryTest {
         assertEquals("Accent", carStats.get(0).getModel());
         assertEquals("Elantra", carStats.get(1).getModel());
         assertEquals("Santa Fe", carStats.get(2).getModel());
+    }
+    
+    @Test
+    public void testCarSearchYaml() {
+        DBSession db = sessionFactory.createDbSession();
+        Query<CarEntity> carsSearch = new Query<CarEntity>()
+                .named("carSearch")
+                .result(CarEntity.class);
+        
+        {          
+            Map<String, Object> params = new HashMap<>();
+            params.put("make", "Hyundai");
+            
+            List<CarEntity> searchResults = db.query(carsSearch, params);
+            assertEquals(3, searchResults.size());
+            assertEquals("Accent", searchResults.get(0).getModel());
+            assertEquals("Elantra", searchResults.get(1).getModel());
+            assertEquals("Santa Fe", searchResults.get(2).getModel());
+        }
+        {
+            Map<String, Object> params = new HashMap<>();
+            params.put("make", "Hyundai");
+            params.put("model", "Accent");
+            
+            List<CarEntity> searchResults = db.query(carsSearch, params);
+            assertEquals(1, searchResults.size());
+            assertEquals("Accent", searchResults.get(0).getModel());
+        }
+        {
+            Map<String, Object> params = new HashMap<>();
+            params.put("make", "Hyundai");
+            params.put("year", "2005");
+            
+            List<CarEntity> searchResults = db.query(carsSearch, params);
+            assertEquals(1, searchResults.size());
+            assertEquals("Accent", searchResults.get(0).getModel());
+        }
+        
     }    
     
     @Test
     public void testAdHocQuery() {
         DBSession db = sessionFactory.createDbSession();
         Query<CarStats> modelCounts = new Query<CarStats>()
-                .retrieve(CarStats.class)
-                .select("select count(*) as count, model from car_car")
-                .where("make = ${make}")
-                .groupBy("model")
-                .orderBy("model");
+                .named("carCountByModel_Segmented")
+                .result(CarStats.class);
         
         List<CarStats> carStats = db.query(modelCounts, "Hyundai");
         

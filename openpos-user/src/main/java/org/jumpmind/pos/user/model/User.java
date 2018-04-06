@@ -1,28 +1,36 @@
 package org.jumpmind.pos.user.model;
 
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 
-public class User {
-    
-    private String id;
+import org.jumpmind.pos.persist.Column;
+import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.Table;
+
+@Table(description="Security Identifier granting and denying access to the systems of the retail enterprise, and recorded upon the transaction originating from those systems.")
+public class User extends Entity {
+
+    @Column(naturalKey=true)
     private String username;
+    @Column
     private String lastName;
+    @Column
     private String firstName;
-    private List<PasswordHistory> passwordHistory = new ArrayList<>();
-    private Date lastLogin = new Date();
+    @Column
+    private Date lastLogin;
+    @Column
     private boolean lockedOutFlag;
+    @Column
     private boolean passwordExpiredFlag = false;
+    @Column
     private int passwordFailedAttempts= 0;
-    private Date lastPasswordAttempt = new Date();
+    @Column
+    private Date lastPasswordAttempt;
     
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
+    private List<PasswordHistory> passwordHistory = new ArrayList<>();
+    
     public String getUsername() {
         return username;
     }
