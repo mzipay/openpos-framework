@@ -1,5 +1,5 @@
 <mat-tab-group>
-    <mat-tab *ngFor="let formOption of screen.forms">
+    <mat-tab *ngFor="let formOption of screen.forms" style="padding-bottom:6px">
         <ng-template mat-tab-label>
             <div fxLayoutAlign="start center">
                 <mat-icon>{{formOption.icon}}</mat-icon><span>{{formOption.name}}</span>
