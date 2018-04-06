@@ -1,4 +1,4 @@
-@mixin openpos-theme{
+@mixin default-theme{
 
     $openpos-app-primary: mat-palette($mat-grey, 800, 600, 900);
     $openpos-app-accent : mat-palette($mat-brown, 200, 100, 300 );
@@ -7,7 +7,7 @@
     $app-logo-url: url(assets/logo.png);
     $openpos-theme: mat-light-theme($openpos-app-primary, $openpos-app-accent, $openpos-app-warn);
 
-    .openpos-theme {
+    .default-theme {
 
         .main-background {
             height:100vh;
@@ -18,13 +18,13 @@
         }
 
         .home-screen-logo {
-            width: 800px;
+            width: 270px;
             height: 67px;
             background-image: $app-logo-url; 
             background-repeat: no-repeat;
             background-size: cover;
-            top: 30px;
-            zoom: 40%; 
+            top: 10px;
+            zoom: 65%; 
             position: absolute;
             margin-left: auto;
             margin-right: auto;
