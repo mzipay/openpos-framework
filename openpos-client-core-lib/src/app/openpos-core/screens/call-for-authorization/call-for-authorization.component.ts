@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { SessionService } from '../../services/session.service';
-import { AbstractApp } from '../../common/abstract-app';
 import { IScreen } from '../..';
 
 @Component({
@@ -10,12 +9,12 @@ import { IScreen } from '../..';
 })
 export class CallForAuthorizationComponent implements OnInit, IScreen {
 
-  prompt: string = "";
-  instructions: string = "";
+  prompt = '';
+  instructions = '';
 
   constructor() { }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
 
     this.prompt = screen.prompt;
     this.instructions = screen.instructions;

@@ -17,7 +17,6 @@ import { SearchSelectModule } from '@oasisdigital/angular-material-search-select
 import 'hammerjs'; // for material
 
 // Common
-import { AbstractApp } from './common/abstract-app';
 import { IDeviceRequest } from './common/idevicerequest';
 import { IDevicePlugin } from './common/idevice-plugin';
 
@@ -44,7 +43,7 @@ import { IconComponent } from './common/controls/icon.component';
 import { LoaderComponent } from './common/loader/loader.component';
 import { DynamicFormControlComponent } from './common/controls/dynamic-form-control/dynamic-form-control.component';
 import { ScanSomethingComponent } from './common/controls/scan-something/scan-something.component';
-import { PosComponent } from './pos/pos.component';
+import { DynamicScreenComponent } from './screens/dynamic-screen/dynamic-screen.component';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 import { CheckoutListItemComponent} from './common/controls/checkout-list-item/checkout-list-item.component';
 
@@ -275,7 +274,7 @@ const customLayouts: IKeyboardLayouts = {
     TillCountOtherTenderComponent,
     DynamicFormControlComponent,
     DynamicFormFieldComponent,
-    PosComponent,
+    DynamicScreenComponent,
     ChangeComponent,
     ConfirmationDialogComponent,
     CheckoutListItemComponent,
@@ -314,7 +313,7 @@ const customLayouts: IKeyboardLayouts = {
     SearchSelectModule
   ],
   exports: [
-    PosComponent,
+    DynamicScreenComponent,
     LoaderComponent,
     MaterialModule,
     MatKeyboardModule,

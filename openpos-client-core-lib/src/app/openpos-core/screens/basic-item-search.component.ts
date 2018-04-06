@@ -2,7 +2,6 @@ import { IForm } from './form.component';
 import { Component, OnInit, DoCheck, HostListener, OnDestroy } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
-import { AbstractApp } from '../common/abstract-app';
 
 @Component({
   selector: 'app-basic-item-search',
@@ -24,7 +23,7 @@ export class BasicItemSearchComponent implements IScreen, OnInit, OnDestroy {
   constructor(public session: SessionService) {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
     this.session.registerActionPayload(this.screen.localMenuItems[0].action, () => {
       return this.getSearchPayload();

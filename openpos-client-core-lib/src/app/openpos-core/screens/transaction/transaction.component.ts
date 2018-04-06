@@ -4,9 +4,8 @@ import { DeviceService } from '../../services/device.service';
 import { ISellItem } from '../../common/isellitem';
 import { IScreen } from '../../common/iscreen';
 import { IMenuItem } from '../../common/imenuitem';
-import { Component, ViewChild, AfterViewInit, AfterContentInit, DoCheck, OnInit} from '@angular/core';
+import { Component, ViewChild, AfterViewInit, AfterContentInit, DoCheck, OnInit, AfterViewChecked, ElementRef} from '@angular/core';
 import { SessionService } from '../../services/session.service';
-import { AbstractApp } from '../../common/abstract-app';
 import { ObservableMedia } from '@angular/flex-layout';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs/Observable';
@@ -16,10 +15,12 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './transaction.component.html',
   styleUrls: ['./transaction.component.scss']
 })
-export class TransactionComponent implements AfterViewInit, IScreen, OnInit {
+export class TransactionComponent implements AfterViewInit, AfterViewChecked, IScreen, OnInit {
 
   screen: any;
   @ViewChild('box') vc;
+  @ViewChild('scrollList') private scrollList: ElementRef;
+  public size = -1;
   initialized = false;
 
   public overFlowListSize: Observable<number>;
@@ -31,7 +32,7 @@ export class TransactionComponent implements AfterViewInit, IScreen, OnInit {
 
     }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
     this.items = this.screen.items;
   }
@@ -81,6 +82,19 @@ export class TransactionComponent implements AfterViewInit, IScreen, OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+
+  ngAfterViewChecked() {
+    if (this.items && this.size !== this.items.length) {
+      this.scrollToBottom();
+      this.size = this.items.length;
+    }
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.scrollList.nativeElement.scrollTop = this.scrollList.nativeElement.scrollHeight;
+    } catch (err) { }
   }
 
 }

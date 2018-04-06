@@ -5,7 +5,6 @@ import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { IFormElement } from '../common/iformfield';
-import { AbstractApp, AbstractTemplate } from '..';
 
 @Component({
     selector: 'app-tendering',
@@ -40,7 +39,7 @@ import { AbstractApp, AbstractTemplate } from '..';
         this.session.unregisterActionPayloads();
     }
 
-    show(screen: any, app: AbstractApp, template?: AbstractTemplate): void {
+    show(screen: any): void {
         this.screen = screen;
 
         this.text = this.screen.text;

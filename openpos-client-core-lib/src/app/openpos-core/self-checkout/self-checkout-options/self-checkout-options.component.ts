@@ -1,7 +1,6 @@
 import { IScreen } from '../../common/iscreen';
 import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import {SessionService} from '../../services/session.service';
-import { AbstractApp } from '../../common/abstract-app';
 import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../common/action-intercepter';
 import { IForm } from '../../screens/form.component';
 
@@ -13,8 +12,8 @@ import { IForm } from '../../screens/form.component';
 })
 export class SelfCheckoutOptionsComponent implements IScreen, OnInit, OnDestroy {
 
-  screen: any;
   static readonly UNDO = 'Undo';
+  screen: any;
   public currentView: string;
   public selectedOption: IOptionItem;
   public optionItems: IOptionItem[];
@@ -23,7 +22,7 @@ export class SelfCheckoutOptionsComponent implements IScreen, OnInit, OnDestroy 
   constructor(public session: SessionService) {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
     this.optionItems = this.screen.options;
     this.currentView = this.screen.displayStyle;

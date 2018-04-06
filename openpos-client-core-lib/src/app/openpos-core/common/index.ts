@@ -6,7 +6,6 @@ export {IPlugin} from  './iplugin';
 export {IScreen} from './iscreen';
 export {IItem} from './iitem';
 export {IMenuItem} from './imenuitem';
-export {AbstractApp} from './abstract-app';
 export {AbstractTemplate} from './abstract-template';
 export {ScreenDirective} from './screen.directive';
 export {IDialog} from './idialog';

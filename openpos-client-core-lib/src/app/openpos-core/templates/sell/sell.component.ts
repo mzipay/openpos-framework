@@ -10,7 +10,7 @@ import { IMenuItem } from '../../common/imenuitem';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ScanSomethingComponent } from '../../common/controls/scan-something/scan-something.component';
 import { ObservableMedia } from '@angular/flex-layout';
-import { ISellScreen, AbstractApp } from '../..';
+import { ISellScreen } from '../..';
 import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
 import { SellScreenUtils } from '../../common/screen-interfaces/iSellScreen';
 import { ScanSomethingData } from '../../common/controls/scan-something/scanSomthingData';
@@ -39,7 +39,7 @@ export class SellComponent extends AbstractTemplate implements OnInit {
 
   }
 
-  show(template: any, app: AbstractApp) {
+  show(template: any) {
     this.template = template;
     this.statusBar = SellScreenUtils.getStatusBar(template);
     this.scanSomethingData = SellScreenUtils.getScanSomethingData(template);

@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
 import { MatSelectChange } from '@angular/material';
-import { AbstractApp } from '../../abstract-app';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl, NgForm } from '@angular/forms';
 import { IFormElement } from '../../iformfield';
 import { Observable } from 'rxjs/Observable';

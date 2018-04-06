@@ -1,11 +1,16 @@
-<div fxFlexFill fxLayout="row" fxLayoutAlign="center center">
-    <div fxFlexFill fxFlex="1 1 60%" fxLayout="column" fxLayoutAlign="center stretch" [ngSwitch]="currentView">
+<div fxFlexFill fxLayout="row" fxLayoutAlign="center center" style="overflow-y: hidden">
+    <div fxFlexFill fxFlex="1 1 60%" fxLayout="column" fxLayoutAlign="center stretch" [ngSwitch]="currentView" fxLayoutGap="0px">
         <ng-template ngSwitchCase="ButtonList">
-            <div fxFlex="1 0 auto" fxLayoutAlign="center center" *ngIf="screen.icon">
+            <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.icon">
                 <mat-icon [svgIcon]="screen.icon" class="top" style="width: 200px; height: 100px;"></mat-icon>
             </div>
-            <div fxFlex="1 0 auto" fxLayoutAlign="center center" class="text-md text-center" *ngIf="promptText" style="padding-top: 32px; padding-bottom: 32px;">
+            <div fxFlex="1 0 auto" fxLayoutAlign="center center" class="text-sm text-center" *ngIf="promptText">
                 <b>{{promptText}}</b>
+            </div>
+            <div fxFlex="0 0 auto" *ngIf="screen.optionsImage">
+                <mat-card fxLayoutAlign="center center" style="padding: 0px; margin:8px;">
+                    <div [ngClass]="screen.optionsImage"></div>
+                </mat-card>
             </div>
             <mat-nav-list fxFlex="1 0 auto">
                 <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
@@ -19,7 +24,7 @@
         <ng-template ngSwitchCase="OptionForm">
             <!-- <div class="text-md" fxLayoutAlign="center center" *ngIf="promptText" style="padding-top:60pt;"><b>{{promptText}}</b></div> -->
             <mat-card fxFlex="0 0 30%">
-                <app-dynamic-form-control fxFlexFill class="prompt" [submitButtonText]="'Enter'" [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"
+                <app-dynamic-form-control fxFlexFill class="prompt text-lg" [submitButtonText]="'Enter'" [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"
                     [screen]="screen"></app-dynamic-form-control>
             </mat-card>
         </ng-template>

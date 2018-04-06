@@ -1,3 +1,4 @@
+import { DynamicScreenComponent } from './dynamic-screen/dynamic-screen.component';
 import { IMenuItem } from './../common/imenuitem';
 import { IScreen } from '../common/iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output } from '@angular/core';
@@ -6,7 +7,6 @@ import { MatSelectChange } from '@angular/material';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { AbstractApp } from '../common/abstract-app';
 
 @Component({
     selector: 'app-personalization',
@@ -17,7 +17,6 @@ export class PersonalizationComponent implements IScreen, OnInit {
     firstFormGroup: FormGroup;
     secondFormGroup: FormGroup;
     checkTimeout: any;
-    app: AbstractApp;
 
     constructor(public session: SessionService, private formBuilder: FormBuilder, private http: HttpClient) {
     }
@@ -33,8 +32,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
         });
     }
 
-    show(screen: any, app: AbstractApp): void {
-        this.app = app;
+    show(screen: any): void {
     }
 
     public personalize() {

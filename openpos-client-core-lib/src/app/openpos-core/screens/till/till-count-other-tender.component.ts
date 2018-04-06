@@ -3,7 +3,6 @@ import { IItem } from './../../common/iitem';
 import { SessionService } from './../../services/session.service';
 import { IScreen } from './../../common/iscreen';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { AbstractApp } from '../../common/abstract-app';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
@@ -34,7 +33,7 @@ export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen
   constructor(public session: SessionService) {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
   }
 

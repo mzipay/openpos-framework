@@ -4,7 +4,6 @@ import { IScreen } from '../../common/iscreen';
 import { IMenuItem } from '../../common/imenuitem';
 import { Component, ViewChild, AfterViewInit, AfterContentInit, AfterViewChecked, ElementRef, DoCheck, OnInit } from '@angular/core';
 import { SessionService } from '../../services/session.service';
-import { AbstractApp } from '../../common/abstract-app';
 import { ObservableMedia } from '@angular/flex-layout';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
@@ -13,7 +12,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   templateUrl: './self-checkout-transaction.component.html',
   styleUrls: ['./self-checkout-transaction.component.scss']
 })
-export class SelfCheckoutTransactionComponent implements AfterViewInit, IScreen, OnInit {
+export class SelfCheckoutTransactionComponent implements AfterViewInit, AfterViewChecked, IScreen, OnInit {
 
   screen: any;
   @ViewChild('scrollList') private scrollList: ElementRef;
@@ -21,12 +20,12 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, IScreen,
   initialized = false;
 
   public items: ISellItem[];
-  public size: number = -1;
+  public size = -1;
 
   constructor(public session: SessionService, devices: DeviceService, private observableMedia: ObservableMedia) {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
 
     this.items = this.screen.items;
@@ -35,7 +34,7 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, IScreen,
   ngOnInit(): void {
     this.scrollToBottom();
   }
-  
+
   ngAfterViewChecked() {
     if (this.items && this.size !== this.items.length) {
       this.scrollToBottom();

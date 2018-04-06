@@ -3,7 +3,6 @@ import { IMenuItem } from './../../common/imenuitem';
 import { SessionService } from './../../services/session.service';
 import { IScreen } from './../../common/iscreen';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractApp } from '../../common/abstract-app';
 import { IFormElement } from '../../common/iformfield';
 
 @Component({
@@ -20,7 +19,7 @@ export class TillCountComponent implements OnInit, IScreen {
   constructor(public session: SessionService) {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     // After screen is initialized, all we need to do is
     // get an updated total from the server.  This saves
     // unnecessary rebuilding of the screen

@@ -4,7 +4,6 @@ import { IScreen } from '../../iscreen';
 import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
 import { MatSelectChange } from '@angular/material';
-import { AbstractApp } from '../../abstract-app';
 import {
   FormArray, FormBuilder, FormGroup, Validators, AbstractControl,
   FormControl, NgForm, ValidatorFn, NG_VALIDATORS
@@ -32,7 +31,7 @@ export class DynamicFormControlComponent implements OnInit {
   @Input() screen: any;
 
   form: FormGroup;
-  
+
   buttons: IFormElement[];
 
   constructor(public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) { }
@@ -45,10 +44,10 @@ export class DynamicFormControlComponent implements OnInit {
 
         this.session.registerActionPayload(action, () => {
           if (this.form.valid) {
-              this.buildFormPayload();
-              return this.session.response = this.screenForm;
+            this.buildFormPayload();
+            return this.session.response = this.screenForm;
           } else {
-              throw Error('form is invalid');
+            throw Error('form is invalid');
           }
         });
       });
@@ -64,12 +63,12 @@ export class DynamicFormControlComponent implements OnInit {
       group[element.id] = new FormControl(element.value, ctlValidators);
       // For a DATE type element, there is also a hidden field to handle picking of dates using
       // a date picker, need to add a FormControl for that hidden input also.
-      if(element.inputType === 'Date' || element.inputType === 'NoYearDate') {
-        group[element.id+'Hidden'] = new FormControl();
+      if (element.inputType === 'Date' || element.inputType === 'NoYearDate') {
+        group[element.id + 'Hidden'] = new FormControl();
       }
 
-      if(element.elementType === 'Button' ){
-        this.buttons.push( element );
+      if (element.elementType === 'Button') {
+        this.buttons.push(element);
       }
     });
 
@@ -146,7 +145,7 @@ export class DynamicFormControlComponent implements OnInit {
     }
   }
 
-  onButtonClick(formElement: IFormElement){
+  onButtonClick(formElement: IFormElement) {
     this.session.onAction(formElement.buttonAction);
   }
 

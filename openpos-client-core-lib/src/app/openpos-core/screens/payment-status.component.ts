@@ -1,7 +1,6 @@
 import { IScreen } from '../common/iscreen';
 import {Component, ViewChild, AfterViewInit, DoCheck} from '@angular/core';
 import {SessionService} from '../services/session.service';
-import { AbstractApp } from '../common/abstract-app';
 import { IMenuItem } from '../common/imenuitem';
 
 @Component({
@@ -11,12 +10,12 @@ import { IMenuItem } from '../common/imenuitem';
 export class PaymentStatusComponent implements AfterViewInit, IScreen {
 
   screen: any;
-  pinPadStatus: string = "0";
+  pinPadStatus = '0';
 
   constructor(public session: SessionService) {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
     this.pinPadStatus = this.screen.pinPadStatus;
   }

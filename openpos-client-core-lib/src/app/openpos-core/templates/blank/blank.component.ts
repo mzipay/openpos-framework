@@ -3,7 +3,6 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
 import { IScreen } from '../../common/iscreen';
 import { SessionService } from '../../services/session.service';
-import { AbstractApp } from '../../common/abstract-app';
 import { AbstractTemplate } from '../../common/abstract-template';
 
 @Component({
@@ -22,7 +21,7 @@ export class BlankComponent extends AbstractTemplate implements OnInit {
   ngOnInit() {
   }
 
-  show(template: any, app: AbstractApp) {
+  show(template: any) {
     this.template = template;
   }
 

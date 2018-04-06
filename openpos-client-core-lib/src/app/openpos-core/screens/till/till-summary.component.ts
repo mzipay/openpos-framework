@@ -2,7 +2,6 @@ import { IMenuItem } from './../../common/imenuitem';
 import { SessionService } from './../../services/session.service';
 import { IScreen } from './../../common/iscreen';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { AbstractApp } from '../../common/abstract-app';
 import { FormComponent } from '../form.component';
 
 @Component({
@@ -19,9 +18,9 @@ export class TillSummaryComponent implements OnInit, AfterViewInit, IScreen {
   constructor(public session: SessionService) {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
-    this.formComponent.show(screen, app);
+    this.formComponent.show(screen);
   }
 
   ngOnInit() {

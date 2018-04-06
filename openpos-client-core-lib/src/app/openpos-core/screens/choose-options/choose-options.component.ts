@@ -1,7 +1,6 @@
 import { IScreen } from '../../common/iscreen';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {SessionService} from '../../services/session.service';
-import { AbstractApp } from '../../common/abstract-app';
 import { IForm } from './../form.component';
 import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../common/action-intercepter';
 import { IChooseOptionsScreen, DisplayStyle } from './ichooseOptionsScreen';
@@ -24,7 +23,7 @@ export class ChooseOptionsComponent implements IScreen, OnInit,  OnDestroy {
   constructor(public session: SessionService) {
   }
 
-  show(screen: any, app: AbstractApp) {
+  show(screen: any) {
     this.screen = screen;
     this.optionItems = this.screen.options;
     this.currentView = this.screen.displayStyle;
