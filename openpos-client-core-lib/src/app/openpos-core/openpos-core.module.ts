@@ -119,6 +119,7 @@ import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-op
 import { DynamicFormDialogComponent } from './dialogs/dynamic-form/dynamic-form-dialog.component';
 import { DialogService } from './services/dialog.service';
 import { MultipleDynamicFormDialogComponent } from './dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
+import { SelectableItemListComponent } from './common/controls/selectable-item-list/selectable-item-list.component';
 
 // Keyboard Layouts
 const customLayouts: IKeyboardLayouts = {
@@ -297,7 +298,8 @@ const customLayouts: IKeyboardLayouts = {
     MultipleDynamicFormComponent,
     MultipleDynamicFormDialogComponent,
     DynamicDateFormFieldComponent,
-    NavListComponent
+    NavListComponent,
+    SelectableItemListComponent
   ],
   imports: [
     BrowserModule,
@@ -324,7 +326,8 @@ const customLayouts: IKeyboardLayouts = {
     FabToggleButtonComponent,
     DynamicFormControlComponent,
     FocusDirective,
-    StatusBarComponent
+    StatusBarComponent,
+    SelectableItemListComponent
     ],
   providers: [
     HttpClient,
