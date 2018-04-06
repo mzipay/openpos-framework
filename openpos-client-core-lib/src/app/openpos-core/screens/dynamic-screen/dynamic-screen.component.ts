@@ -97,17 +97,13 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
     // console.log(`${screenWidth} ${x} ${y}`);
     if (this.clickCount === 0 || Date.now() - this.firstClickTime > 1000 ||
-      (x < screenWidth - 100 && y > 100)) {
+      (y > 100)) {
       this.firstClickTime = Date.now();
       this.clickCount = 0;
     }
 
-    if (x < screenWidth - 100 && y > 100) {
-      this.showDevMenu = false;
-    }
-
-    if (x > screenWidth - 100 && y < 100) {
-      this.clickCount = ++this.clickCount;
+    if (y < 100) {
+        this.clickCount = ++this.clickCount;
     }
 
     if (this.clickCount === 5) {
