@@ -5,7 +5,7 @@
 (click)="onItemClick(item)">
     <ng-template ngFor let-item [ngForOf]="[item]" [ngForTemplate]="itemTemplate"></ng-template>
 </div>
-<div fxLayoutAlign="center center">
+<div fxLayoutAlign="center center" *ngIf="numberOfPages > 1">
     <button mat-icon-button color="primary" [disabled]="currentPage <= 1" (click)="onPrevPage()">
         <mat-icon>arrow_back</mat-icon>
     </button>
