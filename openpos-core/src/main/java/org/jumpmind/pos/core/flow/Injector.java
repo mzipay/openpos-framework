@@ -8,9 +8,8 @@ import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,7 +19,7 @@ public class Injector {
     Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private ApplicationContext applicationContext;
+    private AutowireCapableBeanFactory applicationContext;
     
     public void performInjections(Object target, Scope scope,  Map<String, ScopeValue> extraScope) {
         performInjectionsImpl(target, scope, extraScope);
@@ -29,6 +28,7 @@ public class Injector {
     
     protected void performInjectionsImpl(Object target, Scope scope,  Map<String, ScopeValue> extraScope) {
         Class<?> targetClass = target.getClass();
+        applicationContext.autowireBean(target);
         while (targetClass != null) {
             performInjectionsImpl(targetClass, target, scope, extraScope);
             targetClass = targetClass.getSuperclass();
@@ -51,32 +51,13 @@ public class Injector {
                     value = extraScope.get(name);
                 }
 
-                if (value == null) {
-                    if (applicationContext.containsBean(name)) {
-                        value = new ScopeValue(applicationContext.getBean(name));
-                    } else {
-                        try {                            
-                            Object beanByClass = applicationContext.getBean(field.getType());
-                            if (beanByClass != null) {
-                                value = new ScopeValue(beanByClass);
-                            }
-                        } catch (NoSuchBeanDefinitionException ex) {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("No bean found", ex);
-                            }
-                        }
-                    }
-                }
-
                 if (value != null) {
                     try {
                         field.set(target, value.getValue());
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        logger.error("", ex);
                     }
-                } else if (autowired.required()) {
-                    throw new FlowException("Failed to resolve required injection: " + name + " for " + target);
-                }
+                } 
             }
         }
     }
