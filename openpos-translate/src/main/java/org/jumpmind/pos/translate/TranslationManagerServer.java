@@ -22,7 +22,7 @@ import org.jumpmind.pos.translate.InteractionMacro.WaitForScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TranslationManagerServer implements ILegacyScreenListener, ITranslationManager, IDeviceMessageDispatcher {
+public class TranslationManagerServer implements ITranslationManager, IDeviceMessageDispatcher {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -65,7 +65,7 @@ public class TranslationManagerServer implements ILegacyScreenListener, ITransla
     public void setTranslationManagerSubscriber(ITranslationManagerSubscriber subscriber) {
         if (this.subscriberByAppId.get(subscriber.getAppId()) == null) {
             this.subscriberByAppId.put(subscriber.getAppId(), subscriber);
-            getLegacyUISubsystem().addLegacyScreenListener(this);
+            getLegacyUISubsystem().setLegacyScreenListener(this);
         }
     }
 
