@@ -46,11 +46,12 @@ public class UserModuleMain {
 
     private void createTestData() {
         {            
+            // a User, with valid password.
             User user = new User();
             user.setUsername("tstark");
             user.setFirstName("Anthony");
             user.setLastName("Stark");
-            user.setGoesByName("Iron Man");
+            user.setNickname("Iron Man");
             
             PasswordHistory passwordHistory = new PasswordHistory();
             passwordHistory.setHashedPassword("stark"); // TODO
@@ -63,7 +64,7 @@ public class UserModuleMain {
             user.setUsername("cmax");
             user.setFirstName("Crystalia");
             user.setLastName("Maximoff");
-            user.setGoesByName("Crystal");
+            user.setNickname("Crystal");
             userRepository.save(user);
         }
         {            
@@ -71,7 +72,7 @@ public class UserModuleMain {
             user.setUsername("ajones");
             user.setFirstName("Angelica");
             user.setLastName("Jones");
-            user.setGoesByName("Firestar");
+            user.setNickname("Firestar");
             userRepository.save(user);
         }
         {            
@@ -79,7 +80,7 @@ public class UserModuleMain {
             user.setUsername("jhowlett");
             user.setFirstName("James");
             user.setLastName("Howlett");
-            user.setGoesByName("Wolverine");
+            user.setNickname("Wolverine");
             userRepository.save(user);
         }
         

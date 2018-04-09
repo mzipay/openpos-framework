@@ -18,7 +18,7 @@ public class DatabaseSchemaTest {
                 PersistTestUtil.getH2TestProperties(), 
                 PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class),
-                PersistTestUtil.getQueryTempaltes());
+                PersistTestUtil.getQueryTempaltes("test"));
     }
     
     @Test
