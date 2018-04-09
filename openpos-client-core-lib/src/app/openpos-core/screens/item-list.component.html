@@ -15,7 +15,9 @@
 </div>
 
 <ng-template #itemsList>
-    <app-product-list [showItemIcon]="! isItemClickDisabled() && selectionMode ==='Single'" [items]="items" (itemClick)="isItemClickDisabled() || onItemClick($event)"
+    <app-product-list #productList [showItemIcon]="! isItemClickDisabled() && selectionMode ==='Single'" [items]="items" 
+        (itemClick)="isItemClickDisabled() || onItemClick($event)"
+        (itemSelected)="isItemSelectedDisabled() || onItemSelected($event)"
         [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)"
         [itemClass]="condensedListDisplay ? 'item-list-condensed' : ''" [selectionMode]='getSelectionModeAsEnum()'>
     </app-product-list>

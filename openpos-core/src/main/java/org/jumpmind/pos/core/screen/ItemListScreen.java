@@ -11,6 +11,7 @@ public class ItemListScreen extends SellScreen {
     private List<IItem> items = new ArrayList<>();
     private SelectionMode selectionMode = SelectionMode.None;
     private int selectedIndex = -1;
+    private List<Integer> selectedIndexes = new ArrayList<>();
     private String itemActionName = "Item";
     private String text;
     private List<MenuItem> itemActions = new ArrayList<>();
@@ -57,6 +58,15 @@ public class ItemListScreen extends SellScreen {
         return this.selectedIndex;
     }
     
+    public List<Integer> getSelectedIndexes() {
+        return this.selectedIndexes;
+    }
+
+    public void setSelectedIndexes(List<Integer> selectedIndexes) {
+        this.selectedIndexes = selectedIndexes;
+    }
+
+
     public boolean isCondensedListDisplay() {
         return condensedListDisplay;
     }

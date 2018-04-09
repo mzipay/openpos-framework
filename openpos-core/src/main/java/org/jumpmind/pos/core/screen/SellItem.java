@@ -1,33 +1,23 @@
 package org.jumpmind.pos.core.screen;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jumpmind.pos.core.model.FormDisplayField;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 
-public class SellItem implements IItem, Serializable {
+public class SellItem extends DefaultItem {
     
     private static final long serialVersionUID = 1L;
-
-    private Integer index;
-    private String id;
+    
     private String posItemId;
-    private String description;
-    private String amount;
     private String originalAmount;
     private String sellingPrice;
     private String quantity;
     private String discountAmount;
-    private List<String> labels = new ArrayList<>();
-    private List<FormDisplayField> fields = new ArrayList<>();
     private List<MenuItem> menuItems = new ArrayList<>();
-    private boolean selected = false;
     private boolean isGiftReceipt = false;
     
     /**
@@ -35,47 +25,7 @@ public class SellItem implements IItem, Serializable {
      * show up in the json which means less overhead.
      */
     private Map<String, Object> optionalProperties = new HashMap<String, Object>();
-    
-    @Override
-    public String getID() {
-        return this.id;
-    }
 
-    @Override
-    public void setID(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public Integer getIndex() {
-        return this.index;
-    }
-
-    @Override
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-    
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
-    @Override
-    public String getAmount() {
-        return this.amount;
-    }
-    
-    @Override
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-    
     @Override
     public String getSubtitle() {
         String subTitle = String.format("Item: %s %s@%s", this.getPosItemId(), this.getQuantity(), this.getSellingPrice());
@@ -110,26 +60,6 @@ public class SellItem implements IItem, Serializable {
     public String getSellingPrice() {
         return sellingPrice;
     }
-    
-    @Override
-    public List<FormDisplayField> getFields() {
-        return fields;
-    }
-
-    @Override
-    public void setFields(List<FormDisplayField> fields) {
-        this.fields = fields;
-    }
-    
-    public void addField(FormDisplayField field) {
-        this.fields.add(field);
-    }
-
-    @Override
-    public boolean isSelected() {
-        return this.selected;
-    }
-    
     public void setIsGiftReceipt( boolean giftReceipt ) {
         this.isGiftReceipt = giftReceipt;
     }
@@ -137,12 +67,6 @@ public class SellItem implements IItem, Serializable {
     public boolean getIsGiftReceipt() {
         return this.isGiftReceipt;
     }
-    
-    @Override
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
-    
     public void addMenuItem(MenuItem menuItem) {
         this.menuItems.add(menuItem);
     }
@@ -170,18 +94,6 @@ public class SellItem implements IItem, Serializable {
     public void setOriginalAmount(String originalAmount) {
     	this.originalAmount = originalAmount;
     }
-
-	public List<String> getLabels() {
-		return labels;
-	}
-
-	public void setLabels(List<String> labels) {
-		this.labels = labels;
-	} 
-	
-	public void addLabel( String label ) {
-		this.labels.add( label );
-	}
 	
     @JsonAnyGetter
     public Map<String, Object> any() {

@@ -1,7 +1,7 @@
 import { SelectionMode } from './../common/selectionmode';
-import { ItemClickAction, MenuClickAction } from './../common/controls/product-list.component';
+import { ItemClickAction, MenuClickAction, ProductListComponent } from './../common/controls/product-list.component';
 import { IMenuItem } from './../common/imenuitem';
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit, DoCheck, ViewChild } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { IScreen } from './../common/iscreen';
 import { IItem } from './../common/iitem';
@@ -20,6 +20,7 @@ export class ItemListComponent implements IScreen, OnInit {
     condensedListDisplay: false;
     private lastSequenceNum: number;
     selectionMode: string;
+    @ViewChild('productList') productList: ProductListComponent;
 
     constructor(public session: SessionService) {
     }
@@ -45,14 +46,23 @@ export class ItemListComponent implements IScreen, OnInit {
             return SelectionMode.Single;
         }
     }
+
     onItemClick(itemInfo: ItemClickAction): void {
         this.session.response = itemInfo.item;
         this.session.onAction(this.itemActionName);
     }
 
+    onItemSelected(itemInfo: ItemClickAction): void {
+        this.session.response = this.productList.selectedItems;
+    }
+
     onMenuItemClick(itemInfo: MenuClickAction): void {
         this.session.response = itemInfo.item;
         this.session.onAction(itemInfo.menuItem.action, null, itemInfo.menuItem.confirmationMessage );
+    }
+
+    isItemSelectedDisabled(): boolean {
+        return this.getSelectionModeAsEnum() !== SelectionMode.Multiple;
     }
 
     isItemClickDisabled(): boolean {
