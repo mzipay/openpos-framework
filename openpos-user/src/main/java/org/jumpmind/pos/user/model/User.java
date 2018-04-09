@@ -19,7 +19,7 @@ public class User extends Entity {
     @Column
     private String firstName;
     @Column
-    private String goesByName;    
+    private String nickname;    
     @Column
     private Date lastLogin;
     @Column
@@ -51,11 +51,12 @@ public class User extends Entity {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-    public String getGoesByName() {
-        return goesByName;
+
+    public String getNickname() {
+        return nickname;
     }
-    public void setGoesByName(String goesByName) {
-        this.goesByName = goesByName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
     public List<PasswordHistory> getPasswordHistory() {
         return passwordHistory;
