@@ -55,7 +55,7 @@ public class UserModule implements Module {
                 PersistTestUtil.getH2TestProperties(), 
                 sessionContext, 
                 tableClasses,
-                PersistTestUtil.getQueryTempaltes()); // TODO
+                PersistTestUtil.getQueryTempaltes(getTablePrefix())); // TODO
         
         return sessionFactory;
     }

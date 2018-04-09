@@ -6,3 +6,7 @@ npm link
 cd ../../../../openpos-client/
 npm install
 npm link openpos-core
+
+# To start client: 
+# $cd openpos-client/
+# $ng serve
