@@ -13,4 +13,10 @@ public interface ITranslationManager {
     
     public void ping();
     
+    public void showLegacyScreen(ILegacyScreen screen);
+    
+    public void executeMacro(InteractionMacro macro);
+    
+    public void sendAction(String action);
+    
 }
