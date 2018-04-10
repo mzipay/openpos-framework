@@ -5,6 +5,7 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
@@ -30,6 +31,10 @@ abstract public class AbstractScreenTranslator<T extends SellScreen> {
     protected Map<String, String> iconRegistry = new HashMap<>();
     
     protected Class<T> screenClass;
+    
+    protected String appId;
+    
+    protected Properties properties;
 
     public AbstractScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
         this.legacyScreen = legacyScreen;
@@ -126,4 +131,12 @@ abstract public class AbstractScreenTranslator<T extends SellScreen> {
         screen.setScanActionName("Scan");
     }
 
+    public void setAppId(String appId) {
+    	this.appId = appId;
+    }
+    
+    public void setProperties(Properties properties) {
+    	this.properties = properties;
+    }
+    
 }

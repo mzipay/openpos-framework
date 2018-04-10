@@ -17,6 +17,7 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<SellSc
     
     InteractionMacro undoMacro;
 
+    @Deprecated
     public SellOptionsTranslator(ILegacyScreen headlessScreen, String icon, String appId, Properties properties, String... excludeActions) {
         super(headlessScreen, SellScreen.class, appId, properties);
         if (excludeActions != null) {
@@ -26,6 +27,10 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<SellSc
         }
         screen.setType(ScreenType.Options);
         screen.setIcon(icon);        
+    }
+    
+    public SellOptionsTranslator(ILegacyScreen headlessScreen, String icon, String... excludeActions) {
+    	this(headlessScreen, icon, null, null, excludeActions);
     }
     
     public void setUndoMacro(InteractionMacro undoMacro) {
