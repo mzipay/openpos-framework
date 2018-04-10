@@ -53,7 +53,9 @@ export class ItemListComponent implements IScreen, OnInit {
     }
 
     onItemSelected(itemInfo: ItemClickAction): void {
-        this.session.response = this.productList.selectedItems;
+        if (this.getSelectionModeAsEnum() === SelectionMode.Multiple) {
+            this.session.response = this.productList.selectedItems;
+        }
     }
 
     onMenuItemClick(itemInfo: MenuClickAction): void {
