@@ -105,5 +105,23 @@ public class TranslationManagerBridge implements ITranslationManager {
         }
     }
 
+	@Override
+	public void showLegacyScreen(ILegacyScreen screen) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void executeMacro(InteractionMacro macro) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendAction(String action) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }
