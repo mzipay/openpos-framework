@@ -15,6 +15,10 @@ public class DialogProperties implements Serializable {
     public DialogProperties() {
     }
     
+    public DialogProperties(boolean closeable) {
+        this.closeable = closeable;
+    }
+    
     public String getWidth() {
         return width;
     }
