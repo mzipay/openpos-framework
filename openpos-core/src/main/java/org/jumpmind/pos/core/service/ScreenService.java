@@ -10,6 +10,7 @@ import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,8 @@ import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
 import org.jumpmind.pos.core.screen.AbstractScreen;
+import org.jumpmind.pos.core.screen.DialogProperties;
+import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.FormScreen;
 import org.jumpmind.pos.core.screen.IHasForm;
@@ -153,8 +156,18 @@ public class ScreenService implements IScreenService {
         }
         IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
         if (stateManager != null) {
-            logger.info("Posting action of {}", action);
-            stateManager.doAction(action);
+            try {
+                logger.info("Posting action of {}", action);
+                stateManager.doAction(action);
+            } catch (Throwable ex) {
+                DialogScreen errorDialog = new DialogScreen();
+                errorDialog.asDialog(new DialogProperties(true));
+                errorDialog.setIcon("error");
+                errorDialog.setTitle("Internal Server Error");
+                errorDialog.setMessage(Arrays.asList("The application received an unexpected error. Please report to the appropriate technical personnel"));
+                showScreen(appId, nodeId, errorDialog);
+                logger.error("", ex);
+            }
         }
     }
 
