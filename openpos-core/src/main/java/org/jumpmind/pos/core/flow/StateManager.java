@@ -349,15 +349,6 @@ public class StateManager implements IStateManager {
         screenService.showScreen(appId, nodeId, screen);
     }
 
-    public String toJSONPretty(Object o) {
-        try {
-            return jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
-        } catch (JsonProcessingException ex) {
-            logger.warn("Failed to format object to json", ex);
-            return String.valueOf(o);
-        }
-    }
-
     @Override
     public String getNodeId() {
         return nodeId;
