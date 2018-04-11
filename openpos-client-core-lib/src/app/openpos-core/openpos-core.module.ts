@@ -143,13 +143,45 @@ const customLayouts: IKeyboardLayouts = {
       ],
       [
         [KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift],
-        ['z', 'Z'],['x', 'X'],['c', 'C'],['v', 'V'],['b', 'B'],['n', 'N'],['m', 'M'],[',', '<'],['.', '>'],['/', '?'],['@', '@']
+        ['z', 'Z'],['x', 'X'],['c', 'C'],['v', 'V'],['b', 'B'],['n', 'N'],['m', 'M'],[',', '<'],['.', '>'],['/', '?'],
+        [KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift],
       ],
       [
         [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space]
       ]
     ],
     'lang': ['en-US'],
+  },
+  'Email': {
+    'name': 'Email',
+    'keys': [
+      [
+        // tslint:disable-next-line:max-line-length
+        ['`', '~'],['1', '!'],['2', '@'],['3', '#'],['4', '$'],['5', '%'],['6', '^'],['7', '&'],['8', '*'],['9', '('],['0', ')'],['-', '_'],['=', '+'],
+        [KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp]
+      ],
+      [
+        [KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab],
+        // tslint:disable-next-line:max-line-length
+        ['q', 'Q'],['w', 'W'],['e', 'E'],['r', 'R'],['t', 'T'],['y', 'Y'],['u', 'U'],['i', 'I'],['o', 'O'],['p', 'P'],['[', '{'],[']', '}'],['\\', '|']
+      ],
+      [
+        [KeyboardClassKey.Caps, KeyboardClassKey.Caps, KeyboardClassKey.Caps, KeyboardClassKey.Caps],
+        ['a', 'A'],['s', 'S'],['d', 'D'],['f', 'F'],['g', 'G'],['h', 'H'],['j', 'J'],['k', 'K'],['l', 'L'],[';', ':'],['\'', '"'],
+        [KeyboardClassKey.Enter, KeyboardClassKey.Enter, KeyboardClassKey.Enter, KeyboardClassKey.Enter]
+      ],
+      [
+        [KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift],
+        ['z', 'Z'],['x', 'X'],['c', 'C'],['v', 'V'],['b', 'B'],['n', 'N'],['m', 'M'],[',', '<'],['.', '>'],['/', '?'],['@', '@']
+      ],
+      [
+        ['@gmail.com','@gmail.com'], ['@yahoo.com','@yahoo.com'], ['@hotmail.com','@hotmail.com']
+      ],
+      [
+        [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space]
+      ]
+    ],
+    'lang': ['email'],
   },
   'Numeric': {
     'name': 'Numeric',

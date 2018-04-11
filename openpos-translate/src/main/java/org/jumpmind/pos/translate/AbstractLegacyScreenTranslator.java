@@ -41,10 +41,6 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
     protected ILegacyStoreProperties legacyStoreProperties;
 
     protected IUIActionOverrider actionOverrider;
-    
-    protected String appId;
-    
-    protected Properties properties;
 
     public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
         super(legacyScreen, screenClass);

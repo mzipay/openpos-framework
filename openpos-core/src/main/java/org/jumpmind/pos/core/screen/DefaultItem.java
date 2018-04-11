@@ -15,7 +15,7 @@ public class DefaultItem implements IItem, Serializable {
     private String subtitle;
     private String amount;
     private List<String> labels = new ArrayList<>();
-    private List<FormDisplayField> fields;
+    private List<FormDisplayField> fields = new ArrayList<>();;
     private boolean selected = false;
 
     public DefaultItem() {}

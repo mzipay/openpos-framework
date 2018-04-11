@@ -22,8 +22,6 @@ public class FormField implements IFormElement, IField, Serializable {
     private String fieldId;
     private String value;
     private boolean required = true;
-    private boolean disabled = false;
-
 
     public FormField() {
     }
@@ -187,12 +185,8 @@ public class FormField implements IFormElement, IField, Serializable {
         return this;
     }   
 
-    public boolean isDisabled() {
-        return disabled;
-    }
-
     public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
+        put("disabled", disabled);
     }
 
     public FormField disabled(boolean disabled) {
