@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractHeadlessUISubsystem implements ILegacySubsystem {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     
-    protected final static String MOBILE_POS_SCREEN_PREFIX = "MobilePOS_";
+    protected final static String MOBILE_POS_SCREEN_PREFIX = "MobilePOS_";    
 
     protected String configFileName;
     protected String uiPropertyFile;

@@ -13,7 +13,6 @@ import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.AbstractScreen;
 import org.jumpmind.pos.core.screen.NoOpScreen;
-import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.translate.InteractionMacro.AbortMacro;
 import org.jumpmind.pos.translate.InteractionMacro.DoOnActiveScreen;
 import org.jumpmind.pos.translate.InteractionMacro.DoOnScreen;
@@ -30,13 +29,13 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
 
     private ILegacySubsystem legacySubsystem;
 
-    private ILegacyScreenTranslatorFactory screenTranslatorFactory;
+    private ITranslatorFactory screenTranslatorFactory;
 
     private ILegacyScreenInterceptor screenInterceptor;
 
     private InteractionMacro activeMacro;
 
-    private Map<String, AbstractScreenTranslator<? extends SellScreen>> lastTranslatorByAppId = new HashMap<>();
+    private Map<String, ITranslator> lastTranslatorByAppId = new HashMap<>();
 
     private Map<String, ITranslationManagerSubscriber> subscriberByAppId = new HashMap<>();
 
@@ -44,7 +43,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
     
     private boolean lastScreenWasNoOp = false;
 
-    public TranslationManagerServer(ILegacyScreenInterceptor interceptor, ILegacyScreenTranslatorFactory screenTranslatorFactory,
+    public TranslationManagerServer(ILegacyScreenInterceptor interceptor, ITranslatorFactory screenTranslatorFactory,
             Class<?> subsystemClass) {
         this.subsystemClass = subsystemClass;
         this.posSessionInfo = new POSSessionInfo();
@@ -71,7 +70,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
 
     @Override
     public void doAction(String appId, Action action, Form formResults) {
-        AbstractScreenTranslator<? extends SellScreen> lastTranslator = this.lastTranslatorByAppId.get(appId);
+        ITranslator lastTranslator = this.lastTranslatorByAppId.get(appId);
         if (lastTranslator != null) {
             lastTranslator.handleAction(subscriberByAppId.get(appId), this, action, formResults);
         } else {
@@ -183,30 +182,38 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
         }
     }
 
-    protected void translateAndShow(ILegacyScreen screen) {
+    protected void translateAndShow(ILegacyScreen legacyScreen) {
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
-            if (screen != null && subscriber.isInTranslateState()) {
-                AbstractScreenTranslator<?> lastTranslator = this.lastTranslatorByAppId.get(subscriber.getAppId());
-                ILegacyScreen previousScreen = lastTranslator != null ? lastTranslator.getLegacyScreen() : null;
-                if (!screenInterceptor.intercept(screen, previousScreen, subscriber, this, posSessionInfo)) {
-                    subscriber.showScreen(toScreen(screen, subscriber));
+            if (legacyScreen != null && subscriber.isInTranslateState()) {
+                ITranslator lastTranslator = this.lastTranslatorByAppId.get(subscriber.getAppId());
+                
+                ILegacyScreen previousScreen = null;
+                if (lastTranslator instanceof AbstractScreenTranslator<?>) {
+                    previousScreen = ((AbstractScreenTranslator<?>) lastTranslator).getLegacyScreen();
+                }
+                
+                if (!screenInterceptor.intercept(legacyScreen, previousScreen, subscriber, this, posSessionInfo)) {
+                    ITranslator newTranslator = screenTranslatorFactory.createScreenTranslator(legacyScreen, subscriber.getAppId(),
+                            subscriber.getProperties());
+                    
+                    if (newTranslator != null) {
+                        newTranslator.setPosSessionInfo(posSessionInfo);
+                    }
+                    if (newTranslator instanceof AbstractScreenTranslator<?>) {
+                        AbstractScreenTranslator<?> screenTranslator = (AbstractScreenTranslator<?>) newTranslator;                        
+                        AbstractScreen screen = screenTranslator.build();
+                        subscriber.showScreen(screen);
+                    } else if (newTranslator instanceof IActionTranslator) {
+                        ((IActionTranslator)newTranslator).translate(this, subscriber);
+                    }                    
+
+                    this.lastTranslatorByAppId.put(subscriber.getAppId(), newTranslator);
+
                 } else {
                     this.lastTranslatorByAppId.put(subscriber.getAppId(), null);
                 }
             }
         }
-    }
-
-    protected SellScreen toScreen(ILegacyScreen headlessScreen, ITranslationManagerSubscriber subscriber) {
-        AbstractScreenTranslator<? extends SellScreen> lastTranslator = screenTranslatorFactory.createScreenTranslator(headlessScreen, subscriber.getAppId(), subscriber.getProperties());
-        SellScreen screen = null;
-        if (lastTranslator != null) {
-            lastTranslator.setPosSessionInfo(posSessionInfo);
-            screen = lastTranslator.build();
-        }
-        this.lastTranslatorByAppId.put(subscriber.getAppId(), lastTranslator);
-
-        return screen;
     }
 
     public ILegacyScreen getActiveScreen() {
