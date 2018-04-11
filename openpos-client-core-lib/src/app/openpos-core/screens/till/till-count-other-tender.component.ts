@@ -35,14 +35,17 @@ export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen
 
   show(screen: any) {
     this.screen = screen;
+    this.items = screen.items;
+    this.totalAmount = 0;
+    if (screen.total) {
+      this.totalAmount = Number(screen.total);
+    }
   }
 
   ngOnDestroy(): void {
   }
 
   ngOnInit(): void {
-    this.items = [];
-    this.totalAmount = 0;
     this.nextAction = this.screen.nextAction;
   }
 
@@ -72,7 +75,7 @@ export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen
   }
 
   onNextAction() {
-    this.session.response = this.totalAmount.toString();
+    this.session.response = {items: this.items, total: this.totalAmount.toString()};
     this.session.onAction(this.nextAction.action);
   }
 
