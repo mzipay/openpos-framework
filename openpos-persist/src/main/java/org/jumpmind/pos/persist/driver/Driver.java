@@ -73,17 +73,8 @@ public class Driver implements java.sql.Driver {
         String realUrl = getRealUrl(url);
         
         Connection connection = DriverManager.getConnection(realUrl, info);
-
-        String engineName = MDC.get("engineName");
-        TypedProperties engineProperties = null;
-        if (engineName != null) {
-            engineProperties = allEngineProperties.get(engineName);
-        } else {
-            System.out.println("Unknown engine...");
-        }
         
         ConnectionWrapper connectionWrapper = new ConnectionWrapper(connection);
-        connectionWrapper.setEngineProperties(engineProperties);
         return connectionWrapper;
     }
 

@@ -341,9 +341,18 @@ public class ScreenService implements IScreenService {
     }
 
     protected String drawBox(String name, String typeName) {
-        name = name != null ? name : "not named";
-        typeName = typeName != null ? typeName : "undefined";
-        int boxWidth = Math.max(Math.max(name.length() + 2, 28), typeName.length() + 4);
+        String displayName = name != null ? name : null;
+        String displayTypeName = "";
+        
+        if (!StringUtils.isEmpty(displayName)) {
+            displayTypeName = typeName != null ? typeName : "screen";
+            displayTypeName = "[" + displayTypeName + "]";
+        } else {
+            displayName = typeName != null ? typeName : "screen";
+            displayName = "[" + displayName + "]";
+        }
+        
+        int boxWidth = Math.max(Math.max(displayName.length() + 2, 28), displayTypeName.length() + 4);
         final int LINE_COUNT = 8;
         StringBuilder buff = new StringBuilder(256);
         for (int i = 0; i < LINE_COUNT; i++) {
@@ -358,10 +367,10 @@ public class ScreenService implements IScreenService {
                     buff.append(drawFillerLine(boxWidth));
                     break;
                 case 3:
-                    buff.append(drawTitleLine(boxWidth, name));
+                    buff.append(drawTitleLine(boxWidth, displayName));
                     break;
                 case 4:
-                    buff.append(drawTypeLine(boxWidth, typeName));
+                    buff.append(drawTypeLine(boxWidth, displayTypeName));
                     break;
                 case 5:
                     buff.append(drawBottom1(boxWidth));
@@ -405,7 +414,7 @@ public class ScreenService implements IScreenService {
 
     protected String drawTypeLine(int boxWidth, String typeName) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center("[" + typeName + "]", boxWidth - 4))
+        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center(typeName, boxWidth - 4))
                 .append(VERITCAL_LINE + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();

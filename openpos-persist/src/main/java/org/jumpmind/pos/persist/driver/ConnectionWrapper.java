@@ -39,6 +39,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+import javax.print.attribute.standard.PrinterLocation;
+
 import org.jumpmind.properties.TypedProperties;
 
 public class ConnectionWrapper implements Connection {
@@ -241,6 +243,7 @@ public class ConnectionWrapper implements Connection {
             return (PreparedStatement) preResult.getInterceptResult();
         }
         long startTime = System.currentTimeMillis();
+        System.out.println("Wrapped: " + wrapped);
         PreparedStatement value = wrapped.prepareStatement(arg1);
         long endTime = System.currentTimeMillis();
         InterceptResult postResult = interceptor.postExecute("prepareStatement", value,startTime, endTime ,arg1);

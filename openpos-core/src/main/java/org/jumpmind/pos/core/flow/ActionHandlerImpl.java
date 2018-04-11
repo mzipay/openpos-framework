@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.springframework.stereotype.Component;
 
@@ -14,16 +15,22 @@ public class ActionHandlerImpl {
 
     private static final String METHOD_ON_ANY = "onAnyAction";
 
-    public boolean handleAction(Object state, Action action, Object deserializedPayload) {
+    public boolean handleAction(Object state, Action action, Object deserializedPayload, String overrideActionName) {
         Class<?> clazz = state.getClass();
 
         while (clazz != null) {
 
-            List<Method> methods = MethodUtils.getMethodsListWithAnnotation(clazz, ActionHandler.class, true, false);
+            List<Method> methods = MethodUtils.getMethodsListWithAnnotation(clazz, ActionHandler.class, true, true);
 
             Method anyMethod = null;
-
-            String actionName = action.getName();
+            
+            String actionName = null;
+            if (!StringUtils.isEmpty(overrideActionName)) {
+                actionName = overrideActionName;
+            } else {
+                actionName = action.getName();                
+            }
+            
             for (Method method : methods) {
                 String matchingMethodName = "on" + actionName;
                 method.setAccessible(true);

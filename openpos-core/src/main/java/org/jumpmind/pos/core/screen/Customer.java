@@ -3,6 +3,8 @@ package org.jumpmind.pos.core.screen;
 import java.io.Serializable;
 
 public class Customer implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
 
 	private String fullName;
 	private String firstName;
@@ -16,8 +18,6 @@ public class Customer implements Serializable {
 	private String birthday;
 	private String loyaltyId;
 	
-	
-    private static final long serialVersionUID = 1L;
     
     public Customer() {
     }

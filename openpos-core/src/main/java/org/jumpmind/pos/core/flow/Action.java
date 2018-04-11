@@ -28,9 +28,13 @@ public class Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
+    public static final transient String SUB_STATE_COMPLETE = "SUB_STATE_COMPLETE";
+    public static final transient String SUB_STATE_CANCELLED = "SUB_STATE_CANCELLED";
+    
     private String name;
     private Map<String, String> parameters = new HashMap<>();
     private Object data;
+    private IActionHandler subStateCallback;
 
     public Action() {
         this(null);
@@ -77,7 +81,15 @@ public class Action implements Serializable {
     public String toDataString() {
         return data != null ? data.toString() : null;
     }
+    
+    public IActionHandler getSubStateCallback() {
+        return subStateCallback;
+    }
 
+    public void setSubStateCallback(IActionHandler subStateCallback) {
+        this.subStateCallback = subStateCallback;
+    }
+    
     @Override
     public String toString() {
         return "Action [name=" + name + ", parameters=" + parameters + "]";

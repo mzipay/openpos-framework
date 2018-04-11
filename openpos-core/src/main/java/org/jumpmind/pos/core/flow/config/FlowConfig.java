@@ -27,8 +27,10 @@ import org.jumpmind.pos.core.flow.IState;
 
 
 public class FlowConfig {
+    
     private StateConfig initialState;
     private Map<String, StateConfig> stateConfigs = new HashMap<>();
+    private String returnAction;
     
     public StateConfig getStateConfig(IState state) {
         String stateName = FlowUtil.getStateName(state.getClass());
@@ -50,5 +52,13 @@ public class FlowConfig {
     public void setInitialState(StateConfig initialState) {
         add(initialState);
         this.initialState = initialState;
+    }
+
+    public String getReturnAction() {
+        return returnAction;
+    }
+
+    public void setReturnAction(String returnAction) {
+        this.returnAction = returnAction;
     }
 }

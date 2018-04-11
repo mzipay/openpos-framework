@@ -20,9 +20,12 @@
  */
 package org.jumpmind.pos.app.config;
 
+import org.jumpmind.pos.app.state.CustomerSearchResultsState;
+import org.jumpmind.pos.app.state.CustomerSearchState;
 import org.jumpmind.pos.app.state.HomeScreenState;
 import org.jumpmind.pos.app.state.SellState;
 import org.jumpmind.pos.app.state.UserLoginState;
+import org.jumpmind.pos.core.flow.CompleteState;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.IFlowConfigProvider;
@@ -37,9 +40,22 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
     public FlowConfig getConfig(String appId, String nodeId) {
         FlowConfig config = new FlowConfig();
         config.setInitialState(FlowBuilder.addState(HomeScreenState.class).withTransition("Sell", SellState.class).build());
-        config.add(FlowBuilder.addState(SellState.class).withTransition("Back", HomeScreenState.class).build());
+        config.add(FlowBuilder.addState(SellState.class)
+                .withTransition("Back", HomeScreenState.class)
+                .withSubTransition("CustomerSearch", getCustomerConfig(appId, nodeId), "CustomerSearchComplete").build());
         
         config.add(FlowBuilder.addState(UserLoginState.class).build());
+        
+        return config;
+    }
+    
+    public FlowConfig getCustomerConfig(String appId, String nodeId) {
+        FlowConfig config = new FlowConfig();
+        config.setInitialState(FlowBuilder.addState(CustomerSearchState.class)
+                .withTransition("CustomerSearchResultsLoaded", CustomerSearchResultsState.class).build());
+        
+        config.add(FlowBuilder.addState(CustomerSearchResultsState.class)
+                .withTransition("CustomerSelected", CompleteState.class).build());
         
         return config;
     }

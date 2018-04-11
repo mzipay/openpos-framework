@@ -9,7 +9,6 @@ abstract public class AbstractState implements IState {
     @Autowired
     protected IStateManager stateManager;
     
-    
     protected String getStoreId() {        
         String nodeId = stateManager.getNodeId();
         String[] parts = nodeId.split("-");
