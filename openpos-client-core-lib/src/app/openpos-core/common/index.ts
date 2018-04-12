@@ -15,3 +15,4 @@ export * from './screen-interfaces';
 export {IFormatter} from './formatters/iformatter';
 export {FocusDirective} from './focus.directive';
 export {IWorkStation} from './iworkstation';
+export {ISellItem} from './isellitem';
