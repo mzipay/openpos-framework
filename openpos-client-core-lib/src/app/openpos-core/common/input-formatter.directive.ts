@@ -30,9 +30,10 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
     }
 
     writeValue(value: string): void {
-        if (value) {
-            this.renderer.setProperty(this.elRef.nativeElement, 'value', this.formatter.formatValue(value));
-        }
+        if (!value) {
+            value = '';
+        }           
+        this.renderer.setProperty(this.elRef.nativeElement, 'value', this.formatter.formatValue(value));
     }
 
     registerOnChange(fn: (tel: string) => void): void {
