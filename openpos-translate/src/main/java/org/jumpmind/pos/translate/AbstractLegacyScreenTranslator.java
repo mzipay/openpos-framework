@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.ModeConstants;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
@@ -293,6 +294,10 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
         }
         return buttons;
     }
+    
+    protected ILegacyAssignmentSpec getPromptAndResponseAssignmentSpec() {
+        return getLegacyAssignmentSpec(PROMPT_RESPONSE_PANEL_KEY);
+    }
 
     protected ILegacyAssignmentSpec getLegacyAssignmentSpec() {
         return getLegacyAssignmentSpec(WORK_PANEL_KEY);
@@ -489,6 +494,11 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
             String formattedPromptText = null;
             formattedPromptText = toFormattedString(resourceBundle, promptTextKey,
                     promptAndResponseModel != null ? Optional.ofNullable(promptAndResponseModel.getArguments()) : Optional.empty());
+            if (StringUtils.isBlank(formattedPromptText)) {
+                promptTextKey = String.format("%s.%s", this.getPromptAndResponseAssignmentSpec().getBeanSpecName(), promptTextTag);
+                formattedPromptText = toFormattedString(resourceBundle, promptTextKey,
+                        promptAndResponseModel != null ? Optional.ofNullable(promptAndResponseModel.getArguments()) : Optional.empty());
+            }
             optPromptText = Optional.ofNullable(formattedPromptText);
         } catch (Exception ex) {
             logger.error("Failed to get promptText for {}", uiModel.getModel().getClass());
