@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +41,7 @@ import org.jumpmind.pos.core.screen.ScreenType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -64,19 +66,29 @@ public class ScreenService implements IScreenService {
     Logger logger = LoggerFactory.getLogger(getClass());
     Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
 
-    private ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL);
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     SimpMessagingTemplate template;
 
     @Autowired
     IStateManagerFactory stateManagerFactory;
+    
+    @Value("${org.jumpmind.pos.core.service.ScreenService.jsonIncludeNulls:true}")
+    private boolean jsonIncludeNulls = true;
 
     int screenSequenceNumber = 0;
 
     private Map<String, Map<String, AbstractScreen>> lastScreenByAppIdByNodeId = new HashMap<>();
 
     private Map<String, Map<String, AbstractScreen>> lastDialogByAppIdByNodeId = new HashMap<>();
+    
+    @PostConstruct
+    public void init() {
+        if (!jsonIncludeNulls) {
+            mapper.setSerializationInclusion(Include.NON_NULL);
+        }
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "ping")
     @ResponseBody
