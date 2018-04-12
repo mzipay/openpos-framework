@@ -58,11 +58,14 @@ public class TranslatorState implements IState {
 
     @Override
     public void arrive(Action action) {
-        subscribe();
-        translationManager.showActiveScreen();
+        if (subscribe()) {
+            translationManager.showActiveScreen();
+        } else {
+            translationManager.doAction(subscriber.getAppId(), action, new Form());
+        }
     }
 
-    protected void subscribe() {
+    protected boolean subscribe() {
         if (subscriber == null) {
             ITranslationManagerSubscriber subscriber = new ITranslationManagerSubscriber() {
 
@@ -129,6 +132,9 @@ public class TranslatorState implements IState {
             translationManager.setTranslationManagerSubscriber(subscriber);
             stateManager.setNodeScope("translationManager", translationManager);
             stateManager.setNodeScope("subscriber", subscriber);
+            return true;
+        } else {
+            return false;
         }
     }
 

@@ -16,7 +16,7 @@ import { ScanSomethingData } from '../../common/controls/scan-something/scanSomt
 export class SelfCheckoutStatusBarComponent {
 
   @Input()
-  data : SelfCheckoutStatusBarData;
+  data: SelfCheckoutStatusBarData;
 
   constructor(private session: SessionService, public snackBar: MatSnackBar, public dialogService: MatDialog) {
   }
@@ -38,7 +38,7 @@ export class SelfCheckoutStatusBarComponent {
   }
 
   public showScan() {
-    let scanData = new ScanSomethingData();
+    const scanData = new ScanSomethingData();
     scanData.placeholderText = this.data.scanPlaceholderText;
     const dialogConfig: MatDialogConfig = { autoFocus: true, data: scanData };
     this.dialogService.open(ScanSomethingComponent, dialogConfig);

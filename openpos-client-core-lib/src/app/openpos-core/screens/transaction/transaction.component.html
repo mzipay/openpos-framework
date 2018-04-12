@@ -27,7 +27,7 @@
 					</button>
 				</mat-list-item>
 			</mat-list>
-			<div *ngIf="items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
+			<div *ngIf="!items || items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
 				<mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
 				<span class="text-md">Scan/Key something to get started</span>
 			</div>
