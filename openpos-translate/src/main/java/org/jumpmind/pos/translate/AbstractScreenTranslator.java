@@ -10,13 +10,14 @@ import java.util.Properties;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
+import org.jumpmind.pos.core.screen.AbstractScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.SellScreen.ScanType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-abstract public class AbstractScreenTranslator<T extends SellScreen> {
+abstract public class AbstractScreenTranslator<T extends AbstractScreen> implements ITranslator {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -77,8 +78,11 @@ abstract public class AbstractScreenTranslator<T extends SellScreen> {
 
     public T build() {
         logger.info("{} is building a screen of type '{}'", getClass().getSimpleName(), getScreen().getType());
-        if (isBlank(screen.getIcon())) {
-            screen.setIcon(iconRegistry.get(screen.getName()));
+        if (screen instanceof SellScreen) {
+            SellScreen sellScreen = (SellScreen) screen;
+            if (isBlank(sellScreen.getIcon())) {
+                sellScreen.setIcon(iconRegistry.get(screen.getName()));
+            }
         }
         chooseLocale();
         chooseScreenName();
@@ -126,9 +130,12 @@ abstract public class AbstractScreenTranslator<T extends SellScreen> {
     }
 
     protected void enableScan() {
-        screen.setShowScan(true);
-        screen.setScanType(ScanType.CAMERA_CORDOVA);
-        screen.setScanActionName("Scan");
+        if (screen instanceof SellScreen) {
+            SellScreen sellScreen = (SellScreen) screen;
+            sellScreen.setShowScan(true);
+            sellScreen.setScanType(ScanType.CAMERA_CORDOVA);
+            sellScreen.setScanActionName("Scan");
+        }
     }
 
     public void setAppId(String appId) {
