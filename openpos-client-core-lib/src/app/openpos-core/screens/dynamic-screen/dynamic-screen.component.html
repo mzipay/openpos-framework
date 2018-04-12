@@ -19,6 +19,7 @@
             <mat-menu #logsMenu="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="logShareMenu">Share</button>
                 <button mat-menu-item [matMenuTriggerFor]="logUploadMenu">Upload</button>
+                <button mat-menu-item [matMenuTriggerFor]="logViewMenu">View</button>
             </mat-menu>
 
             <mat-menu #logShareMenu="matMenu">
@@ -27,6 +28,10 @@
 
             <mat-menu #logUploadMenu="matMenu">
                 <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileUpload(m)">{{m}}</button>
+            </mat-menu>
+
+            <mat-menu #logViewMenu="matMenu">
+                <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileView(m)">{{m}}</button>
             </mat-menu>
         </div>
 
