@@ -19,14 +19,13 @@
  */
 package org.jumpmind.pos.core.flow;
 
+import static org.jumpmind.pos.util.BoxLogging.DOWN_ARROW;
 import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_LINE;
-
 import static org.jumpmind.pos.util.BoxLogging.LOWER_LEFT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.LOWER_RIGHT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.UPPER_LEFT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.UPPER_RIGHT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
-import static org.jumpmind.pos.util.BoxLogging.DOWN_ARROW;
 
 import java.util.Deque;
 import java.util.HashMap;
@@ -51,9 +50,6 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component()
 @org.springframework.context.annotation.Scope("prototype")
@@ -83,8 +79,6 @@ public class StateManager implements IStateManager {
     private Deque<StateContext> stateStack = new LinkedList<>();
     private FlowConfig flowConfig;
     private IState currentState;
-
-    private ObjectMapper jsonMapper = new ObjectMapper();
 
     @PostConstruct
     public void postConstruct() {
