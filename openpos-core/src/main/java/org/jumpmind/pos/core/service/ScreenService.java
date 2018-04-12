@@ -64,7 +64,7 @@ public class ScreenService implements IScreenService {
     Logger logger = LoggerFactory.getLogger(getClass());
     Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
 
-    private ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_EMPTY);
+    private ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL);
 
     @Autowired
     SimpMessagingTemplate template;
