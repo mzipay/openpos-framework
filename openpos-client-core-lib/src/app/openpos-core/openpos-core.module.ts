@@ -117,6 +117,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
 import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/multiple-dynamic-form.component';
 import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
 import { DynamicFormDialogComponent } from './dialogs/dynamic-form/dynamic-form-dialog.component';
+import { FileViewerComponent } from './dialogs/file-viewer/file-viewer.component';
 import { DialogService } from './services/dialog.service';
 import { MultipleDynamicFormDialogComponent } from './dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { SelectableItemListComponent } from './common/controls/selectable-item-list/selectable-item-list.component';
@@ -231,6 +232,7 @@ const customLayouts: IKeyboardLayouts = {
     SignatureCaptureComponent,
     StaticTableComponent,
     SaleRetrievalComponent,
+    FileViewerComponent,
     TenderingComponent,
     WarrantyCoverageComponent,
     ScanSomethingComponent,
@@ -310,6 +312,7 @@ const customLayouts: IKeyboardLayouts = {
     DynamicScreenComponent,
     ChangeComponent,
     ConfirmationDialogComponent,
+    FileViewerComponent,
     CheckoutListItemComponent,
     ShowErrorsComponent,
     RequireAtleastOneValidatorDirective,

@@ -1,3 +1,4 @@
+import { FileViewerComponent } from './../../dialogs/file-viewer/file-viewer.component';
 import { OpenPOSDialogConfig } from './../../common/idialog';
 import { TemplateDirective } from './../../common/template.directive';
 import { IScreen } from './../../common/iscreen';
@@ -175,16 +176,33 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         (logfilePath) => {
           this.fileUploadService.uploadLocalDeviceFileToServer('log', logFilename, 'text/plain', logfilePath)
             .then((result: { success: boolean, message: string }) => {
-              // TODO: display a dialog with success.
               this.snackBar.open(result.message, 'Dismiss', {
-                duration: 5000, verticalPosition: 'top'
+                duration: 8000, verticalPosition: 'top'
               });
             })
             .catch((result: { success: boolean, message: string }) => {
               this.snackBar.open(result.message, 'Dismiss', {
-                duration: 5000, verticalPosition: 'top'
+                duration: 8000, verticalPosition: 'top'
               });
             });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+  }
+
+  protected onLogfileView(logFilename: string): void {
+    if (this.logPlugin && this.logPlugin.impl) {
+      this.logPlugin.impl.readLogFileContents(
+        logFilename,
+        (logFileContents) => {
+          const dialogRef = this.dialog.open(FileViewerComponent, { panelClass: 'full-screen-dialog',
+            maxWidth: '100vw', maxHeight: '100vh', width: '100vw'
+          });
+          dialogRef.componentInstance.fileName = logFilename;
+          dialogRef.componentInstance.text = logFileContents;
         },
         (error) => {
           console.log(error);

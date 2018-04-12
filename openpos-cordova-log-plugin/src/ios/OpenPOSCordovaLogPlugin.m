@@ -61,9 +61,17 @@
     NSString *logfileContent;
     
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:logFilePath];
+    NSError *readError = nil;
+
     if (fileExists) {
-        logfileContent = [NSString stringWithContentsOfFile:logFilePath encoding:NSUTF8StringEncoding error:nil];
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:logfileContent];
+        logfileContent = [NSString stringWithContentsOfFile:logFilePath encoding:NSUTF8StringEncoding error:&readError];
+        if (readError) {
+            NSLog(@"ERROR while reading from file '%@': %@", logFilePath, readError);
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[readError localizedDescription]];
+            logfileContent = nil;
+        } else {
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:logfileContent];
+        }
     } else {
         NSString* errorMsg = [NSString stringWithFormat:@"Log file '%@' not found.",logFilename];
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMsg];
