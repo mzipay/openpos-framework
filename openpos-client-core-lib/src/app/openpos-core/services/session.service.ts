@@ -114,7 +114,7 @@ export class SessionService implements ILocaleService {
     if (screen && screen.theme) {
         this.setTheme(screen.theme);
     }
-    this.screenSource.next(this.screen);
+    this.screenSource.next(screen);
   }
 
   public showDialog(dialogObj: any) {

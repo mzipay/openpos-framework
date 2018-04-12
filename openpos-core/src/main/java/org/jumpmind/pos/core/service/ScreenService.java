@@ -257,7 +257,8 @@ public class ScreenService implements IScreenService {
         try {            
             StringBuilder topic = new StringBuilder(128);
             topic.append("/topic/app/").append(appId).append("/node/").append(nodeId);
-            Message<?> message = MessageBuilder.withPayload(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(payload).getBytes("UTF-8")).build();
+            payload = payload instanceof String ? payload : mapper.writerWithDefaultPrettyPrinter().writeValueAsString(payload).getBytes("UTF-8");
+            Message<?> message = MessageBuilder.withPayload(payload).build();
             this.template.send(topic.toString(), message);
         } catch (Exception ex) {
             throw new FlowException("Failed to serialize message for node: " + nodeId + " " + payload, ex);

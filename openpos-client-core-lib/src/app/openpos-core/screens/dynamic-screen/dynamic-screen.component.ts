@@ -106,7 +106,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     if (y < 100) {
-        this.clickCount = ++this.clickCount;
+      this.clickCount = ++this.clickCount;
     }
 
     if (this.clickCount === 5) {
@@ -311,7 +311,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
           }
           break;
         case 'customerdisplay':
-        this.classes = 'selfcheckout';
+          this.classes = 'selfcheckout';
           break;
       }
     }
