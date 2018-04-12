@@ -5,7 +5,7 @@
                 <app-prompt-input #promptInput [placeholderText]="screen.placeholderText" [responseType]="screen.responseType"
                     [responseText]="screen.responseText" [promptIcon]="screen.promptIcon" [hintText]="promptText"
                     [maskSpec]="screen.promptMask" [minLength]="screen.minLength" [maxLength]="screen.maxLength"
-                    [promptFormGroup]="promptFormGroup"></app-prompt-input>
+                    [promptFormGroup]="promptFormGroup" [readOnly]="screen.readOnly"></app-prompt-input>
                 <mat-form-field fxFlexFill *ngIf="screen.showComments">
                     <textarea #box matInput [formControlName]="'comments'" placeholder="Comments"></textarea>
                     <mat-error>

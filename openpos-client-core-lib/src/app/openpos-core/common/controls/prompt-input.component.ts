@@ -21,6 +21,7 @@ export class PromptInputComponent implements OnInit{
     @Input() minLength: number;
     @Input() maxLength: number;
     @Input() promptFormGroup: FormGroup;
+    @Input() readOnly: boolean = false;
 
     inputType: string;
 

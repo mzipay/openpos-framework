@@ -7,8 +7,8 @@
                 for SVG icon
             -->
             <app-icon matPrefix iconClass="material-icons primary" [iconName]="promptIcon"></app-icon>
-            <input matInput [formControlName]="'promptInputControl'" [formatterName]="formatter" [appFocus]="true" 
-                   [attr.minlength]="minLength" [attr.maxlength]="maxLength" autoSelectOnFocus>
+            <input matInput [formControlName]="'promptInputControl'" [formatterName]="formatter" [appFocus]="!readOnly" 
+                   [attr.minlength]="minLength" [attr.maxlength]="maxLength" [readonly]="readOnly" autoSelectOnFocus>
             <mat-placeholder>{{placeholderText}}</mat-placeholder>
             <mat-hint class="text-sm" align="start">{{hintText}}</mat-hint>
             <mat-error class="text-sm">
