@@ -35,6 +35,5 @@ public @interface Column {
     String size() default "";
     boolean required() default false;
     boolean primaryKey() default false;
-    boolean naturalKey() default false;
     String description() default "";
 }

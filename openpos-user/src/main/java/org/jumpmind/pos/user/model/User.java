@@ -12,7 +12,7 @@ import org.jumpmind.pos.persist.Table;
 @Table(description="Security Identifier granting and denying access to the systems of the retail enterprise, and recorded upon the transaction originating from those systems.")
 public class User extends Entity {
 
-    @Column(naturalKey=true)
+    @Column(primaryKey=true)
     private String username;
     @Column
     private String lastName;

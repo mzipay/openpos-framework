@@ -36,7 +36,7 @@ public class DBSessionQueryTest {
     public void setup() {
         sessionFactory.setDatabaseSchema(new DatabaseSchema());
         
-        InputStream queryYamlStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("query.yaml");
+        InputStream queryYamlStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("test-query.yaml");
         QueryTemplates queryTemplates = new Yaml(new Constructor(QueryTemplates.class)).load(queryYamlStream);
         
         sessionFactory.init(
@@ -60,8 +60,7 @@ public class DBSessionQueryTest {
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Accent");
             someHyundai.setModelYear("2005");
-            rowId = db.save(someHyundai);
-            assertNotNull(rowId);
+            db.save(someHyundai);
         }
         {            
             DBSession db = sessionFactory.createDbSession();

@@ -32,7 +32,7 @@ public class UserRepository {
         DBSession db = dbFactory.createDbSession();
         User userLookedUp = db.findByNaturalId(User.class, userName);
         if (userLookedUp != null) {
-            List<PasswordHistory> passwordHistory = db.query(passwordHistoryLookup, userLookedUp.getRowId());
+            List<PasswordHistory> passwordHistory = db.query(passwordHistoryLookup, userLookedUp.getUsername());
             if (passwordHistory != null) {
                 userLookedUp.setPasswordHistory(passwordHistory);
             }
@@ -131,10 +131,10 @@ public class UserRepository {
     
     public void save(User user) {
         DBSession db = dbFactory.createDbSession();
-        String userRowId = db.save(user);
+        db.save(user);
         
         for (PasswordHistory passwordHistory : user.getPasswordHistory()) {
-            passwordHistory.setUserRowId(userRowId);
+            passwordHistory.setUsername(user.getUsername());
         }
         
         db.saveAll(user.getPasswordHistory());

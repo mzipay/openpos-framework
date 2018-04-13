@@ -9,23 +9,16 @@ import org.jumpmind.pos.persist.Table;
 @Table
 public class PasswordHistory extends Entity {
     
-    @Column
-    private String userRowId;
-    @Column(naturalKey=true)
+
+    @Column(primaryKey=true)
     private String username;
-    @Column(naturalKey=true)
+    @Column(primaryKey=true)
     private int passwordSequence;
     @Column(size="254")
     private String hashedPassword;
     @Column
     private Date expirationTime;
-    
-    public String getUserRowId() {
-        return userRowId;
-    }
-    public void setUserRowId(String userRowId) {
-        this.userRowId = userRowId;
-    }
+
     public String getUsername() {
         return username;
     }

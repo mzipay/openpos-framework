@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.UUID;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
@@ -23,11 +25,15 @@ import org.jumpmind.db.sql.DmlStatement.DmlType;
 import org.jumpmind.db.sql.Row;
 import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.jumpmind.pos.persist.impl.DefaultMapper;
+import org.jumpmind.pos.persist.impl.EntitySystemInfo;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.Transaction;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class DBSession {
+    
+    private static final Logger log = Logger.getLogger(DBSession.class);
 
     private Transaction currentTransaction;
 
@@ -55,20 +61,20 @@ public class DBSession {
         return null;
     }
 
-    public <T extends Entity> T findByRowId(Class<T> entityClass, String id) {
-        List<T> results = this.find(entityClass, 
-                getValidatedTable(entityClass), 
-                getRowIdWhereClause(entityClass), 
-                Arrays.asList(id));
-        if (results != null && results.size() == 1) {
-            return results.get(0);
-        } else {
-            return null;
-        }
-    }
+//    public <T extends Entity> T findByRowId(Class<T> entityClass, String id) {
+//        List<T> results = this.find(entityClass, 
+//                getValidatedTable(entityClass), 
+//                getRowIdWhereClause(entityClass), 
+//                Arrays.asList(id));
+//        if (results != null && results.size() == 1) {
+//            return results.get(0);
+//        } else {
+//            return null;
+//        }
+//    }
 
-    public <T extends Entity> T findByNaturalId(Class<T> entityClass, Object id) {
-        Map<String, String> naturalColumnsToFields = databaseSchema.getNaturalColumnsToFields(entityClass);
+    public <T extends Entity> T findByNaturalId(Class<T> entityClass, String id) {
+        Map<String, String> naturalColumnsToFields = databaseSchema.getEntityIdColumnsToFields(entityClass);
 
         if (naturalColumnsToFields.size() != 1) {
             throw new PersistException(String.format("findByNaturalId cannot be used with a single 'id' "
@@ -88,7 +94,7 @@ public class DBSession {
     }
 
     public <T extends Entity> T findByNaturalId(Class<T> entityClass, EntityId id) {
-        Map<String, String> naturalColumnsToFields = databaseSchema.getNaturalColumnsToFields(entityClass);
+        Map<String, String> entityIdColumnsToFields = databaseSchema.getEntityIdColumnsToFields(entityClass);
 
         QueryTemplate queryTemplate = new QueryTemplate();
 
@@ -96,8 +102,8 @@ public class DBSession {
             Map<String, Object> params = new HashMap<>();
             Map<String, Object> fieldValues = id.getIdFields();
             
-            for (String columnName : naturalColumnsToFields.keySet()) {   
-                String fieldName = naturalColumnsToFields.get(columnName);
+            for (String columnName : entityIdColumnsToFields.keySet()) {   
+                String fieldName = entityIdColumnsToFields.get(columnName);
                 queryTemplate.optionalWhere(String.format("%s = ${%s}", columnName, fieldName));
                 if (fieldValues != null) {
                     Object value = fieldValues.get(fieldName);
@@ -212,21 +218,27 @@ public class DBSession {
         return columnNames;
     }    
 
-    public String save(Entity entity) {
+    public void save(Entity entity) {
         Table table = getValidatedTable(entity);
 
-        String rowId = entity.getRowId();
-        if (StringUtils.isEmpty(rowId)) {
-            rowId = generateRowId();
-            entity.setRowId(rowId);
-            insert(entity, table);
+        EntitySystemInfo entitySystemInfo = new EntitySystemInfo(entity);
+
+        if (entitySystemInfo.isNew()) {
+            try {                
+                insert(entity, table);
+            } catch (DuplicateKeyException ex) {
+                log.debug("Insert of entity failed, failing over to an update. " + entity, ex);
+                int updateCount = update(entity, table);
+                if (updateCount < 1) {
+                    throw new PersistException("Failed to perform an insert or update on entity. Do the DB primary key and unique fields "
+                            + "match what's understood by the code?  " + entity, ex);
+                }
+            }
         } else {            
             if (update(entity, table) == 0) {
                 insert(entity, table);
             }
         }
-
-        return rowId;
     }
 
     protected String getSelectSql(Class<? extends Entity> entity) {
@@ -323,10 +335,6 @@ public class DBSession {
         return table;
     }    
 
-    protected String generateRowId() {
-        return UUID.randomUUID().toString();
-    }
-
     protected void checkTransactionStarted() {
         if (currentTransaction == null) {
             throw new PersistException("No transaction was started - call startTransaction() before using this.");
@@ -363,6 +371,8 @@ public class DBSession {
                     BeanUtils.copyProperty(object, propertyName, value);    
                 }
             }
+            
+            decorateRetrievedEntity(object);
             objects.add(object);
         }
 
@@ -373,8 +383,11 @@ public class DBSession {
         }
     }
 
-    protected <T> String getRowIdWhereClause(Class<T> entityClass) {
-        return String.format("row_id = ?");
+    protected void decorateRetrievedEntity(Object object) {
+        if (object instanceof Entity) {
+            EntitySystemInfo entitySystemInfo = new EntitySystemInfo((Entity) object);
+            entitySystemInfo.setRetrievalTime(new Date());
+        }
     }
 
     public void saveAll(List<? extends Entity> entities) {

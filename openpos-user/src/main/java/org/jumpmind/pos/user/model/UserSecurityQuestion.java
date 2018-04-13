@@ -13,11 +13,6 @@ public class UserSecurityQuestion extends Entity {
 
     @Column(required = true,
             size = "16",
-            description = "The corresponding User row id.")
-    private String userRowId;
-
-    @Column(required = true,
-            size = "16",
             description = "The corresponding SecurityQuestion id.")
     private String securityQuestionRowId;
 
@@ -31,14 +26,6 @@ public class UserSecurityQuestion extends Entity {
 
     @Column(description = "The date and time at which this OperatorSecurityQuestion ceases to be valie because a new SecurityHint has been chosen.")
     Date expirationTime;
-
-    public String getUserRowId() {
-        return userRowId;
-    }
-
-    public void setUserRowId(String userRowId) {
-        this.userRowId = userRowId;
-    }
 
     public String getSecurityQuestionRowId() {
         return securityQuestionRowId;

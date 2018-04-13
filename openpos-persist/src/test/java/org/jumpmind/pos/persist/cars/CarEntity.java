@@ -8,7 +8,7 @@ import org.jumpmind.pos.persist.Table;
         description = "A basic concept of an automobile fit to drive down the road.")
 public class CarEntity extends Entity {
 
-    @Column(naturalKey=true)
+    @Column(primaryKey=true)
     private String vin;
     @Column    
     private String modelYear;

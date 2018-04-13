@@ -53,8 +53,7 @@ public class DBSessionNaturalIdTest {
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Accent");
             someHyundai.setModelYear("2005");
-            rowId = db.save(someHyundai);
-            assertNotNull(rowId);
+            db.save(someHyundai);
         }
         {            
             DBSession db = sessionFactory.createDbSession();

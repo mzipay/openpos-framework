@@ -7,12 +7,10 @@ import java.util.Map;
 
 public abstract class Entity {
     
-    private static final long serialVersionUID = 1L;
-    
-    @Column(primaryKey = true,
-            size = "36",
-            description = "A unique, automatically assigned key used to identify a row.")
-    private String rowId;
+//    @Column(primaryKey = true,
+//            size = "36",
+//            description = "A unique, automatically assigned key used to identify a row.")
+//    private String rowId;
     
     @Column(required=true,
             description="Timestamp when this entry was created.")
@@ -64,13 +62,13 @@ public abstract class Entity {
         this.lastUpdateBy = lastUpdateBy;
     }
 
-    public String getRowId() {
-        return rowId;
-    }
-
-    public void setRowId(String rowId) {
-        this.rowId = rowId;
-    }
+//    public String getRowId() {
+//        return rowId;
+//    }
+//
+//    public void setRowId(String rowId) {
+//        this.rowId = rowId;
+//    }
     
 
 }

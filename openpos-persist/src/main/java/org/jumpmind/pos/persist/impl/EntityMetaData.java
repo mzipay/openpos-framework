@@ -9,7 +9,7 @@ import org.jumpmind.db.model.Table;
 public class EntityMetaData {
 
     private Table table;
-    private List<Field> naturalKeyFields = new ArrayList<Field>();
+    private List<Field> entityIdFields = new ArrayList<Field>();
     
     public Table getTable() {
         return table;
@@ -17,11 +17,11 @@ public class EntityMetaData {
     public void setTable(Table table) {
         this.table = table;
     }
-    public List<Field> getNaturalKeyFields() {
-        return naturalKeyFields;
+    public List<Field> getEntityIdFields() {
+        return entityIdFields;
     }
-    public void setNaturalKeyFields(List<Field> naturalKeyFields) {
-        this.naturalKeyFields = naturalKeyFields;
+    public void setEntityIdFields(List<Field> entityIdFields) {
+        this.entityIdFields = entityIdFields;
     }
     
 }

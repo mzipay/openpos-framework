@@ -1,17 +1,13 @@
 package org.jumpmind.pos.persist.impl;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.sql.JDBCType;
 import java.sql.Types;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.db.model.Column;
@@ -20,17 +16,10 @@ import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.IDdlBuilder;
 import org.jumpmind.db.sql.SqlScript;
-import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Extends;
 import org.jumpmind.pos.persist.PersistException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.context.annotation.Scope;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder;
 
 
 public class DatabaseSchema {
@@ -175,22 +164,22 @@ public class DatabaseSchema {
         }               
     }
 
-    protected Set<Class<?>> getClassesForPackageAndAnnotation(String packageName, Class<? extends Annotation> annotation) {
-        Set<Class<?>> classes = new HashSet<Class<?>>();
-        ClassPathScanningCandidateComponentProvider scanner =
-                new ClassPathScanningCandidateComponentProvider(true);
-        scanner.addIncludeFilter(new AnnotationTypeFilter(annotation));
-        for (BeanDefinition bd : scanner.findCandidateComponents(packageName)) {
-            try {
-                final Class<?> clazz = Class.forName(bd.getBeanClassName());
-                classes.add(clazz);
-            } catch (ClassNotFoundException ex) {
-                log.error(ex.getMessage());
-            }
-        }    
-        return classes;
-    }
-
+//    protected Set<Class<?>> getClassesForPackageAndAnnotation(String packageName, Class<? extends Annotation> annotation) {
+//        Set<Class<?>> classes = new HashSet<Class<?>>();
+//        ClassPathScanningCandidateComponentProvider scanner =
+//                new ClassPathScanningCandidateComponentProvider(true);
+//        scanner.addIncludeFilter(new AnnotationTypeFilter(annotation));
+//        for (BeanDefinition bd : scanner.findCandidateComponents(packageName)) {
+//            try {
+//                final Class<?> clazz = Class.forName(bd.getBeanClassName());
+//                classes.add(clazz);
+//            } catch (ClassNotFoundException ex) {
+//                log.error(ex.getMessage());
+//            }
+//        }    
+//        return classes;
+//    }
+//
 //    protected Database addTablesToDatabase(Database db, String packageName) {
 //        for (Class<?> clazz : getClassesForPackageAndAnnotation(packageName, org.jumpmind.pos.persist.Table.class)) {
 //            db.addTable(createTable(clazz));
@@ -217,8 +206,8 @@ public class DatabaseSchema {
                 Column column = createColumn(field);
                 if (column != null) {
                     dbTable.addColumn(column);
-                    if (isNaturalKey(field)) {
-                        meta.getNaturalKeyFields().add(field);
+                    if (isPrimaryKey(field)) {
+                        meta.getEntityIdFields().add(field);
                     }
                 }
             }       
@@ -228,17 +217,17 @@ public class DatabaseSchema {
         meta.setTable(dbTable);
         return meta;
     }
-
-    private boolean isNaturalKey(Field field) {
+    
+    private boolean isPrimaryKey(Field field) {
         if (field != null) {            
             org.jumpmind.pos.persist.Column colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.Column.class);
             if (colAnnotation != null) {
-                return colAnnotation.naturalKey();
+                return colAnnotation.primaryKey();
             }
         }
         
         return false;
-    }
+    }    
 
     protected Column createColumn(Field field) {        
         Column dbCol = null;
@@ -265,9 +254,7 @@ public class DatabaseSchema {
             }
             dbCol.setPrimaryKey(colAnnotation.primaryKey());
             
-            dbCol.setUnique(colAnnotation.naturalKey());
-            
-            if (colAnnotation.primaryKey() || colAnnotation.naturalKey()) {
+            if (colAnnotation.primaryKey()) {
                 dbCol.setRequired(true);
             } else {                
                 dbCol.setRequired(colAnnotation.required());
@@ -276,9 +263,9 @@ public class DatabaseSchema {
         return dbCol;
     }
     
-    public Map<String, String> getNaturalColumnsToFields(Class<?> entityClass) {
-        Map<String, String> naturalColumnsToFields = new LinkedHashMap<>();
-        List<Field> fields = getNaturalKeyFields(entityClass);
+    public Map<String, String> getEntityIdColumnsToFields(Class<?> entityClass) {
+        Map<String, String> entityIdColumnsToFields = new LinkedHashMap<>();
+        List<Field> fields = gettEntityIdFields(entityClass);
         for (Field field : fields) {
             org.jumpmind.pos.persist.Column colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.Column.class);
             if (colAnnotation != null) {
@@ -288,16 +275,16 @@ public class DatabaseSchema {
                 } else {
                     columnName = camelToSnakeCase(field.getName());
                 } 
-                naturalColumnsToFields.put(columnName, field.getName());
+                entityIdColumnsToFields.put(columnName, field.getName());
             }
         }
         
-        return naturalColumnsToFields;
+        return entityIdColumnsToFields;
     }
     
-    public List<Field> getNaturalKeyFields(Class<?> entityClass) {
+    public List<Field> gettEntityIdFields(Class<?> entityClass) {
         EntityMetaData meta = classMetadata.get(entityClass);
-        List<Field> fields = meta.getNaturalKeyFields();
+        List<Field> fields = meta.getEntityIdFields();
         return fields;
     }
 

@@ -2,5 +2,5 @@
 queries:
 -
   name: passwordHistoryLookup
-  where: user_row_id = ${userRowId}
+  where: username = ${username}
   orderBy: password_sequence

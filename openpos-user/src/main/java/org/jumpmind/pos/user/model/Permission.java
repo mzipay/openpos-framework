@@ -7,7 +7,7 @@ import org.jumpmind.pos.persist.Table;
 @Table(description = "A table that associates workgroups with resources and specifies their access level.")
 public class Permission extends Entity {
 
-    @Column(naturalKey=true,
+    @Column(primaryKey=true,
             description = "e.g. sell.apply.discount OR sell.*")
     private String permissionId;
     

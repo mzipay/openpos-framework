@@ -10,11 +10,11 @@ import org.jumpmind.pos.persist.Table;
 @Table(name="service_invoice")
 public class ServiceInvoice extends Entity {
     
-    @Column(naturalKey=true)
+    @Column(primaryKey=true)
     private Date invoiceDate;
-    @Column(naturalKey=true)
+    @Column(primaryKey=true)
     private long invoiceLocation;
-    @Column(naturalKey=true)
+    @Column(primaryKey=true)
     private long invoiceNumber;
     @Column
     private BigDecimal invoiceTotal;

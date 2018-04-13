@@ -34,35 +34,34 @@ public class DBSessionTest {
 
     @Test
     public void testBasicCrud() {
-        final String VIN = "KMHCN46C58U242743";
+        final String VIN1 = "KMHCN46C58U242743";
+        final String VIN2 = "KMHCN46C58U2427432342";
         String rowId = null;
         
         {            
             DBSession db = sessionFactory.createDbSession();
             CarEntity someHyundai = new CarEntity();
-            someHyundai.setVin(VIN);
+            someHyundai.setVin(VIN1);
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Accent");
             someHyundai.setModelYear("2005");
-            rowId = db.save(someHyundai);
-            assertNotNull(rowId);
+            db.save(someHyundai);
         }
         {            
             DBSession db = sessionFactory.createDbSession();
             CarEntity someHyundai = new CarEntity();
-            someHyundai.setVin(VIN + "2342");
+            someHyundai.setVin(VIN2);
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Elantra");
             someHyundai.setModelYear("2005");
-            String secondRowId = db.save(someHyundai);
-            assertNotNull(rowId);
+            db.save(someHyundai);
         }        
 
         {   
             DBSession db = sessionFactory.createDbSession();
-            CarEntity hyundaiLookupedUp = db.findByRowId(CarEntity.class, rowId);
+            CarEntity hyundaiLookupedUp = db.findByNaturalId(CarEntity.class, VIN1);
             assertNotNull(hyundaiLookupedUp);
-            assertEquals(VIN, hyundaiLookupedUp.getVin());
+            assertEquals(VIN1, hyundaiLookupedUp.getVin());
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());
             assertEquals("Accent", hyundaiLookupedUp.getModel());
             assertEquals("2005", hyundaiLookupedUp.getModelYear());
@@ -72,9 +71,9 @@ public class DBSessionTest {
         
         {            
             DBSession db = sessionFactory.createDbSession();
-            CarEntity hyundaiLookupedUp = db.findByNaturalId(CarEntity.class, VIN);
+            CarEntity hyundaiLookupedUp = db.findByNaturalId(CarEntity.class, VIN1);
             assertNotNull(hyundaiLookupedUp);
-            assertEquals(VIN, hyundaiLookupedUp.getVin());
+            assertEquals(VIN1, hyundaiLookupedUp.getVin());
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());
             assertEquals("Accent", hyundaiLookupedUp.getModel());
             assertEquals("2006", hyundaiLookupedUp.getModelYear());            
