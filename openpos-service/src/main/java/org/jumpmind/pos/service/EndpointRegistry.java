@@ -12,7 +12,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EnpointRegistry {
+public class EndpointRegistry {
 
     @Autowired
     private ConfigurableApplicationContext applicationContext;
