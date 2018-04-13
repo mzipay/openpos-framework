@@ -6,9 +6,12 @@ import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@DependsOn(value = { "UserModule" })
 public class UserRepository {
     
     private Query<PasswordHistory> passwordHistoryLookup = new Query<PasswordHistory>()
@@ -17,6 +20,7 @@ public class UserRepository {
     
     @Autowired
     @Qualifier("userDbSession")
+    @Lazy
     private DBSession dbSession;    
     
     public User findUser(String userName) {

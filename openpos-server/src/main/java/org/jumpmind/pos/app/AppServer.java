@@ -2,9 +2,11 @@ package org.jumpmind.pos.app;
 
 import java.lang.reflect.Method;
 
+import org.jumpmind.pos.persist.driver.Driver;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
@@ -14,6 +16,12 @@ import org.springframework.context.annotation.PropertySource;
 public class AppServer {
 
     public static void main(String[] args) throws Exception {
+        // Load JumpMind driver wrapper.
+        try {
+            Class.forName(Driver.class.getName());
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }        
         if (args == null || args.length == 0) {
             SpringApplication.run(AppServer.class, args);
         } else if (args != null && args.length > 0) {
