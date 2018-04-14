@@ -270,7 +270,11 @@ export class SessionService implements ILocaleService {
     }
   }
 
-  public async onAction(action: string | IMenuItem, payload?: any, confirm?: string) {
+  public async onValueChange(action: string, payload?: any ){
+    this.onAction( action, payload, null, true);
+  }
+
+  public async onAction(action: string | IMenuItem, payload?: any, confirm?: string, isValueChangedAction?: boolean) {
     if (action) {
       let actionString = '';
       // we need to figure out if we are a menuItem or just a string
@@ -333,7 +337,9 @@ export class SessionService implements ILocaleService {
           this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
         } else {
           sendToServer();
-          this.showDialog(null);
+          if(!isValueChangedAction){
+            this.showDialog(null);
+          }
           this.queueLoading();
         }
       }

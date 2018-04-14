@@ -60,6 +60,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
   private installedTemplate: AbstractTemplate;
 
+  private lastDialogType: string;
+
   protected classes = '';
 
   @ViewChild(TemplateDirective) host: TemplateDirective;
@@ -234,7 +236,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     if (dialog) {
       const dialogType = this.dialogService.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
       if (!this.dialogOpening) {
-        if (this.dialogRef) {
+        if (this.dialogRef && (dialog.type !== this.lastDialogType || dialog.type === 'Dialog')) {
           console.log('closing dialog');
           this.dialogRef.close();
           this.dialogRef = null;
@@ -318,6 +320,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
   }
 
   openDialog(dialog: any) {
+
     const dialogComponentFactory: ComponentFactory<IScreen> = this.dialogService.resolveDialog(dialog.type);
     let closeable = false;
     if (dialog.template.dialogProperties) {
@@ -335,7 +338,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       console.log(`Dialog options: ${JSON.stringify(dialogProperties)}`);
     }
 
-    this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
+    if( !this.dialogRef || dialog.type !== this.lastDialogType || dialog.type === "Dialog"){
+      this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
+    }
+
     this.dialogRef.componentInstance.show(dialog, this);
     this.dialogOpening = false;
     console.log('Dialog \'' + dialog.type + '\' opened');
@@ -354,6 +360,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       }
     }
     );
+    this.lastDialogType = dialog.type;
   }
 
 }
