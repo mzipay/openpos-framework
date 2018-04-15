@@ -9,6 +9,7 @@ public class DialogProperties implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String width;
+    private String height;
     private Boolean executeActionBeforeClose;
     private Boolean closeable;
 
@@ -51,5 +52,13 @@ public class DialogProperties implements Serializable {
 
 	public void setCloseable(Boolean closeable) {
 		this.closeable = closeable;
+	}
+
+	public String getHeight() {
+		return height;
+	}
+
+	public void setHeight(String height) {
+		this.height = height;
 	}
 }
