@@ -101,7 +101,7 @@ public class ScreenService implements IScreenService {
     public void getAction(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String action, @PathVariable String payload,
             HttpServletResponse resp) {
         logger.info("Received a request for {} {} {} {}", appId, nodeId, action, payload);
-        IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
+        IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
         if (stateManager != null) {
             logger.info("Calling stateManager.doAction with: {}", action);
             stateManager.doAction(new Action(action, payload));
@@ -168,7 +168,7 @@ public class ScreenService implements IScreenService {
         if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getType())) {
             publishToClients(appId, nodeId, "{\"clearDialog\":true }");
         }
-        IStateManager stateManager = stateManagerFactory.retreive(appId, nodeId);
+        IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
         if (stateManager != null) {
             try {
                 logger.info("Posting action of {}", action);
