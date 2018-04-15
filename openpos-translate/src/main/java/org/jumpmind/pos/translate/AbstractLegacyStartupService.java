@@ -58,6 +58,9 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
 
     private Map<String, ITranslationManager> translationManagers = new HashMap<>();
     
+    // Cache of Node-id to process mappings for accessing node JVM after startup
+    private Map<String, Process> runningExternalProcesses = new HashMap<>();
+    
     public static String getDefaultServiceName(String storeId, String workstationId) {
         return String.format("%s/%s-%s", ITranslationManager.class.getSimpleName(), storeId, workstationId);
     }
@@ -102,6 +105,44 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
         } 
     }
 
+    protected void terminate(String nodeId) {
+        if (! this.isExternalProcessEnabled()) {
+            logger.warn("Can't terminate node {} when running in internal mode", nodeId);
+            return;
+        }
+
+        Process maybeRunningProcess = this.runningExternalProcesses.get(nodeId);
+        if (maybeRunningProcess != null && maybeRunningProcess.isAlive()) {
+            logger.info("Legacy node {} is alive, now stopping", nodeId);
+            maybeRunningProcess.destroy();
+            /* Should decrement this count in order to allow a subsequent remote debug connection to the VM, but
+             * there is an issue that occurs when restarting the remote VM where it won't start if remote debug arguments
+             * are passed to it.  I am guessing it pertains to the port that was allocated for remote debugging.
+            if (this.externalProcessCount > 0) {
+                this.externalProcessCount--;
+            }
+            */
+        } else {
+            logger.info("Legacy node {} is not currently alive, no need to terminate.", nodeId);
+        }
+        
+    }
+    
+    public void restart(String nodeId) {
+        if (! this.isExternalProcessEnabled()) {
+            logger.warn("Can't restart node {} when running in internal mode", nodeId);
+            return;
+        }
+        
+        if (this.runningExternalProcesses.containsKey(nodeId)) {
+            logger.info("Restarting legacy node {}...", nodeId);
+            this.terminate(nodeId);
+            this.start(nodeId);
+        } else {
+            logger.warn("Legacy node {} not found, nothing to restart", nodeId);
+        }
+    }
+    
     @Override
     public void start(String nodeId) {
         String storeId = NodeUtils.parseStoreId(nodeId);
@@ -198,6 +239,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             
 
             cmdLine.add(this.getHeadlessWorkstationProcessClass().getName());
+            String processKey = String.format("%s-%s", storeId, workstationId);
 
             ProcessBuilder pb = new ProcessBuilder(cmdLine);
             pb.redirectErrorStream(true);
@@ -212,6 +254,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 if (process.isAlive()) {
                     logger.info("Destroying child process {}" + file.getName());
+                    this.runningExternalProcesses.remove(processKey);
                     process.destroy();
                 }
             }));
@@ -229,19 +272,21 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
                         remote.ping();
                         this.getTranslationManagers().put(file.getName(), remote);
                         logger.info("Established a connection with the remote interface for {}:{}", storeId, workingDir);
+                        this.incrementExternalProcessCount();
+                        this.runningExternalProcesses.put(processKey, process);
+                        break;
                     } catch (RemoteAccessException e) {
                         this.getTranslationManagers().remove(file.getName());
                         if (i == 0) {
                             logger.info("The remote interface was not available.  Trying again in a second");
                         } else if (i == MAX_TRIES-1) {
-                            logger.warn("Failed to established a connection with the remote interface for {}:{}", storeId, workingDir);
+                            logger.warn("Failed to establish a connection with the remote interface for {}:{}", storeId, workingDir);
                             process.destroy();
                             break;
                         }
                         Thread.sleep(1000);
                     }
                 }
-                this.incrementExternalProcessCount();
             } else {
                 logger.warn("The launched process died unexpectly for {}", file.getName());
             }
