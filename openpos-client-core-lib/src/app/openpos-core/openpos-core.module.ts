@@ -121,6 +121,7 @@ import { FileViewerComponent } from './dialogs/file-viewer/file-viewer.component
 import { DialogService } from './services/dialog.service';
 import { MultipleDynamicFormDialogComponent } from './dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { SelectableItemListComponent } from './common/controls/selectable-item-list/selectable-item-list.component';
+import { PhonePipe } from './common/phone.pipe';
 
 // Keyboard Layouts
 const customLayouts: IKeyboardLayouts = {
@@ -334,7 +335,8 @@ const customLayouts: IKeyboardLayouts = {
     MultipleDynamicFormDialogComponent,
     DynamicDateFormFieldComponent,
     NavListComponent,
-    SelectableItemListComponent
+    SelectableItemListComponent,
+    PhonePipe
   ],
   imports: [
     BrowserModule,
@@ -362,7 +364,8 @@ const customLayouts: IKeyboardLayouts = {
     DynamicFormControlComponent,
     FocusDirective,
     StatusBarComponent,
-    SelectableItemListComponent
+    SelectableItemListComponent,
+    PhonePipe
     ],
   providers: [
     HttpClient,
