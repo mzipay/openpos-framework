@@ -29,6 +29,8 @@ export class MoneyFormatter implements IFormatter {
 
         if (n.length === 1) {
             return `0.0${n}`;
+        } else if (n.length === 0) {
+            return '';
         }
 
         return `0.${n}`;

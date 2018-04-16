@@ -23,3 +23,8 @@
 textarea {
   line-height: 1.5em;
 }
+
+:host::ng-deep .mat-form-field{
+
+  font-size: 18px;
+}

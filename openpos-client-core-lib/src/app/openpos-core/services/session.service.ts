@@ -334,7 +334,7 @@ export class SessionService implements ILocaleService {
         try {
           this.response = this.actionPayloads.get(actionString)();
         } catch (e) {
-          console.log(`invalid action payload for ${actionString}`);
+          console.log(`invalid action payload for ${actionString}: ` + e);
           processAction = false;
         }
       }
