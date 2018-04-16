@@ -26,7 +26,7 @@ public class DBSessionTest {
     public void setup() {
         sessionFactory.setDatabaseSchema(new DatabaseSchema());
         sessionFactory.init(
-                PersistTestUtil.getH2TestProperties(), 
+                PersistTestUtil.testDbPlatform(), 
                 PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class),
                 PersistTestUtil.getQueryTempaltes("test"));                

@@ -16,7 +16,7 @@ public class DBSessionTransactionTest {
     @Before
     public void setup() {
         sessionFactory.init(
-                PersistTestUtil.getH2TestProperties(), 
+                PersistTestUtil.testDbPlatform(),
                 PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class),
                 PersistTestUtil.getQueryTempaltes("test"));                
