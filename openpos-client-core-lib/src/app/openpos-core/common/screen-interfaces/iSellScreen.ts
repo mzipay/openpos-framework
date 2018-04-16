@@ -54,9 +54,9 @@ export class SellScreenUtils {
         return statusBar;
     }
 
-    public static getScanSomethingData(screen: ISellScreen): ScanSomethingData {
+    public static getScanSomethingData(screen: ISellScreen, template: any): ScanSomethingData {
         const scanSomethingData = new ScanSomethingData();
-        scanSomethingData.placeholderText = screen.placeholderText;
+        scanSomethingData.placeholderText = template.scanSomethingText;
 
         return scanSomethingData;
     }
