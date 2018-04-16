@@ -24,7 +24,8 @@ export class PersonalizationComponent implements IScreen, OnInit {
     ngOnInit() {
         this.firstFormGroup = this.formBuilder.group({
             serverName: ['', [Validators.required]],
-            serverPort: ['', [Validators.required, , Validators.pattern('^[0-9]+$')]]
+            serverPort: ['', [Validators.required, , Validators.pattern('^[0-9]+$')]],
+            sslEnabled: ['']
         }, { asyncValidator: this.serverValidator });
         this.secondFormGroup = this.formBuilder.group({
             storeNumber: ['', [Validators.required, , Validators.pattern('\\d{5}')]],
@@ -37,7 +38,8 @@ export class PersonalizationComponent implements IScreen, OnInit {
 
     public personalize() {
         this.session.personalize(this.firstFormGroup.get('serverName').value, this.firstFormGroup.get('serverPort').value,
-            this.secondFormGroup.get('storeNumber').value, this.secondFormGroup.get('deviceNumber').value);
+            this.secondFormGroup.get('storeNumber').value, this.secondFormGroup.get('deviceNumber').value, 
+            this.firstFormGroup.get('sslEnabled').value);
     }
 
     serverValidator = (control: AbstractControl) => {
@@ -46,8 +48,13 @@ export class PersonalizationComponent implements IScreen, OnInit {
             this.checkTimeout = setTimeout(() => {
                 const serverName = control.get('serverName').value;
                 const serverPort = control.get('serverPort').value;
+                const sslEnabled: boolean = control.get('sslEnabled').value;
                 if (serverName) {
-                    let url: string = 'http://' + serverName;
+                    let protocol = 'http://';
+                    if (sslEnabled) {
+                        protocol = 'https://';
+                    }
+                    let url: string = protocol + serverName;
                     if (serverPort) {
                         url = url + ':' + serverPort;
                     }
