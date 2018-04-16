@@ -16,11 +16,15 @@ export class ScanSomethingComponent implements AfterViewInit {
 
   @Input()
   scanSomethingData: ScanSomethingData;
+  
 
   public barcode: string;
 
   @Input()
   public autoFocus: boolean;
+
+  @Input() minLength: number = 1;
+  @Input() maxLength: number;
 
   constructor(private session: SessionService, public devices: DeviceService,
     @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>,
@@ -39,7 +43,7 @@ export class ScanSomethingComponent implements AfterViewInit {
 
 
   public onEnter(): void {
-    if (this.barcode && this.barcode.trim().length > 0) {
+    if (this.barcode && this.barcode.trim().length >= this.minLength) {
       this.session.onAction('Next', this.barcode);
       this.barcode = '';
       if (this.dialogRef) {
