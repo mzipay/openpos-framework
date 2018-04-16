@@ -2,17 +2,17 @@ package org.jumpmind.pos.service;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EnpointRegistry {
+public class EndpointRegistry {
 
     @Autowired
     private ConfigurableApplicationContext applicationContext;
@@ -32,9 +32,11 @@ public class EnpointRegistry {
     
     protected void checkAndRegisterEndpoint(Object bean) {
         Class<?> beanClass = bean.getClass();
+        
         for (Method method : beanClass.getDeclaredMethods()) {
-            Endpoint baseEndpoint = method.getAnnotation(Endpoint.class);
-            EndpointOverride overrideEndpoint = method.getAnnotation(EndpointOverride.class);
+            Endpoint baseEndpoint = AnnotationUtils.findAnnotation(method, Endpoint.class);
+            EndpointOverride overrideEndpoint = AnnotationUtils.findAnnotation(method, EndpointOverride.class);
+            
             if (baseEndpoint != null) {
                 baseEndpoints.put(baseEndpoint.value(), buildEndpointDefition(baseEndpoint.value(), method, bean));
             } else if (overrideEndpoint != null) {

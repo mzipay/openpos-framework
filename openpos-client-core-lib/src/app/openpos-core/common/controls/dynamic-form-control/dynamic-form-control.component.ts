@@ -22,42 +22,18 @@ import { IForm } from '../../iform';
 })
 export class DynamicFormControlComponent implements OnInit {
 
-  @Input() screenForm: IForm;
+  @Input() 
+  get screenForm(): IForm{
+    return this._screenForm;
+  }
 
-  @Input() submitAction: string;
-
-  @Input() submitButtonText = 'Next';
-
-  @Input() screen: any;
-
-  form: FormGroup;
-
-  buttons: IFormElement[];
-
-  constructor(public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) { }
-
-  ngOnInit() {
-
-
-    if (this.screen.alternateSubmitActions) {
-      this.screen.alternateSubmitActions.forEach(action => {
-
-        this.session.registerActionPayload(action, () => {
-          if (this.form.valid) {
-            this.buildFormPayload();
-            return this.session.response = this.screenForm;
-          } else {
-            throw Error('form is invalid');
-          }
-        });
-      });
-    }
-
+  set screenForm( screenForm: IForm){
+    this._screenForm = screenForm;
     const group: any = {};
 
     this.buttons = new Array<IFormElement>();
 
-    this.screenForm.formElements.forEach(element => {
+    screenForm.formElements.forEach(element => {
 
       const ctlValidators: ValidatorFn[] = this.createControlValidators(element);
       group[element.id] = new FormControl(element.value, ctlValidators);
@@ -74,6 +50,45 @@ export class DynamicFormControlComponent implements OnInit {
 
     const grpValidators: ValidatorFn[] = this.createFormLevelValidators();
     this.form = new FormGroup(group, grpValidators);
+  }
+
+  @Input() submitAction: string;
+
+  @Input() submitButtonText = 'Next';
+
+  @Input() 
+  get screen(): any{
+    return this._screen;
+  }
+
+  set screen( screen: any ){
+    this._screen = screen;
+    if (screen.alternateSubmitActions) {
+      screen.alternateSubmitActions.forEach(action => {
+
+        this.session.registerActionPayload(action, () => {
+          if (this.form.valid) {
+            this.buildFormPayload();
+            return this.session.response = this._screenForm;
+          } else {
+            throw Error('form is invalid');
+          }
+        });
+      });
+    }
+  }
+
+  form: FormGroup;
+
+  buttons: IFormElement[];
+
+  private _screenForm: IForm;
+  private _screen: IScreen;
+
+  constructor(public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) {}
+
+  ngOnInit() {
+
 
   }
 
@@ -134,14 +149,14 @@ export class DynamicFormControlComponent implements OnInit {
     if (this.form.valid) {
 
       this.buildFormPayload();
-      this.session.onAction(this.submitAction, this.screenForm);
+      this.session.onAction(this.submitAction, this._screenForm);
     }
   }
 
   onFieldChanged(formElement: IFormElement) {
     if (formElement.valueChangedAction) {
       this.buildFormPayload();
-      this.session.onAction(formElement.valueChangedAction, this.screenForm);
+      this.session.onValueChange(formElement.valueChangedAction, this._screenForm );
     }
   }
 
@@ -150,7 +165,7 @@ export class DynamicFormControlComponent implements OnInit {
   }
 
   private buildFormPayload() {
-    this.screenForm.formElements.forEach(element => {
+    this._screenForm.formElements.forEach(element => {
       if (element.hasOwnProperty('value')) {
         element.value = this.form.value[element.id];
       }

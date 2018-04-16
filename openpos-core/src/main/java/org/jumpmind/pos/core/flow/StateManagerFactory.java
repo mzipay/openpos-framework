@@ -46,7 +46,7 @@ public class StateManagerFactory implements IStateManagerFactory {
     private Map<String, Map<String, StateManager>> stateManagersByAppIdByNodeId = new HashMap<>();
 
     @Override
-    public IStateManager retreive(String appId, String nodeId) {
+    public IStateManager retrieve(String appId, String nodeId) {
         Map<String, StateManager> stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
         if (stateManagersByNodeId != null) {
             return stateManagersByNodeId.get(nodeId);

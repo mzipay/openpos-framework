@@ -62,7 +62,9 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
 
     @Override
     public void setTranslationManagerSubscriber(ITranslationManagerSubscriber subscriber) {
-        if (this.subscriberByAppId.get(subscriber.getAppId()) == null) {
+        ITranslationManagerSubscriber currentSubscriber = this.subscriberByAppId.get(subscriber.getAppId());
+        
+        if (currentSubscriber == null) {
             this.subscriberByAppId.put(subscriber.getAppId(), subscriber);
             getLegacyUISubsystem().setLegacyScreenListener(this);
         }
@@ -71,6 +73,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
     @Override
     public void doAction(String appId, Action action, Form formResults) {
         ITranslator lastTranslator = this.lastTranslatorByAppId.get(appId);
+        logger.debug("lastTranslator = {}", lastTranslator);
         if (lastTranslator != null) {
             lastTranslator.handleAction(subscriberByAppId.get(appId), this, action, formResults);
         } else {

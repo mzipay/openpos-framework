@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class EndpointDispatcher {
 
     @Autowired
-    private EnpointRegistry endpointRegistry;
+    private EndpointRegistry endpointRegistry;
 
     @SuppressWarnings("unchecked")
     public <T> T dispatch(String path, Object... args) {

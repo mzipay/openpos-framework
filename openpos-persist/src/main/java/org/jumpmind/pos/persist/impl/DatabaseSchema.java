@@ -247,6 +247,7 @@ public class DatabaseSchema {
             } else {
                 dbCol.setTypeCode(colAnnotation.type());
             }
+            
             if (colAnnotation.size() != null & !colAnnotation.size().equalsIgnoreCase("")) {
                 dbCol.setSize(colAnnotation.size());
             } else {
@@ -291,6 +292,8 @@ public class DatabaseSchema {
     protected String getDefaultSize(Field field, Column column) {
         if (column.getMappedTypeCode() == Types.VARCHAR) {
             return "128";
+        } else if (column.getJdbcTypeCode() == Types.DECIMAL) {
+            return "12";
         }
         return null;
     }

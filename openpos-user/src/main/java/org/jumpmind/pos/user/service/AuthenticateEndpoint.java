@@ -11,9 +11,11 @@ import org.jumpmind.pos.user.model.User;
 import org.jumpmind.pos.user.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
+@Transactional
 public class AuthenticateEndpoint {
 
     @Autowired

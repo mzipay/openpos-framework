@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,7 +33,7 @@ public class DBSessionNaturalIdTest {
     public void setup() {
         sessionFactory.setDatabaseSchema(new DatabaseSchema());
         sessionFactory.init(
-                PersistTestUtil.getH2TestProperties(), 
+                PersistTestUtil.testDbPlatform(), 
                 PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class, ServiceInvoice.class),
                 PersistTestUtil.getQueryTempaltes("test"));

@@ -17,6 +17,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { DialogService } from './../../services/dialog.service';
 import { AbstractTemplate } from '../..';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -60,6 +61,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
   private installedTemplate: AbstractTemplate;
 
+  private lastDialogType: string;
+
   protected classes = '';
 
   @ViewChild(TemplateDirective) host: TemplateDirective;
@@ -68,7 +71,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     public deviceService: DeviceService, public dialog: MatDialog,
     public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
     protected router: Router, private pluginService: PluginService,
-    private fileUploadService: FileUploadService) {
+    private fileUploadService: FileUploadService,
+    private httpClient: HttpClient) {
   }
 
   ngOnInit(): void {
@@ -156,6 +160,40 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     this.session.refreshApp();
   }
 
+  protected onDevRestartNode(): Promise<{success: boolean, message: string}> {
+
+      const prom = new Promise<{success: boolean, message: string}>( (resolve, reject) => {
+        const port = this.session.getServerPort();
+        const nodeId = this.session.getNodeId().toString();
+        const url = `http://${this.session.getServerName()}${port ? `:${port}` : ''}` +
+          `/register/restart/node/${nodeId}`;
+        const httpClient = this.httpClient;
+        httpClient.get(url).subscribe( response => {
+          const msg = `Node '${nodeId}' restarted successfully.`;
+          console.log(msg);
+          resolve({success: true, message: msg});
+        },
+        err => {
+            const msg = `Node restart Error occurred: ${JSON.stringify(err)}`;
+            const statusCode = err.status || (err.error ? err.error.status : null);
+            let errMsg = '';
+            if (err.error) {
+                if (err.error.error) {
+                    errMsg += err.error.error;
+                }
+                if (err.error.message) {
+                    errMsg += (errMsg ? '; ' : '') + err.error.message;
+                }
+            }
+            const returnMsg = `${statusCode ? statusCode + ': ' : ''}` +
+              (errMsg ? errMsg : 'Restart failed. Check client and server logs.');
+            reject({success: false, message: returnMsg});
+        });
+
+      });
+      return prom;
+  }
+
   protected onLogfileSelected(logFilename: string): void {
     if (this.logPlugin && this.logPlugin.impl) {
       this.logPlugin.impl.shareLogFile(
@@ -234,7 +272,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     if (dialog) {
       const dialogType = this.dialogService.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
       if (!this.dialogOpening) {
-        if (this.dialogRef) {
+        if (this.dialogRef && (dialog.type !== this.lastDialogType || dialog.type === 'Dialog')) {
           console.log('closing dialog');
           this.dialogRef.close();
           this.dialogRef = null;
@@ -318,6 +356,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
   }
 
   openDialog(dialog: any) {
+
     const dialogComponentFactory: ComponentFactory<IScreen> = this.dialogService.resolveDialog(dialog.type);
     let closeable = false;
     if (dialog.template.dialogProperties) {
@@ -335,7 +374,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       console.log(`Dialog options: ${JSON.stringify(dialogProperties)}`);
     }
 
-    this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
+    if( !this.dialogRef || dialog.type !== this.lastDialogType || dialog.type === "Dialog"){
+      this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
+    }
+
     this.dialogRef.componentInstance.show(dialog, this);
     this.dialogOpening = false;
     console.log('Dialog \'' + dialog.type + '\' opened');
@@ -354,6 +396,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       }
     }
     );
+    this.lastDialogType = dialog.type;
   }
 
 }

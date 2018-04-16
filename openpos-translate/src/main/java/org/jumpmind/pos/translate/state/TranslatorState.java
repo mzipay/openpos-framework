@@ -58,15 +58,15 @@ public class TranslatorState implements IState {
 
     @Override
     public void arrive(Action action) {
-        if (subscribe()) {
+        if (subscribe(action)) {
             translationManager.showActiveScreen();
         } else {
             translationManager.doAction(subscriber.getAppId(), action, new Form());
         }
     }
 
-    protected boolean subscribe() {
-        if (subscriber == null) {
+    protected boolean subscribe(Action action) {
+        if (subscriber == null || (action != null && "restart".equalsIgnoreCase(action.getName()))) {
             ITranslationManagerSubscriber subscriber = new ITranslationManagerSubscriber() {
 
                 Properties properties;
@@ -138,6 +138,12 @@ public class TranslatorState implements IState {
         }
     }
 
+    
+    @ActionHandler 
+    public void onRestart(Action action) {
+        this.arrive(action);
+    }
+    
     @ActionHandler
     public void onAnyAction(Action action, Form form) {
         translationManager.doAction(stateManager.getAppId(), action, form);

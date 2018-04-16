@@ -1,16 +1,18 @@
-<div class="text-md" style="margin-bottom:10px">
-    {{screen.name}}
-</div>   
-<mat-tab-group>
-    <mat-tab *ngFor="let formOption of screen.forms">
-        <ng-template mat-tab-label>
-            <div fxLayoutAlign="start center">
-                <mat-icon>{{formOption.icon}}</mat-icon><span>{{formOption.name}}</span>
+<div fxLayout="column" fxFlexFill>
+    <div class="text-md" style="margin-bottom:10px">
+        {{screen.name}}
+    </div>   
+    <mat-tab-group fxFlex="1 1 auto">
+        <mat-tab fxFlex="1 1 auto" *ngFor="let formOption of screen.forms" fxLayout="column">
+            <ng-template mat-tab-label>
+                <div fxLayoutAlign="start center">
+                    <mat-icon>{{formOption.icon}}</mat-icon><span>{{formOption.name}}</span>
+                </div>
+            </ng-template>
+            <div class="text-sm" style="margin-bottom:15px;margin-top:15px">
+                {{formOption.instructions}}
             </div>
-        </ng-template>
-        <div class="text-sm" style="margin-bottom:15px;margin-top:15px">
-            {{formOption.instructions}}
-        </div>
-        <app-dynamic-form-control [screenForm]="formOption.form" [submitAction]="formOption.submitAction" [screen]="screen"></app-dynamic-form-control>
-    </mat-tab>
-</mat-tab-group>
+            <app-dynamic-form-control fxFlex="1 1 auto" [screenForm]="formOption.form" [submitAction]="formOption.submitAction" [screen]="screen"></app-dynamic-form-control>
+        </mat-tab>
+    </mat-tab-group>
+</div>
