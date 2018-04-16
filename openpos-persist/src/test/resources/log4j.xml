@@ -31,6 +31,9 @@
     <category name="org">
         <priority value="WARN" />
     </category>
+    <category name="org.jumpmind.db.alter">
+        <priority value="DEBUG" />
+    </category>
     <category name="org.jumpmind">
         <priority value="INFO" />
     </category>

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
+@Transactional
 public class AuthenticateEndpoint {
 
     @Autowired
