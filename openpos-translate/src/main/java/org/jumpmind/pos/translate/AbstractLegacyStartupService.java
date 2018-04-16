@@ -128,19 +128,22 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
         
     }
     
-    public void restart(String nodeId) {
+    public boolean restart(String nodeId) {
         if (! this.isExternalProcessEnabled()) {
-            logger.warn("Can't restart node {} when running in internal mode", nodeId);
-            return;
+            logger.warn("Restart of node {} is only supported when running in external mode", nodeId);
+            return false;
         }
         
+        boolean restarted = false;
         if (this.runningExternalProcesses.containsKey(nodeId)) {
             logger.info("Restarting legacy node {}...", nodeId);
             this.terminate(nodeId);
             this.start(nodeId);
+            restarted = true;
         } else {
             logger.warn("Legacy node {} not found, nothing to restart", nodeId);
         }
+        return restarted;
     }
     
     @Override

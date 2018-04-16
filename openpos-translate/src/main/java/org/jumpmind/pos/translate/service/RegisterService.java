@@ -30,9 +30,14 @@ public class RegisterService {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public void restart(@PathVariable String nodeId) {
-        this.startupService.restart(nodeId);
-        IStateManager stateManager = stateManagerFactory.retrieve("pos", nodeId);
-        stateManager.endConversation();
-        stateManager.doAction("Restart");
+        // TODO: enhance to check success/fail and return status in response.
+        if (this.startupService.restart(nodeId)) {
+            // TODO: Will probably need to also pass appId through web service call
+            IStateManager stateManager = stateManagerFactory.retrieve("pos", nodeId);
+            // End existing conversation for the node and reset back to initial state
+            stateManager.endConversation();
+            // Restart action is handled by the Translator state and will reset subscriber on the remote VM
+            stateManager.doAction("Restart");
+        }
     }
 }
