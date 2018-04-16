@@ -152,7 +152,7 @@ export class SessionService implements ILocaleService {
   }
 
   public isSslEnabled(): boolean {
-    return Boolean(localStorage.getItem('sslEnabled')).valueOf();
+    return 'true' === localStorage.getItem('sslEnabled');
   }
 
   public setTheme(theme: string) {
