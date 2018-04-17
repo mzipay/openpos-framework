@@ -38,6 +38,7 @@ import { CustomerSearchResultsComponent } from '../screens/customer-search-resul
 import { FullPageImageComponent } from '../screens/full-page-image/full-page-image.component';
 import { CallForAuthorizationComponent } from '../screens/call-for-authorization/call-for-authorization.component';
 import { DialogComponent } from '../screens/dialog/dialog.component';
+import { LoadingDialogComponent } from '../dialogs/loading-dialog/loading-dialog.component';
 
 @Injectable()
 export class DialogService {
@@ -52,6 +53,7 @@ export class DialogService {
     this.dialogs.set('DynamicForm', DynamicFormDialogComponent);
     this.dialogs.set('MultipleDynamicForm', MultipleDynamicFormDialogComponent);
     this.dialogs.set('Dialog', DialogComponent);
+    this.dialogs.set('LoadingDialog', LoadingDialogComponent);
 
     // Copied from the screen service. may eventually want to make dialog specific versions of these
     this.dialogs.set('BasicItemSearch', BasicItemSearchComponent);

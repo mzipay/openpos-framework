@@ -22,6 +22,7 @@ import { IDevicePlugin } from './common/idevice-plugin';
 
 // Pipes
 import { SafePipe } from './common/safe.pipe';
+import { PhonePipe } from './common/phone.pipe';
 
 // Directives
 import { ScreenDirective } from './common/screen.directive';
@@ -89,6 +90,11 @@ import { FabToggleButtonComponent } from './common/controls/fab-toggle-button/fa
 import { SelfCheckoutOptionsComponent } from './self-checkout/self-checkout-options/self-checkout-options.component';
 import { FullPageImageComponent } from './screens/full-page-image/full-page-image.component';
 import { CallForAuthorizationComponent } from './screens/call-for-authorization/call-for-authorization.component'
+import { MultipleDynamicFormDialogComponent } from './dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
+import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/multiple-dynamic-form.component';
+import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
+import { DynamicFormDialogComponent } from './dialogs/dynamic-form/dynamic-form-dialog.component';
+import { LoadingDialogComponent } from './dialogs/loading-dialog/loading-dialog.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -114,14 +120,9 @@ import { KeyboardDirective } from './common/keyboard.directive';
 import { ValidatorsService } from './services/validators.service';
 import { PrintPreviewComponent } from './screens/print-preview.component';
 import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selection-list.directive';
-import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/multiple-dynamic-form.component';
-import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
-import { DynamicFormDialogComponent } from './dialogs/dynamic-form/dynamic-form-dialog.component';
 import { FileViewerComponent } from './dialogs/file-viewer/file-viewer.component';
 import { DialogService } from './services/dialog.service';
-import { MultipleDynamicFormDialogComponent } from './dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { SelectableItemListComponent } from './common/controls/selectable-item-list/selectable-item-list.component';
-import { PhonePipe } from './common/phone.pipe';
 
 // Keyboard Layouts
 const customLayouts: IKeyboardLayouts = {
@@ -260,7 +261,8 @@ const customLayouts: IKeyboardLayouts = {
     MultipleDynamicFormComponent,
     MultipleDynamicFormDialogComponent,
     DynamicDateFormFieldComponent,
-    NavListComponent
+    NavListComponent,
+    LoadingDialogComponent
   ],
   declarations: [
     DialogComponent,
@@ -336,7 +338,8 @@ const customLayouts: IKeyboardLayouts = {
     DynamicDateFormFieldComponent,
     NavListComponent,
     SelectableItemListComponent,
-    PhonePipe
+    PhonePipe,
+    LoadingDialogComponent
   ],
   imports: [
     BrowserModule,
