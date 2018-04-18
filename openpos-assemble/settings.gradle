@@ -4,6 +4,8 @@ include 'openpos-service'
 include 'openpos-persist'
 include 'openpos-config'
 include 'openpos-user'
+include 'openpos-client-core-lib'
+include 'openpos-wrapper'
 
 rootProject.children.each { project ->
     if (project.projectDir.getName().equals('openpos-client-core-lib')) {
@@ -13,4 +15,6 @@ rootProject.children.each { project ->
     }    
 }
 
+includeFlat 'openpos-client'
 includeFlat 'openpos-server'
+

@@ -81,22 +81,7 @@ public class PersistTestUtil {
         return sessionContext;
     }
     
-    public static QueryTemplates getQueryTempaltes(String tablePrefix) {
-        try {            
-            URL url = Thread.currentThread().getContextClassLoader().getResource(tablePrefix + "-query.yaml");
-            if (url != null) {
-                log.info(String.format("Loading %s...", url.toString()));
-                InputStream queryYamlStream = url.openStream();
-                QueryTemplates queryTemplates = new Yaml(new Constructor(QueryTemplates.class)).load(queryYamlStream);
-                return queryTemplates;
-            } else {
-                log.info("Could not locate "  + tablePrefix + "-query.yaml on the classpath.");
-                return new QueryTemplates();
-            }
-        } catch (Exception ex) {
-            throw new PersistException("Failed to load query.yaml", ex);
-        }
-    }
+
 }
 
     

@@ -3,6 +3,8 @@ import java.util.Date
 
 apply from: '../openpos-core/common.gradle'
 
+apply plugin: 'distribution'
+
 buildscript {
     repositories {
         mavenCentral()
@@ -11,6 +13,8 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
     }
 }
+
+jar.baseName = 'openpos-server'
 
 jar {
     manifest {
@@ -28,7 +32,29 @@ processResources {
     }
 }
 
+distributions {
+   openpos {
+       baseName = 'Client'
+       contents {
+          into ('pos') {
+             from 'src/main/deploy'
+             fileMode 0755
+          }
+          into ('pos/lib') {
+             from configurations.compile
+             from project(":openpos-server").jar
+          }
+          into ('pos/public') {
+             from '../openpos-client/dist'
+          }
+       }
+   }
+}
+
+def projectLabelClient = "OpenPOSBase"
+
 dependencies {
+    compile project(":openpos-wrapper")    
     compile project(":openpos-core")
     compile project(":openpos-config")
     compile project(":openpos-user")

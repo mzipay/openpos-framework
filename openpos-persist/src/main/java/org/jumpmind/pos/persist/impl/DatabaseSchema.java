@@ -309,7 +309,7 @@ public class DatabaseSchema {
             return Types.INTEGER;
         } else if (field.getType().isAssignableFrom(boolean.class)
                 || field.getType().isAssignableFrom(Boolean.class)) {
-            return Types.BIT;
+            return Types.BOOLEAN;
         } else if (field.getType().isAssignableFrom(Date.class)) {
             return Types.TIMESTAMP;
         } else if (field.getType().isAssignableFrom(BigDecimal.class)) {

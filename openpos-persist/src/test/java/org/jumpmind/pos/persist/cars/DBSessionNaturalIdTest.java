@@ -36,7 +36,7 @@ public class DBSessionNaturalIdTest {
                 PersistTestUtil.testDbPlatform(), 
                 PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class, ServiceInvoice.class),
-                PersistTestUtil.getQueryTempaltes("test"));
+                DBSessionFactory.getQueryTempaltes("test"));
         
         {            
             DBSession db = sessionFactory.createDbSession();
