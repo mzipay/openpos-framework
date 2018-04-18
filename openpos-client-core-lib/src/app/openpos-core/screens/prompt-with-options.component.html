@@ -18,9 +18,8 @@
             <mat-nav-list>
                 <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
                 <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onAction(o.value)" style="border-color: black">
-                    <span *ngIf="!o.enabled; else elseBlock" class="muted-color">{{o.displayValue}}</span>
-                    <ng-template #elseBlock>{{o.displayValue}}</ng-template>
-                    <mat-icon class="material-icons pull-right line-item-caret" style="top: 10px;">keyboard_arrow_right</mat-icon>
+                    <span [ngClass]="{'muted-color' : !o.enabled}">{{o.displayValue}}</span>
+                    <mat-icon class="material-icons pull-right line-item-caret" [ngClass]="{'muted-color' : !o.enabled}" style="top: 10px;">keyboard_arrow_right</mat-icon>
                 </mat-list-item>
             </mat-nav-list>
         </mat-card-actions>
