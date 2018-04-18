@@ -39,5 +39,6 @@ public interface ScreenType {
     public static final String SelfCheckoutOptions = "SelfCheckoutOptions";
     public static final String CallForAuthorization = "CallForAuthorization";
     public static final String MultipleDynamicForm = "MultipleDynamicForm";
+    public static final String LoadingDialog = "LoadingDialog";
 
 }

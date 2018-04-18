@@ -10,12 +10,7 @@
 
 <ng-template #formCard>
     <mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
-        <mat-form-field *ngFor="let formField of screen.form.formElements" style="width:100%">
-            <ng-container *ngIf="formField.elementType==='Display'">
-                <label class="prompt-text">{{formField.label}}</label>
-                <input [value]="formField.value" [name]="formField.id" matInput disabled>
-            </ng-container>
-        </mat-form-field>
+        <app-dynamic-form-control [screen]="screen" [screenForm]=" screen.form"></app-dynamic-form-control>
     </mat-card>
 </ng-template>
 <ng-template #promptCard>
