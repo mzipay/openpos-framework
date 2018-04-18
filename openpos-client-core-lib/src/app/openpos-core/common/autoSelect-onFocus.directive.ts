@@ -1,8 +1,7 @@
-import { Directive, Input, ElementRef } from '@angular/core';
+import { Directive, Input, ElementRef, HostListener } from '@angular/core';
 
 @Directive({
-    selector: '[autoSelectOnFocus]',
-    host: { '(focus)': 'onFocus($event)' },
+    selector: '[autoSelectOnFocus]'
 })
 export class AutoSelectOnFocus {
 
@@ -12,6 +11,8 @@ export class AutoSelectOnFocus {
         this.element = el;
     }
 
+    
+    @HostListener('focus', ['$event'])
     onFocus($event: Event){
         this.element.nativeElement.select();
     }
