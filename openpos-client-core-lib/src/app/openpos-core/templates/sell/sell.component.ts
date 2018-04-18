@@ -42,7 +42,7 @@ export class SellComponent extends AbstractTemplate implements OnInit {
   show(template: any) {
     this.template = template;
     this.statusBar = SellScreenUtils.getStatusBar(template);
-    this.scanSomethingData = SellScreenUtils.getScanSomethingData(template);
+    this.scanSomethingData = SellScreenUtils.getScanSomethingData(template, template.template);
     this.autoFocusOnScan = template.template.autoFocusOnScan;
   }
 

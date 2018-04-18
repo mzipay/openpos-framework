@@ -77,12 +77,17 @@ export class SessionService implements ILocaleService {
     return !app;
   }
 
-  public personalize(serverName: string, serverPort: string, storeId: string, deviceId: string) {
+  public personalize(serverName: string, serverPort: string, storeId: string, deviceId: string, sslEnabled?: boolean) {
     const nodeId = storeId + '-' + deviceId;
     console.log(`personalizing with server: ${serverName}, port: ${serverPort}, nodeid: ${nodeId}`);
     localStorage.setItem('serverName', serverName);
     localStorage.setItem('serverPort', serverPort);
     localStorage.setItem('nodeId', nodeId);
+    if (sslEnabled) {
+      localStorage.setItem('sslEnabled', '' + sslEnabled);
+    } else {
+      localStorage.setItem('sslEnabled', 'false');
+    }
     this.refreshApp();
   }
 
@@ -93,11 +98,16 @@ export class SessionService implements ILocaleService {
     localStorage.removeItem('serverPort');
     localStorage.removeItem('nodeId');
     localStorage.removeItem('theme');
+    localStorage.removeItem('sslEnabled');
     this.setTheme(theme);
   }
 
   private getWebsocketUrl(): string {
-    let url: string = 'ws://' + this.getServerName();
+    let protocol = 'ws://';
+    if (this.isSslEnabled()) {
+      protocol = 'wss://';
+    }
+    let url: string = protocol + this.getServerName();
     if (this.getServerPort()) {
       url = url + ':' + this.getServerPort();
     }
@@ -139,6 +149,10 @@ export class SessionService implements ILocaleService {
     } else {
        return localStorage.getItem('theme');
     }
+  }
+
+  public isSslEnabled(): boolean {
+    return 'true' === localStorage.getItem('sslEnabled');
   }
 
   public setTheme(theme: string) {
@@ -320,7 +334,7 @@ export class SessionService implements ILocaleService {
         try {
           this.response = this.actionPayloads.get(actionString)();
         } catch (e) {
-          console.log(`invalid action payload for ${actionString}`);
+          console.log(`invalid action payload for ${actionString}: ` + e);
           processAction = false;
         }
       }

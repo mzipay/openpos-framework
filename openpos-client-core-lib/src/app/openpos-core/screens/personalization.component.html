@@ -11,6 +11,7 @@
                         <mat-form-field>
                             <input matInput placeholder="Server Port" formControlName="serverPort" required novalidate type="tel" pattern="[0-9]*">
                         </mat-form-field>
+                        <mat-checkbox formControlName="sslEnabled">SSL?</mat-checkbox>
                         <span *ngIf="firstFormGroup.status === 'PENDING'">
                             Trying to ping server ...
                         </span>

@@ -15,8 +15,10 @@ public class SellScreen extends AbstractScreen {
     private Workstation workstation;
     private String operatorName;
     private String icon;
-    
     private List<MenuItem> localMenuItems = new ArrayList<>();
+	
+    protected Integer scanMinLength;
+    protected Integer scanMaxLength;
     
     public SellScreen() {
     }
@@ -52,7 +54,6 @@ public class SellScreen extends AbstractScreen {
             list.add(value);
         }
     }    
-    
     
     public String getOperatorName() {
         return operatorName;
@@ -130,4 +131,20 @@ public class SellScreen extends AbstractScreen {
     public void setInstructions(String instructions) {
         this.put("instructions", instructions);
     }
+    
+    public Integer getScanMinLength() {
+		return scanMinLength;
+	}
+
+	public void setScanMinLength(Integer scanMinLength) {
+		this.scanMinLength = scanMinLength;
+	}
+
+	public Integer getScanMaxLength() {
+		return scanMaxLength;
+	}
+
+	public void setScanMaxLength(Integer scanMaxLength) {
+		this.scanMaxLength = scanMaxLength;
+	}
 }
