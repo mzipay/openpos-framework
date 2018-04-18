@@ -1,11 +1,11 @@
 import { DynamicScreenComponent } from './../screens/dynamic-screen/dynamic-screen.component';
 import { IScreen } from './iscreen';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { ViewChild, ComponentFactory, ViewContainerRef, ComponentRef } from '@angular/core';
+import { ViewChild, ComponentFactory, ViewContainerRef, ComponentRef, OnDestroy } from '@angular/core';
 import { ScreenDirective } from './screen.directive';
 import { SessionService } from '../services/session.service';
 
-export abstract class AbstractTemplate implements IScreen {
+export abstract class AbstractTemplate implements IScreen, OnDestroy {
 
     @ViewChild(ScreenDirective) host: ScreenDirective;
 
@@ -24,6 +24,13 @@ export abstract class AbstractTemplate implements IScreen {
         }
         this.currentScreenRef = viewContainerRef.createComponent(screenComponentFactory);
         return this.currentScreenRef.instance;
+    }
+
+    ngOnDestroy(): void {
+        console.log('template destroyed');
+        if (this.currentScreenRef) {
+            this.currentScreenRef.destroy();
+        }
     }
 
     abstract show(screen: any);
