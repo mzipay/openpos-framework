@@ -245,7 +245,7 @@ public class StateManager implements IStateManager {
         }
         
         String targetStateName = stateConfig.getActionToStateMapping().get(action.getName());
-        System.out.println("targetStateName: " + targetStateName);
+        
         if ("CompleteState".equals(targetStateName)) {
             if (!stateStack.isEmpty()) {                
                 StateContext suspendedState = stateStack.pop();

@@ -19,7 +19,7 @@ public class DBSessionTransactionTest {
                 PersistTestUtil.testDbPlatform(),
                 PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class),
-                PersistTestUtil.getQueryTempaltes("test"));                
+                DBSessionFactory.getQueryTempaltes("test"));                
     }
     
     @Test(expected = PersistException.class)
