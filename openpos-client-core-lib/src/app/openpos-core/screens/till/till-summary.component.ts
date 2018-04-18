@@ -13,14 +13,12 @@ export class TillSummaryComponent implements OnInit, AfterViewInit, IScreen {
 
   nextAction: IMenuItem;
   screen: any;
-  @ViewChild(FormComponent) formComponent;
 
   constructor(public session: SessionService) {
   }
 
   show(screen: any) {
     this.screen = screen;
-    this.formComponent.show(screen);
   }
 
   ngOnInit() {
