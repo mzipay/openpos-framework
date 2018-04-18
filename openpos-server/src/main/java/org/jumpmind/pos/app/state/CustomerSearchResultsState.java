@@ -6,8 +6,12 @@ import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.screen.AbstractScreen;
 import org.jumpmind.pos.core.screen.Customer;
 import org.jumpmind.pos.core.screen.CustomerSearchResultsScreen;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class CustomerSearchResultsState extends AbstractState {
+    
+    @Autowired(required=false)
+    private Boolean orderMode;
 
     @Override
     public void arrive(Action action) {
@@ -19,8 +23,13 @@ public class CustomerSearchResultsState extends AbstractState {
         
         customerSearchResults.setSubmitAction("CustomerSelected");
         
+        if (orderMode) {
+            System.out.print("We are in order mode.");
+        }
+        
         Customer screenCustomer = new Customer();
-        screenCustomer.setFirstName(customer.getFirstName());
+        
+        screenCustomer.setFirstName((orderMode ? "ORDER MODE: " : "") + customer.getFirstName());
         screenCustomer.setLastName(customer.getLastName());
         screenCustomer.setEmail(customer.getCustomerId());
         screenCustomer.setLoyaltyId(customer.getCustomerId());

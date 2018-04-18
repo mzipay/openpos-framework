@@ -19,14 +19,6 @@
  */
 package org.jumpmind.pos.core.flow;
 
-import static org.jumpmind.pos.util.BoxLogging.DOWN_ARROW;
-import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_LINE;
-import static org.jumpmind.pos.util.BoxLogging.LOWER_LEFT_CORNER;
-import static org.jumpmind.pos.util.BoxLogging.LOWER_RIGHT_CORNER;
-import static org.jumpmind.pos.util.BoxLogging.UPPER_LEFT_CORNER;
-import static org.jumpmind.pos.util.BoxLogging.UPPER_RIGHT_CORNER;
-import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
-
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -36,7 +28,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.ui.UIManager;
@@ -57,6 +48,7 @@ public class StateManager implements IStateManager {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
     final Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
+    private final StateManagerLogger stateManagerLogger = new StateManagerLogger(loggerGraphical);
 
     @Autowired
     private IScreenService screenService;
@@ -77,8 +69,8 @@ public class StateManager implements IStateManager {
     private String nodeId;
     private Scope scope = new Scope();
     private Deque<StateContext> stateStack = new LinkedList<>();
-    private FlowConfig flowConfig;
-    private IState currentState;
+    private FlowConfig initialFlowConfig;
+    private StateContext currentContext;
 
     @PostConstruct
     public void postConstruct() {
@@ -95,7 +87,8 @@ public class StateManager implements IStateManager {
         this.appId = appId;
         this.nodeId = nodeId;
         this.uiManager.setStateManager(this);
-        transitionTo(null, flowConfig.getInitialState());
+        this.currentContext = new StateContext(initialFlowConfig, null, null);
+        transitionTo(null, initialFlowConfig.getInitialState());
     }
 
     protected void transitionTo(Action action, StateConfig stateConfig) {
@@ -117,34 +110,44 @@ public class StateManager implements IStateManager {
         boolean enterSubState = enterSubStateConfig != null;
         boolean exitSubState = resumeSuspendedState != null;
         
-        IState modifiedState = runStateInterceptors(currentState, newState, action);
+        IState modifiedState = runStateInterceptors(currentContext.getState(), newState, action);
         if (modifiedState != null && modifiedState != newState) {
             newState = modifiedState;
-            logStateTransition(currentState, modifiedState, action, enterSubState);
+            stateManagerLogger.logStateTransition(currentContext.getState(), modifiedState, action, enterSubState);
         } else {
-            logStateTransition(currentState, newState, action, enterSubState);            
+            stateManagerLogger.logStateTransition(currentContext.getState(), newState, action, enterSubState);            
         }
-        
-        Map<String, ScopeValue> extraScope = new HashMap<>();
-        extraScope.put("stateManager", new ScopeValue(this));
-        injector.performInjections(newState, scope, extraScope);
         
         String returnAction = null;
         
         if (enterSubState) {
-            stateStack.push(new StateContext(flowConfig, action, currentState));
-            flowConfig = enterSubStateConfig;
+            stateStack.push(currentContext);
+            currentContext = new StateContext(enterSubStateConfig, action);
         } else if (exitSubState) { 
-            returnAction = flowConfig.getReturnAction();
-            flowConfig = resumeSuspendedState.getFlowConfig();
+            returnAction = currentContext.getFlowConfig().getReturnAction();
+            currentContext = resumeSuspendedState;
         }
         
-        currentState = newState;
+        Map<String, ScopeValue> extraScope = new HashMap<>();
+        addConfigScope(extraScope);
+        extraScope.put("stateManager", new ScopeValue(this));
+        injector.performInjections(newState, scope, extraScope);
+        
+        currentContext.setState(newState);
         
         if (resumeSuspendedState != null && returnAction != null) {
-            actionHandler.handleAction(currentState, action, null, returnAction);
+            actionHandler.handleAction(currentContext.getState(), action, null, returnAction);
         } else {            
-            currentState.arrive(action);
+            currentContext.getState().arrive(action);
+        }
+    }
+
+    protected void addConfigScope(Map<String, ScopeValue> extraScope) {
+        if (currentContext != null && currentContext.getFlowConfig() != null
+                && currentContext.getFlowConfig().getConfigScope() != null) {
+            for (Map.Entry<String, Object> entry : currentContext.getFlowConfig().getConfigScope().entrySet()) {
+                extraScope.put(entry.getKey(), new ScopeValue(entry.getValue()));
+            }
         }
     }
 
@@ -173,7 +176,7 @@ public class StateManager implements IStateManager {
 
     @Override
     public IState getCurrentState() {
-        return currentState;
+        return currentContext.getState();
     }
 
     @Override
@@ -199,12 +202,12 @@ public class StateManager implements IStateManager {
     @Override
     public void doAction(Action action) {
         
-        StateConfig stateConfig = flowConfig.getStateConfig(currentState);
+        StateConfig stateConfig = currentContext.getFlowConfig().getStateConfig(currentContext.getState());
         if (handleTerminatingState(action, stateConfig)) {
             return;
         }
         
-        validateStateConfig(currentState, stateConfig);
+        validateStateConfig(currentContext.getState(), stateConfig);
         String newStateName = stateConfig.getActionToStateMapping().get(action.getName());
         if (newStateName != null) {
             transitionToState(action, newStateName);
@@ -228,10 +231,10 @@ public class StateManager implements IStateManager {
             form = new Form();
         }
         
-        boolean handled = actionHandler.handleAction(currentState, action, form, actionName);
+        boolean handled = actionHandler.handleAction(currentContext.getState(), action, form, actionName);
         if (!handled) {
-            logger.warn("Unexpected action \"{}\". No @ActionHandler {}.on{}() method found.", action.getName(), currentState.getClass().getName(), action.getName());
-            currentState.arrive(action); // TODO, we are in an undefined state he really.
+            logger.warn("Unexpected action \"{}\". No @ActionHandler {}.on{}() method found.", action.getName(), currentContext.getState().getClass().getName(), action.getName());
+            currentContext.getState().arrive(action); // TODO, we are in an undefined state he really.
         }
     }
 
@@ -251,18 +254,12 @@ public class StateManager implements IStateManager {
                 StateContext suspendedState = stateStack.pop();
                 transitionTo(action, suspendedState.getState(), null, suspendedState);
             } else {                
-                throw new FlowException("No suspended state to return to for terminating action " + action + " from state " + currentState);
+                throw new FlowException("No suspended state to return to for terminating action " + action + " from state " + currentContext.getState());
             }
             return true;
         } else {
             return false;
         }
-    }
-
-    protected boolean isTerminatingAction(Action action) {
-        return action != null 
-                && (Action.SUB_STATE_COMPLETE.equals(action.getName())
-                || Action.SUB_STATE_CANCELLED.equals(action.getName()));
     }
 
     protected void transitionToSubState(Action action, FlowConfig subStateConfig) {
@@ -275,7 +272,7 @@ public class StateManager implements IStateManager {
     }
 
     protected void transitionToState(Action action, String newStateName) {
-        StateConfig newStateConfig = flowConfig.getStateConfig(newStateName);
+        StateConfig newStateConfig = currentContext.getFlowConfig().getStateConfig(newStateName);
         if (newStateConfig != null) {
             transitionTo(action, newStateConfig);
         } else {
@@ -294,7 +291,7 @@ public class StateManager implements IStateManager {
     @Override
     public void endConversation() {
         scope.clearConversationScope();
-        transitionTo(null, flowConfig.getInitialState());
+        transitionTo(null, currentContext.getFlowConfig().getInitialState());
     }
 
     @Override
@@ -327,18 +324,14 @@ public class StateManager implements IStateManager {
         scope.setConversationScope(name, value);
     }
 
-    public FlowConfig getFlowConfig() {
-        return flowConfig;
-    }
-
-    public void setFlowConfig(FlowConfig flowConfig) {
-        this.flowConfig = flowConfig;
+    public void setInitialFlowConfig(FlowConfig initialFlowConfig) {
+        this.initialFlowConfig = initialFlowConfig;
     }
 
     @Override
     public void showScreen(AbstractScreen screen) {
-        if (this.currentState != null && this.currentState instanceof IScreenInterceptor) {
-            screen = ((IScreenInterceptor)this.currentState).intercept(screen);            
+        if (this.currentContext.getState() != null && this.currentContext.getState() instanceof IScreenInterceptor) {
+            screen = ((IScreenInterceptor)this.currentContext.getState()).intercept(screen);            
         }
         screenService.showScreen(appId, nodeId, screen);
     }
@@ -353,119 +346,9 @@ public class StateManager implements IStateManager {
         return appId;
     }
     
-    protected void logStateTransition(IState oldState, IState newState, Action action, boolean enterSubState) {
-        if (oldState == newState) {
-            return;
-        }
-        if (loggerGraphical.isInfoEnabled()) {            
-            String oldStateName = oldState != null ? oldState.getClass().getSimpleName() : "<no state>";
-            String newStateName = newState.getClass().getSimpleName();
-            int box1Width = Math.max(oldStateName.length()+2, 20);
-            int box2Width = Math.max(newStateName.length()+2, 20);
-            
-            int inbetweenWidth = action != null ? Math.max(action.getName().length()+2, 10) : 10;
-            
-            boolean exitSubState = isTerminatingAction(action);
-            
-            StringBuilder buff = new StringBuilder(256);
-            
-            int LINE_COUNT = 5;
-            for (int i = 0; i < LINE_COUNT; i++) {
-                switch (i) {
-                    case 0:
-                        buff.append(drawTop(box1Width, box2Width, inbetweenWidth));
-                        break;
-                    case 1:
-                        buff.append(drawFillerLine(box1Width, box2Width, inbetweenWidth, enterSubState, exitSubState));
-                        break;
-                    case 2:
-                        buff.append(drawTitleLine(box1Width, box2Width,inbetweenWidth, oldStateName, newStateName));
-                        break;                    
-                    case 3:
-                        buff.append(drawEventLine(box1Width, box2Width,inbetweenWidth, action != null ? action.getName() : ""));
-                        break;
-                    case 4:
-                        buff.append(drawBottom(box1Width, box2Width, inbetweenWidth));
-                        break;                    
-                        
-                }
-            }
-            
-            logger.info("Transition from " + currentState + " to " + newState + "\n" + buff.toString());
-        } else {
-            logger.info("Transition from " + currentState + " to " + newState);
-        }
-    }
-
-    protected String drawTop(int box1Width, int box2Width, int inbetweenWidth) {
-        StringBuilder buff = new StringBuilder();
-        
-        buff.append(UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box1Width-2)).append(UPPER_RIGHT_CORNER);
-        buff.append(StringUtils.repeat(' ', inbetweenWidth));
-        buff.append(UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box2Width-2)).append(UPPER_RIGHT_CORNER);
-        buff.append("\r\n");
-        return buff.toString();
-    }
-    
-    protected String drawFillerLine(int box1Width, int box2Width, int inbetweenWidth, boolean enterSubState, boolean exitSubState) {
-        StringBuilder buff = new StringBuilder();
-        
-        buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box1Width-2)).append(VERITCAL_LINE);
-        
-        if (exitSubState) {
-            buff.append(StringUtils.center("<Exit SubState>", inbetweenWidth));
-        } else {            
-            buff.append(StringUtils.center("", inbetweenWidth));
-        }
-        
-        if (enterSubState) {            
-            buff.append(VERITCAL_LINE).append(StringUtils.center(DOWN_ARROW + " SubState", box2Width-2)).append(VERITCAL_LINE);
-        } else {
-            buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box2Width-2)).append(VERITCAL_LINE);            
-        }
-        buff.append("\r\n");
-        return buff.toString();
-    }
-    
-    protected String drawEventLine(int box1Width, int box2Width, int inbetweenWidth, String actionName) {
-        StringBuilder buff = new StringBuilder();
-        
-        buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box1Width-2)).append(VERITCAL_LINE);
-        buff.append(StringUtils.center(actionName, inbetweenWidth));
-        buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box2Width-2)).append(VERITCAL_LINE);
-        buff.append("\r\n");
-        return buff.toString();
-    }
-    
-    
-    protected String drawTitleLine(int box1Width, int box2Width, int inbetweenWidth, String oldStateName, String newStateName) {
-        StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE).append(StringUtils.center(oldStateName, box1Width-2)).append(VERITCAL_LINE);
-        buff.append(" ").append(StringUtils.repeat(HORIZONTAL_LINE, inbetweenWidth-3)).append("> ");
-        buff.append(VERITCAL_LINE).append(StringUtils.center(newStateName, box2Width-2)).append(VERITCAL_LINE);
-        buff.append("\r\n");
-        return buff.toString();
-    }
-    
-    protected String drawBottom(int box1Width, int box2Width, int inbetweenWidth) {
-        StringBuilder buff = new StringBuilder();
-        
-        buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box1Width-2)).append(LOWER_RIGHT_CORNER);
-        buff.append(StringUtils.repeat(' ', inbetweenWidth));
-        buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box2Width-2)).append(LOWER_RIGHT_CORNER);
-        buff.append("\r\n");
-        return buff.toString();
-    }
 
     @Override
     public IUI getUI() {
         return uiManager;
     }    
-
-    // TODO
-    //@Override
-//    public ITranslationManager getTranslationManager() {
-//        return translationManager;
-//    }
-
 }

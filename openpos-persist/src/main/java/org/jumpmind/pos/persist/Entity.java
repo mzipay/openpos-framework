@@ -7,11 +7,6 @@ import java.util.Map;
 
 public abstract class Entity {
     
-//    @Column(primaryKey = true,
-//            size = "36",
-//            description = "A unique, automatically assigned key used to identify a row.")
-//    private String rowId;
-    
     @Column(required=true,
             description="Timestamp when this entry was created.")
     private Date createTime = new Date();
@@ -61,14 +56,4 @@ public abstract class Entity {
     public void setLastUpdateBy(String lastUpdateBy) {
         this.lastUpdateBy = lastUpdateBy;
     }
-
-//    public String getRowId() {
-//        return rowId;
-//    }
-//
-//    public void setRowId(String rowId) {
-//        this.rowId = rowId;
-//    }
-    
-
 }

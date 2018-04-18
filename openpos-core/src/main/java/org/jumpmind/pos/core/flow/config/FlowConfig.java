@@ -31,6 +31,14 @@ public class FlowConfig {
     private StateConfig initialState;
     private Map<String, StateConfig> stateConfigs = new HashMap<>();
     private String returnAction;
+    private Map<String, Object> configScope;
+    
+    public FlowConfig() {
+    }
+    
+    public FlowConfig(Map<String, Object> configScope) {
+        this.configScope = configScope;
+    }
     
     public StateConfig getStateConfig(IState state) {
         String stateName = FlowUtil.getStateName(state.getClass());
@@ -61,4 +69,14 @@ public class FlowConfig {
     public void setReturnAction(String returnAction) {
         this.returnAction = returnAction;
     }
+
+    public Map<String, Object> getConfigScope() {
+        return configScope;
+    }
+
+    public void setConfigScope(Map<String, Object> configScope) {
+        this.configScope = configScope;
+    }
+
+
 }

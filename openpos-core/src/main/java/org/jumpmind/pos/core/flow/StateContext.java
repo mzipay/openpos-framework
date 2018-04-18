@@ -12,6 +12,12 @@ public class StateContext {
         
     }
     
+    public StateContext(FlowConfig flowConfig, Action action) {
+        super();
+        this.flowConfig = flowConfig;
+        this.action = action;        
+    }
+    
     public StateContext(FlowConfig flowConfig, Action action, IState state) {
         super();
         this.flowConfig = flowConfig;
