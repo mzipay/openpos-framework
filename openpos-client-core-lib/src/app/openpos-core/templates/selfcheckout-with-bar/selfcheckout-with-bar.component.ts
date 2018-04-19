@@ -5,7 +5,7 @@ import { IScreen } from '../../common/iscreen';
 import { SessionService } from '../../services/session.service';
 import { AbstractTemplate } from '../../common/abstract-template';
 import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
-import { SellScreenUtils } from '../../common/screen-interfaces/iSellScreen';
+import { SellScreenUtils } from '../sell/iSellScreen';
 
 @Component({
   selector: 'app-selfcheckout-with-bar',

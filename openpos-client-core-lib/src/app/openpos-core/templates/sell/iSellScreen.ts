@@ -1,15 +1,16 @@
-import { IMenuItem } from '../imenuitem';
-import { StatusBarData } from './statusBarData';
-import { IWorkStation } from '../iworkstation';
-import { SelfCheckoutStatusBarData } from './selfCheckoutStatusBarData';
-import { ScanSomethingData } from '../controls/scan-something/scanSomthingData';
+import { IMenuItem } from '../../common/imenuitem';
+import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
+import { IWorkStation } from '../../common/iworkstation';
+import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
+import { ScanSomethingData } from '../../common/controls/scan-something/scanSomthingData';
+import { ISellTemplate } from './isell-template';
 
 export interface ISellScreen {
     name: string;
     type: string;
     backButton: IMenuItem;
     logoutButton: IMenuItem;
-    template: string;
+    template: ISellTemplate;
     sequenceNumber: number;
     locale: string;
     prompt: string;
@@ -54,9 +55,10 @@ export class SellScreenUtils {
         return statusBar;
     }
 
-    public static getScanSomethingData(screen: ISellScreen, template: any): ScanSomethingData {
+    public static getScanSomethingData(screen: ISellScreen): ScanSomethingData {
         const scanSomethingData = new ScanSomethingData();
-        scanSomethingData.placeholderText = template.scanSomethingText;
+        scanSomethingData.placeholderText = screen.template.scanSomethingText;
+        scanSomethingData.autoFocus = screen.template.autoFocusOnScan;
 
         return scanSomethingData;
     }
