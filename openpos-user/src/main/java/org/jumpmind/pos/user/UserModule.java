@@ -229,6 +229,8 @@ public class UserModule implements Module {
         Map<String, String> sessionContext = new HashMap<>();
         
         sessionContext.put("module.tablePrefix", getTablePrefix());
+        sessionContext.put("CREATE_BY", "openpos-user");
+        sessionContext.put("LAST_UPDATE_BY", "openpos-user");        
         
         // init sessionFactory per this module. 
         sessionFactory.init(

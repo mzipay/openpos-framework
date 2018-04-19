@@ -1,19 +1,19 @@
 package org.jumpmind.pos.app.state;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jumpmind.pos.app.model.CustomerModel;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.AbstractScreen;
-import org.jumpmind.pos.core.screen.Customer;
-import org.jumpmind.pos.core.screen.CustomerSearchResultsScreen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
 
 public class CustomerSearchState extends AbstractState {
 
     @Override
     public void arrive(Action action) {
-        System.out.println("Hello");
         stateManager.showScreen(buildCustomerSearchScreen());
     }
     
@@ -40,9 +40,14 @@ public class CustomerSearchState extends AbstractState {
         customer.setFirstName(form.getFormElementValue("firstName"));
         customer.setLastName(form.getFormElementValue("lastName"));
         
-        Action customerSelectedAction = new Action();
-        customerSelectedAction.setName("CustomerSearchResultsLoaded");
-        customerSelectedAction.setData(customer);
-        stateManager.doAction(customerSelectedAction);
+        List<CustomerModel> customers = new ArrayList<CustomerModel>();
+        customers.add(customer);
+        
+        Action customerSearchResultsLoaded = new Action();
+        customerSearchResultsLoaded.setName("CustomerSearchResultsLoaded");
+        
+        stateManager.setFlowScope("customerSearchResults", customers);
+        
+        stateManager.doAction(customerSearchResultsLoaded);
     }
 }

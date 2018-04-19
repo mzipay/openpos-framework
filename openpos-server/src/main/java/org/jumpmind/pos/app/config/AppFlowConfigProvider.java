@@ -20,6 +20,9 @@
  */
 package org.jumpmind.pos.app.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jumpmind.pos.app.state.CustomerSearchResultsState;
 import org.jumpmind.pos.app.state.CustomerSearchState;
 import org.jumpmind.pos.app.state.HomeScreenState;
@@ -50,7 +53,11 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
     }
     
     public FlowConfig getCustomerConfig(String appId, String nodeId) {
-        FlowConfig config = new FlowConfig();
+        Map<String, Object> configScope = new HashMap<>();
+        configScope.put("orderMode", Boolean.TRUE);
+        
+        FlowConfig config = new FlowConfig(configScope);
+        
         config.setInitialState(FlowBuilder.addState(CustomerSearchState.class)
                 .withTransition("CustomerSearchResultsLoaded", CustomerSearchResultsState.class).build());
         

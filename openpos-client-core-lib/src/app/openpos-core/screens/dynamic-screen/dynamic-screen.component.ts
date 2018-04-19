@@ -321,7 +321,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       this.previousScreenType = screenType;
       this.previousScreenName = screenName;
       this.overlayContainer.getContainerElement().classList.add(this.session.getTheme());
-      this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(screenType), this.session);
+      this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(screenType));
     }
     this.installedTemplate.show(screen);
     this.installedScreen.show(screen, this, this.installedTemplate);

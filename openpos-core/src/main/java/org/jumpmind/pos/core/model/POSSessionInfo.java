@@ -89,6 +89,10 @@ public class POSSessionInfo {
         return (T)this.attributes.get(key);
     }
     
+    public Object remove(String key) {
+        return this.attributes.remove(key);
+    }
+    
     @SuppressWarnings("unchecked")
     public <T> T remove(TypedMapKey<T> key) {
         return (T)this.attributes.remove(key.toString());
