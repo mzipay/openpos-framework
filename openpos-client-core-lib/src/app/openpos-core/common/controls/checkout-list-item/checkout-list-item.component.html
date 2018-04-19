@@ -6,9 +6,9 @@
                 <div fxFlex="1 1 auto">
                     <div *ngIf="item.productDescription" class="primary text-md" style="padding-bottom: 8px">{{item.productDescription}}</div>
                     <div *ngIf="!item.productDescription" class="primary text-md" style="padding-bottom: 8px">{{item.description}}</div>
-                    <span *ngIf="!item.discountAmount" class="text-sm">{{item.amount|currency:'USD':true:'1.2'}}</span>
-                    <span *ngIf="item.discountAmount" class="muted-color text-sm" style="text-decoration:line-through">{{item.originalAmount|currency:'USD':true:'1.2'}}</span>
-                    <span *ngIf="item.discountAmount" class="text-sm">( -{{item.discountAmount|currency:'USD':true:'1.2'}} )</span>
+                    <span *ngIf="item.amount === item.sellingPrice" class="text-sm">{{item.amount|currency:'USD':true:'1.2'}}</span>
+                    <span *ngIf="item.amount !== item.sellingPrice" class="muted-color text-sm" style="text-decoration:line-through">{{item.sellingPrice|currency:'USD':true:'1.2'}}</span>
+                    <span *ngIf="item.amount !== item.sellingPrice" class="text-sm">( {{item.amount|currency:'USD':true:'1.2'}} )</span>
                 </div>
                 <div>
                     <div *ngIf="item.color" class="muted-color text-sm">Color: {{item.color}}</div>
