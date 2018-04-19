@@ -1,6 +1,7 @@
 import { IMenuItem } from './../common/imenuitem';
 import { IItem } from './../common/iitem';
-import { Component, ViewChild, DoCheck, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, DoCheck, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { MatInput } from '@angular/material';
 import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
@@ -10,8 +11,9 @@ import { IFormElement } from '../common/iformfield';
     selector: 'app-tendering',
     templateUrl: './tendering.component.html'
   })
-  export class TenderingComponent implements IScreen, OnInit, OnDestroy {
+  export class TenderingComponent implements IScreen, AfterViewInit, OnDestroy{
 
+    @ViewChild('tenderAmountField') tenderAmountField: MatInput;
 
     screen: any;
     text: string;
@@ -31,8 +33,8 @@ import { IFormElement } from '../common/iformfield';
     constructor(public session: SessionService) {
     }
 
-    ngOnInit(): void {
-
+    ngAfterViewInit(): void {
+        setTimeout(() => this.tenderAmountField.focus(), 0); 
     }
 
     ngOnDestroy(): void {

@@ -22,16 +22,18 @@ import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-fi
   templateUrl: './dynamic-form-control.component.html',
   styleUrls: ['./dynamic-form-control.component.scss']
 })
-export class DynamicFormControlComponent implements OnInit {
+export class DynamicFormControlComponent implements AfterViewInit {
+  
   @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
 
   ngAfterViewInit(){
-    this.children.filter( child => {
+    const field = this.children.filter( child => {
       if(child.field){
         return child.field.disabled === false;
       }
       return false;      
-    })[0].field.focus();
+    })[0].field;
+    setTimeout(() => field.focus(), 0);   
   }
   
   @Input() 

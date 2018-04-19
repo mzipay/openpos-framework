@@ -16,9 +16,9 @@
             <mat-card fxFlex class="page-content-card text-center">
                 <mat-card-content fxLayout="column" fxLayoutAlign="end">
                     <mat-form-field ngClass="text-md" >
-                        <input matInput #input #field="ngModel" [appFocus]="true" autoSelectOnFocus style="text-align:right"
+                        <input matInput #tenderAmountField="matInput" #field="ngModel" autoSelectOnFocus style="text-align:right"
                             [(ngModel)]="tenderAmount.value"
-                            placeholder="{{tenderAmount.placeholder}}"
+                            [placeholder]="tenderAmount.placeholder"
                             [required]="tenderAmount.required"
                             [formatterName]="'money'" novalidate type="tel" pattern="[0-9]*">
                         <mat-error>
