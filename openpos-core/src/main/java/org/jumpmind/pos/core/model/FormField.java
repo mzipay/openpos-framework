@@ -229,5 +229,17 @@ public class FormField implements IFormElement, IField, Serializable {
     public void setIconName(String iconName) {
     		this.put("iconName", iconName);
     }
-   
+
+    /**
+     * Controls whether or not the text in the field should be selected on a click in the UI
+     */
+    public void setSelectText(boolean selectText) {
+        this.put("select", selectText);
+    }
+
+    public FormField selectText(boolean selectText) {
+        this.setSelectText(selectText);
+        return this;
+    }
+
 }
