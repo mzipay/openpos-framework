@@ -51,7 +51,7 @@ export class SellScreenUtils {
         statusBar.showHelp = screen.showHelp;
         statusBar.showScan = screen.showScan;
         statusBar.showSkip = screen.showSkip;
-        statusBar.scanPlaceholderText = screen.placeholderText;
+        statusBar.scanSomethingData = SellScreenUtils.getScanSomethingData(screen);
         return statusBar;
     }
 
