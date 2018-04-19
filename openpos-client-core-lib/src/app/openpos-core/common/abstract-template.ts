@@ -3,7 +3,6 @@ import { IScreen } from './iscreen';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { ViewChild, ComponentFactory, ViewContainerRef, ComponentRef, OnDestroy } from '@angular/core';
 import { ScreenDirective } from './screen.directive';
-import { SessionService } from '../services/session.service';
 
 export abstract class AbstractTemplate implements IScreen, OnDestroy {
 
@@ -16,7 +15,7 @@ export abstract class AbstractTemplate implements IScreen, OnDestroy {
     constructor() {
     }
 
-    public installScreen(screenComponentFactory: ComponentFactory<IScreen>, session: SessionService): IScreen {
+    public installScreen(screenComponentFactory: ComponentFactory<IScreen>): IScreen {
         const viewContainerRef = this.host.viewContainerRef;
         viewContainerRef.clear();
         if (this.currentScreenRef) {
