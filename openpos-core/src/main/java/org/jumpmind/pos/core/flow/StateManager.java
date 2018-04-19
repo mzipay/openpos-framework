@@ -128,12 +128,12 @@ public class StateManager implements IStateManager {
             currentContext = resumeSuspendedState;
         }
         
-        Map<String, ScopeValue> extraScope = new HashMap<>();
-        addConfigScope(extraScope);
-        extraScope.put("stateManager", new ScopeValue(this));
-        injector.performInjections(newState, scope, extraScope);
-        
         currentContext.setState(newState);
+        
+        Map<String, ScopeValue> extraScope = new HashMap<>();
+        extraScope.put("stateManager", new ScopeValue(this));
+        injector.performInjections(newState, scope, currentContext, extraScope);
+        
         
         if (resumeSuspendedState != null && returnAction != null) {
             actionHandler.handleAction(currentContext.getState(), action, null, returnAction);
@@ -193,8 +193,6 @@ public class StateManager implements IStateManager {
 
     @Override
     public void doAction(String actionName, Map<String, String> params) {
-        // TODO this needs to be put on the action event queue and processed
-        // on main run loop thread.
         Action action = new Action(actionName, params);
         doAction(action);
     }
@@ -320,8 +318,14 @@ public class StateManager implements IStateManager {
         scope.setSessionScope(name, value);
     }
 
+    @Override
     public void setConversationScope(String name, Object value) {
         scope.setConversationScope(name, value);
+    }
+
+    @Override
+    public void setFlowScope(String name, Object value) {
+        currentContext.setFlowScope(name, value);
     }
 
     public void setInitialFlowConfig(FlowConfig initialFlowConfig) {

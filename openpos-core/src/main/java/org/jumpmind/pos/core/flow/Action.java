@@ -28,9 +28,6 @@ public class Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    public static final transient String SUB_STATE_COMPLETE = "SUB_STATE_COMPLETE";
-    public static final transient String SUB_STATE_CANCELLED = "SUB_STATE_CANCELLED";
-    
     private String name;
     private Map<String, String> parameters = new HashMap<>();
     private Object data;
