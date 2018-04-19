@@ -72,7 +72,7 @@ public class StateManagerFactory implements IStateManagerFactory {
             synchronized (this) {
                 if (stateManager == null) {
                     stateManager = applicationContext.getBean(StateManager.class);
-                    stateManager.setFlowConfig(flowConfigProvider.getConfig(appId, nodeId));
+                    stateManager.setInitialFlowConfig(flowConfigProvider.getConfig(appId, nodeId));
                     stateManager.init(appId, nodeId);
                     stateManagersByNodeId.put(nodeId, stateManager);
                 }

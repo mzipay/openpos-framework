@@ -1,7 +1,6 @@
 package org.jumpmind.pos.user;
 
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_CONNECTION_PROPERTIES;
-
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_DRIVER;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_INITIAL_SIZE;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_INIT_SQL;
@@ -23,13 +22,13 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerFactory;
 import org.h2.tools.Server;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
@@ -41,7 +40,6 @@ import org.jumpmind.persist.IPersistenceManager;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.Table;
-import org.jumpmind.pos.persist.cars.PersistTestUtil;
 import org.jumpmind.pos.service.Module;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.ISecurityService;
@@ -228,16 +226,17 @@ public class UserModule implements Module {
         List<Class<?>> tableClasses = 
                 getClassesForPackageAndAnnotation(packageName, Table.class);
 
-        Map<String, String> sessionContext = PersistTestUtil.getSessionContext();
+        Map<String, String> sessionContext = new HashMap<>();
         
         sessionContext.put("module.tablePrefix", getTablePrefix());
+        sessionContext.put("CREATE_BY", "openpos-user");
+        sessionContext.put("LAST_UPDATE_BY", "openpos-user");        
         
         // init sessionFactory per this module. 
         sessionFactory.init(
                 databasePlatform, 
                 sessionContext, 
-                tableClasses,
-                PersistTestUtil.getQueryTempaltes(getTablePrefix())); // TODO
+                tableClasses);
         
         return sessionFactory;
     }

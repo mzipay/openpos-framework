@@ -1,24 +1,5 @@
 package org.jumpmind.pos.persist.cars;
 
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_CONNECTION_PROPERTIES;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_DRIVER;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_INITIAL_SIZE;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_INIT_SQL;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_MAX_ACTIVE;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_MAX_IDLE;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_MAX_WAIT;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_MIN_EVICTABLE_IDLE_TIME_MILLIS;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_MIN_IDLE;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_PASSWORD;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_TEST_ON_BORROW;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_TEST_ON_RETURN;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_TEST_WHILE_IDLE;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_URL;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_USER;
-import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_VALIDATION_QUERY;
-
-import java.io.InputStream;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -29,14 +10,10 @@ import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
 import org.jumpmind.db.sql.SqlTemplateSettings;
 import org.jumpmind.db.util.BasicDataSourceFactory;
-import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.driver.Driver;
-import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.ISecurityService;
 import org.jumpmind.security.SecurityServiceFactory;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 public class PersistTestUtil {
     
@@ -81,22 +58,7 @@ public class PersistTestUtil {
         return sessionContext;
     }
     
-    public static QueryTemplates getQueryTempaltes(String tablePrefix) {
-        try {            
-            URL url = Thread.currentThread().getContextClassLoader().getResource(tablePrefix + "-query.yaml");
-            if (url != null) {
-                log.info(String.format("Loading %s...", url.toString()));
-                InputStream queryYamlStream = url.openStream();
-                QueryTemplates queryTemplates = new Yaml(new Constructor(QueryTemplates.class)).load(queryYamlStream);
-                return queryTemplates;
-            } else {
-                log.info("Could not locate "  + tablePrefix + "-query.yaml on the classpath.");
-                return new QueryTemplates();
-            }
-        } catch (Exception ex) {
-            throw new PersistException("Failed to load query.yaml", ex);
-        }
-    }
+
 }
 
     

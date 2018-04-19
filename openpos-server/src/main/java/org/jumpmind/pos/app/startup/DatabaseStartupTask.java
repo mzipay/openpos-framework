@@ -1,8 +1,6 @@
 package org.jumpmind.pos.app.startup;
 
-import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.pos.core.startup.AbstractStartupTask;
-import org.jumpmind.pos.db.DatabaseManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +14,13 @@ public class DatabaseStartupTask extends AbstractStartupTask {
     final protected Logger logger = LoggerFactory.getLogger(getClass());
 
 
-    @Autowired
-    IDatabasePlatform platform;
+//    @Autowired
+//    IDatabasePlatform platform;
 
     @Autowired
     String tablePrefix;
     
-    DatabaseManager dbMgr = null;
+//    DatabaseManager dbMgr = null;
 
     @Override
     protected void doTask() throws Exception {
@@ -41,8 +39,8 @@ public class DatabaseStartupTask extends AbstractStartupTask {
 //            throw new PosServerException("Failed to check schema per " + url, ex);
 //        }
 //   
-        dbMgr = new DatabaseManager(platform);
-        dbMgr.createAndUpgrade(tablePrefix);
+//        dbMgr = new DatabaseManager(platform);
+//        dbMgr.createAndUpgrade(tablePrefix);
         
     }
 }
