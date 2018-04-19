@@ -12,7 +12,7 @@ import { ScanSomethingComponent } from '../../common/controls/scan-something/sca
 import { ObservableMedia } from '@angular/flex-layout';
 import { ISellScreen } from '../..';
 import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
-import { SellScreenUtils } from '../../common/screen-interfaces/iSellScreen';
+import { SellScreenUtils } from './iSellScreen';
 import { ScanSomethingData } from '../../common/controls/scan-something/scanSomthingData';
 
 @Component({
@@ -24,7 +24,6 @@ export class SellComponent extends AbstractTemplate implements OnInit {
 
   template: ISellScreen;
   statusBar: StatusBarData;
-  autoFocusOnScan: boolean;
   scanSomethingData: ScanSomethingData;
 
   @ViewChild('drawer') drawer;
@@ -42,8 +41,7 @@ export class SellComponent extends AbstractTemplate implements OnInit {
   show(template: any) {
     this.template = template;
     this.statusBar = SellScreenUtils.getStatusBar(template);
-    this.scanSomethingData = SellScreenUtils.getScanSomethingData(template, template.template);
-    this.autoFocusOnScan = template.template.autoFocusOnScan;
+    this.scanSomethingData = SellScreenUtils.getScanSomethingData(template);
   }
 
   public ngOnInit(): void {

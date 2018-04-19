@@ -20,9 +20,6 @@ export class ScanSomethingComponent implements AfterViewInit {
 
   public barcode: string;
 
-  @Input()
-  public autoFocus: boolean;
-
   @Input() minLength: number = 1;
   @Input() maxLength: number;
 
@@ -36,7 +33,7 @@ export class ScanSomethingComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.autoFocus) {
+    if (this.scanSomethingData.autoFocus) {
       this.input.nativeElement.focus();
     }
   }
