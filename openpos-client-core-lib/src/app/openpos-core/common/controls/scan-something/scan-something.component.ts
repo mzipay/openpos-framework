@@ -34,7 +34,7 @@ export class ScanSomethingComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.scanSomethingData.autoFocus) {
-      this.input.focus();
+      this.input.nativeElement.focus();
     }
   }
 
