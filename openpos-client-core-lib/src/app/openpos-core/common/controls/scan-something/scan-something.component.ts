@@ -11,8 +11,7 @@ import { ScanSomethingData } from './scanSomthingData';
 })
 export class ScanSomethingComponent implements AfterViewInit {
 
-  @ViewChild('input')
-  input: ElementRef;
+  @ViewChild('input')  input: ElementRef;
 
   @Input()
   scanSomethingData: ScanSomethingData;
@@ -33,9 +32,7 @@ export class ScanSomethingComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.scanSomethingData.autoFocus) {
-      this.input.nativeElement.focus();
-    }
+      setTimeout(() => this.input.nativeElement.focus(), 0 );
   }
 
 
