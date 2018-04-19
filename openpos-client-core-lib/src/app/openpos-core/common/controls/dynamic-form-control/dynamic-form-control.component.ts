@@ -1,7 +1,7 @@
 import { ITextMask, TextMask } from './../../textmask';
 import { IMenuItem } from '../../imenuitem';
 import { IScreen } from '../../iscreen';
-import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, ViewChildren, AfterViewInit, DoCheck, OnInit, Output, Input, EventEmitter, QueryList } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
 import { MatSelectChange } from '@angular/material';
 import {
@@ -14,6 +14,8 @@ import { ScreenService } from '../../../services/screen.service';
 import { OpenPosValidators } from '../../validators/openpos-validators';
 import { ValidatorsService } from '../../../services/validators.service';
 import { IForm } from '../../iform';
+import { MatInput } from '@angular/material';
+import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
 
 @Component({
   selector: 'app-dynamic-form-control',
@@ -21,7 +23,17 @@ import { IForm } from '../../iform';
   styleUrls: ['./dynamic-form-control.component.scss']
 })
 export class DynamicFormControlComponent implements OnInit {
+  @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
 
+  ngAfterViewInit(){
+    this.children.filter( child => {
+      if(child.field){
+        return child.field.disabled === false;
+      }
+      return false;      
+    })[0].field.focus();
+  }
+  
   @Input() 
   get screenForm(): IForm{
     return this._screenForm;

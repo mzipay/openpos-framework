@@ -7,7 +7,7 @@ import {
   Output, Input, EventEmitter, Optional, ElementRef
 } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
-import { MatSelectChange } from '@angular/material';
+import { MatSelectChange, MatFormField, MatFormFieldControl, MatInput } from '@angular/material';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl, NgForm } from '@angular/forms';
 import { IFormElement } from '../../iformfield';
 import { Observable } from 'rxjs/Observable';
@@ -21,6 +21,8 @@ import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-s
   styleUrls: ['./dynamic-form-field.component.scss']
 })
 export class DynamicFormFieldComponent implements OnInit, OnDestroy {
+
+  @ViewChild(MatInput) field: MatInput;
 
   @Input() formField: IFormElement;
   @Input() formGroup: FormGroup;
