@@ -18,6 +18,7 @@ export interface IFormElement {
     maxLength: number;
     iconName: string;
     disabled: boolean;
+    select: boolean;
 }
 
 export type LabelPositionType = 'before' | 'after';

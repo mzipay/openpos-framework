@@ -68,13 +68,23 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy {
     }
   }
 
-
   ngOnDestroy(): void {
     if (this.valuesSubscription) {
       this.valuesSubscription.unsubscribe();
     }
   }
 
+  isNumericField(): boolean {
+    return ['NumericText', 'Money', 'Phone', 'PostalCode', 'Percent', 'Income'].indexOf(this.formField.inputType) >= 0;
+  }
+  
+  onClick(event, formField: IFormElement) {
+    if (formField.select) {
+      // setSelectionRange is necessary in order to work correctly in UIWebView on iPad
+      event.target.setSelectionRange(0, 9999);
+    }
+  }
+  
   updateAutoCompleteDataSource() {
     this.valuesSubscription = this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
       const values: Array<string> = data;
