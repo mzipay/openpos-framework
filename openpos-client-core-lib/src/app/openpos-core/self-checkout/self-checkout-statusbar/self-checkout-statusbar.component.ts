@@ -38,9 +38,7 @@ export class SelfCheckoutStatusBarComponent {
   }
 
   public showScan() {
-    const scanData = new ScanSomethingData();
-    scanData.placeholderText = this.data.scanPlaceholderText;
-    const dialogConfig: MatDialogConfig = { autoFocus: true, data: scanData };
+    const dialogConfig: MatDialogConfig = { autoFocus: false, data: this.data.scanSomethingData };
     this.dialogService.open(ScanSomethingComponent, dialogConfig);
   }
 

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter, Optional, Inject, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { DeviceService } from '../../../services/device.service';
 import { SessionService } from '../../../services/session.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
 import { ScanSomethingData } from './scanSomthingData';
 
 @Component({
@@ -11,7 +11,8 @@ import { ScanSomethingData } from './scanSomthingData';
 })
 export class ScanSomethingComponent implements AfterViewInit {
 
-  @ViewChild('input')  input: ElementRef;
+  @ViewChild(MatInput)
+  input: MatInput;
 
   @Input()
   scanSomethingData: ScanSomethingData;
@@ -32,7 +33,9 @@ export class ScanSomethingComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-      setTimeout(() => this.input.nativeElement.focus(), 0 );
+    if (this.scanSomethingData.autoFocus) {
+      this.input.focus();
+    }
   }
 
 
