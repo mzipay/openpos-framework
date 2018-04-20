@@ -29,7 +29,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
   ngAfterViewInit(){
     const field = this.children.filter( child => {
       if(child.field){
-        return child.field.disabled === false;
+        return child.field.readonly === false;
       }
       return false;      
     })[0].field;
