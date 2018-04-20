@@ -23,6 +23,8 @@ package org.jumpmind.pos.app.state;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
+import org.jumpmind.pos.core.flow.In;
+import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.HomeScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
@@ -30,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class HomeScreenState extends AbstractState implements IState {
 
-    @Autowired
+    @In(scope=ScopeType.Node)
     IStateManager stateManager;
 
     @Override

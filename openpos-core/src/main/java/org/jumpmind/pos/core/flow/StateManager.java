@@ -59,6 +59,9 @@ public class StateManager implements IStateManager {
     @Autowired
     private Injector injector;
     
+    @Autowired
+    private Outjector outjector;
+    
     @Autowired(required=false)
     private List<? extends IStateInterceptor> stateInterceptors;    
     
@@ -88,6 +91,7 @@ public class StateManager implements IStateManager {
         this.nodeId = nodeId;
         this.uiManager.setStateManager(this);
         this.currentContext = new StateContext(initialFlowConfig, null, null);
+        this.scope.setNodeScope("stateManager", this);
         transitionTo(null, initialFlowConfig.getInitialState());
     }
 
@@ -101,6 +105,10 @@ public class StateManager implements IStateManager {
     }
     
     protected void transitionTo(Action action, IState newState, FlowConfig enterSubStateConfig, StateContext resumeSuspendedState) {
+        if (this.currentContext == null) {
+            throw new FlowException("There is no currentContext on this StateManager.  HINT: States should us @In to get the StateManager, not @Autowired.");
+        }        
+        
         if (enterSubStateConfig != null && resumeSuspendedState != null) {
             throw new FlowException("enterSubStateConfig and resumeSuspendedState should not BOTH be provided at the same time. enterSubStateConfig implies entering a subState, "
                     + "while resumeSuspendedState implies "
@@ -109,6 +117,10 @@ public class StateManager implements IStateManager {
         
         boolean enterSubState = enterSubStateConfig != null;
         boolean exitSubState = resumeSuspendedState != null;
+        
+        if (currentContext.getState() != null) {
+            outjector.performOutjections(currentContext.getState(), scope, currentContext);
+        }        
         
         IState modifiedState = runStateInterceptors(currentContext.getState(), newState, action);
         if (modifiedState != null && modifiedState != newState) {
@@ -130,10 +142,7 @@ public class StateManager implements IStateManager {
         
         currentContext.setState(newState);
         
-        Map<String, ScopeValue> extraScope = new HashMap<>();
-        extraScope.put("stateManager", new ScopeValue(this));
-        injector.performInjections(newState, scope, currentContext, extraScope);
-        
+        injector.performInjections(newState, scope, currentContext);
         
         if (resumeSuspendedState != null && returnAction != null) {
             actionHandler.handleAction(currentContext.getState(), action, null, returnAction);
@@ -308,25 +317,25 @@ public class StateManager implements IStateManager {
         }
     }
 
-    @Override
-    public void setNodeScope(String name, Object value) {
-        scope.setNodeScope(name, value);
-    }
-
-    @Override
-    public void setSessionScope(String name, Object value) {
-        scope.setSessionScope(name, value);
-    }
-
-    @Override
-    public void setConversationScope(String name, Object value) {
-        scope.setConversationScope(name, value);
-    }
-
-    @Override
-    public void setFlowScope(String name, Object value) {
-        currentContext.setFlowScope(name, value);
-    }
+//    @Override
+//    public void setNodeScope(String name, Object value) {
+//        scope.setNodeScope(name, value);
+//    }
+//
+//    @Override
+//    public void setSessionScope(String name, Object value) {
+//        scope.setSessionScope(name, value);
+//    }
+//
+//    @Override
+//    public void setConversationScope(String name, Object value) {
+//        scope.setConversationScope(name, value);
+//    }
+//
+//    @Override
+//    public void setFlowScope(String name, Object value) {
+//        currentContext.setFlowScope(name, value);
+//    }
 
     public void setInitialFlowConfig(FlowConfig initialFlowConfig) {
         this.initialFlowConfig = initialFlowConfig;
@@ -334,6 +343,9 @@ public class StateManager implements IStateManager {
 
     @Override
     public void showScreen(AbstractScreen screen) {
+        if (this.currentContext == null) {
+            throw new FlowException("There is no currentContext on this StateManager.  HINT: States should us @In to get the StateManager, not @Autowired.");
+        }
         if (this.currentContext.getState() != null && this.currentContext.getState() instanceof IScreenInterceptor) {
             screen = ((IScreenInterceptor)this.currentContext.getState()).intercept(screen);            
         }

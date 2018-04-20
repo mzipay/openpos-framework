@@ -4,6 +4,8 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
+import org.jumpmind.pos.core.flow.In;
+import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SellItemScreen;
 import org.jumpmind.pos.core.screen.SellScreen;
@@ -13,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class SellState implements IState {
 
-    @Autowired
+    @In(scope=ScopeType.Node)
     IStateManager stateManager;
     
     @Override

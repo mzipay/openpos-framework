@@ -4,6 +4,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
+import org.jumpmind.pos.core.flow.In;
+import org.jumpmind.pos.core.flow.Out;
+import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.flow.StateManager;
 import org.jumpmind.pos.core.flow.ui.PromptConfig;
 import org.jumpmind.pos.core.screen.IPromptScreen;
@@ -17,11 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UserLoginState implements IState {
 
     @Autowired
-    StateManager stateManager;
-    @Autowired(required=false)
-    User currentUser;
-    @Autowired
-    private UserService userService;    
+    private UserService userService;
+    
+    @In(scope=ScopeType.Node)
+    private StateManager stateManager;
+    
+    @In(scope=ScopeType.Session, required=false)
+    @Out(scope=ScopeType.Session, required=false)
+    private User currentUser;
 
     private String enteredUserName;
     private int userMessageIndex = 0;
@@ -78,7 +84,7 @@ public class UserLoginState implements IState {
 
     protected void processResult() {
         if (result.getResultStatus().equals("SUCCESS")) {
-            stateManager.setSessionScope("currentUser", result.getUser());
+            this.currentUser = result.getUser();
             stateManager.transitionTo(null, targetState);
         } else {
             if (CollectionUtils.isEmpty(result.getUserMessages())) {                
@@ -158,7 +164,7 @@ public class UserLoginState implements IState {
     
     @ActionHandler
     public void onPasswordChangeAcknowledged(Action action) {
-        stateManager.setSessionScope("currentUser", result.getUser());
+        this.currentUser = result.getUser();
         stateManager.transitionTo(null, targetState);
     }
     
