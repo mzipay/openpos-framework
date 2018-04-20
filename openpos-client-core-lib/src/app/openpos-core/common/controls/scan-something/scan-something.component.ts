@@ -16,7 +16,6 @@ export class ScanSomethingComponent implements AfterViewInit {
 
   @Input()
   scanSomethingData: ScanSomethingData;
-  
 
   public barcode: string;
 
@@ -33,11 +32,10 @@ export class ScanSomethingComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.scanSomethingData.autoFocus) {
-      this.input.focus();
-    }
+    // if (this.scanSomethingData.autoFocus) {
+    //  this.input.focus();
+    // }
   }
-
 
   public onEnter(): void {
     if (this.barcode && this.barcode.trim().length >= this.minLength) {
