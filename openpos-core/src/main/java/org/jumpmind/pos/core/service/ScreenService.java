@@ -111,11 +111,14 @@ public class ScreenService implements IScreenService {
 
     @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{nodeId}/control/{controlId}")
     @ResponseBody
-    public String getComponentValues(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String controlId, @RequestParam(name="searchTerm", required=false) String searchTerm) {
+    public String getComponentValues(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String controlId, 
+            @RequestParam(name="searchTerm", required=false) String searchTerm,
+            @RequestParam(name="sizeLimit", defaultValue="1000") Integer sizeLimit
+            ) {
         logger.info("Received a request to load component values for {} {} {}", appId, nodeId, controlId);
-        String result = getComponentValues(appId, nodeId, controlId, getLastScreen(appId, nodeId), searchTerm);
+        String result = getComponentValues(appId, nodeId, controlId, getLastScreen(appId, nodeId), searchTerm, sizeLimit);
         if (result == null) {
-            result = getComponentValues(appId, nodeId, controlId, getLastDialog(appId, nodeId), searchTerm);
+            result = getComponentValues(appId, nodeId, controlId, getLastDialog(appId, nodeId), searchTerm, sizeLimit);
         }
         if (result == null) {
             result = "{}";
@@ -123,7 +126,7 @@ public class ScreenService implements IScreenService {
         return result;
     }
 
-    private String getComponentValues(String appId, String nodeId, String controlId, AbstractScreen screen, String searchTerm) {
+    private String getComponentValues(String appId, String nodeId, String controlId, AbstractScreen screen, String searchTerm, Integer sizeLimit) {
         String result = null;
         if (screen instanceof DynamicFormScreen) {
             DynamicFormScreen dynamicScreen = (DynamicFormScreen) screen;
@@ -133,11 +136,11 @@ public class ScreenService implements IScreenService {
             // inheriting off of each other.
             List<String> valueList = null;
             if (formElement instanceof FormListField) {
-                valueList = ((FormListField) formElement).searchValues(searchTerm);
+                valueList = ((FormListField) formElement).searchValues(searchTerm, sizeLimit);
             } else if (formElement instanceof ComboField) {
-                valueList = ((ComboField) formElement).searchValues(searchTerm);
+                valueList = ((ComboField) formElement).searchValues(searchTerm, sizeLimit);
             } else if (formElement instanceof ToggleField) {
-                valueList = ((ToggleField) formElement).searchValues(searchTerm);
+                valueList = ((ToggleField) formElement).searchValues(searchTerm, sizeLimit);
             }
             if (valueList != null) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();

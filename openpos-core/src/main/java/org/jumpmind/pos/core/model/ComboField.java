@@ -35,9 +35,13 @@ public class ComboField extends FormField {
         this.values = values;
     }
     
-    public List<String> searchValues(String searchTerm) {
+    public List<String> searchValues(String searchTerm, Integer sizeLimit) {
         if (searchTerm != null) {
-            return values != null ? values.stream().filter(v -> v.toLowerCase().contains(searchTerm.toLowerCase())).collect(Collectors.toList()) : null;
+            return values != null ? 
+                    values.stream().filter(v -> v.toLowerCase().contains(searchTerm.toLowerCase()))
+                        .limit(sizeLimit != null && sizeLimit >= 0 ? sizeLimit : values.size())
+                        .collect(Collectors.toList()) 
+                    : null;
         } else {
             return this.getValues();
         }
