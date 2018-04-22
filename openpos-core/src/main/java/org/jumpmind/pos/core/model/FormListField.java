@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.jumpmind.pos.core.screen.SelectionMode;
 
@@ -45,6 +46,14 @@ public class FormListField extends FormField {
     public FormListField(String fieldId, String label, FieldElementType elementType, FieldInputType inputType, String placeholder, List<String> values) {
         super(fieldId, label, elementType, inputType, placeholder);
         this.values = values;
+    }
+    
+    public List<String> searchValues(String searchTerm) {
+        if (searchTerm != null) {
+            return values != null ? values.stream().filter(v -> v.toLowerCase().contains(searchTerm.toLowerCase())).collect(Collectors.toList()) : null;
+        } else {
+            return this.getValues();
+        }
     }
     
     public List<String> getValues() {

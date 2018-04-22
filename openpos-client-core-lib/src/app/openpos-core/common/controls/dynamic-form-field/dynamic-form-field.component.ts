@@ -11,6 +11,7 @@ import { MatSelectChange, MatFormField, MatFormFieldControl, MatInput } from '@a
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl, NgForm } from '@angular/forms';
 import { IFormElement } from '../../iformfield';
 import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 import { ScreenService } from '../../../services/screen.service';
 import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-select';
@@ -20,7 +21,7 @@ import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-s
   templateUrl: './dynamic-form-field.component.html',
   styleUrls: ['./dynamic-form-field.component.scss']
 })
-export class DynamicFormFieldComponent implements OnInit, OnDestroy {
+export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(MatInput) field: MatInput;
 
@@ -66,10 +67,18 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy {
     }
 
     if (this.formField.inputType === 'AutoComplete') {
-      this.updateAutoCompleteDataSource();
+      this.updateAutoCompleteDataSource2();
     }
   }
 
+  ngAfterViewInit(): void {
+    if (this.formField.inputType === 'AutoComplete') {
+      if (this.formField.value) {
+       this.formGroup.get(this.formField.id).setValue(this.formField.value);
+      }
+    }
+  }
+  
   ngOnDestroy(): void {
     if (this.valuesSubscription) {
       this.valuesSubscription.unsubscribe();
@@ -86,7 +95,37 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy {
       event.target.setSelectionRange(0, 9999);
     }
   }
-  
+
+  updateAutoCompleteDataSource2() {
+    const fld: IFormElement = this.formField;
+    const scrnSvc: ScreenService = this.screenService;
+    this.autoCompleteDataSource = {
+      displayValue(value: any): Observable<OptionEntry | null> {
+        console.log(`being asked to display value for: ${value}`);
+        const display = <string>value;
+        return of({
+          value,
+          display,
+          details: {}
+        });
+      },
+
+      search(term: string): Observable<OptionEntry[]> {
+        const lowerTerm = term ? term.toLowerCase() : '';
+        console.log(`autocomplete searching for '${lowerTerm}' on field '${fld.id}'`);
+        return (<Observable<Array<string>>> scrnSvc.getFieldValues(fld.id, lowerTerm))
+          .pipe(
+            map(searchResults => searchResults.slice(0, 1000).map(v => ({
+              value: v,
+              display: v,
+              details: {}
+            })))
+          );
+      }
+    };
+
+  }
+
   updateAutoCompleteDataSource() {
     this.valuesSubscription = this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
       const values: Array<string> = data;
