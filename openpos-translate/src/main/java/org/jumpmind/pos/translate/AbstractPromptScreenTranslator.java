@@ -47,7 +47,7 @@ public abstract class AbstractPromptScreenTranslator<T extends SellScreen> exten
             if (isNotBlank(formattedPromptText)) {
                 String text = formattedPromptText
                         .replace("Enter number and press Next", "")
-                        replace(" and press Next", "")
+                        .replace(" and press Next", "")
                         .replace(" and press next", "")
                         .replace(", then press Next", "");
                 if (text.endsWith(".")) {
