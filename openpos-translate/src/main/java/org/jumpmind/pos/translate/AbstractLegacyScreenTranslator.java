@@ -118,7 +118,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
     }
 
     protected void buildStatusItems() {
-        screen.setOperatorName(WordUtils.capitalizeFully(posSessionInfo.getOperatorLoginId()));
+        screen.setOperatorName(WordUtils.capitalizeFully(posSessionInfo.getOperatorName()));
         String name = getScreenName();
         screen.setName(name);
         if (isBlank(screen.getIcon())) {
