@@ -345,7 +345,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
           if (screen.type === 'SelfCheckoutHome') {
             this.classes = 'main-background selfcheckout';
           } else {
-            this.classes = 'lighter selfcheckout';
+            this.classes = 'selfcheckout';
           }
           break;
         case 'customerdisplay':
