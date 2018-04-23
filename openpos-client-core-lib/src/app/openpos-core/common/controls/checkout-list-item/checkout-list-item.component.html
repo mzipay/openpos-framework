@@ -1,27 +1,26 @@
 <mat-card style="margin: 0px; margin-bottom: 16px;">
     <mat-card-content>
-        <img height="300px" src="{{item.imageUrl}}" alt="{{item.description}}">
+        <img height="275px" src="{{item.imageUrl}}" alt="{{item.description}}">
         <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="stretch" fxLayoutGap="16px" style="padding-left: 16px">
             <div fxFlex="1 1 auto" fxLayout="column">
                 <div fxFlex="1 1 auto">
-                    <div *ngIf="item.productDescription" class="primary text-md" style="padding-bottom: 8px">{{item.productDescription}}</div>
-                    <div *ngIf="!item.productDescription" class="primary text-md" style="padding-bottom: 8px">{{item.description}}</div>
-                    <span *ngIf="item.amount === item.sellingPrice" class="text-sm">{{item.amount|currency:'USD':true:'1.2'}}</span>
-                    <span *ngIf="item.amount !== item.sellingPrice" class="muted-color text-sm" style="text-decoration:line-through">{{item.sellingPrice|currency:'USD':true:'1.2'}}</span>
-                    <span *ngIf="item.amount !== item.sellingPrice" class="text-sm">( {{item.amount|currency:'USD':true:'1.2'}} )</span>
+                    <div *ngIf="item.productDescription" class="primary" style="padding-bottom: 8px; font-size: 22px;">{{item.productDescription}}</div>
+                    <div *ngIf="!item.productDescription" class="primary" style="padding-bottom: 8px; font-size: 22px;">{{item.description}}</div>
+                    <span *ngIf="item.amount === item.sellingPrice" style="font-size: 20px;">{{item.amount|currency:'USD':true:'1.2'}}</span>
+                    <span *ngIf="item.amount !== item.sellingPrice" class="muted-color" style="text-decoration:line-through; font-size: 20px;">{{item.sellingPrice|currency:'USD':true:'1.2'}}</span>
                 </div>
                 <div>
-                    <div *ngIf="item.color" class="muted-color text-sm">Color: {{item.color}}</div>
-                    <div *ngIf="item.size" class="muted-color text-sm" style="margin-top: 8px">Size: {{item.size}}</div>
-                    <div *ngIf="item.id" class="muted-color text-sm" style="margin-top: 8px">Item ID: {{item.id}}</div>
+                    <div *ngIf="item.color" class="muted-color">Color: {{item.color}}</div>
+                    <div *ngIf="item.size" class="muted-color" style="font-size: 20px; margin-top: 4px;">Size: {{item.size}}</div>
+                    <div *ngIf="item.id" class="muted-color" style="font-size: 20px; margin-top: 4px">Item ID: {{item.id}}</div>
                 </div>
             </div>
             <div fxFlex="0 0 auto" fxLayout="column">
-                <span fxFlex="1 1 auto" class="primary text-lg text-right">{{item.amount|currency:'USD':true:'1.2'}}</span>
+                <span fxFlex="1 1 auto" class="primary text-right" style="font-weight: bold; font-size: 24px;">{{item.amount|currency:'USD':true:'1.2'}}</span>
                 <div *ngIf="!isReadOnly">
                     <button mat-button fxFlex="0 0 130px" color="warn" *ngFor="let m of item.menuItems" (click)="doMenuItemAction(m, item.index)"
                         [disabled]="!isMenuItemEnabled(m)">
-                        <span [ngClass]="{'muted-color': ! m.enabled}" class="text-md">{{m.title}}</span>
+                        <span [ngClass]="{'muted-color': ! m.enabled}" style="font-size: 24px;">{{m.title}}</span>
                         <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
                     </button>
                 </div>

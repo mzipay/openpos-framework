@@ -88,28 +88,34 @@ public class Form implements Serializable {
     		return field;
     }
     
-    public static FormField createDateField(String fieldId, String label, String value, boolean required) {
+    public static FormField createDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Date, required);
         formField.setPattern(PATTERN_DATE);
         formField.setValue(value);
+        formField.put("hideCalendar", hideCalendar);
         return formField;
     }
     
-    public FormField addDateField(String fieldId, String label, String value, boolean required) {
-        FormField formField = createDateField(fieldId, label, value, required);
+    public FormField addDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
+        FormField formField = createDateField(fieldId, label, value, required, hideCalendar);
         formElements.add(formField);
         return formField;
     }
+
+    public FormField addDateField(String fieldId, String label, String value, boolean required) {
+        return this.addDateField(fieldId, label, value, required, false);
+    }
     
-    public static FormField createNoYearDateField(String fieldId, String label, String value, boolean required) {
+    public static FormField createNoYearDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
     		FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NoYearDate, required);
     		formField.setPattern(PATTERN_NO_YEAR_DATE);
     		formField.setValue(value);
+    		formField.put("hideCalendar", hideCalendar);
     		return formField;
     }
     
-    public FormField addNoYearDateField(String fieldId, String label, String value, boolean required) {
-    		FormField formField = createNoYearDateField(fieldId, label, value, required);
+    public FormField addNoYearDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
+    		FormField formField = createNoYearDateField(fieldId, label, value, required, hideCalendar);
     		formElements.add(formField);
     		return formField;
     }
