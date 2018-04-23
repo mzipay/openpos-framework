@@ -101,6 +101,10 @@ public class Form implements Serializable {
         formElements.add(formField);
         return formField;
     }
+
+    public FormField addDateField(String fieldId, String label, String value, boolean required) {
+        return this.addDateField(fieldId, label, value, required, false);
+    }
     
     public static FormField createNoYearDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
     		FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NoYearDate, required);
