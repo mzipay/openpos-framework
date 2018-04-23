@@ -5,7 +5,7 @@ export class StatusBarData{
     screenType: String;
     screenName: String;
     screenIcon: String;
-    operatorName: String;
+    operatorText: String;
     logoutButton: IMenuItem;
     workstationId: String;
 

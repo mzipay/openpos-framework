@@ -15,7 +15,7 @@ export interface ISellScreen {
     locale: string;
     prompt: string;
     workstation: IWorkStation;
-    operatorName: string;
+    operatorText: string;
     icon: string;
     showScan: boolean;
     showHelp: boolean;
@@ -33,7 +33,7 @@ export class SellScreenUtils {
 
         statusBar.backButton = screen.backButton;
         statusBar.logoutButton = screen.logoutButton;
-        statusBar.operatorName = screen.operatorName;
+        statusBar.operatorText = screen.operatorText;
         statusBar.screenIcon = screen.icon;
         statusBar.screenName = screen.name;
         statusBar.screenType = screen.type;

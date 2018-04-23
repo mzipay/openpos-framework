@@ -34,7 +34,9 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
     public final static String WORK_PANEL_KEY = "WorkPanel";
     public final static String STATUS_PANEL_KEY = "StatusPanel";
     
-    public final static String USE_ON_SCREEN_KEYBOARD = "use.on.screen.keyboard";
+    public final static String USE_ON_SCREEN_KEYBOARD_PROP = "use.on.screen.keyboard";
+    public final static String STATUS_BAR_USER_TEXT_PROP = "ui.statusbar.user";
+    public final static String STATUS_BAR_USER_TEXT_FIRST_LAST_NAME = "firstLastName";
 
     private ILegacyUtilityManager legacyUtilityManager;
 
@@ -110,7 +112,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
     
     protected void setScreenProperties() {
         if (properties != null && screen != null) {
-            boolean useOnScreenKeyboard = Boolean.valueOf((String) properties.get(USE_ON_SCREEN_KEYBOARD));
+            boolean useOnScreenKeyboard = Boolean.valueOf((String) properties.get(USE_ON_SCREEN_KEYBOARD_PROP));
             if (useOnScreenKeyboard) {
                 screen.setUseOnScreenKeyboard(useOnScreenKeyboard);
             }
@@ -118,7 +120,15 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
     }
 
     protected void buildStatusItems() {
-        screen.setOperatorName(WordUtils.capitalizeFully(posSessionInfo.getOperatorLoginId()));
+
+        String operatorText;
+        if (properties != null && STATUS_BAR_USER_TEXT_FIRST_LAST_NAME.equals(properties.get(STATUS_BAR_USER_TEXT_PROP))) {
+        	operatorText = posSessionInfo.getOperatorName();
+        } else {
+        	operatorText = posSessionInfo.getOperatorLoginId();
+        }
+        screen.setOperatorText(WordUtils.capitalizeFully(operatorText));
+        
         String name = getScreenName();
         screen.setName(name);
         if (isBlank(screen.getIcon())) {
