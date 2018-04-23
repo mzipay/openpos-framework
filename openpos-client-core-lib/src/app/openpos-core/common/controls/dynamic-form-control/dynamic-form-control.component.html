@@ -1,4 +1,4 @@
-<form fxFlex="1 1 auto" (ngSubmit)="submitForm()" [formGroup]="form" novalidate [markDirtyOnSubmit]="form" fxLayout="column" >
+<form fxFlex="1 1 auto" (ngSubmit)="submitForm()" [formGroup]="form" novalidate [markDirtyOnSubmit]="form" fxLayout="column" id="dynamic-form">
     <app-dynamic-form-field *ngFor="let field of screenForm.formElements" [formGroup]="form" [formField]="field" (onFieldChanged)="onFieldChanged($event)"></app-dynamic-form-field>
     <mat-error>
         <app-show-errors [control]="form"></app-show-errors>	
