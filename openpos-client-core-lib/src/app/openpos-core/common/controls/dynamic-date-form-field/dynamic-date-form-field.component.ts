@@ -17,6 +17,7 @@ import { MatSelectChange, MatDatepickerInputEvent } from "@angular/material";
     @Input() value: string;
     @Input() placeholder: string;
     @Input() isPrompt: boolean = false;
+    @Input() hideCalendar: boolean = false;
     @Input() hintText: string ='';
     @Input() controlName: string;
     @Input() hiddenControl: string;
