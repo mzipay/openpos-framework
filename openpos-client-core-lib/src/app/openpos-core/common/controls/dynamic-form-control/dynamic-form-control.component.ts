@@ -85,6 +85,11 @@ export class DynamicFormControlComponent implements AfterViewInit {
             this.buildFormPayload();
             return this.session.response = this._screenForm;
           } else {
+            // Show errors for each of the fields where necessary
+            Object.keys(this.form.controls).forEach(f => {
+              const control = this.form.get(f);
+              control.markAsTouched({onlySelf: true});
+            });
             throw Error('form is invalid');
           }
         });
