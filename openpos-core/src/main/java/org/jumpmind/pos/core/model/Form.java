@@ -138,6 +138,18 @@ public class Form implements Serializable {
         return formField;
     }
     
+    public FormField addDecimalField(String fieldId, String label, String value, boolean required) {
+        FormField formField = createDecimalField(fieldId, label, value, required);
+        formElements.add(formField);
+        return formField;
+    }
+    
+    public static FormField createDecimalField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Decimal, required);
+        formField.setValue(value);
+        return formField;
+    }
+
     public static FormField createIncomeField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Income, required);
         formField.setValue(value);
@@ -311,5 +323,6 @@ public class Form implements Serializable {
 	public void addFormError(String error) {
 		formErrors.add(error);
 	}
+
     
 }
