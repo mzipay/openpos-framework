@@ -14,6 +14,6 @@ export class AutoSelectOnFocus {
     
     @HostListener('focus', ['$event'])
     onFocus($event: Event){
-        this.element.nativeElement.select();
+        this.element.nativeElement.setSelectionRange(0, 9999);
     }
 }

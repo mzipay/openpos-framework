@@ -40,7 +40,7 @@ import { SelfCheckoutWithBarComponent } from '../templates/selfcheckout-with-bar
 import { TillSummaryComponent } from '../screens/till/till-summary.component';
 import { TillCountComponent } from '../screens/till/till-count.component';
 import { ChangeComponent } from '../screens/change/change.component';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { SessionService } from '../services/session.service';
 import { PrintPreviewComponent } from '../screens/print-preview.component';
 import { WaitComponent } from '../screens/wait/wait.component';
@@ -126,13 +126,18 @@ export class ScreenService {
     }
   }
 
-  public getFieldValues(fieldId: string): Observable<any> {
+  public getFieldValues(fieldId: string, searchTerm?: string): Observable<any> {
     const url: string = this.sessionService.getApiServerBaseURL() + '/app/'
       + this.sessionService.getAppId() + '/node/'
       + this.sessionService.getNodeId() + '/control/'
       + fieldId;
-      console.log(`Requesting field values from the server using url: ${url}`);
-    return this.http.get(url, {});
+
+    const httpParams = {};
+    if (searchTerm) {
+      httpParams['searchTerm'] = searchTerm;
+    }
+    console.log(`Requesting field values from the server using url: ${url}, params: '${JSON.stringify(httpParams)}'`);
+    return this.http.get(url, {params: httpParams});
   }
 
 }
