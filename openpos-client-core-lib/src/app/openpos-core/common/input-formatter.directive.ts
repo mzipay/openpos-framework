@@ -10,9 +10,11 @@ export const FORMATTED_INPUT_VALUE_ACCESSOR: any = {
 };
 
 @Directive({
+    // tslint:disable-next-line:directive-selector
     selector: 'input[formatterName]',
     providers: [FORMATTED_INPUT_VALUE_ACCESSOR]
 })
+// tslint:disable-next-line:directive-class-suffix
 export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit {
 
     @Input() formatterName: string;
@@ -32,7 +34,7 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
     writeValue(value: string): void {
         if (!value) {
             value = '';
-        }           
+        }
         this.renderer.setProperty(this.elRef.nativeElement, 'value', this.formatter.formatValue(value));
     }
 
@@ -86,7 +88,7 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
     @HostListener('keypress', ['$event.key', '$event.target.value'])
     onKeyPress(key: string, value: string) {
         // Compute what our proposed new value is going to look like
-        const newValue = value.slice(0, 
+        const newValue = value.slice(0,
             this.elRef.nativeElement.selectionStart) + key + value.slice(this.elRef.nativeElement.selectionEnd, value.length);
 
         // Ask the formatter to validate the addition either with the key or new value

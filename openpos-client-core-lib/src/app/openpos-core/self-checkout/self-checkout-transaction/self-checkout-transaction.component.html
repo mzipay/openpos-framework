@@ -10,15 +10,13 @@
 					<b>{{this.screen.prompt}}</b>
 				</div>
 				<div class="primary text-sm text-center">{{this.screen.instructions}}</div>
-				<mat-card>
-					<div class="scan-item-icon"></div>
-				</mat-card>
+				<div class="scan-item-icon"></div>
 			</div>
 		</div>
 
-		<mat-card fxFlex="0 0 300px" class="page-content-card grey-background scrollable-content-card">
+		<mat-card fxFlex="0 0 300px" class="page-content-card lighter scrollable-content-card">
 			<mat-card-content fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="end stretch" fxLayoutGap="0px" style="padding: 16px">
-				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center stretch" *ngFor="let total of screen.totals" class="page-content-card text-center">
+				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center stretch" *ngFor="let total of screen.totals" class="page-content-card lighter text-center">
 					<mat-card-title class="primary text-sm">
 						{{total.name}}
 					</mat-card-title>
@@ -27,7 +25,7 @@
 							<span class="super-currency-symbol">$</span>{{total.amount}}</p>
 					</mat-card-content>
 				</mat-card>
-				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center stretch" class="page-content-card text-center">
+				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center stretch" class="page-content-card lighter text-center">
 					<mat-card-title class="primary text-md"> Total </mat-card-title>
 					<mat-card-content>
 						<p class="primary text-lg">
@@ -38,21 +36,21 @@
 				<div fxFlex="2 1 auto"></div>
 
 				<div>
-					<button mat-button *ngIf="!screen.customer && screen.loyaltyButton" (click)="doMenuItemAction(screen.loyaltyButton)" class="loyalty-button text-lg">
-						<div>{{screen.loyaltyButton.title}}</div>
-						<mat-icon [svgIcon]="screen.loyaltyButton.icon" class="top" style="height: 50%; width: 100%;"></mat-icon>
+					<button mat-button *ngIf="!screen.customer && screen.loyaltyButton" (click)="doMenuItemAction(screen.loyaltyButton)" class="loyalty-button text-md">
+						<span style="padding-right: 8px;">{{screen.loyaltyButton.title}}</span>
+						<mat-icon [svgIcon]="screen.loyaltyButton.icon" class="top" style="height: 50px; width: 120px; margin-top: -12px"></mat-icon>
 					</button>
 					<div *ngIf="screen.customer && screen.loyaltyButton" class="text-sm primary text-center" style="padding-top: 16px;">
 						<mat-icon [svgIcon]="screen.loyaltyButton.icon" class="top" style="height: 50%; width: 65%;"></mat-icon>
-						<div style="padding-top: 8px;">{{screen.customer.name}}</div>
-						<div style="padding-top: 8px;">Rewards ID: {{screen.customer.loyaltyId}}</div>
+						<div class="muted-color" style="font-size: 20px; padding-top: 8px;">{{screen.customer.name}}</div>
+						<div class="muted-color" style="font-size: 20px; padding-top: 8px;">Rewards ID: {{screen.customer.loyaltyId}}</div>
 					</div>
 					<button mat-button *ngIf="!screen.readOnly" [disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')"
-					 class="green-button text-lg">Checkout
+					 color="primary-inverse" class="black-button text-lg">Checkout
 					</button>
 					<button mat-button *ngIf="!screen.readOnly" color="primary" (click)="doMenuItemAction(screen.logoutButton)" class="border-button text-lg">
 						<span>
-							<app-icon [iconName]="screen.logoutButton.icon" class="top"></app-icon>
+							<app-icon *ngIf="screen.logoutButton.icon" [iconName]="screen.logoutButton.icon" class="top"></app-icon>
 							{{screen.logoutButton.title}}
 						</span>
 					</button>

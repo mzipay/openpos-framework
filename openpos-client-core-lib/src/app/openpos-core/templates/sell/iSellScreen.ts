@@ -1,20 +1,21 @@
-import { IMenuItem } from '../imenuitem';
-import { StatusBarData } from './statusBarData';
-import { IWorkStation } from '../iworkstation';
-import { SelfCheckoutStatusBarData } from './selfCheckoutStatusBarData';
-import { ScanSomethingData } from '../controls/scan-something/scanSomthingData';
+import { IMenuItem } from '../../common/imenuitem';
+import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
+import { IWorkStation } from '../../common/iworkstation';
+import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
+import { ScanSomethingData } from '../../common/controls/scan-something/scanSomthingData';
+import { ISellTemplate } from './isell-template';
 
 export interface ISellScreen {
     name: string;
     type: string;
     backButton: IMenuItem;
     logoutButton: IMenuItem;
-    template: string;
+    template: ISellTemplate;
     sequenceNumber: number;
     locale: string;
     prompt: string;
     workstation: IWorkStation;
-    operatorName: string;
+    operatorText: string;
     icon: string;
     showScan: boolean;
     showHelp: boolean;
@@ -32,7 +33,7 @@ export class SellScreenUtils {
 
         statusBar.backButton = screen.backButton;
         statusBar.logoutButton = screen.logoutButton;
-        statusBar.operatorName = screen.operatorName;
+        statusBar.operatorText = screen.operatorText;
         statusBar.screenIcon = screen.icon;
         statusBar.screenName = screen.name;
         statusBar.screenType = screen.type;
@@ -50,13 +51,14 @@ export class SellScreenUtils {
         statusBar.showHelp = screen.showHelp;
         statusBar.showScan = screen.showScan;
         statusBar.showSkip = screen.showSkip;
-        statusBar.scanPlaceholderText = screen.placeholderText;
+        statusBar.scanSomethingData = SellScreenUtils.getScanSomethingData(screen);
         return statusBar;
     }
 
-    public static getScanSomethingData(screen: ISellScreen, template: any): ScanSomethingData {
+    public static getScanSomethingData(screen: ISellScreen): ScanSomethingData {
         const scanSomethingData = new ScanSomethingData();
-        scanSomethingData.placeholderText = template.scanSomethingText;
+        scanSomethingData.placeholderText = screen.template.scanSomethingText;
+        scanSomethingData.autoFocus = screen.template.autoFocusOnScan;
 
         return scanSomethingData;
     }

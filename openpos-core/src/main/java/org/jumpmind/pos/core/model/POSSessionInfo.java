@@ -9,6 +9,7 @@ import org.jumpmind.pos.util.TypedMap.TypedMapKey;
 
 public class POSSessionInfo {
     public static final TypedMapKey<String> CART_NAME_ATTRIBUTE = new TypedMapKey<>("cartName");
+    public static final TypedMapKey<String> LAST_ACTION_ATTRIBUTE = new TypedMapKey<>("lastAction");
     
     private String transactionId;
     private String operatorName;
@@ -87,6 +88,10 @@ public class POSSessionInfo {
     @SuppressWarnings("unchecked")
     public <T> T get(String key) {
         return (T)this.attributes.get(key);
+    }
+    
+    public Object remove(String key) {
+        return this.attributes.remove(key);
     }
     
     @SuppressWarnings("unchecked")

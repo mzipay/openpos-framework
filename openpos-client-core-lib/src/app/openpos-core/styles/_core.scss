@@ -11,6 +11,7 @@
 @import './mixins/table';
 @import './mixins/typography';
 @import './mixins/tabs';
+@import './mixins/multiple-dynamic-form-dialog';
 
 $mat-card-default-margin: 24px !default;
 
@@ -29,6 +30,7 @@ $mat-card-default-margin: 24px !default;
   @include openpos-table();
   @include openpos-typography();
   @include openpos-tabs();
+  @include multiple-dynamic-form-dialog();
 
   html, body {
     font-family: Roboto, sans-serif;
@@ -36,6 +38,7 @@ $mat-card-default-margin: 24px !default;
     padding:0;
     height: 100vh;
     overflow: hidden;
+    cursor: pointer;
   }
 
   .scrollable{

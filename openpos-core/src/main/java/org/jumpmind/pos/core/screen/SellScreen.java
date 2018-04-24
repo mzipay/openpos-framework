@@ -13,7 +13,7 @@ public class SellScreen extends AbstractScreen {
     
     private String prompt;
     private Workstation workstation;
-    private String operatorName;
+    private String operatorText;
     private String icon;
     private List<MenuItem> localMenuItems = new ArrayList<>();
 	
@@ -55,12 +55,12 @@ public class SellScreen extends AbstractScreen {
         }
     }    
     
-    public String getOperatorName() {
-        return operatorName;
+    public String getOperatorText() {
+        return operatorText;
     }
 
-    public void setOperatorName(String operatorName) {
-        this.operatorName = operatorName;
+    public void setOperatorText(String operatorText) {
+        this.operatorText = operatorText;
     }
 
     public Workstation getWorkstation() {

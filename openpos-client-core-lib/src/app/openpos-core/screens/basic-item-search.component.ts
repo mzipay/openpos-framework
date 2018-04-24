@@ -1,13 +1,16 @@
 import { IForm } from './form.component';
-import { Component, OnInit, DoCheck, HostListener, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, DoCheck, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
+import { MatInput } from '@angular/material';
 
 @Component({
   selector: 'app-basic-item-search',
   templateUrl: './basic-item-search.component.html'
 })
-export class BasicItemSearchComponent implements IScreen, OnInit, OnDestroy {
+export class BasicItemSearchComponent implements IScreen, AfterViewInit, OnDestroy {
+
+  @ViewChild(MatInput) firstInput: MatInput;
 
   screen: any;
   private lastSequenceNum: number;
@@ -42,7 +45,8 @@ export class BasicItemSearchComponent implements IScreen, OnInit, OnDestroy {
     this.session.unregisterActionPayloads();
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
+    setTimeout( () => this.firstInput.focus(), 0);
   }
 
   onValueSelected(value: ISearchCategoryValue, categoryName: string): void {

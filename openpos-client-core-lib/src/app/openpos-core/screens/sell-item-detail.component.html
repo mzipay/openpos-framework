@@ -10,7 +10,7 @@
         </mat-card-content>
     </mat-card>	
     
-    <mat-card fxFlex="shrink" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
+    <mat-card *ngIf="promosDataSource.filteredData.length > 0" fxFlex="shrink" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
 		<mat-card-content>
 
             <mat-table #table [dataSource]="promosDataSource">

@@ -1,7 +1,7 @@
 import { ITextMask, TextMask } from './../../textmask';
 import { IMenuItem } from '../../imenuitem';
 import { IScreen } from '../../iscreen';
-import { Component, ViewChild, AfterViewInit, DoCheck, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, ViewChildren, AfterViewInit, DoCheck, OnInit, Output, Input, EventEmitter, QueryList } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
 import { MatSelectChange } from '@angular/material';
 import {
@@ -14,14 +14,28 @@ import { ScreenService } from '../../../services/screen.service';
 import { OpenPosValidators } from '../../validators/openpos-validators';
 import { ValidatorsService } from '../../../services/validators.service';
 import { IForm } from '../../iform';
+import { MatInput } from '@angular/material';
+import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
 
 @Component({
   selector: 'app-dynamic-form-control',
   templateUrl: './dynamic-form-control.component.html',
   styleUrls: ['./dynamic-form-control.component.scss']
 })
-export class DynamicFormControlComponent implements OnInit {
+export class DynamicFormControlComponent implements AfterViewInit {
+  
+  @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
 
+  ngAfterViewInit(){
+    const field = this.children.filter( child => {
+      if(child.field){
+        return child.field.readonly === false;
+      }
+      return false;      
+    })[0].field;
+    setTimeout(() => field.focus(), 0);   
+  }
+  
   @Input() 
   get screenForm(): IForm{
     return this._screenForm;
@@ -71,6 +85,11 @@ export class DynamicFormControlComponent implements OnInit {
             this.buildFormPayload();
             return this.session.response = this._screenForm;
           } else {
+            // Show errors for each of the fields where necessary
+            Object.keys(this.form.controls).forEach(f => {
+              const control = this.form.get(f);
+              control.markAsTouched({onlySelf: true});
+            });
             throw Error('form is invalid');
           }
         });

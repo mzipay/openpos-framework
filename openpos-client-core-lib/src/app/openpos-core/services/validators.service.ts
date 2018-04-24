@@ -19,6 +19,7 @@ export class ValidatorsService {
         NOLOCALEValidators.set('giftcode', OpenPosValidators.GiftCode);
         NOLOCALEValidators.set('date', OpenPosValidators.DateMMDDYYYY);
         NOLOCALEValidators.set('email', Validators.email);
+        NOLOCALEValidators.set('postalcode', Validators.minLength(5));
 
         this.validators.set('en-us', USValidators);
         this.validators.set('us', USValidators);

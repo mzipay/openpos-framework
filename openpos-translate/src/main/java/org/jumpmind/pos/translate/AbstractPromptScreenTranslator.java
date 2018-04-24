@@ -45,7 +45,11 @@ public abstract class AbstractPromptScreenTranslator<T extends SellScreen> exten
             String maxLength = getSpecPropertyValue(promptResponseSpec, "maxLength", promptAndResponseBeanModel.getMaxLength());
 
             if (isNotBlank(formattedPromptText)) {
-                String text = formattedPromptText.replace(" and press Next", "").replace(" and press next", "").replace(", then press Next", "");
+                String text = formattedPromptText
+                        .replace("Enter number and press Next", "")
+                        .replace(" and press Next", "")
+                        .replace(" and press next", "")
+                        .replace(", then press Next", "");
                 if (text.endsWith(".")) {
                     text = text.substring(0, text.length() - 1);
                 }

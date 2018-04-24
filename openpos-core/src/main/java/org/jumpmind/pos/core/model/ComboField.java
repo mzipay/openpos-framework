@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ComboField extends FormField {
     private static final long serialVersionUID = 1L;
@@ -32,6 +33,18 @@ public class ComboField extends FormField {
         setInputType(FieldInputType.ComboBox);
         setElementType(FieldElementType.Input);
         this.values = values;
+    }
+    
+    public List<String> searchValues(String searchTerm, Integer sizeLimit) {
+        if (searchTerm != null) {
+            return values != null ? 
+                    values.stream().filter(v -> v.toLowerCase().contains(searchTerm.toLowerCase()))
+                        .limit(sizeLimit != null && sizeLimit >= 0 ? sizeLimit : values.size())
+                        .collect(Collectors.toList()) 
+                    : null;
+        } else {
+            return this.getValues();
+        }
     }
     
     public List<String> getValues() {
