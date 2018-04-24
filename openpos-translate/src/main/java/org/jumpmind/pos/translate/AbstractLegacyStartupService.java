@@ -337,9 +337,13 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
     
     @Override
     public ITranslationManager getTranslationManagerRef(String nodeId) {
-        ITranslationManager translationManager = translationManagers.get(nodeId);
-        logger.debug("Returning this translationManager for nodeId {}: {}", nodeId, translationManager);
-        return translationManager;
+        if (this.isExternalProcessEnabled()) {
+            return translationManagers.get(nodeId);
+        } else if (translationManagers.size() > 0) {
+            return this.translationManagers.values().iterator().next();
+        } else {
+            return null;
+        }
     }
 
     public boolean isExternalProcessEnabled() {

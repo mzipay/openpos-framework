@@ -67,8 +67,9 @@ public class Action implements Serializable {
         this.parameters = parameters;
     }
 
-    public Object getData() {
-        return data;
+    @SuppressWarnings("unchecked")
+    public <T> T getData() {
+        return (T)data;
     }
 
     public void setData(Object data) {
