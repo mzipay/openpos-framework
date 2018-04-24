@@ -23,6 +23,16 @@
     height: 70px;
     padding: 16px;
     margin-top: 16px;
+
+    mat-icon {
+        height: 50px; width: 120px; margin-top: -12px
+    }
+}
+
+.top-border {
+    border-top-width: 2px;
+    border-top-color: rgba(0, 0, 0, 0.712); 
+    border-top-style: solid;
 }
 
 .black-button:disabled {
