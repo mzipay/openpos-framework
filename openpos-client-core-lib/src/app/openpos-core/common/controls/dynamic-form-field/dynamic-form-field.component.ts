@@ -112,15 +112,19 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
 
       search(term: string): Observable<OptionEntry[]> {
         const lowerTerm = term ? term.toLowerCase() : '';
-        console.log(`autocomplete searching for '${lowerTerm}' on field '${fld.id}'`);
-        return (<Observable<Array<string>>> scrnSvc.getFieldValues(fld.id, lowerTerm))
-          .pipe(
-            map(searchResults => searchResults.map(v => ({
-              value: v,
-              display: v,
-              details: {}
-            })))
-          );
+        if (lowerTerm) {
+          console.log(`autocomplete searching for '${lowerTerm}' on field '${fld.id}'`);
+          return (<Observable<Array<string>>> scrnSvc.getFieldValues(fld.id, lowerTerm))
+            .pipe(
+              map(searchResults => searchResults.map(v => ({
+                value: v,
+                display: v,
+                details: {}
+              })))
+            );
+        } else {
+          return Observable.of(<OptionEntry[]>[]);
+        }
       }
     };
 
