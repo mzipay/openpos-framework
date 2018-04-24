@@ -6,11 +6,16 @@ import java.util.List;
 import org.jumpmind.pos.app.model.CustomerModel;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
+import org.jumpmind.pos.core.flow.Out;
+import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.AbstractScreen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
 
 public class CustomerSearchState extends AbstractState {
+    
+    @Out(scope=ScopeType.Flow)
+    private List<CustomerModel> customerSearchResults; 
 
     @Override
     public void arrive(Action action) {
@@ -46,7 +51,7 @@ public class CustomerSearchState extends AbstractState {
         Action customerSearchResultsLoaded = new Action();
         customerSearchResultsLoaded.setName("CustomerSearchResultsLoaded");
         
-        stateManager.setFlowScope("customerSearchResults", customers);
+        this.customerSearchResults = customers;
         
         stateManager.doAction(customerSearchResultsLoaded);
     }

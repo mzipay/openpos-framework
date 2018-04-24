@@ -1,3 +1,4 @@
+import { DecimalFormatter } from './../common/formatters/decimal-formatter';
 import { PercentageFormatter } from './../common/formatters/percentage-formatter';
 import { GiftCodeFormatter } from './../common/formatters/giftcode-formatter';
 import { LocaleService } from './locale.service';
@@ -45,6 +46,7 @@ export class FormattersService {
         NOLOCALEFormatters.set('postalcode', new PostalCodeFormatter());
         NOLOCALEFormatters.set('income', new IncomeFormatter());
         NOLOCALEFormatters.set('stateidnumber', new StateIDNumberFormatter());
+        NOLOCALEFormatters.set('decimal', new DecimalFormatter());
     }
 
     getFormatter(name: string): IFormatter {

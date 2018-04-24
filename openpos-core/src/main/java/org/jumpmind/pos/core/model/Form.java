@@ -106,19 +106,25 @@ public class Form implements Serializable {
         return this.addDateField(fieldId, label, value, required, false);
     }
     
-    public static FormField createNoYearDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
-    		FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NoYearDate, required);
-    		formField.setPattern(PATTERN_NO_YEAR_DATE);
-    		formField.setValue(value);
-    		formField.put("hideCalendar", hideCalendar);
-    		return formField;
-    }
-    
-    public FormField addNoYearDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
-    		FormField formField = createNoYearDateField(fieldId, label, value, required, hideCalendar);
-    		formElements.add(formField);
-    		return formField;
-    }
+	public static FormField createNoYearDateField(String fieldId, String label, String value, boolean required,
+			boolean hideCalendar) {
+		FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NoYearDate, required);
+		formField.setPattern(PATTERN_NO_YEAR_DATE);
+		formField.setValue(value);
+		formField.put("hideCalendar", hideCalendar);
+		return formField;
+	}
+
+	public FormField addNoYearDateField(String fieldId, String label, String value, boolean required,
+			boolean hideCalendar) {
+		FormField formField = createNoYearDateField(fieldId, label, value, required, hideCalendar);
+		formElements.add(formField);
+		return formField;
+	}
+
+	public FormField addNoYearDateField(String fieldId, String label, String value, boolean required) {
+		return this.addNoYearDateField(fieldId, label, value, required, false);
+	}
     
     public FormField addIncomeField(String fieldId, String label, String value, boolean required) {
         FormField formField = createIncomeField(fieldId, label, value, required);
@@ -138,6 +144,18 @@ public class Form implements Serializable {
         return formField;
     }
     
+    public FormField addDecimalField(String fieldId, String label, String value, boolean required) {
+        FormField formField = createDecimalField(fieldId, label, value, required);
+        formElements.add(formField);
+        return formField;
+    }
+    
+    public static FormField createDecimalField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Decimal, required);
+        formField.setValue(value);
+        return formField;
+    }
+
     public static FormField createIncomeField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Income, required);
         formField.setValue(value);
@@ -311,5 +329,6 @@ public class Form implements Serializable {
 	public void addFormError(String error) {
 		formErrors.add(error);
 	}
+
     
 }

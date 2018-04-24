@@ -16,9 +16,13 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
+import org.jumpmind.pos.core.flow.In;
+import org.jumpmind.pos.core.flow.Out;
+import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.AbstractScreen;
 import org.jumpmind.pos.core.service.IDeviceService;
+import org.jumpmind.pos.translate.ILegacyStartupService;
 import org.jumpmind.pos.translate.ITranslationManager;
 import org.jumpmind.pos.translate.ITranslationManagerSubscriber;
 import org.slf4j.Logger;
@@ -33,13 +37,14 @@ public class TranslatorState implements IState {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
+    @In(scope=ScopeType.Node)
     protected IStateManager stateManager;
 
     @Autowired
-    protected ITranslationManager translationManager;
+    protected ILegacyStartupService startupService;
 
-    @Autowired(required = false)
+    @In(scope=ScopeType.Node, required=false)
+    @Out(scope=ScopeType.Node)
     protected ITranslationManagerSubscriber subscriber;
 
     @Autowired
@@ -50,7 +55,7 @@ public class TranslatorState implements IState {
 
     @PostConstruct
     public void init() {
-        if (translationManager == null) {
+        if (startupService == null) {
             throw new IllegalStateException("When using a translation state, we expect an implementation of "
                     + ITranslationManager.class.getSimpleName() + " to be bound at the prototype scope");
         }
@@ -59,15 +64,22 @@ public class TranslatorState implements IState {
     @Override
     public void arrive(Action action) {
         if (subscribe(action)) {
-            translationManager.showActiveScreen();
+            getTranslationManager().showActiveScreen();
         } else {
-            translationManager.doAction(subscriber.getAppId(), action, new Form());
+            getTranslationManager().doAction(subscriber.getAppId(), action, new Form());
         }
+    }
+    
+    protected ITranslationManager getTranslationManager() {
+        return this.startupService.getTranslationManagerRef(stateManager.getNodeId());
     }
 
     protected boolean subscribe(Action action) {
         if (subscriber == null || (action != null && "restart".equalsIgnoreCase(action.getName()))) {
-            ITranslationManagerSubscriber subscriber = new ITranslationManagerSubscriber() {
+            
+            logger.info("Creating new translation manager subscriber");
+            
+            this.subscriber = new ITranslationManagerSubscriber() {
 
                 Properties properties;
 
@@ -129,9 +141,9 @@ public class TranslatorState implements IState {
                     return response;
                 }
             };
-            translationManager.setTranslationManagerSubscriber(subscriber);
-            stateManager.setNodeScope("translationManager", translationManager);
-            stateManager.setNodeScope("subscriber", subscriber);
+            getTranslationManager().setTranslationManagerSubscriber(subscriber);
+//            stateManager.setNodeScope("translationManager", translationManager);
+//            stateManager.setNodeScope("subscriber", subscriber);
             return true;
         } else {
             return false;
@@ -146,7 +158,7 @@ public class TranslatorState implements IState {
     
     @ActionHandler
     public void onAnyAction(Action action, Form form) {
-        translationManager.doAction(stateManager.getAppId(), action, form);
+        getTranslationManager().doAction(stateManager.getAppId(), action, form);
     }
 
 }

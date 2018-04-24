@@ -36,10 +36,10 @@ public interface IStateManager {
     public void endConversation();
     public void endSession();
     public <T> T getScopeValue(String name);
-    public void setNodeScope(String name, Object value);
-    public void setSessionScope(String name, Object value);
-    public void setConversationScope(String name, Object value);
-    public void setFlowScope(String name, Object value);
+//    public void setNodeScope(String name, Object value);
+//    public void setSessionScope(String name, Object value);
+//    public void setConversationScope(String name, Object value);
+//    public void setFlowScope(String name, Object value);
     public void showScreen(AbstractScreen screen);
     public void refreshScreen();
     public IState getCurrentState();

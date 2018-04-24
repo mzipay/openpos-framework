@@ -10,7 +10,7 @@
                     <span *ngIf="item.amount !== item.sellingPrice" class="muted-color" style="text-decoration:line-through; font-size: 20px;">{{item.sellingPrice|currency:'USD':true:'1.2'}}</span>
                 </div>
                 <div>
-                    <div *ngIf="item.color" class="muted-color">Color: {{item.color}}</div>
+                    <div *ngIf="item.color" class="muted-color" style="font-size: 20px;">Color: {{item.color}}</div>
                     <div *ngIf="item.size" class="muted-color" style="font-size: 20px; margin-top: 4px;">Size: {{item.size}}</div>
                     <div *ngIf="item.id" class="muted-color" style="font-size: 20px; margin-top: 4px">Item ID: {{item.id}}</div>
                 </div>

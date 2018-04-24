@@ -22,16 +22,16 @@ public class Injector {
     @Autowired
     private AutowireCapableBeanFactory applicationContext;
     
-    public void performInjections(Object target, Scope scope,  StateContext currentContext, Map<String, ScopeValue> extraScope) {
-        performInjectionsImpl(target, scope, currentContext, extraScope);
+    public void performInjections(Object target, Scope scope,  StateContext currentContext) {
+        performInjectionsImpl(target, scope, currentContext);
         performPostContruct(target);
     }
     
-    protected void performInjectionsImpl(Object target, Scope scope, StateContext currentContext, Map<String, ScopeValue> extraScope) {
+    protected void performInjectionsImpl(Object target, Scope scope, StateContext currentContext) {
         Class<?> targetClass = target.getClass();
         applicationContext.autowireBean(target);
         while (targetClass != null) {
-            performInjectionsImpl(targetClass, target, scope, currentContext, extraScope);
+            performInjectionsImpl(targetClass, target, scope, currentContext);
             targetClass = targetClass.getSuperclass();
             if (targetClass == Object.class) {
                 targetClass = null;
@@ -40,41 +40,62 @@ public class Injector {
     }
 
     protected void performInjectionsImpl(Class<?> targetClass, Object target, Scope scope, 
-            StateContext currentContext, Map<String, ScopeValue> extraScope) {
+            StateContext currentContext) {
         Field[] fields = targetClass.getDeclaredFields();
 
         for (Field field : fields) {
             field.setAccessible(true);
-            Autowired autowired = field.getAnnotation(Autowired.class);
-            if (autowired != null) {
-                String name = field.getName();
-                
-                ScopeValue value = currentContext.resolveScope(name); // flow scope
-                if (value == null) {                    
-                    value = scope.resolve(name); // conversation / session / node scope
-                }
-                if (value == null) {
-                    Object configScopeValue = currentContext.getFlowConfig().getConfigScope() != null ?
-                            currentContext.getFlowConfig().getConfigScope().get(name) : null; // config scope
-                    if (configScopeValue != null) {
-                        value = new ScopeValue(configScopeValue);
-                    }
-                }                
-                if (value == null && extraScope != null) { // special injections such as the StateManager itself.
-                    value = extraScope.get(name);
-                }
-
-                if (value != null) {
-                    try {
-                        field.set(target, value.getValue());
-                    } catch (Exception ex) {
-                        logger.error("", ex);
-                    }
-                } 
-//                else if (autowired.required()) {
-//                    throw failedToResolveInjection(field, name, targetClass, target, scope, currentContext, extraScope);
-//                }
+            In in = field.getAnnotation(In.class);
+            if (in == null) {
+                in = field.getDeclaredAnnotation(In.class);
             }
+            
+            if (in != null) {        
+                injectField(targetClass, target, scope, currentContext, in, field);
+            }
+        }
+    }
+
+    protected void injectField(Class<?> targetClass, Object target, Scope scope, StateContext currentContext, In in, Field field) {
+        String name = in.name();
+        if (StringUtils.isEmpty(name)) {                    
+            name = field.getName();
+        }
+                
+        ScopeValue value = null;
+        
+        switch (in.scope()) {
+            case Config:
+                Object configScopeValue = currentContext.getFlowConfig().getConfigScope() != null ?
+                        currentContext.getFlowConfig().getConfigScope().get(name) : null;
+                if (configScopeValue != null) {
+                    value = new ScopeValue(configScopeValue);
+                }                        
+                break;
+            case Node:
+                value = scope.getNodeScope().get(name);
+                break;
+            case Session:
+                value = scope.getSessionScope().get(name);
+                break;
+            case Conversation:
+                value = scope.getConversationScope().get(name);
+                break;
+            case Flow:
+                value = currentContext.resolveScope(name);
+                break;
+            default:
+                break;
+        }
+
+        if (value != null) {
+            try {
+                field.set(target, value.getValue());
+            } catch (Exception ex) {
+                logger.error("", ex);
+            }
+        } else if (in.required()) {
+            throw failedToResolveInjection(field, name, targetClass, target, scope, currentContext);
         }
     }
 
@@ -95,25 +116,24 @@ public class Injector {
     
     private FlowException failedToResolveInjection(Field field, 
             String name, Class<?> targetClass, Object target, Scope scope,
-            StateContext currentContext, Map<String, ScopeValue> extraScope) {
+            StateContext currentContext) {
         
         StringBuilder buff = new StringBuilder();
         buff.append(String.format("Failed to resolve required injection '%s' for field %s\n", name, field));
         buff.append("Tried the following contexts:\n");
-        buff.append(printScopeValues(scope, currentContext, extraScope));
+        buff.append(printScopeValues(scope, currentContext));
         
         throw new FlowException(buff.toString());
     }  
     
-    public String printScopeValues(Scope scope, StateContext currentContext, Map<String, ScopeValue> extraScope) {
+    public String printScopeValues(Scope scope, StateContext currentContext) {
         
         StringBuilder buff = new StringBuilder();
         
-        buff.append(reportScope("FLOW SCOPE", currentContext.getFlowScope()));
-        buff.append(reportScope("CONVERSATION SCOPE", scope.getConversationScope()));
-        buff.append(reportScope("SESSION SCOPE", scope.getSessionScope()));
         buff.append(reportScope("NODE SCOPE", scope.getNodeScope()));
-        buff.append(reportScope("SYSTEM SCOPE", extraScope));
+        buff.append(reportScope("SESSION SCOPE", scope.getSessionScope()));
+        buff.append(reportScope("CONVERSATION SCOPE", scope.getConversationScope()));
+        buff.append(reportScope("FLOW SCOPE", currentContext.getFlowScope()));
         
         return buff.toString();
     }

@@ -5,7 +5,7 @@ public class CompleteState implements IState {
 
     @Override
     public void arrive(Action action) {
-        // No op-Op.
+        // No op.
     }
 
 }

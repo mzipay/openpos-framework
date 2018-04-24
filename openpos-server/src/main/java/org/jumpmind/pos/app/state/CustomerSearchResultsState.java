@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.jumpmind.pos.app.model.CustomerModel;
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.flow.In;
+import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.screen.AbstractScreen;
 import org.jumpmind.pos.core.screen.Customer;
 import org.jumpmind.pos.core.screen.CustomerSearchResultsScreen;
@@ -11,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class CustomerSearchResultsState extends AbstractState {
     
-    @Autowired(required=false)
+    @In(scope=ScopeType.Config, required=false)
     private Boolean orderMode;
     
-    @Autowired(required=false)
+    @In(scope=ScopeType.Flow, required=false)
     private List<CustomerModel> customerSearchResults;
 
     @Override

@@ -9,6 +9,7 @@ import org.jumpmind.pos.util.TypedMap.TypedMapKey;
 
 public class POSSessionInfo {
     public static final TypedMapKey<String> CART_NAME_ATTRIBUTE = new TypedMapKey<>("cartName");
+    public static final TypedMapKey<String> LAST_ACTION_ATTRIBUTE = new TypedMapKey<>("lastAction");
     
     private String transactionId;
     private String operatorName;
