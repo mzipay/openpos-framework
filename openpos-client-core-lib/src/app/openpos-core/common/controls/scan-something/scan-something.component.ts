@@ -9,10 +9,7 @@ import { ScanSomethingData } from './scanSomthingData';
   templateUrl: './scan-something.component.html',
   styleUrls: ['./scan-something.component.scss']
 })
-export class ScanSomethingComponent implements AfterViewInit {
-
-  @ViewChild(MatInput)
-  input: MatInput;
+export class ScanSomethingComponent {
 
   @Input()
   scanSomethingData: ScanSomethingData;
@@ -29,12 +26,6 @@ export class ScanSomethingComponent implements AfterViewInit {
     if (data) {
       this.scanSomethingData = data;
     }
-  }
-
-  ngAfterViewInit(): void {
-    // if (this.scanSomethingData.autoFocus) {
-    //  this.input.focus();
-    // }
   }
 
   public onEnter(): void {
