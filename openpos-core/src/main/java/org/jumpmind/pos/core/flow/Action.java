@@ -21,15 +21,12 @@
 package org.jumpmind.pos.core.flow;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     private String name;
-    private Map<String, String> parameters = new HashMap<>();
     private Object data;
     private IActionHandler subStateCallback;
 
@@ -42,13 +39,8 @@ public class Action implements Serializable {
     }
     
     public Action(String actionName, Object data) {
-        this(actionName, null);
-        this.data = data;
-    }
-
-    public Action(String actionName, Map<String, String> parameters) {
         this.name = actionName;
-        this.parameters = parameters;
+        this.data = data;
     }
     
     public String getName() {
@@ -57,14 +49,6 @@ public class Action implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Map<String, String> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
     }
 
     @SuppressWarnings("unchecked")
@@ -90,6 +74,6 @@ public class Action implements Serializable {
     
     @Override
     public String toString() {
-        return "Action [name=" + name + ", parameters=" + parameters + "]";
+        return "Action [name=" + name + "]";
     }
 }

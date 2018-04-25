@@ -80,7 +80,7 @@ public class TranslatorState implements IState {
             logger.info("Creating new translation manager subscriber");
             
             this.subscriber = new ITranslationManagerSubscriber() {
-
+                private static final long serialVersionUID = 1L;
                 Properties properties;
 
                 @Override
