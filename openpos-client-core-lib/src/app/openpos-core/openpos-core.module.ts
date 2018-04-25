@@ -370,7 +370,8 @@ const customLayouts: IKeyboardLayouts = {
     FocusDirective,
     StatusBarComponent,
     SelectableItemListComponent,
-    PhonePipe
+    PhonePipe,
+    LoginComponent
     ],
   providers: [
     HttpClient,
