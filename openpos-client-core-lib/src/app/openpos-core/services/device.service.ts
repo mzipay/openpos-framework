@@ -1,3 +1,4 @@
+import { InAppBrowserPlugin } from './../plugins/inappbrowser.plugin';
 import { BarcodeScannerPlugin } from './../plugins/barcodescanner.plugin';
 import { Subscription } from 'rxjs/Subscription';
 import { DEVICE_ERROR_RESPONSE_TYPE, DEVICE_RESPONSE_TYPE, DEVICE_DNE_RESPONSE_TYPE } from './../common/ideviceresponse';
@@ -42,15 +43,14 @@ export class DeviceService {
   protected initializeBarcodeScannerPlugin(): void {
     // Add barcdode scanner plugin as a device plugin so it can also be invoked
     // from the server-side in addition to from within the DeviceService
-    const barcodeScannerPlugin = new BarcodeScannerPlugin(this.pluginService);
+    const barcodeScannerPlugin = new BarcodeScannerPlugin();
     this.pluginService.addPlugin(barcodeScannerPlugin.pluginName, barcodeScannerPlugin);
   }
 
   protected initializeInAppBrowserPlugin(): void {
-    if (cordova.InAppBrowser) {
-      window.open = cordova.InAppBrowser.open;
+      const inAppBrowserPlugin = new InAppBrowserPlugin();
+      this.pluginService.addPlugin(inAppBrowserPlugin.pluginId, inAppBrowserPlugin);
       console.log('InAppBrowserPlugin initialized.');
-    }
   }
 
   public scan() {
