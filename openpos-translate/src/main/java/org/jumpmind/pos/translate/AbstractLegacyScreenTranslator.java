@@ -229,7 +229,7 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
     }
 
     protected String getSpecPropertyValue(ILegacyAssignmentSpec spec, String key, String modelValue) {
-        if (isBlank(modelValue)) {
+        if (isBlank(modelValue) && spec != null) {
             String propValue = spec.getPropertyValue(key);
             if (propValue != null) {
                 return propValue;
