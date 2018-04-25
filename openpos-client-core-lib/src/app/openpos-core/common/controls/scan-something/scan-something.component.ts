@@ -9,8 +9,11 @@ import { ScanSomethingData } from './scanSomthingData';
   templateUrl: './scan-something.component.html',
   styleUrls: ['./scan-something.component.scss']
 })
-export class ScanSomethingComponent {
-
+export class ScanSomethingComponent implements AfterViewInit { 
+ 
+  @ViewChild(MatInput) 
+  input: MatInput; 
+  
   @Input()
   scanSomethingData: ScanSomethingData;
 
@@ -37,6 +40,14 @@ export class ScanSomethingComponent {
       }
     }
   }
+
+
+  ngAfterViewInit(): void { 
+    if (this.scanSomethingData.autoFocus) { 
+      this.input.focus(); 
+    } 
+  } 
+ 
 
   private filterBarcodeValue(val: string): string {
     if (!val) {

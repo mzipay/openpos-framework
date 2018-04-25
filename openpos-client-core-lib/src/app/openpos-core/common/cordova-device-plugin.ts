@@ -29,7 +29,7 @@ export class CordovaDevicePlugin implements IDevicePlugin {
         }
     }
 
-    processRequest(request: IDeviceRequest, successCallback: (response: string) => any, errorCallback: (error: string) => any) {
+    processRequest(request: IDeviceRequest, successCallback: (response: any) => any, errorCallback: (error: string) => any) {
         this.impl.processRequest(() => request.payload, successCallback, errorCallback);
     }
 }

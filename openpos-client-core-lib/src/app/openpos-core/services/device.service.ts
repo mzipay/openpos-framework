@@ -1,3 +1,4 @@
+import { BarcodeScannerPlugin } from './../plugins/barcodescanner.plugin';
 import { Subscription } from 'rxjs/Subscription';
 import { DEVICE_ERROR_RESPONSE_TYPE, DEVICE_RESPONSE_TYPE, DEVICE_DNE_RESPONSE_TYPE } from './../common/ideviceresponse';
 import { IDevicePlugin } from './../common/idevice-plugin';
@@ -26,6 +27,7 @@ export class DeviceService {
       console.log('cordova devices are ready for the device service');
       this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
       this.initializeInAppBrowserPlugin();
+      this.initializeBarcodeScannerPlugin();
     },
     false);
 
@@ -35,6 +37,13 @@ export class DeviceService {
         this.onDeviceRequest(event);
       }
     });
+  }
+
+  protected initializeBarcodeScannerPlugin(): void {
+    // Add barcdode scanner plugin as a device plugin so it can also be invoked
+    // from the server-side in addition to from within the DeviceService
+    const barcodeScannerPlugin = new BarcodeScannerPlugin(this.pluginService);
+    this.pluginService.addPlugin(barcodeScannerPlugin.pluginName, barcodeScannerPlugin);
   }
 
   protected initializeInAppBrowserPlugin(): void {
@@ -53,35 +62,19 @@ export class DeviceService {
 
   public cordovaCameraScan() {
     if (!this.session.isRunningInBrowser() && cordova) {
-      console.log('attempting to enable camera scanner');
-      const self = this;
-      cordova.plugins.barcodeScanner.scan(
-        function (result) {
-          if (!result.cancelled) {
-            self.session.response = new Scan(result.text, result.format);
-            self.session.onAction('Scan');
+      this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin =>
+        plugin.processRequest(
+          {requestId: 'scan', deviceId: 'barcode-scanner', type: null, subType: null, payload: null},
+          (response) => {
+            this.session.response = response;
+            this.session.onAction('Scan');
+          },
+          (error) => {
+            console.error('Scanning failed: ' + error);
           }
-          console.log('We got a barcode\n' +
-            'Result: ' + result.text + '\n' +
-            'Format: ' + result.format + '\n' +
-            'Cancelled: ' + result.cancelled);
-        },
-        function (error) {
-          console.error('Scanning failed: ' + error);
-        },
-        {
-          preferFrontCamera: false, // iOS and Android
-          showFlipCameraButton: false, // iOS and Android
-          showTorchButton: false, // iOS and Android
-          torchOn: false, // Android, launch with the torch switched on (if available)
-          saveHistory: false, // Android, save scan history (default false)
-          prompt: 'Place a barcode inside the scan area', // Android
-          resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-          formats: 'CODE_128,CODE_39,EAN_8,EAN_13,UPC_A,UPC_E,QR_CODE,DATA_MATRIX', // default: all but PDF_417 and RSS_EXPANDED
-          orientation: 'landscape', // Android only (portrait|landscape), default unset so it rotates with the device
-          disableAnimations: false, // iOS
-          disableSuccessBeep: false // iOS and Android
-        }
+        )
+      ).catch(error =>
+        console.error(`barcodeScannerPlugin error: ${error}`)
       );
     }
   }
