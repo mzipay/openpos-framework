@@ -16,6 +16,8 @@ public class ItemListScreen extends SellScreen {
     private String text;
     private List<MenuItem> itemActions = new ArrayList<>();
     private boolean condensedListDisplay = false;
+    private String action = "Next";
+    private MenuItem actionButton = null;
 
     public ItemListScreen() {
         setType(ScreenType.ItemList);
@@ -97,6 +99,22 @@ public class ItemListScreen extends SellScreen {
 
     public void addItemAction(MenuItem itemAction) {
         this.getItemActions().add(itemAction);
+    }
+    
+    public String getAction() {
+        return action;
+    }
+    
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public MenuItem getActionButton() {
+        return actionButton;
+    }
+
+    public void setActionButton(MenuItem actionButton) {
+        this.actionButton = actionButton;
     }
 
     

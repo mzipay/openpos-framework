@@ -58,6 +58,10 @@ export class ItemListComponent implements IScreen, OnInit {
         }
     }
 
+    onActionButtonClick(): void {
+        this.session.onAction(this.screen.actionButton.action, null);
+    }
+
     onMenuItemClick(itemInfo: MenuClickAction): void {
         this.session.response = itemInfo.item;
         this.session.onAction(itemInfo.menuItem.action, null, itemInfo.menuItem.confirmationMessage );
