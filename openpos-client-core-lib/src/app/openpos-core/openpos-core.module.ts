@@ -1,3 +1,4 @@
+import { PopTartComponent } from './dialogs/pop-tart/pop-tart.component';
 import { NavListComponent } from './dialogs/nav-list/nav-list.component';
 
 // Angular Includes
@@ -263,6 +264,7 @@ const customLayouts: IKeyboardLayouts = {
     MultipleDynamicFormDialogComponent,
     DynamicDateFormFieldComponent,
     NavListComponent,
+    PopTartComponent,
     LoadingDialogComponent
   ],
   declarations: [
@@ -338,6 +340,7 @@ const customLayouts: IKeyboardLayouts = {
     MultipleDynamicFormDialogComponent,
     DynamicDateFormFieldComponent,
     NavListComponent,
+    PopTartComponent,
     SelectableItemListComponent,
     PhonePipe,
     LoadingDialogComponent,

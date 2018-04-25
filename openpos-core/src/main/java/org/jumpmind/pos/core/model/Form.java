@@ -72,7 +72,33 @@ public class Form implements Serializable {
         field.setValue(value);
         formElements.add(field);
         return field;        
+    }
+    
+    public PopTartField addPopTart(String fieldId, String label, String... values) {
+        return addPopTart(fieldId, label, values != null && values.length > 0 ? Arrays.asList(values) : new ArrayList<>());
+    }
+    
+    public PopTartField addPopTart(String fieldId, String label, List<String> values) {
+        PopTartField field = new PopTartField(fieldId, label, null, values);
+        formElements.add(field);
+        return field;        
 
+    }
+    
+    public PopTartField addPopTart(String fieldId, String label, List<String> values, boolean required) {
+        PopTartField field = new PopTartField(fieldId, label, null, values);
+        field.setRequired(required);
+        formElements.add(field);
+        return field;        
+
+    }
+    
+    public PopTartField addPopTart(String fieldId, String label, String value, List<String> values, boolean required) {
+        PopTartField field = new PopTartField(fieldId, label, null, values);
+        field.setRequired(required);
+        field.setValue(value);
+        formElements.add(field);
+        return field;        
     }
     
     public FormListField addListField(String fieldId, String label, String placeholder, boolean required, List<String> values) {

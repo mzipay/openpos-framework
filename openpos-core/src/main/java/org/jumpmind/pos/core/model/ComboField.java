@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ComboField extends FormField {
+    
     private static final long serialVersionUID = 1L;
 
     private List<String> values;
