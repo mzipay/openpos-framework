@@ -3,7 +3,7 @@
         {{screen.name}}
     </div>   
     <mat-tab-group fxFlex="1 1 auto">
-        <mat-tab fxFlex="1 1 auto" *ngFor="let formOption of screen.forms" fxLayout="column">
+        <mat-tab *ngFor="let formOption of screen.forms" fxLayout="column">
             <ng-template mat-tab-label>
                 <div fxLayoutAlign="start center">
                     <mat-icon>{{formOption.icon}}</mat-icon><span>{{formOption.name}}</span>
