@@ -261,7 +261,7 @@ public class ScreenService implements IScreenService {
         try {            
             StringBuilder topic = new StringBuilder(128);
             topic.append("/topic/app/").append(appId).append("/node/").append(nodeId);
-            payload = payload instanceof String ? payload : mapper.writerWithDefaultPrettyPrinter().writeValueAsString(payload).getBytes("UTF-8");
+            payload = payload instanceof String ? ((String)payload).getBytes("UTF-8") : mapper.writerWithDefaultPrettyPrinter().writeValueAsString(payload).getBytes("UTF-8");
             Message<?> message = MessageBuilder.withPayload(payload).build();
             this.template.send(topic.toString(), message);
         } catch (Exception ex) {
