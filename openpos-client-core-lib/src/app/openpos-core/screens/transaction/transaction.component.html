@@ -19,8 +19,8 @@
 						<br>
 						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">
 							<span class="super-currency-symbol">$</span>{{item.originalAmount}}</p>
-						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">( -
-							<span class="super-currency-symbol">$</span>{{item.discountAmount}} )</p>
+						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">-
+							<span class="super-currency-symbol">$</span>{{item.discountAmount}}</p>
 					</span>
 					<button *ngIf="!screen.readOnly" mat-icon-button color="primary" (click)="openItemDialog(item)">
 						<mat-icon>more_vert</mat-icon>
