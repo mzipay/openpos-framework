@@ -65,6 +65,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
   protected classes = '';
 
+  private currentTheme: string;
+
   @ViewChild(TemplateDirective) host: TemplateDirective;
 
   constructor(public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
@@ -320,7 +322,11 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       this.installedTemplate = this.currentTemplateRef.instance as AbstractTemplate;
       this.previousScreenType = screenType;
       this.previousScreenName = screenName;
-      this.overlayContainer.getContainerElement().classList.add(this.session.getTheme());
+      if (this.session.getTheme() !== this.currentTheme) {
+          this.overlayContainer.getContainerElement().classList.remove(this.currentTheme);
+          this.overlayContainer.getContainerElement().classList.add(this.session.getTheme());
+          this.currentTheme = this.session.getTheme();
+      }
       this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(screenType));
     }
     this.installedTemplate.show(screen);
