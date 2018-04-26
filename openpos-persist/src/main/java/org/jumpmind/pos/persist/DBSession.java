@@ -3,6 +3,8 @@ package org.jumpmind.pos.persist;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,11 +13,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
+
+import javax.sql.DataSource;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.el.util.ReflectionUtil;
 import org.apache.log4j.Logger;
 import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Table;
@@ -27,6 +32,7 @@ import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.jumpmind.pos.persist.impl.DefaultMapper;
 import org.jumpmind.pos.persist.impl.EntitySystemInfo;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
+import org.jumpmind.pos.persist.impl.ReflectUtils;
 import org.jumpmind.pos.persist.impl.Transaction;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -91,6 +97,15 @@ public class DBSession {
         };
         
         return findByNaturalId(entityClass, entityId);
+    }
+    
+    public Connection getConnection() {
+        DataSource datasource = databasePlatform.getDataSource();
+        try {
+            return datasource.getConnection();
+        } catch (SQLException e) {
+            throw new PersistException("Failed to get connection from databasePlatform " + databasePlatform);
+        }
     }
 
     public <T extends Entity> T findByNaturalId(Class<T> entityClass, EntityId id) {
@@ -171,6 +186,9 @@ public class DBSession {
         
         if (query.getQueryTemplate() == null) {
             if (!StringUtils.isEmpty(query.getName())) {                
+                if (!queryTemplates.containsKey(query.getName())) {
+                    throw new PersistException("No query templates found for query named '" + query.getName() + "'. Check your *-query.yaml config.");
+                }
                 query.setQueryTemplate(queryTemplates.get(query.getName()));
             } else {
                 query.setQueryTemplate(new QueryTemplate());
@@ -368,7 +386,7 @@ public class DBSession {
 
                 if (row.containsKey(columnName)) {
                     Object value = row.get(columnName);
-                    BeanUtils.copyProperty(object, propertyName, value);    
+                    ReflectUtils.setProperty(object, propertyName, value);
                 }
             }
             

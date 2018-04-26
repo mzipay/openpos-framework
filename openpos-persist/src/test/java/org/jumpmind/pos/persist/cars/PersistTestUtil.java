@@ -27,7 +27,6 @@ public class PersistTestUtil {
         return SecurityServiceFactory.create();
     }      
     
-    
     public static BasicDataSource testDataSource() {
         return BasicDataSourceFactory.create(getH2TestProperties(), securityService());
     }    

@@ -1,4 +1,4 @@
-package org.jumpmind.pos.config.model;
+package org.jumpmind.pos.config.service;
 
 import org.jumpmind.pos.service.ServiceResultImpl;
 

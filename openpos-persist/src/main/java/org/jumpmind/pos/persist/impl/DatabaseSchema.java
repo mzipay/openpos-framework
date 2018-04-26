@@ -115,9 +115,18 @@ public class DatabaseSchema {
     }
 
     protected void validateTable(Table table) {
-        validateName(tablePrefix + "_" + table.getName(), "table");
+        String tableName = tablePrefix + "_" + table.getName();
+        validateName(tableName, "table");
+        boolean hasPk = false;
         for (Column column : table.getColumns()) {
             validateName(column.getName(), "column");
+            if (column.isPrimaryKey()) {
+                hasPk = true;
+            }
+        }
+        if (!hasPk) {
+            throw new PersistException(
+                    String.format("Table '%s' must define at least 1 primary key field with @Column(primaryKey=true)", tableName));
         }
     }
 
@@ -334,4 +343,8 @@ public class DatabaseSchema {
         
         return buff.toString();
     }
+    
+    protected void validatePrimaryKey(Table table) {
+        
+    }    
 }

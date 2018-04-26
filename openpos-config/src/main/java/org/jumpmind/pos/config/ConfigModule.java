@@ -1,4 +1,4 @@
-package org.jumpmind.pos.user;
+package org.jumpmind.pos.config;
 
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_CONNECTION_PROPERTIES;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_DRIVER;
@@ -61,9 +61,9 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@Configuration("UserModule")
+@Configuration("ConfigModule")
 @EnableTransactionManagement
-public class UserModule implements Module {
+public class ConfigModule implements Module {
     
     @Autowired
     Environment env;
@@ -82,12 +82,12 @@ public class UserModule implements Module {
     
     PlatformTransactionManager txManager;    
     
-    private static Logger log = Logger.getLogger(UserModule.class);
+    private static Logger log = Logger.getLogger(ConfigModule.class);
 
     private DBSessionFactory sessionFactory;
 
     public String getName() {
-        return "user";
+        return "config";
     }
 
     public String getVersion() {
@@ -100,7 +100,7 @@ public class UserModule implements Module {
 
     @Override
     public String getTablePrefix() {
-        return "usr";
+        return "cfg";
     }
     
     protected List<Class<?>> getClassesForPackageAndAnnotation(String packageName, Class<? extends Annotation> annotation) {
@@ -185,13 +185,13 @@ public class UserModule implements Module {
 
     @Bean
     @Scope(value = "singleton")
-    @Qualifier("userDataSource")
+    @Qualifier("configDataSource")
     BasicDataSource dataSource() {
         if (dataSource == null) {
             h2Server();
             TypedProperties properties = new TypedProperties();
             properties.put(DB_POOL_DRIVER, env.getProperty(DB_POOL_DRIVER, Driver.class.getName()));
-            properties.put(DB_POOL_URL, env.getProperty(DB_POOL_URL, "jdbc:h2:mem:user"));
+            properties.put(DB_POOL_URL, env.getProperty(DB_POOL_URL, "jdbc:h2:mem:config"));
             properties.put(DB_POOL_USER, env.getProperty(DB_POOL_USER));
             properties.put(DB_POOL_PASSWORD, env.getProperty(DB_POOL_PASSWORD));
             properties.put(DB_POOL_INITIAL_SIZE, env.getProperty(DB_POOL_INITIAL_SIZE, "20"));
@@ -216,34 +216,33 @@ public class UserModule implements Module {
         return dataSource;
     }
     
-    @Bean(name="userSessionFactory")
+    @Bean(name="configSessionFactory")
     public DBSessionFactory getSessionFactory() {
-        if (sessionFactory == null) {            
-            sessionFactory = new DBSessionFactory();
-            
-            String packageName = this.getClass().getPackage().getName();
-            
-            List<Class<?>> tableClasses = 
-                    getClassesForPackageAndAnnotation(packageName, Table.class);
-            
-            Map<String, String> sessionContext = new HashMap<>();
-            
-            sessionContext.put("module.tablePrefix", getTablePrefix());
-            sessionContext.put("CREATE_BY", "openpos-user");
-            sessionContext.put("LAST_UPDATE_BY", "openpos-user");        
-            
-            // init sessionFactory per this module. 
-            sessionFactory.init(
-                    databasePlatform(), 
-                    sessionContext, 
-                    tableClasses);
-        }
+        
+        sessionFactory = new DBSessionFactory();
+        
+        String packageName = this.getClass().getPackage().getName();
+        
+        List<Class<?>> tableClasses = 
+                getClassesForPackageAndAnnotation(packageName, Table.class);
+
+        Map<String, String> sessionContext = new HashMap<>();
+        
+        sessionContext.put("module.tablePrefix", getTablePrefix());
+        sessionContext.put("CREATE_BY", "openpos-user");
+        sessionContext.put("LAST_UPDATE_BY", "openpos-user");        
+        
+        // init sessionFactory per this module. 
+        sessionFactory.init(
+                databasePlatform(), 
+                sessionContext, 
+                tableClasses);
         
         return sessionFactory;
     }
 
     @Bean("userDbSession")
     public DBSession getSession() {
-        return getSessionFactory().createDbSession();
+        return sessionFactory.createDbSession();
     }    
 }
