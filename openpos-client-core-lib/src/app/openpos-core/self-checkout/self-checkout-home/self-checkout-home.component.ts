@@ -30,6 +30,7 @@ export class SelfCheckoutHomeComponent implements IScreen {
   }
 
   show(screen: any) {
+    this.actionSent = false;
     this.screen = screen;
     this.menuItems = screen.menuItems;
   }
