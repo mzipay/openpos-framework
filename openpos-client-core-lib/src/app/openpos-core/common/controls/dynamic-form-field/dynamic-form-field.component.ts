@@ -1,3 +1,5 @@
+import { PopTartComponent } from './../../../dialogs/pop-tart/pop-tart.component';
+import { NavListComponent } from './../../../dialogs/nav-list/nav-list.component';
 import { Subscription } from 'rxjs/Subscription';
 import { ITextMask, TextMask } from './../../textmask';
 import { IMenuItem } from '../../imenuitem';
@@ -7,7 +9,7 @@ import {
   Output, Input, EventEmitter, Optional, ElementRef
 } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
-import { MatSelectChange, MatFormField, MatFormFieldControl, MatInput } from '@angular/material';
+import { MatSelectChange, MatFormField, MatFormFieldControl, MatInput, MatDialog } from '@angular/material';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl, NgForm } from '@angular/forms';
 import { IFormElement } from '../../iformfield';
 import { Observable } from 'rxjs/Observable';
@@ -47,12 +49,12 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
 
   public values: Array<string> = [];
 
-  constructor(public session: SessionService, public screenService: ScreenService) { }
+  constructor(public session: SessionService, public screenService: ScreenService, protected dialog: MatDialog) { }
 
   ngOnInit() {
     if (this.formField.inputType === 'ComboBox' || this.formField.inputType === 'SubmitOptionList' ||
-      this.formField.inputType === 'ToggleButton') {
-        this.valuesSubscription = this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
+      this.formField.inputType === 'ToggleButton' || this.formField.inputType === 'PopTart') {
+      this.valuesSubscription = this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
         this.values = data;
         console.log('asynchronously received ' + this.values.length + ' items for ' + this.formField.id);
       });
@@ -74,11 +76,11 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   ngAfterViewInit(): void {
     if (this.formField.inputType === 'AutoComplete') {
       if (this.formField.value) {
-       this.formGroup.get(this.formField.id).setValue(this.formField.value);
+        this.formGroup.get(this.formField.id).setValue(this.formField.value);
       }
     }
   }
-  
+
   ngOnDestroy(): void {
     if (this.valuesSubscription) {
       this.valuesSubscription.unsubscribe();
@@ -88,7 +90,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   isNumericField(): boolean {
     return ['NumericText', 'Money', 'Phone', 'PostalCode', 'Percent', 'Income', 'Decimal'].indexOf(this.formField.inputType) >= 0;
   }
-  
+
   onClick(event, formField: IFormElement) {
     if (formField.select) {
       // setSelectionRange is necessary in order to work correctly in UIWebView on iPad
@@ -114,7 +116,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
         const lowerTerm = term ? term.toLowerCase() : '';
         if (lowerTerm) {
           console.log(`autocomplete searching for '${lowerTerm}' on field '${fld.id}'`);
-          return (<Observable<Array<string>>> scrnSvc.getFieldValues(fld.id, lowerTerm))
+          return (<Observable<Array<string>>>scrnSvc.getFieldValues(fld.id, lowerTerm))
             .pipe(
               map(searchResults => searchResults.map(v => ({
                 value: v,
@@ -179,6 +181,22 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
 
     // this.session.response = this.screenForm;
     // this.session.onAction(formElement.id);
+  }
+
+  openPopTart() {
+    const dialogRef = this.dialog.open(PopTartComponent, {
+      width: '70%',
+      data: {
+        optionItems: this.values,
+        disableClose: false,
+        autoFocus: false
+     }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('pop tart closed with value of: ' + result);
+      this.formGroup.get(this.formField.id).setValue(result);
+    });
   }
 
   getPlaceholderText(formElement: IFormElement) {

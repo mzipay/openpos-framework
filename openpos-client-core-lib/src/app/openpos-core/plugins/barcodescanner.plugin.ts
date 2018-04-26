@@ -1,9 +1,7 @@
-import { PluginService } from './../services/plugin.service';
 import { IDevicePlugin, IDeviceRequest, IDialog, ActionIntercepter, ActionIntercepterBehaviorType, IPlugin } from '../common';
 import { SessionService, DeviceService } from '../services';
 import { CordovaDevicePlugin } from '../common/cordova-device-plugin';
 import { Scan } from '../common/scan';
-// declare var cordova: any;
 
 export class BarcodeScannerPlugin extends CordovaDevicePlugin {
 
@@ -11,7 +9,7 @@ export class BarcodeScannerPlugin extends CordovaDevicePlugin {
     pluginName = this.pluginId;
     private pluginImpl: IPlugin;
 
-    constructor(private pluginService: PluginService) {
+    constructor() {
         super('barcodeScanner');
     }
 
