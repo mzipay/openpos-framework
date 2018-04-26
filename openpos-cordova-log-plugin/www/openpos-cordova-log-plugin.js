@@ -6,12 +6,24 @@ const PLUGIN_NAME = 'OpenPOSCordovaLogPlugin';
 var OpenPOSCordovaLogPlugin = {
   pluginId: 'openPOSCordovaLogPlugin',
   pluginName: PLUGIN_NAME,
-  
+  /*  These are now initted through a preference in the cordova config.xml
+  config: {
+    logDir: 'Logs',
+    logSuffix: '.log'
+  },
+  */
+
   init: function(successCallback, errorCallback) {
     // Nothing to init for this plugin
+    // Make sure plugin at least has default config
+    _configure(null);
     successCallback();
   },
   
+  configure: function(pluginConfig) {
+    _configure(pluginConfig);
+  },
+
   /** 
    * Lists the name of all the files ending with *.log in the Logs directory.
    * 
@@ -81,8 +93,27 @@ var OpenPOSCordovaLogPlugin = {
         'shareLogFile', [logFilename]
       );
   }
-  
-
 };
+
+function _configure(pluginConfig) {
+  /* These settings are now configured through the cordova preferences in config.xml
+  if (pluginConfig) {
+    if (pluginConfig.logDir !== 'undefined' && pluginConfig.logDir) {
+      OpenPOSCordovaLogPlugin.config.logDir = pluginConfig.logDir;
+    }
+
+    if (pluginConfig.logSuffix !== 'undefined' && pluginConfig.logSuffix) {
+      OpenPOSCordovaLogPlugin.config.logSuffix = pluginConfig.logSuffix;
+    }
+  }
+  
+  exec(
+    function() {},
+    function(error) {},
+    PLUGIN_NAME,
+    'configure', [OpenPOSCordovaLogPlugin.config.logDir, OpenPOSCordovaLogPlugin.config.logSuffix]
+  );
+  */
+}
 
 module.exports = OpenPOSCordovaLogPlugin;

@@ -4,6 +4,10 @@
 
 }
 
+/* Configure the plugin with values such as the log file suffix/extension
+   and the subdir to write the log files into. */
+- (void) configure:(CDVInvokedUrlCommand *)command;
+
 /* Return list of files in the Logs dir */
 - (NSArray *)listLogFiles:(CDVInvokedUrlCommand *)command;
 

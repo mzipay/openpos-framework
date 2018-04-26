@@ -10,22 +10,42 @@
 
 @property (strong, nonatomic) NSString *_curLogFileName;
 @property (nonatomic) FILE *_curLogFile;
+@property (nonatomic) NSString *_logFileSuffix;
+@property (nonatomic) NSString *_logDir;
+
 
 - (NSString *) getOrCreateLogsDir;
 - (NSString *) logFileNameUsingDate: (NSDate *)someDate;
 - (NSString *) logFileName: (NSString *)fileName;
 - (void) captureConsoleOutputToOpenPOSLogFile;
 - (void)finishLaunching:(NSNotification *)notification;
+- (NSString *) logFileSuffix;
+- (NSString *) logDir;
+
 @end
 
 @implementation OpenPOSCordovaLogPlugin
+
+- (void)configure:(CDVInvokedUrlCommand *)command {
+    /* These settings are now initialized through a cordova 'preference' in config.xml
+    self._logDir = [command.arguments objectAtIndex:0];
+    NSLog(@"OpenPOSCordovaLogPlugin: logDir set to '%@'", self._logDir);
+
+    self._logFileSuffix = [command.arguments objectAtIndex:1];
+    NSLog(@"OpenPOSCordovaLogPlugin: logFileSuffix set to '%@'", self._logFileSuffix);
+    
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    */
+}
 
 - (NSArray *)listLogFiles:(CDVInvokedUrlCommand *)command {
     NSString *logFilesDir = [self getOrCreateLogsDir];
     NSFileManager *fm = [NSFileManager defaultManager];
     
     NSArray *logFilesDirContents = [fm contentsOfDirectoryAtPath:logFilesDir error:nil];
-    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.log'"];
+    NSString *format = [NSString stringWithFormat:@"self ENDSWITH '%@'",[self logFileSuffix]];
+    NSPredicate *fltr = [NSPredicate predicateWithFormat: format];
     NSArray *logFileNames = [logFilesDirContents filteredArrayUsingPredicate:fltr];
 
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:logFileNames];
@@ -119,6 +139,19 @@
     }
     NSLog(@"OpenPOSCordovaLogPlugin intializing...");
     
+    NSString* logDirPref = [self.commandDelegate.settings objectForKey: [@"OpenPOSCordovaLogPlugin.logDir" lowercaseString]];
+    if (logDirPref != nil) {
+        self._logDir = logDirPref;
+        NSLog(@"OpenPOSCordovaLogPlugin: logDir read from pref: '%@'", self._logDir);
+    }
+
+
+    NSString* logSuffixPref = [self.commandDelegate.settings objectForKey: [@"OpenPOSCordovaLogPlugin.logSuffix" lowercaseString]];
+    if (logSuffixPref != nil) {
+        self._logFileSuffix = logSuffixPref;
+        NSLog(@"OpenPOSCordovaLogPlugin: logSuffix read from pref: '%@'", self._logFileSuffix);
+    }
+
     // Hook into the notification for when the application launch finishes, so
     // that we can divert logging to our own file
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
@@ -192,7 +225,7 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
     
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *logsDirectory = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",@"Logs"]];
+    NSString *logsDirectory = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", [self logDir]]];
     
     NSError *error = nil;
     [[NSFileManager defaultManager] createDirectoryAtPath:logsDirectory
@@ -212,7 +245,7 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *fileName = [NSString stringWithFormat:@"openpos-client_%@.log",[dateFormatter stringFromDate: someDate]];
+    NSString *fileName = [NSString stringWithFormat:@"openpos-client_%@%@",[dateFormatter stringFromDate: someDate], [self logFileSuffix]];
     NSString *logFilePath = [logsDirectory stringByAppendingPathComponent: fileName];
     return logFilePath;
 }
@@ -246,6 +279,10 @@
     // redirect stderr to log file
     self._curLogFile = freopen([logFilePathCurrentDate cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
     self._curLogFileName = logFilePathCurrentDate;
+
+    NSLog(@"OpenPOSCordovaLogPlugin: logDir is: '%@'", self._logDir);
+    NSLog(@"OpenPOSCordovaLogPlugin: logFileSuffix is: '%@'", self._logFileSuffix);
+    NSLog(@"OpenPOSCordovaLogPlugin: current log file is: '%@'", self._curLogFileName);
 }
 
 - (UIViewController *) documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
@@ -271,5 +308,23 @@
 
     }
 }
+
+- (NSString *) logFileSuffix {
+    NSString *logSuffix = self._logFileSuffix;
+    if (logSuffix == nil) {
+        logSuffix = @".log";
+    }
+
+    return logSuffix;
+}
+
+- (NSString *) logDir {
+    NSString *logDir = self._logDir;
+    if (logDir == nil) {
+        logDir = @"Logs";
+    }
     
+    return logDir;
+}
+
 @end
