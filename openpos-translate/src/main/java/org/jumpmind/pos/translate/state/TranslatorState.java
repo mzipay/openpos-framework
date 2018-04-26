@@ -7,8 +7,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.StreamSupport;
 
-import javax.annotation.PostConstruct;
-
 import org.jumpmind.pos.core.device.DefaultDeviceResponse;
 import org.jumpmind.pos.core.device.IDeviceRequest;
 import org.jumpmind.pos.core.device.IDeviceResponse;
@@ -22,12 +20,12 @@ import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.AbstractScreen;
 import org.jumpmind.pos.core.service.IDeviceService;
-import org.jumpmind.pos.translate.ILegacyStartupService;
 import org.jumpmind.pos.translate.ITranslationManager;
 import org.jumpmind.pos.translate.ITranslationManagerSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
@@ -40,8 +38,9 @@ public class TranslatorState implements IState {
     @In(scope=ScopeType.Node)
     protected IStateManager stateManager;
 
-    @Autowired
-    protected ILegacyStartupService startupService;
+    @In(scope=ScopeType.Node, required=false)
+    @Out(scope=ScopeType.Node)
+    protected ITranslationManager translationManager;
 
     @In(scope=ScopeType.Node, required=false)
     @Out(scope=ScopeType.Node)
@@ -51,15 +50,10 @@ public class TranslatorState implements IState {
     protected IDeviceService deviceService;
 
     @Autowired
-    protected Environment env;
-
-    @PostConstruct
-    public void init() {
-        if (startupService == null) {
-            throw new IllegalStateException("When using a translation state, we expect an implementation of "
-                    + ITranslationManager.class.getSimpleName() + " to be bound at the prototype scope");
-        }
-    }
+    protected Environment env;   
+    
+    @Autowired
+    ApplicationContext applicationContext;    
 
     @Override
     public void arrive(Action action) {
@@ -71,11 +65,17 @@ public class TranslatorState implements IState {
     }
     
     protected ITranslationManager getTranslationManager() {
-        return this.startupService.getTranslationManagerRef(stateManager.getNodeId());
+        return this.translationManager;
     }
 
     protected boolean subscribe(Action action) {
         if (subscriber == null || (action != null && "restart".equalsIgnoreCase(action.getName()))) {
+            
+            this.translationManager = applicationContext.getBean(ITranslationManager.class);  
+            if (this.translationManager == null) {
+                throw new IllegalStateException("When using a translation state, we expect an implementation of "
+                        + ITranslationManager.class.getSimpleName() + " to be bound at the prototype scope");
+            }
             
             logger.info("Creating new translation manager subscriber");
             
@@ -141,9 +141,7 @@ public class TranslatorState implements IState {
                     return response;
                 }
             };
-            getTranslationManager().setTranslationManagerSubscriber(subscriber);
-//            stateManager.setNodeScope("translationManager", translationManager);
-//            stateManager.setNodeScope("subscriber", subscriber);
+            translationManager.setTranslationManagerSubscriber(subscriber);
             return true;
         } else {
             return false;
