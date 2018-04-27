@@ -66,8 +66,10 @@ export class DeviceService {
         plugin.processRequest(
           {requestId: 'scan', deviceId: 'barcode-scanner', type: null, subType: null, payload: null},
           (response) => {
-            this.session.response = response;
-            this.session.onAction('Scan');
+            if (response && ! response.cancelled) {
+              this.session.response = response;
+              this.session.onAction('Scan');
+            }
           },
           (error) => {
             console.error('Scanning failed: ' + error);

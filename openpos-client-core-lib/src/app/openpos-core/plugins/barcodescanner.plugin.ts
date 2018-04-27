@@ -23,11 +23,14 @@ export class BarcodeScannerPlugin extends CordovaDevicePlugin {
           function (result) {
             if (! result.cancelled) {
                 successCallback(new Scan(result.text, result.format));
+                console.log('We got a barcode\n' +
+                'Result: ' + result.text + '\n' +
+                'Format: ' + result.format + '\n' +
+                'Cancelled: ' + result.cancelled);
+              } else {
+                successCallback(new Scan(null, null, true));
+                console.log('Barcode scan cancelled');
             }
-            console.log('We got a barcode\n' +
-              'Result: ' + result.text + '\n' +
-              'Format: ' + result.format + '\n' +
-              'Cancelled: ' + result.cancelled);
           },
           function (error) {
             const msg = `Scanning failed: ${error}`;
