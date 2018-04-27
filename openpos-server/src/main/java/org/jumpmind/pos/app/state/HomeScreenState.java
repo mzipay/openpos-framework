@@ -20,25 +20,28 @@
  */
 package org.jumpmind.pos.app.state;
 
+import org.apache.log4j.Logger;
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
-import org.jumpmind.pos.core.flow.IStateManager;
-import org.jumpmind.pos.core.flow.In;
-import org.jumpmind.pos.core.flow.ScopeType;
-import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.HomeScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jumpmind.pos.core.screen.SellScreen;
 
 public class HomeScreenState extends AbstractState implements IState {
-
-    @In(scope=ScopeType.Node)
-    IStateManager stateManager;
+    
+    private Logger logger = Logger.getLogger(HomeScreenState.class);
 
     @Override
     public void arrive(Action action) {
         stateManager.endSession();
         stateManager.showScreen(buildScreen());
+    }
+    
+    @ActionHandler
+    public void onSell(Action action) {
+        logger.info("Sell action intercepted for testing purposes.");
+        stateManager.doAction(action);
     }
 
     protected SellScreen buildScreen() {
