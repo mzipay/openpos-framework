@@ -3,6 +3,7 @@ package org.jumpmind.pos.core.screen;
 public class SignatureCaptureScreen extends SellScreen {
     private static final long serialVersionUID = 1L;
 
+    private String title;
     private String text;
     private String textIcon;
     private String signatureData;
@@ -43,6 +44,14 @@ public class SignatureCaptureScreen extends SellScreen {
 
     public void setSignatureMediaType(String signatureMediaType) {
         this.signatureMediaType = signatureMediaType;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
     
 }

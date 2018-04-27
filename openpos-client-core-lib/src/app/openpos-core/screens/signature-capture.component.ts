@@ -5,7 +5,8 @@ import 'signature_pad';
 
 @Component({
   selector: 'app-signature-capture',
-  templateUrl: './signature-capture.component.html'
+  templateUrl: './signature-capture.component.html',
+  styleUrls: ['./signature-capture.component.scss']
 })
 export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScreen {
 
