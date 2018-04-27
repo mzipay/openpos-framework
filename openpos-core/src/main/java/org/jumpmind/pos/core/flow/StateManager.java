@@ -225,9 +225,9 @@ public class StateManager implements IStateManager {
                 FlowConfig subStateConfig = stateConfig.getActionToSubStateMapping().get(action.getName());
                 if (subStateConfig != null) {
                     transitionToSubState(action, subStateConfig);    
-                } else {                
-                    logger.warn("Unexpected action \"{}\". No @ActionHandler {}.on{}() method found.", action.getName(), currentContext.getState().getClass().getName(), action.getName());
-                    currentContext.getState().arrive(action); // TODO, we are in an undefined state he really.                    
+                } else {            
+                    throw new FlowException(String.format("Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"... defined in the flow config.", 
+                            action.getName(), currentContext.getState().getClass().getName(), action.getName(), action.getName()));
                 }
             }
         }
