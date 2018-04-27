@@ -124,7 +124,6 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
 import { FileViewerComponent } from './dialogs/file-viewer/file-viewer.component';
 import { DialogService } from './services/dialog.service';
 import { SelectableItemListComponent } from './common/controls/selectable-item-list/selectable-item-list.component';
-import { CloseSelectDirective } from './common/closeSelect.directive';
 
 // Keyboard Layouts
 const customLayouts: IKeyboardLayouts = {
@@ -343,8 +342,7 @@ const customLayouts: IKeyboardLayouts = {
     PopTartComponent,
     SelectableItemListComponent,
     PhonePipe,
-    LoadingDialogComponent,
-    CloseSelectDirective
+    LoadingDialogComponent
   ],
   imports: [
     BrowserModule,
