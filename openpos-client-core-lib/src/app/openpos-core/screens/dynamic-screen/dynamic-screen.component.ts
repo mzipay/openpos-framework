@@ -162,38 +162,38 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     this.session.refreshApp();
   }
 
-  protected onDevRestartNode(): Promise<{success: boolean, message: string}> {
+  protected onDevRestartNode(): Promise<{ success: boolean, message: string }> {
 
-      const prom = new Promise<{success: boolean, message: string}>( (resolve, reject) => {
-        const port = this.session.getServerPort();
-        const nodeId = this.session.getNodeId().toString();
-        const url = `http://${this.session.getServerName()}${port ? `:${port}` : ''}` +
-          `/register/restart/node/${nodeId}`;
-        const httpClient = this.httpClient;
-        httpClient.get(url).subscribe( response => {
-          const msg = `Node '${nodeId}' restarted successfully.`;
-          console.log(msg);
-          resolve({success: true, message: msg});
-        },
+    const prom = new Promise<{ success: boolean, message: string }>((resolve, reject) => {
+      const port = this.session.getServerPort();
+      const nodeId = this.session.getNodeId().toString();
+      const url = `http://${this.session.getServerName()}${port ? `:${port}` : ''}` +
+        `/register/restart/node/${nodeId}`;
+      const httpClient = this.httpClient;
+      httpClient.get(url).subscribe(response => {
+        const msg = `Node '${nodeId}' restarted successfully.`;
+        console.log(msg);
+        resolve({ success: true, message: msg });
+      },
         err => {
-            const msg = `Node restart Error occurred: ${JSON.stringify(err)}`;
-            const statusCode = err.status || (err.error ? err.error.status : null);
-            let errMsg = '';
-            if (err.error) {
-                if (err.error.error) {
-                    errMsg += err.error.error;
-                }
-                if (err.error.message) {
-                    errMsg += (errMsg ? '; ' : '') + err.error.message;
-                }
+          const msg = `Node restart Error occurred: ${JSON.stringify(err)}`;
+          const statusCode = err.status || (err.error ? err.error.status : null);
+          let errMsg = '';
+          if (err.error) {
+            if (err.error.error) {
+              errMsg += err.error.error;
             }
-            const returnMsg = `${statusCode ? statusCode + ': ' : ''}` +
-              (errMsg ? errMsg : 'Restart failed. Check client and server logs.');
-            reject({success: false, message: returnMsg});
+            if (err.error.message) {
+              errMsg += (errMsg ? '; ' : '') + err.error.message;
+            }
+          }
+          const returnMsg = `${statusCode ? statusCode + ': ' : ''}` +
+            (errMsg ? errMsg : 'Restart failed. Check client and server logs.');
+          reject({ success: false, message: returnMsg });
         });
 
-      });
-      return prom;
+    });
+    return prom;
   }
 
   protected onLogfileSelected(logFilename: string): void {
@@ -238,7 +238,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       this.logPlugin.impl.readLogFileContents(
         logFilename,
         (logFileContents) => {
-          const dialogRef = this.dialog.open(FileViewerComponent, { panelClass: 'full-screen-dialog',
+          const dialogRef = this.dialog.open(FileViewerComponent, {
+            panelClass: 'full-screen-dialog',
             maxWidth: '100vw', maxHeight: '100vh', width: '100vw'
           });
           dialogRef.componentInstance.fileName = logFilename;
@@ -261,7 +262,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     return this.registered;
   }
 
-  isPersonalized(): boolean {
+  protected isPersonalized(): boolean {
     if (!this.personalized && this.session.isPersonalized()) {
       this.personalized = true;
       console.log('already personalized.  setting needs personalization to false');
@@ -269,7 +270,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     return this.personalized;
   }
 
-  public updateDialog(dialog?: any): void {
+  protected updateDialog(dialog?: any): void {
     this.registerWithServer();
     if (dialog) {
       const dialogType = this.dialogService.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
@@ -292,7 +293,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
   }
 
-  updateTemplateAndScreen(screen?: any): void {
+  protected updateTemplateAndScreen(screen?: any): void {
     this.registerWithServer();
 
     if (!this.isPersonalized() && !screen) {
@@ -323,9 +324,9 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       this.previousScreenType = screenType;
       this.previousScreenName = screenName;
       if (this.session.getTheme() !== this.currentTheme) {
-          this.overlayContainer.getContainerElement().classList.remove(this.currentTheme);
-          this.overlayContainer.getContainerElement().classList.add(this.session.getTheme());
-          this.currentTheme = this.session.getTheme();
+        this.overlayContainer.getContainerElement().classList.remove(this.currentTheme);
+        this.overlayContainer.getContainerElement().classList.add(this.session.getTheme());
+        this.currentTheme = this.session.getTheme();
       }
       this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(screenType));
     }
@@ -338,7 +339,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
   }
 
-  updateClasses(screen: any) {
+  protected updateClasses(screen: any) {
     if (screen) {
       this.classes = '';
       switch (this.session.getAppId()) {
@@ -361,7 +362,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
   }
 
-  openDialog(dialog: any) {
+  protected openDialog(dialog: any) {
 
     const dialogComponentFactory: ComponentFactory<IScreen> = this.dialogService.resolveDialog(dialog.type);
     let closeable = false;
@@ -380,7 +381,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       console.log(`Dialog options: ${JSON.stringify(dialogProperties)}`);
     }
 
-    if( !this.dialogRef || dialog.type !== this.lastDialogType || dialog.type === "Dialog"){
+    if (!this.dialogRef || dialog.type !== this.lastDialogType || dialog.type === 'Dialog') {
       this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
     }
 

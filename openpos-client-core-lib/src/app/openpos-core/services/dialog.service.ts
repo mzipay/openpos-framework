@@ -39,6 +39,7 @@ import { FullPageImageComponent } from '../screens/full-page-image/full-page-ima
 import { CallForAuthorizationComponent } from '../screens/call-for-authorization/call-for-authorization.component';
 import { DialogComponent } from '../screens/dialog/dialog.component';
 import { LoadingDialogComponent } from '../dialogs/loading-dialog/loading-dialog.component';
+import { LoginDialogComponent } from '../dialogs/login-dialog/login-dialog.component';
 
 @Injectable()
 export class DialogService {
@@ -60,6 +61,7 @@ export class DialogService {
     this.dialogs.set('EmbeddedWebPage', EmbeddedWebPageComponent);
     this.dialogs.set('Form', FormComponent);
     this.dialogs.set('Login', LoginComponent);
+    this.dialogs.set('LoginDialog', LoginDialogComponent);
     this.dialogs.set('Home', HomeComponent);
     this.dialogs.set('SelfCheckoutHome', SelfCheckoutHomeComponent);
     this.dialogs.set('ItemList', ItemListComponent);
