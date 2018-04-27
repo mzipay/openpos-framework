@@ -10,8 +10,9 @@ public class DialogProperties implements Serializable {
 
     private String width;
     private String height;
-    private Boolean executeActionBeforeClose;
-    private Boolean closeable;
+    private boolean executeActionBeforeClose = false;
+    private boolean closeable = false;
+    private boolean autoFocus = false;
 
     public DialogProperties() {
     }
@@ -33,11 +34,11 @@ public class DialogProperties implements Serializable {
         return this;
     }
 
-    public Boolean getExecuteActionBeforeClose() {
+    public boolean isExecuteActionBeforeClose() {
         return executeActionBeforeClose;
     }
 
-    public void setExecuteActionBeforeClose(Boolean executeActionBeforeClose) {
+    public void setExecuteActionBeforeClose(boolean executeActionBeforeClose) {
         this.executeActionBeforeClose = executeActionBeforeClose;
     }
     
@@ -45,12 +46,12 @@ public class DialogProperties implements Serializable {
         this.setExecuteActionBeforeClose(execBeforeClose);
         return this;
     }
+    
+    public boolean isCloseable() {
+        return closeable;
+    }
 
-	public Boolean getCloseable() {
-		return closeable;
-	}
-
-	public void setCloseable(Boolean closeable) {
+	public void setCloseable(boolean closeable) {
 		this.closeable = closeable;
 	}
 
@@ -61,4 +62,12 @@ public class DialogProperties implements Serializable {
 	public void setHeight(String height) {
 		this.height = height;
 	}
+	
+	public void setAutoFocus(boolean autoFocus) {
+        this.autoFocus = autoFocus;
+    }
+	
+    public boolean isAutoFocus() {
+        return autoFocus;
+    }
 }

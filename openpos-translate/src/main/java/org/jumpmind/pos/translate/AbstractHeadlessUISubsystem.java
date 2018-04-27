@@ -11,12 +11,12 @@ public abstract class AbstractHeadlessUISubsystem implements ILegacySubsystem {
     protected String configFileName;
     protected String uiPropertyFile;
     protected String factoryName;
-    protected ITranslationManager listener;
+    protected ITranslationManager translationManager;
     protected boolean statusUpdating = false;  // indicates if the current showScreen call is to 'SHOW_STATUS_ONLY'
     
     
     public void setLegacyScreenListener(ITranslationManager listener) {
-        this.listener = listener;
+        this.translationManager = listener;
     }
 
     public void setConfigFilename(String name) {

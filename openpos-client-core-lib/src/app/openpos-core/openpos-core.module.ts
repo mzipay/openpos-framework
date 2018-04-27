@@ -1,3 +1,4 @@
+import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.component';
 import { PopTartComponent } from './dialogs/pop-tart/pop-tart.component';
 import { NavListComponent } from './dialogs/nav-list/nav-list.component';
 
@@ -223,6 +224,7 @@ const customLayouts: IKeyboardLayouts = {
     SelfCheckoutHomeComponent,
     ItemListComponent,
     LoginComponent,
+    LoginDialogComponent,
     PaymentStatusComponent,
     SelfCheckoutPaymentStatusComponent,
     PromptComponent,
@@ -276,6 +278,7 @@ const customLayouts: IKeyboardLayouts = {
     BasicItemSearchComponent,
     ItemListComponent,
     LoginComponent,
+    LoginDialogComponent,
     ChooseOptionsComponent,
     ChooseOptionsDialogComponent,
     DynamicFormDialogComponent,
@@ -372,7 +375,8 @@ const customLayouts: IKeyboardLayouts = {
     StatusBarComponent,
     SelectableItemListComponent,
     PhonePipe,
-    LoginComponent
+    LoginComponent,
+    LoginDialogComponent
     ],
   providers: [
     HttpClient,

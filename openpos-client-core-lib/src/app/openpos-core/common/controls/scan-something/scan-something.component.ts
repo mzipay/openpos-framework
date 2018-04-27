@@ -9,17 +9,17 @@ import { ScanSomethingData } from './scanSomthingData';
   templateUrl: './scan-something.component.html',
   styleUrls: ['./scan-something.component.scss']
 })
-export class ScanSomethingComponent implements AfterViewInit { 
- 
-  @ViewChild(MatInput) 
-  input: MatInput; 
-  
+export class ScanSomethingComponent implements AfterViewInit {
+
+  @ViewChild(MatInput)
+  input: MatInput;
+
   @Input()
   scanSomethingData: ScanSomethingData;
 
   public barcode: string;
 
-  @Input() minLength: number = 1;
+  @Input() minLength = 1;
   @Input() maxLength: number;
 
   constructor(private session: SessionService, public devices: DeviceService,
@@ -42,12 +42,12 @@ export class ScanSomethingComponent implements AfterViewInit {
   }
 
 
-  ngAfterViewInit(): void { 
-    if (this.scanSomethingData.autoFocus) { 
-      this.input.focus(); 
-    } 
-  } 
- 
+  ngAfterViewInit(): void {
+    if (this.scanSomethingData.autoFocus) {
+      this.input.focus();
+    }
+  }
+
 
   private filterBarcodeValue(val: string): string {
     if (!val) {

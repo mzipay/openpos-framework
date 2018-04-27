@@ -9,9 +9,8 @@ import { IFormElement } from '../../common/iformfield';
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
   })
-  export class LoginComponent implements DoCheck, IScreen, OnInit {
+  export class LoginComponent implements IScreen {
 
-    private lastSequenceNum: number;
     public form: IForm;
     public screen: any;
     loginIdField: IFormElement;
@@ -42,18 +41,8 @@ import { IFormElement } from '../../common/iformfield';
         this.title = this.form.name;
     }
 
-    ngOnInit(): void {
-    }
-
     hasSubmitAction(): boolean {
         return this.submitAction !== null;
-    }
-
-    ngDoCheck(): void {
-        if (this.screen.sequenceNumber !== this.lastSequenceNum) {
-            this.ngOnInit();
-            this.lastSequenceNum = this.screen.sequenceNumber;
-        }
     }
 
     onEnterPressed(): void {
