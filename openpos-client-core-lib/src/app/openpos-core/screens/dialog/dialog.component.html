@@ -6,10 +6,10 @@
     <p *ngFor="let m of messages">{{m}}</p>
     <mat-progress-bar *ngIf="screen.subType === 'Progress'" mode="indeterminate"></mat-progress-bar>
   </div>
-  <div mat-dialog-actions>
-    <div fxLayout="row">
-      <button *ngFor="let m of screen.buttons; let i = index" [id]="'button-' + i" mat-raised-button [mat-dialog-close]="m"
-        [color]="i===0?'primary':''" [disabled]="!m.enabled" [autofocus]="i===0" [appFocus]="i===0">{{m.title}}</button>
-    </div>
+  <div mat-dialog-actions fxLayout="row">
+    <button *ngFor="let m of otherButtons; let i = index" [id]="'button-' + i" mat-raised-button [mat-dialog-close]="m"
+        color="primary-inverse" [disabled]="!m.enabled">{{m.title}}</button>
+        <div fxFlex="1 1 auto"></div>
+    <button *ngIf="primaryButton" mat-raised-button [mat-dialog-close]="primaryButton" color="primary" id="primaryButton" autofocus appFocus>{{primaryButton.title}}</button>
   </div>
 </ng-container>

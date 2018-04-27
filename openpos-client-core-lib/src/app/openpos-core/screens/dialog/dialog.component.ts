@@ -14,12 +14,22 @@ declare var version: any;
 export class DialogComponent implements IScreen {
 
   screen: any;
+  primaryButton: IMenuItem;
+  otherButtons: IMenuItem[];
 
   constructor(public session: SessionService, public dialogRef: MatDialogRef<DialogComponent>) {
   }
 
   show(screen: any): void {
     this.screen = screen;
+    
+    if( screen.buttons ){
+      this.primaryButton = screen.buttons[0];
+    }
+
+    if( screen.buttons && screen.buttons.length > 1 ){
+      this.otherButtons = screen.buttons.slice(1, screen.buttons.length);
+    }
   }
 
   get messages(): string[] {
