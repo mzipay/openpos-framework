@@ -7,11 +7,11 @@ import org.jumpmind.pos.persist.Table;
 @Table
 public class WorkgroupPermission extends Entity {
 
-    @Column(required=true,
+    @Column(primaryKey=true,
             size = "16")
     private String workgroupRowId;
     
-    @Column(required=true,
+    @Column(primaryKey=true,
             size = "16")
     private String permissionRowId;
 

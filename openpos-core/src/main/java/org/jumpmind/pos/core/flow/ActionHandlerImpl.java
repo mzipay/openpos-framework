@@ -14,16 +14,35 @@ import org.springframework.stereotype.Component;
 public class ActionHandlerImpl {
 
     private static final String METHOD_ON_ANY = "onAnyAction";
+    
+    public boolean canHandleAction(Object state, Action action) {
+        // if there is an action handler OR an any action handler
+        // AND it's not the current state fireing this action.
+        Method actionMethod = getActionMethod(state, action, null);
+        if  (actionMethod != null
+                && !isCalledFromState(state)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public boolean handleAction(Object state, Action action, Object deserializedPayload, String overrideActionName) {
+        Method actionMethod = getActionMethod(state, action, overrideActionName);
+        if (actionMethod != null) {
+            invokeHandleAction(state, action, actionMethod, deserializedPayload);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    protected Method getActionMethod(Object state, Action action, String overrideActionName) {
         Class<?> clazz = state.getClass();
 
         while (clazz != null) {
-
             List<Method> methods = MethodUtils.getMethodsListWithAnnotation(clazz, ActionHandler.class, true, true);
 
-            Method anyMethod = null;
-            
             String actionName = null;
             if (!StringUtils.isEmpty(overrideActionName)) {
                 actionName = overrideActionName;
@@ -34,25 +53,15 @@ public class ActionHandlerImpl {
             for (Method method : methods) {
                 String matchingMethodName = "on" + actionName;
                 method.setAccessible(true);
-                if (matchingMethodName.equals(method.getName())) {
-                    invokeHandleAction(state, action, method, deserializedPayload);
-                    return true;
-                } else if (METHOD_ON_ANY.equals(method.getName())) {
-                    anyMethod = method;
-                }
+                if (matchingMethodName.equals(method.getName())
+                        || METHOD_ON_ANY.equals(method.getName())) {
+                    return method;
+                } 
             }
-
-            if (anyMethod != null) {
-                invokeHandleAction(state, action, anyMethod, deserializedPayload);
-                return true;
-            }
-
             clazz = clazz.getSuperclass();
-
         }
-
-        return false;
-
+        
+        return null;
     }
 
     protected void invokeHandleAction(Object state, Action action, Method method, Object deserializedPayload) {
@@ -73,5 +82,15 @@ public class ActionHandlerImpl {
             throw new FlowException("Failed to invoke method " + method, ex);
         }
     }
+    
+    protected boolean isCalledFromState(Object state) {
+        StackTraceElement[] currentStack = Thread.currentThread().getStackTrace();
+        for (StackTraceElement stackFrame : currentStack) {
+            if (stackFrame.getClassName().equals(state.getClass().getName())) {                
+                return true;
+            }
+        }
+        return false;
+    }    
 
 }

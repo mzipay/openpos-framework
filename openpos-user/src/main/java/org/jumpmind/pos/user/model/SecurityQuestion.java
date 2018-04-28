@@ -9,6 +9,8 @@ import org.jumpmind.pos.persist.Table;
         description = "A question that is put ot the Customer or Operator when they have forgotten their Password and the system is trying to verify their identity.")
 public class SecurityQuestion extends Entity {
 
+    @Column(primaryKey = true)
+    private String securityQuestionId;
 
     @Column(required = true,
             size = "255",
