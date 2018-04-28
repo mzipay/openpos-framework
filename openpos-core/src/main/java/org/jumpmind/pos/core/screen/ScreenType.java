@@ -40,5 +40,5 @@ public interface ScreenType {
     public static final String CallForAuthorization = "CallForAuthorization";
     public static final String MultipleDynamicForm = "MultipleDynamicForm";
     public static final String LoadingDialog = "LoadingDialog";
-
+    public static final String Version = "Version";
 }

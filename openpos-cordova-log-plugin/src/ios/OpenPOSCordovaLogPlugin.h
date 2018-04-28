@@ -20,4 +20,7 @@
 /* Shares a log file using platform standard file sharing UI */
 - (void) shareLogFile:(CDVInvokedUrlCommand *)command;
 
+/* Returns iOS Application version */
+- (NSString *)getAppVersion:(CDVInvokedUrlCommand *)command;
+
 @end

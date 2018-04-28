@@ -6,12 +6,9 @@ const PLUGIN_NAME = 'OpenPOSCordovaLogPlugin';
 var OpenPOSCordovaLogPlugin = {
   pluginId: 'openPOSCordovaLogPlugin',
   pluginName: PLUGIN_NAME,
-  /*  These are now initted through a preference in the cordova config.xml
   config: {
-    logDir: 'Logs',
-    logSuffix: '.log'
+    buildNumber: '0'
   },
-  */
 
   init: function(successCallback, errorCallback) {
     // Nothing to init for this plugin
@@ -21,7 +18,16 @@ var OpenPOSCordovaLogPlugin = {
   },
   
   configure: function(pluginConfig) {
-    _configure(pluginConfig);
+    return _configure(pluginConfig);
+  },
+
+  getAppVersion: function(successCallback, errorCallback) {
+    exec(
+      successCallback,
+      errorCallback,
+      PLUGIN_NAME, 
+      'getAppVersion', []
+    );
   },
 
   /** 
@@ -96,14 +102,9 @@ var OpenPOSCordovaLogPlugin = {
 };
 
 function _configure(pluginConfig) {
-  /* These settings are now configured through the cordova preferences in config.xml
   if (pluginConfig) {
-    if (pluginConfig.logDir !== 'undefined' && pluginConfig.logDir) {
-      OpenPOSCordovaLogPlugin.config.logDir = pluginConfig.logDir;
-    }
-
-    if (pluginConfig.logSuffix !== 'undefined' && pluginConfig.logSuffix) {
-      OpenPOSCordovaLogPlugin.config.logSuffix = pluginConfig.logSuffix;
+    if (pluginConfig.buildNumber !== 'undefined' && pluginConfig.buildNumber) {
+      OpenPOSCordovaLogPlugin.config.buildNumber = pluginConfig.buildNumber;
     }
   }
   
@@ -111,9 +112,10 @@ function _configure(pluginConfig) {
     function() {},
     function(error) {},
     PLUGIN_NAME,
-    'configure', [OpenPOSCordovaLogPlugin.config.logDir, OpenPOSCordovaLogPlugin.config.logSuffix]
+    'configure', [OpenPOSCordovaLogPlugin.config.buildNumber]
   );
-  */
+
+  return true;
 }
 
 module.exports = OpenPOSCordovaLogPlugin;

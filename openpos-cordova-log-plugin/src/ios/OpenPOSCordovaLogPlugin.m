@@ -12,6 +12,10 @@
 @property (nonatomic) FILE *_curLogFile;
 @property (nonatomic) NSString *_logFileSuffix;
 @property (nonatomic) NSString *_logDir;
+@property (nonatomic) NSString *_buildNumber;
+@property (nonatomic) NSString *_appVersion;
+
+
 
 
 - (NSString *) getOrCreateLogsDir;
@@ -21,22 +25,23 @@
 - (void)finishLaunching:(NSNotification *)notification;
 - (NSString *) logFileSuffix;
 - (NSString *) logDir;
+- (NSString *) appVersion;
+
 
 @end
 
 @implementation OpenPOSCordovaLogPlugin
 
 - (void)configure:(CDVInvokedUrlCommand *)command {
-    /* These settings are now initialized through a cordova 'preference' in config.xml
-    self._logDir = [command.arguments objectAtIndex:0];
-    NSLog(@"OpenPOSCordovaLogPlugin: logDir set to '%@'", self._logDir);
-
-    self._logFileSuffix = [command.arguments objectAtIndex:1];
-    NSLog(@"OpenPOSCordovaLogPlugin: logFileSuffix set to '%@'", self._logFileSuffix);
+    self._buildNumber = [command.arguments objectAtIndex:0];
+    NSString *logBuildNum = @"";
+    if (! [@"0" isEqualToString: self._buildNumber]) {
+        logBuildNum = [NSString stringWithFormat: @", buildNumber: %@", self._buildNumber];
+    }
+    NSLog(@"[OpenPOSCordovaLogPlugin] appVersion: %@%@", [self appVersion], logBuildNum);
     
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    */
 }
 
 - (NSArray *)listLogFiles:(CDVInvokedUrlCommand *)command {
@@ -52,6 +57,12 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     
     return logFileNames;
+}
+
+- (NSString *)getAppVersion:(CDVInvokedUrlCommand *)command {
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[self appVersion]];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    return [self appVersion];
 }
 
 /* Returns path to given log file */
@@ -138,19 +149,22 @@
         [self startRollLogCheckTask];
     }
     NSLog(@"OpenPOSCordovaLogPlugin intializing...");
-    
+
+    self._appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSLog(@"[OpenPOSCordovaLogPlugin] appVersion detected as: %@", self._appVersion);
+
     NSString* logDirPref = [self.commandDelegate.settings objectForKey: [@"OpenPOSCordovaLogPlugin.logDir" lowercaseString]];
     if (logDirPref != nil) {
         self._logDir = logDirPref;
-        NSLog(@"OpenPOSCordovaLogPlugin: logDir read from pref: '%@'", self._logDir);
+        NSLog(@"[OpenPOSCordovaLogPlugin] logDir read from pref: '%@'", self._logDir);
     }
-
 
     NSString* logSuffixPref = [self.commandDelegate.settings objectForKey: [@"OpenPOSCordovaLogPlugin.logSuffix" lowercaseString]];
     if (logSuffixPref != nil) {
         self._logFileSuffix = logSuffixPref;
-        NSLog(@"OpenPOSCordovaLogPlugin: logSuffix read from pref: '%@'", self._logFileSuffix);
+        NSLog(@"[OpenPOSCordovaLogPlugin] logSuffix read from pref: '%@'", self._logFileSuffix);
     }
+
 
     // Hook into the notification for when the application launch finishes, so
     // that we can divert logging to our own file
@@ -307,6 +321,10 @@
         }
 
     }
+}
+
+- (NSString *) appVersion {
+    return self._appVersion;
 }
 
 - (NSString *) logFileSuffix {

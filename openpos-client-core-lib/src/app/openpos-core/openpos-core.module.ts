@@ -1,3 +1,4 @@
+import { AppVersion } from './common/appversion';
 import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.component';
 import { PopTartComponent } from './dialogs/pop-tart/pop-tart.component';
 import { NavListComponent } from './dialogs/nav-list/nav-list.component';
@@ -125,6 +126,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
 import { FileViewerComponent } from './dialogs/file-viewer/file-viewer.component';
 import { DialogService } from './services/dialog.service';
 import { SelectableItemListComponent } from './common/controls/selectable-item-list/selectable-item-list.component';
+import { VersionComponent } from './screens/version/version.component';
 
 // Keyboard Layouts
 const customLayouts: IKeyboardLayouts = {
@@ -266,7 +268,8 @@ const customLayouts: IKeyboardLayouts = {
     DynamicDateFormFieldComponent,
     NavListComponent,
     PopTartComponent,
-    LoadingDialogComponent
+    LoadingDialogComponent,
+    VersionComponent
   ],
   declarations: [
     DialogComponent,
@@ -345,7 +348,8 @@ const customLayouts: IKeyboardLayouts = {
     PopTartComponent,
     SelectableItemListComponent,
     PhonePipe,
-    LoadingDialogComponent
+    LoadingDialogComponent,
+    VersionComponent
   ],
   imports: [
     BrowserModule,
@@ -408,7 +412,8 @@ export class OpenposCoreModule {
         ScreenService,
         DialogService,
         IconService,
-        ValidatorsService
+        ValidatorsService,
+        AppVersion
       ]
     };
   }
