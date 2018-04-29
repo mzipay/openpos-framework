@@ -13,7 +13,7 @@ public interface ITranslationManager {
     
     public void ping();
     
-    public void showLegacyScreen(ILegacyScreen screen);
+    public boolean showLegacyScreen(ILegacyScreen screen);
     
     public void executeMacro(InteractionMacro macro);
     

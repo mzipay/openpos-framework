@@ -82,7 +82,8 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
     }
 
     @Override
-    public void showLegacyScreen(ILegacyScreen screen) {
+    public boolean showLegacyScreen(ILegacyScreen screen) {
+        boolean screenShown = false;
         if (screen != null && screen.isStatusUpdate()) {
             if (!this.lastScreenWasNoOp) {
                 // We don't currently handle updates to the status panel only
@@ -98,10 +99,11 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
             }
         } else {
             if (executeActiveMacro(screen)) {
-                translateAndShow(screen);
+                screenShown = translateAndShow(screen);
                 lastScreenWasNoOp = false;
             }
         }
+        return screenShown;
     }
 
     public void executeMacro(InteractionMacro macro) {
@@ -185,7 +187,8 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
         }
     }
 
-    protected void translateAndShow(ILegacyScreen legacyScreen) {
+    protected boolean translateAndShow(ILegacyScreen legacyScreen) {
+        boolean screenShown = false;
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
             if (legacyScreen != null && subscriber.isInTranslateState()) {
                 ITranslator lastTranslator = this.lastTranslatorByAppId.get(subscriber.getAppId());
@@ -206,6 +209,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
                         AbstractScreenTranslator<?> screenTranslator = (AbstractScreenTranslator<?>) newTranslator;                        
                         AbstractScreen screen = screenTranslator.build();
                         subscriber.showScreen(screen);
+                        screenShown = true;
                     } else if (newTranslator instanceof IActionTranslator) {
                         ((IActionTranslator)newTranslator).translate(this, subscriber);
                     }                    
@@ -217,6 +221,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
                 }
             }
         }
+        return screenShown;
     }
 
     public ILegacyScreen getActiveScreen() {
