@@ -5,11 +5,10 @@ import { FocusDirective } from '../../common/focus.directive';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { IScreen } from '../../common/iscreen';
 
-declare var version: any;
-
 @Component({
   selector: 'app-dialog',
-  templateUrl: './dialog.component.html'
+  templateUrl: './dialog.component.html',
+  styleUrls: [ './dialog.component.scss']
 })
 export class DialogComponent implements IScreen {
 
@@ -32,21 +31,12 @@ export class DialogComponent implements IScreen {
     }
   }
 
+  isCustomerFacing(): boolean {
+    return this.screen.customerFacing && ['CUSTOMER_CONFIRMATION'].indexOf(this.screen.subType) >= 0;
+  }
+
   get messages(): string[] {
-    const targetMessages: Array<string> = new Array;
-    const sourceMessages = this.screen.message;
-    let clientVersion: string;
-    if (typeof version === 'undefined') {
-      clientVersion = 'unknown';
-    } else {
-      clientVersion = version;
-    }
-    if (sourceMessages) {
-      for (let i = 0; i < sourceMessages.length; i++) {
-        targetMessages.push(sourceMessages[i].replace('$version$', clientVersion));
-      }
-    }
-    return targetMessages;
+    return this.screen.message;
   }
 
 }

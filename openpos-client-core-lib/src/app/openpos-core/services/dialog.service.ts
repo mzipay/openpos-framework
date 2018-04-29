@@ -1,3 +1,4 @@
+import { VersionComponent } from './../screens/version/version.component';
 import { IScreen } from '../common/iscreen';
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { SessionService } from '../services/session.service';
@@ -90,6 +91,7 @@ export class DialogService {
     this.dialogs.set('SelfCheckoutOptions', SelfCheckoutOptionsComponent);
     this.dialogs.set('FullPageImage', FullPageImageComponent);
     this.dialogs.set('CallForAuthorization', CallForAuthorizationComponent);
+    this.dialogs.set('Version', VersionComponent);
   }
 
   public addDialog(name: string, type: Type<IScreen>): void {
