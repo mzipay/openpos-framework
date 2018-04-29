@@ -1,4 +1,4 @@
-import { VersionComponent } from './../screens/version/version.component';
+import { VersionComponent } from './../dialogs/version/version.component';
 import { IScreen } from '../common/iscreen';
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { SessionService } from '../services/session.service';
