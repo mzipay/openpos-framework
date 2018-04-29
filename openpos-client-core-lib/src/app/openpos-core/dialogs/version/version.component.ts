@@ -1,3 +1,4 @@
+import { AppVersion } from './../../common/app-version';
 import { IPlugin } from './../../common/iplugin';
 import { PluginService } from './../../services/plugin.service';
 import { IMenuItem } from './../../common/imenuitem';
@@ -17,6 +18,7 @@ export class VersionComponent implements IScreen, OnInit {
     versions: { id: string, name: string, version: string }[];
     primaryAction: IMenuItem;
     otherActions: IMenuItem[];
+    appVersion = new AppVersion();
 
     constructor(private pluginService: PluginService) {
 
@@ -31,11 +33,11 @@ export class VersionComponent implements IScreen, OnInit {
 
         const clientBuildVersion = {
             id: 'clientBuildVersion', name: 'Client Build Version',
-            version: this.buildVersion
+            version: this.appVersion.buildVersion()
         };
         this.versions.unshift(clientBuildVersion);
 
-        this.appVersion.then(v => {
+        this.appVersion.appVersion(this.pluginService).then(v => {
             if (v !== 'n/a') {
                 this.versions.unshift({
                     id: 'cordovaAppVersion', name: 'Cordova App Version',
@@ -53,32 +55,4 @@ export class VersionComponent implements IScreen, OnInit {
         }
     }
 
-    protected get buildVersion(): string {
-        return typeof version === 'undefined' ? 'unknown' : version;
-    }
-
-    public get appVersion(): Promise<string> {
-        const promiseReturn = new Promise<string>(
-            (resolve, reject) => {
-                this.pluginService.getPlugin('openPOSCordovaLogPlugin').then(
-                    (plugin: IPlugin) => {
-                        if (plugin.impl) {
-                            plugin.impl.getAppVersion(
-                                (appVersion) => {
-                                    resolve(appVersion);
-                                },
-                                (error) => {
-                                    reject(`Failed to get client app version.  Reason: ${error}`);
-                                }
-                            );
-                        } else {
-                            reject(`Failed to get client app version.  Reason: logging plugin not loaded`);
-                        }
-                    }
-                ).catch(error => {
-                    reject(`Couldn't get client app version, not available. Reason: ${error}`);
-                });
-            });
-        return promiseReturn;
-    }
 }

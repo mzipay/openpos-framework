@@ -1,3 +1,4 @@
+import { AppVersion } from './common/app-version';
 
 import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.component';
 import { PopTartComponent } from './dialogs/pop-tart/pop-tart.component';

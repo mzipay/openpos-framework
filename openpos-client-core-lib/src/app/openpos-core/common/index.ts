@@ -1,3 +1,4 @@
+import { AppVersion } from './app-version';
 export { LoaderState } from './loader/loader-state';
 export {LoaderComponent } from './loader';
 export {IDevicePlugin} from  './idevice-plugin';
@@ -16,3 +17,4 @@ export {IFormatter} from './formatters/iformatter';
 export {FocusDirective} from './focus.directive';
 export {IWorkStation} from './iworkstation';
 export {ISellItem} from './isellitem';
+export {AppVersion} from './app-version';
