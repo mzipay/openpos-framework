@@ -380,7 +380,8 @@ const customLayouts: IKeyboardLayouts = {
     SelectableItemListComponent,
     PhonePipe,
     LoginComponent,
-    LoginDialogComponent
+    LoginDialogComponent,
+    ChooseOptionsComponent
     ],
   providers: [
     HttpClient,

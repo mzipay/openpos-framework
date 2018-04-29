@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.screen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DialogScreen extends SellScreen {
@@ -42,6 +43,15 @@ public class DialogScreen extends SellScreen {
         this.title = title;
     }
 
+    public DialogScreen addMessage(String message) {
+        this.message.add(message);
+        return this;
+    }
+    
+    public void setMessage(String...messages) {
+        this.setMessage(Arrays.asList(messages));
+    }
+    
     public void setMessage(List<String> message) {
         this.message = message;
     }
