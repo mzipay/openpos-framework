@@ -38,6 +38,7 @@ import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.FormScreen;
 import org.jumpmind.pos.core.screen.IHasForm;
 import org.jumpmind.pos.core.screen.ScreenType;
+import org.jumpmind.pos.util.LogFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,9 @@ public class ScreenService implements IScreenService {
     
     @Value("${org.jumpmind.pos.core.service.ScreenService.jsonIncludeNulls:true}")
     private boolean jsonIncludeNulls = true;
+    
+    @Autowired
+    private LogFormatter logFormatter;
 
     int screenSequenceNumber = 0;
 
@@ -161,30 +165,28 @@ public class ScreenService implements IScreenService {
 
     @MessageMapping("action/app/{appId}/node/{nodeId}")
     public void action(@DestinationVariable String appId, @DestinationVariable String nodeId, Action action) {
-        try {
-            logger.info("Received action from {}\n{}", nodeId, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(action));
-        } catch (JsonProcessingException ex) {
-            logger.error("Failed to write action to JSON", ex);
-        }
-
         deserializeForm(appId, nodeId, action);
+        
+        logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
+
         AbstractScreen lastDialog = removeLastDialog(appId, nodeId);
         if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getType())) {
+            logger.debug("Instructing node {} to clear dialog.", nodeId);
             publishToClients(appId, nodeId, "{\"clearDialog\":true }");
         }
         IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
         if (stateManager != null) {
             try {
-                logger.info("Posting action of {}", action);
+                logger.debug("Posting action {}", action);
                 stateManager.doAction(action);
             } catch (Throwable ex) {
+                logger.error("Unexpected exception while processing action: " + action, ex);
                 DialogScreen errorDialog = new DialogScreen();
                 errorDialog.asDialog(new DialogProperties(true));
                 errorDialog.setIcon("error");
                 errorDialog.setTitle("Internal Server Error");
                 errorDialog.setMessage(Arrays.asList("The application received an unexpected error. Please report to the appropriate technical personnel"));
                 showScreen(appId, nodeId, errorDialog);
-                logger.error("", ex);
             }
         }
     }

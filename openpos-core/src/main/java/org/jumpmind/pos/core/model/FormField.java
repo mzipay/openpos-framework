@@ -22,6 +22,7 @@ public class FormField implements IFormElement, IField, Serializable {
     private String fieldId;
     private String value;
     private boolean required = true;
+    private boolean sensitive = false;
 
     public FormField() {
     }
@@ -240,6 +241,14 @@ public class FormField implements IFormElement, IField, Serializable {
     public FormField selectText(boolean selectText) {
         this.setSelectText(selectText);
         return this;
+    }
+
+    public boolean isSensitive() {
+        return sensitive;
+    }
+
+    public void setSensitive(boolean sensitive) {
+        this.sensitive = sensitive;
     }
 
 }
