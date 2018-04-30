@@ -14,7 +14,7 @@ export class AppVersion {
     }
 
     public buildVersion(): string {
-        if (! this._buildVersion) {
+        if (!this._buildVersion) {
             this._buildVersion = typeof version === 'undefined' ? 'unknown' : version;
         }
 
@@ -47,7 +47,7 @@ export class AppVersion {
                     }
                 ).catch(error => {
                     this._appVersion = 'n/a';
-                    reject(`Couldn't get client app version, not available. Reason: ${error}`);
+                    reject(`Couldn't get client app version, not available`);
                 });
             });
         }
