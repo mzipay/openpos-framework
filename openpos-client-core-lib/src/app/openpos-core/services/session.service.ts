@@ -299,8 +299,8 @@ export class SessionService implements ILocaleService {
         // check to see if we are an IURLMenuItem
         if (menuItem.hasOwnProperty('url')) {
           const urlMenuItem = <IUrlMenuItem>menuItem;
-          console.log(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode} `);
-          window.open(urlMenuItem.url, urlMenuItem.targetMode);
+          console.log(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode}, with options: ${urlMenuItem.options}`);
+          window.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
           if (!actionString || 0 === actionString.length) {
             return;
           }
