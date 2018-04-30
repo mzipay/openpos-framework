@@ -2,6 +2,7 @@ package org.jumpmind.pos.persist.impl;
 
 import java.lang.reflect.Field;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.jumpmind.pos.persist.PersistException;
 
@@ -19,7 +20,15 @@ public class ReflectUtils {
                 }
                 if (field != null) {
                     field.setAccessible(true);
-                    field.set(target, value);
+                    try {                        
+                        field.set(target, value);
+                    } catch (Exception ex) {
+                        try {                            
+                            BeanUtils.copyProperty(target, propertyName, value);
+                        } catch (Exception ex2) {
+                            throw ex;
+                        }
+                    }
                     return;
                 }
                 clazz = clazz.getSuperclass();
@@ -30,7 +39,7 @@ public class ReflectUtils {
         
         throw new PersistException(String.format("Could not locate field '%s' on target '%s' to set to value '%s'", propertyName, target, value));
     }
-    
+
     private static Object messageNulls(Object target, String propertyName, Object value) {
         if (value != null) {
             return value;
@@ -41,6 +50,22 @@ public class ReflectUtils {
         }
         
         return value;
-    }    
+    }
+    
+//    private static Object messageValue(Object target, String propertyName, Field field, Object value) {
+//        
+//        if (Integer.class.isAssignableFrom(field.getType())
+//                || int.class.isAssignableFrom(field.getType())) {
+//            if (value instnaceof Long) {
+//                Long longValue = (Long) value;
+//                if (longValue <= Integer.MAX_VALUE) {
+//                    Integer intValue = (int) longValue.longValue();
+//                    return intValue;
+//                }
+//            }
+//        }
+//        
+//        return value;
+//    }    
     
 }
