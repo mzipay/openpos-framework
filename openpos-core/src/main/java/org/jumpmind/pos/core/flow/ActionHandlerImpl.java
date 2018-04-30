@@ -39,6 +39,8 @@ public class ActionHandlerImpl {
     
     protected Method getActionMethod(Object state, Action action, String overrideActionName) {
         Class<?> clazz = state.getClass();
+        
+        Method anyMethod = null;
 
         while (clazz != null) {
             List<Method> methods = MethodUtils.getMethodsListWithAnnotation(clazz, ActionHandler.class, true, true);
@@ -53,15 +55,20 @@ public class ActionHandlerImpl {
             for (Method method : methods) {
                 String matchingMethodName = "on" + actionName;
                 method.setAccessible(true);
-                if (matchingMethodName.equals(method.getName())
-                        || METHOD_ON_ANY.equals(method.getName())) {
+                if (matchingMethodName.equals(method.getName())) {
                     return method;
-                } 
+                } else if (METHOD_ON_ANY.equals(method.getName())) {
+                    anyMethod = method;
+                }
             }
             clazz = clazz.getSuperclass();
         }
         
-        return null;
+        if (anyMethod != null) {
+            return anyMethod;
+        } else {            
+            return null;
+        }
     }
 
     protected void invokeHandleAction(Object state, Action action, Method method, Object deserializedPayload) {
