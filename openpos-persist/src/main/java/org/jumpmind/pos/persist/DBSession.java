@@ -16,11 +16,8 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.el.util.ReflectionUtil;
 import org.apache.log4j.Logger;
 import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Table;
