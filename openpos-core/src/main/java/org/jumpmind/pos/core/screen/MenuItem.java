@@ -33,6 +33,7 @@ public class MenuItem implements IUIAction, Serializable {
     private boolean enabled = true;
     private String confirmationMessage;
     private List<MenuItem> children;
+    private boolean sensitive;
     
     public MenuItem() {
     }
@@ -66,6 +67,14 @@ public class MenuItem implements IUIAction, Serializable {
         this.action = action;
         this.title = title;
         this.enabled = enabled;
+    }
+    
+    public MenuItem(String title, String action, boolean enabled, boolean sensitive) {
+        super();
+        this.action = action;
+        this.title = title;
+        this.enabled = enabled;
+        this.sensitive = sensitive;
     }
 
     @Override
@@ -122,6 +131,16 @@ public class MenuItem implements IUIAction, Serializable {
     
     public void setConfirmationMessage( String confirmationMessage) {
         this.confirmationMessage = confirmationMessage;
+    }
+
+
+    public boolean isSensitive() {
+        return sensitive;
+    }
+
+
+    public void setSensitive(boolean sensitive) {
+        this.sensitive = sensitive;
     }
 
 }

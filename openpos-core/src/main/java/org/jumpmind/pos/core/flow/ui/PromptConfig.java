@@ -29,6 +29,7 @@ public class PromptConfig {
         this.icon = icon;
         return this;
     }    
+
     public PromptConfig placeholder(String placeholder) {
         this.placeholder = placeholder;
         return this;
@@ -41,6 +42,12 @@ public class PromptConfig {
         this.actionMenuItem = new MenuItem(title, actionName, true);
         return this;
     }
+    
+    public PromptConfig action(String title, String actionName, boolean sensitive) {
+        this.actionMenuItem = new MenuItem(title, actionName, true, sensitive);
+        return this;
+    }
+
     public PromptConfig actionMenuItem(MenuItem actionMenuItem) {
         this.actionMenuItem = actionMenuItem;
         return this;

@@ -22,13 +22,12 @@ package org.jumpmind.pos.core.flow;
 
 import java.io.Serializable;
 
-public class Action implements Serializable {
+public class Action implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
     
     private String name;
     private Object data;
-    private IActionHandler subStateCallback;
 
     public Action() {
         this(null);
@@ -63,14 +62,7 @@ public class Action implements Serializable {
     public String toDataString() {
         return data != null ? data.toString() : null;
     }
-    
-    public IActionHandler getSubStateCallback() {
-        return subStateCallback;
-    }
 
-    public void setSubStateCallback(IActionHandler subStateCallback) {
-        this.subStateCallback = subStateCallback;
-    }
     
     @Override
     public String toString() {

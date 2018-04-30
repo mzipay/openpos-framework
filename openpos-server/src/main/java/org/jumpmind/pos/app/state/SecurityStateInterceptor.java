@@ -21,7 +21,6 @@ public class SecurityStateInterceptor implements IStateInterceptor {
         User user = stateManager.getScopeValue("currentUser"); 
         
         if (user == null) {            
-            System.out.println("SecurityStateInterceptor running.");
             return new UserLoginState(currentState, newState);
         } else {
             return null;
