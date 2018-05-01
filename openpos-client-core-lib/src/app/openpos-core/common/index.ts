@@ -10,7 +10,7 @@ export {IMenuItem} from './imenuitem';
 export {AbstractTemplate} from './abstract-template';
 export {ScreenDirective} from './screen.directive';
 export {IDialog} from './idialog';
-export {ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType} from './action-intercepter';
+export {ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType, FunctionActionIntercepter} from './action-intercepter';
 export * from './controls';
 export * from './screen-interfaces';
 export {IFormatter} from './formatters/iformatter';
