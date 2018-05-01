@@ -382,7 +382,8 @@ const customLayouts: IKeyboardLayouts = {
     PhonePipe,
     LoginComponent,
     LoginDialogComponent,
-    ChooseOptionsComponent
+    ChooseOptionsComponent,
+    FormattedInputValueAccessor
     ],
   providers: [
     HttpClient,
