@@ -18,7 +18,7 @@ public class ActionHandlerImpl {
     public boolean canHandleAction(Object state, Action action) {
         // if there is an action handler OR an any action handler
         // AND it's not the current state fireing this action.
-        Method actionMethod = getActionMethod(state, action, null);
+        Method actionMethod = getActionMethod(state, action, null, false);
         if  (actionMethod != null
                 && !isCalledFromState(state)) {
             return true;
@@ -28,7 +28,7 @@ public class ActionHandlerImpl {
     }
 
     public boolean handleAction(Object state, Action action, Object deserializedPayload, String overrideActionName) {
-        Method actionMethod = getActionMethod(state, action, overrideActionName);
+        Method actionMethod = getActionMethod(state, action, overrideActionName, true);
         if (actionMethod != null) {
             invokeHandleAction(state, action, actionMethod, deserializedPayload);
             return true;
@@ -37,7 +37,7 @@ public class ActionHandlerImpl {
         }
     }
     
-    protected Method getActionMethod(Object state, Action action, String overrideActionName) {
+    protected Method getActionMethod(Object state, Action action, String overrideActionName, boolean considerOnAnyActionMethod) {
         Class<?> clazz = state.getClass();
         
         Method anyMethod = null;
@@ -64,7 +64,7 @@ public class ActionHandlerImpl {
             clazz = clazz.getSuperclass();
         }
         
-        if (anyMethod != null) {
+        if (anyMethod != null && considerOnAnyActionMethod) {
             return anyMethod;
         } else {            
             return null;
