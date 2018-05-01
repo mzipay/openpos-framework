@@ -205,7 +205,6 @@ public class StateManager implements IStateManager {
         doAction(action);
     }
 
-
     @Override
     public void doAction(Action action) {
         
@@ -215,26 +214,20 @@ public class StateManager implements IStateManager {
         }
         
         validateStateConfig(currentContext.getState(), stateConfig);
-        
-        if (actionHandler.canHandleAction(currentContext.getState(), action)) {
-            handleAction(action);
-        } else {            
-            String newStateName = stateConfig.getActionToStateMapping().get(action.getName());
-            if (newStateName != null) {
-                transitionToState(action, newStateName);
-            } else {
-                FlowConfig subStateConfig = stateConfig.getActionToSubStateMapping().get(action.getName());
-                if (subStateConfig != null) {
-                    transitionToSubState(action, subStateConfig);    
-                } else {                
-                    throw new FlowException(String.format("Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"... defined in the flow config.", 
-                            action.getName(), currentContext.getState().getClass().getName(), action.getName(), action.getName()));                    
-                }
+        String newStateName = stateConfig.getActionToStateMapping().get(action.getName());
+        if (newStateName != null) {
+            transitionToState(action, newStateName);
+        } else {
+            FlowConfig subStateConfig = stateConfig.getActionToSubStateMapping().get(action.getName());
+            if (subStateConfig != null) {
+                transitionToSubState(action, subStateConfig);    
+            } else {                
+                handleAction(action);
             }
         }
     }
     
-    protected boolean handleAction(Action action, String actionName) {        
+    protected void handleAction(Action action, String actionName) {        
         
         // TODO move this block to the action handler.
         Form form = null;
@@ -244,7 +237,11 @@ public class StateManager implements IStateManager {
             form = new Form();
         }
         
-        return actionHandler.handleAction(currentContext.getState(), action, form, actionName);
+        boolean handled = actionHandler.handleAction(currentContext.getState(), action, form, actionName);
+        if (!handled) {
+            logger.warn("Unexpected action \"{}\". No @ActionHandler {}.on{}() method found.", action.getName(), currentContext.getState().getClass().getName(), action.getName());
+            currentContext.getState().arrive(action); // TODO, we are in an undefined state he really.
+        }
     }
 
     protected void handleAction(Action action) {
