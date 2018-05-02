@@ -41,7 +41,7 @@ public class FlowBuilder implements IFlowBuilder {
     
     @Override
     public IFlowBuilder withTransition(String actionName, Class<? extends IState> destination) {
-        stateConfig.getActionToStateMapping().put(actionName, FlowUtil.getStateName(destination));        
+        stateConfig.getActionToStateMapping().put(actionName, destination);        
         return this;
     }
 

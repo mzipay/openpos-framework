@@ -134,14 +134,6 @@ public class ConfigRepository {
         return actualLocationValue.equals(config.getLocationValue());
     }
 
-    protected Map<String, String> filterTags(Map<String, String> tags) {
-        return null;
-    }
-
-    protected ConfigModel tieBreak(List<ConfigModel> matches) {
-        return null;
-    }
-
     protected int evaluateTag(String configValue, String nodeValue, final String tagName, int points) {
         if (nodeValue != null) {
             if (StringUtils.isEmpty(configValue) || configValue.equals(ConfigModel.TAG_ALL)) {

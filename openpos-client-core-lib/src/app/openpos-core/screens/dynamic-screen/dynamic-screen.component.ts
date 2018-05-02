@@ -303,7 +303,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       screen = { type: 'Blank', template: { type: 'Blank', dialog: false } };
     }
 
-    console.log(screen);
     if (screen &&
       (screen.refreshAlways
         || screen.type !== this.previousScreenType
