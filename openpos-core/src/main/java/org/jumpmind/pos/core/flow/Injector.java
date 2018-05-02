@@ -29,7 +29,9 @@ public class Injector {
     
     protected void performInjectionsImpl(Object target, Scope scope, StateContext currentContext) {
         Class<?> targetClass = target.getClass();
-        applicationContext.autowireBean(target);
+        if (applicationContext != null) {            
+            applicationContext.autowireBean(target);
+        }
         while (targetClass != null) {
             performInjectionsImpl(targetClass, target, scope, currentContext);
             targetClass = targetClass.getSuperclass();

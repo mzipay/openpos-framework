@@ -20,6 +20,7 @@
  */
 package org.jumpmind.pos.core.flow.config;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,9 +30,9 @@ import org.jumpmind.pos.core.flow.IState;
 public class FlowConfig {
     
     private StateConfig initialState;
-    private Map<String, StateConfig> stateConfigs = new HashMap<>();
+    private Map<Class<? extends IState>, StateConfig> stateConfigs = new HashMap<>();
     private String returnAction;
-    private Map<String, Object> configScope;
+    private Map<String, Object> configScope = new HashMap<>();
     
     public FlowConfig() {
     }
@@ -41,18 +42,32 @@ public class FlowConfig {
     }
     
     public StateConfig getStateConfig(IState state) {
-        String stateName = FlowUtil.getStateName(state.getClass());
-        return stateConfigs.get(stateName);
+        return stateConfigs.get(state.getClass());
     }
     
-    public StateConfig getStateConfig(String stateName) {
-        return stateConfigs.get(stateName);
+    public StateConfig getStateConfig(Class<? extends IState> stateClass) {
+        return stateConfigs.get(stateClass);
     }
     
     public void add(StateConfig config) {
-        stateConfigs.put(config.getStateName(), config);
+        stateConfigs.put(config.getStateClass(), config);
+        autoConfigureTargetStates(config);
     }
     
+    protected void autoConfigureTargetStates(StateConfig config) {
+        Collection<Class<? extends IState>> targetStateClasses = 
+                config.getActionToStateMapping().values();
+        
+        for (Class<? extends IState> targetStateClass : targetStateClasses) {
+            if (!stateConfigs.containsKey(targetStateClass)) {
+                StateConfig stateConfig = new StateConfig();
+                stateConfig.setStateName(FlowUtil.getStateName(targetStateClass));
+                stateConfig.setStateClass(targetStateClass);                
+                stateConfigs.put(targetStateClass, stateConfig);
+            }
+        }
+    }
+
     public StateConfig getInitialState() {
         return initialState;
     }

@@ -42,8 +42,8 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
     @Override
     public FlowConfig getConfig(String appId, String nodeId) {
         FlowConfig config = new FlowConfig();
-        config.setInitialState(FlowBuilder.addState(HomeScreenState.class).withTransition("Sell", SellState.class)
-                .withTransition("AdvanceSearch", SellState.class).build());
+        config.setInitialState(FlowBuilder.addState(HomeScreenState.class)
+                .withTransition("Sell", SellState.class).build());
 
         config.add(FlowBuilder.addState(SellState.class)
                 .withTransition("Back", HomeScreenState.class)
