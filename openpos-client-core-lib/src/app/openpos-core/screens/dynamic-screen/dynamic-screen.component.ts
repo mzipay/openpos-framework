@@ -308,7 +308,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         || screen.type !== this.previousScreenType
         || screen.name !== this.previousScreenName)
     ) {
-      console.log(`Switching screens from ${this.previousScreenType} to ${screen.type}`);
+      console.log(`>>> Switching screens from "${this.previousScreenType}" to "${screen.type}"`);
       const templateName = screen.template.type;
       const screenType = screen.type;
       const screenName = screen.name;

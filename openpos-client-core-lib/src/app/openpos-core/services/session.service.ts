@@ -130,10 +130,10 @@ export class SessionService implements ILocaleService {
   }
 
   public showDialog(dialogObj: any) {
-    console.log(`SessionService.showDialog invoked. dialogObj: ${dialogObj}`);
     if (!dialogObj) {
       this.dialog = null;
     } else if (dialogObj.template.dialog) {
+      console.log(`SessionService.showDialog invoked. dialogObj: ${dialogObj}`);      
       this.dialog = dialogObj;
       this.response = null;
     }
@@ -272,7 +272,7 @@ export class SessionService implements ILocaleService {
 
   public onDeviceResponse(deviceResponse: IDeviceResponse) {
     const sendResponseBackToServer: Function = () => {
-      console.log('Publish deviceResponse ' + deviceResponse);
+      console.log(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
       this.stompService.publish(`/app/device/app/${this.appId}/node/${this.getNodeId()}/device/${deviceResponse.deviceId}`,
         JSON.stringify(deviceResponse));
     };
@@ -343,6 +343,7 @@ export class SessionService implements ILocaleService {
 
       if (processAction) {
         const sendToServer: Function = () => {
+          console.log(`>>> Post action "${actionString}"`)
           this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
             JSON.stringify({ name: actionString, data: this.response }));
         };

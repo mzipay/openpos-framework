@@ -26,7 +26,6 @@ export abstract class AbstractTemplate implements IScreen, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        console.log('template destroyed');
         if (this.currentScreenRef) {
             this.currentScreenRef.destroy();
         }
