@@ -13,10 +13,12 @@ public interface ITranslationManager {
     
     public void ping();
     
-    public boolean showLegacyScreen(ILegacyScreen screen);
+    public boolean processLegacyScreen(ILegacyScreen screen);
     
     public void executeMacro(InteractionMacro macro);
     
     public void sendAction(String action);
+
+	public boolean showLegacyScreen(ILegacyScreen screen);
     
 }

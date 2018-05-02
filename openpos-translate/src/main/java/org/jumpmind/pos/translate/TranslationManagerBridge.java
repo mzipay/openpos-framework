@@ -106,7 +106,7 @@ public class TranslationManagerBridge implements ITranslationManager {
     }
 
 	@Override
-	public boolean showLegacyScreen(ILegacyScreen screen) {
+	public boolean processLegacyScreen(ILegacyScreen screen) {
 		return false;
 		
 	}
@@ -117,6 +117,11 @@ public class TranslationManagerBridge implements ITranslationManager {
 
 	@Override
 	public void sendAction(String action) {
+	}
+
+	@Override
+	public boolean showLegacyScreen(ILegacyScreen screen) {
+		return false;
 	}
 
 
