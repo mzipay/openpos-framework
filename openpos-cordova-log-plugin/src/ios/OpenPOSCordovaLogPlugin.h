@@ -23,4 +23,7 @@
 /* Returns iOS Application version */
 - (NSString *)getAppVersion:(CDVInvokedUrlCommand *)command;
 
+/* Returns the name of the current log file */
+- (NSString *) getCurrentLogFilePath:(CDVInvokedUrlCommand *)command;
+
 @end

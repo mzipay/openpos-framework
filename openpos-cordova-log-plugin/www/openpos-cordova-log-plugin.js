@@ -47,7 +47,6 @@ var OpenPOSCordovaLogPlugin = {
       );
   },
   
-  
   /** 
    * If the file exists, the successCallback will return the contents
    * of the file as a string.
@@ -85,6 +84,16 @@ var OpenPOSCordovaLogPlugin = {
         PLUGIN_NAME, 
         'getLogFilePath', [logFilename]
       );
+  },
+
+  /** Returns the filename of the current log file via successCallback. */
+  getCurrentLogFilePath: function(successCallback, errorCallback) {
+    exec(
+      successCallback, 
+      errorCallback,
+      PLUGIN_NAME, 
+      'getCurrentLogFilePath', []
+    );
   },
 
   /**
