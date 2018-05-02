@@ -18,7 +18,7 @@ public class ConfigService {
     @Autowired
     private EndpointDispatcher endpointDispatcher;
     
-    @RequestMapping("/authenticate")
+    @RequestMapping("/{configName}")
     public ConfigResult getConfig(
             @RequestParam(value="region", defaultValue="*") String region,
             @RequestParam(value="country", defaultValue="*") String country,
@@ -29,7 +29,7 @@ public class ConfigService {
             @RequestParam(value="storeType", defaultValue="*") String storeType,
             @RequestParam(value="departmentId", defaultValue="*") String departmentId,
             @RequestParam(value="brandId", defaultValue="*") String brandId,
-            @RequestParam(value="configName", defaultValue="") String configName) {
+            @PathVariable(value="configName") String configName) {
         return endpointDispatcher.dispatch("/getConfig", region, country, state, store, nodeId, deviceType, storeType, departmentId, brandId, configName);
     }
     

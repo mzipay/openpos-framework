@@ -16,17 +16,21 @@ public class UserService {
     
     @RequestMapping("/authenticate")
     public AuthenticationResult authenticate(
+            @RequestParam(value="nodeId", defaultValue="") String nodeId,
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="password", defaultValue="") String password) {
+        // TODO handle NodeId
         return endpointDispatcher.dispatch("/authenticate", username, password);
     }
     
     @RequestMapping("/changePassword")
     public ServiceResultImpl changePassword(
+            @RequestParam(value="nodeId", defaultValue="") String nodeId,
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="oldPassword", defaultValue="") String oldPassword,
             @RequestParam(value="newPassword1", defaultValue="") String newPassword1,
             @RequestParam(value="newPassword2", defaultValue="") String newPassword2) {
+        // TODO handle NodeId
         return endpointDispatcher.dispatch("/changePassword", username, oldPassword, newPassword1, newPassword2);
     }  
 }
