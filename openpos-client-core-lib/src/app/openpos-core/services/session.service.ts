@@ -49,6 +49,8 @@ export class SessionService implements ILocaleService {
 
   private stompService: StompService;
 
+  private stompDebug:boolean = false;
+
   private actionPayloads: Map<string, Function> = new Map<string, Function>();
 
   private actionIntercepters: Map<string, ActionIntercepter> = new Map();
@@ -122,7 +124,7 @@ export class SessionService implements ILocaleService {
   public showScreen(screen: any) {
     this.screen = screen;
     if (screen && screen.theme) {
-        this.setTheme(screen.theme);
+        this.setTheme(screen.theme);      
     }
     this.screenSource.next(screen);
   }
@@ -227,7 +229,7 @@ export class SessionService implements ILocaleService {
       heartbeat_in: 0, // Typical value 0 - disabled
       heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
       reconnect_delay: 5000,
-      debug: true
+      debug: this.stompDebug
     });
 
     // Give preference to nodeId query parameter if it's present, then fallback to
