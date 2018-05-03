@@ -4,48 +4,40 @@ import { Directive, HostListener, Input, Output, EventEmitter } from '@angular/c
     selector: '[InactivityMonitor]'
 })
 export class InactivityMonitorDirective {
+
+    static lastKeepAliveFlushTime: number = new Date().getTime();
+
     constructor() {
     }  
 
-    @Input()
-    set InactivityMonitor(timeoutActive: boolean){
-        this._timeoutActive = timeoutActive;
-        if( timeoutActive ) {
-            this.resetTimeout();
-        } else if( this.timerHandle ) {
-            clearTimeout( this.timerHandle );
-        }
-    }
-    get InactivityMonitor(): boolean {
-        return this._timeoutActive;
-    }
+    @Input() keepAliveMillis: number = 30000;
 
-    @Input() timeOut: number = 30000;
-
-    @Output() inactivityTimedOut: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() issueKeepAlive: EventEmitter<string> = new EventEmitter<string>();
 
     private timerHandle: any;
     private _timeoutActive
 
     @HostListener('window:keydown', ['$event'])
     keyEvent(event: KeyboardEvent) {
-        this.resetTimeout();
+        this.keepAlive();
     }
 
     @HostListener('window:click', ['$event'])
     mouseEvent(event: MouseEvent) {
-        this.resetTimeout();
+        this.keepAlive();
     }
 
     @HostListener('window:touchstart', ['$event'])
     touchEvent(event: TouchEvent) {
-        this.resetTimeout();
+        this.keepAlive();
     }
 
-    private resetTimeout(){
-        if( this.timerHandle ){
-            clearTimeout( this.timerHandle );
+    private keepAlive() {
+        let now = new Date().getTime();
+        let nextFlushTime = InactivityMonitorDirective.lastKeepAliveFlushTime+this.keepAliveMillis;
+        if (now > nextFlushTime) {
+            InactivityMonitorDirective.lastKeepAliveFlushTime = now;
+            this.issueKeepAlive.emit('KeepAlive');
         }
-        this.timerHandle = setTimeout( () => this.inactivityTimedOut.emit(true), this.timeOut );
     }
 }
