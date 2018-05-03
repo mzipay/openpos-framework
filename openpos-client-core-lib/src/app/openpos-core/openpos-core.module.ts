@@ -32,6 +32,7 @@ import { PhonePipe } from './common/phone.pipe';
 import { ScreenDirective } from './common/screen.directive';
 import { TemplateDirective } from './common/template.directive';
 import { FocusDirective } from './common/focus.directive';
+import { InactivityMonitorDirective } from './common/inactivityMonitor.directive';
 
 // Services
 import { ScreenService } from './services/screen.service';
@@ -350,7 +351,8 @@ const customLayouts: IKeyboardLayouts = {
     SelectableItemListComponent,
     PhonePipe,
     LoadingDialogComponent,
-    VersionComponent
+    VersionComponent,
+    InactivityMonitorDirective
   ],
   imports: [
     BrowserModule,
@@ -383,7 +385,8 @@ const customLayouts: IKeyboardLayouts = {
     LoginComponent,
     LoginDialogComponent,
     ChooseOptionsComponent,
-    FormattedInputValueAccessor
+    FormattedInputValueAccessor,
+    InactivityMonitorDirective
     ],
   providers: [
     HttpClient,
