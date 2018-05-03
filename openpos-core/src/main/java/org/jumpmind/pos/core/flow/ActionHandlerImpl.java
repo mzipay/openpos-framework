@@ -6,21 +6,27 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 // TODO should be called just ActionHandler, need to repackage annotation of the same name.
 @Component
 @org.springframework.context.annotation.Scope("prototype")
 public class ActionHandlerImpl {
+    
+    private static final Logger log = Logger.getLogger(ActionHandlerImpl.class);
 
     private static final String METHOD_ON_ANY = "onAnyAction";
     
+    private static final String ACTION_KEEP_ALIVE = "KeepAlive";
+    
     public boolean canHandleAction(Object state, Action action) {
         // if there is an action handler OR an any action handler
-        // AND it's not the current state fireing this action.
+        // AND it's not the current state firing this action.
         Method actionMethod = getActionMethod(state, action, null);
         if  (actionMethod != null
-                && !isCalledFromState(state)) {
+                && !isCalledFromState(state)
+                || action.getName().equals(ACTION_KEEP_ALIVE)) {
             return true;
         } else {
             return false;
@@ -28,6 +34,11 @@ public class ActionHandlerImpl {
     }
 
     public boolean handleAction(Object state, Action action, String overrideActionName) {
+        if (action.getName().equals(ACTION_KEEP_ALIVE)) {
+            log.debug(String.format("Handling %s action.", ACTION_KEEP_ALIVE));
+            return true;
+        }
+        
         Method actionMethod = getActionMethod(state, action, overrideActionName);
         if (actionMethod != null) {
             invokeActionMethod(state, action, actionMethod);
@@ -36,16 +47,6 @@ public class ActionHandlerImpl {
             return false;
         }
     }
-    
-//    protected void massageAction(Action action) {
-//        Form form;
-//        if (action.getData() instanceof Form) {
-//            form = (Form)action.getData();
-//        } else {
-//            form = new Form();
-//        }
-//        // TODO -- this is boken.  Look at how it used to work. and test.
-//    }
 
     public boolean canHandleAnyAction(Object state) {
         return getAnyActionMethod(state) != null;

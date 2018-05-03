@@ -19,10 +19,12 @@
  */
 package org.jumpmind.pos.core.flow;
 
+import java.util.Date;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
@@ -56,7 +58,10 @@ public class StateManager implements IStateManager {
     private Outjector outjector;
     
     @Autowired(required=false)
-    private List<? extends IStateInterceptor> stateInterceptors;    
+    private List<? extends IStateInterceptor> stateInterceptors;
+    
+    @Autowired(required=false)
+    private List<? extends ISessionTimeoutListener> sessionTimeoutListeners;    
     
     @Autowired
     UIManager uiManager;
@@ -67,6 +72,10 @@ public class StateManager implements IStateManager {
     private Deque<StateContext> stateStack = new LinkedList<>();
     private FlowConfig initialFlowConfig;
     private StateContext currentContext;
+    
+    private AtomicReference<Date> lastInteractionTime = new AtomicReference<Date>(new Date());
+    
+    private long sessionTimeoutMillis = 0;
 
 //    @PostConstruct
 //    public void postConstruct() {
@@ -201,6 +210,7 @@ public class StateManager implements IStateManager {
 
     @Override
     public void doAction(Action action) {
+        lastInteractionTime.set(new Date()); 
         
         StateConfig stateConfig = currentContext.getFlowConfig().getStateConfig(currentContext.getState());
         if (handleTerminatingState(action, stateConfig)) {
@@ -333,11 +343,18 @@ public class StateManager implements IStateManager {
     @Override
     public void showScreen(AbstractScreen screen) {
         if (this.currentContext == null) {
-            throw new FlowException("There is no currentContext on this StateManager.  HINT: States should us @In to get the StateManager, not @Autowired.");
+            throw new FlowException("There is no currentContext on this StateManager.  HINT: States should us @In(scope=ScopeType.Node) to get the StateManager, not @Autowired.");
         }
         if (this.currentContext.getState() != null && this.currentContext.getState() instanceof IScreenInterceptor) {
             screen = ((IScreenInterceptor)this.currentContext.getState()).intercept(screen);            
         }
+        
+        if (screen != null && screen.getSessionTimeoutMillis() > 0) {
+            sessionTimeoutMillis = screen.getSessionTimeoutMillis();
+        } else {
+            sessionTimeoutMillis = 0;
+        }
+        
         screenService.showScreen(appId, nodeId, screen);
     }
 
@@ -355,5 +372,22 @@ public class StateManager implements IStateManager {
     @Override
     public IUI getUI() {
         return uiManager;
-    }    
+    }
+    
+    // called from a Timer thread.
+    public void checkSessionAge() {
+        long inactiveMillis = new Date().getTime() - lastInteractionTime.get().getTime();
+        if (inactiveMillis > sessionTimeoutMillis) {
+            sessionTimeout();
+        }
+    }
+
+    protected void sessionTimeout() {
+        logger.info(String.format("Node %s session timed out.", nodeId));
+        if (!CollectionUtils.isEmpty(sessionTimeoutListeners)) {
+            for (ISessionTimeoutListener sessionTimeoutListener : sessionTimeoutListeners) {
+                sessionTimeoutListener.onSessionTimeout(this);
+            }
+        }
+    }
 }
