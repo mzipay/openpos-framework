@@ -6,6 +6,7 @@ export interface IDialog {
     buttons: IMenuItem[];
     subType: string;
     message: string[];
+    customerFacing: boolean;
 }
 
 export interface OpenPOSDialogConfig extends MatDialogConfig {

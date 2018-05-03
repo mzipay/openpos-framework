@@ -1,4 +1,7 @@
 <ng-container *ngIf="screen">
+  <div *ngIf="isCustomerFacing()" class="modal-header">
+      <h2 mat-dialog-title class="warn text-lg">TO BE COMPLETED BY THE CLIENT</h2>
+  </div>
   <div #test class="modal-header">
     <h4 mat-dialog-title [ngClass]="{'warn text-lg': isCustomerFacing()}">{{screen.title}}</h4>
   </div>
