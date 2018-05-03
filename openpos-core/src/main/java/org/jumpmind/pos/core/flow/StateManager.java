@@ -24,21 +24,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.ui.UIManager;
-import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.AbstractScreen;
 import org.jumpmind.pos.core.service.IScreenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
 
 @Component()
@@ -74,16 +68,16 @@ public class StateManager implements IStateManager {
     private FlowConfig initialFlowConfig;
     private StateContext currentContext;
 
-    @PostConstruct
-    public void postConstruct() {
-        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
-
-        scanner.addIncludeFilter(new AnnotationTypeFilter(org.jumpmind.pos.core.model.annotations.Screen.class));
-
-        for (BeanDefinition bd : scanner.findCandidateComponents("org.jumpmind.pos")) {
-            logger.info("" + bd);
-        }
-    }
+//    @PostConstruct
+//    public void postConstruct() {
+//        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
+//
+//        scanner.addIncludeFilter(new AnnotationTypeFilter(org.jumpmind.pos.core.model.annotations.Screen.class));
+//
+//        for (BeanDefinition bd : scanner.findCandidateComponents("org.jumpmind.pos")) {
+//            logger.info("" + bd);
+//        }
+//    }
 
     public void init(String appId, String nodeId) {
         this.appId = appId;
@@ -144,7 +138,7 @@ public class StateManager implements IStateManager {
         injector.performInjections(newState, scope, currentContext);
         
         if (resumeSuspendedState != null && returnAction != null) {
-            actionHandler.handleAction(currentContext.getState(), action, null, returnAction);
+            actionHandler.handleAction(currentContext.getState(), action, returnAction);
         } else {            
             currentContext.getState().arrive(action);
         }
@@ -214,38 +208,30 @@ public class StateManager implements IStateManager {
         }
         
         validateStateConfig(currentContext.getState(), stateConfig);
-        String newStateName = stateConfig.getActionToStateMapping().get(action.getName());
-        if (newStateName != null) {
-            transitionToState(action, newStateName);
-        } else {
-            FlowConfig subStateConfig = stateConfig.getActionToSubStateMapping().get(action.getName());
-            if (subStateConfig != null) {
-                transitionToSubState(action, subStateConfig);    
-            } else {                
-                handleAction(action);
-            }
-        }
-    }
-    
-    protected void handleAction(Action action, String actionName) {        
         
-        // TODO move this block to the action handler.
-        Form form = null;
-        if (action.getData() instanceof Form) {
-            form = (Form)action.getData();
-        } else {
-            form = new Form();
-        }
+        Class<? extends IState> transitionStateClass = stateConfig.getActionToStateMapping().get(action.getName());
+        FlowConfig subStateConfig = stateConfig.getActionToSubStateMapping().get(action.getName());
         
-        boolean handled = actionHandler.handleAction(currentContext.getState(), action, form, actionName);
-        if (!handled) {
-            logger.warn("Unexpected action \"{}\". No @ActionHandler {}.on{}() method found.", action.getName(), currentContext.getState().getClass().getName(), action.getName());
-            currentContext.getState().arrive(action); // TODO, we are in an undefined state he really.
+        if (actionHandler.canHandleAction(currentContext.getState(), action)) {
+            handleAction(action);
+        } else if (transitionStateClass != null) {
+            transitionToState(action, transitionStateClass);
+        } else if (subStateConfig != null) {
+            transitionToSubState(action, subStateConfig);
+        } else if (actionHandler.canHandleAnyAction(currentContext.getState())) {
+            actionHandler.handleAnyAction(currentContext.getState(), action);
+        } else {
+            throw new FlowException(String.format("Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"... defined in the flow config.", 
+                    action.getName(), currentContext.getState().getClass().getName(), action.getName(), action.getName()));                    
         }
     }
 
     protected void handleAction(Action action) {
         handleAction(action, null);
+    }
+    
+    protected boolean handleAction(Action action, String actionName) {        
+        return actionHandler.handleAction(currentContext.getState(), action, actionName);
     }
 
     protected boolean handleTerminatingState(Action action, StateConfig stateConfig) {
@@ -253,9 +239,9 @@ public class StateManager implements IStateManager {
             return false;
         }
         
-        String targetStateName = stateConfig.getActionToStateMapping().get(action.getName());
+        Class<? extends IState> targetStateClass = stateConfig.getActionToStateMapping().get(action.getName());
         
-        if ("CompleteState".equals(targetStateName)) {
+        if (CompleteState.class == targetStateClass) {
             if (!stateStack.isEmpty()) {                
                 StateContext suspendedState = stateStack.pop();
                 transitionTo(action, suspendedState.getState(), null, suspendedState);
@@ -277,13 +263,12 @@ public class StateManager implements IStateManager {
         }
     }
 
-    protected void transitionToState(Action action, String newStateName) {
-        StateConfig newStateConfig = currentContext.getFlowConfig().getStateConfig(newStateName);
+    protected void transitionToState(Action action, Class<? extends IState> newStateClass) {
+        StateConfig newStateConfig = currentContext.getFlowConfig().getStateConfig(newStateClass);
         if (newStateConfig != null) {
             transitionTo(action, newStateConfig);
         } else {
-            throw new FlowException(String.format("No State found for name \"%s\". Did you remember to add this state to your FlowConfig directly "
-                    + "and not just as a transition?", newStateName));
+            throw new FlowException(String.format("No State found for class \"%s\"", newStateClass));
         }
     }
 
@@ -312,7 +297,12 @@ public class StateManager implements IStateManager {
         if (value != null) {
             return (T) value.getValue();
         } else {
-            return null;
+            value = currentContext.resolveScope(name);
+            if (value != null) {
+                return (T) value.getValue();    
+            } else {
+                return null;
+            }
         }
     }
 

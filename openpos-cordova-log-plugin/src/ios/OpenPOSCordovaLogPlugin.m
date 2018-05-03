@@ -84,6 +84,13 @@
     return logFilePath;
 }
 
+- (NSString *) getCurrentLogFilePath:(CDVInvokedUrlCommand *)command {
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: self._curLogFileName];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    
+    return self._curLogFileName;
+}
+
 - (NSString *)readLogFileContents:(CDVInvokedUrlCommand *)command {
     NSString* logFilename = [command.arguments objectAtIndex:0];
     NSString* logFilePath = [self logFileName:logFilename];

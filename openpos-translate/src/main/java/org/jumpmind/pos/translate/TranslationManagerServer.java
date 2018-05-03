@@ -57,7 +57,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
 
     @Override
     public void showActiveScreen() {
-        showLegacyScreen(getLegacyUISubsystem().getActiveScreen());
+        processLegacyScreen(getLegacyUISubsystem().getActiveScreen());
     }
 
     @Override
@@ -82,7 +82,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
     }
 
     @Override
-    public boolean showLegacyScreen(ILegacyScreen screen) {
+    public boolean processLegacyScreen(ILegacyScreen screen) {
         boolean screenShown = false;
         if (screen != null && screen.isStatusUpdate()) {
             if (!this.lastScreenWasNoOp) {
@@ -105,6 +105,17 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
         }
         return screenShown;
     }
+    
+	@Override
+	public boolean showLegacyScreen(ILegacyScreen screen) {
+		boolean screenShown = false;
+		if (screen != null) {
+			screenShown = translateAndShow(screen);
+			lastScreenWasNoOp = false;
+
+		}
+		return screenShown;
+	}
 
     public void executeMacro(InteractionMacro macro) {
         this.activeMacro = macro;

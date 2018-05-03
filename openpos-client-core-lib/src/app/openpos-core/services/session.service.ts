@@ -49,6 +49,8 @@ export class SessionService implements ILocaleService {
 
   private stompService: StompService;
 
+  private stompDebug:boolean = false;
+
   private actionPayloads: Map<string, Function> = new Map<string, Function>();
 
   private actionIntercepters: Map<string, ActionIntercepter> = new Map();
@@ -122,16 +124,16 @@ export class SessionService implements ILocaleService {
   public showScreen(screen: any) {
     this.screen = screen;
     if (screen && screen.theme) {
-        this.setTheme(screen.theme);
+        this.setTheme(screen.theme);      
     }
     this.screenSource.next(screen);
   }
 
   public showDialog(dialogObj: any) {
-    console.log(`SessionService.showDialog invoked. dialogObj: ${dialogObj}`);
     if (!dialogObj) {
       this.dialog = null;
     } else if (dialogObj.template.dialog) {
+      console.log(`SessionService.showDialog invoked. dialogObj: ${dialogObj}`);      
       this.dialog = dialogObj;
       this.response = null;
     }
@@ -227,7 +229,7 @@ export class SessionService implements ILocaleService {
       heartbeat_in: 0, // Typical value 0 - disabled
       heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
       reconnect_delay: 5000,
-      debug: true
+      debug: this.stompDebug
     });
 
     // Give preference to nodeId query parameter if it's present, then fallback to
@@ -270,7 +272,7 @@ export class SessionService implements ILocaleService {
 
   public onDeviceResponse(deviceResponse: IDeviceResponse) {
     const sendResponseBackToServer: Function = () => {
-      console.log('Publish deviceResponse ' + deviceResponse);
+      console.log(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
       this.stompService.publish(`/app/device/app/${this.appId}/node/${this.getNodeId()}/device/${deviceResponse.deviceId}`,
         JSON.stringify(deviceResponse));
     };
@@ -341,6 +343,7 @@ export class SessionService implements ILocaleService {
 
       if (processAction) {
         const sendToServer: Function = () => {
+          console.log(`>>> Post action "${actionString}"`)
           this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
             JSON.stringify({ name: actionString, data: this.response }));
         };

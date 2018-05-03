@@ -48,7 +48,7 @@
                                 <button mat-button *ngIf="template.type === 'Transaction'" color="accent" style="text-align: left">
                                     <ng-container *ngIf="template.customer">
                                         <mat-icon>person</mat-icon>&nbsp;
-                                        <span>{{template.customer.name}}</span>
+                                        <span class="text-sm">{{template.customer.name}}</span>
                                     </ng-container>
                                     <ng-container *ngIf="!template.customer && !template.noCustomerText">
                                         <mat-icon class="muted-color">link</mat-icon>&nbsp;

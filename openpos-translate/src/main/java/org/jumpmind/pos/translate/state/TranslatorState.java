@@ -33,7 +33,7 @@ import org.springframework.core.env.MutablePropertySources;
 
 public class TranslatorState implements IState {
 
-    final Logger logger = LoggerFactory.getLogger(getClass());
+    final protected Logger logger = LoggerFactory.getLogger(getClass());
 
     @In(scope=ScopeType.Node)
     protected IStateManager stateManager;
@@ -58,9 +58,9 @@ public class TranslatorState implements IState {
     @Override
     public void arrive(Action action) {
         if (subscribe(action)) {
-            getTranslationManager().showActiveScreen();
+            translationManager.showActiveScreen();
         } else {
-            getTranslationManager().doAction(subscriber.getAppId(), action, new Form());
+            translationManager.doAction(subscriber.getAppId(), action, new Form());
         }
     }
     
@@ -156,7 +156,7 @@ public class TranslatorState implements IState {
     
     @ActionHandler
     public void onAnyAction(Action action, Form form) {
-        getTranslationManager().doAction(stateManager.getAppId(), action, form);
+        translationManager.doAction(stateManager.getAppId(), action, form);
     }
 
 }

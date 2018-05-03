@@ -27,58 +27,85 @@ public class ActionHandlerImpl {
         }
     }
 
-    public boolean handleAction(Object state, Action action, Object deserializedPayload, String overrideActionName) {
+    public boolean handleAction(Object state, Action action, String overrideActionName) {
         Method actionMethod = getActionMethod(state, action, overrideActionName);
         if (actionMethod != null) {
-            invokeHandleAction(state, action, actionMethod, deserializedPayload);
+            invokeActionMethod(state, action, actionMethod);
             return true;
         } else {
             return false;
         }
     }
     
+//    protected void massageAction(Action action) {
+//        Form form;
+//        if (action.getData() instanceof Form) {
+//            form = (Form)action.getData();
+//        } else {
+//            form = new Form();
+//        }
+//        // TODO -- this is boken.  Look at how it used to work. and test.
+//    }
+
+    public boolean canHandleAnyAction(Object state) {
+        return getAnyActionMethod(state) != null;
+    }
+    
+    public boolean handleAnyAction(Object state, Action action) {
+        Method anyActionMethod = getAnyActionMethod(state);
+        if (anyActionMethod != null) {
+            invokeActionMethod(state, action, anyActionMethod);
+            return true;
+        } else {
+            return false;
+        }
+    }    
+    
+    protected Method getAnyActionMethod(Object state) {
+        Class<?> clazz = state.getClass();
+        
+        List<Method> methods = MethodUtils.getMethodsListWithAnnotation(clazz, ActionHandler.class, true, true);
+        
+        for (Method method : methods) {
+            if (METHOD_ON_ANY.equals(method.getName())) {
+                return method;
+            }
+        }
+        
+        return null;
+    }
+    
     protected Method getActionMethod(Object state, Action action, String overrideActionName) {
         Class<?> clazz = state.getClass();
         
-        Method anyMethod = null;
+        List<Method> methods = MethodUtils.getMethodsListWithAnnotation(clazz, ActionHandler.class, true, true);
 
-        while (clazz != null) {
-            List<Method> methods = MethodUtils.getMethodsListWithAnnotation(clazz, ActionHandler.class, true, true);
-
-            String actionName = null;
-            if (!StringUtils.isEmpty(overrideActionName)) {
-                actionName = overrideActionName;
-            } else {
-                actionName = action.getName();                
-            }
-            
-            for (Method method : methods) {
-                String matchingMethodName = "on" + actionName;
-                method.setAccessible(true);
-                if (matchingMethodName.equals(method.getName())) {
-                    return method;
-                } else if (METHOD_ON_ANY.equals(method.getName())) {
-                    anyMethod = method;
-                }
-            }
-            clazz = clazz.getSuperclass();
+        String actionName = null;
+        if (!StringUtils.isEmpty(overrideActionName)) {
+            actionName = overrideActionName;
+        } else {
+            actionName = action.getName();                
         }
         
-        if (anyMethod != null) {
-            return anyMethod;
-        } else {            
-            return null;
+        for (Method method : methods) {
+            String matchingMethodName = "on" + actionName;
+            method.setAccessible(true);
+            if (matchingMethodName.equals(method.getName())) {
+                return method;
+            }
         }
+        
+        return null;
     }
 
-    protected void invokeHandleAction(Object state, Action action, Method method, Object deserializedPayload) {
+    protected void invokeActionMethod(Object state, Action action, Method method) {
         List<Object> arguments = new ArrayList<Object>();
         try {
             for (Class<?> type : method.getParameterTypes()) {
                 if (type.isAssignableFrom(Action.class)) {
                     arguments.add(action);
-                } else if (deserializedPayload != null && type.isAssignableFrom(deserializedPayload.getClass())) {
-                    arguments.add(deserializedPayload);
+                } else if (action.getData() != null && type.isAssignableFrom(action.getData().getClass())) {
+                    arguments.add(action.getData());
                 } else {
                     arguments.add(null);
                 }
