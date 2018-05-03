@@ -42,9 +42,9 @@ public class SessionTimer {
         if (stateManagerFactory == null) {
             throw new FlowException("stateManagerFactory cannot be null.");
         }
-        log.debug("checking sessionAges");
+        log.debug("checking if StateManagers need to time out due to inactivity.");
         for (StateManager stateManager : stateManagerFactory.getAllStateManagers()) {
-            stateManager.checkSessionAge();
+            stateManager.checkSessionTimeout();
         }
     }    
 }

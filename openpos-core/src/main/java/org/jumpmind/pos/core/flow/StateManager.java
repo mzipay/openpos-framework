@@ -375,7 +375,7 @@ public class StateManager implements IStateManager {
     }
     
     // called from a Timer thread.
-    public void checkSessionAge() {
+    public void checkSessionTimeout() {
         long inactiveMillis = new Date().getTime() - lastInteractionTime.get().getTime();
         if (inactiveMillis > sessionTimeoutMillis) {
             sessionTimeout();
