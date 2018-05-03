@@ -385,11 +385,8 @@ const customLayouts: IKeyboardLayouts = {
     LoginComponent,
     LoginDialogComponent,
     ChooseOptionsComponent,
-<<<<<<< Updated upstream
-    FormattedInputValueAccessor
-=======
+    FormattedInputValueAccessor,
     InactivityMonitorDirective
->>>>>>> Stashed changes
     ],
   providers: [
     HttpClient,
