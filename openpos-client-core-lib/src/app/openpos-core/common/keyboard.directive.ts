@@ -65,11 +65,6 @@ export class KeyboardDirective implements OnDestroy {
       // reference the input element
       this._keyboardRef.instance.setInputInstance(this._elementRef);
 
-      // set control if given, cast to smth. non-abstract
-      if (this._control) {
-        this._keyboardRef.instance.attachControl(this._control.control);
-      }
-
       // connect outputs
       this._keyboardRef.instance.enterClick.subscribe(() => {
         const event = new Event('submit', { cancelable: true, bubbles: true });

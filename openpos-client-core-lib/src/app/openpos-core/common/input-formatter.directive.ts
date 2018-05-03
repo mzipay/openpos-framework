@@ -35,11 +35,7 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
         if (!value) {
             value = '';
         }
-        const newCaret = this.getCaretPos(value);
-        console.log('Write Value Called ' + newCaret);
         this.renderer.setProperty(this.elRef.nativeElement, 'value', this.formatter.formatValue(value));
-        this.renderer.setProperty(this.elRef.nativeElement, 'selectionStart', newCaret);
-        this.renderer.setProperty(this.elRef.nativeElement, 'selectionEnd', newCaret);
     }
 
     registerOnChange(fn: (tel: string) => void): void {
@@ -52,7 +48,6 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
 
     @HostListener('input', ['$event.target.value'])
     handleInput(value: string) {
-        console.log('Handle Input Called');
         // Clean out any special characters
         const cleanValue = this.formatter.unFormatValue(value);
 
