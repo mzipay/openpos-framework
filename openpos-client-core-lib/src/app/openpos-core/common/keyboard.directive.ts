@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs/Subscription';
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Optional, Output, Self } from '@angular/core';
 import { MatInput } from '@angular/material';
-import { MatKeyboardRef, MatKeyboardService, MatKeyboardComponent } from '@ngx-material-keyboard/core';
+import { MatKeyboardRef, MatKeyboardService, MatKeyboardComponent } from '../keyboard';
 import { NgControl } from '@angular/forms';
 import { SessionService } from '../services/session.service';
 

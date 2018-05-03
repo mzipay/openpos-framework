@@ -119,7 +119,7 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
 import { DynamicDateFormFieldComponent } from './common/controls/dynamic-date-form-field/dynamic-date-form-field.component';
 
 // On Screen Keyboard
-import { IKeyboardLayouts, KeyboardClassKey, keyboardLayouts, MAT_KEYBOARD_LAYOUTS, MatKeyboardModule } from '@ngx-material-keyboard/core';
+import { IKeyboardLayouts, KeyboardClassKey, keyboardLayouts, MAT_KEYBOARD_LAYOUTS, MatKeyboardModule } from './keyboard';
 import { KeyboardDirective } from './common/keyboard.directive';
 import { ValidatorsService } from './services/validators.service';
 import { PrintPreviewComponent } from './screens/print-preview.component';
