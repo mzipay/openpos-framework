@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs/Subscription';
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Optional, Output, Self } from '@angular/core';
 import { MatInput } from '@angular/material';
-import { MatKeyboardRef, MatKeyboardService, MatKeyboardComponent } from '@ngx-material-keyboard/core';
+import { MatKeyboardRef, MatKeyboardService, MatKeyboardComponent } from '../keyboard';
 import { NgControl } from '@angular/forms';
 import { SessionService } from '../services/session.service';
 
@@ -64,11 +64,6 @@ export class KeyboardDirective implements OnDestroy {
 
       // reference the input element
       this._keyboardRef.instance.setInputInstance(this._elementRef);
-
-      // set control if given, cast to smth. non-abstract
-      if (this._control) {
-        this._keyboardRef.instance.attachControl(this._control.control);
-      }
 
       // connect outputs
       this._keyboardRef.instance.enterClick.subscribe(() => {

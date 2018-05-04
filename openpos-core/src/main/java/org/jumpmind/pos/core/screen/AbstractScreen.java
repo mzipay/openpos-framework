@@ -24,7 +24,8 @@ public abstract class AbstractScreen implements Serializable {
     private String name;
     private String type;
     private AbstractTemplate template = new BlankWithBarTemplate();
-    private String locale;    
+    private String locale;   
+    private int sessionTimeoutMillis;
     
     public AbstractScreen() {
     }
@@ -142,6 +143,14 @@ public abstract class AbstractScreen implements Serializable {
     
     public void setRefreshAlways(boolean refreshAlways) {
         this.optionalProperties.put("refreshAlways", refreshAlways);
+    }
+
+    public int getSessionTimeoutMillis() {
+        return sessionTimeoutMillis;
+    }
+
+    public void setSessionTimeoutMillis(int sessionTimeoutMillis) {
+        this.sessionTimeoutMillis = sessionTimeoutMillis;
     }
     
 }

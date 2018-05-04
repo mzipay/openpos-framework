@@ -51,6 +51,21 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
         // Clean out any special characters
         const cleanValue = this.formatter.unFormatValue(value);
 
+        const newCaret = this.getCaretPos(value);
+
+        // Our new value to display is a formatted version of the clean value
+        const newValue = this.formatter.formatValue(cleanValue);
+
+        this.renderer.setProperty(this.elRef.nativeElement, 'value', newValue);
+        this.renderer.setProperty(this.elRef.nativeElement, 'selectionStart', newCaret);
+        this.renderer.setProperty(this.elRef.nativeElement, 'selectionEnd', newCaret);
+
+        // We are going to unformat the new value one more time before sending it back to the model
+        // This makes sure our model has a true unformatted version of our display value
+        this.onChange(this.formatter.unFormatValue(newValue));
+    }
+
+    getCaretPos(value: string) {
         // We need to remap the caret position of the raw input string to the now new formatted string
         // Save off the caret position in the raw input
         const caret = this.elRef.nativeElement.selectionStart;
@@ -73,16 +88,7 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
             }
         }
 
-        // Our new value to display is a formatted version of the clean value
-        const newValue = this.formatter.formatValue(cleanValue);
-
-        this.renderer.setProperty(this.elRef.nativeElement, 'value', newValue);
-        this.renderer.setProperty(this.elRef.nativeElement, 'selectionStart', newCaret);
-        this.renderer.setProperty(this.elRef.nativeElement, 'selectionEnd', newCaret);
-
-        // We are going to unformat the new value one more time before sending it back to the model
-        // This makes sure our model has a true unformatted version of our display value
-        this.onChange(this.formatter.unFormatValue(newValue));
+        return newCaret;
     }
 
     @HostListener('keypress', ['$event.key', '$event.target.value'])

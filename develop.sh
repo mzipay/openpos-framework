@@ -11,4 +11,3 @@ npm link openpos-core
 # $cd openpos-client/
 # $ng serve
 
-No com.biglots.openpos.app.customer.state.LookupCustomerInfoState.onsearchCustomerByInfo() found.

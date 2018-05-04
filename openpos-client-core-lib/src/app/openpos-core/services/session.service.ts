@@ -357,7 +357,9 @@ export class SessionService implements ILocaleService {
           if(!isValueChangedAction){
             this.showDialog(null);
           }
-          this.queueLoading();
+          if (action !== 'KeepAlive') {
+            this.queueLoading();
+          }
         }
       }
 

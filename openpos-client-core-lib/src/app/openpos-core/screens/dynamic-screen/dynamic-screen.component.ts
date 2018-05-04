@@ -308,7 +308,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         || screen.type !== this.previousScreenType
         || screen.name !== this.previousScreenName)
     ) {
-      console.log(`>>> Switching screens from "${this.previousScreenType}" to "${screen.type}"`);
+      this.logSwitchScreens(screen);
+
       const templateName = screen.template.type;
       const screenType = screen.type;
       const screenName = screen.name;
@@ -336,6 +337,30 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     this.updateClasses(screen);
 
+  }
+
+  protected logSwitchScreens(screen: any) {
+    var msg:string = `>>> Switching screens from "${this.previousScreenType}" to "${screen.type}"`;
+    let nameLogged:boolean = false;
+    let sequenceLogged:boolean = false;
+    if (screen.name && screen.name !== screen.type) {
+      nameLogged = true;
+      msg += ` (name "${screen.name}"`;
+    }
+    if (screen.sequenceNumber) {
+      sequenceLogged = true;
+      if (!nameLogged) {
+        msg += ` (`;
+      } else {
+        msg += `, `;
+      }
+      msg += `sequence ${screen.sequenceNumber})`;
+    }
+    if (nameLogged && !sequenceLogged) {
+      msg += `)`;
+    }
+
+    console.log(msg);    
   }
 
   protected updateClasses(screen: any) {

@@ -20,7 +20,9 @@
  */
 package org.jumpmind.pos.core.flow;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jumpmind.pos.core.flow.config.IFlowConfigProvider;
@@ -79,6 +81,18 @@ public class StateManagerFactory implements IStateManagerFactory {
             }
         }
         return stateManager;
+    }
+    
+    public List<StateManager> getAllStateManagers() {
+        List<StateManager> allStateManagers = new ArrayList<>();
+        
+        for (Map<String, StateManager> stateManagersByNodeId : stateManagersByAppIdByNodeId.values()) {
+            for (StateManager stateManager : stateManagersByNodeId.values()) {
+                allStateManagers.add(stateManager);
+            }
+        }
+        
+        return allStateManagers;
     }
 
 }
