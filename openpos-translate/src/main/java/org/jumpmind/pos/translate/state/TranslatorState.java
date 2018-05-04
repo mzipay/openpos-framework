@@ -128,12 +128,14 @@ public class TranslatorState implements IState {
                     try {
                         response = futureResponse.get(request.getTimeout(), TimeUnit.MILLISECONDS);
                     } catch (TimeoutException ex) {
+                        logger.warn("Timeout ({}ms) reached for DeviceRequest id: {}, type: {}, subtype: {}.", request.getTimeout(), 
+                                request.getRequestId(), request.getType(), request.getSubType() );
                         futureResponse.cancel(true);
                         response = new DefaultDeviceResponse(request.getRequestId(), request.getDeviceId(),
                                 IDeviceResponse.DEVICE_TIMEOUT_RESPONSE_TYPE, "Timeout reached. " + ex.getMessage());
                     } catch (Exception ex) {
                         futureResponse.cancel(true);
-                        String msg = String.format("Failure waiting for a response. Error: {}", ex.getMessage());
+                        String msg = String.format("Failure waiting for a response for DeviceRequest id: %s. Error: %s", request.getRequestId(), ex.getMessage());
                         response = new DefaultDeviceResponse(request.getRequestId(), request.getDeviceId(),
                                 IDeviceResponse.DEVICE_ERROR_RESPONSE_TYPE, msg);
                         logger.error(msg);
