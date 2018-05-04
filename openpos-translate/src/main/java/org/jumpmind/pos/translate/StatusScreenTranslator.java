@@ -47,8 +47,6 @@ public class StatusScreenTranslator extends AbstractLegacyScreenTranslator<Loadi
     public void buildMainContent() {
        super.buildMainContent();
        
-       getScreen().setCustomerFacing(true);
-       
        String statusText = this.getPromptText(this.getLegacyUIModel(), this.getLegacyAssignmentSpec(PROMPT_RESPONSE_PANEL_KEY), 
                this.getResourceBundleFilename()).orElse(null);
        
