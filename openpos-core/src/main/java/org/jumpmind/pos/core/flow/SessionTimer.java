@@ -26,12 +26,12 @@ public class SessionTimer {
     public void start() {
         timer = new Timer("SessionTimer", true);
         
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//                checkSessionAges();
-//            }
-//        }, ONE_MINUTE, ONE_MINUTE);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                checkSessionAges();
+            }
+        }, ONE_MINUTE, ONE_MINUTE);
     }
     
     public void stop() {
