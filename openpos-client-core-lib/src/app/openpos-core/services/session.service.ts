@@ -311,6 +311,8 @@ export class SessionService implements ILocaleService {
         actionString = <string>action;
       }
 
+      console.log(`action is: ${actionString}`);
+
       if (confirm) {
         console.log('Confirming action');
         const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
