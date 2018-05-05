@@ -85,6 +85,10 @@
         background-color: white;
     }
 
+    .mat-fab .mat-button-wrapper {
+        padding: 0;
+    }
+
     .mat-progress-bar-buffer{
         background-color:mat-color($background, app-bar); 
     }
