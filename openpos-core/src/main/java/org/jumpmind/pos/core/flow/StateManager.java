@@ -351,9 +351,7 @@ public class StateManager implements IStateManager {
         
         if (screen != null && screen.getSessionTimeoutMillis() > 0) {
             sessionTimeoutMillis = screen.getSessionTimeoutMillis();
-        } else {
-            sessionTimeoutMillis = 0;
-        }
+        } 
         
         screenService.showScreen(appId, nodeId, screen);
     }
@@ -377,7 +375,7 @@ public class StateManager implements IStateManager {
     // called from a Timer thread.
     public void checkSessionTimeout() {
         if (sessionTimeoutMillis > 0) {            
-            long inactiveMillis = new Date().getTime() - lastInteractionTime.get().getTime();
+            long inactiveMillis = System.currentTimeMillis() - lastInteractionTime.get().getTime();
             if (inactiveMillis > sessionTimeoutMillis) {
                 sessionTimeout();
             }
