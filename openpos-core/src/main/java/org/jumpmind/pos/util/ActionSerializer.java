@@ -40,9 +40,13 @@ public class ActionSerializer extends JsonSerializer<Action> {
             for (IFormElement formElement : form.getFormElements()) {
                 if (formElement instanceof FormField) {
                     FormField field = (FormField) formElement;
+                    
+                    String fieldId = field.getId() != null ? field.getId().toLowerCase() : "";
+                    String fieldLabel = field.getLabel() != null ? field.getLabel().toLowerCase() : "";
+                    
                     if (field.isSensitive()
-                            || StringUtils.containsAny(field.getId().toLowerCase(), LogFormatter.SENSITIVE_FIELDS)
-                            || StringUtils.containsAny(field.getLabel().toLowerCase(), LogFormatter.SENSITIVE_FIELDS)
+                            || StringUtils.containsAny(fieldId, LogFormatter.SENSITIVE_FIELDS)
+                            || StringUtils.containsAny(fieldLabel, LogFormatter.SENSITIVE_FIELDS)
                             || field.getInputType() == FieldInputType.AlphanumericPassword) {
                         field.setValue(MASKED_STRING);
                     }
