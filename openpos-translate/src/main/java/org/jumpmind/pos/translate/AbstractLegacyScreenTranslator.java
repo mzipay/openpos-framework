@@ -165,12 +165,13 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
                     assignmentPanelSpec.getBeanSpecName());
             Map<String, Boolean> enabledState = parseButtonStates(assignmentPanelSpec);
 
-            Arrays.stream(localNavSpec.getButtons())
-                    .filter(buttonSpec -> Optional.ofNullable(enabledState.get(buttonSpec.getActionName())).orElse(buttonSpec.getEnabled()))
-                    .forEachOrdered(enabledButtonSpec -> {
-                        logger.info("Available local menu with label tag of: {}", enabledButtonSpec.getLabelTag());
-                    });
-
+            if (logger.isDebugEnabled()) {
+                Arrays.stream(localNavSpec.getButtons()).filter(
+                        buttonSpec -> Optional.ofNullable(enabledState.get(buttonSpec.getActionName())).orElse(buttonSpec.getEnabled()))
+                        .forEachOrdered(enabledButtonSpec -> {
+                            logger.debug("Available local menu with label tag of: {}", enabledButtonSpec.getLabelTag());
+                        });
+            }
         }
     }
 

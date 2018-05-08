@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 // TODO should be called just ActionHandler, need to repackage annotation of the same name.
@@ -14,31 +13,22 @@ import org.springframework.stereotype.Component;
 @org.springframework.context.annotation.Scope("prototype")
 public class ActionHandlerImpl {
     
-    private static final Logger log = Logger.getLogger(ActionHandlerImpl.class);
-
     private static final String METHOD_ON_ANY = "onAnyAction";
-    
-    private static final String ACTION_KEEP_ALIVE = "KeepAlive";
+
     
     public boolean canHandleAction(Object state, Action action) {
         // if there is an action handler OR an any action handler
         // AND it's not the current state firing this action.
         Method actionMethod = getActionMethod(state, action, null);
         if  (actionMethod != null
-                && !isCalledFromState(state)
-                || action.getName().equals(ACTION_KEEP_ALIVE)) {
+                && !isCalledFromState(state)) {
             return true;
         } else {
             return false;
         }
     }
 
-    public boolean handleAction(Object state, Action action, String overrideActionName) {
-        if (action.getName().equals(ACTION_KEEP_ALIVE)) {
-            log.debug(String.format("Handling %s action.", ACTION_KEEP_ALIVE));
-            return true;
-        }
-        
+    public boolean handleAction(Object state, Action action, String overrideActionName) {        
         Method actionMethod = getActionMethod(state, action, overrideActionName);
         if (actionMethod != null) {
             invokeActionMethod(state, action, actionMethod);

@@ -21,6 +21,8 @@ public class SessionTimer {
     private StateManagerFactory stateManagerFactory;
     
     private static long ONE_MINUTE = 60000;
+        
+    public static final String ACTION_KEEP_ALIVE = "KeepAlive";
     
     @PostConstruct
     public void start() {

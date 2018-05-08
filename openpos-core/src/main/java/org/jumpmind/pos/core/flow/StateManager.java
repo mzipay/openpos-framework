@@ -77,17 +77,6 @@ public class StateManager implements IStateManager {
     
     private long sessionTimeoutMillis = 0;
 
-//    @PostConstruct
-//    public void postConstruct() {
-//        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
-//
-//        scanner.addIncludeFilter(new AnnotationTypeFilter(org.jumpmind.pos.core.model.annotations.Screen.class));
-//
-//        for (BeanDefinition bd : scanner.findCandidateComponents("org.jumpmind.pos")) {
-//            logger.info("" + bd);
-//        }
-//    }
-
     public void init(String appId, String nodeId) {
         this.appId = appId;
         this.nodeId = nodeId;
@@ -206,6 +195,11 @@ public class StateManager implements IStateManager {
     public void doAction(String actionName, Map<String, String> params) {
         Action action = new Action(actionName, params);
         doAction(action);
+    }
+    
+    @Override
+    public void keepAlive() {
+        lastInteractionTime.set(new Date());         
     }
 
     @Override

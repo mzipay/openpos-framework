@@ -23,6 +23,7 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
+import org.jumpmind.pos.core.flow.SessionTimer;
 import org.jumpmind.pos.core.model.ComboField;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
@@ -165,28 +166,34 @@ public class ScreenService implements IScreenService {
 
     @MessageMapping("action/app/{appId}/node/{nodeId}")
     public void action(@DestinationVariable String appId, @DestinationVariable String nodeId, Action action) {
-        deserializeForm(appId, nodeId, action);
-        
-        logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
-
-        AbstractScreen lastDialog = removeLastDialog(appId, nodeId);
-        if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getType())) {
-            logger.debug("Instructing node {} to clear dialog.", nodeId);
-            publishToClients(appId, nodeId, "{\"clearDialog\":true }");
-        }
         IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
         if (stateManager != null) {
-            try {
-                logger.debug("Posting action {}", action);
-                stateManager.doAction(action);
-            } catch (Throwable ex) {
-                logger.error("Unexpected exception while processing action: " + action, ex);
-                DialogScreen errorDialog = new DialogScreen();
-                errorDialog.asDialog(new DialogProperties(true));
-                errorDialog.setIcon("error");
-                errorDialog.setTitle("Internal Server Error");
-                errorDialog.setMessage(Arrays.asList("The application received an unexpected error. Please report to the appropriate technical personnel"));
-                showScreen(appId, nodeId, errorDialog);
+            if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
+                stateManager.keepAlive();
+            } else {
+                deserializeForm(appId, nodeId, action);
+
+                logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
+
+                AbstractScreen lastDialog = removeLastDialog(appId, nodeId);
+                if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getType())) {
+                    logger.debug("Instructing node {} to clear dialog.", nodeId);
+                    publishToClients(appId, nodeId, "{\"clearDialog\":true }");
+                }
+
+                try {
+                    logger.debug("Posting action {}", action);
+                    stateManager.doAction(action);
+                } catch (Throwable ex) {
+                    logger.error("Unexpected exception while processing action: " + action, ex);
+                    DialogScreen errorDialog = new DialogScreen();
+                    errorDialog.asDialog(new DialogProperties(true));
+                    errorDialog.setIcon("error");
+                    errorDialog.setTitle("Internal Server Error");
+                    errorDialog.setMessage(Arrays
+                            .asList("The application received an unexpected error. Please report to the appropriate technical personnel"));
+                    showScreen(appId, nodeId, errorDialog);
+                }
             }
         }
     }

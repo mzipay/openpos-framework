@@ -27,6 +27,7 @@ import org.jumpmind.pos.core.screen.AbstractScreen;
 
 public interface IStateManager {
 
+    public void keepAlive();
     public void init(String appId, String nodeId);
     public String getNodeId();
     public String getAppId();
