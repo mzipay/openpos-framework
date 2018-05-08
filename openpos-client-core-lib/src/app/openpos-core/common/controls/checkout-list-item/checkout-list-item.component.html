@@ -21,7 +21,7 @@
                     <button mat-button fxFlex="0 0 130px" color="warn" *ngFor="let m of item.menuItems" (click)="doMenuItemAction(m, item.index)"
                         [disabled]="!isMenuItemEnabled(m)">
                         <span [ngClass]="{'muted-color': ! m.enabled}" style="font-size: 24px;">{{m.title}}</span>
-                        <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
+                        <mat-icon *ngIf="m.icon" [svgIcon]="m.icon"></mat-icon>
                     </button>
                 </div>
             </div>
