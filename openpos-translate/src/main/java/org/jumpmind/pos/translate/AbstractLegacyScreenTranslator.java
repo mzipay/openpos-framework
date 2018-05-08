@@ -108,13 +108,15 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
             screen.setWorkstation(workstation);
         }
         setScreenProperties();
-        
-        Integer  timeout = getLegacyUIModel().getTimeout();
-        if (timeout != null) {
-            screen.setSessionTimeoutMillis(timeout);
-        }
-        
-    }
+
+		if (getLegacyUIModel() != null) {
+			Integer timeout = getLegacyUIModel().getTimeout();
+			if (timeout != null) {
+				screen.setSessionTimeoutMillis(timeout);
+			}
+		}
+
+	}
     
     protected void setScreenProperties() {
         if (properties != null && screen != null) {
