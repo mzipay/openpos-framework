@@ -4,6 +4,8 @@
 
 }
 
+extern NSInteger const DEFAULT_LOG_RETENTION_DAYS;
+
 /* Configure the plugin with values such as the log file suffix/extension
    and the subdir to write the log files into. */
 - (void) configure:(CDVInvokedUrlCommand *)command;
@@ -25,5 +27,8 @@
 
 /* Returns the name of the current log file */
 - (NSString *) getCurrentLogFilePath:(CDVInvokedUrlCommand *)command;
+
+/* Will purge any log files that were modified more than logRetentionDays ago. */
+- (void) purgeOldLogs:(CDVInvokedUrlCommand *)command;
 
 @end

@@ -107,6 +107,19 @@ var OpenPOSCordovaLogPlugin = {
         PLUGIN_NAME, 
         'shareLogFile', [logFilename]
       );
+  },
+
+  /**
+   * Will remove any log files that are older than OpenPOSCordovaLogPlugin.logRetentionDays via 
+	 * which is set via platform preference.
+   */
+  purgeOldLogFiles: function(successCallback, errorCallback) {
+    exec(
+      successCallback, 
+      errorCallback,
+      PLUGIN_NAME, 
+      'purgeOldLogs', []
+    );
   }
 };
 
