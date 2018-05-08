@@ -316,26 +316,6 @@ public class StateManager implements IStateManager {
         }
     }
 
-//    @Override
-//    public void setNodeScope(String name, Object value) {
-//        scope.setNodeScope(name, value);
-//    }
-//
-//    @Override
-//    public void setSessionScope(String name, Object value) {
-//        scope.setSessionScope(name, value);
-//    }
-//
-//    @Override
-//    public void setConversationScope(String name, Object value) {
-//        scope.setConversationScope(name, value);
-//    }
-//
-//    @Override
-//    public void setFlowScope(String name, Object value) {
-//        currentContext.setFlowScope(name, value);
-//    }
-
     public void setInitialFlowConfig(FlowConfig initialFlowConfig) {
         this.initialFlowConfig = initialFlowConfig;
     }
