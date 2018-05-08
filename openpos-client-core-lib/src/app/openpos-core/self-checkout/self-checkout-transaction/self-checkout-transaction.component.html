@@ -1,4 +1,4 @@
-<div fxFlexFill style="padding:16px" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+<div fxFlexFill style="padding: 16px;" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
 
 	<div fxFlexFill fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="16px">
 		<div #scrollList fxFlex="1 1 auto" style="overflow-y: auto; overflow-x: hidden;">
@@ -15,20 +15,20 @@
 		</div>
 
 		<mat-card fxFlex="0 0 300px" class="page-content-card lighter scrollable-content-card">
-			<mat-card-content fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="end center" fxLayoutGap="0px" style="padding: 16px">
-				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center center" *ngFor="let total of screen.totals" class="page-content-card lighter text-center">
-					<mat-card-title class="primary text-sm muted-color">
+			<mat-card-content fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="end center" fxLayoutGap="0px" style="padding: 16px;">
+				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center center" *ngFor="let total of screen.totals" class="page-content-card lighter text-center subtotal">
+					<mat-card-title class="primary muted-color">
 						{{total.name}}
 					</mat-card-title>
 					<mat-card-content>
-						<p class="primary text-md">
+						<p class="primary">
 							<span class="super-currency-symbol">$</span>{{total.amount}}</p>
 					</mat-card-content>
 				</mat-card>
-				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center center" class="page-content-card lighter text-center top-border">
-					<mat-card-title class="primary text-md"> Total </mat-card-title>
+				<mat-card fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="center center" class="page-content-card lighter text-center total">
+					<mat-card-title class="primary"> Total </mat-card-title>
 					<mat-card-content>
-						<p class="primary text-lg">
+						<p class="primary">
 							<span class="super-currency-symbol">$</span>{{screen.grandTotal}}</p>
 					</mat-card-content>
 				</mat-card>
@@ -46,7 +46,7 @@
 						<div class="muted-color" style="padding-top: 8px;">Rewards ID: {{screen.customer.loyaltyId}}</div>
 					</div>
 					<button mat-button *ngIf="!screen.readOnly" [disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')"
-					 color="primary-inverse" class="black-button text-lg">Checkout
+					 class="green-button text-lg">Checkout
 					</button>
 					<button mat-button *ngIf="!screen.readOnly" color="primary" (click)="doMenuItemAction(screen.logoutButton)" class="border-button text-lg">
 						<span>
