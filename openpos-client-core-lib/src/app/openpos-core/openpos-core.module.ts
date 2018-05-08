@@ -32,7 +32,7 @@ import { PhonePipe } from './common/phone.pipe';
 import { ScreenDirective } from './common/screen.directive';
 import { TemplateDirective } from './common/template.directive';
 import { FocusDirective } from './common/focus.directive';
-import { InactivityMonitorDirective } from './common/inactivityMonitor.directive';
+import { InactivityMonitorDirective } from './common/inactivity-monitor.directive';
 
 // Services
 import { ScreenService } from './services/screen.service';

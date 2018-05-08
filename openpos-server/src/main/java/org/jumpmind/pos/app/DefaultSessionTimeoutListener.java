@@ -1,5 +1,7 @@
-package org.jumpmind.pos.core.flow;
+package org.jumpmind.pos.app;
 
+import org.jumpmind.pos.core.flow.ISessionTimeoutListener;
+import org.jumpmind.pos.core.flow.StateManager;
 import org.springframework.stereotype.Component;
 
 @Component

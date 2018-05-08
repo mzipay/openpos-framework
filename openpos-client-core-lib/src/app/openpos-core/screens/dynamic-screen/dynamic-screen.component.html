@@ -1,4 +1,4 @@
-<div [ngClass]="session.getTheme()">
+<div [ngClass]="session.getTheme()" inactivityMonitor (issueKeepAlive)="session.keepAlive()">
     <div [ngClass]="classes" style="height: 100vh">
 
         <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu">

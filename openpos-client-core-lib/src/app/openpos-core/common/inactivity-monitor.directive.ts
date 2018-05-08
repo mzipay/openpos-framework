@@ -1,21 +1,22 @@
 import { Directive, HostListener, Input, Output, EventEmitter } from '@angular/core';
 
 @Directive({
-    selector: '[InactivityMonitor]'
+    // tslint:disable-next-line:directive-selector
+    selector: '[inactivityMonitor]'
 })
 export class InactivityMonitorDirective {
 
     static lastKeepAliveFlushTime: number = new Date().getTime();
 
     constructor() {
-    }  
+    }
 
-    @Input() keepAliveMillis: number = 30000;
+    @Input() keepAliveMillis = 30000;
 
     @Output() issueKeepAlive: EventEmitter<string> = new EventEmitter<string>();
 
     private timerHandle: any;
-    private _timeoutActive
+    private _timeoutActive;
 
     @HostListener('window:keydown', ['$event'])
     keyEvent(event: KeyboardEvent) {
@@ -33,8 +34,8 @@ export class InactivityMonitorDirective {
     }
 
     private keepAlive() {
-        let now = new Date().getTime();
-        let nextFlushTime = InactivityMonitorDirective.lastKeepAliveFlushTime+this.keepAliveMillis;
+        const now = new Date().getTime();
+        const nextFlushTime = InactivityMonitorDirective.lastKeepAliveFlushTime + this.keepAliveMillis;
         if (now > nextFlushTime) {
             InactivityMonitorDirective.lastKeepAliveFlushTime = now;
             this.issueKeepAlive.emit('KeepAlive');

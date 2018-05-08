@@ -49,7 +49,7 @@ export class SessionService implements ILocaleService {
 
   private stompService: StompService;
 
-  private stompDebug:boolean = false;
+  private stompDebug = false;
 
   private actionPayloads: Map<string, Function> = new Map<string, Function>();
 
@@ -124,7 +124,7 @@ export class SessionService implements ILocaleService {
   public showScreen(screen: any) {
     this.screen = screen;
     if (screen && screen.theme) {
-        this.setTheme(screen.theme);      
+      this.setTheme(screen.theme);
     }
     this.screenSource.next(screen);
   }
@@ -133,7 +133,7 @@ export class SessionService implements ILocaleService {
     if (!dialogObj) {
       this.dialog = null;
     } else if (dialogObj.template.dialog) {
-      console.log(`SessionService.showDialog invoked. dialogObj: ${dialogObj}`);      
+      console.log(`SessionService.showDialog invoked. dialogObj: ${dialogObj}`);
       this.dialog = dialogObj;
       this.response = null;
     }
@@ -149,7 +149,7 @@ export class SessionService implements ILocaleService {
     if (this.screen && this.screen.theme) {
       return this.screen.theme;
     } else {
-       return localStorage.getItem('theme');
+      return localStorage.getItem('theme');
     }
   }
 
@@ -272,6 +272,7 @@ export class SessionService implements ILocaleService {
 
   public onDeviceResponse(deviceResponse: IDeviceResponse) {
     const sendResponseBackToServer: Function = () => {
+      // tslint:disable-next-line:max-line-length
       console.log(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
       this.stompService.publish(`/app/device/app/${this.appId}/node/${this.getNodeId()}/device/${deviceResponse.deviceId}`,
         JSON.stringify(deviceResponse));
@@ -286,8 +287,8 @@ export class SessionService implements ILocaleService {
     }
   }
 
-  public async onValueChange(action: string, payload?: any ){
-    this.onAction( action, payload, null, true);
+  public async onValueChange(action: string, payload?: any) {
+    this.onAction(action, payload, null, true);
   }
 
   public async onAction(action: string | IMenuItem, payload?: any, confirm?: string, isValueChangedAction?: boolean) {
@@ -345,9 +346,7 @@ export class SessionService implements ILocaleService {
 
       if (processAction) {
         const sendToServer: Function = () => {
-          console.log(`>>> Post action "${actionString}"`)
-          this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
-            JSON.stringify({ name: actionString, data: this.response }));
+          this.publish(actionString);
         };
 
         // see if we have any intercepters registered
@@ -356,18 +355,26 @@ export class SessionService implements ILocaleService {
           this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
         } else {
           sendToServer();
-          if(!isValueChangedAction){
+          if (!isValueChangedAction) {
             this.showDialog(null);
           }
-          if (action !== 'KeepAlive') {
-            this.queueLoading();
-          }
+          this.queueLoading();
         }
       }
 
     } else {
       console.log(`received an invalid action ${action}`);
     }
+  }
+
+  public keepAlive() {
+    this.publish('KeepAlive');
+  }
+
+  private publish (actionString: string) {
+    console.log(`>>> Post action "${actionString}"`)
+    this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
+      JSON.stringify({ name: actionString, data: this.response }));
   }
 
   private queueLoading() {
