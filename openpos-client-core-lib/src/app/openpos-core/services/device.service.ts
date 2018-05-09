@@ -21,6 +21,7 @@ export class DeviceService {
   private screen: any;
 
   private screenSubscription: Subscription;
+  private _isRunningInCordova: boolean = null;
 
   constructor(protected session: SessionService, public pluginService: PluginService) {
     this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
@@ -29,6 +30,7 @@ export class DeviceService {
       this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
       this.initializeInAppBrowserPlugin();
       this.initializeBarcodeScannerPlugin();
+      this._isRunningInCordova = true;
     },
     false);
 
@@ -127,6 +129,18 @@ export class DeviceService {
         console.log(msg);
       }
     );
+  }
+
+  public isRunningInCordova(): boolean {
+    if (this._isRunningInCordova == null) {
+      this._isRunningInCordova = typeof cordova !== 'undefined' && ! this.session.isRunningInBrowser();
+    }
+
+    return this._isRunningInCordova;
+  }
+
+  public isRunningInBrowser(): boolean {
+    return this.session.isRunningInBrowser();
   }
 
 }
