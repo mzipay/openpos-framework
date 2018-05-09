@@ -323,7 +323,7 @@ public class StateManager implements IStateManager {
             screen = ((IScreenInterceptor)this.currentContext.getState()).intercept(screen);            
         }
         
-        if (screen != null && screen.getSessionTimeoutMillis() > 0) {
+        if (screen != null) {
             sessionTimeoutMillis = screen.getSessionTimeoutMillis();
         } 
         
@@ -357,11 +357,15 @@ public class StateManager implements IStateManager {
     }
 
     protected void sessionTimeout() {
-        logger.info(String.format("Node %s session timed out.", nodeId));
-        if (!CollectionUtils.isEmpty(sessionTimeoutListeners)) {
-            for (ISessionTimeoutListener sessionTimeoutListener : sessionTimeoutListeners) {
-                sessionTimeoutListener.onSessionTimeout(this);
+        try {
+            logger.info(String.format("Node %s session timed out.", nodeId));
+            if (!CollectionUtils.isEmpty(sessionTimeoutListeners)) {
+                for (ISessionTimeoutListener sessionTimeoutListener : sessionTimeoutListeners) {
+                    sessionTimeoutListener.onSessionTimeout(this);
+                }
             }
+        } catch (Exception e) {
+            logger.error("Failed to process the session timeout", e);
         }
     }
 }
