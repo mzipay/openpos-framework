@@ -256,10 +256,21 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     if (!this.registered && this.isPersonalized()) {
       console.log('initializing the application');
       this.session.unsubscribe();
-      this.session.subscribe(this.router.url.substring(1));
+      this.session.subscribe(this.normalizeAppIdFromUrl());
       this.registered = true;
     }
     return this.registered;
+  }
+
+  protected normalizeAppIdFromUrl(): string {
+    let appId = this.router.url.substring(1);
+    if (appId.indexOf('#') > 0) {
+      appId = appId.substring(0, appId.indexOf('#'));
+    }
+    if (appId.indexOf('/') > 0) {
+      appId = appId.substring(0, appId.indexOf('/'));
+    }
+    return appId;
   }
 
   protected isPersonalized(): boolean {
@@ -340,9 +351,9 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
   }
 
   protected logSwitchScreens(screen: any) {
-    var msg:string = `>>> Switching screens from "${this.previousScreenType}" to "${screen.type}"`;
-    let nameLogged:boolean = false;
-    let sequenceLogged:boolean = false;
+    var msg: string = `>>> Switching screens from "${this.previousScreenType}" to "${screen.type}"`;
+    let nameLogged: boolean = false;
+    let sequenceLogged: boolean = false;
     if (screen.name && screen.name !== screen.type) {
       nameLogged = true;
       msg += ` (name "${screen.name}"`;
@@ -360,7 +371,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       msg += `)`;
     }
 
-    console.log(msg);    
+    console.log(msg);
   }
 
   protected updateClasses(screen: any) {
@@ -409,7 +420,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     // Can I either use subtype (no) or change type to dialog before getting here, or alter
     // the logic below?
     if (!this.dialogRef || dialog.type !== this.lastDialogType || dialog.type === 'Dialog'
-         || dialog.refreshAlways) {
+      || dialog.refreshAlways) {
       this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
     } else {
       console.log(`Using previously created dialogRef. current dialog type: ${dialog.type}, last dialog type: ${this.lastDialogType}`);
