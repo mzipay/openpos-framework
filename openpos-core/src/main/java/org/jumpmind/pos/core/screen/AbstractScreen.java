@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class AbstractScreen implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * Put properties in this map if they are optional. When not set, they don't
      * show up in the json which means less overhead.
@@ -24,9 +24,9 @@ public abstract class AbstractScreen implements Serializable {
     private String name;
     private String type;
     private AbstractTemplate template = new BlankWithBarTemplate();
-    private String locale;   
+    private String locale;
     private int sessionTimeoutMillis;
-    
+
     public AbstractScreen() {
     }
 
@@ -34,22 +34,27 @@ public abstract class AbstractScreen implements Serializable {
         this.type = type;
         this.name = name;
     }
-    
+
     /**
-     * Allows this screen content to be displayed in a Dialog on the client side.
+     * Allows this screen content to be displayed in a Dialog on the client
+     * side.
      */
     public AbstractScreen asDialog() {
         return this.asDialog(null);
     }
 
     /**
-     * Allows this screen content to be displayed in a Dialog on the client side.
-     * @param dialogProperties Additional properties that can control dialog behavior and rendering on the server side.
+     * Allows this screen content to be displayed in a Dialog on the client
+     * side.
+     * 
+     * @param dialogProperties
+     *            Additional properties that can control dialog behavior and
+     *            rendering on the server side.
      */
     public AbstractScreen asDialog(DialogProperties dialogProperties) {
-        this.template.setDialog(true);        
+        this.template.setDialog(true);
         if (dialogProperties != null) {
-        	this.template.setDialogProperties(dialogProperties);
+            this.template.setDialogProperties(dialogProperties);
         }
         return this;
     }
@@ -57,8 +62,8 @@ public abstract class AbstractScreen implements Serializable {
     // TODO i don't really like this method here
     public static <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
         return new ObjectMapper().convertValue(actionData, convertToInstanceOf);
-    }    
-    
+    }
+
     @JsonAnyGetter
     public Map<String, Object> any() {
         return this.optionalProperties;
@@ -84,7 +89,7 @@ public abstract class AbstractScreen implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -108,11 +113,11 @@ public abstract class AbstractScreen implements Serializable {
     public void setLogoutButton(MenuItem logoutButton) {
         put("logoutButton", logoutButton);
     }
-    
+
     public void setTemplate(AbstractTemplate template) {
         this.template = template;
     }
-    
+
     public AbstractTemplate getTemplate() {
         return template;
     }
@@ -140,7 +145,7 @@ public abstract class AbstractScreen implements Serializable {
     public void setLocale(String locale) {
         this.locale = locale;
     }
-    
+
     public void setRefreshAlways(boolean refreshAlways) {
         this.optionalProperties.put("refreshAlways", refreshAlways);
     }
@@ -152,5 +157,5 @@ public abstract class AbstractScreen implements Serializable {
     public void setSessionTimeoutMillis(int sessionTimeoutMillis) {
         this.sessionTimeoutMillis = sessionTimeoutMillis;
     }
-    
+
 }
