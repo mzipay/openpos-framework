@@ -19,7 +19,7 @@ public class SellItemScreen extends PromptScreen {
     private String taxTotal;
     private String itemActionName = "Item";
     private Transaction transaction = new Transaction();
-    private Customer customer;
+    private String customerName;
     private String noCustomerText;
     private List<Total> totals = new ArrayList<>();
     
@@ -91,12 +91,12 @@ public class SellItemScreen extends PromptScreen {
         this.transaction = transaction;
     }
     
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
     
-    public Customer getCustomer() {
-        return customer;
+    public String getCustomerName() {
+        return customerName;
     }
 
     public String getItemActionName() {

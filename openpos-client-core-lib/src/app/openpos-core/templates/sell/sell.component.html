@@ -46,15 +46,15 @@
                             <div fxFlex="1 1 auto"></div>
                             <ng-container *ngIf="!template.hideCustomer">
                                 <button mat-button *ngIf="template.type === 'Transaction'" color="accent" style="text-align: left">
-                                    <ng-container *ngIf="template.customer">
+                                    <ng-container *ngIf="template.customerName">
                                         <mat-icon>person</mat-icon>&nbsp;
-                                        <span class="text-sm">{{template.customer.name}}</span>
+                                        <span class="text-sm">{{template.customerName}}</span>
                                     </ng-container>
-                                    <ng-container *ngIf="!template.customer && !template.noCustomerText">
+                                    <ng-container *ngIf="!template.customerName && !template.noCustomerText">
                                         <mat-icon class="muted-color">link</mat-icon>&nbsp;
                                         <span class="muted-color">No Linked Customer</span>
                                     </ng-container>
-                                    <div fxFlex="1 1 150px" style="white-space: pre-wrap" *ngIf="template.noCustomerText && !template.customer" class="muted-color text-center">{{template.noCustomerText}}</div>
+                                    <div fxFlex="1 1 150px" style="white-space: pre-wrap" *ngIf="template.noCustomerText && !template.customerName" class="muted-color text-center">{{template.noCustomerText}}</div>
                                 </button>
                             </ng-container>
                             <div *ngIf="template.type === 'Transaction'" fxFlex="0 1 auto" class="sell-screen-logo"></div>
