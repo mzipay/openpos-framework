@@ -174,15 +174,6 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  onSubmitOptionSelected(formElement: IFormElement, valueIndex: number, event: Event) {
-    if (formElement.selectedIndexes) {
-      formElement.selectedIndexes = [valueIndex];
-    }
-
-    // this.session.response = this.screenForm;
-    // this.session.onAction(formElement.id);
-  }
-
   openPopTart() {
     const dialogRef = this.dialog.open(PopTartComponent, {
       width: '70%',

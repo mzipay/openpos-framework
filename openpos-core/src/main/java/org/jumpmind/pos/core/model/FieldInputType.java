@@ -9,8 +9,6 @@ public enum FieldInputType {
     ComboBox,
     PopTart,
     Decimal,
-    /** Intended to be used for reason code screens where a press of the reason code should cause the form to be submitted.*/
-    SubmitOptionList,
     TextArea,
     StateIDNumber,
     Percent,
