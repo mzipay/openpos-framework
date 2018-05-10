@@ -344,7 +344,7 @@ export class SessionService implements ILocaleService {
         }
       }
 
-      if (processAction) {
+      if (processAction && !this.loading) {
         const sendToServer: Function = () => {
           this.publish(actionString);
         };
