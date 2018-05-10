@@ -405,9 +405,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       console.log(`Dialog options: ${JSON.stringify(dialogProperties)}`);
     }
 
-    // JRM: Problem is with showing two 'AmountConfirmationDialog's simultaneously
-    // Can I either use subtype (no) or change type to dialog before getting here, or alter
-    // the logic below?
     if (!this.dialogRef || dialog.type !== this.lastDialogType || dialog.type === 'Dialog'
          || dialog.refreshAlways) {
       this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
