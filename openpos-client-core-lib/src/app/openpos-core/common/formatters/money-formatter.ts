@@ -5,9 +5,25 @@ export class MoneyFormatter implements IFormatter {
     locale?: string;
 
     formatValue(value: string): string {
-        if (!value) return "";
+        if (!value) return '';
 
-        return `$${value}`;
+        const i = value.toString().indexOf('.');
+        if( i > 0 ){
+            const d = value.toString().slice(i+1);
+            switch( d.length) {
+                case 0:
+                    return `$${value}00`;
+                case 1:
+                    return `$${value}0`;
+                case 2:
+                    return `$${value}`;
+                default:
+                    return `$${value.toString().slice(0, i+2)}`;
+            }
+
+        } else {
+            return `$${value}.00`
+        }
     }
 
     unFormatValue(value: string): string {
