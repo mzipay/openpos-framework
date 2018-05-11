@@ -188,6 +188,9 @@ export class DynamicFormControlComponent implements AfterViewInit {
       if (element.hasOwnProperty('value')) {
         element.value = this.form.value[element.id];
       }
+      if(element.hasOwnProperty('checked')) {
+        element.checked = this.form.value[element.id];
+      }
     });
   }
 }
