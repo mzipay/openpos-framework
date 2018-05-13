@@ -368,7 +368,7 @@ export class SessionService implements ILocaleService {
       }
 
     } else {
-      console.log(`received an invalid action ${action}`);
+      console.log(`received an invalid action: ${action}`);
     }
   }
 

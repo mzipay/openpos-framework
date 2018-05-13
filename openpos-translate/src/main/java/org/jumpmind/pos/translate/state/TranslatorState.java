@@ -127,6 +127,11 @@ public class TranslatorState implements IState {
                             request);
                     try {
                         response = futureResponse.get(request.getTimeout(), TimeUnit.MILLISECONDS);
+                        if (response != null) {
+                            logger.info("Reponse of type '{}' received from device '{}', for request id: {}", response.getType(), response.getDeviceId(), response.getRequestId() );
+                        } else {
+                            logger.warn("Received a null response for request id: {}", request.getRequestId());
+                        }
                     } catch (TimeoutException ex) {
                         logger.warn("Timeout ({}ms) reached for DeviceRequest id: {}, type: {}, subtype: {}.", request.getTimeout(), 
                                 request.getRequestId(), request.getType(), request.getSubType() );
