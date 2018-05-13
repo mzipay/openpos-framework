@@ -55,11 +55,16 @@ export class SessionService implements ILocaleService {
 
   private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
+  private serverBaseUrl: string;
+
   loaderState: LoaderState;
 
   constructor(private location: Location, private router: Router, public dialogService: MatDialog,
     public zone: NgZone) {
     this.loaderState = new LoaderState(this);
+    this.zone.onError.subscribe((e) => {
+      console.error(`[OpenPOS]${e}`);
+    });
   }
 
   public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -464,13 +469,15 @@ export class SessionService implements ILocaleService {
     return 'USD';
   }
 
-  public getApiServerBaseURL(): string {
-    let url: string = 'http://' + this.getServerName();
-    if (this.getServerPort()) {
-      url = url + ':' + this.getServerPort();
+  public getServerBaseURL(): string {
+    if (! this.serverBaseUrl) {
+      this.serverBaseUrl = `http://${this.getServerName()}${this.getServerPort() ? `:${this.getServerPort()}` : ''}`;
     }
-    url = url + '/api';
-    return url;
+    return this.serverBaseUrl;
+  }
+
+  public getApiServerBaseURL(): string {
+    return `${this.getServerBaseURL()}/api`;
   }
 
   getLocale(): string {
