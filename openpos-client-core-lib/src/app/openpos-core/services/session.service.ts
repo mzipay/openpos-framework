@@ -365,6 +365,8 @@ export class SessionService implements ILocaleService {
           }
           this.queueLoading();
         }
+      } else {
+        console.log(`Not sending action: ${actionString}.  processAction: ${processAction}, loading:${this.loading}`);
       }
 
     } else {
