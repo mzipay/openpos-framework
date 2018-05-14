@@ -2,17 +2,14 @@ package org.jumpmind.pos;
 
 import java.lang.reflect.Method;
 
-import javax.print.attribute.standard.PrinterLocation;
-
-import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.persist.driver.Driver;
 import org.jumpmind.pos.user.model.PasswordHistory;
+import org.jumpmind.pos.user.model.User;
 import org.jumpmind.pos.user.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -27,6 +24,7 @@ public class UserModuleMain {
     private UserRepository userRepository;
     
     public static void main(String[] args) throws Exception {
+        loadJumpMindDriver();
         if (args == null || args.length == 0) {
             System.setProperty("spring.jackson.serialization.indent_output", "true");
             System.setProperty("openpos.development", "true");
@@ -42,6 +40,14 @@ public class UserModuleMain {
     @EventListener
     public void handleContextRefresh(ContextRefreshedEvent event) {
         createTestData();
+    }
+    
+    protected static void loadJumpMindDriver() {
+        try {
+            Class.forName(Driver.class.getName());
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void createTestData() {

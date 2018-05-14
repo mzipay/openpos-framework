@@ -351,6 +351,7 @@ export class SessionService implements ILocaleService {
 
       if (processAction && !this.loading) {
         const sendToServer: Function = () => {
+          console.log(`>>> Post action "${actionString}"`);
           this.publish(actionString);
         };
 
@@ -375,11 +376,11 @@ export class SessionService implements ILocaleService {
   }
 
   public keepAlive() {
+    console.log(`>>> KeepAlive`);
     this.publish('KeepAlive');
   }
 
   private publish (actionString: string) {
-    console.log(`>>> Post action "${actionString}"`)
     this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
       JSON.stringify({ name: actionString, data: this.response }));
   }
