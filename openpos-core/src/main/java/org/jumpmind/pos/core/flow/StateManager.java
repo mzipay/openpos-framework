@@ -97,7 +97,7 @@ public class StateManager implements IStateManager {
     
     protected void transitionTo(Action action, IState newState, FlowConfig enterSubStateConfig, StateContext resumeSuspendedState) {
         if (this.currentContext == null) {
-            throw new FlowException("There is no currentContext on this StateManager.  HINT: States should us @In to get the StateManager, not @Autowired.");
+            throw new FlowException("There is no currentContext on this StateManager.  HINT: States should use @In to get the StateManager, not @Autowired.");
         }        
         
         if (enterSubStateConfig != null && resumeSuspendedState != null) {
@@ -317,7 +317,7 @@ public class StateManager implements IStateManager {
     @Override
     public void showScreen(AbstractScreen screen) {
         if (this.currentContext == null) {
-            throw new FlowException("There is no currentContext on this StateManager.  HINT: States should us @In(scope=ScopeType.Node) to get the StateManager, not @Autowired.");
+            throw new FlowException("There is no currentContext on this StateManager.  HINT: States should use @In(scope=ScopeType.Node) to get the StateManager, not @Autowired.");
         }
         if (this.currentContext.getState() != null && this.currentContext.getState() instanceof IScreenInterceptor) {
             screen = ((IScreenInterceptor)this.currentContext.getState()).intercept(screen);            

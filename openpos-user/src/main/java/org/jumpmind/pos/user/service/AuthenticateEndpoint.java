@@ -2,9 +2,8 @@ package org.jumpmind.pos.user.service;
 
 import java.util.Date;
 
-
-import org.jumpmind.pos.config.service.ConfigService;
 import org.apache.commons.collections4.CollectionUtils;
+import org.jumpmind.pos.config.service.ConfigService;
 import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.user.model.PasswordHistory;
 import org.jumpmind.pos.user.model.User;
@@ -25,6 +24,7 @@ public class AuthenticateEndpoint {
 
     @Endpoint("/authenticate")
     public AuthenticationResult authenticate(
+       //     @RequestParam(value="serviceContext", defaultValue="") ServiceContext serviceContext,
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="password", defaultValue="") String password) {
 
