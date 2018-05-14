@@ -344,6 +344,11 @@ public class DatabaseSchema {
         return buff.toString();
     }
     
+    public Map<Class<?>, EntityMetaData> getClassMetadata() {
+        return new HashMap<Class<?>, EntityMetaData>(classMetadata);
+    }
+    
+    
     protected void validatePrimaryKey(Table table) {
         
     }    

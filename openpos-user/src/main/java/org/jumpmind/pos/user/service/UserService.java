@@ -1,6 +1,7 @@
 package org.jumpmind.pos.user.service;
 
 import org.jumpmind.pos.service.EndpointDispatcher;
+import org.jumpmind.pos.service.ServiceContext;
 import org.jumpmind.pos.service.ServiceResultImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ public class UserService {
     
     @RequestMapping("/authenticate")
     public AuthenticationResult authenticate(
-            @RequestParam(value="nodeId", defaultValue="") String nodeId,
+            //@RequestParam(value="serviceContext", defaultValue="") ServiceContext serviceContext,
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="password", defaultValue="") String password) {
         // TODO handle NodeId

@@ -207,7 +207,7 @@ public class UserModule implements Module {
             properties.put(DB_POOL_INIT_SQL, env.getProperty(DB_POOL_INIT_SQL));
             properties.put(DB_POOL_CONNECTION_PROPERTIES, env.getProperty(DB_POOL_CONNECTION_PROPERTIES));
             log.info(String.format(
-                    "About to initialize the configuration datasource using the following driver:"
+                    "About to initialize the 'User' module datasource using the following driver:"
                             + " '%s' and the following url: '%s' and the following user: '%s'",
                     properties.get(DB_POOL_DRIVER), properties.get(DB_POOL_URL), properties.get(DB_POOL_USER)));
 

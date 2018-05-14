@@ -345,7 +345,8 @@ public class DBSession {
     protected Table getValidatedTable(Class<?> entityClass) {
         org.jumpmind.db.model.Table table = databaseSchema.getTable(entityClass);
         if (table == null) {
-            throw new PersistException("Failed to locate a database table for entity class: " + entityClass);
+            throw new PersistException("Failed to locate a database table for entity class: '" + entityClass + "'. Mapped entities in this session are: " + 
+                    databaseSchema.getClassMetadata().keySet() + " Make sure the correct dbSession is used with the module by using the correct @Qualifier");
         }
         return table;
     }    
