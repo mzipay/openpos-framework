@@ -26,14 +26,18 @@ export class DynamicFormControlComponent implements AfterViewInit {
   
   @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
 
-  ngAfterViewInit(){
-    const field = this.children.filter( child => {
+  ngAfterViewInit() {
+    const nonReadonlyChildren = this.children.filter( child => {
       if(child.field){
         return child.field.readonly === false;
       }
       return false;      
-    })[0].field;
-    setTimeout(() => field.focus(), 0);   
+    });
+
+    if( nonReadonlyChildren.length > 0 ) {
+      setTimeout(() => nonReadonlyChildren[0].field.focus(), 0);
+    }
+       
   }
   
   @Input() 
