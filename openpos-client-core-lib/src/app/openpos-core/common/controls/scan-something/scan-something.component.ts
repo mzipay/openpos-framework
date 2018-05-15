@@ -3,6 +3,7 @@ import { DeviceService } from '../../../services/device.service';
 import { SessionService } from '../../../services/session.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
 import { ScanSomethingData } from './scanSomthingData';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-scan-something',
@@ -26,6 +27,8 @@ export class ScanSomethingComponent implements AfterViewInit {
     @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: ScanSomethingData) {
 
+    this.session.subscribeForScreenUpdates((screen: any): void => this.focusFirst());
+
     if (data) {
       this.scanSomethingData = data;
     }
@@ -43,7 +46,11 @@ export class ScanSomethingComponent implements AfterViewInit {
 
 
   ngAfterViewInit(): void {
-    if (this.scanSomethingData.autoFocus) {
+    this.focusFirst();
+  }
+
+  private focusFirst(): void {
+    if (this.scanSomethingData && this.scanSomethingData.autoFocus) {
       this.input.focus();
     }
   }
