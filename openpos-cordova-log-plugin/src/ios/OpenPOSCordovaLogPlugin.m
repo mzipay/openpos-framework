@@ -62,6 +62,15 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
     return [self appVersion];
 }
 
+/* Returns path on the device where log files are stored. */
+- (NSString *)getLogDirectoryPath:(CDVInvokedUrlCommand *)command {
+    CDVPluginResult *result;
+    NSString *logFilesDir = [self getOrCreateLogsDir];
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:logFilesDir];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    return logFilesDir;
+}
+
 /* Returns path to given log file */
 - (NSString *)getLogFilePath:(CDVInvokedUrlCommand *)command {
     NSString* logFilename = [command.arguments objectAtIndex:0];

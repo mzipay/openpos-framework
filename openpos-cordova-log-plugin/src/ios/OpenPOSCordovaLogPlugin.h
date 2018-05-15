@@ -19,6 +19,9 @@ extern NSInteger const DEFAULT_LOG_RETENTION_DAYS;
 /* Returns path to given log file */
 - (NSString *)getLogFilePath:(CDVInvokedUrlCommand *)command;
 
+/* Returns path on the device where log files are stored. */
+- (NSString *)getLogDirectoryPath:(CDVInvokedUrlCommand *)command;
+
 /* Shares a log file using platform standard file sharing UI */
 - (void) shareLogFile:(CDVInvokedUrlCommand *)command;
 
