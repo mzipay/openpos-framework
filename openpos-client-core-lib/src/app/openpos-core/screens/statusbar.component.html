@@ -5,7 +5,7 @@
 			mat-button style="margin-left:-20px" (click)="session.onAction(data.backButton.action)">
 			<mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
 		</button>
-		<mat-icon *ngIf="data.screenIcon">{{data.screenIcon}}</mat-icon>
+		<app-icon *ngIf="data.screenIcon" [iconName]="data.screenIcon"></app-icon>
 		<span class="text-sm">&nbsp;{{data.screenName}}</span>
 	</span>
 	
