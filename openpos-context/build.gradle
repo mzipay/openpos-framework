@@ -42,9 +42,8 @@ task develop {
 }
 
 dependencies {
-    compile project(":openpos-persist")
     compile project(":openpos-service")
-    compile project(":openpos-context")
+    compile project(":openpos-cache")
     compile "com.h2database:h2:1.4.196"
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.25'
@@ -57,10 +56,10 @@ dependencies {
         exclude module: "spring-boot-starter-tomcat"
         exclude module: "spring-boot-starter-logging"
     }
-    testCompile("org.springframework.boot:spring-boot-starter-jetty:$springBootVersion"){
+    compile("org.springframework.boot:spring-boot-starter-jetty:$springBootVersion"){
         exclude module: "spring-boot-starter-logging"
     }
-    testCompile("org.springframework.boot:spring-boot-starter-websocket:$springBootVersion"){
+    compile("org.springframework.boot:spring-boot-starter-websocket:$springBootVersion"){
         exclude module: "spring-boot-starter-tomcat"
         exclude module: "spring-boot-starter-logging"
     }
@@ -80,7 +79,7 @@ jar {
 }  
 
 processResources {
-    from ('../openpos-user/dist/') {
+    from ('../openpos-context/dist/') {
         into 'public'
     }
 }

@@ -20,7 +20,7 @@ public class CacheService {
         return endpointDispatcher.dispatch("/getvalue", nodeId, key);
     }
 
-    @RequestMapping
+    @RequestMapping("/setValue")
     public CacheResult setValue(
             @RequestParam(value="nodeId") String nodeId,        
             @RequestParam(value="cacheId", defaultValue="*") String cacheId,
@@ -29,7 +29,7 @@ public class CacheService {
         return endpointDispatcher.dispatch("/setValue", nodeId, cacheId, key, value);
     }    
     
-    @RequestMapping
+    @RequestMapping("/clearValue")
     public CacheResult clearValue(
             @RequestParam(value="nodeId") String nodeId,        
             @RequestParam(value="cacheId", defaultValue="*") String cacheId,
@@ -37,14 +37,14 @@ public class CacheService {
         return endpointDispatcher.dispatch("/clearValue", nodeId, cacheId, key);
     }    
 
-    @RequestMapping
+    @RequestMapping("/clearCache")
     public CacheResult clearCache(
             @RequestParam(value="nodeId") String nodeId,        
             @RequestParam(value="cacheId", defaultValue="*") String cacheId) {
         return endpointDispatcher.dispatch("/clearCache", nodeId, cacheId);
     }        
 
-    @RequestMapping
+    @RequestMapping("/clearAllCaches")
     public CacheResult clearAllCaches(
             @RequestParam(value="nodeId") String nodeId) {
         return endpointDispatcher.dispatch("/clearAllCaches", nodeId);

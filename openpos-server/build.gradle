@@ -56,7 +56,7 @@ def projectLabelClient = "OpenPOSBase"
 dependencies {
     compile project(":openpos-wrapper")    
     compile project(":openpos-core")
-    compile project(":openpos-config")
+    compile project(":openpos-context")
     compile project(":openpos-user")
     compile project(":openpos-i18n")
     compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.13.10.RELEASE'

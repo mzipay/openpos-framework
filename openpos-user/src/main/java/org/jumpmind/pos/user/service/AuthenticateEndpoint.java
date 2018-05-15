@@ -3,7 +3,7 @@ package org.jumpmind.pos.user.service;
 import java.util.Date;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.jumpmind.pos.config.service.ConfigService;
+import org.jumpmind.pos.context.service.ContextService;
 import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.user.model.PasswordHistory;
 import org.jumpmind.pos.user.model.User;
@@ -20,7 +20,7 @@ public class AuthenticateEndpoint {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    ConfigService configService;
+    ContextService contextService;
 
     @Endpoint("/authenticate")
 //    @Cached("userCache")
@@ -51,7 +51,7 @@ public class AuthenticateEndpoint {
     private AuthenticationResult handleSuccess(User user) {
         AuthenticationResult result =  new AuthenticationResult("SUCCESS", user);
         long expiresInDays = passwordExpiresInDays(user);
-        if (expiresInDays > 0 && expiresInDays <= configService.getInt("openpos.user.warn.password.expires.days")) {
+        if (expiresInDays > 0 && expiresInDays <= contextService.getInt("openpos.user.warn.password.expires.days")) {
             UserMessage message = new UserMessage();
             message.setMessageCode("PASSWORD_EXPIRY_WARNING");
             message.setMessage(String.format("Your password exires in %s days.", expiresInDays));
@@ -80,7 +80,7 @@ public class AuthenticateEndpoint {
             user.setPasswordFailedAttempts(user.getPasswordFailedAttempts()+1);
             user.setLastPasswordAttempt(new Date());
 
-            if (user.getPasswordFailedAttempts() > configService.getInt("openpos.user.max.login.attempts")) {
+            if (user.getPasswordFailedAttempts() > contextService.getInt("openpos.user.max.login.attempts")) {
                 user.setLockedOutFlag(true);
             }
             userRepository.save(user);
@@ -93,7 +93,7 @@ public class AuthenticateEndpoint {
         if (user.isLockedOutFlag()) {
             Date lastPasswordAttempt = user.getLastPasswordAttempt();
             if (lastPasswordAttempt != null) {                
-                Date passwordAttemptsResetDate = new Date(lastPasswordAttempt.getTime() + configService.getLong("openpos.user.attempts.reset.period.ms"));
+                Date passwordAttemptsResetDate = new Date(lastPasswordAttempt.getTime() + contextService.getLong("openpos.user.attempts.reset.period.ms"));
                 Date now = new Date();
                 if (now.after(passwordAttemptsResetDate)) {                    
                     user.setLockedOutFlag(false);

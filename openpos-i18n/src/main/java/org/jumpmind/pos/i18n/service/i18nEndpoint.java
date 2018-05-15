@@ -1,19 +1,14 @@
 package org.jumpmind.pos.i18n.service;
 
-import java.io.File;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.jumpmind.pos.config.service.ConfigService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.jumpmind.pos.service.Endpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class i18nEndpoint {
