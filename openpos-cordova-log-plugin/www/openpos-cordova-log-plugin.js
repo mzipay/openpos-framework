@@ -66,6 +66,14 @@ var OpenPOSCordovaLogPlugin = {
       );
   },
   
+  getLogDirectoryPath: function(successCallback, errorCallback) {
+    exec(
+      successCallback, 
+      errorCallback,
+      PLUGIN_NAME, 
+      'getLogDirectoryPath', []
+    );
+  },
 
   /** 
    * If the file exists, the successCallback will return the full path

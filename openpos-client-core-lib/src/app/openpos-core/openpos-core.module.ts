@@ -129,6 +129,7 @@ import { FileViewerComponent } from './dialogs/file-viewer/file-viewer.component
 import { DialogService } from './services/dialog.service';
 import { SelectableItemListComponent } from './common/controls/selectable-item-list/selectable-item-list.component';
 import { VersionComponent } from './dialogs/version/version.component';
+import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
 
 // Keyboard Layouts
 const customLayouts: IKeyboardLayouts = {
@@ -352,7 +353,8 @@ const customLayouts: IKeyboardLayouts = {
     PhonePipe,
     LoadingDialogComponent,
     VersionComponent,
-    InactivityMonitorDirective
+    InactivityMonitorDirective,
+    PhoneUSValidatorDirective
   ],
   imports: [
     BrowserModule,
