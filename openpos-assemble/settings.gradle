@@ -19,3 +19,8 @@ rootProject.children.each { project ->
 includeFlat 'openpos-client'
 includeFlat 'openpos-server'
 
+rootProject.children.each { project ->    
+  if (!project.projectDir.exists()) {
+      throw new GradleException("Could not find the project ** ${project.projectDir.getName()} **.  Are you sure you have all the projects checked out and have openposDir set properly?");
+  }
+}

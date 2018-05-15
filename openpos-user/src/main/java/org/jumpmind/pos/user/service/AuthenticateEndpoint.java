@@ -24,7 +24,8 @@ public class AuthenticateEndpoint {
 
     @Endpoint("/authenticate")
     public AuthenticationResult authenticate(
-       //     @RequestParam(value="serviceContext", defaultValue="") ServiceContext serviceContext,
+            @RequestParam(value="nodeId", defaultValue="") String nodeId,
+            @RequestParam(value="locale", defaultValue="") String locale,
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="password", defaultValue="") String password) {
 

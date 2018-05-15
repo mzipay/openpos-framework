@@ -77,7 +77,7 @@ public class UserLoginState implements IState {
     public void onPasswordEntered(Action action) {
         String password = (String) action.getData();
         oldPassword = password;
-        result = userService.authenticate(stateManager.getNodeId(), enteredUserName, password);
+        result = userService.authenticate(stateManager.getNodeId(), null, enteredUserName, password);
         userMessageIndex = 0;
         showUserMessages();
     }
@@ -153,7 +153,7 @@ public class UserLoginState implements IState {
         String newPassword2 = (String) action.getData();
         
         ServiceResultImpl changePasswordResult = 
-                userService.changePassword(stateManager.getNodeId(), result.getUser().getUsername(), oldPassword, newPassword1, newPassword2);
+                userService.changePassword(stateManager.getNodeId(), null, result.getUser().getUsername(), oldPassword, newPassword1, newPassword2);
         if (changePasswordResult.getResultStatus().equals("SUCCESS")) {
             stateManager.getUI().notify("Your password was changed succesful.", "PasswordChangeAcknowledged");
         } else {
