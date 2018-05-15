@@ -43,7 +43,6 @@ task develop {
 
 dependencies {
     compile project(":openpos-service")
-    compile project(":openpos-cache")
     compile "com.h2database:h2:1.4.196"
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.25'
@@ -79,7 +78,7 @@ jar {
 }  
 
 processResources {
-    from ('../openpos-config/dist/') {
+    from ('../openpos-cache/dist/') {
         into 'public'
     }
 }
