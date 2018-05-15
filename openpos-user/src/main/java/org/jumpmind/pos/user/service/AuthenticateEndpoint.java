@@ -23,6 +23,7 @@ public class AuthenticateEndpoint {
     ConfigService configService;
 
     @Endpoint("/authenticate")
+//    @Cached("userCache")
     public AuthenticationResult authenticate(
             @RequestParam(value="nodeId", defaultValue="") String nodeId,
             @RequestParam(value="locale", defaultValue="") String locale,

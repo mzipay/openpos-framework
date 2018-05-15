@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ClearCacheEndpoint {
     
     @Endpoint("/clearCache")
-    
     public CacheResult clearCache(
             @RequestParam(value="nodeId") String nodeId,        
             @RequestParam(value="cacheId", defaultValue="*") String cacheId) {

@@ -25,7 +25,7 @@ public class CacheService {
             @RequestParam(value="nodeId") String nodeId,        
             @RequestParam(value="cacheId", defaultValue="*") String cacheId,
             @RequestParam(value="key") String key,
-            @RequestParam(value="key") Object value) {
+            @RequestParam(value="value") Object value) {
         return endpointDispatcher.dispatch("/setValue", nodeId, cacheId, key, value);
     }    
     
