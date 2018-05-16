@@ -50,8 +50,7 @@ public class TestModuleTest {
     @Test
     public void test03SqlScript002WasRun() {
         module.setDynamicVersion("0.0.2");
-        module.resetSessionFactory();
-        module.sessionFactory();
+        module.updateDataModel(userSession);
         List<TestTable> rows = userSession.findAll(TestTable.class);
         assertNotNull(rows);
         assertEquals(4, rows.size());

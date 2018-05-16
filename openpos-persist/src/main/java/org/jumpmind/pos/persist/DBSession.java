@@ -66,7 +66,10 @@ public class DBSession {
     }
 
     public <T> List<T> findAll(Class<T> clazz) {
-        return null;
+        QueryTemplate queryTemplate = new QueryTemplate();
+        Query<T> query = new Query<T>().result(clazz);
+        query.setQueryTemplate(queryTemplate);
+        return query(query, new HashMap<>());
     }
 
     public <T extends Entity> T findByNaturalId(Class<T> entityClass, String id) {

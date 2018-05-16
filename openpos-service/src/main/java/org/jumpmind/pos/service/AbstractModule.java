@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.log4j.Logger;
 import org.h2.Driver;
 import org.h2.tools.Server;
 import org.jumpmind.db.platform.IDatabasePlatform;
@@ -40,6 +39,8 @@ import org.jumpmind.pos.service.model.ModuleInfo;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.ISecurityService;
 import org.jumpmind.security.SecurityServiceFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -53,7 +54,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 abstract public class AbstractModule implements Module {
 
-    protected final Logger logger = Logger.getLogger(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     protected Environment env;
@@ -157,32 +158,37 @@ abstract public class AbstractModule implements Module {
 
             DBSession session = sessionFactory.createDbSession();            
             
-            String fromVersion = null;
-                        
-            try {
-                ModuleInfo info = session.findByNaturalId(ModuleInfo.class, installationId);
-                if (info != null) {
-                    fromVersion = info.getCurrentVersion();
-                }
-            } catch (PersistException e) {
-                logger.info("The module table is not available");
-            }
-            
-            DatabaseScriptContainer scripts = new DatabaseScriptContainer(getName() + "/sql", databasePlatform());
-
-            scripts.executePreInstallScripts(fromVersion, getVersion());
-
-            sessionFactory.getDatabaseSchema().createAndUpgrade();
-
-            scripts.executePostInstallScripts(fromVersion, getVersion());
-            
-            session.save(new ModuleInfo(installationId, getVersion()));
+            updateDataModel(session);
             
         }
 
         return sessionFactory;
     }
+        
+    public void updateDataModel(DBSession session) {
+        String fromVersion = null;
+        
+        try {
+            ModuleInfo info = session.findByNaturalId(ModuleInfo.class, installationId);
+            if (info != null) {
+                fromVersion = info.getCurrentVersion();
+            }
+        } catch (PersistException e) {
+            logger.info("The module table is not available");
+        }
+        
+        logger.info("The previous version of {} was {} and the current version is {}", getName(), fromVersion, getVersion());
+        
+        DatabaseScriptContainer scripts = new DatabaseScriptContainer(getName() + "/sql", databasePlatform());
 
+        scripts.executePreInstallScripts(fromVersion, getVersion());
+
+        sessionFactory.getDatabaseSchema().createAndUpgrade();
+
+        scripts.executePostInstallScripts(fromVersion, getVersion());
+        
+        session.save(new ModuleInfo(installationId, getVersion()));
+    }
 
     protected DBSession session() {
         return sessionFactory().createDbSession();

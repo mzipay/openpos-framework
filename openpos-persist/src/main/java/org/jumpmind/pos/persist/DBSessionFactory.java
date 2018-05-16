@@ -49,6 +49,10 @@ public class DBSessionFactory {
         this.databasePlatform = databasePlatform;
         this.entities = entities;
 
+        this.initSchema();
+    }
+    
+    protected void initSchema() {
         this.databaseSchema = new DatabaseSchema();
         databaseSchema.init(sessionContext.get("module.tablePrefix"), databasePlatform,
                 this.entities.stream().filter(e -> e.getAnnotation(Table.class) != null).collect(Collectors.toList()),
@@ -56,6 +60,7 @@ public class DBSessionFactory {
     }
 
     public void reloadSchema() {
+        this.initSchema();
         databaseSchema.createAndUpgrade();
     }
 

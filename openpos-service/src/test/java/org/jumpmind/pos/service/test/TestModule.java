@@ -69,8 +69,5 @@ public class TestModule extends AbstractModule {
     protected DBSession session() {
         return super.session();
     }
-    
-    protected void resetSessionFactory() {
-        this.sessionFactory = null;
-    }
+
 }

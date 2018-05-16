@@ -41,6 +41,7 @@ public class DatabaseSchema {
         db = new Database();
         loadTables(db);
         loadExtensions(db);
+        platform.prefixDatabase(tablePrefix, db);
     }   
     
     public Table getTable(Class<?> entityClass) {
@@ -61,7 +62,8 @@ public class DatabaseSchema {
             log.info("Checking if database tables need created or altered");
             Database desiredModel = db;
 
-            platform.prefixDatabase(tablePrefix, desiredModel);
+            
+            platform.resetCachedTableModel();
             Database actualModel = platform.readFromDatabase(desiredModel.getTables());
 
             IDdlBuilder builder = platform.getDdlBuilder();
