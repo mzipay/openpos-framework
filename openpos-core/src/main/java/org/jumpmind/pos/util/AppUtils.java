@@ -1,8 +1,15 @@
 package org.jumpmind.pos.util;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class AppUtils {
+public final class AppUtils {
+    
+    static final Logger logger = LoggerFactory.getLogger(AppUtils.class);
+       
+    private AppUtils() {
+    }
     
     public static boolean isDevMode() {
         String value = System.getProperty("profile");
@@ -12,4 +19,5 @@ public class AppUtils {
             return false;
         }
     }
+    
 }

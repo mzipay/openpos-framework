@@ -1,10 +1,9 @@
-package org.jumpmind.pos.user;
+package org.jumpmind.pos.service.test;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.service.AbstractModule;
-import org.jumpmind.pos.service.Module;
 import org.jumpmind.security.ISecurityService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,25 +12,31 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@Configuration("UserModule")
+@Configuration("TestModule")
 @EnableTransactionManagement
-public class UserModule extends AbstractModule implements Module {
-
-    static final String NAME = "user";
+public class TestModule extends AbstractModule {
+    
+    static final String NAME = "test";
+    
+    private String dynamicVersion = "0.0.1";
 
     @Override
     public String getName() {
         return NAME;
     }
+    
+    public void setDynamicVersion(String dynamicVersion) {
+        this.dynamicVersion = dynamicVersion;
+    }
 
     @Override
     public String getVersion() {
-        return "0.0.1";
+        return dynamicVersion;
     }
 
     @Override
     public String getTablePrefix() {
-        return "usr";
+        return "tst";
     }
 
     @Override
@@ -64,5 +69,8 @@ public class UserModule extends AbstractModule implements Module {
     protected DBSession session() {
         return super.session();
     }
-
+    
+    protected void resetSessionFactory() {
+        this.sessionFactory = null;
+    }
 }

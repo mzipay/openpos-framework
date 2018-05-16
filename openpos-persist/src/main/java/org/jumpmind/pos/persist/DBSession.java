@@ -268,9 +268,6 @@ public class DBSession {
         return sql;
     }
 
-    private void setRowModificationData(Entity entity) {
-    }
-
     protected void insert(Entity entity, Table table) {
         if (StringUtils.isEmpty(entity.getCreateBy())) {
             entity.setCreateBy(sessionContext.get("CREATE_BY"));
@@ -293,7 +290,6 @@ public class DBSession {
     }
 
     protected int excecuteDml(DmlType type, Object object, org.jumpmind.db.model.Table table) {
-
         LinkedHashMap<String, Column> objectToTableMapping = mapObjectToTable(object.getClass(), table);
         LinkedHashMap<String, Object> objectValuesByColumnName = getObjectValuesByColumnName(object, objectToTableMapping);
 

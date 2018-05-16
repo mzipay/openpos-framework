@@ -5,27 +5,6 @@ apply from: '../openpos-core/common.gradle'
 
 apply plugin: 'distribution'
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
-    }
-}
-
-jar.baseName = 'openpos-server'
-
-jar {
-    manifest {
-        attributes("Implementation-Title": project.name,
-                   "Implementation-Version": appVersion,
-                   "Project-Artifact": project.name,                       
-                   "Build-Version": appVersion,
-                   "Build-Time": new SimpleDateFormat("yyyyMMdd-HHmm").format(new Date()))
-    }    
-}  
-
 processResources {
     from ('../openpos-client/dist/') {
         into 'public'

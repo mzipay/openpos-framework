@@ -1,4 +1,4 @@
-package org.jumpmind.pos.util;
+package org.jumpmind.pos.persist;
 
 import java.io.BufferedReader;
 import java.io.IOException;
