@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -43,9 +45,15 @@ public class ContextRepository {
             .result(ConfigModel.class);
     
     @Autowired
-    @Qualifier("configDbSession")
+    @Qualifier("contextDbSession")
     @Lazy
-    private DBSession dbSession;
+    DBSession dbSession;
+    
+    @PostConstruct
+    public void init() {
+        List<TagModel> tags = loadTags();
+        System.out.println("init");
+    }
     
     public List<TagModel> loadTags() {
         return dbSession.query(tagLookup);        
@@ -153,5 +161,9 @@ public class ContextRepository {
         } else {
             return 0;
         }
+    }
+    
+    protected DBSession getDBSession() {
+        return dbSession;
     }
 }

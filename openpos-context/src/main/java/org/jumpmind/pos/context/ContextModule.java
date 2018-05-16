@@ -1,6 +1,7 @@
 package org.jumpmind.pos.context;
 
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_CONNECTION_PROPERTIES;
+
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_DRIVER;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_INITIAL_SIZE;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_INIT_SQL;
@@ -17,8 +18,12 @@ import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_URL;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_USER;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_VALIDATION_QUERY;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.annotation.Annotation;
-import java.sql.Driver;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +35,9 @@ import java.util.stream.StreamSupport;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.h2.tools.RunScript;
 import org.h2.tools.Server;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
@@ -39,9 +46,12 @@ import org.jumpmind.db.sql.SqlPersistenceManager;
 import org.jumpmind.db.sql.SqlTemplateSettings;
 import org.jumpmind.db.util.BasicDataSourceFactory;
 import org.jumpmind.persist.IPersistenceManager;
+import org.jumpmind.pos.context.model.ContextTestUtils;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
+import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.Table;
+import org.jumpmind.pos.persist.driver.Driver;
 import org.jumpmind.pos.service.Module;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.ISecurityService;
@@ -88,8 +98,8 @@ public class ContextModule implements Module {
 
     private DBSessionFactory sessionFactory;
     
-    @PostConstruct
-    public void init() {
+    @Override
+    public void start() {
         System.out.print("Post construct");
     }
 
@@ -245,11 +255,45 @@ public class ContextModule implements Module {
                 sessionContext, 
                 tableClasses);
         
+        try {
+            ContextTestUtils.initTestDB(sessionFactory.createDbSession(), "/context-test-data.sql");
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        
         return sessionFactory;
     }
 
+//    protected void initDatabase() {
+//        
+//        final String INIT_SCRIPT_KEY = "module." + getName() + ".init.sql";
+//        String initScriptFileName = env.getProperty(INIT_SCRIPT_KEY, "");
+//        try {
+//            if (!StringUtils.isEmpty(initScriptFileName)) {
+//                Reader reader = null;
+//                File script = new File(initScriptFileName);
+//                if (script.exists()) {
+//                    reader = new FileReader(script);
+//                } else {
+//                    URL scriptResourceURL = Thread.currentThread().getContextClassLoader().getResource(initScriptFileName);
+//                    if (scriptResourceURL != null) {
+//                        reader = new InputStreamReader(scriptResourceURL.openStream());
+//                    }
+//                }
+//                if (reader != null) {
+//                    DBSession session =  getSessionFactory().createDbSession();
+//                        RunScript.execute(session.getConnection(), reader);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            throw new PersistException("Failed to execute script " + initScriptFileName, ex);
+//        }
+//    }
+
     @Bean("contextDbSession")
     public DBSession getSession() {
-        return getSessionFactory().createDbSession();
+        DBSession session =  getSessionFactory().createDbSession();
+        return session;
     }    
+    
 }

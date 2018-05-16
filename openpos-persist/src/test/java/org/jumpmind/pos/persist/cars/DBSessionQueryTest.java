@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -319,5 +320,26 @@ public class DBSessionQueryTest {
         assertEquals("Accent", carStats.get(0).getModel());
         assertEquals("Elantra", carStats.get(1).getModel());
         assertEquals("Santa Fe", carStats.get(2).getModel());
+    }
+    
+    @Test
+    public void testExtraFields() {
+        DBSession db = sessionFactory.createDbSession();
+        db.executeScript(new StringReader("alter table car_car add color varchar(128);"
+                + "update car_car set color = 'grey' where model = 'Accent';"
+                + "update car_car set color = 'blue' where model = 'Elantra';"));
+        
+        sessionFactory.reloadSchema();
+        db.close();
+        db = sessionFactory.createDbSession();
+        
+        Query<CarEntity> allCars = new Query<CarEntity>()
+                .result(CarEntity.class);
+        
+        {
+            List<CarEntity> cars = db.query(allCars);
+            assertEquals(3, cars.size());
+        }        
+        
     }
 }

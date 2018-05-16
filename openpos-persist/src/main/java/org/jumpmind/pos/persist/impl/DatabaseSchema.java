@@ -65,17 +65,15 @@ public class DatabaseSchema {
             Database actualModel = platform.readFromDatabase(desiredModel.getTables());
 
             IDdlBuilder builder = platform.getDdlBuilder();
-            if (builder.isAlterDatabase(actualModel, desiredModel)) {
-                log.info("There are database tables that needed altered");
-                String delimiter = platform.getDatabaseInfo().getSqlCommandDelimiter();
-                String alterSql = builder.alterDatabase(actualModel, desiredModel);
-                log.info("SQL generated:\r\n{}", alterSql);
-
+            
+            String alterSql = builder.alterDatabase(actualModel, desiredModel, new SchemaObjectRemoveInterceptor());
+            
+            String delimiter = platform.getDatabaseInfo().getSqlCommandDelimiter();
+            if (!StringUtils.isEmpty(alterSql)) {                    
+                log.info("There are database tables that needed altered. "
+                        + "SQL generated:\r\n{}", alterSql);
+                
                 SqlScript script = new SqlScript(alterSql, platform.getSqlTemplate(), true, false, false, delimiter, null);
-                //TODO: add sql listener
-                // if (logOutput) {
-                // script.setListener(new LogSqlResultsListener(log));
-                // }
                 script.execute(platform.getDatabaseInfo().isRequiresAutoCommitForDdl());
                 log.info("Finished updating tables.");
                 return true;

@@ -31,6 +31,8 @@ public class DBSessionFactory {
     
     private Map<String, String> sessionContext;
     
+    private List<Class<?>> entities;
+    
     public void init(IDatabasePlatform databasePlatform, Map<String, String> sessionContext, 
             List<Class<?>> entities) {
         
@@ -42,17 +44,20 @@ public class DBSessionFactory {
     public void init(IDatabasePlatform databasePlatform, Map<String, String> sessionContext, 
             List<Class<?>> entities, QueryTemplates queryTemplatesObject) {
         
-        this.databaseSchema = new DatabaseSchema();
         this.queryTemplates = buildQueryTemplatesMap(queryTemplatesObject);
         this.sessionContext = sessionContext;
         
         this.databasePlatform = databasePlatform;
-        
+        this.entities = entities;
+        reloadSchema();
+    }
+
+    public void reloadSchema() {
+        this.databaseSchema = new DatabaseSchema();
         databaseSchema.init(sessionContext.get("module.tablePrefix"), 
                 databasePlatform, 
                 entities.stream().filter(e -> e.getAnnotation(Table.class) != null).collect(Collectors.toList()), 
-                entities.stream().filter(e -> e.getAnnotation(Extends.class) != null).collect(Collectors.toList()));
-        
+                entities.stream().filter(e -> e.getAnnotation(Extends.class) != null).collect(Collectors.toList()));        
         databaseSchema.createAndUpgrade();
     }
 
