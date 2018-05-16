@@ -20,47 +20,51 @@ import org.yaml.snakeyaml.constructor.Constructor;
 @Component
 @Scope("prototype")
 public class DBSessionFactory {
-    
+
     private static Logger log = Logger.getLogger(DBSessionFactory.class);
 
     private DatabaseSchema databaseSchema;
-    
+
     private Map<String, QueryTemplate> queryTemplates;
-    
+
     private IDatabasePlatform databasePlatform;
-    
+
     private Map<String, String> sessionContext;
-    
-    public void init(IDatabasePlatform databasePlatform, Map<String, String> sessionContext, 
-            List<Class<?>> entities) {
-        
+
+    private List<Class<?>> entities;
+
+    public void init(IDatabasePlatform databasePlatform, Map<String, String> sessionContext, List<Class<?>> entities) {
+
         QueryTemplates queryTemplates = getQueryTempaltes(sessionContext.get("module.tablePrefix"));
-        
+
         init(databasePlatform, sessionContext, entities, queryTemplates);
     }
-    
-    public void init(IDatabasePlatform databasePlatform, Map<String, String> sessionContext, 
-            List<Class<?>> entities, QueryTemplates queryTemplatesObject) {
-        
-        this.databaseSchema = new DatabaseSchema();
+
+    public void init(IDatabasePlatform databasePlatform, Map<String, String> sessionContext, List<Class<?>> entities,
+            QueryTemplates queryTemplatesObject) {
+
         this.queryTemplates = buildQueryTemplatesMap(queryTemplatesObject);
         this.sessionContext = sessionContext;
-        
+
         this.databasePlatform = databasePlatform;
-        
-        databaseSchema.init(sessionContext.get("module.tablePrefix"), 
-                databasePlatform, 
-                entities.stream().filter(e -> e.getAnnotation(Table.class) != null).collect(Collectors.toList()), 
-                entities.stream().filter(e -> e.getAnnotation(Extends.class) != null).collect(Collectors.toList()));
-        
+        this.entities = entities;
+
+        this.databaseSchema = new DatabaseSchema();
+        databaseSchema.init(sessionContext.get("module.tablePrefix"), databasePlatform,
+                this.entities.stream().filter(e -> e.getAnnotation(Table.class) != null).collect(Collectors.toList()),
+                this.entities.stream().filter(e -> e.getAnnotation(Extends.class) != null).collect(Collectors.toList()));
+    }
+
+    public void reloadSchema() {
+        databaseSchema.createAndUpgrade();
     }
 
     public DBSession createDbSession() {
         return new DBSession(null, null, databaseSchema, databasePlatform, sessionContext, queryTemplates);
     }
-    
+
     public static QueryTemplates getQueryTempaltes(String tablePrefix) {
-        try {            
+        try {
             URL url = Thread.currentThread().getContextClassLoader().getResource(tablePrefix + "-query.yaml");
             if (url != null) {
                 log.info(String.format("Loading %s...", url.toString()));
@@ -68,7 +72,7 @@ public class DBSessionFactory {
                 QueryTemplates queryTemplates = new Yaml(new Constructor(QueryTemplates.class)).load(queryYamlStream);
                 return queryTemplates;
             } else {
-                log.info("Could not locate "  + tablePrefix + "-query.yaml on the classpath.");
+                log.info("Could not locate " + tablePrefix + "-query.yaml on the classpath.");
                 return new QueryTemplates();
             }
         } catch (Exception ex) {
@@ -83,13 +87,13 @@ public class DBSessionFactory {
     public void setDatabaseSchema(DatabaseSchema databaseSchema) {
         this.databaseSchema = databaseSchema;
     }
-    
+
     protected Map<String, QueryTemplate> buildQueryTemplatesMap(QueryTemplates queryTemplates) {
         Map<String, QueryTemplate> queryTemplatesMap = new HashMap<>();
-        if (queryTemplates != null) {            
+        if (queryTemplates != null) {
             queryTemplates.getQueries().stream().forEach((q) -> queryTemplatesMap.put(q.getName(), q));
         }
         return queryTemplatesMap;
-    }    
-    
+    }
+
 }
