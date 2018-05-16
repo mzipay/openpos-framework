@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan(
-        basePackages = { "org.jumpmind.pos", "org.jumpmind.pos.core", "org.jumpmind.pos.app" })
+        basePackages = { "org.jumpmind.pos" })
 public class TestConfig {
 
 }
