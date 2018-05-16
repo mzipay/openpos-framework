@@ -17,10 +17,14 @@ export class IconService {
         this.iconRegistry.addSvgIcon('local_rotate-3d',     this.makeIconSafeUrl('rotate-3d.svg'));
     }
 
-    public addIcon(key: string, asset: string) {
-        // TODO: needs fixed. adding icons as local file resources will not work when running the application
-        // as standalone javascript app in Cordova or locally in file system.  (i.e., when not served)
-        this.iconRegistry.addSvgIcon(key, this.sanitizer.bypassSecurityTrustResourceUrl(`./assets/icons/${asset}`));
+    public addIcon(key: string, asset: string, served?: boolean) {
+        if (! served) {
+	        // TODO: needs fixed. adding icons as local file resources will not work when running the application
+    	    // as standalone javascript app in Cordova or locally in file system.  (i.e., when not served)
+            this.iconRegistry.addSvgIcon(key, this.sanitizer.bypassSecurityTrustResourceUrl(`./assets/icons/${asset}`));
+        } else {
+            this.iconRegistry.addSvgIcon(key, this.makeIconSafeUrl(asset));
+        }
     }
 
     private makeIconSafeUrl(iconFilename: string): SafeResourceUrl {
