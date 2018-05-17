@@ -12,13 +12,9 @@ import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.QueryTemplates;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-@Component
-@Scope("prototype")
 public class DBSessionFactory {
 
     private static Logger log = Logger.getLogger(DBSessionFactory.class);

@@ -14,7 +14,6 @@ import org.jumpmind.pos.context.ContextException;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -45,9 +44,8 @@ public class ContextRepository {
             .result(ConfigModel.class);
     
     @Autowired
-    @Qualifier("contextDbSession")
     @Lazy
-    DBSession dbSession;
+    DBSession contextSession;
     
     @PostConstruct
     public void init() {
@@ -56,7 +54,7 @@ public class ContextRepository {
     }
     
     public List<TagModel> loadTags() {
-        return dbSession.query(tagLookup);        
+        return contextSession.query(tagLookup);        
     }
     
     public ConfigModel findConfigValue(Date currentTime, Map<String, String> tags, String configName) {
@@ -64,7 +62,7 @@ public class ContextRepository {
         Map<String, Object> params = new HashMap<>();
         params.put("configName", configName);
         params.put("currentTime", currentTime);
-        List<ConfigModel> configs = dbSession.query(configLookup, params);
+        List<ConfigModel> configs = contextSession.query(configLookup, params);
         if (CollectionUtils.isEmpty(configs)) {
             if (log.isDebugEnabled()) {                
                 log.debug("No configuration found for " + configName);
@@ -163,7 +161,4 @@ public class ContextRepository {
         }
     }
     
-    protected DBSession getDBSession() {
-        return dbSession;
-    }
 }

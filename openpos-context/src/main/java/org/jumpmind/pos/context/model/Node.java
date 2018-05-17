@@ -23,8 +23,6 @@ public class Node extends Entity {
     @Column
     private String city;
     @Column
-    private String state;
-    @Column
     private String postalCode;    
     @Column(size="254")
     private String description;
@@ -77,14 +75,6 @@ public class Node extends Entity {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public String getPostalCode() {

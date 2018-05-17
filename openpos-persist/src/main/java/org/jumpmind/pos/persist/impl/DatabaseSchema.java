@@ -116,10 +116,10 @@ public class DatabaseSchema {
 
     protected void validateTable(Table table) {
         String tableName = tablePrefix + "_" + table.getName();
-        validateName(tableName, "table");
+        validateName(tableName, "table", tableName);
         boolean hasPk = false;
         for (Column column : table.getColumns()) {
-            validateName(column.getName(), "column");
+            validateName(column.getName(), "column", tableName);
             if (column.isPrimaryKey()) {
                 hasPk = true;
             }
@@ -130,17 +130,17 @@ public class DatabaseSchema {
         }
     }
 
-    protected void validateName(String name, String type) {
+    protected void validateName(String nameToValidate, String type, String tableName) {
         final int ORACLE_MAX_NAME_LENGTH = 30;
-        if (name.length() == 0) {
-            throw new PersistException(String.format("Invalid %s name \"%s\". The name cannot be blank.", type, name));
+        if (nameToValidate.length() == 0) {
+            throw new PersistException(String.format("Invalid %s name \"%s\". The name cannot be blank.", type, nameToValidate));
         }
-        else if (name.length() > ORACLE_MAX_NAME_LENGTH) {
-            throw new PersistException(String.format("Invalid %s name \"%s\". Must be 30 characeters or less.", type, name));
-        } else if (ReservedWords.isReserved(name)) {
-            throw new PersistException(String.format("Invalid %s name \"%s\". This is a reserved word. Try making the name more specific.", type, name));
-        } else if (StringUtils.containsWhitespace(name)) {
-            throw new PersistException(String.format("Invalid %s name \"%s\".  The name contains whitespace.", type, name));
+        else if (nameToValidate.length() > ORACLE_MAX_NAME_LENGTH) {
+            throw new PersistException(String.format("Invalid %s name \"%s\". Must be 30 characeters or less.", type, nameToValidate));
+        } else if (ReservedWords.isReserved(nameToValidate)) {
+            throw new PersistException(String.format("Invalid %s name \"%s\" for table \"%s\". This is a reserved word. Try making the name more specific.", type, nameToValidate, tableName));
+        } else if (StringUtils.containsWhitespace(nameToValidate)) {
+            throw new PersistException(String.format("Invalid %s name \"%s\".  The name contains whitespace.", type, nameToValidate));
         }        
     }
 
@@ -341,7 +341,7 @@ public class DatabaseSchema {
             index++;
         }
         
-        return buff.toString();
+        return buff.toString().toLowerCase();
     }
     
     public Map<Class<?>, EntityMetaData> getClassMetadata() {
