@@ -8,6 +8,7 @@ include 'openpos-user'
 include 'openpos-client-core-lib'
 include 'openpos-wrapper'
 include 'openpos-i18n'
+include 'openpos-tax'
 
 rootProject.children.each { project ->
     if (project.projectDir.getName().equals('openpos-client-core-lib')) {
