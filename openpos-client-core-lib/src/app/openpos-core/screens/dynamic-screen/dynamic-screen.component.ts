@@ -67,6 +67,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
   private currentTheme: string;
 
+  private disableDevMenu = false;
+
   @ViewChild(TemplateDirective) host: TemplateDirective;
 
   constructor(public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
@@ -106,7 +108,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
     // console.log(`${screenWidth} ${x} ${y}`);
     if (this.clickCount === 0 || Date.now() - this.firstClickTime > 1000 ||
-      (y > 100)) {
+      (y > 100) || this.disableDevMenu) {
       this.firstClickTime = Date.now();
       this.clickCount = 0;
     }
@@ -330,6 +332,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
       }
       this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(screenType));
     }
+    this.disableDevMenu = screen.template.disableDevMenu;
     this.installedTemplate.show(screen);
     this.installedScreen.show(screen, this, this.installedTemplate);
 
@@ -340,9 +343,9 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
   }
 
   protected logSwitchScreens(screen: any) {
-    var msg:string = `>>> Switching screens from "${this.previousScreenType}" to "${screen.type}"`;
-    let nameLogged:boolean = false;
-    let sequenceLogged:boolean = false;
+    let msg = `>>> Switching screens from "${this.previousScreenType}" to "${screen.type}"`;
+    let nameLogged = false;
+    let sequenceLogged = false;
     if (screen.name && screen.name !== screen.type) {
       nameLogged = true;
       msg += ` (name "${screen.name}"`;
@@ -387,7 +390,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
   }
 
   protected openDialog(dialog: any) {
-
     const dialogComponentFactory: ComponentFactory<IScreen> = this.dialogService.resolveDialog(dialog.type);
     let closeable = false;
     if (dialog.template.dialogProperties) {
