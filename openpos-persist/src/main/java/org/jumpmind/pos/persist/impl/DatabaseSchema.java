@@ -61,7 +61,6 @@ public class DatabaseSchema {
         try {
             log.info("Checking if database tables need created or altered");
             Database desiredModel = db;
-
             
             platform.resetCachedTableModel();
             Database actualModel = platform.readFromDatabase(desiredModel.getTables());

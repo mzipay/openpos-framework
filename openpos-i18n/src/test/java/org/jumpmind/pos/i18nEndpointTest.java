@@ -4,39 +4,27 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.jumpmind.pos.i18n.service.i18nEndpoint;
+import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.cars.TestConfig;
+import org.jumpmind.pos.i18n.model.Resource;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes= {TestConfig.class})
-public class i18nEndpointTest {
-	
-//	@Test
-//	public void performance () {
-//		String base = "test";
-//		String key = "_company1";
-//		Locale locale = Locale.FRANCE;
-//		String brand = "BigLots";
-//		String[] args = {"builder"};
-//		long tic, toc, time;
-//		
-//		tic = System.nanoTime();
-//		for (int i = 0; i < 500000; i++) {
-//			i18nEndpoint.getString(base, key, locale, brand);
-//		}
-//		toc = System.nanoTime();
-//		time = toc - tic;
-//		System.out.println("Concat completed in: \t" + time);	
-//	}
+public class i18nEndpointTest {	
 	
     @Autowired
 	i18nEndpoint i18nEndpoint;	
+    
+    @Autowired
+    @Qualifier("i18nSession")
+    private DBSession dbSession; 
 	
 	@Test
 	/**
@@ -375,8 +363,7 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "");
 	}
 	
-	// TODO figure out encoding issues
-    @Ignore
+     
 	@Test
 	/**
 	 * Test to translate a key in a base, not "test"
@@ -388,7 +375,7 @@ public class i18nEndpointTest {
 		String brand = "BigLots";
 		
 		String res = i18nEndpoint.getString(base, key, locale, brand);
-		Assert.assertEquals(res, "�tes");
+		Assert.assertEquals(res, "\u00eates");
 	}
 	
 	@Test
@@ -482,8 +469,6 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	// TODO figure out encoding issues
-	@Ignore
 	@Test
 	/**
 	 *  Test for TRANSLATION date and time format with NO format specifier
@@ -499,7 +484,7 @@ public class i18nEndpointTest {
 				date,
 		};
 		
-		String exp = "� " + DateFormat.getTimeInstance(DateFormat.DEFAULT, locale).format(date) + 
+		String exp = "\u00c0 " + DateFormat.getTimeInstance(DateFormat.DEFAULT, locale).format(date) + 
 				" en " + DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(date);
 
 		
@@ -507,8 +492,7 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	// TODO figure out encoding issues
-    @Ignore
+     
 	@Test
 	/**
 	 *  Test for TRANSLATION date and time format with SHORT format specifier
@@ -524,7 +508,7 @@ public class i18nEndpointTest {
 				date,
 		};
 		
-		String exp = "� " + DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date) + 
+		String exp = "\u00c0 " + DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date) + 
 				" en " + DateFormat.getDateInstance(DateFormat.SHORT, locale).format(date);
 
 		
@@ -552,8 +536,7 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	   // TODO figure out encoding issues
-    @Ignore
+     
 	@Test
 	/**
 	 *  Test for currency format French
@@ -568,7 +551,7 @@ public class i18nEndpointTest {
 				1,
 		};
 
-		String exp = "J'ai 1,00 �"; 
+		String exp = "J'ai 1,00 \u20ac"; 
 		
 		String res = i18nEndpoint.getString(base, key, locale, brand, args);
 		Assert.assertEquals(res, exp);
@@ -593,8 +576,6 @@ public class i18nEndpointTest {
 		String res = i18nEndpoint.getString(base, key, locale, brand, args);
 		Assert.assertEquals(res, exp);
 	}
-	
-	//TODO Report the weird French separator thing
 	
 	@Test
 	/**
@@ -815,5 +796,176 @@ public class i18nEndpointTest {
 		String res = i18nEndpoint.getString(base, key, locale, brand, args);
 		Assert.assertEquals(res, exp);
 	}
+	
+	@Test
+	public void getStringDatabaseNoOverlapTest () {
+ 
+            Resource resource = new Resource();
+            resource.setBaseName("common");
+            resource.setLocale(Locale.US);
+            resource.setBrand("Target");
+            resource.setStringKey("_hello");
+            
+            resource.setPattern("hi there");
+            dbSession.save(resource);
+            
+            String res = i18nEndpoint.getString("common", "_hello", Locale.US, "Target");
+            String exp = "hi there";
+            
+            Assert.assertEquals(exp, res);
+
+	}
+	
+	@Test
+	public void getStringDatabaseNoBrandTest () {
+		  
+            Resource resource = new Resource();
+            resource.setBaseName("common");
+            resource.setLocale(Locale.US);
+            resource.setBrand("*");
+            resource.setStringKey("_test");
+            
+            resource.setPattern("test");
+            dbSession.save(resource);
+            
+            String res = i18nEndpoint.getString("common", "_test", Locale.US, "");
+            String exp = "test";
+            
+            Assert.assertEquals(exp, res);
+
+	}
+	
+	@Test
+	public void getStringDatabaseOverlapTest () {
+		
+            Resource resource = new Resource();
+            resource.setBaseName("common");
+            resource.setLocale(Locale.US);
+            resource.setBrand("*");
+            resource.setStringKey("_me");
+            
+            resource.setPattern("myself");
+            dbSession.save(resource);
+            
+            String res = i18nEndpoint.getString("common", "_me", Locale.US, "");
+            String exp = "myself";
+            
+            Assert.assertEquals(exp, res);
+
+	}
+	
+	@Test
+	public void getStringDatabaseMultiLocaleTest () {
+		  
+            Resource resource = new Resource();
+            resource.setBaseName("common");
+            resource.setLocale(Locale.US);
+            resource.setBrand("*");
+            resource.setStringKey("_please");
+            resource.setPattern("Please");
+            
+            dbSession.save(resource);
+            
+            Resource resource1 = new Resource();
+            resource1.setBaseName("common");
+            resource1.setLocale(Locale.FRANCE);
+            resource1.setBrand("*");
+            resource1.setStringKey("_please");
+            resource1.setPattern("Puis");
+            
+            dbSession.save(resource1);
+            
+            String res = i18nEndpoint.getString("common", "_please", Locale.US, "");
+            String exp = "Please";
+            
+            String res1 = i18nEndpoint.getString("common", "_please", Locale.FRANCE, "");
+            String exp1 = "Puis";
+            
+            Assert.assertEquals(exp, res);
+            Assert.assertEquals(exp1, res1);   
+        }
+		
+		@Test
+		public void getStringDatabaseBrandOverrideTest () {
+			
+	            Resource resource1 = new Resource();
+	            resource1.setBaseName("common");
+	            resource1.setLocale(Locale.US);
+	            resource1.setBrand("*");
+	            resource1.setStringKey("_company");
+	            resource1.setPattern("<company>");
+	            
+	            dbSession.save(resource1);
+	            
+	            Resource resource = new Resource();
+	            resource.setBaseName("common");
+	            resource.setLocale(Locale.US);
+	            resource.setBrand("Target");
+	            resource.setStringKey("_company");
+	            resource.setPattern("Target");
+	            
+	            dbSession.save(resource);
+	            
+	            String res = i18nEndpoint.getString("common", "_company", Locale.US, "");
+	            String exp = "<company>";
+	            
+	            String res1 = i18nEndpoint.getString("common", "_company", Locale.US, "Target");
+	            String exp1 = "Target";
+	            
+	            Assert.assertEquals(exp, res);
+	            Assert.assertEquals(exp1, res1);
+	}
+		
+		@Test
+		public void getStringDatabaseFormatTest () {
+			
+	            Resource resource = new Resource();
+	            resource.setBaseName("common");
+	            resource.setLocale(Locale.US);
+	            resource.setBrand("*");
+	            resource.setStringKey("_test_string1");
+	            
+	            resource.setPattern("At {0, time, short} on {0, date, short}");
+	            dbSession.save(resource);
+	            
+	            Date date = new Date();
+	    		Object[] args = {
+	    				date,
+	    		};
+	    		
+	            String res = i18nEndpoint.getString("common", "_test_string1", Locale.US, "", args);
+	    		
+	    		
+	    		String exp = "At " + DateFormat.getTimeInstance(DateFormat.SHORT).format(date) + 
+	    				" on " + DateFormat.getDateInstance(DateFormat.SHORT).format(date);
+	            
+	            Assert.assertEquals(exp, res);
+		}
+		
+		@Test
+		public void getStringDatabaseFormatBadPatternTest () {
+			
+	            Resource resource = new Resource();
+	            resource.setBaseName("common");
+	            resource.setLocale(Locale.US);
+	            resource.setBrand("*");
+	            resource.setStringKey("_test_string1");
+	            
+	            resource.setPattern("At {0, BAD, short} on {0, date, short}");
+	            dbSession.save(resource);
+	            
+	            Date date = new Date();
+	    		Object[] args = {
+	    				date,
+	    		};
+	    		
+	            String res = i18nEndpoint.getString("common", "_test_string1", Locale.US, "", args);
+	    		
+	    		
+	    		String exp = "<UNABLE TO APPLY PATTERN>";
+	            
+	            Assert.assertEquals(exp, res);
+		}
+	
 		
 }
