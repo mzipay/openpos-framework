@@ -314,8 +314,7 @@ public class DBSessionQueryTest {
     @Test
     public void testExtraFields() {
         DBSession db = sessionFactory.createDbSession();
-        db.executeScript(new StringReader("alter table car_car add color varchar(128);"
-                + "update car_car set color = 'grey' where model = 'Accent';"
+        db.executeScript(new StringReader("update car_car set color = 'grey' where model = 'Accent';"
                 + "update car_car set color = 'blue' where model = 'Elantra';"));
         
         sessionFactory.reloadSchema();
@@ -328,7 +327,9 @@ public class DBSessionQueryTest {
         {
             List<CarEntity> cars = db.query(allCars);
             assertEquals(3, cars.size());
+            assertNull(cars.get(0).getAdditionalField("color"));
+            assertEquals("grey", cars.get(1).getAdditionalField("color"));
+            assertEquals("blue", cars.get(2).getAdditionalField("color"));
         }        
-        
     }
 }

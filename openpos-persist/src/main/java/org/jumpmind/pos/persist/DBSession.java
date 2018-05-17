@@ -36,6 +36,7 @@ import org.jumpmind.pos.persist.impl.EntitySystemInfo;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.ReflectUtils;
 import org.jumpmind.pos.persist.impl.Transaction;
+import org.jumpmind.util.LinkedCaseInsensitiveMap;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -273,10 +274,6 @@ public class DBSession {
 
     protected String getSelectSql(Class<? extends Entity> entity) {
         Table table = getValidatedTable(entity);  
-     //   LinkedHashMap<String, Column> objectToTableMapping = mapObjectToTable(entity, table);
-    //    Column[] columns = objectToTableMapping.values().toArray(new Column[objectToTableMapping.size()]);
-//        DmlStatement statement = databasePlatform.createDmlStatement(DmlType.SELECT, table.getCatalog(), table.getSchema(),
-//                table.getName(), null, columns, null, null);
         DmlStatement statement = databasePlatform.createDmlStatement(DmlType.SELECT, table.getCatalog(), table.getSchema(),
                 table.getName(), null, table.getColumns(), null, null);
         String sql = statement.getSql();
@@ -389,7 +386,7 @@ public class DBSession {
 
             PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(object);
             
-            Set<String> matchedColumns = new HashSet<>();
+            LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<String>();
             
             for (int i = 0; i < propertyDescriptors.length; i++) {
                 String propertyName = propertyDescriptors[i].getName();
@@ -398,7 +395,7 @@ public class DBSession {
                 if (row.containsKey(columnName)) {
                     Object value = row.get(columnName);
                     ReflectUtils.setProperty(object, propertyName, value);
-                    matchedColumns.add(columnName);
+                    matchedColumns.put(columnName, null);
                 }
             }
             
@@ -416,9 +413,9 @@ public class DBSession {
         }
     }
 
-    private void addUnmatchedColumns(Row row, Set<String> matchedColumns, Entity entity) {
+    private void addUnmatchedColumns(Row row, Map<String, String> matchedColumns, Entity entity) {
         for (String rowColumn : row.keySet()) {
-            if (!matchedColumns.contains(rowColumn)) {
+            if (!matchedColumns.containsKey(rowColumn)) {
                 entity.setAdditionalField(rowColumn, row.get(rowColumn));
             }
         }        

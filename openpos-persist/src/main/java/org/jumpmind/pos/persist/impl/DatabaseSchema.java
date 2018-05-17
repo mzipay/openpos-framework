@@ -30,7 +30,8 @@ public class DatabaseSchema {
     private List<Class<?>> entityClasses;
     private List<Class<?>> entityExtensionClasses;
     private Map<Class<?>, EntityMetaData> classMetadata = new HashMap<>();
-    private Database db;
+    private Database desiredModel;
+    private Database actualModel;
     private String tablePrefix;
 
     public void init(String tablePrefix, IDatabasePlatform platform, List<Class<?>> entityClasses, List<Class<?>> entityExtensionClasses) {
@@ -38,11 +39,17 @@ public class DatabaseSchema {
         this.platform = platform;
         this.entityClasses = entityClasses;
         this.entityExtensionClasses = entityExtensionClasses;
-        db = new Database();
+        desiredModel = buildDesiredModel();
+    }
+
+    protected Database buildDesiredModel() {
+        Database db = new Database();
         loadTables(db);
         loadExtensions(db);
         platform.prefixDatabase(tablePrefix, db);
+        return db;
     }   
+    
     
     public Table getTable(Class<?> entityClass) {
         if (entityClass == null) {
@@ -57,13 +64,26 @@ public class DatabaseSchema {
         }
     }
     
+    protected void refreshMetaData() {
+        for (EntityMetaData entityMetaData : classMetadata.values()) {
+            for (Table actualTable : actualModel.getTables()) {
+                Table desiredTable = entityMetaData.getTable();
+                if (desiredTable.getName().equalsIgnoreCase(actualTable.getName())) {
+                    actualTable.setCatalog(null); // TODO causing invalid SQL generation right now on H2. 
+                    actualTable.setSchema(null); // TODO
+                    entityMetaData.setTable(actualTable);
+                    break;
+                }
+            }
+        }
+    }
+    
     public boolean createAndUpgrade() {
         try {
             log.info("Checking if database tables need created or altered");
-            Database desiredModel = db;
             
             platform.resetCachedTableModel();
-            Database actualModel = platform.readFromDatabase(desiredModel.getTables());
+            actualModel = platform.readFromDatabase(desiredModel.getTables());
 
             IDdlBuilder builder = platform.getDdlBuilder();
             
@@ -76,9 +96,12 @@ public class DatabaseSchema {
                 
                 SqlScript script = new SqlScript(alterSql, platform.getSqlTemplate(), true, false, false, delimiter, null);
                 script.execute(platform.getDatabaseInfo().isRequiresAutoCommitForDdl());
+                actualModel = platform.readFromDatabase(desiredModel.getTables());
                 log.info("Finished updating tables.");
+                refreshMetaData();
                 return true;
             } else {
+                refreshMetaData();
                 return false;
             }
         } catch (RuntimeException ex) {
@@ -88,13 +111,15 @@ public class DatabaseSchema {
         }
     }     
 
-    protected void loadTables(Database db) {        
+    protected void loadTables(Database db) {
+        Map<Class<?>, EntityMetaData> classMetadataNew = new HashMap<>();
         for (Class<?> entityClass : entityClasses) {
             EntityMetaData meta = createMetaData(entityClass);
             validateTable(meta.getTable());
-            classMetadata.put(entityClass, meta);
+            classMetadataNew.put(entityClass, meta);
             db.addTable(meta.getTable());
         }
+        this.classMetadata = classMetadataNew;
     }
 
     protected void loadExtensions(Database db) {
@@ -143,57 +168,12 @@ public class DatabaseSchema {
         }        
     }
 
-//    protected Database readDatabaseFromClasses(String basePackageName, String extensionPackageName) {
-//        Database db = new Database();
-//        addTablesToDatabase(db, basePackageName);
-//        updateDatabaseWithExtensions(db, extensionPackageName);        
-//        return db;
-//    }
-
-//    protected void updateDatabaseWithExtensions(Database db, String extensionPackageName) {
-//        addTablesToDatabase(db, extensionPackageName);
-//        updateTablesWithExtensions(db, extensionPackageName);
-//    }
-
-//    protected void updateTablesWithExtensions(Database db, String extensionPackageName) {
-//        for (Class<?> clazz : getClassesForPackageAndAnnotation(extensionPackageName, Extends.class)) {
-//            Extends extendsAnnotation = clazz.getAnnotation(Extends.class);
-//            Class<?> extendedClass = extendsAnnotation.clazz();
-//            //TODO: enhance for multiple tiers/levels of @Extends without parent being @Table
-//            org.jumpmind.pos.persist.Table tblAnnotation = extendedClass.getAnnotation(org.jumpmind.pos.persist.Table.class);
-//            extendTable(db.findTable(tblAnnotation.name()), clazz);
-//        }
-//    }
-
     protected void extendTable(Table dbTable, Class<?> clazz) {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field:fields) {
             dbTable.addColumn(createColumn(field));
         }               
     }
-
-//    protected Set<Class<?>> getClassesForPackageAndAnnotation(String packageName, Class<? extends Annotation> annotation) {
-//        Set<Class<?>> classes = new HashSet<Class<?>>();
-//        ClassPathScanningCandidateComponentProvider scanner =
-//                new ClassPathScanningCandidateComponentProvider(true);
-//        scanner.addIncludeFilter(new AnnotationTypeFilter(annotation));
-//        for (BeanDefinition bd : scanner.findCandidateComponents(packageName)) {
-//            try {
-//                final Class<?> clazz = Class.forName(bd.getBeanClassName());
-//                classes.add(clazz);
-//            } catch (ClassNotFoundException ex) {
-//                log.error(ex.getMessage());
-//            }
-//        }    
-//        return classes;
-//    }
-//
-//    protected Database addTablesToDatabase(Database db, String packageName) {
-//        for (Class<?> clazz : getClassesForPackageAndAnnotation(packageName, org.jumpmind.pos.persist.Table.class)) {
-//            db.addTable(createTable(clazz));
-//        }
-//        return db;        
-//    }
 
     protected EntityMetaData createMetaData(Class<?> entityClass) {
         

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
+
 
 public abstract class Entity {
     
@@ -25,7 +27,7 @@ public abstract class Entity {
     @SuppressWarnings("unused")
     private transient Map<String, Object> systemData = new HashMap<>(); 
     
-    private transient Map<String, Object> additionalFields = new HashMap<>();
+    private transient Map<String, Object> additionalFields = new CaseInsensitiveMap<String, Object>();
 
     public Date getCreateTime() {
         return createTime;

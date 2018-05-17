@@ -35,7 +35,7 @@ public class TestConfig {
             sessionFactory = new DBSessionFactory();
 
             Map<String, String> sessionContext = new HashMap<>();
-            sessionContext.put("module.tablePrefix", "per");
+            sessionContext.put("module.tablePrefix", "tst");
             sessionContext.put("CREATE_BY", "openpos-test");
             sessionContext.put("LAST_UPDATE_BY", "openpos-test");
             
@@ -59,7 +59,7 @@ public class TestConfig {
     public void updateDataModel(DBSession session) {
         String fromVersion = null;
 
-        DatabaseScriptContainer scripts = new DatabaseScriptContainer("name" + "/sql", PersistTestUtil.testDbPlatform());
+        DatabaseScriptContainer scripts = new DatabaseScriptContainer("test/sql", PersistTestUtil.testDbPlatform());
 
         scripts.executePreInstallScripts(fromVersion, "0.0.1");
 
