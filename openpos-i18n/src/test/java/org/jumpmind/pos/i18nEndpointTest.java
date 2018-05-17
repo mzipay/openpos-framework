@@ -8,7 +8,6 @@ import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.cars.TestConfig;
 import org.jumpmind.pos.i18n.model.Resource;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,31 +17,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes= {TestConfig.class})
-public class i18nEndpointTest {
-	
-//	@Test
-//	public void performance () {
-//		String base = "test";
-//		String key = "_company1";
-//		Locale locale = Locale.FRANCE;
-//		String brand = "BigLots";
-//		String[] args = {"builder"};
-//		long tic, toc, time;
-//		
-//		tic = System.nanoTime();
-//		for (int i = 0; i < 500000; i++) {
-//			i18nEndpoint.getString(base, key, locale, brand);
-//		}
-//		toc = System.nanoTime();
-//		time = toc - tic;
-//		System.out.println("Concat completed in: \t" + time);	
-//	}
+public class i18nEndpointTest {	
 	
     @Autowired
 	i18nEndpoint i18nEndpoint;	
     
     @Autowired
-    @Qualifier("i18nDbSession")
+    @Qualifier("i18nSession")
     private DBSession dbSession; 
 	
 	@Test
@@ -818,7 +799,7 @@ public class i18nEndpointTest {
 	
 	@Test
 	public void getStringDatabaseNoOverlapTest () {
-		{  
+ 
             Resource resource = new Resource();
             resource.setBaseName("common");
             resource.setLocale(Locale.US);
@@ -832,13 +813,12 @@ public class i18nEndpointTest {
             String exp = "hi there";
             
             Assert.assertEquals(exp, res);
-            
-        }
+
 	}
 	
 	@Test
 	public void getStringDatabaseNoBrandTest () {
-		{  
+		  
             Resource resource = new Resource();
             resource.setBaseName("common");
             resource.setLocale(Locale.US);
@@ -852,13 +832,12 @@ public class i18nEndpointTest {
             String exp = "test";
             
             Assert.assertEquals(exp, res);
-            
-        }
+
 	}
 	
 	@Test
 	public void getStringDatabaseOverlapTest () {
-		{  
+		
             Resource resource = new Resource();
             resource.setBaseName("common");
             resource.setLocale(Locale.US);
@@ -872,13 +851,12 @@ public class i18nEndpointTest {
             String exp = "myself";
             
             Assert.assertEquals(exp, res);
-            
-        }
+
 	}
 	
 	@Test
 	public void getStringDatabaseMultiLocaleTest () {
-		{  
+		  
             Resource resource = new Resource();
             resource.setBaseName("common");
             resource.setLocale(Locale.US);
@@ -904,15 +882,12 @@ public class i18nEndpointTest {
             String exp1 = "Puis";
             
             Assert.assertEquals(exp, res);
-            Assert.assertEquals(exp1, res1);
-		}
-            
+            Assert.assertEquals(exp1, res1);   
         }
 		
 		@Test
 		public void getStringDatabaseBrandOverrideTest () {
-			{  
-	          
+			
 	            Resource resource1 = new Resource();
 	            resource1.setBaseName("common");
 	            resource1.setLocale(Locale.US);
@@ -939,13 +914,11 @@ public class i18nEndpointTest {
 	            
 	            Assert.assertEquals(exp, res);
 	            Assert.assertEquals(exp1, res1);
-	            
-	        }
 	}
 		
 		@Test
 		public void getStringDatabaseFormatTest () {
-			{  
+			
 	            Resource resource = new Resource();
 	            resource.setBaseName("common");
 	            resource.setLocale(Locale.US);
@@ -967,13 +940,11 @@ public class i18nEndpointTest {
 	    				" on " + DateFormat.getDateInstance(DateFormat.SHORT).format(date);
 	            
 	            Assert.assertEquals(exp, res);
-	            
-	        }
 		}
 		
 		@Test
 		public void getStringDatabaseFormatBadPatternTest () {
-			{  
+			
 	            Resource resource = new Resource();
 	            resource.setBaseName("common");
 	            resource.setLocale(Locale.US);
@@ -994,7 +965,6 @@ public class i18nEndpointTest {
 	    		String exp = "<UNABLE TO APPLY PATTERN>";
 	            
 	            Assert.assertEquals(exp, res);
-	        }
 		}
 	
 		

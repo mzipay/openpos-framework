@@ -1,7 +1,7 @@
 ---
 queries:
 -
-  name: brandLookup
+  name: patternLookup
   select: > 
     select *
     from i18n_Resource

@@ -13,7 +13,6 @@ public class Resource extends Entity {
     private String baseName;
     @Column(primaryKey=true)
     private String brand;
-    //TODO check if passing Locale is okay
     @Column(primaryKey=true)
     private Locale locale;
     @Column(primaryKey=true)

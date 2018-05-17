@@ -22,8 +22,8 @@ public class i18nRepository {
       
 	final Logger log = LoggerFactory.getLogger(getClass());
 	
-    private Query<Resource> brandLookup = new Query<Resource>()
-            .named("brandLookup")
+    private Query<Resource> patternLookup = new Query<Resource>()
+            .named("patternLookup")
             .result(Resource.class);
     
     @Autowired
@@ -44,7 +44,7 @@ public class i18nRepository {
     public String getString(String base, String key, Locale locale, String brand) {
 
         Map<String, Object> params = generateHashMap(base, key, locale, brand);
-    	List<Resource> phrases = dbSession.query(brandLookup, params);
+    	List<Resource> phrases = dbSession.query(patternLookup, params);
     	String string = null;
     	if (phrases != null) {
     		Resource row = phrases.stream().filter((p)-> p.getBrand().equals(brand)).findFirst().orElse(null);

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Component
@@ -22,20 +23,13 @@ public class i18nEndpoint {
     
     @Autowired
     private i18nRepository i18nRepository;
-    
-    private String format(String location, String pattern, Locale locale, Object... args) {
-		try {
-			MessageFormat formatter = new MessageFormat(pattern, locale);
-			return formatter.format(args);
-		} catch (IllegalArgumentException e) {
-			log.warn("Bad message format or arguments in resource \"" + location + "_" + locale + "\"", e);
-			return "<UNABLE TO APPLY PATTERN>";
-		}
-	}
-
 
     @Endpoint("/getString")
-    public String getString(String base, String key, Locale locale, String brand, Object... args) {
+    public String getString(@RequestParam(value="base", defaultValue="") String base,
+            @RequestParam(value="key", defaultValue="") String key,
+            @RequestParam(value="locale", defaultValue="") Locale locale,
+            @RequestParam(value="brand", defaultValue="") String brand,
+            @RequestParam(value="args", defaultValue="") Object... args) {
 
         final String[] properties = { base + "_" + brand + "_" + OVERRIDE, base + "_" + brand, base + "_" + OVERRIDE, base, };
        
@@ -57,4 +51,14 @@ public class i18nEndpoint {
         }
     	return "<MISSING RESOURCE>";
     }
+    
+    private String format(String location, String pattern, Locale locale, Object... args) {
+		try {
+			MessageFormat formatter = new MessageFormat(pattern, locale);
+			return formatter.format(args);
+		} catch (IllegalArgumentException e) {
+			log.warn("Bad message format or arguments in resource \"" + location + "_" + locale + "\"", e);
+			return "<UNABLE TO APPLY PATTERN>";
+		}
+	}
 }
