@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.h2.Driver;
-import org.h2.tools.Server;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
 import org.jumpmind.db.sql.SqlTemplateSettings;
@@ -35,6 +33,7 @@ import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.DatabaseScriptContainer;
 import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.Table;
+import org.jumpmind.pos.persist.driver.Driver;
 import org.jumpmind.pos.service.model.ModuleInfo;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.ISecurityService;
@@ -62,8 +61,8 @@ abstract public class AbstractModule implements Module {
     @Value("${installation.id}")
     protected String installationId;
 
-    @Autowired
-    Server h2Server;
+//    @Autowired
+//    Server h2Server;
 
     protected IDatabasePlatform databasePlatform;
 
@@ -114,9 +113,10 @@ abstract public class AbstractModule implements Module {
 
     protected BasicDataSource dataSource() {
         if (dataSource == null) {
+            Driver.class.getName(); // Load openpos driver wrapper.
             TypedProperties properties = new TypedProperties();
-            properties.put(DB_POOL_DRIVER, env.getProperty(DB_POOL_DRIVER, Driver.class.getName()));
-            properties.put(DB_POOL_URL, env.getProperty(DB_POOL_URL, "jdbc:h2:mem:user"));
+            properties.put(DB_POOL_DRIVER, env.getProperty(DB_POOL_DRIVER, "org.h2.Driver"));
+            properties.put(DB_POOL_URL, env.getProperty(DB_POOL_URL, "jdbc:openpos:h2:mem:" + getName()));
             properties.put(DB_POOL_USER, env.getProperty(DB_POOL_USER));
             properties.put(DB_POOL_PASSWORD, env.getProperty(DB_POOL_PASSWORD));
             properties.put(DB_POOL_INITIAL_SIZE, env.getProperty(DB_POOL_INITIAL_SIZE, "20"));
@@ -143,6 +143,8 @@ abstract public class AbstractModule implements Module {
 
     protected DBSessionFactory sessionFactory() {
         if (sessionFactory == null) {
+            Driver.register(null);  // Load openpos driver wrapper.
+            //Driver.class.getName();
             sessionFactory = new DBSessionFactory();
 
             String packageName = this.getClass().getPackage().getName();
@@ -152,8 +154,8 @@ abstract public class AbstractModule implements Module {
             Map<String, String> sessionContext = new HashMap<>();
 
             sessionContext.put("module.tablePrefix", getTablePrefix());
-            sessionContext.put("CREATE_BY", "openpos-user");
-            sessionContext.put("LAST_UPDATE_BY", "openpos-user");
+            sessionContext.put("CREATE_BY", "openpos-" + getName());
+            sessionContext.put("LAST_UPDATE_BY", "openpos-" + getName());
 
             sessionFactory.init(databasePlatform(), sessionContext, tableClasses);
 
