@@ -8,17 +8,12 @@ import java.util.Map;
 public class SellScreen extends AbstractScreen {
 
     private static final long serialVersionUID = 1L;
-
-    public enum ScanType { CAMERA_CORDOVA, NONE }
     
     private String prompt;
     private Workstation workstation;
     private String operatorText;
     private String icon;
-    private List<MenuItem> localMenuItems = new ArrayList<>();
-	
-    protected Integer scanMinLength;
-    protected Integer scanMaxLength;
+    private List<MenuItem> localMenuItems = new ArrayList<>();	
     
     public SellScreen() {
     }
@@ -91,14 +86,6 @@ public class SellScreen extends AbstractScreen {
         return localMenuItems;
     }
 
-    public void setScanType(ScanType scanType) {
-        put("scanType", scanType);
-    }
-
-    public void setScanActionName(String scanActionName) {
-        put("scanActionName", scanActionName);
-    }
-
     /**
      * Indicator for marking the screen as "Customer Facing", meaning that the screen is intended for the customer to 
      * complete.
@@ -106,11 +93,7 @@ public class SellScreen extends AbstractScreen {
      */
     public void setCustomerFacing(Boolean customerFacing) {
         put("customerFacing", customerFacing);
-    }
-    
-    public void setShowScan(boolean showScan) {
-        put("showScan", showScan);
-    }
+    }    
     
     public void setPrompt(String prompt) {
         this.prompt = prompt;
@@ -132,19 +115,4 @@ public class SellScreen extends AbstractScreen {
         this.put("instructions", instructions);
     }
     
-    public Integer getScanMinLength() {
-		return scanMinLength;
-	}
-
-	public void setScanMinLength(Integer scanMinLength) {
-		this.scanMinLength = scanMinLength;
-	}
-
-	public Integer getScanMaxLength() {
-		return scanMaxLength;
-	}
-
-	public void setScanMaxLength(Integer scanMaxLength) {
-		this.scanMaxLength = scanMaxLength;
-	}
 }

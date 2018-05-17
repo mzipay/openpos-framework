@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.pos.util;
+package org.jumpmind.pos.persist;
 
 import org.springframework.core.io.Resource;
 

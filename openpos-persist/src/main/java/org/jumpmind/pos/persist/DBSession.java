@@ -1,6 +1,9 @@
 package org.jumpmind.pos.persist;
 
 import java.beans.PropertyDescriptor;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -9,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +23,7 @@ import javax.sql.DataSource;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.h2.tools.RunScript;
 import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
@@ -61,20 +66,11 @@ public class DBSession {
     }
 
     public <T> List<T> findAll(Class<T> clazz) {
-        return null;
+        QueryTemplate queryTemplate = new QueryTemplate();
+        Query<T> query = new Query<T>().result(clazz);
+        query.setQueryTemplate(queryTemplate);
+        return query(query, new HashMap<>());
     }
-
-//    public <T extends Entity> T findByRowId(Class<T> entityClass, String id) {
-//        List<T> results = this.find(entityClass, 
-//                getValidatedTable(entityClass), 
-//                getRowIdWhereClause(entityClass), 
-//                Arrays.asList(id));
-//        if (results != null && results.size() == 1) {
-//            return results.get(0);
-//        } else {
-//            return null;
-//        }
-//    }
 
     public <T extends Entity> T findByNaturalId(Class<T> entityClass, String id) {
         Map<String, String> naturalColumnsToFields = databaseSchema.getEntityIdColumnsToFields(entityClass);
@@ -144,6 +140,25 @@ public class DBSession {
             }
         } catch (Exception ex) {
             throw new PersistException("findByNaturalId failed.", ex);            
+        }
+    }
+    
+    public void executeScript(File file) {
+        try {
+            executeScript(new FileReader(file));
+        } catch (Exception ex) {
+            if (ex instanceof PersistException) {
+                throw (PersistException)ex;
+            }
+            throw new PersistException("Failed to execute script " + file, ex);
+        }
+    }
+    
+    public void executeScript(Reader reader) {
+        try {
+            RunScript.execute(getConnection(), reader);
+        } catch (Exception ex) {
+            throw new PersistException("Failed to execute script " + reader, ex);
         }
     }
 
@@ -222,9 +237,9 @@ public class DBSession {
 
     protected LinkedHashMap<String, Column> mapObjectToTable(Class<?> resultClass, Table table) {
         LinkedHashMap<String, Column> columnNames = new LinkedHashMap<String, Column>();
-        PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(resultClass);
-        for (int i = 0; i < pds.length; i++) {
-            String propName = pds[i].getName();
+        PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(resultClass);
+        for (int i = 0; i < propertyDescriptors.length; i++) {
+            String propName = propertyDescriptors[i].getName();
             Column column = table.getColumnWithName(DatabaseSchema.camelToSnakeCase(propName));
             if (column != null) {
                 columnNames.put(propName, column);
@@ -258,17 +273,14 @@ public class DBSession {
 
     protected String getSelectSql(Class<? extends Entity> entity) {
         Table table = getValidatedTable(entity);  
-        LinkedHashMap<String, Column> objectToTableMapping = mapObjectToTable(entity, table);
-
-        Column[] columns = objectToTableMapping.values().toArray(new Column[objectToTableMapping.size()]);
-
+     //   LinkedHashMap<String, Column> objectToTableMapping = mapObjectToTable(entity, table);
+    //    Column[] columns = objectToTableMapping.values().toArray(new Column[objectToTableMapping.size()]);
+//        DmlStatement statement = databasePlatform.createDmlStatement(DmlType.SELECT, table.getCatalog(), table.getSchema(),
+//                table.getName(), null, columns, null, null);
         DmlStatement statement = databasePlatform.createDmlStatement(DmlType.SELECT, table.getCatalog(), table.getSchema(),
-                table.getName(), null, columns, null, null);
+                table.getName(), null, table.getColumns(), null, null);
         String sql = statement.getSql();
         return sql;
-    }
-
-    private void setRowModificationData(Entity entity) {
     }
 
     protected void insert(Entity entity, Table table) {
@@ -293,7 +305,6 @@ public class DBSession {
     }
 
     protected int excecuteDml(DmlType type, Object object, org.jumpmind.db.model.Table table) {
-
         LinkedHashMap<String, Column> objectToTableMapping = mapObjectToTable(object.getClass(), table);
         LinkedHashMap<String, Object> objectValuesByColumnName = getObjectValuesByColumnName(object, objectToTableMapping);
 
@@ -376,19 +387,25 @@ public class DBSession {
         for (Row row : rows) {
             T object = resultClass.newInstance();
 
-            LinkedHashMap<String, Column> columnNames = new LinkedHashMap<String, Column>();
-            PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(object);
-            for (int i = 0; i < pds.length; i++) {
-                String propertyName = pds[i].getName();
+            PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(object);
+            
+            Set<String> matchedColumns = new HashSet<>();
+            
+            for (int i = 0; i < propertyDescriptors.length; i++) {
+                String propertyName = propertyDescriptors[i].getName();
                 String columnName = DatabaseSchema.camelToSnakeCase(propertyName);
 
                 if (row.containsKey(columnName)) {
                     Object value = row.get(columnName);
                     ReflectUtils.setProperty(object, propertyName, value);
+                    matchedColumns.add(columnName);
                 }
             }
             
-            decorateRetrievedEntity(object);
+            if (object instanceof Entity) {
+                addUnmatchedColumns(row, matchedColumns, (Entity)object);
+                decorateRetrievedEntity((Entity)object);
+            }
             objects.add(object);
         }
 
@@ -399,16 +416,30 @@ public class DBSession {
         }
     }
 
-    protected void decorateRetrievedEntity(Object object) {
-        if (object instanceof Entity) {
-            EntitySystemInfo entitySystemInfo = new EntitySystemInfo((Entity) object);
-            entitySystemInfo.setRetrievalTime(new Date());
-        }
+    private void addUnmatchedColumns(Row row, Set<String> matchedColumns, Entity entity) {
+        for (String rowColumn : row.keySet()) {
+            if (!matchedColumns.contains(rowColumn)) {
+                entity.setAdditionalField(rowColumn, row.get(rowColumn));
+            }
+        }        
+    }
+
+    protected void decorateRetrievedEntity(Entity entity) {
+        EntitySystemInfo entitySystemInfo = new EntitySystemInfo(entity);
+        entitySystemInfo.setRetrievalTime(new Date());
     }
 
     public void saveAll(List<? extends Entity> entities) {
         for (Entity entity : entities) {
             save(entity);
+        }
+    }
+    
+    public void close() {
+        try {
+            getConnection().close();
+        } catch (Exception ex) {
+            log.debug("Failed to close connection", ex);
         }
     }
 }

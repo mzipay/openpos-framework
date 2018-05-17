@@ -27,7 +27,7 @@ public class i18nRepository {
             .result(Resource.class);
     
     @Autowired
-    @Qualifier("i18nDbSession")
+    @Qualifier("i18nSession")
     @Lazy
     private DBSession dbSession; 
     

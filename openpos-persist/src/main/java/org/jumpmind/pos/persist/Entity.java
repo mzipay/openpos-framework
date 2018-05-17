@@ -24,6 +24,8 @@ public abstract class Entity {
     
     @SuppressWarnings("unused")
     private transient Map<String, Object> systemData = new HashMap<>(); 
+    
+    private transient Map<String, Object> additionalFields = new HashMap<>();
 
     public Date getCreateTime() {
         return createTime;
@@ -56,4 +58,18 @@ public abstract class Entity {
     public void setLastUpdateBy(String lastUpdateBy) {
         this.lastUpdateBy = lastUpdateBy;
     }
+    
+    public void setAdditionalField(String fieldName, Object fieldValue) {
+        additionalFields.put(fieldName, fieldValue);
+    }    
+    
+    public Object getAdditionalField(String fieldName) {
+        return additionalFields.get(fieldName);
+    }
+    
+    public Map<String, Object> getAdditionalFields() {
+        return new HashMap<>(additionalFields);
+    }    
+    
+    
 }

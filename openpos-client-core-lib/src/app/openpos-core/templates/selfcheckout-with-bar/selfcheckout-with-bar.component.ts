@@ -1,3 +1,4 @@
+import { IScan, ISellTemplate } from './../sell/isell-template';
 import { over } from '@stomp/stompjs';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
@@ -6,7 +7,6 @@ import { SessionService } from '../../services/session.service';
 import { AbstractTemplate } from '../../common/abstract-template';
 import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
 import { SellScreenUtils } from '../sell/iSellScreen';
-import { ScanSomethingData } from '../../common/controls/scan-something/scanSomthingData';
 
 @Component({
   selector: 'app-selfcheckout-with-bar',
@@ -15,9 +15,8 @@ import { ScanSomethingData } from '../../common/controls/scan-something/scanSomt
 })
 export class SelfCheckoutWithBarComponent extends AbstractTemplate implements OnInit {
 
-  template: any;
-  statusBar : SelfCheckoutStatusBarData;
-  scanSomethingData: ScanSomethingData;
+  template: ISellTemplate;
+  statusBar: SelfCheckoutStatusBarData;
 
   constructor(public overlayContainer: OverlayContainer) {
       super();
@@ -26,10 +25,10 @@ export class SelfCheckoutWithBarComponent extends AbstractTemplate implements On
   ngOnInit() {
   }
 
-  show(template: any) {
-    this.template = template;
-    this.statusBar = SellScreenUtils.getSelfCheckoutStatusBar( template );
-    this.scanSomethingData = SellScreenUtils.getScanSomethingData(template);
+  show(screen: any) {
+    this.template = screen.template;
+    this.statusBar = SellScreenUtils.getSelfCheckoutStatusBar( screen );
   }
 
 }
+

@@ -118,8 +118,9 @@ public abstract class AbstractScreen implements Serializable {
         this.template = template;
     }
 
-    public AbstractTemplate getTemplate() {
-        return template;
+    @SuppressWarnings("unchecked")
+    public <T extends AbstractTemplate> T getTemplate() {
+        return (T)template;
     }
 
     public void setSequenceNumber(int sequenceNumber) {

@@ -1,45 +1,4 @@
-import java.text.SimpleDateFormat
-import java.util.Date
-
-group = 'org.jumpmind.pos'
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-apply plugin: 'eclipse'
-apply plugin: 'java'
-
-sourceCompatibility=1.8
-targetCompatibility=1.8
-
-repositories {
-    maven { url symmetricMavenUrl }
-}
-
-eclipse {
-    classpath {
-        downloadSources = true
-        downloadJavadoc = false
-    }
-}
-
-ext {
-   springBootVersion = '1.5.9.RELEASE'
-   springVersion = '4.3.14.RELEASE'
-}
-
-task develop {
-    description 'Generates Eclipse artifacts and sets up your development environment'
-    dependsOn tasks.cleanEclipse, tasks.eclipse
-    delete '.settings'
-}
+apply from: '../openpos-core/common.gradle'
 
 dependencies {
     compile project(":openpos-persist")
@@ -69,20 +28,4 @@ dependencies {
     testCompile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.20.1.Final'    
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile "org.springframework:spring-test:$springVersion"
-}
-
-jar {
-    manifest {
-        attributes("Implementation-Title": project.name,
-                   "Implementation-Version": appVersion,
-                   "Project-Artifact": project.name,                       
-                   "Build-Version": appVersion,
-                   "Build-Time": new SimpleDateFormat("yyyyMMdd-HHmm").format(new Date()))
-    }    
-}  
-
-processResources {
-    from ('../openpos-i18n/dist/') {
-        into 'public'
-    }
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -19,14 +18,13 @@ public class UserRepository {
             .result(PasswordHistory.class);
     
     @Autowired
-    @Qualifier("userDbSession")
     @Lazy
-    private DBSession dbSession;    
+    private DBSession userSession;    
     
     public User findUser(String userName) {
-        User userLookedUp = dbSession.findByNaturalId(User.class, userName);
+        User userLookedUp = userSession.findByNaturalId(User.class, userName);
         if (userLookedUp != null) {
-            List<PasswordHistory> passwordHistory = dbSession.query(passwordHistoryLookup, userLookedUp.getUsername());
+            List<PasswordHistory> passwordHistory = userSession.query(passwordHistoryLookup, userLookedUp.getUsername());
             if (passwordHistory != null) {
                 userLookedUp.setPasswordHistory(passwordHistory);
             }
@@ -37,12 +35,12 @@ public class UserRepository {
 
     
     public void save(User user) {
-        dbSession.save(user);
+        userSession.save(user);
         
         for (PasswordHistory passwordHistory : user.getPasswordHistory()) {
             passwordHistory.setUsername(user.getUsername());
         }
         
-        dbSession.saveAll(user.getPasswordHistory());
+        userSession.saveAll(user.getPasswordHistory());
     }
 }

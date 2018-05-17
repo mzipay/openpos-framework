@@ -9,9 +9,7 @@ import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SellItemScreen;
 import org.jumpmind.pos.core.screen.SellScreen;
-import org.jumpmind.pos.core.screen.SellScreen.ScanType;
 import org.jumpmind.pos.core.template.SellTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class SellState implements IState {
 
@@ -29,25 +27,11 @@ public class SellState implements IState {
         screen.setPrompt("Ready to begin");
         screen.setTemplate(new SellTemplate());
         screen.setName("Sell");        
-        enableScan(screen);
         screen.addLocalMenuItem(new MenuItem("CustomerSearch", "Customer", "person"));
         screen.addLocalMenuItem(new MenuItem("Returns", "Returns", "receipt"));
         screen.addLocalMenuItem(new MenuItem("Foo", "Invalid Action", "receipt"));
         return screen;
-    }
-    
-    protected void enableScan(SellItemScreen screen) {
-        screen.setShowScan(true);
-        screen.setScanType(ScanType.CAMERA_CORDOVA);
-        screen.setScanActionName("Scan");
-    }
-    
-//    @ActionHandler
-//    protected void onCustomerSearch(Action action) {
-//        Action subAction = new Action("CustomerSearchSub");
-//        subAction.setSubStateCallback((a)->onCustomerSearchComplete(a));
-//        stateManager.doAction(subAction);
-//    }
+    }    
     
     @ActionHandler    
     protected void onCustomerSearchComplete(Action action) {
