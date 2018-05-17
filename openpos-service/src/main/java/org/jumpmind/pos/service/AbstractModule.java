@@ -58,15 +58,16 @@ abstract public class AbstractModule implements Module {
 
     @Autowired
     protected Environment env;
-    
+
     @Value("${installation.id}")
     protected String installationId;
+
+    @Autowired
+    Server h2Server;
 
     protected IDatabasePlatform databasePlatform;
 
     protected BasicDataSource dataSource;
-
-    protected Server h2Server;
 
     protected ISecurityService securityService;
 
@@ -156,18 +157,18 @@ abstract public class AbstractModule implements Module {
 
             sessionFactory.init(databasePlatform(), sessionContext, tableClasses);
 
-            DBSession session = sessionFactory.createDbSession();            
-            
+            DBSession session = sessionFactory.createDbSession();
+
             updateDataModel(session);
-            
+
         }
 
         return sessionFactory;
     }
-        
+
     public void updateDataModel(DBSession session) {
         String fromVersion = null;
-        
+
         try {
             ModuleInfo info = session.findByNaturalId(ModuleInfo.class, installationId);
             if (info != null) {
@@ -176,9 +177,9 @@ abstract public class AbstractModule implements Module {
         } catch (PersistException e) {
             logger.info("The module table is not available");
         }
-        
+
         logger.info("The previous version of {} was {} and the current version is {}", getName(), fromVersion, getVersion());
-        
+
         DatabaseScriptContainer scripts = new DatabaseScriptContainer(getName() + "/sql", databasePlatform());
 
         scripts.executePreInstallScripts(fromVersion, getVersion());
@@ -186,7 +187,7 @@ abstract public class AbstractModule implements Module {
         sessionFactory.getDatabaseSchema().createAndUpgrade();
 
         scripts.executePostInstallScripts(fromVersion, getVersion());
-        
+
         session.save(new ModuleInfo(installationId, getVersion()));
     }
 
