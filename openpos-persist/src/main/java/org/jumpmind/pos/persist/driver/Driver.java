@@ -25,13 +25,10 @@ import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.jumpmind.properties.TypedProperties;
-import org.slf4j.MDC;
 
 /**
  * Simple configuration (note the jdbc:openpos prefix):
@@ -46,17 +43,12 @@ import org.slf4j.MDC;
 public class Driver implements java.sql.Driver {
     
     private static final String DRIVER_PREFIX = "jdbc:openpos:";
-    private static final Map<String, TypedProperties> allEngineProperties = new HashMap<String, TypedProperties>();
     
     public static void register(TypedProperties properties) {
         try {
-            if (properties != null) {                
-                String engineName = properties.get("engine.name");  // ParameterConstants.ENGINE_NAME
-                allEngineProperties.put(engineName, properties);
-            }
             DriverManager.registerDriver(new Driver());
         } catch (Exception ex) {
-            throw new RuntimeException("Failed to register SymmetricDS driver", ex);
+            throw new RuntimeException("Failed to register openpos driver", ex);
         } 
     }
 
