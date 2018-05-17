@@ -35,17 +35,6 @@ public class DBSessionQueryTest {
 
     @Before
     public void setup() {
-        sessionFactory.setDatabaseSchema(new DatabaseSchema());
-        
-        InputStream queryYamlStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("test-query.yaml");
-        QueryTemplates queryTemplates = new Yaml(new Constructor(QueryTemplates.class)).load(queryYamlStream);
-        
-        sessionFactory.init(
-                PersistTestUtil.testDbPlatform(), 
-                PersistTestUtil.getSessionContext(), 
-                Arrays.asList(CarEntity.class), 
-                queryTemplates);
-        
         {            
             DBSession db = sessionFactory.createDbSession();
             db.executeSql("TRUNCATE TABLE CAR_CAR");
