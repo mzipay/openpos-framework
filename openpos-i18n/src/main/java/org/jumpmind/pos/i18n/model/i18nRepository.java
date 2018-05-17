@@ -1,13 +1,15 @@
 package org.jumpmind.pos.i18n.model;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.Query;
-import org.jumpmind.pos.i18n.model.i18n;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.jumpmind.pos.i18n.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
@@ -18,36 +20,43 @@ import org.springframework.stereotype.Repository;
 @DependsOn(value = { "i18nModule" })
 public class i18nRepository {
       
-    private Query<i18n> keyLookup = new Query<i18n>()
-            .named("keyLookup")
-            .result(i18n.class);
+	final Logger log = LoggerFactory.getLogger(getClass());
+	
+    private Query<Resource> brandLookup = new Query<Resource>()
+            .named("brandLookup")
+            .result(Resource.class);
     
     @Autowired
     @Qualifier("i18nDbSession")
     @Lazy
-    private DBSession dbSession;    
+    private DBSession dbSession; 
     
-    public String getString(String base, String key, Locale locale, String brand) {
-    	
-    	//TODO Figure out how to query with multiple primary keys
-    	
-    	List<i18n> phrases = dbSession.query(keyLookup, key);
-    	
-    	for (i18n phrase : phrases) {
-    		if (phrase.getLocale().equals(locale)) {
-    			if (phrase.getBaseName().equals(base)) {
-    				if (phrase.getBrand().equals(brand)) {
-    					return phrase.getPattern();
-    				} else if (phrase.getBrand().equals("*")) {
-    					return phrase.getPattern();
-    				}
-    			}
-    		}
-    	}
-    	return "";
+    private Map<String, Object> generateHashMap(String base, String key, Locale locale, String brand) {
+    	Map<String, Object> params = new HashMap<>();
+        params.put("brand", brand);
+        params.put("noBrand", "*");
+        params.put("base", base);
+        params.put("key", key);
+        params.put("locale", locale);
+        return params;
     }
     
-    public void save(i18n resource) {
+    public String getString(String base, String key, Locale locale, String brand) {
+
+        Map<String, Object> params = generateHashMap(base, key, locale, brand);
+    	List<Resource> phrases = dbSession.query(brandLookup, params);
+    	String string = null;
+    	if (phrases != null) {
+    		Resource row = phrases.stream().filter((p)-> p.getBrand().equals(brand)).findFirst().orElse(null);
+    		if (row == null) {
+    			row = phrases.stream().filter((p)-> p.getBrand().equals("*")).findFirst().orElse(null);
+    		}
+    		string = row.getPattern();
+    	}
+    	return string;
+    }
+    
+    public void save(Resource resource) {
         dbSession.save(resource);
     }
 }

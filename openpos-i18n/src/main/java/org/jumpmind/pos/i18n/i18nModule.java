@@ -87,7 +87,7 @@ public class i18nModule implements Module {
     private DBSessionFactory sessionFactory;
 
     public String getName() {
-        return "user";
+        return "i18n";
     }
 
     public String getVersion() {
@@ -232,6 +232,7 @@ public class i18nModule implements Module {
             sessionContext.put("CREATE_BY", "openpos-user");
             sessionContext.put("LAST_UPDATE_BY", "openpos-user");        
             
+
             // init sessionFactory per this module. 
             sessionFactory.init(
                     databasePlatform(), 

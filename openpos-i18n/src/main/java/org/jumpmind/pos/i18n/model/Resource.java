@@ -1,7 +1,5 @@
 package org.jumpmind.pos.i18n.model;
 
-import java.util.ArrayList;
-
 import java.util.Locale;
 
 import org.jumpmind.pos.persist.Column;
@@ -9,14 +7,15 @@ import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
 @Table(description="Internationalization resource table")
-public class i18n extends Entity {
+public class Resource extends Entity {
 
     @Column(primaryKey=true)
     private String baseName;
     @Column(primaryKey=true)
     private String brand;
+    //TODO check if passing Locale is okay
     @Column(primaryKey=true)
-    private String locale;
+    private Locale locale;
     @Column(primaryKey=true)
     private String stringKey; 
     
@@ -40,10 +39,10 @@ public class i18n extends Entity {
         this.brand = brand;
     }
     public Locale getLocale() {
-        return new Locale(locale);
+        return locale;
     }
     public void setLocale(Locale locale) {
-        this.locale = locale.toString();
+        this.locale = locale;
     }
     public String getStringKey() {
         return stringKey;
