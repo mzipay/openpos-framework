@@ -1,32 +1,42 @@
 package org.jumpmind.pos.core.template;
 
+import org.jumpmind.pos.core.template.Scan.ScanType;
+
 public class SellTemplate extends AbstractTemplate {
 
     private static final long serialVersionUID = 1L;
-    
-    boolean autoFocusOnScan = false;
-    String scanSomethingText = "Scan/Key Something";
-    
-    
+
+    StatusBar statusBar = new StatusBar();
+
+    Scan scan;
+
     public SellTemplate() {
         super("Sell");
     }
-    
-    public void setAutoFocusOnScan(boolean autoFocusOnScan) {
-        this.autoFocusOnScan = autoFocusOnScan;
-    }
-    
-    public boolean isAutoFocusOnScan() {
-        return autoFocusOnScan;
-    }
-    
-    public void setScanSomethingText(String scanSomethingText) {
-        this.scanSomethingText = scanSomethingText;
-    }
-    
-    public String getScanSomethingText() {
-        return scanSomethingText;
+
+    public void setStatusBar(StatusBar statusBar) {
+        this.statusBar = statusBar;
     }
 
+    public StatusBar getStatusBar() {
+        return statusBar;
+    }
+
+    public void setScan(Scan scan) {
+        this.scan = scan;
+    }
+
+    public Scan getScan() {
+        return scan;
+    }
+
+    public SellTemplate enableScan(boolean autoFocusOnScan) {
+        Scan scan = new Scan();
+        scan.setAutoFocusOnScan(autoFocusOnScan);
+        scan.setScanType(ScanType.CAMERA_CORDOVA);
+        scan.setScanActionName("Scan");
+        setScan(scan);
+        return this;
+    }
 
 }

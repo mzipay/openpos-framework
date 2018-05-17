@@ -2,7 +2,6 @@ import { IMenuItem } from '../../common/imenuitem';
 import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
 import { IWorkStation } from '../../common/iworkstation';
 import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
-import { ScanSomethingData } from '../../common/controls/scan-something/scanSomthingData';
 import { ISellTemplate } from './isell-template';
 
 export interface ISellScreen {
@@ -11,15 +10,11 @@ export interface ISellScreen {
     backButton: IMenuItem;
     logoutButton: IMenuItem;
     template: ISellTemplate;
-    sequenceNumber: number;
     locale: string;
     prompt: string;
     workstation: IWorkStation;
     operatorText: string;
     icon: string;
-    showScan: boolean;
-    showHelp: boolean;
-    showSkip: boolean;
     localMenuItems: IMenuItem[];
     theme: string;
     placeholderText: string;
@@ -48,18 +43,11 @@ export class SellScreenUtils {
         const statusBar = new SelfCheckoutStatusBarData();
 
         statusBar.backButton = screen.backButton;
-        statusBar.showHelp = screen.showHelp;
-        statusBar.showScan = screen.showScan;
-        statusBar.showSkip = screen.showSkip;
-        statusBar.scanSomethingData = SellScreenUtils.getScanSomethingData(screen);
+        statusBar.showAdmin = screen.template.statusBar.showAdmin;
+        statusBar.showScan = screen.template.statusBar.showScan;
+        statusBar.showSkip = screen.template.statusBar.showSkip;
+        statusBar.scanSomethingData = screen.template.scan;
         return statusBar;
     }
 
-    public static getScanSomethingData(screen: ISellScreen): ScanSomethingData {
-        const scanSomethingData = new ScanSomethingData();
-        scanSomethingData.placeholderText = screen.template.scanSomethingText;
-        scanSomethingData.autoFocus = screen.template.autoFocusOnScan;
-
-        return scanSomethingData;
-    }
 }

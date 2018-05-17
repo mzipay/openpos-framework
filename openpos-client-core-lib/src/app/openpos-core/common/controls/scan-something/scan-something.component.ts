@@ -2,8 +2,8 @@ import { Component, Input, OnInit, Output, EventEmitter, Optional, Inject, ViewC
 import { DeviceService } from '../../../services/device.service';
 import { SessionService } from '../../../services/session.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
-import { ScanSomethingData } from './scanSomthingData';
 import { Subscription } from 'rxjs/Subscription';
+import { IScan } from '../../../templates/sell/isell-template';
 
 @Component({
   selector: 'app-scan-something',
@@ -16,16 +16,13 @@ export class ScanSomethingComponent implements AfterViewInit {
   input: MatInput;
 
   @Input()
-  scanSomethingData: ScanSomethingData;
+  scanSomethingData: IScan;
 
   public barcode: string;
 
-  @Input() minLength = 1;
-  @Input() maxLength: number;
-
   constructor(private session: SessionService, public devices: DeviceService,
     @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: ScanSomethingData) {
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: IScan) {
 
     this.session.subscribeForScreenUpdates((screen: any): void => this.focusFirst());
 
@@ -35,7 +32,7 @@ export class ScanSomethingComponent implements AfterViewInit {
   }
 
   public onEnter(): void {
-    if (this.barcode && this.barcode.trim().length >= this.minLength) {
+    if (this.barcode && this.barcode.trim().length >= this.scanSomethingData.scanMinLength) {
       this.session.onAction('Next', this.barcode);
       this.barcode = '';
       if (this.dialogRef) {
@@ -50,7 +47,7 @@ export class ScanSomethingComponent implements AfterViewInit {
   }
 
   private focusFirst(): void {
-    if (this.scanSomethingData && this.scanSomethingData.autoFocus) {
+    if (this.scanSomethingData && this.scanSomethingData.autoFocusOnScan) {
       this.input.focus();
     }
   }

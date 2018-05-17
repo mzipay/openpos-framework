@@ -1,10 +1,10 @@
-import { IMenuItem } from "..";
-import { ScanSomethingData } from "../controls/scan-something/scanSomthingData";
+import { IMenuItem } from '..';
+import { IScan } from '../../templates/sell/isell-template';
 
-export class SelfCheckoutStatusBarData{
+export class SelfCheckoutStatusBarData {
     showScan: boolean;
     backButton: IMenuItem;
     showSkip: boolean;
-    showHelp: boolean;
-    scanSomethingData: ScanSomethingData;
+    showAdmin: boolean;
+    scanSomethingData: IScan;
 }

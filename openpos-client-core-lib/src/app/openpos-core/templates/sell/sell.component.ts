@@ -13,7 +13,7 @@ import { ObservableMedia } from '@angular/flex-layout';
 import { ISellScreen } from '../..';
 import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
 import { SellScreenUtils } from './iSellScreen';
-import { ScanSomethingData } from '../../common/controls/scan-something/scanSomthingData';
+import { ISellTemplate } from './isell-template';
 
 @Component({
   selector: 'app-sell',
@@ -22,9 +22,9 @@ import { ScanSomethingData } from '../../common/controls/scan-something/scanSomt
 })
 export class SellComponent extends AbstractTemplate implements OnInit {
 
-  template: ISellScreen;
+  template: ISellTemplate;
+  screen: ISellScreen;
   statusBar: StatusBarData;
-  scanSomethingData: ScanSomethingData;
 
   @ViewChild('drawer') drawer;
   public drawerOpen: Observable<boolean>;
@@ -38,15 +38,14 @@ export class SellComponent extends AbstractTemplate implements OnInit {
 
   }
 
-  show(template: any) {
-    this.template = template;
-    this.statusBar = SellScreenUtils.getStatusBar(template);
-    this.scanSomethingData = SellScreenUtils.getScanSomethingData(template);
+  show(screen: any) {
+    this.screen = screen;
+    this.template = screen.template;
+    this.statusBar = SellScreenUtils.getStatusBar(screen);
   }
 
   public ngOnInit(): void {
-
-    if (this.template.localMenuItems.length > 0) {
+    if (this.screen.localMenuItems.length > 0) {
       this.initializeDrawerMediaSizeHandling();
     } else {
       this.drawerOpen = Observable.of(false);

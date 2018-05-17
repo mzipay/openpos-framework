@@ -29,9 +29,7 @@ public class SellItemScreen extends PromptScreen {
 
     public SellItemScreen() {
         this.setType(ScreenType.Transaction);
-        this.setTemplate(new SellTemplate());
-        this.setShowScan(true);
-        this.setScanType(ScanType.CAMERA_CORDOVA);
+        this.setTemplate(new SellTemplate().enableScan(false));
     }
 
     public List<SellItem> getItems() {

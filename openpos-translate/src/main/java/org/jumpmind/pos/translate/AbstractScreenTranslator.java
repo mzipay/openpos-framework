@@ -13,7 +13,7 @@ import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.AbstractScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SellScreen;
-import org.jumpmind.pos.core.screen.SellScreen.ScanType;
+import org.jumpmind.pos.core.template.SellTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -130,11 +130,9 @@ abstract public class AbstractScreenTranslator<T extends AbstractScreen> impleme
     }
 
     protected void enableScan() {
-        if (screen instanceof SellScreen) {
-            SellScreen sellScreen = (SellScreen) screen;
-            sellScreen.setShowScan(true);
-            sellScreen.setScanType(ScanType.CAMERA_CORDOVA);
-            sellScreen.setScanActionName("Scan");
+        if (screen.getTemplate() instanceof SellTemplate) {
+            SellTemplate template = screen.getTemplate();
+            template.enableScan(false);
         }
     }
 
