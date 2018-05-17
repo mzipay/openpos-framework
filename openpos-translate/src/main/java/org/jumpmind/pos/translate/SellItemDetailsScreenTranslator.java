@@ -64,8 +64,8 @@ public class SellItemDetailsScreenTranslator extends AbstractLegacyScreenTransla
         buildLocalMenuItems();
     }
 
-    protected void buildLocalMenuItems() {
-        this.screen.addLocalMenuItem(new MenuItem("Remove Item", "Remove", false));
+    protected void buildLocalMenuItems() {        
+        addLocalMenuItem(new MenuItem("Remove Item", "Remove", false));
     }
 
     @Override

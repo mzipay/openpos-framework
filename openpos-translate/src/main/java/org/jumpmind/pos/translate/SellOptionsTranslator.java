@@ -14,7 +14,7 @@ import org.jumpmind.pos.core.template.SellTemplate;
 public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<SellScreen> {
 
     Set<String> excludeLabelTags = new HashSet<>();
-    
+
     InteractionMacro undoMacro;
 
     @Deprecated
@@ -26,13 +26,15 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<SellSc
             }
         }
         screen.setType(ScreenType.Options);
-        screen.setIcon(icon);        
+        screen.setIcon(icon);
+        SellTemplate template = new SellTemplate();
+        screen.setTemplate(template);
     }
-    
+
     public SellOptionsTranslator(ILegacyScreen headlessScreen, String icon, String... excludeActions) {
-    	this(headlessScreen, icon, null, null, excludeActions);
+        this(headlessScreen, icon, null, null, excludeActions);
     }
-    
+
     public void setUndoMacro(InteractionMacro undoMacro) {
         this.undoMacro = undoMacro;
     }
@@ -40,17 +42,16 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<SellSc
     @Override
     protected void buildMainContent() {
         super.buildMainContent();
-        screen.setTemplate(new SellTemplate());
-        screen.setLocalMenuItems(generateUIActionsForLocalNavButtons(MenuItem.class, true, excludeLabelTags.toArray(new String[]{})));
-        if (screen.getLocalMenuItems().size() > 0) {
+        SellTemplate template = screen.getTemplate();
+        template.setLocalMenuItems(generateUIActionsForLocalNavButtons(MenuItem.class, true, excludeLabelTags.toArray(new String[] {})));
+        if (template.getLocalMenuItems().size() > 0) {
             screen.setPrompt("Choose Option");
             screen.setInstructions("Please select an option from the menu to the right");
         }
     }
-    
+
     @Override
-    public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,
-            Form formResults) {
+    public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action, Form formResults) {
         if ("Undo".equals(action.getName()) && undoMacro != null) {
             tmServer.executeMacro(undoMacro);
         } else {

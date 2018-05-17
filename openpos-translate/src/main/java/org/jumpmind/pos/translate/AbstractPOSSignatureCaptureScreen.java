@@ -9,7 +9,7 @@ import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SignatureCaptureScreen;
 import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
 
-public abstract class AbstractPOSSignatureCaptureScreen extends AbstractScreenTranslator<SignatureCaptureScreen> implements ILegacyBeanAccessor {
+public abstract class AbstractPOSSignatureCaptureScreen extends AbstractLegacyScreenTranslator<SignatureCaptureScreen> implements ILegacyBeanAccessor {
     protected ILegacyPOSBeanService legacyPOSBeanService;
     protected ILegacyStoreProperties legacyStoreProperties;
 
@@ -26,7 +26,7 @@ public abstract class AbstractPOSSignatureCaptureScreen extends AbstractScreenTr
         // Need to specify jpeg or png since other formats such as tiff are not widely supported in the various browser implementations of
         // the HTML5 canvas 
         getScreen().setSignatureMediaType("image/png");
-        getScreen().addLocalMenuItem(new MenuItem("Continue", "SaveSignature", true));
+        addLocalMenuItem(new MenuItem("Continue", "SaveSignature", true));
 
         getScreen().setBackButton(new MenuItem("Back", "Cancel", true));
     }

@@ -2,6 +2,8 @@ import { IMenuItem } from './../../common/imenuitem';
 export interface ISellTemplate {
     scan: IScan;
     statusBar: IStatusBar;
+    localMenuItems: IMenuItem[];
+    transactionMenuItems: IMenuItem[];
 }
 
 export interface IScan {

@@ -48,7 +48,8 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
         this.configureScreenResponseField();
         if (addLocalMenuItems) {
             List<MenuItem> localNavButtons = generateUIActionsForLocalNavButtons(MenuItem.class, true);
-            screen.setLocalMenuItems(localNavButtons);
+            SellTemplate template = screen.getTemplate();
+            template.setLocalMenuItems(localNavButtons);
         }
         addActionButton();
     }

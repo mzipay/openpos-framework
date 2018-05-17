@@ -1,13 +1,21 @@
 package org.jumpmind.pos.core.template;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.template.Scan.ScanType;
 
 public class SellTemplate extends AbstractTemplate {
 
-    private static final long serialVersionUID = 1L;
+    protected static final long serialVersionUID = 1L;
 
-    StatusBar statusBar = new StatusBar();
-
+    protected StatusBar statusBar = new StatusBar();
+    
+    protected List<MenuItem> localMenuItems = new ArrayList<>();
+    
+    protected List<MenuItem> transactionMenuItems = new ArrayList<>();
+    
     Scan scan;
 
     public SellTemplate() {
@@ -37,6 +45,38 @@ public class SellTemplate extends AbstractTemplate {
         scan.setScanActionName("Scan");
         setScan(scan);
         return this;
+    }
+    
+    public MenuItem getLocalMenuItemByAction(String action) {
+        return this. localMenuItems.stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
+    }
+    
+    public MenuItem getLocalMenuItemByTitle(String title) {
+        return this.localMenuItems.stream().filter( mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
+    }
+
+    public void addLocalMenuItem(MenuItem menuItem) {
+        this.localMenuItems.add(menuItem);
+    }
+    
+    public void setLocalMenuItems(List<MenuItem> localMenuItems) {
+        this.localMenuItems = localMenuItems;
+    }
+    
+    public List<MenuItem> getLocalMenuItems() {
+        return localMenuItems;
+    }
+    
+    public void addTransactionMenuItem(MenuItem menuItem) {
+        this.transactionMenuItems.add(menuItem);
+    }
+    
+    public void setTransactionMenuItems(List<MenuItem> transactionMenuItems) {
+        this.transactionMenuItems = transactionMenuItems;
+    }
+    
+    public List<MenuItem> getTransactionMenuItems() {
+        return transactionMenuItems;
     }
 
 }

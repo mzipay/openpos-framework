@@ -24,6 +24,7 @@ import org.jumpmind.pos.core.screen.IUIAction;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.Workstation;
+import org.jumpmind.pos.core.template.SellTemplate;
 import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
 
 public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> extends AbstractScreenTranslator<T> implements ILegacyBeanAccessor {
@@ -213,6 +214,27 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
                         }
                     });
 
+        }
+    }
+    
+    protected void clearTransactionMenuItems() {
+        if (screen.getTemplate() instanceof SellTemplate) {
+            SellTemplate sellTemplate = screen.getTemplate();
+            sellTemplate.getTransactionMenuItems().clear();
+        }                
+    }
+    
+    protected void addTransactionMenuItem(MenuItem menuItem) {
+        if (screen.getTemplate() instanceof SellTemplate) {
+            SellTemplate sellTemplate = screen.getTemplate();
+            sellTemplate.addTransactionMenuItem(menuItem);
+        }        
+    }
+    
+    protected void addLocalMenuItem(MenuItem menuItem) {
+        if (screen.getTemplate() instanceof SellTemplate) {
+            SellTemplate sellTemplate = screen.getTemplate();
+            sellTemplate.addLocalMenuItem(menuItem);
         }
     }
 
@@ -539,7 +561,10 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
     
     protected void addLocalMenuButtons() {
         List<MenuItem> localNavButtons = generateUIActionsForLocalNavButtons(MenuItem.class, true);
-        screen.setLocalMenuItems(localNavButtons);
+        if (screen.getTemplate() instanceof SellTemplate) {
+            SellTemplate template = screen.getTemplate();
+            template.setLocalMenuItems(localNavButtons);
+        }
     }
 
     protected String getPromptTextFromBeanSpec() {

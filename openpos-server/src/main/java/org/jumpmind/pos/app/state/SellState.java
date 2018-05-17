@@ -25,11 +25,12 @@ public class SellState implements IState {
         SellItemScreen screen = new SellItemScreen();
         screen.setLogoutButton(new MenuItem("Back", "Logout", "exit_to_app"));
         screen.setPrompt("Ready to begin");
-        screen.setTemplate(new SellTemplate());
         screen.setName("Sell");        
-        screen.addLocalMenuItem(new MenuItem("CustomerSearch", "Customer", "person"));
-        screen.addLocalMenuItem(new MenuItem("Returns", "Returns", "receipt"));
-        screen.addLocalMenuItem(new MenuItem("Foo", "Invalid Action", "receipt"));
+        SellTemplate template = new SellTemplate();
+        template.addLocalMenuItem(new MenuItem("CustomerSearch", "Customer", "person"));
+        template.addLocalMenuItem(new MenuItem("Returns", "Returns", "receipt"));
+        template.addLocalMenuItem(new MenuItem("Foo", "Invalid Action", "receipt"));
+        screen.setTemplate(template);        
         return screen;
     }    
     

@@ -12,8 +12,7 @@ public class SellScreen extends AbstractScreen {
     private String prompt;
     private Workstation workstation;
     private String operatorText;
-    private String icon;
-    private List<MenuItem> localMenuItems = new ArrayList<>();	
+    private String icon;	
     
     public SellScreen() {
     }
@@ -64,27 +63,7 @@ public class SellScreen extends AbstractScreen {
 
     public void setWorkstation(Workstation workstation) {
         this.workstation = workstation;
-    }
-        
-    public MenuItem getLocalMenuItemByAction(String action) {
-        return this. localMenuItems.stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
-    }
-    
-    public MenuItem getLocalMenuItemByTitle(String title) {
-        return this.localMenuItems.stream().filter( mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
-    }
-
-    public void addLocalMenuItem(MenuItem menuItem) {
-        this.localMenuItems.add(menuItem);
-    }
-    
-    public void setLocalMenuItems(List<MenuItem> localMenuItems) {
-        this.localMenuItems = localMenuItems;
-    }
-    
-    public List<MenuItem> getLocalMenuItems() {
-        return localMenuItems;
-    }
+    }        
 
     /**
      * Indicator for marking the screen as "Customer Facing", meaning that the screen is intended for the customer to 

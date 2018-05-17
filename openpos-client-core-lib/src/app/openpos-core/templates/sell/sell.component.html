@@ -10,13 +10,13 @@
         </div>
         <mat-card fxFlex class="page-content-card min-height lighter" fxLayout="column" fxLayoutAlign="start">
             <mat-card-title fxFlex="0 0 auto" class="text-md">
-                <ng-container *ngIf="screen.transactionMenuItems?.length > 0; else prompt">
+                <ng-container *ngIf="template.transactionMenuItems?.length > 0; else prompt">
                     <button mat-button class="text-md" style="padding-left:0px;" [matMenuTriggerFor]="transactionMenu">
                         <span>{{screen.prompt}}</span>
                         <mat-icon>expand_more</mat-icon>
                     </button>
                     <mat-menu #transactionMenu="matMenu">
-                        <button color=primary mat-menu-item *ngFor="let m of screen.transactionMenuItems" (click)="doMenuItemAction(m)" [disabled]="!isMenuItemEnabled(m)">
+                        <button color=primary mat-menu-item *ngFor="let m of template.transactionMenuItems" (click)="doMenuItemAction(m)" [disabled]="!isMenuItemEnabled(m)">
                             <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
                             <span [ngClass]="{'muted-color': ! m.enabled}">{{m.title}}</span>
                         </button>
@@ -27,7 +27,7 @@
                 </ng-template>
 
                 <span fxFlex="1 1 auto"></span>
-                <span *ngIf="screen && screen.localMenuItems && screen.localMenuItems.length">
+                <span *ngIf="template && template.localMenuItems && template.localMenuItems.length">
                     <button mat-icon-button (click)="drawer.toggle()">
                         <mat-icon>menu</mat-icon>
                     </button>
@@ -37,7 +37,7 @@
                 <mat-drawer-container fxFlex="1 1 auto">
                         <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async" fxLayout="column" fxLayoutAlign="start stretch"
                             fxLayoutGap="4px" style="overflow-x:hidden;padding-bottom:20px">
-                            <button mat-button color="primary" *ngFor="let m of screen.localMenuItems" (click)="doMenuItemAction(m)" style="text-align: left"
+                            <button mat-button color="primary" *ngFor="let m of template.localMenuItems" (click)="doMenuItemAction(m)" style="text-align: left"
                                 [disabled]="!isMenuItemEnabled(m)">
                                 <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
                                 <span [ngClass]="{'muted-color': ! m.enabled}">&nbsp;{{m.title}}</span>

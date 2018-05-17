@@ -22,9 +22,6 @@ public class SellItemScreen extends PromptScreen {
     private String customerName;
     private String noCustomerText;
     private List<Total> totals = new ArrayList<>();
-    
-    private List<MenuItem> transactionMenuItems = new ArrayList<>();
-    
     private MenuItem loyaltyButton;
 
     public SellItemScreen() {
@@ -103,19 +100,7 @@ public class SellItemScreen extends PromptScreen {
 
     public void setItemActionName(String itemActionName) {
         this.itemActionName = itemActionName;
-    }
-    
-    public void addTransactionMenuItem(MenuItem menuItem) {
-        this.transactionMenuItems.add(menuItem);
-    }
-    
-    public void setTransactionMenuItems(List<MenuItem> transactionMenuItems) {
-        this.transactionMenuItems = transactionMenuItems;
-    }
-    
-    public List<MenuItem> getTransactionMenuItems() {
-        return transactionMenuItems;
-    }
+    }    
 
 	public List<Total> getTotals() {
 		return totals;

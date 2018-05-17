@@ -45,7 +45,7 @@ export class SellComponent extends AbstractTemplate implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (this.screen.localMenuItems.length > 0) {
+    if (this.template.localMenuItems.length > 0) {
       this.initializeDrawerMediaSizeHandling();
     } else {
       this.drawerOpen = Observable.of(false);

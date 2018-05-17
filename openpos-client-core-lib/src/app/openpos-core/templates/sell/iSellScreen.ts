@@ -15,7 +15,6 @@ export interface ISellScreen {
     workstation: IWorkStation;
     operatorText: string;
     icon: string;
-    localMenuItems: IMenuItem[];
     theme: string;
     placeholderText: string;
 }
