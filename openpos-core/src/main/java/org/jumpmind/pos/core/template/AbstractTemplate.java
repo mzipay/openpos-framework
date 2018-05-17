@@ -55,5 +55,9 @@ public abstract class AbstractTemplate implements Serializable {
     public void setDialogProperties(DialogProperties dialogProperties) {
         this.put("dialogProperties", dialogProperties);
     }
+    
+    public void disableDevMenu() {
+        this.put("disableDevMenu", true);
+    }
 
 }
