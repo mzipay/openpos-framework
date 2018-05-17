@@ -115,6 +115,10 @@ public abstract class AbstractLegacyScreenTranslator <T extends SellScreen> exte
 				screen.setSessionTimeoutMillis(timeout);
 			}
 		}
+		
+		if (this.isSelfCheckout()) {
+		    this.screen.getTemplate().disableDevMenu();
+		}
 
 	}
     
