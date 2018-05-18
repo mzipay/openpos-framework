@@ -231,7 +231,8 @@ export class MatKeyboardKeyComponent implements OnInit {
     const tail = value.slice(caret + selectionLength);
     this.inputValue = [head, char, tail].join('');
 
-    this._setCursorPosition(caret + char.length);
+    const caret2 = this.input ? this._getCursorPosition() : 0;
+    this._setCursorPosition(caret2 + char.length);
   }
 
   private deleteText(): void {
@@ -244,11 +245,13 @@ export class MatKeyboardKeyComponent implements OnInit {
       this._setCursorPosition(caret);
     } else {
       const value = this.inputValue;
-      const head = value.slice(0, caret - 1);
+      const head = caret > 0 ? value.slice(0, caret - 1) : '';
       const tail = value.slice(caret);
       this.inputValue = [head, tail].join('');
 
-      this._setCursorPosition(caret - 1);
+      if (caret > 0) {
+        this._setCursorPosition(caret - 1);
+      }
     }
   }
 
