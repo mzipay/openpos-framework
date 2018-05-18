@@ -6,12 +6,14 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.stream.StreamSupport;
 
+import org.h2.server.web.WebServlet;
 import org.h2.tools.Server;
 import org.jumpmind.db.sql.SqlException;
 import org.jumpmind.properties.TypedProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -49,6 +51,14 @@ public class AppConfig {
         return h2Server;
     }
 
+    @Bean
+    public ServletRegistrationBean sqlServlet() {
+        ServletRegistrationBean bean = new ServletRegistrationBean(new WebServlet(), "/sql/*");
+        bean.addInitParameter("webAllowOthers", "false");
+        bean.setLoadOnStartup(1);
+        return bean;
+    }
+    
     @Bean
     @Scope(value = "singleton")
     TypedProperties environmentProperties() {

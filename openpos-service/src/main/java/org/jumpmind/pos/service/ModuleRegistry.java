@@ -1,14 +1,73 @@
 package org.jumpmind.pos.service;
 
-import org.apache.log4j.Logger;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
-//@Component
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class ModuleRegistry 
 //implements BeanFactoryPostProcessor 
 {
 
-    private static Logger log = Logger.getLogger(ModuleRegistry.class);
-
+    final Logger log = LoggerFactory.getLogger(getClass());
+    
+    @Autowired
+    List<AbstractModule> modules;
+    
+    @PostConstruct
+    public void loadModuleDatabaseDefaults () {
+    	BufferedWriter out = null;
+    	Date date = new Date();
+    	
+    	try {
+            File file = new File(".h2.server.properties");
+            out = new BufferedWriter(new FileWriter(file));
+            out.write("#H2 Server Properties\n#" + DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(date) + "\n");
+    	} catch (IOException e) {
+    		log.warn("Unable to configure \".h2.server.properties\" file");
+    	}
+    	
+    	int pos = 0;
+    	if (out != null) {
+    		for (AbstractModule module : modules) {
+    			try {
+    				out.write(pos + "=" + StringUtils.capitalize(module.getName()) + "|");
+    				out.write(module.getDriver() + "|");
+    				out.write(module.getURL() + "|\n");
+    				pos++;
+    			} catch (IOException e) {
+    				log.warn("Unable to configure " + module.getName() + " in \".h2.server.properties\"");
+    			}	
+        	}
+    	}
+    	if (out != null) {
+    		try {
+    			out.close();
+    		} catch (IOException e) {
+    			
+    		}
+    	}
+    }
+    
+    
+    
 //    @Autowired
 //    private ConfigurableApplicationContext applicationContext;
 
