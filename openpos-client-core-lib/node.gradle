@@ -11,4 +11,3 @@ task nodeClean(type: Delete) {
   delete "${openposDir}/node_modules" 
 } 
 clean.dependsOn nodeClean
- \ No newline at end of file 
