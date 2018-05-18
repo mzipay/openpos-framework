@@ -23,6 +23,7 @@ public abstract class AbstractScreen implements Serializable {
 
     private String name;
     private String type;
+    private String icon;
     private AbstractTemplate template = new BlankWithBarTemplate();
     private String locale;
     private int sessionTimeoutMillis;
@@ -157,6 +158,18 @@ public abstract class AbstractScreen implements Serializable {
 
     public void setSessionTimeoutMillis(int sessionTimeoutMillis) {
         this.sessionTimeoutMillis = sessionTimeoutMillis;
+    }
+    
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+    
+    public String getIcon() {
+        return icon;
+    }
+    
+    public void setPrompt(String prompt) {
+        this.put("prompt", prompt);
     }
 
 }

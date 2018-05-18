@@ -1,6 +1,5 @@
 import { IMenuItem } from '../../common/imenuitem';
 import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
-import { IWorkStation } from '../../common/iworkstation';
 import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
 import { ISellTemplate } from './isell-template';
 
@@ -12,8 +11,6 @@ export interface ISellScreen {
     template: ISellTemplate;
     locale: string;
     prompt: string;
-    workstation: IWorkStation;
-    operatorText: string;
     icon: string;
     theme: string;
     placeholderText: string;
@@ -27,12 +24,12 @@ export class SellScreenUtils {
 
         statusBar.backButton = screen.backButton;
         statusBar.logoutButton = screen.logoutButton;
-        statusBar.operatorText = screen.operatorText;
+        statusBar.operatorText = screen.template.operatorText;
         statusBar.screenIcon = screen.icon;
         statusBar.screenName = screen.name;
         statusBar.screenType = screen.type;
-        if (screen.workstation) {
-            statusBar.workstationId = screen.workstation.workstationId;
+        if (screen.template.workstation) {
+            statusBar.workstationId = screen.template.workstation.workstationId;
         }
 
         return statusBar;

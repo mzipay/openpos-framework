@@ -3,12 +3,12 @@
 		<div fxLayout="row" fxLayoutAlign=" center">
 
 			<button *ngIf="data.showScan" mat-button (click)="showScan()">
-				<mat-icon svgIcon="local_search_id_code" class="icon-statusbar"></mat-icon>
+				<mat-icon svgIcon="openpos_search_id_code" class="icon-statusbar"></mat-icon>
 			</button>
 
 			<ng-container *ngIf="data && data.type !='SelfCheckoutTransaction' && data.backButton && data.backButton.enabled; else checkForLogoutButton">
 				<button mat-button style="margin-left:-20px" (click)="doMenuItemAction(data.backButton)">
-					<app-icon iconName="local_exit"></app-icon>
+					<app-icon iconName="openpos_exit"></app-icon>
 				</button>
 			</ng-container>
 
@@ -23,7 +23,7 @@
 		</div>
 
 		<button *ngIf="data.showAdmin" mat-button (click)="onAdminLogin()">
-			<mat-icon svgIcon="local_admin" class="icon-statusbar"></mat-icon>
+			<mat-icon svgIcon="openpos_admin" class="icon-statusbar"></mat-icon>
 		</button>
 
 	</div>

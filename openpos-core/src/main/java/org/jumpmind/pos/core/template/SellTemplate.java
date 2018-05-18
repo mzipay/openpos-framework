@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.Workstation;
 import org.jumpmind.pos.core.template.Scan.ScanType;
 
 public class SellTemplate extends AbstractTemplate {
@@ -17,6 +18,9 @@ public class SellTemplate extends AbstractTemplate {
     protected List<MenuItem> transactionMenuItems = new ArrayList<>();
     
     Scan scan;
+    
+    private Workstation workstation;
+    private String operatorText;
 
     public SellTemplate() {
         super("Sell");
@@ -78,5 +82,22 @@ public class SellTemplate extends AbstractTemplate {
     public List<MenuItem> getTransactionMenuItems() {
         return transactionMenuItems;
     }
+    
+
+    public String getOperatorText() {
+        return operatorText;
+    }
+
+    public void setOperatorText(String operatorText) {
+        this.operatorText = operatorText;
+    }
+
+    public Workstation getWorkstation() {
+        return workstation;
+    }
+
+    public void setWorkstation(Workstation workstation) {
+        this.workstation = workstation;
+    }       
 
 }

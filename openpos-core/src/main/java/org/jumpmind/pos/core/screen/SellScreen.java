@@ -9,10 +9,7 @@ public class SellScreen extends AbstractScreen {
 
     private static final long serialVersionUID = 1L;
     
-    private String prompt;
-    private Workstation workstation;
-    private String operatorText;
-    private String icon;	
+
     
     public SellScreen() {
     }
@@ -49,22 +46,6 @@ public class SellScreen extends AbstractScreen {
         }
     }    
     
-    public String getOperatorText() {
-        return operatorText;
-    }
-
-    public void setOperatorText(String operatorText) {
-        this.operatorText = operatorText;
-    }
-
-    public Workstation getWorkstation() {
-        return workstation;
-    }
-
-    public void setWorkstation(Workstation workstation) {
-        this.workstation = workstation;
-    }        
-
     /**
      * Indicator for marking the screen as "Customer Facing", meaning that the screen is intended for the customer to 
      * complete.
@@ -72,23 +53,7 @@ public class SellScreen extends AbstractScreen {
      */
     public void setCustomerFacing(Boolean customerFacing) {
         put("customerFacing", customerFacing);
-    }    
-    
-    public void setPrompt(String prompt) {
-        this.prompt = prompt;
-    }
-    
-    public String getPrompt() {
-        return prompt;
-    }
-    
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-    
-    public String getIcon() {
-        return icon;
-    }
+    }        
     
     public void setInstructions(String instructions) {
         this.put("instructions", instructions);

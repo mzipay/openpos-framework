@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.h2.tools.Server;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
 import org.jumpmind.db.sql.SqlTemplateSettings;
@@ -61,8 +62,11 @@ abstract public class AbstractModule implements Module {
     @Value("${installation.id}")
     protected String installationId;
 
-//    @Autowired
-//    Server h2Server;
+    /**
+     * This is to make the modules dependent on the h2 server being created
+     */
+    @Autowired(required=false)
+    Server h2Server;
 
     protected IDatabasePlatform databasePlatform;
 
