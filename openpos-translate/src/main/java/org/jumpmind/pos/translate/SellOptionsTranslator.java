@@ -6,12 +6,12 @@ import java.util.Set;
 
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.ScreenType;
-import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.template.SellTemplate;
 
-public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<SellScreen> {
+public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Screen> {
 
     Set<String> excludeLabelTags = new HashSet<>();
 
@@ -19,7 +19,7 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<SellSc
 
     @Deprecated
     public SellOptionsTranslator(ILegacyScreen headlessScreen, String icon, String appId, Properties properties, String... excludeActions) {
-        super(headlessScreen, SellScreen.class, appId, properties);
+        super(headlessScreen, Screen.class, appId, properties);
         if (excludeActions != null) {
             for (String string : excludeActions) {
                 this.excludeLabelTags.add(string);

@@ -19,15 +19,15 @@ import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.ModeConstants;
 import org.jumpmind.pos.core.model.Form;
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.IUIAction;
 import org.jumpmind.pos.core.screen.MenuItem;
-import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.screen.Workstation;
 import org.jumpmind.pos.core.template.SellTemplate;
 import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
 
-public abstract class AbstractLegacyScreenTranslator<T extends SellScreen> extends AbstractScreenTranslator<T>
+public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends AbstractScreenTranslator<T>
         implements ILegacyBeanAccessor {
 
     public final static String LOCAL_NAV_PANEL_KEY = "LocalNavigationPanel";
@@ -89,7 +89,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends SellScreen> exten
         return this.legacyStoreProperties;
     }
 
-    protected Form getForm(SellScreen screen) {
+    protected Form getForm(Screen screen) {
         if (screen instanceof DynamicFormScreen) {
             return ((DynamicFormScreen) screen).getForm();
         } else {

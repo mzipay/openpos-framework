@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class AbstractScreen implements Serializable {
+public class Screen implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,10 +28,10 @@ public abstract class AbstractScreen implements Serializable {
     private String locale;
     private int sessionTimeoutMillis;
 
-    public AbstractScreen() {
+    public Screen() {
     }
 
-    public AbstractScreen(String name, String type) {
+    public Screen(String name, String type) {
         this.type = type;
         this.name = name;
     }
@@ -40,7 +40,7 @@ public abstract class AbstractScreen implements Serializable {
      * Allows this screen content to be displayed in a Dialog on the client
      * side.
      */
-    public AbstractScreen asDialog() {
+    public Screen asDialog() {
         return this.asDialog(null);
     }
 
@@ -52,7 +52,7 @@ public abstract class AbstractScreen implements Serializable {
      *            Additional properties that can control dialog behavior and
      *            rendering on the server side.
      */
-    public AbstractScreen asDialog(DialogProperties dialogProperties) {
+    public Screen asDialog(DialogProperties dialogProperties) {
         this.template.setDialog(true);
         if (dialogProperties != null) {
             this.template.setDialogProperties(dialogProperties);
@@ -171,5 +171,20 @@ public abstract class AbstractScreen implements Serializable {
     public void setPrompt(String prompt) {
         this.put("prompt", prompt);
     }
+    
+    /**
+     * Indicator for marking the screen as "Customer Facing", meaning that the screen is intended for the customer to 
+     * complete.
+     * @param customerFacing <code>true</code> if the customer should use the screen.
+     */
+    public void setCustomerFacing(Boolean customerFacing) {
+        put("customerFacing", customerFacing);
+    }        
+    
+    public void setInstructions(String instructions) {
+        this.put("instructions", instructions);
+    }
+    
+
 
 }

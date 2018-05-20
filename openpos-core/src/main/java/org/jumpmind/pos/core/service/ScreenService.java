@@ -32,7 +32,7 @@ import org.jumpmind.pos.core.model.IFormElement;
 import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
-import org.jumpmind.pos.core.screen.AbstractScreen;
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
@@ -85,9 +85,9 @@ public class ScreenService implements IScreenService {
 
     int screenSequenceNumber = 0;
 
-    private Map<String, Map<String, AbstractScreen>> lastScreenByAppIdByNodeId = new HashMap<>();
+    private Map<String, Map<String, Screen>> lastScreenByAppIdByNodeId = new HashMap<>();
 
-    private Map<String, Map<String, AbstractScreen>> lastDialogByAppIdByNodeId = new HashMap<>();
+    private Map<String, Map<String, Screen>> lastDialogByAppIdByNodeId = new HashMap<>();
     
     @PostConstruct
     public void init() {
@@ -131,7 +131,7 @@ public class ScreenService implements IScreenService {
         return result;
     }
 
-    private String getComponentValues(String appId, String nodeId, String controlId, AbstractScreen screen, String searchTerm, Integer sizeLimit) {
+    private String getComponentValues(String appId, String nodeId, String controlId, Screen screen, String searchTerm, Integer sizeLimit) {
         String result = null;
         if (screen instanceof DynamicFormScreen) {
             DynamicFormScreen dynamicScreen = (DynamicFormScreen) screen;
@@ -175,7 +175,7 @@ public class ScreenService implements IScreenService {
 
                 logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
 
-                AbstractScreen lastDialog = removeLastDialog(appId, nodeId);
+                Screen lastDialog = removeLastDialog(appId, nodeId);
                 if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getType())) {
                     logger.debug("Instructing node {} to clear dialog.", nodeId);
                     publishToClients(appId, nodeId, "{\"clearDialog\":true }");
@@ -198,8 +198,8 @@ public class ScreenService implements IScreenService {
         }
     }
 
-    protected AbstractScreen removeLastDialog(String appId, String nodeId) {
-        Map<String, AbstractScreen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
+    protected Screen removeLastDialog(String appId, String nodeId) {
+        Map<String, Screen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             return lastScreenByNodeId.remove(nodeId);
         } else {
@@ -208,8 +208,8 @@ public class ScreenService implements IScreenService {
     }
 
     @Override
-    public AbstractScreen getLastDialog(String appId, String nodeId) {
-        Map<String, AbstractScreen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
+    public Screen getLastDialog(String appId, String nodeId) {
+        Map<String, Screen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             return lastScreenByNodeId.get(nodeId);
         } else {
@@ -218,8 +218,8 @@ public class ScreenService implements IScreenService {
     }
 
     @Override
-    public AbstractScreen getLastScreen(String appId, String nodeId) {
-        Map<String, AbstractScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+    public Screen getLastScreen(String appId, String nodeId) {
+        Map<String, Screen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             return lastScreenByNodeId.get(nodeId);
         } else {
@@ -228,7 +228,7 @@ public class ScreenService implements IScreenService {
     }
 
     @Override
-    public void showScreen(String appId, String nodeId, AbstractScreen screen) {
+    public void showScreen(String appId, String nodeId, Screen screen) {
         if (screen != null) {
             screen.setSequenceNumber(++this.screenSequenceNumber);
             try {
@@ -256,9 +256,9 @@ public class ScreenService implements IScreenService {
         }
     }
 
-    private void recordLastScreen(String appId, String nodeId, AbstractScreen screen,
-            Map<String, Map<String, AbstractScreen>> lastScreenByAppIdByNodeId) {
-        Map<String, AbstractScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+    private void recordLastScreen(String appId, String nodeId, Screen screen,
+            Map<String, Map<String, Screen>> lastScreenByAppIdByNodeId) {
+        Map<String, Screen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId == null) {
             lastScreenByNodeId = new HashMap<>();
             lastScreenByAppIdByNodeId.put(appId, lastScreenByNodeId);
@@ -295,13 +295,13 @@ public class ScreenService implements IScreenService {
     }
 
     private boolean hasForm(String appId, String nodeId) {
-        Map<String, AbstractScreen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
+        Map<String, Screen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null && lastScreenByNodeId.get(nodeId) != null) {
             return lastScreenByNodeId.get(nodeId) instanceof IHasForm;
         } else {
             lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
             if (lastScreenByNodeId != null) {
-                AbstractScreen lastScreen = lastScreenByNodeId.get(nodeId);
+                Screen lastScreen = lastScreenByNodeId.get(nodeId);
                 if (lastScreen != null && lastScreen instanceof IHasForm) {
                     return true;
                 }
@@ -310,7 +310,7 @@ public class ScreenService implements IScreenService {
         return false;
     }
 
-    protected Form buildForm(AbstractScreen screen) {
+    protected Form buildForm(Screen screen) {
         Form form = new Form();
 
         for (Field field : screen.getClass().getDeclaredFields()) {
@@ -338,7 +338,7 @@ public class ScreenService implements IScreenService {
         return form;
     }
 
-    protected void applyAnnotations(AbstractScreen screen) {
+    protected void applyAnnotations(Screen screen) {
         org.jumpmind.pos.core.model.annotations.Screen screenAnnotation = screen.getClass()
                 .getAnnotation(org.jumpmind.pos.core.model.annotations.Screen.class);
         if (screenAnnotation != null) {
@@ -349,7 +349,7 @@ public class ScreenService implements IScreenService {
 
     @Override
     public void refresh(String appId, String nodeId) {
-        Map<String, AbstractScreen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+        Map<String, Screen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId != null) {
             showScreen(appId, nodeId, lastScreenByNodeId.get(nodeId));
         }
@@ -379,7 +379,7 @@ public class ScreenService implements IScreenService {
         }
     }
 
-    protected void logScreenTransition(String nodeId, AbstractScreen screen) throws JsonProcessingException {
+    protected void logScreenTransition(String nodeId, Screen screen) throws JsonProcessingException {
         if (loggerGraphical.isInfoEnabled()) {
             logger.info("Show screen on node \"" + nodeId + "\"\n" + drawBox(screen.getName(), screen.getType())
                     + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
