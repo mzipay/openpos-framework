@@ -1,7 +1,8 @@
 package org.jumpmind.pos.tax.service;
 
 import org.jumpmind.pos.service.EndpointDispatcher;
-import org.jumpmind.pos.tax.model.RetailTransaction;
+import org.jumpmind.pos.tax.model.TaxCalculationRequest;
+import org.jumpmind.pos.tax.model.TaxCalculationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +15,8 @@ public class TaxService {
     private EndpointDispatcher endpointDispatcher;
 
     @RequestMapping("/calculateTax")
-    public void calculateTax(RetailTransaction trans) {
-        endpointDispatcher.dispatch("/calculateTax", trans);
+    public TaxCalculationResponse calculateTax(TaxCalculationRequest request) {
+        return endpointDispatcher.dispatch("/calculateTax", request);
     }
 
 }
