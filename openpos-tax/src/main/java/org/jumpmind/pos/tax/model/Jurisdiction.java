@@ -4,8 +4,8 @@ import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
-@Table(description = "Tax Authority Rule")
-public class AuthorityRule extends Entity {
+@Table(description = "Tax Jurisdiction")
+public class Jurisdiction extends Entity {
 
     @Column(primaryKey = true)
     private String id;
@@ -16,7 +16,7 @@ public class AuthorityRule extends Entity {
     @Column
     private String authorityId;
 
-    private Authority taxAuthority;
+    private Authority authority;
 
     public void setId(String id) {
         this.id = id;
@@ -34,12 +34,12 @@ public class AuthorityRule extends Entity {
         return geoCode;
     }
 
-    public void setTaxAuthority(Authority taxAuthority) {
-        this.taxAuthority = taxAuthority;
+    public void setAuthority(Authority taxAuthority) {
+        this.authority = taxAuthority;
     }
 
-    public Authority getTaxAuthority() {
-        return taxAuthority;
+    public Authority getAuthority() {
+        return authority;
     }
     
     public void setAuthorityId(String authorityId) {
