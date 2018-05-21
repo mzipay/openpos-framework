@@ -25,6 +25,14 @@ public class TaxAmount {
         this.taxPercent = taxPercent;
     }
 
+    public TaxAmount(TaxAmount amount) {
+        taxAuthorityId = amount.getTaxAuthorityId();
+        taxGroupId = amount.getTaxGroupId();
+        taxableAmount = amount.getTaxableAmount();
+        taxAmount = amount.getTaxAmount();
+        taxPercent = amount.getTaxPercent();
+    }
+
     public String getTaxAuthorityId() {
         return taxAuthorityId;
     }
@@ -63,6 +71,17 @@ public class TaxAmount {
 
     public void setTaxPercent(BigDecimal taxPercent) {
         this.taxPercent = taxPercent;
+    }
+
+    public void add(TaxAmount itemTaxAmount) {
+        if (taxableAmount == null) {
+            taxableAmount = BigDecimal.ZERO;
+        }
+        if (taxAmount == null) {
+            taxAmount = BigDecimal.ZERO;
+        }
+        taxableAmount = taxableAmount.add(itemTaxAmount.getTaxAmount());
+        taxAmount = taxAmount.add(itemTaxAmount.getTaxAmount());
     }
 
 }

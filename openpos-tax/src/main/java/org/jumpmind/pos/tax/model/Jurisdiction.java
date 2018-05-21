@@ -12,7 +12,7 @@ public class Jurisdiction extends Entity {
 
     @Column
     private String geoCode;
-    
+
     @Column
     private String authorityId;
 
@@ -25,11 +25,11 @@ public class Jurisdiction extends Entity {
     public String getId() {
         return id;
     }
-    
+
     public void setGeoCode(String geoCode) {
         this.geoCode = geoCode;
     }
-    
+
     public String getGeoCode() {
         return geoCode;
     }
@@ -41,11 +41,11 @@ public class Jurisdiction extends Entity {
     public Authority getAuthority() {
         return authority;
     }
-    
+
     public void setAuthorityId(String authorityId) {
         this.authorityId = authorityId;
     }
-    
+
     public String getAuthorityId() {
         return authorityId;
     }

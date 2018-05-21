@@ -21,13 +21,13 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
 
     @Column(primaryKey = true)
     private String id;
-    
+
     @Column(primaryKey = true)
     private String authorityId;
-    
+
     @Column(primaryKey = true)
-    private String groupdId;
-    
+    private String groupId;
+
     // TODO tax type?
     // TODO tax holiday flag?
     // TODO effective time
@@ -57,7 +57,7 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
     private Group taxableGroup;
 
     private Collection<RateRule> taxRateRules;
-    
+
     private Authority authority;
 
     public String getId() {
@@ -67,11 +67,11 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public String getAuthorityId() {
         return authorityId;
     }
-    
+
     public void setAuthorityId(String authorityId) {
         this.authorityId = authorityId;
     }
@@ -88,10 +88,9 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
         return false;
     }
 
-    public int compareTo(GroupRule o) {
+    public int compareTo(GroupRule taxGroupRule) {
         int compare = -1;
-        if (o != null && o instanceof GroupRule) {
-            GroupRule taxGroupRule = (GroupRule) o;
+        if (taxGroupRule != null) {
             compare = taxGroupRule.getAuthorityId().compareTo(authorityId);
             if (compare == 0) {
                 compare = taxGroupRule.getTaxableGroup().compareTo(taxableGroup);
@@ -212,18 +211,19 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
         this.cycleAmount = centsPerCycle;
     }
 
-    public String getGroupdId() {
-        return groupdId;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setGroupdId(String groupdId) {
-        this.groupdId = groupdId;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
-    
+
     public void setAuthority(Authority authority) {
+        this.authorityId = authority.getId();
         this.authority = authority;
     }
-    
+
     public Authority getAuthority() {
         return authority;
     }

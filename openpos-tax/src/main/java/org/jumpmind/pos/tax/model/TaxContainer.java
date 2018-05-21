@@ -42,7 +42,7 @@ public class TaxContainer {
         // TODO: implement collapseTaxGroups()
     }
 
-    public Collection<GroupRule> getTaxGroupRules() {
+    public Collection<GroupRule> getGroupRules() {
         return itemsMap.keySet();
     }
 

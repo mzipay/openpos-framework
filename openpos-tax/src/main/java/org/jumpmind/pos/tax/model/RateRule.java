@@ -19,16 +19,16 @@ abstract public class RateRule extends Entity {
 
     @Column(primaryKey = true)
     private String id;
-    
+
     @Column(primaryKey = true)
     private String authorityId;
-    
+
     @Column(primaryKey = true)
     private String groupId;
 
     @Column(primaryKey = true)
     private Integer taxRateRuleSequenceNumber;
-    
+
     // TODO tax type
     // TODO tax holiday
 
