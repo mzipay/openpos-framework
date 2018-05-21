@@ -21,6 +21,17 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
 
     @Column(primaryKey = true)
     private String id;
+    
+    @Column(primaryKey = true)
+    private String authorityId;
+    
+    @Column(primaryKey = true)
+    private String groupdId;
+    
+    // TODO tax type?
+    // TODO tax holiday flag?
+    // TODO effective time
+    // TODO customer group?
 
     @Column()
     private String ruleName;
@@ -43,11 +54,11 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
     @Column()
     private BigDecimal cycleAmount;
 
-    private Authority taxAuthority;
-
     private Group taxableGroup;
 
     private Collection<RateRule> taxRateRules;
+    
+    private Authority authority;
 
     public String getId() {
         return id;
@@ -56,15 +67,23 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
     public void setId(String id) {
         this.id = id;
     }
+    
+    public String getAuthorityId() {
+        return authorityId;
+    }
+    
+    public void setAuthorityId(String authorityId) {
+        this.authorityId = authorityId;
+    }
 
     public String toString() {
-        return "TaxGroupRule " + taxAuthority.getId() + "-" + taxableGroup.getId() + "-" + compoundSequenceNumber;
+        return "TaxGroupRule " + authorityId + "-" + taxableGroup.getId() + "-" + compoundSequenceNumber;
     }
 
     public boolean equals(Object o) {
         if (o != null && o instanceof GroupRule) {
             GroupRule taxGroupRule = (GroupRule) o;
-            return taxGroupRule.getTaxAuthority().equals(taxAuthority) && taxGroupRule.getTaxableGroup().equals(taxableGroup);
+            return taxGroupRule.getAuthorityId().equals(authorityId) && taxGroupRule.getTaxableGroup().equals(taxableGroup);
         }
         return false;
     }
@@ -73,7 +92,7 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
         int compare = -1;
         if (o != null && o instanceof GroupRule) {
             GroupRule taxGroupRule = (GroupRule) o;
-            compare = taxGroupRule.getTaxAuthority().compareTo(taxAuthority);
+            compare = taxGroupRule.getAuthorityId().compareTo(authorityId);
             if (compare == 0) {
                 compare = taxGroupRule.getTaxableGroup().compareTo(taxableGroup);
             }
@@ -161,14 +180,6 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
         this.taxableGroup = taxableGroup;
     }
 
-    public Authority getTaxAuthority() {
-        return taxAuthority;
-    }
-
-    public void setTaxAuthority(Authority taxAuthority) {
-        this.taxAuthority = taxAuthority;
-    }
-
     public Boolean getTaxOnGrossAmountFlag() {
         return taxOnGrossAmountFlag;
     }
@@ -199,6 +210,22 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
 
     public void setCycleAmount(BigDecimal centsPerCycle) {
         this.cycleAmount = centsPerCycle;
+    }
+
+    public String getGroupdId() {
+        return groupdId;
+    }
+
+    public void setGroupdId(String groupdId) {
+        this.groupdId = groupdId;
+    }
+    
+    public void setAuthority(Authority authority) {
+        this.authority = authority;
+    }
+    
+    public Authority getAuthority() {
+        return authority;
     }
 
 }
