@@ -88,7 +88,7 @@ export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScree
     };
 
     this.session.response = signatureData;
-    this.session.onAction('SaveSignature');
+    this.session.onAction(this.screen.saveAction.action);
   }
 }
 
