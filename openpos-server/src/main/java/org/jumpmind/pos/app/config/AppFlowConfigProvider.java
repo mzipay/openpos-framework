@@ -22,7 +22,7 @@ package org.jumpmind.pos.app.config;
 
 import org.jumpmind.pos.app.state.HomeScreenState;
 import org.jumpmind.pos.app.state.SellState;
-import org.jumpmind.pos.app.state.UserLoginState;
+import org.jumpmind.pos.app.state.user.UserLoginState;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.IFlowConfigProvider;

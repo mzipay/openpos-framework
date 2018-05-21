@@ -38,6 +38,11 @@ public class HomeScreenState extends AbstractState implements IState {
         stateManager.showScreen(buildScreen());
     }
     
+    @Override
+    protected String getDefaultBundleName() {
+        return "home";
+    }
+    
     @ActionHandler
     public void onSell(Action action) {
         logger.info("Sell action intercepted for testing purposes.");

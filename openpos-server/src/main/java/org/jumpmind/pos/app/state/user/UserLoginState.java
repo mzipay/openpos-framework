@@ -1,13 +1,13 @@
-package org.jumpmind.pos.app.state;
+package org.jumpmind.pos.app.state.user;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.jumpmind.pos.app.state.AbstractState;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.Out;
 import org.jumpmind.pos.core.flow.ScopeType;
-import org.jumpmind.pos.core.flow.StateManager;
 import org.jumpmind.pos.core.flow.ui.PromptConfig;
 import org.jumpmind.pos.core.screen.IPromptScreen;
 import org.jumpmind.pos.service.ServiceResultImpl;
@@ -17,13 +17,10 @@ import org.jumpmind.pos.user.service.UserMessage;
 import org.jumpmind.pos.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class UserLoginState implements IState {
+public class UserLoginState extends AbstractState {
 
     @Autowired
     private UserService userService;
-    
-    @In(scope=ScopeType.Node)
-    private StateManager stateManager;
     
     @In(scope=ScopeType.Session, required=false)
     @Out(scope=ScopeType.Session, required=false)
@@ -42,6 +39,11 @@ public class UserLoginState implements IState {
         this.sourceState = sourceState;
         this.targetState = targetState;
     }
+    
+    @Override
+    protected String getDefaultBundleName() {        
+        return "user";
+    }
 
     @Override
     public void arrive(Action action) {
@@ -50,10 +52,10 @@ public class UserLoginState implements IState {
 
     protected void promptForLogin() {
         stateManager.getUI().prompt(new PromptConfig()
-                .placeholder("User Id")
-                .promptText("Type your User ID and press enter to continue.")
+                .placeholder(resource("_loginUserId"))
+                .promptText(resource("_loginUserPromptText"))
                 .icon("lock")
-                .action("Next", "UsernameEntered"));
+                .action(commonResource("_nextButton"), "UsernameEntered"));
     }
 
 

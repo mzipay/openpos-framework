@@ -34,6 +34,7 @@ public interface IStateManager {
     public void doAction(String action);
     public void doAction(String action, Map<String, String> params);
     public void doAction(Action action);    
+    public void transitionTo(Action action, IState newState);
     public void endConversation();
     public void endSession();
     public <T> T getScopeValue(String name);

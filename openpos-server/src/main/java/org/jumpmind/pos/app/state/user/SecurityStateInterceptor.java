@@ -1,4 +1,4 @@
-package org.jumpmind.pos.app.state;
+package org.jumpmind.pos.app.state.user;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.Action;
