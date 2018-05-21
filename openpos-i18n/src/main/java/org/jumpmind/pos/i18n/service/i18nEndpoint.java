@@ -35,12 +35,12 @@ public class i18nEndpoint {
        
         String dbquery = i18nRepository.getString(base, key, locale, brand);
         if (dbquery == null) {
-        	for (String string : properties) {
+        	for (String property : properties) {
         		try {
-        			ResourceBundle bundle = ResourceBundle.getBundle(string, locale);
+        			ResourceBundle bundle = ResourceBundle.getBundle(String.format("i18n/%s", property), locale);
         			if (bundle.containsKey(key)) {
         				String pattern = bundle.getString(key);
-        				 return format(string, pattern, locale, args);
+        				 return format(property, pattern, locale, args);
         			}
             	} catch (MissingResourceException e) {
             		continue;
