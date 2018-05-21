@@ -5,7 +5,7 @@ import { PopTartComponent } from './dialogs/pop-tart/pop-tart.component';
 import { NavListComponent } from './dialogs/nav-list/nav-list.component';
 
 // Angular Includes
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -42,6 +42,7 @@ import { PluginService } from './services/plugin.service';
 import { FormattersService } from './services/formatters.service';
 import { FileUploadService } from './services/file-upload.service';
 import { LocaleService, LocaleServiceImpl } from './services/locale.service';
+import { ErrorHandlerService } from './services/errorhandler.service';
 
 
 // Components
@@ -397,10 +398,7 @@ const customLayouts: IKeyboardLayouts = {
     SessionService,
     DeviceService,
     Location,
-    {
-      provide: LocationStrategy,
-      useClass: PathLocationStrategy
-    },
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
     DatePipe,
     BreakpointObserver,
     MediaMatcher,
@@ -408,7 +406,9 @@ const customLayouts: IKeyboardLayouts = {
     FormattersService,
     PluginService,
     FileUploadService,
-    { provide: MAT_KEYBOARD_LAYOUTS, useValue: customLayouts }
+    { provide: MAT_KEYBOARD_LAYOUTS, useValue: customLayouts },
+    { provide: ErrorHandler, useClass: ErrorHandlerService }
+    
   ]
 })
 // Export services below under 'providers'
