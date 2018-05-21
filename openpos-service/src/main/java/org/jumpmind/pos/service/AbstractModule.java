@@ -187,11 +187,13 @@ abstract public class AbstractModule implements Module {
         logger.info("The previous version of {} was {} and the current version is {}", getName(), fromVersion, getVersion());
 
         DatabaseScriptContainer scripts = new DatabaseScriptContainer(getName() + "/sql", databasePlatform());
-
+        
+        IDBSchemaListener schemaListener = getDbSchemaListener();
+        
         scripts.executePreInstallScripts(fromVersion, getVersion());
-
+        schemaListener.beforeSchemaCreate(sessionFactory);
         sessionFactory.getDatabaseSchema().createAndUpgrade();
-
+        schemaListener.afterSchemaCreate(sessionFactory);
         scripts.executePostInstallScripts(fromVersion, getVersion());
 
         session.save(new ModuleInfo(installationId, getVersion()));
@@ -199,5 +201,16 @@ abstract public class AbstractModule implements Module {
 
     protected DBSession session() {
         return sessionFactory().createDbSession();
+    }
+    
+    protected IDBSchemaListener getDbSchemaListener() {
+        return new IDBSchemaListener() {
+            @Override
+            public void beforeSchemaCreate(DBSessionFactory sessionFactory) {
+            }
+            @Override
+            public void afterSchemaCreate(DBSessionFactory sessionFactory) {
+            }
+        };
     }
 }
