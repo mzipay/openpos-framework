@@ -1,9 +1,9 @@
 package org.jumpmind.pos.context.service;
 
 import org.jumpmind.pos.context.model.ConfigModel;
-import org.jumpmind.pos.service.ServiceResultImpl;
+import org.jumpmind.pos.service.ServiceResult;
 
-public class ConfigResult extends ServiceResultImpl {
+public class ConfigResult extends ServiceResult {
 
     private String configName;
     private String configValue;

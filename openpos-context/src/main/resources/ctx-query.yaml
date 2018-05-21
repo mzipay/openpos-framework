@@ -1,9 +1,6 @@
 ---
 queries:
 -
-  name: tagLookup
-  orderBy: tag_group, tag_level desc
--
   name: configLookup
   where: config_name = ${configName}
     AND enabled_flag = 1
