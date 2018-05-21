@@ -22,7 +22,7 @@ package org.jumpmind.pos.core.flow;
 
 import java.util.Map;
 
-import org.jumpmind.pos.core.screen.AbstractScreen;
+import org.jumpmind.pos.core.screen.Screen;
 
 
 public interface IStateManager {
@@ -37,7 +37,7 @@ public interface IStateManager {
     public void endConversation();
     public void endSession();
     public <T> T getScopeValue(String name);
-    public void showScreen(AbstractScreen screen);
+    public void showScreen(Screen screen);
     public void refreshScreen();
     public IState getCurrentState();
     public IUI getUI();

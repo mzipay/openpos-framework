@@ -8,7 +8,6 @@ import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SellItemScreen;
-import org.jumpmind.pos.core.screen.SellScreen;
 import org.jumpmind.pos.core.template.SellTemplate;
 
 public class SellState implements IState {
@@ -21,7 +20,7 @@ public class SellState implements IState {
         stateManager.showScreen(buildScreen());
     }
 
-    protected SellScreen buildScreen() {
+    protected SellItemScreen buildScreen() {
         SellItemScreen screen = new SellItemScreen();
         screen.setLogoutButton(new MenuItem("Back", "Logout", "exit_to_app"));
         screen.setPrompt("Ready to begin");

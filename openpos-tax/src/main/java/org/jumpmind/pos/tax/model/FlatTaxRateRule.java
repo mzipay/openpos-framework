@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * @author elong
  * 
  */
-public class FlatTaxRateRule extends TaxRateRule {
+public class FlatTaxRateRule extends RateRule {
 
     private BigDecimal amount;
 

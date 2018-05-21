@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VersionScreen extends SellScreen {
+public class VersionScreen extends Screen {
     private static final long serialVersionUID = 1L;
 
     private List<Version> versions = null;

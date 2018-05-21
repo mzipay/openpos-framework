@@ -14,16 +14,16 @@ import org.springframework.stereotype.Repository;
 @DependsOn(value = { "TaxModule" })
 public class TaxRepository {
 
-    private Query<TaxAuthorityRule> taxAuthorityRuleLookup = new Query<TaxAuthorityRule>().named("taxAuthorityRuleLookup")
-            .result(TaxAuthorityRule.class);
+    private Query<Jurisdiction> taxAuthorityRuleLookup = new Query<Jurisdiction>().named("taxAuthorityRuleLookup")
+            .result(Jurisdiction.class);
 
     @Autowired
     @Qualifier("taxDbSession")
     @Lazy
     private DBSession dbSession;
 
-    public List<TaxAuthorityRule> findTaxAuthorityRules(String taxCalculationGeocode) {
-        List<TaxAuthorityRule> taxAuthorityRules = dbSession.query(taxAuthorityRuleLookup, taxCalculationGeocode);
+    public List<Jurisdiction> findTaxAuthorityRules(String taxCalculationGeocode) {
+        List<Jurisdiction> taxAuthorityRules = dbSession.query(taxAuthorityRuleLookup, taxCalculationGeocode);
         return taxAuthorityRules;
     }
 

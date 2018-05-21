@@ -30,7 +30,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.ui.UIManager;
-import org.jumpmind.pos.core.screen.AbstractScreen;
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IScreenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -315,7 +315,7 @@ public class StateManager implements IStateManager {
     }
 
     @Override
-    public void showScreen(AbstractScreen screen) {
+    public void showScreen(Screen screen) {
         if (this.currentContext == null) {
             throw new FlowException("There is no currentContext on this StateManager.  HINT: States should use @In(scope=ScopeType.Node) to get the StateManager, not @Autowired.");
         }

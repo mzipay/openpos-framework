@@ -7,7 +7,7 @@ import java.util.List;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.MultipleFormOption;
 
-public class MultipleDynamicFormScreen extends SellScreen implements IHasForm{
+public class MultipleDynamicFormScreen extends Screen implements IHasForm{
 
 	private static final long serialVersionUID = 1L;
 

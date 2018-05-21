@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ItemListScreen extends SellScreen {
+public class ItemListScreen extends Screen {
 
     private static final long serialVersionUID = 1L;
     

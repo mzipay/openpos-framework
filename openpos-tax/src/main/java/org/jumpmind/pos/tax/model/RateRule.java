@@ -15,13 +15,22 @@ import org.jumpmind.pos.persist.Table;
  */
 @Table(
         description = "A rule denoting what percentage or dollar amount of tax is applied to a particular taxable total in a RetailTransaction.")
-abstract public class TaxRateRule extends Entity {
+abstract public class RateRule extends Entity {
 
     @Column(primaryKey = true)
     private String id;
+    
+    @Column(primaryKey = true)
+    private String authorityId;
+    
+    @Column(primaryKey = true)
+    private String groupId;
 
-    @Column()
+    @Column(primaryKey = true)
     private Integer taxRateRuleSequenceNumber;
+    
+    // TODO tax type
+    // TODO tax holiday
 
     @Column()
     private BigDecimal minTaxableAmount;
@@ -29,7 +38,7 @@ abstract public class TaxRateRule extends Entity {
     @Column()
     private BigDecimal maxTaxableAmount;
 
-    private TaxGroupRule taxGroupRule;
+    private GroupRule taxGroupRule;
 
     public String getId() {
         return id;
@@ -60,11 +69,11 @@ abstract public class TaxRateRule extends Entity {
         this.minTaxableAmount = minTaxableAmount;
     }
 
-    public TaxGroupRule getTaxGroupRule() {
+    public GroupRule getTaxGroupRule() {
         return taxGroupRule;
     }
 
-    public void setTaxGroupRule(TaxGroupRule taxGroupRule) {
+    public void setTaxGroupRule(GroupRule taxGroupRule) {
         this.taxGroupRule = taxGroupRule;
     }
 

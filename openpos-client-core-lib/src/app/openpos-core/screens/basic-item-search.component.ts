@@ -28,7 +28,7 @@ export class BasicItemSearchComponent implements IScreen, AfterViewInit, OnDestr
 
   show(screen: any) {
     this.screen = screen;
-    this.session.registerActionPayload(this.screen.localMenuItems[0].action, () => {
+    this.session.registerActionPayload(this.screen.template.localMenuItems[0].action, () => {
       return this.getSearchPayload();
     });
 

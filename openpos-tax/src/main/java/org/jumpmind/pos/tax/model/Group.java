@@ -11,13 +11,13 @@ import org.jumpmind.pos.persist.Table;
  * 
  */
 @Table(description = "A group of Items for which a TaxAuthority defines TaxGroupRules.")
-public class TaxableGroup extends Entity implements Comparable<TaxableGroup> {
+public class Group extends Entity implements Comparable<Group> {
 
     @Column(primaryKey = true)
     private String id;
 
     @Column()
-    private String name;
+    private String groupName;
 
     @Column()
     private String description;
@@ -25,35 +25,35 @@ public class TaxableGroup extends Entity implements Comparable<TaxableGroup> {
     @Column()
     private String receiptPrintCode;
 
-    public TaxableGroup() {
+    public Group() {
     }
 
-    public TaxableGroup(String id) {
+    public Group(String id) {
         this.id = id;
     }
 
-    public TaxableGroup(String id, String name, String description, String receiptPrintCode) {
+    public Group(String id, String name, String description, String receiptPrintCode) {
         this.id = id;
-        this.name = name;
+        this.groupName = name;
         this.description = description;
         this.receiptPrintCode = receiptPrintCode;
     }
 
     public String toString() {
-        return getClass().getSimpleName() + " " + id + ": " + name;
+        return getClass().getSimpleName() + " " + id + ": " + groupName;
     }
 
     public boolean equals(Object o) {
-        if (o != null && o instanceof TaxableGroup) {
-            TaxableGroup taxableGroup = (TaxableGroup) o;
+        if (o != null && o instanceof Group) {
+            Group taxableGroup = (Group) o;
             return taxableGroup.getId().equals(id);
         }
         return false;
     }
 
-    public int compareTo(TaxableGroup o) {
-        if (o != null && o instanceof TaxableGroup) {
-            TaxableGroup taxableGroup = (TaxableGroup) o;
+    public int compareTo(Group o) {
+        if (o != null && o instanceof Group) {
+            Group taxableGroup = (Group) o;
             return taxableGroup.getId().compareTo(id);
         }
         return -1;
@@ -75,12 +75,12 @@ public class TaxableGroup extends Entity implements Comparable<TaxableGroup> {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setGroupName(String name) {
+        this.groupName = name;
     }
 
     public String getReceiptPrintCode() {

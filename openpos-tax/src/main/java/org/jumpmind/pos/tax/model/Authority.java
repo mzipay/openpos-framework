@@ -17,13 +17,13 @@ import org.jumpmind.pos.persist.Table;
  * 
  */
 @Table(description = "A government authority that levies sales taxes and on whose behalf the store collects these sales taxes.")
-public class TaxAuthority extends Entity implements Comparable<TaxAuthority> {
+public class Authority extends Entity implements Comparable<Authority> {
 
     @Column(primaryKey = true)
     private String id;
 
     @Column
-    private String name;
+    private String authName;
 
     @Column
     private String roundingCode;
@@ -31,44 +31,44 @@ public class TaxAuthority extends Entity implements Comparable<TaxAuthority> {
     @Column
     private Integer roundingDigitsQuantity;
 
-    private Collection<TaxGroupRule> taxGroupRules;
+    private Collection<GroupRule> taxGroupRules;
 
-    public TaxAuthority() {
+    public Authority() {
     }
 
-    public TaxAuthority(String id) {
+    public Authority(String id) {
         this.id = id;
     }
 
     public String toString() {
-        return getClass().getSimpleName() + " " + id + ": " + name;
+        return getClass().getSimpleName() + " " + id + ": " + authName;
     }
 
     public boolean equals(Object o) {
-        if (o != null && o instanceof TaxAuthority) {
-            TaxAuthority taxAuthority = (TaxAuthority) o;
+        if (o != null && o instanceof Authority) {
+            Authority taxAuthority = (Authority) o;
             return taxAuthority.getId().equals(id);
         }
         return false;
     }
 
-    public int compareTo(TaxAuthority o) {
-        if (o != null && o instanceof TaxAuthority) {
-            TaxAuthority taxAuthority = (TaxAuthority) o;
+    public int compareTo(Authority o) {
+        if (o != null && o instanceof Authority) {
+            Authority taxAuthority = (Authority) o;
             return taxAuthority.getId().compareTo(id);
         }
         return -1;
     }
 
-    public void addTaxGroupRule(TaxGroupRule taxGroupRule) {
+    public void addTaxGroupRule(GroupRule taxGroupRule) {
         if (taxGroupRules == null) {
-            taxGroupRules = new ArrayList<TaxGroupRule>();
+            taxGroupRules = new ArrayList<GroupRule>();
         }
         taxGroupRules.add(taxGroupRule);
     }
 
-    public TaxGroupRule getTaxGroupRule(String taxableGroupId) {
-        for (TaxGroupRule taxGroupRule : taxGroupRules) {
+    public GroupRule getTaxGroupRule(String taxableGroupId) {
+        for (GroupRule taxGroupRule : taxGroupRules) {
             if (taxGroupRule.getTaxableGroup().getId().equals(taxableGroupId)) {
                 return taxGroupRule;
             }
@@ -104,12 +104,12 @@ public class TaxAuthority extends Entity implements Comparable<TaxAuthority> {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getAuthName() {
+        return authName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAuthName(String name) {
+        this.authName = name;
     }
 
     public String getRoundingCode() {
@@ -128,11 +128,11 @@ public class TaxAuthority extends Entity implements Comparable<TaxAuthority> {
         this.roundingDigitsQuantity = roundingDigitsQuantity;
     }
 
-    public Collection<TaxGroupRule> getTaxGroupRules() {
+    public Collection<GroupRule> getTaxGroupRules() {
         return taxGroupRules;
     }
 
-    public void setTaxGroupRules(Collection<TaxGroupRule> taxGroupRules) {
+    public void setTaxGroupRules(Collection<GroupRule> taxGroupRules) {
         this.taxGroupRules = taxGroupRules;
     }
 
