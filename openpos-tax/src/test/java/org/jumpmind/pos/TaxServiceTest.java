@@ -76,9 +76,9 @@ public class TaxServiceTest {
     }
     */
 
-    private TaxableItem getTaxableItem(String taxGroup, double amount) {
+    private TaxableItem getTaxableItem(String groupId, double amount) {
         TaxableItem taxableItem = new TaxableItem();
-        taxableItem.setTaxGroupId(taxGroup);
+        taxableItem.setGroupId(groupId);
         taxableItem.setExtendedAmount(new BigDecimal(amount));
         return taxableItem;
     }

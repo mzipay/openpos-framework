@@ -49,14 +49,14 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
     private String calculationMethodCode;
 
     @Column()
-    private String taxRateRuleUsageCode;
+    private String rateRuleUsageCode;
 
     @Column()
     private BigDecimal cycleAmount;
 
-    private Group taxableGroup;
+    private Group group;
 
-    private Collection<RateRule> taxRateRules;
+    private Collection<RateRule> rateRules;
 
     private Authority authority;
 
@@ -77,46 +77,46 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
     }
 
     public String toString() {
-        return "TaxGroupRule " + authorityId + "-" + taxableGroup.getId() + "-" + compoundSequenceNumber;
+        return "GroupRule " + authorityId + "-" + group.getId() + "-" + compoundSequenceNumber;
     }
 
     public boolean equals(Object o) {
         if (o != null && o instanceof GroupRule) {
-            GroupRule taxGroupRule = (GroupRule) o;
-            return taxGroupRule.getAuthorityId().equals(authorityId) && taxGroupRule.getTaxableGroup().equals(taxableGroup);
+            GroupRule groupRule = (GroupRule) o;
+            return groupRule.getAuthorityId().equals(authorityId) && groupRule.getGroup().equals(group);
         }
         return false;
     }
 
-    public int compareTo(GroupRule taxGroupRule) {
+    public int compareTo(GroupRule groupRule) {
         int compare = -1;
-        if (taxGroupRule != null) {
-            compare = taxGroupRule.getAuthorityId().compareTo(authorityId);
+        if (groupRule != null) {
+            compare = groupRule.getAuthorityId().compareTo(authorityId);
             if (compare == 0) {
-                compare = taxGroupRule.getTaxableGroup().compareTo(taxableGroup);
+                compare = groupRule.getGroup().compareTo(group);
             }
         }
         return compare;
     }
 
-    public void addTaxRateRule(RateRule taxRateRule) {
-        if (taxRateRules == null) {
-            taxRateRules = new ArrayList<RateRule>();
+    public void addRateRule(RateRule rateRule) {
+        if (rateRules == null) {
+            rateRules = new ArrayList<RateRule>();
         }
-        taxRateRules.add(taxRateRule);
+        rateRules.add(rateRule);
     }
 
-    public RateRule getFirstTaxRateRule() {
-        if (taxRateRules != null && taxRateRules.size() > 0) {
-            return taxRateRules.iterator().next();
+    public RateRule getFirstRateRule() {
+        if (rateRules != null && rateRules.size() > 0) {
+            return rateRules.iterator().next();
         }
         return null;
     }
 
-    public RateRule getLastTaxRateRule() {
+    public RateRule getLastRateRule() {
         RateRule rateRule = null;
-        if (taxRateRules != null) {
-            Iterator<RateRule> iter = taxRateRules.iterator();
+        if (rateRules != null) {
+            Iterator<RateRule> iter = rateRules.iterator();
             while (iter.hasNext()) {
                 rateRule = iter.next();
             }
@@ -125,10 +125,10 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
     }
 
     public BigDecimal getTaxPercent() {
-        if (taxRateRules != null && taxRateRules.size() == 1) {
-            RateRule rateRule = taxRateRules.iterator().next();
-            if (rateRule instanceof CalculateTaxRateRule) {
-                CalculateTaxRateRule calcRateRule = (CalculateTaxRateRule) rateRule;
+        if (rateRules != null && rateRules.size() == 1) {
+            RateRule rateRule = rateRules.iterator().next();
+            if (rateRule instanceof PercentRateRule) {
+                PercentRateRule calcRateRule = (PercentRateRule) rateRule;
                 return calcRateRule.getPercent();
             }
         }
@@ -171,12 +171,12 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
         this.ruleName = name;
     }
 
-    public Group getTaxableGroup() {
-        return taxableGroup;
+    public Group getGroup() {
+        return group;
     }
 
-    public void setTaxableGroup(Group taxableGroup) {
-        this.taxableGroup = taxableGroup;
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     public Boolean getTaxOnGrossAmountFlag() {
@@ -187,20 +187,20 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
         this.taxOnGrossAmountFlag = taxOnGrossAmountFlag;
     }
 
-    public Collection<RateRule> getTaxRateRules() {
-        return taxRateRules;
+    public Collection<RateRule> getRateRules() {
+        return rateRules;
     }
 
-    public void setTaxRateRules(Collection<RateRule> taxRateRules) {
-        this.taxRateRules = taxRateRules;
+    public void setRateRules(Collection<RateRule> rateRules) {
+        this.rateRules = rateRules;
     }
 
-    public String getTaxRateRuleUsageCode() {
-        return taxRateRuleUsageCode;
+    public String getRateRuleUsageCode() {
+        return rateRuleUsageCode;
     }
 
-    public void setTaxRateRuleUsageCode(String taxRateRuleUsageCode) {
-        this.taxRateRuleUsageCode = taxRateRuleUsageCode;
+    public void setRateRuleUsageCode(String rateRuleUsageCode) {
+        this.rateRuleUsageCode = rateRuleUsageCode;
     }
 
     public BigDecimal getCycleAmount() {
@@ -220,7 +220,6 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
     }
 
     public void setAuthority(Authority authority) {
-        this.authorityId = authority.getId();
         this.authority = authority;
     }
 

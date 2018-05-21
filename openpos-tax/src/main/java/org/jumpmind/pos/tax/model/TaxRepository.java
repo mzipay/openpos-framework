@@ -22,8 +22,8 @@ public class TaxRepository {
     private DBSession dbSession;
 
     public List<Jurisdiction> findTaxJurisdictions(String geoCode) {
-        List<Jurisdiction> taxAuthorityRules = dbSession.query(taxJurisdictionLookup, geoCode);
-        return taxAuthorityRules;
+        List<Jurisdiction> jurisdictions = dbSession.query(taxJurisdictionLookup, geoCode);
+        return jurisdictions;
     }
 
 }

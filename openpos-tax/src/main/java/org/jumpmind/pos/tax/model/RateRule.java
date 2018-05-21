@@ -27,7 +27,7 @@ abstract public class RateRule extends Entity {
     private String groupId;
 
     @Column(primaryKey = true)
-    private Integer taxRateRuleSequenceNumber;
+    private Integer rateRuleSequenceNumber;
 
     // TODO tax type
     // TODO tax holiday
@@ -38,7 +38,7 @@ abstract public class RateRule extends Entity {
     @Column()
     private BigDecimal maxTaxableAmount;
 
-    private GroupRule taxGroupRule;
+    private GroupRule groupRule;
 
     public String getId() {
         return id;
@@ -49,7 +49,7 @@ abstract public class RateRule extends Entity {
     }
 
     public String toString() {
-        return getClass().getSimpleName() + " [" + taxRateRuleSequenceNumber + "] " + minTaxableAmount.setScale(2, BigDecimal.ROUND_HALF_UP)
+        return getClass().getSimpleName() + " [" + rateRuleSequenceNumber + "] " + minTaxableAmount.setScale(2, BigDecimal.ROUND_HALF_UP)
                 + " to " + maxTaxableAmount.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
@@ -69,20 +69,20 @@ abstract public class RateRule extends Entity {
         this.minTaxableAmount = minTaxableAmount;
     }
 
-    public GroupRule getTaxGroupRule() {
-        return taxGroupRule;
+    public GroupRule getGroupRule() {
+        return groupRule;
     }
 
-    public void setTaxGroupRule(GroupRule taxGroupRule) {
-        this.taxGroupRule = taxGroupRule;
+    public void setGroupRule(GroupRule groupRule) {
+        this.groupRule = groupRule;
     }
 
-    public Integer getTaxRateRuleSequenceNumber() {
-        return taxRateRuleSequenceNumber;
+    public Integer getRateRuleSequenceNumber() {
+        return rateRuleSequenceNumber;
     }
 
-    public void setTaxRateRuleSequenceNumber(Integer taxRateRuleSequenceNumber) {
-        this.taxRateRuleSequenceNumber = taxRateRuleSequenceNumber;
+    public void setRateRuleSequenceNumber(Integer rateRuleSequenceNumber) {
+        this.rateRuleSequenceNumber = rateRuleSequenceNumber;
     }
 
 }

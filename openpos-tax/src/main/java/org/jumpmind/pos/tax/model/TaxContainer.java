@@ -12,7 +12,7 @@ public class TaxContainer {
     private SortedMap<GroupRule, List<TaxableItem>> itemsMap;
 
     public TaxContainer() {
-        itemsMap = new TreeMap<GroupRule, List<TaxableItem>>(new TaxGroupRuleComparator());
+        itemsMap = new TreeMap<GroupRule, List<TaxableItem>>(new GroupRuleComparator());
     }
 
     public void add(Collection<GroupRule> groupRules, TaxableItem item) {
@@ -75,7 +75,7 @@ public class TaxContainer {
         return builder.toString();
     }
 
-    class TaxGroupRuleComparator implements Comparator<GroupRule> {
+    class GroupRuleComparator implements Comparator<GroupRule> {
 
         public int compare(GroupRule o1, GroupRule o2) {
             Integer i1 = o1.getCompoundSequenceNumber();

@@ -34,8 +34,8 @@ public class Jurisdiction extends Entity {
         return geoCode;
     }
 
-    public void setAuthority(Authority taxAuthority) {
-        this.authority = taxAuthority;
+    public void setAuthority(Authority authority) {
+        this.authority = authority;
     }
 
     public Authority getAuthority() {

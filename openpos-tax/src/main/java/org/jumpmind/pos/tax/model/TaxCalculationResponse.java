@@ -38,9 +38,9 @@ public class TaxCalculationResponse {
         return taxAmounts;
     }
 
-    public TaxAmount getTaxAmount(String taxAuthorityId, String taxGroupId) {
+    public TaxAmount getTaxAmount(String authorityId, String groupId) {
         for (TaxAmount taxAmount : taxAmounts) {
-            if (taxAmount.getTaxAuthorityId().equals(taxAuthorityId) && taxAmount.getTaxGroupId().equals(taxGroupId)) {
+            if (taxAmount.getAuthorityId().equals(authorityId) && taxAmount.getGroupId().equals(groupId)) {
                 return taxAmount;
             }
         }

@@ -6,7 +6,7 @@ public class TaxableItem {
 
     private int sequenceNumber;
 
-    private String taxGroupId;
+    private String groupId;
 
     private BigDecimal extendedAmount = BigDecimal.ZERO;
 
@@ -15,9 +15,9 @@ public class TaxableItem {
     public TaxableItem() {
     }
 
-    public TaxableItem(int sequenceNumber, String taxGroupId, BigDecimal extendedAmount, boolean taxExemptEligible) {
+    public TaxableItem(int sequenceNumber, String groupId, BigDecimal extendedAmount, boolean taxExemptEligible) {
         this.sequenceNumber = sequenceNumber;
-        this.taxGroupId = taxGroupId;
+        this.groupId = groupId;
         this.extendedAmount = extendedAmount;
         this.taxExemptEligible = taxExemptEligible;
     }
@@ -30,12 +30,12 @@ public class TaxableItem {
         this.sequenceNumber = sequenceNumber;
     }
 
-    public String getTaxGroupId() {
-        return taxGroupId;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setTaxGroupId(String taxGroupId) {
-        this.taxGroupId = taxGroupId;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     public BigDecimal getExtendedAmount() {
