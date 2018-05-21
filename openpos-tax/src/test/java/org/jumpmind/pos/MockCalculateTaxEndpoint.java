@@ -80,7 +80,7 @@ public class MockCalculateTaxEndpoint extends CalculateTaxEndpoint {
 
     private GroupRule addGroup(Authority authority, Group taxGroup, String method) {
         GroupRule groupRule = new GroupRule();
-        groupRule.setTaxAuthority(authority);
+        groupRule.setAuthority(authority);
         groupRule.setTaxableGroup(taxGroup);
         groupRule.setCalculationMethodCode(method);
         groupRule.setTaxRateRuleUsageCode(TaxConstants.USAGE_PICK_ONE);
