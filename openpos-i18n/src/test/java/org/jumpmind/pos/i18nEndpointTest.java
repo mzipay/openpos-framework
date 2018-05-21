@@ -26,10 +26,11 @@ public class i18nEndpointTest {
     @Qualifier("i18nSession")
     private DBSession dbSession; 
 	
-	@Test
+	 
 	/**
 	 * Test missing resource with incorrect base with a brand field
 	 */
+	@Test
 	public void getStringMissingResourceBaseTest () {
 		String base = "nothing";
 		String key = "_me";
@@ -40,10 +41,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "<MISSING RESOURCE>");
 	}
 	
-	@Test
+	 
 	/**
 	 * Test missing resource with incorrect base with no brand field
 	 */
+	@Test
 	public void getStringMissingResourceBaseNoBrandTest () {
 		String base = "nothing";
 		String key = "_me";
@@ -54,10 +56,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "<MISSING RESOURCE>");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test missing resource with a properties file that exists, but bad key
 	 */
+	@Test
 	public void getStringMissingResourceKeyTest () {
 		String base = "test";
 		String key = "_nothing";
@@ -68,10 +71,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "<MISSING RESOURCE>");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test missing resource with a properties file and brand that exists, but bad key
 	 */
+	@Test
 	public void getStringMissingResourceKeyNoBrandTest () {
 		String base = "test";
 		String key = "_nothing";
@@ -82,10 +86,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "<MISSING RESOURCE>");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for an unrecognized locale to default to the default brand file
 	 */
+	@Test
 	public void getStringIncorrectToDefaultLocaleTest () {
 		String base = "test";
 		String key = "_company";
@@ -96,10 +101,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "<Company Name>");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for an unrecognized locale to default to the default locale file
 	 */
+	@Test
 	public void getStringIncorrectToDefaultLocaleNoBrandTest () {
 		String base = "test";
 		String key = "_me";
@@ -110,10 +116,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "me");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for a bad brand with no key in any test_other file
 	 */
+	@Test
 	public void getStringMissingResourceBrandTest () {
 		String base = "test";
 		String key = "_company2";
@@ -124,10 +131,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "<MISSING RESOURCE>");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for a bad brand with antest_other valid key in antest_other file
 	 */
+	@Test
 	public void getStringBadBrandUseLocaleTest () {
 		String base = "test";
 		String key = "_company";
@@ -138,10 +146,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "<Enterprise Titre>");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Basic Translation from locale file Test
 	 */
+	@Test
 	public void getStringTranslateNoBrandTest () {
 		String base = "test";
 		String key = "_company";
@@ -152,10 +161,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "<Enterprise Titre>");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Basic locale override test
 	 */
+	@Test
 	public void getStringTranslateOverrideNoBrandTest () {
 		String base = "test";
 		String key = "_company1";
@@ -166,10 +176,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "<Las Enterprise>");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test to get from brand file from default locale
 	 */
+	@Test
 	public void getStringBrandDefaultTest () {
 		String base = "test";
 		String key = "_company1";
@@ -180,10 +191,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "Big Lots");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test to ensure the brand override file works
 	 */
+	@Test
 	public void getStringBrandDefaultOverrideTest () {
 		String base = "test";
 		String key = "_company2";
@@ -194,10 +206,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "Biggest Lots");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test to translate from brand file
 	 */
+	@Test
 	public void getStringTranslateBrandTest () {
 		String base = "test";
 		String key = "_company1";
@@ -208,10 +221,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "Grand Lots");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test to override translation from brand file
 	 */
+	@Test
 	public void getStringTranslateBrandOverrideTest () {
 		String base = "test";
 		String key = "_company2";
@@ -222,10 +236,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "Plus Grand Lots");
 	}
 	
-	@Test
+	 
 	/**
 	 * 	Test to ensure retrieving english strings works
 	 */
+	@Test
 	public void getStringDefaultNoBrandTest () {
 		String base = "test";
 		String key = "_you";
@@ -236,10 +251,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "you");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test to ensure brand does not interfere with getting english strings
 	 */
+	@Test
 	public void getStringDefaultBrandNoConseqTest () {
 		String base = "test";
 		String key = "_you";
@@ -251,10 +267,11 @@ public class i18nEndpointTest {
 	}
 	
 	
-	@Test
+	 
 	/**
 	 * Test to ensure brand does not interfere with translation
 	 */
+	@Test
 	public void getStringTranslateBrandNoConseqTest () {
 		String base = "test";
 		String key = "_me";
@@ -265,10 +282,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "moi");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test where (translation) key is in the override file but not the base locale file
 	 */
+	@Test
 	public void getStringTranslateInOverrideNotBaseTest () {
 		String base = "test";
 		String key = "_override";
@@ -279,10 +297,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "Je m'appelle");
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test where (english) key is in the override file but not the base locale file
 	 */
+	@Test
 	public void getStringDefaultInOverrideNotBaseTest () {
 		String base = "test";
 		String key = "_override";
@@ -293,10 +312,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "My name is");
 	}
 	
-	@Test
+	 
 	/**
 	 * Test to get (english) key in the brand override file, not the base brand file
 	 */
+	@Test
 	public void getStringDefaultInBrandOverrideNotBrandTest () {
 		String base = "test";
 		String key = "_overrideB";
@@ -307,10 +327,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "Biggest Lots Override");
 	}
 	
-	@Test
+	 
 	/**
 	 * Test to get (translation) key in the brand override file, not the base brand file
 	 */
+	@Test
 	public void getStringTranslateInBrandOverrideNotBrandTest () {
 		String base = "test";
 		String key = "_overrideB";
@@ -321,10 +342,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "Plus Grand Lots Override");
 	}
 	
-	@Test
+	 
 	/**
 	 * Test to get (translation) key in the brand file, not the base locale file
 	 */
+	@Test
 	public void getStringTranslateInBrandNotBaseTest () {
 		String base = "test";
 		String key = "_logo_color";
@@ -335,10 +357,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "jaune");
 	}
 	
-	@Test
+	 
 	/**
 	 * Test where locale key field is blank
 	 */
+	@Test
 	public void getStringTranslateEmptyField () {
 		String base = "test";
 		String key = "_empty";
@@ -349,10 +372,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "");
 	}
 	
-	@Test
+	 
 	/**
 	 * Test where brand override key field is blank, but brand is not
 	 */
+	@Test
 	public void getStringTranslateEmptyFieldInOverride () {
 		String base = "test";
 		String key = "_logo_color1";
@@ -364,10 +388,11 @@ public class i18nEndpointTest {
 	}
 	
      
-	@Test
+	 
 	/**
 	 * Test to translate a key in a base, not "test"
 	 */
+	@Test
 	public void getStringTranslateDifferentBaseTest () {
 		String base = "test_other";
 		String key = "_are";
@@ -378,10 +403,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "\u00eates");
 	}
 	
-	@Test
+	 
 	/**
 	 * Test to translate a key in a non-French, non-constant Locale with no brand
 	 */
+	@Test
 	public void getStringTranslateNonConstantLocaleNoBrandTest () {
 		String base = "test";
 		String key = "_hello";
@@ -392,10 +418,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "Hola!");
 	}
 	
-	@Test
+	 
 	/**
 	 * Test to translate a key in a non-French, non-constant Locale with a Brand
 	 */
+	@Test
 	public void getStringTranslateNonConstantLocale () {
 		String base = "test";
 		String key = "_hello";
@@ -406,10 +433,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, "Hola!");
 	}
 	
-	@Test
+	 
 	/**
 	 * Test where key is bad, but good in different locale
 	 */
+	@Test
 	public void getStringKeyInDifferentLocale () {
 		String base = "test";
 		String key = "_you";
@@ -423,10 +451,11 @@ public class i18nEndpointTest {
 	
 	/* 	Message Formatter Tests */
 	
-	@Test
+	 
 	/**
 	 *  Test for date and time format with NO format specifier
 	 */
+	@Test
 	public void getStringMessageFormatDateTimeTest () {
 		String base = "test";
 		String key = "_test_string0";
@@ -446,10 +475,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for date and time format with SHORT format specifier
 	 */
+	@Test
 	public void getStringMessageFormatDateTimeShortTest () {
 		String base = "test";
 		String key = "_test_string1";
@@ -469,10 +499,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for TRANSLATION date and time format with NO format specifier
 	 */
+	@Test
 	public void getStringMessageTranslateFormatDateTimeTest () {
 		String base = "test";
 		String key = "_test_string0";
@@ -493,10 +524,11 @@ public class i18nEndpointTest {
 	}
 	
      
-	@Test
+	 
 	/**
 	 *  Test for TRANSLATION date and time format with SHORT format specifier
 	 */
+	@Test
 	public void getStringMessageTranslateFormatDateTimeShortTest () {
 		String base = "test";
 		String key = "_test_string1";
@@ -516,10 +548,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for currency format US Eng
 	 */
+	@Test
 	public void getStringMessageFormatCurrencyTest () {
 		String base = "test";
 		String key = "_currency_string0";
@@ -537,10 +570,11 @@ public class i18nEndpointTest {
 	}
 	
      
-	@Test
+	 
 	/**
 	 *  Test for currency format French
 	 */
+	@Test
 	public void getStringMessageTranslateFormatCurrencyTest () {
 		String base = "test";
 		String key = "_currency_string0";
@@ -557,10 +591,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for number format in US Eng
 	 */
+	@Test
 	public void getStringMessageFormatNumberTest () {
 		String base = "test";
 		String key = "_number_string0";
@@ -577,10 +612,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for currency format in French
 	 */
+	@Test
 	public void getStringMessageTranslateFrFormatNumberTest () {
 		String base = "test";
 		String key = "_number_string0";
@@ -597,10 +633,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for number format in German
 	 */
+	@Test
 	public void getStringMessageTranslateDeFormatNumberTest () {
 		String base = "test";
 		String key = "_number_string0";
@@ -617,10 +654,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for number (INTEGER) format US Eng
 	 */
+	@Test
 	public void getStringMessageFormatNumberIntegerTest () {
 		String base = "test";
 		String key = "_number_string1";
@@ -637,10 +675,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for number (INTEGER) format US French
 	 */
+	@Test
 	public void getStringMessageTranslateFormatNumberIntegerTest () {
 		String base = "test";
 		String key = "_number_string1";
@@ -657,10 +696,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for conflicting parameter passed
 	 */
+	@Test
 	public void getStringMessageBadParameterNumberTest () {
 		String base = "test";
 		String key = "_number_string1";
@@ -677,10 +717,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for no parameters passed
 	 */
+	@Test
 	public void getStringMessageNoParameterNumberTest () {
 		String base = "test";
 		String key = "_number_string1";
@@ -697,10 +738,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for pattern with invalid format passed with no args
 	 */
+	@Test
 	public void getStringMessageBadPatternNoArgsTest () {
 		String base = "test";
 		String key = "_bad_pattern0";
@@ -717,10 +759,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for pattern with invalid format passed with no args
 	 */
+	@Test
 	public void getStringMessageBadPatternWithArgsTest () {
 		String base = "test";
 		String key = "_bad_pattern0";
@@ -737,10 +780,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for pattern with invalid (not a number) parameter reference
 	 */
+	@Test
 	public void getStringMessageBadPatternBadReferenceTest () {
 		String base = "test";
 		String key = "_bad_pattern1";
@@ -757,10 +801,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for pattern with custom style string
 	 */
+	@Test
 	public void getStringMessageBadPatternWrongFormatSpecTest () {
 		String base = "test";
 		String key = "_custom_style0";
@@ -777,10 +822,11 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
-	@Test
+	 
 	/**
 	 *  Test for pattern with quoted brackets
 	 */
+	@Test
 	public void getStringMessageQuotedTest () {
 		String base = "test";
 		String key = "_quoted";
@@ -797,6 +843,9 @@ public class i18nEndpointTest {
 		Assert.assertEquals(res, exp);
 	}
 	
+	/**
+	 *  Basic database test query
+	 */
 	@Test
 	public void getStringDatabaseNoOverlapTest () {
  
@@ -816,6 +865,9 @@ public class i18nEndpointTest {
 
 	}
 	
+	/**
+	 *  Test to ensure the no brand function works
+	 */
 	@Test
 	public void getStringDatabaseNoBrandTest () {
 		  
@@ -835,6 +887,9 @@ public class i18nEndpointTest {
 
 	}
 	
+	/**
+	 *  Test to ensure database is chosen first in getting string
+	 */
 	@Test
 	public void getStringDatabaseOverlapTest () {
 		
@@ -854,7 +909,10 @@ public class i18nEndpointTest {
 
 	}
 	
-	@Test
+	/**
+	 *  Test query the database where there are multiple locales
+	 */
+	@Test 
 	public void getStringDatabaseMultiLocaleTest () {
 		  
             Resource resource = new Resource();
@@ -885,9 +943,12 @@ public class i18nEndpointTest {
             Assert.assertEquals(exp1, res1);   
         }
 		
-		@Test
-		public void getStringDatabaseBrandOverrideTest () {
-			
+		/**
+		 *  Test database query with brand override function
+		 */
+	@Test
+	public void getStringDatabaseBrandOverrideTest () {
+		
 	            Resource resource1 = new Resource();
 	            resource1.setBaseName("common");
 	            resource1.setLocale(Locale.US);
@@ -915,9 +976,12 @@ public class i18nEndpointTest {
 	            Assert.assertEquals(exp, res);
 	            Assert.assertEquals(exp1, res1);
 	}
-		
-		@Test
-		public void getStringDatabaseFormatTest () {
+	
+	/**		 
+	 *   Test database query with format pattern
+	 */
+	@Test 
+	public void getStringDatabaseFormatTest () {
 			
 	            Resource resource = new Resource();
 	            resource.setBaseName("common");
@@ -942,6 +1006,9 @@ public class i18nEndpointTest {
 	            Assert.assertEquals(exp, res);
 		}
 		
+		/**
+		 *  Test database query with bad pattern
+		 */
 		@Test
 		public void getStringDatabaseFormatBadPatternTest () {
 			

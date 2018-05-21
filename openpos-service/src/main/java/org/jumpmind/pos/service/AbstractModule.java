@@ -114,13 +114,21 @@ abstract public class AbstractModule implements Module {
         }
         return this.securityService;
     }
+    
+    public String getDriver() {
+    	return env.getProperty(DB_POOL_DRIVER, "org.h2.Driver");
+    }
+    
+    public String getURL() {
+    	return env.getProperty(DB_POOL_URL, "jdbc:openpos:h2:mem:" + getName());
+    }
 
     protected BasicDataSource dataSource() {
         if (dataSource == null) {
             Driver.class.getName(); // Load openpos driver wrapper.
             TypedProperties properties = new TypedProperties();
-            properties.put(DB_POOL_DRIVER, env.getProperty(DB_POOL_DRIVER, "org.h2.Driver"));
-            properties.put(DB_POOL_URL, env.getProperty(DB_POOL_URL, "jdbc:openpos:h2:mem:" + getName()));
+            properties.put(DB_POOL_DRIVER, getDriver());
+            properties.put(DB_POOL_URL, getURL());
             properties.put(DB_POOL_USER, env.getProperty(DB_POOL_USER));
             properties.put(DB_POOL_PASSWORD, env.getProperty(DB_POOL_PASSWORD));
             properties.put(DB_POOL_INITIAL_SIZE, env.getProperty(DB_POOL_INITIAL_SIZE, "20"));

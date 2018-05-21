@@ -3,7 +3,7 @@ package org.jumpmind.pos.core.screen;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WarrantyCoverageScreen extends SellScreen {
+public class WarrantyCoverageScreen extends Screen {
 
     private static final long serialVersionUID = 1L;
     

@@ -1,6 +1,6 @@
 package org.jumpmind.pos.core.screen;
 
-public class SignatureCaptureScreen extends SellScreen {
+public class SignatureCaptureScreen extends Screen {
     private static final long serialVersionUID = 1L;
 
     private String title;
@@ -8,6 +8,7 @@ public class SignatureCaptureScreen extends SellScreen {
     private String textIcon;
     private String signatureData;
     private String signatureMediaType;
+    private MenuItem saveAction;
     
 
     public SignatureCaptureScreen() {
@@ -52,6 +53,14 @@ public class SignatureCaptureScreen extends SellScreen {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public MenuItem getSaveAction() {
+        return saveAction;
+    }
+
+    public void setSaveAction(MenuItem saveAction) {
+        this.saveAction = saveAction;
     }
     
 }

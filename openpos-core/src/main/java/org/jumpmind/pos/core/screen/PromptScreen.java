@@ -3,7 +3,7 @@ package org.jumpmind.pos.core.screen;
 
 import org.jumpmind.pos.core.model.FieldInputType;
 
-public class PromptScreen extends SellScreen implements IPromptScreen {
+public class PromptScreen extends Screen implements IPromptScreen {
 
     private static final long serialVersionUID = 1L;
     

@@ -24,9 +24,9 @@ import org.apache.log4j.Logger;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.HomeScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
-import org.jumpmind.pos.core.screen.SellScreen;
 
 public class HomeScreenState extends AbstractState implements IState {
     
@@ -44,7 +44,7 @@ public class HomeScreenState extends AbstractState implements IState {
         stateManager.doAction(action);
     }
 
-    protected SellScreen buildScreen() {
+    protected Screen buildScreen() {
         HomeScreen screen = new HomeScreen();
         screen.addMenuItem(new MenuItem("Sell", "Sell", "credit_card"));
         screen.addMenuItem(new MenuItem("AdvanceSearch", "Item Search", "search"));

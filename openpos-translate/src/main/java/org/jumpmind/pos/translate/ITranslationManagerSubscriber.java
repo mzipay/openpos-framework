@@ -5,11 +5,11 @@ import java.util.Properties;
 
 import org.jumpmind.pos.core.device.IDeviceMessageDispatcher;
 import org.jumpmind.pos.core.flow.Action;
-import org.jumpmind.pos.core.screen.AbstractScreen;
+import org.jumpmind.pos.core.screen.Screen;
 
 public interface ITranslationManagerSubscriber extends IDeviceMessageDispatcher, Serializable {
 
-    public void showScreen(AbstractScreen screen);
+    public void showScreen(Screen screen);
 
     public void doAction(Action action);
     

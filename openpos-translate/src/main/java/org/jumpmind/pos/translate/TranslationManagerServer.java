@@ -11,7 +11,7 @@ import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
-import org.jumpmind.pos.core.screen.AbstractScreen;
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.NoOpScreen;
 import org.jumpmind.pos.translate.InteractionMacro.AbortMacro;
 import org.jumpmind.pos.translate.InteractionMacro.DoOnActiveScreen;
@@ -190,7 +190,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
         }
     }
 
-    protected void show(AbstractScreen screen) {
+    protected void show(Screen screen) {
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
             if (screen != null && subscriber.isInTranslateState()) {
                 subscriber.showScreen(screen);
@@ -218,7 +218,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
                     }
                     if (newTranslator instanceof AbstractScreenTranslator<?>) {
                         AbstractScreenTranslator<?> screenTranslator = (AbstractScreenTranslator<?>) newTranslator;                        
-                        AbstractScreen screen = screenTranslator.build();
+                        Screen screen = screenTranslator.build();
                         subscriber.showScreen(screen);
                         screenShown = true;
                     } else if (newTranslator instanceof IActionTranslator) {

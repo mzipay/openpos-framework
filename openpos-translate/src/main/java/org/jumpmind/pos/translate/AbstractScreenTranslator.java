@@ -10,14 +10,12 @@ import java.util.Properties;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
-import org.jumpmind.pos.core.screen.AbstractScreen;
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.MenuItem;
-import org.jumpmind.pos.core.screen.SellScreen;
-import org.jumpmind.pos.core.template.SellTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-abstract public class AbstractScreenTranslator<T extends AbstractScreen> implements ITranslator {
+abstract public class AbstractScreenTranslator<T extends Screen> implements ITranslator {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -78,11 +76,8 @@ abstract public class AbstractScreenTranslator<T extends AbstractScreen> impleme
 
     public T build() {
         logger.info("{} is building a screen of type '{}'", getClass().getSimpleName(), getScreen().getType());
-        if (screen instanceof SellScreen) {
-            SellScreen sellScreen = (SellScreen) screen;
-            if (isBlank(sellScreen.getIcon())) {
-                sellScreen.setIcon(iconRegistry.get(screen.getName()));
-            }
+        if (isBlank(screen.getIcon())) {
+            screen.setIcon(iconRegistry.get(screen.getName()));
         }
         chooseLocale();
         chooseScreenName();
@@ -127,13 +122,6 @@ abstract public class AbstractScreenTranslator<T extends AbstractScreen> impleme
     
     public void setBackButton(String action) {
     		this.screen.setBackButton(new MenuItem("Back", action, true));
-    }
-
-    protected void enableScan() {
-        if (screen.getTemplate() instanceof SellTemplate) {
-            SellTemplate template = screen.getTemplate();
-            template.enableScan(false);
-        }
     }
 
     public void setAppId(String appId) {
