@@ -1,6 +1,6 @@
 package org.jumpmind.pos.context.model;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jumpmind.pos.persist.Column;
@@ -23,11 +23,15 @@ public class Node extends Entity {
     @Column
     private String city;
     @Column
-    private String postalCode;    
+    private String nodeState;
+    @Column
+    private String postalCode;
+    @Column(size="10") 
+    String locale;
     @Column(size="254")
     private String description;
     
-    private Map<String, String> tags = new HashMap<String, String>();
+    private Map<String, String> tags = new LinkedHashMap<String, String>();
 
     public String getNodeId() {
         return nodeId;
@@ -104,5 +108,17 @@ public class Node extends Entity {
     public void clearTagValue(String tagName) {
         tags.remove(tagName);
     }    
+    
+    public Map<String, String> getTags() {
+        return new LinkedHashMap<>(tags);
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
 
 }

@@ -91,5 +91,6 @@ export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
 export interface IForm {
     name: string;
     formElements: IFormElement[];
+    formErrors: string[];
 }
 

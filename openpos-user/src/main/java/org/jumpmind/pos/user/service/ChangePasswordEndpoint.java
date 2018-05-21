@@ -2,7 +2,7 @@ package org.jumpmind.pos.user.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.service.Endpoint;
-import org.jumpmind.pos.service.ServiceResultImpl;
+import org.jumpmind.pos.service.ServiceResult;
 import org.jumpmind.pos.user.model.User;
 import org.jumpmind.pos.user.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class ChangePasswordEndpoint {
     private UserHelper userHelper;
 
     @Endpoint("/changePassword")
-    public ServiceResultImpl changePassword(
+    public ServiceResult changePassword(
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="oldPassword", defaultValue="") String oldPassword,
             @RequestParam(value="newPassword1", defaultValue="") String newPassword1,
@@ -27,7 +27,7 @@ public class ChangePasswordEndpoint {
         User user = userRepository.findUser(username);
 
         if (user != null) {
-            ServiceResultImpl serviceResult = new ServiceResultImpl();
+            ServiceResult serviceResult = new ServiceResult();
             serviceResult.setResultStatus("FAILURE");
             
             String currentPassword = userHelper.getCurrentPassword(user);
@@ -47,7 +47,7 @@ public class ChangePasswordEndpoint {
             return serviceResult;
         }
         else  {
-            ServiceResultImpl result = new ServiceResultImpl();
+            ServiceResult result = new ServiceResult();
             result.setResultStatus("GENERAL_FAILURE");
             result.setResultMessage("User not found.");
             return result;

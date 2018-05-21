@@ -1,8 +1,5 @@
 ---
 queries:
 -
-  name: taxAuthorityRuleLookup
-  select: > 
-    select rule from TaxAuthorityRule rule 
-    join rule.businessUnitGroup.businessUnits as businessUnit 
-    where businessUnit.id = ${businessUnitId}
+  name: taxJurisdictionLookup
+  where: geoCode = ${geoCode}

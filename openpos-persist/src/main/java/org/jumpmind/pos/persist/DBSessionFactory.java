@@ -77,7 +77,7 @@ public class DBSessionFactory {
                 return new QueryTemplates();
             }
         } catch (Exception ex) {
-            throw new PersistException("Failed to load query.yaml", ex);
+            throw new PersistException("Failed to load " + tablePrefix + "-query.yaml", ex);
         }
     }
 

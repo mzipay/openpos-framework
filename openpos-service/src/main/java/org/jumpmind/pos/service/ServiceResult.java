@@ -1,10 +1,19 @@
 package org.jumpmind.pos.service;
 
-public class ServiceResultImpl {
+import org.apache.commons.lang3.StringUtils;
+
+public class ServiceResult {
+    
+    public static final String RESULT_SUCCESS = "SUCCESS";
+    public static final String RESULT_NOT_FOUND = "NOT_FOUND";
     
     private String resultStatus = "";
     private String resultMessage = "";
     private Object extension;
+    
+    public boolean isSuccess() {
+        return StringUtils.equals(resultStatus, RESULT_SUCCESS);
+    }
     
     public String getResultStatus() {
         return resultStatus;

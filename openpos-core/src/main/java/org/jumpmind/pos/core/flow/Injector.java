@@ -21,15 +21,15 @@ public class Injector {
 
     @Autowired
     private AutowireCapableBeanFactory applicationContext;
-    
-    public void performInjections(Object target, Scope scope,  StateContext currentContext) {
+
+    public void performInjections(Object target, Scope scope, StateContext currentContext) {
         performInjectionsImpl(target, scope, currentContext);
         performPostContruct(target);
     }
-    
+
     protected void performInjectionsImpl(Object target, Scope scope, StateContext currentContext) {
         Class<?> targetClass = target.getClass();
-        if (applicationContext != null) {            
+        if (applicationContext != null) {
             applicationContext.autowireBean(target);
         }
         while (targetClass != null) {
@@ -41,8 +41,7 @@ public class Injector {
         }
     }
 
-    protected void performInjectionsImpl(Class<?> targetClass, Object target, Scope scope, 
-            StateContext currentContext) {
+    protected void performInjectionsImpl(Class<?> targetClass, Object target, Scope scope, StateContext currentContext) {
         Field[] fields = targetClass.getDeclaredFields();
 
         for (Field field : fields) {
@@ -51,28 +50,39 @@ public class Injector {
             if (in == null) {
                 in = field.getDeclaredAnnotation(In.class);
             }
-            
-            if (in != null) {        
-                injectField(targetClass, target, scope, currentContext, in, field);
+
+            if (in != null) {
+                injectField(targetClass, target, scope, currentContext, in.name(), in.scope(), in.required(), field);
             }
+
+            InOut inOut = field.getAnnotation(InOut.class);
+            if (inOut == null) {
+                inOut = field.getDeclaredAnnotation(InOut.class);
+            }
+
+            if (inOut != null) {
+                injectField(targetClass, target, scope, currentContext, inOut.name(), inOut.scope(), inOut.required(), field);
+            }
+
         }
     }
 
-    protected void injectField(Class<?> targetClass, Object target, Scope scope, StateContext currentContext, In in, Field field) {
-        String name = in.name();
-        if (StringUtils.isEmpty(name)) {                    
+    protected void injectField(Class<?> targetClass, Object target, Scope scope, StateContext currentContext, String name,
+            ScopeType scopeType, boolean required, Field field) {
+        if (StringUtils.isEmpty(name)) {
             name = field.getName();
         }
-                
+
         ScopeValue value = null;
-        
-        switch (in.scope()) {
+
+        switch (scopeType) {
             case Config:
-                Object configScopeValue = currentContext.getFlowConfig().getConfigScope() != null ?
-                        currentContext.getFlowConfig().getConfigScope().get(name) : null;
+                Object configScopeValue = currentContext.getFlowConfig().getConfigScope() != null
+                        ? currentContext.getFlowConfig().getConfigScope().get(name)
+                        : null;
                 if (configScopeValue != null) {
                     value = new ScopeValue(configScopeValue);
-                }                        
+                }
                 break;
             case Node:
                 value = scope.getNodeScope().get(name);
@@ -96,7 +106,7 @@ public class Injector {
             } catch (Exception ex) {
                 logger.error("", ex);
             }
-        } else if (in.required()) {
+        } else if (required) {
             throw failedToResolveInjection(field, name, targetClass, target, scope, currentContext);
         }
     }
@@ -115,48 +125,48 @@ public class Injector {
             }
         }
     }
-    
-    private FlowException failedToResolveInjection(Field field, 
-            String name, Class<?> targetClass, Object target, Scope scope,
+
+    private FlowException failedToResolveInjection(Field field, String name, Class<?> targetClass, Object target, Scope scope,
             StateContext currentContext) {
-        
+
         StringBuilder buff = new StringBuilder();
         buff.append(String.format("Failed to resolve required injection '%s' for field %s\n", name, field));
         buff.append("Tried the following contexts:\n");
         buff.append(printScopeValues(scope, currentContext));
-        
+
         throw new FlowException(buff.toString());
-    }  
-    
+    }
+
     public String printScopeValues(Scope scope, StateContext currentContext) {
-        
+
         StringBuilder buff = new StringBuilder();
-        
+
         buff.append(reportScope("NODE SCOPE", scope.getNodeScope()));
         buff.append(reportScope("SESSION SCOPE", scope.getSessionScope()));
         buff.append(reportScope("CONVERSATION SCOPE", scope.getConversationScope()));
         buff.append(reportScope("FLOW SCOPE", currentContext.getFlowScope()));
-        
+
         return buff.toString();
     }
-    
+
     protected String reportScope(String scopeName, Map<String, ScopeValue> scope) {
-        
+
         final int MAX_VALUE_WIDTH = 64;
-        
+
         StringBuilder buff = new StringBuilder();
-        
+
         buff.append(scopeName).append(":\n");
         if (scope != null) {
             if (scope.isEmpty()) {
                 buff.append("\t<empty>\n");
             } else {
-                for (Map.Entry<String, ScopeValue> entry : scope.entrySet()) {                    
-                    buff.append("\t").append(entry.getKey()).append("=").append(StringUtils.abbreviate(entry.getValue().getValue().toString(), MAX_VALUE_WIDTH)).append("\n");
+                for (Map.Entry<String, ScopeValue> entry : scope.entrySet()) {
+                    buff.append("\t").append(entry.getKey()).append("=")
+                            .append(StringUtils.abbreviate(entry.getValue().getValue().toString(), MAX_VALUE_WIDTH)).append("\n");
                 }
             }
-        }        
-        
+        }
+
         return buff.toString();
     }
 }
