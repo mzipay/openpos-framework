@@ -26,7 +26,7 @@ public abstract class AbstractPOSSignatureCaptureScreen extends AbstractLegacySc
         // Need to specify jpeg or png since other formats such as tiff are not widely supported in the various browser implementations of
         // the HTML5 canvas 
         getScreen().setSignatureMediaType("image/png");
-        addLocalMenuItem(new MenuItem("Continue", "SaveSignature", true));
+        getScreen().setSaveAction(new MenuItem("Continue", "SaveSignature", true));
 
         getScreen().setBackButton(new MenuItem("Back", "Cancel", true));
     }

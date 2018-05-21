@@ -16,12 +16,10 @@
 		<mat-card-actions id="signature-actions" style="margin-left:0px;margin-right:0px">
 			<div fxLayout="row" fxLayoutAlign="space-between start">
 				<button mat-raised-button (click)="onClearSignature()" class="sigcap-button">Clear</button>
-				<div *ngFor="let m of screen.localMenuItems">
-					<button *ngIf="m.action === 'SaveSignature'; else elseBlock" mat-raised-button (click)="onSaveSignature()" color="primary" class="sigcap-button">{{m.title}}</button>
-					<ng-template #elseBlock>
-						<button mat-raised-button (click)="session.onAction(m.action)" class="sigcap-button">{{m.title}}</button>
-					</ng-template>
-				</div>
+				<button *ngIf="screen.saveAction.action === 'SaveSignature'; else elseBlock" mat-raised-button (click)="onSaveSignature()" color="primary" class="sigcap-button">{{screen.saveAction.title}}</button>
+				<ng-template #elseBlock>
+					<button mat-raised-button (click)="session.onAction(screen.saveAction.action)" class="sigcap-button">{{screen.saveAction.title}}</button>
+				</ng-template>
 			</div>
 		</mat-card-actions>
 	</mat-card>
