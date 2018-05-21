@@ -10,7 +10,7 @@ import org.jumpmind.pos.core.flow.Out;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.flow.ui.PromptConfig;
 import org.jumpmind.pos.core.screen.IPromptScreen;
-import org.jumpmind.pos.service.ServiceResultImpl;
+import org.jumpmind.pos.service.ServiceResult;
 import org.jumpmind.pos.user.model.User;
 import org.jumpmind.pos.user.service.AuthenticationResult;
 import org.jumpmind.pos.user.service.UserMessage;
@@ -154,7 +154,7 @@ public class UserLoginState extends AbstractState {
     public void onNewPassword2Entered(Action action) {
         String newPassword2 = (String) action.getData();
         
-        ServiceResultImpl changePasswordResult = 
+        ServiceResult changePasswordResult = 
                 userService.changePassword(stateManager.getNodeId(), null, result.getUser().getUsername(), oldPassword, newPassword1, newPassword2);
         if (changePasswordResult.getResultStatus().equals("SUCCESS")) {
             stateManager.getUI().notify("Your password was changed succesful.", "PasswordChangeAcknowledged");

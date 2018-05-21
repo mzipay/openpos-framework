@@ -45,16 +45,16 @@ public class Group extends Entity implements Comparable<Group> {
 
     public boolean equals(Object o) {
         if (o != null && o instanceof Group) {
-            Group taxableGroup = (Group) o;
-            return taxableGroup.getId().equals(id);
+            Group group = (Group) o;
+            return group.getId().equals(id);
         }
         return false;
     }
 
     public int compareTo(Group o) {
         if (o != null && o instanceof Group) {
-            Group taxableGroup = (Group) o;
-            return taxableGroup.getId().compareTo(id);
+            Group group = (Group) o;
+            return group.getId().compareTo(id);
         }
         return -1;
     }

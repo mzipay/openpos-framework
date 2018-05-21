@@ -2,7 +2,7 @@ package org.jumpmind.pos.user.service;
 
 import org.jumpmind.pos.service.EndpointDispatcher;
 import org.jumpmind.pos.service.ServiceContext;
-import org.jumpmind.pos.service.ServiceResultImpl;
+import org.jumpmind.pos.service.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +25,7 @@ public class UserService {
     }
     
     @RequestMapping("/changePassword")
-    public ServiceResultImpl changePassword(
+    public ServiceResult changePassword(
             @RequestParam(value="nodeId", defaultValue="") String nodeId,
             @RequestParam(value="locale", defaultValue="") String locale,            
             @RequestParam(value="username", defaultValue="") String username,

@@ -4,7 +4,10 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.service.AbstractModule;
+import org.jumpmind.pos.service.IDBSchemaListener;
 import org.jumpmind.security.ISecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -17,6 +20,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class ContextModule extends AbstractModule {
     
     protected final static String NAME = "context";
+    
+    @Autowired
+    @Qualifier("ContextDBSchemaListener")
+    private ContextSchemaEnhancer contextSchemaEnhancer;
 
     @Override
     public String getName() {
@@ -62,6 +69,11 @@ public class ContextModule extends AbstractModule {
     @Bean(name = NAME + "Session")
     protected DBSession session() {
         return super.session();
+    }
+    
+    @Override
+    protected IDBSchemaListener getDbSchemaListener() {
+        return contextSchemaEnhancer;
     }
     
 }

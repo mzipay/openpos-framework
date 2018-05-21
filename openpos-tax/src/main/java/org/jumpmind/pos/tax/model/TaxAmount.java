@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 public class TaxAmount {
 
-    private String taxAuthorityId;
+    private String authorityId;
 
-    private String taxGroupId;
+    private String groupId;
 
     private BigDecimal taxableAmount;
 
@@ -17,28 +17,36 @@ public class TaxAmount {
     public TaxAmount() {
     }
 
-    public TaxAmount(String taxAuthorityId, String taxGroupId, BigDecimal taxableAmount, BigDecimal taxAmount, BigDecimal taxPercent) {
-        this.taxAuthorityId = taxAuthorityId;
-        this.taxGroupId = taxGroupId;
+    public TaxAmount(String authorityId, String groupId, BigDecimal taxableAmount, BigDecimal taxAmount, BigDecimal taxPercent) {
+        this.authorityId = authorityId;
+        this.groupId = groupId;
         this.taxableAmount = taxableAmount;
         this.taxAmount = taxAmount;
         this.taxPercent = taxPercent;
     }
 
-    public String getTaxAuthorityId() {
-        return taxAuthorityId;
+    public TaxAmount(TaxAmount amount) {
+        authorityId = amount.getAuthorityId();
+        groupId = amount.getGroupId();
+        taxableAmount = amount.getTaxableAmount();
+        taxAmount = amount.getTaxAmount();
+        taxPercent = amount.getTaxPercent();
     }
 
-    public void setTaxAuthorityId(String taxAuthorityId) {
-        this.taxAuthorityId = taxAuthorityId;
+    public String getAuthorityId() {
+        return authorityId;
     }
 
-    public String getTaxGroupId() {
-        return taxGroupId;
+    public void setAuthorityId(String authorityId) {
+        this.authorityId = authorityId;
     }
 
-    public void setTaxGroupId(String taxGroupId) {
-        this.taxGroupId = taxGroupId;
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     public BigDecimal getTaxableAmount() {
@@ -63,6 +71,17 @@ public class TaxAmount {
 
     public void setTaxPercent(BigDecimal taxPercent) {
         this.taxPercent = taxPercent;
+    }
+
+    public void add(TaxAmount itemTaxAmount) {
+        if (taxableAmount == null) {
+            taxableAmount = BigDecimal.ZERO;
+        }
+        if (taxAmount == null) {
+            taxAmount = BigDecimal.ZERO;
+        }
+        taxableAmount = taxableAmount.add(itemTaxAmount.getTaxAmount());
+        taxAmount = taxAmount.add(itemTaxAmount.getTaxAmount());
     }
 
 }

@@ -1,25 +1,26 @@
 package org.jumpmind.pos.tax.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class TaxCalculationRequest {
 
-    private List<TaxableItem> taxableItems;
+    private List<TaxableItem> taxableItems = new ArrayList<TaxableItem>();
 
     private Date calculateDate;
 
-    private String taxCalculationGeocode;
+    private String geoCode;
 
     private String customerType;
 
     public TaxCalculationRequest() {
     }
 
-    public TaxCalculationRequest(List<TaxableItem> taxableItems, Date calculateDate, String taxCalculationGeocode, String customerType) {
+    public TaxCalculationRequest(List<TaxableItem> taxableItems, Date calculateDate, String geoCode, String customerType) {
         this.taxableItems = taxableItems;
         this.calculateDate = calculateDate;
-        this.taxCalculationGeocode = taxCalculationGeocode;
+        this.geoCode = geoCode;
         this.customerType = customerType;
     }
 
@@ -31,6 +32,10 @@ public class TaxCalculationRequest {
         this.taxableItems = taxableItems;
     }
 
+    public void addTaxableItem(TaxableItem taxableItem) {
+        this.taxableItems.add(taxableItem);
+    }
+
     public Date getCalculateDate() {
         return calculateDate;
     }
@@ -39,12 +44,12 @@ public class TaxCalculationRequest {
         this.calculateDate = calculateDate;
     }
 
-    public String getTaxCalculationGeocode() {
-        return taxCalculationGeocode;
+    public String getGeoCode() {
+        return geoCode;
     }
 
-    public void setTaxCalculationGeocode(String taxCalculationGeocode) {
-        this.taxCalculationGeocode = taxCalculationGeocode;
+    public void setGeoCode(String geoCode) {
+        this.geoCode = geoCode;
     }
 
     public String getCustomerType() {

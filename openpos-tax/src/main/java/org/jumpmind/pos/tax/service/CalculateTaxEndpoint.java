@@ -6,9 +6,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jumpmind.pos.service.Endpoint;
-import org.jumpmind.pos.tax.model.CalculateTaxRateRule;
-import org.jumpmind.pos.tax.model.FlatTaxRateRule;
-import org.jumpmind.pos.tax.model.ItemTaxAmount;
+import org.jumpmind.pos.tax.model.PercentRateRule;
+import org.jumpmind.pos.tax.model.FlatRateRule;
+import org.jumpmind.pos.tax.model.ItemTax;
+import org.jumpmind.pos.tax.model.TaxAmount;
 import org.jumpmind.pos.tax.model.Authority;
 import org.jumpmind.pos.tax.model.Jurisdiction;
 import org.jumpmind.pos.tax.model.TaxCalculationRequest;
@@ -37,12 +38,12 @@ public class CalculateTaxEndpoint {
      */
     @Endpoint("/calculateTax")
     public TaxCalculationResponse calculateTax(TaxCalculationRequest request) {
-        Collection<Authority> authorities = getTaxAuthorities(request.getTaxCalculationGeocode());
+        Collection<Authority> authorities = getAuthorities(request.getGeoCode());
         TaxContainer container = new TaxContainer();
 
         for (TaxableItem item : request.getTaxableItems()) {
             for (Authority authority : authorities) {
-                GroupRule groupRule = authority.getTaxGroupRule(item.getTaxGroupId());
+                GroupRule groupRule = authority.getGroupRule(item.getGroupId());
                 container.add(groupRule, item);
             }
         }
@@ -51,7 +52,7 @@ public class CalculateTaxEndpoint {
 
         TaxCalculationResponse response = new TaxCalculationResponse();
 
-        for (GroupRule groupRule : container.getTaxGroupRules()) {
+        for (GroupRule groupRule : container.getGroupRules()) {
             Collection<TaxableItem> lineItems = container.getItems(groupRule);
             String method = groupRule.getCalculationMethodCode();
             if (method == null) {
@@ -66,13 +67,13 @@ public class CalculateTaxEndpoint {
             }
         }
 
-        addTaxLineItems(request, response);
+        addTaxAmounts(request, response);
         return response;
     }
 
-    public Collection<Authority> getTaxAuthorities(String taxCalculationGeocode) {
+    public Collection<Authority> getAuthorities(String geoCode) {
 
-        List<Jurisdiction> result = taxRepository.findTaxAuthorityRules(taxCalculationGeocode);
+        List<Jurisdiction> result = taxRepository.findTaxJurisdictions(geoCode);
         List<Authority> authorities = new ArrayList<Authority>();
         for (Jurisdiction rule : result) {
             Authority athy = rule.getAuthority();
@@ -81,12 +82,7 @@ public class CalculateTaxEndpoint {
             }
         }
 
-        if (authorities.size() == 0) {
-            // logger.warn("Could not find a tax authority for " +
-            // businessUnitId);
-        }
         return authorities;
-
     }
 
     /**
@@ -100,7 +96,7 @@ public class CalculateTaxEndpoint {
             boolean usesCompounding) {
         BigDecimal taxableAmount = BigDecimal.ZERO;
         for (TaxableItem item : items) {
-            taxableAmount = taxableAmount.add(getTaxableAmount(item, usesCompounding));
+            taxableAmount = taxableAmount.add(getTaxableAmount(response, item, usesCompounding));
         }
 
         BigDecimal taxAmount = calculateTax(groupRule, taxableAmount);
@@ -117,18 +113,14 @@ public class CalculateTaxEndpoint {
     private void applyTaxAtItem(TaxCalculationResponse response, GroupRule groupRule, Collection<TaxableItem> items,
             boolean usesCompounding) {
         for (TaxableItem item : items) {
-            BigDecimal taxableAmount = getTaxableAmount(item, usesCompounding);
+            BigDecimal taxableAmount = getTaxableAmount(response, item, usesCompounding);
             BigDecimal taxAmount = calculateTax(groupRule, taxableAmount);
             taxAmount = groupRule.getAuthority().round(taxAmount);
 
-            ItemTaxAmount itemTaxAmount = new ItemTaxAmount(item.getSequenceNumber(), groupRule.getAuthority().getId(),
-                    groupRule.getTaxableGroup().getId(), taxableAmount, taxAmount, getTaxPercent(groupRule));
+            TaxAmount itemTaxAmount = new TaxAmount(groupRule.getAuthority().getId(), groupRule.getGroupId(), taxableAmount, taxAmount,
+                    getTaxPercent(groupRule));
 
-            response.addItemTaxAmount(itemTaxAmount);
-            // item.addSaleReturnTaxLineItem(new
-            // SaleReturnTaxLineItem(groupRule.getTaxAuthority(),
-            // groupRule.getTaxableGroup(),
-            // item.getExtendedAmount(), taxAmount, getTaxPercent(groupRule)));
+            response.addItemTaxAmount(item.getSequenceNumber(), itemTaxAmount);
         }
     }
 
@@ -144,7 +136,7 @@ public class CalculateTaxEndpoint {
         BigDecimal totalTaxableAmount = BigDecimal.ZERO;
         BigDecimal totalTaxAmount = BigDecimal.ZERO;
         for (TaxableItem item : items) {
-            BigDecimal taxableAmount = getTaxableAmount(item, usesCompounding);
+            BigDecimal taxableAmount = getTaxableAmount(response, item, usesCompounding);
             BigDecimal taxAmount = calculateTax(groupRule, taxableAmount);
             totalTaxableAmount = totalTaxableAmount.add(taxableAmount);
             totalTaxAmount = totalTaxAmount.add(taxAmount);
@@ -161,17 +153,22 @@ public class CalculateTaxEndpoint {
      * @param taxableAmount
      * @param taxAmount
      */
-    private void prorate(TaxCalculationResponse response, GroupRule groupRule, Collection<TaxableItem> items,
-            BigDecimal totalTaxableAmount, BigDecimal totalTaxAmount, boolean usesCompounding) {
+    private void prorate(TaxCalculationResponse response, GroupRule groupRule, Collection<TaxableItem> items, BigDecimal totalTaxableAmount,
+            BigDecimal totalTaxAmount, boolean usesCompounding) {
+
         for (TaxableItem item : items) {
-            BigDecimal taxableAmount = getTaxableAmount(item, usesCompounding);
+            BigDecimal taxableAmount = getTaxableAmount(response, item, usesCompounding);
             BigDecimal taxAmount = BigDecimal.ZERO;
             if (totalTaxableAmount.signum() != 0) {
                 taxAmount = taxableAmount.multiply(totalTaxAmount).divide(totalTaxableAmount, BigDecimal.ROUND_DOWN);
                 taxAmount = groupRule.getAuthority().round(taxAmount);
             }
-            // item.addSaleReturnTaxLineItem(new SaleReturnTaxLineItem(groupRule.getTaxAuthority(), groupRule.getTaxableGroup(), taxableAmount,
-            //        taxAmount, getTaxPercent(groupRule)));
+
+            TaxAmount itemTaxAmount = new TaxAmount(groupRule.getAuthority().getId(), groupRule.getGroup().getId(), taxableAmount,
+                    taxAmount, getTaxPercent(groupRule));
+
+            response.addItemTaxAmount(item.getSequenceNumber(), itemTaxAmount);
+
             totalTaxAmount = totalTaxAmount.subtract(taxAmount);
             totalTaxableAmount = totalTaxableAmount.subtract(taxableAmount);
         }
@@ -184,39 +181,38 @@ public class CalculateTaxEndpoint {
      * @param request
      * @param lineItems
      */
-    private void addTaxLineItems(TaxCalculationRequest request, TaxCalculationResponse response) {
-        for (TaxableItem lineItem : request.getTaxableItems()) {
-        	/*
-            for (SaleReturnTaxLineItem saleReturnTaxLineItem : lineItem.getSaleReturnTaxLineItems()) {
-                TaxLineItem taxLineItem = request.getTaxLineItem(saleReturnTaxLineItem.getTaxAuthority(),
-                        saleReturnTaxLineItem.getTaxableGroup());
-                if (taxLineItem == null) {
-                    taxLineItem = new TaxLineItem(saleReturnTaxLineItem);
-                    response.addLineItem(taxLineItem);
+    private void addTaxAmounts(TaxCalculationRequest request, TaxCalculationResponse response) {
+        for (ItemTax itemTax : response.getItemTaxes()) {
+
+            for (TaxAmount itemTaxAmount : itemTax.getItemTaxAmounts()) {
+                TaxAmount taxAmount = response.getTaxAmount(itemTaxAmount.getAuthorityId(), itemTaxAmount.getGroupId());
+                if (taxAmount == null) {
+                    taxAmount = new TaxAmount(itemTaxAmount);
+                    response.addTaxAmount(taxAmount);
                 } else {
-                    taxLineItem.add(saleReturnTaxLineItem);
+                    taxAmount.add(itemTaxAmount);
                 }
             }
-            */
         }
     }
 
-    private BigDecimal getTaxableAmount(TaxableItem item, boolean usesCompounding) {
+    private BigDecimal getTaxableAmount(TaxCalculationResponse response, TaxableItem item, boolean usesCompounding) {
         BigDecimal taxableAmount = item.getExtendedAmount();
-        /*
-        if (usesCompounding && item.getSaleReturnTaxLineItems() != null) {
-            for (SaleReturnTaxLineItem taxLineItem : item.getSaleReturnTaxLineItems()) {
-                taxableAmount = taxableAmount.add(taxLineItem.getTaxAmount());
+
+        ItemTax itemTax = response.getItemTax(item.getSequenceNumber());
+        if (usesCompounding && itemTax != null) {
+            for (TaxAmount taxAmount : itemTax.getItemTaxAmounts()) {
+                taxableAmount = taxableAmount.add(taxAmount.getTaxAmount());
             }
         }
-        */
+
         return taxableAmount;
     }
 
     private BigDecimal getTaxPercent(GroupRule groupRule) {
-        for (RateRule rateRule : groupRule.getTaxRateRules()) {
-            if (rateRule instanceof CalculateTaxRateRule) {
-                CalculateTaxRateRule calcRateRule = (CalculateTaxRateRule) rateRule;
+        for (RateRule rateRule : groupRule.getRateRules()) {
+            if (rateRule instanceof PercentRateRule) {
+                PercentRateRule calcRateRule = (PercentRateRule) rateRule;
                 return calcRateRule.getPercent();
             }
         }
@@ -232,7 +228,7 @@ public class CalculateTaxEndpoint {
      * @return
      */
     private BigDecimal calculateTax(GroupRule groupRule, BigDecimal amount) {
-        String usageCode = groupRule.getTaxRateRuleUsageCode();
+        String usageCode = groupRule.getRateRuleUsageCode();
         if (usageCode != null && usageCode.equals(TaxConstants.USAGE_TAX_TABLE)) {
             return calculateTaxTable(groupRule, amount);
         } else {
@@ -250,12 +246,12 @@ public class CalculateTaxEndpoint {
      */
     private BigDecimal calculatePickOne(GroupRule groupRule, BigDecimal amount) {
         BigDecimal tax = BigDecimal.ZERO;
-        for (RateRule rateRule : groupRule.getTaxRateRules()) {
-            if (rateRule instanceof FlatTaxRateRule) {
-                FlatTaxRateRule flatRateRule = (FlatTaxRateRule) rateRule;
+        for (RateRule rateRule : groupRule.getRateRules()) {
+            if (rateRule instanceof FlatRateRule) {
+                FlatRateRule flatRateRule = (FlatRateRule) rateRule;
                 tax = tax.add(flatRateRule.getAmount());
-            } else if (rateRule instanceof CalculateTaxRateRule) {
-                CalculateTaxRateRule calcRateRule = (CalculateTaxRateRule) rateRule;
+            } else if (rateRule instanceof PercentRateRule) {
+                PercentRateRule calcRateRule = (PercentRateRule) rateRule;
                 tax = tax.add(calcRateRule.getPercent().movePointLeft(2).multiply(amount));
             }
         }
@@ -271,9 +267,9 @@ public class CalculateTaxEndpoint {
      * @return
      */
     private BigDecimal calculateTaxTable(GroupRule groupRule, BigDecimal amount) {
-        Collection<RateRule> rateRules = groupRule.getTaxRateRules();
-        FlatTaxRateRule firstBreak = (FlatTaxRateRule) groupRule.getFirstTaxRateRule();
-        FlatTaxRateRule lastBreak = (FlatTaxRateRule) groupRule.getLastTaxRateRule();
+        Collection<RateRule> rateRules = groupRule.getRateRules();
+        FlatRateRule firstBreak = (FlatRateRule) groupRule.getFirstRateRule();
+        FlatRateRule lastBreak = (FlatRateRule) groupRule.getLastRateRule();
 
         BigDecimal tax = BigDecimal.ZERO;
         // If the taxable amount fits in the table, we just lookup the tax
@@ -302,17 +298,17 @@ public class CalculateTaxEndpoint {
     }
 
     private BigDecimal lookupRateRuleTax(Collection<RateRule> rateRules, BigDecimal taxableAmount) {
-        FlatTaxRateRule rateRule = lookupRateRule(rateRules, taxableAmount);
+        FlatRateRule rateRule = lookupRateRule(rateRules, taxableAmount);
         if (rateRule != null) {
             return rateRule.getAmount();
         }
         return BigDecimal.ZERO;
     }
 
-    private FlatTaxRateRule lookupRateRule(Collection<RateRule> rateRules, BigDecimal taxableAmount) {
+    private FlatRateRule lookupRateRule(Collection<RateRule> rateRules, BigDecimal taxableAmount) {
         for (RateRule rateRule : rateRules) {
             if (taxableAmount.compareTo(rateRule.getMaxTaxableAmount()) <= 0) {
-                return (FlatTaxRateRule) rateRule;
+                return (FlatRateRule) rateRule;
             }
         }
         return null;
