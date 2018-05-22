@@ -62,19 +62,19 @@ public class MockCalculateTaxEndpointTest {
         assertTax(response, "1", "600", 5.16);
     }
 
-    /* TODO: Have JJ Implement this test in addition to testing using real database 
-     *       Model off of other @Test methods.  These were old test methods that have 
-     *       been converted to a new API (RetailTransaction -> TaxCalculationRequest etc.)
-     * 
+//    /* TODO: Have JJ Implement this test in addition to testing using real database 
+//     *       Model off of other @Test methods.  These were old test methods that have 
+//     *       been converted to a new API (RetailTransaction -> TaxCalculationRequest etc.)
+//     * 
     @Test
     public void testCompoundingTax() {
-        RetailTransaction tran = getTransaction();
-        tran.addLineItem(getTaxableItem("450", 1.04));
-        calculateTaxEndpoint.calculateTax(tran);
-        assertTax(tran, "1", "450", 0.01, 1.25);
-        assertTax(tran, "3", "450", 0.06, 5.25);
+        TaxCalculationRequest request = new TaxCalculationRequest();
+        request.addTaxableItem(getTaxableItem("450", 1.04));
+        TaxCalculationResponse response = calculateTaxEndpoint.calculateTax(request);
+        assertTax(response, "1", "450", 0.01, 1.25);
+        assertTax(response, "3", "450", 0.06, 5.25);
     }
-    */
+    
 
     private TaxableItem getTaxableItem(String groupId, double amount) {
         TaxableItem taxableItem = new TaxableItem();
