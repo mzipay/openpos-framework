@@ -34,6 +34,7 @@ public class HomeScreenState extends AbstractState implements IState {
 
     @Override
     public void arrive(Action action) {
+        super.arrive(action);
         stateManager.endSession();
         stateManager.showScreen(buildScreen());
     }

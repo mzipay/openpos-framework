@@ -25,7 +25,7 @@ public class ContextRepository {
 
     private static Logger log = Logger.getLogger(ContextRepository.class);
 
-    private static final int DISQUALIFIED = Integer.MIN_VALUE;
+    protected static final int DISQUALIFIED = Integer.MIN_VALUE;
 
     private Query<ConfigModel> configLookup = new Query<ConfigModel>()
             .named("configLookup")
@@ -45,15 +45,14 @@ public class ContextRepository {
 
     public Node findNode(String nodeId) {
         Node node = contextSession.findByNaturalId(Node.class, nodeId);
-
-        for (String columnName : node.getAdditionalFields().keySet()) {
-            String columnUpper = columnName.toUpperCase(); 
-            if (columnUpper.startsWith(TagModel.TAG_PREFIX)) {
-                node.setTagValue(columnUpper, 
-                        node.getAdditionalFields().get(columnName).toString());
+        if (node != null) {
+            for (String columnName : node.getAdditionalFields().keySet()) {
+                String columnUpper = columnName.toUpperCase();
+                if (columnUpper.startsWith(TagModel.TAG_PREFIX)) {
+                    node.setTagValue(columnUpper, node.getAdditionalFields().get(columnName).toString());
+                }
             }
         }
-
         return node;
     }
 

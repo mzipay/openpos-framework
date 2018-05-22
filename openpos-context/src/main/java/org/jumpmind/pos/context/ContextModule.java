@@ -16,7 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration("ContextModule")
-@EnableTransactionManagement
+@EnableTransactionManagement()
 public class ContextModule extends AbstractModule {
     
     protected final static String NAME = "context";
