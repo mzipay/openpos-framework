@@ -15,7 +15,7 @@ import org.jumpmind.pos.tax.service.CalculateTaxEndpoint;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TaxServiceTest {
+public class MockCalculateTaxEndpointTest {
     CalculateTaxEndpoint calculateTaxEndpoint;
 
     MathContext mc = new MathContext(10, RoundingMode.HALF_UP);

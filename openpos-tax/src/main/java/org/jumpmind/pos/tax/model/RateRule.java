@@ -50,8 +50,6 @@ public class RateRule extends Entity {
     @Column
     private BigDecimal taxAmount;
     
-    private GroupRule groupRule;
-
     public String getId() {
         return id;
     }
@@ -79,14 +77,6 @@ public class RateRule extends Entity {
 
     public void setMinTaxableAmount(BigDecimal minTaxableAmount) {
         this.minTaxableAmount = minTaxableAmount;
-    }
-
-    public GroupRule getGroupRule() {
-        return groupRule;
-    }
-
-    public void setGroupRule(GroupRule groupRule) {
-        this.groupRule = groupRule;
     }
 
     public Integer getRateRuleSequenceNumber() {
