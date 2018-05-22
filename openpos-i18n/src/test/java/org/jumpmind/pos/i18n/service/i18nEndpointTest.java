@@ -37,7 +37,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "<MISSING RESOURCE>");
 	}
 	
@@ -52,7 +52,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "<MISSING RESOURCE>");
 	}
 	
@@ -67,7 +67,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "<MISSING RESOURCE>");
 	}
 	
@@ -82,7 +82,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "<MISSING RESOURCE>");
 	}
 	
@@ -97,7 +97,7 @@ public class i18nEndpointTest {
 		Locale locale = new Locale("foo", "foh");
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "<Company Name>");
 	}
 	
@@ -112,7 +112,7 @@ public class i18nEndpointTest {
 		Locale locale = new Locale("foo", "foh");
 		String brand = "";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "me");
 	}
 	
@@ -127,7 +127,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "4Tran";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "<MISSING RESOURCE>");
 	}
 	
@@ -142,7 +142,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "4Tran";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "<Enterprise Titre>");
 	}
 	
@@ -157,7 +157,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "<Enterprise Titre>");
 	}
 	
@@ -172,7 +172,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "<Las Enterprise>");
 	}
 	
@@ -187,7 +187,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.getDefault();
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "Big Lots");
 	}
 	
@@ -202,7 +202,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.getDefault();
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "Biggest Lots");
 	}
 	
@@ -217,7 +217,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "Grand Lots");
 	}
 	
@@ -232,7 +232,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "Plus Grand Lots");
 	}
 	
@@ -247,7 +247,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.getDefault();
 		String brand = "";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "you");
 	}
 	
@@ -262,7 +262,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.getDefault();
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "you");
 	}
 	
@@ -278,7 +278,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "moi");
 	}
 	
@@ -293,7 +293,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "Je m'appelle");
 	}
 	
@@ -308,7 +308,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.getDefault();
 		String brand = "";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "My name is");
 	}
 	
@@ -323,7 +323,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.getDefault();
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "Biggest Lots Override");
 	}
 	
@@ -338,7 +338,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "Plus Grand Lots Override");
 	}
 	
@@ -353,7 +353,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "jaune");
 	}
 	
@@ -368,7 +368,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "");
 	}
 	
@@ -383,7 +383,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "");
 	}
 	
@@ -399,7 +399,7 @@ public class i18nEndpointTest {
 		Locale locale = Locale.FRANCE;
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "\u00eates");
 	}
 	
@@ -414,7 +414,7 @@ public class i18nEndpointTest {
 		Locale locale = new Locale ("es", "MX");
 		String brand = "";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "Hola!");
 	}
 	
@@ -429,7 +429,7 @@ public class i18nEndpointTest {
 		Locale locale = new Locale ("es", "MX");
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "Hola!");
 	}
 	
@@ -444,7 +444,7 @@ public class i18nEndpointTest {
 		Locale locale = new Locale ("es", "MX");
 		String brand = "BigLots";
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand);
 		Assert.assertEquals(res, "<MISSING RESOURCE>");
 	}
 	
@@ -471,7 +471,7 @@ public class i18nEndpointTest {
 				" on " + DateFormat.getDateInstance().format(date);
 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -495,7 +495,7 @@ public class i18nEndpointTest {
 				" on " + DateFormat.getDateInstance(DateFormat.SHORT).format(date);
 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -519,7 +519,7 @@ public class i18nEndpointTest {
 				" en " + DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(date);
 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -544,7 +544,7 @@ public class i18nEndpointTest {
 				" en " + DateFormat.getDateInstance(DateFormat.SHORT, locale).format(date);
 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -565,7 +565,7 @@ public class i18nEndpointTest {
 
 		String exp = "I have $1.00"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -587,7 +587,7 @@ public class i18nEndpointTest {
 
 		String exp = "J'ai 1,00 \u20ac"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -608,7 +608,7 @@ public class i18nEndpointTest {
 
 		String exp = "It's the number 34,592.09"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -629,7 +629,7 @@ public class i18nEndpointTest {
 
 		String exp = "C'est le nombre 34\u00a0592,09"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -650,7 +650,7 @@ public class i18nEndpointTest {
 
 		String exp = "Es ist die Nummer 34.592,09"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -671,7 +671,7 @@ public class i18nEndpointTest {
 
 		String exp = "It's the number 34,592"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -692,7 +692,7 @@ public class i18nEndpointTest {
 
 		String exp = "C'est le nombre 34\u00a0592"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -713,7 +713,7 @@ public class i18nEndpointTest {
 
 		String exp = "<UNABLE TO APPLY PATTERN>"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -734,7 +734,7 @@ public class i18nEndpointTest {
 
 		String exp = "It's the number {0}"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -755,7 +755,7 @@ public class i18nEndpointTest {
 
 		String exp = "<UNABLE TO APPLY PATTERN>"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -776,7 +776,7 @@ public class i18nEndpointTest {
 
 		String exp = "<UNABLE TO APPLY PATTERN>"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -797,7 +797,7 @@ public class i18nEndpointTest {
 
 		String exp = "<UNABLE TO APPLY PATTERN>"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -818,7 +818,7 @@ public class i18nEndpointTest {
 
 		String exp = "Nous avons \"custom_style\"45"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -839,7 +839,7 @@ public class i18nEndpointTest {
 
 		String exp = "Nous avons {0, number}"; 
 		
-		String res = i18nEndpoint.getString(base, key, locale, brand, args);
+		String res = i18nEndpoint.getString(base, key, locale.toString(), brand, args);
 		Assert.assertEquals(res, exp);
 	}
 	
@@ -851,14 +851,14 @@ public class i18nEndpointTest {
  
             Resource resource = new Resource();
             resource.setBaseName("common");
-            resource.setLocale(Locale.US);
+            resource.setLocale(Locale.US.toString());
             resource.setBrand("Target");
             resource.setStringKey("_hello");
             
             resource.setPattern("hi there");
             dbSession.save(resource);
             
-            String res = i18nEndpoint.getString("common", "_hello", Locale.US, "Target");
+            String res = i18nEndpoint.getString("common", "_hello", Locale.US.toString(), "Target");
             String exp = "hi there";
             
             Assert.assertEquals(exp, res);
@@ -873,14 +873,14 @@ public class i18nEndpointTest {
 		  
             Resource resource = new Resource();
             resource.setBaseName("common");
-            resource.setLocale(Locale.US);
+            resource.setLocale(Locale.US.toString());
             resource.setBrand("*");
             resource.setStringKey("_test");
             
             resource.setPattern("test");
             dbSession.save(resource);
             
-            String res = i18nEndpoint.getString("common", "_test", Locale.US, "");
+            String res = i18nEndpoint.getString("common", "_test", Locale.US.toString(), "");
             String exp = "test";
             
             Assert.assertEquals(exp, res);
@@ -895,14 +895,14 @@ public class i18nEndpointTest {
 		
             Resource resource = new Resource();
             resource.setBaseName("common");
-            resource.setLocale(Locale.US);
+            resource.setLocale(Locale.US.toString());
             resource.setBrand("*");
             resource.setStringKey("_me");
             
             resource.setPattern("myself");
             dbSession.save(resource);
             
-            String res = i18nEndpoint.getString("common", "_me", Locale.US, "");
+            String res = i18nEndpoint.getString("common", "_me", Locale.US.toString(), "");
             String exp = "myself";
             
             Assert.assertEquals(exp, res);
@@ -917,7 +917,7 @@ public class i18nEndpointTest {
 		  
             Resource resource = new Resource();
             resource.setBaseName("common");
-            resource.setLocale(Locale.US);
+            resource.setLocale(Locale.US.toString());
             resource.setBrand("*");
             resource.setStringKey("_please");
             resource.setPattern("Please");
@@ -926,17 +926,17 @@ public class i18nEndpointTest {
             
             Resource resource1 = new Resource();
             resource1.setBaseName("common");
-            resource1.setLocale(Locale.FRANCE);
+            resource1.setLocale(Locale.FRANCE.toString());
             resource1.setBrand("*");
             resource1.setStringKey("_please");
             resource1.setPattern("Puis");
             
             dbSession.save(resource1);
             
-            String res = i18nEndpoint.getString("common", "_please", Locale.US, "");
+            String res = i18nEndpoint.getString("common", "_please", Locale.US.toString(), "");
             String exp = "Please";
             
-            String res1 = i18nEndpoint.getString("common", "_please", Locale.FRANCE, "");
+            String res1 = i18nEndpoint.getString("common", "_please", Locale.FRANCE.toString(), "");
             String exp1 = "Puis";
             
             Assert.assertEquals(exp, res);
@@ -951,7 +951,7 @@ public class i18nEndpointTest {
 		
 	            Resource resource1 = new Resource();
 	            resource1.setBaseName("common");
-	            resource1.setLocale(Locale.US);
+	            resource1.setLocale(Locale.US.toString());
 	            resource1.setBrand("*");
 	            resource1.setStringKey("_company");
 	            resource1.setPattern("<company>");
@@ -960,17 +960,17 @@ public class i18nEndpointTest {
 	            
 	            Resource resource = new Resource();
 	            resource.setBaseName("common");
-	            resource.setLocale(Locale.US);
+	            resource.setLocale(Locale.US.toString());
 	            resource.setBrand("Target");
 	            resource.setStringKey("_company");
 	            resource.setPattern("Target");
 	            
 	            dbSession.save(resource);
 	            
-	            String res = i18nEndpoint.getString("common", "_company", Locale.US, "");
+	            String res = i18nEndpoint.getString("common", "_company", Locale.US.toString(), "");
 	            String exp = "<company>";
 	            
-	            String res1 = i18nEndpoint.getString("common", "_company", Locale.US, "Target");
+	            String res1 = i18nEndpoint.getString("common", "_company", Locale.US.toString(), "Target");
 	            String exp1 = "Target";
 	            
 	            Assert.assertEquals(exp, res);
@@ -985,7 +985,7 @@ public class i18nEndpointTest {
 			
 	            Resource resource = new Resource();
 	            resource.setBaseName("common");
-	            resource.setLocale(Locale.US);
+	            resource.setLocale(Locale.US.toString());
 	            resource.setBrand("*");
 	            resource.setStringKey("_test_string1");
 	            
@@ -997,7 +997,7 @@ public class i18nEndpointTest {
 	    				date,
 	    		};
 	    		
-	            String res = i18nEndpoint.getString("common", "_test_string1", Locale.US, "", args);
+	            String res = i18nEndpoint.getString("common", "_test_string1", Locale.US.toString(), "", args);
 	    		
 	    		
 	    		String exp = "At " + DateFormat.getTimeInstance(DateFormat.SHORT).format(date) + 
@@ -1014,7 +1014,7 @@ public class i18nEndpointTest {
 			
 	            Resource resource = new Resource();
 	            resource.setBaseName("common");
-	            resource.setLocale(Locale.US);
+	            resource.setLocale(Locale.US.toString());
 	            resource.setBrand("*");
 	            resource.setStringKey("_test_string1");
 	            
@@ -1026,7 +1026,7 @@ public class i18nEndpointTest {
 	    				date,
 	    		};
 	    		
-	            String res = i18nEndpoint.getString("common", "_test_string1", Locale.US, "", args);
+	            String res = i18nEndpoint.getString("common", "_test_string1", Locale.US.toString(), "", args);
 	    		
 	    		
 	    		String exp = "<UNABLE TO APPLY PATTERN>";

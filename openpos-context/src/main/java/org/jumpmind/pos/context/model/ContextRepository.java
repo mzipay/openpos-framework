@@ -49,7 +49,8 @@ public class ContextRepository {
             for (String columnName : node.getAdditionalFields().keySet()) {
                 String columnUpper = columnName.toUpperCase();
                 if (columnUpper.startsWith(TagModel.TAG_PREFIX)) {
-                    node.setTagValue(columnUpper, node.getAdditionalFields().get(columnName).toString());
+                    Object value = node.getAdditionalFields().get(columnName);
+                    node.setTagValue(columnUpper, value != null ? value.toString() : null);
                 }
             }
         }

@@ -1,7 +1,5 @@
 package org.jumpmind.pos.i18n.service;
 
-import java.util.Locale;
-
 import org.jumpmind.pos.service.EndpointDispatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +17,7 @@ public class i18nService {
     public String getString(
             @RequestParam(value="base", defaultValue="") String base,
             @RequestParam(value="key", defaultValue="") String key,
-            @RequestParam(value="locale", defaultValue="") Locale locale,
+            @RequestParam(value="locale", defaultValue="") String locale,
             @RequestParam(value="brand", defaultValue="") String brand,
             @RequestParam(value="args", defaultValue="") Object... args) {
         return endpointDispatcher.dispatch("/getString", base, key, locale, brand, args);
