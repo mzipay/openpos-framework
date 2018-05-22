@@ -10,8 +10,8 @@ public class Scan implements Serializable {
         CAMERA_CORDOVA, NONE
     }
 
-    protected Integer scanMinLength;
-    protected Integer scanMaxLength;
+    protected Integer scanMinLength = 1;
+    protected Integer scanMaxLength = 20;
     protected ScanType scanType;
     protected String scanActionName;
     protected String scanSomethingText = "Scan/Key Something";
