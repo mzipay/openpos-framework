@@ -5,3 +5,4 @@
 /.settings/
 /build/
 /.h2.server.properties
+/.oracle_jre_usage/
