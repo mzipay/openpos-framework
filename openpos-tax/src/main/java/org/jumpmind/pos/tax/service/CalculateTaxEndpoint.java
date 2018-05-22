@@ -6,18 +6,16 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jumpmind.pos.service.Endpoint;
-import org.jumpmind.pos.tax.model.PercentRateRule;
-import org.jumpmind.pos.tax.model.FlatRateRule;
-import org.jumpmind.pos.tax.model.ItemTax;
-import org.jumpmind.pos.tax.model.TaxAmount;
 import org.jumpmind.pos.tax.model.Authority;
+import org.jumpmind.pos.tax.model.GroupRule;
+import org.jumpmind.pos.tax.model.ItemTax;
 import org.jumpmind.pos.tax.model.Jurisdiction;
+import org.jumpmind.pos.tax.model.RateRule;
+import org.jumpmind.pos.tax.model.TaxAmount;
 import org.jumpmind.pos.tax.model.TaxCalculationRequest;
 import org.jumpmind.pos.tax.model.TaxCalculationResponse;
 import org.jumpmind.pos.tax.model.TaxConstants;
 import org.jumpmind.pos.tax.model.TaxContainer;
-import org.jumpmind.pos.tax.model.GroupRule;
-import org.jumpmind.pos.tax.model.RateRule;
 import org.jumpmind.pos.tax.model.TaxRepository;
 import org.jumpmind.pos.tax.model.TaxableItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -211,9 +209,8 @@ public class CalculateTaxEndpoint {
 
     private BigDecimal getTaxPercent(GroupRule groupRule) {
         for (RateRule rateRule : groupRule.getRateRules()) {
-            if (rateRule instanceof PercentRateRule) {
-                PercentRateRule calcRateRule = (PercentRateRule) rateRule;
-                return calcRateRule.getPercent();
+            if (rateRule.getTypeCode() == RateRule.TYPE_PERCENT_RATE) {
+                return rateRule.getPercent();
             }
         }
         return BigDecimal.ZERO;
@@ -247,12 +244,10 @@ public class CalculateTaxEndpoint {
     private BigDecimal calculatePickOne(GroupRule groupRule, BigDecimal amount) {
         BigDecimal tax = BigDecimal.ZERO;
         for (RateRule rateRule : groupRule.getRateRules()) {
-            if (rateRule instanceof FlatRateRule) {
-                FlatRateRule flatRateRule = (FlatRateRule) rateRule;
-                tax = tax.add(flatRateRule.getAmount());
-            } else if (rateRule instanceof PercentRateRule) {
-                PercentRateRule calcRateRule = (PercentRateRule) rateRule;
-                tax = tax.add(calcRateRule.getPercent().movePointLeft(2).multiply(amount));
+            if (rateRule.getTypeCode() == RateRule.TYPE_FLAT_RATE) {
+                tax = tax.add(rateRule.getAmount());
+            } else if (rateRule.getTypeCode() == RateRule.TYPE_FLAT_RATE) {
+                tax = tax.add(rateRule.getPercent().movePointLeft(2).multiply(amount));
             }
         }
         return tax;
@@ -268,8 +263,8 @@ public class CalculateTaxEndpoint {
      */
     private BigDecimal calculateTaxTable(GroupRule groupRule, BigDecimal amount) {
         Collection<RateRule> rateRules = groupRule.getRateRules();
-        FlatRateRule firstBreak = (FlatRateRule) groupRule.getFirstRateRule();
-        FlatRateRule lastBreak = (FlatRateRule) groupRule.getLastRateRule();
+        RateRule firstBreak = (RateRule) groupRule.getFirstRateRule();
+        RateRule lastBreak = (RateRule) groupRule.getLastRateRule();
 
         BigDecimal tax = BigDecimal.ZERO;
         // If the taxable amount fits in the table, we just lookup the tax
@@ -298,17 +293,17 @@ public class CalculateTaxEndpoint {
     }
 
     private BigDecimal lookupRateRuleTax(Collection<RateRule> rateRules, BigDecimal taxableAmount) {
-        FlatRateRule rateRule = lookupRateRule(rateRules, taxableAmount);
+        RateRule rateRule = lookupRateRule(rateRules, taxableAmount);
         if (rateRule != null) {
             return rateRule.getAmount();
         }
         return BigDecimal.ZERO;
     }
 
-    private FlatRateRule lookupRateRule(Collection<RateRule> rateRules, BigDecimal taxableAmount) {
+    private RateRule lookupRateRule(Collection<RateRule> rateRules, BigDecimal taxableAmount) {
         for (RateRule rateRule : rateRules) {
             if (taxableAmount.compareTo(rateRule.getMaxTaxableAmount()) <= 0) {
-                return (FlatRateRule) rateRule;
+                return rateRule;
             }
         }
         return null;

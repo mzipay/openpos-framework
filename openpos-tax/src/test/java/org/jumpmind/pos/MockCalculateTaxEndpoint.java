@@ -6,12 +6,11 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jumpmind.pos.tax.model.PercentRateRule;
-import org.jumpmind.pos.tax.model.FlatRateRule;
 import org.jumpmind.pos.tax.model.Authority;
-import org.jumpmind.pos.tax.model.TaxConstants;
-import org.jumpmind.pos.tax.model.GroupRule;
 import org.jumpmind.pos.tax.model.Group;
+import org.jumpmind.pos.tax.model.GroupRule;
+import org.jumpmind.pos.tax.model.RateRule;
+import org.jumpmind.pos.tax.model.TaxConstants;
 import org.jumpmind.pos.tax.service.CalculateTaxEndpoint;
 
 public class MockCalculateTaxEndpoint extends CalculateTaxEndpoint {
@@ -89,21 +88,23 @@ public class MockCalculateTaxEndpoint extends CalculateTaxEndpoint {
         return groupRule;
     }
 
-    private PercentRateRule addPercentRule(Authority authority, String taxGroupId, double percent, String method) {
+    private RateRule addPercentRule(Authority authority, String taxGroupId, double percent, String method) {
         Group taxGroup = new Group(taxGroupId);
         GroupRule groupRule = addGroup(authority, taxGroup, method);
 
-        PercentRateRule rateRule = new PercentRateRule();
+        RateRule rateRule = new RateRule();
+        rateRule.setTypeCode(RateRule.TYPE_PERCENT_RATE);
         rateRule.setPercent(new BigDecimal(percent));
         groupRule.addRateRule(rateRule);
         return rateRule;
     }
 
-    private FlatRateRule addFlatRule(Authority authority, String taxGroupId, double amount, String method) {
+    private RateRule addFlatRule(Authority authority, String taxGroupId, double amount, String method) {
         Group taxGroup = new Group(taxGroupId);
         GroupRule groupRule = addGroup(authority, taxGroup, method);
 
-        FlatRateRule rateRule = new FlatRateRule();
+        RateRule rateRule = new RateRule();
+        rateRule.setTypeCode(RateRule.TYPE_FLAT_RATE);
         rateRule.setAmount(new BigDecimal(amount));
         groupRule.addRateRule(rateRule);
         return rateRule;
@@ -121,7 +122,8 @@ public class MockCalculateTaxEndpoint extends CalculateTaxEndpoint {
         for (int i = 0; i < breaks.length - 1; i++) {
             BigDecimal minTaxableAmount = new BigDecimal(breaks[i], mc);
             BigDecimal maxTaxableAmount = new BigDecimal(breaks[i + 1], mc).subtract(penny);
-            FlatRateRule rateRule = new FlatRateRule();
+            RateRule rateRule = new RateRule();
+            rateRule.setTypeCode(RateRule.TYPE_FLAT_RATE);
             rateRule.setMinTaxableAmount(minTaxableAmount);
             rateRule.setMaxTaxableAmount(maxTaxableAmount);
             rateRule.setAmount(amount);
