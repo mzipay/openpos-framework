@@ -67,11 +67,11 @@ public class UserLoginState extends AbstractState {
 
     protected void promptForPassword() {
         stateManager.getUI().prompt(new PromptConfig()
-                .placeholder("Password")
-                .promptText("Type your Password and press enter.")
+                .placeholder(resource("_loginPassword"))
+                .promptText(resource("_loginPasswordPrompt"))
                 .promptType(IPromptScreen.TYPE_ALPHANUMERICPASSWORD)
                 .icon("lock")
-                .action("Next", "PasswordEntered")
+                .action(commonResource("_nextButton"), "PasswordEntered")
                 .backAction("BackToUserPrompt"));        
     }
 
