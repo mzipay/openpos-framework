@@ -45,10 +45,10 @@ public class RateRule extends Entity {
     private BigDecimal maxTaxableAmount;
     
     @Column
-    private BigDecimal percent;
+    private BigDecimal taxPercent;
 
     @Column
-    private BigDecimal amount;
+    private BigDecimal taxAmount;
     
     private GroupRule groupRule;
 
@@ -121,20 +121,20 @@ public class RateRule extends Entity {
         this.typeCode = typeCode;
     }
 
-    public BigDecimal getPercent() {
-        return percent;
+    public BigDecimal getTaxPercent() {
+        return taxPercent;
     }
 
-    public void setPercent(BigDecimal percent) {
-        this.percent = percent;
+    public void setTaxPercent(BigDecimal percent) {
+        this.taxPercent = percent;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getTaxAmount() {
+        return taxAmount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setTaxAmount(BigDecimal amount) {
+        this.taxAmount = amount;
     }
     
     

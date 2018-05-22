@@ -94,7 +94,7 @@ public class MockCalculateTaxEndpoint extends CalculateTaxEndpoint {
 
         RateRule rateRule = new RateRule();
         rateRule.setTypeCode(RateRule.TYPE_PERCENT_RATE);
-        rateRule.setPercent(new BigDecimal(percent));
+        rateRule.setTaxPercent(new BigDecimal(percent));
         groupRule.addRateRule(rateRule);
         return rateRule;
     }
@@ -105,7 +105,7 @@ public class MockCalculateTaxEndpoint extends CalculateTaxEndpoint {
 
         RateRule rateRule = new RateRule();
         rateRule.setTypeCode(RateRule.TYPE_FLAT_RATE);
-        rateRule.setAmount(new BigDecimal(amount));
+        rateRule.setTaxAmount(new BigDecimal(amount));
         groupRule.addRateRule(rateRule);
         return rateRule;
     }
@@ -126,7 +126,7 @@ public class MockCalculateTaxEndpoint extends CalculateTaxEndpoint {
             rateRule.setTypeCode(RateRule.TYPE_FLAT_RATE);
             rateRule.setMinTaxableAmount(minTaxableAmount);
             rateRule.setMaxTaxableAmount(maxTaxableAmount);
-            rateRule.setAmount(amount);
+            rateRule.setTaxAmount(amount);
             groupRule.addRateRule(rateRule);
             amount = amount.add(penny);
         }

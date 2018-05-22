@@ -128,7 +128,7 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
         if (rateRules != null && rateRules.size() == 1) {
             RateRule rateRule = rateRules.iterator().next();
             if (rateRule.getTypeCode() == RateRule.TYPE_PERCENT_RATE) {
-                return rateRule.getPercent();
+                return rateRule.getTaxPercent();
             }
         }
         return null;

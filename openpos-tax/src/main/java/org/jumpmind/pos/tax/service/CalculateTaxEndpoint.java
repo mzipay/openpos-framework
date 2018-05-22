@@ -210,7 +210,7 @@ public class CalculateTaxEndpoint {
     private BigDecimal getTaxPercent(GroupRule groupRule) {
         for (RateRule rateRule : groupRule.getRateRules()) {
             if (rateRule.getTypeCode() == RateRule.TYPE_PERCENT_RATE) {
-                return rateRule.getPercent();
+                return rateRule.getTaxPercent();
             }
         }
         return BigDecimal.ZERO;
@@ -245,9 +245,9 @@ public class CalculateTaxEndpoint {
         BigDecimal tax = BigDecimal.ZERO;
         for (RateRule rateRule : groupRule.getRateRules()) {
             if (rateRule.getTypeCode() == RateRule.TYPE_FLAT_RATE) {
-                tax = tax.add(rateRule.getAmount());
+                tax = tax.add(rateRule.getTaxAmount());
             } else if (rateRule.getTypeCode() == RateRule.TYPE_FLAT_RATE) {
-                tax = tax.add(rateRule.getPercent().movePointLeft(2).multiply(amount));
+                tax = tax.add(rateRule.getTaxPercent().movePointLeft(2).multiply(amount));
             }
         }
         return tax;
@@ -280,7 +280,7 @@ public class CalculateTaxEndpoint {
             }
             BigDecimal nonCycleAmount = lastBreak.getMaxTaxableAmount().subtract(cycleAmount);
             BigDecimal nonCycleTax = lookupRateRuleTax(rateRules, nonCycleAmount);
-            BigDecimal cycleTax = lastBreak.getAmount().subtract(nonCycleTax);
+            BigDecimal cycleTax = lastBreak.getTaxAmount().subtract(nonCycleTax);
 
             BigDecimal workingAmount = amount.subtract(nonCycleAmount);
             BigDecimal times = new BigDecimal(workingAmount.divide(cycleAmount, BigDecimal.ROUND_DOWN).toBigInteger());
@@ -295,7 +295,7 @@ public class CalculateTaxEndpoint {
     private BigDecimal lookupRateRuleTax(Collection<RateRule> rateRules, BigDecimal taxableAmount) {
         RateRule rateRule = lookupRateRule(rateRules, taxableAmount);
         if (rateRule != null) {
-            return rateRule.getAmount();
+            return rateRule.getTaxAmount();
         }
         return BigDecimal.ZERO;
     }
