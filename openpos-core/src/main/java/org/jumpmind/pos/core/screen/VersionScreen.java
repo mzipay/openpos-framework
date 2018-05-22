@@ -9,7 +9,8 @@ public class VersionScreen extends Screen {
 
     private List<Version> versions = null;
     private String title;
-    
+    private List<MenuItem> localMenuItems = new ArrayList<>();
+
     public VersionScreen() {
         setType(ScreenType.Version);
     }
@@ -40,6 +41,18 @@ public class VersionScreen extends Screen {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+    
+    public void addLocalMenuItem(MenuItem menuItem) {
+        this.localMenuItems.add(menuItem);
+    }
+    
+    public void setLocalMenuItems(List<MenuItem> localMenuItems) {
+        this.localMenuItems = localMenuItems;
+    }
+    
+    public List<MenuItem> getLocalMenuItems() {
+        return localMenuItems;
     }
     
     
