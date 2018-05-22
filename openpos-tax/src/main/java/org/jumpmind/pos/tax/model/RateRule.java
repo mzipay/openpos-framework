@@ -15,7 +15,10 @@ import org.jumpmind.pos.persist.Table;
  */
 @Table(
         description = "A rule denoting what percentage or dollar amount of tax is applied to a particular taxable total in a RetailTransaction.")
-abstract public class RateRule extends Entity {
+public class RateRule extends Entity {
+    
+    public static final int TYPE_PERCENT_RATE = 1;
+    public static final int TYPE_FLAT_RATE = 2;
 
     @Column(primaryKey = true)
     private String id;
@@ -28,16 +31,25 @@ abstract public class RateRule extends Entity {
 
     @Column(primaryKey = true)
     private Integer rateRuleSequenceNumber;
-
+    
     // TODO tax type
     // TODO tax holiday
+    
+    @Column
+    private int typeCode;
 
     @Column()
     private BigDecimal minTaxableAmount;
 
     @Column()
     private BigDecimal maxTaxableAmount;
+    
+    @Column
+    private BigDecimal taxPercent;
 
+    @Column
+    private BigDecimal taxAmount;
+    
     private GroupRule groupRule;
 
     public String getId() {
@@ -84,5 +96,47 @@ abstract public class RateRule extends Entity {
     public void setRateRuleSequenceNumber(Integer rateRuleSequenceNumber) {
         this.rateRuleSequenceNumber = rateRuleSequenceNumber;
     }
+
+    public String getAuthorityId() {
+        return authorityId;
+    }
+
+    public void setAuthorityId(String authorityId) {
+        this.authorityId = authorityId;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public int getTypeCode() {
+        return typeCode;
+    }
+
+    public void setTypeCode(int typeCode) {
+        this.typeCode = typeCode;
+    }
+
+    public BigDecimal getTaxPercent() {
+        return taxPercent;
+    }
+
+    public void setTaxPercent(BigDecimal percent) {
+        this.taxPercent = percent;
+    }
+
+    public BigDecimal getTaxAmount() {
+        return taxAmount;
+    }
+
+    public void setTaxAmount(BigDecimal amount) {
+        this.taxAmount = amount;
+    }
+    
+    
 
 }

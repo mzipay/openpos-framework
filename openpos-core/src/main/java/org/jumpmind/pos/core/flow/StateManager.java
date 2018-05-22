@@ -91,6 +91,7 @@ public class StateManager implements IStateManager {
         transitionTo(action, newState);
     }
 
+    @Override
     public void transitionTo(Action action, IState newState) {
         transitionTo(action, newState, null, null);
     }

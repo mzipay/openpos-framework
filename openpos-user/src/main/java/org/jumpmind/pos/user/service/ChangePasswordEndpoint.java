@@ -14,6 +14,7 @@ public class ChangePasswordEndpoint {
     
     @Autowired
     private UserRepository userRepository;
+    
     @Autowired
     private UserHelper userHelper;
 

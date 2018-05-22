@@ -3,3 +3,4 @@
 .settings
 .project
 .classpath
+/.h2.server.properties

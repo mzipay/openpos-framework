@@ -24,7 +24,7 @@ public class ContextService {
     @RequestMapping("/node")
     public NodeResult getNode(
             @RequestParam(value="nodeId", defaultValue="*") String nodeId) {
-        return endpointDispatcher.dispatch("/getNode", nodeId);
+        return endpointDispatcher.dispatch("/node", nodeId);
     }
     
 //    final String THIRTY_MINUTES= "1800000";
