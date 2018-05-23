@@ -3,10 +3,10 @@ package org.jumpmind.pos.user.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jumpmind.pos.service.ServiceResultImpl;
+import org.jumpmind.pos.service.ServiceResult;
 import org.jumpmind.pos.user.model.User;
 
-public class AuthenticationResult extends ServiceResultImpl {
+public class AuthenticationResult extends ServiceResult {
     
     private String authenticationCode;
     private User user;

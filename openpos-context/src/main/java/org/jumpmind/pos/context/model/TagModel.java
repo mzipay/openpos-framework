@@ -1,38 +1,44 @@
 package org.jumpmind.pos.context.model;
 
-import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
-import org.jumpmind.pos.persist.Table;
+public class TagModel {
 
-@Table(name="tag")
-public class TagModel extends Entity {
+    public static final String TAG_PREFIX = "TAG_";
     public static final String TAG_ALL = "*";
-
-    @Column(size="128", primaryKey=true)    
-    private String tagName;
-    @Column
-    private String tagGroup;
-    @Column
-    private int tagLevel;
+    public static final String TAG_NUMERIC_TYPE = "NUMERIC";
+    public static final String TAG_CODE_TYPE = "CODE";
     
-    public String getTagName() {
-        return tagName;
+    public static final String BRAND_ID_TAG = "BRAND_ID";
+
+    private String name; // e.g. STORE
+    private String group;  // e.g. LOCATION
+    private int level;
+    private String dataType; // NUMERIC or CODE
+    
+    public String getName() {
+        return name;
     }
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setName(String name) {
+        this.name = name;
     }
-    public String getTagGroup() {
-        return tagGroup;
+    public String getGroup() {
+        return group;
     }
-    public void setTagGroup(String tagGroup) {
-        this.tagGroup = tagGroup;
+    public void setGroup(String group) {
+        this.group = group;
     }
-    public int getTagLevel() {
-        return tagLevel;
+    public int getLevel() {
+        return level;
     }
-    public void setTagLevel(int tagLevel) {
-        this.tagLevel = tagLevel;
+    public void setLevel(int level) {
+        this.level = level;
     }
+    public String getDataType() {
+        return dataType;
+    }
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
+    
 
     
 }

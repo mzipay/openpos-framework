@@ -1,42 +1,47 @@
 package org.jumpmind.pos.tax.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TaxCalculationResponse {
 
-    private List<ItemTaxAmount> itemTaxAmounts = new ArrayList<ItemTaxAmount>();
+    private Map<Integer, ItemTax> itemTaxes = new HashMap<Integer, ItemTax>();
 
     private List<TaxAmount> taxAmounts = new ArrayList<TaxAmount>();
 
-    public void addItemTaxAmount(ItemTaxAmount amount) {
-        itemTaxAmounts.add(amount);
+    public void addItemTaxAmount(int sequenceNumber, TaxAmount itemTaxAmount) {
+
+        if (itemTaxes.containsKey(sequenceNumber)) {
+            itemTaxes.get(sequenceNumber).addItemTaxAmount(itemTaxAmount);
+        } else {
+            ItemTax itemTax = new ItemTax(sequenceNumber, itemTaxAmount);
+            itemTaxes.put(sequenceNumber, itemTax);
+        }
+    }
+
+    public Collection<ItemTax> getItemTaxes() {
+        return itemTaxes.values();
+    }
+
+    public ItemTax getItemTax(int sequenceNumber) {
+        return itemTaxes.get(sequenceNumber);
     }
 
     public void addTaxAmount(TaxAmount amount) {
         taxAmounts.add(amount);
     }
 
-    public List<ItemTaxAmount> getItemTaxAmounts() {
-        return itemTaxAmounts;
-    }
-
-    public void setItemTaxAmounts(List<ItemTaxAmount> itemTaxAmounts) {
-        this.itemTaxAmounts = itemTaxAmounts;
-    }
-
     public List<TaxAmount> getTaxAmounts() {
         return taxAmounts;
     }
 
-    public void setTaxAmounts(List<TaxAmount> taxAmounts) {
-        this.taxAmounts = taxAmounts;
-    }
-
-    public TaxAmount getTaxAmount(String taxAuthorityId, String taxGroupId) {
-        for (TaxAmount taxLineItem : taxAmounts) {
-            if (taxLineItem.getTaxAuthorityId().equals(taxAuthorityId) && taxLineItem.getTaxGroupId().equals(taxGroupId)) {
-                return taxLineItem;
+    public TaxAmount getTaxAmount(String authorityId, String groupId) {
+        for (TaxAmount taxAmount : taxAmounts) {
+            if (taxAmount.getAuthorityId().equals(authorityId) && taxAmount.getGroupId().equals(groupId)) {
+                return taxAmount;
             }
         }
         return null;

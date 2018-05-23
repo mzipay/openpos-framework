@@ -40,7 +40,7 @@ export class VersionComponent implements IScreen, OnInit {
         this.appVersion.appVersion(this.pluginService).then(v => {
             if (v !== 'n/a') {
                 this.versions.unshift({
-                    id: 'cordovaAppVersion', name: 'Cordova App Version',
+                    id: 'cordovaAppVersion', name: 'Native App Version',
                     version: v
                 });
             }

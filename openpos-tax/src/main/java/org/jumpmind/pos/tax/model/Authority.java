@@ -31,7 +31,7 @@ public class Authority extends Entity implements Comparable<Authority> {
     @Column
     private Integer roundingDigitsQuantity;
 
-    private Collection<GroupRule> taxGroupRules;
+    private Collection<GroupRule> groupRules;
 
     public Authority() {
     }
@@ -46,31 +46,31 @@ public class Authority extends Entity implements Comparable<Authority> {
 
     public boolean equals(Object o) {
         if (o != null && o instanceof Authority) {
-            Authority taxAuthority = (Authority) o;
-            return taxAuthority.getId().equals(id);
+            Authority authority = (Authority) o;
+            return authority.getId().equals(id);
         }
         return false;
     }
 
     public int compareTo(Authority o) {
         if (o != null && o instanceof Authority) {
-            Authority taxAuthority = (Authority) o;
-            return taxAuthority.getId().compareTo(id);
+            Authority authority = (Authority) o;
+            return authority.getId().compareTo(id);
         }
         return -1;
     }
 
-    public void addTaxGroupRule(GroupRule taxGroupRule) {
-        if (taxGroupRules == null) {
-            taxGroupRules = new ArrayList<GroupRule>();
+    public void addGroupRule(GroupRule groupRule) {
+        if (groupRules == null) {
+            groupRules = new ArrayList<GroupRule>();
         }
-        taxGroupRules.add(taxGroupRule);
+        groupRules.add(groupRule);
     }
 
-    public GroupRule getTaxGroupRule(String taxableGroupId) {
-        for (GroupRule taxGroupRule : taxGroupRules) {
-            if (taxGroupRule.getTaxableGroup().getId().equals(taxableGroupId)) {
-                return taxGroupRule;
+    public GroupRule getGroupRule(String groupId) {
+        for (GroupRule groupRule : groupRules) {
+            if (groupRule.getGroup().getId().equals(groupId)) {
+                return groupRule;
             }
         }
         return null;
@@ -128,12 +128,12 @@ public class Authority extends Entity implements Comparable<Authority> {
         this.roundingDigitsQuantity = roundingDigitsQuantity;
     }
 
-    public Collection<GroupRule> getTaxGroupRules() {
-        return taxGroupRules;
+    public Collection<GroupRule> getGroupRules() {
+        return groupRules;
     }
 
-    public void setTaxGroupRules(Collection<GroupRule> taxGroupRules) {
-        this.taxGroupRules = taxGroupRules;
+    public void setGroupRules(Collection<GroupRule> groupRules) {
+        this.groupRules = groupRules;
     }
 
 }

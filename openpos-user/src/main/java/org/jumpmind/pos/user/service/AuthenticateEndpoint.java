@@ -51,7 +51,9 @@ public class AuthenticateEndpoint {
     private AuthenticationResult handleSuccess(User user) {
         AuthenticationResult result =  new AuthenticationResult("SUCCESS", user);
         long expiresInDays = passwordExpiresInDays(user);
-        if (expiresInDays > 0 && expiresInDays <= contextService.getInt("openpos.user.warn.password.expires.days")) {
+        // TOO
+//        if (expiresInDays > 0 && expiresInDays <= contextService.getInt("openpos.user.warn.password.expires.days")) {
+        if (expiresInDays > 0 && expiresInDays <= 7) {
             UserMessage message = new UserMessage();
             message.setMessageCode("PASSWORD_EXPIRY_WARNING");
             message.setMessage(String.format("Your password exires in %s days.", expiresInDays));
@@ -79,8 +81,9 @@ public class AuthenticateEndpoint {
         if (password.length() < 3) {
             user.setPasswordFailedAttempts(user.getPasswordFailedAttempts()+1);
             user.setLastPasswordAttempt(new Date());
-
-            if (user.getPasswordFailedAttempts() > contextService.getInt("openpos.user.max.login.attempts")) {
+// TODO
+//            if (user.getPasswordFailedAttempts() > contextService.getInt("openpos.user.max.login.attempts")) {
+            if (user.getPasswordFailedAttempts() > 5) {
                 user.setLockedOutFlag(true);
             }
             userRepository.save(user);
@@ -92,8 +95,12 @@ public class AuthenticateEndpoint {
     protected boolean checkLockout(User user) {
         if (user.isLockedOutFlag()) {
             Date lastPasswordAttempt = user.getLastPasswordAttempt();
-            if (lastPasswordAttempt != null) {                
-                Date passwordAttemptsResetDate = new Date(lastPasswordAttempt.getTime() + contextService.getLong("openpos.user.attempts.reset.period.ms"));
+            if (lastPasswordAttempt != null) {      
+                // TODO
+//                Date passwordAttemptsResetDate = new Date(lastPasswordAttempt.getTime() + 
+//                        contextService.getLong("openpos.user.attempts.reset.period.ms"));
+                Date passwordAttemptsResetDate = new Date(lastPasswordAttempt.getTime() + 
+                      5000);                
                 Date now = new Date();
                 if (now.after(passwordAttemptsResetDate)) {                    
                     user.setLockedOutFlag(false);

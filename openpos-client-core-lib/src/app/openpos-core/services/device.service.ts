@@ -56,9 +56,12 @@ export class DeviceService {
   }
 
   public scan() {
-    console.log('request to scan was made for: ' + this.screen.scanType);
-    if (this.screen.scanType && this.screen.scanType === 'CAMERA_CORDOVA') {
-      this.cordovaCameraScan();
+    if (this.screen.template && this.screen.template.scan &&  
+        this.screen.template.scan.scanType === 'CAMERA_CORDOVA') {
+        console.log(`request to scan was made for: ${this.screen.template.scan.scanType}`);
+        this.cordovaCameraScan();
+    } else {
+        console.log(`FAILED to invoke scan. Is there a screen.template.scan.scanType?`) ;
     }
   }
 

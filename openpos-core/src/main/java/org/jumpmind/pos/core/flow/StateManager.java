@@ -91,6 +91,7 @@ public class StateManager implements IStateManager {
         transitionTo(action, newState);
     }
 
+    @Override
     public void transitionTo(Action action, IState newState) {
         transitionTo(action, newState, null, null);
     }
@@ -225,7 +226,7 @@ public class StateManager implements IStateManager {
         } else if (actionHandler.canHandleAnyAction(currentContext.getState())) {
             actionHandler.handleAnyAction(currentContext.getState(), action);
         } else {
-            throw new FlowException(String.format("Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"... defined in the flow config.", 
+            throw new FlowException(String.format("Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"...) defined in the flow config.", 
                     action.getName(), currentContext.getState().getClass().getName(), action.getName(), action.getName()));                    
         }
     }

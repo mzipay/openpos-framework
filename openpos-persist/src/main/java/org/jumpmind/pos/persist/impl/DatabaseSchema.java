@@ -78,6 +78,16 @@ public class DatabaseSchema {
         }
     }
     
+    public void modifyTable(Table desiredTable) {
+        Table currentTable = platform.readTableFromDatabase(desiredTable.getCatalog(), desiredTable.getSchema(), desiredTable.getName());
+        IDdlBuilder builder = platform.getDdlBuilder();
+        String alterSql = builder.alterTable(currentTable, desiredTable);
+        if (!StringUtils.isEmpty(alterSql)) {
+            log.info("There are database tables that needed altered. SQL generated:\r\n{}", alterSql);
+            runScript(alterSql);
+        }
+    }
+    
     public boolean createAndUpgrade() {
         try {
             log.info("Checking if database tables need created or altered");
@@ -89,13 +99,9 @@ public class DatabaseSchema {
             
             String alterSql = builder.alterDatabase(actualModel, desiredModel, new SchemaObjectRemoveInterceptor());
             
-            String delimiter = platform.getDatabaseInfo().getSqlCommandDelimiter();
             if (!StringUtils.isEmpty(alterSql)) {                    
-                log.info("There are database tables that needed altered. "
-                        + "SQL generated:\r\n{}", alterSql);
-                
-                SqlScript script = new SqlScript(alterSql, platform.getSqlTemplate(), true, false, false, delimiter, null);
-                script.execute(platform.getDatabaseInfo().isRequiresAutoCommitForDdl());
+                log.info("There are database tables that needed altered. SQL generated:\r\n{}", alterSql);
+                runScript(alterSql);
                 actualModel = platform.readFromDatabase(desiredModel.getTables());
                 log.info("Finished updating tables.");
                 refreshMetaData();
@@ -109,6 +115,12 @@ public class DatabaseSchema {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    protected void runScript(String alterSql) {
+        String delimiter = platform.getDatabaseInfo().getSqlCommandDelimiter();
+        SqlScript script = new SqlScript(alterSql, platform.getSqlTemplate(), true, false, false, delimiter, null);
+        script.execute(platform.getDatabaseInfo().isRequiresAutoCommitForDdl());
     }     
 
     protected void loadTables(Database db) {
@@ -332,3 +344,4 @@ public class DatabaseSchema {
         
     }    
 }
+

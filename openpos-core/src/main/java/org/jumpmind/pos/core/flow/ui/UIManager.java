@@ -39,7 +39,8 @@ public class UIManager implements IUI {
 
     @Override
     public void prompt(PromptConfig promptConfig) {
-        PromptScreen screen = new PromptScreen();
+        PromptScreen screen = new PromptScreen();   
+         
         if (promptConfig.getName() != null) {            
             screen.setName(promptConfig.getName());
         } else if (promptConfig.getPlaceholder() != null) {
@@ -48,6 +49,7 @@ public class UIManager implements IUI {
             screen.setName("Prompt " + StringUtils.abbreviate(promptConfig.getPromptText(), 25));
         }
         
+        screen.setOtherActions(promptConfig.getOtherActions());
         screen.setRefreshAlways(true);
         screen.setResponseType(promptConfig.getPromptType());
         if (promptConfig.getBackAction() != null) {            
@@ -57,7 +59,6 @@ public class UIManager implements IUI {
         screen.setIcon(promptConfig.getIcon());
         screen.setPlaceholderText(promptConfig.getPlaceholder());
         screen.setText(promptConfig.getPromptText());
-//        screen.setAction("Next");
         if (promptConfig.getActionMenuItem() != null) {            
             screen.setActionButton(promptConfig.getActionMenuItem());
         } else {

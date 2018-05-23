@@ -7,7 +7,8 @@
 			<div style="margin-bottom:10px" fxLayout="row" fxLayoutAlign=" center">
 				<mat-icon *ngIf="screen.textIcon" class="material-icons" color="primary" style="margin-right:5px">{{screen.textIcon}}</mat-icon>
 				<label class="text-md">{{screen.text}}</label>
-			</div>
+            </div>
+            <div *ngIf="screen.instructions">{{screen.instructions}}</div>
 			<div id="signature-pad" fxLayout="column">
 				<canvas style="background-color: white;"></canvas>
 			</div>
@@ -16,7 +17,7 @@
 		<mat-card-actions id="signature-actions" style="margin-left:0px;margin-right:0px">
 			<div fxLayout="row" fxLayoutAlign="space-between start">
 				<button mat-raised-button (click)="onClearSignature()" class="sigcap-button">Clear</button>
-				<button *ngIf="screen.saveAction.action === 'SaveSignature'; else elseBlock" mat-raised-button (click)="onSaveSignature()" color="primary" class="sigcap-button">{{screen.saveAction.title}}</button>
+				<button *ngIf="screen.saveAction.action.indexOf('SaveSignature') >= 0; else elseBlock" mat-raised-button (click)="onSaveSignature()" color="primary" class="sigcap-button">{{screen.saveAction.title}}</button>
 				<ng-template #elseBlock>
 					<button mat-raised-button (click)="session.onAction(screen.saveAction.action)" class="sigcap-button">{{screen.saveAction.title}}</button>
 				</ng-template>
