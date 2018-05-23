@@ -10,6 +10,7 @@ import org.jumpmind.pos.core.flow.Out;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.flow.ui.PromptConfig;
 import org.jumpmind.pos.core.screen.IPromptScreen;
+import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.service.ServiceResult;
 import org.jumpmind.pos.user.model.User;
 import org.jumpmind.pos.user.service.AuthenticationResult;
@@ -70,9 +71,10 @@ public class UserLoginState extends AbstractState {
                 .placeholder(resource("_loginPassword"))
                 .promptText(resource("_loginPasswordPrompt"))
                 .promptType(IPromptScreen.TYPE_ALPHANUMERICPASSWORD)
-                .icon("lock")
+                .icon("lock").addOtherAction(new MenuItem("ForgotPassword", "Forgot Password"))
                 .action(commonResource("_nextButton"), "PasswordEntered")
                 .backAction("BackToUserPrompt"));        
+        
     }
 
     @ActionHandler

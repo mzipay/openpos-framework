@@ -1,5 +1,8 @@
 package org.jumpmind.pos.core.flow.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jumpmind.pos.core.screen.IPromptScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 
@@ -12,6 +15,7 @@ public class PromptConfig {
     private String icon;
     private String placeholder;
     private MenuItem actionMenuItem = new MenuItem("Next", "Next", true);   
+    private List<MenuItem> otherActions = new ArrayList<>();
     
     public PromptConfig named(String name) {
         this.name = name;
@@ -53,6 +57,11 @@ public class PromptConfig {
         return this;
     }
     
+    public PromptConfig addOtherAction(MenuItem option) {
+        otherActions.add(option);
+        return this;
+    }
+    
     public String getName() {
         return name;
     }
@@ -73,6 +82,11 @@ public class PromptConfig {
     }
     public MenuItem getActionMenuItem() {
         return actionMenuItem;
+    }    
+    
+    public List<MenuItem> getOtherActions() {
+        return otherActions;
     }
+    
  
 }

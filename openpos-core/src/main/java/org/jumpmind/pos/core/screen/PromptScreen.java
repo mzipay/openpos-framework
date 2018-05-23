@@ -1,6 +1,9 @@
 package org.jumpmind.pos.core.screen;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jumpmind.pos.core.model.FieldInputType;
 
 public class PromptScreen extends Screen implements IPromptScreen {
@@ -19,6 +22,8 @@ public class PromptScreen extends Screen implements IPromptScreen {
     private MenuItem actionButton = null;
     private String comments = "";
     private boolean showComments = false;
+    private List<MenuItem> otherActions;
+    
 
     public PromptScreen() {
         setType(ScreenType.Prompt);
@@ -138,6 +143,21 @@ public class PromptScreen extends Screen implements IPromptScreen {
 
 	public void setShowComments(boolean showComments) {
 		this.showComments = showComments;
+	}
+	
+	public List<MenuItem> getOtherActions() {
+        return otherActions;
+    }
+	
+	public void setOtherActions(List<MenuItem> otherActions) {
+        this.otherActions = otherActions;
+    }
+	
+	public void addOtherAction(MenuItem action) {
+	    if (this.otherActions == null) {
+	        this.otherActions = new ArrayList<>();
+	    }
+	    this.otherActions.add(action);
 	}
     
 }
