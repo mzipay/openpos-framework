@@ -7,4 +7,7 @@ export interface ISellItem extends IItem {
     imageUrl: string;
     productDescription: string;
     menuItems: IMenuItem[];
+    sellingPrice: string;
+    color: string;
+    size: string;
 }

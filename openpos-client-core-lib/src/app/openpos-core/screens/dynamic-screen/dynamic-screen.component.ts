@@ -63,7 +63,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
   private lastDialogType: string;
 
-  protected classes = '';
+  public classes = '';
 
   private currentTheme: string;
 
@@ -150,21 +150,21 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
   }
 
-  protected onDevRefreshView() {
+  public onDevRefreshView() {
     this.session.refreshApp();
   }
 
-  protected onPersonalize() {
+  public onPersonalize() {
     this.session.dePersonalize();
     this.session.showScreen(this.session.getPersonalizationScreen());
   }
 
-  protected onDevClearLocalStorage() {
+  public onDevClearLocalStorage() {
     localStorage.clear();
     this.session.refreshApp();
   }
 
-  protected onDevRestartNode(): Promise<{ success: boolean, message: string }> {
+  public onDevRestartNode(): Promise<{ success: boolean, message: string }> {
 
     const prom = new Promise<{ success: boolean, message: string }>((resolve, reject) => {
       const port = this.session.getServerPort();
