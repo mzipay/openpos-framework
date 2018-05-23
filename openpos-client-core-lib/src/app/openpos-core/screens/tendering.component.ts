@@ -50,9 +50,11 @@ import { IFormElement } from '../common/iformfield';
         this.balanceDue = this.screen.balanceDue;
         this.itemActions = this.screen.itemActions;
 
-        this.screen.template.localMenuItems.forEach(element => {
-            this.session.registerActionPayload( element.action, () => this.tenderAmount.value );
-        });
+        if (this.screen.template.localMenuItems) {
+            this.screen.template.localMenuItems.forEach(element => {
+                this.session.registerActionPayload( element.action, () => this.tenderAmount.value );
+            });
+        }
     }
 
 }
