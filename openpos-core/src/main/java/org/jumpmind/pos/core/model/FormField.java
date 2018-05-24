@@ -23,6 +23,7 @@ public class FormField implements IFormElement, IField, Serializable {
     private String value;
     private boolean required = true;
     private boolean sensitive = false;
+    private KeyboardType keyboardPreference;
 
     public FormField() {
     }
@@ -249,6 +250,19 @@ public class FormField implements IFormElement, IField, Serializable {
 
     public void setSensitive(boolean sensitive) {
         this.sensitive = sensitive;
+    }
+
+    public FormField keyboardPreference(KeyboardType keyboardPreference) {
+        this.setKeyboardPreference(keyboardPreference);
+        return this;
+    }
+
+    public KeyboardType getKeyboardPreference() {
+        return keyboardPreference;
+    }
+
+    public void setKeyboardPreference(KeyboardType keyboardPreference) {
+        this.keyboardPreference = keyboardPreference;
     }
 
 }

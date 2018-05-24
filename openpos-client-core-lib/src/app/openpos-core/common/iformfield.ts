@@ -20,6 +20,7 @@ export interface IFormElement {
     disabled: boolean;
     select: boolean;
     checked: boolean;
+    keyboardPreference: string
 }
 
 export type LabelPositionType = 'before' | 'after';

@@ -89,7 +89,8 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   isNumericField(): boolean {
-    return ['NumericText', 'Money', 'Phone', 'PostalCode', 'Percent', 'Income', 'Decimal'].indexOf(this.formField.inputType) >= 0;
+    return (['NumericText', 'Money', 'Phone', 'PostalCode', 'Percent', 'Income', 'Decimal'].indexOf(this.formField.inputType) >= 0 
+        || this.formField.keyboardPreference == 'Numeric');
   }
 
   onClick(event, formField: IFormElement) {
