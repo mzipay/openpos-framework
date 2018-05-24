@@ -42,7 +42,6 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
         config.add(FlowBuilder.addState(UserLoginState.class).build());
         
         return config;
-    }
-    
+    }    
 
 }
