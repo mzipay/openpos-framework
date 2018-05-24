@@ -1,8 +1,10 @@
 package org.jumpmind.pos.tax.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.Query;
@@ -16,41 +18,91 @@ import org.springframework.stereotype.Repository;
 @DependsOn(value = { "TaxModule" })
 public class TaxRepository {
 
-    private Query<Jurisdiction> taxJurisdictionLookup = new Query<Jurisdiction>().named("taxJurisdictionLookup").result(Jurisdiction.class);
+    private static Query<Jurisdiction> taxJurisdictionLookup = new Query<Jurisdiction>().named("taxJurisdictionLookup").result(Jurisdiction.class);
 
-    private Query<GroupRule> taxGroupRuleLookup = new Query<GroupRule>().named("taxGroupRuleLookup").result(GroupRule.class);
+    private static Query<GroupRule> taxGroupRuleLookup = new Query<GroupRule>().named("taxGroupRuleLookup").result(GroupRule.class);
     
-    private Query<RateRule> taxRateRuleLookup = new Query<RateRule>().named("taxRateRuleLookup").result(RateRule.class);
+    private static Query<RateRule> taxRateRuleLookup = new Query<RateRule>().named("taxRateRuleLookup").result(RateRule.class);
     
     @Autowired
-    @Qualifier("taxDbSession")
+    @Qualifier("taxSession")
     @Lazy
-    private DBSession dbSession;
+    private  DBSession dbSession;
 
     public List<Jurisdiction> findTaxJurisdictions(String geoCode) {
         List<Jurisdiction> jurisdictions = dbSession.query(taxJurisdictionLookup, geoCode);
+		HashMap<String, Group> groupMap = populateGroupMap();
+		HashMap<String, List<RateRule>> rateRuleMap = new HashMap<>();
+		
         for (Jurisdiction jurisdiction : jurisdictions) {
-			String authorityID = jurisdiction.getAuthorityId();
-			Authority authority = dbSession.findByNaturalId(Authority.class, authorityID);
+			String authorityId = jurisdiction.getAuthorityId();
+			Authority authority = dbSession.findByNaturalId(Authority.class, authorityId);
 			jurisdiction.setAuthority(authority);
-			List<GroupRule> groupRules = dbSession.query(taxGroupRuleLookup, authorityID);
-			for (GroupRule groupRule : groupRules) {
-				authority.addGroupRule(groupRule);
-				groupRule.setAuthority(authority);
-				String groupID = groupRule.getGroupId();
-				Group group = dbSession.findByNaturalId(Group.class, groupID);
-				groupRule.setGroup(group);
-				Map<String, Object> params = new HashMap<>();
-				params.put("groupID", groupID);
-				params.put("authorityID", authorityID);
-				List<RateRule> rateRules = dbSession.query(taxRateRuleLookup, params);
-				for (RateRule rateRule : rateRules) {
-					groupRule.addRateRule(rateRule);
+			
+			updateRateRuleMap(rateRuleMap, authorityId);
+
+			List<GroupRule> groupRules = dbSession.query(taxGroupRuleLookup, authorityId);
+			if (groupRules != null) {
+				for (GroupRule groupRule : groupRules) {
+					authority.addGroupRule(groupRule);
+					groupRule.setAuthority(authority);
+					String groupID = groupRule.getGroupId();
+					if (groupMap.containsKey(groupID)) {
+						Group group = groupMap.get(groupID);
+						groupRule.setGroup(group);
+					}
+					String key = authorityId + '-' + groupID;
+					if (rateRuleMap.containsKey(key)) {
+						List<RateRule> ruleList = rateRuleMap.get(key);
+						for (RateRule rateRule : ruleList) {
+							groupRule.addRateRule(rateRule);
+						}
+						rateRuleMap.put(key, ruleList);
+					}
 				}
-				
 			}
 		}
         return jurisdictions;
     }
 
+    private void updateRateRuleMap (HashMap<String, List<RateRule>> rateRuleMap, String authorityID) {
+    	Set<String> keySet = rateRuleMap.keySet();
+    	boolean contains = false;
+    	for (String string : keySet) {
+			if (string.contains(authorityID)) {
+				contains = true;
+			}
+		}
+    	if (!contains) {
+    		List<RateRule> rateRules = dbSession.query(taxRateRuleLookup, authorityID);
+    		if (rateRules != null) {
+    			for (RateRule rateRule : rateRules) {
+    				StringBuilder keyB = new StringBuilder();
+    				keyB.append(rateRule.getAuthorityId());
+    				keyB.append('-');
+    				keyB.append(rateRule.getGroupId());
+    				String key = keyB.toString();
+			
+    				List<RateRule> obj = rateRuleMap.get(key);
+    				if (obj == null) {
+    					obj = new ArrayList<>();
+    					obj.add(rateRule);
+    					rateRuleMap.put(key, obj);
+    				} else {
+    					obj.add(rateRule);
+    				}
+    			}
+    		}
+    	}
+    }
+    
+    
+    private HashMap<String, Group> populateGroupMap () {
+    	HashMap<String, Group> groupMap = new HashMap<>();
+		List<Group> groups = dbSession.findAll(Group.class);
+    	for (Group group : groups) {
+			groupMap.put(group.getId(), group);
+		}
+    	return groupMap;
+    }
 }

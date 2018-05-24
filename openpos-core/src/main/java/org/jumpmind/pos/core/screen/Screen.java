@@ -172,6 +172,10 @@ public class Screen implements Serializable {
         this.put("prompt", prompt);
     }
     
+    public void setSubtitle(String subtitle) {
+        this.put("subtitle", subtitle);
+    }
+    
     /**
      * Indicator for marking the screen as "Customer Facing", meaning that the screen is intended for the customer to 
      * complete.

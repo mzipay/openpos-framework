@@ -33,6 +33,7 @@
                     </button>
                 </span>
             </mat-card-title>
+            <mat-card-subtitle *ngIf="screen.subtitle" class="text-md">{{screen.subtitle}}</mat-card-subtitle>
             <mat-card-content fxFlex="1 1 auto">
                 <mat-drawer-container fxFlex="1 1 auto">
                         <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async" fxLayout="column" fxLayoutAlign="start stretch"

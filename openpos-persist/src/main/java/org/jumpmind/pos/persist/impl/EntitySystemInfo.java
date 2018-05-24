@@ -23,7 +23,11 @@ public class EntitySystemInfo {
     public EntitySystemInfo(Entity entity) {
         Field field = FieldUtils.getField(entity.getClass(), "systemInfo", FORCE_ACCESS);
         try {
-            systemData = (Map<String, Object>) field.get(entity);
+        	if (field != null) {
+        		systemData = (Map<String, Object>) field.get(entity);
+        	} else {
+        		systemData = new HashMap<>();
+        	}
         } catch (Exception ex) {
             log.debug("Failed to access hidden system field systemInfo on object: " + entity, ex);
             systemData = new HashMap<>();

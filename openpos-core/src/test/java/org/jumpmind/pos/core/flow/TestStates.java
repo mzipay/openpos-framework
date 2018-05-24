@@ -123,6 +123,9 @@ public class TestStates {
         @ActionHandler
         public void onAnyAction(Action action) {
             anyActionMethodCalled = true;
+            if (action.getName().equals("Done")) {
+                stateManager.doAction(action);
+            }
         }
     }
     
