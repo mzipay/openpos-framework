@@ -104,7 +104,6 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
                 .build());   
         
         return config;
-    }
-    
+    }    
 
 }

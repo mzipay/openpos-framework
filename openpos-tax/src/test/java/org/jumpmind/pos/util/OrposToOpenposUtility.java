@@ -69,7 +69,7 @@ public class OrposToOpenposUtility {
                	String taxAuth = escapeApostrophes(rs.getString("nm_athy_tx"));
                	int rc = rs.getInt("sc_rnd");
                	double rd = rs.getDouble("qu_dgt_rnd");
-               	out.write("INSERT INTO tax_authority (ID, Auth_name, rounding_code, "
+               	out.write("INSERT INTO tax_authority (id, auth_name, rounding_code, "
                			+ "rounding_digits_quantity, create_time, create_by, last_update_time, last_update_by) "
                			+ "VALUES (" + id + ", '" + taxAuth + "', " + rc + ", " + rd + ", '" + timestamp
                			+ "', 'UTIL', '" + timestamp + "', 'UTIL');\n");
@@ -91,8 +91,8 @@ public class OrposToOpenposUtility {
                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                while (rs.next()) {
                	int id = rs.getInt("ty_tx");
-               	int aid = rs.getInt("id_athy_tx");
-               	int gid = rs.getInt("id_gp_tx");
+               	String aid = rs.getString("id_athy_tx");
+               	String gid = rs.getString("id_gp_tx");
                	String rulename = escapeApostrophes(rs.getString("nm_ru_tx"));
                	String desc = escapeApostrophes(rs.getString("de_ru_tx"));
                	int cmpsq = rs.getInt("ai_cmpnd");
@@ -100,11 +100,11 @@ public class OrposToOpenposUtility {
                	String calMth = rs.getString("cd_cal_mth");
                	String trusgcd = rs.getString("cd_tx_rt_ru_usg");
                	//TODO tax cycle amount?
-               	out.write("INSERT INTO tax_group_rule (ID, Authority_id, group_id, "
+               	out.write("INSERT INTO tax_group_rule (id, authority_id, group_id, "
                			+ "rule_name, description, compound_sequence_number, tax_on_gross_amount_flag, "
                			+ "calculation_method_code, rate_rule_usage_code, cycle_amount, create_time, "
                			+ "create_by, last_update_time, last_update_by) "
-               			+ "VALUES (" + id + ", " + aid + ", " + gid + ", '" + rulename + "', '"
+               			+ "VALUES (" + id + ", '" + aid + "', '" + gid + "', '" + rulename + "', '"
                			+ desc + "', " + cmpsq + ", '" + grossflag + "', '" + calMth + "', '" + trusgcd + "', 0, '"
                			+ timestamp + "', 'UTIL', '" + timestamp + "', 'UTIL');\n");
                }
@@ -129,7 +129,7 @@ public class OrposToOpenposUtility {
                	String desc = escapeApostrophes(rs.getString("de_gp_tx"));
                	String recPrntCode = rs.getString("cd_rcv_prt");
                	
-               	out.write("INSERT INTO tax_group (ID, group_name, description, "
+               	out.write("INSERT INTO tax_group (id, group_name, description, "
                			+ "receipt_print_code, create_time, create_by, "
                			+ "last_update_time, last_update_by) " 
                			+ "VALUES (" + id + ", '" + gname + "', '" + desc + "', '" + recPrntCode + "', '"
@@ -156,7 +156,7 @@ public class OrposToOpenposUtility {
     				String geoID = escapeApostrophes(rs.getString("ID_CD_GEO"));
     				String authID = escapeApostrophes(rs.getString("ID_ATHY_TX"));
                	
-    				out.write("INSERT INTO tax_jurisdiction (ID, geo_code, authority_id, "
+    				out.write("INSERT INTO tax_jurisdiction (id, geo_code, authority_id, "
     						+ "create_time, create_by, last_update_time, last_update_by) " 
     						+ "VALUES ('" + id + "', '" + geoID + "', '" + authID + "', '"
     						+ timestamp + "', 'UTIL', '" + timestamp + "', 'UTIL');\n");
@@ -180,13 +180,13 @@ public class OrposToOpenposUtility {
     				int id = rs.getInt("TY_TX");
     				String authID = escapeApostrophes(rs.getString("ID_ATHY_TX"));
     				String groupID = escapeApostrophes(rs.getString("ID_GP_TX"));
-    				int rrSeqNum = rs.getInt("ai_tx_rt_ru");
+    				Integer rrSeqNum = rs.getInt("ai_tx_rt_ru");
     				int typeCode = rs.getInt("CD_TYP");
     				double minTxAm = rs.getDouble("mo_txbl_min");
     				double maxTxAm = rs.getDouble("mo_txbl_max");
     				double txPrcnt = rs.getDouble("PE_TX");
     				double txAmnt = rs.getDouble("mo_tx");
-    				out.write("INSERT INTO tax_rate_rule (ID, authority_id, group_id, rate_rule_sequence_number, type_code, "
+    				out.write("INSERT INTO tax_rate_rule (id, authority_id, group_id, rate_rule_sequence_number, type_code, "
     						+ "min_taxable_amount, max_taxable_amount, tax_percent, tax_amount, "
     						+ ""
     						+ "create_time, create_by, last_update_time, last_update_by) " 
