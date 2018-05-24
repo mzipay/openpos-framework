@@ -112,23 +112,22 @@ public class StateManager implements IStateManager {
         
         if (currentContext.getState() != null) {
             outjector.performOutjections(currentContext.getState(), scope, currentContext);
-        }        
+        }
+        
+        String returnActionName = currentContext.getFlowConfig().getReturnAction();
         
         IState modifiedState = runStateInterceptors(currentContext.getState(), newState, action);
         if (modifiedState != null && modifiedState != newState) {
             newState = modifiedState;
-            stateManagerLogger.logStateTransition(currentContext.getState(), modifiedState, action, enterSubState);
+            stateManagerLogger.logStateTransition(currentContext.getState(), modifiedState, action, returnActionName, enterSubState, exitSubState);
         } else {
-            stateManagerLogger.logStateTransition(currentContext.getState(), newState, action, enterSubState);            
+            stateManagerLogger.logStateTransition(currentContext.getState(), newState, action, returnActionName, enterSubState, exitSubState);            
         }
-        
-        String returnAction = null;
         
         if (enterSubState) {
             stateStack.push(currentContext);
             currentContext = new StateContext(enterSubStateConfig, action);
         } else if (exitSubState) { 
-            returnAction = currentContext.getFlowConfig().getReturnAction();
             currentContext = resumeSuspendedState;
         }
         
@@ -136,10 +135,17 @@ public class StateManager implements IStateManager {
         
         injector.performInjections(newState, scope, currentContext);
         
-        if (resumeSuspendedState != null && returnAction != null) {
-            actionHandler.handleAction(currentContext.getState(), action, returnAction);
-        } else {            
+        if (resumeSuspendedState == null) {
             currentContext.getState().arrive(action);
+        } else {            
+            Action returnAction = new Action(returnActionName, action.getData());
+            returnAction.setCausedBy(action);
+            if (actionHandler.canHandleAction(currentContext.getState(), returnAction)) {
+                actionHandler.handleAction(currentContext.getState(), returnAction);
+            }  else {
+                throw new FlowException(String.format("Unexpected return action from substate: \"%s\". No @ActionHandler %s.on%s() method found.", 
+                        returnAction.getName(), currentContext.getState().getClass().getName(), returnAction.getName()));                    
+            }
         }
     }
 
@@ -219,24 +225,20 @@ public class StateManager implements IStateManager {
         
         if (actionHandler.canHandleAction(currentContext.getState(), action)) {
             handleAction(action);
+        } else if (actionHandler.canHandleAnyAction(currentContext.getState())) {
+            actionHandler.handleAnyAction(currentContext.getState(), action);
         } else if (transitionStateClass != null) {
             transitionToState(action, transitionStateClass);
         } else if (subStateConfig != null) {
             transitionToSubState(action, subStateConfig);
-        } else if (actionHandler.canHandleAnyAction(currentContext.getState())) {
-            actionHandler.handleAnyAction(currentContext.getState(), action);
         } else {
             throw new FlowException(String.format("Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"...) defined in the flow config.", 
                     action.getName(), currentContext.getState().getClass().getName(), action.getName(), action.getName()));                    
         }
     }
-
-    protected void handleAction(Action action) {
-        handleAction(action, null);
-    }
     
-    protected boolean handleAction(Action action, String actionName) {        
-        return actionHandler.handleAction(currentContext.getState(), action, actionName);
+    protected boolean handleAction(Action action) {        
+        return actionHandler.handleAction(currentContext.getState(), action);
     }
 
     protected boolean handleTerminatingState(Action action, StateConfig stateConfig) {

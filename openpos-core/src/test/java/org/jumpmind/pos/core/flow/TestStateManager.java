@@ -51,7 +51,7 @@ public class TestStateManager {
         customerFlow.setInitialState(FlowBuilder.addState(CustomerState.class)
                 .withTransition("CustomerSearch", CustomerSearchState.class)
                 .withTransition("CustomerSelected", CompleteState.class)
-                .withSubTransition("CustomerSignup", customerSignupFlow)
+                .withSubTransition("CustomerSignup", customerSignupFlow, "CustomerSignupComplete")
                 .build());
         customerFlow.add(FlowBuilder.addState(CustomerSearchState.class)
                 .withTransition("CustomerSelected", CompleteState.class).build());
@@ -70,7 +70,7 @@ public class TestStateManager {
                 .withTransition("Done", HomeState.class)
                 .build());
         config.add(FlowBuilder.addState(SellState.class)
-                .withSubTransition("Customer", customerFlow)
+                .withSubTransition("Customer", customerFlow, "CustomerLookupComplete")
                 .build());
         config.add(FlowBuilder.addState(ActionTestingState.class).
                 withTransition("Done", HomeState.class)
@@ -111,7 +111,7 @@ public class TestStateManager {
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
         assertTrue("stateManager.getScopeValue(\"specificActionMethodCalled\")", 
                 stateManager.getScopeValue("specificActionMethodCalled"));
-        assertFalse("stateManager.getScopeValue(\"anyActionMethodCalled\")", 
+        assertTrue("stateManager.getScopeValue(\"anyActionMethodCalled\")", 
                 stateManager.getScopeValue("anyActionMethodCalled"));
         
         stateManager.doAction("TestActions");

@@ -20,9 +20,19 @@
  */
 package org.jumpmind.pos.app.config;
 
+import org.jumpmind.pos.app.state.CheckTransBalanceState;
+import org.jumpmind.pos.app.state.CommitTransState;
 import org.jumpmind.pos.app.state.HomeScreenState;
 import org.jumpmind.pos.app.state.SellState;
+import org.jumpmind.pos.app.state.TenderCashState;
+import org.jumpmind.pos.app.state.TenderCreditDebitState;
+import org.jumpmind.pos.app.state.TenderGiftCardState;
+import org.jumpmind.pos.app.state.TenderMenuState;
+import org.jumpmind.pos.app.state.customer.CustomerDetailsState;
+import org.jumpmind.pos.app.state.customer.CustomerSearchResultState;
+import org.jumpmind.pos.app.state.customer.CustomerSearchState;
 import org.jumpmind.pos.app.state.user.UserLoginState;
+import org.jumpmind.pos.core.flow.CompleteState;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.IFlowConfigProvider;
@@ -40,6 +50,58 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
                 .withTransition("Sell", SellState.class).build());
 
         config.add(FlowBuilder.addState(UserLoginState.class).build());
+        
+        config.add(FlowBuilder.addState(SellState.class)
+                .withTransition("Back", HomeScreenState.class)
+                .withTransition("Checkout", TenderMenuState.class)
+                .withSubTransition("CustomerSearch", getCustomerSearchConfig(appId, nodeId), "CustomerSearchFinished")
+                .build());
+        
+        config.add(FlowBuilder.addState(TenderMenuState.class)
+                .withTransition("Back", SellState.class)
+                .withTransition("TenderCash", TenderCashState.class)
+                .withTransition("TenderCreditDebit", TenderCreditDebitState.class)
+                .withTransition("TenderGiftCard", TenderGiftCardState.class)
+                .build());        
+        config.add(FlowBuilder.addState(TenderCashState.class)
+                .withTransition("Back", TenderMenuState.class)
+                .withTransition("CheckTransBalance", CheckTransBalanceState.class)
+                .build());        
+        config.add(FlowBuilder.addState(TenderCreditDebitState.class)
+                .withTransition("Back", TenderMenuState.class)
+                .withTransition("CheckTransBalance", CheckTransBalanceState.class)
+                .build());        
+        config.add(FlowBuilder.addState(TenderGiftCardState.class)
+                .withTransition("Back", TenderMenuState.class)
+                .withTransition("CheckTransBalance", CheckTransBalanceState.class)
+                .build());        
+        config.add(FlowBuilder.addState(CheckTransBalanceState.class)
+                .withTransition("Back", TenderMenuState.class)
+                .withTransition("CommitTransaction", CommitTransState.class)
+                .withTransition("ReturnToTenderMenu", TenderMenuState.class)
+                .build());        
+        
+        return config;
+    }
+    
+    public FlowConfig getCustomerSearchConfig(String appId, String nodeId) {
+        FlowConfig config = new FlowConfig();
+        config.setInitialState(FlowBuilder.addState(CustomerSearchState.class)
+                .withTransition("Back", CompleteState.class)
+                .withTransition("SearchCustomer", CustomerSearchResultState.class)
+                .build());
+        
+        config.add(FlowBuilder.addState(CustomerSearchResultState.class)
+                .withTransition("Back", CustomerSearchState.class)
+                .withTransition("ViewDetails", CustomerDetailsState.class)
+                .withTransition("SelectCustomer", CompleteState.class)
+                .build());   
+        
+        config.add(FlowBuilder.addState(CustomerDetailsState.class)
+                .withTransition("Back", CustomerSearchState.class)
+                .withTransition("ViewDetails", CustomerDetailsState.class)
+                .withTransition("SelectCustomer", CompleteState.class)
+                .build());   
         
         return config;
     }

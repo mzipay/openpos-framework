@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +16,9 @@ public class ActionHandlerImpl {
 
     
     public boolean canHandleAction(Object state, Action action) {
-        // if there is an action handler OR an any action handler
+        // if there is an action handler
         // AND it's not the current state firing this action.
-        Method actionMethod = getActionMethod(state, action, null);
+        Method actionMethod = getActionMethod(state, action);
         if  (actionMethod != null
                 && !isCalledFromState(state)) {
             return true;
@@ -28,8 +27,8 @@ public class ActionHandlerImpl {
         }
     }
 
-    public boolean handleAction(Object state, Action action, String overrideActionName) {        
-        Method actionMethod = getActionMethod(state, action, overrideActionName);
+    public boolean handleAction(Object state, Action action) {        
+        Method actionMethod = getActionMethod(state, action);
         if (actionMethod != null) {
             invokeActionMethod(state, action, actionMethod);
             return true;
@@ -39,7 +38,8 @@ public class ActionHandlerImpl {
     }
 
     public boolean canHandleAnyAction(Object state) {
-        return getAnyActionMethod(state) != null;
+        return getAnyActionMethod(state) != null
+                && !isCalledFromState(state);
     }
     
     public boolean handleAnyAction(Object state, Action action) {
@@ -66,17 +66,12 @@ public class ActionHandlerImpl {
         return null;
     }
     
-    protected Method getActionMethod(Object state, Action action, String overrideActionName) {
+    protected Method getActionMethod(Object state, Action action) {
         Class<?> clazz = state.getClass();
         
         List<Method> methods = MethodUtils.getMethodsListWithAnnotation(clazz, ActionHandler.class, true, true);
 
-        String actionName = null;
-        if (!StringUtils.isEmpty(overrideActionName)) {
-            actionName = overrideActionName;
-        } else {
-            actionName = action.getName();                
-        }
+        String actionName = action.getName();                
         
         for (Method method : methods) {
             String matchingMethodName = "on" + actionName;
@@ -90,6 +85,7 @@ public class ActionHandlerImpl {
     }
 
     protected void invokeActionMethod(Object state, Action action, Method method) {
+        method.setAccessible(true);
         List<Object> arguments = new ArrayList<Object>();
         try {
             for (Class<?> type : method.getParameterTypes()) {
