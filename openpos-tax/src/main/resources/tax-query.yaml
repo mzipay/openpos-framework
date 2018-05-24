@@ -2,11 +2,14 @@
 queries:
 -
   name: taxJurisdictionLookup
-  where: geoCode = ${geoCode}
--
+  where: geo_code = ${geoCode}
+-  
   name: taxGroupRuleLookup
-  where: authorityID = ${authorityID}
+  where: authority_id = ${authorityId}
 -
   name: taxRateRuleLookup
-  where: groupID = ${groupID}
-      AND authorityID = ${authorityID}
+  where: authority_id = ${authorityId}
+-
+  name: taxRateRuleLookup2
+  where: (group_id = ${groupID}
+      AND authority_id = ${authorityID})

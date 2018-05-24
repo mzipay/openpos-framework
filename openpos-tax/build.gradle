@@ -1,49 +1,9 @@
-import java.text.SimpleDateFormat
-import java.util.Date
-
-group = 'org.jumpmind.pos'
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-apply plugin: 'eclipse'
-apply plugin: 'java'
-
-sourceCompatibility=1.8
-targetCompatibility=1.8
-
-repositories {
-    maven { url symmetricMavenUrl }
-}
-
-eclipse {
-    classpath {
-        downloadSources = true
-        downloadJavadoc = false
-    }
-}
-
-ext {
-   springBootVersion = '1.5.9.RELEASE'
-   springVersion = '4.3.14.RELEASE'
-}
-
-task develop {
-    description 'Generates Eclipse artifacts and sets up your development environment'
-    dependsOn tasks.cleanEclipse, tasks.eclipse
-    delete '.settings'
-}
+apply from: '../openpos-core/common.gradle'
 
 dependencies {
     compile project(":openpos-persist")
     compile project(":openpos-service")
+    compile project(":openpos-context")
     compile "com.h2database:h2:1.4.196"
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.25'
@@ -64,22 +24,8 @@ dependencies {
         exclude module: "spring-boot-starter-logging"
     }
 
+    testCompile "com.h2database:h2:1.4.196"
     testCompile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.20.1.Final'    
     testCompile group: 'junit', name: 'junit', version: '4.12'
-}
-
-jar {
-    manifest {
-        attributes("Implementation-Title": project.name,
-                   "Implementation-Version": appVersion,
-                   "Project-Artifact": project.name,                       
-                   "Build-Version": appVersion,
-                   "Build-Time": new SimpleDateFormat("yyyyMMdd-HHmm").format(new Date()))
-    }    
-}  
-
-processResources {
-    from ('../openpos-tax/dist/') {
-        into 'public'
-    }
+    testCompile "org.springframework:spring-test:$springVersion"
 }

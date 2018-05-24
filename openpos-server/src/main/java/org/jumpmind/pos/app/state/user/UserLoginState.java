@@ -5,8 +5,7 @@ import org.jumpmind.pos.app.state.AbstractState;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
-import org.jumpmind.pos.core.flow.In;
-import org.jumpmind.pos.core.flow.Out;
+import org.jumpmind.pos.core.flow.InOut;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.flow.ui.PromptConfig;
 import org.jumpmind.pos.core.screen.IPromptScreen;
@@ -23,8 +22,7 @@ public class UserLoginState extends AbstractState {
     @Autowired
     private UserService userService;
     
-    @In(scope=ScopeType.Session, required=false)
-    @Out(scope=ScopeType.Session, required=false)
+    @InOut(scope=ScopeType.Session)
     private User currentUser;
 
     private String enteredUserName;
@@ -42,13 +40,13 @@ public class UserLoginState extends AbstractState {
     }
     
     @Override
-    protected String getDefaultBundleName() {        
-        return "user";
-    }
-
-    @Override
     public void arrive(Action action) {
         promptForLogin();
+    }
+    
+    @Override
+    protected String getDefaultBundleName() {        
+        return "user";
     }
 
     protected void promptForLogin() {
@@ -60,12 +58,6 @@ public class UserLoginState extends AbstractState {
     }
 
 
-    @ActionHandler
-    public void onUsernameEntered(Action action) {
-        enteredUserName = (String) action.getData();
-        promptForPassword();
-    }
-
     protected void promptForPassword() {
         stateManager.getUI().prompt(new PromptConfig()
                 .placeholder(resource("_loginPassword"))
@@ -75,15 +67,6 @@ public class UserLoginState extends AbstractState {
                 .action(commonResource("_nextButton"), "PasswordEntered")
                 .backAction("BackToUserPrompt"));        
         
-    }
-
-    @ActionHandler
-    public void onPasswordEntered(Action action) {
-        String password = (String) action.getData();
-        oldPassword = password;
-        result = userService.authenticate(stateManager.getNodeId(), null, enteredUserName, password);
-        userMessageIndex = 0;
-        showUserMessages();
     }
 
     protected void processResult() {
@@ -113,6 +96,21 @@ public class UserLoginState extends AbstractState {
                 break;
         }
     }
+    
+    @ActionHandler
+    public void onUsernameEntered(Action action) {
+        enteredUserName = (String) action.getData();
+        promptForPassword();
+    }    
+    
+    @ActionHandler
+    public void onPasswordEntered(Action action) {
+        String password = (String) action.getData();
+        oldPassword = password;
+        result = userService.authenticate(stateManager.getNodeId(), null, enteredUserName, password);
+        userMessageIndex = 0;
+        showUserMessages();
+    }
 
     @ActionHandler
     public void onBackToUserPrompt(Action action) {
@@ -126,6 +124,11 @@ public class UserLoginState extends AbstractState {
 
     @ActionHandler
     public void onFailureAcknowledged(Action action) {
+        promptForLogin();
+    }
+    
+    @ActionHandler
+    public void onForgotPassword(Action action) {
         promptForLogin();
     }
     

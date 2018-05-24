@@ -15,11 +15,13 @@ public class StateManagerLogger {
     
     final Logger log;
     
+    private final String EXIT_SUBSTATE = "<Exit SubState>";
+    
     public StateManagerLogger(Logger log) {
         this.log = log;
     }
     
-    protected void logStateTransition(IState oldState, IState newState, Action action, boolean enterSubState) {
+    protected void logStateTransition(IState oldState, IState newState, Action action, String returnAction, boolean enterSubState, boolean exitSubState) {
         if (oldState == newState) {
             return;
         }
@@ -29,10 +31,21 @@ public class StateManagerLogger {
             int box1Width = Math.max(oldStateName.length()+2, 20);
             int box2Width = Math.max(newStateName.length()+2, 20);
             
-            int inbetweenWidth = action != null ? Math.max(action.getName().length()+2, 10) : 10;
+            String primaryAction = null;
+            String secondaryAction = null;
+            if (returnAction == null) {
+                primaryAction = action != null ? action.getName() : "";
+                secondaryAction = "";
+            } else {
+                primaryAction = returnAction;
+                secondaryAction = "("+action.getName()+")";
+            }
             
-//            boolean exitSubState = isTerminatingAction(action);
-            boolean exitSubState = false;
+            int inbetweenWidth = Math.max(primaryAction.length()+2, 10);
+            inbetweenWidth = Math.max(secondaryAction.length()+2, inbetweenWidth);
+            if (exitSubState) {
+                inbetweenWidth = Math.max(EXIT_SUBSTATE.length()+2, inbetweenWidth);
+            }
             
             StringBuilder buff = new StringBuilder(256);
             
@@ -49,10 +62,12 @@ public class StateManagerLogger {
                         buff.append(drawTitleLine(box1Width, box2Width,inbetweenWidth, oldStateName, newStateName));
                         break;                    
                     case 3:
-                        buff.append(drawEventLine(box1Width, box2Width,inbetweenWidth, action != null ? action.getName() : ""));
+
+                        buff.append(drawEventLine(box1Width, box2Width,inbetweenWidth, primaryAction));
                         break;
                     case 4:
-                        buff.append(drawBottom(box1Width, box2Width, inbetweenWidth));
+                        
+                        buff.append(drawBottom(box1Width, box2Width, inbetweenWidth, secondaryAction));
                         break;                    
                         
                 }
@@ -80,7 +95,7 @@ public class StateManagerLogger {
         buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box1Width-2)).append(VERITCAL_LINE);
         
         if (exitSubState) {
-            buff.append(StringUtils.center("<Exit SubState>", inbetweenWidth));
+            buff.append(StringUtils.center(EXIT_SUBSTATE, inbetweenWidth));
         } else {            
             buff.append(StringUtils.center("", inbetweenWidth));
         }
@@ -114,11 +129,11 @@ public class StateManagerLogger {
         return buff.toString();
     }
     
-    protected String drawBottom(int box1Width, int box2Width, int inbetweenWidth) {
+    protected String drawBottom(int box1Width, int box2Width, int inbetweenWidth, String secondaryAction) {
         StringBuilder buff = new StringBuilder();
         
         buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box1Width-2)).append(LOWER_RIGHT_CORNER);
-        buff.append(StringUtils.repeat(' ', inbetweenWidth));
+        buff.append(StringUtils.center(secondaryAction, inbetweenWidth));
         buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, box2Width-2)).append(LOWER_RIGHT_CORNER);
         buff.append("\r\n");
         return buff.toString();
