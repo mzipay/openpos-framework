@@ -33,6 +33,11 @@ public class TestStates {
         public void arrive(Action action) {
             
         }
+        
+        @ActionHandler
+        public void onCustomerLookupComplete(Action action) {
+            
+        }
     } 
     
     public static class CustomerState implements IState {
@@ -52,6 +57,11 @@ public class TestStates {
             assertEquals("LOYALTY", this.customerFlowType);
             this.customerFlowTypeWorked = "customerFlowTypeWorked";
             this.selectedCustomer = "customer1234";
+        }
+        
+        @ActionHandler
+        public void onCustomerSignupComplete(Action action) {
+            arrive(action.getCausedBy());
         }
     } 
     

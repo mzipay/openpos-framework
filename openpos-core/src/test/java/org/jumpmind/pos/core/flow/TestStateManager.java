@@ -111,7 +111,7 @@ public class TestStateManager {
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
         assertTrue("stateManager.getScopeValue(\"specificActionMethodCalled\")", 
                 stateManager.getScopeValue("specificActionMethodCalled"));
-        assertTrue("stateManager.getScopeValue(\"anyActionMethodCalled\")", 
+        assertFalse("stateManager.getScopeValue(\"anyActionMethodCalled\")", 
                 stateManager.getScopeValue("anyActionMethodCalled"));
         
         stateManager.doAction("TestActions");

@@ -225,12 +225,12 @@ public class StateManager implements IStateManager {
         
         if (actionHandler.canHandleAction(currentContext.getState(), action)) {
             handleAction(action);
-        } else if (actionHandler.canHandleAnyAction(currentContext.getState())) {
-            actionHandler.handleAnyAction(currentContext.getState(), action);
         } else if (transitionStateClass != null) {
             transitionToState(action, transitionStateClass);
         } else if (subStateConfig != null) {
             transitionToSubState(action, subStateConfig);
+        } else if (actionHandler.canHandleAnyAction(currentContext.getState())) {
+            actionHandler.handleAnyAction(currentContext.getState(), action);
         } else {
             throw new FlowException(String.format("Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"...) defined in the flow config.", 
                     action.getName(), currentContext.getState().getClass().getName(), action.getName(), action.getName()));                    
