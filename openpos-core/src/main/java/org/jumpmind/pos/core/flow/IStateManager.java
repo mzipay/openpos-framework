@@ -37,7 +37,6 @@ public interface IStateManager {
     public void transitionTo(Action action, IState newState);
     public void endConversation();
     public void endSession();
-    public <T> T getScopeValue(String name);
     public void showScreen(Screen screen);
     public void refreshScreen();
     public IState getCurrentState();

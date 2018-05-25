@@ -116,13 +116,8 @@ public class StateManager implements IStateManager {
         
         String returnActionName = currentContext.getFlowConfig().getReturnAction();
         
-        IState modifiedState = runStateInterceptors(currentContext.getState(), newState, action);
-        if (modifiedState != null && modifiedState != newState) {
-            newState = modifiedState;
-            stateManagerLogger.logStateTransition(currentContext.getState(), modifiedState, action, returnActionName, enterSubState, exitSubState);
-        } else {
-            stateManagerLogger.logStateTransition(currentContext.getState(), newState, action, returnActionName, enterSubState, exitSubState);            
-        }
+        newState = runStateInterceptors(currentContext.getState(), newState, action);
+        stateManagerLogger.logStateTransition(currentContext.getState(), newState, action, returnActionName, enterSubState, exitSubState);            
         
         if (enterSubState) {
             stateStack.push(currentContext);
@@ -159,15 +154,16 @@ public class StateManager implements IStateManager {
     }
 
     protected IState runStateInterceptors(IState oldState, IState newState, Action action) {
+        IState nextState = newState;
         if (!CollectionUtils.isEmpty(stateInterceptors)) {
             for (IStateInterceptor interceptor : stateInterceptors) {
-                IState changedState = interceptor.intercept(this, oldState, newState, action);
+                IState changedState = interceptor.intercept(this, oldState, nextState, action);
                 if (changedState != null) {
-                    return changedState;
+                    nextState = changedState;
                 }
             }
         }
-        return null;
+        return nextState;
     }
 
     protected IState buildState(StateConfig stateConfig) {
@@ -237,6 +233,63 @@ public class StateManager implements IStateManager {
         }
     }
     
+    public void setScopeValue(ScopeType scopeType, String name, Object value) {
+        switch (scopeType) {
+            case Node:
+                scope.setNodeScope(name, value);
+                break;
+            case Session:
+                scope.setSessionScope(name, value);
+                break;
+            case Conversation:
+                scope.setConversationScope(name, value);
+                break;
+            case Flow:
+                currentContext.setFlowScope(name, value);
+                break;
+            default:
+                throw new FlowException("Invalid scope " + scopeType);
+        }
+    }
+    
+    public <T> T getScopeValue(ScopeType scopeType, String name) {
+        ScopeValue scopeValue = null;
+        switch (scopeType) {
+            case Node:
+            case Session:
+            case Conversation:
+                scopeValue = scope.getScopeValue(scopeType, name);
+                break;
+            case Flow:
+                scopeValue = currentContext.getFlowScope().get(name);
+                break;
+            default:
+                throw new FlowException("Invalid scope " + scopeType);
+        }
+        
+        if (scopeValue != null) {
+            return scopeValue.getValue();
+        } else {
+            return null;
+        }
+    }
+        
+    @SuppressWarnings("unchecked")
+    public <T> T getScopeValue(String name) {
+        ScopeValue value = scope.resolve(name);
+        if (value != null) {
+            return (T) value.getValue();
+        } else {
+            value = currentContext.resolveScope(name);
+            if (value != null) {
+                return (T) value.getValue();    
+            } else {
+                return null;
+            }
+        }
+    }
+
+    
     protected boolean handleAction(Action action) {        
         return actionHandler.handleAction(currentContext.getState(), action);
     }
@@ -295,22 +348,6 @@ public class StateManager implements IStateManager {
     @Override
     public void endSession() {
         scope.clearSessionScope();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T getScopeValue(String name) {
-        ScopeValue value = scope.resolve(name);
-        if (value != null) {
-            return (T) value.getValue();
-        } else {
-            value = currentContext.resolveScope(name);
-            if (value != null) {
-                return (T) value.getValue();    
-            } else {
-                return null;
-            }
-        }
     }
 
     public void setInitialFlowConfig(FlowConfig initialFlowConfig) {

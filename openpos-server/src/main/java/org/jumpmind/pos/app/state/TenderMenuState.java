@@ -1,15 +1,11 @@
 package org.jumpmind.pos.app.state;
 
-import java.math.BigDecimal;
-
-import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.app.demo.DemoTransaction;
 import org.jumpmind.pos.app.demo.DemoTransactionService;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.In;
-import org.jumpmind.pos.core.flow.Out;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;

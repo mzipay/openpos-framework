@@ -12,8 +12,6 @@ public class CheckTransBalanceState extends AbstractState {
     
     @Override
     public void arrive(Action action) {
-        super.arrive(action);
-        
         if (currentTransaction.getBalanceDue() != null 
                 && currentTransaction.getBalanceDue().equals("0.00")) { // demo only! 
             stateManager.doAction("CommitTransaction");
