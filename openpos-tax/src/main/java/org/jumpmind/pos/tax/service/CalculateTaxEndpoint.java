@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.jumpmind.pos.MockCalculateTaxEndpoint;
 import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.tax.model.Authority;
 import org.jumpmind.pos.tax.model.GroupRule;
@@ -246,7 +247,7 @@ public class CalculateTaxEndpoint {
         for (RateRule rateRule : groupRule.getRateRules()) {
             if (rateRule.getTypeCode() == RateRule.TYPE_FLAT_RATE) {
                 tax = tax.add(rateRule.getTaxAmount());
-            } else if (rateRule.getTypeCode() == RateRule.TYPE_FLAT_RATE) {
+            } else if (rateRule.getTypeCode() == RateRule.TYPE_PERCENT_RATE) {
                 tax = tax.add(rateRule.getTaxPercent().movePointLeft(2).multiply(amount));
             }
         }

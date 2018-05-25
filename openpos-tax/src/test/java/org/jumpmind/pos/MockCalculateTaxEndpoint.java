@@ -15,6 +15,7 @@ import org.jumpmind.pos.tax.service.CalculateTaxEndpoint;
 
 public class MockCalculateTaxEndpoint extends CalculateTaxEndpoint {
 
+	
     @Override
     public Collection<Authority> getAuthorities(String storeId) {
         Collection<Authority> authorities = new ArrayList<Authority>();
@@ -91,7 +92,7 @@ public class MockCalculateTaxEndpoint extends CalculateTaxEndpoint {
     private RateRule addPercentRule(Authority authority, String taxGroupId, double percent, String method) {
         Group taxGroup = new Group(taxGroupId);
         GroupRule groupRule = addGroup(authority, taxGroup, method);
-
+        
         RateRule rateRule = new RateRule();
         rateRule.setTypeCode(RateRule.TYPE_PERCENT_RATE);
         rateRule.setTaxPercent(new BigDecimal(percent));

@@ -2,7 +2,7 @@
     <div class="text-md" style="margin-bottom:10px">
         {{screen.name}}
     </div>   
-    <mat-tab-group>
+    <mat-tab-group #tabGroup (selectedIndexChange)="tabChanged($event)">
         <mat-tab *ngFor="let formOption of screen.forms" fxLayout="column">
             <ng-template mat-tab-label>
                 <div fxLayoutAlign="start center">
@@ -12,7 +12,7 @@
             <div class="text-sm" style="margin-bottom:15px;margin-top:15px">
                 {{formOption.instructions}}
             </div>
-            <app-dynamic-form-control [screenForm]="formOption.form" [submitAction]="formOption.submitAction" [screen]="screen"></app-dynamic-form-control>
+            <app-dynamic-form-control #frm [screenForm]="formOption.form" [submitAction]="formOption.submitAction" [screen]="screen"></app-dynamic-form-control>
         </mat-tab>
     </mat-tab-group>
 </div>
