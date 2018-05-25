@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
-@Transactional
+@Transactional(transactionManager="configTxManager")
 public class GetConfigEndpoint {
     
     @Autowired
