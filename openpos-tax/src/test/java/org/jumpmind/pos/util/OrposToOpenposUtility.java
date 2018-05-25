@@ -105,7 +105,7 @@ public class OrposToOpenposUtility {
                			+ "calculation_method_code, rate_rule_usage_code, cycle_amount, create_time, "
                			+ "create_by, last_update_time, last_update_by) "
                			+ "VALUES (" + id + ", '" + aid + "', '" + gid + "', '" + rulename + "', '"
-               			+ desc + "', " + cmpsq + ", '" + grossflag + "', '" + calMth + "', '" + trusgcd + "', 0, '"
+               			+ desc + "', " + cmpsq + ", '" + grossflag + "', '" + calMth + "', '" + trusgcd + "', null, '"
                			+ timestamp + "', 'UTIL', '" + timestamp + "', 'UTIL');\n");
                }
                out.close();
@@ -188,7 +188,6 @@ public class OrposToOpenposUtility {
     				double txAmnt = rs.getDouble("mo_tx");
     				out.write("INSERT INTO tax_rate_rule (id, authority_id, group_id, rate_rule_sequence_number, type_code, "
     						+ "min_taxable_amount, max_taxable_amount, tax_percent, tax_amount, "
-    						+ ""
     						+ "create_time, create_by, last_update_time, last_update_by) " 
     						+ "VALUES ('" + id + "', '" + authID + "', '" + groupID + "', "
     						+ rrSeqNum + ", " + typeCode + ", " + minTxAm + ", " + maxTxAm + ", " + txPrcnt + ", " + txAmnt + ", '"

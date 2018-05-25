@@ -68,11 +68,13 @@ public class Authority extends Entity implements Comparable<Authority> {
     }
 
     public GroupRule getGroupRule(String groupId) {
-        for (GroupRule groupRule : groupRules) {
-            if (groupRule.getGroup().getId().equals(groupId)) {
-                return groupRule;
-            }
-        }
+    	if (groupRules != null) {
+    		for (GroupRule groupRule : groupRules) {
+    			if (groupRule.getGroup().getId().equals(groupId)) {
+    				return groupRule;
+    			}
+    		}
+    	}
         return null;
     }
 

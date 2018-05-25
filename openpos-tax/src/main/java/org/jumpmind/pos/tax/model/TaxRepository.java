@@ -18,11 +18,11 @@ import org.springframework.stereotype.Repository;
 @DependsOn(value = { "TaxModule" })
 public class TaxRepository {
 
-    private static Query<Jurisdiction> taxJurisdictionLookup = new Query<Jurisdiction>().named("taxJurisdictionLookup").result(Jurisdiction.class);
+    private Query<Jurisdiction> taxJurisdictionLookup = new Query<Jurisdiction>().named("taxJurisdictionLookup").result(Jurisdiction.class);
 
-    private static Query<GroupRule> taxGroupRuleLookup = new Query<GroupRule>().named("taxGroupRuleLookup").result(GroupRule.class);
+    private Query<GroupRule> taxGroupRuleLookup = new Query<GroupRule>().named("taxGroupRuleLookup").result(GroupRule.class);
     
-    private static Query<RateRule> taxRateRuleLookup = new Query<RateRule>().named("taxRateRuleLookup").result(RateRule.class);
+    private Query<RateRule> taxRateRuleLookup = new Query<RateRule>().named("taxRateRuleLookup").result(RateRule.class);
     
     @Autowired
     @Qualifier("taxSession")

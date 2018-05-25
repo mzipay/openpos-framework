@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.jumpmind.pos.MockCalculateTaxEndpoint;
 import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.tax.model.Authority;
 import org.jumpmind.pos.tax.model.GroupRule;
@@ -28,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CalculateTaxEndpoint {
 
     @Autowired
-    TaxRepository taxRepository;
+    private TaxRepository taxRepository;
 
     /**
      * Re-calculate the tax for the RetailTransaction, re-creating the
@@ -43,7 +42,9 @@ public class CalculateTaxEndpoint {
         for (TaxableItem item : request.getTaxableItems()) {
             for (Authority authority : authorities) {
                 GroupRule groupRule = authority.getGroupRule(item.getGroupId());
-                container.add(groupRule, item);
+                if (groupRule != null) {
+                	container.add(groupRule, item);
+                }
             }
         }
 
