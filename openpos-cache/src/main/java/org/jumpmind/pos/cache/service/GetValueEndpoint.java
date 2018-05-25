@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
-@Transactional
+@Transactional(transactionManager="cacheTxManager")
 public class GetValueEndpoint {
     
     @Endpoint("/getValue")

@@ -30,6 +30,12 @@ public class UserRepository {
             }
         }
         
+        // Add Workgroup to User
+        // select Workgroup and populate in User
+        // select Permisssions for Workgroup by adding query to yaml file.
+        //  select columns from permision p join workgroup_permission wp on p.permission_id=wp.permission_id where wp.workgroup_id=
+        // add permissions to the workgroup we just selected and added to User
+        
         return userLookedUp;
     }
 

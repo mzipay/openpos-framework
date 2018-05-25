@@ -7,28 +7,26 @@ import org.jumpmind.pos.persist.Table;
 @Table
 public class WorkgroupPermission extends Entity {
 
-    @Column(primaryKey=true,
-            size = "16")
-    private String workgroupRowId;
+    @Column(primaryKey=true)
+    private String workgroupId;
     
-    @Column(primaryKey=true,
-            size = "16")
-    private String permissionRowId;
+    @Column(primaryKey=true)
+    private String permissionId;
 
-    public String getWorkgroupRowId() {
-        return workgroupRowId;
+    public String getWorkgroupId() {
+        return workgroupId;
     }
 
-    public void setWorkgroupRowId(String workgroupRowId) {
-        this.workgroupRowId = workgroupRowId;
+    public void setWorkgroupId(String workgroupRowId) {
+        this.workgroupId = workgroupRowId;
     }
 
-    public String getPermissionRowId() {
-        return permissionRowId;
+    public String getPermissionId() {
+        return permissionId;
     }
 
-    public void setPermissionRowId(String permissionRowId) {
-        this.permissionRowId = permissionRowId;
+    public void setPermissionId(String permissionRowId) {
+        this.permissionId = permissionRowId;
     }
     
 }

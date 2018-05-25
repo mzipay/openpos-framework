@@ -10,7 +10,6 @@ public class CustomerSearchState extends AbstractState {
     
     @Override
     public void arrive(Action action) {
-        super.arrive(action);
         DynamicFormScreen formScreen = new DynamicFormScreen();
         formScreen.setPrompt("Customer lookup");
         

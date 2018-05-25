@@ -3,7 +3,6 @@ package org.jumpmind.pos.user.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Entity;
@@ -41,7 +40,10 @@ public class User extends Entity {
     protected Date lastPasswordAttempt;
     
     @Column
-    protected Locale locale;
+    protected String locale;
+    
+    @Column
+    protected String workgroupId;
 
     protected List<PasswordHistory> passwordHistory = new ArrayList<>();
 
@@ -131,11 +133,19 @@ public class User extends Entity {
         this.lastPasswordAttempt = lastPasswordAttempt;
     }
 
-    public void setLocale(Locale locale) {
+    public void setLocale(String locale) {
         this.locale = locale;
     }
 
-    public Locale getLocale() {
+    public String getLocale() {
         return locale;
+    }
+    
+    public void setWorkgroupId(String workgroupId) {
+        this.workgroupId = workgroupId;
+    }
+    
+    public String getWorkgroupId() {
+        return workgroupId;
     }
 }

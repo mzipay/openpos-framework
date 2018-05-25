@@ -7,7 +7,6 @@ public class CustomerSearchResultState extends AbstractState {
     
     @Override
     public void arrive(Action action) {
-        super.arrive(action);
     }
 
     @Override

@@ -135,5 +135,9 @@
     .mat-tab-label-active{
         color: $app-primary;
     }
+
+    app-prompt-input app-icon {
+        padding: 5px;
+    }
     
 }

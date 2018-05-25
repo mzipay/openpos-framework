@@ -28,10 +28,11 @@ public class Scope {
     private Map<String, ScopeValue> nodeScope = new HashMap<String, ScopeValue>();
     private Map<String, ScopeValue> sessionScope = new HashMap<String, ScopeValue>();
     private Map<String, ScopeValue> conversationScope = new HashMap<String, ScopeValue>();
-    
+
     public void clearConversationScope() {
         conversationScope.clear();
     }
+
     public void clearSessionScope() {
         clearConversationScope();
         sessionScope.clear();
@@ -47,30 +48,65 @@ public class Scope {
         }
         return null;
     }
-    
+
     public void setNodeScope(String name, Object value) {
         setScope(nodeScope, name, value);
     }
+
     public void setSessionScope(String name, Object value) {
         setScope(sessionScope, name, value);
     }
+
     public void setConversationScope(String name, Object value) {
         setScope(conversationScope, name, value);
     }
-    
+
     protected void setScope(Map<String, ScopeValue> scope, String name, Object value) {
         ScopeValue scopeValue = new ScopeValue();
         scopeValue.setValue(value);
         scope.put(name, scopeValue);
     }
+
     public Map<String, ScopeValue> getNodeScope() {
         return nodeScope;
     }
+
     public Map<String, ScopeValue> getSessionScope() {
         return sessionScope;
     }
+
     public Map<String, ScopeValue> getConversationScope() {
         return conversationScope;
+    }
+
+    public void setScopeValue(ScopeType scopeType, String name, Object value) {
+        switch (scopeType) {
+            case Node:
+                setNodeScope(name, value);
+                break;
+            case Session:
+                setSessionScope(name, value);
+                break;
+            case Conversation:
+                setConversationScope(name, value);
+                break;
+            default:
+                throw new FlowException("Invalid scope " + scopeType);
+        }
+    }
+    
+    public ScopeValue getScopeValue(ScopeType scopeType, String name) {
+        switch (scopeType) {
+            case Node:
+                return getNodeScope().get(name);
+            case Session:
+                return getSessionScope().get(name);
+            case Conversation:
+                return getConversationScope().get(name);
+            default:
+                throw new FlowException("Invalid scope " + scopeType);
+        }
+        
     }
 
 }

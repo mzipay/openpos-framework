@@ -12,7 +12,7 @@
                 <span>{{menuItem.title}}</span>
                 <mat-icon *ngIf="menuItem.icon" class="material-icons">{{menuItem.icon}}</mat-icon>
             </button>
-            <button mat-raised-button type="submit" color=primary>
+            <button mat-raised-button  color=primary (click)="onFormSubmit()">
                 <span>{{screen.actionButton.title}}</span>
                 <mat-icon *ngIf="screen.actionButton.icon" class="material-icons">{{screen.actionButton.icon}}</mat-icon>
             </button>

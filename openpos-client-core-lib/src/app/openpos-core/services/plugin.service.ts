@@ -46,17 +46,21 @@ export class PluginService {
                     if (typeof plugin.configure !== 'undefined') {
                         console.log(`Invoking plugin.configure for '${pluginId}'...`);
                         resolve(plugin.configure(pluginConfig));
+                        console.log(`'${pluginId}' configured.`);
                     } else if (plugin.impl && typeof plugin.impl.configure === 'function') {
                         console.log(`Invoking plugin.impl.configure for '${pluginId}'...`);
                         resolve(plugin.impl.configure(pluginConfig));
+                        console.log(`'${pluginId}' configured.`);
                     } else if (plugin.hasOwnProperty('config')) {
                         console.log(`Setting plugin.config for '${pluginId}'...`);
                         plugin.config = pluginConfig;
                         resolve(true);
+                        console.log(`'${pluginId}' configured.`);
                     } else if (plugin.impl && plugin.impl.hasOwnProperty('config')) {
                         console.log(`Setting plugin.impl.config for '${pluginId}'...`);
                         plugin.impl.config = pluginConfig;
                         resolve(true);
+                        console.log(`'${pluginId}' configured.`);
                     } else {
                         console.log(`No method of configuration is available for plugin '${pluginId}'`);
                         resolve(false);
@@ -136,9 +140,9 @@ export class PluginService {
         });
     }
 
-    public getDevicePlugin(pluginId: string): Promise<IDevicePlugin> {
+    public getDevicePlugin(pluginId: string, doInitWhenNeeded: boolean = true): Promise<IDevicePlugin> {
         return new Promise<IDevicePlugin>( (resolve, reject) => {
-                const pluginPromise: Promise<IPlugin> = this.getPlugin(pluginId);
+                const pluginPromise: Promise<IPlugin> = this.getPlugin(pluginId, doInitWhenNeeded);
                 pluginPromise.then(thePlugin => {
                     if (thePlugin && (<IDevicePlugin>thePlugin).processRequest) {
                         resolve(<IDevicePlugin> thePlugin);

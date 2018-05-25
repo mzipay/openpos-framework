@@ -53,7 +53,7 @@ public class UIManager implements IUI {
         screen.setRefreshAlways(true);
         screen.setResponseType(promptConfig.getPromptType());
         if (promptConfig.getBackAction() != null) {            
-            screen.setBackButton(new MenuItem(promptConfig.getBackAction(), "Back", true));
+            screen.setBackButton(new MenuItem(promptConfig.getBackAction(), "Back"));
         }
         screen.setPromptIcon(promptConfig.getIcon());
         screen.setIcon(promptConfig.getIcon());

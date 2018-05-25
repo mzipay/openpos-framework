@@ -4,7 +4,6 @@ import static org.jumpmind.pos.context.model.TagModel.BRAND_ID_TAG;
 
 import org.jumpmind.pos.context.model.Node;
 import org.jumpmind.pos.context.service.ContextService;
-import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.In;
@@ -26,17 +25,6 @@ abstract public class AbstractState implements IState {
 
     @InOut(scope = ScopeType.Node)
     protected Node node;
-
-    @Override
-    public void arrive(Action action) {
-        if (node == null) {
-            String nodeId = stateManager.getNodeId();
-            this.node = contextService.getNode(nodeId).getNode();
-            if (this.node == null) {
-                throw new IllegalStateException(String.format("Could not find a row in ctx_node with an id of %s.  It is required", nodeId));
-            }
-        }
-    }
 
     protected String getStoreId() {
         String nodeId = stateManager.getNodeId();

@@ -20,7 +20,6 @@ public class TenderCreditDebitState extends AbstractState {
     
     @Override
     public void arrive(Action action) {
-        super.arrive(action);
         try {
             Thread.sleep(new Random().nextInt(2000));
         } catch (InterruptedException e) {

@@ -1,6 +1,5 @@
 package org.jumpmind.pos.app.state;
 
-import org.jumpmind.pos.app.demo.DemoException;
 import org.jumpmind.pos.app.demo.DemoTransaction;
 import org.jumpmind.pos.app.demo.DemoTransactionService;
 import org.jumpmind.pos.core.flow.Action;
@@ -18,7 +17,6 @@ public class TenderCashState extends AbstractState {
     
     @Override
     public void arrive(Action action) {
-        super.arrive(action);
         demoTransactionService.applyTender(currentTransaction, "Cash",  action.getData());
         stateManager.doAction("CheckTransBalance");
     }

@@ -25,36 +25,42 @@ import java.util.Date;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 public class ScopeValue {
-    
+
     private Date createdTime;
     private String createdStackTrace;
     private Object value;
-    
+
     public ScopeValue() {
         createdTime = new Date();
         createdStackTrace = ExceptionUtils.getStackTrace(new Throwable());
     }
-    
+
     public ScopeValue(Object value) {
         this();
-       this.value = value;
+        this.value = value;
     }
-    
+
     public Date getCreatedTime() {
         return createdTime;
     }
+
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
+
     public String getCreatedStackTrace() {
         return createdStackTrace;
     }
+
     public void setCreatedStackTrace(String createdStackTrace) {
         this.createdStackTrace = createdStackTrace;
     }
-    public Object getValue() {
-        return value;
+
+    @SuppressWarnings("unchecked")
+    public <T extends Object> T getValue() {
+        return (T)value;
     }
+
     public void setValue(Object value) {
         this.value = value;
     }
