@@ -8,7 +8,7 @@
 				<mat-icon *ngIf="screen.textIcon" class="material-icons" color="primary" style="margin-right:5px">{{screen.textIcon}}</mat-icon>
 				<label class="text-md">{{screen.text}}</label>
             </div>
-            <div *ngIf="screen.instructions">{{screen.instructions}}</div>
+            <div *ngIf="screen.instructions" class="text-sm">{{screen.instructions}}</div>
 			<div id="signature-pad" fxLayout="column">
 				<canvas style="background-color: white;"></canvas>
 			</div>
