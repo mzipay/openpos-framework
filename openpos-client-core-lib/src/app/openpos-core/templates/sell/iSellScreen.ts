@@ -15,6 +15,7 @@ export interface ISellScreen {
     theme: string;
     placeholderText: string;
     hideCustomer: boolean;
+    subtitle: string;
 }
 
 
