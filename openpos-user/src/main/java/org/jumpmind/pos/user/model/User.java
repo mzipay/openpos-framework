@@ -46,6 +46,8 @@ public class User extends Entity {
     protected String workgroupId;
 
     protected List<PasswordHistory> passwordHistory = new ArrayList<>();
+    
+    protected Workgroup workgroup = new Workgroup();
 
     public String getUsername() {
         return username;
@@ -147,5 +149,13 @@ public class User extends Entity {
     
     public String getWorkgroupId() {
         return workgroupId;
+    }
+    
+    public void setWorkgroup(Workgroup workgroup) {
+        this.workgroup = workgroup;
+    }
+    
+    public Workgroup getWorkgroup() {
+        return workgroup;
     }
 }

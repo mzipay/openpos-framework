@@ -4,3 +4,13 @@ queries:
   name: passwordHistoryLookup
   where: username = ${username}
   orderBy: password_sequence
+-
+  name: WorkgroupPermissionsLookup
+  select: > 
+    select p.permission_id, allows_override
+    from user_permission p
+    join user_workgroup_permission wp
+    on p.permission_id = wp.permission_id
+    where wp.workgroup_id = ${workgroupId}
+
+      

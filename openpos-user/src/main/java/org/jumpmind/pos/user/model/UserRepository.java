@@ -17,6 +17,10 @@ public class UserRepository {
             .named("passwordHistoryLookup")
             .result(PasswordHistory.class);
     
+    private Query<Permission> workgroupPermissionsLookup = new Query<Permission>()
+            .named("workgroupPermissionsLookup")
+            .result(Permission.class);
+    
     @Autowired
     @Lazy
     private DBSession userSession;    
@@ -29,12 +33,12 @@ public class UserRepository {
                 userLookedUp.setPasswordHistory(passwordHistory);
             }
         }
-        
-        // Add Workgroup to User
-        // select Workgroup and populate in User
-        // select Permisssions for Workgroup by adding query to yaml file.
-        //  select columns from permision p join workgroup_permission wp on p.permission_id=wp.permission_id where wp.workgroup_id=
-        // add permissions to the workgroup we just selected and added to User
+        //TODO Test this
+        String workgroupId = userLookedUp.getWorkgroupId();
+        Workgroup workgroup = userSession.findByNaturalId(Workgroup.class, workgroupId);
+        List<Permission> permissions = userSession.query(workgroupPermissionsLookup, workgroupId);
+        workgroup.setPermissions(permissions);
+        userLookedUp.setWorkgroup(workgroup);
         
         return userLookedUp;
     }
