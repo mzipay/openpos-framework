@@ -26,6 +26,7 @@ export class AppVersion {
         if (this._appVersion) {
             promiseReturn = new Promise<string>((resolve, reject) => { resolve(this._appVersion); });
         } else {
+            console.log('Initializing appVersion...')
             promiseReturn = new Promise<string>(
             (resolve, reject) => {
                 pluginService.getPlugin('openPOSCordovaLogPlugin').then(
