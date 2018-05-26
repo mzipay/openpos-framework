@@ -12,19 +12,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 @DependsOn(value = { "UserModule" })
 public class UserRepository {
-    
-    private Query<PasswordHistory> passwordHistoryLookup = new Query<PasswordHistory>()
-            .named("passwordHistoryLookup")
+
+    private Query<PasswordHistory> passwordHistoryLookup = new Query<PasswordHistory>().named("passwordHistoryLookup")
             .result(PasswordHistory.class);
-    
-    private Query<Permission> workgroupPermissionsLookup = new Query<Permission>()
-            .named("workgroupPermissionsLookup")
+
+    private Query<Permission> workgroupPermissionsLookup = new Query<Permission>().named("workgroupPermissionsLookup")
             .result(Permission.class);
-    
+
     @Autowired
     @Lazy
-    private DBSession userSession;    
-    
+    private DBSession userSession;
+
     public User findUser(String userName) {
         User userLookedUp = userSession.findByNaturalId(User.class, userName);
         if (userLookedUp != null) {
@@ -33,24 +31,25 @@ public class UserRepository {
                 userLookedUp.setPasswordHistory(passwordHistory);
             }
         }
-        //TODO Test this
+        // TODO Test this
         String workgroupId = userLookedUp.getWorkgroupId();
-        Workgroup workgroup = userSession.findByNaturalId(Workgroup.class, workgroupId);
-        List<Permission> permissions = userSession.query(workgroupPermissionsLookup, workgroupId);
-        workgroup.setPermissions(permissions);
-        userLookedUp.setWorkgroup(workgroup);
-        
+        if (workgroupId != null) {
+            Workgroup workgroup = userSession.findByNaturalId(Workgroup.class, workgroupId);
+            List<Permission> permissions = userSession.query(workgroupPermissionsLookup, workgroupId);
+            workgroup.setPermissions(permissions);
+            userLookedUp.setWorkgroup(workgroup);
+        }
+
         return userLookedUp;
     }
 
-    
     public void save(User user) {
         userSession.save(user);
-        
+
         for (PasswordHistory passwordHistory : user.getPasswordHistory()) {
             passwordHistory.setUsername(user.getUsername());
         }
-        
+
         userSession.saveAll(user.getPasswordHistory());
     }
 }
