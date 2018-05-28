@@ -1,5 +1,6 @@
 package org.jumpmind.pos.core.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -7,15 +8,17 @@ import java.util.Optional;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jumpmind.pos.util.TypedMap.TypedMapKey;
 
-public class POSSessionInfo {
+public class POSSessionInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     public static final TypedMapKey<String> CART_NAME_ATTRIBUTE = new TypedMapKey<>("cartName");
     public static final TypedMapKey<String> LAST_ACTION_ATTRIBUTE = new TypedMapKey<>("lastAction");
     
     private String transactionId;
     private String operatorName;
     private String operatorLoginId;
-    private Optional<Boolean> registerOpen = Optional.empty();
-    private Optional<Boolean> storeOpen = Optional.empty();
+    private Boolean registerOpen = null;
+    private Boolean storeOpen = null;
     private boolean trainingMode = false;
     private boolean adminMode = false;
     
@@ -61,19 +64,19 @@ public class POSSessionInfo {
 
     
     public Optional<Boolean> isRegisterOpen() {
-        return registerOpen;
+        return Optional.ofNullable(this.registerOpen);
     }
 
     public void setRegisterOpen(Optional<Boolean> registerOpen) {
-        this.registerOpen = registerOpen;
+        this.registerOpen = registerOpen != null ? registerOpen.orElse(null) : null;
     }
 
     public Optional<Boolean> isStoreOpen() {
-        return storeOpen;
+        return Optional.ofNullable(this.storeOpen);
     }
 
     public void setStoreOpen(Optional<Boolean> storeOpen) {
-        this.storeOpen = storeOpen;
+        this.storeOpen = storeOpen != null ? storeOpen.orElse(null) : null;
     }
 
     public <T> void put(TypedMapKey<T> key, T value) {
