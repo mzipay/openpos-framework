@@ -29,7 +29,7 @@ public class DBSessionTest {
                 PersistTestUtil.testDbPlatform(), 
                 PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class),
-                DBSessionFactory.getQueryTempaltes("test"));                
+                DBSessionFactory.getQueryTempaltes("persist-test"));                
     }    
 
     @Test

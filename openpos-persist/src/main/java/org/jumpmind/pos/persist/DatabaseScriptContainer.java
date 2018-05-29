@@ -127,9 +127,9 @@ public class DatabaseScriptContainer {
             public Object doInConnection(Connection c) throws SQLException, DataAccessException {
                 ISqlTemplate template = platform.getSqlTemplate();
                 SqlScript sqlscript = new SqlScript(script, template, true, ";", replacementTokens);
-                sqlscript.setFailOnSequenceCreate(false);
+                sqlscript.setFailOnSequenceCreate(true);
                 sqlscript.setFailOnDrop(false);
-                sqlscript.setFailOnError(false);
+                sqlscript.setFailOnError(true);
                 sqlscript.execute();
                 return null;
             }

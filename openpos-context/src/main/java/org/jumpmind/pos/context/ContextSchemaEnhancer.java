@@ -46,7 +46,6 @@ public class ContextSchemaEnhancer implements IDBSchemaListener {
         warnOrphanedTagColumns(tags, table);
         modifyTagColumns(tags, table);
         addTagColumns(tags, table);
-        sessionFactory.getDatabaseSchema().modifyTable(table);
     }
 
     protected void modifyTagColumns(List<TagModel> tags, Table table) {

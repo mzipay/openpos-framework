@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class TestModule extends AbstractModule {
     
-    static final String NAME = "test";
+    static final String NAME = "service-test";
     
     private String dynamicVersion = "0.0.1";
 

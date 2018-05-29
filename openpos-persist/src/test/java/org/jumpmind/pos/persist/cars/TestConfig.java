@@ -21,11 +21,11 @@ import org.yaml.snakeyaml.constructor.Constructor;
 @Configuration
 @ComponentScan(
         basePackages = { "org.jumpmind.pos" })
-@PropertySource(value = { "classpath:test.properties"})
+@PropertySource(value = { "classpath:persist-test.properties"})
 public class TestConfig {
 
     protected DBSessionFactory sessionFactory;
-    InputStream queryYamlStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("test-query.yaml");
+    InputStream queryYamlStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("persist-test-query.yaml");
     QueryTemplates queryTemplates = new Yaml(new Constructor(QueryTemplates.class)).load(queryYamlStream);    
 
     @Bean
@@ -59,7 +59,7 @@ public class TestConfig {
     public void updateDataModel(DBSession session) {
         String fromVersion = null;
 
-        DatabaseScriptContainer scripts = new DatabaseScriptContainer("test/sql", PersistTestUtil.testDbPlatform());
+        DatabaseScriptContainer scripts = new DatabaseScriptContainer("persist-test/sql", PersistTestUtil.testDbPlatform());
 
         scripts.executePreInstallScripts(fromVersion, "0.0.1");
 

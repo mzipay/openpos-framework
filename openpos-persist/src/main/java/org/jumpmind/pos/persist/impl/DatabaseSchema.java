@@ -76,17 +76,7 @@ public class DatabaseSchema {
                 }
             }
         }
-    }
-    
-    public void modifyTable(Table desiredTable) {
-        Table currentTable = platform.readTableFromDatabase(desiredTable.getCatalog(), desiredTable.getSchema(), desiredTable.getName());
-        IDdlBuilder builder = platform.getDdlBuilder();
-        String alterSql = builder.alterTable(currentTable, desiredTable);
-        if (!StringUtils.isEmpty(alterSql)) {
-            log.info("There are database tables that needed altered. SQL generated:\r\n{}", alterSql);
-            runScript(alterSql);
-        }
-    }
+    }  
     
     public boolean createAndUpgrade() {
         try {
@@ -100,7 +90,7 @@ public class DatabaseSchema {
             String alterSql = builder.alterDatabase(actualModel, desiredModel, new SchemaObjectRemoveInterceptor());
             
             if (!StringUtils.isEmpty(alterSql)) {                    
-                log.info("There are database tables that needed altered. SQL generated:\r\n{}", alterSql);
+                log.info("There are database tables that need to be created or altered. SQL generated:\r\n{}", alterSql);
                 runScript(alterSql);
                 actualModel = platform.readFromDatabase(desiredModel.getTables());
                 log.info("Finished updating tables.");

@@ -16,7 +16,6 @@ tags:
   name: STORE_NUMBER
   group: LOCATION
   level: 4
-  dataType: NUMERIC
 -
   name: STORE_TYPE  
 -
