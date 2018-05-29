@@ -18,7 +18,7 @@ import { keyboardLayouts, MAT_KEYBOARD_LAYOUTS } from './configs/keyboard-layout
 import { MatKeyboardContainerComponent } from './components/keyboard-container/keyboard-container.component';
 import { MatKeyboardKeyComponent } from './components/keyboard-key/keyboard-key.component';
 import { MatKeyboardComponent } from './components/keyboard/keyboard.component';
-import { MatKeyboardDirective } from './directives/keyboard.directive';
+import { KeyboardDirective } from './directives/keyboard.directive';
 // Providers
 import { MatKeyboardKebabCasePipe } from './pipes/kebab-case.pipe';
 import { MatKeyboardService } from './services/keyboard.service';
@@ -42,14 +42,14 @@ import { MatKeyboardService } from './services/keyboard.service';
     MatKeyboardComponent,
     MatKeyboardContainerComponent,
     MatKeyboardKeyComponent,
-    MatKeyboardDirective
+    KeyboardDirective
   ],
   declarations: [
     MatKeyboardKebabCasePipe,
     MatKeyboardComponent,
     MatKeyboardContainerComponent,
     MatKeyboardKeyComponent,
-    MatKeyboardDirective
+    KeyboardDirective
   ],
   entryComponents: [
     MatKeyboardComponent,
@@ -64,4 +64,4 @@ import { MatKeyboardService } from './services/keyboard.service';
     { provide: MAT_KEYBOARD_LAYOUTS, useValue: keyboardLayouts }
   ]
 })
-export class MatKeyboardModule {}
+export class MatKeyboardModule { }

@@ -121,7 +121,6 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         if (this.isSelfCheckout()) {
             this.screen.getTemplate().disableDevMenu();
         }
-
     }
 
     protected void setScreenProperties() {

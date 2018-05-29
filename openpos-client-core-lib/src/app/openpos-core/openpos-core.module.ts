@@ -95,7 +95,7 @@ import { FabToggleGroupComponent } from './common/controls/fab-toggle-group/fab-
 import { FabToggleButtonComponent } from './common/controls/fab-toggle-button/fab-toggle-button.component';
 import { SelfCheckoutOptionsComponent } from './self-checkout/self-checkout-options/self-checkout-options.component';
 import { FullPageImageComponent } from './screens/full-page-image/full-page-image.component';
-import { CallForAuthorizationComponent } from './screens/call-for-authorization/call-for-authorization.component'
+import { CallForAuthorizationComponent } from './screens/call-for-authorization/call-for-authorization.component';
 import { MultipleDynamicFormDialogComponent } from './dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/multiple-dynamic-form.component';
 import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
@@ -121,8 +121,7 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
 import { DynamicDateFormFieldComponent } from './common/controls/dynamic-date-form-field/dynamic-date-form-field.component';
 
 // On Screen Keyboard
-import { IKeyboardLayouts, KeyboardClassKey, keyboardLayouts, MAT_KEYBOARD_LAYOUTS, MatKeyboardModule } from './keyboard';
-import { KeyboardDirective } from './common/keyboard.directive';
+import { MatKeyboardModule } from './keyboard';
 import { ValidatorsService } from './services/validators.service';
 import { PrintPreviewComponent } from './screens/print-preview.component';
 import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selection-list.directive';
@@ -132,90 +131,6 @@ import { SelectableItemListComponent } from './common/controls/selectable-item-l
 import { VersionComponent } from './dialogs/version/version.component';
 import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
 
-// Keyboard Layouts
-const customLayouts: IKeyboardLayouts = {
-  'US Standard': {
-    'name': 'US Standard',
-    'keys': [
-      [
-        // tslint:disable-next-line:max-line-length
-        ['`', '~'],['1', '!'],['2', '@'],['3', '#'],['4', '$'],['5', '%'],['6', '^'],['7', '&'],['8', '*'],['9', '('],['0', ')'],['-', '_'],['=', '+'],
-        [KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp]
-      ],
-      [
-        [KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab],
-        // tslint:disable-next-line:max-line-length
-        ['q', 'Q'],['w', 'W'],['e', 'E'],['r', 'R'],['t', 'T'],['y', 'Y'],['u', 'U'],['i', 'I'],['o', 'O'],['p', 'P'],['[', '{'],[']', '}'],['\\', '|']
-      ],
-      [
-        [KeyboardClassKey.Caps, KeyboardClassKey.Caps, KeyboardClassKey.Caps, KeyboardClassKey.Caps],
-        ['a', 'A'],['s', 'S'],['d', 'D'],['f', 'F'],['g', 'G'],['h', 'H'],['j', 'J'],['k', 'K'],['l', 'L'],[';', ':'],['\'', '"'],
-        [KeyboardClassKey.Enter, KeyboardClassKey.Enter, KeyboardClassKey.Enter, KeyboardClassKey.Enter]
-      ],
-      [
-        [KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift],
-        ['z', 'Z'],['x', 'X'],['c', 'C'],['v', 'V'],['b', 'B'],['n', 'N'],['m', 'M'],[',', '<'],['.', '>'],['/', '?'],
-        [KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift],
-      ],
-      [
-        [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space]
-      ]
-    ],
-    'lang': ['en-US'],
-  },
-  'Email': {
-    'name': 'Email',
-    'keys': [
-      [
-        // tslint:disable-next-line:max-line-length
-        ['`', '~'],['1', '!'],['2', '@'],['3', '#'],['4', '$'],['5', '%'],['6', '^'],['7', '&'],['8', '*'],['9', '('],['0', ')'],['-', '_'],['=', '+'],
-        [KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp]
-      ],
-      [
-        [KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab, KeyboardClassKey.Tab],
-        // tslint:disable-next-line:max-line-length
-        ['q', 'Q'],['w', 'W'],['e', 'E'],['r', 'R'],['t', 'T'],['y', 'Y'],['u', 'U'],['i', 'I'],['o', 'O'],['p', 'P'],['[', '{'],[']', '}'],['\\', '|']
-      ],
-      [
-        [KeyboardClassKey.Caps, KeyboardClassKey.Caps, KeyboardClassKey.Caps, KeyboardClassKey.Caps],
-        ['a', 'A'],['s', 'S'],['d', 'D'],['f', 'F'],['g', 'G'],['h', 'H'],['j', 'J'],['k', 'K'],['l', 'L'],[';', ':'],['\'', '"'],
-        [KeyboardClassKey.Enter, KeyboardClassKey.Enter, KeyboardClassKey.Enter, KeyboardClassKey.Enter]
-      ],
-      [
-        [KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift],
-        ['z', 'Z'],['x', 'X'],['c', 'C'],['v', 'V'],['b', 'B'],['n', 'N'],['m', 'M'],[',', '<'],['.', '>'],['/', '?'],['@', '@']
-      ],
-      [
-        ['@gmail.com','@gmail.com'], ['@yahoo.com','@yahoo.com'], ['@hotmail.com','@hotmail.com']
-      ],
-      [
-        [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space]
-      ]
-    ],
-    'lang': ['email'],
-  },
-  'Numeric': {
-    'name': 'Numeric',
-    'keys': [
-      [
-        [KeyboardClassKey.Bksp]
-      ],
-      [
-        ['7'],['8'],['9']
-      ],
-      [
-        ['4'],['5'],['6']
-      ],
-      [
-        ['1'],['2'],['3']
-      ],
-      [
-       ['0'],['.'],[KeyboardClassKey.Enter]
-      ]
-    ],
-    'lang': ['numeric']
-  }
-};
 
 @NgModule({
   entryComponents: [
@@ -335,7 +250,6 @@ const customLayouts: IKeyboardLayouts = {
     AutoSelectOnFocus,
     OverFlowListComponent,
     FormattedInputValueAccessor,
-    KeyboardDirective,
     PrintPreviewComponent,
     WaitComponent,
     CustomerSearchResultsComponent,
@@ -406,9 +320,7 @@ const customLayouts: IKeyboardLayouts = {
     FormattersService,
     PluginService,
     FileUploadService,
-    { provide: MAT_KEYBOARD_LAYOUTS, useValue: customLayouts },
     { provide: ErrorHandler, useClass: ErrorHandlerService }
-    
   ]
 })
 // Export services below under 'providers'

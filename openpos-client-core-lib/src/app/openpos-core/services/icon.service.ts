@@ -14,6 +14,7 @@ export class IconService {
         this.iconRegistry.addSvgIcon('barcode', this.makeIconSafeUrl('barcode.svg'));
         this.iconRegistry.addSvgIcon('openpos_barcode', this.makeIconSafeUrl('barcode.svg'));
         this.iconRegistry.addSvgIcon('percent', this.makeIconSafeUrl('percent.svg'));
+        this.iconRegistry.addSvgIcon('openpos_percent', this.makeIconSafeUrl('percent.svg'));
         this.iconRegistry.addSvgIcon('openpos_rotate-3d', this.makeIconSafeUrl('rotate-3d.svg'));
     }
 

@@ -14,11 +14,18 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
     
     protected Function<OptionItem, Boolean> optionItemEvalFunc = null;
     protected InteractionMacro undoMacro;
+    protected boolean filterDisabledOptions = true;
 
     public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
-        this(headlessScreen, screenClass, null);
+        this(headlessScreen, screenClass, true);
     }
 
+    public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass, boolean filterDisabledOptions) {
+        super(headlessScreen, screenClass);
+        screen.setType(ScreenType.ChooseOptions);
+        this.filterDisabledOptions = filterDisabledOptions;
+    }
+    
     /**
      * Constructor to be used for modifying OptionItems or excluding them.
      *  
@@ -48,7 +55,7 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
     }
     
     protected void buildOptions() {
-        List<OptionItem> options = this.generateUIActionsForLocalNavButtons(OptionItem.class, true, new String[]{});
+        List<OptionItem> options = this.generateUIActionsForLocalNavButtons(OptionItem.class, this.filterDisabledOptions, new String[]{});
         if (this.optionItemEvalFunc != null) {
             options = options.stream().filter(o -> { return this.optionItemEvalFunc.apply(o); }).collect(Collectors.toList());
         }

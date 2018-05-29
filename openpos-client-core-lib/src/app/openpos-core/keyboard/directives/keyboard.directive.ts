@@ -1,18 +1,25 @@
+import { Subscription } from 'rxjs/Subscription';
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Optional, Output, Self } from '@angular/core';
-import { NgControl } from '@angular/forms';
-
-import { MatKeyboardRef } from '../classes/keyboard-ref.class';
+import { MatInput } from '@angular/material';
 import { MatKeyboardComponent } from '../components/keyboard/keyboard.component';
+import { MatKeyboardRef } from '../classes/keyboard-ref.class';
 import { MatKeyboardService } from '../services/keyboard.service';
+import { NgControl } from '@angular/forms';
+import { SessionService } from '../../services/session.service';
 
 @Directive({
-  selector: 'input[matKeyboard], textarea[matKeyboard]'
+  // tslint:disable-next-line:directive-selector
+  selector: 'input:not([type=checkbox]), textarea'
 })
-export class MatKeyboardDirective implements OnDestroy {
+export class KeyboardDirective implements OnDestroy {
 
   private _keyboardRef: MatKeyboardRef<MatKeyboardComponent>;
 
-  @Input() matKeyboard: string;
+  private screen: any;
+
+  private screenSubscription: Subscription;
+
+  @Input() keyboardLayout: string;
 
   @Input() darkTheme: boolean;
 
@@ -28,35 +35,49 @@ export class MatKeyboardDirective implements OnDestroy {
 
   @Output() shiftClick: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private _elementRef: ElementRef,
-              private _keyboardService: MatKeyboardService,
-              @Optional() @Self() private _control?: NgControl) {}
+  constructor(public session: SessionService, private _elementRef: ElementRef,
+    private _keyboardService: MatKeyboardService,
+    @Optional() @Self() private _control?: NgControl) {
+      this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
+    }
 
   ngOnDestroy() {
     this._hideKeyboard();
+    this.screenSubscription.unsubscribe();
   }
 
   @HostListener('focus', ['$event'])
   private _showKeyboard() {
-    this._keyboardRef = this._keyboardService.open(this.matKeyboard, {
-      darkTheme: this.darkTheme,
-      duration: this.duration,
-      isDebug: this.isDebug
-    });
+    if (this.screen && this.screen.useOnScreenKeyboard) {
 
-    // reference the input element
-    this._keyboardRef.instance.setInputInstance(this._elementRef);
+      this._keyboardRef = this._keyboardService.open(this.keyboardLayout, {
+        darkTheme: true,
+        duration: this.duration,
+        isDebug: this.isDebug
+      });
 
-    // set control if given, cast to smth. non-abstract
-    if (this._control) {
-      this._keyboardRef.instance.attachControl(this._control.control);
+      // reference the input element
+      this._keyboardRef.instance.setInputInstance(this._elementRef);
+
+      // connect outputs
+      this._keyboardRef.instance.enterClick.subscribe(() => {
+        const event = new Event('submit', { cancelable: true, bubbles: true });
+        if (this._elementRef.nativeElement.form) {
+          this._elementRef.nativeElement.form.dispatchEvent(event);
+        }
+        const enterPressedEvent = new KeyboardEvent('keypress', { key: 'Enter', code: 'Enter', cancelable: true, bubbles: true });
+        this._elementRef.nativeElement.dispatchEvent(enterPressedEvent);
+        const enterDownEvent = new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', cancelable: true, bubbles: true });
+        this._elementRef.nativeElement.dispatchEvent(enterDownEvent);
+        const enterUpEvent = new KeyboardEvent('keyup', { key: 'Enter', code: 'Enter', cancelable: true, bubbles: true });
+        this._elementRef.nativeElement.dispatchEvent(enterUpEvent);
+
+        this.enterClick.next();
+      });
+      this._keyboardRef.instance.capsClick.subscribe(() => this.capsClick.next());
+      this._keyboardRef.instance.altClick.subscribe(() => this.altClick.next());
+      this._keyboardRef.instance.shiftClick.subscribe(() => this.shiftClick.next());
     }
-
-    // connect outputs
-    this._keyboardRef.instance.enterClick.subscribe(() => this.enterClick.next());
-    this._keyboardRef.instance.capsClick.subscribe(() => this.capsClick.next());
-    this._keyboardRef.instance.altClick.subscribe(() => this.altClick.next());
-    this._keyboardRef.instance.shiftClick.subscribe(() => this.shiftClick.next());
   }
 
   @HostListener('blur', ['$event'])
