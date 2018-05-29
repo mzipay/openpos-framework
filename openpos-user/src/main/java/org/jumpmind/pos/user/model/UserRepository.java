@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
+import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.Permission;
+import org.jumpmind.pos.user.model.Workgroup;
 
 @Repository
 @DependsOn(value = { "UserModule" })
@@ -18,8 +21,8 @@ public class UserRepository {
             .result(PasswordHistory.class);
     
     private Query<Permission> workgroupPermissionsLookup = new Query<Permission>()
-            .named("workgroupPermissionsLookup")
-            .result(Permission.class);
+    		.named("workgroupPermissionsLookup")
+    		.result(Permission.class);
     
     @Autowired
     @Lazy
@@ -33,13 +36,18 @@ public class UserRepository {
                 userLookedUp.setPasswordHistory(passwordHistory);
             }
         }
-        //TODO Test this
-        String workgroupId = userLookedUp.getWorkgroupId();
-        Workgroup workgroup = userSession.findByNaturalId(Workgroup.class, workgroupId);
-        List<Permission> permissions = userSession.query(workgroupPermissionsLookup, workgroupId);
-        workgroup.setPermissions(permissions);
-        userLookedUp.setWorkgroup(workgroup);
-        
+
+        if (userLookedUp != null) {
+        	String workgroupId = userLookedUp.getWorkgroupId();
+        	Workgroup workgroup = userSession.findByNaturalId(Workgroup.class, workgroupId);
+        	List<Permission> permissions = userSession.query(workgroupPermissionsLookup, workgroupId);
+        	if (workgroup != null) {
+        		if (permissions != null) {
+        			workgroup.setPermissions(permissions);
+        		}
+            	userLookedUp.setWorkgroup(workgroup);
+        	}
+        }
         return userLookedUp;
     }
 
