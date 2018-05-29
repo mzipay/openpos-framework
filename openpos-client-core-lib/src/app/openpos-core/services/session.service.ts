@@ -162,6 +162,10 @@ export class SessionService implements ILocaleService {
     return 'true' === localStorage.getItem('sslEnabled');
   }
 
+  public setSslEnabled(enabled: boolean) {
+    localStorage.setItem('sslEnabled', enabled + '');
+  }  
+
   public setTheme(theme: string) {
     localStorage.setItem('theme', theme);
   }
