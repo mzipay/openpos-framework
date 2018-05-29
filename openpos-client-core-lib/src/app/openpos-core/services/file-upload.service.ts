@@ -12,8 +12,7 @@ export class FileUploadService {
     }
 
     protected getUploadServiceUrl(): string {
-        const port = this.sessionService.getServerPort();
-        const url = `http://${this.sessionService.getServerName()}${port ? `:${port}` : ''}/fileupload/uploadToNode`;
+        const url = `${this.sessionService.getServerBaseURL()}/fileupload/uploadToNode`;
         return url;
     }
 

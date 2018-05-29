@@ -169,8 +169,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     const prom = new Promise<{ success: boolean, message: string }>((resolve, reject) => {
       const port = this.session.getServerPort();
       const nodeId = this.session.getNodeId().toString();
-      const url = `http://${this.session.getServerName()}${port ? `:${port}` : ''}` +
-        `/register/restart/node/${nodeId}`;
+      const url = `${this.session.getServerBaseURL()}/register/restart/node/${nodeId}`;
       const httpClient = this.httpClient;
       httpClient.get(url).subscribe(response => {
         const msg = `Node '${nodeId}' restarted successfully.`;

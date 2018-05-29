@@ -476,8 +476,9 @@ export class SessionService implements ILocaleService {
   }
 
   public getServerBaseURL(): string {
+    let protocol = this.isSslEnabled() ? 'https' : 'http';
     if (! this.serverBaseUrl) {
-      this.serverBaseUrl = `http://${this.getServerName()}${this.getServerPort() ? `:${this.getServerPort()}` : ''}`;
+      this.serverBaseUrl = `${protocol}://${this.getServerName()}${this.getServerPort() ? `:${this.getServerPort()}` : ''}`;
     }
     return this.serverBaseUrl;
   }
