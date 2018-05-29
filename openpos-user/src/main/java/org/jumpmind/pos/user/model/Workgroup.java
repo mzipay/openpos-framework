@@ -19,6 +19,14 @@ public class Workgroup extends Entity {
     
     private List<Permission> permissions;
 
+    public String getWorkgroupId() {
+    	return workgroupId;
+    }
+    
+    public void setWorkgroupId(String workgroupId) {
+    	this.workgroupId = workgroupId;
+    }
+    
     public String getDescription() {
         return description;
     }

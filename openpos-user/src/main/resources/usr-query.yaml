@@ -5,12 +5,12 @@ queries:
   where: username = ${username}
   orderBy: password_sequence
 -
-  name: WorkgroupPermissionsLookup
+  name: workgroupPermissionsLookup
   select: > 
     select p.permission_id, allows_override
-    from user_permission p
-    join user_workgroup_permission wp
+    from usr_permission p
+    join usr_workgroup_permission wp
     on p.permission_id = wp.permission_id
     where wp.workgroup_id = ${workgroupId}
-
-      
+    
+    
