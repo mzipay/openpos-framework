@@ -46,12 +46,21 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
         this.onTouched = fn;
     }
 
-    @HostListener('input', ['$event.target.value'])
-    handleInput(value: string) {
+    @HostListener('input', ['$event'])
+    handleInput(event) {
+        const value = event.target.value;
+
         // Clean out any special characters
         const cleanValue = this.formatter.unFormatValue(value);
 
-        const newCaret = this.getCaretPos(value);
+        let caret: number;
+        if (event.detail) {
+            caret = event.detail;
+        } else {
+            caret = this.elRef.nativeElement.selectionStart;
+        }
+
+        const newCaret = this.getCaretPos(value, caret);
 
         // Our new value to display is a formatted version of the clean value
         const newValue = this.formatter.formatValue(cleanValue);
@@ -65,11 +74,7 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
         this.onChange(this.formatter.unFormatValue(newValue));
     }
 
-    getCaretPos(value: string) {
-        // We need to remap the caret position of the raw input string to the now new formatted string
-        // Save off the caret position in the raw input
-        const caret = this.elRef.nativeElement.selectionStart;
-
+    getCaretPos(value: string, caret: number) {
         // Get the cleaned substring of the raw value before the caret
         const beforeCaretClean = this.formatter.unFormatValue(value.slice(0, caret));
 
@@ -101,6 +106,6 @@ export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit
         if (!this.formatter.allowKey(key, this.formatter.unFormatValue(newValue)) && key !== 'Enter') {
             event.preventDefault();
         }
-
     }
+
 }

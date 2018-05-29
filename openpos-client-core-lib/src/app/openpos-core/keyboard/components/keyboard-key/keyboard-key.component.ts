@@ -133,19 +133,18 @@ export class MatKeyboardKeyComponent implements OnInit {
     }
   }
 
-  set inputValue(inputValue: string) {
-    if (this.control) {
-      this.control.setValue(inputValue);
-    } else if (this.input && this.input.nativeElement) {
+  private setInputValue(inputValue: string, newCaret: number) {
+    if (this.input && this.input.nativeElement) {
       this.input.nativeElement.value = inputValue;
-      const inputEvent = new Event('input');
+      this._setCursorPosition(newCaret);
+      const inputEvent = new CustomEvent('input', { detail: newCaret });
       this.input.nativeElement.dispatchEvent(inputEvent);
     }
   }
 
   // Inject dependencies
   constructor(@Inject(MAT_KEYBOARD_DEADKEYS) private _deadkeys: IKeyboardDeadkeys,
-              @Inject(MAT_KEYBOARD_ICONS) private _icons: IKeyboardIcons) {}
+    @Inject(MAT_KEYBOARD_ICONS) private _icons: IKeyboardIcons) { }
 
   ngOnInit() {
     // read the deadkeys
@@ -156,10 +155,6 @@ export class MatKeyboardKeyComponent implements OnInit {
   }
 
   onClick(event: MouseEvent) {
-    // Trigger a global key event
-    // TODO: investigate
-    this._triggerKeyEvent();
-
     // Trigger generic click event
     this.genericClick.emit(event);
 
@@ -191,9 +186,6 @@ export class MatKeyboardKeyComponent implements OnInit {
           char = VALUE_NEWLINE;
         } else {
           this.enterClick.emit(event);
-          // TODO: trigger submit / onSubmit / ngSubmit properly (for the time being this has to be handled by the user himself)
-          // console.log(this.control.ngControl.control.root)
-          // this.input.nativeElement.form.submit();
         }
         break;
 
@@ -229,9 +221,8 @@ export class MatKeyboardKeyComponent implements OnInit {
     const selectionLength = this._getSelectionLength();
     const head = value.slice(0, caret);
     const tail = value.slice(caret + selectionLength);
-    this.inputValue = [head, char, tail].join('');
-
-    this._setCursorPosition(caret + char.length);
+    const newCaret = caret + char.length;
+    this.setInputValue([head, char, tail].join(''), newCaret);
   }
 
   private deleteText(): void {
@@ -240,15 +231,15 @@ export class MatKeyboardKeyComponent implements OnInit {
 
     if (selectionLength > 0) {
       this.insertText('');
-
-      this._setCursorPosition(caret);
     } else {
       const value = this.inputValue;
-      const head = value.slice(0, caret - 1);
+      const head = caret > 0 ? value.slice(0, caret - 1) : '';
       const tail = value.slice(caret);
-      this.inputValue = [head, tail].join('');
-
-      this._setCursorPosition(caret - 1);
+      let newCaret = 0;
+      if (caret > 0) {
+        newCaret = caret - 1;
+      }
+      this.setInputValue([head, tail].join(''), newCaret);
     }
   }
 
@@ -268,26 +259,6 @@ export class MatKeyboardKeyComponent implements OnInit {
 
       return window.document['selection'].createRange().text.length;
     }
-  }
-
-  private _triggerKeyEvent(): Event {
-    const keyboardEvent = new KeyboardEvent('keydown');
-    //
-    // keyboardEvent[initMethod](
-    //   true, // bubbles
-    //   true, // cancelable
-    //   window, // viewArg: should be window
-    //   false, // ctrlKeyArg
-    //   false, // altKeyArg
-    //   false, // shiftKeyArg
-    //   false, // metaKeyArg
-    //   this.charCode, // keyCodeArg : unsigned long - the virtual key code, else 0
-    //   0 // charCodeArgs : unsigned long - the Unicode character associated with the depressed key, else 0
-    // );
-    //
-    // window.document.dispatchEvent(keyboardEvent);
-
-    return keyboardEvent;
   }
 
   // inspired by:
@@ -318,13 +289,6 @@ export class MatKeyboardKeyComponent implements OnInit {
     if (!this.input) {
       return;
     }
-
-    if (this.control) {
-      this.inputValue = this.control.value;
-    }
-    // ^ this is used to not only get "focus", but
-    // to make sure we don't have it everything -selected-
-    // (it causes an issue in chrome, and having it doesn't hurt any other browser)
 
     if ('createTextRange' in this.input.nativeElement) {
       const range = this.input.nativeElement.createTextRange();
