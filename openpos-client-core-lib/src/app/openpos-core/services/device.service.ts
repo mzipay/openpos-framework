@@ -27,10 +27,10 @@ export class DeviceService {
     this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
     document.addEventListener('deviceready', () => {
       console.log('cordova devices are ready for the device service');
-      this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
       this.initializeInAppBrowserPlugin();
       this.initializeBarcodeScannerPlugin();
       this._isRunningInCordova = true;
+      this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
     },
     false);
 

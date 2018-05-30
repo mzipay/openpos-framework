@@ -33,6 +33,7 @@ import { ScreenDirective } from './common/screen.directive';
 import { TemplateDirective } from './common/template.directive';
 import { FocusDirective } from './common/focus.directive';
 import { InactivityMonitorDirective } from './common/inactivity-monitor.directive';
+import { BarcodeScanPublisherDirective } from './common/barcode-scan-publisher.directive';
 
 // Services
 import { ScreenService } from './services/screen.service';
@@ -269,7 +270,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
     LoadingDialogComponent,
     VersionComponent,
     InactivityMonitorDirective,
-    PhoneUSValidatorDirective
+    PhoneUSValidatorDirective,
+    BarcodeScanPublisherDirective
   ],
   imports: [
     BrowserModule,
@@ -303,7 +305,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
     LoginDialogComponent,
     ChooseOptionsComponent,
     FormattedInputValueAccessor,
-    InactivityMonitorDirective
+    InactivityMonitorDirective,
+    BarcodeScanPublisherDirective
     ],
   providers: [
     HttpClient,
