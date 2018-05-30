@@ -3,6 +3,7 @@ package org.jumpmind.pos.util;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,8 +16,8 @@ public class OrposToOpenposUtility {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection c = null;
         try {
-            c = DriverManager.getConnection("jdbc:mysql://localhost/registerdb?serverTimezone=UTC", "regDB_USER", "Passw0rd");
-            writeAuthenticationSql(c);
+            c = DriverManager.getConnection("jdbc:mysql://localhost/storedb?serverTimezone=UTC", "root", "JSQLM1nd166");
+            writeAuthoritySql(c);
             writeGroupRuleSql(c);
             writeTaxableGroupSql(c);
             writeTaxJurisdictionSql(c);
@@ -50,7 +51,7 @@ public class OrposToOpenposUtility {
         return res;
     }
 
-    protected static void writeAuthenticationSql(Connection c) throws Exception {
+    protected static void writeAuthoritySql(Connection c) throws Exception {
         try {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("select * from pa_athy_tx");
@@ -62,9 +63,10 @@ public class OrposToOpenposUtility {
                 String taxAuth = escapeApostrophes(rs.getString("nm_athy_tx"));
                 int rc = rs.getInt("sc_rnd");
                 double rd = rs.getDouble("qu_dgt_rnd");
+                Timestamp created = rs.getTimestamp("ts_crt_rcrd");
                 out.write("INSERT INTO tax_authority (id, auth_name, rounding_code, "
                         + "rounding_digits_quantity, create_time, create_by, last_update_time, last_update_by) " + "VALUES (" + id + ", '"
-                        + taxAuth + "', " + rc + ", " + rd + ", '" + timestamp + "', 'UTIL', '" + timestamp + "', 'UTIL');\n");
+                        + taxAuth + "', " + rc + ", " + rd + ", '" + created + "', 'UTIL', '" + timestamp + "', 'UTIL');\n");
             }
             out.close();
             rs.close();
@@ -91,12 +93,13 @@ public class OrposToOpenposUtility {
                 Boolean grossflag = rs.getBoolean("fl_tx_gs_amt");
                 String calMth = rs.getString("cd_cal_mth");
                 String trusgcd = rs.getString("cd_tx_rt_ru_usg");
-                // TODO tax cycle amount?
+                BigDecimal cycamt = rs.getBigDecimal("mo_txbl_cyc");
+                Timestamp created = rs.getTimestamp("ts_crt_rcrd");
                 out.write("INSERT INTO tax_group_rule (id, authority_id, group_id, "
                         + "rule_name, description, compound_sequence_number, tax_on_gross_amount_flag, "
                         + "calculation_method_code, rate_rule_usage_code, cycle_amount, create_time, "
                         + "create_by, last_update_time, last_update_by) " + "VALUES (" + id + ", '" + aid + "', '" + gid + "', '" + rulename
-                        + "', '" + desc + "', " + cmpsq + ", '" + grossflag + "', '" + calMth + "', '" + trusgcd + "', 0, '" + timestamp
+                        + "', '" + desc + "', " + cmpsq + ", '" + grossflag + "', '" + calMth + "', '" + trusgcd + "', " + cycamt+ ", '" + created
                         + "', 'UTIL', '" + timestamp + "', 'UTIL');\n");
             }
             out.close();
@@ -119,10 +122,11 @@ public class OrposToOpenposUtility {
                 String gname = escapeApostrophes(rs.getString("nm_gp_tx"));
                 String desc = escapeApostrophes(rs.getString("de_gp_tx"));
                 String recPrntCode = rs.getString("cd_rcv_prt");
+                Timestamp created = rs.getTimestamp("ts_crt_rcrd");
 
                 out.write("INSERT INTO tax_group (id, group_name, description, " + "receipt_print_code, create_time, create_by, "
                         + "last_update_time, last_update_by) " + "VALUES (" + id + ", '" + gname + "', '" + desc + "', '" + recPrntCode
-                        + "', '" + timestamp + "', 'UTIL', '" + timestamp + "', 'UTIL');\n");
+                        + "', '" + created + "', 'UTIL', '" + timestamp + "', 'UTIL');\n");
             }
             out.close();
             rs.close();
@@ -170,15 +174,16 @@ public class OrposToOpenposUtility {
                 String groupID = escapeApostrophes(rs.getString("ID_GP_TX"));
                 Integer rrSeqNum = rs.getInt("ai_tx_rt_ru");
                 int typeCode = rs.getInt("CD_TYP");
-                double minTxAm = rs.getDouble("mo_txbl_min");
-                double maxTxAm = rs.getDouble("mo_txbl_max");
-                double txPrcnt = rs.getDouble("PE_TX");
-                double txAmnt = rs.getDouble("mo_tx");
+                BigDecimal minTxAm = rs.getBigDecimal("mo_txbl_min");
+                BigDecimal maxTxAm = rs.getBigDecimal("mo_txbl_max");
+                BigDecimal txPrcnt = rs.getBigDecimal("PE_TX");
+                BigDecimal txAmnt = rs.getBigDecimal("mo_tx");
+                Timestamp created = rs.getTimestamp("ts_crt_rcrd");
                 out.write("INSERT INTO tax_rate_rule (id, authority_id, group_id, rate_rule_sequence_number, type_code, "
                         + "min_taxable_amount, max_taxable_amount, tax_percent, tax_amount, " + ""
                         + "create_time, create_by, last_update_time, last_update_by) " + "VALUES ('" + id + "', '" + authID + "', '" + groupID
                         + "', " + rrSeqNum + ", " + typeCode + ", " + minTxAm + ", " + maxTxAm + ", " + txPrcnt + ", " + txAmnt + ", '"
-                        + timestamp + "', 'UTIL', '" + timestamp + "', 'UTIL');\n");
+                        + created + "', 'UTIL', '" + timestamp + "', 'UTIL');\n");
             }
             out.close();
             rs.close();

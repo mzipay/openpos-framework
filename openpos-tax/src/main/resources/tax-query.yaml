@@ -8,8 +8,8 @@ queries:
   where: authority_id = ${authorityId}
 -
   name: taxRateRuleLookup
-  where: authority_id = ${authorityId}
+  where: authority_id = ${authorityID}
 -
   name: taxRateRuleLookup2
-  where: (group_id = ${groupID}
-      AND authority_id = ${authorityID})
+  where: (group_id = ${groupId}
+      AND authority_id = ${authorityId})
