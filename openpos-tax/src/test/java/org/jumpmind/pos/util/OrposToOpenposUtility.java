@@ -16,7 +16,7 @@ public class OrposToOpenposUtility {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection c = null;
         try {
-            c = DriverManager.getConnection("jdbc:mysql://localhost/registerdb?serverTimezone=UTC", "root", "JSQLM1nd166");
+            c = DriverManager.getConnection("jdbc:mysql://localhost/storedb?serverTimezone=UTC", "root", "JSQLM1nd166");
             writeAuthoritySql(c);
             writeGroupRuleSql(c);
             writeTaxableGroupSql(c);
@@ -93,8 +93,7 @@ public class OrposToOpenposUtility {
                 Boolean grossflag = rs.getBoolean("fl_tx_gs_amt");
                 String calMth = rs.getString("cd_cal_mth");
                 String trusgcd = rs.getString("cd_tx_rt_ru_usg");
-                //BigDecimal cycamt = rs.getBigDecimal("mo_txbl_cyc");
-                BigDecimal cycamt = null;
+                BigDecimal cycamt = rs.getBigDecimal("mo_txbl_cyc");
                 Timestamp created = rs.getTimestamp("ts_crt_rcrd");
                 out.write("INSERT INTO tax_group_rule (id, authority_id, group_id, "
                         + "rule_name, description, compound_sequence_number, tax_on_gross_amount_flag, "
