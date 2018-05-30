@@ -2,6 +2,8 @@ package org.jumpmind.pos.translate;
 
 import static java.lang.String.format;
 
+import org.jumpmind.pos.core.device.IDeviceRequest;
+import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.util.RMICallbackProxyManager;
@@ -75,6 +77,19 @@ public class TranslationManagerBridge implements ITranslationManager {
             setTranslationManagerSubscriber();
             ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
             implementation.showActiveScreen();
+        }
+    }
+    
+    @Override
+    public IDeviceResponse sendDeviceRequest(IDeviceRequest request) {
+        try {
+            ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
+            return implementation.sendDeviceRequest(request);
+        } catch (RemoteConnectFailureException e) {
+            headlessStartupService.start(nodeId);
+            setTranslationManagerSubscriber();
+            ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
+            return implementation.sendDeviceRequest(request);
         }
     }
     
