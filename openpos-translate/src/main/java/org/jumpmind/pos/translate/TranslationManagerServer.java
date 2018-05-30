@@ -40,7 +40,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
     private Map<String, ITranslationManagerSubscriber> subscriberByAppId = new HashMap<>();
 
     private POSSessionInfo posSessionInfo = new POSSessionInfo();
-    
+
     private boolean lastScreenWasNoOp = false;
 
     public TranslationManagerServer(ILegacyScreenInterceptor interceptor, ITranslatorFactory screenTranslatorFactory,
@@ -63,7 +63,6 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
     @Override
     public void setTranslationManagerSubscriber(ITranslationManagerSubscriber subscriber) {
         ITranslationManagerSubscriber currentSubscriber = this.subscriberByAppId.get(subscriber.getAppId());
-        
         if (currentSubscriber == null) {
             this.subscriberByAppId.put(subscriber.getAppId(), subscriber);
             getLegacyUISubsystem().setLegacyScreenListener(this);
@@ -105,17 +104,17 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
         }
         return screenShown;
     }
-    
-	@Override
-	public boolean showLegacyScreen(ILegacyScreen screen) {
-		boolean screenShown = false;
-		if (screen != null) {
-			screenShown = translateAndShow(screen);
-			lastScreenWasNoOp = false;
 
-		}
-		return screenShown;
-	}
+    @Override
+    public boolean showLegacyScreen(ILegacyScreen screen) {
+        boolean screenShown = false;
+        if (screen != null) {
+            screenShown = translateAndShow(screen);
+            lastScreenWasNoOp = false;
+
+        }
+        return screenShown;
+    }
 
     public void executeMacro(InteractionMacro macro) {
         this.activeMacro = macro;
@@ -203,32 +202,32 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
             if (legacyScreen != null && subscriber.isInTranslateState()) {
                 ITranslator lastTranslator = this.lastTranslatorByAppId.get(subscriber.getAppId());
-                
+
                 ILegacyScreen previousScreen = null;
                 if (lastTranslator instanceof AbstractScreenTranslator<?>) {
                     previousScreen = ((AbstractScreenTranslator<?>) lastTranslator).getLegacyScreen();
                 }
-                
+
                 if (!screenInterceptor.intercept(legacyScreen, previousScreen, subscriber, this, posSessionInfo)) {
                     ITranslator newTranslator = screenTranslatorFactory.createScreenTranslator(legacyScreen, subscriber.getAppId(),
                             subscriber.getProperties());
-                    
+
                     if (newTranslator != null) {
                         newTranslator.setPosSessionInfo(posSessionInfo);
                     }
                     if (newTranslator instanceof AbstractScreenTranslator<?>) {
-                        AbstractScreenTranslator<?> screenTranslator = (AbstractScreenTranslator<?>) newTranslator;                        
+                        AbstractScreenTranslator<?> screenTranslator = (AbstractScreenTranslator<?>) newTranslator;
                         Screen screen = screenTranslator.build();
                         subscriber.showScreen(screen);
                         screenShown = true;
                     } else if (newTranslator instanceof IActionTranslator) {
-                        ((IActionTranslator)newTranslator).translate(this, subscriber);
-                    }                    
+                        ((IActionTranslator) newTranslator).translate(this, subscriber);
+                    }
 
                     this.lastTranslatorByAppId.put(subscriber.getAppId(), newTranslator);
 
                 } else {
-                    this.lastTranslatorByAppId.put(subscriber.getAppId(), null);
+//                    this.lastTranslatorByAppId.put(subscriber.getAppId(), null);
                 }
             }
         }
@@ -267,7 +266,16 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
     public IDeviceResponse sendDeviceRequest(IDeviceRequest request) {
         IDeviceResponse response = null;
         for (ITranslationManagerSubscriber subscriber : this.subscriberByAppId.values()) {
-            response = subscriber.sendDeviceRequest(request);
+            if ("translator".equals(request.getDeviceId())) {
+                ITranslator lastTranslator = this.lastTranslatorByAppId.get(subscriber.getAppId());
+                if (lastTranslator instanceof IDeviceRequestHandler) {
+                    response = ((IDeviceRequestHandler) lastTranslator).sendDeviceRequest(subscriber, this, request);
+                } else {
+                    logger.info("Received a device request that could not be handled by a translator: {}",  (lastTranslator != null ?  lastTranslator.getClass().getSimpleName() : null));
+                }
+            } else {
+                response = subscriber.sendDeviceRequest(request);
+            }
             break;
         }
 
