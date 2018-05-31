@@ -82,7 +82,7 @@ public class ContextSchemaEnhancer implements IDBSchemaListener {
                 }
             }
             if (!matched) {
-                log.info("Orphaned tag column detected.  This column should be manually dropped: " + 
+                log.info("Orphaned tag column detected.  This column should be manually dropped if no longer needed: " + 
                         table + " " + existingColumn);
             }
         }
@@ -94,12 +94,14 @@ public class ContextSchemaEnhancer implements IDBSchemaListener {
     
     protected Column setColumnInfo(Column column, TagModel tag) {
         column.setName(getColumnName(tag));
-        if (StringUtils.equals(TagModel.TAG_NUMERIC_TYPE, tag.getDataType())) {
-            column.setTypeCode(Types.BIGINT);
-        } else {
+        column.setPrimaryKey(true);
+        column.setRequired(true);
+//        if (StringUtils.equals(TagModel.TAG_NUMERIC_TYPE, tag.getDataType())) {
+//            column.setTypeCode(Types.BIGINT);
+//        } else {
             column.setTypeCode(Types.VARCHAR);
             column.setSize("128");
-        }
+//        }
         return column;        
     }
     

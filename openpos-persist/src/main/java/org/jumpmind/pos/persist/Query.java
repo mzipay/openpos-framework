@@ -3,8 +3,10 @@ package org.jumpmind.pos.persist;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
@@ -79,6 +81,15 @@ public class Query<T> {
     public SqlStatement generateSQL(Map<String, Object> params) {
         List<String> keys = new ArrayList<>();
         
+        StringSubstitutor literalSubtitution = new StringSubstitutor(new StringLookup() {
+            @Override
+            public String lookup(String key) {
+                Object paramValue = params.get(key);
+                return paramValue != null ? paramValue.toString() : "null";
+            }
+        }, "$${", "}", '\\');
+        
+        
         StringSubstitutor sub = new StringSubstitutor(new StringLookup() {
             @Override
             public String lookup(String key) {
@@ -87,8 +98,10 @@ public class Query<T> {
             }
         });
         
-        String preppedSelectClause = sub.replace(queryTemplate.getSelect());
-        String preppedWhereClause = sub.replace(queryTemplate.getWhere());
+        String preppedSelectClause = literalSubtitution.replace(queryTemplate.getSelect());        
+        preppedSelectClause = sub.replace(preppedSelectClause);
+        String preppedWhereClause = literalSubtitution.replace(queryTemplate.getWhere());
+        preppedWhereClause = sub.replace(preppedWhereClause);
         
         StringBuilder buff = new StringBuilder();
         preppedSelectClause = stripWhere(preppedSelectClause);
@@ -103,7 +116,9 @@ public class Query<T> {
         } 
         
         for (String optionalWhereClause : queryTemplate.getOptionalWhereClauses()) {
-            List<String> optionalWhereClauseKeys = new ArrayList<>();
+            Set<String> optionalWhereClauseKeys = new LinkedHashSet<>();
+            String preppedOptionalWhereClause = literalSubtitution.replace(optionalWhereClause);
+            
             StringSubstitutor optionalSubstitution = new StringSubstitutor(new StringLookup() {
                 @Override
                 public String lookup(String key) {
@@ -111,7 +126,8 @@ public class Query<T> {
                     return "?";
                 }
             });
-            String preppedOptionalWhereClause = optionalSubstitution.replace(optionalWhereClause);
+            
+            preppedOptionalWhereClause = optionalSubstitution.replace(preppedOptionalWhereClause);
             
             boolean shouldInclude = true;
             for (String key : optionalWhereClauseKeys) {

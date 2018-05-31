@@ -8,7 +8,7 @@ import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
 @Table
-public class Node extends Entity {
+public class Node extends Entity implements ITaggedElement {
     
     @Column(primaryKey=true)
     private String nodeId;
@@ -97,18 +97,28 @@ public class Node extends Entity {
         this.description = description;
     }
 
+    @Override
     public String getTagValue(String tagName) {
         return tags.get(tagName);
     }
 
+    @Override
     public void setTagValue(String tagName, String tagValue) {
         tags.put(tagName, tagValue);
     }
     
+    @Override
+    public void setTags(Map<String, String> tags) {
+        this.tags.clear();
+        this.tags.putAll(tags);
+    }
+    
+    @Override
     public void clearTagValue(String tagName) {
         tags.remove(tagName);
     }    
     
+    @Override
     public Map<String, String> getTags() {
         return new LinkedHashMap<>(tags);
     }

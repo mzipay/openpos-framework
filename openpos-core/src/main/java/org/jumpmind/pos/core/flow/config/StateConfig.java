@@ -31,7 +31,7 @@ public class StateConfig {
     private String stateName;
     private Class<? extends IState> stateClass;
     private Map<String, Class<? extends IState>> actionToStateMapping = new HashMap<>();
-    private Map<String, FlowConfig> actionToSubStateMapping = new HashMap<>();
+    private Map<String, SubTransition> actionToSubStateMapping = new HashMap<>();
 
     public String getStateName() {
         return stateName;
@@ -51,10 +51,10 @@ public class StateConfig {
     public void setActionToStateMapping(Map<String, Class<? extends IState>> actionToStateMapping) {
         this.actionToStateMapping = actionToStateMapping;
     }
-    public Map<String, FlowConfig> getActionToSubStateMapping() {
+    public Map<String, SubTransition> getActionToSubStateMapping() {
         return actionToSubStateMapping;
     }
-    public void setActionToSubStateMapping(Map<String, FlowConfig> actionToSubStateMapping) {
+    public void setActionToSubStateMapping(Map<String, SubTransition> actionToSubStateMapping) {
         this.actionToSubStateMapping = actionToSubStateMapping;
     }    
 

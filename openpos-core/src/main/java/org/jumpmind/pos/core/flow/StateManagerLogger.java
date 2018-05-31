@@ -1,6 +1,6 @@
 package org.jumpmind.pos.core.flow;
 
-import static org.jumpmind.pos.util.BoxLogging.DOWN_ARROW;
+import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_MIDDLE;
 import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_LINE;
 import static org.jumpmind.pos.util.BoxLogging.LOWER_LEFT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.LOWER_RIGHT_CORNER;
@@ -15,6 +15,7 @@ public class StateManagerLogger {
     
     final Logger log;
     
+    private final String ENTER_SUBSTATE = "<SubState>";
     private final String EXIT_SUBSTATE = "<Exit SubState>";
     
     public StateManagerLogger(Logger log) {
@@ -43,7 +44,9 @@ public class StateManagerLogger {
             
             int inbetweenWidth = Math.max(primaryAction.length()+2, 10);
             inbetweenWidth = Math.max(secondaryAction.length()+2, inbetweenWidth);
-            if (exitSubState) {
+            if (enterSubState) {
+                inbetweenWidth = Math.max(ENTER_SUBSTATE.length()+2, inbetweenWidth);
+            } else if (exitSubState) {
                 inbetweenWidth = Math.max(EXIT_SUBSTATE.length()+2, inbetweenWidth);
             }
             
@@ -94,17 +97,16 @@ public class StateManagerLogger {
         
         buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box1Width-2)).append(VERITCAL_LINE);
         
-        if (exitSubState) {
+        if (enterSubState) {
+            buff.append(StringUtils.center(ENTER_SUBSTATE, inbetweenWidth));
+        } else if (exitSubState) {
             buff.append(StringUtils.center(EXIT_SUBSTATE, inbetweenWidth));
         } else {            
             buff.append(StringUtils.center("", inbetweenWidth));
         }
         
-        if (enterSubState) {            
-            buff.append(VERITCAL_LINE).append(StringUtils.center(DOWN_ARROW + " SubState", box2Width-2)).append(VERITCAL_LINE);
-        } else {
-            buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box2Width-2)).append(VERITCAL_LINE);            
-        }
+        buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box2Width-2)).append(VERITCAL_LINE);            
+
         buff.append("\r\n");
         return buff.toString();
     }
@@ -123,7 +125,7 @@ public class StateManagerLogger {
     protected String drawTitleLine(int box1Width, int box2Width, int inbetweenWidth, String oldStateName, String newStateName) {
         StringBuilder buff = new StringBuilder();
         buff.append(VERITCAL_LINE).append(StringUtils.center(oldStateName, box1Width-2)).append(VERITCAL_LINE);
-        buff.append(" ").append(StringUtils.repeat(HORIZONTAL_LINE, inbetweenWidth-3)).append("> ");
+        buff.append(" ").append(StringUtils.repeat(HORIZONTAL_MIDDLE, inbetweenWidth-3)).append("> ");
         buff.append(VERITCAL_LINE).append(StringUtils.center(newStateName, box2Width-2)).append(VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();

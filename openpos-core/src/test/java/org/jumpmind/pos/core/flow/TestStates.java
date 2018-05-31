@@ -24,6 +24,28 @@ public class TestStates {
         }
     }
     
+    public static class HelpState implements IState {
+        
+        @In(scope=ScopeType.Node)
+        private IStateManager stateManager;
+
+        @Override
+        public void arrive(Action action) {
+            
+        }
+    }
+    
+    public static class AboutState implements IState {
+        
+        @In(scope=ScopeType.Node)
+        private IStateManager stateManager;
+        
+        @Override
+        public void arrive(Action action) {
+            
+        }
+    }     
+    
     public static class SellState implements IState {
         
         @In(scope=ScopeType.Node)

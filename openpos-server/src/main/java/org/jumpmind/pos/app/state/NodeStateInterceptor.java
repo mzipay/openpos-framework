@@ -1,6 +1,6 @@
 package org.jumpmind.pos.app.state;
 
-import org.jumpmind.pos.context.model.Node;
+import org.jumpmind.pos.context.model.ITaggedElement;
 import org.jumpmind.pos.context.service.ContextService;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.IState;
@@ -22,7 +22,7 @@ public class NodeStateInterceptor implements IStateInterceptor {
     public IState intercept(StateManager stateManager, IState currentState, IState newState, Action action) {
         if (stateManager.getScopeValue("node") == null) {
             String nodeId = stateManager.getNodeId();
-            Node node = contextService.getNode(nodeId).getNode();
+            ITaggedElement node = contextService.getNode(nodeId).getNode();
             if (node != null) {
                 stateManager.setScopeValue(ScopeType.Node, "node", node);
             } else {

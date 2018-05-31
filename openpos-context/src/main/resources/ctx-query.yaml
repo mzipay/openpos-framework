@@ -1,9 +1,13 @@
 ---
 queries:
 -
+  name: nodesByTag
+  where: $${tagColumnName} = ${tagValue}
+  orderBy: node_id asc  
+-
   name: configLookup
   where: config_name = ${configName}
-    AND enabled_flag = 1
+    AND (enabled_flag IS NULL OR enabled_flag = 1)
     AND (effective_date <= ${currentTime})
     AND (expiration_date IS NULL OR expiration_date > ${currentTime})
   orderBy: effective_date asc

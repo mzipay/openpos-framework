@@ -36,6 +36,16 @@ queries:
       AND model = ${model}
     group by model 
     order by model
+- 
+  name: carsByLiteralReplacementInWhereClause
+  where: $${columnName} = ${columnValue}
+- 
+  name: carsByLiteralReplacementInSelectClause
+  select: select VIN, MODEL_YEAR, MAKE, MODEL, CREATE_TIME, CREATE_BY, LAST_UPDATE_TIME, LAST_UPDATE_BY, COLOR from CAR_CAR WHERE $${columnName} = ${columnValue}  
+- 
+  name: carsByLiteralReplacementInOptionalWhereClause
+  optionalWhereClauses: 
+    - $${columnName} = ${columnValue}
 
 
 

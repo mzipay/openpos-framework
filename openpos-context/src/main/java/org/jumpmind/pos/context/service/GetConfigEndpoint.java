@@ -1,12 +1,8 @@
 package org.jumpmind.pos.context.service;
 
-import java.util.Date;
-
-import org.jumpmind.pos.context.model.ConfigModel;
 import org.jumpmind.pos.context.model.ContextRepository;
-import org.jumpmind.pos.context.model.Node;
+import org.jumpmind.pos.context.model.ITaggedElement;
 import org.jumpmind.pos.service.Endpoint;
-import org.jumpmind.pos.service.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,21 +33,22 @@ public class GetConfigEndpoint {
             return result;
         }
         
-        Node node = nodeResult.getNode();
+        ITaggedElement node = nodeResult.getNode();
         
-        ConfigModel model = contextRepository.findConfigValue(new Date(), node.getTags(), configName);
-        if (model != null) {
-            result.setResultStatus(ServiceResult.RESULT_SUCCESS);
-            result.setConfigName(configName);
-            result.setConfigValue(model.getConfigValue());
-            result.setConfig(model);
-        } else {
-            result.setResultStatus(ServiceResult.RESULT_NOT_FOUND);
-            result.setResultMessage("No config found for " + configName);
-        }
-        
-        return result;
-        
+//        ConfigModel model = contextRepository.findConfigValue(new Date(), node.getTags(), configName);
+//        if (model != null) {
+//            result.setResultStatus(ServiceResult.RESULT_SUCCESS);
+//            result.setConfigName(configName);
+//            result.setConfigValue(model.getConfigValue());
+//            result.setConfig(model);
+//        } else {
+//            result.setResultStatus(ServiceResult.RESULT_NOT_FOUND);
+//            result.setResultMessage("No config found for " + configName);
+//        }
+//        
+//        return result;
+
+        return null;
     }
 
 }
