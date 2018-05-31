@@ -12,7 +12,7 @@ public class TagCalculator {
 
     protected static final int DISQUALIFIED = Integer.MIN_VALUE;
     
-    public ITaggedElement getMostSpecific(List<ITaggedElement> taggedElements, Map<String, String> specifiedTags, TagConfig tagConfig) {
+    public ITaggedElement getMostSpecific(List<? extends ITaggedElement> taggedElements, Map<String, String> specifiedTags, TagConfig tagConfig) {
         
         List<TagValue> tagValues = buildTagValues(specifiedTags, tagConfig);
         

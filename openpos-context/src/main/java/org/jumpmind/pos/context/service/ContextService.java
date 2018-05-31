@@ -1,5 +1,7 @@
 package org.jumpmind.pos.context.service;
 
+import java.util.Date;
+
 import org.jumpmind.pos.service.EndpointDispatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +19,9 @@ public class ContextService {
     @RequestMapping("/config/{configName}")
     public ConfigResult getConfig(
             @RequestParam(value="nodeId", defaultValue="*") String nodeId,
+            @RequestParam(value="currentTime") Date currentTime,
             @PathVariable(value="configName") String configName) {
-        return endpointDispatcher.dispatch("/getConfig", nodeId, configName);
+        return endpointDispatcher.dispatch("/getConfig", nodeId, currentTime, configName);
     }
     
     @RequestMapping("/node")
