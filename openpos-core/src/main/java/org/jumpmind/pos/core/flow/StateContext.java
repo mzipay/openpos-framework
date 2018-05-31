@@ -11,6 +11,7 @@ public class StateContext {
     private Action action;
     private IState state;
     private Map<String, ScopeValue> flowScope = new HashMap<String, ScopeValue>(4);
+    private String returnActionName;
     
     public StateContext() {
         
@@ -65,6 +66,14 @@ public class StateContext {
         flowScope.put(name, new ScopeValue(value));
     }
     
+    public String getReturnActionName() {
+        return returnActionName;
+    }
+
+    public void setReturnActionName(String returnActionName) {
+        this.returnActionName = returnActionName;
+    }
+
     @Override
     public String toString() {
         return state != null ? state.toString() : super.toString();

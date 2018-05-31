@@ -3,6 +3,7 @@ package org.jumpmind.pos.context.model;
 import java.sql.Types;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jumpmind.pos.persist.Column;
@@ -10,7 +11,7 @@ import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
 @Table(name="config")
-public class ConfigModel extends Entity {
+public class ConfigModel extends Entity implements ITaggedElement {
     
     @Column(primaryKey=true)
     private Date effectiveDate;
@@ -67,11 +68,26 @@ public class ConfigModel extends Entity {
     }
 
     public Map<String, String> getTags() {
-        return tags;
+        return new LinkedHashMap<>(tags);
     }
 
     public void setTags(Map<String, String> tags) {
         this.tags = tags;
+    }
+
+    @Override
+    public String getTagValue(String tagName) {
+        return tags.get(tagName);
+    }
+
+    @Override
+    public void setTagValue(String tagName, String tagValue) {
+        tags.put(tagName, tagValue);
+    }
+
+    @Override
+    public void clearTagValue(String tagName) {
+        tags.remove(tagName);
     }
  
 

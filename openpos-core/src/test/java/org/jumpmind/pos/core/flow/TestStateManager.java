@@ -5,10 +5,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.jumpmind.pos.core.flow.TestStates.AboutState;
 import org.jumpmind.pos.core.flow.TestStates.ActionTestingState;
 import org.jumpmind.pos.core.flow.TestStates.CustomerSearchState;
 import org.jumpmind.pos.core.flow.TestStates.CustomerSignupState;
 import org.jumpmind.pos.core.flow.TestStates.CustomerState;
+import org.jumpmind.pos.core.flow.TestStates.HelpState;
 import org.jumpmind.pos.core.flow.TestStates.HomeState;
 import org.jumpmind.pos.core.flow.TestStates.InjectionFailedState;
 import org.jumpmind.pos.core.flow.TestStates.OptionalInjectionState;
@@ -55,7 +57,10 @@ public class TestStateManager {
                 .build());
         customerFlow.add(FlowBuilder.addState(CustomerSearchState.class)
                 .withTransition("CustomerSelected", CompleteState.class).build());
-        
+        customerFlow.addGlobalTransition("Help", HelpState.class);
+        customerFlow.addGlobalSubTransition("CustomerSignup", customerSignupFlow);
+        customerFlow.add(FlowBuilder.addState(HelpState.class)
+                .withTransition("Back", CustomerState.class).build());        
         
         FlowConfig config = new FlowConfig();
         config.setInitialState(FlowBuilder.addState(HomeState.class)
@@ -78,6 +83,10 @@ public class TestStateManager {
         config.add(FlowBuilder.addState(TransitionInterceptionState.class).
                 withTransition("Sell", SellState.class)
                 .build());
+        config.addGlobalTransition("Help", HelpState.class);
+        config.addGlobalTransition("About", AboutState.class);
+        config.addGlobalTransition("Home", HomeState.class);
+        config.addGlobalSubTransition("CustomerLookupGlobal", customerFlow);
         
         stateManager.setInitialFlowConfig(config);
         TestUtil.setField(stateManager, "actionHandler", new ActionHandlerImpl());
@@ -240,5 +249,72 @@ public class TestStateManager {
         assertEquals(OptionalInjectionState.class, stateManager.getCurrentState().getClass());
     }
     
+    @Test
+    public void testGlobalTransitionFromIntialState() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Help");
+        assertEquals(HelpState.class, stateManager.getCurrentState().getClass());
+    }
+    
+    @Test
+    public void testGlobalTransitionFromSubsquentState() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Help");
+        assertEquals(HelpState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("About");
+        assertEquals(AboutState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Home");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());        
+    }   
+    
+    @Test
+    public void testGlobalTransitionFromSubState() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Sell");
+        assertEquals(SellState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Customer");
+        assertEquals(CustomerState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Help");
+        assertEquals(HelpState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Back");
+        assertEquals(CustomerState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("CustomerSelected");
+        assertEquals(SellState.class, stateManager.getCurrentState().getClass());        
+    }    
+    
+    @Test
+    public void testGlobalSubTransitionFromIntialState() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("CustomerLookupGlobal");
+        assertEquals(CustomerState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("CustomerSignup");
+        assertEquals(CustomerSignupState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("CustomerSignedup");
+        assertEquals(CustomerState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("CustomerSelected");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+    }
+    
+    @Test
+    public void testGlobalSubTransitionFromSubState() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Sell");
+        assertEquals(SellState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Customer");
+        assertEquals(CustomerState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("CustomerSignup");
+        assertEquals(CustomerSignupState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("CustomerSignedup");
+        assertEquals(CustomerState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("CustomerSelected");
+        assertEquals(SellState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Home");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+    }
     
 }

@@ -52,8 +52,8 @@ public class FlowBuilder implements IFlowBuilder {
 
     @Override
     public IFlowBuilder withSubTransition(String actionName, FlowConfig flowConfig, String returnAction) {
-        flowConfig.setReturnAction(returnAction);
-        stateConfig.getActionToSubStateMapping().put(actionName, flowConfig);
+        SubTransition subTransition = new SubTransition(returnAction, flowConfig);
+        stateConfig.getActionToSubStateMapping().put(actionName, subTransition);
         return this;
     }
 }

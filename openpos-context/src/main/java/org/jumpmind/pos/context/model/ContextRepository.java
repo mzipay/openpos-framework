@@ -2,16 +2,18 @@ package org.jumpmind.pos.context.model;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.log4j.Logger;
 import org.jumpmind.pos.context.ContextException;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
@@ -23,13 +25,14 @@ import org.yaml.snakeyaml.constructor.Constructor;
 @DependsOn(value = { "ContextModule" })
 public class ContextRepository {
 
-    private static Logger log = Logger.getLogger(ContextRepository.class);
-
-    protected static final int DISQUALIFIED = Integer.MIN_VALUE;
+    private static Logger log = LoggerFactory.getLogger(ContextRepository.class);
 
     private Query<ConfigModel> configLookup = new Query<ConfigModel>()
             .named("configLookup")
             .result(ConfigModel.class);
+    private Query<Node> nodesByTag = new Query<Node>()
+            .named("nodesByTag")
+            .result(Node.class);
     
     private static TagConfig tagConfig;
 
@@ -37,46 +40,60 @@ public class ContextRepository {
     @Lazy
     DBSession contextSession;
     
-//    @PostConstruct
-//    public void init() {
-//        TagConfig tagConfig = getTagConfig();
-//        System.out.println(tagConfig);
-//    }
-
     public Node findNode(String nodeId) {
         Node node = contextSession.findByNaturalId(Node.class, nodeId);
-        if (node != null) {
-            for (String columnName : node.getAdditionalFields().keySet()) {
-                String columnUpper = columnName.toUpperCase();
-                if (columnUpper.startsWith(TagModel.TAG_PREFIX)) {
-                    Object value = node.getAdditionalFields().get(columnName);
-                    node.setTagValue(columnUpper, value != null ? value.toString() : null);
-                }
-            }
-        }
+        addTags(node, node.getAdditionalFields());
         return node;
     }
 
-    public ConfigModel findConfigValue(Date currentTime, Map<String, String> tags, String configName) {
+    public List<Node> findNodesByTag(String tagName, String tagValue) {
+        Map<String, Object> params = new HashMap<>();
+        String tagColumnName = TagModel.TAG_PREFIX + tagName;
+        params.put("tagColumnName", tagColumnName);
+        params.put("tagValue", tagValue);
+        List<Node> nodes = contextSession.query(nodesByTag, params);
+        addTagsToNodes(nodes);
+        return nodes;
+    }    
 
+    public List<ConfigModel> findConfigs(Date currentTime, String configName) {
         Map<String, Object> params = new HashMap<>();
         params.put("configName", configName);
         params.put("currentTime", currentTime);
+        
         List<ConfigModel> configs = contextSession.query(configLookup, params);
-        if (CollectionUtils.isEmpty(configs)) {
+        if (configs != null && !CollectionUtils.isEmpty(configs)) {
+            addTagsToConfigs(configs);
+            return configs;
+        } else {
             if (log.isDebugEnabled()) {                
                 log.debug("No configuration found for " + configName);
             }
             return null;
         }
-
-        ConfigModel config = findMostSpecificConfig(tags, configs);
-        if (config != null) {
-            return config;
-        } else {            
-            log.debug("No matching configuration found for " + configName + " and tags " + tags);
-            return null;
-        }
+    }
+    
+    protected void addTagsToConfigs(List<ConfigModel> configs) {
+        if (configs != null) {
+            for (ConfigModel config : configs) {
+                addTags(config, config.getAdditionalFields());
+            }
+        }        
+    }    
+    
+    protected void addTagsToNodes(List<Node> nodes) {
+        if (nodes != null) {
+            for (Node node : nodes) {
+                addTags(node, node.getAdditionalFields());
+            }
+        }        
+    }    
+    
+    protected void addTags(ITaggedElement node, Map<String, Object> fields) {
+        if (node != null) {
+            Map<String, String> tags = additionalFieldsToTags(fields);
+            node.setTags(tags);
+        }        
     }
     
     public static TagConfig getTagConfig() {
@@ -99,22 +116,57 @@ public class ContextRepository {
         } else {
             return tagConfig;
         }
-    }    
-
+    }
+    
+    protected Map<String, String> additionalFieldsToTags(Map<String, Object> additionalFields) {
+        
+        Map<String, String> tags = new HashMap<>();
+        
+        for (String columnName : additionalFields.keySet()) {
+            String columnUpper = columnName.toUpperCase();
+            if (columnUpper.startsWith(TagModel.TAG_PREFIX)) {
+                Object value = additionalFields.get(columnName);
+                String tagName = columnUpper.substring(TagModel.TAG_PREFIX.length());
+                tags.put(tagName, value.toString());
+            }
+        }
+        
+        return tags;
+    }
+ 
     protected ConfigModel findMostSpecificConfig(Map<String, String> tags, List<ConfigModel> configs) {
-        //        if (tags == null) {
-        //            throw new ContextException("tags cannot be null");
-        //        }
-        //        if (configs == null) {
-        //            throw new ContextException("configs cannot be null");
-        //        }
+                if (tags == null) {
+                    throw new ContextException("tags cannot be null");
+                }
+                if (configs == null) {
+                    throw new ContextException("configs cannot be null");
+                }
+                
+                TagConfig tagConfig = getTagConfig();
+                Map<String, List<TagModel>> tagsByGroup = tagConfig.getTagsByGroup();
+                
+                List<ConfigModel> matchingConfigs = new ArrayList<>(configs);
+                
+                tagsByGroup.values().forEach(tagDefinitions -> {
+                    tagDefinitions.forEach(tagDefinition -> {
+                        String value = tags.get(tagDefinition.getName());
+                        configs.forEach(config -> {
+//                            if (config.get)
+                        });
+                    });
+                });
+                
+                
+                for (List<TagModel> tagDefinitions : tagsByGroup.values()) {
+                    for (TagModel tag : tagDefinitions) {
+                        String value = tags.get(tag);
+                    }
+                }
+                
+                
         //        
         //        ConfigModel bestMatchConfig = null;
-        //        
-        //        int maxMatchScore = -1;
-        //        
-        //        for (ConfigModel config : configs) {
-        //            int matchScore = 0; 
+   
         //            if (config.getLocationType() != null) {
         //                if (!matchLocation(config, tags)) {
         //                    continue;
@@ -184,5 +236,7 @@ public class ContextRepository {
     //            return 0;
     //        }
     //    }
+
+
 
 }

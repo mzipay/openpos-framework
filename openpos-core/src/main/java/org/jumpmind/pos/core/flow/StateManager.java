@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.collections.CollectionUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
+import org.jumpmind.pos.core.flow.config.SubTransition;
 import org.jumpmind.pos.core.flow.ui.UIManager;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IScreenService;
@@ -96,7 +97,7 @@ public class StateManager implements IStateManager {
         transitionTo(action, newState, null, null);
     }
     
-    protected void transitionTo(Action action, IState newState, FlowConfig enterSubStateConfig, StateContext resumeSuspendedState) {
+    protected void transitionTo(Action action, IState newState, SubTransition enterSubStateConfig, StateContext resumeSuspendedState) {
         if (this.currentContext == null) {
             throw new FlowException("There is no currentContext on this StateManager.  HINT: States should use @In to get the StateManager, not @Autowired.");
         }        
@@ -114,14 +115,15 @@ public class StateManager implements IStateManager {
             outjector.performOutjections(currentContext.getState(), scope, currentContext);
         }
         
-        String returnActionName = currentContext.getFlowConfig().getReturnAction();
+        String returnActionName = currentContext.getReturnActionName();
         
         newState = runStateInterceptors(currentContext.getState(), newState, action);
         stateManagerLogger.logStateTransition(currentContext.getState(), newState, action, returnActionName, enterSubState, exitSubState);            
         
         if (enterSubState) {
             stateStack.push(currentContext);
-            currentContext = new StateContext(enterSubStateConfig, action);
+            currentContext = new StateContext(enterSubStateConfig.getSubFlowConfig(), action);
+            currentContext.setReturnActionName(enterSubStateConfig.getReturnActionName());
         } else if (exitSubState) { 
             currentContext = resumeSuspendedState;
         }
@@ -130,10 +132,10 @@ public class StateManager implements IStateManager {
         
         injector.performInjections(newState, scope, currentContext);
         
-        if (resumeSuspendedState == null) {
+        if (resumeSuspendedState == null || returnActionName == null) {
             currentContext.getState().arrive(action);
-        } else {            
-            Action returnAction = new Action(returnActionName, action.getData());
+        } else {
+            Action returnAction = new Action(returnActionName, action.getData());    
             returnAction.setCausedBy(action);
             if (actionHandler.canHandleAction(currentContext.getState(), returnAction)) {
                 actionHandler.handleAction(currentContext.getState(), returnAction);
@@ -207,9 +209,11 @@ public class StateManager implements IStateManager {
 
     @Override
     public void doAction(Action action) {
-        lastInteractionTime.set(new Date()); 
+        lastInteractionTime.set(new Date());
         
-        StateConfig stateConfig = currentContext.getFlowConfig().getStateConfig(currentContext.getState());
+        FlowConfig flowConfig = currentContext.getFlowConfig();
+        
+        StateConfig stateConfig = flowConfig.getStateConfig(currentContext.getState());
         if (handleTerminatingState(action, stateConfig)) {
             return;
         }
@@ -217,7 +221,9 @@ public class StateManager implements IStateManager {
         validateStateConfig(currentContext.getState(), stateConfig);
         
         Class<? extends IState> transitionStateClass = stateConfig.getActionToStateMapping().get(action.getName());
-        FlowConfig subStateConfig = stateConfig.getActionToSubStateMapping().get(action.getName());
+        Class<? extends IState> globalTransitionStateClass = flowConfig.getActionToStateMapping().get(action.getName());
+        SubTransition subStateConfig = stateConfig.getActionToSubStateMapping().get(action.getName());
+        SubTransition globalSubStateConfig = flowConfig.getActionToSubStateMapping().get(action.getName());
         
         if (actionHandler.canHandleAction(currentContext.getState(), action)) {
             handleAction(action);
@@ -227,6 +233,10 @@ public class StateManager implements IStateManager {
             transitionToSubState(action, subStateConfig);
         } else if (actionHandler.canHandleAnyAction(currentContext.getState())) {
             actionHandler.handleAnyAction(currentContext.getState(), action);
+        } else if (globalTransitionStateClass != null) {
+            transitionToState(action, globalTransitionStateClass);
+        } else if (globalSubStateConfig != null) {
+            transitionToSubState(action, globalSubStateConfig);
         } else {
             throw new FlowException(String.format("Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"...) defined in the flow config.", 
                     action.getName(), currentContext.getState().getClass().getName(), action.getName(), action.getName()));                    
@@ -314,8 +324,8 @@ public class StateManager implements IStateManager {
         }
     }
 
-    protected void transitionToSubState(Action action, FlowConfig subStateConfig) {
-        Class<? extends IState> subState = subStateConfig.getInitialState().getStateClass();
+    protected void transitionToSubState(Action action, SubTransition subStateConfig) {
+        Class<? extends IState> subState = subStateConfig.getSubFlowConfig().getInitialState().getStateClass();
         try {
             transitionTo(action, subState.newInstance(), subStateConfig, null);
         } catch (Exception ex) {

@@ -31,8 +31,9 @@ public class FlowConfig {
     
     private StateConfig initialState;
     private Map<Class<? extends IState>, StateConfig> stateConfigs = new HashMap<>();
-    private String returnAction;
     private Map<String, Object> configScope = new HashMap<>();
+    private Map<String, Class<? extends IState>> globalTransitions = new HashMap<>();
+    private Map<String, SubTransition> actionToSubStateMapping = new HashMap<>();
     
     public FlowConfig() {
     }
@@ -59,13 +60,17 @@ public class FlowConfig {
                 config.getActionToStateMapping().values();
         
         for (Class<? extends IState> targetStateClass : targetStateClasses) {
-            if (!stateConfigs.containsKey(targetStateClass)) {
-                StateConfig stateConfig = new StateConfig();
-                stateConfig.setStateName(FlowUtil.getStateName(targetStateClass));
-                stateConfig.setStateClass(targetStateClass);                
-                stateConfigs.put(targetStateClass, stateConfig);
-            }
+            autoConfigureTargetState(targetStateClass);
         }
+    }
+    
+    protected void autoConfigureTargetState(Class<? extends IState> targetStateClass) {
+        if (!stateConfigs.containsKey(targetStateClass)) {
+            StateConfig stateConfig = new StateConfig();
+            stateConfig.setStateName(FlowUtil.getStateName(targetStateClass));
+            stateConfig.setStateClass(targetStateClass);                
+            stateConfigs.put(targetStateClass, stateConfig);
+        }        
     }
 
     public StateConfig getInitialState() {
@@ -77,13 +82,13 @@ public class FlowConfig {
         this.initialState = initialState;
     }
 
-    public String getReturnAction() {
-        return returnAction;
-    }
-
-    public void setReturnAction(String returnAction) {
-        this.returnAction = returnAction;
-    }
+//    public String getReturnAction() {
+//        return returnAction;
+//    }
+//
+//    public void setReturnAction(String returnAction) {
+//        this.returnAction = returnAction;
+//    }
 
     public Map<String, Object> getConfigScope() {
         return configScope;
@@ -92,6 +97,21 @@ public class FlowConfig {
     public void setConfigScope(Map<String, Object> configScope) {
         this.configScope = configScope;
     }
+    
+    public void addGlobalTransition(String actionName, Class<? extends IState> destination) {
+        globalTransitions.put(actionName, destination);
+        autoConfigureTargetState(destination);
+    }
+    
+    public Map<String, Class<? extends IState>> getActionToStateMapping() {
+        return globalTransitions;
+    }
 
-
+    public void addGlobalSubTransition(String string, FlowConfig customerFlow) {
+        SubTransition subTransition = new SubTransition(null, customerFlow);
+        actionToSubStateMapping.put(string, subTransition);
+    }
+    public Map<String, SubTransition> getActionToSubStateMapping() {
+        return actionToSubStateMapping;
+    }    
 }

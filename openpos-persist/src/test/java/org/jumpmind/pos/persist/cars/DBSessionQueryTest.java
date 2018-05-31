@@ -4,9 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.io.InputStream;
 import java.io.StringReader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,16 +13,12 @@ import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.Query;
-import org.jumpmind.pos.persist.impl.DatabaseSchema;
-import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes= {TestConfig.class})
@@ -331,5 +325,70 @@ public class DBSessionQueryTest {
             assertEquals("grey", cars.get(1).getAdditionalField("color"));
             assertEquals("blue", cars.get(2).getAdditionalField("color"));
         }        
+    }
+    
+    @Test 
+    public void testLiteralQueryReplacementInSelectClause() {
+        sessionFactory.reloadSchema();
+        DBSession db = sessionFactory.createDbSession();
+        db.executeScript(new StringReader("update car_car set color = 'grey' where model = 'Accent';"
+                + "update car_car set color = 'blue' where model = 'Elantra';"));
+        
+        Query<CarEntity> carsByLiteralReplacementInSelectClause = new Query<CarEntity>()
+                .named("carsByLiteralReplacementInSelectClause")
+                .result(CarEntity.class);
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("columnName", "color");
+        params.put("columnValue", "blue");
+        
+        List<CarEntity> cars = db.query(carsByLiteralReplacementInSelectClause, params);
+        assertEquals(1, cars.size());
+        assertEquals("Hyundai", cars.get(0).getMake());
+        assertEquals("Elantra", cars.get(0).getModel());
+        assertEquals("blue", cars.get(0).getAdditionalField("color"));
+    }
+    @Test 
+    public void testLiteralQueryReplacementInWhereClause() {
+        sessionFactory.reloadSchema();
+        DBSession db = sessionFactory.createDbSession();
+        db.executeScript(new StringReader("update car_car set color = 'grey' where model = 'Accent';"
+                + "update car_car set color = 'blue' where model = 'Elantra';"));
+        
+        Query<CarEntity> carsByLiteralFieldMatch = new Query<CarEntity>()
+                .named("carsByLiteralReplacementInWhereClause")
+                .result(CarEntity.class);
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("columnName", "color");
+        params.put("columnValue", "blue");
+        
+        List<CarEntity> cars = db.query(carsByLiteralFieldMatch, params);
+        assertEquals(1, cars.size());
+        assertEquals("Hyundai", cars.get(0).getMake());
+        assertEquals("Elantra", cars.get(0).getModel());
+        assertEquals("blue", cars.get(0).getAdditionalField("color"));
+    }
+    
+    @Test 
+    public void testLiteralQueryReplacementInOptionalWhereClause() {
+        sessionFactory.reloadSchema();
+        DBSession db = sessionFactory.createDbSession();
+        db.executeScript(new StringReader("update car_car set color = 'grey' where model = 'Accent';"
+                + "update car_car set color = 'blue' where model = 'Elantra';"));
+        
+        Query<CarEntity> carsByLiteralReplacementInOptionalWhereClause = new Query<CarEntity>()
+                .named("carsByLiteralReplacementInOptionalWhereClause")
+                .result(CarEntity.class);
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("columnName", "color");
+        params.put("columnValue", "blue");
+        
+        List<CarEntity> cars = db.query(carsByLiteralReplacementInOptionalWhereClause, params);
+        assertEquals(1, cars.size());
+        assertEquals("Hyundai", cars.get(0).getMake());
+        assertEquals("Elantra", cars.get(0).getModel());
+        assertEquals("blue", cars.get(0).getAdditionalField("color"));
     }
 }
