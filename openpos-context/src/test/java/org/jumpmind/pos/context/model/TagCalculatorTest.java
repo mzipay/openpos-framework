@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class TestTagCalculator {
+public class TagCalculatorTest {
     
     public TagConfig buildTagConfig() {
         TagConfig tagConfig = new TagConfig();
