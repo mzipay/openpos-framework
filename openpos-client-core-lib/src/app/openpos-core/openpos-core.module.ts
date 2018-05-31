@@ -34,6 +34,7 @@ import { TemplateDirective } from './common/template.directive';
 import { FocusDirective } from './common/focus.directive';
 import { InactivityMonitorDirective } from './common/inactivity-monitor.directive';
 import { BarcodeScanPublisherDirective } from './common/barcode-scan-publisher.directive';
+import { ScreenOrientationDirective } from './common/screen-orientation.directive';
 
 // Services
 import { ScreenService } from './services/screen.service';
@@ -271,7 +272,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
     VersionComponent,
     InactivityMonitorDirective,
     PhoneUSValidatorDirective,
-    BarcodeScanPublisherDirective
+    BarcodeScanPublisherDirective,
+    ScreenOrientationDirective
   ],
   imports: [
     BrowserModule,
@@ -306,7 +308,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
     ChooseOptionsComponent,
     FormattedInputValueAccessor,
     InactivityMonitorDirective,
-    BarcodeScanPublisherDirective
+    BarcodeScanPublisherDirective,
+    ScreenOrientationDirective
     ],
   providers: [
     HttpClient,
