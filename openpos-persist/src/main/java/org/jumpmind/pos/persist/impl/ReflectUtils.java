@@ -33,8 +33,8 @@ public class ReflectUtils {
             return value;
         }
         Field field = getAccessibleField(target, propertyName);
-        if (field != null && field.getType().isAssignableFrom(boolean.class)) {
-            return false;
+        if (field != null && field.getType().isPrimitive()) {
+            return 0;
         }
         
         return value;
