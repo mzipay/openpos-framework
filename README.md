@@ -2,6 +2,12 @@
 
 This is the core library for openpos and contains all of the common functionality and screen for open pos. 
 
+## Add Openpos-client-core-lib to package.json
+To use this library add to following to your dependencies in `package.json`
+```json
+"@jumpmind/openpos-client-core-lib": "github:JumpMind/openpos-client-core-lib"
+```
+
 ## Development Setup
 For development on the library you'll want to link your client application to openpos-client-core-lib by the following steps.
 
