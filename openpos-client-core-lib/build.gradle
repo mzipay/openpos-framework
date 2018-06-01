@@ -2,10 +2,10 @@ plugins {
 	id "com.moowork.node" version "1.2.0"
 }
 
-apply from: "../../../node.gradle"
+apply from: "./node.gradle"
 
 node {
-    final def rootDir = "../../../.."
+    final def rootDir = "./../"
 	workDir = file("${rootDir}/node")
 	nodeModulesDir = file("./")
 }
