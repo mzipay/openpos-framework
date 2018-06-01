@@ -1,18 +1,20 @@
 {
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../out-tsc/app",
-    "baseUrl": "./",
-    "module": "es2015",
-    "types": []
-  },
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../out-tsc/app",
+        "baseUrl": "./",
+        "module": "es2015",
+        "types": []
+    },
     "include": [
-    "../node_modules/openpos-core/**/*.ts",
-    "**/*.ts"
-  ],
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts",
-    "../node_modules/openpos-core/**/*.spec.ts"
-  ]
+        "**/*.ts"
+    ],
+    "files": [
+        "../node_modules/@jumpmind/openpos-client-core-lib/index.ts",
+        "../node_modules/@stomp/ng2-stompjs/index.ts"
+    ],
+    "exclude": [
+        "test.ts",
+        "**/*.spec.ts"
+    ]
 }
