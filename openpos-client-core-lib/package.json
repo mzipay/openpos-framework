@@ -1,22 +1,11 @@
 {
-    "name": "openpos-core",
+    "name": "@jumpmind/openpos-client-core-lib",
     "version": "1.0.0",
     "description": "Core Library for openpos client",
     "main": "index.js",
     "author": "Jumpmind",
     "license": "MIT",
     "private": true,
-    "dependencies": {
-        "@oasisdigital/angular-material-search-select": "^0.12.0",
-        "@stomp/ng2-stompjs": "0.4.1",
-        "@stomp/stompjs": "4.0.0",
-        "@types/signature_pad": "0.0.30",
-        "angular2-text-mask": "8.0.4",
-        "hammerjs": "2.0.8",
-        "signature_pad": "2.3.0",
-        "text-mask-addons": "3.7.0",
-        "xml2js": "0.4.19"
-    },
     "peerDependencies": {
         "@angular/cdk": "^5.x.x",
         "@angular/material": "^5.x.x",
@@ -30,6 +19,15 @@
         "@angular/platform-browser": "^5.x.x",
         "@angular/platform-browser-dynamic": "^5.x.x",
         "@angular/platform-server": "^5.x.x",
-        "@angular/router": "^5.x.x"
+        "@angular/router": "^5.x.x",
+        "@oasisdigital/angular-material-search-select": "^0.12.0",
+        "@stomp/ng2-stompjs": "0.4.1",
+        "@stomp/stompjs": "4.0.0",
+        "@types/signature_pad": "0.0.30",
+        "angular2-text-mask": "8.0.4",
+        "hammerjs": "2.0.8",
+        "signature_pad": "2.3.0",
+        "text-mask-addons": "3.7.0",
+        "xml2js": "0.4.19"
     }
 }

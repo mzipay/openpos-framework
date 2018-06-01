@@ -34,3 +34,7 @@ openpos-client/.vscode/settings.json
 biglots.code-workspace
 biglots.code-workspace
 ascena.code-workspace
+
+openpos-client-core-lib/\.settings/org\.eclipse\.buildship\.core\.prefs
+
+openpos-client-core-lib/\.project

@@ -1,4 +1,4 @@
-import { DynamicScreenComponent } from 'openpos-core';
+import { DynamicScreenComponent } from '@jumpmind/openpos-client-core-lib';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 

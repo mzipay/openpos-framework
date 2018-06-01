@@ -5,6 +5,5 @@ export * from './plugins';
 export * from './common';
 export * from './screens';
 export * from './templates';
-export * from '@angular/material';
-export * from '@angular/cdk/layout';
+export * from './dialogs';
 
