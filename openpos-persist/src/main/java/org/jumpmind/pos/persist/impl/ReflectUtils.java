@@ -3,7 +3,6 @@ package org.jumpmind.pos.persist.impl;
 import java.lang.reflect.Field;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.reflect.FieldUtils;
 import org.jumpmind.pos.persist.PersistException;
 
 public class ReflectUtils {
