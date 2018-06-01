@@ -1,0 +1,31 @@
+
+<!--I didn't want to put the time in to make this truly generic so right now its specific to totals
+    but if we want to use this for something else I think we could either pass in a component or template
+    to render in place of the card for different data types -->
+<div fxFlex fxLayout="row" fxLayoutAlign="center" fxLayoutGap="6px">
+   <mat-card fxFlex *ngFor="let total of shownItems" fxFlex class="page-content-card text-center">
+       <mat-card-title class="muted-color text-sm">
+           {{total.name}}
+       </mat-card-title>
+       <mat-card-content>
+           <p class="muted-color text-lg">
+               <span class="super-currency-symbol">$</span>{{total.amount}}</p>
+       </mat-card-content>
+   </mat-card>
+   <button *ngIf="showOverflowList()" mat-icon-button color="accent" [matMenuTriggerFor]="totalsMenu">
+       <mat-icon>more_vert</mat-icon>
+   </button>
+   <mat-menu #totalsMenu="matMenu" overlapTrigger=false class="overflow-menu-panel" panelClass="overflow-menu-panel">
+       <div fxFlex="0 0 auto" fxLayout="column" fxLayoutAlign="center" fxLayoutGap="6px">
+           <mat-card *ngFor="let total of overflowItems" fxFlex class="page-content-card text-center">
+               <mat-card-title class="muted-color text-sm">
+                   {{total.name}}
+               </mat-card-title>
+               <mat-card-content>
+                   <p class="muted-color text-lg">
+                       <span class="super-currency-symbol">$</span>{{total.amount}}</p>
+               </mat-card-content>
+           </mat-card>				
+       </div>
+   </mat-menu>
+</div>

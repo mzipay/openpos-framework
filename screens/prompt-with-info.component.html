@@ -1,0 +1,33 @@
+
+<div *ngIf="screen.type==='PromptWithInfo'" fxLayout="column" fxLayoutAlign="center center">
+    <ng-container *ngIf="screen.promptPosition === 'Top'; else formCard">
+        <ng-container *ngTemplateOutlet="promptCard"></ng-container>
+    </ng-container>
+    <ng-container *ngIf="screen.promptPosition === 'Top'; else promptCard">
+        <ng-container *ngTemplateOutlet="formCard"></ng-container>
+    </ng-container>
+</div>
+
+<ng-template #formCard>
+    <mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
+        <app-dynamic-form-control [screen]="screen" [screenForm]="screen.form"></app-dynamic-form-control>
+    </mat-card>
+</ng-template>
+<ng-template #promptCard>
+    <mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
+        <form [formGroup]="promptFormGroup" (ngSubmit)="onFormSubmit()" novalidate [markDirtyOnSubmit]="promptFormGroup">
+            <mat-card-content>		    
+                    <app-prompt-input #promptInput *ngIf="screen.editable" [placeholderText]="screen.placeholderText" [responseType]="screen.responseType"
+                    [promptIcon]="screen.promptIcon" [responseText]="screen.responseText" [hintText]="screen.text" [maskSpec]="screen.promptMask" 
+                    [minLength]="screen.minLength" [maxLength]="screen.maxLength"
+                    [promptFormGroup]="promptFormGroup"></app-prompt-input>
+            </mat-card-content>
+            <mat-card-actions *ngIf="screen.actionButton" align="end">
+                <button mat-raised-button type="submit" color=primary>
+                    <span>{{screen.actionButton.title ? screen.actionButton.title : 'Next'}}</span>
+                    <mat-icon *ngIf="screen.actionButton.icon" class="material-icons">{{screen.actionButton.icon}}</mat-icon>
+                </button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</ng-template>

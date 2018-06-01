@@ -1,0 +1,29 @@
+plugins {
+	id "com.moowork.node" version "1.2.0"
+}
+
+apply from: "./node.gradle"
+
+node {
+    final def rootDir = "./../"
+	workDir = file("${rootDir}/node")
+	nodeModulesDir = file("./")
+}
+
+npm_link.dependsOn(npmInstall)
+
+task link {}
+link.dependsOn(npm_link)
+
+
+task build {}
+build.dependsOn(link)
+
+task develop {}
+
+task check {}
+
+task runAll{}
+
+task assemble {}
+assemble.dependsOn(build)

@@ -1,0 +1,51 @@
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+    <div fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center"  fxLayoutGap="16px">
+            <mat-card fxFlex class="page-content-card text-center">
+                    <mat-card-content fxLayout="column" fxLayoutAlign="end">
+                        <mat-form-field ngClass="text-md" >
+                            <input matInput #balance #field="ngModel" style="text-align:right"
+                                [(ngModel)]="balanceDue"
+                                placeholder="Balance Due"
+                                readonly="true"
+                                [formatterName]="'money'">
+                        </mat-form-field>
+                    </mat-card-content>
+                </mat-card>
+                
+
+            <mat-card fxFlex class="page-content-card text-center">
+                <mat-card-content fxLayout="column" fxLayoutAlign="end">
+                    <mat-form-field ngClass="text-md" >
+                        <input matInput #tenderAmountField="matInput" #field="ngModel" autoSelectOnFocus style="text-align:right"
+                            [(ngModel)]="tenderAmount.value"
+                            [placeholder]="tenderAmount.placeholder"
+                            [required]="tenderAmount.required"
+                            [formatterName]="'money'" novalidate type="tel" pattern="[0-9]*" autofocus>
+                        <mat-error>
+                                <app-show-errors [control]="field"></app-show-errors>
+                        </mat-error>
+                    </mat-form-field>
+                </mat-card-content>
+            </mat-card>
+
+    </div>
+
+    <mat-card fxFlex="1 1 auto" ngClass="page-content-card scrollable-content-card serrated-edge" fxLayout="column">
+        <mat-card-title class="text-md" style="padding:16px">
+            Completed Tenders
+        </mat-card-title>
+        <mat-card-content fxFlex="1 1 auto">
+            <mat-list class="list-seperator" ngClass.xs="xs">
+                <mat-list-item *ngFor="let item of tenderItems">
+					<p matLine>{{item.description}}</p>
+					<span class="text-md">{{item.amount|currency:session.getCurrencyDenomination():true:'1.2'}}</span>
+				</mat-list-item>
+            </mat-list>
+            <div *ngIf="tenderItems.length == 0" class="text-md"
+            fxLayout="column" fxLayoutAlign="center center">
+                <app-icon iconName="credit_card" class="muted-color" iconClass="mat-128"></app-icon>
+                Completed tenders will appear here.
+            </div>
+        </mat-card-content>
+</mat-card>
+</div>
