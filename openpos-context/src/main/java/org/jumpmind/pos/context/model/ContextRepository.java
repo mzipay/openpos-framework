@@ -42,7 +42,9 @@ public class ContextRepository {
     
     public Node findNode(String nodeId) {
         Node node = contextSession.findByNaturalId(Node.class, nodeId);
-        addTags(node, node.getAdditionalFields());
+        if (node != null) {            
+            addTags(node, node.getAdditionalFields());
+        }
         return node;
     }
 
@@ -99,7 +101,7 @@ public class ContextRepository {
     public static TagConfig getTagConfig() {
         if (tagConfig == null) {            
             try {
-                URL url = Thread.currentThread().getContextClassLoader().getResource("tags.yaml");
+                URL url = Thread.currentThread().getContextClassLoader().getResource("openpos-tags.yaml");
                 if (url != null) {
                     log.info(String.format("Loading %s...", url.toString()));
                     InputStream queryYamlStream = url.openStream();
