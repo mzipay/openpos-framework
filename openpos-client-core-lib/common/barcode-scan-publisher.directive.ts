@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Subscription';
 import { Scan } from './scan';
 import { BarcodeScannerPlugin } from './../plugins/barcodescanner.plugin';
 import { PluginService } from './../services/plugin.service';
@@ -11,6 +12,7 @@ import { DeviceService } from '../services/device.service';
 export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
 
     private barcodePlugin: BarcodeScannerPlugin;
+    private barcodeEventSubscription: Subscription;
     constructor(el: ElementRef, 
         private sessionService: SessionService,
         private deviceService: DeviceService, 
@@ -27,7 +29,7 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
                 // event to the plugin.  This won't be called for cordova barcodescanner plugin
                 // camera-based scan events.  It should only be used for third party scan events
                 // which come from other sources such as a scan device
-                this.barcodePlugin.onBarcodeScanned.subscribe({
+                this.barcodeEventSubscription = this.barcodePlugin.onBarcodeScanned.subscribe({
                     next: (scan: Scan) => {
                         this.publishBarcode(scan);
                     }
@@ -37,7 +39,9 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
     }    
 
     ngOnDestroy(): void {
-//        console.log('BarcodeScanPublisherDirective DESTROYED');
+        if (this.barcodeEventSubscription) {
+            this.barcodeEventSubscription.unsubscribe();
+        }
     }
 
     publishBarcode(scan: Scan) {
