@@ -1,7 +1,7 @@
 package org.jumpmind.pos.context.service;
 
 import org.jumpmind.pos.context.model.ContextRepository;
-import org.jumpmind.pos.context.model.Node;
+import org.jumpmind.pos.context.model.DeviceModel;
 import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.service.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,26 +11,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
 @Transactional(transactionManager="contextTxManager")
-public class GetNodeEndpoint {
+public class GetDeviceEndpoint {
     
     @Autowired
     private ContextRepository contextRepository;    
     
-    @Endpoint("/node")
-    public NodeResult getNode(
-            @RequestParam(value="nodeId", defaultValue="*") String nodeId) {
+    @Endpoint("/device")
+    public DeviceResult getNode(
+            @RequestParam(value="deviceId", defaultValue="*") String deviceId) {
         
-        NodeResult result = new NodeResult();
-        Node node = contextRepository.findNode(nodeId);
+        DeviceResult result = new DeviceResult();
+        DeviceModel device = contextRepository.findDevice(deviceId);
         
-        if (node != null) {
+        if (device != null) {
             result.setResultStatus(ServiceResult.RESULT_SUCCESS);
-            result.setNodeId(node.getNodeId());
-            result.setNode(node);
+            result.setDeviceId(device.getDeviceId());
+            result.setDevice(device);
             return result;
         } else {
             result.setResultStatus(ServiceResult.RESULT_NOT_FOUND);
-            result.setResultMessage("No node found for nodeId=" + nodeId);
+            result.setResultMessage("No node found for deviceId=" + deviceId);
         }
         
         return result;

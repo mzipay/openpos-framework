@@ -1,9 +1,9 @@
 ---
 queries:
 -
-  name: nodesByTag
+  name: devicesByTag
   where: $${tagColumnName} = ${tagValue}
-  orderBy: node_id asc  
+  orderBy: device_id asc  
 -
   name: configLookup
   where: config_name = ${configName}

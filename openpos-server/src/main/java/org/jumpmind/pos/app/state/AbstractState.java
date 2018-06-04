@@ -2,7 +2,7 @@ package org.jumpmind.pos.app.state;
 
 import static org.jumpmind.pos.context.model.TagModel.BRAND_ID_TAG;
 
-import org.jumpmind.pos.context.model.Node;
+import org.jumpmind.pos.context.model.DeviceModel;
 import org.jumpmind.pos.context.service.ContextService;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
@@ -24,7 +24,7 @@ abstract public class AbstractState implements IState {
     protected ContextService contextService;
 
     @InOut(scope = ScopeType.Node)
-    protected Node node;
+    protected DeviceModel node;
 
     protected String getStoreId() {
         String nodeId = stateManager.getNodeId();

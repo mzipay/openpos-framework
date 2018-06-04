@@ -8,7 +8,7 @@ import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.pos.context.model.ConfigModel;
 import org.jumpmind.pos.context.model.ContextRepository;
-import org.jumpmind.pos.context.model.Node;
+import org.jumpmind.pos.context.model.DeviceModel;
 import org.jumpmind.pos.context.model.TagModel;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.impl.EntityMetaData;
@@ -30,7 +30,7 @@ public class ContextSchemaEnhancer implements IDBSchemaListener {
     public void beforeSchemaCreate(DBSessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
         List<TagModel> tags = ContextRepository.getTagConfig().getTags();
-        enchanceTaggedTable(Node.class, tags);
+        enchanceTaggedTable(DeviceModel.class, tags);
         enchanceTaggedTable(ConfigModel.class, tags);
     }
 

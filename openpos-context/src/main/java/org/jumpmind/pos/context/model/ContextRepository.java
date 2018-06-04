@@ -30,9 +30,9 @@ public class ContextRepository {
     private Query<ConfigModel> configLookup = new Query<ConfigModel>()
             .named("configLookup")
             .result(ConfigModel.class);
-    private Query<Node> nodesByTag = new Query<Node>()
-            .named("nodesByTag")
-            .result(Node.class);
+    private Query<DeviceModel> devicesByTag = new Query<DeviceModel>()
+            .named("devicesByTag")
+            .result(DeviceModel.class);
     
     private static TagConfig tagConfig;
 
@@ -40,22 +40,22 @@ public class ContextRepository {
     @Lazy
     DBSession contextSession;
     
-    public Node findNode(String nodeId) {
-        Node node = contextSession.findByNaturalId(Node.class, nodeId);
-        if (node != null) {            
-            addTags(node, node.getAdditionalFields());
+    public DeviceModel findDevice(String deviceId) {
+        DeviceModel device = contextSession.findByNaturalId(DeviceModel.class, deviceId);
+        if (device != null) {            
+            addTags(device, device.getAdditionalFields());
         }
-        return node;
+        return device;
     }
 
-    public List<Node> findNodesByTag(String tagName, String tagValue) {
+    public List<DeviceModel> findDevicesByTag(String tagName, String tagValue) {
         Map<String, Object> params = new HashMap<>();
         String tagColumnName = TagModel.TAG_PREFIX + tagName;
         params.put("tagColumnName", tagColumnName);
         params.put("tagValue", tagValue);
-        List<Node> nodes = contextSession.query(nodesByTag, params);
-        addTagsToNodes(nodes);
-        return nodes;
+        List<DeviceModel> devices = contextSession.query(devicesByTag, params);
+        addTagsToDevices(devices);
+        return devices;
     }    
 
     public List<ConfigModel> findConfigs(Date currentTime, String configName) {
@@ -83,18 +83,18 @@ public class ContextRepository {
         }        
     }    
     
-    protected void addTagsToNodes(List<Node> nodes) {
-        if (nodes != null) {
-            for (Node node : nodes) {
-                addTags(node, node.getAdditionalFields());
+    protected void addTagsToDevices(List<DeviceModel> devices) {
+        if (devices != null) {
+            for (DeviceModel device : devices) {
+                addTags(device, device.getAdditionalFields());
             }
         }        
     }    
     
-    protected void addTags(ITaggedElement node, Map<String, Object> fields) {
-        if (node != null) {
+    protected void addTags(ITaggedElement taggedElement, Map<String, Object> fields) {
+        if (taggedElement != null) {
             Map<String, String> tags = additionalFieldsToTags(fields);
-            node.setTags(tags);
+            taggedElement.setTags(tags);
         }        
     }
     
@@ -121,9 +121,7 @@ public class ContextRepository {
     }
     
     protected Map<String, String> additionalFieldsToTags(Map<String, Object> additionalFields) {
-        
         Map<String, String> tags = new HashMap<>();
-        
         for (String columnName : additionalFields.keySet()) {
             String columnUpper = columnName.toUpperCase();
             if (columnUpper.startsWith(TagModel.TAG_PREFIX)) {
@@ -136,109 +134,4 @@ public class ContextRepository {
         return tags;
     }
  
-    protected ConfigModel findMostSpecificConfig(Map<String, String> tags, List<ConfigModel> configs) {
-                if (tags == null) {
-                    throw new ContextException("tags cannot be null");
-                }
-                if (configs == null) {
-                    throw new ContextException("configs cannot be null");
-                }
-                
-                TagConfig tagConfig = getTagConfig();
-                Map<String, List<TagModel>> tagsByGroup = tagConfig.getTagsByGroup();
-                
-                List<ConfigModel> matchingConfigs = new ArrayList<>(configs);
-                
-                tagsByGroup.values().forEach(tagDefinitions -> {
-                    tagDefinitions.forEach(tagDefinition -> {
-                        String value = tags.get(tagDefinition.getName());
-                        configs.forEach(config -> {
-//                            if (config.get)
-                        });
-                    });
-                });
-                
-                
-                for (List<TagModel> tagDefinitions : tagsByGroup.values()) {
-                    for (TagModel tag : tagDefinitions) {
-                        String value = tags.get(tag);
-                    }
-                }
-                
-                
-        //        
-        //        ConfigModel bestMatchConfig = null;
-   
-        //            if (config.getLocationType() != null) {
-        //                if (!matchLocation(config, tags)) {
-        //                    continue;
-        //                }
-        //            }
-        //            matchScore += evaluateLocation(config);
-        //            matchScore += evaluateTag(config.getBrandId(), tags.get(TAG_BRAND_ID), TAG_BRAND_ID, 1000);
-        //            matchScore += evaluateTag(config.getStoreType(), tags.get(TAG_STORE_TYPE), TAG_STORE_TYPE, 500);
-        //            matchScore += evaluateTag(config.getDepartmentId(), tags.get(TAG_DEPARTMENT_ID), TAG_DEPARTMENT_ID, 250);
-        //            matchScore += evaluateTag(config.getDeviceType(), tags.get(TAG_DEVICE_TYPE), TAG_DEVICE_TYPE, 50);
-        //            
-        //            if (matchScore > maxMatchScore) {
-        //                bestMatchConfig = config;
-        //                maxMatchScore = matchScore;
-        //            }
-        //        }
-        //        
-        //        if (bestMatchConfig == null) {
-        //            return null;
-        //        } else {
-        //            return bestMatchConfig;
-        //        } 
-
-        return null;
-    }
-    //    
-    //    protected int evaluateLocation(ConfigModel config) {
-    //        if (config.getLocationType() == null) {
-    //            return 0;
-    //        }
-    //        
-    //        switch (config.getLocationType()) {
-    //            case REGION:
-    //                return 1;
-    //            case COUNTRY:
-    //                return 2;
-    //            case STATE:
-    //                return 3;
-    //            case STORE:
-    //                return 4;
-    //            case NODE_ID:
-    //                return 5;                
-    //        }
-    //        return 0;
-    //    }
-    //
-    //    protected boolean matchLocation(ConfigModel config, Map<String, String> tags) {
-    //        String actualLocationValue = tags.get(config.getLocationType().name());
-    //        
-    //        if (StringUtils.isEmpty(actualLocationValue)) {
-    //            throw new ContextException("Can't find tag value for location type: " + config.getLocationType() + " in tags: " + tags);
-    //        }
-    //        
-    //        return actualLocationValue.equals(config.getLocationValue());
-    //    }
-    //
-    //    protected int evaluateTag(String configValue, String nodeValue, final String tagName, int points) {
-    //        if (nodeValue != null) {
-    //            if (StringUtils.isEmpty(configValue) || configValue.equals(ConfigModel.TAG_ALL)) {
-    //                return 0;
-    //            } else if (configValue.equals(nodeValue)) {
-    //                return points;
-    //            } else {
-    //                return DISQUALIFIED;
-    //            }
-    //        } else {
-    //            return 0;
-    //        }
-    //    }
-
-
-
 }

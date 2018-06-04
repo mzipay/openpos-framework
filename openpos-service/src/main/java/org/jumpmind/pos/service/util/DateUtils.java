@@ -11,28 +11,37 @@ import org.jumpmind.pos.service.PosServerException;
 public class DateUtils {
     
     private static final String ISO_DATE_TIME_MILLIS = "yyyy-MM-dd HH:mm:ss.SSS";
+    private static final String ISO_DATE_TIME_MILLIS_T = "yyyy-MM-dd'T'HH:mm:ss.SSS";
     private static final String ISO_DATE_TIME_SECONDS = "yyyy-MM-dd HH:mm:ss";
+    private static final String ISO_DATE_TIME_SECONDS_T = "yyyy-MM-dd'T'HH:mm:ss";
     private static final String ISO_DATE = "yyyy-MM-dd";
     
     private static String[] FORMATS = new String[] {
             ISO_DATE_TIME_MILLIS,
+            ISO_DATE_TIME_MILLIS_T,
             ISO_DATE_TIME_SECONDS,
+            ISO_DATE_TIME_SECONDS_T,
             ISO_DATE
     };
     
     public static Date parseDateTimeISO(String date) {
         if (!StringUtils.isEmpty(date)) {
+            Exception originalException = null;
             for (String format : FORMATS) {
-                if (date.length() == format.length()) {                    
+                if (date.length() == format.length() || date.length() == format.length()-2) {                    
                     SimpleDateFormat dateFormat = new SimpleDateFormat(format);
                     try {
                         return dateFormat.parse(date);
                     } catch (ParseException ex) {
-                        throw new PosServerException("Failed to parse date as ISO format: '" + date + "'", ex);
+                        originalException = ex;
                     }
                 }
             }
-            throw new PosServerException("Failed to parse date as ISO format: '" + date + "'");
+            if (originalException != null) {
+                throw new PosServerException("Failed to parse date as ISO format: '" + date + "'", originalException);                
+            } else {                
+                throw new PosServerException("Failed to parse date as ISO format: '" + date + "'");
+            }
         } else {
             return null;            
         }

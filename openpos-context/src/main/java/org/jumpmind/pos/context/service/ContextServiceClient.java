@@ -1,12 +1,18 @@
 package org.jumpmind.pos.context.service;
 
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 import org.jumpmind.pos.service.PosServerException;
 import org.jumpmind.pos.service.util.DateUtils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class ContextServiceClient {
 
@@ -18,6 +24,14 @@ public class ContextServiceClient {
     public ContextServiceClient(ContextService contextService, String nodeId) {
         this.nodeId = nodeId;
         this.contextService = contextService;
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        dateFormat.setTimeZone(TimeZone.getDefault());
+        mapper.setDateFormat(dateFormat);
+        
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(BigDecimal.class, new BigDecimalDeserializer());
+        mapper.registerModule(module);
     }
 
     public Date getDate(String configName) {
@@ -44,6 +58,16 @@ public class ContextServiceClient {
 
     public String getString(String configName) {
         return getConfigValue(configName);
+    }
+    
+    public <T> List<T> getObjectList(String configName, Class<T> argType) {
+        String value = getConfigValue(configName);
+        try {
+            return mapper.readValue(value, 
+                    mapper.getTypeFactory().constructCollectionType(List.class, argType));
+        } catch (Exception ex) {
+            throw new PosServerException("Failed to parse config json '" + value + "' as a list of " + argType, ex);
+        }        
     }
 
     public <T> T getObject(String configName, Class<T> argType) {

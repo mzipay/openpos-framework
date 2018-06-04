@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jumpmind.pos.context.model.ConfigModel;
 import org.jumpmind.pos.context.model.ContextRepository;
-import org.jumpmind.pos.context.model.Node;
+import org.jumpmind.pos.context.model.DeviceModel;
 import org.jumpmind.pos.context.model.TagCalculator;
 import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.service.ServiceResult;
@@ -27,24 +27,24 @@ public class GetConfigEndpoint {
     
     @Endpoint("/getConfig")
     public ConfigResult getConfig(
-            @RequestParam(value="nodeId", defaultValue="*") String nodeId,
+            @RequestParam(value="deviceId", defaultValue="*") String deviceId,
             @RequestParam(value="currentTime") Date currentTime,
             @RequestParam(value="configName", defaultValue="") String configName) {    
         
         ConfigResult result = new ConfigResult();
         
-        NodeResult nodeResult = contextService.getNode(nodeId);
-        if (!nodeResult.isSuccess()) {
-            result.setResultStatus(nodeResult.getResultStatus());
-            result.setResultMessage(nodeResult.getResultMessage());
+        DeviceResult deviceResult = contextService.getDevice(deviceId);
+        if (!deviceResult.isSuccess()) {
+            result.setResultStatus(deviceResult.getResultStatus());
+            result.setResultMessage(deviceResult.getResultMessage());
             return result;
         }
         
-        Node node = nodeResult.getNode();
+        DeviceModel device = deviceResult.getDevice();
         List<ConfigModel> configs = contextRepository.findConfigs(currentTime, configName);
         ConfigModel config = null;
         if (configs != null) {
-            config = (ConfigModel) tagCalculator.getMostSpecific(configs, node.getTags(), ContextRepository.getTagConfig());
+            config = (ConfigModel) tagCalculator.getMostSpecific(configs, device.getTags(), ContextRepository.getTagConfig());
             if (config != null) {
                 result.setResultStatus(ServiceResult.RESULT_SUCCESS);
                 result.setConfigName(configName);
