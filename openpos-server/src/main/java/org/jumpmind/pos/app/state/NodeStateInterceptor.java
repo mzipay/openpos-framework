@@ -22,7 +22,7 @@ public class NodeStateInterceptor implements IStateInterceptor {
     public IState intercept(StateManager stateManager, IState currentState, IState newState, Action action) {
         if (stateManager.getScopeValue("node") == null) {
             String nodeId = stateManager.getNodeId();
-            ITaggedElement node = contextService.getNode(nodeId).getNode();
+            ITaggedElement node = contextService.getDevice(nodeId).getDevice();
             if (node != null) {
                 stateManager.setScopeValue(ScopeType.Node, "node", node);
             } else {

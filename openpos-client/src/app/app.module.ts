@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 
-import { OpenposCoreModule } from 'openpos-core';
+import { OpenposCoreModule } from '@jumpmind/openpos-client-core-lib';
 
 @NgModule({
   entryComponents: [

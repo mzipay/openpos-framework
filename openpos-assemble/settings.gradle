@@ -5,7 +5,7 @@ include 'openpos-persist'
 include 'openpos-context'
 include 'openpos-cache'
 include 'openpos-user'
-include 'openpos-client-core-lib'
+// include 'openpos-client-core-lib'
 include 'openpos-wrapper'
 include 'openpos-i18n'
 include 'openpos-tax'
@@ -13,11 +13,7 @@ include 'openpos-trans'
 include 'openpos-ops'
 
 rootProject.children.each { project ->
-    if (project.projectDir.getName().equals('openpos-client-core-lib')) {
-        project.projectDir = new File(openposDir + project.projectDir.getName() + '/src/app/openpos-core')
-    } else {
-        project.projectDir = new File(openposDir + project.projectDir.getName())
-    }    
+    project.projectDir = new File(openposDir + project.projectDir.getName())
 }
 
 includeFlat 'openpos-client'
