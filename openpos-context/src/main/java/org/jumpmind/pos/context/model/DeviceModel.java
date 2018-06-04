@@ -23,8 +23,8 @@ public class DeviceModel extends Entity implements ITaggedElement {
         return deviceId;
     }
 
-    public void setDeviceId(String nodeId) {
-        this.deviceId = nodeId;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     public String getDeviceType() {

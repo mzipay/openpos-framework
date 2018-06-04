@@ -46,7 +46,7 @@ public class GetConfigEndpointTest {
     }
     
     @Test
-    public void testConfigBadNode() {
+    public void testConfigBadDevice() {
         ConfigResult configResult = endpoint.getConfig("999888-1", getDate("2018-05-31 00:00:00"), "pos.welcome.text");
         
         assertNull(configResult.getConfigName());

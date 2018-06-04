@@ -1,6 +1,5 @@
 package org.jumpmind.pos.context.service;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class SimpleJsonPojo {

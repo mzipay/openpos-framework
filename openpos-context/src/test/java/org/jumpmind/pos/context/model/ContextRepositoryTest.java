@@ -41,11 +41,11 @@ public class ContextRepositoryTest {
     @Test
     public void findDevicesByTag() {
         {            
-            List<DeviceModel> nodes = contextRepository.findDevicesByTag("STORE_NUMBER", "500");
-            assertNotNull(nodes);
-            assertEquals(2, nodes.size());
+            List<DeviceModel> devices = contextRepository.findDevicesByTag("STORE_NUMBER", "500");
+            assertNotNull(devices);
+            assertEquals(2, devices.size());
             {
-                DeviceModel device = nodes.get(0);
+                DeviceModel device = devices.get(0);
                 assertEquals("WORKSTATION", device.getDeviceType());
                 assertEquals("Store 500 Register 1", device.getDescription());
                 assertEquals("N_AMERICA", device.getTagValue("REGION"));
@@ -58,7 +58,7 @@ public class ContextRepositoryTest {
                 assertEquals("POS", device.getTagValue("APP_PROFILE"));
             }
             {
-                DeviceModel device = nodes.get(1);
+                DeviceModel device = devices.get(1);
                 assertEquals("WORKSTATION", device.getDeviceType());
                 assertEquals("Store 500 Register 2", device.getDescription());
                 assertEquals("N_AMERICA", device.getTagValue("REGION"));
@@ -75,7 +75,6 @@ public class ContextRepositoryTest {
     
     @Test
     public void testLoadConfigs() {
-        DeviceModel device = contextRepository.findDevice("100-1");
         List<ConfigModel> welcomeTextConfigs = contextRepository.findConfigs(new Date(), "pos.welcome.text");
         assertEquals(11,  welcomeTextConfigs.size());
         for (ConfigModel configModel : welcomeTextConfigs) {

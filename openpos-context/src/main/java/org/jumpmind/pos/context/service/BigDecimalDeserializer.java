@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.DecimalNode;
+import com.fasterxml.jackson.databind.node.DoubleNode;
 
 public class BigDecimalDeserializer extends JsonDeserializer<BigDecimal> {
 
@@ -16,13 +16,15 @@ public class BigDecimalDeserializer extends JsonDeserializer<BigDecimal> {
     public BigDecimal deserialize(JsonParser parser, DeserializationContext deserializationContext) throws IOException, 
         JsonProcessingException {
         JsonNode node = parser.getCodec().readTree(parser);
-        if (node instanceof DecimalNode) {
-//            node.isFloatingPointNumber()
-            int id = (Integer) ((DecimalNode) node.get("id")).numberValue();
+        if (node instanceof DoubleNode) {
+            DoubleNode doubleNode = (DoubleNode) node;
+            Double n = (Double) doubleNode.numberValue();
+            BigDecimal bd = new BigDecimal(n.toString());
+            return bd;
+        } else {            
+            return null;
         }
-//        String itemName = node.get("itemName").asText();
-        
-        return null;
     }
 
 }
+;

@@ -16,13 +16,13 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class ContextServiceClient {
 
-    private String nodeId;
+    private String devuceId;
     private ContextService contextService;
     private ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     private Date configDate;
 
-    public ContextServiceClient(ContextService contextService, String nodeId) {
-        this.nodeId = nodeId;
+    public ContextServiceClient(ContextService contextService, String deviceId) {
+        this.devuceId = deviceId;
         this.contextService = contextService;
         
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
@@ -80,7 +80,7 @@ public class ContextServiceClient {
     }    
 
     protected String getConfigValue(String configName) {
-        ConfigResult configResult = contextService.getConfig(nodeId, getConfigDate(), configName);
+        ConfigResult configResult = contextService.getConfig(devuceId, getConfigDate(), configName);
         if (configResult.isSuccess()) {
             return configResult.getConfigValue();
         } else {

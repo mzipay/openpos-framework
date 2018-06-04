@@ -271,14 +271,9 @@ INSERT INTO CTX_CONFIG(CONFIG_NAME, EFFECTIVE_DATE, EXPIRATION_DATE, ENABLED_FLA
     CONFIG_VALUE)
     VALUES ('test.decimal.json', {ts '2010-01-01 00:00:00.000'}, {ts '2030-01-01 00:00:00.000'}, 1, CURRENT_TIMESTAMP, 'test', CURRENT_TIMESTAMP, 'test',
             '*', '*', '*', '*', '*', '*', '*', '*',
-            '[{
+            '{
                 "id":"1234",
                 "amount" : 34.45
-            },
-            {
-                "id":"56789",
-                "amount" : 31231234.1
-            }
-            ]' 
+            }' 
         );                                                
 

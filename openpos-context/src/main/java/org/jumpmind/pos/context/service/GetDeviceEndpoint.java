@@ -17,7 +17,7 @@ public class GetDeviceEndpoint {
     private ContextRepository contextRepository;    
     
     @Endpoint("/device")
-    public DeviceResult getNode(
+    public DeviceResult getDevice(
             @RequestParam(value="deviceId", defaultValue="*") String deviceId) {
         
         DeviceResult result = new DeviceResult();
@@ -30,7 +30,7 @@ public class GetDeviceEndpoint {
             return result;
         } else {
             result.setResultStatus(ServiceResult.RESULT_NOT_FOUND);
-            result.setResultMessage("No node found for deviceId=" + deviceId);
+            result.setResultMessage("No device found for deviceId=" + deviceId);
         }
         
         return result;
