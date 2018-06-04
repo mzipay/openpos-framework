@@ -2,9 +2,11 @@ package org.jumpmind.pos.app.state.user;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.jumpmind.pos.app.state.AbstractState;
+import org.jumpmind.pos.context.service.ContextServiceClient;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
+import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.InOut;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.flow.ui.PromptConfig;
@@ -23,6 +25,9 @@ public class UserLoginState extends AbstractState {
     
     @InOut(scope=ScopeType.Session)
     private User currentUser;
+    
+    @In(scope=ScopeType.Node)
+    private ContextServiceClient contextServiceClient;
 
     private String enteredUserName;
     private int userMessageIndex = 0;
@@ -40,6 +45,8 @@ public class UserLoginState extends AbstractState {
     
     @Override
     public void arrive(Action action) {
+        String welcomeText = contextServiceClient.getString("pos.welcome.text"); // testing.
+        System.out.println("Welcome - " + welcomeText);
         promptForLogin();
     }
     
