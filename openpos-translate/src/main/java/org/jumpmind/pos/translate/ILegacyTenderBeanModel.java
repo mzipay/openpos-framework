@@ -9,4 +9,6 @@ public interface ILegacyTenderBeanModel {
     ILegacyCurrency getBalanceDue();
 
     ILegacyNavigationButtonBeanModel getGlobalButtonBeanModel();
+
+    ILegacyTotalsBeanModel getTotalsModel();
 }
