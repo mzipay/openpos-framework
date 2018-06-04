@@ -273,7 +273,7 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         InactivityMonitorDirective,
         PhoneUSValidatorDirective,
         BarcodeScanPublisherDirective,
-        MimicSrollDirective
+        MimicScrollDirective
     ],
     imports: [
         BrowserModule,
@@ -308,7 +308,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         ChooseOptionsComponent,
         FormattedInputValueAccessor,
         InactivityMonitorDirective,
-        BarcodeScanPublisherDirective
+        BarcodeScanPublisherDirective,
+        MimicScrollDirective
     ],
     providers: [
         HttpClient,
