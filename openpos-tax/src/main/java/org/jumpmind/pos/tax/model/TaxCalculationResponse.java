@@ -1,5 +1,6 @@
 package org.jumpmind.pos.tax.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public class TaxCalculationResponse {
                 return taxAmount;
             }
         }
-        return null;
+        TaxAmount taxAmountEmpty = new TaxAmount(authorityId, groupId, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+        return taxAmountEmpty;
     }
 }

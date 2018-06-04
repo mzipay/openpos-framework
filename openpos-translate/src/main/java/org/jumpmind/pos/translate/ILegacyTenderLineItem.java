@@ -6,4 +6,6 @@ public interface ILegacyTenderLineItem {
     public String getTypeDescriptorString();
     public int getLineNumber();
     public String getNumber();
+    public boolean isAuthorizableTender();
+    public String getAuthorizationResponse();
 }

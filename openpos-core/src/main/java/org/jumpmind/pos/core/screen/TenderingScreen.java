@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.core.model.FormField;
+import org.jumpmind.pos.core.model.IFormElement;
 
 public class TenderingScreen extends Screen {
     private static final long serialVersionUID = 1L;
@@ -12,6 +13,8 @@ public class TenderingScreen extends Screen {
     private SelectionMode selectionMode = SelectionMode.Single;
     private String text;
     private FormField tenderAmount;
+    
+    private IFormElement balanceDueAmount;
     private String balanceDue;
     private List<MenuItem> itemActions = new ArrayList<>();
     
@@ -47,9 +50,20 @@ public class TenderingScreen extends Screen {
     public void setTenderAmount(FormField tenderAmount) {
         this.tenderAmount = tenderAmount;
     }
+    
+    public void setBalanceDueAmount(IFormElement balanceDueAmount) {
+        this.balanceDueAmount = balanceDueAmount;
+    }
+    
+    public IFormElement getBalanceDueAmount() {
+        return this.balanceDueAmount;
+    }
+    
+    @Deprecated
     public String getBalanceDue() {
         return balanceDue;
     }
+    @Deprecated
     public void setBalanceDue(String balanceDue) {
         this.balanceDue = balanceDue;
     }
