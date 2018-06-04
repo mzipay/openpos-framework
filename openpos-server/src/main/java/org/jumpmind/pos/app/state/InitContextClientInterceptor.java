@@ -8,9 +8,11 @@ import org.jumpmind.pos.core.flow.IStateInterceptor;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.flow.StateManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(150)
 public class InitContextClientInterceptor implements IStateInterceptor {
     
     private static final String CONTEXT_SERVICE_CLIENT = "contextServiceClient";
