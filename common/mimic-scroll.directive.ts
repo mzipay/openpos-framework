@@ -3,6 +3,7 @@ import 'hammerjs';
 import 'hammer-timejs';
 import { Subscription } from 'rxjs/Subscription';
 import { SessionService } from '../services';
+import { Configuration } from '../configuration/configuration';
 
 @Directive({
     selector: 'mat-card-content'
@@ -18,7 +19,7 @@ export class MimicScrollDirective {
 
     @HostListener('panmove', ['$event'])
     onPan(event: any): void {
-        if (this.screen && this.screen.mimicScroll) {
+        if (Configuration.mimicScroll) {
             this.elRef.nativeElement.scrollTop += event.deltaY / 10;
         }
     }
