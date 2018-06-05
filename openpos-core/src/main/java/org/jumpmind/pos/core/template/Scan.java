@@ -11,7 +11,7 @@ public class Scan implements Serializable {
     }
 
     protected Integer scanMinLength = 1;
-    protected Integer scanMaxLength = 20;
+    protected Integer scanMaxLength = 22;
     protected ScanType scanType;
     protected String scanActionName;
     protected String scanSomethingText = "Scan/Key Something";
