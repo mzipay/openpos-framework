@@ -80,7 +80,7 @@ public class EndpointInjector {
             try {
                 field.set(target, value);
             } catch (Exception ex) {
-                logger.error("", ex);
+                throw new PosServerException("Failed to apply injection. target=" + target + " value=" + value, ex);
             }
         } else if (required) {
             throw failedToResolveInjection(field, name, targetClass, target, context);

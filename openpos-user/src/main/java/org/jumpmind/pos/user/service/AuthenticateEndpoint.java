@@ -3,7 +3,6 @@ package org.jumpmind.pos.user.service;
 import java.util.Date;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.jumpmind.pos.context.service.ContextService;
 import org.jumpmind.pos.context.service.ContextServiceClient;
 import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.service.In;
@@ -13,21 +12,18 @@ import org.jumpmind.pos.user.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
 @Scope("prototype")
-@Transactional(transactionManager="userTxManager")
 public class AuthenticateEndpoint {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @In
-    ContextServiceClient contextServiceClient;
+    private ContextServiceClient contextServiceClient;
 
     @Endpoint("/authenticate")
-//    @Cached("userCache")
     public AuthenticationResult authenticate(
             @RequestParam(value="deviceId", defaultValue="") String deviceId,
             @RequestParam(value="locale", defaultValue="") String locale,
@@ -97,11 +93,8 @@ public class AuthenticateEndpoint {
         if (user.isLockedOutFlag()) {
             Date lastPasswordAttempt = user.getLastPasswordAttempt();
             if (lastPasswordAttempt != null) {      
-                // TODO
                 Date passwordAttemptsResetDate = new Date(lastPasswordAttempt.getTime() + 
                         contextServiceClient.getLong("openpos.user.attempts.reset.period.ms"));
-//                Date passwordAttemptsResetDate = new Date(lastPasswordAttempt.getTime() + 
-//                      5000);                
                 Date now = new Date();
                 if (now.after(passwordAttemptsResetDate)) {                    
                     user.setLockedOutFlag(false);
