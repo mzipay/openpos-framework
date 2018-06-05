@@ -38,9 +38,9 @@ public class EndpointRegistry {
             EndpointOverride overrideEndpoint = AnnotationUtils.findAnnotation(method, EndpointOverride.class);
             
             if (baseEndpoint != null) {
-                baseEndpoints.put(baseEndpoint.value(), buildEndpointDefition(baseEndpoint.value(), method, bean));
+                baseEndpoints.put(baseEndpoint.value(), buildEndpointDefinition(baseEndpoint.value(), method, bean));
             } else if (overrideEndpoint != null) {
-                overrideEndpoints.put(overrideEndpoint.value(), buildEndpointDefition(overrideEndpoint.value(), method, bean));
+                overrideEndpoints.put(overrideEndpoint.value(), buildEndpointDefinition(overrideEndpoint.value(), method, bean));
             }
         }
     }
@@ -53,9 +53,9 @@ public class EndpointRegistry {
         return baseEndpoints.get(requestPath);
     }
     
-    protected EndpointDefinition buildEndpointDefition(String requestPath, Method method, Object bean) {
+    protected EndpointDefinition buildEndpointDefinition(String requestPath, Method method, Object bean) {
         EndpointDefinition endpointDefinition = new EndpointDefinition();
-        endpointDefinition.setEndpointInstance(bean);
+        endpointDefinition.setEndpointClass(bean.getClass());
         endpointDefinition.setEndpointMethod(method);
         endpointDefinition.setRequestPath(requestPath);
         endpointDefinition.setOverride(method.getAnnotation(EndpointOverride.class) != null);

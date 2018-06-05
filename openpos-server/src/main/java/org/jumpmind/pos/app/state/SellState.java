@@ -3,6 +3,7 @@ package org.jumpmind.pos.app.state;
 import org.jumpmind.pos.app.demo.DemoException;
 import org.jumpmind.pos.app.demo.DemoTransaction;
 import org.jumpmind.pos.app.demo.DemoTransactionService;
+import org.jumpmind.pos.app.state.user.StatePermission;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
@@ -14,6 +15,7 @@ import org.jumpmind.pos.core.screen.SellItemScreen;
 import org.jumpmind.pos.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@StatePermission(permissionId = "sell")
 public class SellState implements IState {
 
     @In(scope=ScopeType.Node)

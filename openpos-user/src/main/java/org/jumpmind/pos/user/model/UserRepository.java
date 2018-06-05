@@ -36,15 +36,17 @@ public class UserRepository {
         }
 
         if (userLookedUp != null) {
-        	String workgroupId = userLookedUp.getWorkgroupId();
-        	Workgroup workgroup = userSession.findByNaturalId(Workgroup.class, workgroupId);
-        	List<Permission> permissions = userSession.query(workgroupPermissionsLookup, workgroupId);
-        	if (workgroup != null) {
-        		if (permissions != null) {
-        			workgroup.setPermissions(permissions);
-        		}
-            	userLookedUp.setWorkgroup(workgroup);
-        	}
+            String workgroupId = userLookedUp.getWorkgroupId();
+            if (workgroupId != null) {
+                Workgroup workgroup = userSession.findByNaturalId(Workgroup.class, workgroupId);
+                List<Permission> permissions = userSession.query(workgroupPermissionsLookup, workgroupId);
+                if (workgroup != null) {
+                    if (permissions != null) {
+                        workgroup.setPermissions(permissions);
+                    }
+                    userLookedUp.setWorkgroup(workgroup);
+                }
+            }
         }
         return userLookedUp;
     }
