@@ -4,28 +4,32 @@ import java.util.Date;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.jumpmind.pos.context.service.ContextService;
+import org.jumpmind.pos.context.service.ContextServiceClient;
 import org.jumpmind.pos.service.Endpoint;
+import org.jumpmind.pos.service.In;
 import org.jumpmind.pos.user.model.PasswordHistory;
 import org.jumpmind.pos.user.model.User;
 import org.jumpmind.pos.user.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
+@Scope("prototype")
 @Transactional(transactionManager="userTxManager")
 public class AuthenticateEndpoint {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    ContextService contextService;
+    @In
+    ContextServiceClient contextServiceClient;
 
     @Endpoint("/authenticate")
 //    @Cached("userCache")
     public AuthenticationResult authenticate(
-            @RequestParam(value="nodeId", defaultValue="") String nodeId,
+            @RequestParam(value="deviceId", defaultValue="") String deviceId,
             @RequestParam(value="locale", defaultValue="") String locale,
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="password", defaultValue="") String password) {
@@ -51,9 +55,8 @@ public class AuthenticateEndpoint {
     private AuthenticationResult handleSuccess(User user) {
         AuthenticationResult result =  new AuthenticationResult("SUCCESS", user);
         long expiresInDays = passwordExpiresInDays(user);
-        // TOO
-//        if (expiresInDays > 0 && expiresInDays <= contextService.getInt("openpos.user.warn.password.expires.days")) {
-        if (expiresInDays > 0 && expiresInDays <= 7) {
+        if (expiresInDays > 0 
+                && expiresInDays <= contextServiceClient.getInt("openpos.user.warn.password.expires.days")) {
             UserMessage message = new UserMessage();
             message.setMessageCode("PASSWORD_EXPIRY_WARNING");
             message.setMessage(String.format("Your password exires in %s days.", expiresInDays));
@@ -63,7 +66,7 @@ public class AuthenticateEndpoint {
         return result;
     }
 
-    private AuthenticationResult handlePasswordExpired(User user) {
+    protected AuthenticationResult handlePasswordExpired(User user) {
         UserMessage message = new UserMessage();
         long expiresInDays = Math.abs(passwordExpiresInDays(user));
         message.setMessageCode("PASSWORD_EXPIRED");
@@ -81,9 +84,7 @@ public class AuthenticateEndpoint {
         if (password.length() < 3) {
             user.setPasswordFailedAttempts(user.getPasswordFailedAttempts()+1);
             user.setLastPasswordAttempt(new Date());
-// TODO
-//            if (user.getPasswordFailedAttempts() > contextService.getInt("openpos.user.max.login.attempts")) {
-            if (user.getPasswordFailedAttempts() > 5) {
+            if (user.getPasswordFailedAttempts() > contextServiceClient.getInt("openpos.user.max.login.attempts")) {
                 user.setLockedOutFlag(true);
             }
             userRepository.save(user);
@@ -97,10 +98,10 @@ public class AuthenticateEndpoint {
             Date lastPasswordAttempt = user.getLastPasswordAttempt();
             if (lastPasswordAttempt != null) {      
                 // TODO
-//                Date passwordAttemptsResetDate = new Date(lastPasswordAttempt.getTime() + 
-//                        contextService.getLong("openpos.user.attempts.reset.period.ms"));
                 Date passwordAttemptsResetDate = new Date(lastPasswordAttempt.getTime() + 
-                      5000);                
+                        contextServiceClient.getLong("openpos.user.attempts.reset.period.ms"));
+//                Date passwordAttemptsResetDate = new Date(lastPasswordAttempt.getTime() + 
+//                      5000);                
                 Date now = new Date();
                 if (now.after(passwordAttemptsResetDate)) {                    
                     user.setLockedOutFlag(false);
