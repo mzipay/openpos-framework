@@ -13,14 +13,12 @@ export class MimicScrollDirective {
     private screenSubscription: Subscription;
     private screen: any;
 
-    constructor(private elRef: ElementRef, public session: SessionService, ) {
-        this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
-    }
-
-    @HostListener('panmove', ['$event'])
-    onPan(event: any): void {
+    constructor(private elRef: ElementRef, public session: SessionService, public renderer: Renderer2) {
         if (Configuration.mimicScroll) {
-            this.elRef.nativeElement.scrollTop += event.deltaY / 10;
+            this.renderer.listen(elRef.nativeElement, 'panmove', (event) => {
+                this.elRef.nativeElement.scrollTop += event.deltaY / 10;
+            });
         }
+
     }
 }
