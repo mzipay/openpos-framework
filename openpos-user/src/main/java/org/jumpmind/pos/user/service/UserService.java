@@ -1,7 +1,6 @@
 package org.jumpmind.pos.user.service;
 
 import org.jumpmind.pos.service.EndpointDispatcher;
-import org.jumpmind.pos.service.ServiceContext;
 import org.jumpmind.pos.service.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
