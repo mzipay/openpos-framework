@@ -221,7 +221,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
                         subscriber.showScreen(screen);
                         screenShown = true;
                     } else if (newTranslator instanceof IActionTranslator) {
-                        ((IActionTranslator) newTranslator).translate(this, subscriber);
+                        ((IActionTranslator) newTranslator).translate(this, subscriber, legacyScreen);
                     }
 
                     this.lastTranslatorByAppId.put(subscriber.getAppId(), newTranslator);
