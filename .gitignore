@@ -34,7 +34,7 @@ openpos-client/.vscode/settings.json
 biglots.code-workspace
 biglots.code-workspace
 ascena.code-workspace
-
+*/.gradle/
 openpos-client-core-lib/\.settings/org\.eclipse\.buildship\.core\.prefs
 
 openpos-client-core-lib/\.project
