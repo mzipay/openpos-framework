@@ -27,7 +27,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
   @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
 
   ngAfterViewInit() {
-    // Delays less than 1 sec don't work consistently
+    // Delays less than 1 sec do not work correctly.
     this.display(1000);
   }
 
