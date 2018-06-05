@@ -35,6 +35,7 @@ import { FocusDirective } from './common/focus.directive';
 import { InactivityMonitorDirective } from './common/inactivity-monitor.directive';
 import { BarcodeScanPublisherDirective } from './common/barcode-scan-publisher.directive';
 import { MimicScrollDirective } from './common/mimic-scroll.directive';
+import { ScreenOrientationDirective } from './common/screen-orientation.directive';
 
 // Services
 import { ScreenService } from './services/screen.service';
@@ -273,7 +274,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         InactivityMonitorDirective,
         PhoneUSValidatorDirective,
         BarcodeScanPublisherDirective,
-        MimicScrollDirective
+        MimicScrollDirective,
+        ScreenOrientationDirective
     ],
     imports: [
         BrowserModule,
@@ -309,7 +311,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         FormattedInputValueAccessor,
         InactivityMonitorDirective,
         BarcodeScanPublisherDirective,
-        MimicScrollDirective
+        MimicScrollDirective,
+        ScreenOrientationDirective
     ],
     providers: [
         HttpClient,
