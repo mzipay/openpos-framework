@@ -13,6 +13,8 @@ public class TaxAmount {
     private BigDecimal taxAmount;
 
     private BigDecimal taxPercent;
+    
+    private boolean isEmpty = false;
 
     public TaxAmount() {
     }
@@ -71,6 +73,14 @@ public class TaxAmount {
 
     public void setTaxPercent(BigDecimal taxPercent) {
         this.taxPercent = taxPercent;
+    }
+    
+    public void setIsEmpty(boolean isEmpty) {
+    	this.isEmpty = isEmpty;
+    }
+    
+    public boolean getIsEmpty() {
+    	return this.isEmpty;
     }
 
     public void add(TaxAmount itemTaxAmount) {

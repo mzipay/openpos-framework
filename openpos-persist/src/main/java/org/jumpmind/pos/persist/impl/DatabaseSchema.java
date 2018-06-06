@@ -283,7 +283,7 @@ public class DatabaseSchema {
         if (column.getMappedTypeCode() == Types.VARCHAR) {
             return "128";
         } else if (column.getJdbcTypeCode() == Types.DECIMAL) {
-            return "12";
+            return "12,3";
         }
         return null;
     }

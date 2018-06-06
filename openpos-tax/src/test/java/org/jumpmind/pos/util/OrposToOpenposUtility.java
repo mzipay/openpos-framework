@@ -4,14 +4,20 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
+
+
 public class OrposToOpenposUtility {
 
+	static MathContext mc = new MathContext(10, RoundingMode.HALF_UP);
+	
     public static void main(String[] args) throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection c = null;
@@ -62,7 +68,7 @@ public class OrposToOpenposUtility {
                 int id = rs.getInt("id_athy_tx");
                 String taxAuth = escapeApostrophes(rs.getString("nm_athy_tx"));
                 int rc = rs.getInt("sc_rnd");
-                double rd = rs.getDouble("qu_dgt_rnd");
+                int rd = rs.getInt("qu_dgt_rnd");
                 Timestamp created = rs.getTimestamp("ts_crt_rcrd");
                 out.write("INSERT INTO tax_authority (id, auth_name, rounding_code, "
                         + "rounding_digits_quantity, create_time, create_by, last_update_time, last_update_by) " + "VALUES (" + id + ", '"

@@ -45,7 +45,6 @@ public class TaxCalculationResponse {
                 return taxAmount;
             }
         }
-        TaxAmount taxAmountEmpty = new TaxAmount(authorityId, groupId, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
-        return taxAmountEmpty;
+        return null;
     }
 }

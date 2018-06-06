@@ -44,7 +44,7 @@ public class CalculateTaxEndpoint {
                 GroupRule groupRule = authority.getGroupRule(item.getGroupId());
                 if (groupRule != null) {
                 	container.add(groupRule, item);
-                }
+                } 
             }
         }
 
