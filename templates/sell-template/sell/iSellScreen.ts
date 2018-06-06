@@ -1,6 +1,6 @@
-import { IMenuItem } from '../../common/imenuitem';
-import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
-import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
+import { IMenuItem } from '../../../common/imenuitem';
+import { StatusBarData } from '../../../common/screen-interfaces/statusBarData';
+import { SelfCheckoutStatusBarData } from '../../../common/screen-interfaces/selfCheckoutStatusBarData';
 import { ISellTemplate } from './isell-template';
 
 export interface ISellScreen {

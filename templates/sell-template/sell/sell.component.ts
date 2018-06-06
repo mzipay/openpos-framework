@@ -3,15 +3,15 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/takeWhile';
 import 'rxjs/add/operator/startWith';
-import { AbstractTemplate } from '../../common/abstract-template';
-import { SessionService } from '../../services/session.service';
+import { AbstractTemplate } from '../../../common/abstract-template';
+import { SessionService } from '../../../services/session.service';
 
-import { IMenuItem } from '../../common/imenuitem';
+import { IMenuItem } from '../../../common/imenuitem';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ScanSomethingComponent } from '../../common/controls/scan-something/scan-something.component';
+import { ScanSomethingComponent } from '../../../common/controls/scan-something/scan-something.component';
 import { ObservableMedia } from '@angular/flex-layout';
 import { ISellScreen } from '../..';
-import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
+import { StatusBarData } from '../../../common/screen-interfaces/statusBarData';
 import { SellScreenUtils } from './iSellScreen';
 import { ISellTemplate } from './isell-template';
 

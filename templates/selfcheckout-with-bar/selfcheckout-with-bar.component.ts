@@ -1,4 +1,4 @@
-import { IScan, ISellTemplate } from './../sell/isell-template';
+import { IScan, ISellTemplate } from './../sell-template/sell/isell-template';
 import { over } from '@stomp/stompjs';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
@@ -6,7 +6,7 @@ import { IScreen } from '../../common/iscreen';
 import { SessionService } from '../../services/session.service';
 import { AbstractTemplate } from '../../common/abstract-template';
 import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
-import { SellScreenUtils } from '../sell/iSellScreen';
+import { SellScreenUtils } from '../sell-template/sell/iSellScreen';
 
 @Component({
   selector: 'app-selfcheckout-with-bar',
