@@ -15,8 +15,10 @@ public class TenderingScreen extends Screen {
     private FormField tenderAmount;
     
     private IFormElement balanceDueAmount;
-    private String balanceDue;
+    @Deprecated private String balanceDue;
+    private IFormElement totalAmount;
     private List<MenuItem> itemActions = new ArrayList<>();
+    private MenuItem actionButton;
     
     public TenderingScreen() {
         setType(ScreenType.Tendering);
@@ -51,6 +53,14 @@ public class TenderingScreen extends Screen {
         this.tenderAmount = tenderAmount;
     }
     
+    public IFormElement getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(IFormElement totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
     public void setBalanceDueAmount(IFormElement balanceDueAmount) {
         this.balanceDueAmount = balanceDueAmount;
     }
@@ -77,5 +87,12 @@ public class TenderingScreen extends Screen {
         this.itemActions.add(itemAction);
     }
     
+    public MenuItem getActionButton() {
+        return actionButton;
+    }
+
+    public void setActionButton(MenuItem actionButton) {
+        this.actionButton = actionButton;
+    }
     
 }
