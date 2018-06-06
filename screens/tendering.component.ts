@@ -4,7 +4,6 @@ import { Component, ViewChild, DoCheck, OnInit, OnDestroy, AfterViewInit } from 
 import { MatInput } from '@angular/material';
 import { SessionService } from '../services/session.service';
 import { IScreen } from '../common/iscreen';
-import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { IFormElement } from '../common/iformfield';
 
 @Component({
@@ -19,17 +18,12 @@ import { IFormElement } from '../common/iformfield';
     text: string;
     tenderItems: IItem[];
     tenderAmount: IFormElement;
+    balanceDueAmount: IFormElement;
     balanceDue: string;
+    totalAmount: IFormElement;
     itemActions: IMenuItem[] = [];
-    numberMask = createNumberMask({
-        prefix: '',
-        includeThousandsSeparator: false,
-        allowDecimal: true,
-        integerLimit: 9,
-        requireDecimal: true,
-        allowNegative: false
-    });
-
+    actionButton: IMenuItem;
+    
     constructor(public session: SessionService) {
     }
 
@@ -48,7 +42,10 @@ import { IFormElement } from '../common/iformfield';
         this.tenderItems = this.screen.tenderItems;
         this.tenderAmount = this.screen.tenderAmount;
         this.balanceDue = this.screen.balanceDue;
+        this.balanceDueAmount = this.screen.balanceDueAmount;
+        this.totalAmount = this.screen.totalAmount;
         this.itemActions = this.screen.itemActions;
+        this.actionButton = this.screen.actionButton;
 
         if (this.screen.template.localMenuItems) {
             this.screen.template.localMenuItems.forEach(element => {
@@ -57,4 +54,8 @@ import { IFormElement } from '../common/iformfield';
         }
     }
 
+    onAction(): void {
+        this.session.onAction(this.actionButton.action, this.tenderAmount.value);
+    }
+        
 }
