@@ -220,7 +220,8 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
                         Screen screen = screenTranslator.build();
                         subscriber.showScreen(screen);
                         screenShown = true;
-                    } else if (newTranslator instanceof IActionTranslator) {
+                    }
+                    if (newTranslator instanceof IActionTranslator) {
                         ((IActionTranslator) newTranslator).translate(this, subscriber, legacyScreen);
                     }
 
