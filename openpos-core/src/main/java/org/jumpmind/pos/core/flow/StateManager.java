@@ -21,6 +21,7 @@ package org.jumpmind.pos.core.flow;
 
 import java.util.Date;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -213,7 +214,7 @@ public class StateManager implements IStateManager {
         
         FlowConfig flowConfig = currentContext.getFlowConfig();
         
-        StateConfig stateConfig = flowConfig.getStateConfig(currentContext.getState());
+        StateConfig stateConfig = findStateConfig(flowConfig);
         if (handleTerminatingState(action, stateConfig)) {
             return;
         }
@@ -241,6 +242,17 @@ public class StateManager implements IStateManager {
             throw new FlowException(String.format("Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"...) defined in the flow config.", 
                     action.getName(), currentContext.getState().getClass().getName(), action.getName(), action.getName()));                    
         }
+    }
+
+    private StateConfig findStateConfig(FlowConfig flowConfig) {
+        StateConfig stateConfig = flowConfig.getStateConfig(currentContext.getState());
+        Iterator<StateContext> itr = stateStack.iterator();
+        while (stateConfig == null && itr.hasNext()) {
+            StateContext context = itr.next();
+            stateConfig = context.getFlowConfig().getStateConfig(currentContext.getState());
+
+        }
+        return stateConfig;
     }
     
     public void setScopeValue(ScopeType scopeType, String name, Object value) {
