@@ -7,7 +7,7 @@ import { IMenuItem } from '../common/imenuitem';
   selector: 'app-payment-status',
   templateUrl: './payment-status.component.html'
 })
-export class PaymentStatusComponent implements AfterViewInit, IScreen {
+export class PaymentStatusComponent implements IScreen {
 
   screen: any;
   pinPadStatus = '0';
