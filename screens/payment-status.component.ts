@@ -7,7 +7,7 @@ import { IMenuItem } from '../common/imenuitem';
   selector: 'app-payment-status',
   templateUrl: './payment-status.component.html'
 })
-export class PaymentStatusComponent implements AfterViewInit, IScreen {
+export class PaymentStatusComponent implements IScreen {
 
   screen: any;
   pinPadStatus = '0';
@@ -18,12 +18,6 @@ export class PaymentStatusComponent implements AfterViewInit, IScreen {
   show(screen: any) {
     this.screen = screen;
     this.pinPadStatus = this.screen.pinPadStatus;
-  }
-
-
-  ngAfterViewInit(): void {
-    // Poll for status change if servers upports payment status updates.
-    this.session.onAction('GetPaymentStatus');
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {

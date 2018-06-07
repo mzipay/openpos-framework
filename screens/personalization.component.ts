@@ -38,7 +38,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
 
     public personalize() {
         this.session.personalize(this.firstFormGroup.get('serverName').value, this.firstFormGroup.get('serverPort').value,
-            this.secondFormGroup.get('storeNumber').value, this.secondFormGroup.get('deviceNumber').value, 
+            {storeId: this.secondFormGroup.get('storeNumber').value, deviceId: this.secondFormGroup.get('deviceNumber').value}, 
             this.firstFormGroup.get('sslEnabled').value);
     }
 
