@@ -20,12 +20,6 @@ export class PaymentStatusComponent implements AfterViewInit, IScreen {
     this.pinPadStatus = this.screen.pinPadStatus;
   }
 
-
-  ngAfterViewInit(): void {
-    // Poll for status change if servers upports payment status updates.
-    this.session.onAction('GetPaymentStatus');
-  }
-
   public doMenuItemAction(menuItem: IMenuItem) {
     this.session.onAction(menuItem.action, null, menuItem.confirmationMessage );
   }
