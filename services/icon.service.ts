@@ -7,7 +7,7 @@ import { MatIconRegistry } from '@angular/material';
 export class IconService {
     constructor(private iconRegistry: MatIconRegistry,
         private sanitizer: DomSanitizer, private sessionService: SessionService) {
-        this.sessionService.onPersonalized.subscribe(personalized => {
+        this.sessionService.onServerConnect.subscribe(personalized => {
             this.init();
         });
     }

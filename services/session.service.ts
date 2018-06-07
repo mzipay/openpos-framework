@@ -59,8 +59,8 @@ export class SessionService implements ILocaleService {
 
     loaderState: LoaderState;
 
-    public onPersonalized: Observable<boolean>;
-    private onPersonalizedObserver: any;
+    public onServerConnect: Observable<boolean>;
+    private onServerConnectObserver: any;
 
     constructor(private location: Location, private router: Router, public dialogService: MatDialog,
         public zone: NgZone) {
@@ -68,7 +68,7 @@ export class SessionService implements ILocaleService {
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
-        this.onPersonalized = Observable.create(observer => {this.onPersonalizedObserver = observer;});
+        this.onServerConnect = Observable.create(observer => {this.onServerConnectObserver = observer;});
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -106,13 +106,13 @@ export class SessionService implements ILocaleService {
         } else {
             localStorage.setItem('sslEnabled', 'false');
         }
-        this.onPersonalizedObserver.next(true);
+        this.serverBaseUrl = null; // will be regenerated on next fetch
         if (refreshApp) {
             this.refreshApp();
         }
 
     }
-    
+
     public dePersonalize() {
         this.unsubscribe();
         const theme = this.getTheme();
@@ -272,6 +272,7 @@ export class SessionService implements ILocaleService {
             .map((state: number) => StompState[state]);
 
         this.subscribed = true;
+        this.onServerConnectObserver.next(true);
     }
 
     public unsubscribe() {
