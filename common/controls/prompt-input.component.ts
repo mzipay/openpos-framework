@@ -25,17 +25,10 @@ export class PromptInputComponent implements OnInit{
 
     inputType: string;
 
-    onOffModel: boolean;
     formatter: string;
     _textMask: ITextMask; // Mask object built for text-mask
 
     constructor(private datePipe: DatePipe) {
-    }
-
-    public onSlideChange(): void {
-        if (this.responseType === 'ONOFF') {
-            this.responseText = this.onOffModel ? 'ON' : 'OFF';
-        }
     }
 
     isNumericField(): boolean {
@@ -55,15 +48,7 @@ export class PromptInputComponent implements OnInit{
             this._textMask = newMask;
         } else {
             this._textMask = TextMask.NO_MASK;
-        }
-
-        if (this.responseType === 'ONOFF') {
-            if (!this.responseText) {
-                this.responseText = 'OFF';
-            }
-            this.onOffModel = this.responseText === 'ON';
-        }
-        
+        }        
     }
 
 }
