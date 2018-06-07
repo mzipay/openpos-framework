@@ -15,7 +15,7 @@ import org.jumpmind.pos.core.screen.SellItemScreen;
 import org.jumpmind.pos.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@StatePermission(permissionId = "sell")
+@StatePermission(permissionId = "sell.main")
 public class SellState implements IState {
 
     @In(scope=ScopeType.Node)

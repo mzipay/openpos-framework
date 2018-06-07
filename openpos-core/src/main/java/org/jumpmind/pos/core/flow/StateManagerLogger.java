@@ -39,7 +39,7 @@ public class StateManagerLogger {
                 secondaryAction = "";
             } else {
                 primaryAction = returnAction;
-                secondaryAction = "("+action.getName()+")";
+                secondaryAction = "(" + (action != null ? action.getName() : "") + ")";
             }
             
             int inbetweenWidth = Math.max(primaryAction.length()+2, 10);
