@@ -5,7 +5,7 @@ import { IScreen } from '../../common/iscreen';
 import { SessionService } from '../../services/session.service';
 import { AbstractTemplate } from '../../common/abstract-template';
 import { StatusBarData } from '../../common/screen-interfaces/statusBarData';
-import { SellScreenUtils } from '../sell/iSellScreen';
+import { SellScreenUtils } from '../sell-template/sell/iSellScreen';
 
 @Component({
   selector: 'app-blank-with-bar',

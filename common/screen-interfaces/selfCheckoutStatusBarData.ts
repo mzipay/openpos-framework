@@ -1,5 +1,5 @@
 import { IMenuItem } from '..';
-import { IScan } from '../../templates/sell/isell-template';
+import { IScan } from '../../templates/sell-template/sell/isell-template';
 
 export class SelfCheckoutStatusBarData {
     showScan: boolean;

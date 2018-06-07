@@ -108,7 +108,8 @@ import { LoadingDialogComponent } from './dialogs/loading-dialog/loading-dialog.
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
 import { BlankWithBarComponent } from './templates/blank-with-bar/blank-with-bar.component';
-import { SellComponent } from './templates/sell/sell.component';
+import { SellComponent } from './templates/sell-template/sell/sell.component';
+import { SellLinkedCustomerComponent } from './templates/sell-template/sell-linked-customer/sell-linked-customer.component';
 import { SelfCheckoutWithBarComponent } from './templates/selfcheckout-with-bar/selfcheckout-with-bar.component';
 
 import { MaterialModule } from './material.module';
@@ -169,6 +170,7 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         BlankWithBarComponent,
         SelfCheckoutWithBarComponent,
         SellComponent,
+        SellLinkedCustomerComponent,
         OptionsComponent,
         TillSummaryComponent,
         TillCountComponent,
@@ -235,6 +237,7 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         BlankWithBarComponent,
         SelfCheckoutWithBarComponent,
         SellComponent,
+        SellLinkedCustomerComponent,
         TemplateDirective,
         OptionsComponent,
         TillSummaryComponent,

@@ -3,7 +3,7 @@ import { DeviceService } from '../../../services/device.service';
 import { SessionService } from '../../../services/session.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
-import { IScan } from '../../../templates/sell/isell-template';
+import { IScan } from '../../../templates/sell-template/sell/isell-template';
 
 @Component({
   selector: 'app-scan-something',

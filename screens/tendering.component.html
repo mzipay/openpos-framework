@@ -1,32 +1,48 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
     <div fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center"  fxLayoutGap="16px">
-            <mat-card fxFlex class="page-content-card text-center">
-                    <mat-card-content fxLayout="column" fxLayoutAlign="end">
-                        <mat-form-field ngClass="text-md" >
-                            <input matInput #balance #field="ngModel" style="text-align:right"
-                                [(ngModel)]="balanceDue"
-                                placeholder="Balance Due"
-                                readonly="true"
-                                [formatterName]="'money'">
-                        </mat-form-field>
-                    </mat-card-content>
-                </mat-card>
-                
 
-            <mat-card fxFlex class="page-content-card text-center">
-                <mat-card-content fxLayout="column" fxLayoutAlign="end">
-                    <mat-form-field ngClass="text-md" >
-                        <input matInput #tenderAmountField="matInput" #field="ngModel" autoSelectOnFocus style="text-align:right"
-                            [(ngModel)]="tenderAmount.value"
-                            [placeholder]="tenderAmount.placeholder"
-                            [required]="tenderAmount.required"
-                            [formatterName]="'money'" novalidate type="tel" pattern="[0-9]*" autofocus>
-                        <mat-error>
-                                <app-show-errors [control]="field"></app-show-errors>
-                        </mat-error>
-                    </mat-form-field>
+        <mat-card *ngIf="totalAmount" fxFlex class="page-content-card text-center">
+            <mat-card-title class="muted-color text-sm text-left">
+                {{totalAmount.label}}
+            </mat-card-title>
+            <mat-card-content>
+                <p class="muted-color text-lg text-center"><span class="super-currency-symbol">$</span>{{totalAmount.value}}</p>
+            </mat-card-content>
+        </mat-card>
+        <mat-card fxFlex class="page-content-card text-center">
+            <ng-container *ngIf="balanceDueAmount; else deprecatedBalanceDueBlock">
+                <mat-card-title class="muted-color text-sm text-left">
+                        {{balanceDueAmount.label}}
+                </mat-card-title>
+                <mat-card-content>
+                    <p class="muted-color text-lg text-center"><span class="super-currency-symbol">$</span>{{balanceDueAmount.value}}</p>
                 </mat-card-content>
-            </mat-card>
+            </ng-container>
+            <ng-template #deprecatedBalanceDueBlock>
+                <mat-card-title class="muted-color text-sm text-left">
+                        Balance Due
+                </mat-card-title>
+                <mat-card-content>
+                    <p class="muted-color text-lg text-center"><span class="super-currency-symbol">$</span>{{balanceDue}}</p>
+                </mat-card-content>
+            </ng-template>
+        </mat-card>
+
+        <mat-card fxFlex class="page-content-card text-center">
+            <mat-card-content fxLayout="column" fxLayoutAlign="end" style="text-align: center">
+                <mat-form-field ngClass="text-md">
+                    <input matInput #tenderAmountField="matInput" #field="ngModel" autoSelectOnFocus
+                        style="text-align: center" 
+                        [(ngModel)]="tenderAmount.value"
+                        [placeholder]="tenderAmount.placeholder"
+                        [required]="tenderAmount.required"
+                        [formatterName]="'money'" novalidate type="tel" pattern="[0-9]*" autofocus>
+                    <mat-error>
+                            <app-show-errors [control]="field"></app-show-errors>
+                    </mat-error>
+                </mat-form-field>
+            </mat-card-content>
+        </mat-card>
 
     </div>
 
@@ -38,7 +54,7 @@
             <mat-list class="list-seperator" ngClass.xs="xs">
                 <mat-list-item *ngFor="let item of tenderItems">
 					<p matLine>{{item.description}}</p>
-					<span class="text-md">{{item.amount|currency:session.getCurrencyDenomination():true:'1.2'}}</span>
+					<span class="text-md">{{item.amount.indexOf('(') >=0 ? item.amount : item.amount|currency:session.getCurrencyDenomination():true:'1.2'}}</span>
 				</mat-list-item>
             </mat-list>
             <div *ngIf="tenderItems.length == 0" class="text-md"
@@ -47,5 +63,11 @@
                 Completed tenders will appear here.
             </div>
         </mat-card-content>
-</mat-card>
+        <mat-card-actions align="end">
+            <button *ngIf="actionButton" mat-raised-button type="submit" color=primary [disabled]="! actionButton.enabled" (click)="onAction()">
+                <span>{{actionButton.title}}</span>
+                <mat-icon *ngIf="actionButton.icon" class="material-icons">{{actionButton.icon}}</mat-icon>
+            </button>
+        </mat-card-actions>
+    </mat-card>
 </div>
