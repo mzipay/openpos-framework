@@ -1,11 +1,13 @@
 package org.jumpmind.pos.app.state.customer;
 
 import org.jumpmind.pos.app.state.AbstractState;
+import org.jumpmind.pos.app.state.user.StatePermission;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 
+@StatePermission(permissionId = "sell.customer_search")
 public class CustomerSearchState extends AbstractState {
     
     @Override

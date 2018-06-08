@@ -1,33 +1,68 @@
 package org.jumpmind.pos.app.state.user;
 
-import org.jumpmind.pos.context.service.ContextServiceClient;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
-import org.jumpmind.pos.core.flow.In;
+import org.jumpmind.pos.core.flow.Out;
 import org.jumpmind.pos.core.flow.ScopeType;
+import org.jumpmind.pos.user.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ManagerOverrideState extends UserLoginState {
 
-    public ManagerOverrideState(IState sourceState, IState targetState) {
+    private User user;
+    private StatePermission statePermission;
+
+    @Autowired
+    private StatePermissionCalculator permissionCalculator;
+
+    public ManagerOverrideState(IState sourceState, IState targetState, User user, StatePermission statePermission) {
         super(sourceState, targetState);
+        this.user = user;
+        this.statePermission = statePermission;
+
     }
 
-    @In(scope = ScopeType.Node)
-    private ContextServiceClient contextServiceClient;
+    @Out(scope = ScopeType.Conversation)
+    private ManagerOverride managerOverride = new ManagerOverride();
 
     @Override
     public void arrive(Action action) {
-        notifyInsufficientPrivilege();
+        promptManagerOverride();
+    }
+
+    protected void promptManagerOverride() {
+        stateManager.getUI().askYesNo("Insufficient privilege. Provide a manager override?", "ManagerLogin", "Back");
     }
 
     protected void notifyInsufficientPrivilege() {
-        stateManager.getUI().askYesNo("Insufficient privilege. Provide a manager override?", "ManagerLogin", "Back");
+        stateManager.getUI().notify("Insufficient privilege. Please provide a different user.", "ManagerLogin");
     }
 
     @ActionHandler
     protected void onManagerLogin() {
         promptForLogin();
+    }
+
+    @Override
+    protected void processResult() {
+        if (isResultSuccessful()) {
+            User manager = getResultUser();
+            managerOverride.setManagerUsername(manager.getUsername());
+            if (permissionCalculator.isUserPrivileged(manager, statePermission)) {
+                managerOverride.setOverridePermissionId(statePermission.permissionId());
+                super.processResult();
+            } else {
+                notifyInsufficientPrivilege();
+            }
+        } else {
+            super.processResult();
+        }
+    }
+
+    @Override
+    protected void onSuccessfulAuthentication() {
+        this.currentUser = user;
     }
 
 }
