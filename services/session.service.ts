@@ -37,6 +37,8 @@ export class SessionService implements ILocaleService {
 
     private subscription: any;
 
+    private authToken: string;
+
     private messages: Observable<Message>;
 
     public onDeviceRequest = new EventEmitter<IDeviceRequest>();
@@ -65,7 +67,7 @@ export class SessionService implements ILocaleService {
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
-    }
+    }    
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
         return this.screenSource.asObservable().subscribe(
@@ -158,6 +160,10 @@ export class SessionService implements ILocaleService {
         }
     }
 
+    public setAuthToken(token: string) {
+        this.authToken = token;
+    }
+
     public isSslEnabled(): boolean {
         return 'true' === localStorage.getItem('sslEnabled');
     }
@@ -232,8 +238,7 @@ export class SessionService implements ILocaleService {
         this.stompService = new StompService({
             url: url,
             headers: {
-                //    login: 'guest',
-                //    passcode: 'guest'
+                authToken: this.authToken,
             },
             heartbeat_in: 0, // Typical value 0 - disabled
             heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
