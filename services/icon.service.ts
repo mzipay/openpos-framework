@@ -7,6 +7,13 @@ import { MatIconRegistry } from '@angular/material';
 export class IconService {
     constructor(private iconRegistry: MatIconRegistry,
         private sanitizer: DomSanitizer, private sessionService: SessionService) {
+        this.sessionService.onServerConnect.subscribe(personalized => {
+            this.init();
+        });
+    }
+
+    private init() {
+        console.log(`Icon service is initializing using base server url: ${this.sessionService.getServerBaseURL()}`);
         this.iconRegistry.addSvgIcon('openpos_calculator', this.makeIconSafeUrl('calculator.svg'));
         this.iconRegistry.addSvgIcon('openpos_cash', this.makeIconSafeUrl('cash.svg'));
         this.iconRegistry.addSvgIcon('openpos_cash-multiple', this.makeIconSafeUrl('cash-multiple.svg'));

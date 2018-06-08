@@ -35,7 +35,7 @@ import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TenderingComponent } from '../screens/tendering.component';
-import { SellComponent } from '../templates/sell/sell.component';
+import { SellComponent } from '../templates/sell-template/sell/sell.component';
 import { SelfCheckoutWithBarComponent } from '../templates/selfcheckout-with-bar/selfcheckout-with-bar.component';
 import { TillSummaryComponent } from '../screens/till/till-summary.component';
 import { TillCountComponent } from '../screens/till/till-count.component';

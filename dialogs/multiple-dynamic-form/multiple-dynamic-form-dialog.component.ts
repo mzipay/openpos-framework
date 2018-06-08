@@ -10,13 +10,4 @@ import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
 })
 export class MultipleDynamicFormDialogComponent extends MultipleDynamicFormComponent {
 
-    @ViewChildren('frm')
-    forms: QueryList<DynamicFormControlComponent>;
-
-    @ViewChild('tabGroup') 
-    tabGroup: MatTabGroup;
-
-    public tabChanged(tabChangeEvent: MatTabChangeEvent): void {
-        this.forms.toArray()[this.tabGroup.selectedIndex].display(0);
-    }
 }

@@ -27,7 +27,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
   @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
 
   ngAfterViewInit() {
-    // Delays less than 1 sec don't work consistently
+    // Delays less than 1 sec do not work correctly.
     this.display(1000);
   }
 
@@ -197,7 +197,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
         element.value = this.form.value[element.id];
       }
       if(element.hasOwnProperty('checked')) {
-        element.checked = this.form.value[element.id];
+        element.checked = (this.form.value[element.id]===true || this.form.value[element.id]==='checked');
       }
     });
   }

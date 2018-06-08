@@ -61,13 +61,17 @@ export class SessionService implements ILocaleService {
 
     loaderState: LoaderState;
 
+    public onServerConnect: Observable<boolean>;
+    private onServerConnectObserver: any;
+
     constructor(private location: Location, private router: Router, public dialogService: MatDialog,
         public zone: NgZone) {
         this.loaderState = new LoaderState(this);
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
-    }    
+        this.onServerConnect = Observable.create(observer => {this.onServerConnectObserver = observer;});
+    }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
         return this.screenSource.asObservable().subscribe(
@@ -86,8 +90,15 @@ export class SessionService implements ILocaleService {
         return !app;
     }
 
-    public personalize(serverName: string, serverPort: string, storeId: string, deviceId: string, sslEnabled?: boolean) {
-        const nodeId = storeId + '-' + deviceId;
+    public personalize(serverName: string, serverPort: string, node: string | {storeId: string, deviceId: string}, 
+        sslEnabled?: boolean, refreshApp: boolean = true) {
+
+        let nodeId = '';
+        if (typeof node === 'string') {
+            nodeId = node;
+        } else {
+            nodeId = node.storeId + '-' + node.deviceId;
+        }
         console.log(`personalizing with server: ${serverName}, port: ${serverPort}, nodeid: ${nodeId}`);
         localStorage.setItem('serverName', serverName);
         localStorage.setItem('serverPort', serverPort);
@@ -97,7 +108,11 @@ export class SessionService implements ILocaleService {
         } else {
             localStorage.setItem('sslEnabled', 'false');
         }
-        this.refreshApp();
+        this.serverBaseUrl = null; // will be regenerated on next fetch
+        if (refreshApp) {
+            this.refreshApp();
+        }
+
     }
 
     public dePersonalize() {
@@ -262,6 +277,7 @@ export class SessionService implements ILocaleService {
             .map((state: number) => StompState[state]);
 
         this.subscribed = true;
+        this.onServerConnectObserver.next(true);
     }
 
     public unsubscribe() {
@@ -484,9 +500,10 @@ export class SessionService implements ILocaleService {
     }
 
     public getServerBaseURL(): string {
-        let protocol = this.isSslEnabled() ? 'https' : 'http';
         if (!this.serverBaseUrl) {
+            const protocol = this.isSslEnabled() ? 'https' : 'http';
             this.serverBaseUrl = `${protocol}://${this.getServerName()}${this.getServerPort() ? `:${this.getServerPort()}` : ''}`;
+            console.log(`Generated serverBaseURL: ${this.serverBaseUrl}`);
         }
         return this.serverBaseUrl;
     }

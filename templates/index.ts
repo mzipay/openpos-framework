@@ -1,1 +1,1 @@
-export {ISellScreen} from './sell/iSellScreen';
+export {ISellScreen} from './sell-template/sell/iSellScreen';

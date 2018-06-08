@@ -97,10 +97,13 @@
         background-color:mat-color($background, app-bar); 
     }
 
-    .mat-button-toggle{
+    .mat-button-toggle:not(.mat-button-toggle-disabled):not(.mat-button-toggle-checked){
         background-color: white;
         border: solid mat-color(map-get($theme, primary)) 1px;
         color: mat-color(map-get($theme, primary));
+    }
+
+    .mat-button-toggle{
         text-align: center;
     }
 

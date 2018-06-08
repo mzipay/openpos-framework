@@ -1,5 +1,5 @@
-import { IWorkStation } from './../../common/iworkstation';
-import { IMenuItem } from './../../common/imenuitem';
+import { IWorkStation } from './../../../common/iworkstation';
+import { IMenuItem } from './../../../common/imenuitem';
 
 export interface ISellTemplate {
     scan: IScan;
