@@ -1,18 +1,13 @@
 package org.jumpmind.pos.app.state;
 
 import org.jumpmind.pos.context.model.DeviceModel;
-import org.jumpmind.pos.context.model.ITaggedElement;
 import org.jumpmind.pos.context.service.ContextService;
 import org.jumpmind.pos.context.service.DeviceResult;
-import org.jumpmind.pos.core.flow.Action;
-import org.jumpmind.pos.core.flow.IState;
-import org.jumpmind.pos.core.flow.IStateInterceptor;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.ITransitionStep;
 import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.InOut;
 import org.jumpmind.pos.core.flow.ScopeType;
-import org.jumpmind.pos.core.flow.StateManager;
 import org.jumpmind.pos.core.flow.Transition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
