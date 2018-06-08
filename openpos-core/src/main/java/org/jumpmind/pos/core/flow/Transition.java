@@ -106,9 +106,6 @@ public class Transition extends Object {
         return clonedSteps;
     }    
 
-    public CountDownLatch getLatch() {
-        return latch;
-    }
 
     public ITransitionStep getCurrentTransitionStep() {
         return currentTransitionStep;
@@ -125,17 +122,9 @@ public class Transition extends Object {
     public IState getTargetState() {
         return targetState;
     }
-
-    public StateManager getStateManager() {
-        return stateManager;
-    }
-
+    
     public Action getOriginalAction() {
         return originalAction;
-    }
-
-    public TransitionResult getTransitionResult() {
-        return transitionResult;
     }
 
 }
