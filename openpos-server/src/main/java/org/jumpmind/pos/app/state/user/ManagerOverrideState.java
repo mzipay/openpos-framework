@@ -23,7 +23,7 @@ public class ManagerOverrideState extends UserLoginState {
 
     }
 
-    @Out(scope = ScopeType.Conversation)
+    @Out(required = false, scope = ScopeType.Conversation)
     private ManagerOverride managerOverride = new ManagerOverride();
 
     @Override
@@ -48,8 +48,9 @@ public class ManagerOverrideState extends UserLoginState {
     protected void processResult() {
         if (isResultSuccessful()) {
             User manager = getResultUser();
-            managerOverride.setManagerUsername(manager.getUsername());
             if (permissionCalculator.isUserPrivileged(manager, statePermission)) {
+                managerOverride = new ManagerOverride();
+                managerOverride.setManagerUsername(manager.getUsername());
                 managerOverride.setOverridePermissionId(statePermission.permissionId());
                 super.processResult();
             } else {
