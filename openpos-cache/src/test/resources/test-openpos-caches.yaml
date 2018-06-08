@@ -1,0 +1,43 @@
+---
+caches:
+-
+  name: default
+  type: org.jumpmind.pos.cache.service.impl.JCSCache
+  config: 
+    jcs.default : ''
+    jcs.default.cacheattributes : 'org.apache.commons.jcs.engine.CompositeCacheAttributes'
+    jcs.default.cacheattributes.MaxObjects : '20000'
+    jcs.default.cacheattributes.MemoryCacheName : 'org.apache.commons.jcs.engine.memory.lru.LRUMemoryCache'
+    jcs.default.cacheattributes.UseMemoryShrinker : 'true'
+    jcs.default.cacheattributes.MaxMemoryIdleTimeSeconds : '3600'
+    jcs.default.cacheattributes.ShrinkerIntervalSeconds : '120'
+-
+  name: testFirstJCS
+  type: org.jumpmind.pos.cache.service.impl.JCSCache
+  config: 
+    jcs.testFirstJCS : ''
+    jcs.testFirstJCS.cacheattributes : 'org.apache.commons.jcs.engine.CompositeCacheAttributes'
+    jcs.testFirstJCS.cacheattributes.MaxObjects : '20000'
+    jcs.testFirstJCS.cacheattributes.MemoryCacheName : 'org.apache.commons.jcs.engine.memory.lru.LRUMemoryCache'
+    jcs.testFirstJCS.cacheattributes.UseMemoryShrinker : 'true'
+    jcs.testFirstJCS.cacheattributes.MaxMemoryIdleTimeSeconds : '3600'
+    jcs.testFirstJCS.cacheattributes.ShrinkerIntervalSeconds : '120'
+-
+  name: testSecondJCS
+  type: org.jumpmind.pos.cache.service.impl.JCSCache
+  config: 
+    jcs.testSecondJCS : ''
+    jcs.testSecondJCS.cacheattributes : 'org.apache.commons.jcs.engine.CompositeCacheAttributes'
+    jcs.testSecondJCS.cacheattributes.MaxObjects : '20000'
+    jcs.testSecondJCS.cacheattributes.MemoryCacheName : 'org.apache.commons.jcs.engine.memory.lru.LRUMemoryCache'
+    jcs.testSecondJCS.cacheattributes.UseMemoryShrinker : 'true'
+    jcs.testSecondJCS.cacheattributes.MaxMemoryIdleTimeSeconds : '3600'
+    jcs.testSecondJCS.cacheattributes.ShrinkerIntervalSeconds : '120'  
+-
+  name: simpleMap
+  type: org.jumpmind.pos.cache.service.impl.SimpleMapCache
+
+-
+  name: noOpCache
+  type: org.jumpmind.pos.cache.service.impl.NoOpCache
+      

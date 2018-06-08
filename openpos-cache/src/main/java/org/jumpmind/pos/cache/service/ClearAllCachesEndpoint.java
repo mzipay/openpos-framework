@@ -11,7 +11,7 @@ public class ClearAllCachesEndpoint {
     
     @Endpoint("/clearAllCaches")
     public CacheResult clearAllCaches(
-            @RequestParam(value="nodeId") String nodeId) {
+            @RequestParam(value="deviceId") String deviceId) {
         return null;
     }  
         

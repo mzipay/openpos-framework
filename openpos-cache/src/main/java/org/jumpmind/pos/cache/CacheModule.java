@@ -1,5 +1,7 @@
 package org.jumpmind.pos.cache;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
@@ -16,6 +18,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class CacheModule extends AbstractModule {
     static final String NAME = "cache";
+    
+    @PostConstruct
+    public void init() {
+        
+    }
 
     @Override
     public String getName() {

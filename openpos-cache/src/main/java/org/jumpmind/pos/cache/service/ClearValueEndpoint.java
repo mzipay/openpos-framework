@@ -11,8 +11,8 @@ public class ClearValueEndpoint {
     
     @Endpoint("/clearValue")
     public CacheResult clearValue(
-            @RequestParam(value="nodeId") String nodeId,        
-            @RequestParam(value="cacheId", defaultValue="*") String cacheId,
+            @RequestParam(value="deviceId") String deviceId,        
+            @RequestParam(value="cacheId") String cacheId,
             @RequestParam(value="key") String key) {
         return null;
     }

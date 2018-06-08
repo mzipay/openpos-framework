@@ -3,6 +3,8 @@ package org.jumpmind.pos.user.service;
 import java.util.Date;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.jumpmind.pos.cache.service.CacheContainer;
+import org.jumpmind.pos.cache.service.impl.ICache;
 import org.jumpmind.pos.context.service.ContextServiceClient;
 import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.service.In;
@@ -22,6 +24,8 @@ public class AuthenticateEndpoint {
     private UserRepository userRepository;
     @In
     private ContextServiceClient contextServiceClient;
+//    @In
+//    private ICache userCache;
 
     @Endpoint("/authenticate")
     public AuthenticationResult authenticate(
@@ -29,7 +33,12 @@ public class AuthenticateEndpoint {
             @RequestParam(value="locale", defaultValue="") String locale,
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="password", defaultValue="") String password) {
-
+        
+//        User user = userCache.getOrLoad(username, k -> {
+//                return userRepository.findUser(username);
+//            }
+//        );
+        
         User user = userRepository.findUser(username);
 
         if (user != null) {

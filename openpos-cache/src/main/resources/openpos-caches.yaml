@@ -1,0 +1,11 @@
+---
+caches:
+-
+  name: default
+  type: org.jumpmind.pos.cache.service.impl.JCSCache
+  config: 
+    maxEntriesLocalHeap: '20000'
+    timeToIdleSeconds: '600'
+    timeToLiveSeconds: '0'
+
+      
