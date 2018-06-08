@@ -1,12 +1,14 @@
 package org.jumpmind.pos.core.flow;
 
 import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_MIDDLE;
+
 import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_LINE;
 import static org.jumpmind.pos.util.BoxLogging.LOWER_LEFT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.LOWER_RIGHT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.UPPER_LEFT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.UPPER_RIGHT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
+import static org.jumpmind.pos.util.BoxLogging.STAR;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -65,11 +67,9 @@ public class StateManagerLogger {
                         buff.append(drawTitleLine(box1Width, box2Width,inbetweenWidth, oldStateName, newStateName));
                         break;                    
                     case 3:
-
                         buff.append(drawEventLine(box1Width, box2Width,inbetweenWidth, primaryAction));
                         break;
                     case 4:
-                        
                         buff.append(drawBottom(box1Width, box2Width, inbetweenWidth, secondaryAction));
                         break;                    
                         
@@ -81,6 +81,28 @@ public class StateManagerLogger {
             log.info("Transition from " + oldState + " to " + newState);
         }
     }
+    
+    public void logTranistionStep(Transition transition, ITransitionStep currentTransitionStep) {
+        StringBuilder buff = new StringBuilder();
+        
+        String stepName = currentTransitionStep.getClass().getSimpleName();
+        String stepTitle = "Step: " + stepName;
+        
+        int boxWidth = Math.max(stepTitle.length()+6, 30);
+        
+        buff.append(STAR).append(StringUtils.repeat(STAR, boxWidth-2)).append(STAR);
+        buff.append("\r\n");
+        buff.append(VERITCAL_LINE).append(StringUtils.center(stepTitle, boxWidth-2)).append(VERITCAL_LINE);
+        buff.append("\r\n");
+        buff.append(STAR).append(StringUtils.repeat(STAR, boxWidth-2)).append(STAR);
+        
+        String fromStateName = transition.getSourceStateContext().getState() != null ? transition.getSourceStateContext().getState().getClass().getSimpleName() : "<no state>"; 
+        String toStateName = transition.getTargetState() != null ? transition.getTargetState().getClass().getSimpleName() : "<no state>"; 
+        
+        log.info("Transition step [" + stepName + "] running between " + 
+                fromStateName + " and " + toStateName + "\r\n" + buff.toString());
+    }
+
 
     protected String drawTop(int box1Width, int box2Width, int inbetweenWidth) {
         StringBuilder buff = new StringBuilder();
@@ -106,8 +128,8 @@ public class StateManagerLogger {
         }
         
         buff.append(VERITCAL_LINE).append(StringUtils.repeat(' ', box2Width-2)).append(VERITCAL_LINE);            
-
         buff.append("\r\n");
+        
         return buff.toString();
     }
     
@@ -140,5 +162,6 @@ public class StateManagerLogger {
         buff.append("\r\n");
         return buff.toString();
     }
+
 
 }

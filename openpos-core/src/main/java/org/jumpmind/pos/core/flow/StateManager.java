@@ -59,8 +59,11 @@ public class StateManager implements IStateManager {
     @Autowired
     private Outjector outjector;
     
+//    @Autowired(required=false)
+//    private List<? extends IStateInterceptor> stateInterceptors;
+    
     @Autowired(required=false)
-    private List<? extends IStateInterceptor> stateInterceptors;
+    private List<? extends ITransitionStep> transitionSteps;
     
     @Autowired(required=false)
     private List<? extends ISessionTimeoutListener> sessionTimeoutListeners;    
@@ -74,6 +77,7 @@ public class StateManager implements IStateManager {
     private Deque<StateContext> stateStack = new LinkedList<>();
     private FlowConfig initialFlowConfig;
     private StateContext currentContext;
+    private Transition currentTransition;
     
     private AtomicReference<Date> lastInteractionTime = new AtomicReference<Date>(new Date());
     
@@ -109,43 +113,55 @@ public class StateManager implements IStateManager {
                     + "existing a subState. These two should be be happening at the same time.");
         }
         
-        boolean enterSubState = enterSubStateConfig != null;
-        boolean exitSubState = resumeSuspendedState != null;
         
         if (currentContext.getState() != null) {
-            outjector.performOutjections(currentContext.getState(), scope, currentContext);
+            performOutjections(currentContext.getState());
         }
         
-        String returnActionName = currentContext.getReturnActionName();
-        
-        newState = runStateInterceptors(currentContext.getState(), newState, action);
-        stateManagerLogger.logStateTransition(currentContext.getState(), newState, action, returnActionName, enterSubState, exitSubState);            
-        
-        if (enterSubState) {
-            stateStack.push(currentContext);
-            currentContext = new StateContext(enterSubStateConfig.getSubFlowConfig(), action);
-            currentContext.setReturnActionName(enterSubStateConfig.getReturnActionName());
-        } else if (exitSubState) { 
-            currentContext = resumeSuspendedState;
-        }
-        
-        currentContext.setState(newState);
-        
-        injector.performInjections(newState, scope, currentContext);
-        
-        if (resumeSuspendedState == null || returnActionName == null) {
-            currentContext.getState().arrive(action);
-        } else {
-            Action returnAction = new Action(returnActionName, action.getData());    
-            returnAction.setCausedBy(action);
-            if (actionHandler.canHandleAction(currentContext.getState(), returnAction)) {
-                actionHandler.handleAction(currentContext.getState(), returnAction);
-            }  else {
-                throw new FlowException(String.format("Unexpected return action from substate: \"%s\". No @ActionHandler %s.on%s() method found.", 
-                        returnAction.getName(), currentContext.getState().getClass().getName(), returnAction.getName()));                    
+        TransitionResult transitionResult = executeTransition(currentContext, newState, action);
+        if (transitionResult == TransitionResult.PROCEED) {            
+            boolean enterSubState = enterSubStateConfig != null;
+            boolean exitSubState = resumeSuspendedState != null;
+            String returnActionName = currentContext.getReturnActionName();
+            stateManagerLogger.logStateTransition(currentContext.getState(), newState, action, returnActionName, enterSubState, exitSubState);            
+            
+            if (enterSubState) {
+                stateStack.push(currentContext);
+                currentContext = new StateContext(enterSubStateConfig.getSubFlowConfig(), action);
+                currentContext.setReturnActionName(enterSubStateConfig.getReturnActionName());
+            } else if (exitSubState) { 
+                currentContext = resumeSuspendedState;
             }
+            
+            currentContext.setState(newState);
+            
+            performInjections(newState);
+            
+            if (resumeSuspendedState == null || returnActionName == null) {
+                currentContext.getState().arrive(action);
+            } else {
+                Action returnAction = new Action(returnActionName, action.getData());    
+                returnAction.setCausedBy(action);
+                if (actionHandler.canHandleAction(currentContext.getState(), returnAction)) {
+                    actionHandler.handleAction(currentContext.getState(), returnAction);
+                }  else {
+                    throw new FlowException(String.format("Unexpected return action from substate: \"%s\". No @ActionHandler %s.on%s() method found.", 
+                            returnAction.getName(), currentContext.getState().getClass().getName(), returnAction.getName()));                    
+                }
+            }
+        } else {
+            currentContext.getState().arrive(action);
         }
+        
     }
+    
+    public void performInjections(Object stateOrStep) {
+        injector.performInjections(stateOrStep, scope, currentContext);
+    }
+    
+    public void performOutjections(Object stateOrStep) {
+        outjector.performOutjections(stateOrStep, scope, currentContext);        
+    }    
 
     protected void addConfigScope(Map<String, ScopeValue> extraScope) {
         if (currentContext != null && currentContext.getFlowConfig() != null
@@ -155,18 +171,16 @@ public class StateManager implements IStateManager {
             }
         }
     }
-
-    protected IState runStateInterceptors(IState oldState, IState newState, Action action) {
-        IState nextState = newState;
-        if (!CollectionUtils.isEmpty(stateInterceptors)) {
-            for (IStateInterceptor interceptor : stateInterceptors) {
-                IState changedState = interceptor.intercept(this, oldState, nextState, action);
-                if (changedState != null) {
-                    nextState = changedState;
-                }
-            }
+    
+    protected TransitionResult executeTransition(StateContext sourceStateContext, IState newState, Action action) {
+        if (CollectionUtils.isEmpty(transitionSteps)) {
+            return TransitionResult.PROCEED;
         }
-        return nextState;
+        
+        this.currentTransition = new Transition(transitionSteps, sourceStateContext, newState); 
+        TransitionResult result = currentTransition.execute(this, action);
+        this.currentTransition = null;
+        return result;
     }
 
     protected IState buildState(StateConfig stateConfig) {
@@ -211,6 +225,11 @@ public class StateManager implements IStateManager {
     @Override
     public void doAction(Action action) {
         lastInteractionTime.set(new Date());
+        
+        if (currentTransition != null)  {
+            currentTransition.handleAction(action);
+            return;
+        }
         
         FlowConfig flowConfig = currentContext.getFlowConfig();
         
@@ -310,10 +329,13 @@ public class StateManager implements IStateManager {
             }
         }
     }
-
+    
+    protected boolean handleAction(Object state, Action action) {
+        return actionHandler.handleAction(state, action);
+    }
     
     protected boolean handleAction(Action action) {        
-        return actionHandler.handleAction(currentContext.getState(), action);
+        return handleAction(currentContext.getState(), action);
     }
 
     protected boolean handleTerminatingState(Action action, StateConfig stateConfig) {
@@ -426,8 +448,16 @@ public class StateManager implements IStateManager {
                     sessionTimeoutListener.onSessionTimeout(this);
                 }
             }
-        } catch (Exception e) {
-            logger.error("Failed to process the session timeout", e);
+        } catch (Exception ex) {
+            logger.error("Failed to process the session timeout", ex);
         }
     }
+
+//    protected void transitionProceed() {
+//        latch.countDown();
+//    }
+//    
+//    protected void transitionCancel() {
+//        latch.countDown();
+//    }    
 }

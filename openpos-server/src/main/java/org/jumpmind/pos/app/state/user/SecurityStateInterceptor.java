@@ -24,14 +24,16 @@ public class SecurityStateInterceptor implements IStateInterceptor {
 
         if (statePermission != null && user == null) {
             // Display User Login
-            return new UserLoginState(currentState, newState);
+//            return new UserLoginStep(currentState, newState);
+            return null;
         } else if (permissionCalculator.isUserPrivileged(user, statePermission)
                 || permissionCalculator.isOverridden(statePermission, managerOverride)) {
             // Proceed to newState
             return null;
         } else {
             // Display Insufficient Privilege / Manager Override ?
-            return new ManagerOverrideState(currentState, newState, user, statePermission);
+//            return new ManagerOverrideState(currentState, newState, user, statePermission);
+            return null;
         }
     }
 

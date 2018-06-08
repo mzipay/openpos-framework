@@ -31,8 +31,8 @@ import org.jumpmind.pos.app.state.TenderMenuState;
 import org.jumpmind.pos.app.state.customer.CustomerDetailsState;
 import org.jumpmind.pos.app.state.customer.CustomerSearchResultState;
 import org.jumpmind.pos.app.state.customer.CustomerSearchState;
-import org.jumpmind.pos.app.state.user.ManagerOverrideState;
-import org.jumpmind.pos.app.state.user.UserLoginState;
+import org.jumpmind.pos.app.state.user.ManagerOverrideStep;
+import org.jumpmind.pos.app.state.user.UserLoginStep;
 import org.jumpmind.pos.core.flow.CompleteState;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
@@ -50,9 +50,9 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
         config.setInitialState(FlowBuilder.addState(HomeScreenState.class)
                 .withTransition("Sell", SellState.class).build());
 
-        config.add(FlowBuilder.addState(UserLoginState.class).build());
-        
-        config.add(FlowBuilder.addState(ManagerOverrideState.class).build());
+//        config.add(FlowBuilder.addState(UserLoginStep.class).build());
+//        
+//        config.add(FlowBuilder.addState(ManagerOverrideState.class).build());
         
         config.add(FlowBuilder.addState(SellState.class)
                 .withTransition("Back", HomeScreenState.class)
