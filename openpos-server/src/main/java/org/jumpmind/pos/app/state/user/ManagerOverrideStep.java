@@ -59,9 +59,9 @@ public class ManagerOverrideStep extends UserLoginStep {
     protected void processResult() {
         if (isResultSuccessful()) {
             User manager = getResultUser();
-            managerOverride = new ManagerOverride();
-            managerOverride.setManagerUsername(manager.getUsername());
             if (permissionCalculator.isUserPrivileged(manager, statePermission)) {
+                managerOverride = new ManagerOverride();
+                managerOverride.setManagerUsername(manager.getUsername());
                 managerOverride.setOverridePermissionId(statePermission.permissionId());
                 super.processResult();
             } else {
