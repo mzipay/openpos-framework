@@ -48,8 +48,12 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
 }
 
 - (NSArray *)listLogFiles:(CDVInvokedUrlCommand *)command {
-    NSArray *logFileNames = [self getLogFileList: FALSE];
-    
+    NSString *order = nil;
+    if (command.arguments != nil && [command.arguments count] > 0) {
+        order = [command.arguments objectAtIndex:0];
+    }
+
+    NSArray *logFileNames = [self getLogFileList:FALSE sortOrder:order];
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:logFileNames];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     
@@ -324,7 +328,7 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
     [self _purgeOldLogFiles]; // purge files older than _logRetentionDays
 }
 
-- (NSArray *)getLogFileList: (BOOL) returnFullPath {
+- (NSArray *)getLogFileList: (BOOL) returnFullPath  sortOrder:(NSString *)sortOrder {
     NSString *logFilesDir = [self getOrCreateLogsDir];
     NSFileManager *fm = [NSFileManager defaultManager];
     
@@ -333,6 +337,17 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
     NSPredicate *fltr = [NSPredicate predicateWithFormat: format];
     NSArray *logFileNames = [logFilesDirContents filteredArrayUsingPredicate:fltr];
     
+    if (sortOrder != nil) {
+        if( [@"asc" caseInsensitiveCompare: sortOrder] == NSOrderedSame ||
+            [@"desc" caseInsensitiveCompare: sortOrder] == NSOrderedSame ) {
+
+            BOOL sortAsc = [@"asc" caseInsensitiveCompare: sortOrder] == NSOrderedSame;
+            NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:sortAsc selector:@selector(localizedCaseInsensitiveCompare:)];
+            NSArray* sortedLogFileNames = [logFileNames sortedArrayUsingDescriptors:@[sortDescriptor]];
+            logFileNames = sortedLogFileNames;
+        }
+    }
+
     if (returnFullPath && logFileNames != nil) {
         NSMutableArray *logFilenamesWithPath = [NSMutableArray array];
         NSUInteger fileCount = [logFileNames count];
@@ -349,7 +364,7 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
     NSLog(@"[OpenPOSCordovaLogPlugin]>>> PURGE LOGS: Running...");
     NSFileManager* fileMgr = [NSFileManager defaultManager];
     
-    NSArray *logFileNames = [self getLogFileList: TRUE];
+    NSArray *logFileNames = [self getLogFileList:TRUE sortOrder:@"ASC"];
     if (logFileNames != nil) {
         NSUInteger fileCount = [logFileNames count];
         NSLog(@"[OpenPOSCordovaLogPlugin]>>> PURGE LOGS: Got list of log files. size: %lu", fileCount);
