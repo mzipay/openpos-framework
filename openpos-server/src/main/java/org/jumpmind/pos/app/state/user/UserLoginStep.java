@@ -1,58 +1,75 @@
 package org.jumpmind.pos.app.state.user;
 
+import static org.jumpmind.pos.context.model.TagModel.BRAND_ID_TAG;
+
 import org.apache.commons.collections.CollectionUtils;
-import org.jumpmind.pos.app.state.AbstractState;
+import org.jumpmind.pos.context.model.DeviceModel;
 import org.jumpmind.pos.context.service.ContextServiceClient;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
-import org.jumpmind.pos.core.flow.IState;
+import org.jumpmind.pos.core.flow.IStateManager;
+import org.jumpmind.pos.core.flow.ITransitionStep;
 import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.InOut;
 import org.jumpmind.pos.core.flow.ScopeType;
+import org.jumpmind.pos.core.flow.Transition;
 import org.jumpmind.pos.core.flow.ui.PromptConfig;
 import org.jumpmind.pos.core.screen.IPromptScreen;
+import org.jumpmind.pos.i18n.service.i18nService;
 import org.jumpmind.pos.service.ServiceResult;
 import org.jumpmind.pos.user.model.User;
 import org.jumpmind.pos.user.service.AuthenticationResult;
 import org.jumpmind.pos.user.service.UserMessage;
 import org.jumpmind.pos.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
-public class UserLoginState extends AbstractState {
+@Component
+@Order(150)
+public class UserLoginStep implements ITransitionStep {
 
     @Autowired
     private UserService userService;
 
-    @InOut(scope = ScopeType.Session)
+    @InOut(scope = ScopeType.Session, required=false)
     protected User currentUser;
+    
+    @In(scope = ScopeType.Node)
+    protected IStateManager stateManager;    
 
     @In(scope = ScopeType.Node)
     private ContextServiceClient contextServiceClient;
+    
+    @Autowired
+    protected i18nService i18nService;    
+    
+    @In(scope = ScopeType.Node)
+    protected DeviceModel node;    
 
     private String enteredUserName;
     private int userMessageIndex = 0;
     private AuthenticationResult result;
     private String oldPassword;
     private String newPassword1;
-
-    private IState sourceState;
-    private IState targetState;
-
-    public UserLoginState(IState sourceState, IState targetState) {
-        this.sourceState = sourceState;
-        this.targetState = targetState;
+    
+    protected Transition transition;
+    
+    public boolean isApplicable(Transition transition) {
+        this.transition = transition;
+        StatePermission statePermission = transition.getTargetState().getClass().getDeclaredAnnotation(StatePermission.class);
+        if (statePermission != null && currentUser == null) {                
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public void arrive(Action action) {
+    public void arrive(Transition transition) {
         String welcomeText = contextServiceClient.getString("pos.welcome.text"); // testing.
         System.out.println("Welcome - " + welcomeText);
         promptForLogin();
-    }
-
-    @Override
-    protected String getDefaultBundleName() {
-        return "user";
     }
 
     protected void promptForLogin() {
@@ -73,7 +90,6 @@ public class UserLoginState extends AbstractState {
     protected void processResult() {
         if (isResultSuccessful()) {
             onSuccessfulAuthentication();
-            stateManager.transitionTo(null, targetState);
         } else {
             if (CollectionUtils.isEmpty(result.getUserMessages())) {
                 stateManager.getUI().notify(result.getResultMessage(), "FailureAcknowledged");
@@ -91,6 +107,7 @@ public class UserLoginState extends AbstractState {
 
     protected void onSuccessfulAuthentication() {
         this.currentUser = result.getUser();
+        transition.proceed();
     }
 
     protected void showUserMessages() {
@@ -131,7 +148,7 @@ public class UserLoginState extends AbstractState {
 
     @ActionHandler
     public void onBack(Action action) {
-        stateManager.transitionTo(null, sourceState);
+        transition.cancel();
     }
 
     @ActionHandler
@@ -178,7 +195,6 @@ public class UserLoginState extends AbstractState {
     @ActionHandler
     public void onPasswordChangeAcknowledged(Action action) {
         onSuccessfulAuthentication();
-        stateManager.transitionTo(null, targetState);
     }
 
     @ActionHandler
@@ -194,4 +210,12 @@ public class UserLoginState extends AbstractState {
     public void onMessageAcknowledged(Action action) {
         showUserMessages();
     }
+    
+    protected String resource(String key) {
+        return i18nService.getString("user", key, node.getLocale(), node.getTagValue(BRAND_ID_TAG));
+    }
+
+    protected String commonResource(String key) {
+        return i18nService.getString("common", key, node.getLocale(), node.getTagValue(BRAND_ID_TAG));
+    } 
 }

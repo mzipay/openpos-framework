@@ -161,8 +161,12 @@ public class Injector {
                 buff.append("\t<empty>\n");
             } else {
                 for (Map.Entry<String, ScopeValue> entry : scope.entrySet()) {
-                    buff.append("\t").append(entry.getKey()).append("=")
-                            .append(StringUtils.abbreviate(entry.getValue().getValue().toString(), MAX_VALUE_WIDTH)).append("\n");
+                    buff.append("\t").append(entry.getKey()).append("=");
+                    if (entry.getValue() == null || entry.getValue().getValue() == null) {
+                        buff.append("null").append("\n");
+                    } else {
+                        buff.append(StringUtils.abbreviate(entry.getValue().getValue().toString(), MAX_VALUE_WIDTH)).append("\n");                        
+                    }
                 }
             }
         }

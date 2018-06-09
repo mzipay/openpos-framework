@@ -9,6 +9,7 @@ import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.In;
+import org.jumpmind.pos.core.flow.InOut;
 import org.jumpmind.pos.core.flow.Out;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.screen.SellItemScreen;
@@ -27,8 +28,7 @@ public class SellState implements IState {
     @Autowired
     DemoTransactionService demoTransactionService;
     
-    @In(required=false, scope=ScopeType.Conversation)
-    @Out(required=false, scope=ScopeType.Conversation)
+    @InOut(required=false, scope=ScopeType.Conversation)
     DemoTransaction currentTransaction;
     
     @Override
