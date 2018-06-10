@@ -33,7 +33,7 @@ export class PromptInputComponent implements OnInit{
 
     isNumericField(): boolean {
         if (this.responseType) {
-            return ['numerictext', 'money', 'phone', 'postalCode', 'percent', 'income', 'decimal']
+            return ['numerictext', 'money', 'phone', 'postalCode', 'percent', 'percentint', 'income', 'decimal']
               .indexOf(this.responseType.toLowerCase()) >= 0;
         } else {
             return false;
