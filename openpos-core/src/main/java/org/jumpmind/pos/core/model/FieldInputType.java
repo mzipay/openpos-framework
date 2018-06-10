@@ -11,7 +11,10 @@ public enum FieldInputType {
     Decimal,
     TextArea,
     StateIDNumber,
+    /** Allows positive decimal and integer values with at most two decimal places */
     Percent,
+    /** Only allows values of 100, 0 or 2 digit positive integer percentage */
+    PercentInt,
     PostalCode,
     Phone,
     Money,
