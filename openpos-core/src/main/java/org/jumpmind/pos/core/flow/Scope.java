@@ -62,9 +62,13 @@ public class Scope {
     }
 
     protected void setScope(Map<String, ScopeValue> scope, String name, Object value) {
-        ScopeValue scopeValue = new ScopeValue();
-        scopeValue.setValue(value);
-        scope.put(name, scopeValue);
+        if (value instanceof ScopeValue) {
+            scope.put(name, (ScopeValue)value);
+        } else {            
+            ScopeValue scopeValue = new ScopeValue();
+            scopeValue.setValue(value);
+            scope.put(name, scopeValue);
+        }
     }
 
     public Map<String, ScopeValue> getNodeScope() {

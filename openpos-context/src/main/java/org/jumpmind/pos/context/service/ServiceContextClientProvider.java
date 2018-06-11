@@ -1,5 +1,7 @@
 package org.jumpmind.pos.context.service;
 
+import org.jumpmind.pos.cache.service.CacheContainer;
+import org.jumpmind.pos.cache.service.impl.ICache;
 import org.jumpmind.pos.service.IServiceContextProvider;
 import org.jumpmind.pos.service.InjectionContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,9 @@ public class ServiceContextClientProvider implements IServiceContextProvider {
     
     @Autowired
     private ContextService contextService;
+    
+    @Autowired
+    private CacheContainer cacheContainer;
 
     @Override
     public Object resolveValue(String name, Class<?> type, InjectionContext injectionContext) {
@@ -22,6 +27,10 @@ public class ServiceContextClientProvider implements IServiceContextProvider {
             
             ContextServiceClient client = new ContextServiceClient(contextService, deviceId);
             return client;
+        }
+        
+        if (ICache.class.isAssignableFrom(type)) {
+            return cacheContainer.getOrCreateCache(name);
         }
         
         return null;
