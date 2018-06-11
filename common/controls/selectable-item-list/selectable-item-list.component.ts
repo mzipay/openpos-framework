@@ -19,7 +19,8 @@ export class SelectableItemListComponentConfiguration<ItemType> {
 export class SelectableItemListComponent<ItemType> {
 
     @ContentChild(TemplateRef) itemTemplate: TemplateRef<ElementRef>;
-
+    
+    @Input() defaultSelect: boolean = false;
     @Input()
     set configuration(config: SelectableItemListComponentConfiguration<ItemType>) {
         this._config = config;
@@ -50,6 +51,10 @@ export class SelectableItemListComponent<ItemType> {
         }
         this.itemsToShow = this._config.items.slice((this.currentPage - 1) *
             this._config.numResultsPerPage, this._config.numResultsPerPage * this.currentPage);
+        
+        if(this.defaultSelect && this.itemsToShow.length == 1) {
+            this.onItemClick(this.itemsToShow[0]) 
+        }
     }
 
     onNextPage() {
