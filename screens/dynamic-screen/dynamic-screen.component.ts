@@ -154,7 +154,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
                     this.logPlugin = plugin;
                     if (this.logPlugin && this.logPlugin.impl) {
                         this.logsAvailable = true;
-                        this.logPlugin.impl.listLogFiles(
+                        this.logPlugin.impl.listLogFiles('DESC',
                             (fileNames) => {
                                 this.logFilenames = fileNames;
                             },

@@ -1,10 +1,20 @@
 import { IFormatter } from './iformatter';
 
 export class PercentageFormatter implements IFormatter {
-    static readonly FILTER_REGEX = /^100$|^\d{0,2}(\.\d{1,2})?$|^\d{0,2}(\.)?$/;
+    static readonly DECIMAL_MODE = 'decimal';
+    static readonly INTEGER_MODE = 'integer';
+    private static readonly FILTER_REGEX_DECIMAL_MODE = /^100$|^\d{0,2}(\.\d{1,2})?$|^\d{0,2}(\.)?$/;
+    private static readonly FILTER_REGEX_INTEGER_MODE = /^100$|^\d{0,2}$/;
+
+    mode: 'decimal'|'integer';
+
+    constructor(mode = PercentageFormatter.DECIMAL_MODE) {
+    }
 
     allowKey(key: string, newValue: string): boolean {
-        const match = PercentageFormatter.FILTER_REGEX.test(newValue);
+        const match = this.mode === PercentageFormatter.INTEGER_MODE ? 
+            PercentageFormatter.FILTER_REGEX_INTEGER_MODE.test(newValue) : 
+            PercentageFormatter.FILTER_REGEX_DECIMAL_MODE.test(newValue);
         return match;
     }
 
