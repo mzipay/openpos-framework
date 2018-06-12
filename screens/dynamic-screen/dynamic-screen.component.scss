@@ -4,3 +4,40 @@
     position:absolute;     
     z-index: 1000;
 }
+
+.devButton {
+    position: relative;
+    cursor: pointer;
+    margin-right: .5em;
+    height: 34px;
+    width: 200px;
+}
+
+.panel {
+    float: left;
+    width: 750px;
+  }
+  
+  .stacktrace {
+    float: right;
+    margin-left: 10px;
+    width: 650px;
+  }
+  
+  .tab {
+    
+  }
+
+.muted {
+    color: "accent";
+}
+
+.mat-cell {
+    word-wrap: break-word;
+}
+
+/* Structure */
+table {
+    table-layout: fixed;
+    width: 100%;
+  }

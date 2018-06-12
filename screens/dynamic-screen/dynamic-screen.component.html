@@ -1,12 +1,150 @@
 <div [ngClass]="session.getTheme()" inactivityMonitor (issueKeepAlive)="session.keepAlive()">
     <div [ngClass]="classes" style="height: 100vh">
 
-        <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu">
+        <!-- <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu">
             <mat-icon>code</mat-icon>
-        </button>
+        </button> -->
 
-        <div [matMenuTriggerFor]="devMenu">
-            <mat-menu #devMenu="matMenu">
+        <div *ngIf="showDevMenu">
+           
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  Developer Tools
+                </mat-expansion-panel-header>
+                <mat-tab-group dynamicHeight>
+                    <mat-tab label="State">
+                    <span  md-colors="{color:'accent'}">    
+                      <h2>State: Home</h2>
+                    </span>
+                    <div class="tab">
+                    <div class="panel" layout="row">
+                            <mat-card>
+                      <mat-accordion multi="true" >
+
+                            <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        Connections
+                                    </mat-expansion-panel-header>
+                                    <h3>TO</h3>
+                                    <mat-list dense>
+                                            <mat-list-item> Sell </mat-list-item>
+                                            <mat-list-item> Search </mat-list-item>
+                                            <mat-list-item> Customer Lookup </mat-list-item>
+                                    </mat-list>
+                                    <mat-divider></mat-divider>
+                                    <h3>FROM</h3>
+                                    <mat-list dense>
+                                            <mat-list-item> Registration </mat-list-item>
+                                            
+                                    </mat-list>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel> 
+                                <mat-expansion-panel-header>
+                                Config Scope
+                                </mat-expansion-panel-header>
+                                    <table class="mat-table">
+                                        <thead>
+                                            <tr style="text-align:left" class="mat-header-row">
+                                            <th class="mat-header-cell"> Value </th>
+                                            <th class="mat-header-cell"> Name / String </th>
+                                            </tr>
+                                            </thead>
+                                        <tbody>
+                                            <tr class="mat-row" *ngFor="let element of elements">
+                                            <td class="mat-cell"> {{element.position}} </td>
+                                            <td class="mat-cell"> {{element.name}} </td>
+                                            <td class="mat-cell">
+                                                    <button mat-icon-button>
+                                                            <mat-icon aria-label="delete">close</mat-icon>
+                                                          </button>
+                                            </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                            </mat-expansion-panel>
+                          
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    Node Scope
+                                </mat-expansion-panel-header>
+                                <table class="mat-table">
+                                    <thead>
+                                        <tr style="text-align:left" class="mat-header-row">
+                                        <th class="mat-header-cell"> ID </th>
+                                        <th class="mat-header-cell"> Time Created </th>
+                                        <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                        </tr>
+                                        </thead>
+                                    <tbody>
+                                        <tr class="mat-row" *ngFor="let element of NodeElements">
+                                        <td class="mat-cell"> {{element.ID}} </td>
+                                        <td class="mat-cell" > {{element.Time}} </td>
+                                        <td class="mat-cell" style="text-align:center">
+                                            <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                        </td>
+                                        <td class="mat-cell-close">
+                                            <button mat-icon-button (click)="onRemove(element)">
+                                                <mat-icon aria-label="delete">close</mat-icon>
+                                            </button>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                        Session Scope
+                                </mat-expansion-panel-header>
+                                    
+                             </mat-expansion-panel>
+
+                             <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    Conversation Scope
+                                </mat-expansion-panel-header>
+                            </mat-expansion-panel>
+
+
+                          
+                          </mat-accordion>
+                        </mat-card>
+                        </div>
+                        <div *ngIf="displayStackTrace" class="stacktrace">
+                            <mat-card>
+                                <mat-card-title>StackTrace - {{selected}}</mat-card-title>
+                                <mat-card-content [style.overflow]="'auto'" [style.height.px]="'300'">
+                                    {{stackTrace}}
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    </mat-tab>
+                    <mat-tab label="Local Storage">
+                        <h1>Local Storage</h1>
+
+                      </mat-tab>
+                    <mat-tab label="Save Points">
+                      <h1>Save Points</h1>
+
+                    </mat-tab>
+                  </mat-tab-group>
+                
+                  <!-- //<div fxFlexFill fxLayout="row" fxLayoutAlign="center start" fxLayoutAlign.xs="center"> -->
+                <mat-action-row>
+                    <div fxFlexFill fxLayout="row" fxLayoutAlign="left start" fxLayoutAlign.xs="left">
+                        <button mat-raised-button color="accent" (click)="onPersonalize">Create Save Point</button>
+                    </div>
+
+                </mat-action-row>
+                <!-- </div> -->
+            </mat-expansion-panel>
+           
+           
+           
+            <!-- <mat-menu #devMenu="matMenu">
                 <ng-container *ngIf="logsAvailable">
                     <button mat-menu-item [matMenuTriggerFor]="logsMenu">Logs</button>
                     <mat-divider></mat-divider>
@@ -16,7 +154,7 @@
                 <button mat-menu-item (click)="onDevClearLocalStorage()">Clear Local Storage</button>
                 <mat-divider></mat-divider>
                 <button mat-menu-item (click)="onDevRestartNode()">Restart Node</button>
-            </mat-menu>
+            </mat-menu> -->
 
             <mat-menu #logsMenu="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="logShareMenu">Share</button>

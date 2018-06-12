@@ -17,9 +17,17 @@ import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confi
 import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Element } from '../screens/dynamic-screen/dynamic-screen.component';
+
 
 @Injectable()
 export class SessionService implements ILocaleService {
+
+    sub$ = new BehaviorSubject<any[]>([]);
+
+    obs$: Observable<Element[]>;
+
+    NodeElements: Element[] = [];
 
     private screen: any;
 
@@ -66,11 +74,13 @@ export class SessionService implements ILocaleService {
 
     constructor(private location: Location, private router: Router, public dialogService: MatDialog,
         public zone: NgZone) {
+
         this.loaderState = new LoaderState(this);
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
         this.onServerConnect = Observable.create(observer => {this.onServerConnectObserver = observer;});
+        this.obs$ = this.sub$.asObservable();
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -436,6 +446,8 @@ export class SessionService implements ILocaleService {
                 this.loading = true;
                 this.showLoading(json.title, json.message);
                 return;
+            } else if (json.type === 'DevTools') {
+                this.populateDevTables(json.Scopes);
             } else if (json.template && json.template.dialog) {
                 this.showDialog(json);
             } else if (json.type === 'NoOp') {
@@ -453,6 +465,36 @@ export class SessionService implements ILocaleService {
                 this.showDialog(null);
             }
             this.cancelLoading();
+        }
+    }
+
+    private populateDevTables(Scopes: any) {
+        if(Scopes.NodeScope) {
+            console.log('Pushing Node Scope Elements...');
+            Scopes.NodeScope.forEach(element => {
+                if (!this.NodeElements.includes(element, 0)) {
+                    this.NodeElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace   
+                    });
+                    this.sub$.next(this.NodeElements);
+                }
+            });
+            
+        }
+    }
+
+    public removeElement(element: Element) {
+        console.log('Attempting to remove \'' + element.ID + '\'...');
+        let index = this.NodeElements.findIndex(item => {
+            return element.ID === item.ID;
+        });
+        if (index !== -1) {
+            this.NodeElements.splice(index, 1);
+            this.sub$.next(this.NodeElements);
+            console.log('Node Scope updated: ');
+            console.log(this.NodeElements);
         }
     }
 

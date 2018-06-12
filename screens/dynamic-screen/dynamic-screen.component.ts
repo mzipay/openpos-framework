@@ -18,14 +18,29 @@ import { Router } from '@angular/router';
 import { DialogService } from './../../services/dialog.service';
 import { AbstractTemplate } from '../..';
 import { HttpClient } from '@angular/common/http';
+import {ChangeDetectorRef} from '@angular/core';
 
+// import { MatTableDataSource } from '@angular/material';
+import { MatInputModule, MatProgressSpinnerModule, MatTableModule } from "@angular/material";
+// import { DevTableService } from '../../services/devtable.service';
+// import { Observable } from 'rxjs/Observable';
+// import 'rxjs/add/observable/of';
+// import {DataSource} from '@angular/cdk/collections';
+// import { Process } from '../../models/process.model';
 
 @Component({
     selector: 'app-dynamic-screen',
     templateUrl: './dynamic-screen.component.html',
-    styleUrls: ['./dynamic-screen.component.scss']
+    styleUrls: ['./dynamic-screen.component.scss'],
 })
+
 export class DynamicScreenComponent implements OnDestroy, OnInit {
+
+    NodeElements: Element[];
+
+    //dataSource = new DevTableDataSource(this.NodeElements);
+
+    displayedColumns = ["ID", "Time Created", "StackTrace" "close"];
 
     public backButton: IMenuItem;
 
@@ -40,6 +55,12 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     showDevMenu = false;
 
     logsAvailable = false;
+
+    private stackTrace: string;
+
+    private selected: string;
+
+    private displayStackTrace = false;
 
     private dialogRef: MatDialogRef<IScreen>;
 
@@ -76,18 +97,21 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
         protected router: Router, private pluginService: PluginService,
         private fileUploadService: FileUploadService,
-        private httpClient: HttpClient) {
+        private httpClient: HttpClient, private cd: ChangeDetectorRef
+        /* private devTableService: DevTableService */) {
     }
 
     ngOnInit(): void {
 
+
         const self = this;
+        
         this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
         this.session.subscribeForDialogUpdates((dialog: any): void => self.updateDialog(dialog));
-
         if (!this.registerWithServer()) {
             this.updateTemplateAndScreen();
         }
+        this.session.obs$.subscribe(NodeElements => this.NodeElements = NodeElements);
     }
 
 
@@ -146,8 +170,19 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
                 this.logsAvailable = false;
             });
         }
+        this.session.onAction('GetDevTools');
         this.showDevMenu = !this.showDevMenu;
 
+    }
+
+    protected onRemove(element: Element) {
+        this.session.removeElement(element);
+    }
+
+    protected onStackTrace(element: Element) {
+        this.displayStackTrace = true;
+        this.selected = '\'' + element.ID + '\'';
+        this.stackTrace = element.StackTrace;
     }
 
     public onDevRefreshView() {
@@ -443,5 +478,14 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
         this.lastDialogType = dialog.type;
     }
+    
 
 }
+
+export interface Element {
+    ID: string,
+    Time: string,
+    StackTrace: string,
+
+}
+
