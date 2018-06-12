@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
 import org.jumpmind.pos.core.flow.TestStates.AboutState;
 import org.jumpmind.pos.core.flow.TestStates.ActionTestingState;
 import org.jumpmind.pos.core.flow.TestStates.CustomerSearchState;
@@ -34,11 +36,15 @@ public class StateManagerTest {
     @InjectMocks
     StateManager stateManager;
     
+    @InjectMocks 
+    Injector injector;
+    
     @Mock
     private ScreenService screenService;
     
     @Mock
     private UIManager uiManager;
+    
     
     @Before
     public void setup() throws Exception {
@@ -86,12 +92,16 @@ public class StateManagerTest {
         config.addGlobalTransition("Help", HelpState.class);
         config.addGlobalTransition("About", AboutState.class);
         config.addGlobalTransition("Home", HomeState.class);
+        config.addGlobalTransition("TestTransitionProceed", HomeState.class);
+        config.addGlobalTransition("TestTransitionCancel", HomeState.class);
         config.addGlobalSubTransition("CustomerLookupGlobal", customerFlow);
         
         stateManager.setInitialFlowConfig(config);
         TestUtil.setField(stateManager, "actionHandler", new ActionHandlerImpl());
-        TestUtil.setField(stateManager, "injector", new Injector());
+        TestUtil.setField(stateManager, "injector", injector);
         TestUtil.setField(stateManager, "outjector", new Outjector());
+        TestUtil.setField(stateManager, "transitionSteps", Arrays.asList(new TestTransitionStepCancel(), new TestTransitionStepProceed()));
+        
 
     }
     
@@ -315,6 +325,26 @@ public class StateManagerTest {
         assertEquals(SellState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("Home");
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+    }
+    
+    @Test
+    public void testTransitionProceed() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Sell");
+        assertEquals(SellState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("TestTransitionProceed");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+    }
+    
+    @Test
+    public void testTransitionCancel() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Sell");
+        assertEquals(SellState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("TestTransitionCancel");
+        assertEquals(SellState.class, stateManager.getCurrentState().getClass());        
     }
     
 }

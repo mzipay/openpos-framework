@@ -89,7 +89,7 @@ public class StateManager implements IStateManager {
         this.uiManager.setStateManager(this);
         this.currentContext = new StateContext(initialFlowConfig, null, null);
         this.scope.setNodeScope("stateManager", this);
-        transitionTo(null, initialFlowConfig.getInitialState());
+        transitionTo(new Action("Startup"), initialFlowConfig.getInitialState());
     }
 
     protected void transitionTo(Action action, StateConfig stateConfig) {
@@ -178,6 +178,7 @@ public class StateManager implements IStateManager {
         }
         
         this.currentTransition = new Transition(transitionSteps, sourceStateContext, newState); 
+        
         TransitionResult result = currentTransition.execute(this, action);
         this.currentTransition = null;
         return result;
@@ -386,7 +387,7 @@ public class StateManager implements IStateManager {
     @Override
     public void endConversation() {
         scope.clearConversationScope();
-        transitionTo(null, currentContext.getFlowConfig().getInitialState());
+        transitionTo(new Action("EndConversation"), currentContext.getFlowConfig().getInitialState());
     }
 
     @Override
