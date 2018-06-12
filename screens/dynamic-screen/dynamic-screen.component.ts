@@ -40,7 +40,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     //dataSource = new DevTableDataSource(this.NodeElements);
 
-    displayedColumns = ["ID", "Time Created", "StackTrace" "close"];
+    displayedColumns = ["ID", "Time Created", "StackTrace", "close"];
 
     public backButton: IMenuItem;
 
