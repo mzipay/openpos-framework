@@ -3,3 +3,10 @@
     line-height: 8px;
     padding: 7px 10px;
 }
+
+.mat-toolbar{
+    height: 30px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}

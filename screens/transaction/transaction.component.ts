@@ -9,6 +9,8 @@ import { SessionService } from '../../services/session.service';
 import { ObservableMedia } from '@angular/flex-layout';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs/Observable';
+import { ISellScreen } from '../../templates';
+import { SelectableItemListComponentConfiguration, SelectionMode } from '../../common/controls/selectable-item-list/selectable-item-list.component';
 
 @Component({
   selector: 'app-transaction',
@@ -17,11 +19,14 @@ import { Observable } from 'rxjs/Observable';
 })
 export class TransactionComponent implements AfterViewInit, AfterViewChecked, IScreen, OnInit {
 
-  screen: any;
+  screen: ISellScreen;
   @ViewChild('box') vc;
   @ViewChild('scrollList') private scrollList: ElementRef;
   public size = -1;
   initialized = false;
+  listConfig =  new SelectableItemListComponentConfiguration<ISellItem>();
+  selectedItems: ISellItem[] = new Array<ISellItem>();
+  individualMenuClicked = false;
 
   public overFlowListSize: Observable<number>;
 
@@ -34,6 +39,11 @@ export class TransactionComponent implements AfterViewInit, AfterViewChecked, IS
 
   show(screen: any) {
     this.screen = screen;
+    this.selectedItems = this.screen.items.filter(item => this.screen.selectedItems.find(selectedItem => item.index === selectedItem.index));
+    this.listConfig =  new SelectableItemListComponentConfiguration<ISellItem>();
+    this.listConfig.selectionMode = SelectionMode.Multiple;
+    this.listConfig.numResultsPerPage = Number.MAX_VALUE;
+    this.listConfig.items = this.screen.items;
     this.items = this.screen.items;
   }
 
@@ -69,11 +79,22 @@ export class TransactionComponent implements AfterViewInit, AfterViewChecked, IS
   }
 
   openItemDialog(item: ISellItem) {
-    this.session.response = item.index;
+    this.individualMenuClicked = true;
+    this.openItemsDialog([item]);
+  }
+
+  openItemsDialog(items: ISellItem[]) {
+    let optionItems = [];
+    if(items.length > 1) {
+      optionItems = this.screen.multiSelectedMenuItems;
+    } else {
+      optionItems = items[0].menuItems;
+    }
+    this.session.response = this.getIndexes(items);
     const dialogRef = this.dialog.open(NavListComponent, {
       width: '70%',
       data: {
-        optionItems: item.menuItems,
+        optionItems: optionItems,
         disableClose: false,
         autoFocus: false
      }
@@ -82,6 +103,21 @@ export class TransactionComponent implements AfterViewInit, AfterViewChecked, IS
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+
+  public getIndexes(items: ISellItem[]):number[] {
+    var indexes = [];
+    items.forEach(item => indexes.push(item.index));
+    return indexes;
+  }
+
+  public onItemListChange(event: ISellItem[]): void {
+    if(this.individualMenuClicked){
+      this.individualMenuClicked = false;
+      return;
+    }
+    this.selectedItems = event;
+    this.session.onAction("SelectedItemsChanged", this.selectedItems);
   }
 
   ngAfterViewChecked() {

@@ -2,6 +2,7 @@ import { IMenuItem } from '../../../common/imenuitem';
 import { StatusBarData } from '../../../common/screen-interfaces/statusBarData';
 import { SelfCheckoutStatusBarData } from '../../../common/screen-interfaces/selfCheckoutStatusBarData';
 import { ISellTemplate } from './isell-template';
+import { ISellItem } from '../../../common';
 
 export interface ISellScreen {
     name: string;
@@ -16,6 +17,9 @@ export interface ISellScreen {
     placeholderText: string;
     hideCustomer: boolean;
     subtitle: string;
+    items: ISellItem[];
+    selectedItems: ISellItem[];
+    multiSelectedMenuItems: IMenuItem[];
 }
 
 
