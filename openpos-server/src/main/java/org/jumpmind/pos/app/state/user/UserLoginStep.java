@@ -3,6 +3,7 @@ package org.jumpmind.pos.app.state.user;
 import static org.jumpmind.pos.context.model.TagModel.BRAND_ID_TAG;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.jumpmind.pos.cache.service.impl.ICache;
 import org.jumpmind.pos.context.model.DeviceModel;
 import org.jumpmind.pos.context.service.ContextServiceClient;
 import org.jumpmind.pos.core.flow.Action;
@@ -40,6 +41,9 @@ public class UserLoginStep implements ITransitionStep {
 
     @In(scope = ScopeType.Node)
     private ContextServiceClient contextServiceClient;
+    
+    @In(scope = ScopeType.Node)
+    private ICache i18nCache;
     
     @Autowired
     protected i18nService i18nService;    
@@ -212,10 +216,14 @@ public class UserLoginStep implements ITransitionStep {
     }
     
     protected String resource(String key) {
-        return i18nService.getString("user", key, node.getLocale(), node.getTagValue(BRAND_ID_TAG));
+        return i18nCache.getOrLoad(key, f -> {
+            return i18nService.getString("user", key, node.getLocale(), node.getTagValue(BRAND_ID_TAG));
+        });
     }
 
     protected String commonResource(String key) {
-        return i18nService.getString("common", key, node.getLocale(), node.getTagValue(BRAND_ID_TAG));
+        return i18nCache.getOrLoad(key, f -> {
+            return i18nService.getString("common", key, node.getLocale(), node.getTagValue(BRAND_ID_TAG));
+        });        
     } 
 }

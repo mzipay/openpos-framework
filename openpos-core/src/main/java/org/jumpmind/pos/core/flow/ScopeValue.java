@@ -37,7 +37,7 @@ public class ScopeValue {
 
     public ScopeValue(Object value) {
         this();
-        this.value = value;
+        setValue(value);
     }
 
     public Date getCreatedTime() {
@@ -62,6 +62,9 @@ public class ScopeValue {
     }
 
     public void setValue(Object value) {
+        if (value instanceof ScopeValue) {
+            throw new FlowException("ScopeValue should not wrap another ScopeValue object.");
+        }
         this.value = value;
     }
 
