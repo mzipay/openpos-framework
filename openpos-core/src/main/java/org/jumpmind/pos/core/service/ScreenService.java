@@ -33,6 +33,7 @@ import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
 import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.core.screen.DevToolsMessage;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
@@ -170,6 +171,11 @@ public class ScreenService implements IScreenService {
         if (stateManager != null) {
             if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
                 stateManager.keepAlive();
+            } else if (action.getName().equals("GetDevTools")) {
+            	logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
+            	DevToolsMessage json = new DevToolsMessage(stateManager, this);
+            	logger.info(logFormatter.toJsonString(json));
+                publishToClients(appId, nodeId, json);
             } else {
                 deserializeForm(appId, nodeId, action);
 

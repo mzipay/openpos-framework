@@ -41,5 +41,6 @@ public interface IStateManager {
     public void refreshScreen();
     public IState getCurrentState();
     public IUI getUI();
+	public Scope getScope();
     
 }

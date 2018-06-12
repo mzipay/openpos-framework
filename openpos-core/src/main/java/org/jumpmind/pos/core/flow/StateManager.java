@@ -274,6 +274,10 @@ public class StateManager implements IStateManager {
         }
     }
     
+    public Scope getScope() {
+    	return this.scope;
+    }
+    
     public <T> T getScopeValue(ScopeType scopeType, String name) {
         ScopeValue scopeValue = null;
         switch (scopeType) {
