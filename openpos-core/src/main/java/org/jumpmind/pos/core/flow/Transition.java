@@ -7,7 +7,7 @@ import java.util.concurrent.CountDownLatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Transition {
+public class Transition extends Object {
     
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final Logger logGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
