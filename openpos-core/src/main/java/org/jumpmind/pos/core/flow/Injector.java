@@ -2,12 +2,10 @@ package org.jumpmind.pos.core.flow;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +21,6 @@ public class Injector {
 
     @Autowired
     private AutowireCapableBeanFactory applicationContext;
-    
-    @Autowired(required=false)
-    private List<IScopeValueProvider> scopeValueProviders;
 
     public void performInjections(Object target, Scope scope, StateContext currentContext) {
         performInjectionsImpl(target, scope, currentContext);
@@ -104,36 +99,16 @@ public class Injector {
             default:
                 break;
         }
-        
-        if (value == null) {
-            value = resolveThroughValueProviders(name, scopeType, target, field);
-            if (value != null) {
-                scope.setScopeValue(scopeType, name, value);
-            }            
-        }
 
         if (value != null) {
             try {
                 field.set(target, value.getValue());
             } catch (Exception ex) {
-                throw new FlowException("Failed to set target field " + field + " to value " + value.getValue(), ex);
+                logger.error("", ex);
             }
-        } else if (required) {            
+        } else if (required) {
             throw failedToResolveInjection(field, name, targetClass, target, scope, currentContext);
         }
-    }
-
-    protected ScopeValue resolveThroughValueProviders(String name, ScopeType scopeType, Object target, Field field) {
-        ScopeValue value = null;
-        if (!CollectionUtils.isEmpty(scopeValueProviders)) {
-            for (IScopeValueProvider valueProvider : scopeValueProviders) {
-                value = valueProvider.getValue(name, scopeType, target, field);
-                if (value != null) {
-                    break;
-                }
-            }
-        }
-        return value;
     }
 
     protected void performPostContruct(Object target) {
