@@ -16,6 +16,11 @@
                     <span  md-colors="{color:'accent'}">    
                       <h2>State: Home</h2>
                     </span>
+                    <span>
+                        <button mat-icon-button (click)="onDevRefreshTables()">
+                                    <mat-icon aria-label="refresh">refresh</mat-icon>
+                        </button>
+                    </span>
                     <div class="tab">
                     <div class="panel" layout="row">
                             <mat-card>
@@ -43,25 +48,6 @@
                                 <mat-expansion-panel-header>
                                 Config Scope
                                 </mat-expansion-panel-header>
-                                    <table class="mat-table">
-                                        <thead>
-                                            <tr style="text-align:left" class="mat-header-row">
-                                            <th class="mat-header-cell"> Value </th>
-                                            <th class="mat-header-cell"> Name / String </th>
-                                            </tr>
-                                            </thead>
-                                        <tbody>
-                                            <tr class="mat-row" *ngFor="let element of elements">
-                                            <td class="mat-cell"> {{element.position}} </td>
-                                            <td class="mat-cell"> {{element.name}} </td>
-                                            <td class="mat-cell">
-                                                    <button mat-icon-button>
-                                                            <mat-icon aria-label="delete">close</mat-icon>
-                                                          </button>
-                                            </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
                             </mat-expansion-panel>
                           
                             <mat-expansion-panel>
@@ -124,8 +110,18 @@
                     </mat-tab>
                     <mat-tab label="Local Storage">
                         <h1>Local Storage</h1>
+                        <ul>
+                            <li><button mat-button (click)="onPersonalize()">Personalize</button></li>
+                            <li><button mat-button (click)="onDevRefreshView()">Refresh View</button></li>
+                            <li><button mat-button (click)="onDevClearLocalStorage()">Clear Local Storage</button></li>
+                        </ul>
+                            <mat-divider></mat-divider>
+                            <div fxFlexFill fxLayout="row" fxLayoutAlign="left start" fxLayoutAlign.xs="left">
+                                <button mat-button color="primary" (click)="onDevRestartNode()">Restart Node</button>
+                            </div>
+                      
 
-                      </mat-tab>
+                    </mat-tab>
                     <mat-tab label="Save Points">
                       <h1>Save Points</h1>
 
@@ -135,7 +131,7 @@
                   <!-- //<div fxFlexFill fxLayout="row" fxLayoutAlign="center start" fxLayoutAlign.xs="center"> -->
                 <mat-action-row>
                     <div fxFlexFill fxLayout="row" fxLayoutAlign="left start" fxLayoutAlign.xs="left">
-                        <button mat-raised-button color="accent" (click)="onPersonalize">Create Save Point</button>
+                        <button mat-raised-button color="accent">Create Save Point</button>
                     </div>
 
                 </mat-action-row>

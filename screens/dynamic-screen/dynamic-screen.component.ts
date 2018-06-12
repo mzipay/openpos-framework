@@ -170,9 +170,13 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
                 this.logsAvailable = false;
             });
         }
-        this.session.onAction('GetDevTools');
+        this.session.onAction('DevTools::Get');
         this.showDevMenu = !this.showDevMenu;
 
+    }
+
+    protected onDevRefreshTables() {
+        this.session.onAction('DevTools::Get');
     }
 
     protected onRemove(element: Element) {
@@ -486,6 +490,6 @@ export interface Element {
     ID: string,
     Time: string,
     StackTrace: string,
-
+    Value: string
 }
 

@@ -471,12 +471,14 @@ export class SessionService implements ILocaleService {
     private populateDevTables(Scopes: any) {
         if(Scopes.NodeScope) {
             console.log('Pushing Node Scope Elements...');
+            this.NodeElements = [];
             Scopes.NodeScope.forEach(element => {
                 if (!this.NodeElements.includes(element, 0)) {
                     this.NodeElements.push({
                         ID: element.name,
                         Time: element.date,
-                        StackTrace: element.stackTrace   
+                        StackTrace: element.stackTrace,  
+                        Value: element.value 
                     });
                     this.sub$.next(this.NodeElements);
                 }
@@ -486,11 +488,12 @@ export class SessionService implements ILocaleService {
     }
 
     public removeElement(element: Element) {
-        console.log('Attempting to remove \'' + element.ID + '\'...');
+        console.log('Attempting to remove \'' + element.Value + '\'...');
         let index = this.NodeElements.findIndex(item => {
-            return element.ID === item.ID;
+            return element.Value === item.Value;
         });
         if (index !== -1) {
+            this.onAction("DevTools::Remove", element);
             this.NodeElements.splice(index, 1);
             this.sub$.next(this.NodeElements);
             console.log('Node Scope updated: ');
