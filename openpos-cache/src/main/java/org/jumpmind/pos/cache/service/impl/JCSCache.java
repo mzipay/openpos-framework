@@ -1,11 +1,8 @@
 package org.jumpmind.pos.cache.service.impl;
 
-import java.util.function.Function;
-
 import org.apache.commons.jcs.access.CacheAccess;
 import org.apache.commons.jcs.engine.control.CompositeCache;
 import org.jumpmind.pos.cache.service.CacheConfig;
-import org.jumpmind.pos.cache.service.NullCacheElement;
 
 public class JCSCache implements ICache {
     

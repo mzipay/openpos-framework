@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.flow.ApplicationState;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
@@ -82,12 +83,8 @@ public class ScreenService implements IScreenService {
     
     @Autowired
     private LogFormatter logFormatter;
-
-    int screenSequenceNumber = 0;
-
-    private Map<String, Map<String, Screen>> lastScreenByAppIdByNodeId = new HashMap<>();
-
-    private Map<String, Map<String, Screen>> lastDialogByAppIdByNodeId = new HashMap<>();
+    
+    private ApplicationState applicationState;
     
     @PostConstruct
     public void init() {
@@ -199,7 +196,7 @@ public class ScreenService implements IScreenService {
     }
 
     protected Screen removeLastDialog(String appId, String nodeId) {
-        Map<String, Screen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
+        Map<String, Screen> lastScreenByNodeId = applicationState.getLastDialogByAppIdByNodeId().get(appId);
         if (lastScreenByNodeId != null) {
             return lastScreenByNodeId.remove(nodeId);
         } else {
@@ -209,7 +206,7 @@ public class ScreenService implements IScreenService {
 
     @Override
     public Screen getLastDialog(String appId, String nodeId) {
-        Map<String, Screen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
+        Map<String, Screen> lastScreenByNodeId = applicationState.getLastDialogByAppIdByNodeId().get(appId);
         if (lastScreenByNodeId != null) {
             return lastScreenByNodeId.get(nodeId);
         } else {
@@ -219,7 +216,7 @@ public class ScreenService implements IScreenService {
 
     @Override
     public Screen getLastScreen(String appId, String nodeId) {
-        Map<String, Screen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+        Map<String, Screen> lastScreenByNodeId = applicationState.getLastScreenByAppIdByNodeId().get(appId);
         if (lastScreenByNodeId != null) {
             return lastScreenByNodeId.get(nodeId);
         } else {
@@ -230,7 +227,7 @@ public class ScreenService implements IScreenService {
     @Override
     public void showScreen(String appId, String nodeId, Screen screen) {
         if (screen != null) {
-            screen.setSequenceNumber(++this.screenSequenceNumber);
+            screen.setSequenceNumber(applicationState.incrementAndScreenSequenceNumber());
             try {
                 applyAnnotations(screen);
                 if (screen.isScreenOfType(ScreenType.Form) && !(screen instanceof FormScreen)) {
@@ -249,19 +246,19 @@ public class ScreenService implements IScreenService {
             }
             publishToClients(appId, nodeId, screen);
             if (screen.getTemplate().isDialog()) {
-                recordLastScreen(appId, nodeId, screen, lastDialogByAppIdByNodeId);
+                recordLastScreen(appId, nodeId, screen, applicationState.getLastDialogByAppIdByNodeId());
             } else {
-                recordLastScreen(appId, nodeId, screen, lastScreenByAppIdByNodeId);
+                recordLastScreen(appId, nodeId, screen, applicationState.getLastScreenByAppIdByNodeId());
             }
         }
     }
 
     private void recordLastScreen(String appId, String nodeId, Screen screen,
             Map<String, Map<String, Screen>> lastScreenByAppIdByNodeId) {
-        Map<String, Screen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+        Map<String, Screen> lastScreenByNodeId = applicationState.getLastScreenByAppIdByNodeId().get(appId);
         if (lastScreenByNodeId == null) {
             lastScreenByNodeId = new HashMap<>();
-            lastScreenByAppIdByNodeId.put(appId, lastScreenByNodeId);
+            applicationState.getLastScreenByAppIdByNodeId().put(appId, lastScreenByNodeId);
         }
         lastScreenByNodeId.put(nodeId, screen);
     }
@@ -295,11 +292,11 @@ public class ScreenService implements IScreenService {
     }
 
     private boolean hasForm(String appId, String nodeId) {
-        Map<String, Screen> lastScreenByNodeId = lastDialogByAppIdByNodeId.get(appId);
+        Map<String, Screen> lastScreenByNodeId = applicationState.getLastDialogByAppIdByNodeId().get(appId);
         if (lastScreenByNodeId != null && lastScreenByNodeId.get(nodeId) != null) {
             return lastScreenByNodeId.get(nodeId) instanceof IHasForm;
         } else {
-            lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+            lastScreenByNodeId = applicationState.getLastScreenByAppIdByNodeId().get(appId);
             if (lastScreenByNodeId != null) {
                 Screen lastScreen = lastScreenByNodeId.get(nodeId);
                 if (lastScreen != null && lastScreen instanceof IHasForm) {
@@ -349,7 +346,7 @@ public class ScreenService implements IScreenService {
 
     @Override
     public void refresh(String appId, String nodeId) {
-        Map<String, Screen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
+        Map<String, Screen> lastScreenByNodeId = applicationState.getLastScreenByAppIdByNodeId().get(appId);
         if (lastScreenByNodeId != null) {
             showScreen(appId, nodeId, lastScreenByNodeId.get(nodeId));
         }
@@ -481,6 +478,14 @@ public class ScreenService implements IScreenService {
         buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth - 2)).append(LOWER_RIGHT_CORNER);
         buff.append("\r\n");
         return buff.toString();
+    }
+
+    public ApplicationState getApplicationState() {
+        return applicationState;
+    }
+
+    public void setApplicationState(ApplicationState applicationState) {
+        this.applicationState = applicationState;
     }
 
 }
