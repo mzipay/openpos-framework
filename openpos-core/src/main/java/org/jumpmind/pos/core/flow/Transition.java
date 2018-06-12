@@ -3,6 +3,7 @@ package org.jumpmind.pos.core.flow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ public class Transition extends Object {
     private final Logger logGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
     private final StateManagerLogger stateManagerLog = new StateManagerLogger(logGraphical);    
     
-    public CountDownLatch latch = new CountDownLatch(1);
+    private AtomicReference<CountDownLatch> latch = new AtomicReference<>(new CountDownLatch(1));
 
     private ITransitionStep currentTransitionStep;
     private List<? extends ITransitionStep> transitionSteps;
@@ -49,15 +50,16 @@ public class Transition extends Object {
     
     public void proceed() {
         if (stepIndex > 0) {
-            latch.countDown();
-            latch = new CountDownLatch(1);
+            CountDownLatch oldLatch = latch.get();
+            latch.set(new CountDownLatch(1));
+            oldLatch.countDown();
             stateManager.performOutjections(currentTransitionStep);
         }
         if (stepIndex >= transitionSteps.size()) {
             if (transitionResult == null) {                
                 transitionResult = TransitionResult.PROCEED;
             }
-            latch.countDown();
+            latch.get().countDown();
             return;
         }
 
@@ -76,7 +78,7 @@ public class Transition extends Object {
         }
         
         try {
-            latch.await();
+            latch.get().await();
         } catch (InterruptedException ex) {
             throw new FlowException("Transition await interupted.", ex);
         }        
@@ -88,7 +90,7 @@ public class Transition extends Object {
     
     public void cancel() {
         log.info("Transition was canncelled by " + currentTransitionStep);
-        latch.countDown();
+        latch.get().countDown();
         transitionResult = TransitionResult.CANCEL;
     }
     
