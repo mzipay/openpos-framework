@@ -32,7 +32,7 @@ public class FlowConfig {
     private StateConfig initialState;
     private Map<Class<? extends IState>, StateConfig> stateConfigs = new HashMap<>();
     private Map<String, Object> configScope = new HashMap<>();
-    private Map<String, Class<? extends IState>> globalTransitions = new HashMap<>();
+    private Map<String, Class<? extends IState>> actionToStateMapping = new HashMap<>();
     private Map<String, SubTransition> actionToSubStateMapping = new HashMap<>();
     
     public FlowConfig() {
@@ -82,14 +82,6 @@ public class FlowConfig {
         this.initialState = initialState;
     }
 
-//    public String getReturnAction() {
-//        return returnAction;
-//    }
-//
-//    public void setReturnAction(String returnAction) {
-//        this.returnAction = returnAction;
-//    }
-
     public Map<String, Object> getConfigScope() {
         return configScope;
     }
@@ -99,19 +91,37 @@ public class FlowConfig {
     }
     
     public void addGlobalTransition(String actionName, Class<? extends IState> destination) {
-        globalTransitions.put(actionName, destination);
+        actionToStateMapping.put(actionName, destination);
         autoConfigureTargetState(destination);
-    }
-    
-    public Map<String, Class<? extends IState>> getActionToStateMapping() {
-        return globalTransitions;
     }
 
     public void addGlobalSubTransition(String string, FlowConfig customerFlow) {
         SubTransition subTransition = new SubTransition(null, customerFlow);
         actionToSubStateMapping.put(string, subTransition);
     }
+
+    public Map<Class<? extends IState>, StateConfig> getStateConfigs() {
+        return stateConfigs;
+    }
+
+    public void setStateConfigs(Map<Class<? extends IState>, StateConfig> stateConfigs) {
+        this.stateConfigs = stateConfigs;
+    }
+
+    public Map<String, Class<? extends IState>> getActionToStateMapping() {
+        return actionToStateMapping;
+    }
+
+    public void setActionToStateMapping(Map<String, Class<? extends IState>> actionToStateMapping) {
+        this.actionToStateMapping = actionToStateMapping;
+    }
+
     public Map<String, SubTransition> getActionToSubStateMapping() {
         return actionToSubStateMapping;
-    }    
+    }
+
+    public void setActionToSubStateMapping(Map<String, SubTransition> actionToSubStateMapping) {
+        this.actionToSubStateMapping = actionToSubStateMapping;
+    }
+    
 }

@@ -22,9 +22,12 @@ package org.jumpmind.pos.core.flow;
 
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.jumpmind.pos.core.flow.config.FlowConfig;
+import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.screen.Screen;
 
 /**
@@ -35,7 +38,7 @@ import org.jumpmind.pos.core.screen.Screen;
 public class ApplicationState {
 
     private Scope scope = new Scope();
-    private Deque<StateContext> stateStack = new LinkedList<>();
+    private LinkedList<StateContext> stateStack = new LinkedList<>();
     private StateContext currentContext;
     private Transition currentTransition;
     private int screenSequenceNumber = 0;
@@ -48,10 +51,10 @@ public class ApplicationState {
     public void setScope(Scope scope) {
         this.scope = scope;
     }
-    public Deque<StateContext> getStateStack() {
+    public LinkedList<StateContext> getStateStack() {
         return stateStack;
     }
-    public void setStateStack(Deque<StateContext> stateStack) {
+    public void setStateStack(LinkedList<StateContext> stateStack) {
         this.stateStack = stateStack;
     }
     public StateContext getCurrentContext() {
@@ -87,6 +90,52 @@ public class ApplicationState {
     public int incrementAndScreenSequenceNumber() {
         return ++screenSequenceNumber;
     }
+    
+    public Object getScopeValue(ScopeType scopeType, String name) {
+        ScopeValue scopeValue = null;
+        switch (scopeType) {
+            case Node:
+            case Session:
+            case Conversation:
+                scopeValue = getScope().getScopeValue(scopeType, name);
+                break;
+            case Flow:
+                break;
+            default:
+                throw new FlowException("Invalid scope " + scopeType);
+        }
+        
+        if (scopeValue != null) {
+            return scopeValue.getValue();
+        } else {
+            return null;
+        }
+    }
+    
+    public <T> T getScopeValue(String name) {
+        ScopeValue value = getScope().resolve(name);
+        if (value != null) {
+            return (T) value.getValue();
+        } else {
+            value = getCurrentContext().resolveScope(name);
+            if (value != null) {
+                return (T) value.getValue();    
+            } else {
+                return null;
+            }
+        }
+    }
+    
+    public StateConfig findStateConfig(FlowConfig flowConfig) {
+        StateConfig stateConfig = flowConfig.getStateConfig(getCurrentContext().getState());
+        Iterator<StateContext> itr = getStateStack().iterator();
+        while (stateConfig == null && itr.hasNext()) {
+            StateContext context = itr.next();
+            stateConfig = context.getFlowConfig().getStateConfig(getCurrentContext().getState());
+
+        }
+        return stateConfig;
+    }    
     
     
 }

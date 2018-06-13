@@ -19,25 +19,40 @@
  */
 package org.jumpmind.pos.core.flow;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.jumpmind.pos.cache.service.impl.ICache;
+import org.jumpmind.pos.cache.service.impl.JCSCache;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.config.SubTransition;
 import org.jumpmind.pos.core.flow.ui.UIManager;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IScreenService;
+import org.jumpmind.pos.util.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 @Component()
 @org.springframework.context.annotation.Scope("prototype")
@@ -67,6 +82,13 @@ public class StateManager implements IStateManager {
     
     private ApplicationState applicationState = new ApplicationState();
     
+//    @JsonIgnoreType
+//    public abstract class MixInIgnoreType {
+//    }
+//    public class MyMixIgnoreCache {
+//        
+//    }
+    
     @Autowired
     UIManager uiManager;
 
@@ -82,8 +104,27 @@ public class StateManager implements IStateManager {
         this.appId = appId;
         this.nodeId = nodeId;
         this.uiManager.setStateManager(this);
-        applicationState.setCurrentContext(new StateContext(initialFlowConfig, null, null));
+        
+//        boolean loadedFromSave = false;
+//        
+//        try {            
+//            File f = new File("./openpos-state.json");
+//            if (f.exists()) {                
+//                String json = new String(Files.readAllBytes(Paths.get("./openpos-state.json")));
+//                applicationState = mapper.readValue(json, ApplicationState.class);
+//                loadedFromSave = true;
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        
         applicationState.getScope().setNodeScope("stateManager", this);
+        
+//        if (!loadedFromSave) {            
+            applicationState.setCurrentContext(new StateContext(initialFlowConfig, null, null));
+//        }
+        
+        
         screenService.setApplicationState(applicationState);
         
         transitionTo(new Action("Startup"), initialFlowConfig.getInitialState());
@@ -116,7 +157,41 @@ public class StateManager implements IStateManager {
         }
         
         TransitionResult transitionResult = executeTransition(applicationState.getCurrentContext(), newState, action);
-        if (transitionResult == TransitionResult.PROCEED) {            
+        if (transitionResult == TransitionResult.PROCEED) {          
+            ObjectMapper mapper = new ObjectMapper();
+            {        
+                mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+                mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
+            }
+
+                try {
+                    filterApplicationStateForSerialization(applicationState);
+                    String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(applicationState);
+                    PrintWriter writer = new PrintWriter("openpos-state.json", "UTF-8");
+                    writer.println(json);
+                    System.out.println(json);
+                    writer.close();                
+                    
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
+                try {            
+                    File f = new File("./openpos-state.json");
+                    if (f.exists()) {                
+                        String json = new String(Files.readAllBytes(Paths.get("./openpos-state.json")));
+                        applicationState = mapper.readValue(json, ApplicationState.class);
+                        applicationState.getScope().setNodeScope("stateManager", this);
+                        if (this.applicationState.getCurrentContext().getState() != null) {                            
+                            performInjections(this.applicationState.getCurrentContext().getState());
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }   
+            
+            
+            
             boolean enterSubState = enterSubStateConfig != null;
             boolean exitSubState = resumeSuspendedState != null;
             String returnActionName = applicationState.getCurrentContext().getReturnActionName();
@@ -160,15 +235,6 @@ public class StateManager implements IStateManager {
         outjector.performOutjections(stateOrStep, applicationState.getScope(), applicationState.getCurrentContext());        
     }    
 
-    protected void addConfigScope(Map<String, ScopeValue> extraScope) {
-        if (applicationState.getCurrentContext() != null && applicationState.getCurrentContext().getFlowConfig() != null
-                && applicationState.getCurrentContext().getFlowConfig().getConfigScope() != null) {
-            for (Map.Entry<String, Object> entry : applicationState.getCurrentContext().getFlowConfig().getConfigScope().entrySet()) {
-                extraScope.put(entry.getKey(), new ScopeValue(entry.getValue()));
-            }
-        }
-    }
-    
     protected TransitionResult executeTransition(StateContext sourceStateContext, IState newState, Action action) {
         if (CollectionUtils.isEmpty(transitionSteps)) {
             return TransitionResult.PROCEED;
@@ -224,6 +290,10 @@ public class StateManager implements IStateManager {
     public void doAction(Action action) {
         lastInteractionTime.set(new Date());
         
+
+        
+         
+        
         if (applicationState.getCurrentTransition() != null)  {
             applicationState.getCurrentTransition().handleAction(action);
             return;
@@ -231,7 +301,7 @@ public class StateManager implements IStateManager {
         
         FlowConfig flowConfig = applicationState.getCurrentContext().getFlowConfig();
         
-        StateConfig stateConfig = findStateConfig(flowConfig);
+        StateConfig stateConfig = applicationState.findStateConfig(flowConfig);
         if (handleTerminatingState(action, stateConfig)) {
             return;
         }
@@ -260,57 +330,43 @@ public class StateManager implements IStateManager {
                     action.getName(), applicationState.getCurrentContext().getState().getClass().getName(), action.getName(), action.getName()));                    
         }
     }
-
-    private StateConfig findStateConfig(FlowConfig flowConfig) {
-        StateConfig stateConfig = flowConfig.getStateConfig(applicationState.getCurrentContext().getState());
-        Iterator<StateContext> itr = applicationState.getStateStack().iterator();
-        while (stateConfig == null && itr.hasNext()) {
-            StateContext context = itr.next();
-            stateConfig = context.getFlowConfig().getStateConfig(applicationState.getCurrentContext().getState());
-
-        }
-        return stateConfig;
-    }
     
+    private void filterApplicationStateForSerialization(ApplicationState appStateForSerialization) {
+        appStateForSerialization.getScope().getNodeScope().remove("stateManager");
+        Set<String> keys = new HashSet<>(appStateForSerialization.getScope().getNodeScope().keySet());
+        
+        for (String key : keys) {
+            Object value = appStateForSerialization.getScope().getNodeScope().get(key).getValue();
+            if (ICache.class.isAssignableFrom(value.getClass())
+                    || value.getClass().toString().contains("ContextServiceClient")) {
+                appStateForSerialization.getScope().getNodeScope().remove(key);
+            }
+        }
+        
+        appStateForSerialization.setCurrentTransition(null);
+        
+//        if (appStateForSerialization.getCurrentTransition() != null) {
+//            
+//            appStateForSerialization.getCurrentTransition().setStateManager(null);
+//            appStateForSerialization.getCurrentTransition().setCurrentTransitionStep(null);
+//            appStateForSerialization.getCurrentTransition().setStepIndex(0);
+//        }
+        
+        
+    }
+
     public void setScopeValue(ScopeType scopeType, String name, Object value) {
         applicationState.getScope().setScopeValue(scopeType, name, value);
     }
     
+    @SuppressWarnings("unchecked")
     public <T> T getScopeValue(ScopeType scopeType, String name) {
-        ScopeValue scopeValue = null;
-        switch (scopeType) {
-            case Node:
-            case Session:
-            case Conversation:
-                scopeValue = applicationState.getScope().getScopeValue(scopeType, name);
-                break;
-            case Flow:
-                scopeValue = applicationState.getCurrentContext().getFlowScope().get(name);
-                break;
-            default:
-                throw new FlowException("Invalid scope " + scopeType);
-        }
-        
-        if (scopeValue != null) {
-            return scopeValue.getValue();
-        } else {
-            return null;
-        }
+        return (T)applicationState.getScopeValue(scopeType, name);
     }
         
     @SuppressWarnings("unchecked")
     public <T> T getScopeValue(String name) {
-        ScopeValue value = applicationState.getScope().resolve(name);
-        if (value != null) {
-            return (T) value.getValue();
-        } else {
-            value = applicationState.getCurrentContext().resolveScope(name);
-            if (value != null) {
-                return (T) value.getValue();    
-            } else {
-                return null;
-            }
-        }
+        return (T)applicationState.getScopeValue(name);
     }
     
     protected boolean handleAction(Object state, Action action) {
@@ -435,12 +491,4 @@ public class StateManager implements IStateManager {
             logger.error("Failed to process the session timeout", ex);
         }
     }
-
-//    protected void transitionProceed() {
-//        latch.countDown();
-//    }
-//    
-//    protected void transitionCancel() {
-//        latch.countDown();
-//    }    
 }

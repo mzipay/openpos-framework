@@ -6,6 +6,10 @@ public class SubTransition {
     private String returnActionName;
     private FlowConfig subFlowConfig;
     
+    public SubTransition() {
+        
+    }
+    
     public SubTransition(String returnActionName, FlowConfig subFlowConfig) {
         super();
         this.returnActionName = returnActionName;

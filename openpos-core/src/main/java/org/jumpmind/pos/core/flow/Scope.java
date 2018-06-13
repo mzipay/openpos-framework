@@ -71,18 +71,6 @@ public class Scope {
         }
     }
 
-    public Map<String, ScopeValue> getNodeScope() {
-        return nodeScope;
-    }
-
-    public Map<String, ScopeValue> getSessionScope() {
-        return sessionScope;
-    }
-
-    public Map<String, ScopeValue> getConversationScope() {
-        return conversationScope;
-    }
-
     public void setScopeValue(ScopeType scopeType, String name, Object value) {
         switch (scopeType) {
             case Node:
@@ -111,6 +99,30 @@ public class Scope {
                 throw new FlowException("Invalid scope " + scopeType);
         }
         
+    }
+
+    public Map<String, ScopeValue> getNodeScope() {
+        return nodeScope;
+    }
+
+    public void setNodeScope(Map<String, ScopeValue> nodeScope) {
+        this.nodeScope = nodeScope;
+    }
+
+    public Map<String, ScopeValue> getSessionScope() {
+        return sessionScope;
+    }
+
+    public void setSessionScope(Map<String, ScopeValue> sessionScope) {
+        this.sessionScope = sessionScope;
+    }
+
+    public Map<String, ScopeValue> getConversationScope() {
+        return conversationScope;
+    }
+
+    public void setConversationScope(Map<String, ScopeValue> conversationScope) {
+        this.conversationScope = conversationScope;
     }
 
 }
