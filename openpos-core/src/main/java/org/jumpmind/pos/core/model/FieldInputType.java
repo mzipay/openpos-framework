@@ -19,8 +19,10 @@ public enum FieldInputType {
     Phone,
     Money,
     Income,
+    /** DDMMyyyy format */
     Date,
+    NoYearDate,
+    DateMMDDYY,
     ToggleButton,
-    AutoComplete,
-    NoYearDate
+    AutoComplete
 }

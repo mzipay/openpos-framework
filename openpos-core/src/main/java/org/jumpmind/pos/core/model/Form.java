@@ -11,6 +11,7 @@ public class Form implements Serializable {
     public static final String PATTERN_MONEY =  "^(\\d{0,9}\\.\\d{0,2}|\\d{1,9})$";
     public static final String PATTERN_PERCENT =  "^100$|^\\d{0,2}(\\.\\d{1,2})?$|^\\d{0,2}(\\.)?"; // 100-0, Only two decimal places allowed.
     public static final String PATTERN_DATE = "^(\\d{2})/(\\d{2})/(\\d{4}$)";
+    public static final String PATTERN_YY_DATE = "^(\\d{2})/(\\d{2})/(\\d{2}$)";
     public static final String PATTERN_NO_YEAR_DATE = "^(\\d{2})/(\\d{2})$";
     // TODO: This pattern may be too restrictive. 
     public static final String PATTERN_US_PHONE_NUMBER = "^\\d{10}$";
