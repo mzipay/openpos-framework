@@ -34,6 +34,7 @@ import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
 import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.core.screen.DevToolsMessage;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
@@ -167,6 +168,9 @@ public class ScreenService implements IScreenService {
         if (stateManager != null) {
             if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
                 stateManager.keepAlive();
+            } else if (action.getName().contains("DevTools")) {
+            	logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
+            	DevToolRouter(action, stateManager, this, appId, nodeId);
             } else {
                 deserializeForm(appId, nodeId, action);
 
@@ -193,6 +197,29 @@ public class ScreenService implements IScreenService {
                 }
             }
         }
+    }
+    
+    private void DevToolRouter(Action action, IStateManager stateManager, ScreenService screenService, String appId, String nodeId) {
+		DevToolsMessage msg = new DevToolsMessage(stateManager, this);
+    	if(action.getName().contains("::Get")) {
+    		logger.info(logFormatter.toJsonString(msg));
+    		publishToClients(appId, nodeId, msg);
+    	} else if (action.getName().contains("::Remove")) {
+    		Map<String, String> element = action.getData();
+    		if (action.getName().contains("::Node")) {
+    			msg = new DevToolsMessage(stateManager, this, element, "Node", "remove");
+    			publishToClients(appId, nodeId, msg);
+    		} else if (action.getName().contains("::Session")) {
+    			msg = new DevToolsMessage(stateManager, this, element, "Session", "remove");
+    			publishToClients(appId, nodeId, msg);
+    		} else if (action.getName().contains("::Conversation")) {
+    			msg = new DevToolsMessage(stateManager, this, element, "Conversation", "remove");
+    			publishToClients(appId, nodeId, msg);
+    		} else if (action.getName().contains("::Config")) {
+    			msg = new DevToolsMessage(stateManager, this, element, "Config", "remove");
+    			publishToClients(appId, nodeId, msg);
+    		}
+    	}
     }
 
     protected Screen removeLastDialog(String appId, String nodeId) {

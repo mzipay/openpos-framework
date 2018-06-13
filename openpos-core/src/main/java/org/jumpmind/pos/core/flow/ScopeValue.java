@@ -25,7 +25,7 @@ import java.util.Date;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 public class ScopeValue {
-
+    
     private Date createdTime;
     private String createdStackTrace;
     private Object value;

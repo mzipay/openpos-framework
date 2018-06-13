@@ -491,4 +491,9 @@ public class StateManager implements IStateManager {
             logger.error("Failed to process the session timeout", ex);
         }
     }
+
+    @Override
+    public ApplicationState getApplicationState() {
+        return applicationState;
+    }
 }
