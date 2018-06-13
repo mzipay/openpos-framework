@@ -1,8 +1,6 @@
 package org.jumpmind.pos.cache.service;
 
-import org.jumpmind.pos.service.ServiceResult;
-
-public class CacheResult extends ServiceResult {
+public class CacheResult  {
 
     private String configName;
     private String configValue;

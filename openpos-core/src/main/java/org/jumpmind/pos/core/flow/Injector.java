@@ -166,10 +166,14 @@ public class Injector {
 
         StringBuilder buff = new StringBuilder();
 
-        buff.append(reportScope("NODE SCOPE", scope.getNodeScope()));
-        buff.append(reportScope("SESSION SCOPE", scope.getSessionScope()));
-        buff.append(reportScope("CONVERSATION SCOPE", scope.getConversationScope()));
-        buff.append(reportScope("FLOW SCOPE", currentContext.getFlowScope()));
+        try {            
+            buff.append(reportScope("NODE SCOPE", scope.getNodeScope()));
+            buff.append(reportScope("SESSION SCOPE", scope.getSessionScope()));
+            buff.append(reportScope("CONVERSATION SCOPE", scope.getConversationScope()));
+            buff.append(reportScope("FLOW SCOPE", currentContext.getFlowScope()));
+        } catch (Exception ex) {
+            logger.warn("Exception while generating scope report", ex);
+        }
 
         return buff.toString();
     }

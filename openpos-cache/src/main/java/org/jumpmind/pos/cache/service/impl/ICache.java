@@ -31,7 +31,11 @@ public interface ICache extends Closeable {
             }
             setValue(key, value);
         }
-        return value;
+        if (value instanceof NullCacheElement) {
+            return null;
+        } else {            
+            return value;
+        }
     }
     
 }

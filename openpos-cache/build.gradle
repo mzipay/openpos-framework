@@ -1,7 +1,7 @@
 apply from: '../openpos-core/common.gradle'
 
 dependencies {
-    compile project(":openpos-service")
+    // compile project(":openpos-service")
     compile "com.h2database:h2:1.4.196"
 	compile group: 'org.apache.commons', name: 'commons-jcs-core', version: '2.2'    
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'

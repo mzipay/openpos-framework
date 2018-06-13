@@ -19,40 +19,23 @@
  */
 package org.jumpmind.pos.core.flow;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.jumpmind.pos.cache.service.impl.ICache;
-import org.jumpmind.pos.cache.service.impl.JCSCache;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.config.SubTransition;
 import org.jumpmind.pos.core.flow.ui.UIManager;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IScreenService;
-import org.jumpmind.pos.util.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 @Component()
 @org.springframework.context.annotation.Scope("prototype")
@@ -74,6 +57,9 @@ public class StateManager implements IStateManager {
     @Autowired
     private Outjector outjector;
     
+    @Autowired
+    private ApplicationStateSerializer applicationStateSerializer;
+    
     @Autowired(required=false)
     private List<? extends ITransitionStep> transitionSteps;
     
@@ -82,15 +68,11 @@ public class StateManager implements IStateManager {
     
     private ApplicationState applicationState = new ApplicationState();
     
-//    @JsonIgnoreType
-//    public abstract class MixInIgnoreType {
-//    }
-//    public class MyMixIgnoreCache {
-//        
-//    }
-    
     @Autowired
     UIManager uiManager;
+    
+    @Value("${org.jumpmind.pos.core.flow.StateManager.autoSaveState:false}")
+    private boolean autoSaveState = false;    
 
     private String appId;
     private String nodeId;
@@ -105,29 +87,26 @@ public class StateManager implements IStateManager {
         this.nodeId = nodeId;
         this.uiManager.setStateManager(this);
         
-//        boolean loadedFromSave = false;
-//        
-//        try {            
-//            File f = new File("./openpos-state.json");
-//            if (f.exists()) {                
-//                String json = new String(Files.readAllBytes(Paths.get("./openpos-state.json")));
-//                applicationState = mapper.readValue(json, ApplicationState.class);
-//                loadedFromSave = true;
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
+        boolean resumeState = false;
+        
+        if (autoSaveState) {            
+            try {            
+                applicationState = applicationStateSerializer.deserialize(this, "./openpos-state.json");
+                resumeState = true;
+            } catch (Exception ex) {
+                logger.warn("Failed to load openpos-state.json", ex);
+            }
+        }
         
         applicationState.getScope().setNodeScope("stateManager", this);
-        
-//        if (!loadedFromSave) {            
-            applicationState.setCurrentContext(new StateContext(initialFlowConfig, null, null));
-//        }
-        
-        
         screenService.setApplicationState(applicationState);
         
-        transitionTo(new Action("Startup"), initialFlowConfig.getInitialState());
+        if (resumeState) {
+            refreshScreen();
+        } else {            
+            applicationState.setCurrentContext(new StateContext(initialFlowConfig, null, null));
+            transitionTo(new Action("Startup"), initialFlowConfig.getInitialState());
+        }
     }
 
     protected void transitionTo(Action action, StateConfig stateConfig) {
@@ -157,41 +136,7 @@ public class StateManager implements IStateManager {
         }
         
         TransitionResult transitionResult = executeTransition(applicationState.getCurrentContext(), newState, action);
-        if (transitionResult == TransitionResult.PROCEED) {          
-            ObjectMapper mapper = new ObjectMapper();
-            {        
-                mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-                mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
-            }
-
-                try {
-                    filterApplicationStateForSerialization(applicationState);
-                    String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(applicationState);
-                    PrintWriter writer = new PrintWriter("openpos-state.json", "UTF-8");
-                    writer.println(json);
-                    System.out.println(json);
-                    writer.close();                
-                    
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                
-                try {            
-                    File f = new File("./openpos-state.json");
-                    if (f.exists()) {                
-                        String json = new String(Files.readAllBytes(Paths.get("./openpos-state.json")));
-                        applicationState = mapper.readValue(json, ApplicationState.class);
-                        applicationState.getScope().setNodeScope("stateManager", this);
-                        if (this.applicationState.getCurrentContext().getState() != null) {                            
-                            performInjections(this.applicationState.getCurrentContext().getState());
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }   
-            
-            
-            
+        if (transitionResult == TransitionResult.PROCEED) {   
             boolean enterSubState = enterSubStateConfig != null;
             boolean exitSubState = resumeSuspendedState != null;
             String returnActionName = applicationState.getCurrentContext().getReturnActionName();
@@ -290,10 +235,6 @@ public class StateManager implements IStateManager {
     public void doAction(Action action) {
         lastInteractionTime.set(new Date());
         
-
-        
-         
-        
         if (applicationState.getCurrentTransition() != null)  {
             applicationState.getCurrentTransition().handleAction(action);
             return;
@@ -329,30 +270,6 @@ public class StateManager implements IStateManager {
             throw new FlowException(String.format("Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"...) defined in the flow config.", 
                     action.getName(), applicationState.getCurrentContext().getState().getClass().getName(), action.getName(), action.getName()));                    
         }
-    }
-    
-    private void filterApplicationStateForSerialization(ApplicationState appStateForSerialization) {
-        appStateForSerialization.getScope().getNodeScope().remove("stateManager");
-        Set<String> keys = new HashSet<>(appStateForSerialization.getScope().getNodeScope().keySet());
-        
-        for (String key : keys) {
-            Object value = appStateForSerialization.getScope().getNodeScope().get(key).getValue();
-            if (ICache.class.isAssignableFrom(value.getClass())
-                    || value.getClass().toString().contains("ContextServiceClient")) {
-                appStateForSerialization.getScope().getNodeScope().remove(key);
-            }
-        }
-        
-        appStateForSerialization.setCurrentTransition(null);
-        
-//        if (appStateForSerialization.getCurrentTransition() != null) {
-//            
-//            appStateForSerialization.getCurrentTransition().setStateManager(null);
-//            appStateForSerialization.getCurrentTransition().setCurrentTransitionStep(null);
-//            appStateForSerialization.getCurrentTransition().setStepIndex(0);
-//        }
-        
-        
     }
 
     public void setScopeValue(ScopeType scopeType, String name, Object value) {
@@ -451,6 +368,12 @@ public class StateManager implements IStateManager {
         } 
         
         screenService.showScreen(appId, nodeId, screen);
+        
+        if (autoSaveState) {            
+            if (this.getApplicationState().getCurrentTransition() == null) {
+                applicationStateSerializer.serialize(this, applicationState, "./openpos-state.json");
+            }
+        }
     }
 
     @Override
@@ -495,5 +418,9 @@ public class StateManager implements IStateManager {
     @Override
     public ApplicationState getApplicationState() {
         return applicationState;
+    }
+    
+    public void setApplicationState(ApplicationState applicationState) {
+        this.applicationState = applicationState;
     }
 }
