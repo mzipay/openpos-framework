@@ -42,8 +42,8 @@ public interface IStateManager {
     public void refreshScreen();
     public IState getCurrentState();
     public IUI getUI();
-	public Scope getScope();
-	public StateContext getCurrentStateContext();
-	public FlowConfig getCurrentConfig();
+	//public Scope getScope();
+	//public StateContext getCurrentStateContext();
+	//public FlowConfig getCurrentConfig();
     
 }

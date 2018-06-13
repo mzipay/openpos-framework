@@ -192,15 +192,15 @@ public class StateManager implements IStateManager {
         return state;
     }
     
-    @Override
-    public StateContext getCurrentStateContext() {
-    	return currentContext;
-    }
+//    @Override
+//    public StateContext getCurrentStateContext() {
+//    	return currentContext;
+//    }
     
-    @Override
-    public FlowConfig getCurrentConfig() {
-    	return initialFlowConfig;
-    }
+//    @Override
+//    public FlowConfig getCurrentConfig() {
+//    	return initialFlowConfig;
+//    }
 
     @Override
     public IState getCurrentState() {
@@ -286,9 +286,9 @@ public class StateManager implements IStateManager {
         applicationState.getScope().setScopeValue(scopeType, name, value);
     }
     
-    public Scope getScope() {
-    	return this.scope;
-    }
+//    public Scope getScope() {
+//    	return this.scope;
+//    }
     
     public <T> T getScopeValue(ScopeType scopeType, String name) {
         ScopeValue scopeValue = null;
