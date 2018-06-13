@@ -24,12 +24,12 @@ public class DevToolsMessage extends Screen {
 		setName("DevTools");
 		setRefreshAlways(true);
 		setScopes(sm.getApplicationState().getScope());
+		setCurrentState(sm);
 		this.put("scopes", scopes);
 		
 		//sm.getApplicationState().getCurrentContext().getFlowConfig().getConfigScope();
 		
-		IState currentState = sm.getCurrentState();
-		this.put("currentState", sm.getApplicationState().getCurrentContext().getFlowConfig().getStateConfig(currentState));
+
 	}
 	
 	public DevToolsMessage(IStateManager sm, ScreenService ss, Map<String, String> element, String scopeType, String cmd) {
@@ -59,6 +59,10 @@ public class DevToolsMessage extends Screen {
 		this.put("scopes", scopes);
 	}
 
+	private void setCurrentState (IStateManager sm) {
+		IState currentState = sm.getCurrentState();
+		this.put("currentState", sm.getApplicationState().getCurrentContext().getFlowConfig().getStateConfig(currentState));
+	}
 
 	private void setScopes (Scope scope) {
 		scopes.put("ConversationScope", buildScope(scope.getConversationScope()));
@@ -71,7 +75,7 @@ public class DevToolsMessage extends Screen {
 		Set<String> keys = map.keySet();
 		List<ScopeField> res = new ArrayList<>();
 		for (String key : keys) {
-			res.add(new ScopeField(key, map.get(key).getValue().toString(), map.get(key).getCreatedTime().toString(), map.get(key).getCreatedStackTrace()));
+			res.add(new ScopeField(key, map.get(key).getValue().toString(), map.get(key).getCreatedTime().toString(), map.get(key).getCreatedStackTrace().replaceAll("at", "\n  at")));
 		}
 		return res;
 	}
