@@ -18,6 +18,7 @@ import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Element } from '../screens/dynamic-screen/dynamic-screen.component';
+import { IThemeChangingEvent } from '../events/ithemechanging.event';
 
 
 @Injectable()
@@ -67,6 +68,8 @@ export class SessionService implements ILocaleService {
     private messages: Observable<Message>;
 
     public onDeviceRequest = new EventEmitter<IDeviceRequest>();
+    public onThemeChanging = new EventEmitter<IThemeChangingEvent>();
+    private previousTheme: string;
 
     private screenSource = new BehaviorSubject<any>(null);
 
@@ -219,6 +222,11 @@ export class SessionService implements ILocaleService {
 
     public setTheme(theme: string) {
         localStorage.setItem('theme', theme);
+        if (this.previousTheme !== theme) {
+            console.log(`Theme changing from '${this.previousTheme}' to '${theme}'`);
+            this.onThemeChanging.emit({currentTheme: this.previousTheme, newTheme: theme});
+            this.previousTheme = theme;          
+        }
     }
 
     public setServerName(name: string) {

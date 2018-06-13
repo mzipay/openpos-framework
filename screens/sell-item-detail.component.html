@@ -6,8 +6,9 @@
                     <p matLine>{{field.label}}</p>
                     <p matLine>{{field.value || 'N/A'}}</p> 
                 </mat-list-item>
-                <mat-list-item *ngIf="promosDataSource.filteredData.length > 0">
+                <mat-list-item>
                     <p matLine>Promotions</p>
+                    <p matLine *ngIf="promosDataSource.filteredData.length === 0"class="text-md">N/A</p> 
                 </mat-list-item>
             </mat-list>
             <ng-container *ngIf="promosDataSource.filteredData.length > 0">

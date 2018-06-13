@@ -1,32 +1,50 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px;">
 	<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
-		<mat-card-content #scrollList>
-			<mat-list class="list-seperator" ngClass.xs="xs">
-				<mat-list-item *ngFor="let item of items">
-					<p matLine>{{item.description}}</p>
-					<p matLine class="muted-color">
-						<mat-chip-list>
-							{{item.subtitle}}&nbsp;
-							<mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
-						</mat-chip-list>
-					</p>
-
-					<span [hidden]="!item.isGiftReceipt">
-						<mat-icon color="muted-color">redeem</mat-icon>
-					</span>
-					<span class="primary text-md">
-						<span class="super-currency-symbol">$</span>{{item.amount}}
-						<br>
-						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">
-							<span class="super-currency-symbol">$</span>{{item.originalAmount}}</p>
-						<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">-
-							<span class="super-currency-symbol">$</span>{{item.discountAmount}}</p>
-					</span>
-					<button *ngIf="!screen.readOnly" mat-icon-button color="primary" (click)="openItemDialog(item)">
+		<mat-card-content #scrollList ngClass.xs="xs">
+			<mat-toolbar *ngIf="selectedItems.length > 1" class="page-content-card" color="primary" >
+				<span>{{selectedItems.length}} Items Selected</span>
+				<span fxFlex="1 1 auto"></span>
+				<span>
+					<button *ngIf="!screen.readOnly && screen.selectedItems" mat-icon-button color="primary-inverse" (click)="openItemsDialog(selectedItems)">
 						<mat-icon>more_vert</mat-icon>
 					</button>
-				</mat-list-item>
-			</mat-list>
+				</span>
+			</mat-toolbar>
+			<app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems" (selectedItemListChange)="onItemListChange($event)">
+				<ng-template let-item>
+					<div fxLayoutAlign="space-between" fxLayout.xs="column" >
+						<div fxFlex="90" fxAlign="left">
+							{{item.description}}
+							<span class="muted-color">
+								<mat-chip-list>
+									{{item.subtitle}}&nbsp;
+									<mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
+								</mat-chip-list>
+							</span>
+						</div>							
+						<div *ngIf="item.isGiftReceipt" fxAlign="right center">
+							<mat-icon color="muted-color">redeem</mat-icon>&nbsp;&nbsp;
+						</div>				
+						<div fxAlign="right">
+							<span class="primary text-md">
+								<span class="super-currency-symbol">$</span>{{item.amount}}
+								<br>
+								<span>
+									<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">
+										<span class="super-currency-symbol">$</span>{{item.originalAmount}}</p>
+									<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">-
+										<span class="super-currency-symbol">$</span>{{item.discountAmount}}</p>
+								</span>
+							</span>
+						</div>						
+						<div *ngIf="selectedItems.length < 2" fxAlign="right" >
+							<button *ngIf="!screen.readOnly" mat-icon-button color="primary" (click)="openItemDialog(item)">
+								<mat-icon>more_vert</mat-icon>
+							</button>
+						</div>
+					</div>
+				</ng-template>
+			</app-selectable-item-list> 
 			<div *ngIf="!items || items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
 				<mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
 				<span class="text-md">Scan/Key something to get started</span>
