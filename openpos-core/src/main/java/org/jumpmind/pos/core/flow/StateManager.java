@@ -191,16 +191,6 @@ public class StateManager implements IStateManager {
         }
         return state;
     }
-    
-//    @Override
-//    public StateContext getCurrentStateContext() {
-//    	return currentContext;
-//    }
-    
-//    @Override
-//    public FlowConfig getCurrentConfig() {
-//    	return initialFlowConfig;
-//    }
 
     @Override
     public IState getCurrentState() {
@@ -285,10 +275,6 @@ public class StateManager implements IStateManager {
     public void setScopeValue(ScopeType scopeType, String name, Object value) {
         applicationState.getScope().setScopeValue(scopeType, name, value);
     }
-    
-//    public Scope getScope() {
-//    	return this.scope;
-//    }
     
     public <T> T getScopeValue(ScopeType scopeType, String name) {
         ScopeValue scopeValue = null;
@@ -426,6 +412,12 @@ public class StateManager implements IStateManager {
     public IUI getUI() {
         return uiManager;
     }
+    
+    //For dev purposes
+    public ApplicationState getApplicationState() {
+    	return applicationState;
+    }
+    
     
     // called from a Timer thread.
     public void checkSessionTimeout() {

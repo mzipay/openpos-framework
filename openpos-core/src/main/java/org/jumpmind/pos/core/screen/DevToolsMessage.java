@@ -10,6 +10,7 @@ import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.Scope;
 import org.jumpmind.pos.core.flow.ScopeValue;
+import org.jumpmind.pos.core.flow.StateManager;
 import org.jumpmind.pos.core.service.ScreenService;
 
 public class DevToolsMessage extends Screen {
@@ -22,38 +23,40 @@ public class DevToolsMessage extends Screen {
 		setType(ScreenType.DevTools);
 		setName("DevTools");
 		setRefreshAlways(true);
-		setScopes(sm.getScope());
+		setScopes(sm.getApplicationState().getScope());
 		this.put("scopes", scopes);
 		
-		//IState currentState = sm.getCurrentState();
-		//this.put("currentState", sm.getCurrentConfig().getStateConfig(currentState));
+		//sm.getApplicationState().getCurrentContext().getFlowConfig().getConfigScope();
+		
+		IState currentState = sm.getCurrentState();
+		this.put("currentState", sm.getApplicationState().getCurrentContext().getFlowConfig().getStateConfig(currentState));
 	}
 	
 	public DevToolsMessage(IStateManager sm, ScreenService ss, Map<String, String> element, String scopeType, String cmd) {
 		setType(ScreenType.DevTools);
 		setName("DevTools");
 		setRefreshAlways(true);
-		setScopes(sm.getScope());
+		setScopes(sm.getApplicationState().getScope());
 		
 		
 		String scopeId = element.get("ID");
 		if (cmd.equals("remove")) {
 			if (scopeType.equals("Node")) {
-    			sm.getScope().removeNodeScope(scopeId);
+    			sm.getApplicationState().getScope().removeNodeScope(scopeId);
     			scopes.get("NodeScope").removeIf(p -> p.getName().equals(scopeId));
     		} else if (scopeType.equals("Session")) {
-    			sm.getScope().removeSessionScope(scopeId);
+    			sm.getApplicationState().getScope().removeSessionScope(scopeId);
     			scopes.get("SessionScope").removeIf(p -> p.getName().equals(scopeId));
     		} else if (scopeType.equals("Conversation")) {
-    			sm.getScope().removeConversationScope(scopeId);
+    			sm.getApplicationState().getScope().removeConversationScope(scopeId);
     			scopes.get("ConversationScope").removeIf(p -> p.getName().equals(scopeId));
     		} else if (scopeType.equals("Config")) {
     			//TODO add support
     		}
 		} else {
-			// TODO add a scope support?
+			// TODO 'add a scope' support?
 		}
-		this.put("Scopes", scopes);
+		this.put("scopes", scopes);
 	}
 
 
