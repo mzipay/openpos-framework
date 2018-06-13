@@ -45,7 +45,7 @@ export class SessionService implements ILocaleService {
     ConvElements: Element[] = [];
     ConfElements: Element[] = [];
 
-    currentState = 'null';
+    currentState: string;
 
     private screen: any;
 
@@ -498,7 +498,7 @@ export class SessionService implements ILocaleService {
 
     private populateDevTables(json: any) {
         if(json.currentState) {
-            this.currentState = json.currentState;
+            this.currentState = json.currentState.stateName;
         }
         if(json.scopes.ConversationScope) {
             console.log('Pulling Conversation Scope Elements...');

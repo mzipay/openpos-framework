@@ -57,6 +57,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     logsAvailable = false;
 
+    private currentState: string;
+
     private stackTrace: string;
 
     private selected: string;
@@ -174,13 +176,15 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
                 this.logsAvailable = false;
             });
         }
-        //this.session.onAction('DevTools::Get');
+        this.session.onAction('DevTools::Get');
+        this.currentState = this.session.currentState;
         this.showDevMenu = !this.showDevMenu;
 
     }
 
     protected onDevMenuRefresh() {
-        //this.session.onAction('DevTools::Get');
+        this.session.onAction('DevTools::Get');
+        this.currentState = this.session.currentState;
     }
 
     protected onNodeRemove(element: Element) {

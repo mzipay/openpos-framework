@@ -14,7 +14,7 @@
                 <mat-tab-group dynamicHeight>
                     <mat-tab label="State">
                     <span  md-colors="{color:'accent'}">    
-                      <h2>State: Home
+                      <h2>Current State: {{currentState}}
                         <button mat-icon-button (click)="onDevMenuRefresh()">
                             <mat-icon aria-label="refresh">refresh</mat-icon>
                         </button>
@@ -163,7 +163,7 @@
                         <div *ngIf="displayStackTrace" class="stacktrace">
                             <mat-card>
                                 <mat-card-title>StackTrace - {{selected}}</mat-card-title>
-                                <mat-card-content [style.overflow]="'scroll'" [style.height.px]="'300'" class="stacktrace-font">
+                                <mat-card-content [style.overflow]="'scroll'" [style.height.px]="'300'" class="stacktrace-content">
                                     {{stackTrace}}
                                 </mat-card-content>
                             </mat-card>
@@ -188,6 +188,14 @@
                     <mat-tab label="Save Points">
                       <h1>Save Points</h1>
 
+                    </mat-tab>
+                    <mat-tab label="Logs">
+                        <h1>Logs</h1>
+                        <div [style.height.px]="'250'">
+                        <ul>
+                                <li><button mat-raised-button [matMenuTriggerFor]="logsMenu">Logs</button></li>
+                        </ul>
+                        </div>
                     </mat-tab>
                   </mat-tab-group>
                 
