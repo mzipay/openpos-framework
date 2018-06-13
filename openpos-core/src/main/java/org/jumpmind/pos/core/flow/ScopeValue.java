@@ -20,14 +20,11 @@
  */
 package org.jumpmind.pos.core.flow;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-public class ScopeValue implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ScopeValue {
     
     private Date createdTime;
     private String createdStackTrace;

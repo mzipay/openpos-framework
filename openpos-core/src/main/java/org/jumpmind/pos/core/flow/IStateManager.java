@@ -22,6 +22,7 @@ package org.jumpmind.pos.core.flow;
 
 import java.util.Map;
 
+import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.screen.Screen;
 
 
@@ -42,5 +43,7 @@ public interface IStateManager {
     public IState getCurrentState();
     public IUI getUI();
 	public Scope getScope();
+	public StateContext getCurrentStateContext();
+	public FlowConfig getCurrentConfig();
     
 }

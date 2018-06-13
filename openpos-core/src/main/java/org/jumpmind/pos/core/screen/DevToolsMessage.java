@@ -1,13 +1,12 @@
 package org.jumpmind.pos.core.screen;
 
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.Scope;
 import org.jumpmind.pos.core.flow.ScopeValue;
@@ -24,6 +23,36 @@ public class DevToolsMessage extends Screen {
 		setName("DevTools");
 		setRefreshAlways(true);
 		setScopes(sm.getScope());
+		this.put("scopes", scopes);
+		
+		//IState currentState = sm.getCurrentState();
+		//this.put("currentState", sm.getCurrentConfig().getStateConfig(currentState));
+	}
+	
+	public DevToolsMessage(IStateManager sm, ScreenService ss, Map<String, String> element, String scopeType, String cmd) {
+		setType(ScreenType.DevTools);
+		setName("DevTools");
+		setRefreshAlways(true);
+		setScopes(sm.getScope());
+		
+		
+		String scopeId = element.get("ID");
+		if (cmd.equals("remove")) {
+			if (scopeType.equals("Node")) {
+    			sm.getScope().removeNodeScope(scopeId);
+    			scopes.get("NodeScope").removeIf(p -> p.getName().equals(scopeId));
+    		} else if (scopeType.equals("Session")) {
+    			sm.getScope().removeSessionScope(scopeId);
+    			scopes.get("SessionScope").removeIf(p -> p.getName().equals(scopeId));
+    		} else if (scopeType.equals("Conversation")) {
+    			sm.getScope().removeConversationScope(scopeId);
+    			scopes.get("ConversationScope").removeIf(p -> p.getName().equals(scopeId));
+    		} else if (scopeType.equals("Config")) {
+    			//TODO add support
+    		}
+		} else {
+			// TODO add a scope support?
+		}
 		this.put("Scopes", scopes);
 	}
 
@@ -43,5 +72,9 @@ public class DevToolsMessage extends Screen {
 		}
 		return res;
 	}
+	
+	
+	
+	
 }
 

@@ -37,7 +37,22 @@ public class Scope {
         clearConversationScope();
         sessionScope.clear();
     }
+    
+    public void clearNodeScope() {
+        nodeScope.clear();
+    }
 
+    public void removeNodeScope(String key) {
+    	nodeScope.remove(key);
+    }
+    
+    public void removeConversationScope(String key) {
+    	nodeScope.remove(key);
+    }
+    
+    public void removeSessionScope(String key) {
+    	nodeScope.remove(key);
+    }
     public ScopeValue resolve(String name) {
         if (conversationScope.containsKey(name)) {
             return conversationScope.get(name);

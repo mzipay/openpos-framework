@@ -179,6 +179,16 @@ public class StateManager implements IStateManager {
         }
         return state;
     }
+    
+    @Override
+    public StateContext getCurrentStateContext() {
+    	return currentContext;
+    }
+    
+    @Override
+    public FlowConfig getCurrentConfig() {
+    	return initialFlowConfig;
+    }
 
     @Override
     public IState getCurrentState() {
