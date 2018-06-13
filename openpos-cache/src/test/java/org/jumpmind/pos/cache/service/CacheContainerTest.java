@@ -1,19 +1,17 @@
 package org.jumpmind.pos.cache.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
 import org.jumpmind.pos.cache.service.impl.ICache;
-import org.jumpmind.pos.persist.cars.TestConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {TestConfig.class})
 public class CacheContainerTest {
     
     @Autowired

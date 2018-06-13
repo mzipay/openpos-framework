@@ -150,7 +150,7 @@ public class CacheContainer {
                         URL url = urls.nextElement();
                         log.info(String.format("Loading %s...", url.toString()));
                         InputStream queryYamlStream = url.openStream();
-                        CacheConfigs cacheConfigsEntry = new Yaml(new Constructor(CacheConfigs.class)).load(queryYamlStream);
+                        CacheConfigs cacheConfigsEntry = (CacheConfigs) new Yaml(new Constructor(CacheConfigs.class)).load(queryYamlStream);
                         cacheConfigs.add(cacheConfigsEntry);
                     }
                     
