@@ -204,5 +204,14 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
 
     return text;
   }
+
+  isDateInput(): boolean {
+    return this.formField.inputType && this.formField.inputType.toLowerCase().indexOf('date') >= 0;
+  }
+  
+  isSpecialCaseInput(): boolean {
+    return ['ToggleButton', 'Checkbox', 'AutoComplete'].indexOf(this.formField.inputType) >= 0 ||
+        this.isDateInput();
+  }
 }
 

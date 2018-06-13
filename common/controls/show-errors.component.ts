@@ -20,7 +20,9 @@ export class ShowErrorsComponent {
         'maxlength': () => 'Length is invalid',
         'phoneUS' : () => 'Phone number is invalid',
         'phone' : () => 'Phone number is invalid',
-        'date': () => 'Date is invalid'
+        'date': () => 'Date is invalid',
+        'datemmddyy': () => 'Date is invalid',
+        'noyeardate': () => 'Date is invalid'
     };
 
     @Input()

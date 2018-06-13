@@ -6,7 +6,7 @@
         </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <ng-container *ngIf="formField.elementType==='Input' && ['ToggleButton', 'Checkbox', 'AutoComplete', 'Date', 'NoYearDate'].indexOf(formField.inputType) < 0">
+    <ng-container *ngIf="formField.elementType==='Input' && ! isSpecialCaseInput()">
         <mat-form-field fxFlexFill [ngSwitch]="formField.inputType">
             <app-icon *ngIf="formField.iconName" matPrefix iconName="{{formField.iconName}}" iconClass="material-icons"></app-icon>
 
@@ -40,7 +40,7 @@
         </mat-form-field>
     </ng-container>
 
-    <ng-container *ngIf="formField.inputType ==='Date' || formField.inputType ==='NoYearDate'">
+    <ng-container *ngIf="isDateInput()">
         <app-dynamic-date-form-field *ngIf="formField.hideCalendar" [type]="formField.inputType" [(value)]="formField.value" [placeholder]="getPlaceholderText(formField)" 
         [hideCalendar]="formField.hideCalendar" [controlName]="formField.id" [hiddenControl]="formField.id+'Hidden'"[form]="formGroup"></app-dynamic-date-form-field>
         <app-dynamic-date-form-field *ngIf="!formField.hideCalendar" [type]="formField.inputType" [(value)]="formField.value" [placeholder]="getPlaceholderText(formField)" 
