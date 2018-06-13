@@ -3,7 +3,6 @@ package org.jumpmind.pos.cache.service;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -40,6 +39,14 @@ public class CacheContainer {
     public void init() {
         cacheConfigs = loadCacheConfigs();
         initCaches();
+    }
+    
+    public ICache getOrCreateCache(String cacheName) {
+        ICache cache = getCache(cacheName);
+        if (cache == null) {
+            cache = createNewCache(cacheName, DEFAULT_CACHE_NAME);
+        }
+        return cache;
     }
 
     public ICache getCache(String cacheName) {
@@ -155,10 +162,6 @@ public class CacheContainer {
             }
         }
 
-
-//        Collections.reverse(cacheConfigs); // so we read highest classpath values first.
         return cacheConfigs;
     }
-
-
 }

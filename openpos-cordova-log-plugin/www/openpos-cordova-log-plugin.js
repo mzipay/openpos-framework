@@ -32,18 +32,21 @@ var OpenPOSCordovaLogPlugin = {
 
   /** 
    * Lists the name of all the files ending with *.log in the Logs directory.
+   * order - 'ASC' or 'DESC' to indicate if log file names should be returned in ascending
+   * or descending order by name. If ommitted, will be returned in order as determined by underlying
+   * OS.
    * 
    * successCallback - a single parameter callback that will receive an
    *   array of log file names found in the Logs directory
    * errorCallback - a single parameter callback which will receive an error message if
    *   there was a failure. 
    */
-  listLogFiles: function(successCallback, errorCallback ) {
+  listLogFiles: function(order, successCallback, errorCallback) {
     exec(
         successCallback,
         errorCallback,
         PLUGIN_NAME, 
-        'listLogFiles', []
+        'listLogFiles', [order]
       );
   },
   

@@ -11,6 +11,7 @@ public class SellItemScreen extends PromptScreen {
     private static final long serialVersionUID = 1L;
 
     private List<SellItem> items = new ArrayList<>();
+    private List<SellItem> selectedItems = new ArrayList<>();
     
     private String balanceDue;
     private String discountTotal;
@@ -23,6 +24,7 @@ public class SellItemScreen extends PromptScreen {
     private String noCustomerText;
     private List<Total> totals = new ArrayList<>();
     private MenuItem loyaltyButton;
+    private List<MenuItem> multiSelectedMenuItems;
 
     public SellItemScreen() {
         this.setType(ScreenType.Transaction);
@@ -35,6 +37,14 @@ public class SellItemScreen extends PromptScreen {
 
     public void setItems(List<SellItem> items) {
         this.items = items;
+    }
+    
+    public List<SellItem> getSelectedItems() {
+        return selectedItems;
+    }
+    
+    public void setSelectedItems(List<SellItem> selectedItems) {
+        this.selectedItems = selectedItems;
     }
 
     public String getBalanceDue() {
@@ -129,4 +139,12 @@ public class SellItemScreen extends PromptScreen {
 	public void setLoyaltyButton(MenuItem loyaltyButton) {
 		this.loyaltyButton = loyaltyButton;
 	}
+
+    public List<MenuItem> getMultiSelectedMenuItems() {
+        return multiSelectedMenuItems;
+    }
+
+    public void setMultiSelectedMenuItems(List<MenuItem> multiSelectedMenuItems) {
+        this.multiSelectedMenuItems = multiSelectedMenuItems;
+    }
 }

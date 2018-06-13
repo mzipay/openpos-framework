@@ -2,10 +2,12 @@ package org.jumpmind.pos.core.flow;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,9 @@ public class Injector {
 
     @Autowired
     private AutowireCapableBeanFactory applicationContext;
+    
+    @Autowired(required=false)
+    private List<IScopeValueProvider> scopeValueProviders;
 
     public void performInjections(Object target, Scope scope, StateContext currentContext) {
         performInjectionsImpl(target, scope, currentContext);
@@ -99,16 +104,36 @@ public class Injector {
             default:
                 break;
         }
+        
+        if (value == null) {
+            value = resolveThroughValueProviders(name, scopeType, target, field);
+            if (value != null) {
+                scope.setScopeValue(scopeType, name, value);
+            }            
+        }
 
         if (value != null) {
             try {
                 field.set(target, value.getValue());
             } catch (Exception ex) {
-                logger.error("", ex);
+                throw new FlowException("Failed to set target field " + field + " to value " + value.getValue(), ex);
             }
-        } else if (required) {
+        } else if (required) {            
             throw failedToResolveInjection(field, name, targetClass, target, scope, currentContext);
         }
+    }
+
+    protected ScopeValue resolveThroughValueProviders(String name, ScopeType scopeType, Object target, Field field) {
+        ScopeValue value = null;
+        if (!CollectionUtils.isEmpty(scopeValueProviders)) {
+            for (IScopeValueProvider valueProvider : scopeValueProviders) {
+                value = valueProvider.getValue(name, scopeType, target, field);
+                if (value != null) {
+                    break;
+                }
+            }
+        }
+        return value;
     }
 
     protected void performPostContruct(Object target) {
@@ -161,8 +186,12 @@ public class Injector {
                 buff.append("\t<empty>\n");
             } else {
                 for (Map.Entry<String, ScopeValue> entry : scope.entrySet()) {
-                    buff.append("\t").append(entry.getKey()).append("=")
-                            .append(StringUtils.abbreviate(entry.getValue().getValue().toString(), MAX_VALUE_WIDTH)).append("\n");
+                    buff.append("\t").append(entry.getKey()).append("=");
+                    if (entry.getValue() == null || entry.getValue().getValue() == null) {
+                        buff.append("null").append("\n");
+                    } else {
+                        buff.append(StringUtils.abbreviate(entry.getValue().getValue().toString(), MAX_VALUE_WIDTH)).append("\n");                        
+                    }
                 }
             }
         }

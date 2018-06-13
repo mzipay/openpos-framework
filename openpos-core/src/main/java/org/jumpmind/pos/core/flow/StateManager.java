@@ -60,20 +60,19 @@ public class StateManager implements IStateManager {
     private Outjector outjector;
     
     @Autowired(required=false)
-    private List<? extends IStateInterceptor> stateInterceptors;
+    private List<? extends ITransitionStep> transitionSteps;
     
     @Autowired(required=false)
-    private List<? extends ISessionTimeoutListener> sessionTimeoutListeners;    
+    private List<? extends ISessionTimeoutListener> sessionTimeoutListeners;
+    
+    private ApplicationState applicationState = new ApplicationState();
     
     @Autowired
     UIManager uiManager;
 
     private String appId;
     private String nodeId;
-    private Scope scope = new Scope();
-    private Deque<StateContext> stateStack = new LinkedList<>();
     private FlowConfig initialFlowConfig;
-    private StateContext currentContext;
     
     private AtomicReference<Date> lastInteractionTime = new AtomicReference<Date>(new Date());
     
@@ -83,9 +82,11 @@ public class StateManager implements IStateManager {
         this.appId = appId;
         this.nodeId = nodeId;
         this.uiManager.setStateManager(this);
-        this.currentContext = new StateContext(initialFlowConfig, null, null);
-        this.scope.setNodeScope("stateManager", this);
-        transitionTo(null, initialFlowConfig.getInitialState());
+        applicationState.setCurrentContext(new StateContext(initialFlowConfig, null, null));
+        applicationState.getScope().setNodeScope("stateManager", this);
+        screenService.setApplicationState(applicationState);
+        
+        transitionTo(new Action("Startup"), initialFlowConfig.getInitialState());
     }
 
     protected void transitionTo(Action action, StateConfig stateConfig) {
@@ -99,8 +100,8 @@ public class StateManager implements IStateManager {
     }
     
     protected void transitionTo(Action action, IState newState, SubTransition enterSubStateConfig, StateContext resumeSuspendedState) {
-        if (this.currentContext == null) {
-            throw new FlowException("There is no currentContext on this StateManager.  HINT: States should use @In to get the StateManager, not @Autowired.");
+        if (applicationState.getCurrentContext() == null) {
+            throw new FlowException("There is no applicationState.getCurrentContext() on this StateManager.  HINT: States should use @In to get the StateManager, not @Autowired.");
         }        
         
         if (enterSubStateConfig != null && resumeSuspendedState != null) {
@@ -109,64 +110,75 @@ public class StateManager implements IStateManager {
                     + "existing a subState. These two should be be happening at the same time.");
         }
         
-        boolean enterSubState = enterSubStateConfig != null;
-        boolean exitSubState = resumeSuspendedState != null;
         
-        if (currentContext.getState() != null) {
-            outjector.performOutjections(currentContext.getState(), scope, currentContext);
+        if (applicationState.getCurrentContext().getState() != null) {
+            performOutjections(applicationState.getCurrentContext().getState());
         }
         
-        String returnActionName = currentContext.getReturnActionName();
-        
-        newState = runStateInterceptors(currentContext.getState(), newState, action);
-        stateManagerLogger.logStateTransition(currentContext.getState(), newState, action, returnActionName, enterSubState, exitSubState);            
-        
-        if (enterSubState) {
-            stateStack.push(currentContext);
-            currentContext = new StateContext(enterSubStateConfig.getSubFlowConfig(), action);
-            currentContext.setReturnActionName(enterSubStateConfig.getReturnActionName());
-        } else if (exitSubState) { 
-            currentContext = resumeSuspendedState;
-        }
-        
-        currentContext.setState(newState);
-        
-        injector.performInjections(newState, scope, currentContext);
-        
-        if (resumeSuspendedState == null || returnActionName == null) {
-            currentContext.getState().arrive(action);
-        } else {
-            Action returnAction = new Action(returnActionName, action.getData());    
-            returnAction.setCausedBy(action);
-            if (actionHandler.canHandleAction(currentContext.getState(), returnAction)) {
-                actionHandler.handleAction(currentContext.getState(), returnAction);
-            }  else {
-                throw new FlowException(String.format("Unexpected return action from substate: \"%s\". No @ActionHandler %s.on%s() method found.", 
-                        returnAction.getName(), currentContext.getState().getClass().getName(), returnAction.getName()));                    
+        TransitionResult transitionResult = executeTransition(applicationState.getCurrentContext(), newState, action);
+        if (transitionResult == TransitionResult.PROCEED) {            
+            boolean enterSubState = enterSubStateConfig != null;
+            boolean exitSubState = resumeSuspendedState != null;
+            String returnActionName = applicationState.getCurrentContext().getReturnActionName();
+            stateManagerLogger.logStateTransition(applicationState.getCurrentContext().getState(), newState, action, returnActionName, enterSubState, exitSubState);            
+            
+            if (enterSubState) {
+                applicationState.getStateStack().push(applicationState.getCurrentContext());
+                applicationState.setCurrentContext(new StateContext(enterSubStateConfig.getSubFlowConfig(), action));
+                applicationState.getCurrentContext().setReturnActionName(enterSubStateConfig.getReturnActionName());
+            } else if (exitSubState) { 
+                applicationState.setCurrentContext(resumeSuspendedState);
             }
+            
+            applicationState.getCurrentContext().setState(newState);
+            
+            performInjections(newState);
+            
+            if (resumeSuspendedState == null || returnActionName == null) {
+                applicationState.getCurrentContext().getState().arrive(action);
+            } else {
+                Action returnAction = new Action(returnActionName, action.getData());    
+                returnAction.setCausedBy(action);
+                if (actionHandler.canHandleAction(applicationState.getCurrentContext().getState(), returnAction)) {
+                    actionHandler.handleAction(applicationState.getCurrentContext().getState(), returnAction);
+                }  else {
+                    throw new FlowException(String.format("Unexpected return action from substate: \"%s\". No @ActionHandler %s.on%s() method found.", 
+                            returnAction.getName(), applicationState.getCurrentContext().getState().getClass().getName(), returnAction.getName()));                    
+                }
+            }
+        } else {
+            applicationState.getCurrentContext().getState().arrive(action);
         }
+        
     }
+    
+    public void performInjections(Object stateOrStep) {
+        injector.performInjections(stateOrStep, applicationState.getScope(), applicationState.getCurrentContext());
+    }
+    
+    public void performOutjections(Object stateOrStep) {
+        outjector.performOutjections(stateOrStep, applicationState.getScope(), applicationState.getCurrentContext());        
+    }    
 
     protected void addConfigScope(Map<String, ScopeValue> extraScope) {
-        if (currentContext != null && currentContext.getFlowConfig() != null
-                && currentContext.getFlowConfig().getConfigScope() != null) {
-            for (Map.Entry<String, Object> entry : currentContext.getFlowConfig().getConfigScope().entrySet()) {
+        if (applicationState.getCurrentContext() != null && applicationState.getCurrentContext().getFlowConfig() != null
+                && applicationState.getCurrentContext().getFlowConfig().getConfigScope() != null) {
+            for (Map.Entry<String, Object> entry : applicationState.getCurrentContext().getFlowConfig().getConfigScope().entrySet()) {
                 extraScope.put(entry.getKey(), new ScopeValue(entry.getValue()));
             }
         }
     }
-
-    protected IState runStateInterceptors(IState oldState, IState newState, Action action) {
-        IState nextState = newState;
-        if (!CollectionUtils.isEmpty(stateInterceptors)) {
-            for (IStateInterceptor interceptor : stateInterceptors) {
-                IState changedState = interceptor.intercept(this, oldState, nextState, action);
-                if (changedState != null) {
-                    nextState = changedState;
-                }
-            }
+    
+    protected TransitionResult executeTransition(StateContext sourceStateContext, IState newState, Action action) {
+        if (CollectionUtils.isEmpty(transitionSteps)) {
+            return TransitionResult.PROCEED;
         }
-        return nextState;
+        
+        applicationState.setCurrentTransition(new Transition(transitionSteps, sourceStateContext, newState)); 
+        
+        TransitionResult result = applicationState.getCurrentTransition().execute(this, action); // This will block.
+        applicationState.setCurrentTransition(null);
+        return result;
     }
 
     protected IState buildState(StateConfig stateConfig) {
@@ -192,7 +204,7 @@ public class StateManager implements IStateManager {
 
     @Override
     public IState getCurrentState() {
-        return currentContext.getState();
+        return applicationState.getCurrentContext().getState();
     }
 
     @Override
@@ -222,66 +234,56 @@ public class StateManager implements IStateManager {
     public void doAction(Action action) {
         lastInteractionTime.set(new Date());
         
-        FlowConfig flowConfig = currentContext.getFlowConfig();
+        if (applicationState.getCurrentTransition() != null)  {
+            applicationState.getCurrentTransition().handleAction(action);
+            return;
+        }
+        
+        FlowConfig flowConfig = applicationState.getCurrentContext().getFlowConfig();
         
         StateConfig stateConfig = findStateConfig(flowConfig);
         if (handleTerminatingState(action, stateConfig)) {
             return;
         }
         
-        validateStateConfig(currentContext.getState(), stateConfig);
+        validateStateConfig(applicationState.getCurrentContext().getState(), stateConfig);
         
         Class<? extends IState> transitionStateClass = stateConfig.getActionToStateMapping().get(action.getName());
         Class<? extends IState> globalTransitionStateClass = flowConfig.getActionToStateMapping().get(action.getName());
         SubTransition subStateConfig = stateConfig.getActionToSubStateMapping().get(action.getName());
         SubTransition globalSubStateConfig = flowConfig.getActionToSubStateMapping().get(action.getName());
         
-        if (actionHandler.canHandleAction(currentContext.getState(), action)) {
+        if (actionHandler.canHandleAction(applicationState.getCurrentContext().getState(), action)) {
             handleAction(action);
         } else if (transitionStateClass != null) {
             transitionToState(action, transitionStateClass);
         } else if (subStateConfig != null) {
             transitionToSubState(action, subStateConfig);
-        } else if (actionHandler.canHandleAnyAction(currentContext.getState())) {
-            actionHandler.handleAnyAction(currentContext.getState(), action);
+        } else if (actionHandler.canHandleAnyAction(applicationState.getCurrentContext().getState())) {
+            actionHandler.handleAnyAction(applicationState.getCurrentContext().getState(), action);
         } else if (globalTransitionStateClass != null) {
             transitionToState(action, globalTransitionStateClass);
         } else if (globalSubStateConfig != null) {
             transitionToSubState(action, globalSubStateConfig);
         } else {
             throw new FlowException(String.format("Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"...) defined in the flow config.", 
-                    action.getName(), currentContext.getState().getClass().getName(), action.getName(), action.getName()));                    
+                    action.getName(), applicationState.getCurrentContext().getState().getClass().getName(), action.getName(), action.getName()));                    
         }
     }
 
     private StateConfig findStateConfig(FlowConfig flowConfig) {
-        StateConfig stateConfig = flowConfig.getStateConfig(currentContext.getState());
-        Iterator<StateContext> itr = stateStack.iterator();
+        StateConfig stateConfig = flowConfig.getStateConfig(applicationState.getCurrentContext().getState());
+        Iterator<StateContext> itr = applicationState.getStateStack().iterator();
         while (stateConfig == null && itr.hasNext()) {
             StateContext context = itr.next();
-            stateConfig = context.getFlowConfig().getStateConfig(currentContext.getState());
+            stateConfig = context.getFlowConfig().getStateConfig(applicationState.getCurrentContext().getState());
 
         }
         return stateConfig;
     }
     
     public void setScopeValue(ScopeType scopeType, String name, Object value) {
-        switch (scopeType) {
-            case Node:
-                scope.setNodeScope(name, value);
-                break;
-            case Session:
-                scope.setSessionScope(name, value);
-                break;
-            case Conversation:
-                scope.setConversationScope(name, value);
-                break;
-            case Flow:
-                currentContext.setFlowScope(name, value);
-                break;
-            default:
-                throw new FlowException("Invalid scope " + scopeType);
-        }
+        applicationState.getScope().setScopeValue(scopeType, name, value);
     }
     
     public Scope getScope() {
@@ -294,10 +296,10 @@ public class StateManager implements IStateManager {
             case Node:
             case Session:
             case Conversation:
-                scopeValue = scope.getScopeValue(scopeType, name);
+                scopeValue = applicationState.getScope().getScopeValue(scopeType, name);
                 break;
             case Flow:
-                scopeValue = currentContext.getFlowScope().get(name);
+                scopeValue = applicationState.getCurrentContext().getFlowScope().get(name);
                 break;
             default:
                 throw new FlowException("Invalid scope " + scopeType);
@@ -312,11 +314,11 @@ public class StateManager implements IStateManager {
         
     @SuppressWarnings("unchecked")
     public <T> T getScopeValue(String name) {
-        ScopeValue value = scope.resolve(name);
+        ScopeValue value = applicationState.getScope().resolve(name);
         if (value != null) {
             return (T) value.getValue();
         } else {
-            value = currentContext.resolveScope(name);
+            value = applicationState.getCurrentContext().resolveScope(name);
             if (value != null) {
                 return (T) value.getValue();    
             } else {
@@ -324,10 +326,13 @@ public class StateManager implements IStateManager {
             }
         }
     }
-
+    
+    protected boolean handleAction(Object state, Action action) {
+        return actionHandler.handleAction(state, action);
+    }
     
     protected boolean handleAction(Action action) {        
-        return actionHandler.handleAction(currentContext.getState(), action);
+        return handleAction(applicationState.getCurrentContext().getState(), action);
     }
 
     protected boolean handleTerminatingState(Action action, StateConfig stateConfig) {
@@ -338,11 +343,11 @@ public class StateManager implements IStateManager {
         Class<? extends IState> targetStateClass = stateConfig.getActionToStateMapping().get(action.getName());
         
         if (CompleteState.class == targetStateClass) {
-            if (!stateStack.isEmpty()) {                
-                StateContext suspendedState = stateStack.pop();
+            if (!applicationState.getStateStack().isEmpty()) {                
+                StateContext suspendedState = applicationState.getStateStack().pop();
                 transitionTo(action, suspendedState.getState(), null, suspendedState);
             } else {                
-                throw new FlowException("No suspended state to return to for terminating action " + action + " from state " + currentContext.getState());
+                throw new FlowException("No suspended state to return to for terminating action " + action + " from state " + applicationState.getCurrentContext().getState());
             }
             return true;
         } else {
@@ -360,7 +365,7 @@ public class StateManager implements IStateManager {
     }
 
     protected void transitionToState(Action action, Class<? extends IState> newStateClass) {
-        StateConfig newStateConfig = currentContext.getFlowConfig().getStateConfig(newStateClass);
+        StateConfig newStateConfig = applicationState.getCurrentContext().getFlowConfig().getStateConfig(newStateClass);
         if (newStateConfig != null) {
             transitionTo(action, newStateConfig);
         } else {
@@ -377,13 +382,13 @@ public class StateManager implements IStateManager {
 
     @Override
     public void endConversation() {
-        scope.clearConversationScope();
-        transitionTo(null, currentContext.getFlowConfig().getInitialState());
+        applicationState.getScope().clearConversationScope();
+        transitionTo(new Action("EndConversation"), applicationState.getCurrentContext().getFlowConfig().getInitialState());
     }
 
     @Override
     public void endSession() {
-        scope.clearSessionScope();
+        applicationState.getScope().clearSessionScope();
     }
 
     public void setInitialFlowConfig(FlowConfig initialFlowConfig) {
@@ -392,11 +397,11 @@ public class StateManager implements IStateManager {
 
     @Override
     public void showScreen(Screen screen) {
-        if (this.currentContext == null) {
-            throw new FlowException("There is no currentContext on this StateManager.  HINT: States should use @In(scope=ScopeType.Node) to get the StateManager, not @Autowired.");
+        if (applicationState.getCurrentContext() == null) {
+            throw new FlowException("There is no applicationState.getCurrentContext() on this StateManager.  HINT: States should use @In(scope=ScopeType.Node) to get the StateManager, not @Autowired.");
         }
-        if (this.currentContext.getState() != null && this.currentContext.getState() instanceof IScreenInterceptor) {
-            screen = ((IScreenInterceptor)this.currentContext.getState()).intercept(screen);            
+        if (applicationState.getCurrentContext().getState() != null && applicationState.getCurrentContext().getState() instanceof IScreenInterceptor) {
+            screen = ((IScreenInterceptor)applicationState.getCurrentContext().getState()).intercept(screen);            
         }
         
         if (screen != null) {
@@ -440,8 +445,16 @@ public class StateManager implements IStateManager {
                     sessionTimeoutListener.onSessionTimeout(this);
                 }
             }
-        } catch (Exception e) {
-            logger.error("Failed to process the session timeout", e);
+        } catch (Exception ex) {
+            logger.error("Failed to process the session timeout", ex);
         }
     }
+
+//    protected void transitionProceed() {
+//        latch.countDown();
+//    }
+//    
+//    protected void transitionCancel() {
+//        latch.countDown();
+//    }    
 }

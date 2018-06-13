@@ -1,4 +1,8 @@
 package org.jumpmind.pos.core.config;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
+
+import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
@@ -6,9 +10,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessagingException;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.ChannelInterceptorAdapter;
+import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.scheduling.concurrent.DefaultManagedTaskScheduler;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.socket.WebSocketHandler;
@@ -26,6 +39,9 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     
     @Autowired
     MutableBoolean initialized;
+    
+    @Autowired
+    Environment env;
     
     /*
      * TODO: This was added to increase the acceptable message size after adding the ItemSearchScreen.
@@ -45,6 +61,39 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 		config.setApplicationDestinationPrefixes("/app");
 		config.setPathMatcher(new AntPathMatcher("."));
 	}
+	
+	 @Override
+	    public void configureClientInboundChannel(ChannelRegistration registration) {
+	        registration.interceptors(new ChannelInterceptorAdapter() {
+	            @Override
+	            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+	                StompHeaderAccessor accessor =
+	                        MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+	                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+	                    String serverAuthToken = env.getProperty("openpos.auth.token");
+	                    if (isNotBlank(serverAuthToken)) {
+	                       @SuppressWarnings("unchecked")
+	                       Map<String, List<String>> nativeHeaders = (Map<String, List<String>>)message.getHeaders().get("nativeHeaders");
+	                       List<String> authTokens = nativeHeaders.get("authToken");
+	                       String authToken = authTokens != null && authTokens.size() > 0 ? authTokens.get(0) : null;
+	                       if (serverAuthToken.equals(authToken)) {
+	                           accessor.setUser(new Principal() {                                
+                                @Override
+                                public String getName() {
+                                    return "authenticatedClient";
+                                }
+                            });       
+	                       } else {
+	                           throw new MessagingException("Auth failed. Invalid auth token received");
+	                       }
+	                    }
+	                    
+	                    
+	                }
+	                return message;
+	            }
+	        });
+	    }
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {

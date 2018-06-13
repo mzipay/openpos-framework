@@ -19,6 +19,7 @@ public class SellItem extends DefaultItem {
     private String discountAmount;
     private List<MenuItem> menuItems = new ArrayList<>();
     private boolean isGiftReceipt = false;
+    private boolean isQuantityChangeable;
     
     /**
      * Put properties in this map if they are optional. When not set, they don't
@@ -111,5 +112,13 @@ public class SellItem extends DefaultItem {
 
     public Object get(String name) {
         return optionalProperties.get(name);
+    }
+
+    public boolean isQuantityChangeable() {
+        return isQuantityChangeable;
+    }
+
+    public void setQuantityChangeable(boolean isQuantityChangeable) {
+        this.isQuantityChangeable = isQuantityChangeable;
     }
 }
