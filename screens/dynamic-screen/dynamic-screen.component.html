@@ -15,17 +15,16 @@
                     <mat-tab label="State">
                     <span  md-colors="{color:'accent'}">    
                       <h2>State: Home
-                        <button mat-icon-button (click)="onDevRefreshTables()">
+                        <button mat-icon-button (click)="onDevMenuRefresh()">
                             <mat-icon aria-label="refresh">refresh</mat-icon>
                         </button>
                     </h2>
                     </span>
                     <div class="tab">
                     <div class="panel" layout="row">
-                            <mat-card>
-                      <mat-accordion multi="true" >
-
-                            <mat-expansion-panel>
+                        <mat-card>
+                            <mat-accordion multi="true" >
+                                <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         Connections
                                     </mat-expansion-panel-header>
@@ -38,68 +37,133 @@
                                     <mat-divider></mat-divider>
                                     <h3>FROM</h3>
                                     <mat-list dense>
-                                            <mat-list-item> Registration </mat-list-item>
-                                            
+                                        <mat-list-item> Registration </mat-list-item>    
                                     </mat-list>
-                            </mat-expansion-panel>
+                                </mat-expansion-panel>
 
-                            <mat-expansion-panel> 
-                                <mat-expansion-panel-header>
-                                Config Scope
-                                </mat-expansion-panel-header>
-                            </mat-expansion-panel>
-                          
-                            <mat-expansion-panel>
-                                <mat-expansion-panel-header>
-                                    Node Scope
-                                </mat-expansion-panel-header>
-                                <table class="mat-table">
-                                    <thead>
-                                        <tr style="text-align:left" class="mat-header-row">
-                                        <th class="mat-header-cell"> ID </th>
-                                        <th class="mat-header-cell"> Time Created </th>
-                                        <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
-                                        </tr>
+                                <mat-expansion-panel> 
+                                    <mat-expansion-panel-header>
+                                    Config Scope
+                                    </mat-expansion-panel-header>
+                                    <table class="mat-table">
+                                        <thead>
+                                            <tr style="text-align:left" class="mat-header-row">
+                                                <th class="mat-header-cell"> ID </th>
+                                                <th class="mat-header-cell"> Time Created </th>
+                                                <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                            </tr>
                                         </thead>
-                                    <tbody>
-                                        <tr class="mat-row" *ngFor="let element of NodeElements">
-                                        <td class="mat-cell"> {{element.ID}} </td>
-                                        <td class="mat-cell" > {{element.Time}} </td>
-                                        <td class="mat-cell" style="text-align:center">
-                                            <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
-                                        </td>
-                                        <td class="mat-cell-close">
-                                            <button mat-icon-button (click)="onRemove(element)">
-                                                <mat-icon aria-label="delete">close</mat-icon>
-                                            </button>
-                                        </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </mat-expansion-panel>
+                                        <tbody>
+                                            <tr class="mat-row" *ngFor="let element of ConfElements">
+                                                <td class="mat-cell"> {{element.ID}} </td>
+                                                <td class="mat-cell" > {{element.Time}} </td>
+                                                <td class="mat-cell" style="text-align:center">
+                                                    <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                                </td>
+                                                <td class="mat-cell-close">
+                                                    <button mat-icon-button (click)="onConfRemove(element)">
+                                                        <mat-icon aria-label="delete">close</mat-icon>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </mat-expansion-panel>
+                            
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        Node Scope
+                                    </mat-expansion-panel-header>
+                                    <table class="mat-table">
+                                        <thead>
+                                            <tr style="text-align:left" class="mat-header-row">
+                                                <th class="mat-header-cell"> ID </th>
+                                                <th class="mat-header-cell"> Time Created </th>
+                                                <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="mat-row" *ngFor="let element of NodeElements">
+                                                <td class="mat-cell"> {{element.ID}} </td>
+                                                <td class="mat-cell" > {{element.Time}} </td>
+                                                <td class="mat-cell" style="text-align:center">
+                                                    <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                                </td>
+                                                <td class="mat-cell-close">
+                                                    <button mat-icon-button (click)="onNodeRemove(element)">
+                                                        <mat-icon aria-label="delete">close</mat-icon>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </mat-expansion-panel>
 
-                            <mat-expansion-panel>
-                                <mat-expansion-panel-header>
-                                        Session Scope
-                                </mat-expansion-panel-header>
-                                    
-                             </mat-expansion-panel>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                            Session Scope
+                                    </mat-expansion-panel-header>
+                                        <table class="mat-table">
+                                            <thead>
+                                                <tr style="text-align:left" class="mat-header-row">
+                                                    <th class="mat-header-cell"> ID </th>
+                                                    <th class="mat-header-cell"> Time Created </th>
+                                                    <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="mat-row" *ngFor="let element of SessElements">
+                                                    <td class="mat-cell"> {{element.ID}} </td>
+                                                    <td class="mat-cell" > {{element.Time}} </td>
+                                                    <td class="mat-cell" style="text-align:center">
+                                                        <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                                    </td>
+                                                    <td class="mat-cell-close">
+                                                        <button mat-icon-button (click)="onSessRemove(element)">
+                                                            <mat-icon aria-label="delete">close</mat-icon>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                </mat-expansion-panel>
 
-                             <mat-expansion-panel>
-                                <mat-expansion-panel-header>
-                                    Conversation Scope
-                                </mat-expansion-panel-header>
-                            </mat-expansion-panel>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        Conversation Scope
+                                    </mat-expansion-panel-header>
+                                        <table class="mat-table">
+                                            <thead>
+                                                <tr style="text-align:left" class="mat-header-row">
+                                                    <th class="mat-header-cell"> ID </th>
+                                                    <th class="mat-header-cell"> Time Created </th>
+                                                    <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="mat-row" *ngFor="let element of ConvElements">
+                                                    <td class="mat-cell"> {{element.ID}} </td>
+                                                    <td class="mat-cell" > {{element.Time}} </td>
+                                                    <td class="mat-cell" style="text-align:center">
+                                                        <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                                    </td>
+                                                    <td class="mat-cell-close">
+                                                        <button mat-icon-button (click)="onConvRemove(element)">
+                                                            <mat-icon aria-label="delete">close</mat-icon>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                </mat-expansion-panel>
 
-
-                          
-                          </mat-accordion>
+                            </mat-accordion>
                         </mat-card>
                         </div>
                         <div *ngIf="displayStackTrace" class="stacktrace">
                             <mat-card>
                                 <mat-card-title>StackTrace - {{selected}}</mat-card-title>
-                                <mat-card-content [style.overflow]="'auto'" [style.height.px]="'300'">
+                                <mat-card-content [style.overflow]="'scroll'" [style.height.px]="'300'" class="stacktrace-font">
                                     {{stackTrace}}
                                 </mat-card-content>
                             </mat-card>

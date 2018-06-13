@@ -37,8 +37,9 @@ import { MatInputModule, MatProgressSpinnerModule, MatTableModule } from "@angul
 export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     NodeElements: Element[];
-
-    //dataSource = new DevTableDataSource(this.NodeElements);
+    SessElements: Element[];
+    ConvElements: Element[];
+    ConfElements: Element[];
 
     displayedColumns = ["ID", "Time Created", "StackTrace", "close"];
 
@@ -111,7 +112,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         if (!this.registerWithServer()) {
             this.updateTemplateAndScreen();
         }
-        this.session.obs$.subscribe(NodeElements => this.NodeElements = NodeElements);
+        this.session.obsNode$.subscribe(NodeElements => this.NodeElements = NodeElements);
+        this.session.obsSess$.subscribe(SessElements => this.SessElements = SessElements);
+        this.session.obsConv$.subscribe(ConvElements => this.ConvElements = ConvElements);
+        this.session.obsConf$.subscribe(ConfElements => this.ConfElements = ConfElements);
     }
 
 
@@ -170,17 +174,29 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
                 this.logsAvailable = false;
             });
         }
-        this.session.onAction('DevTools::Get');
+        //this.session.onAction('DevTools::Get');
         this.showDevMenu = !this.showDevMenu;
 
     }
 
-    protected onDevRefreshTables() {
-        this.session.onAction('DevTools::Get');
+    protected onDevMenuRefresh() {
+        //this.session.onAction('DevTools::Get');
     }
 
-    protected onRemove(element: Element) {
-        this.session.removeElement(element);
+    protected onNodeRemove(element: Element) {
+        this.session.removeNodeElement(element);
+    }
+
+    protected onSessRemove(element: Element) {
+        this.session.removeSessionElement(element);
+    }
+
+    protected onConvRemove(element: Element) {
+        this.session.removeConversationElement(element);
+    }
+
+    protected onConfRemove(element: Element) {
+        this.session.removeConfigElement(element);
     }
 
     protected onStackTrace(element: Element) {

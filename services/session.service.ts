@@ -23,11 +23,28 @@ import { Element } from '../screens/dynamic-screen/dynamic-screen.component';
 @Injectable()
 export class SessionService implements ILocaleService {
 
-    sub$ = new BehaviorSubject<any[]>([]);
+    subNode$ = new BehaviorSubject<any[]>([]);
 
-    obs$: Observable<Element[]>;
+    obsNode$: Observable<Element[]>;
+
+    subConv$ = new BehaviorSubject<any[]>([]);
+
+    obsConv$: Observable<Element[]>;
+
+    subSess$ = new BehaviorSubject<any[]>([]);
+
+    obsSess$: Observable<Element[]>;
+
+    subConf$ = new BehaviorSubject<any[]>([]);
+
+    obsConf$: Observable<Element[]>;
 
     NodeElements: Element[] = [];
+    SessElements: Element[] = [];
+    ConvElements: Element[] = [];
+    ConfElements: Element[] = [];
+
+    currentState = 'null';
 
     private screen: any;
 
@@ -80,7 +97,10 @@ export class SessionService implements ILocaleService {
             console.error(`[OpenPOS]${e}`);
         });
         this.onServerConnect = Observable.create(observer => {this.onServerConnectObserver = observer;});
-        this.obs$ = this.sub$.asObservable();
+        this.obsNode$ = this.subNode$.asObservable();
+        this.obsSess$ = this.subSess$.asObservable();
+        this.obsConv$ = this.subConv$.asObservable();
+        this.obsConf$ = this.subConf$.asObservable();
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -447,7 +467,7 @@ export class SessionService implements ILocaleService {
                 this.showLoading(json.title, json.message);
                 return;
             } else if (json.type === 'DevTools') {
-                this.populateDevTables(json.Scopes);
+                this.populateDevTables(json);
             } else if (json.template && json.template.dialog) {
                 this.showDialog(json);
             } else if (json.type === 'NoOp') {
@@ -468,11 +488,46 @@ export class SessionService implements ILocaleService {
         }
     }
 
-    private populateDevTables(Scopes: any) {
-        if(Scopes.NodeScope) {
-            console.log('Pushing Node Scope Elements...');
+    private populateDevTables(json: any) {
+        if(json.currentState) {
+            this.currentState = json.currentState;
+        }
+        if(json.scopes.ConversationScope) {
+            console.log('Pulling Conversation Scope Elements...');
+            this.ConvElements = [];
+            json.scopes.ConversationScope.forEach(element => {
+                if (!this.ConvElements.includes(element, 0)) {
+                    this.ConvElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace,  
+                        Value: element.value 
+                    });
+                    this.subConv$.next(this.ConvElements);
+                }
+            });
+            
+        }
+        if(json.scopes.SessionScope) {
+            console.log('Pulling Session Scope Elements...');
+            this.SessElements = [];
+            json.scopes.SessionScope.forEach(element => {
+                if (!this.SessElements.includes(element, 0)) {
+                    this.SessElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace,  
+                        Value: element.value 
+                    });
+                    this.subSess$.next(this.SessElements);
+                }
+            });
+            
+        }
+        if(json.scopes.NodeScope) {
+            console.log('Pulling Node Scope Elements...');
             this.NodeElements = [];
-            Scopes.NodeScope.forEach(element => {
+            json.scopes.NodeScope.forEach(element => {
                 if (!this.NodeElements.includes(element, 0)) {
                     this.NodeElements.push({
                         ID: element.name,
@@ -480,24 +535,66 @@ export class SessionService implements ILocaleService {
                         StackTrace: element.stackTrace,  
                         Value: element.value 
                     });
-                    this.sub$.next(this.NodeElements);
+                    this.subNode$.next(this.NodeElements);
                 }
             });
             
         }
     }
 
-    public removeElement(element: Element) {
+    public removeNodeElement(element: Element) {
         console.log('Attempting to remove \'' + element.Value + '\'...');
         let index = this.NodeElements.findIndex(item => {
             return element.Value === item.Value;
         });
         if (index !== -1) {
-            this.onAction("DevTools::Remove", element);
+            this.onAction("DevTools::Remove::Node", element);
             this.NodeElements.splice(index, 1);
-            this.sub$.next(this.NodeElements);
+            this.subNode$.next(this.NodeElements);
             console.log('Node Scope updated: ');
             console.log(this.NodeElements);
+        }
+    }
+
+    public removeSessionElement(element: Element) {
+        console.log('Attempting to remove \'' + element.Value + '\'...');
+        let index = this.SessElements.findIndex(item => {
+            return element.Value === item.Value;
+        });
+        if (index !== -1) {
+            this.onAction("DevTools::Remove::Session", element);
+            this.SessElements.splice(index, 1);
+            this.subSess$.next(this.SessElements);
+            console.log('Session Scope updated: ');
+            console.log(this.NodeElements);
+        }
+    }
+
+    public removeConversationElement(element: Element) {
+        console.log('Attempting to remove \'' + element.Value + '\'...');
+        let index = this.ConvElements.findIndex(item => {
+            return element.Value === item.Value;
+        });
+        if (index !== -1) {
+            this.onAction("DevTools::Remove::Conversation", element);
+            this.ConvElements.splice(index, 1);
+            this.subConv$.next(this.ConvElements);
+            console.log('Conversation Scope updated: ');
+            console.log(this.ConvElements);
+        }
+    }
+
+    public removeConfigElement(element: Element) {
+        console.log('Attempting to remove \'' + element.Value + '\'...');
+        let index = this.ConfElements.findIndex(item => {
+            return element.Value === item.Value;
+        });
+        if (index !== -1) {
+            this.onAction("DevTools::Remove::Config", element);
+            this.ConfElements.splice(index, 1);
+            this.subConf$.next(this.ConfElements);
+            console.log('Config Scope updated: ');
+            console.log(this.ConfElements);
         }
     }
 

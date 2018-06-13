@@ -20,12 +20,14 @@
   
   .stacktrace {
     float: right;
-    margin-left: 10px;
+    margin-left: 12px;
     width: 650px;
+
   }
-  
-  .tab {
-    
+
+  .stacktrace-font {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 10px;
   }
 
 .muted {
