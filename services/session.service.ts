@@ -17,7 +17,7 @@ import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confi
 import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Element } from '../screens/dynamic-screen/dynamic-screen.component';
+import { Element, ActionMap } from '../screens/dynamic-screen/dynamic-screen.component';
 import { IThemeChangingEvent } from '../events/ithemechanging.event';
 
 
@@ -40,12 +40,33 @@ export class SessionService implements ILocaleService {
 
     obsConf$: Observable<Element[]>;
 
+    subFlow$ = new BehaviorSubject<any[]>([]);
+
+    obsFlow$: Observable<Element[]>;
+
     NodeElements: Element[] = [];
     SessElements: Element[] = [];
     ConvElements: Element[] = [];
     ConfElements: Element[] = [];
+    FlowElements: Element[] = [];
 
     currentState: string;
+
+    subState$ = new BehaviorSubject<string>();
+
+    obsState$: Observable<string>;
+
+    currentStateClass: string;
+
+    subStateClass$ = new BehaviorSubject<string>();
+
+    obsStateClass$: Observable<string>;
+
+    currentStateActions: ActionMap[] = [];
+
+    subStateActions$ = new BehaviorSubject<any[]>([]);
+
+    obsStateActions$: Observable<ActionMap[]>;
 
     private screen: any;
 
@@ -104,6 +125,10 @@ export class SessionService implements ILocaleService {
         this.obsSess$ = this.subSess$.asObservable();
         this.obsConv$ = this.subConv$.asObservable();
         this.obsConf$ = this.subConf$.asObservable();
+        this.obsFlow$ = this.subFlow$.asObservable();
+        this.obsState$ = this.subState$.asObservable();
+        this.obsStateClass$ = this.subStateClass$.asObservable();
+        this.obsStateActions$ = this.subStateActions$.asObservable();
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -499,6 +524,19 @@ export class SessionService implements ILocaleService {
     private populateDevTables(json: any) {
         if(json.currentState) {
             this.currentState = json.currentState.stateName;
+            this.subState$.next(this.currentState);
+            this.currentStateClass = json.currentState.stateClass;
+            this.subStateClass$.next(this.currentStateClass);
+            this.currentStateActions = [];
+            for(var i = 0; i < json.actionsSize; i = i + 2) {
+                this.currentStateActions.push({
+                    Action: json.actions[i],
+                    Destination: json.actions[i+1]
+
+                });
+                this.subStateActions$.next(this.currentStateActions);
+                console.log(this.currentStateActions);
+            }
         }
         if(json.scopes.ConversationScope) {
             console.log('Pulling Conversation Scope Elements...');
@@ -547,6 +585,22 @@ export class SessionService implements ILocaleService {
                 }
             });
             
+        }
+        if(json.scopes.FlowScope) {
+            console.log('Pulling Flow Scope Elements...');
+            this.FlowElements = [];
+            json.scopes.FlowScope.forEach(element => {
+                if (!this.FlowElements.includes(element, 0)) {
+                    this.FlowElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace,  
+                        Value: element.value 
+                    });
+                    this.subFlow$.next(this.FlowElements);
+                }
+            });
+            console.log(this.FlowElements);
         }
     }
 
@@ -603,6 +657,20 @@ export class SessionService implements ILocaleService {
             this.subConf$.next(this.ConfElements);
             console.log('Config Scope updated: ');
             console.log(this.ConfElements);
+        }
+    }
+
+    public removeFlowElement(element: Element) {
+        console.log('Attempting to remove \'' + element.Value + '\'...');
+        let index = this.FlowElements.findIndex(item => {
+            return element.Value === item.Value;
+        });
+        if (index !== -1) {
+            this.onAction("DevTools::Remove::Flow", element);
+            this.FlowElements.splice(index, 1);
+            this.subFlow$.next(this.FlowElements);
+            console.log('Flow Scope updated: ');
+            console.log(this.FlowElements);
         }
     }
 

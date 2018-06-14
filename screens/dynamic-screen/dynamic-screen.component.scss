@@ -26,8 +26,10 @@
   }
 
   .stacktrace-content {
+    overflow: scroll;
     font-family: 'Courier New', Courier, monospace;
     font-size: 10px;
+    line-height: 13px;
   }
 
 .muted {
@@ -42,4 +44,10 @@
 table {
     table-layout: fixed;
     width: 100%;
-  }
+}
+
+.stateTab {
+    height: 520px;
+    overflow: auto;
+    
+}

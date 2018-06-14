@@ -40,6 +40,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     SessElements: Element[];
     ConvElements: Element[];
     ConfElements: Element[];
+    FlowElements: Element[];
 
     displayedColumns = ["ID", "Time Created", "StackTrace", "close"];
 
@@ -56,6 +57,12 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     showDevMenu = false;
 
     logsAvailable = false;
+
+    private showUpdating = false;
+
+    currentStateActions: ActionMap[];
+
+    private currentStateClass: string;
 
     private currentState: string;
 
@@ -118,6 +125,11 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.session.obsSess$.subscribe(SessElements => this.SessElements = SessElements);
         this.session.obsConv$.subscribe(ConvElements => this.ConvElements = ConvElements);
         this.session.obsConf$.subscribe(ConfElements => this.ConfElements = ConfElements);
+        this.session.obsConf$.subscribe(FlowElements => this.FlowElements = FlowElements);
+        this.session.obsState$.subscribe(currentState => this.currentState = currentState);
+        this.session.obsStateClass$.subscribe(currentStateClass => this.currentStateClass = currentStateClass);
+        this.session.obsStateActions$.subscribe(currentStateActions => this.currentStateActions = currentStateActions);
+
     }
 
 
@@ -177,14 +189,29 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             });
         }
         this.session.onAction('DevTools::Get');
-        this.currentState = this.session.currentState;
+        
         this.showDevMenu = !this.showDevMenu;
 
     }
 
     protected onDevMenuRefresh() {
-        this.session.onAction('DevTools::Get');
-        this.currentState = this.session.currentState;
+        console.log("refreshing tools... ")
+        this.displayStackTrace = false;
+        this.currentState = 'Updating State... ';
+        this.currentStateClass = 'Updating State...';
+        this.showUpdating = true;
+        this.currentStateActions = [];
+        this.NodeElements = [];
+        this.ConvElements = [];
+        this.SessElements = [];
+        this.ConfElements = [];
+        this.FlowElements = [];
+        setTimeout( () => {
+            this.session.onAction('DevTools::Get')
+            this.showUpdating = false
+            }, 500
+        );
+
     }
 
     protected onNodeRemove(element: Element) {
@@ -201,6 +228,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     protected onConfRemove(element: Element) {
         this.session.removeConfigElement(element);
+    }
+
+    protected onFlowRemove(element: Element) {
+        this.session.removeFlowElement(element);
     }
 
     protected onStackTrace(element: Element) {
@@ -511,5 +542,16 @@ export interface Element {
     Time: string,
     StackTrace: string,
     Value: string
+}
+
+export interface State {
+    Name: string,
+    Class: string,
+    ActionMap: ActionMap[]
+}
+
+export interface ActionMap {
+    Action: string,
+    Destination: string,
 }
 

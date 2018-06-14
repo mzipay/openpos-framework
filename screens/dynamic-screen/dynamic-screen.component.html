@@ -8,42 +8,57 @@
         <div *ngIf="showDevMenu">
            
             <mat-expansion-panel>
-                <mat-expansion-panel-header>
+                <mat-expansion-panel-header (click)="onDevMenuRefresh()">
                   Developer Tools
                 </mat-expansion-panel-header>
                 <mat-tab-group dynamicHeight>
                     <mat-tab label="State">
-                    <span  md-colors="{color:'accent'}">    
+                    <div  class="stateTab" >
+                    <span>    
                       <h2>Current State: {{currentState}}
                         <button mat-icon-button (click)="onDevMenuRefresh()">
                             <mat-icon aria-label="refresh">refresh</mat-icon>
                         </button>
                     </h2>
+                    <h5>Current State Class: <i>{{currentStateClass}}</i></h5>
                     </span>
                     <div class="tab">
                     <div class="panel" layout="row">
                         <mat-card>
                             <mat-accordion multi="true" >
-                                <mat-expansion-panel>
+                                <mat-expansion-panel [disabled]="showUpdating">
                                     <mat-expansion-panel-header>
-                                        Connections
+                                        <mat-panel-title>
+                                            Connections
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
                                     </mat-expansion-panel-header>
-                                    <h3>TO</h3>
-                                    <mat-list dense>
-                                            <mat-list-item> Sell </mat-list-item>
-                                            <mat-list-item> Search </mat-list-item>
-                                            <mat-list-item> Customer Lookup </mat-list-item>
-                                    </mat-list>
-                                    <mat-divider></mat-divider>
-                                    <h3>FROM</h3>
-                                    <mat-list dense>
-                                        <mat-list-item> Registration </mat-list-item>    
-                                    </mat-list>
+                                        <table class="mat-table">
+                                                <thead>
+                                                    <tr style="text-align:left" class="mat-header-row">
+                                                        <th class="mat-header-cell"> Action </th>
+                                                        <th class="mat-header-cell"> Destination State </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="mat-row" *ngFor="let action of currentStateActions">
+                                                        <td class="mat-cell"> {{action.Action}} </td>
+                                                        <td class="mat-cell" > {{action.Destination}} </td>                                                       
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                 </mat-expansion-panel>
 
-                                <mat-expansion-panel> 
+                                <mat-expansion-panel [disabled]="showUpdating"> 
                                     <mat-expansion-panel-header>
-                                    Config Scope
+                                        <mat-panel-title>
+                                            Config Scope
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
                                     </mat-expansion-panel-header>
                                     <table class="mat-table">
                                         <thead>
@@ -70,9 +85,14 @@
                                     </table>
                                 </mat-expansion-panel>
                             
-                                <mat-expansion-panel>
+                                <mat-expansion-panel [disabled]="showUpdating">
                                     <mat-expansion-panel-header>
-                                        Node Scope
+                                        <mat-panel-title>
+                                            Node Scope
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
                                     </mat-expansion-panel-header>
                                     <table class="mat-table">
                                         <thead>
@@ -99,9 +119,14 @@
                                     </table>
                                 </mat-expansion-panel>
 
-                                <mat-expansion-panel>
+                                <mat-expansion-panel [disabled]="showUpdating">
                                     <mat-expansion-panel-header>
+                                        <mat-panel-title>
                                             Session Scope
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
                                     </mat-expansion-panel-header>
                                         <table class="mat-table">
                                             <thead>
@@ -128,9 +153,14 @@
                                         </table>
                                 </mat-expansion-panel>
 
-                                <mat-expansion-panel>
+                                <mat-expansion-panel [disabled]="showUpdating">
                                     <mat-expansion-panel-header>
-                                        Conversation Scope
+                                        <mat-panel-title>
+                                            Conversation Scope
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
                                     </mat-expansion-panel-header>
                                         <table class="mat-table">
                                             <thead>
@@ -157,18 +187,53 @@
                                         </table>
                                 </mat-expansion-panel>
 
+                                <mat-expansion-panel [disabled]="showUpdating"> 
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Flow Scope
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <table class="mat-table">
+                                        <thead>
+                                            <tr style="text-align:left" class="mat-header-row">
+                                                <th class="mat-header-cell"> ID </th>
+                                                <th class="mat-header-cell"> Time Created </th>
+                                                <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="mat-row" *ngFor="let element of FlowElements">
+                                                <td class="mat-cell"> {{element.ID}} </td>
+                                                <td class="mat-cell" > {{element.Time}} </td>
+                                                <td class="mat-cell" style="text-align:center">
+                                                    <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                                </td>
+                                                <td class="mat-cell-close">
+                                                    <button mat-icon-button (click)="onConfRemove(element)">
+                                                        <mat-icon aria-label="delete">close</mat-icon>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </mat-expansion-panel>
+
                             </mat-accordion>
                         </mat-card>
                         </div>
                         <div *ngIf="displayStackTrace" class="stacktrace">
                             <mat-card>
                                 <mat-card-title>StackTrace - {{selected}}</mat-card-title>
-                                <mat-card-content [style.overflow]="'scroll'" [style.height.px]="'300'" class="stacktrace-content">
+                                <mat-card-content [style.height.px]="'300'" class="stacktrace-content">
                                     {{stackTrace}}
                                 </mat-card-content>
                             </mat-card>
                         </div>
                         <div class="clear"></div>
+                    </div>
                     </div>
                     </mat-tab>
                     <mat-tab label="Local Storage">
