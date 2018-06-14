@@ -50,7 +50,7 @@ public class DialogScreen extends Screen {
         return this;
     }
     
-    @JsonIgnore
+    // @JsonIgnore
     public void setMessage(String...messages) {
         this.setMessage(Arrays.asList(messages));
     }
