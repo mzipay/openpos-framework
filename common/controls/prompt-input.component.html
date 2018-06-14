@@ -1,5 +1,5 @@
 <div [formGroup]="promptFormGroup">
-        <ng-container  *ngIf="responseType!='DATE'&& responseType!='NOYEARDATE'"[ngSwitch]="responseType">   
+        <ng-container  *ngIf="responseType && responseType.toLowerCase().indexOf('date') < 0" [ngSwitch]="responseType">   
             <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-lg">
                 <!-- Was using this:
                     <mat-icon matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
@@ -33,7 +33,7 @@
            
         </ng-container>
     
-        <ng-container *ngIf="responseType ==='DATE' || responseType ==='NOYEARDATE'" >
+        <ng-container *ngIf="responseType && responseType.toLowerCase().indexOf('date') >= 0" >
             <app-dynamic-date-form-field [controlName]="'promptInputControl'" [hiddenControl]="'promptInputHiddenDateControl'" [form]="promptFormGroup"
             [type]="responseType" [(value)]="responseText" [placeholder]="placeholderText" [isPrompt]=true [hintText]="hintText"></app-dynamic-date-form-field>
             <mat-error class="text-sm">

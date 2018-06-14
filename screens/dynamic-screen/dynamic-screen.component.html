@@ -1,10 +1,10 @@
 <div [ngClass]="session.getTheme()" inactivityMonitor (issueKeepAlive)="session.keepAlive()">
     <div [ngClass]="classes" style="height: 100vh">
 
-        <!-- <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu">
+        <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu">
             <mat-icon>code</mat-icon>
-        </button> -->
-
+        </button>
+<!--
         <div *ngIf="showDevMenu">
            
             <mat-expansion-panel>
@@ -264,19 +264,18 @@
                     </mat-tab>
                   </mat-tab-group>
                 
-                  <!-- //<div fxFlexFill fxLayout="row" fxLayoutAlign="center start" fxLayoutAlign.xs="center"> -->
                 <mat-action-row>
                     <div fxFlexFill fxLayout="row" fxLayoutAlign="left start" fxLayoutAlign.xs="left">
                         <button mat-raised-button color="accent">Create Save Point</button>
                     </div>
 
                 </mat-action-row>
-                <!-- </div> -->
             </mat-expansion-panel>
+        -->           
            
            
-           
-            <!-- <mat-menu #devMenu="matMenu">
+        <div [matMenuTriggerFor]="devMenu">
+            <mat-menu #devMenu="matMenu">
                 <ng-container *ngIf="logsAvailable">
                     <button mat-menu-item [matMenuTriggerFor]="logsMenu">Logs</button>
                     <mat-divider></mat-divider>
@@ -286,7 +285,7 @@
                 <button mat-menu-item (click)="onDevClearLocalStorage()">Clear Local Storage</button>
                 <mat-divider></mat-divider>
                 <button mat-menu-item (click)="onDevRestartNode()">Restart Node</button>
-            </mat-menu> -->
+            </mat-menu>
 
             <mat-menu #logsMenu="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="logShareMenu">Share</button>

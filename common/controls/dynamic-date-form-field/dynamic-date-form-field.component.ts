@@ -25,18 +25,31 @@ import { MatSelectChange, MatDatepickerInputEvent } from "@angular/material";
 
     @Output() valueChange = new EventEmitter<any>();
   
-    dateMask = [/\d/, /\d/, '/', /\d/, /\d/,'/', /\d/, /\d/, /\d/, /\d/];
-    autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
-    format = 'MM/dd/yyyy';
+    protected static readonly DEFAULT_MASK = [/\d/, /\d/, '/', /\d/, /\d/,'/', /\d/, /\d/, /\d/, /\d/];
+    protected static readonly dateMasks: Map<string,DateFormatEntry> = new Map([
+        ['date', { mask: DynamicDateFormFieldComponent.DEFAULT_MASK, format: 'MM/dd/yyyy', 
+                   datePipe: createAutoCorrectedDatePipe('mm/dd/yyyy') }],
+        ['noyeardate', { mask: [/\d/, /\d/, '/', /\d/, /\d/], format: 'MM/dd', 
+                         datePipe: createAutoCorrectedDatePipe('mm/dd') }],
+        ['datemmddyy', { mask: [/\d/, /\d/, '/', /\d/, /\d/,'/', /\d/, /\d/], format: 'MM/dd/yy', 
+                         datePipe: createAutoCorrectedDatePipe('mm/dd/yy') }]
+    ]);
+
+    dateMask = DynamicDateFormFieldComponent.dateMasks.get('date').mask; // [/\d/, /\d/, '/', /\d/, /\d/,'/', /\d/, /\d/, /\d/, /\d/];
+    autoCorrectedDatePipe = DynamicDateFormFieldComponent.dateMasks.get('date').datePipe;
+    format = DynamicDateFormFieldComponent.dateMasks.get('date').format;
     dateValue: Date;
   
-    constructor(@Optional() private datePipe: DatePipe) {}
+    constructor(@Optional() private datePipe: DatePipe) {
+    }
   
     ngOnInit() {
-        if(this.type === 'NoYearDate' || this.type === 'NOYEARDATE') {
-            this.dateMask = [/\d/, /\d/, '/', /\d/, /\d/];
-            this.autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd');
-            this.format = 'MM/dd';
+        if (this.type) {
+            const lowerType = this.type.toLowerCase();
+            this.dateMask = DynamicDateFormFieldComponent.dateMasks.get(lowerType).mask;
+            this.autoCorrectedDatePipe = DynamicDateFormFieldComponent.dateMasks.get(lowerType).datePipe;
+            this.format = DynamicDateFormFieldComponent.dateMasks.get(lowerType).format;
+
         }
     }
     public onDateEntered(): void {
@@ -71,4 +84,8 @@ import { MatSelectChange, MatDatepickerInputEvent } from "@angular/material";
   
   }
   
-  
+  interface DateFormatEntry {
+      mask: Array<string|RegExp>;
+      format: string;
+      datePipe: any;
+  }

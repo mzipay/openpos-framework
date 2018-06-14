@@ -61,7 +61,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
       group[element.id] = new FormControl(element.value, ctlValidators);
       // For a DATE type element, there is also a hidden field to handle picking of dates using
       // a date picker, need to add a FormControl for that hidden input also.
-      if (element.inputType === 'Date' || element.inputType === 'NoYearDate') {
+      if (element.inputType && element.inputType.toLowerCase().indexOf('date') >= 0) {
         group[element.id + 'Hidden'] = new FormControl();
       }
 
