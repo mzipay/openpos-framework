@@ -299,7 +299,13 @@ public class StateManager implements IStateManager {
             return false;
         }
         
-        Class<? extends IState> targetStateClass = stateConfig.getActionToStateMapping().get(action.getName());
+        Class<? extends IState> targetStateClass = stateConfig.
+                getActionToStateMapping().get(action.getName());
+        
+        if (targetStateClass == null) {
+            targetStateClass = 
+                    applicationState.getCurrentContext().getFlowConfig().getActionToStateMapping().get(action.getName());
+        }
         
         if (CompleteState.class == targetStateClass) {
             if (!applicationState.getStateStack().isEmpty()) {                
