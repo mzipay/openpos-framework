@@ -16,7 +16,9 @@ import org.jumpmind.pos.core.flow.TestStates.HelpState;
 import org.jumpmind.pos.core.flow.TestStates.HomeState;
 import org.jumpmind.pos.core.flow.TestStates.InjectionFailedState;
 import org.jumpmind.pos.core.flow.TestStates.OptionalInjectionState;
+import org.jumpmind.pos.core.flow.TestStates.RepostActionState;
 import org.jumpmind.pos.core.flow.TestStates.SellState;
+import org.jumpmind.pos.core.flow.TestStates.StackOverflowState;
 import org.jumpmind.pos.core.flow.TestStates.TestScopesState;
 import org.jumpmind.pos.core.flow.TestStates.TransitionInterceptionState;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
@@ -54,6 +56,19 @@ public class StateManagerTest {
                 .withTransition("CustomerSignedup", CompleteState.class)
                 .build());        
         
+//        FlowConfig itemLookupFlow = new FlowConfig();
+//        FlowConfig vendorFlow = new FlowConfig();
+//        
+//        itemLookupFlow.setInitialState(FlowBuilder.addState(ItemLookupState.class).build());
+//        itemLookupFlow.addGlobalSubTransition("ItemLookupState", itemLookupFlow);
+//        itemLookupFlow.addGlobalSubTransition("VendorList", vendorFlow);
+//        itemLookupFlow.addGlobalTransition("SwitchFlows", CompleteState.class);
+//        
+//        vendorFlow.setInitialState(FlowBuilder.addState(VendorState.class).build());
+//        vendorFlow.addGlobalSubTransition("ItemLookupState", itemLookupFlow);
+//        vendorFlow.addGlobalSubTransition("VendorList", vendorFlow);
+//        vendorFlow.addGlobalTransition("SwitchFlows", CompleteState.class);
+        
         FlowConfig customerFlow = new FlowConfig();
         customerFlow.getConfigScope().put("customerFlowType", "LOYALTY");
         customerFlow.setInitialState(FlowBuilder.addState(CustomerState.class)
@@ -76,6 +91,7 @@ public class StateManagerTest {
                 .withTransition("TestTransitionInterception", TransitionInterceptionState.class)
                 .withTransition("TestFailedInjections", InjectionFailedState.class)
                 .withTransition("TestOptionalInjections", OptionalInjectionState.class)
+                .withTransition("StackOverflow", StackOverflowState.class)
                 .build());
         config.add(FlowBuilder.addState(TestScopesState.class)
                 .withTransition("Done", HomeState.class)
@@ -89,12 +105,16 @@ public class StateManagerTest {
         config.add(FlowBuilder.addState(TransitionInterceptionState.class).
                 withTransition("Sell", SellState.class)
                 .build());
+        
         config.addGlobalTransition("Help", HelpState.class);
         config.addGlobalTransition("About", AboutState.class);
         config.addGlobalTransition("Home", HomeState.class);
+        config.addGlobalTransition("RepostActionState", RepostActionState.class);
+        config.addGlobalTransition("RepostActionStateGotToSell", SellState.class);
         config.addGlobalTransition("TestTransitionProceed", HomeState.class);
         config.addGlobalTransition("TestTransitionCancel", HomeState.class);
         config.addGlobalSubTransition("CustomerLookupGlobal", customerFlow);
+        //config.addGlobalSubTransition("VendorList", vendorFlow);
         
         stateManager.setInitialFlowConfig(config);
         TestUtil.setField(stateManager, "actionHandler", new ActionHandlerImpl());
@@ -102,7 +122,7 @@ public class StateManagerTest {
         TestUtil.setField(stateManager, "outjector", new Outjector());
         TestUtil.setField(stateManager, "transitionSteps", Arrays.asList(new TestTransitionStepCancel(), new TestTransitionStepProceed()));
         
-
+        
     }
     
     @Test
@@ -345,6 +365,13 @@ public class StateManagerTest {
         assertEquals(SellState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("TestTransitionCancel");
         assertEquals(SellState.class, stateManager.getCurrentState().getClass());        
+    }
+    
+    @Test(expected=FlowException.class)
+    public void testStackOverflow() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("StackOverflow");
     }
     
 }

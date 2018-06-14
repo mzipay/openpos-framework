@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.jumpmind.pos.core.javapos.SimulatedPOSPrinterService.PrintLineFeedEscapeSequence;
 import org.springframework.stereotype.Component;
 
 // TODO should be called just ActionHandler, need to repackage annotation of the same name.
@@ -106,12 +107,30 @@ public class ActionHandlerImpl {
     
     protected boolean isCalledFromState(Object state) {
         StackTraceElement[] currentStack = Thread.currentThread().getStackTrace();
+        
+        if (currentStack.length > 150) {
+            checkStackOverflow(currentStack);
+        }
+        
         for (StackTraceElement stackFrame : currentStack) {
             if (stackFrame.getClassName().equals(state.getClass().getName())) {                
                 return true;
             }
         }
         return false;
-    }    
+    }
 
+    public void checkStackOverflow(StackTraceElement[] currentStack) {
+        int stateManagerCount = 0;
+        
+        for (StackTraceElement stackFrame : currentStack) {
+            // TODO count org.jumpmind.pos.core.flow.StateManager classes
+            if (StateManager.class.getName().equals(stackFrame.getClassName())) {
+                if (stateManagerCount++ > 75) {                    
+                    throw new FlowException("Action cycle detected.  You may need to adjust your "
+                            + "use of onAnyMethod() and/or the use of super classes for your State. A super/abstract class cannot forward an Action that it could handle.");
+                }
+            }
+        }
+    }    
 }
