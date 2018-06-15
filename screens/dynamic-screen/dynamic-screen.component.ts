@@ -18,7 +18,9 @@ import { Router } from '@angular/router';
 import { DialogService } from './../../services/dialog.service';
 import { AbstractTemplate } from '../..';
 import { HttpClient } from '@angular/common/http';
-import {ChangeDetectorRef} from '@angular/core';
+import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
+import { Configuration } from '../../configuration/configuration';
+
 
 // import { MatTableDataSource } from '@angular/material';
 import { MatInputModule, MatProgressSpinnerModule, MatTableModule } from "@angular/material";
@@ -100,8 +102,14 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
         protected router: Router, private pluginService: PluginService,
         private fileUploadService: FileUploadService,
-        private httpClient: HttpClient, private cd: ChangeDetectorRef
+        private httpClient: HttpClient, private cd: ChangeDetectorRef, 
+        private elRef: ElementRef, public renderer: Renderer2
         /* private devTableService: DevTableService */) {
+            if (Configuration.useTouchListener) {
+                this.renderer.listen(elRef.nativeElement, 'touchstart', (event) => {
+                    this.documentClick(event);
+                });
+            }
     }
 
     ngOnInit(): void {
@@ -126,7 +134,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     @HostListener('document:click', ['$event'])
-    @HostListener('document:touchstart', ['$event'])
     documentClick(event: any) {
         const screenWidth = window.innerWidth;
         let x = event.clientX;
