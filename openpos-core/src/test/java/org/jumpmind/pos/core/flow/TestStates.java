@@ -107,7 +107,29 @@ public class TestStates {
         public void arrive(Action action) {
             
         }
+    }
+    
+    public static abstract class AbstractRepostActionState implements IState {
+        @In(scope=ScopeType.Node)
+        private IStateManager stateManager;        
+        @ActionHandler
+        public void onAnyAction(Action action) {
+            stateManager.doAction("RepostActionStateGotToSell");
+        }
     } 
+    
+    public static class RepostActionState extends AbstractRepostActionState {
+        
+        @In(scope=ScopeType.Node)
+        private IStateManager stateManager;
+        
+        @Override
+        public void arrive(Action action) {
+            assertNotNull(stateManager);
+            stateManager.doAction(new Action("ShouldGoTo_AbstractRepostActionState.AnyAction"));
+        }
+    }
+    
     public static class InjectionFailedState implements IState {
         
         @In(scope=ScopeType.Node)
@@ -201,5 +223,62 @@ public class TestStates {
             anyActionMethodCalled = true;
         }
     }
+    
+    public static abstract class AbstractStackOverflowState implements IState {
+        
+        @In(scope=ScopeType.Node)
+        private IStateManager stateManager;        
+        
+        @Override
+        public void arrive(Action action) {
+            stateManager.doAction(action);
+        }        
+        
+        @ActionHandler
+        public void onAnyAction(Action action) {
+            stateManager.doAction(action);
+        }
+    }
+    
+    public static class StackOverflowState extends AbstractStackOverflowState {
+
+    }    
+    
+//    
+//    public static class DashboardState extends AbstractRemapState {
+//        @In(scope=ScopeType.Node)
+//        private IStateManager stateManager;
+//        
+//        @ActionHandler
+//        public void onAnyAction(Action action) {
+//            stateManager.doAction(action);
+//        }
+//    }    
+//    public static class ItemLookupState extends AbstractRemapState {
+//        @In(scope=ScopeType.Node)
+//        private IStateManager stateManager;
+//        
+//        @Override
+//        public void arrive(Action action) {
+//        }        
+//        
+//        public void onAnyAction(Action action) {
+//            super.onAnyAction(action);
+//        }
+//    }    
+//    public static class VendorState extends AbstractRemapState {
+//        @In(scope=ScopeType.Node)
+//        private IStateManager stateManager;
+//        
+//        @Override
+//        public void arrive(Action action) {
+//        }
+//        
+//        public void onAnyAction(Action action) {
+//            super.onAnyAction(action);
+//        }        
+//    }    
+
+
 
 }
