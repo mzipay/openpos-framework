@@ -21,6 +21,7 @@ public enum FieldInputType {
     Income,
     /** DDMMyyyy format */
     Date,
+    /** DDMM format */
     NoYearDate,
     DateMMDDYY,
     ToggleButton,
