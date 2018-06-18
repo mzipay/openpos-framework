@@ -29,6 +29,7 @@ public class StateContext {
         this.action = action;
         this.state = state;
     }
+    
     public FlowConfig getFlowConfig() {
         return flowConfig;
     }

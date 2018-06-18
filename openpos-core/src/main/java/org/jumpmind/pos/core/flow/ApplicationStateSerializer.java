@@ -10,8 +10,10 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import org.jumpmind.pos.cache.service.impl.ICache;
+import org.jumpmind.pos.core.flow.config.IFlowConfigProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +26,9 @@ public class ApplicationStateSerializer {
     final Logger log = LoggerFactory.getLogger(getClass());
 
     ObjectMapper mapper = new ObjectMapper();
+    
+    @Autowired
+    private IFlowConfigProvider flowConfigProvider;
 
     @PostConstruct
     public void init() {        
@@ -47,7 +52,7 @@ public class ApplicationStateSerializer {
             
             filterApplicationStateForSerialization(applicationState);
             String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(applicationState);
-            rehydradteApplicatoinState(stateManager, applicationState);
+            rehydrateApplicationState(stateManager, applicationState);
             PrintWriter writer = new PrintWriter(fileName, "UTF-8");
             writer.println(json);
             writer.close();                
@@ -63,7 +68,7 @@ public class ApplicationStateSerializer {
             if (f.exists()) {                
                 String json = new String(Files.readAllBytes(Paths.get(fileName)));
                 ApplicationState applicationState = mapper.readValue(json, ApplicationState.class);
-                rehydradteApplicatoinState(stateManager, applicationState);
+                rehydrateApplicationState(stateManager, applicationState);
                 return applicationState;
             } else {
                 throw new FlowException("Could not find file to desererialize " + fileName);    
@@ -92,13 +97,25 @@ public class ApplicationStateSerializer {
         appStateForSerialization.setCurrentTransition(null);
     }
     
-    public void rehydradteApplicatoinState(StateManager stateManager, ApplicationState applicationState) {
+    public void rehydrateApplicationState(StateManager stateManager, ApplicationState applicationState) {
         applicationState.getScope().setNodeScope("stateManager", stateManager);
         
         stateManager.setApplicationState(applicationState);
         if (applicationState.getCurrentContext().getState() != null) {                            
             stateManager.performInjections(applicationState.getCurrentContext().getState());
-        }        
+        }
+        
+        refreshFlowConfig(stateManager, applicationState.getCurrentContext());
+        
+        for (StateContext context : applicationState.getStateStack()) {
+            refreshFlowConfig(stateManager, context);    
+        }
+    }
+    
+    protected void refreshFlowConfig(StateManager stateManager, StateContext stateContext) {
+        String flowConfigName = stateContext.getFlowConfig().getName(); // Only the name will be available after deserialize
+        stateContext.setFlowConfig(
+                flowConfigProvider.getConfigByName(stateManager.getAppId(), stateManager.getNodeId(), flowConfigName));        
     }
 
 }

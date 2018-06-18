@@ -26,19 +26,32 @@ import java.util.Map;
 
 import org.jumpmind.pos.core.flow.IState;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 public class FlowConfig {
     
+    private String name;
+    @JsonIgnore
     private StateConfig initialState;
+    @JsonIgnore
     private Map<Class<? extends IState>, StateConfig> stateConfigs = new HashMap<>();
+    @JsonIgnore
     private Map<String, Object> configScope = new HashMap<>();
+    @JsonIgnore
     private Map<String, Class<? extends IState>> actionToStateMapping = new HashMap<>();
+    @JsonIgnore
     private Map<String, SubTransition> actionToSubStateMapping = new HashMap<>();
     
     public FlowConfig() {
+        
+    }
+    public FlowConfig(String name) {
+        this.name = name;
     }
     
-    public FlowConfig(Map<String, Object> configScope) {
+    public FlowConfig(String name, Map<String, Object> configScope) {
+        this(name);
         this.configScope = configScope;
     }
     
@@ -95,8 +108,8 @@ public class FlowConfig {
         autoConfigureTargetState(destination);
     }
 
-    public void addGlobalSubTransition(String string, FlowConfig customerFlow) {
-        SubTransition subTransition = new SubTransition(null, customerFlow);
+    public void addGlobalSubTransition(String string, FlowConfig flowConfig) {
+        SubTransition subTransition = new SubTransition(null, flowConfig);
         actionToSubStateMapping.put(string, subTransition);
     }
 
@@ -122,6 +135,14 @@ public class FlowConfig {
 
     public void setActionToSubStateMapping(Map<String, SubTransition> actionToSubStateMapping) {
         this.actionToSubStateMapping = actionToSubStateMapping;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
     
 }

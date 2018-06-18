@@ -20,6 +20,9 @@
  */
 package org.jumpmind.pos.app.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jumpmind.pos.app.state.CheckTransBalanceState;
 import org.jumpmind.pos.app.state.CommitTransState;
 import org.jumpmind.pos.app.state.HomeScreenState;
@@ -31,35 +34,41 @@ import org.jumpmind.pos.app.state.TenderMenuState;
 import org.jumpmind.pos.app.state.customer.CustomerDetailsState;
 import org.jumpmind.pos.app.state.customer.CustomerSearchResultState;
 import org.jumpmind.pos.app.state.customer.CustomerSearchState;
-import org.jumpmind.pos.app.state.user.ManagerOverrideStep;
-import org.jumpmind.pos.app.state.user.UserLoginStep;
 import org.jumpmind.pos.core.flow.CompleteState;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.IFlowConfigProvider;
+import org.jumpmind.pos.core.flow.config.StateConfig;
+import org.jumpmind.pos.core.flow.config.SubTransition;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 @Primary
 @Component
 public class AppFlowConfigProvider implements IFlowConfigProvider {
+    
+    private FlowConfig config;
+    private Map<String, FlowConfig> flowConfigsByName = new HashMap<>();
+    
+    @Override
+    public FlowConfig getConfigByName(String appId, String nodeId, String name) {
+        buildFlowConfigsByName(appId, nodeId);
+        return flowConfigsByName.get(name);
+    }
 
     @Override
     public FlowConfig getConfig(String appId, String nodeId) {
-        FlowConfig config = new FlowConfig();
+        
+        config = new FlowConfig("Default");
+        
+        
         config.setInitialState(FlowBuilder.addState(HomeScreenState.class)
                 .withTransition("Sell", SellState.class).build());
-
-//        config.add(FlowBuilder.addState(UserLoginStep.class).build());
-//        
-//        config.add(FlowBuilder.addState(ManagerOverrideState.class).build());
-        
         config.add(FlowBuilder.addState(SellState.class)
                 .withTransition("Back", HomeScreenState.class)
                 .withTransition("Checkout", TenderMenuState.class)
                 .withSubTransition("CustomerSearch", getCustomerSearchConfig(appId, nodeId), "CustomerSearchFinished")
                 .build());
-        
         config.add(FlowBuilder.addState(TenderMenuState.class)
                 .withTransition("Back", SellState.class)
                 .withTransition("TenderCash", TenderCashState.class)
@@ -82,13 +91,16 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
                 .withTransition("Back", TenderMenuState.class)
                 .withTransition("CommitTransaction", CommitTransState.class)
                 .withTransition("ReturnToTenderMenu", TenderMenuState.class)
-                .build());        
+                .build());
+        
+        config.addGlobalSubTransition("AdvanceSearch", getCustomerSearchConfig(appId, nodeId));
+        config.addGlobalTransition("BackToMain", HomeScreenState.class);
         
         return config;
     }
     
-    public FlowConfig getCustomerSearchConfig(String appId, String nodeId) {
-        FlowConfig config = new FlowConfig();
+    protected FlowConfig getCustomerSearchConfig(String appId, String nodeId) {
+        FlowConfig config = new FlowConfig("CustomerSearch");
         config.setInitialState(FlowBuilder.addState(CustomerSearchState.class)
                 .withTransition("Back", CompleteState.class)
                 .withTransition("SearchCustomer", CustomerSearchResultState.class)
@@ -107,6 +119,26 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
                 .build());   
         
         return config;
+    }
+    
+    protected void buildFlowConfigsByName(String appId, String nodeId) {
+        if (config == null) {
+            config = getConfig(appId, nodeId);
+        }
+        
+        buildFlowConfigsByName(appId, nodeId, config);
     }    
-
+    
+    protected void buildFlowConfigsByName(String appId, String nodeId, FlowConfig flowConfig) {
+        flowConfigsByName.put(flowConfig.getName(), flowConfig);
+        for (SubTransition subTransition : flowConfig.getActionToSubStateMapping().values()) {
+            buildFlowConfigsByName(appId, nodeId, subTransition.getSubFlowConfig()); // recurse.
+        }
+        
+        for (StateConfig stateConfig : flowConfig.getStateConfigs().values()) {
+            for (SubTransition subTransition : stateConfig.getActionToSubStateMapping().values()) {
+                buildFlowConfigsByName(appId, nodeId, subTransition.getSubFlowConfig()); // recurse.    
+            }
+        }
+    }
 }
