@@ -20,9 +20,6 @@
  */
 package org.jumpmind.pos.app.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jumpmind.pos.app.state.CheckTransBalanceState;
 import org.jumpmind.pos.app.state.CommitTransState;
 import org.jumpmind.pos.app.state.HomeScreenState;
@@ -37,30 +34,21 @@ import org.jumpmind.pos.app.state.customer.CustomerSearchState;
 import org.jumpmind.pos.core.flow.CompleteState;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
-import org.jumpmind.pos.core.flow.config.IFlowConfigProvider;
-import org.jumpmind.pos.core.flow.config.StateConfig;
-import org.jumpmind.pos.core.flow.config.SubTransition;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 @Primary
 @Component
-public class AppFlowConfigProvider implements IFlowConfigProvider {
+public class AppFlowConfigProvider extends AbstractFlowConfigProvider {
     
     private FlowConfig config;
-    private Map<String, FlowConfig> flowConfigsByName = new HashMap<>();
-    
-    @Override
-    public FlowConfig getConfigByName(String appId, String nodeId, String name) {
-        buildFlowConfigsByName(appId, nodeId);
-        return flowConfigsByName.get(name);
-    }
 
     @Override
     public FlowConfig getConfig(String appId, String nodeId) {
-        
+        if (config != null) {
+            return config;
+        }
         config = new FlowConfig("Default");
-        
         
         config.setInitialState(FlowBuilder.addState(HomeScreenState.class)
                 .withTransition("Sell", SellState.class).build());
@@ -119,26 +107,5 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
                 .build());   
         
         return config;
-    }
-    
-    protected void buildFlowConfigsByName(String appId, String nodeId) {
-        if (config == null) {
-            config = getConfig(appId, nodeId);
-        }
-        
-        buildFlowConfigsByName(appId, nodeId, config);
-    }    
-    
-    protected void buildFlowConfigsByName(String appId, String nodeId, FlowConfig flowConfig) {
-        flowConfigsByName.put(flowConfig.getName(), flowConfig);
-        for (SubTransition subTransition : flowConfig.getActionToSubStateMapping().values()) {
-            buildFlowConfigsByName(appId, nodeId, subTransition.getSubFlowConfig()); // recurse.
-        }
-        
-        for (StateConfig stateConfig : flowConfig.getStateConfigs().values()) {
-            for (SubTransition subTransition : stateConfig.getActionToSubStateMapping().values()) {
-                buildFlowConfigsByName(appId, nodeId, subTransition.getSubFlowConfig()); // recurse.    
-            }
-        }
     }
 }
