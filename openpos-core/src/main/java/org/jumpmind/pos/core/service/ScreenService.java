@@ -124,15 +124,15 @@ public class ScreenService implements IScreenService {
             result = getComponentValues(appId, nodeId, controlId, getLastDialog(appId, nodeId), searchTerm, sizeLimit);
         }
         if (result == null) {
-            result = "{}";
+            result = "[]";
         }
         return result;
     }
 
     private String getComponentValues(String appId, String nodeId, String controlId, Screen screen, String searchTerm, Integer sizeLimit) {
         String result = null;
-        if (screen instanceof DynamicFormScreen) {
-            DynamicFormScreen dynamicScreen = (DynamicFormScreen) screen;
+        if (screen instanceof IHasForm) {
+        	IHasForm dynamicScreen = (IHasForm) screen;
             IFormElement formElement = dynamicScreen.getForm().getFormElement(controlId);
 
             // TODO: Look at combining FormListField and ComboField or at least
@@ -282,10 +282,10 @@ public class ScreenService implements IScreenService {
 
     private void recordLastScreen(String appId, String nodeId, Screen screen,
             Map<String, Map<String, Screen>> lastScreenByAppIdByNodeId) {
-        Map<String, Screen> lastScreenByNodeId = applicationState.getLastScreenByAppIdByNodeId().get(appId);
+        Map<String, Screen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
         if (lastScreenByNodeId == null) {
             lastScreenByNodeId = new HashMap<>();
-            applicationState.getLastScreenByAppIdByNodeId().put(appId, lastScreenByNodeId);
+            lastScreenByAppIdByNodeId.put(appId, lastScreenByNodeId);
         }
         lastScreenByNodeId.put(nodeId, screen);
     }
