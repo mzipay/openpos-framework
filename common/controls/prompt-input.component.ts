@@ -40,6 +40,14 @@ export class PromptInputComponent implements OnInit{
         }
     }
 
+    isDateField(): boolean {
+        if(this.responseType) {
+            return this.responseType.toLowerCase().indexOf('date') >= 0;
+        } else {
+            return false;
+        }
+    }
+
     ngOnInit(): void {
         this.formatter = this.responseType;
 
