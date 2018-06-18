@@ -1,4 +1,4 @@
-package org.jumpmind.pos.app.config;
+package org.jumpmind.pos.core.flow.config;
 
 import java.util.HashMap;
 import java.util.Map;

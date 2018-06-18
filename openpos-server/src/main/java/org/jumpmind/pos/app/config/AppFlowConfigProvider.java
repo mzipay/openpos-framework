@@ -32,6 +32,7 @@ import org.jumpmind.pos.app.state.customer.CustomerDetailsState;
 import org.jumpmind.pos.app.state.customer.CustomerSearchResultState;
 import org.jumpmind.pos.app.state.customer.CustomerSearchState;
 import org.jumpmind.pos.core.flow.CompleteState;
+import org.jumpmind.pos.core.flow.config.AbstractFlowConfigProvider;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.springframework.context.annotation.Primary;
