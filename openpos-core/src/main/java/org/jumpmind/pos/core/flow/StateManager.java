@@ -93,6 +93,8 @@ public class StateManager implements IStateManager {
             try {            
                 applicationState = applicationStateSerializer.deserialize(this, "./openpos-state.json");
                 resumeState = true;
+            } catch (FlowException ex) {
+                logger.info(ex.getMessage());
             } catch (Exception ex) {
                 logger.warn("Failed to load openpos-state.json", ex);
             }

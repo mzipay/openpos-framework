@@ -58,7 +58,7 @@ public class ApplicationStateSerializer {
             writer.close();                
 
         } catch (Exception ex) {
-            throw new FlowException("Failed to desererialize file " + fileName, ex);
+            throw new FlowException("Failed to sererialize file " + fileName, ex);
         }
     }
 
@@ -88,8 +88,8 @@ public class ApplicationStateSerializer {
 
         for (String key : keys) {
             Object value = appStateForSerialization.getScope().getNodeScope().get(key).getValue();
-            if (ICache.class.isAssignableFrom(value.getClass())
-                    || value.getClass().toString().contains("ContextServiceClient")) {
+            if (value != null && (ICache.class.isAssignableFrom(value.getClass())
+                    || value.getClass().toString().contains("ContextServiceClient"))) {
                 appStateForSerialization.getScope().getNodeScope().remove(key);
             }
         }
