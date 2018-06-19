@@ -169,7 +169,11 @@ public class Query<T> {
                 value = params.get("*");
             }
             if (value == null) {
-                throw new PersistException(String.format("Missing required query parameter '%s'. Cannot build query: %s", key, sqlStatement.getSql()));
+                if (params.containsKey(key)) {
+                    throw new PersistException(String.format("Required query parameter '%s' was present but the value is null. A value must be provided. Cannot build query: %s", key, sqlStatement.getSql()));
+                } else {                    
+                    throw new PersistException(String.format("Missing required query parameter '%s'. Cannot build query: %s", key, sqlStatement.getSql()));
+                }
             }
             values.add(value);
         }

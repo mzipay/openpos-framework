@@ -11,3 +11,19 @@ queries:
     AND (effective_date <= ${currentTime})
     AND (expiration_date IS NULL OR expiration_date > ${currentTime})
   orderBy: effective_date asc
+-
+  name: configsByTag
+  where: (enabled_flag IS NULL OR enabled_flag = 1)
+    AND (effective_date <= ${currentTime})
+    AND (expiration_date IS NULL OR expiration_date > ${currentTime})    
+  optionalWhereClauses: 
+    - ($${tag1ColumnName} = ${tag1Value} OR $${tag1ColumnName} = '*')
+    - ($${tag2ColumnName} = ${tag2Value} OR $${tag2ColumnName} = '*')
+    - ($${tag3ColumnName} = ${tag3Value} OR $${tag3ColumnName} = '*')
+    - ($${tag4ColumnName} = ${tag4Value} OR $${tag4ColumnName} = '*')
+    - ($${tag5ColumnName} = ${tag5Value} OR $${tag5ColumnName} = '*')
+    - ($${tag6ColumnName} = ${tag6Value} OR $${tag6ColumnName} = '*')
+    - ($${tag7ColumnName} = ${tag7Value} OR $${tag7ColumnName} = '*')
+    - ($${tag8ColumnName} = ${tag8Value} OR $${tag8ColumnName} = '*')
+    - ($${tag9ColumnName} = ${tag9Value} OR $${tag9ColumnName} = '*')
+  orderBy: config_name, effective_date asc
