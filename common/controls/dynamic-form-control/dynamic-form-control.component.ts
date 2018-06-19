@@ -79,14 +79,14 @@ export class DynamicFormControlComponent implements AfterViewInit {
   @Input() submitButtonText = 'Next';
 
   @Input() 
-  get screen(): any{
-    return this._screen;
+  get alternateSubmitActions(): string[]{
+    return this._alternateSubmitActions;
   }
 
-  set screen( screen: any ){
-    this._screen = screen;
-    if (screen.alternateSubmitActions) {
-      screen.alternateSubmitActions.forEach(action => {
+  set alternateSubmitActions( actions: string[] ){
+    this._alternateSubmitActions = actions;
+    if (actions) {
+      actions.forEach(action => {
 
         this.session.registerActionPayload(action, () => {
           if (this.form.valid) {
@@ -110,7 +110,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
   buttons: IFormElement[];
 
   private _screenForm: IForm;
-  private _screen: IScreen;
+  private _alternateSubmitActions: string[];
 
   constructor(public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) {}
 
