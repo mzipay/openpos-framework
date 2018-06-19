@@ -6,8 +6,6 @@ public class TagModel {
     public static final String TAG_ALL = "*";
     public static final String TAG_CODE_TYPE = "CODE";
     
-    public static final String BRAND_ID_TAG = "BRAND_ID";
-
     private String name; // e.g. STORE
     private String group;  // e.g. LOCATION
     private int level;

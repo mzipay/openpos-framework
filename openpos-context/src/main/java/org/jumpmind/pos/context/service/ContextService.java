@@ -24,11 +24,20 @@ public class ContextService {
         return endpointDispatcher.dispatch("/getConfig", deviceId, currentTime, configName);
     }
     
+    @RequestMapping("/config/")
+    public ConfigResult getAllConfigs(
+            @RequestParam(value="deviceId", defaultValue="*") String deviceId,
+            @RequestParam(value="currentTime") Date currentTime) {
+        return endpointDispatcher.dispatch("/getAllConfigs", deviceId, currentTime);
+    }
+    
     @RequestMapping("/device")
     public DeviceResult getDevice(
             @RequestParam(value="deviceId", defaultValue="*") String deviceId) {
         return endpointDispatcher.dispatch("/device", deviceId);
     }
+    
+    
     
 }
     
