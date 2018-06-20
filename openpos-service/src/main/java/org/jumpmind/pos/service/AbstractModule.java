@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.h2.tools.Server;
 import org.jumpmind.db.platform.IDatabasePlatform;
@@ -77,6 +79,11 @@ abstract public class AbstractModule implements Module {
     protected PlatformTransactionManager txManager;
 
     protected DBSessionFactory sessionFactory;
+    
+    @PostConstruct
+    protected void logModuleStartup() {
+        
+    }
 
     protected List<Class<?>> getClassesForPackageAndAnnotation(String packageName, Class<? extends Annotation> annotation) {
         List<Class<?>> classes = new ArrayList<Class<?>>();

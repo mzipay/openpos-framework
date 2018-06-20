@@ -1,0 +1,4 @@
+apply from: '../openpos-core/common.gradle'
+
+dependencies {
+}
