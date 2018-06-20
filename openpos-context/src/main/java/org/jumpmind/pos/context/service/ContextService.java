@@ -25,7 +25,7 @@ public class ContextService {
     }
     
     @RequestMapping("/config/")
-    public ConfigResult getAllConfigs(
+    public ConfigListResult getAllConfigs(
             @RequestParam(value="deviceId", defaultValue="*") String deviceId,
             @RequestParam(value="currentTime") Date currentTime) {
         return endpointDispatcher.dispatch("/getAllConfigs", deviceId, currentTime);
