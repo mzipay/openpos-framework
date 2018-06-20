@@ -90,11 +90,11 @@ public class StateManagerLogger {
         
         int boxWidth = Math.max(stepTitle.length()+6, 30);
         
-        buff.append(STAR).append(StringUtils.repeat(STAR, boxWidth-2)).append(STAR);
+        buff.append(UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth-2)).append(UPPER_RIGHT_CORNER);
         buff.append("\r\n");
         buff.append(VERITCAL_LINE).append(StringUtils.center(stepTitle, boxWidth-2)).append(VERITCAL_LINE);
         buff.append("\r\n");
-        buff.append(STAR).append(StringUtils.repeat(STAR, boxWidth-2)).append(STAR);
+        buff.append(LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth-2)).append(LOWER_RIGHT_CORNER);
         
         String fromStateName = transition.getSourceStateContext().getState() != null ? transition.getSourceStateContext().getState().getClass().getSimpleName() : "<no state>"; 
         String toStateName = transition.getTargetState() != null ? transition.getTargetState().getClass().getSimpleName() : "<no state>"; 

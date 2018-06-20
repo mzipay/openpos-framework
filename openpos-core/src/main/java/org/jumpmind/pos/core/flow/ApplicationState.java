@@ -127,6 +127,9 @@ public class ApplicationState {
     }
     
     public StateConfig findStateConfig(FlowConfig flowConfig) {
+        if (flowConfig == null) {
+            return null;
+        }
         StateConfig stateConfig = flowConfig.getStateConfig(getCurrentContext().getState());
         Iterator<StateContext> itr = getStateStack().iterator();
         while (stateConfig == null && itr.hasNext()) {
