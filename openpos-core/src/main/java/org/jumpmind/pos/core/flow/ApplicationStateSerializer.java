@@ -113,9 +113,11 @@ public class ApplicationStateSerializer {
     }
     
     protected void refreshFlowConfig(StateManager stateManager, StateContext stateContext) {
-        String flowConfigName = stateContext.getFlowConfig().getName(); // Only the name will be available after deserialize
-        stateContext.setFlowConfig(
-                flowConfigProvider.getConfigByName(stateManager.getAppId(), stateManager.getNodeId(), flowConfigName));        
+        if (stateContext.getFlowConfig() != null) {
+            String flowConfigName = stateContext.getFlowConfig().getName(); // Only the name will be available after deserialize
+            stateContext.setFlowConfig(
+                    flowConfigProvider.getConfigByName(stateManager.getAppId(), stateManager.getNodeId(), flowConfigName));                    
+        }
     }
 
 }
