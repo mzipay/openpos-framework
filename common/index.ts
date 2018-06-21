@@ -23,4 +23,5 @@ export { ICheckboxField } from './iformfield';
 export { CordovaDevicePlugin } from './cordova-device-plugin';
 export { CordovaPlugin } from './cordova-plugin';
 export { Scan } from './scan';
+export { IForm } from './iform';
 export * from './ideviceresponse';
