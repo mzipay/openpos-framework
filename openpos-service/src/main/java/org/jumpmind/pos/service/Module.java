@@ -10,5 +10,9 @@ public interface Module {
     }
     
     public String getTablePrefix();
+
+    String getURL();
+
+    String getDriver();
     
 }
