@@ -88,8 +88,6 @@ public class StateManagerLogger {
         
         String boxed = BoxLogging.box(stepTitle);
         
-        int boxWidth = Math.max(stepTitle.length()+6, 30);
-                
         String fromStateName = transition.getSourceStateContext().getState() != null ? transition.getSourceStateContext().getState().getClass().getSimpleName() : "<no state>"; 
         String toStateName = transition.getTargetState() != null ? transition.getTargetState().getClass().getSimpleName() : "<no state>"; 
         

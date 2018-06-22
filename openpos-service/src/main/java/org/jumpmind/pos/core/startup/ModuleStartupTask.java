@@ -21,7 +21,7 @@ public class ModuleStartupTask extends AbstractStartupTask {
         if (moduleRegistry.getModules() != null && moduleRegistry.getModules().size() > 0) {
             List<Module> modules = moduleRegistry.getModules();
             for (Module module : modules) {
-                logger.info(BoxLogging.box("Starting Module: " + StringUtils.leftPad(module.getName(), 15)));
+                logger.info(BoxLogging.box("Starting Module: " + StringUtils.leftPad(module.getName(), 15).toUpperCase()));
                 module.start();
             }
         } else {
