@@ -3,7 +3,16 @@
     <h4 mat-dialog-title [ngClass]="{'warn text-lg text-center': isCustomerFacing()}">{{screen.title}}</h4>
   </div>
   <div mat-dialog-content>
-    <p *ngFor="let m of messages" [ngClass]="{'text-md': isCustomerFacing()}">{{m}}</p>
+    <ng-container *ngIf="messages.length > 0">
+        <div *ngFor="let m of messages" [ngClass]="{'text-md': isCustomerFacing()}">
+            <p>{{m}}</p> 
+        </div>
+    </ng-container>
+    <ng-container *ngIf="lines.length > 0">
+        <div *ngFor="let l of lines" [ngClass]="{'text-md': isCustomerFacing()}">
+          <p [class]="l.cssClass">{{l.message}}</p>
+        </div>
+    </ng-container>
     <mat-progress-bar *ngIf="screen.subType === 'Progress'" mode="indeterminate"></mat-progress-bar>
   </div>
   <div mat-dialog-actions fxLayout="row">
