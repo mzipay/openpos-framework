@@ -16,6 +16,8 @@ public class DialogScreen extends Screen {
     
     private List<String> message = new ArrayList<>();
     
+    private List<Line> messageLines = new ArrayList<>();
+    
     private DialogProperties dialogProperties;
     
     public DialogScreen() {
@@ -75,6 +77,23 @@ public class DialogScreen extends Screen {
     
     public String getSubType() {
         return subType;
+    }
+
+    public List<Line> getMessageLines() {
+        return messageLines;
+    }
+
+    public void setMessageLines(List<Line> messageLines) {
+        this.messageLines = messageLines;
+    }
+    
+    public DialogScreen addMessageLine(Line line) {
+        this.messageLines.add(line);
+        return this;
+    }
+    
+    public void setMessageLines(Line...lines) {
+        this.setMessageLines(Arrays.asList(lines));
     }
     
 }
