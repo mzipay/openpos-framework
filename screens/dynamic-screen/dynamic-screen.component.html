@@ -1,10 +1,9 @@
 <div [ngClass]="session.getTheme()" inactivityMonitor (issueKeepAlive)="session.keepAlive()">
     <div [ngClass]="classes" style="height: 100vh">
 
-        <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu">
+        <!-- <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu">
             <mat-icon>code</mat-icon>
-        </button>
-<!--
+        </button>  -->
         <div *ngIf="showDevMenu">
            
             <mat-expansion-panel>
@@ -14,14 +13,14 @@
                 <mat-tab-group dynamicHeight>
                     <mat-tab label="State">
                     <div  class="stateTab" >
-                    <span>    
+                    <div  [style.width.px]="'30vw'">    
                       <h2>Current State: {{currentState}}
                         <button mat-icon-button (click)="onDevMenuRefresh()">
                             <mat-icon aria-label="refresh">refresh</mat-icon>
                         </button>
                     </h2>
                     <h5>Current State Class: <i>{{currentStateClass}}</i></h5>
-                    </span>
+                    </div>
                     <div class="tab">
                     <div class="panel" layout="row">
                         <mat-card>
@@ -65,7 +64,7 @@
                                             <tr style="text-align:left" class="mat-header-row">
                                                 <th class="mat-header-cell"> ID </th>
                                                 <th class="mat-header-cell"> Time Created </th>
-                                                <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                                <th class="mat-header-cell" style="text-align:center"> Origin </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -99,7 +98,7 @@
                                             <tr style="text-align:left" class="mat-header-row">
                                                 <th class="mat-header-cell"> ID </th>
                                                 <th class="mat-header-cell"> Time Created </th>
-                                                <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                                <th class="mat-header-cell" style="text-align:center"> Origin </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -133,7 +132,7 @@
                                                 <tr style="text-align:left" class="mat-header-row">
                                                     <th class="mat-header-cell"> ID </th>
                                                     <th class="mat-header-cell"> Time Created </th>
-                                                    <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                                    <th class="mat-header-cell" style="text-align:center"> Origin </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -167,7 +166,7 @@
                                                 <tr style="text-align:left" class="mat-header-row">
                                                     <th class="mat-header-cell"> ID </th>
                                                     <th class="mat-header-cell"> Time Created </th>
-                                                    <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                                    <th class="mat-header-cell" style="text-align:center"> Origin </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -201,7 +200,7 @@
                                             <tr style="text-align:left" class="mat-header-row">
                                                 <th class="mat-header-cell"> ID </th>
                                                 <th class="mat-header-cell"> Time Created </th>
-                                                <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                                <th class="mat-header-cell" style="text-align:center"> Origin </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -226,8 +225,8 @@
                         </div>
                         <div *ngIf="displayStackTrace" class="stacktrace">
                             <mat-card>
-                                <mat-card-title>StackTrace - {{selected}}</mat-card-title>
-                                <mat-card-content [style.height.px]="'300'" class="stacktrace-content">
+                                <mat-card-title>Origin of: {{selected}}</mat-card-title>
+                                <mat-card-content [style.height.px]="'400'" class="stacktrace-content">
                                     {{stackTrace}}
                                 </mat-card-content>
                             </mat-card>
@@ -251,28 +250,68 @@
 
                     </mat-tab>
                     <mat-tab label="Save Points">
-                      <h1>Save Points</h1>
-
+                        <h1>Save Points</h1>
+                        <mat-card class="savePoints">
+                        <div [style.height.px]="'300'">
+                            <table class="mat-table">
+                                    <thead>
+                                        <tr style="text-align:left" class="mat-header-row">
+                                            <th class="mat-header-cell"> Name </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="mat-row" *ngFor="let element of savePoints">
+                                            <td class="mat-cell"> {{element}} </td>
+                                            <td class="mat-cell" style="text-align:center">
+                                                <button mat-button color="accent" (click)="onLoadSavePoint(element)">Load</button>
+                                            </td>
+                                            <td class="mat-cell-close">
+                                                <button mat-icon-button (click)="onSavePointRemove(element)">
+                                                    <mat-icon aria-label="delete">close</mat-icon>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                            </table>        
+                        </div>
+                    </mat-card>
                     </mat-tab>
                     <mat-tab label="Logs">
                         <h1>Logs</h1>
-                        <div [style.height.px]="'250'">
-                        <ul>
-                                <li><button mat-raised-button [matMenuTriggerFor]="logsMenu">Logs</button></li>
-                        </ul>
+                        <div [style.height.px]="'350'">
+                            <ng-container *ngIf="logsAvailable">
+                                 <mat-divider></mat-divider>
+                                 <ul>
+                                    <li *ngFor="let m of logFilenames"><button mat-button [matMenuTriggerFor]="logsMenu">{{m}}</button></li>
+                                 </ul>
+                            </ng-container>
                         </div>
                     </mat-tab>
                   </mat-tab-group>
                 
                 <mat-action-row>
                     <div fxFlexFill fxLayout="row" fxLayoutAlign="left start" fxLayoutAlign.xs="left">
-                        <button mat-raised-button color="accent">Create Save Point</button>
+                            <!-- <mat-form-field style="width:100%">
+                                    <mat-label>Create A Savepoint</mat-label>
+                                    <input type="savePoint" [(ngModel)]="savepointField.value" #passwdField="ngModel" matInput placeholder="{{passwordField.placeholder}}" [pattern]="passwordField.pattern"
+                                        [required]="passwordField.required" (keyup.enter)="onEnterPressed()">
+                                </mat-form-field> -->
+                            <mat-form-field appearance="standard">
+                                    
+                                    <input matInput #newSavePoint
+                                    (keyup.enter)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''"
+                          
+                                    placeholder="Create a Save Point" >
+                                    <mat-icon matSuffix>
+                                            <button mat-icon-button (click)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''">
+                                                    <mat-icon aria-label="save">save</mat-icon>
+                                                </button>
+                                    </mat-icon>
+                            </mat-form-field>
                     </div>
-
                 </mat-action-row>
-            </mat-expansion-panel>
-        -->           
-           
+            </mat-expansion-panel>   
+        </div> 
            
         <div [matMenuTriggerFor]="devMenu">
             <mat-menu #devMenu="matMenu">
@@ -287,10 +326,16 @@
                 <button mat-menu-item (click)="onDevRestartNode()">Restart Node</button>
             </mat-menu>
 
-            <mat-menu #logsMenu="matMenu">
+            <!-- <mat-menu #logsMenu="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="logShareMenu">Share</button>
                 <button mat-menu-item [matMenuTriggerFor]="logUploadMenu">Upload</button>
                 <button mat-menu-item [matMenuTriggerFor]="logViewMenu">View</button>
+            </mat-menu> -->
+
+            <mat-menu #logsMenu="matMenu">
+                <button mat-menu-item (click)="onLogfileSelected(m)">Share</button>
+                <button mat-menu-item (click)="onLogfileUpload(m)">Upload</button>
+                <button mat-menu-item (click)="onLogfileView(m)">View</button>
             </mat-menu>
 
             <mat-menu #logShareMenu="matMenu">

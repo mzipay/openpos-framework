@@ -15,13 +15,20 @@
 
 .panel {
     float: left;
-    width: 750px;
+    width: 45vw;
+  }
+
+  .savePoints {
+      width: 30vw;
+      overflow: auto;
   }
   
   .stacktrace {
-    float: right;
-    margin-left: 12px;
-    width: 650px;
+    position: fixed;
+
+    right: 45px;
+    top: 100px;
+    width: 40vw;
 
   }
 
@@ -50,4 +57,8 @@ table {
     height: 520px;
     overflow: auto;
     
+}
+
+.saveForm {
+    padding-left: 10px;
 }

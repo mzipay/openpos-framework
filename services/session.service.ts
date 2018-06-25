@@ -44,11 +44,17 @@ export class SessionService implements ILocaleService {
 
     obsFlow$: Observable<Element[]>;
 
+    subSave$ = new BehaviorSubject<string>();
+
+    obsSave$: Observable<string>;
+
     NodeElements: Element[] = [];
     SessElements: Element[] = [];
     ConvElements: Element[] = [];
     ConfElements: Element[] = [];
     FlowElements: Element[] = [];
+    savePoints: string[] = [];
+
 
     currentState: string;
 
@@ -129,6 +135,7 @@ export class SessionService implements ILocaleService {
         this.obsState$ = this.subState$.asObservable();
         this.obsStateClass$ = this.subStateClass$.asObservable();
         this.obsStateActions$ = this.subStateActions$.asObservable();
+        this.obsSave$ = this.subSave$.asObservable();
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -500,7 +507,7 @@ export class SessionService implements ILocaleService {
                 this.showLoading(json.title, json.message);
                 return;
             } else if (json.type === 'DevTools') {
-                this.populateDevTables(json);
+                this.devToolRouter(json);
             } else if (json.template && json.template.dialog) {
                 this.showDialog(json);
             } else if (json.type === 'NoOp') {
@@ -518,6 +525,12 @@ export class SessionService implements ILocaleService {
                 this.showDialog(null);
             }
             this.cancelLoading();
+        }
+    }
+
+    private devToolRouter(json) {
+        if (json.name === 'DevTools::Get') {
+            this.populateDevTables(json);
         }
     }
 
@@ -601,6 +614,31 @@ export class SessionService implements ILocaleService {
                 }
             });
             console.log(this.FlowElements);
+        }
+    }
+
+    public addSaveFile(newSavePoint: string) {
+        if (newSavePoint) {
+            if(!this.savePoints.includes(newSavePoint)) {
+                this.savePoints.push(newSavePoint);
+                this.subSave$.next(this.savePoints);
+            }
+          this.onAction('DevTools::Save::' + newSavePoint);
+          console.log("Save Point Created: \'" + newSavePoint + "\'");
+        }
+    }
+
+    public removeSaveFile(saveName: string) {
+        console.log('Attempting to remove Save Point \'' + saveName + '\'...');
+        let index = this.savePoints.findIndex(item => {
+            return saveName === item;
+        });
+        if (index !== -1) {
+            this.onAction("DevTools::RemoveSave::" + saveName);
+            this.savePoints.splice(index, 1);
+            this.subSave$.next(this.savePoints);
+            console.log('Save Points updated: ');
+            console.log(this.savePoints);
         }
     }
 

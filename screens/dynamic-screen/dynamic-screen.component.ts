@@ -19,14 +19,8 @@ import { DialogService } from './../../services/dialog.service';
 import { AbstractTemplate } from '../..';
 import { HttpClient } from '@angular/common/http';
 import {ChangeDetectorRef} from '@angular/core';
-
-// import { MatTableDataSource } from '@angular/material';
+//import { IForm } from './form.component';
 import { MatInputModule, MatProgressSpinnerModule, MatTableModule } from "@angular/material";
-// import { DevTableService } from '../../services/devtable.service';
-// import { Observable } from 'rxjs/Observable';
-// import 'rxjs/add/observable/of';
-// import {DataSource} from '@angular/cdk/collections';
-// import { Process } from '../../models/process.model';
 
 @Component({
     selector: 'app-dynamic-screen',
@@ -41,8 +35,9 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     ConvElements: Element[];
     ConfElements: Element[];
     FlowElements: Element[];
+    
 
-    displayedColumns = ["ID", "Time Created", "StackTrace", "close"];
+    savePoints: string[] = [];
 
     public backButton: IMenuItem;
 
@@ -58,9 +53,12 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     logsAvailable = false;
 
+
+    savePointFileName: string;
+
     private showUpdating = false;
 
-    currentStateActions: ActionMap[];
+    private currentStateActions: ActionMap[];
 
     private currentStateClass: string;
 
@@ -101,6 +99,17 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     private disableDevMenu = false;
 
     @ViewChild(TemplateDirective) host: TemplateDirective;
+    
+    // @ViewChild(MatInput) firstInput: MatInput;
+
+    screen: any;
+    private lastSequenceNum: number;
+    private lastScreenName: string;
+  
+    // searchCategories: ISearchCategory[];
+    // searchCategoryStructure: SearchCategoryStructure;
+    // searchCategoryValues: ISearchCategoryValue[];
+    // searchFieldForm: IForm;
 
     constructor(public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
         public deviceService: DeviceService, public dialog: MatDialog,
@@ -129,6 +138,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.session.obsState$.subscribe(currentState => this.currentState = currentState);
         this.session.obsStateClass$.subscribe(currentStateClass => this.currentStateClass = currentStateClass);
         this.session.obsStateActions$.subscribe(currentStateActions => this.currentStateActions = currentStateActions);
+        this.session.obsSave$.subscribe(savePoints => this.savePoints = savePoints);
 
     }
 
@@ -189,9 +199,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             });
         }
         this.session.onAction('DevTools::Get');
-        
         this.showDevMenu = !this.showDevMenu;
-
     }
 
     protected onDevMenuRefresh() {
@@ -238,6 +246,40 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.displayStackTrace = true;
         this.selected = '\'' + element.ID + '\'';
         this.stackTrace = element.StackTrace;
+    }
+
+    protected onLoadSavePoint(savePoint: string) {
+        if (this.savePoints.includes(savePoint)) {
+            this.session.onAction('DevTools::Load::' + savePoint);
+            console.log("Loaded Save Point: \'" + savePoint + "\'");
+        } else {
+            console.log("Unable to load Save Point: \'" + savePoint + "\'");
+        }
+    }
+
+    protected onCreateSavePoint(newSavePoint: string) {
+       this.session.addSaveFile(newSavePoint);
+        // if (newSavePoint) {
+        //     if(!this.savePoints.includes(newSavePoint)) {
+        //         this.savePoints.push(newSavePoint);
+        //     }
+        //   this.session.onAction('DevTools::Save::' + newSavePoint);
+        //   console.log("Save Point Created: \'" + newSavePoint + "\'");
+        // }
+    }
+
+    protected onSavePointRemove(savePoint: string) {
+        this.session.removeSaveFile(savePoint);
+        // console.log('Attempting to remove \'' + savePoint + '\'...');
+        // if (this.savePoints.includes(savePoint)) {
+        //     let index = this.savePoints.findIndex(item => {
+        //     return savePoint === item.Value;
+        //     });
+        //     this.session.onAction('DevTools::RemoveSave::' + savePoint);
+        //     console.log("Removed Save Point: \'" + savePoint + "\'");
+        // } else {
+        //     console.log("Unable to remove Save Point: \'" + savePoint + "\'");
+        // }
     }
 
     public onDevRefreshView() {
