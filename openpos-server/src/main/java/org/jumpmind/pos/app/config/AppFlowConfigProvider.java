@@ -47,6 +47,8 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
     @Override
     public FlowConfig getConfig(String appId, String nodeId) {
         FlowConfig config = new FlowConfig();
+        //TODO add config scope to test
+        //config.setConfigScope();
         config.setInitialState(FlowBuilder.addState(HomeScreenState.class)
                 .withTransition("Sell", SellState.class).build());
 
