@@ -47,11 +47,11 @@ public class Scope {
     }
     
     public void removeConversationScope(String key) {
-    	nodeScope.remove(key);
+    	conversationScope.remove(key);
     }
     
     public void removeSessionScope(String key) {
-    	nodeScope.remove(key);
+    	sessionScope.remove(key);
     }
     public ScopeValue resolve(String name) {
         if (conversationScope.containsKey(name)) {

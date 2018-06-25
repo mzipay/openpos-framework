@@ -44,5 +44,8 @@ public interface IStateManager {
     public ApplicationState getApplicationState();
 	//public StateContext getCurrentStateContext();
 	//public FlowConfig getCurrentConfig();
+	public void performOutjections(Object object);
+	public void setApplicationState(ApplicationState applicationState);
+	public void performInjections(Object object);
     
 }

@@ -74,6 +74,9 @@ public class ScreenService implements IScreenService {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
+    DevToolsMessage devToolsMessage;
+    
+    @Autowired
     SimpMessagingTemplate template;
 
     @Autowired
@@ -200,24 +203,33 @@ public class ScreenService implements IScreenService {
     }
     
     private void DevToolRouter(Action action, IStateManager stateManager, ScreenService screenService, String appId, String nodeId) {
-		DevToolsMessage msg = new DevToolsMessage(stateManager, this);
+    	devToolsMessage.createMessage(stateManager, this);
     	if(action.getName().contains("::Get")) {
-    		logger.info(logFormatter.toJsonString(msg));
-    		publishToClients(appId, nodeId, msg);
+    		devToolsMessage.setName("DevTools::Get");
+    		logger.info(logFormatter.toJsonString(devToolsMessage));
+    		publishToClients(appId, nodeId, devToolsMessage);
+    	} else if (action.getName().contains("::Save")) {
+    		devToolsMessage.setName("DevTools::Save");
+    		devToolsMessage.saveState(stateManager);
+    		publishToClients(appId, nodeId, devToolsMessage);
     	} else if (action.getName().contains("::Remove")) {
     		Map<String, String> element = action.getData();
     		if (action.getName().contains("::Node")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Node", "remove");
-    			publishToClients(appId, nodeId, msg);
+    			devToolsMessage.createMessage(stateManager, this, element, "Node", "remove");
+    			devToolsMessage.setName("DevTools::Remove");
+    			publishToClients(appId, nodeId, devToolsMessage);
     		} else if (action.getName().contains("::Session")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Session", "remove");
-    			publishToClients(appId, nodeId, msg);
+    			devToolsMessage.createMessage(stateManager, this, element, "Session", "remove");
+    			devToolsMessage.setName("DevTools::Remove");
+    			publishToClients(appId, nodeId, devToolsMessage);
     		} else if (action.getName().contains("::Conversation")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Conversation", "remove");
-    			publishToClients(appId, nodeId, msg);
+    			devToolsMessage.createMessage(stateManager, this, element, "Conversation", "remove");
+    			devToolsMessage.setName("DevTools::Remove");
+    			publishToClients(appId, nodeId, devToolsMessage);
     		} else if (action.getName().contains("::Config")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Config", "remove");
-    			publishToClients(appId, nodeId, msg);
+    			devToolsMessage.createMessage(stateManager, this, element, "Config", "remove");
+    			devToolsMessage.setName("DevTools::Remove");
+    			publishToClients(appId, nodeId, devToolsMessage);
     		}
     	}
     }
