@@ -34,7 +34,7 @@ public class NodeStateStep implements ITransitionStep {
     public void arrive(Transition transition) {        
         String nodeId = stateManager.getNodeId();
         DeviceResult deviceResult = contextService.getDevice(nodeId);
-        if (deviceResult != null) {
+        if (deviceResult != null && deviceResult.getDevice() != null) {
             this.node = deviceResult.getDevice();
         } else {
             throw new IllegalStateException(String.format("Could not find a row in ctx_device with an id of %s.  It is required.", nodeId));

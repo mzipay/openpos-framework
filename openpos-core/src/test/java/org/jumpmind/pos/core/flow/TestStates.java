@@ -243,42 +243,4 @@ public class TestStates {
     public static class StackOverflowState extends AbstractStackOverflowState {
 
     }    
-    
-//    
-//    public static class DashboardState extends AbstractRemapState {
-//        @In(scope=ScopeType.Node)
-//        private IStateManager stateManager;
-//        
-//        @ActionHandler
-//        public void onAnyAction(Action action) {
-//            stateManager.doAction(action);
-//        }
-//    }    
-//    public static class ItemLookupState extends AbstractRemapState {
-//        @In(scope=ScopeType.Node)
-//        private IStateManager stateManager;
-//        
-//        @Override
-//        public void arrive(Action action) {
-//        }        
-//        
-//        public void onAnyAction(Action action) {
-//            super.onAnyAction(action);
-//        }
-//    }    
-//    public static class VendorState extends AbstractRemapState {
-//        @In(scope=ScopeType.Node)
-//        private IStateManager stateManager;
-//        
-//        @Override
-//        public void arrive(Action action) {
-//        }
-//        
-//        public void onAnyAction(Action action) {
-//            super.onAnyAction(action);
-//        }        
-//    }    
-
-
-
 }

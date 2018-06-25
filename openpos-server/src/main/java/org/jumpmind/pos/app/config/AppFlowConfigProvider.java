@@ -1,3 +1,5 @@
+
+
 /**
  * Licensed to JumpMind Inc under one or more contributor
  * license agreements.  See the NOTICE file distributed
@@ -31,37 +33,33 @@ import org.jumpmind.pos.app.state.TenderMenuState;
 import org.jumpmind.pos.app.state.customer.CustomerDetailsState;
 import org.jumpmind.pos.app.state.customer.CustomerSearchResultState;
 import org.jumpmind.pos.app.state.customer.CustomerSearchState;
-import org.jumpmind.pos.app.state.user.ManagerOverrideStep;
-import org.jumpmind.pos.app.state.user.UserLoginStep;
 import org.jumpmind.pos.core.flow.CompleteState;
+import org.jumpmind.pos.core.flow.config.AbstractFlowConfigProvider;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
-import org.jumpmind.pos.core.flow.config.IFlowConfigProvider;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 @Primary
 @Component
-public class AppFlowConfigProvider implements IFlowConfigProvider {
+public class AppFlowConfigProvider extends AbstractFlowConfigProvider {
+    
+    private FlowConfig config;
 
     @Override
     public FlowConfig getConfig(String appId, String nodeId) {
-        FlowConfig config = new FlowConfig();
-        //TODO add config scope to test
-        //config.setConfigScope();
+        if (config != null) {
+            return config;
+        }
+        config = new FlowConfig("Default");
+        
         config.setInitialState(FlowBuilder.addState(HomeScreenState.class)
                 .withTransition("Sell", SellState.class).build());
-
-//        config.add(FlowBuilder.addState(UserLoginStep.class).build());
-//        
-//        config.add(FlowBuilder.addState(ManagerOverrideState.class).build());
-        
         config.add(FlowBuilder.addState(SellState.class)
                 .withTransition("Back", HomeScreenState.class)
                 .withTransition("Checkout", TenderMenuState.class)
                 .withSubTransition("CustomerSearch", getCustomerSearchConfig(appId, nodeId), "CustomerSearchFinished")
                 .build());
-        
         config.add(FlowBuilder.addState(TenderMenuState.class)
                 .withTransition("Back", SellState.class)
                 .withTransition("TenderCash", TenderCashState.class)
@@ -84,13 +82,16 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
                 .withTransition("Back", TenderMenuState.class)
                 .withTransition("CommitTransaction", CommitTransState.class)
                 .withTransition("ReturnToTenderMenu", TenderMenuState.class)
-                .build());        
+                .build());
+        
+        config.addGlobalSubTransition("AdvanceSearch", getCustomerSearchConfig(appId, nodeId));
+        config.addGlobalTransition("BackToMain", HomeScreenState.class);
         
         return config;
     }
     
-    public FlowConfig getCustomerSearchConfig(String appId, String nodeId) {
-        FlowConfig config = new FlowConfig();
+    protected FlowConfig getCustomerSearchConfig(String appId, String nodeId) {
+        FlowConfig config = new FlowConfig("CustomerSearch");
         config.setInitialState(FlowBuilder.addState(CustomerSearchState.class)
                 .withTransition("Back", CompleteState.class)
                 .withTransition("SearchCustomer", CustomerSearchResultState.class)
@@ -109,6 +110,5 @@ public class AppFlowConfigProvider implements IFlowConfigProvider {
                 .build());   
         
         return config;
-    }    
-
+    }
 }

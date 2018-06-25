@@ -1,0 +1,301 @@
+[ "org.jumpmind.pos.core.flow.ApplicationState", {
+  "scope" : [ "org.jumpmind.pos.core.flow.Scope", {
+    "nodeScope" : [ "java.util.HashMap", {
+      "node" : [ "org.jumpmind.pos.core.flow.ScopeValue", {
+        "createdTime" : [ "java.util.Date", 1529935201877 ],
+        "createdStackTrace" : "java.lang.Throwable\r\n\tat org.jumpmind.pos.core.flow.ScopeValue.<init>(ScopeValue.java:35)\r\n\tat org.jumpmind.pos.core.flow.Scope.setScope(Scope.java:83)\r\n\tat org.jumpmind.pos.core.flow.Scope.setNodeScope(Scope.java:68)\r\n\tat org.jumpmind.pos.core.flow.Outjector.outjectField(Outjector.java:54)\r\n\tat org.jumpmind.pos.core.flow.Outjector.performOutjectionsImpl(Outjector.java:35)\r\n\tat org.jumpmind.pos.core.flow.Outjector.performOutjections(Outjector.java:15)\r\n\tat org.jumpmind.pos.core.flow.StateManager.performOutjections(StateManager.java:182)\r\n\tat org.jumpmind.pos.core.flow.Transition.proceed(Transition.java:56)\r\n\tat org.jumpmind.pos.core.flow.Transition.proceed(Transition.java:77)\r\n\tat org.jumpmind.pos.core.flow.Transition.execute(Transition.java:42)\r\n\tat org.jumpmind.pos.core.flow.StateManager.executeTransition(StateManager.java:192)\r\n\tat org.jumpmind.pos.core.flow.StateManager.transitionTo(StateManager.java:140)\r\n\tat org.jumpmind.pos.core.flow.StateManager.transitionTo(StateManager.java:121)\r\n\tat org.jumpmind.pos.core.flow.StateManager.transitionTo(StateManager.java:116)\r\n\tat org.jumpmind.pos.core.flow.StateManager.transitionToState(StateManager.java:337)\r\n\tat org.jumpmind.pos.core.flow.StateManager.doAction(StateManager.java:262)\r\n\tat org.jumpmind.pos.app.state.HomeScreenState.onSell(HomeScreenState.java:49)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)\r\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)\r\n\tat java.lang.reflect.Method.invoke(Unknown Source)\r\n\tat org.jumpmind.pos.core.flow.ActionHandlerImpl.invokeActionMethod(ActionHandlerImpl.java:102)\r\n\tat org.jumpmind.pos.core.flow.ActionHandlerImpl.handleAction(ActionHandlerImpl.java:34)\r\n\tat org.jumpmind.pos.core.flow.StateManager.handleAction(StateManager.java:292)\r\n\tat org.jumpmind.pos.core.flow.StateManager.handleAction(StateManager.java:296)\r\n\tat org.jumpmind.pos.core.flow.StateManager.doAction(StateManager.java:260)\r\n\tat org.jumpmind.pos.core.service.ScreenService.action(ScreenService.java:189)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)\r\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)\r\n\tat java.lang.reflect.Method.invoke(Unknown Source)\r\n\tat org.springframework.messaging.handler.invocation.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:180)\r\n\tat org.springframework.messaging.handler.invocation.InvocableHandlerMethod.invoke(InvocableHandlerMethod.java:112)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMatch(AbstractMethodMessageHandler.java:502)\r\n\tat org.springframework.messaging.simp.annotation.support.SimpAnnotationMethodMessageHandler.handleMatch(SimpAnnotationMethodMessageHandler.java:497)\r\n\tat org.springframework.messaging.simp.annotation.support.SimpAnnotationMethodMessageHandler.handleMatch(SimpAnnotationMethodMessageHandler.java:87)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMessageInternal(AbstractMethodMessageHandler.java:461)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMessage(AbstractMethodMessageHandler.java:399)\r\n\tat org.springframework.messaging.support.ExecutorSubscribableChannel$SendTask.run(ExecutorSubscribableChannel.java:135)\r\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)\r\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)\r\n\tat java.lang.Thread.run(Unknown Source)\r\n",
+        "value" : [ "org.jumpmind.pos.context.model.DeviceModel", {
+          "createTime" : [ "java.sql.Timestamp", 1529073835719 ],
+          "createBy" : "test",
+          "lastUpdateTime" : [ "java.sql.Timestamp", 1529073835719 ],
+          "lastUpdateBy" : "test",
+          "additionalFields" : [ "java.util.HashMap", {
+            "tag_state" : "",
+            "tag_country" : "UG",
+            "tag_app_profile" : "POS",
+            "tag_store_number" : "00039",
+            "tag_store_type" : "REGULAR",
+            "tag_brand_id" : "Metl",
+            "tag_device_type" : "WORKSTATION",
+            "tag_region" : "EAST_AFRICA"
+          } ],
+          "deviceId" : "00039-011",
+          "deviceType" : "WORKSTATION",
+          "locale" : null,
+          "description" : "Store 00039 Register 11",
+          "tags" : [ "java.util.LinkedHashMap", {
+            "BRAND_ID" : "Metl",
+            "STORE_NUMBER" : "00039",
+            "DEVICE_TYPE" : "WORKSTATION",
+            "COUNTRY" : "UG",
+            "STORE_TYPE" : "REGULAR",
+            "STATE" : "",
+            "APP_PROFILE" : "POS",
+            "REGION" : "EAST_AFRICA"
+          } ]
+        } ]
+      } ]
+    } ],
+    "sessionScope" : [ "java.util.HashMap", {
+      "currentUser" : [ "org.jumpmind.pos.core.flow.ScopeValue", {
+        "createdTime" : [ "java.util.Date", 1529935213807 ],
+        "createdStackTrace" : "java.lang.Throwable\r\n\tat org.jumpmind.pos.core.flow.ScopeValue.<init>(ScopeValue.java:35)\r\n\tat org.jumpmind.pos.core.flow.Scope.setScope(Scope.java:83)\r\n\tat org.jumpmind.pos.core.flow.Scope.setSessionScope(Scope.java:72)\r\n\tat org.jumpmind.pos.core.flow.Outjector.outjectField(Outjector.java:57)\r\n\tat org.jumpmind.pos.core.flow.Outjector.performOutjectionsImpl(Outjector.java:35)\r\n\tat org.jumpmind.pos.core.flow.Outjector.performOutjections(Outjector.java:15)\r\n\tat org.jumpmind.pos.core.flow.StateManager.performOutjections(StateManager.java:182)\r\n\tat org.jumpmind.pos.core.flow.Transition.proceed(Transition.java:56)\r\n\tat org.jumpmind.pos.core.flow.Transition.proceed(Transition.java:77)\r\n\tat org.jumpmind.pos.app.state.user.UserLoginStep.onSuccessfulAuthentication(UserLoginStep.java:112)\r\n\tat org.jumpmind.pos.app.state.user.UserLoginStep.processResult(UserLoginStep.java:94)\r\n\tat org.jumpmind.pos.app.state.user.UserLoginStep.showUserMessages(UserLoginStep.java:117)\r\n\tat org.jumpmind.pos.app.state.user.UserLoginStep.onPasswordEntered(UserLoginStep.java:143)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)\r\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)\r\n\tat java.lang.reflect.Method.invoke(Unknown Source)\r\n\tat org.jumpmind.pos.core.flow.ActionHandlerImpl.invokeActionMethod(ActionHandlerImpl.java:102)\r\n\tat org.jumpmind.pos.core.flow.ActionHandlerImpl.handleAction(ActionHandlerImpl.java:34)\r\n\tat org.jumpmind.pos.core.flow.StateManager.handleAction(StateManager.java:292)\r\n\tat org.jumpmind.pos.core.flow.Transition.handleAction(Transition.java:88)\r\n\tat org.jumpmind.pos.core.flow.StateManager.doAction(StateManager.java:241)\r\n\tat org.jumpmind.pos.core.service.ScreenService.action(ScreenService.java:189)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)\r\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)\r\n\tat java.lang.reflect.Method.invoke(Unknown Source)\r\n\tat org.springframework.messaging.handler.invocation.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:180)\r\n\tat org.springframework.messaging.handler.invocation.InvocableHandlerMethod.invoke(InvocableHandlerMethod.java:112)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMatch(AbstractMethodMessageHandler.java:502)\r\n\tat org.springframework.messaging.simp.annotation.support.SimpAnnotationMethodMessageHandler.handleMatch(SimpAnnotationMethodMessageHandler.java:497)\r\n\tat org.springframework.messaging.simp.annotation.support.SimpAnnotationMethodMessageHandler.handleMatch(SimpAnnotationMethodMessageHandler.java:87)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMessageInternal(AbstractMethodMessageHandler.java:461)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMessage(AbstractMethodMessageHandler.java:399)\r\n\tat org.springframework.messaging.support.ExecutorSubscribableChannel$SendTask.run(ExecutorSubscribableChannel.java:135)\r\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)\r\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)\r\n\tat java.lang.Thread.run(Unknown Source)\r\n",
+        "value" : [ "org.jumpmind.pos.user.model.User", {
+          "createTime" : [ "java.sql.Timestamp", 1529073836293 ],
+          "createBy" : "test",
+          "lastUpdateTime" : null,
+          "lastUpdateBy" : "test",
+          "additionalFields" : [ "java.util.HashMap", { } ],
+          "username" : "tstark",
+          "lastName" : "Stark",
+          "firstName" : "Tony",
+          "nickname" : "Iron Man",
+          "lastLogin" : null,
+          "lockedOutFlag" : false,
+          "passwordExpiredFlag" : false,
+          "passwordFailedAttempts" : 0,
+          "lastPasswordAttempt" : null,
+          "locale" : null,
+          "workgroupId" : "1",
+          "passwordHistory" : [ "java.util.ArrayList", [ [ "org.jumpmind.pos.user.model.PasswordHistory", {
+            "createTime" : [ "java.sql.Timestamp", 1529073836293 ],
+            "createBy" : "test",
+            "lastUpdateTime" : null,
+            "lastUpdateBy" : "test",
+            "additionalFields" : [ "java.util.HashMap", { } ],
+            "username" : "tstark",
+            "passwordSequence" : 1,
+            "hashedPassword" : "stark",
+            "expirationTime" : null
+          } ] ] ],
+          "workgroup" : [ "org.jumpmind.pos.user.model.Workgroup", {
+            "createTime" : [ "java.sql.Timestamp", 1529073836293 ],
+            "createBy" : "test",
+            "lastUpdateTime" : null,
+            "lastUpdateBy" : "test",
+            "additionalFields" : [ "java.util.HashMap", { } ],
+            "workgroupId" : "1",
+            "description" : "Management",
+            "permissions" : [ "java.util.ArrayList", [ [ "org.jumpmind.pos.user.model.Permission", {
+              "createTime" : [ "java.util.Date", 1529935213797 ],
+              "createBy" : null,
+              "lastUpdateTime" : [ "java.util.Date", 1529935213797 ],
+              "lastUpdateBy" : null,
+              "additionalFields" : [ "java.util.HashMap", { } ],
+              "permissionId" : "sell.customer_search",
+              "allowsOverride" : false
+            } ], [ "org.jumpmind.pos.user.model.Permission", {
+              "createTime" : [ "java.util.Date", 1529935213800 ],
+              "createBy" : null,
+              "lastUpdateTime" : [ "java.util.Date", 1529935213800 ],
+              "lastUpdateBy" : null,
+              "additionalFields" : [ "java.util.HashMap", { } ],
+              "permissionId" : "sell.main",
+              "allowsOverride" : false
+            } ] ] ]
+          } ]
+        } ]
+      } ]
+    } ],
+    "conversationScope" : [ "java.util.HashMap", {
+      "managerOverride" : [ "org.jumpmind.pos.core.flow.ScopeValue", {
+        "createdTime" : [ "java.util.Date", 1529935213807 ],
+        "createdStackTrace" : "java.lang.Throwable\r\n\tat org.jumpmind.pos.core.flow.ScopeValue.<init>(ScopeValue.java:35)\r\n\tat org.jumpmind.pos.core.flow.Scope.setScope(Scope.java:83)\r\n\tat org.jumpmind.pos.core.flow.Scope.setConversationScope(Scope.java:76)\r\n\tat org.jumpmind.pos.core.flow.Outjector.outjectField(Outjector.java:60)\r\n\tat org.jumpmind.pos.core.flow.Outjector.performOutjectionsImpl(Outjector.java:30)\r\n\tat org.jumpmind.pos.core.flow.Outjector.performOutjections(Outjector.java:15)\r\n\tat org.jumpmind.pos.core.flow.StateManager.performOutjections(StateManager.java:182)\r\n\tat org.jumpmind.pos.core.flow.Transition.proceed(Transition.java:56)\r\n\tat org.jumpmind.pos.core.flow.Transition.proceed(Transition.java:77)\r\n\tat org.jumpmind.pos.app.state.user.UserLoginStep.onSuccessfulAuthentication(UserLoginStep.java:112)\r\n\tat org.jumpmind.pos.app.state.user.UserLoginStep.processResult(UserLoginStep.java:94)\r\n\tat org.jumpmind.pos.app.state.user.UserLoginStep.showUserMessages(UserLoginStep.java:117)\r\n\tat org.jumpmind.pos.app.state.user.UserLoginStep.onPasswordEntered(UserLoginStep.java:143)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)\r\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)\r\n\tat java.lang.reflect.Method.invoke(Unknown Source)\r\n\tat org.jumpmind.pos.core.flow.ActionHandlerImpl.invokeActionMethod(ActionHandlerImpl.java:102)\r\n\tat org.jumpmind.pos.core.flow.ActionHandlerImpl.handleAction(ActionHandlerImpl.java:34)\r\n\tat org.jumpmind.pos.core.flow.StateManager.handleAction(StateManager.java:292)\r\n\tat org.jumpmind.pos.core.flow.Transition.handleAction(Transition.java:88)\r\n\tat org.jumpmind.pos.core.flow.StateManager.doAction(StateManager.java:241)\r\n\tat org.jumpmind.pos.core.service.ScreenService.action(ScreenService.java:189)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)\r\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)\r\n\tat java.lang.reflect.Method.invoke(Unknown Source)\r\n\tat org.springframework.messaging.handler.invocation.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:180)\r\n\tat org.springframework.messaging.handler.invocation.InvocableHandlerMethod.invoke(InvocableHandlerMethod.java:112)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMatch(AbstractMethodMessageHandler.java:502)\r\n\tat org.springframework.messaging.simp.annotation.support.SimpAnnotationMethodMessageHandler.handleMatch(SimpAnnotationMethodMessageHandler.java:497)\r\n\tat org.springframework.messaging.simp.annotation.support.SimpAnnotationMethodMessageHandler.handleMatch(SimpAnnotationMethodMessageHandler.java:87)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMessageInternal(AbstractMethodMessageHandler.java:461)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMessage(AbstractMethodMessageHandler.java:399)\r\n\tat org.springframework.messaging.support.ExecutorSubscribableChannel$SendTask.run(ExecutorSubscribableChannel.java:135)\r\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)\r\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)\r\n\tat java.lang.Thread.run(Unknown Source)\r\n",
+        "value" : null
+      } ],
+      "currentTransaction" : [ "org.jumpmind.pos.core.flow.ScopeValue", {
+        "createdTime" : [ "java.util.Date", 1529938471964 ],
+        "createdStackTrace" : "java.lang.Throwable\r\n\tat org.jumpmind.pos.core.flow.ScopeValue.<init>(ScopeValue.java:35)\r\n\tat org.jumpmind.pos.core.flow.Scope.setScope(Scope.java:83)\r\n\tat org.jumpmind.pos.core.flow.Scope.setConversationScope(Scope.java:76)\r\n\tat org.jumpmind.pos.core.flow.Outjector.outjectField(Outjector.java:60)\r\n\tat org.jumpmind.pos.core.flow.Outjector.performOutjectionsImpl(Outjector.java:35)\r\n\tat org.jumpmind.pos.core.flow.Outjector.performOutjections(Outjector.java:15)\r\n\tat org.jumpmind.pos.core.flow.StateManager.performOutjections(StateManager.java:182)\r\n\tat org.jumpmind.pos.core.flow.ApplicationStateSerializer.serialize(ApplicationStateSerializer.java:47)\r\n\tat org.jumpmind.pos.core.screen.DevToolsMessage.saveState(DevToolsMessage.java:116)\r\n\tat org.jumpmind.pos.core.service.ScreenService.DevToolRouter(ScreenService.java:212)\r\n\tat org.jumpmind.pos.core.service.ScreenService.action(ScreenService.java:175)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)\r\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)\r\n\tat java.lang.reflect.Method.invoke(Unknown Source)\r\n\tat org.springframework.messaging.handler.invocation.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:180)\r\n\tat org.springframework.messaging.handler.invocation.InvocableHandlerMethod.invoke(InvocableHandlerMethod.java:112)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMatch(AbstractMethodMessageHandler.java:502)\r\n\tat org.springframework.messaging.simp.annotation.support.SimpAnnotationMethodMessageHandler.handleMatch(SimpAnnotationMethodMessageHandler.java:497)\r\n\tat org.springframework.messaging.simp.annotation.support.SimpAnnotationMethodMessageHandler.handleMatch(SimpAnnotationMethodMessageHandler.java:87)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMessageInternal(AbstractMethodMessageHandler.java:461)\r\n\tat org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler.handleMessage(AbstractMethodMessageHandler.java:399)\r\n\tat org.springframework.messaging.support.ExecutorSubscribableChannel$SendTask.run(ExecutorSubscribableChannel.java:135)\r\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)\r\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)\r\n\tat java.lang.Thread.run(Unknown Source)\r\n",
+        "value" : [ "org.jumpmind.pos.app.demo.DemoTransaction", {
+          "transaction" : [ "org.jumpmind.pos.core.screen.Transaction", {
+            "transactionNumber" : "24343",
+            "active" : true
+          } ],
+          "workstation" : [ "org.jumpmind.pos.core.screen.Workstation", {
+            "storeId" : "00039-011",
+            "workstationId" : "00039-011"
+          } ],
+          "balanceDue" : null,
+          "discountTotal" : null,
+          "tenderTotal" : null,
+          "grandTotal" : null,
+          "subTotal" : null,
+          "taxTotal" : null,
+          "customerName" : null,
+          "totals" : [ "java.util.ArrayList", [ ] ],
+          "lineItems" : [ "java.util.ArrayList", [ ] ],
+          "tenderLineItems" : [ "java.util.ArrayList", [ ] ],
+          "user" : [ "org.jumpmind.pos.user.model.User", {
+            "createTime" : [ "java.sql.Timestamp", 1529073836293 ],
+            "createBy" : "test",
+            "lastUpdateTime" : null,
+            "lastUpdateBy" : "test",
+            "additionalFields" : [ "java.util.HashMap", { } ],
+            "username" : "tstark",
+            "lastName" : "Stark",
+            "firstName" : "Tony",
+            "nickname" : "Iron Man",
+            "lastLogin" : null,
+            "lockedOutFlag" : false,
+            "passwordExpiredFlag" : false,
+            "passwordFailedAttempts" : 0,
+            "lastPasswordAttempt" : null,
+            "locale" : null,
+            "workgroupId" : "1",
+            "passwordHistory" : [ "java.util.ArrayList", [ [ "org.jumpmind.pos.user.model.PasswordHistory", {
+              "createTime" : [ "java.sql.Timestamp", 1529073836293 ],
+              "createBy" : "test",
+              "lastUpdateTime" : null,
+              "lastUpdateBy" : "test",
+              "additionalFields" : [ "java.util.HashMap", { } ],
+              "username" : "tstark",
+              "passwordSequence" : 1,
+              "hashedPassword" : "stark",
+              "expirationTime" : null
+            } ] ] ],
+            "workgroup" : [ "org.jumpmind.pos.user.model.Workgroup", {
+              "createTime" : [ "java.sql.Timestamp", 1529073836293 ],
+              "createBy" : "test",
+              "lastUpdateTime" : null,
+              "lastUpdateBy" : "test",
+              "additionalFields" : [ "java.util.HashMap", { } ],
+              "workgroupId" : "1",
+              "description" : "Management",
+              "permissions" : [ "java.util.ArrayList", [ [ "org.jumpmind.pos.user.model.Permission", {
+                "createTime" : [ "java.util.Date", 1529935213797 ],
+                "createBy" : null,
+                "lastUpdateTime" : [ "java.util.Date", 1529935213797 ],
+                "lastUpdateBy" : null,
+                "additionalFields" : [ "java.util.HashMap", { } ],
+                "permissionId" : "sell.customer_search",
+                "allowsOverride" : false
+              } ], [ "org.jumpmind.pos.user.model.Permission", {
+                "createTime" : [ "java.util.Date", 1529935213800 ],
+                "createBy" : null,
+                "lastUpdateTime" : [ "java.util.Date", 1529935213800 ],
+                "lastUpdateBy" : null,
+                "additionalFields" : [ "java.util.HashMap", { } ],
+                "permissionId" : "sell.main",
+                "allowsOverride" : false
+              } ] ] ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ],
+  "stateStack" : [ "java.util.LinkedList", [ ] ],
+  "currentContext" : [ "org.jumpmind.pos.core.flow.StateContext", {
+    "flowConfig" : [ "org.jumpmind.pos.core.flow.config.FlowConfig", {
+      "name" : "Default"
+    } ],
+    "action" : null,
+    "state" : [ "org.jumpmind.pos.app.state.SellState", { } ],
+    "flowScope" : [ "java.util.HashMap", { } ],
+    "returnActionName" : null
+  } ],
+  "currentTransition" : null,
+  "screenSequenceNumber" : 34,
+  "lastScreenByAppIdByNodeId" : [ "java.util.HashMap", {
+    "pos" : [ "java.util.HashMap", {
+      "00039-011" : [ "org.jumpmind.pos.core.screen.SellItemScreen", {
+        "name" : "Sell",
+        "type" : "Transaction",
+        "icon" : null,
+        "template" : [ "org.jumpmind.pos.core.template.SellTemplate", {
+          "type" : "Sell",
+          "dialog" : false,
+          "statusBar" : [ "org.jumpmind.pos.core.template.StatusBar", { } ],
+          "localMenuItems" : [ "java.util.ArrayList", [ [ "org.jumpmind.pos.core.screen.MenuItem", {
+            "action" : "CustomerSearch",
+            "title" : "Customer",
+            "icon" : "person",
+            "enabled" : true,
+            "confirmationMessage" : null,
+            "children" : null,
+            "sensitive" : false
+          } ], [ "org.jumpmind.pos.core.screen.MenuItem", {
+            "action" : "ItemLookup",
+            "title" : "Item Lookup",
+            "icon" : "wallpaper",
+            "enabled" : true,
+            "confirmationMessage" : null,
+            "children" : null,
+            "sensitive" : false
+          } ], [ "org.jumpmind.pos.core.screen.MenuItem", {
+            "action" : "Returns",
+            "title" : "Returns",
+            "icon" : "receipt",
+            "enabled" : true,
+            "confirmationMessage" : null,
+            "children" : null,
+            "sensitive" : false
+          } ] ] ],
+          "transactionMenuItems" : [ "java.util.ArrayList", [ ] ],
+          "scan" : [ "org.jumpmind.pos.core.template.Scan", {
+            "scanMinLength" : 1,
+            "scanMaxLength" : 22,
+            "scanType" : null,
+            "scanActionName" : null,
+            "scanSomethingText" : "Scan Something",
+            "autoFocusOnScan" : false
+          } ],
+          "workstation" : [ "org.jumpmind.pos.core.screen.Workstation", {
+            "storeId" : "00039-011",
+            "workstationId" : "00039-011"
+          } ],
+          "operatorText" : "Tony Stark"
+        } ],
+        "locale" : null,
+        "sessionTimeoutMillis" : 0,
+        "promptIcon" : null,
+        "placeholderText" : null,
+        "text" : null,
+        "responseText" : null,
+        "editable" : true,
+        "responseType" : null,
+        "minLength" : null,
+        "maxLength" : null,
+        "action" : "Next",
+        "actionButton" : null,
+        "comments" : "",
+        "showComments" : false,
+        "otherActions" : null,
+        "items" : [ "java.util.ArrayList", [ ] ],
+        "selectedItems" : [ "java.util.ArrayList", [ ] ],
+        "balanceDue" : null,
+        "discountTotal" : null,
+        "grandTotal" : null,
+        "subTotal" : null,
+        "taxTotal" : null,
+        "itemActionName" : "Item",
+        "transaction" : [ "org.jumpmind.pos.core.screen.Transaction", {
+          "transactionNumber" : "24343",
+          "active" : true
+        } ],
+        "customerName" : null,
+        "noCustomerText" : null,
+        "totals" : [ "java.util.ArrayList", [ ] ],
+        "loyaltyButton" : null,
+        "multiSelectedMenuItems" : null,
+        "sequenceNumber" : 34,
+        "readOnly" : false,
+        "logoutButton" : [ "org.jumpmind.pos.core.screen.MenuItem", {
+          "action" : "Back",
+          "title" : "Logout",
+          "icon" : "exit_to_app",
+          "enabled" : true,
+          "confirmationMessage" : null,
+          "children" : null,
+          "sensitive" : false
+        } ],
+        "prompt" : "Ready to begin"
+      } ]
+    } ]
+  } ],
+  "lastDialogByAppIdByNodeId" : [ "java.util.HashMap", {
+    "pos" : [ "java.util.HashMap", {
+      "00039-011" : null
+    } ]
+  } ]
+} ]

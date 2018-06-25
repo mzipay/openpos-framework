@@ -90,8 +90,8 @@ public class Transition {
     
     public void cancel() {
         log.info("Transition was canncelled by " + currentTransitionStep);
-        latch.get().countDown();
         transitionResult = TransitionResult.CANCEL;
+        latch.get().countDown();
     }
     
     protected List<? extends ITransitionStep> cloneSteps(List<? extends ITransitionStep> steps) {

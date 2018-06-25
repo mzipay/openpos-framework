@@ -22,7 +22,10 @@ public class CustomerSearchState extends AbstractState {
         form.addTextAreaField("lastName", "First Name", "", false);
         form.addPostalCodeField("zip", "Zip", "", false);
         form.addPhoneField("phone", "Phone", "", false);
+
         formScreen.setForm(form);
+        formScreen.setSubmitAction("BackToMain");
+        
         stateManager.showScreen(formScreen);
         
     }

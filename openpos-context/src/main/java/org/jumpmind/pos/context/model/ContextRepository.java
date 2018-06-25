@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,9 @@ public class ContextRepository {
     private Query<DeviceModel> devicesByTag = new Query<DeviceModel>()
             .named("devicesByTag")
             .result(DeviceModel.class);
+    private Query<ConfigModel> configsByTag = new Query<ConfigModel>()
+            .named("configsByTag")
+            .result(ConfigModel.class);
     
     private static TagConfig tagConfig;
 
@@ -55,6 +59,35 @@ public class ContextRepository {
         List<DeviceModel> devices = contextSession.query(devicesByTag, params);
         addTagsToDevices(devices);
         return devices;
+    }
+    
+    public List<ConfigModel> findConfigsByTag(Date currentTime, Map<String, String> tags) {
+        Map<String, Object> params = new LinkedHashMap<>();
+        params.put("currentTime", currentTime);
+        
+        int counter = 1;
+        for (String tagName : tags.keySet()) {
+            String tagValue = tags.get(tagName);
+            String tagColumnName = TagModel.TAG_PREFIX + tagName; 
+            String tagColumnNameKey = String.format("tag%dColumnName", counter);
+            String tagColumnValueKey = String.format("tag%dValue", counter);
+            
+            params.put(tagColumnNameKey, tagColumnName);
+            params.put(tagColumnValueKey, tagValue);
+            
+            counter++;
+        }
+        
+        List<ConfigModel> configs = contextSession.query(configsByTag, params);
+        if (configs != null && !CollectionUtils.isEmpty(configs)) {
+            addTagsToConfigs(configs);
+            return configs;
+        } else {
+            if (log.isDebugEnabled()) {                
+                log.debug("No configuration found for tags " + tags);
+            }
+            return null;
+        }
     }    
 
     public List<ConfigModel> findConfigs(Date currentTime, String configName) {

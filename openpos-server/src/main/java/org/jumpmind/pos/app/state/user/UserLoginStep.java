@@ -71,8 +71,6 @@ public class UserLoginStep implements ITransitionStep {
 
     @Override
     public void arrive(Transition transition) {
-        String welcomeText = contextServiceClient.getString("pos.welcome.text"); // testing.
-        System.out.println("Welcome - " + welcomeText);
         promptForLogin();
     }
 

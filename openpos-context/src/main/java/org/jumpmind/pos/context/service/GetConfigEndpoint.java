@@ -60,5 +60,4 @@ public class GetConfigEndpoint {
         
         return result;
     }
-
 }

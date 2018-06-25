@@ -1,3 +1,4 @@
+include 'openpos-util'
 include 'openpos-core'
 include 'openpos-translate'
 include 'openpos-service'
@@ -21,6 +22,6 @@ includeFlat 'openpos-server'
 
 rootProject.children.each { project ->    
   if (!project.projectDir.exists()) {
-      throw new GradleException("Could not find the project ** ${project.projectDir.getName()} **.  Are you sure you have all the projects checked out and have openposDir set properly?");
+      throw new GradleException("Could not find the project ** ${project.projectDir.getName()} **.  Are you sure you have all the projects checked out and have openposDir set properly? (openposDir=${openposDir}), Checked in ${project.projectDir}");
   }
 }

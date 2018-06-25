@@ -18,6 +18,7 @@ import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_USER
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_VALIDATION_QUERY;
 
 import java.lang.annotation.Annotation;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,7 @@ import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
 import org.jumpmind.db.sql.SqlTemplateSettings;
 import org.jumpmind.db.util.BasicDataSourceFactory;
+import org.jumpmind.db.util.ConfigDatabaseUpgrader;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.DatabaseScriptContainer;
@@ -65,7 +67,7 @@ abstract public class AbstractModule implements Module {
     /**
      * This is to make the modules dependent on the h2 server being created
      */
-    @Autowired(required=false)
+    @Autowired(required = false)
     Server h2Server;
 
     protected IDatabasePlatform databasePlatform;
@@ -114,13 +116,15 @@ abstract public class AbstractModule implements Module {
         }
         return this.securityService;
     }
-    
+
+    @Override
     public String getDriver() {
-    	return env.getProperty(DB_POOL_DRIVER, "org.h2.Driver");
+        return env.getProperty(DB_POOL_DRIVER, "org.h2.Driver");
     }
-    
+
+    @Override
     public String getURL() {
-    	return env.getProperty(DB_POOL_URL, "jdbc:openpos:h2:mem:" + getName());
+        return env.getProperty(DB_POOL_URL, "jdbc:openpos:h2:mem:" + getName());
     }
 
     protected BasicDataSource dataSource() {
@@ -155,8 +159,8 @@ abstract public class AbstractModule implements Module {
 
     protected DBSessionFactory sessionFactory() {
         if (sessionFactory == null) {
-            Driver.register(null);  // Load openpos driver wrapper.
-            //Driver.class.getName();
+            Driver.register(null); // Load openpos driver wrapper.
+            // Driver.class.getName();
             sessionFactory = new DBSessionFactory();
 
             String packageName = this.getClass().getPackage().getName();
@@ -171,19 +175,21 @@ abstract public class AbstractModule implements Module {
 
             sessionFactory.init(databasePlatform(), sessionContext, tableClasses);
 
-            DBSession session = sessionFactory.createDbSession();
-
-            updateDataModel(session);
-
         }
 
         return sessionFactory;
+    }
+
+    @Override
+    public void start() {
+        updateDataModel(session());
     }
 
     public void updateDataModel(DBSession session) {
         String fromVersion = null;
 
         try {
+
             ModuleInfo info = session.findByNaturalId(ModuleInfo.class, installationId);
             if (info != null) {
                 fromVersion = info.getCurrentVersion();
@@ -195,27 +201,38 @@ abstract public class AbstractModule implements Module {
         logger.info("The previous version of {} was {} and the current version is {}", getName(), fromVersion, getVersion());
 
         DatabaseScriptContainer scripts = new DatabaseScriptContainer(getName() + "/sql", databasePlatform());
-        
+
         IDBSchemaListener schemaListener = getDbSchemaListener();
-        
+
         scripts.executePreInstallScripts(fromVersion, getVersion());
         schemaListener.beforeSchemaCreate(sessionFactory);
         sessionFactory.getDatabaseSchema().createAndUpgrade();
+        upgradeDbFromXml();
         schemaListener.afterSchemaCreate(sessionFactory);
         scripts.executePostInstallScripts(fromVersion, getVersion());
 
         session.save(new ModuleInfo(installationId, getVersion()));
     }
 
+    protected void upgradeDbFromXml() {
+        String path = "/" + getName() + "-schema.xml";
+        URL resource = getClass().getResource(path);
+        if (resource != null) {
+            ConfigDatabaseUpgrader databaseUpgrade = new ConfigDatabaseUpgrader(path, databasePlatform(), true, "");
+            databaseUpgrade.upgrade();
+        }
+    }
+
     protected DBSession session() {
         return sessionFactory().createDbSession();
     }
-    
+
     protected IDBSchemaListener getDbSchemaListener() {
         return new IDBSchemaListener() {
             @Override
             public void beforeSchemaCreate(DBSessionFactory sessionFactory) {
             }
+
             @Override
             public void afterSchemaCreate(DBSessionFactory sessionFactory) {
             }

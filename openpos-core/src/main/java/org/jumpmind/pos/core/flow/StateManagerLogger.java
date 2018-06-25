@@ -1,16 +1,15 @@
 package org.jumpmind.pos.core.flow;
 
-import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_MIDDLE;
-
 import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_LINE;
+import static org.jumpmind.pos.util.BoxLogging.HORIZONTAL_MIDDLE;
 import static org.jumpmind.pos.util.BoxLogging.LOWER_LEFT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.LOWER_RIGHT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.UPPER_LEFT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.UPPER_RIGHT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
-import static org.jumpmind.pos.util.BoxLogging.STAR;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jumpmind.pos.util.BoxLogging;
 import org.slf4j.Logger;
 
 public class StateManagerLogger {
@@ -83,24 +82,17 @@ public class StateManagerLogger {
     }
     
     public void logTranistionStep(Transition transition, ITransitionStep currentTransitionStep) {
-        StringBuilder buff = new StringBuilder();
         
         String stepName = currentTransitionStep.getClass().getSimpleName();
         String stepTitle = "Step: " + stepName;
         
-        int boxWidth = Math.max(stepTitle.length()+6, 30);
-        
-        buff.append(STAR).append(StringUtils.repeat(STAR, boxWidth-2)).append(STAR);
-        buff.append("\r\n");
-        buff.append(VERITCAL_LINE).append(StringUtils.center(stepTitle, boxWidth-2)).append(VERITCAL_LINE);
-        buff.append("\r\n");
-        buff.append(STAR).append(StringUtils.repeat(STAR, boxWidth-2)).append(STAR);
+        String boxed = BoxLogging.box(stepTitle);
         
         String fromStateName = transition.getSourceStateContext().getState() != null ? transition.getSourceStateContext().getState().getClass().getSimpleName() : "<no state>"; 
         String toStateName = transition.getTargetState() != null ? transition.getTargetState().getClass().getSimpleName() : "<no state>"; 
         
         log.info("Transition step [" + stepName + "] running between " + 
-                fromStateName + " and " + toStateName + "\r\n" + buff.toString());
+                fromStateName + " and " + toStateName + "\r\n" + boxed);
     }
 
 
