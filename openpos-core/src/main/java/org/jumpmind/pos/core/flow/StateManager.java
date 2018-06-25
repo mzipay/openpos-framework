@@ -81,6 +81,8 @@ public class StateManager implements IStateManager {
     private AtomicReference<Date> lastInteractionTime = new AtomicReference<Date>(new Date());
     
     private long sessionTimeoutMillis = 0;
+    
+    private Action sessionTimeoutAction;
 
     public void init(String appId, String nodeId) {
         this.appId = appId;
@@ -373,7 +375,11 @@ public class StateManager implements IStateManager {
         
         if (screen != null) {
             sessionTimeoutMillis = screen.getSessionTimeoutMillis();
-        } 
+            sessionTimeoutAction = screen.getSessionTimeoutAction();
+        }  else {
+            sessionTimeoutMillis = 0;
+            sessionTimeoutAction = null;
+        }
         
         screenService.showScreen(appId, nodeId, screen);
         
@@ -414,8 +420,10 @@ public class StateManager implements IStateManager {
         try {
             logger.info(String.format("Node %s session timed out.", nodeId));
             if (!CollectionUtils.isEmpty(sessionTimeoutListeners)) {
+                Action localSessionTimeoutAction = sessionTimeoutAction != null 
+                        ? sessionTimeoutAction : new Action("Timeout");
                 for (ISessionTimeoutListener sessionTimeoutListener : sessionTimeoutListeners) {
-                    sessionTimeoutListener.onSessionTimeout(this);
+                    sessionTimeoutListener.onSessionTimeout(this, localSessionTimeoutAction);
                 }
             }
         } catch (Exception ex) {
