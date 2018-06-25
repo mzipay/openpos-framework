@@ -304,6 +304,7 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         FabToggleGroupComponent,
         FabToggleButtonComponent,
         DynamicFormControlComponent,
+        DynamicFormFieldComponent,
         FocusDirective,
         StatusBarComponent,
         SelectableItemListComponent,

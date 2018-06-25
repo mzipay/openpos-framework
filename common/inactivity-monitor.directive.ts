@@ -1,4 +1,5 @@
-import { Directive, HostListener, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, HostListener, Input, Output, EventEmitter, Renderer2, ElementRef } from '@angular/core';
+import { Configuration } from '../configuration/configuration';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
@@ -8,7 +9,12 @@ export class InactivityMonitorDirective {
 
     static lastKeepAliveFlushTime: number = new Date().getTime();
 
-    constructor() {
+    constructor(private elRef: ElementRef, public renderer: Renderer2) {
+        if (Configuration.useTouchListener) {
+            this.renderer.listen(elRef.nativeElement, 'touchstart', (event) => {
+                this.touchEvent(event);
+            });
+        }
     }
 
     @Input() keepAliveMillis = 30000;
@@ -28,7 +34,6 @@ export class InactivityMonitorDirective {
         this.keepAlive();
     }
 
-    @HostListener('window:touchstart', ['$event'])
     touchEvent(event: TouchEvent) {
         this.keepAlive();
     }
