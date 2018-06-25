@@ -9,5 +9,5 @@ import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
     templateUrl: './multiple-dynamic-form-dialog.component.html'
 })
 export class MultipleDynamicFormDialogComponent extends MultipleDynamicFormComponent {
-
+    current:number = 0;
 }
