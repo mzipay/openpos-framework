@@ -44,9 +44,9 @@ export class SessionService implements ILocaleService {
 
     obsFlow$: Observable<Element[]>;
 
-    subSave$ = new BehaviorSubject<string>();
+    subSave$ = new BehaviorSubject<string[]>([]);
 
-    obsSave$: Observable<string>;
+    obsSave$: Observable<string[]>;
 
     NodeElements: Element[] = [];
     SessElements: Element[] = [];
@@ -58,13 +58,13 @@ export class SessionService implements ILocaleService {
 
     currentState: string;
 
-    subState$ = new BehaviorSubject<string>();
+    subState$ = new BehaviorSubject<string>("");
 
     obsState$: Observable<string>;
 
     currentStateClass: string;
 
-    subStateClass$ = new BehaviorSubject<string>();
+    subStateClass$ = new BehaviorSubject<string>("");
 
     obsStateClass$: Observable<string>;
 

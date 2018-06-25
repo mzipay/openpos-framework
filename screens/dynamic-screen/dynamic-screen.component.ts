@@ -41,7 +41,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     FlowElements: Element[];
     
 
-    savePoints: string[] = [];
+    savePoints: string[];
 
     public backButton: IMenuItem;
 
