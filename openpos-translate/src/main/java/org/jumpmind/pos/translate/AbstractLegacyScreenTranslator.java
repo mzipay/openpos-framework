@@ -18,6 +18,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.ModeConstants;
+import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
@@ -112,9 +113,13 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         setScreenProperties();
 
         if (getLegacyUIModel() != null) {
-            Integer timeout = getLegacyUIModel().getTimeout();
+            ILegacyUIModel model = getLegacyUIModel();
+            Integer timeout = model.getTimeout();
             if (timeout != null) {
                 screen.setSessionTimeoutMillis(timeout);
+                if (model.getTimeoutAction() != null) {
+                    screen.setSessionTimeoutAction(new Action(model.getTimeoutAction()));
+                }
             }
         }
 

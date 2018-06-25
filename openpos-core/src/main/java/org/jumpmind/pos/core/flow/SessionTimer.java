@@ -20,7 +20,7 @@ public class SessionTimer {
     @Autowired
     private StateManagerFactory stateManagerFactory;
     
-    private static long ONE_MINUTE = 60000;
+    private static long TIMEOUT_CHECK_INTERVAL = 1000;
         
     public static final String ACTION_KEEP_ALIVE = "KeepAlive";
     
@@ -33,7 +33,7 @@ public class SessionTimer {
             public void run() {
                 checkSessionAges();
             }
-        }, ONE_MINUTE, ONE_MINUTE);
+        }, TIMEOUT_CHECK_INTERVAL, TIMEOUT_CHECK_INTERVAL);
     }
     
     public void stop() {
