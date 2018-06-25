@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.template.AbstractTemplate;
 import org.jumpmind.pos.core.template.BlankWithBarTemplate;
 
@@ -27,6 +28,7 @@ public class Screen implements Serializable {
     private AbstractTemplate template = new BlankWithBarTemplate();
     private String locale;
     private int sessionTimeoutMillis;
+    private Action sessionTimeoutAction;
 
     public Screen() {
     }
@@ -188,7 +190,12 @@ public class Screen implements Serializable {
     public void setInstructions(String instructions) {
         this.put("instructions", instructions);
     }
-    
 
+    public Action getSessionTimeoutAction() {
+        return sessionTimeoutAction;
+    }
 
+    public void setSessionTimeoutAction(Action sessionTimeoutAction) {
+        this.sessionTimeoutAction = sessionTimeoutAction;
+    }
 }
