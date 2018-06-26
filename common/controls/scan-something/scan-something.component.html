@@ -6,6 +6,5 @@
     <input #input matInput cdkFocusInitial="true" [keyboardLayout]="'Numeric'" fxFlexFill fxFlex="1 1 auto" class="bordered prompt-input-scan-something text-md" 
       (keyup.enter)="onEnter()" [(ngModel)]="barcode" (paste)="onBarcodePaste($event)"
       [placeholder]="scanSomethingData.scanSomethingText ? scanSomethingData.scanSomethingText : 'Scan/Enter Something'" novalidate type="tel" pattern="[0-9]*"
-      [attr.minlength]="scanSomethingData.scanMinLength" [attr.maxlength]="scanSomethingData.scanMaxLength" barcodeScanPublisher
-      [screenOrientation]="'landscape-secondary'">
+      [attr.minlength]="scanSomethingData.scanMinLength" [attr.maxlength]="scanSomethingData.scanMaxLength" barcodeScanPublisher>
   </div>
