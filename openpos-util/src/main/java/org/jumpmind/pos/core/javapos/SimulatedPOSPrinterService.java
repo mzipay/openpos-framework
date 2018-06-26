@@ -33,18 +33,19 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
     protected int rotateSpecial;
     protected boolean slpLetterQuality;
     protected Map<Integer, InMemoryBitmap> inMemoryBitmaps;
-    
+
     protected StringBuilder receipt = new StringBuilder();
 
     public SimulatedPOSPrinterService() {
         logger.trace(String.format("%s created", this.getClass()));
     }
+
     @Override
     public void reset() {
     }
 
     public void appendText(final int type, final String newText) {
-        receipt.append(newText);        
+        receipt.append(newText);
     }
 
     public void printBarCode(int i, String s, int j, int k, int l, int i1, int j1) throws JposException {
@@ -68,8 +69,14 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
 
     public void cutPaper(int i) throws JposException {
         appendText(i, "\n\n--------------- cut here ---------------\n\n");
-        printerLogger.info("\n" + receipt);
-        receipt.setLength(0);
+        flush();
+    }
+
+    protected void flush() {
+        if (receipt.length() > 0) {
+            printerLogger.info("\n" + receipt);
+            receipt.setLength(0);
+        }
     }
 
     public void clearPrintArea() throws JposException {
@@ -283,6 +290,7 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
     }
 
     public void clearOutput() throws JposException {
+        flush();
     }
 
     public void endInsertion() throws JposException {
@@ -857,74 +865,90 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
     public boolean getCapServiceAllowManagement() throws JposException {
         return false;
     }
-    
+
     public Map<Integer, InMemoryBitmap> getInMemoryBitmaps() {
         return inMemoryBitmaps;
     }
 
-    public void printNormalWithEscapeSequences(int station, String data) throws JposException {
+    public void printNormalWithEscapeSequences(int station, String data) throws JposException {        
+        if (recLineChars > 0 && data.length() > recLineChars) {
+            String lineSeparator = System.getProperty("line.separator");
+            StringBuilder text = new StringBuilder();
+            String[] lines = data.split("\n");
+            for (String string : lines) {
+                do {
+                    if (string.length() > recLineChars) {
+                        text.append(string.substring(0, recLineChars-1)).append(lineSeparator);
+                        string = string.substring(recLineChars-1);
+                    } else {
+                        text.append(string).append(lineSeparator);
+                        string = null;
+                    }
+                } while (string != null);
+            }
+            data = text.toString();
+        }
+
         // Add additional escape sequence classes here to be filtered on.
-        IEscapeSequence[] checkSequences = new IEscapeSequence[] { 
-                new PrintBitmapEscapeSequence(),
-                new PrintLineFeedEscapeSequence()};
-        
-        // Capture the length - 1 so that all comparisons are against 0 based index
+        IEscapeSequence[] checkSequences = new IEscapeSequence[] { new PrintBitmapEscapeSequence(), new PrintLineFeedEscapeSequence() };
+
+        // Capture the length - 1 so that all comparisons are against 0 based
+        // index
         int indexedLength = data.length() - 1;
-        
+
         int nextFilterPosition = indexedLength;
         int previousPrintPosition = 0;
-        
+
         do {
             nextFilterPosition = indexedLength;
             IEscapeSequence seqToPrint = null;
-            
+
             // Find the position of next escape sequence
             for (int i = 0; i < checkSequences.length; i++) {
                 int currentFilterEndPosition = checkSequences[i].findNext(data, previousPrintPosition);
-                
-                
+
                 if (currentFilterEndPosition >= 0 && currentFilterEndPosition <= nextFilterPosition) {
-                    // We found a sequence match that occurs sooner than what we had before
+                    // We found a sequence match that occurs sooner than what we
+                    // had before
                     nextFilterPosition = currentFilterEndPosition;
                     seqToPrint = checkSequences[i];
                 }
             }
             if (nextFilterPosition <= indexedLength) {
                 int endPrintPosition = seqToPrint == null ? data.length() - 1 : nextFilterPosition - (seqToPrint.getSequenceLength() - 1);
-                
-                // print normal text 
+
+                // print normal text
                 if (previousPrintPosition >= 0 && endPrintPosition >= previousPrintPosition) {
-                    // Check if we are at last piece of text, if so just print remaining.
-                    String text = endPrintPosition == indexedLength 
-                                        ? data.substring(previousPrintPosition) 
-                                        : data.substring(previousPrintPosition, endPrintPosition);
-                    
-                    String[] replacedChars = {"|N", "|bC", "|rA"};
-                    for (int i = 0; i < replacedChars.length ; i++) {
+                    // Check if we are at last piece of text, if so just print
+                    // remaining.
+                    String text = endPrintPosition == indexedLength ? data.substring(previousPrintPosition)
+                            : data.substring(previousPrintPosition, endPrintPosition);
+
+                    String[] replacedChars = { "|N", "|bC", "|rA" };
+                    for (int i = 0; i < replacedChars.length; i++) {
                         text = StringUtils.replace(text, replacedChars[i], "");
                     }
                     appendText(station, text);
                 }
-                
+
                 if (seqToPrint != null) {
                     // print the escape
                     seqToPrint.print(this, station);
                 }
-            }           
+            }
             previousPrintPosition = nextFilterPosition + 1;
-        } while (nextFilterPosition  < indexedLength);
+        } while (nextFilterPosition < indexedLength);
     }
 
-    
     public interface IEscapeSequence {
         public void print(SimulatedPOSPrinterService service, int station) throws JposException;
-        
+
         public int findNext(String data, int startPosition);
-        
+
         public int getSequenceLength();
-        
+
         public String getPrefix();
-        
+
         public String getSuffix();
     }
 
@@ -934,22 +958,20 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
         public String getPrefix() {
             return prefix;
         }
-        
-    }    
+
+    }
+
     public class PrintBitmapEscapeSequence extends AbstractEscapeSequence {
         private int bitmapNumber;
-            
+
         public void print(SimulatedPOSPrinterService printerService, int station) throws JposException {
-            if (printerService.getInMemoryBitmaps() == null || 
-                    !printerService.getInMemoryBitmaps().containsKey(new Integer(bitmapNumber))) {
-                
-                logger.error("Unable to print bitmap from memory, it was not found.  " +
-                        "Ensure setBitmap() was called to load it.");
-            }
-            else {
+            if (printerService.getInMemoryBitmaps() == null || !printerService.getInMemoryBitmaps().containsKey(new Integer(bitmapNumber))) {
+
+                logger.error("Unable to print bitmap from memory, it was not found.  " + "Ensure setBitmap() was called to load it.");
+            } else {
                 InMemoryBitmap memoryBMap = printerService.getInMemoryBitmaps().get(new Integer(bitmapNumber));
-                printerService.printBitmap(memoryBMap.getStation(), memoryBMap.getFileName(), 
-                        memoryBMap.getWidth(), memoryBMap.getAlignment());
+                printerService.printBitmap(memoryBMap.getStation(), memoryBMap.getFileName(), memoryBMap.getWidth(),
+                        memoryBMap.getAlignment());
             }
         }
 
@@ -960,15 +982,14 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
                 int endSeqPosition = data.indexOf(getSuffix(), beginSeqPosition);
                 if (endSeqPosition > 0) {
                     bitmapNumber = new Integer(data.substring(beginSeqPosition, endSeqPosition)).intValue();
-                } 
-                else {
+                } else {
                     current = -1;
                 }
                 current = endSeqPosition;
             }
             return current;
-        }   
-        
+        }
+
         public int getSequenceLength() {
             int length = 0;
             if (bitmapNumber > 0) {
@@ -976,15 +997,15 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
             }
             return length;
         }
-        
+
         public String getSuffix() {
             return "B";
         }
     }
-    
+
     public class PrintLineFeedEscapeSequence extends AbstractEscapeSequence {
         private int lineFeedNumber;
-        
+
         public int findNext(String data, int startPosition) {
             int current = data.indexOf(getPrefix(), startPosition);
             if (current >= 0) {
@@ -993,11 +1014,10 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
                 if (endSeqPosition > 0) {
                     lineFeedNumber = new Integer(data.substring(beginSeqPosition, endSeqPosition)).intValue();
                     current = endSeqPosition + getSuffix().length() - 1;
-                } 
-                else {
+                } else {
                     current = -1;
                 }
-                
+
             }
             return current;
         }
@@ -1019,46 +1039,53 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
                 service.printNormal(station, "\n");
             }
         }
-        
 
-    }    
-    
+    }
+
     public class InMemoryBitmap {
         private int station;
         private String fileName;
         private int width;
         private int alignment;
-        
+
         public InMemoryBitmap(int station, String fileName, int width, int alignment) {
             this.station = station;
             this.fileName = fileName;
             this.width = width;
-            this.alignment = alignment;         
+            this.alignment = alignment;
         }
+
         public int getStation() {
             return station;
         }
+
         public void setStation(int station) {
             this.station = station;
         }
+
         public String getFileName() {
             return fileName;
         }
+
         public void setFileName(String fileName) {
             this.fileName = fileName;
         }
+
         public int getWidth() {
             return width;
         }
+
         public void setWidth(int width) {
             this.width = width;
         }
+
         public int getAlignment() {
             return alignment;
         }
+
         public void setAlignment(int alignment) {
             this.alignment = alignment;
         }
     }
-    
+
 }

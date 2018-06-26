@@ -1,9 +1,5 @@
 package org.jumpmind.pos.core.javapos;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.logging.Log;
@@ -142,15 +138,5 @@ public abstract class AbstractSimulatedService {
         this.callbacks = callbacks;
     }
 
-    public void addToGridBag(int x, int y, int colspan, Component comp, GridBagConstraints c,
-            Container container) {
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.gridx = x;
-        c.gridy = y;
-        c.gridwidth = colspan;
-
-        container.add(comp, c);
-    }
 
 }
