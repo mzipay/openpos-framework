@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.Screen;
@@ -42,6 +43,9 @@ abstract public class AbstractScreenTranslator<T extends Screen> implements ITra
     }
     
     protected void newScreen() {
+        if (screenClass == null) {
+            throw new RuntimeException("screenClass cannot be null at this point. Legacy screen: " + this.getLegacyScreen());
+        }            
         try {
             screen = screenClass.newInstance();
         } catch (Exception e) {
