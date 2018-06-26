@@ -38,6 +38,8 @@ public class DevToolsMessage extends Screen {
     private IScreenService screenService;
 	
     private static final long serialVersionUID = 1L;
+    
+    private static final String SAVE_PATH = "./src/main/resources/saveStates/";
 
 	private Map<String, List<ScopeField>> scopes = new HashMap<>();
 	
@@ -114,7 +116,17 @@ public class DevToolsMessage extends Screen {
 	}
 	
 	public void loadSaveFiles () {
-		//TODO add way to populate save files on init or remove all on destruction
+		saveFiles.clear();
+		 File dir = new File(SAVE_PATH);
+		 File[] directoryListing = dir.listFiles();
+		 if (directoryListing != null) {
+		   for (File child : directoryListing) {
+		     this.saveFiles.add(child.getName().replaceAll(".json", ""));
+		    }
+		  } else {
+		    logger.warn("No save files found in save directory.");
+		  }
+		 this.put("saveFiles", saveFiles);
 	}
 	
 	private void setScopes (IStateManager sm) {
@@ -136,12 +148,12 @@ public class DevToolsMessage extends Screen {
 	}
 	
 	public void saveState(IStateManager sm, String saveName) {
-		String filename = "./" + saveName + ".json";
+		String filename = SAVE_PATH + saveName + ".json";
 		applicationStateSerializer.serialize(sm, sm.getApplicationState(), filename);
 	}
 	
 	public void loadState(IStateManager sm, String saveName) {
-		String filename = "./" + saveName + ".json";
+		String filename = SAVE_PATH + saveName + ".json";
 		
         boolean resumeState = false;
         
@@ -165,7 +177,7 @@ public class DevToolsMessage extends Screen {
 	}
 	
 	public void removeSave(String saveName) {
-		String filename = "./" + saveName + ".json";
+		String filename = SAVE_PATH + saveName + ".json";
 		File save = new File(filename);
 		if(save.delete()) {
 			logger.info("Successfully deleted save file " + filename);
