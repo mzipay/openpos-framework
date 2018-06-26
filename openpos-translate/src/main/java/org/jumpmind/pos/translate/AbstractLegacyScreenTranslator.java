@@ -18,7 +18,6 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.ModeConstants;
-import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
@@ -113,13 +112,9 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         setScreenProperties();
 
         if (getLegacyUIModel() != null) {
-            ILegacyUIModel model = getLegacyUIModel();
-            Integer timeout = model.getTimeout();
+            Integer timeout = getLegacyUIModel().getTimeout();
             if (timeout != null) {
                 screen.setSessionTimeoutMillis(timeout);
-                if (model.getTimeoutAction() != null) {
-                    screen.setSessionTimeoutAction(new Action(model.getTimeoutAction()));
-                }
             }
         }
 
@@ -463,7 +458,9 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             }
 
             for (ILegacyButtonSpec buttonSpec : buttonSpecs) {
-                if (buttonSpec != null && !toExclude.contains(buttonSpec.getLabelTag())) {
+                if (buttonSpec != null && 
+                        !(toExclude.contains(buttonSpec.getLabelTag())
+                                || toExclude.contains(buttonSpec.getActionName()))) {
                     Boolean enabled = enabledState.get(buttonSpec.getActionName());
                     if (enabled == null) {
                         enabled = buttonSpec.getEnabled();
