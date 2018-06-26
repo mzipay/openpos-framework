@@ -85,13 +85,14 @@ public class DevToolsMessage extends Screen {
     			sm.getApplicationState().getScope().removeConversationScope(scopeId);
     			scopes.get("ConversationScope").removeIf(p -> p.getName().equals(scopeId));
     		} else if (scopeType.equals("Config")) {
-    			//TODO add support
+    			sm.getApplicationState().getCurrentContext().getFlowConfig().getConfigScope().remove(scopeId);
+    			scopes.get("ConfigScope").removeIf(p -> p.getName().equals(scopeId));
     		} else if (scopeType.equals("Flow")) {
     			sm.getApplicationState().getCurrentContext().removeFlowScope(scopeId);
     			scopes.get("FlowScope").removeIf(p -> p.getName().equals(scopeId));
     		}
 		} else {
-			// TODO 'add a scope' support?
+			// TODO 'add a scope' support? idk.
 		}
 		this.put("scopes", scopes);
 	}
@@ -135,6 +136,7 @@ public class DevToolsMessage extends Screen {
 		scopes.put("NodeScope", buildScope(sm.getApplicationState().getScope().getNodeScope()));
 		scopes.put("SessionScope", buildScope(sm.getApplicationState().getScope().getSessionScope()));
 		scopes.put("FlowScope", buildScope(sm.getApplicationState().getCurrentContext().getFlowScope()));
+		scopes.put("ConfigScope", buildConfigScope(sm.getApplicationState().getCurrentContext().getFlowConfig().getConfigScope()));
 	}
 	
 	
@@ -143,6 +145,15 @@ public class DevToolsMessage extends Screen {
 		List<ScopeField> res = new ArrayList<>();
 		for (String key : keys) {
 			res.add(new ScopeField(key, map.get(key).getCreatedTime().toString(), map.get(key).getCreatedStackTrace().replaceAll("at ", "\nat_")));
+		}
+		return res;
+	}
+	
+	private List<ScopeField> buildConfigScope(Map<String, Object> map) {
+		Set<String> keys = map.keySet();
+		List<ScopeField> res = new ArrayList<>();
+		for (String key : keys) {
+			res.add(new ScopeField(key, map.get(key).toString(), map.get(key).toString().replaceAll("at ", "\nat_")));
 		}
 		return res;
 	}
