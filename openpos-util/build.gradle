@@ -1,4 +1,5 @@
 apply from: '../openpos-core/common.gradle'
 
 dependencies {
+   compile group: 'org.javapos', name: 'javapos', version: '1.14.1'
 }
