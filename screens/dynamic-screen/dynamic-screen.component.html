@@ -283,7 +283,8 @@
                     </mat-tab>
                     <mat-tab label="Logs">
                         <h1>Logs</h1>
-                        <div [style.height.px]="'300'" class="logs">
+                        <div class="logs">
+                            <div *ngIf="!logsAvailable"  [style.height.px]="'300'"></div>
                             <ng-container *ngIf="logsAvailable" [style.height.px]="'300'" >
                                 <mat-divider></mat-divider>
                                 <ul>
