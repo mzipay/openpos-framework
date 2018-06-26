@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class DialogScreen extends Screen {
 
     private static final long serialVersionUID = 1L;
@@ -17,6 +15,8 @@ public class DialogScreen extends Screen {
     private String subType;
     
     private List<String> message = new ArrayList<>();
+    
+    private List<Line> messageLines = new ArrayList<>();
     
     private DialogProperties dialogProperties;
     
@@ -77,6 +77,23 @@ public class DialogScreen extends Screen {
     
     public String getSubType() {
         return subType;
+    }
+
+    public List<Line> getMessageLines() {
+        return messageLines;
+    }
+
+    public void setMessageLines(List<Line> messageLines) {
+        this.messageLines = messageLines;
+    }
+    
+    public DialogScreen addMessageLine(Line line) {
+        this.messageLines.add(line);
+        return this;
+    }
+    
+    public void setMessageLines(Line...lines) {
+        this.setMessageLines(Arrays.asList(lines));
     }
     
 }
