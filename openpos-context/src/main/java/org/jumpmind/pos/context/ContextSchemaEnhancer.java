@@ -25,13 +25,16 @@ public class ContextSchemaEnhancer implements IDBSchemaListener {
     private final static Logger log = LoggerFactory.getLogger(ContextSchemaEnhancer.class);
     
     private DBSessionFactory sessionFactory;
+    
+    private final static boolean MODIFY_PK = true;
+    private final static boolean PRESERVE_PK = false;
 
     @Override
     public void beforeSchemaCreate(DBSessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
         List<TagModel> tags = ContextRepository.getTagConfig().getTags();
-        enchanceTaggedTable(DeviceModel.class, tags);
-        enchanceTaggedTable(ConfigModel.class, tags);
+        enchanceTaggedTable(DeviceModel.class, tags, PRESERVE_PK);
+        enchanceTaggedTable(ConfigModel.class, tags, MODIFY_PK);
     }
 
     @Override
@@ -39,30 +42,30 @@ public class ContextSchemaEnhancer implements IDBSchemaListener {
         // No action.
     }
     
-    protected void enchanceTaggedTable(Class<?> entityClass, List<TagModel> tags) {
+    protected void enchanceTaggedTable(Class<?> entityClass, List<TagModel> tags, boolean includeInPk) {
         EntityMetaData entityMetaData = 
                 sessionFactory.getDatabaseSchema().getClassMetadata().get(entityClass);
         Table table = entityMetaData.getTable();
         warnOrphanedTagColumns(tags, table);
-        modifyTagColumns(tags, table);
-        addTagColumns(tags, table);
+        modifyTagColumns(tags, table, includeInPk);
+        addTagColumns(tags, table, includeInPk);
     }
 
-    protected void modifyTagColumns(List<TagModel> tags, Table table) {
+    protected void modifyTagColumns(List<TagModel> tags, Table table, boolean includeInPk) {
         for (Column existingColumn : table.getColumns()) {
             for (TagModel tag : tags) {
                 if (StringUtils.equalsIgnoreCase(getColumnName(tag), existingColumn.getName())) {
-                    setColumnInfo(existingColumn, tag);
+                    setColumnInfo(existingColumn, tag, includeInPk);
                     break;
                 }
             }
         }        
     }
 
-    protected void addTagColumns(List<TagModel> tags, Table table) {
+    protected void addTagColumns(List<TagModel> tags, Table table, boolean modifyPk) {
         for (TagModel tag : tags) {
             if (table.getColumnIndex(getColumnName(tag)) == -1) {
-                Column tagColumn = generateTagColumn(tag);
+                Column tagColumn = generateTagColumn(tag, modifyPk);
                 table.addColumn(tagColumn);
             }
         }
@@ -88,20 +91,20 @@ public class ContextSchemaEnhancer implements IDBSchemaListener {
         }
     }
     
-    protected Column generateTagColumn(TagModel tag) {
-        return setColumnInfo(new Column(), tag);
+    protected Column generateTagColumn(TagModel tag, boolean modifyPk) {
+        return setColumnInfo(new Column(), tag, modifyPk);
     }
     
-    protected Column setColumnInfo(Column column, TagModel tag) {
+    protected Column setColumnInfo(Column column, TagModel tag, boolean includeInPk) {
         column.setName(getColumnName(tag));
-        column.setPrimaryKey(true);
+        column.setPrimaryKey(includeInPk);
         column.setRequired(true);
-//        if (StringUtils.equals(TagModel.TAG_NUMERIC_TYPE, tag.getDataType())) {
-//            column.setTypeCode(Types.BIGINT);
-//        } else {
-            column.setTypeCode(Types.VARCHAR);
-            column.setSize("128");
-//        }
+        column.setTypeCode(Types.VARCHAR);
+        if (tag.getSize() > 0) {
+            column.setSize(String.valueOf(tag.getSize()));
+        } else {            
+            column.setSize("32");
+        }
         return column;        
     }
     

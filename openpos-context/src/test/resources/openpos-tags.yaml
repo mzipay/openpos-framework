@@ -17,10 +17,12 @@ tags:
   group: LOCATION
   level: 4
 -
-  name: STORE_TYPE  
+  name: STORE_TYPE
 -
   name: DEVICE_TYPE
+  size: 20
 -
   name: BRAND_ID
+  size: 20
 -
   name: APP_PROFILE

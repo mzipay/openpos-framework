@@ -20,7 +20,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 @Configuration
 @ComponentScan(
-        basePackages = { "org.jumpmind.pos" })
+        basePackages = { "org.jumpmind.pos.persist" })
 @PropertySource(value = { "classpath:persist-test.properties"})
 public class TestConfig {
 

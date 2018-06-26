@@ -67,6 +67,10 @@ public class StateContext {
         flowScope.put(name, new ScopeValue(value));
     }
     
+    public void removeFlowScope(String name) {
+    	flowScope.remove(name);
+    }
+    
     public String getReturnActionName() {
         return returnActionName;
     }

@@ -33,13 +33,12 @@ import org.jumpmind.pos.core.model.IFormElement;
 import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.DevToolsMessage;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
-import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.FormScreen;
 import org.jumpmind.pos.core.screen.IHasForm;
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.ScreenType;
 import org.jumpmind.pos.util.LogFormatter;
 import org.slf4j.Logger;
@@ -73,6 +72,9 @@ public class ScreenService implements IScreenService {
 
     private ObjectMapper mapper = new ObjectMapper();
 
+    @Autowired
+    DevToolsMessage devToolsMessage;
+    
     @Autowired
     SimpMessagingTemplate template;
 
@@ -200,24 +202,44 @@ public class ScreenService implements IScreenService {
     }
     
     private void DevToolRouter(Action action, IStateManager stateManager, ScreenService screenService, String appId, String nodeId) {
-		DevToolsMessage msg = new DevToolsMessage(stateManager, this);
+    	devToolsMessage.createMessage(stateManager, this);
     	if(action.getName().contains("::Get")) {
-    		logger.info(logFormatter.toJsonString(msg));
-    		publishToClients(appId, nodeId, msg);
+    		devToolsMessage.setName("DevTools::Get");
+    		logger.info(logFormatter.toJsonString(devToolsMessage));
+    		publishToClients(appId, nodeId, devToolsMessage);
+    	} else if (action.getName().contains("::Save")) {
+    		devToolsMessage.setName("DevTools::Save");
+    		String saveName = action.getName().substring(16);
+    		devToolsMessage.saveState(stateManager, saveName);
+    		publishToClients(appId, nodeId, devToolsMessage);
+    	} else if (action.getName().contains("DevTools::Load")) {
+    		devToolsMessage.setName("DevTools::Load");
+    		String saveName = action.getName().substring(16);
+    		devToolsMessage.loadState(stateManager, saveName);
+    		publishToClients(appId, nodeId, devToolsMessage);
+    	} else if (action.getName().contains("DevTools::RemoveSave")) {
+    		devToolsMessage.setName("DevTools::RemoveSave");
+    		String saveName = action.getName().substring(22);
+    		devToolsMessage.removeSave(saveName);
+    		publishToClients(appId, nodeId, devToolsMessage);
     	} else if (action.getName().contains("::Remove")) {
     		Map<String, String> element = action.getData();
     		if (action.getName().contains("::Node")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Node", "remove");
-    			publishToClients(appId, nodeId, msg);
+    			devToolsMessage.createMessage(stateManager, this, element, "Node", "remove");
+    			devToolsMessage.setName("DevTools::Remove");
+    			publishToClients(appId, nodeId, devToolsMessage);
     		} else if (action.getName().contains("::Session")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Session", "remove");
-    			publishToClients(appId, nodeId, msg);
+    			devToolsMessage.createMessage(stateManager, this, element, "Session", "remove");
+    			devToolsMessage.setName("DevTools::Remove");
+    			publishToClients(appId, nodeId, devToolsMessage);
     		} else if (action.getName().contains("::Conversation")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Conversation", "remove");
-    			publishToClients(appId, nodeId, msg);
+    			devToolsMessage.createMessage(stateManager, this, element, "Conversation", "remove");
+    			devToolsMessage.setName("DevTools::Remove");
+    			publishToClients(appId, nodeId, devToolsMessage);
     		} else if (action.getName().contains("::Config")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Config", "remove");
-    			publishToClients(appId, nodeId, msg);
+    			devToolsMessage.createMessage(stateManager, this, element, "Config", "remove");
+    			devToolsMessage.setName("DevTools::Remove");
+    			publishToClients(appId, nodeId, devToolsMessage);
     		}
     	}
     }
@@ -431,13 +453,10 @@ public class ScreenService implements IScreenService {
         for (int i = 0; i < LINE_COUNT; i++) {
             switch (i) {
                 case 0:
-                    buff.append(drawTop1(boxWidth));
+                    buff.append(drawTop1(boxWidth+2));
                     break;
                 case 1:
                     buff.append(drawTop2(boxWidth));
-                    break;
-                case 2:
-                    buff.append(drawFillerLine(boxWidth));
                     break;
                 case 3:
                     buff.append(drawTitleLine(boxWidth, displayName));
@@ -449,7 +468,7 @@ public class ScreenService implements IScreenService {
                     buff.append(drawBottom1(boxWidth));
                     break;
                 case 6:
-                    buff.append(drawBottom2(boxWidth));
+                    buff.append(drawBottom2(boxWidth+2));
                     break;
             }
         }
@@ -465,38 +484,38 @@ public class ScreenService implements IScreenService {
 
     protected String drawTop2(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth - 4))
-                .append(UPPER_RIGHT_CORNER + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + " " + UPPER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth - 4))
+                .append(UPPER_RIGHT_CORNER + " " + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
 
     protected String drawFillerLine(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.repeat(' ', boxWidth - 4)).append(VERITCAL_LINE + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + " " + VERITCAL_LINE).append(StringUtils.repeat(' ', boxWidth - 4)).append(VERITCAL_LINE + " " + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
 
     protected String drawTitleLine(int boxWidth, String name) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center(name, boxWidth - 4)).append(VERITCAL_LINE + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + " " + VERITCAL_LINE).append(StringUtils.center(name, boxWidth - 4)).append(VERITCAL_LINE + " " + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
 
     protected String drawTypeLine(int boxWidth, String typeName) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center(typeName, boxWidth - 4))
-                .append(VERITCAL_LINE + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + " " + VERITCAL_LINE).append(StringUtils.center(typeName, boxWidth - 4))
+                .append(VERITCAL_LINE + " " + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
 
     protected String drawBottom1(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth - 4))
-                .append(LOWER_RIGHT_CORNER + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + " " + LOWER_LEFT_CORNER).append(StringUtils.repeat(HORIZONTAL_LINE, boxWidth - 4))
+                .append(LOWER_RIGHT_CORNER + " " + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }

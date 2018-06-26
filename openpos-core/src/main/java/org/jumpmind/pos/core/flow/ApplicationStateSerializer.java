@@ -39,7 +39,7 @@ public class ApplicationStateSerializer {
     /**
      * Warning: this method has side-effects of mutating the applicationState.
      */
-    public void serialize(StateManager stateManager, ApplicationState applicationState, String fileName) {
+    public void serialize(IStateManager stateManager, ApplicationState applicationState, String fileName) {
         try {
             if (applicationState.getCurrentContext().getState() != null) {
                 try {                    
@@ -62,7 +62,7 @@ public class ApplicationStateSerializer {
         }
     }
 
-    public ApplicationState deserialize(StateManager stateManager, String fileName) {
+    public ApplicationState deserialize(IStateManager stateManager, String fileName) {
         try {            
             File f = new File(fileName);
             if (f.exists()) {                
@@ -97,7 +97,7 @@ public class ApplicationStateSerializer {
         appStateForSerialization.setCurrentTransition(null);
     }
     
-    public void rehydrateApplicationState(StateManager stateManager, ApplicationState applicationState) {
+    public void rehydrateApplicationState(IStateManager stateManager, ApplicationState applicationState) {
         applicationState.getScope().setNodeScope("stateManager", stateManager);
         
         stateManager.setApplicationState(applicationState);
@@ -112,10 +112,12 @@ public class ApplicationStateSerializer {
         }
     }
     
-    protected void refreshFlowConfig(StateManager stateManager, StateContext stateContext) {
-        String flowConfigName = stateContext.getFlowConfig().getName(); // Only the name will be available after deserialize
-        stateContext.setFlowConfig(
-                flowConfigProvider.getConfigByName(stateManager.getAppId(), stateManager.getNodeId(), flowConfigName));        
+    protected void refreshFlowConfig(IStateManager stateManager, StateContext stateContext) {
+        if (stateContext.getFlowConfig() != null) {
+            String flowConfigName = stateContext.getFlowConfig().getName(); // Only the name will be available after deserialize
+            stateContext.setFlowConfig(
+                    flowConfigProvider.getConfigByName(stateManager.getAppId(), stateManager.getNodeId(), flowConfigName));                    
+        }
     }
 
 }

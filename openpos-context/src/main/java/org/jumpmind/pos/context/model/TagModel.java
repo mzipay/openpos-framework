@@ -7,10 +7,10 @@ public class TagModel {
     public static final String TAG_CODE_TYPE = "CODE";
     public static final String BRAND_ID_TAG = "BRAND";
     
-    
     private String name; // e.g. STORE
     private String group;  // e.g. LOCATION
     private int level;
+    private int size;
     
     public String getName() {
         return name;
@@ -29,6 +29,12 @@ public class TagModel {
     }
     public void setLevel(int level) {
         this.level = level;
+    }
+    public int getSize() {
+        return size;
+    }
+    public void setSize(int size) {
+        this.size = size;
     }
     
 }
