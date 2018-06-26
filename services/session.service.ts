@@ -2,7 +2,6 @@ import { LoaderState } from './../common/loader/loader-state';
 import { IDeviceResponse } from './../common/ideviceresponse';
 import { IDeviceRequest } from './../common/idevicerequest';
 import { IMenuItem } from '../common/imenuitem';
-import { IDialog } from '../common/idialog';
 import { Observable } from 'rxjs/Observable';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs/Subscription';
@@ -10,16 +9,15 @@ import { Injectable, EventEmitter, NgZone } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { Scan } from '../common/scan';
-import { FunctionActionIntercepter, ActionIntercepter } from '../common/action-intercepter';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType } from '../common/action-intercepter';
+import { ToastType, IToastScreen } from '../common/toast-screen.interface';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confirmation-dialog.component';
 import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Element } from '../screens/dynamic-screen/dynamic-screen.component';
 import { IThemeChangingEvent } from '../events/ithemechanging.event';
-
 
 @Injectable()
 export class SessionService implements ILocaleService {
@@ -92,7 +90,7 @@ export class SessionService implements ILocaleService {
     public onServerConnect: Observable<boolean>;
     private onServerConnectObserver: any;
 
-    constructor(private location: Location, private router: Router, public dialogService: MatDialog,
+    constructor(private location: Location, private router: Router, public dialogService: MatDialog, public snackBar: MatSnackBar,
         public zone: NgZone) {
 
         this.loaderState = new LoaderState(this);
@@ -487,6 +485,12 @@ export class SessionService implements ILocaleService {
                 // screen shown was a 'loading' screen, don't want to dismiss
                 // that prematurely
                 return;
+            } else if( json.type === 'Toast') {
+                const toast = json as IToastScreen;
+                this.snackBar.open(toast.message, null, {
+                    duration:toast.duration,
+                    panelClass: this.getToastClass(toast.toastType)
+                  });
             } else {
                 this.response = null;
                 this.showScreen(json);
@@ -494,6 +498,17 @@ export class SessionService implements ILocaleService {
             }
             this.cancelLoading();
         }
+    }
+
+    private getToastClass( type: ToastType ): string {
+        switch(type){
+            case ToastType.Success:
+                return 'toast-success';
+            case ToastType.Error:
+                return 'toast-error';
+        }
+
+        return null;
     }
 
     private populateDevTables(json: any) {
