@@ -37,6 +37,7 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
     public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass, Function<OptionItem, Boolean> optionFilter) {
         super(headlessScreen, screenClass);
         this.optionItemEvalFunc = optionFilter;
+        this.filterDisabledOptions = optionFilter == null;  // If there is an optionFilter, let the optionFilter handle filtering
         screen.setType(ScreenType.ChooseOptions);
     }
     

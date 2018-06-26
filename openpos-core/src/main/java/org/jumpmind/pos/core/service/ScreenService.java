@@ -276,6 +276,7 @@ public class ScreenService implements IScreenService {
                 recordLastScreen(appId, nodeId, screen, applicationState.getLastDialogByAppIdByNodeId());
             } else {
                 recordLastScreen(appId, nodeId, screen, applicationState.getLastScreenByAppIdByNodeId());
+                recordLastScreen(appId, nodeId, null, applicationState.getLastDialogByAppIdByNodeId());
             }
         }
     }
