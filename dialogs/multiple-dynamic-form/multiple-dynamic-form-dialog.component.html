@@ -2,14 +2,14 @@
     <div class="text-md" style="margin-bottom:10px">
         {{screen.name}}
     </div>   
-    <mat-tab-group [@.disabled]="true" #tabGroup>
-        <mat-tab *ngFor="let formOption of screen.forms" fxLayout="column">
+    <mat-tab-group [@.disabled]="true" (selectChange)="current=$event.index" #tabGroup>
+        <mat-tab *ngFor="let formOption of screen.forms; let i=index" fxLayout="column">
             <ng-template mat-tab-label>
                 <div fxLayoutAlign="start center">
                     <mat-icon>{{formOption.icon}}</mat-icon><span>{{formOption.name}}</span>
                 </div>
             </ng-template>
-            <div *ngIf="screen.forms.indexOf(formOption) == tabGroup.selectedIndex">
+            <div *ngIf="i===current">
                 <div class="text-sm" style="margin-bottom:15px;margin-top:15px">
                     {{formOption.instructions}}
                     <app-dynamic-form-control #frm [screenForm]="formOption.form" [submitAction]="formOption.submitAction"></app-dynamic-form-control>

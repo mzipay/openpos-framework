@@ -31,7 +31,7 @@ export class ScreenOrientationDirective implements OnInit, OnDestroy {
                 if (window.screen && (<any>window.screen).orientation) {
                     this._enabled = true;
                     const currentOrientation = (<any>window.screen).orientation.type;
-                    console.log(`Current screent orientation is: ${currentOrientation}`);
+                    console.log(`Current screen orientation is: ${currentOrientation}`);
                     console.log(`Requested orientationMode is: ${this.orientationMode}`);
                     if (this.orientationMode) {
                         switch (this.orientationMode) {
