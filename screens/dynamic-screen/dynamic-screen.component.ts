@@ -60,6 +60,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     savePointFileName: string;
 
+    private displaySavePoints = false;
+
     private showUpdating = false;
 
     private currentStateActions: ActionMap[];
@@ -228,6 +230,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             this.showUpdating = false
             }, 500
         );
+        this.onCreateSavePoint(null);
 
     }
 
@@ -267,18 +270,19 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     protected onCreateSavePoint(newSavePoint: string) {
-       this.session.addSaveFile(newSavePoint);
-        // if (newSavePoint) {
-        //     if(!this.savePoints.includes(newSavePoint)) {
-        //         this.savePoints.push(newSavePoint);
-        //     }
-        //   this.session.onAction('DevTools::Save::' + newSavePoint);
-        //   console.log("Save Point Created: \'" + newSavePoint + "\'");
-        // }
+        if (newSavePoint) {
+            this.session.addSaveFile(newSavePoint);
+        }
+        if (!this.displaySavePoints && this.savePoints.length > 0) {
+            this.displaySavePoints = true;
+        }
     }
 
     protected onSavePointRemove(savePoint: string) {
         this.session.removeSaveFile(savePoint);
+        if (this.savePoints.length === 0) {
+            this.displaySavePoints = false;
+        }
         // console.log('Attempting to remove \'' + savePoint + '\'...');
         // if (this.savePoints.includes(savePoint)) {
         //     let index = this.savePoints.findIndex(item => {

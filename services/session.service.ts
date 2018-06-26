@@ -615,6 +615,16 @@ export class SessionService implements ILocaleService {
             });
             console.log(this.FlowElements);
         }
+
+        if(json.saveFiles) {
+            console.log('Pulling save files...');
+            this.savePoints = [];
+            json.saveFiles.forEach(saveName => {
+                this.savePoints.push(saveName);
+                this.subSave$.next(this.savePoints);
+                console.log(this.savePoints);
+            })
+        }
     }
 
     public addSaveFile(newSavePoint: string) {
