@@ -18,12 +18,8 @@ import { Router } from '@angular/router';
 import { DialogService } from './../../services/dialog.service';
 import { AbstractTemplate } from '../..';
 import { HttpClient } from '@angular/common/http';
-//import { IForm } from './form.component';
 import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
 import { Configuration } from '../../configuration/configuration';
-
-
-// import { MatTableDataSource } from '@angular/material';
 import { MatInputModule, MatProgressSpinnerModule, MatTableModule } from "@angular/material";
 
 @Component({
@@ -105,17 +101,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     private disableDevMenu = false;
 
     @ViewChild(TemplateDirective) host: TemplateDirective;
-    
-    // @ViewChild(MatInput) firstInput: MatInput;
 
     screen: any;
     private lastSequenceNum: number;
     private lastScreenName: string;
-  
-    // searchCategories: ISearchCategory[];
-    // searchCategoryStructure: SearchCategoryStructure;
-    // searchCategoryValues: ISearchCategoryValue[];
-    // searchFieldForm: IForm;
 
     constructor(public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
         public deviceService: DeviceService, public dialog: MatDialog,
@@ -283,16 +272,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         if (this.savePoints.length === 0) {
             this.displaySavePoints = false;
         }
-        // console.log('Attempting to remove \'' + savePoint + '\'...');
-        // if (this.savePoints.includes(savePoint)) {
-        //     let index = this.savePoints.findIndex(item => {
-        //     return savePoint === item.Value;
-        //     });
-        //     this.session.onAction('DevTools::RemoveSave::' + savePoint);
-        //     console.log("Removed Save Point: \'" + savePoint + "\'");
-        // } else {
-        //     console.log("Unable to remove Save Point: \'" + savePoint + "\'");
-        // }
     }
 
     public onDevRefreshView() {

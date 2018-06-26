@@ -536,6 +536,7 @@ export class SessionService implements ILocaleService {
 
     private populateDevTables(json: any) {
         if(json.currentState) {
+            console.log("Pulling current state actions...");
             this.currentState = json.currentState.stateName;
             this.subState$.next(this.currentState);
             this.currentStateClass = json.currentState.stateClass;
@@ -548,7 +549,7 @@ export class SessionService implements ILocaleService {
 
                 });
                 this.subStateActions$.next(this.currentStateActions);
-                console.log(this.currentStateActions);
+                
             }
         }
         if(json.scopes.ConversationScope) {
@@ -614,6 +615,23 @@ export class SessionService implements ILocaleService {
                 }
             });
             console.log(this.FlowElements);
+        }
+
+        if(json.scopes.ConfigScope) {
+            console.log('Pulling Config Scope Elements...');
+            this.ConfElements = [];
+            json.scopes.ConfigScope.forEach(element => {
+                if (!this.ConfElements.includes(element, 0)) {
+                    this.ConfElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace,  
+                        Value: element.value 
+                    });
+                    this.subConf$.next(this.ConfElements);
+                }
+            });
+            console.log(this.ConfElements);
         }
 
         if(json.saveFiles) {

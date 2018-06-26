@@ -236,16 +236,18 @@
                     </div>
                     </mat-tab>
                     <mat-tab label="Local Storage">
+                        <div >
                         <h1>Local Storage</h1>
-                        <ul>
+                        <ul [style.height.px]="'250'">
                             <li><button mat-button (click)="onPersonalize()">Personalize</button></li>
                             <li><button mat-button (click)="onDevRefreshView()">Refresh View</button></li>
                             <li><button mat-button (click)="onDevClearLocalStorage()">Clear Local Storage</button></li>
                         </ul>
-                            <mat-divider></mat-divider>
+
                             <div fxFlexFill fxLayout="row" fxLayoutAlign="left start" fxLayoutAlign.xs="left">
-                                <button mat-button color="primary" (click)="onDevRestartNode()">Restart Node</button>
+                                <button mat-raised-button color="primary" (click)="onDevRestartNode()">Restart Node</button>
                             </div>
+                        </div>
                     </mat-tab>
                     <mat-tab label="Save Points" >
                         <h1>Save Points</h1>
@@ -281,8 +283,8 @@
                     </mat-tab>
                     <mat-tab label="Logs">
                         <h1>Logs</h1>
-                        <div [style.height.px]="'350'">
-                            <ng-container *ngIf="logsAvailable">
+                        <div [style.height.px]="'300'" class="logs">
+                            <ng-container *ngIf="logsAvailable" [style.height.px]="'300'" >
                                 <mat-divider></mat-divider>
                                 <ul>
                                     <li *ngFor="let m of logFilenames"><button mat-button [matMenuTriggerFor]="logsMenu">{{m}}</button></li>
