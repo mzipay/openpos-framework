@@ -504,8 +504,8 @@ export class SessionService implements ILocaleService {
         switch(type){
             case ToastType.Success:
                 return 'toast-success';
-            case ToastType.Error:
-                return 'toast-error';
+            case ToastType.Warn:
+                return 'toast-warn';
         }
 
         return null;
