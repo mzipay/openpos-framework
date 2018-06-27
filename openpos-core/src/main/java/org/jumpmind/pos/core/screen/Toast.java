@@ -12,8 +12,8 @@ public class Toast extends Screen {
 		return new Toast(message) {{ setToastType(ToastType.Success);}};
 	}
 	
-	public static Toast CreateErrorToast( String message ) {
-		return new Toast(message) {{ setToastType(ToastType.Error);}};
+	public static Toast CreateWarningToast( String message ) {
+		return new Toast(message) {{ setToastType(ToastType.Warn);}};
 	}
 	
 	public Toast() {
