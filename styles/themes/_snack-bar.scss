@@ -2,4 +2,8 @@
     .toast-success{
         background-color: mat-color(map-get($theme, accent));
     }
+
+    .toast-warn{
+        background-color: mat-color(map-get($theme, warn));
+    }
 }
