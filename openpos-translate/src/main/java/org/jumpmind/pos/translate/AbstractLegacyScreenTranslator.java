@@ -355,6 +355,26 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         return this.legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
     }
 
+    protected String retrieveText(String propName, Optional<String> defaultValue) {
+        String resourceBundleName = this.getLegacyScreen().getResourceBundleFilename();
+        String text = null;
+        if (!StringUtils.isEmpty(resourceBundleName)) {
+            text = legacyPOSBeanService.getLegacyUtilityManager(legacyScreen).retrieveText(this.legacyScreen.getSpecName(),
+                    getResourceBundleFilename(), propName, null);
+            if (text == null) {
+                ILegacyAssignmentSpec panelSpec = legacyPOSBeanService.getLegacyAssignmentSpec(legacyScreen, LOCAL_NAV_PANEL_KEY);
+                text = legacyPOSBeanService.getLegacyUtilityManager(legacyScreen).retrieveText(panelSpec.getBeanSpecName(),
+                        getResourceBundleFilename(), propName, null);                
+            }
+        }
+        
+        if (!StringUtils.isEmpty(text)) {
+            return text;
+        } else {
+            return retrieveCommonText(propName, defaultValue);
+        }
+    }
+    
     protected String retrieveCommonText(String propName, Optional<String> defaultValue) {
         String commonText = defaultValue.isPresent()
                 ? this.legacyPOSBeanService.getLegacyUIUtilities().retrieveCommonText(propName, defaultValue.get())
@@ -383,6 +403,8 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         ILegacyAssignmentSpec spec = this.legacyPOSBeanService.getLegacyAssignmentSpec(this.legacyScreen, panelKey);
         return spec;
     }
+    
+    
 
     @Override
     protected void chooseLocale() {
@@ -439,7 +461,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             ILegacyBeanSpec localNavSpec = legacyPOSBeanService.getLegacyBeanSpec(legacyScreen, panelSpec.getBeanSpecName());
             ILegacyPOSBaseBeanModel model = legacyPOSBeanService.getLegacyPOSBaseBeanModel(legacyScreen);
             
-            ILegacyNavigationButtonBeanModel buttonModel = model.getLegacyLocalButtonBeanModel(); // Here correct
+            ILegacyNavigationButtonBeanModel buttonModel = model.getLegacyLocalButtonBeanModel();
             Map<String, Boolean> enabledState = parseButtonStates(panelSpec);
 
             ILegacyButtonSpec[] buttonSpecs;
@@ -535,6 +557,13 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
 
         return generatedActions;
 
+    }
+    
+    protected String translate(String tag, String defaultValue, Object... params) {
+        
+        
+        
+        return null;
     }
 
     protected Optional<String> getPromptText(ILegacyUIModel uiModel, ILegacyAssignmentSpec promptResponsePanel,
