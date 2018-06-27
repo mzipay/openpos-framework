@@ -15,15 +15,21 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
     protected Function<OptionItem, Boolean> optionItemEvalFunc = null;
     protected InteractionMacro undoMacro;
     protected boolean filterDisabledOptions = true;
+    private String[] filteredOptions;
 
     public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         this(headlessScreen, screenClass, true);
     }
 
     public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass, boolean filterDisabledOptions) {
+        this(headlessScreen, screenClass, filterDisabledOptions, null);
+    }
+    
+    public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass, boolean filterDisabledOptions, String[] filteredOptions) {
         super(headlessScreen, screenClass);
         screen.setType(ScreenType.ChooseOptions);
         this.filterDisabledOptions = filterDisabledOptions;
+        this.filteredOptions = filteredOptions;
     }
     
     /**
@@ -56,7 +62,9 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
     }
     
     protected void buildOptions() {
-        List<OptionItem> options = this.generateUIActionsForLocalNavButtons(OptionItem.class, this.filterDisabledOptions, new String[]{});
+        List<OptionItem> options = this.generateUIActionsForLocalNavButtons(OptionItem.class, 
+                this.filterDisabledOptions, 
+                filteredOptions != null ? filteredOptions : new String[] {});
         if (this.optionItemEvalFunc != null) {
             options = options.stream().filter(o -> { return this.optionItemEvalFunc.apply(o); }).collect(Collectors.toList());
         }

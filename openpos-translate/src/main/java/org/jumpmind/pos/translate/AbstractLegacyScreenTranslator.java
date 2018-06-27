@@ -438,7 +438,8 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         if (panelSpec != null) {
             ILegacyBeanSpec localNavSpec = legacyPOSBeanService.getLegacyBeanSpec(legacyScreen, panelSpec.getBeanSpecName());
             ILegacyPOSBaseBeanModel model = legacyPOSBeanService.getLegacyPOSBaseBeanModel(legacyScreen);
-            ILegacyNavigationButtonBeanModel buttonModel = model.getLegacyLocalButtonBeanModel();
+            
+            ILegacyNavigationButtonBeanModel buttonModel = model.getLegacyLocalButtonBeanModel(); // Here correct
             Map<String, Boolean> enabledState = parseButtonStates(panelSpec);
 
             ILegacyButtonSpec[] buttonSpecs;

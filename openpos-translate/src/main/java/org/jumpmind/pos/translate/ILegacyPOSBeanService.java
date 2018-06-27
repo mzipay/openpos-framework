@@ -16,7 +16,6 @@ public interface ILegacyPOSBeanService {
     ILegacyLocaleUtilities getLegacyLocaleUtilities();
     ILegacyUIUtilities getLegacyUIUtilities();
     ILegacySummaryTenderMenuBeanModel getLegacySummaryTenderMenuBeanModel(ILegacyScreen legacyScreen);
-    ILegacySummaryTenderMenuBeanModel getLegacySummaryChargeMenuBeanModel(ILegacyScreen legacyScreen);
     ILegacyStatusBeanModel getLegacyStatusBeanModel(ILegacyScreen legacyScreen);
     ILegacyCurrencyDetailBeanModel getLegacyCurrencyDetailBeanModel(ILegacyScreen legacyScreen);
     ILegacyOtherTenderDetailBeanModel getLegacyOtherTenderDetailBeanModel(ILegacyScreen legacyScreen);
