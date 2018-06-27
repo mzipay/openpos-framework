@@ -395,7 +395,7 @@ export class SessionService implements ILocaleService {
             // we need to figure out if we are a menuItem or just a string
             if (action.hasOwnProperty('action')) {
                 const menuItem = <IMenuItem>(action);
-
+                confirm = menuItem.confirmationMessage;
                 actionString = menuItem.action;
                 // check to see if we are an IURLMenuItem
                 if (menuItem.hasOwnProperty('url')) {
