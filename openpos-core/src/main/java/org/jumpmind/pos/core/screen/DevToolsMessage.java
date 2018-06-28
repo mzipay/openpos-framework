@@ -2,21 +2,17 @@ package org.jumpmind.pos.core.screen;
 
 import java.io.File;
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ApplicationState;
 import org.jumpmind.pos.core.flow.ApplicationStateSerializer;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
-import org.jumpmind.pos.core.flow.Scope;
 import org.jumpmind.pos.core.flow.ScopeValue;
-import org.jumpmind.pos.core.flow.StateContext;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.service.IScreenService;
@@ -91,9 +87,7 @@ public class DevToolsMessage extends Screen {
     			sm.getApplicationState().getCurrentContext().removeFlowScope(scopeId);
     			scopes.get("FlowScope").removeIf(p -> p.getName().equals(scopeId));
     		}
-		} else {
-			// TODO 'add a scope' support? idk.
-		}
+		} 
 		this.put("scopes", scopes);
 	}
 
@@ -118,25 +112,38 @@ public class DevToolsMessage extends Screen {
 	
 	public void loadSaveFiles () {
 		saveFiles.clear();
-		 File dir = new File(SAVE_PATH);
-		 File[] directoryListing = dir.listFiles();
-		 if (directoryListing != null) {
-		   for (File child : directoryListing) {
-		     this.saveFiles.add(child.getName().replaceAll(".json", ""));
-		    }
-		  } else {
-		    logger.warn("No save files found in save directory.");
-		  }
+		File dir = null;
+		try {
+			dir = new File(SAVE_PATH);
+			File[] directoryListing = dir.listFiles();
+			if (directoryListing != null) {
+				int i = 0;
+				for (File child : directoryListing) {
+					this.saveFiles.add(child.getName().replaceAll(".json", ""));
+					i++;
+			    }
+			   	logger.info("Loaded " + i + " save files from " + dir);
+			} else {
+			    logger.warn("No save files found in save directory.");
+			}
+		} catch (Exception ex) {
+			logger.warn("Cannot load save files from " + SAVE_PATH);
+		}
+		 
 		 this.put("saveFiles", saveFiles);
 	}
 	
 	private void setScopes (IStateManager sm) {
-		scopes.clear();
-		scopes.put("ConversationScope", buildScope(sm.getApplicationState().getScope().getConversationScope()));
-		scopes.put("NodeScope", buildScope(sm.getApplicationState().getScope().getNodeScope()));
-		scopes.put("SessionScope", buildScope(sm.getApplicationState().getScope().getSessionScope()));
-		scopes.put("FlowScope", buildScope(sm.getApplicationState().getCurrentContext().getFlowScope()));
-		scopes.put("ConfigScope", buildConfigScope(sm.getApplicationState().getCurrentContext().getFlowConfig().getConfigScope()));
+		try {
+			scopes.clear();
+			scopes.put("ConversationScope", buildScope(sm.getApplicationState().getScope().getConversationScope()));
+			scopes.put("NodeScope", buildScope(sm.getApplicationState().getScope().getNodeScope()));
+			scopes.put("SessionScope", buildScope(sm.getApplicationState().getScope().getSessionScope()));
+			scopes.put("FlowScope", buildScope(sm.getApplicationState().getCurrentContext().getFlowScope()));
+			scopes.put("ConfigScope", buildConfigScope(sm.getApplicationState().getCurrentContext().getFlowConfig().getConfigScope()));
+		} catch (Exception ex) {
+			logger.warn("Error loading in Developer Tool application scopes. Deleting local storage may fix this.", ex);
+		}
 	}
 	
 	
@@ -160,27 +167,36 @@ public class DevToolsMessage extends Screen {
 	
 	public void saveState(IStateManager sm, String saveName) {
 		String filename = SAVE_PATH + saveName + ".json";
-		applicationStateSerializer.serialize(sm, sm.getApplicationState(), filename);
+		try {
+			applicationStateSerializer.serialize(sm, sm.getApplicationState(), filename);
+			logger.info("Saved state " + filename);
+		} catch (FlowException ex) {
+			logger.info(ex.getMessage());
+		}
+		catch (Exception ex) {
+			logger.warn("Unable to save state at " + filename, ex);
+		}
 	}
 	
 	public void loadState(IStateManager sm, String saveName) {
 		String filename = SAVE_PATH + saveName + ".json";
 		
         boolean resumeState = false;
-        
-        ApplicationState applicationState = new ApplicationState();
-        try {            
+       
+        try {     
+            ApplicationState applicationState = new ApplicationState();
             applicationState = applicationStateSerializer.deserialize(sm, filename);
             sm.setApplicationState(applicationState);
+            screenService.setApplicationState(applicationState);
+            sm.getApplicationState().getScope().setNodeScope("stateManager", sm);
             resumeState = true;
+            logger.info("Loaded save state " + filename);
         } catch (FlowException ex) {
             logger.info(ex.getMessage());
         } catch (Exception ex) {
-            logger.warn("Failed to load " + filename, ex);
+            logger.warn("Failed to load save state " + filename, ex);
         }
-        sm.getApplicationState().getScope().setNodeScope("stateManager", sm);
-        screenService.setApplicationState(applicationState);
-        
+
         if (resumeState) {
             sm.refreshScreen();
         }
@@ -189,11 +205,16 @@ public class DevToolsMessage extends Screen {
 	
 	public void removeSave(String saveName) {
 		String filename = SAVE_PATH + saveName + ".json";
-		File save = new File(filename);
-		if(save.delete()) {
-			logger.info("Successfully deleted save file " + filename);
+		File save = null;
+		try {
+			save = new File(filename);
+		} catch (Exception ex) {
+			logger.warn("Can't find save state " + filename, ex);
+		}
+		if(save != null && save.delete()) {
+			logger.info("Successfully deleted save state " + filename);
 		} else {
-			logger.warn("Failed to delete save file " + filename);
+			logger.warn("Failed to delete save state " + filename);
 		}
 	}
 	

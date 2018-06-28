@@ -42,4 +42,5 @@ public interface ScreenType {
     public static final String LoadingDialog = "LoadingDialog";
     public static final String Version = "Version";
     public static final String DevTools = "DevTools";
+    public static final String SelectionList = "SelectionList";
 }
