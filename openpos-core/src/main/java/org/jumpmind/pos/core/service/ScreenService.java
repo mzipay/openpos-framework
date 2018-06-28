@@ -33,13 +33,12 @@ import org.jumpmind.pos.core.model.IFormElement;
 import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.DevToolsMessage;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
-import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.FormScreen;
 import org.jumpmind.pos.core.screen.IHasForm;
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.ScreenType;
 import org.jumpmind.pos.util.LogFormatter;
 import org.slf4j.Logger;
@@ -78,15 +77,15 @@ public class ScreenService implements IScreenService {
 
     @Autowired
     IStateManagerFactory stateManagerFactory;
-    
+
     @Value("${org.jumpmind.pos.core.service.ScreenService.jsonIncludeNulls:true}")
     private boolean jsonIncludeNulls = true;
-    
+
     @Autowired
     private LogFormatter logFormatter;
-    
-    private ApplicationState applicationState;
-    
+
+    private Map<String, Map<String, ApplicationState>> applicationStateByAppIdByNodeId = new HashMap<>();
+
     @PostConstruct
     public void init() {
         if (!jsonIncludeNulls) {
@@ -114,10 +113,9 @@ public class ScreenService implements IScreenService {
 
     @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{nodeId}/control/{controlId}")
     @ResponseBody
-    public String getComponentValues(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String controlId, 
-            @RequestParam(name="searchTerm", required=false) String searchTerm,
-            @RequestParam(name="sizeLimit", defaultValue="1000") Integer sizeLimit
-            ) {
+    public String getComponentValues(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String controlId,
+            @RequestParam(name = "searchTerm", required = false) String searchTerm,
+            @RequestParam(name = "sizeLimit", defaultValue = "1000") Integer sizeLimit) {
         logger.info("Received a request to load component values for {} {} {}", appId, nodeId, controlId);
         String result = getComponentValues(appId, nodeId, controlId, getLastScreen(appId, nodeId), searchTerm, sizeLimit);
         if (result == null) {
@@ -132,7 +130,7 @@ public class ScreenService implements IScreenService {
     private String getComponentValues(String appId, String nodeId, String controlId, Screen screen, String searchTerm, Integer sizeLimit) {
         String result = null;
         if (screen instanceof IHasForm) {
-        	IHasForm dynamicScreen = (IHasForm) screen;
+            IHasForm dynamicScreen = (IHasForm) screen;
             IFormElement formElement = dynamicScreen.getForm().getFormElement(controlId);
 
             // TODO: Look at combining FormListField and ComboField or at least
@@ -168,11 +166,11 @@ public class ScreenService implements IScreenService {
         if (stateManager != null) {
             if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
                 stateManager.keepAlive();
-            } else if (action.getName().contains("DevTools")) {
-            	logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
-            	DevToolRouter(action, stateManager, this, appId, nodeId);
+            } else if (action.getName().contains("DevTools")) {                
+                logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
+                DevToolRouter(action, stateManager, this, appId, nodeId);
             } else {
-                deserializeForm(appId, nodeId, action);
+                deserializeForm(stateManager.getApplicationState(), action);
 
                 logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
 
@@ -198,34 +196,36 @@ public class ScreenService implements IScreenService {
             }
         }
     }
-    
+
     private void DevToolRouter(Action action, IStateManager stateManager, ScreenService screenService, String appId, String nodeId) {
-		DevToolsMessage msg = new DevToolsMessage(stateManager, this);
-    	if(action.getName().contains("::Get")) {
-    		logger.info(logFormatter.toJsonString(msg));
-    		publishToClients(appId, nodeId, msg);
-    	} else if (action.getName().contains("::Remove")) {
-    		Map<String, String> element = action.getData();
-    		if (action.getName().contains("::Node")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Node", "remove");
-    			publishToClients(appId, nodeId, msg);
-    		} else if (action.getName().contains("::Session")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Session", "remove");
-    			publishToClients(appId, nodeId, msg);
-    		} else if (action.getName().contains("::Conversation")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Conversation", "remove");
-    			publishToClients(appId, nodeId, msg);
-    		} else if (action.getName().contains("::Config")) {
-    			msg = new DevToolsMessage(stateManager, this, element, "Config", "remove");
-    			publishToClients(appId, nodeId, msg);
-    		}
-    	}
+        DevToolsMessage msg = new DevToolsMessage(stateManager, this);
+        if (action.getName().contains("::Get")) {
+            logger.info(logFormatter.toJsonString(msg));
+            publishToClients(appId, nodeId, msg);
+        } else if (action.getName().contains("::Remove")) {
+            Map<String, String> element = action.getData();
+            if (action.getName().contains("::Node")) {
+                msg = new DevToolsMessage(stateManager, this, element, "Node", "remove");
+                publishToClients(appId, nodeId, msg);
+            } else if (action.getName().contains("::Session")) {
+                msg = new DevToolsMessage(stateManager, this, element, "Session", "remove");
+                publishToClients(appId, nodeId, msg);
+            } else if (action.getName().contains("::Conversation")) {
+                msg = new DevToolsMessage(stateManager, this, element, "Conversation", "remove");
+                publishToClients(appId, nodeId, msg);
+            } else if (action.getName().contains("::Config")) {
+                msg = new DevToolsMessage(stateManager, this, element, "Config", "remove");
+                publishToClients(appId, nodeId, msg);
+            }
+        }
     }
 
     protected Screen removeLastDialog(String appId, String nodeId) {
-        Map<String, Screen> lastScreenByNodeId = applicationState.getLastDialogByAppIdByNodeId().get(appId);
-        if (lastScreenByNodeId != null) {
-            return lastScreenByNodeId.remove(nodeId);
+        ApplicationState applicationState = getApplicationState(appId, nodeId);
+        if (applicationState != null && applicationState.getLastDialog() != null) {
+            Screen lastDialog = applicationState.getLastDialog();
+            applicationState.setLastDialog(null);
+            return lastDialog;
         } else {
             return null;
         }
@@ -233,9 +233,9 @@ public class ScreenService implements IScreenService {
 
     @Override
     public Screen getLastDialog(String appId, String nodeId) {
-        Map<String, Screen> lastScreenByNodeId = applicationState.getLastDialogByAppIdByNodeId().get(appId);
-        if (lastScreenByNodeId != null) {
-            return lastScreenByNodeId.get(nodeId);
+        ApplicationState applicationState = getApplicationState(appId, nodeId);
+        if (applicationState != null) {
+            return applicationState.getLastDialog();
         } else {
             return null;
         }
@@ -243,9 +243,9 @@ public class ScreenService implements IScreenService {
 
     @Override
     public Screen getLastScreen(String appId, String nodeId) {
-        Map<String, Screen> lastScreenByNodeId = applicationState.getLastScreenByAppIdByNodeId().get(appId);
-        if (lastScreenByNodeId != null) {
-            return lastScreenByNodeId.get(nodeId);
+        ApplicationState applicationState = getApplicationState(appId, nodeId);
+        if (applicationState != null) {
+            return applicationState.getLastScreen();
         } else {
             return null;
         }
@@ -253,6 +253,7 @@ public class ScreenService implements IScreenService {
 
     @Override
     public void showScreen(String appId, String nodeId, Screen screen) {
+        ApplicationState applicationState = getApplicationState(appId, nodeId);
         if (screen != null) {
             screen.setSequenceNumber(applicationState.incrementAndScreenSequenceNumber());
             try {
@@ -273,29 +274,20 @@ public class ScreenService implements IScreenService {
             }
             publishToClients(appId, nodeId, screen);
             if (screen.getTemplate().isDialog()) {
-                recordLastScreen(appId, nodeId, screen, applicationState.getLastDialogByAppIdByNodeId());
+                applicationState.setLastDialog(screen);
             } else {
-                recordLastScreen(appId, nodeId, screen, applicationState.getLastScreenByAppIdByNodeId());
-                recordLastScreen(appId, nodeId, null, applicationState.getLastDialogByAppIdByNodeId());
+                applicationState.setLastScreen(screen);
+                applicationState.setLastDialog(null);
             }
         }
     }
 
-    private void recordLastScreen(String appId, String nodeId, Screen screen,
-            Map<String, Map<String, Screen>> lastScreenByAppIdByNodeId) {
-        Map<String, Screen> lastScreenByNodeId = lastScreenByAppIdByNodeId.get(appId);
-        if (lastScreenByNodeId == null) {
-            lastScreenByNodeId = new HashMap<>();
-            lastScreenByAppIdByNodeId.put(appId, lastScreenByNodeId);
-        }
-        lastScreenByNodeId.put(nodeId, screen);
-    }
-
     protected void publishToClients(String appId, String nodeId, Object payload) {
-        try {            
+        try {
             StringBuilder topic = new StringBuilder(128);
             topic.append("/topic/app/").append(appId).append("/node/").append(nodeId);
-            payload = payload instanceof String ? ((String)payload).getBytes("UTF-8") : mapper.writerWithDefaultPrettyPrinter().writeValueAsString(payload).getBytes("UTF-8");
+            payload = payload instanceof String ? ((String) payload).getBytes("UTF-8")
+                    : mapper.writerWithDefaultPrettyPrinter().writeValueAsString(payload).getBytes("UTF-8");
             Message<?> message = MessageBuilder.withPayload(payload).build();
             this.template.send(topic.toString(), message);
         } catch (Exception ex) {
@@ -303,8 +295,8 @@ public class ScreenService implements IScreenService {
         }
     }
 
-    protected void deserializeForm(String appId, String nodeId, Action action) {
-        if (hasForm(appId, nodeId)) {
+    protected void deserializeForm(ApplicationState applicationState, Action action) {
+        if (hasForm(applicationState)) {
             try {
                 Form form = mapper.convertValue(action.getData(), Form.class);
                 if (form != null) {
@@ -319,20 +311,12 @@ public class ScreenService implements IScreenService {
         }
     }
 
-    private boolean hasForm(String appId, String nodeId) {
-        Map<String, Screen> lastScreenByNodeId = applicationState.getLastDialogByAppIdByNodeId().get(appId);
-        if (lastScreenByNodeId != null && lastScreenByNodeId.get(nodeId) != null) {
-            return lastScreenByNodeId.get(nodeId) instanceof IHasForm;
+    protected boolean hasForm(ApplicationState applicationState) {
+        if (applicationState.getLastDialog() != null) {
+            return applicationState.getLastDialog() instanceof IHasForm;
         } else {
-            lastScreenByNodeId = applicationState.getLastScreenByAppIdByNodeId().get(appId);
-            if (lastScreenByNodeId != null) {
-                Screen lastScreen = lastScreenByNodeId.get(nodeId);
-                if (lastScreen != null && lastScreen instanceof IHasForm) {
-                    return true;
-                }
-            }
+            return applicationState.getLastScreen() instanceof IHasForm;
         }
-        return false;
     }
 
     protected Form buildForm(Screen screen) {
@@ -374,9 +358,9 @@ public class ScreenService implements IScreenService {
 
     @Override
     public void refresh(String appId, String nodeId) {
-        Map<String, Screen> lastScreenByNodeId = applicationState.getLastScreenByAppIdByNodeId().get(appId);
-        if (lastScreenByNodeId != null) {
-            showScreen(appId, nodeId, lastScreenByNodeId.get(nodeId));
+        ApplicationState applicationState = getApplicationState(appId, nodeId);
+        if (applicationState != null && applicationState.getLastScreen() != null) {
+            showScreen(appId, nodeId, applicationState.getLastScreen());
         }
     }
 
@@ -416,7 +400,7 @@ public class ScreenService implements IScreenService {
     protected String drawBox(String name, String typeName) {
         String displayName = name != null ? name : null;
         String displayTypeName = "";
-        
+
         if (!StringUtils.isEmpty(displayName)) {
             displayTypeName = typeName != null ? typeName : "screen";
             displayTypeName = "[" + displayTypeName + "]";
@@ -424,7 +408,7 @@ public class ScreenService implements IScreenService {
             displayName = typeName != null ? typeName : "screen";
             displayName = "[" + displayName + "]";
         }
-        
+
         int boxWidth = Math.max(Math.max(displayName.length() + 2, 28), displayTypeName.length() + 4);
         final int LINE_COUNT = 8;
         StringBuilder buff = new StringBuilder(256);
@@ -487,8 +471,7 @@ public class ScreenService implements IScreenService {
 
     protected String drawTypeLine(int boxWidth, String typeName) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center(typeName, boxWidth - 4))
-                .append(VERITCAL_LINE + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + VERITCAL_LINE).append(StringUtils.center(typeName, boxWidth - 4)).append(VERITCAL_LINE + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
@@ -508,12 +491,22 @@ public class ScreenService implements IScreenService {
         return buff.toString();
     }
 
-    public ApplicationState getApplicationState() {
-        return applicationState;
+    protected ApplicationState getApplicationState(String appId, String nodeId) {
+        Map<String, ApplicationState> applicationStateByNodeId = this.applicationStateByAppIdByNodeId.get(appId);
+        if (applicationStateByNodeId != null) {
+            return applicationStateByNodeId.get(nodeId);
+        } else {
+            return null;
+        }
     }
 
     public void setApplicationState(ApplicationState applicationState) {
-        this.applicationState = applicationState;
+        Map<String, ApplicationState> applicationStateByNodeId = this.applicationStateByAppIdByNodeId.get(applicationState.getAppId());
+        if (applicationStateByNodeId == null) {
+            applicationStateByNodeId = new HashMap<>();
+            this.applicationStateByAppIdByNodeId.put(applicationState.getAppId(), applicationStateByNodeId);
+        }
+        applicationStateByNodeId.put(applicationState.getNodeId(), applicationState);
     }
 
 }

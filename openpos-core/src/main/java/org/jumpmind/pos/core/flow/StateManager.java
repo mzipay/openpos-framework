@@ -87,6 +87,8 @@ public class StateManager implements IStateManager {
     public void init(String appId, String nodeId) {
         this.appId = appId;
         this.nodeId = nodeId;
+        this.applicationState.setAppId(appId);
+        this.applicationState.setNodeId(nodeId);
         this.uiManager.setStateManager(this);
         
         boolean resumeState = false;
