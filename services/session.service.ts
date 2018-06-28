@@ -2,7 +2,6 @@ import { LoaderState } from './../common/loader/loader-state';
 import { IDeviceResponse } from './../common/ideviceresponse';
 import { IDeviceRequest } from './../common/idevicerequest';
 import { IMenuItem } from '../common/imenuitem';
-import { IDialog } from '../common/idialog';
 import { Observable } from 'rxjs/Observable';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs/Subscription';
@@ -10,16 +9,15 @@ import { Injectable, EventEmitter, NgZone } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { Scan } from '../common/scan';
-import { FunctionActionIntercepter, ActionIntercepter } from '../common/action-intercepter';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType } from '../common/action-intercepter';
+import { ToastType, IToastScreen } from '../common/toast-screen.interface';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confirmation-dialog.component';
 import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Element } from '../screens/dynamic-screen/dynamic-screen.component';
+import { Element, ActionMap } from '../screens/dynamic-screen/dynamic-screen.component';
 import { IThemeChangingEvent } from '../events/ithemechanging.event';
-
 
 @Injectable()
 export class SessionService implements ILocaleService {
@@ -40,12 +38,39 @@ export class SessionService implements ILocaleService {
 
     obsConf$: Observable<Element[]>;
 
+    subFlow$ = new BehaviorSubject<any[]>([]);
+
+    obsFlow$: Observable<Element[]>;
+
+    subSave$ = new BehaviorSubject<string[]>([]);
+
+    obsSave$: Observable<string[]>;
+
     NodeElements: Element[] = [];
     SessElements: Element[] = [];
     ConvElements: Element[] = [];
     ConfElements: Element[] = [];
+    FlowElements: Element[] = [];
+    savePoints: string[] = [];
+
 
     currentState: string;
+
+    subState$ = new BehaviorSubject<string>("");
+
+    obsState$: Observable<string>;
+
+    currentStateClass: string;
+
+    subStateClass$ = new BehaviorSubject<string>("");
+
+    obsStateClass$: Observable<string>;
+
+    currentStateActions: ActionMap[] = [];
+
+    subStateActions$ = new BehaviorSubject<any[]>([]);
+
+    obsStateActions$: Observable<ActionMap[]>;
 
     private screen: any;
 
@@ -92,7 +117,7 @@ export class SessionService implements ILocaleService {
     public onServerConnect: Observable<boolean>;
     private onServerConnectObserver: any;
 
-    constructor(private location: Location, private router: Router, public dialogService: MatDialog,
+    constructor(private location: Location, private router: Router, public dialogService: MatDialog, public snackBar: MatSnackBar,
         public zone: NgZone) {
 
         this.loaderState = new LoaderState(this);
@@ -104,6 +129,11 @@ export class SessionService implements ILocaleService {
         this.obsSess$ = this.subSess$.asObservable();
         this.obsConv$ = this.subConv$.asObservable();
         this.obsConf$ = this.subConf$.asObservable();
+        this.obsFlow$ = this.subFlow$.asObservable();
+        this.obsState$ = this.subState$.asObservable();
+        this.obsStateClass$ = this.subStateClass$.asObservable();
+        this.obsStateActions$ = this.subStateActions$.asObservable();
+        this.obsSave$ = this.subSave$.asObservable();
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -365,7 +395,7 @@ export class SessionService implements ILocaleService {
             // we need to figure out if we are a menuItem or just a string
             if (action.hasOwnProperty('action')) {
                 const menuItem = <IMenuItem>(action);
-
+                confirm = menuItem.confirmationMessage;
                 actionString = menuItem.action;
                 // check to see if we are an IURLMenuItem
                 if (menuItem.hasOwnProperty('url')) {
@@ -475,7 +505,7 @@ export class SessionService implements ILocaleService {
                 this.showLoading(json.title, json.message);
                 return;
             } else if (json.type === 'DevTools') {
-                this.populateDevTables(json);
+                this.devToolRouter(json);
             } else if (json.template && json.template.dialog) {
                 this.showDialog(json);
             } else if (json.type === 'NoOp') {
@@ -487,6 +517,12 @@ export class SessionService implements ILocaleService {
                 // screen shown was a 'loading' screen, don't want to dismiss
                 // that prematurely
                 return;
+            } else if( json.type === 'Toast') {
+                const toast = json as IToastScreen;
+                this.snackBar.open(toast.message, null, {
+                    duration:toast.duration,
+                    panelClass: this.getToastClass(toast.toastType)
+                  });
             } else {
                 this.response = null;
                 this.showScreen(json);
@@ -496,9 +532,40 @@ export class SessionService implements ILocaleService {
         }
     }
 
+    private devToolRouter(json) {
+        if (json.name === 'DevTools::Get') {
+            this.populateDevTables(json);
+        }
+    }
+
+    private getToastClass( type: ToastType ): string {
+        switch(type){
+            case ToastType.Success:
+                return 'toast-success';
+            case ToastType.Warn:
+                return 'toast-warn';
+        }
+
+        return null;
+    }
+
     private populateDevTables(json: any) {
         if(json.currentState) {
+            console.log("Pulling current state actions...");
             this.currentState = json.currentState.stateName;
+            this.subState$.next(this.currentState);
+            this.currentStateClass = json.currentState.stateClass;
+            this.subStateClass$.next(this.currentStateClass);
+            this.currentStateActions = [];
+            for(var i = 0; i < json.actionsSize; i = i + 2) {
+                this.currentStateActions.push({
+                    Action: json.actions[i],
+                    Destination: json.actions[i+1]
+
+                });
+                this.subStateActions$.next(this.currentStateActions);
+                
+            }
         }
         if(json.scopes.ConversationScope) {
             console.log('Pulling Conversation Scope Elements...');
@@ -547,6 +614,74 @@ export class SessionService implements ILocaleService {
                 }
             });
             
+        }
+        if(json.scopes.FlowScope) {
+            console.log('Pulling Flow Scope Elements...');
+            this.FlowElements = [];
+            json.scopes.FlowScope.forEach(element => {
+                if (!this.FlowElements.includes(element, 0)) {
+                    this.FlowElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace,  
+                        Value: element.value 
+                    });
+                    this.subFlow$.next(this.FlowElements);
+                }
+            });
+            console.log(this.FlowElements);
+        }
+
+        if(json.scopes.ConfigScope) {
+            console.log('Pulling Config Scope Elements...');
+            this.ConfElements = [];
+            json.scopes.ConfigScope.forEach(element => {
+                if (!this.ConfElements.includes(element, 0)) {
+                    this.ConfElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace,  
+                        Value: element.value 
+                    });
+                    this.subConf$.next(this.ConfElements);
+                }
+            });
+            console.log(this.ConfElements);
+        }
+
+        if(json.saveFiles) {
+            console.log('Pulling save files...');
+            this.savePoints = [];
+            json.saveFiles.forEach(saveName => {
+                this.savePoints.push(saveName);
+                this.subSave$.next(this.savePoints);
+                console.log(this.savePoints);
+            })
+        }
+    }
+
+    public addSaveFile(newSavePoint: string) {
+        if (newSavePoint) {
+            if(!this.savePoints.includes(newSavePoint)) {
+                this.savePoints.push(newSavePoint);
+                this.subSave$.next(this.savePoints);
+            }
+          this.onAction('DevTools::Save::' + newSavePoint);
+          console.log("Save Point Created: \'" + newSavePoint + "\'");
+        }
+    }
+
+    public removeSaveFile(saveName: string) {
+        console.log('Attempting to remove Save Point \'' + saveName + '\'...');
+        let index = this.savePoints.findIndex(item => {
+            return saveName === item;
+        });
+        if (index !== -1) {
+            this.onAction("DevTools::RemoveSave::" + saveName);
+            this.savePoints.splice(index, 1);
+            this.subSave$.next(this.savePoints);
+            console.log('Save Points updated: ');
+            console.log(this.savePoints);
         }
     }
 
@@ -603,6 +738,20 @@ export class SessionService implements ILocaleService {
             this.subConf$.next(this.ConfElements);
             console.log('Config Scope updated: ');
             console.log(this.ConfElements);
+        }
+    }
+
+    public removeFlowElement(element: Element) {
+        console.log('Attempting to remove \'' + element.Value + '\'...');
+        let index = this.FlowElements.findIndex(item => {
+            return element.Value === item.Value;
+        });
+        if (index !== -1) {
+            this.onAction("DevTools::Remove::Flow", element);
+            this.FlowElements.splice(index, 1);
+            this.subFlow$.next(this.FlowElements);
+            console.log('Flow Scope updated: ');
+            console.log(this.FlowElements);
         }
     }
 

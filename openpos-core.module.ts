@@ -104,6 +104,7 @@ import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/mu
 import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
 import { DynamicFormDialogComponent } from './dialogs/dynamic-form/dynamic-form-dialog.component';
 import { LoadingDialogComponent } from './dialogs/loading-dialog/loading-dialog.component';
+import { SelectionListComponent } from './screens/selection-list/selection-list.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -193,7 +194,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         NavListComponent,
         PopTartComponent,
         LoadingDialogComponent,
-        VersionComponent
+        VersionComponent,
+        SelectionListComponent
     ],
     declarations: [
         DialogComponent,
@@ -278,7 +280,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         PhoneUSValidatorDirective,
         BarcodeScanPublisherDirective,
         MimicScrollDirective,
-        ScreenOrientationDirective
+        ScreenOrientationDirective,
+        SelectionListComponent
     ],
     imports: [
         BrowserModule,
@@ -304,6 +307,7 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         FabToggleGroupComponent,
         FabToggleButtonComponent,
         DynamicFormControlComponent,
+        DynamicFormFieldComponent,
         FocusDirective,
         StatusBarComponent,
         SelectableItemListComponent,

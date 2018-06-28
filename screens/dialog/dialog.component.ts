@@ -1,9 +1,10 @@
 import { IMenuItem } from '../../common/imenuitem';
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { SessionService } from '../../services/session.service';
 import { FocusDirective } from '../../common/focus.directive';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { IScreen } from '../../common/iscreen';
+import { ILine } from '../iLine';
 
 @Component({
   selector: 'app-dialog',
@@ -15,13 +16,17 @@ export class DialogComponent implements IScreen {
   screen: any;
   primaryButton: IMenuItem;
   otherButtons: IMenuItem[];
+  messages: string[];
+  lines: ILine[];
 
   constructor(public session: SessionService, public dialogRef: MatDialogRef<DialogComponent>) {
   }
 
   show(screen: any): void {
     this.screen = screen;
-    
+    this.messages = this.screen.message;
+    this.lines = this.screen.messageLines;
+ 
     if( screen.buttons ){
       this.primaryButton = screen.buttons[0];
     }
@@ -34,9 +39,4 @@ export class DialogComponent implements IScreen {
   isCustomerFacing(): boolean {
     return this.screen.customerFacing && ['CUSTOMER_CONFIRMATION'].indexOf(this.screen.subType) >= 0;
   }
-
-  get messages(): string[] {
-    return this.screen.message;
-  }
-
 }

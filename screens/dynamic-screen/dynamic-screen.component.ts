@@ -20,15 +20,7 @@ import { AbstractTemplate } from '../..';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
 import { Configuration } from '../../configuration/configuration';
-
-
-// import { MatTableDataSource } from '@angular/material';
 import { MatInputModule, MatProgressSpinnerModule, MatTableModule } from "@angular/material";
-// import { DevTableService } from '../../services/devtable.service';
-// import { Observable } from 'rxjs/Observable';
-// import 'rxjs/add/observable/of';
-// import {DataSource} from '@angular/cdk/collections';
-// import { Process } from '../../models/process.model';
 
 @Component({
     selector: 'app-dynamic-screen',
@@ -42,8 +34,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     SessElements: Element[];
     ConvElements: Element[];
     ConfElements: Element[];
+    FlowElements: Element[];
+    
 
-    displayedColumns = ["ID", "Time Created", "StackTrace", "close"];
+    savePoints: string[];
 
     public backButton: IMenuItem;
 
@@ -58,6 +52,17 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     showDevMenu = false;
 
     logsAvailable = false;
+
+
+    savePointFileName: string;
+
+    private displaySavePoints = false;
+
+    private showUpdating = false;
+
+    private currentStateActions: ActionMap[];
+
+    private currentStateClass: string;
 
     private currentState: string;
 
@@ -97,6 +102,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     @ViewChild(TemplateDirective) host: TemplateDirective;
 
+    screen: any;
+    private lastSequenceNum: number;
+    private lastScreenName: string;
+
     constructor(public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
         public deviceService: DeviceService, public dialog: MatDialog,
         public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
@@ -126,6 +135,12 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.session.obsSess$.subscribe(SessElements => this.SessElements = SessElements);
         this.session.obsConv$.subscribe(ConvElements => this.ConvElements = ConvElements);
         this.session.obsConf$.subscribe(ConfElements => this.ConfElements = ConfElements);
+        this.session.obsConf$.subscribe(FlowElements => this.FlowElements = FlowElements);
+        this.session.obsState$.subscribe(currentState => this.currentState = currentState);
+        this.session.obsStateClass$.subscribe(currentStateClass => this.currentStateClass = currentStateClass);
+        this.session.obsStateActions$.subscribe(currentStateActions => this.currentStateActions = currentStateActions);
+        this.session.obsSave$.subscribe(savePoints => this.savePoints = savePoints);
+
     }
 
 
@@ -184,14 +199,28 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             });
         }
         this.session.onAction('DevTools::Get');
-        this.currentState = this.session.currentState;
         this.showDevMenu = !this.showDevMenu;
-
     }
 
     protected onDevMenuRefresh() {
-        this.session.onAction('DevTools::Get');
-        this.currentState = this.session.currentState;
+        console.log("refreshing tools... ")
+        this.displayStackTrace = false;
+        this.currentState = 'Updating State... ';
+        this.currentStateClass = 'Updating State...';
+        this.showUpdating = true;
+        this.currentStateActions = [];
+        this.NodeElements = [];
+        this.ConvElements = [];
+        this.SessElements = [];
+        this.ConfElements = [];
+        this.FlowElements = [];
+        setTimeout( () => {
+            this.session.onAction('DevTools::Get')
+            this.showUpdating = false
+            }, 500
+        );
+        this.onCreateSavePoint(null);
+
     }
 
     protected onNodeRemove(element: Element) {
@@ -210,10 +239,39 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.session.removeConfigElement(element);
     }
 
+    protected onFlowRemove(element: Element) {
+        this.session.removeFlowElement(element);
+    }
+
     protected onStackTrace(element: Element) {
         this.displayStackTrace = true;
         this.selected = '\'' + element.ID + '\'';
         this.stackTrace = element.StackTrace;
+    }
+
+    protected onLoadSavePoint(savePoint: string) {
+        if (this.savePoints.includes(savePoint)) {
+            this.session.onAction('DevTools::Load::' + savePoint);
+            console.log("Loaded Save Point: \'" + savePoint + "\'");
+        } else {
+            console.log("Unable to load Save Point: \'" + savePoint + "\'");
+        }
+    }
+
+    protected onCreateSavePoint(newSavePoint: string) {
+        if (newSavePoint) {
+            this.session.addSaveFile(newSavePoint);
+        }
+        if (!this.displaySavePoints && this.savePoints.length > 0) {
+            this.displaySavePoints = true;
+        }
+    }
+
+    protected onSavePointRemove(savePoint: string) {
+        this.session.removeSaveFile(savePoint);
+        if (this.savePoints.length === 0) {
+            this.displaySavePoints = false;
+        }
     }
 
     public onDevRefreshView() {
@@ -518,5 +576,16 @@ export interface Element {
     Time: string,
     StackTrace: string,
     Value: string
+}
+
+export interface State {
+    Name: string,
+    Class: string,
+    ActionMap: ActionMap[]
+}
+
+export interface ActionMap {
+    Action: string,
+    Destination: string,
 }
 

@@ -1,56 +1,70 @@
 <div [ngClass]="session.getTheme()" inactivityMonitor (issueKeepAlive)="session.keepAlive()">
     <div [ngClass]="classes" style="height: 100vh">
 
-        <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu">
+        <!-- <button *ngIf="showDevMenu" #devMenuButton class="float" mat-mini-fab color="accent" [matMenuTriggerFor]="devMenu">
             <mat-icon>code</mat-icon>
-        </button>
-<!--
+        </button>  -->
         <div *ngIf="showDevMenu">
            
             <mat-expansion-panel>
-                <mat-expansion-panel-header>
+                <mat-expansion-panel-header (click)="onDevMenuRefresh()">
                   Developer Tools
                 </mat-expansion-panel-header>
                 <mat-tab-group dynamicHeight>
                     <mat-tab label="State">
-                    <span  md-colors="{color:'accent'}">    
+                    <div  class="stateTab" >
+                    <div  [style.width.px]="'30vw'">    
                       <h2>Current State: {{currentState}}
                         <button mat-icon-button (click)="onDevMenuRefresh()">
                             <mat-icon aria-label="refresh">refresh</mat-icon>
                         </button>
                     </h2>
-                    </span>
+                    <h5>Current State Class: <i>{{currentStateClass}}</i></h5>
+                    </div>
                     <div class="tab">
                     <div class="panel" layout="row">
                         <mat-card>
                             <mat-accordion multi="true" >
-                                <mat-expansion-panel>
+                                <mat-expansion-panel [disabled]="showUpdating">
                                     <mat-expansion-panel-header>
-                                        Connections
+                                        <mat-panel-title>
+                                            Connections
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
                                     </mat-expansion-panel-header>
-                                    <h3>TO</h3>
-                                    <mat-list dense>
-                                            <mat-list-item> Sell </mat-list-item>
-                                            <mat-list-item> Search </mat-list-item>
-                                            <mat-list-item> Customer Lookup </mat-list-item>
-                                    </mat-list>
-                                    <mat-divider></mat-divider>
-                                    <h3>FROM</h3>
-                                    <mat-list dense>
-                                        <mat-list-item> Registration </mat-list-item>    
-                                    </mat-list>
+                                        <table class="mat-table">
+                                                <thead>
+                                                    <tr style="text-align:left" class="mat-header-row">
+                                                        <th class="mat-header-cell"> Action </th>
+                                                        <th class="mat-header-cell"> Destination State </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="mat-row" *ngFor="let action of currentStateActions">
+                                                        <td class="mat-cell"> {{action.Action}} </td>
+                                                        <td class="mat-cell" > {{action.Destination}} </td>                                                       
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                 </mat-expansion-panel>
 
-                                <mat-expansion-panel> 
+                                <mat-expansion-panel [disabled]="showUpdating"> 
                                     <mat-expansion-panel-header>
-                                    Config Scope
+                                        <mat-panel-title>
+                                            Config Scope
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
                                     </mat-expansion-panel-header>
                                     <table class="mat-table">
                                         <thead>
                                             <tr style="text-align:left" class="mat-header-row">
                                                 <th class="mat-header-cell"> ID </th>
                                                 <th class="mat-header-cell"> Time Created </th>
-                                                <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                                <th class="mat-header-cell" style="text-align:center"> Origin </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -70,16 +84,21 @@
                                     </table>
                                 </mat-expansion-panel>
                             
-                                <mat-expansion-panel>
+                                <mat-expansion-panel [disabled]="showUpdating">
                                     <mat-expansion-panel-header>
-                                        Node Scope
+                                        <mat-panel-title>
+                                            Node Scope
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
                                     </mat-expansion-panel-header>
                                     <table class="mat-table">
                                         <thead>
                                             <tr style="text-align:left" class="mat-header-row">
                                                 <th class="mat-header-cell"> ID </th>
                                                 <th class="mat-header-cell"> Time Created </th>
-                                                <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                                <th class="mat-header-cell" style="text-align:center"> Origin </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -99,16 +118,21 @@
                                     </table>
                                 </mat-expansion-panel>
 
-                                <mat-expansion-panel>
+                                <mat-expansion-panel [disabled]="showUpdating">
                                     <mat-expansion-panel-header>
+                                        <mat-panel-title>
                                             Session Scope
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
                                     </mat-expansion-panel-header>
                                         <table class="mat-table">
                                             <thead>
                                                 <tr style="text-align:left" class="mat-header-row">
                                                     <th class="mat-header-cell"> ID </th>
                                                     <th class="mat-header-cell"> Time Created </th>
-                                                    <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                                    <th class="mat-header-cell" style="text-align:center"> Origin </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -128,16 +152,21 @@
                                         </table>
                                 </mat-expansion-panel>
 
-                                <mat-expansion-panel>
+                                <mat-expansion-panel [disabled]="showUpdating">
                                     <mat-expansion-panel-header>
-                                        Conversation Scope
+                                        <mat-panel-title>
+                                            Conversation Scope
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
                                     </mat-expansion-panel-header>
                                         <table class="mat-table">
                                             <thead>
                                                 <tr style="text-align:left" class="mat-header-row">
                                                     <th class="mat-header-cell"> ID </th>
                                                     <th class="mat-header-cell"> Time Created </th>
-                                                    <th class="mat-header-cell" style="text-align:center"> StackTrace </th>
+                                                    <th class="mat-header-cell" style="text-align:center"> Origin </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -157,57 +186,131 @@
                                         </table>
                                 </mat-expansion-panel>
 
+                                <mat-expansion-panel [disabled]="showUpdating"> 
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Flow Scope
+                                        </mat-panel-title>
+                                        <mat-panel-description *ngIf="showUpdating">
+                                            Updating...
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <table class="mat-table">
+                                        <thead>
+                                            <tr style="text-align:left" class="mat-header-row">
+                                                <th class="mat-header-cell"> ID </th>
+                                                <th class="mat-header-cell"> Time Created </th>
+                                                <th class="mat-header-cell" style="text-align:center"> Origin </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="mat-row" *ngFor="let element of FlowElements">
+                                                <td class="mat-cell"> {{element.ID}} </td>
+                                                <td class="mat-cell" > {{element.Time}} </td>
+                                                <td class="mat-cell" style="text-align:center">
+                                                    <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                                </td>
+                                                <td class="mat-cell-close">
+                                                    <button mat-icon-button (click)="onConfRemove(element)">
+                                                        <mat-icon aria-label="delete">close</mat-icon>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </mat-expansion-panel>
+
                             </mat-accordion>
                         </mat-card>
                         </div>
                         <div *ngIf="displayStackTrace" class="stacktrace">
                             <mat-card>
-                                <mat-card-title>StackTrace - {{selected}}</mat-card-title>
-                                <mat-card-content [style.overflow]="'scroll'" [style.height.px]="'300'" class="stacktrace-content">
+                                <mat-card-title>Origin of: {{selected}}</mat-card-title>
+                                <mat-card-content [style.height.px]="'400'" class="stacktrace-content">
                                     {{stackTrace}}
                                 </mat-card-content>
                             </mat-card>
                         </div>
                         <div class="clear"></div>
                     </div>
+                    </div>
                     </mat-tab>
                     <mat-tab label="Local Storage">
+                        <div >
                         <h1>Local Storage</h1>
-                        <ul>
+                        <ul [style.height.px]="'250'">
                             <li><button mat-button (click)="onPersonalize()">Personalize</button></li>
                             <li><button mat-button (click)="onDevRefreshView()">Refresh View</button></li>
                             <li><button mat-button (click)="onDevClearLocalStorage()">Clear Local Storage</button></li>
                         </ul>
-                            <mat-divider></mat-divider>
+
                             <div fxFlexFill fxLayout="row" fxLayoutAlign="left start" fxLayoutAlign.xs="left">
-                                <button mat-button color="primary" (click)="onDevRestartNode()">Restart Node</button>
+                                <button mat-raised-button color="primary" (click)="onDevRestartNode()">Restart Node</button>
                             </div>
-                      
-
+                        </div>
                     </mat-tab>
-                    <mat-tab label="Save Points">
-                      <h1>Save Points</h1>
-
+                    <mat-tab label="Save Points" >
+                        <h1>Save Points</h1>
+                        
+                        <div *ngIf="displaySavePoints" class="savePoints" [style.height.px]="'300'">
+                                <mat-card>
+                                    <mat-card-title></mat-card-title>
+                                    <mat-card-content >
+                                        <table  class="mat-table">
+                                            <thead>
+                                                <tr style="text-align:left" class="mat-header-row">
+                                                    <th class="mat-header-cell"> Name </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="mat-row" *ngFor="let element of savePoints">
+                                                    <td class="mat-cell"> {{element}} </td>
+                                                    <td class="mat-cell" style="text-align:center">
+                                                        <button mat-button color="accent" (click)="onLoadSavePoint(element)">Load</button>
+                                                    </td>
+                                                    <td class="mat-cell-close">
+                                                        <button mat-icon-button (click)="onSavePointRemove(element)">
+                                                            <mat-icon aria-label="delete">close</mat-icon>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </mat-card-content>   
+                                </mat-card>     
+                        </div>
+                        <div *ngIf="!displaySavePoints" [style.height.px]="'300'"></div>
                     </mat-tab>
                     <mat-tab label="Logs">
                         <h1>Logs</h1>
-                        <div [style.height.px]="'250'">
-                        <ul>
-                                <li><button mat-raised-button [matMenuTriggerFor]="logsMenu">Logs</button></li>
-                        </ul>
+                        <div class="logs">
+                            <div *ngIf="!logsAvailable"  [style.height.px]="'300'"></div>
+                            <ng-container *ngIf="logsAvailable" [style.height.px]="'300'" >
+                                <mat-divider></mat-divider>
+                                <ul>
+                                    <li *ngFor="let m of logFilenames"><button mat-button [matMenuTriggerFor]="logsMenu">{{m}}</button></li>
+                                </ul>
+                            </ng-container>
                         </div>
                     </mat-tab>
-                  </mat-tab-group>
+                </mat-tab-group>
                 
                 <mat-action-row>
                     <div fxFlexFill fxLayout="row" fxLayoutAlign="left start" fxLayoutAlign.xs="left">
-                        <button mat-raised-button color="accent">Create Save Point</button>
+                        <mat-form-field appearance="standard">
+                            <input matInput #newSavePoint
+                            (keyup.enter)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''"
+                            placeholder="Create a Save Point" >
+                            <mat-icon matSuffix>
+                                <button mat-icon-button (click)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''">
+                                    <mat-icon aria-label="save">save</mat-icon>
+                                </button>
+                            </mat-icon>
+                        </mat-form-field>
                     </div>
-
                 </mat-action-row>
-            </mat-expansion-panel>
-        -->           
-           
+            </mat-expansion-panel>   
+        </div> 
            
         <div [matMenuTriggerFor]="devMenu">
             <mat-menu #devMenu="matMenu">
@@ -222,10 +325,16 @@
                 <button mat-menu-item (click)="onDevRestartNode()">Restart Node</button>
             </mat-menu>
 
-            <mat-menu #logsMenu="matMenu">
+            <!-- <mat-menu #logsMenu="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="logShareMenu">Share</button>
                 <button mat-menu-item [matMenuTriggerFor]="logUploadMenu">Upload</button>
                 <button mat-menu-item [matMenuTriggerFor]="logViewMenu">View</button>
+            </mat-menu> -->
+
+            <mat-menu #logsMenu="matMenu">
+                <button mat-menu-item (click)="onLogfileSelected(m)">Share</button>
+                <button mat-menu-item (click)="onLogfileUpload(m)">Upload</button>
+                <button mat-menu-item (click)="onLogfileView(m)">View</button>
             </mat-menu>
 
             <mat-menu #logShareMenu="matMenu">
