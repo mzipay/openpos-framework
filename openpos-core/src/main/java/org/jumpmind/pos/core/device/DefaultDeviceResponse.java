@@ -20,6 +20,14 @@ public class DefaultDeviceResponse implements IDeviceResponse, Serializable {
         this.payload = payload;
     }
     
+    protected DefaultDeviceResponse(IDeviceResponse otherResponse) {
+        this.requestId = otherResponse.getRequestId();
+        this.deviceId = otherResponse.getDeviceId();
+        this.type = otherResponse.getType();
+        // Shallow copy of the payload
+        this.payload = otherResponse.getPayload();
+    }
+    
     @Override
     public String getRequestId() {
         return this.requestId;
