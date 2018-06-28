@@ -184,7 +184,7 @@ public class ScreenService implements IScreenService {
                     logger.debug("Posting action {}", action);
                     stateManager.doAction(action);
                 } catch (Throwable ex) {
-                    logger.error("Unexpected exception while processing action: " + action, ex);
+                    logger.error(String.format("Unexpected exception while processing action from %s: %s", nodeId, action), ex);
                     DialogScreen errorDialog = new DialogScreen();
                     errorDialog.asDialog(new DialogProperties(true));
                     errorDialog.setIcon("error");
