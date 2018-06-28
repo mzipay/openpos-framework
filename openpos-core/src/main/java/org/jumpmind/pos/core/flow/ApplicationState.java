@@ -20,77 +20,90 @@
  */
 package org.jumpmind.pos.core.flow;
 
-import java.util.Deque;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
 
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.screen.Screen;
 
 /**
- * Responsible for housing all true state data for a node. That is, it should be possible
- * to serialize this class and use it to reengage the application at exactly the same point 
- * it was in.
+ * Responsible for housing all true state data for a node. That is, it should be
+ * possible to serialize this class and use it to reengage the application at
+ * exactly the same point it was in.
  */
 public class ApplicationState {
 
+    private String appId;
+    private String nodeId;
     private Scope scope = new Scope();
     private LinkedList<StateContext> stateStack = new LinkedList<>();
     private StateContext currentContext;
     private Transition currentTransition;
     private int screenSequenceNumber = 0;
-    private Map<String, Map<String, Screen>> lastScreenByAppIdByNodeId = new HashMap<>();
-    private Map<String, Map<String, Screen>> lastDialogByAppIdByNodeId = new HashMap<>();
-    
+    private Screen lastScreen;
+    private Screen lastDialog;
+
     public Scope getScope() {
         return scope;
     }
+
     public void setScope(Scope scope) {
         this.scope = scope;
     }
+
     public LinkedList<StateContext> getStateStack() {
         return stateStack;
     }
+
     public void setStateStack(LinkedList<StateContext> stateStack) {
         this.stateStack = stateStack;
     }
+
     public StateContext getCurrentContext() {
         return currentContext;
     }
+
     public void setCurrentContext(StateContext currentContext) {
         this.currentContext = currentContext;
     }
+
     public Transition getCurrentTransition() {
         return currentTransition;
     }
+
     public void setCurrentTransition(Transition currentTransition) {
         this.currentTransition = currentTransition;
     }
+
     public int getScreenSequenceNumber() {
         return screenSequenceNumber;
     }
+
     public void setScreenSequenceNumber(int screenSequenceNumber) {
         this.screenSequenceNumber = screenSequenceNumber;
     }
-    public Map<String, Map<String, Screen>> getLastScreenByAppIdByNodeId() {
-        return lastScreenByAppIdByNodeId;
-    }
-    public void setLastScreenByAppIdByNodeId(Map<String, Map<String, Screen>> lastScreenByAppIdByNodeId) {
-        this.lastScreenByAppIdByNodeId = lastScreenByAppIdByNodeId;
-    }
-    public Map<String, Map<String, Screen>> getLastDialogByAppIdByNodeId() {
-        return lastDialogByAppIdByNodeId;
-    }
-    public void setLastDialogByAppIdByNodeId(Map<String, Map<String, Screen>> lastDialogByAppIdByNodeId) {
-        this.lastDialogByAppIdByNodeId = lastDialogByAppIdByNodeId;
-    }
+
     public int incrementAndScreenSequenceNumber() {
         return ++screenSequenceNumber;
     }
     
+    public void setLastDialog(Screen lastDialog) {
+        this.lastDialog = lastDialog;
+    }
+    
+    public Screen getLastDialog() {
+        return lastDialog;
+    }
+    
+    public void setLastScreen(Screen lastScreen) {
+        this.lastScreen = lastScreen;
+    }
+    
+    public Screen getLastScreen() {
+        return lastScreen;
+    }
+
     public Object getScopeValue(ScopeType scopeType, String name) {
         ScopeValue scopeValue = null;
         switch (scopeType) {
@@ -104,14 +117,15 @@ public class ApplicationState {
             default:
                 throw new FlowException("Invalid scope " + scopeType);
         }
-        
+
         if (scopeValue != null) {
             return scopeValue.getValue();
         } else {
             return null;
         }
     }
-    
+
+    @SuppressWarnings("unchecked")
     public <T> T getScopeValue(String name) {
         ScopeValue value = getScope().resolve(name);
         if (value != null) {
@@ -119,13 +133,13 @@ public class ApplicationState {
         } else {
             value = getCurrentContext().resolveScope(name);
             if (value != null) {
-                return (T) value.getValue();    
+                return (T) value.getValue();
             } else {
                 return null;
             }
         }
     }
-    
+
     public StateConfig findStateConfig(FlowConfig flowConfig) {
         StateConfig stateConfig = flowConfig.getStateConfig(getCurrentContext().getState());
         Iterator<StateContext> itr = getStateStack().iterator();
@@ -135,7 +149,22 @@ public class ApplicationState {
 
         }
         return stateConfig;
-    }    
-    
-    
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
+    }
+
+    public String getNodeId() {
+        return nodeId;
+    }
+
 }
