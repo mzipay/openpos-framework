@@ -7,4 +7,5 @@ public interface ILegacySummaryCountBeanModel {
     String getLabel();
     String getDisplayAmount();
     BigDecimal getAmount();
+    String getActionName();
 }
