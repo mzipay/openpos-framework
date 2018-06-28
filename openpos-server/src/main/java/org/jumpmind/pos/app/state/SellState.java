@@ -10,7 +10,6 @@ import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.InOut;
-import org.jumpmind.pos.core.flow.Out;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.screen.SellItemScreen;
 import org.jumpmind.pos.user.model.User;

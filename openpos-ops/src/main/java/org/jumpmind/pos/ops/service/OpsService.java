@@ -18,4 +18,10 @@ public class OpsService {
     public DeviceStatusResult getDeviceStatus(@RequestParam(value="deviceId", defaultValue="*") String deviceId) {
         return endpointDispatcher.dispatch("/deviceStatus", deviceId);
     }
+    
+    @RequestMapping("/deviceStatuses")
+    public DeviceStatusResult getDeviceStatuses() {
+        return endpointDispatcher.dispatch("/deviceStatus");
+    }
+
 }

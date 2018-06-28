@@ -38,6 +38,8 @@ public class DevToolsMessage extends Screen {
     private IScreenService screenService;
 	
     private static final long serialVersionUID = 1L;
+    
+    private static final String SAVE_PATH = "./src/main/resources/saveStates/";
 
 	private Map<String, List<ScopeField>> scopes = new HashMap<>();
 	
@@ -83,13 +85,14 @@ public class DevToolsMessage extends Screen {
     			sm.getApplicationState().getScope().removeConversationScope(scopeId);
     			scopes.get("ConversationScope").removeIf(p -> p.getName().equals(scopeId));
     		} else if (scopeType.equals("Config")) {
-    			//TODO add support
+    			sm.getApplicationState().getCurrentContext().getFlowConfig().getConfigScope().remove(scopeId);
+    			scopes.get("ConfigScope").removeIf(p -> p.getName().equals(scopeId));
     		} else if (scopeType.equals("Flow")) {
     			sm.getApplicationState().getCurrentContext().removeFlowScope(scopeId);
     			scopes.get("FlowScope").removeIf(p -> p.getName().equals(scopeId));
     		}
 		} else {
-			// TODO 'add a scope' support?
+			// TODO 'add a scope' support? idk.
 		}
 		this.put("scopes", scopes);
 	}
@@ -114,7 +117,17 @@ public class DevToolsMessage extends Screen {
 	}
 	
 	public void loadSaveFiles () {
-		//TODO add way to populate save files on init or remove all on destruction
+		saveFiles.clear();
+		 File dir = new File(SAVE_PATH);
+		 File[] directoryListing = dir.listFiles();
+		 if (directoryListing != null) {
+		   for (File child : directoryListing) {
+		     this.saveFiles.add(child.getName().replaceAll(".json", ""));
+		    }
+		  } else {
+		    logger.warn("No save files found in save directory.");
+		  }
+		 this.put("saveFiles", saveFiles);
 	}
 	
 	private void setScopes (IStateManager sm) {
@@ -123,6 +136,7 @@ public class DevToolsMessage extends Screen {
 		scopes.put("NodeScope", buildScope(sm.getApplicationState().getScope().getNodeScope()));
 		scopes.put("SessionScope", buildScope(sm.getApplicationState().getScope().getSessionScope()));
 		scopes.put("FlowScope", buildScope(sm.getApplicationState().getCurrentContext().getFlowScope()));
+		scopes.put("ConfigScope", buildConfigScope(sm.getApplicationState().getCurrentContext().getFlowConfig().getConfigScope()));
 	}
 	
 	
@@ -135,13 +149,22 @@ public class DevToolsMessage extends Screen {
 		return res;
 	}
 	
+	private List<ScopeField> buildConfigScope(Map<String, Object> map) {
+		Set<String> keys = map.keySet();
+		List<ScopeField> res = new ArrayList<>();
+		for (String key : keys) {
+			res.add(new ScopeField(key, map.get(key).toString(), map.get(key).toString().replaceAll("at ", "\nat_")));
+		}
+		return res;
+	}
+	
 	public void saveState(IStateManager sm, String saveName) {
-		String filename = "./" + saveName + ".json";
+		String filename = SAVE_PATH + saveName + ".json";
 		applicationStateSerializer.serialize(sm, sm.getApplicationState(), filename);
 	}
 	
 	public void loadState(IStateManager sm, String saveName) {
-		String filename = "./" + saveName + ".json";
+		String filename = SAVE_PATH + saveName + ".json";
 		
         boolean resumeState = false;
         
@@ -165,7 +188,7 @@ public class DevToolsMessage extends Screen {
 	}
 	
 	public void removeSave(String saveName) {
-		String filename = "./" + saveName + ".json";
+		String filename = SAVE_PATH + saveName + ".json";
 		File save = new File(filename);
 		if(save.delete()) {
 			logger.info("Successfully deleted save file " + filename);
