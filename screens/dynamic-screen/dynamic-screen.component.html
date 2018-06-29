@@ -313,7 +313,7 @@
         </div> 
            
         <div [matMenuTriggerFor]="devMenu">
-            <mat-menu #devMenu="matMenu">
+            <mat-menu #devMenu="matMenu" yPosition="below" xPosition="after">
                 <ng-container *ngIf="logsAvailable">
                     <button mat-menu-item [matMenuTriggerFor]="logsMenu">Logs</button>
                     <mat-divider></mat-divider>
