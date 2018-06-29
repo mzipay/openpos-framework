@@ -1,20 +1,11 @@
-import { ITextMask, TextMask } from './../../textmask';
-import { IMenuItem } from '../../imenuitem';
-import { IScreen } from '../../iscreen';
-import { Component, ViewChildren, AfterViewInit, DoCheck, OnInit, Output, Input, EventEmitter, QueryList } from '@angular/core';
+import { Component, ViewChildren, AfterViewInit, Input, QueryList } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
-import { MatSelectChange } from '@angular/material';
-import {
-  FormArray, FormBuilder, FormGroup, Validators, AbstractControl,
-  FormControl, NgForm, ValidatorFn, NG_VALIDATORS
-} from '@angular/forms';
+import { FormGroup, Validators, FormControl, ValidatorFn } from '@angular/forms';
 import { IFormElement } from '../../iformfield';
-import { Observable } from 'rxjs/Observable';
 import { ScreenService } from '../../../services/screen.service';
 import { OpenPosValidators } from '../../validators/openpos-validators';
 import { ValidatorsService } from '../../../services/validators.service';
 import { IForm } from '../../iform';
-import { MatInput } from '@angular/material';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
 
 @Component({

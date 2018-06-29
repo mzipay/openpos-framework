@@ -1,11 +1,9 @@
 import { InAppBrowserPlugin } from './../plugins/inappbrowser.plugin';
 import { BarcodeScannerPlugin } from './../plugins/barcodescanner.plugin';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, BehaviorSubject, Subject } from 'rxjs';
 import { DEVICE_ERROR_RESPONSE_TYPE, DEVICE_RESPONSE_TYPE, DEVICE_DNE_RESPONSE_TYPE } from './../common/ideviceresponse';
 import { IDevicePlugin } from './../common/idevice-plugin';
 import { PluginService } from './plugin.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
 import { IDeviceRequest } from './../common/idevicerequest';
 import { SessionService } from './session.service';
 import { Injectable } from '@angular/core';

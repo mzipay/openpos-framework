@@ -1,6 +1,5 @@
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Optional, Output, Self } from '@angular/core';
-import { MatInput } from '@angular/material';
 import { MatKeyboardComponent } from '../components/keyboard/keyboard.component';
 import { MatKeyboardRef } from '../classes/keyboard-ref.class';
 import { MatKeyboardService } from '../services/keyboard.service';

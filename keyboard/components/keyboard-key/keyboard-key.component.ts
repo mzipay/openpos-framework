@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 import { MAT_KEYBOARD_DEADKEYS } from '../../configs/keyboard-deadkey.config';
 import { MAT_KEYBOARD_ICONS } from '../../configs/keyboard-icons.config';

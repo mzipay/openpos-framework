@@ -3,8 +3,7 @@ import { SessionService } from '../services/session.service';
 import { IScreen } from './../common/iscreen';
 import { SelectionMode } from './../common/selectionmode';
 import { DataSource } from '@angular/cdk/collections';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
     selector: 'app-static-table',

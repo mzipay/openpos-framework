@@ -1,7 +1,7 @@
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { MatKeyboardComponent } from '../components/keyboard/keyboard.component';
 import { MatKeyboardContainerComponent } from '../components/keyboard-container/keyboard-container.component';

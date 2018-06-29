@@ -3,12 +3,11 @@ import { MatDialog } from '@angular/material';
 import { DeviceService } from '../../services/device.service';
 import { ISellItem } from '../../common/isellitem';
 import { IScreen } from '../../common/iscreen';
-import { IMenuItem } from '../../common/imenuitem';
-import { Component, ViewChild, AfterViewInit, AfterContentInit, DoCheck, OnInit, AfterViewChecked, ElementRef} from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnInit, AfterViewChecked, ElementRef} from '@angular/core';
 import { SessionService } from '../../services/session.service';
 import { ObservableMedia } from '@angular/flex-layout';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { ISellScreen } from '../../templates';
 import { SelectableItemListComponentConfiguration, SelectionMode } from '../../common/controls/selectable-item-list/selectable-item-list.component';
 
@@ -62,11 +61,11 @@ export class TransactionComponent implements AfterViewInit, AfterViewChecked, IS
         startSize = size;
       }
     });
-    this.overFlowListSize = this.observableMedia.asObservable().map(
+    this.overFlowListSize = this.observableMedia.asObservable().pipe(map(
       change => {
         return sizeMap.get(change.mqAlias);
       }
-    ).startWith(startSize);
+    ), startWith(startSize));
   }
 
   ngAfterViewInit(): void {

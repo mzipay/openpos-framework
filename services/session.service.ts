@@ -2,20 +2,19 @@ import { LoaderState } from './../common/loader/loader-state';
 import { IDeviceResponse } from './../common/ideviceresponse';
 import { IDeviceRequest } from './../common/idevicerequest';
 import { IMenuItem } from '../common/imenuitem';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
-import { Subscription } from 'rxjs/Subscription';
 import { Injectable, EventEmitter, NgZone } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType } from '../common/action-intercepter';
+import { ActionIntercepter } from '../common/action-intercepter';
 import { ToastType, IToastScreen } from '../common/toast-screen.interface';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confirmation-dialog.component';
 import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Element, ActionMap } from '../screens/dynamic-screen/dynamic-screen.component';
 import { IThemeChangingEvent } from '../events/ithemechanging.event';
 
@@ -341,8 +340,7 @@ export class SessionService implements ILocaleService {
         // Subscribe a function to be run on_next message
         this.subscription = this.messages.subscribe(this.onNextMessage);
 
-        this.state = this.stompService.state
-            .map((state: number) => StompState[state]);
+        this.state = this.stompService.state.pipe(map((state: number) => StompState[state]));
 
         this.subscribed = true;
         this.onServerConnectObserver.next(true);

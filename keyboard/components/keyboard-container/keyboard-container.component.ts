@@ -3,9 +3,8 @@ import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal } from '@angular/cdk
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, EmbeddedViewRef, HostBinding, HostListener, NgZone, OnDestroy, ViewChild } from '@angular/core';
 import { AnimationCurves, AnimationDurations } from '@angular/material/core';
 
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/first';
+import { Subject, Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 import { MatKeyboardConfig } from '../../configs/keyboard.config';
 import { KeyboardAnimationState } from '../../enums/keyboard-animation-state.enum';
@@ -139,8 +138,7 @@ export class MatKeyboardContainerComponent extends BasePortalOutlet implements O
    */
   private _completeExit() {
     this._ngZone.onMicrotaskEmpty
-      .asObservable()
-      .first()
+      .asObservable().pipe(first())
       .subscribe(() => {
         this.onExit.next();
         this.onExit.complete();
