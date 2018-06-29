@@ -6,7 +6,7 @@
     "author": "Jumpmind",
     "license": "MIT",
     "private": true,
-    "peerDependencies": {
+    "dependencies": {
         "@angular/cdk": "^6.x.x",
         "@angular/material": "^6.x.x",
         "@angular/animations": "^6.x.x",
