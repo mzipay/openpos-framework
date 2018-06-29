@@ -26,7 +26,6 @@ export class TransactionComponent implements AfterViewInit, AfterViewChecked, IS
   initialized = false;
   listConfig =  new SelectableItemListComponentConfiguration<ISellItem>();
   selectedItems: ISellItem[] = new Array<ISellItem>();
-  individualMenuClicked = false;
 
   public overFlowListSize: Observable<number>;
 
@@ -78,11 +77,6 @@ export class TransactionComponent implements AfterViewInit, AfterViewChecked, IS
     this.session.onAction('Next');
   }
 
-  openItemDialog(item: ISellItem) {
-    this.individualMenuClicked = true;
-    this.openItemsDialog([item]);
-  }
-
   openItemsDialog(items: ISellItem[]) {
     let optionItems = [];
     if(items.length > 1) {
@@ -112,10 +106,6 @@ export class TransactionComponent implements AfterViewInit, AfterViewChecked, IS
   }
 
   public onItemListChange(event: ISellItem[]): void {
-    if(this.individualMenuClicked){
-      this.individualMenuClicked = false;
-      return;
-    }
     this.selectedItems = event;
     this.session.onAction("SelectedItemsChanged", this.selectedItems);
   }
