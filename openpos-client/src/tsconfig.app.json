@@ -10,8 +10,7 @@
         "**/*.ts"
     ],
     "files": [
-        "../node_modules/@jumpmind/openpos-client-core-lib/index.ts",
-        "../node_modules/@stomp/ng2-stompjs/index.ts"
+        "../node_modules/@jumpmind/openpos-client-core-lib/index.ts"
     ],
     "exclude": [
         "test.ts",
