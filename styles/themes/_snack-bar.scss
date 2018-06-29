@@ -1,6 +1,6 @@
 @mixin openpos-snack-bar($theme){
     .toast-success{
-        background-color: mat-color(map-get($theme, accent));
+        background-color: mat-color(map-get($theme, primary));
     }
 
     .toast-warn{
