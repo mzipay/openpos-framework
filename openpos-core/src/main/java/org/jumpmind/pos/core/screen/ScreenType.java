@@ -5,6 +5,7 @@ public interface ScreenType {
     public static final String Blank = "Blank";
     public static final String CallForAuthorization = "CallForAuthorization";
     public static final String Cart = "Cart";
+    public static final String CatalogBrowser = "CatalogBrowser";
     public static final String Change = "Change";
     public static final String ChooseOptions = "ChooseOptions";
     public static final String CustomerSearch = "CustomerSearch";
