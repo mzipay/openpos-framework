@@ -33,7 +33,8 @@ public class DBSessionNaturalIdTest {
                 PersistTestUtil.testDbPlatform(), 
                 PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class, ServiceInvoice.class),
-                DBSessionFactory.getQueryTempaltes("persist-test"));        
+                DBSessionFactory.getQueryTemplates("persist-test"),
+                DBSessionFactory.getDmlTemplates("persist-test"));        
         {            
             DBSession db = sessionFactory.createDbSession();
             db.executeSql("TRUNCATE TABLE CAR_CAR");

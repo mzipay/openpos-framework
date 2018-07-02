@@ -18,7 +18,8 @@ public class DatabaseSchemaTest {
                 PersistTestUtil.testDbPlatform(), 
                 PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class),
-                DBSessionFactory.getQueryTempaltes("persist-test"));
+                DBSessionFactory.getQueryTemplates("persist-test"),
+                DBSessionFactory.getDmlTemplates("persist-test"));   
     }
     
     @Test

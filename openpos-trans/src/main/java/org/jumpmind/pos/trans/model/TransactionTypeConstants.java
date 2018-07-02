@@ -1,8 +1,8 @@
 package org.jumpmind.pos.trans.model;
 
-public final class TransactionType {
+public final class TransactionTypeConstants {
     
-    private TransactionType() {
+    private TransactionTypeConstants() {
     }
     
     public final int SALE = 1;
