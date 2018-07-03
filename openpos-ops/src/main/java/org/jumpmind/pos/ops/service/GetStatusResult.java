@@ -7,20 +7,22 @@ import org.jumpmind.pos.service.ServiceResult;
 
 public class GetStatusResult extends ServiceResult {
 
-    List<UnitStatus> deviceStatuses;
+    private static final long serialVersionUID = 1L;
     
-    public void setDeviceStatuses(List<UnitStatus> deviceStatuses) {
-        this.deviceStatuses = deviceStatuses;
+    List<UnitStatus> unitStatuses;
+    
+    public void setUnitStatuses(List<UnitStatus> unitStatuses) {
+        this.unitStatuses = unitStatuses;
     }
     
-    public List<UnitStatus> getDeviceStatuses() {
-        return deviceStatuses;
+    public List<UnitStatus> getUnitStatuses() {
+        return unitStatuses;
     }
     
-    public UnitStatus getDeviceStatus(String deviceId) {
-        for (UnitStatus deviceStatus : deviceStatuses) {
-            if (deviceStatus.getUnitId().equals(deviceId)) {
-                return deviceStatus;
+    public UnitStatus getUnitStatus(String unitId) {
+        for (UnitStatus unitStatus : unitStatuses) {
+            if (unitStatus.getUnitId().equals(unitId)) {
+                return unitStatus;
             }
         }
         return null;
