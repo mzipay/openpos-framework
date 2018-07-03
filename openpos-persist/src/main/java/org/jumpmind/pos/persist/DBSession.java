@@ -1,5 +1,7 @@
 package org.jumpmind.pos.persist;
 
+import static org.apache.commons.lang.StringUtils.isNotBlank;
+
 import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.FileReader;
@@ -12,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ import org.jumpmind.db.sql.DmlStatement.DmlType;
 import org.jumpmind.db.sql.Row;
 import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.jumpmind.pos.persist.impl.DefaultMapper;
+import org.jumpmind.pos.persist.impl.DmlTemplate;
 import org.jumpmind.pos.persist.impl.EntitySystemInfo;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.ReflectUtils;
@@ -41,24 +43,22 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class DBSession {
-    
+
     private static final Logger log = Logger.getLogger(DBSession.class);
 
     private Transaction currentTransaction;
 
-    private String catalogName;
-    private String schemaName;
     private DatabaseSchema databaseSchema;
     private IDatabasePlatform databasePlatform;
     private JdbcTemplate jdbcTemplate;
     private Map<String, String> sessionContext;
     private Map<String, QueryTemplate> queryTemplates;
+    private Map<String, DmlTemplate> dmlTemplates;
 
     public DBSession(String catalogName, String schemaName, DatabaseSchema databaseSchema, IDatabasePlatform databasePlatform,
-            Map<String, String> sessionContext, Map<String, QueryTemplate> queryTemplates) {
+            Map<String, String> sessionContext, Map<String, QueryTemplate> queryTemplates, Map<String, DmlTemplate> dmlTemplates) {
         super();
-        this.catalogName = catalogName;
-        this.schemaName = schemaName;
+        this.dmlTemplates = dmlTemplates;
         this.databaseSchema = databaseSchema;
         this.databasePlatform = databasePlatform;
         this.sessionContext = sessionContext;
@@ -77,10 +77,11 @@ public class DBSession {
         Map<String, String> naturalColumnsToFields = databaseSchema.getEntityIdColumnsToFields(entityClass);
 
         if (naturalColumnsToFields.size() != 1) {
-            throw new PersistException(String.format("findByNaturalId cannot be used with a single 'id' "
-                    + "param because the entity defines %s natural key fields.", naturalColumnsToFields.size()));
+            throw new PersistException(String.format(
+                    "findByNaturalId cannot be used with a single 'id' " + "param because the entity defines %s natural key fields.",
+                    naturalColumnsToFields.size()));
         }
-        
+
         EntityId entityId = new EntityId() {
             public Map<String, Object> getIdFields() {
                 Map<String, Object> fields = new HashMap<>();
@@ -89,10 +90,10 @@ public class DBSession {
                 return fields;
             }
         };
-        
+
         return findByNaturalId(entityClass, entityId);
     }
-    
+
     public Connection getConnection() {
         DataSource datasource = databasePlatform.getDataSource();
         try {
@@ -110,8 +111,8 @@ public class DBSession {
         try {
             Map<String, Object> params = new HashMap<>();
             Map<String, Object> fieldValues = id.getIdFields();
-            
-            for (String columnName : entityIdColumnsToFields.keySet()) {   
+
+            for (String columnName : entityIdColumnsToFields.keySet()) {
                 String fieldName = entityIdColumnsToFields.get(columnName);
                 queryTemplate.optionalWhere(String.format("%s = ${%s}", columnName, fieldName));
                 if (fieldValues != null) {
@@ -130,31 +131,32 @@ public class DBSession {
             List<T> results = query(query, params);
 
             if (results != null) {
-                if (results.size() == 1) {                
+                if (results.size() == 1) {
                     return results.get(0);
                 } else {
-                    throw new PersistException(String.format("findByNaturalId must result in 0 or 1 rows, "
-                            + "but instead resulted in %s rows. Sql used: %s", results.size(), query.generateSQL(params).getSql()));
+                    throw new PersistException(
+                            String.format("findByNaturalId must result in 0 or 1 rows, " + "but instead resulted in %s rows. Sql used: %s",
+                                    results.size(), query.generateSQL(params).getSql()));
                 }
             } else {
                 return null;
             }
         } catch (Exception ex) {
-            throw new PersistException("findByNaturalId failed.", ex);            
+            throw new PersistException("findByNaturalId failed.", ex);
         }
     }
-    
+
     public void executeScript(File file) {
         try {
             executeScript(new FileReader(file));
         } catch (Exception ex) {
             if (ex instanceof PersistException) {
-                throw (PersistException)ex;
+                throw (PersistException) ex;
             }
             throw new PersistException("Failed to execute script " + file, ex);
         }
     }
-    
+
     public void executeScript(Reader reader) {
         try {
             RunScript.execute(getConnection(), reader);
@@ -163,12 +165,21 @@ public class DBSession {
         }
     }
 
+    public int executeDml(String namedDml, Object... params) {
+        DmlTemplate template = dmlTemplates.get(namedDml);
+        if (template != null && isNotBlank(template.getDml())) {
+            return jdbcTemplate.update(template.getDml(), params);
+        } else {
+            throw new PersistException("Could not find dml named: " + namedDml);
+        }
+    }
+
     public int executeSql(String sql, Object... params) {
         return jdbcTemplate.update(sql, params);
     }
-    
+
     public <T> List<T> query(Query<T> query) {
-        return query(query, (Map<String, Object>)null);
+        return query(query, (Map<String, Object>) null);
     }
 
     @SuppressWarnings("unchecked")
@@ -195,21 +206,21 @@ public class DBSession {
 
     @SuppressWarnings("unchecked")
     protected <T> void populdateDefaultSelect(Query<T> query) {
-        boolean isEntityResult = Entity.class.isAssignableFrom(query.getResultClass()); 
-        
+        boolean isEntityResult = Entity.class.isAssignableFrom(query.getResultClass());
+
         if (query.getQueryTemplate() == null) {
-            if (!StringUtils.isEmpty(query.getName())) {                
+            if (!StringUtils.isEmpty(query.getName())) {
                 if (!queryTemplates.containsKey(query.getName())) {
-                    throw new PersistException("No query templates found for query named '" + query.getName() + "'. Check your *-query.yaml config.");
+                    throw new PersistException(
+                            "No query templates found for query named '" + query.getName() + "'. Check your *-query.yaml config.");
                 }
                 query.setQueryTemplate(queryTemplates.get(query.getName()));
             } else {
                 query.setQueryTemplate(new QueryTemplate());
             }
         }
-        
-        if (isEntityResult
-            && StringUtils.isEmpty(query.getQueryTemplate().getSelect())) {
+
+        if (isEntityResult && StringUtils.isEmpty(query.getQueryTemplate().getSelect())) {
             Class<? extends Entity> entityClass = (Class<? extends Entity>) query.getResultClass();
             query.getQueryTemplate().setSelect(getSelectSql(entityClass));
         }
@@ -225,7 +236,7 @@ public class DBSession {
         if (currentTransaction != null) {
             throw new PersistException("Transaction already started.  The previous transaction must be committed "
                     + "or rolled back before starting another transacstion. " + currentTransaction);
-        }        
+        }
     }
 
     public void commitTransaction() {
@@ -247,7 +258,7 @@ public class DBSession {
             }
         }
         return columnNames;
-    }    
+    }
 
     public void save(Entity entity) {
         Table table = getValidatedTable(entity);
@@ -255,7 +266,7 @@ public class DBSession {
         EntitySystemInfo entitySystemInfo = new EntitySystemInfo(entity);
 
         if (entitySystemInfo.isNew()) {
-            try {                
+            try {
                 insert(entity, table);
             } catch (DuplicateKeyException ex) {
                 log.debug("Insert of entity failed, failing over to an update. " + entity, ex);
@@ -265,7 +276,7 @@ public class DBSession {
                             + "match what's understood by the code?  " + entity, ex);
                 }
             }
-        } else {            
+        } else {
             if (update(entity, table) == 0) {
                 insert(entity, table);
             }
@@ -273,9 +284,9 @@ public class DBSession {
     }
 
     protected String getSelectSql(Class<? extends Entity> entity) {
-        Table table = getValidatedTable(entity);  
-        DmlStatement statement = databasePlatform.createDmlStatement(DmlType.SELECT, table.getCatalog(), table.getSchema(),
-                table.getName(), null, table.getColumns(), null, null);
+        Table table = getValidatedTable(entity);
+        DmlStatement statement = databasePlatform.createDmlStatement(DmlType.SELECT, table.getCatalog(), table.getSchema(), table.getName(),
+                null, table.getColumns(), null, null);
         String sql = statement.getSql();
         return sql;
     }
@@ -286,14 +297,14 @@ public class DBSession {
         }
         if (StringUtils.isEmpty(entity.getLastUpdateBy())) {
             entity.setLastUpdateBy(sessionContext.get("LAST_UPDATE_BY"));
-        }        
+        }
         excecuteDml(DmlType.INSERT, entity, table);
     }
 
     protected int update(Entity entity, Table table) {
         if (StringUtils.isEmpty(entity.getCreateBy())) {
             entity.setCreateBy(sessionContext.get("CREATE_BY"));
-        }        
+        }
         if (StringUtils.isEmpty(entity.getLastUpdateBy())) {
             entity.setCreateBy(sessionContext.get("LAST_UPDATE_BY"));
         }
@@ -339,9 +350,10 @@ public class DBSession {
             }
             return objectValuesByColumnName;
         } catch (Exception ex) {
-            throw new PersistException("Failed to getObjectValuesByColumnName on object " + object + " objectToTableMapping: " + objectToTableMapping);
+            throw new PersistException(
+                    "Failed to getObjectValuesByColumnName on object " + object + " objectToTableMapping: " + objectToTableMapping);
         }
-    }    
+    }
 
     protected org.jumpmind.db.model.Table getValidatedTable(Entity entity) {
         if (entity == null) {
@@ -353,21 +365,22 @@ public class DBSession {
     protected Table getValidatedTable(Class<?> entityClass) {
         org.jumpmind.db.model.Table table = databaseSchema.getTable(entityClass);
         if (table == null) {
-            throw new PersistException("Failed to locate a database table for entity class: '" + entityClass + "'. Mapped entities in this session are: " + 
-                    databaseSchema.getClassMetadata().keySet() + " Make sure the correct dbSession is used with the module by using the correct @Qualifier");
+            throw new PersistException("Failed to locate a database table for entity class: '" + entityClass
+                    + "'. Mapped entities in this session are: " + databaseSchema.getClassMetadata().keySet()
+                    + " Make sure the correct dbSession is used with the module by using the correct @Qualifier");
         }
         return table;
-    }    
+    }
 
     protected void checkTransactionStarted() {
         if (currentTransaction == null) {
             throw new PersistException("No transaction was started - call startTransaction() before using this.");
-        }        
+        }
     }
 
     protected <T extends Entity> List<T> find(Class<T> entityClass, Table table, String whereClause, List<Object> params) {
         try {
-            T entity = entityClass.newInstance();
+            entityClass.newInstance();
             String sql = getSelectSql(entityClass) + whereClause;
             return queryInternal(entityClass, sql, params);
         } catch (Exception ex) {
@@ -385,9 +398,9 @@ public class DBSession {
             T object = resultClass.newInstance();
 
             PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(object);
-            
+
             LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<String>();
-            
+
             for (int i = 0; i < propertyDescriptors.length; i++) {
                 String propertyName = propertyDescriptors[i].getName();
                 String columnName = DatabaseSchema.camelToSnakeCase(propertyName);
@@ -398,10 +411,10 @@ public class DBSession {
                     matchedColumns.put(columnName, null);
                 }
             }
-            
+
             if (object instanceof Entity) {
-                addUnmatchedColumns(row, matchedColumns, (Entity)object);
-                decorateRetrievedEntity((Entity)object);
+                addUnmatchedColumns(row, matchedColumns, (Entity) object);
+                decorateRetrievedEntity((Entity) object);
             }
             objects.add(object);
         }
@@ -409,7 +422,7 @@ public class DBSession {
         if (objects != null && !objects.isEmpty()) {
             return objects;
         } else {
-            return null;            
+            return null;
         }
     }
 
@@ -418,7 +431,7 @@ public class DBSession {
             if (!matchedColumns.containsKey(rowColumn)) {
                 entity.setAdditionalField(rowColumn, row.get(rowColumn));
             }
-        }        
+        }
     }
 
     protected void decorateRetrievedEntity(Entity entity) {
@@ -431,7 +444,7 @@ public class DBSession {
             save(entity);
         }
     }
-    
+
     public void close() {
         try {
             getConnection().close();

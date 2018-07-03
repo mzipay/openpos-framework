@@ -36,6 +36,11 @@ public class ContextService {
             @RequestParam(value="deviceId", defaultValue="*") String deviceId) {
         return endpointDispatcher.dispatch("/device", deviceId);
     }
+        
+    @RequestMapping("/sequence/{name}/next")
+    public Long getNextSequence(@RequestParam("name") String name) {
+        return endpointDispatcher.dispatch("/sequence/{name}/next", name);
+    }
     
     
     

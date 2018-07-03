@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ConfigListResult extends ServiceResult {
     
+    private static final long serialVersionUID = 1L;
     private List<ConfigModel> configs;
     @JsonIgnore
     private transient Map<String, ConfigModel> configsByName; 

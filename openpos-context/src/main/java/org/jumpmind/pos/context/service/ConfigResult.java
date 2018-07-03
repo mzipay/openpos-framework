@@ -5,6 +5,7 @@ import org.jumpmind.pos.service.ServiceResult;
 
 public class ConfigResult extends ServiceResult {
 
+    private static final long serialVersionUID = 1L;
     private String configName;
     private String configValue;
     private ConfigModel config;

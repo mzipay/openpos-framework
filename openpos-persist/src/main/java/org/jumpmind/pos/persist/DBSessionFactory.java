@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.pos.persist.impl.DatabaseSchema;
+import org.jumpmind.pos.persist.impl.DmlTemplate;
+import org.jumpmind.pos.persist.impl.DmlTemplates;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.yaml.snakeyaml.Yaml;
@@ -22,6 +24,8 @@ public class DBSessionFactory {
     private DatabaseSchema databaseSchema;
 
     private Map<String, QueryTemplate> queryTemplates;
+    
+    private Map<String, DmlTemplate> dmlTemplates;
 
     private IDatabasePlatform databasePlatform;
 
@@ -31,15 +35,17 @@ public class DBSessionFactory {
 
     public void init(IDatabasePlatform databasePlatform, Map<String, String> sessionContext, List<Class<?>> entities) {
 
-        QueryTemplates queryTemplates = getQueryTempaltes(sessionContext.get("module.tablePrefix"));
+        QueryTemplates queryTemplates = getQueryTemplates(sessionContext.get("module.tablePrefix"));
+        DmlTemplates dmlTemplates = getDmlTemplates(sessionContext.get("module.tablePrefix"));
 
-        init(databasePlatform, sessionContext, entities, queryTemplates);
+        init(databasePlatform, sessionContext, entities, queryTemplates, dmlTemplates);
     }
 
     public void init(IDatabasePlatform databasePlatform, Map<String, String> sessionContext, List<Class<?>> entities,
-            QueryTemplates queryTemplatesObject) {
+            QueryTemplates queryTemplatesObject, DmlTemplates dmlTemplates) {
 
         this.queryTemplates = buildQueryTemplatesMap(queryTemplatesObject);
+        this.dmlTemplates = buildDmlTemplatesMap(dmlTemplates);
         this.sessionContext = sessionContext;
 
         this.databasePlatform = databasePlatform;
@@ -61,10 +67,10 @@ public class DBSessionFactory {
     }
 
     public DBSession createDbSession() {
-        return new DBSession(null, null, databaseSchema, databasePlatform, sessionContext, queryTemplates);
+        return new DBSession(null, null, databaseSchema, databasePlatform, sessionContext, queryTemplates, dmlTemplates);
     }
 
-    public static QueryTemplates getQueryTempaltes(String tablePrefix) {
+    public static QueryTemplates getQueryTemplates(String tablePrefix) {
         try {
             URL url = Thread.currentThread().getContextClassLoader().getResource(tablePrefix + "-query.yaml");
             if (url != null) {
@@ -75,6 +81,23 @@ public class DBSessionFactory {
             } else {
                 log.info("Could not locate " + tablePrefix + "-query.yaml on the classpath.");
                 return new QueryTemplates();
+            }
+        } catch (Exception ex) {
+            throw new PersistException("Failed to load " + tablePrefix + "-query.yaml", ex);
+        }
+    }
+    
+    public static DmlTemplates getDmlTemplates(String tablePrefix) {
+        try {
+            URL url = Thread.currentThread().getContextClassLoader().getResource(tablePrefix + "-dml.yaml");
+            if (url != null) {
+                log.info(String.format("Loading %s...", url.toString()));
+                InputStream queryYamlStream = url.openStream();
+                DmlTemplates queryTemplates = new Yaml(new Constructor(DmlTemplates.class)).load(queryYamlStream);
+                return queryTemplates;
+            } else {
+                log.info("Could not locate " + tablePrefix + "-query.yaml on the classpath.");
+                return new DmlTemplates();
             }
         } catch (Exception ex) {
             throw new PersistException("Failed to load " + tablePrefix + "-query.yaml", ex);
@@ -95,6 +118,14 @@ public class DBSessionFactory {
             queryTemplates.getQueries().stream().forEach((q) -> queryTemplatesMap.put(q.getName(), q));
         }
         return queryTemplatesMap;
+    }
+    
+    protected Map<String, DmlTemplate> buildDmlTemplatesMap(DmlTemplates dmlTemplates) {
+        Map<String, DmlTemplate> dmlTemplatesMap = new HashMap<>();
+        if (dmlTemplates != null && dmlTemplates.getDmls() != null) {
+            dmlTemplates.getDmls().stream().forEach((q) -> dmlTemplatesMap.put(q.getName(), q));
+        }
+        return dmlTemplatesMap;
     }
 
 }

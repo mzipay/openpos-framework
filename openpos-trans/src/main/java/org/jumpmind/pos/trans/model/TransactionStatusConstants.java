@@ -1,8 +1,8 @@
 package org.jumpmind.pos.trans.model;
 
-public final class TransactionStatus {
+public final class TransactionStatusConstants {
 
-    private TransactionStatus() {
+    private TransactionStatusConstants() {
     }
     
     public final int IN_PROGRESS = 1;

@@ -6,7 +6,6 @@ import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.PersistException;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class DBSessionTransactionTest {
@@ -19,7 +18,8 @@ public class DBSessionTransactionTest {
                 PersistTestUtil.testDbPlatform(),
                 PersistTestUtil.getSessionContext(), 
                 Arrays.asList(CarEntity.class),
-                DBSessionFactory.getQueryTempaltes("persist-test"));                
+                DBSessionFactory.getQueryTemplates("persist-test"),
+                DBSessionFactory.getDmlTemplates("persist-test"));                   
     }
     
     @Test(expected = PersistException.class)

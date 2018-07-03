@@ -25,19 +25,49 @@ task npmClean(type: Delete) {
 }
 clean.dependsOn(npmClean)
 
-// task npmLink(type: NpmTask) {
-//  args = ['link', "openpos-core"]
-// }
-// npmLink.dependsOn(npm_install);
-// npmLink.dependsOn tasks.getByPath(':openpos-client-core-lib:link')
+task check_core_lib_installed(type:Exec) {
+  workingDir '.'
+  ignoreExitValue true
+  commandLine 'npm', 'ls', '--global', '@jumpmind/openpos-client-core-lib'
+  standardOutput = new ByteArrayOutputStream() //store the output instead of printing to the console
+  ext.output = {
+    return standardOutput.toString()
+  }
+}
+
+task npm_link_manual(type:Exec) {
+  workingDir '.'
+  ignoreExitValue true
+  commandLine 'npm', 'link', '@jumpmind/openpos-client-core-lib' 
+  standardOutput = new ByteArrayOutputStream() //store the output instead of printing to the console
+  ext.output = {
+    return standardOutput.toString()
+  }
+}
+
+npm_link_manual.doFirst {
+	println(check_core_lib_installed.output())
+	// Don't try to link if we can't locate the client lib.
+    if (check_core_lib_installed.execResult == null || check_core_lib_installed.execResult.exitValue > 0) { 
+		println '@jumpmind/openpos-client-core-lib symlink not found, will not attempt to link projects.\n' +
+		'If you want to link in the @jumpmind/openpos-client-core-lib, you will need to have pulled the openpos-client-core-lib\n' +
+		'project, and run \'npm link\' from the home directory of that project.'
+		throw new StopExecutionException() 
+	} else {
+		println 'Linking @jumpmind/openpos-client-core-lib...'
+	}
+}
+
+npm_link_manual.dependsOn (check_core_lib_installed)
+
+task develop { dependsOn npm_install, npm_link_manual }
+
+develop.doFirst {
+	println(npm_link_manual.output())
+}
 
 task build {}
 build.dependsOn(npm_run_build)
-// npm_run_build.dependsOn(npmLink)
-
-task develop {}
-develop.dependsOn(npm_install)
-// develop.dependsOn(npmLink)
 
 task pack {}
 npm_pack.dependsOn(build)
@@ -45,4 +75,3 @@ pack.dependsOn(npm_pack)
 
 task assemble {}
 assemble.dependsOn(build)
-// npm_install.dependsOn tasks.getByPath(':openpos-client-core-lib:link')
