@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.screen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,10 @@ public class SellItem extends DefaultItem {
     
     public void setMenuItems(List<MenuItem> transactionMenuItems) {
         this.menuItems = transactionMenuItems;
+    }
+    
+    public void setMenuItems(MenuItem... transactionMenuItems) {
+        this.menuItems = Arrays.asList(transactionMenuItems);
     }
     
     public List<MenuItem> getMenuItems() {

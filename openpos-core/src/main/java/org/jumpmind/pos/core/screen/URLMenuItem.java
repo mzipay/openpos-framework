@@ -1,5 +1,6 @@
 package org.jumpmind.pos.core.screen;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -88,6 +89,11 @@ public class URLMenuItem extends MenuItem {
         this.url = url;
     }
 
+    public URLMenuItem url(String url) {
+        this.setUrl(url);
+        return this;
+    }
+
     public URLTargetMode getTargetMode() {
         return targetMode;
     }
@@ -96,12 +102,22 @@ public class URLMenuItem extends MenuItem {
         this.targetMode = targetMode;
     }
 
+    public URLMenuItem targetMode(URLTargetMode targetMode) {
+        this.setTargetMode(targetMode);
+        return this;
+    }
+    
     public String getOptions() {
         return options;
     }
     
     public void setOptions(String options) {
         this.options = options;
+    }
+
+    public URLMenuItem options(String options) {
+        this.setOptions(options);
+        return this;
     }
     
 }
