@@ -104,6 +104,7 @@ import { MultipleDynamicFormComponent } from './screens/multiple-dynamic-form/mu
 import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
 import { DynamicFormDialogComponent } from './dialogs/dynamic-form/dynamic-form-dialog.component';
 import { LoadingDialogComponent } from './dialogs/loading-dialog/loading-dialog.component';
+import { CatalogBrowserComponent } from './screens/catalog-browser/catalog-browser.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -193,7 +194,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         NavListComponent,
         PopTartComponent,
         LoadingDialogComponent,
-        VersionComponent
+        VersionComponent,
+        CatalogBrowserComponent
     ],
     declarations: [
         DialogComponent,
@@ -274,6 +276,7 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         PhonePipe,
         LoadingDialogComponent,
         VersionComponent,
+        CatalogBrowserComponent,
         InactivityMonitorDirective,
         PhoneUSValidatorDirective,
         BarcodeScanPublisherDirective,

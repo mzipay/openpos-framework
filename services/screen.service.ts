@@ -49,6 +49,7 @@ import { SelfCheckoutOptionsComponent } from '../self-checkout/self-checkout-opt
 import { CallForAuthorizationComponent } from '../screens/call-for-authorization/call-for-authorization.component'
 import { DialogComponent } from '../screens/dialog/dialog.component';
 import { MultipleDynamicFormComponent } from '../screens/multiple-dynamic-form/multiple-dynamic-form.component';
+import { CatalogBrowserComponent } from './../screens/catalog-browser/catalog-browser.component';
 
 @Injectable()
 export class ScreenService {
@@ -93,7 +94,7 @@ export class ScreenService {
     this.screens.set('FullPageImage', FullPageImageComponent);
     this.screens.set('CallForAuthorization', CallForAuthorizationComponent);
     this.screens.set('MultipleDynamicForm', MultipleDynamicFormComponent);
-
+    this.screens.set('CatalogBrowser', CatalogBrowserComponent);
     // Default Dialog 
     this.screens.set('Dialog', DialogComponent);
 
