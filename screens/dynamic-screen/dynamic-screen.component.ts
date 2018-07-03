@@ -321,7 +321,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         return prom;
     }
 
-    protected onLogfileSelected(logFilename: string): void {
+    public onLogfileSelected(logFilename: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             this.logPlugin.impl.shareLogFile(
                 logFilename,
@@ -334,7 +334,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
     }
 
-    protected onLogfileUpload(logFilename: string): void {
+    public onLogfileUpload(logFilename: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             this.logPlugin.impl.getLogFilePath(
                 logFilename,
@@ -358,7 +358,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
     }
 
-    protected onLogfileView(logFilename: string): void {
+    public onLogfileView(logFilename: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             this.logPlugin.impl.readLogFileContents(
                 logFilename,
