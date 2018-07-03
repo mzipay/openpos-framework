@@ -1,0 +1,90 @@
+package org.jumpmind.pos.core.screen;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class CatalogBrowserScreen extends Screen {
+    private static final long serialVersionUID = 1L;
+
+    public static final int DEFAULT_MAX_ITEMS_PER_PAGE = 25;
+    
+    private List<SellItem> items =  new ArrayList<>();
+    private Integer maxItemsPerPage = DEFAULT_MAX_ITEMS_PER_PAGE;
+    private List<String> categories = new ArrayList<>();
+    private Integer selectedItemQuantity;
+    
+    public CatalogBrowserScreen() {
+        setType(ScreenType.CatalogBrowser);
+    }
+
+    public void addItems(SellItem... items) {
+        this.getItems().addAll(Arrays.asList(items));
+    }
+    
+    public void addItem(SellItem item) {
+        this.getItems().add(item);
+    }
+    
+    public List<SellItem> getItems() {
+        return items;
+    }
+    
+    public void setItems(List<SellItem> items) {
+        this.items = items;
+    }
+    
+    public CatalogBrowserScreen items(List<SellItem> items) {
+        this.setItems(items);
+        return this;
+    }
+    
+    public Integer getMaxItemsPerPage() {
+        return maxItemsPerPage;
+    }
+    
+    public void setMaxItemsPerPage(Integer maxItemsPerPage) {
+        this.maxItemsPerPage = maxItemsPerPage;
+    }
+    
+    public CatalogBrowserScreen maxItemsPerPage(Integer maxItemsPerPage) {
+        this.setMaxItemsPerPage(maxItemsPerPage);
+        return this;
+    }
+    
+    public void addCategory(String... categories) {
+        this.getCategories().addAll(Arrays.asList(categories));
+    }
+    
+    public void addCategory(String category) {
+        this.getCategories().add(category);
+    }
+    
+    public CatalogBrowserScreen categories(List<String> categories) {
+        this.setCategories(categories);
+        return this;
+    }
+    
+    public List<String> getCategories() {
+        return categories;
+    }
+    
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
+    
+    public CatalogBrowserScreen selectedItemQuantity(Integer selectedItemQuantity) {
+        this.setSelectedItemQuantity(selectedItemQuantity);
+        return this;
+    }
+    
+    public Integer getSelectedItemQuantity() {
+        return selectedItemQuantity;
+    }
+    
+    public void setSelectedItemQuantity(Integer selectedItemQuantity) {
+        this.selectedItemQuantity = selectedItemQuantity;
+    }
+    
+    
+}
