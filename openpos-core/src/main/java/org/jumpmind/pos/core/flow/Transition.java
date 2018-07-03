@@ -49,18 +49,18 @@ public class Transition {
     }
     
     public void proceed() {
-        if (stepIndex > 0) {
+        if (stepIndex >= transitionSteps.size()) {
+            if (transitionResult == null) {
+                transitionResult = TransitionResult.PROCEED;
+            }
+            stateManager.performOutjections(currentTransitionStep);
+            latch.get().countDown();
+            return;
+        } else if (stepIndex > 0) {
             CountDownLatch oldLatch = latch.get();
             latch.set(new CountDownLatch(1));
             oldLatch.countDown();
             stateManager.performOutjections(currentTransitionStep);
-        }
-        if (stepIndex >= transitionSteps.size()) {
-            if (transitionResult == null) {                
-                transitionResult = TransitionResult.PROCEED;
-            }
-            latch.get().countDown();
-            return;
         }
 
         currentTransitionStep = transitionSteps.get(stepIndex++);

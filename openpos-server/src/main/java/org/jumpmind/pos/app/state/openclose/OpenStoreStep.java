@@ -1,7 +1,11 @@
 package org.jumpmind.pos.app.state.openclose;
 
+import org.jumpmind.pos.app.state.Prerequisite;
+import org.jumpmind.pos.app.state.Requires;
 import org.jumpmind.pos.context.model.DeviceModel;
 import org.jumpmind.pos.context.service.ContextServiceClient;
+import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.ITransitionStep;
 import org.jumpmind.pos.core.flow.In;
@@ -15,33 +19,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @Order(250)
 public class OpenStoreStep implements ITransitionStep {
 
     @Autowired
     OpsService opsService;
-    
+
     @In(scope = ScopeType.Node)
     IStateManager stateManager;
-    
+
     @In(scope = ScopeType.Node)
-    ContextServiceClient contextServiceClient;    
-    
+    ContextServiceClient contextServiceClient;
+
     Transition transition;
-    
+
     @Override
     public boolean isApplicable(Transition transition) {
         this.transition = transition;
-        DeviceModel device = contextServiceClient.getDevice();
-        GetStatusResult results = opsService.getUnitStatus(UnitStatusConstants.UNIT_TYPE_STORE, device.getBusinessUnitId());
-        UnitStatus unitStatus = results.getUnitStatus(device.getBusinessUnitId());
-        if (unitStatus == null || unitStatus.getUnitStatus().equals(UnitStatusConstants.STATUS_CLOSED)) {
-            return true;
-        } else {
-            return false;
+        Class<?> targetClass = transition.getTargetState().getClass();
+        Requires requires = targetClass.getAnnotation(Requires.class);
+        if (requires != null && isPrerequisite(requires, Prerequisite.OPEN_STORE)) {
+            DeviceModel device = contextServiceClient.getDevice();
+            GetStatusResult results = opsService.getUnitStatus(UnitStatusConstants.UNIT_TYPE_STORE, device.getBusinessUnitId());
+            UnitStatus unitStatus = results.getUnitStatus(device.getBusinessUnitId());
+            if (unitStatus == null || unitStatus.getUnitStatus().equals(UnitStatusConstants.STATUS_CLOSED)) {
+                return true;
+            }
         }
+        return false;
     }
 
     @Override
@@ -49,12 +55,24 @@ public class OpenStoreStep implements ITransitionStep {
         // TODO i18n
         stateManager.getUI().askYesNo("The store is closed.  Would you like to open the store?", "OpenStore", "DoNotOpenStore");
     }
-    
-    public void onOpenStore() {
+
+    protected boolean isPrerequisite(Requires requires, Prerequisite target) {
+        Prerequisite[] values = requires.value();
+        for (Prerequisite prerequisite : values) {
+            if (prerequisite.equals(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @ActionHandler
+    public void onOpenStore(Action action) {
         this.transition.proceed();
     }
-    
-    public void onDoNotOpenStore() {
+
+    @ActionHandler
+    public void onDoNotOpenStore(Action action) {
         this.transition.cancel();
     }
 
