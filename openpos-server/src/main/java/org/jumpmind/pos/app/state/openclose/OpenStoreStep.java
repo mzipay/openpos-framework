@@ -35,7 +35,7 @@ public class OpenStoreStep implements ITransitionStep {
     public boolean isApplicable(Transition transition) {
         this.transition = transition;
         DeviceModel device = contextServiceClient.getDevice();
-        GetStatusResult results = opsService.unitStatus(UnitStatusConstants.UNIT_TYPE_STORE, device.getBusinessUnitId());
+        GetStatusResult results = opsService.getUnitStatus(UnitStatusConstants.UNIT_TYPE_STORE, device.getBusinessUnitId());
         UnitStatus unitStatus = results.getUnitStatus(device.getBusinessUnitId());
         if (unitStatus == null || unitStatus.getUnitStatus().equals(UnitStatusConstants.STATUS_CLOSED)) {
             return true;

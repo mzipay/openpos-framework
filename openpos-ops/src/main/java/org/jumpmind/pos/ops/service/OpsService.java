@@ -14,14 +14,14 @@ public class OpsService {
     private EndpointDispatcher endpointDispatcher;
 
     @RequestMapping("/unitStatus/{unitType}/{unitId}")
-    public GetStatusResult unitStatus(
+    public GetStatusResult getUnitStatus(
             @RequestParam(value = "unitType") String unitType,
             @RequestParam(value = "unitId", defaultValue = "*") String unitId) {
-        return endpointDispatcher.dispatch("/deviceStatus", unitType, unitId);
+        return endpointDispatcher.dispatch("/unitStatus/{unitType}/{unitId}", unitType, unitId);
     }
 
     @RequestMapping("/changeUnitStatus")
-    public StatusChangeResult changeUnitStatus(StatusChangeRequest request) {
+    public StatusChangeResult updateUnitStatus(StatusChangeRequest request) {
         return null;
     }
 
