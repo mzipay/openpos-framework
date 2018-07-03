@@ -8,10 +8,7 @@ abstract public class TransactionEntity extends Entity {
     @Column(primaryKey = true)
     private Long sequenceNumber;
     
-    @Column(primaryKey = true)
-    private String businessUnitId;
-    
-    @Column(primaryKey = true)
+    @Column(primaryKey = true, size="8")
     private String businessDate;
     
     @Column(primaryKey = true)

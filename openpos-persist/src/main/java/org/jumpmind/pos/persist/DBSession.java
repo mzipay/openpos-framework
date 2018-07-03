@@ -142,7 +142,26 @@ public class DBSession {
                 return null;
             }
         } catch (Exception ex) {
-            throw new PersistException("findByNaturalId failed.", ex);
+            throw new PersistException("findByNaturalId failed", ex);
+        }
+    }
+    
+    public <T> List<T> findByFields(Class<T> entityClass, Map<String, Object> fieldValues) {
+        Map<String, String> fieldsToColumns = databaseSchema.getEntityFieldsToColumns(entityClass);
+
+        QueryTemplate queryTemplate = new QueryTemplate();
+
+        try {
+            for (String fieldName : fieldValues.keySet()) {
+                String columnName = fieldsToColumns.get(fieldName);
+                queryTemplate.optionalWhere(String.format("%s = ${%s}", columnName, fieldName));
+            }
+
+            Query<T> query = new Query<T>().result(entityClass);
+            query.setQueryTemplate(queryTemplate);
+            return query(query, fieldValues);
+        } catch (Exception ex) {
+            throw new PersistException("findByFields failed", ex);
         }
     }
 
@@ -419,11 +438,9 @@ public class DBSession {
             objects.add(object);
         }
 
-        if (objects != null && !objects.isEmpty()) {
-            return objects;
-        } else {
-            return null;
-        }
+
+        return objects;
+
     }
 
     private void addUnmatchedColumns(Row row, Map<String, String> matchedColumns, Entity entity) {
