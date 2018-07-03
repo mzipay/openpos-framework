@@ -13,6 +13,9 @@ public class CatalogBrowserScreen extends Screen {
     private Integer maxItemsPerPage = DEFAULT_MAX_ITEMS_PER_PAGE;
     private List<String> categories = new ArrayList<>();
     private Integer selectedItemQuantity;
+    private Integer itemStartIndex = 0;
+    private Integer itemEndIndex = DEFAULT_MAX_ITEMS_PER_PAGE-1;
+    private Integer itemTotalCount;
     
     public CatalogBrowserScreen() {
         setType(ScreenType.CatalogBrowser);
@@ -85,6 +88,44 @@ public class CatalogBrowserScreen extends Screen {
     public void setSelectedItemQuantity(Integer selectedItemQuantity) {
         this.selectedItemQuantity = selectedItemQuantity;
     }
+
+    public Integer getItemStartIndex() {
+        return itemStartIndex;
+    }
+
+    public void setItemStartIndex(Integer itemStartIndex) {
+        this.itemStartIndex = itemStartIndex;
+    }
+
+    public CatalogBrowserScreen itemStartIndex(Integer itemStartIndex) {
+        this.setItemStartIndex(itemStartIndex);
+        return this;
+    }
     
+    public Integer getItemEndIndex() {
+        return itemEndIndex;
+    }
+
+    public void setItemEndIndex(Integer itemEndIndex) {
+        this.itemEndIndex = itemEndIndex;
+    }
+
+    public CatalogBrowserScreen itemEndIndex(Integer itemEndIndex) {
+        this.setItemEndIndex(itemEndIndex);
+        return this;
+    }
+    
+    public void setItemTotalCount(Integer itemTotalCount) {
+        this.itemTotalCount =itemTotalCount;
+    }
+    
+    public Integer getItemTotalCount() {
+        return this.itemTotalCount;
+    }
+    
+    public CatalogBrowserScreen itemTotalCount(Integer itemTotalCount) {
+        this.setItemTotalCount(itemTotalCount);
+        return this;
+    }
     
 }

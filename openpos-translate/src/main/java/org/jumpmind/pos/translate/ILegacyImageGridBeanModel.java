@@ -6,4 +6,6 @@ public interface ILegacyImageGridBeanModel {
     public void setCategoryId(String categoryId);
     public String getCategoryId();
     public ILegacyImageGridBeanModel getCurrentCategoryModel();
+    public int getCurrentPageNo();
+    public void setCurrentPageNo(int pageNo);
 }
