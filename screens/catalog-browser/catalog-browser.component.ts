@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ISellItem } from './../../common/isellitem';
 import { IScreen } from './../../common/iscreen';
+import { MatPaginator } from '@angular/material';
 
 @Component({
     selector: 'app-catalog-browser',
@@ -9,6 +10,7 @@ import { IScreen } from './../../common/iscreen';
   })
   export class CatalogBrowserComponent implements IScreen {
     @ViewChild('drawer') drawer;
+    @ViewChild(MatPaginator) paginator;
   
     screen: IScreen;
     items: ISellItem[];
