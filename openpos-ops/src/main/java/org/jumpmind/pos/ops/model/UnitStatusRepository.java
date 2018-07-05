@@ -33,6 +33,10 @@ public class UnitStatusRepository {
         return getLatest(list);
     }
     
+    public void saveUnitStatus(UnitStatus unitStatus) {
+        dbSession.save(unitStatus);
+    }
+    
     protected static List<UnitStatus> getLatest(List<UnitStatus> list) {
         list = list.stream().sorted((o1, o2) -> -o1.getCreateTime().compareTo(o2.getCreateTime())).collect(Collectors.toList());
         Iterator<UnitStatus> i = list.iterator();

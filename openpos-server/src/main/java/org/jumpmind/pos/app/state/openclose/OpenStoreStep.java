@@ -1,5 +1,8 @@
 package org.jumpmind.pos.app.state.openclose;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.jumpmind.pos.app.state.Prerequisite;
 import org.jumpmind.pos.app.state.Requires;
 import org.jumpmind.pos.context.model.DeviceModel;
@@ -15,6 +18,7 @@ import org.jumpmind.pos.ops.model.UnitStatus;
 import org.jumpmind.pos.ops.model.UnitStatusConstants;
 import org.jumpmind.pos.ops.service.GetStatusResult;
 import org.jumpmind.pos.ops.service.OpsService;
+import org.jumpmind.pos.ops.service.StatusChangeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -68,6 +72,16 @@ public class OpenStoreStep implements ITransitionStep {
 
     @ActionHandler
     public void onOpenStore(Action action) {
+        StatusChangeRequest request = new StatusChangeRequest();
+        // TODO where to get the business date from?
+        request.setBusinessDay(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        request.setBusinessUnitId(contextServiceClient.getDevice().getBusinessUnitId());
+        request.setNewStatus(UnitStatusConstants.STATUS_OPEN);
+        request.setRequestingDeviceId(contextServiceClient.getDevice().getDeviceId());
+        request.setTimeOfRequest(new Date());
+        request.setUnitId(request.getBusinessUnitId());
+        request.setUnitType(UnitStatusConstants.UNIT_TYPE_STORE);
+        opsService.updateUnitStatus(request);
         this.transition.proceed();
     }
 

@@ -1,6 +1,7 @@
 package org.jumpmind.pos.ops.service;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class StatusChangeRequest implements Serializable {
 
@@ -11,6 +12,8 @@ public class StatusChangeRequest implements Serializable {
     String newStatus;
     String requestingDeviceId;
     String businessDay;
+    String businessUnitId;
+    Date timeOfRequest = new Date();
 
     public String getUnitType() {
         return unitType;
@@ -50,6 +53,23 @@ public class StatusChangeRequest implements Serializable {
 
     public void setBusinessDay(String businessDay) {
         this.businessDay = businessDay;
+    }
+    
+    public void setBusinessUnitId(String businessUnitId) {
+        this.businessUnitId = businessUnitId;
+    }
+   
+    public String getBusinessUnitId() {
+        return businessUnitId;
+    }
+    
+    public void setTimeOfRequest(Date dateOfRequest) {
+        this.timeOfRequest = dateOfRequest;
+    }
+    
+
+    public Date getTimeOfRequest() {
+        return timeOfRequest;
     }
 
 }
