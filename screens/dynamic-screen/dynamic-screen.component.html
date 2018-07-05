@@ -325,16 +325,10 @@
                 <button mat-menu-item (click)="onDevRestartNode()">Restart Node</button>
             </mat-menu>
 
-            <!-- <mat-menu #logsMenu="matMenu">
+            <mat-menu #logsMenu="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="logShareMenu">Share</button>
                 <button mat-menu-item [matMenuTriggerFor]="logUploadMenu">Upload</button>
                 <button mat-menu-item [matMenuTriggerFor]="logViewMenu">View</button>
-            </mat-menu> -->
-
-            <mat-menu #logsMenu="matMenu">
-                <button mat-menu-item (click)="onLogfileSelected(m)">Share</button>
-                <button mat-menu-item (click)="onLogfileUpload(m)">Upload</button>
-                <button mat-menu-item (click)="onLogfileView(m)">View</button>
             </mat-menu>
 
             <mat-menu #logShareMenu="matMenu">

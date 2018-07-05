@@ -20,6 +20,7 @@ export interface ISellScreen {
     items: ISellItem[];
     selectedItems: ISellItem[];
     multiSelectedMenuItems: IMenuItem[];
+    transaction: any;
 }
 
 
