@@ -294,7 +294,9 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             ILegacyCargo cargo = bus.getLegacyCargo();
             if (cargo != null) {
                 posSessionInfo.setOperatorName(cargo.getOperatorFirstLastName());
-                posSessionInfo.setOperatorLoginId(cargo.getOperatorLoginId());
+                if (cargo.getOperatorLoginId() != null) {
+                	posSessionInfo.setOperatorLoginId(cargo.getOperatorLoginId());
+                }
 
                 if (bus.getMainCargo() != null) {
                     posSessionInfo.setTrainingMode(bus.getMainCargo().isTrainingMode());

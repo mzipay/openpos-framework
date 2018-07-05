@@ -2,6 +2,7 @@ package org.jumpmind.pos.translate;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.screen.MenuItem;
@@ -48,6 +49,7 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
         this.configureScreenResponseField();
         if (addLocalMenuItems) {
             List<MenuItem> localNavButtons = generateUIActionsForLocalNavButtons(MenuItem.class, true);
+            localNavButtons = localNavButtons.stream().filter(p -> !(p.getTitle().equals("Next"))).collect(Collectors.toList());
             SellTemplate template = screen.getTemplate();
             template.setLocalMenuItems(localNavButtons);
         }
