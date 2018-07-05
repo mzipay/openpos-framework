@@ -25,30 +25,28 @@ task npmClean(type: Delete) {
 }
 clean.dependsOn(npmClean)
 
-task check_core_lib_installed(type:Exec) {
-  workingDir '.'
-  ignoreExitValue true
-  commandLine 'npm', 'ls', '--global', '@jumpmind/openpos-client-core-lib'
-  standardOutput = new ByteArrayOutputStream() //store the output instead of printing to the console
-  ext.output = {
-    return standardOutput.toString()
+npmSetup.doFirst {
+  if (gradle.startParameter.taskNames.contains('develop')) {
+	// Use shared copy of node when setting up dev environment.
+	// This allows check_core_lib_installed to find openpos-client-core-lib
+	// in the developers shared node modules.
+    node.download = false; 
   }
 }
 
-task npm_link_manual(type:Exec) {
-  workingDir '.'
-  ignoreExitValue true
-  commandLine 'npm', 'link', '@jumpmind/openpos-client-core-lib' 
-  standardOutput = new ByteArrayOutputStream() //store the output instead of printing to the console
-  ext.output = {
-    return standardOutput.toString()
-  }
+task check_core_lib_installed(type: NpmTask) {  
+  ignoreExitValue true  
+  args = ['ls', '--global', 'true', '@jumpmind/openpos-client-core-lib']
+}
+
+task npm_link_manual(type: NpmTask) {  
+  workingDir = file("${project.projectDir}")
+  args = ['link', '@jumpmind/openpos-client-core-lib' ]
 }
 
 npm_link_manual.doFirst {
-	println(check_core_lib_installed.output())
 	// Don't try to link if we can't locate the client lib.
-    if (check_core_lib_installed.execResult == null || check_core_lib_installed.execResult.exitValue > 0) { 
+    if (check_core_lib_installed.result == null || check_core_lib_installed.execResult.result > 0) { 
 		println '@jumpmind/openpos-client-core-lib symlink not found, will not attempt to link projects.\n' +
 		'If you want to link in the @jumpmind/openpos-client-core-lib, you will need to have pulled the openpos-client-core-lib\n' +
 		'project, and run \'npm link\' from the home directory of that project.'
