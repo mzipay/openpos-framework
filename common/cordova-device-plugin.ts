@@ -20,7 +20,6 @@ export class CordovaDevicePlugin implements IDevicePlugin {
     }
 
     init(successCallback: () => void, errorCallback: (error?: string) => void): void {
-        // TODO: check if init method exists before trying to call it
         if (typeof this.impl.init === 'function') {
             this.impl.init(successCallback, errorCallback);
         } else {
