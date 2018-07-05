@@ -4,16 +4,60 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { TextMaskModule } from 'angular2-text-mask';
 import { SearchSelectModule } from '@oasisdigital/angular-material-search-select';
 import { MaterialModule } from './material.module';
 import { MatKeyboardModule } from '../keyboard';
 
+import { 
+    MarkDirtyOnSubmitDirective, 
+    FormattedInputValueAccessor, 
+    FocusDirective } from './directives';
+import { 
+    PromptInputComponent, 
+    IconComponent, 
+    ShowErrorsComponent, 
+    DynamicDateFormFieldComponent,
+    DynamicFormFieldComponent,
+    DynamicFormControlComponent,
+    ProductListComponent,
+    SelectableItemListComponent,
+    OverFlowListComponent,
+    ScanSomethingComponent
+} from './components';
+import { SafePipe } from './pipes/safe.pipe';
+
+const components = [
+    PromptInputComponent,
+    IconComponent,
+    ShowErrorsComponent,
+    DynamicDateFormFieldComponent,
+    DynamicFormFieldComponent,
+    DynamicFormControlComponent,
+    ProductListComponent,
+    SelectableItemListComponent,
+    OverFlowListComponent,
+    ScanSomethingComponent
+]
+
+const directives = [
+    MarkDirtyOnSubmitDirective,
+    FormattedInputValueAccessor,
+    FocusDirective
+]
+
+const pipes = [
+    SafePipe
+]
 
 @NgModule({
     entryComponents: [],
-    declarations: [],
+    declarations: [
+        ...directives,
+        ...components,
+        ...pipes
+    ],
     imports: [
         BrowserModule,
         FormsModule,
@@ -38,7 +82,11 @@ import { MatKeyboardModule } from '../keyboard';
         MaterialModule,
         MatKeyboardModule,
         TextMaskModule,
-        SearchSelectModule
+        SearchSelectModule,
+
+        ...directives,
+        ...components,
+        ...pipes
     ],
     providers: [
     ]

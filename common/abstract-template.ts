@@ -1,7 +1,5 @@
-import { DynamicScreenComponent } from './../screens/dynamic-screen/dynamic-screen.component';
 import { IScreen } from './iscreen';
-import { OverlayContainer } from '@angular/cdk/overlay';
-import { ViewChild, ComponentFactory, ViewContainerRef, ComponentRef, OnDestroy } from '@angular/core';
+import { ViewChild, ComponentFactory, ComponentRef, OnDestroy } from '@angular/core';
 import { ScreenDirective } from './screen.directive';
 
 export abstract class AbstractTemplate implements IScreen, OnDestroy {

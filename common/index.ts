@@ -1,4 +1,3 @@
-import { AppVersion } from './app-version';
 export { LoaderState } from './loader/loader-state';
 export { LoaderComponent } from './loader';
 export { IDevicePlugin } from './idevice-plugin';
@@ -14,7 +13,6 @@ export { ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehavior
 export * from './controls';
 export * from './screen-interfaces';
 export { IFormatter } from './formatters/iformatter';
-export { FocusDirective } from './focus.directive';
 export { IWorkStation } from './iworkstation';
 export { ISellItem } from './isellitem';
 export { AppVersion } from './app-version';
@@ -26,3 +24,6 @@ export { Scan } from './scan';
 export { IForm } from './iform';
 export * from './screen-orientation.directive';
 export * from './ideviceresponse';
+export { DynamicScreenComponent } from './dynamic-screen/dynamic-screen.component';
+
+export { PersonalizationComponent } from './personalization.component';

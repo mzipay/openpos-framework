@@ -1,9 +1,8 @@
 import { IScreen } from '../../common/iscreen';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {SessionService} from '../../services/session.service';
-import { IForm } from './../form.component';
+import { SessionService } from '../../services/session.service';
 import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../common/action-intercepter';
-import { IChooseOptionsScreen, DisplayStyle } from './ichooseOptionsScreen';
+import { IOptionItem } from './option-item.interface';
 
 
 @Component({
@@ -53,12 +52,4 @@ export class ChooseOptionsComponent implements IScreen, OnInit,  OnDestroy {
     this.session.unregisterActionIntercepter(ChooseOptionsComponent.UNDO);
   }
 
-}
-
-export interface IOptionItem {
-    displayValue: string;
-    value: string;
-    enabled: boolean;
-    selected: boolean;
-    form: IForm;
 }

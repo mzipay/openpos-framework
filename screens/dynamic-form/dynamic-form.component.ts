@@ -1,7 +1,6 @@
 import { IScreen } from '../../common/iscreen';
 import { Component } from '@angular/core';
 import { SessionService } from '../../services/session.service';
-import {NgForm} from '@angular/forms';
 
 
 @Component({

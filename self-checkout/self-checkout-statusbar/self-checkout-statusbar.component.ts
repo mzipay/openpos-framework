@@ -1,10 +1,9 @@
-import { MatDialog, MatDialogConfig, MatDialogRef, MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
-import { FileUploadService } from '../../services/file-upload.service';
+import { MatDialog, MatDialogConfig, MatSnackBar } from '@angular/material';
 import { IMenuItem } from '../../common/imenuitem';
 import { Component, Input } from '@angular/core';
 import { SessionService } from '../../services/session.service';
-import { ScanSomethingComponent } from '../../common/controls/scan-something/scan-something.component';
-import { SelfCheckoutStatusBarData } from '../../common/screen-interfaces/selfCheckoutStatusBarData';
+import { SelfCheckoutStatusBarData } from '../../self-checkout/self-checkout-statusbar/self-checkout-status-bar-data';
+import { ScanSomethingComponent } from '../../shared';
 
 @Component({
   selector: 'app-self-checkout-statusbar',

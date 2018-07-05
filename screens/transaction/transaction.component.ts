@@ -8,8 +8,8 @@ import { SessionService } from '../../services/session.service';
 import { ObservableMedia } from '@angular/flex-layout';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { ISellScreen } from '../../templates';
-import { SelectableItemListComponentConfiguration, SelectionMode } from '../../common/controls/selectable-item-list/selectable-item-list.component';
+import { ISellScreen } from '../templates';
+import { SelectableItemListComponentConfiguration, SelectionMode } from '../../shared/components/selectable-item-list/selectable-item-list.component';
 
 @Component({
   selector: 'app-transaction',

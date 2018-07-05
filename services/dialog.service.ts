@@ -4,36 +4,33 @@ import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@a
 import { SessionService } from '../services/session.service';
 import { ChooseOptionsDialogComponent } from '../dialogs/choose-options/choose-options-dialog.component';
 import { DynamicFormDialogComponent } from '../dialogs/dynamic-form/dynamic-form-dialog.component';
-import { ScreenService } from '.';
 
 import { MultipleDynamicFormDialogComponent } from '../dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
-import { BasicItemSearchComponent } from '../screens/basic-item-search.component';
-import { EmbeddedWebPageComponent } from '../screens/embedded-web-page.component';
-import { FormComponent } from '../screens/form.component';
-import { DynamicFormComponent } from '../screens/dynamic-form/dynamic-form.component';
+import { BasicItemSearchComponent } from '../screens/basic-item-search/basic-item-search.component';
+import { EmbeddedWebPageComponent } from '../screens/embedded-web-page/embedded-web-page.component';
+import { FormComponent } from '../screens/form/form.component';
 import { LoginComponent } from '../screens/login/login.component';
-import { HomeComponent } from '../screens/home.component';
+import { HomeComponent } from '../screens/home/home.component';
 import { SelfCheckoutHomeComponent, SelfCheckoutTransactionComponent, SelfCheckoutOptionsComponent } from '../self-checkout';
-import { ItemListComponent } from '../screens/item-list.component';
-import { PaymentStatusComponent } from '../screens/payment-status.component';
+import { ItemListComponent } from '../screens/item-list/item-list.component';
+import { PaymentStatusComponent } from '../screens/payment-status/payment-status.component';
 import { SelfCheckoutPaymentStatusComponent } from '../self-checkout/self-checkout-payment-status/self-checkout-payment-status.component';
-import { PromptComponent } from '../screens/prompt.component';
-import { PromptWithOptionsComponent } from '../screens/prompt-with-options.component';
-import { PromptWithInfoComponent } from '../screens/prompt-with-info.component';
+import { PromptComponent } from '../screens/prompt/prompt.component';
+import { PromptWithOptionsComponent } from '../screens/prompt-with-options/prompt-with-options.component';
+import { PromptWithInfoComponent } from '../screens/prompt-with-info/prompt-with-info.component';
 import { TransactionComponent } from '../screens/transaction/transaction.component';
-import { SellItemDetailComponent } from '../screens/sell-item-detail.component';
-import { SignatureCaptureComponent } from '../screens/signature-capture.component';
-import { StaticTableComponent } from '../screens/static-table.component';
-import { SaleRetrievalComponent } from '../screens/sale-retrieval.component';
-import { TenderingComponent } from '../screens/tendering.component';
-import { WarrantyCoverageComponent } from '../screens/warranty-coverage.component';
-import { PersonalizationComponent } from '../screens/personalization.component';
-import { TillCountComponent } from '../screens/till/till-count.component';
-import { TillCountOtherTenderComponent } from '../screens/till/till-count-other-tender.component';
-import { TillSummaryComponent } from '../screens/till/till-summary.component';
+import { SellItemDetailComponent } from '../screens/sell-item-detail/sell-item-detail.component';
+import { SignatureCaptureComponent } from '../screens/signature-capture/signature-capture.component';
+import { StaticTableComponent } from '../screens/static-table/static-table.component';
+import { SaleRetrievalComponent } from '../screens/sale-retrieval/sale-retrieval.component';
+import { TenderingComponent } from '../screens/tendering/tendering.component';
+import { WarrantyCoverageComponent } from '../screens/warranty-coverage/warranty-coverage.component';
+import { PersonalizationComponent } from '../common/personalization.component';
+import { TillCountComponent } from '../screens/till-count/till-count.component';
+import { TillCountOtherTenderComponent } from '../screens/till-count-other-tender/till-count-other-tender.component';
 import { OptionsComponent } from '../screens/options/options.component';
 import { ChangeComponent } from '../screens/change/change.component';
-import { PrintPreviewComponent } from '../screens/print-preview.component';
+import { PrintPreviewComponent } from '../screens/print-preview/print-preview.component';
 import { WaitComponent } from '../screens/wait/wait.component';
 import { CustomerSearchResultsComponent } from '../screens/customer-search-results/customer-search-results.component';
 import { FullPageImageComponent } from '../screens/full-page-image/full-page-image.component';
@@ -42,6 +39,7 @@ import { DialogComponent } from '../screens/dialog/dialog.component';
 import { LoadingDialogComponent } from '../dialogs/loading-dialog/loading-dialog.component';
 import { LoginDialogComponent } from '../dialogs/login-dialog/login-dialog.component';
 import { SelectionListComponent } from '../screens/selection-list/selection-list.component'
+import { TillSummaryComponent } from '../screens/till-summary/till-summary.component';
 
 @Injectable()
 export class DialogService {

@@ -1,7 +1,7 @@
 import { IScreen } from '../../common/iscreen';
 import { Component } from '@angular/core';
 import { SessionService } from '../../services/session.service';
-import { SelectableItemListComponentConfiguration, SelectionMode } from '../../common/controls/selectable-item-list/selectable-item-list.component';
+import { SelectableItemListComponentConfiguration, SelectionMode } from '../../shared/components/selectable-item-list/selectable-item-list.component';
 import { IMenuItem } from '../../common/imenuitem';
 
 @Component({

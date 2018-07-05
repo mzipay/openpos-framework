@@ -1,6 +1,6 @@
-import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
-import { IScreen, AbstractTemplate } from '../..';
-import { IMultipleDynamicFormScreen } from './imultipleDynamicFormScreen';
+import { Component } from '@angular/core';
+import { IScreen } from '../..';
+import { IMultipleDynamicFormScreen } from './multiple-dynamic-form-screen.interface';
 
 
 @Component({

@@ -1,8 +1,5 @@
-import { Component, OnInit, DoCheck, OnDestroy, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { IScreen, AbstractTemplate } from '../..';
+import { Component } from '@angular/core';
 import { MultipleDynamicFormComponent } from '../../screens/multiple-dynamic-form/multiple-dynamic-form.component';
-import { DynamicFormControlComponent } from '../../common/controls/dynamic-form-control/dynamic-form-control.component';
-import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
 
 @Component({
     selector: 'app-multiple-dynamic-form-dialog',

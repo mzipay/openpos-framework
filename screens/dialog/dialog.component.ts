@@ -1,10 +1,9 @@
 import { IMenuItem } from '../../common/imenuitem';
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { SessionService } from '../../services/session.service';
-import { FocusDirective } from '../../common/focus.directive';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 import { IScreen } from '../../common/iscreen';
-import { ILine } from '../iLine';
+import { ILine } from './iLine';
 
 @Component({
   selector: 'app-dialog',

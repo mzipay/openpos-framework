@@ -15,7 +15,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confirmation-dialog.component';
 import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
-import { Element, ActionMap } from '../screens/dynamic-screen/dynamic-screen.component';
+import { Element, ActionMap } from '../common/dynamic-screen/dynamic-screen.component';
 import { IThemeChangingEvent } from '../events/ithemechanging.event';
 
 @Injectable()

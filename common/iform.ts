@@ -4,4 +4,5 @@ export interface IForm {
     formElements: IFormElement[];
     requiresAtLeastOneValue: Boolean;
     formErrors: string[];
+    name: string;
   }
