@@ -1,28 +1,12 @@
-import { AppVersion } from './common/app-version';
-
 import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.component';
 import { PopTartComponent } from './dialogs/pop-tart/pop-tart.component';
 import { NavListComponent } from './dialogs/nav-list/nav-list.component';
 
 // Angular Includes
 import { NgModule, ErrorHandler } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { LayoutModule, BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
-
-import { StompConfig, StompService } from '@stomp/ng2-stompjs';
-import { TextMaskModule } from 'angular2-text-mask';
-import { SearchSelectModule } from '@oasisdigital/angular-material-search-select';
-import 'hammerjs'; // for material
-
-// Common
-import { IDeviceRequest } from './common/idevicerequest';
-import { IDevicePlugin } from './common/idevice-plugin';
+import { HttpClient } from '@angular/common/http';
+import { BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
 
 // Pipes
 import { SafePipe } from './common/safe.pipe';
@@ -113,8 +97,6 @@ import { SellComponent } from './templates/sell-template/sell/sell.component';
 import { SellLinkedCustomerComponent } from './templates/sell-template/sell-linked-customer/sell-linked-customer.component';
 import { SelfCheckoutWithBarComponent } from './templates/selfcheckout-with-bar/selfcheckout-with-bar.component';
 
-import { MaterialModule } from './material.module';
-import { Plugin } from 'webpack';
 import { httpInterceptorProviders } from './http-intercepters';
 import { ShowErrorsComponent } from './common/controls/show-errors.component';
 import { RequireAtleastOneValidatorDirective } from './common/validators/require-atleast-one.directive';
@@ -126,7 +108,6 @@ import { FormattedInputValueAccessor } from './common/input-formatter.directive'
 import { DynamicDateFormFieldComponent } from './common/controls/dynamic-date-form-field/dynamic-date-form-field.component';
 
 // On Screen Keyboard
-import { MatKeyboardModule } from './keyboard';
 import { ValidatorsService } from './services/validators.service';
 import { PrintPreviewComponent } from './screens/print-preview.component';
 import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selection-list.directive';
@@ -135,6 +116,7 @@ import { DialogService } from './services/dialog.service';
 import { SelectableItemListComponent } from './common/controls/selectable-item-list/selectable-item-list.component';
 import { VersionComponent } from './dialogs/version/version.component';
 import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
+import { SharedModule } from './shared';
 
 
 @NgModule({
@@ -284,26 +266,13 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         SelectionListComponent
     ],
     imports: [
-        BrowserModule,
-        FormsModule,
-        ReactiveFormsModule,
-        HttpModule,
-        HttpClientModule,
-        FlexLayoutModule,
-        BrowserAnimationsModule,
-        MaterialModule,
-        MatKeyboardModule,
-        TextMaskModule,
-        SearchSelectModule
+        SharedModule
     ],
     exports: [
         DynamicScreenComponent,
         LoaderComponent,
-        MaterialModule,
-        MatKeyboardModule,
         IconComponent,
         ScreenDirective,
-        ReactiveFormsModule,
         FabToggleGroupComponent,
         FabToggleButtonComponent,
         DynamicFormControlComponent,
