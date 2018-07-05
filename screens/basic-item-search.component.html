@@ -10,7 +10,7 @@
     </mat-card>
     <mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
         <mat-card-title>
-            <div fxLayout="row" fxLayoutWrap fxLayoutAlign=" center">
+            <div fxLayout="row wrap" fxLayoutAlign=" center">
                 <ng-container *ngFor="let category of searchCategories; let i = index">
                     <ng-container *ngFor="let value of searchCategoryValues[i].values; let valueIndex = index">
                         <ng-container *ngIf="value.selected && value.attributes.name !== '<All>'">

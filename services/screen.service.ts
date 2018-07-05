@@ -26,21 +26,15 @@ import { PromptWithOptionsComponent } from '../screens/prompt-with-options.compo
 import { PromptWithInfoComponent } from '../screens/prompt-with-info.component';
 import { StaticTableComponent } from '../screens/static-table.component';
 import { IScreen } from '../common/iscreen';
-import { IDialog } from '../common/idialog';
-import { Observable } from 'rxjs/Observable';
-import { Message } from '@stomp/stompjs';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs';
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
-import { StompService, StompState } from '@stomp/ng2-stompjs';
-import { Location } from '@angular/common';
-import { Router } from '@angular/router';
 import { TenderingComponent } from '../screens/tendering.component';
 import { SellComponent } from '../templates/sell-template/sell/sell.component';
 import { SelfCheckoutWithBarComponent } from '../templates/selfcheckout-with-bar/selfcheckout-with-bar.component';
 import { TillSummaryComponent } from '../screens/till/till-summary.component';
 import { TillCountComponent } from '../screens/till/till-count.component';
 import { ChangeComponent } from '../screens/change/change.component';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { SessionService } from '../services/session.service';
 import { PrintPreviewComponent } from '../screens/print-preview.component';
 import { WaitComponent } from '../screens/wait/wait.component';
@@ -49,6 +43,7 @@ import { SelfCheckoutOptionsComponent } from '../self-checkout/self-checkout-opt
 import { CallForAuthorizationComponent } from '../screens/call-for-authorization/call-for-authorization.component'
 import { DialogComponent } from '../screens/dialog/dialog.component';
 import { MultipleDynamicFormComponent } from '../screens/multiple-dynamic-form/multiple-dynamic-form.component';
+import { SelectionListComponent } from '../screens/selection-list/selection-list.component'
 
 @Injectable()
 export class ScreenService {
@@ -93,6 +88,7 @@ export class ScreenService {
     this.screens.set('FullPageImage', FullPageImageComponent);
     this.screens.set('CallForAuthorization', CallForAuthorizationComponent);
     this.screens.set('MultipleDynamicForm', MultipleDynamicFormComponent);
+    this.screens.set('SelectionList', SelectionListComponent);
 
     // Default Dialog 
     this.screens.set('Dialog', DialogComponent);

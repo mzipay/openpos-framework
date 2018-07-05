@@ -1,11 +1,11 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px;">
 	<mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
 		<mat-card-content #scrollList ngClass.xs="xs">
-			<mat-toolbar *ngIf="selectedItems.length > 1" class="page-content-card" color="primary" >
+			<mat-toolbar *ngIf="selectedItems.length > 0" class="page-content-card" color="primary" >
 				<span>{{selectedItems.length}} Items Selected</span>
 				<span fxFlex="1 1 auto"></span>
 				<span>
-					<button *ngIf="!screen.readOnly && screen.selectedItems" mat-icon-button color="primary-inverse" (click)="openItemsDialog(selectedItems)">
+					<button *ngIf="!screen.readOnly && screen.selectedItems.length > 1" mat-icon-button color="primary-inverse" (click)="openItemsDialog(selectedItems)">
 						<mat-icon>more_vert</mat-icon>
 					</button>
 				</span>
@@ -36,12 +36,12 @@
 										<span class="super-currency-symbol">$</span>{{item.discountAmount}}</p>
 								</span>
 							</span>
-						</div>						
+						</div>	
 						<div *ngIf="selectedItems.length < 2" fxAlign="right" >
 							<button *ngIf="!screen.readOnly" mat-icon-button color="primary" (click)="openItemDialog(item)">
 								<mat-icon>more_vert</mat-icon>
 							</button>
-						</div>
+						</div>					
 					</div>
 				</ng-template>
 			</app-selectable-item-list> 

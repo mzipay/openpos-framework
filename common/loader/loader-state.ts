@@ -1,7 +1,6 @@
 import { SessionService } from './../../services/session.service';
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Subject, timer } from 'rxjs';
+
 
 export class LoaderState {
 
@@ -16,8 +15,8 @@ export class LoaderState {
     observable = this.loaderSubject.asObservable();
 
     constructor(protected sessionService: SessionService) {
-        const timer = Observable.timer(1000, 1000);
-        timer.subscribe(t => this.checkConnectionStatus());
+        const t = timer(1000, 1000);
+        t.subscribe(t => this.checkConnectionStatus());
     }
 
     get show() {

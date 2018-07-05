@@ -1,11 +1,11 @@
+import { FileUploadService } from './file-upload.service';
+import { LogfileDownloadPlugin } from './../plugins/logfile-download.plugin';
 import { InAppBrowserPlugin } from './../plugins/inappbrowser.plugin';
 import { BarcodeScannerPlugin } from './../plugins/barcodescanner.plugin';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, BehaviorSubject, Subject } from 'rxjs';
 import { DEVICE_ERROR_RESPONSE_TYPE, DEVICE_RESPONSE_TYPE, DEVICE_DNE_RESPONSE_TYPE } from './../common/ideviceresponse';
 import { IDevicePlugin } from './../common/idevice-plugin';
 import { PluginService } from './plugin.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
 import { IDeviceRequest } from './../common/idevicerequest';
 import { SessionService } from './session.service';
 import { Injectable } from '@angular/core';
@@ -23,12 +23,13 @@ export class DeviceService {
   private screenSubscription: Subscription;
   private _isRunningInCordova: boolean = null;
 
-  constructor(protected session: SessionService, public pluginService: PluginService) {
+  constructor(protected session: SessionService, public pluginService: PluginService, private fileUploadService: FileUploadService) {
     this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
     document.addEventListener('deviceready', () => {
       console.log('cordova devices are ready for the device service');
       this.initializeInAppBrowserPlugin();
       this.initializeBarcodeScannerPlugin();
+      this.initializeLogfileDownloadPlugin();
       this._isRunningInCordova = true;
       this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
     },
@@ -53,6 +54,12 @@ export class DeviceService {
       const inAppBrowserPlugin = new InAppBrowserPlugin();
       this.pluginService.addPlugin(inAppBrowserPlugin.pluginId, inAppBrowserPlugin);
       console.log('InAppBrowserPlugin initialized.');
+  }
+
+  protected initializeLogfileDownloadPlugin(): void {
+      const logfileDownloadPlugin = new LogfileDownloadPlugin(this.fileUploadService);
+      this.pluginService.addPlugin(logfileDownloadPlugin.pluginId, logfileDownloadPlugin);
+      console.log('LogfileDownloadPlugin initialized.');
   }
 
   public scan() {

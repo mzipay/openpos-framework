@@ -41,6 +41,7 @@ import { CallForAuthorizationComponent } from '../screens/call-for-authorization
 import { DialogComponent } from '../screens/dialog/dialog.component';
 import { LoadingDialogComponent } from '../dialogs/loading-dialog/loading-dialog.component';
 import { LoginDialogComponent } from '../dialogs/login-dialog/login-dialog.component';
+import { SelectionListComponent } from '../screens/selection-list/selection-list.component'
 
 @Injectable()
 export class DialogService {
@@ -92,6 +93,7 @@ export class DialogService {
     this.dialogs.set('FullPageImage', FullPageImageComponent);
     this.dialogs.set('CallForAuthorization', CallForAuthorizationComponent);
     this.dialogs.set('Version', VersionComponent);
+    this.dialogs.set('SelectionList', SelectionListComponent);
   }
 
   public addDialog(name: string, type: Type<IScreen>): void {

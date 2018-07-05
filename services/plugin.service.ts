@@ -23,6 +23,9 @@ export class PluginService {
                     cordova.plugins['file'] = cordova.file;
                     console.log('PluginService added cordova-plugin-file to cordova.plugins');
                 }
+            } else {
+                console.log(`Failed to load the Cordova 'file' plugin. Log file uploads will not work unless this is resolved.` +
+                    ` Is the Cordova 'file' plugin included in the project?`);
             }
           },
           false);

@@ -321,7 +321,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         return prom;
     }
 
-    protected onLogfileSelected(logFilename: string): void {
+    public onLogfileSelected(logFilename: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             this.logPlugin.impl.shareLogFile(
                 logFilename,
@@ -334,7 +334,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
     }
 
-    protected onLogfileUpload(logFilename: string): void {
+    public onLogfileUpload(logFilename: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             this.logPlugin.impl.getLogFilePath(
                 logFilename,
@@ -358,7 +358,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
     }
 
-    protected onLogfileView(logFilename: string): void {
+    public onLogfileView(logFilename: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             this.logPlugin.impl.readLogFileContents(
                 logFilename,
@@ -526,8 +526,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     protected openDialog(dialog: any) {
         const dialogComponentFactory: ComponentFactory<IScreen> = this.dialogService.resolveDialog(dialog.type);
         let closeable = false;
+        let closeAction = null;
         if (dialog.template.dialogProperties) {
             closeable = dialog.template.dialogProperties.closeable;
+            closeAction = dialog.template.dialogProperties.closeAction;
         }
         const dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: false };
         const dialogComponent = dialogComponentFactory.componentType;
@@ -556,11 +558,11 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             // they close so that actionPayloads can be included with the action
             // before the dialog is destroyed.
             this.dialogRef.beforeClose().subscribe(result => {
-                this.session.onAction(result);
+                this.session.onAction(closeAction || result);
             });
         } else {
             this.dialogRef.afterClosed().subscribe(result => {
-                this.session.onAction(result);
+                this.session.onAction(closeAction || result);
             }
             );
         }

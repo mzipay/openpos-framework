@@ -5,7 +5,9 @@ export class MoneyFormatter implements IFormatter {
     locale?: string;
 
     formatValue(value: string): string {
-        if (!value) return '';
+        if (!value) {
+            return '';
+        }
 
         const i = value.toString().indexOf('.');
         if( i > 0 ){
@@ -34,8 +36,16 @@ export class MoneyFormatter implements IFormatter {
             ++i;
         }
 
-        n = n.slice(i, n.length);
+        if (i === n.length) { // all zeros
+            if (i == 0 || i == 2) { // blank if we're at '00' which should be possible backspace from 0.00
+                return '';
+            } else {
+                return `0.00`;
+            }
+        }        
 
+        n = n.slice(i, n.length);
+        
         if (n.length > 2) {
             let dec = n.slice(n.length - 2, n.length);
             let whole = n.slice(0, n.length - 2);

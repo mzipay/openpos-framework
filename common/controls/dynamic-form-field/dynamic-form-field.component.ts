@@ -1,20 +1,18 @@
 import { PopTartComponent } from './../../../dialogs/pop-tart/pop-tart.component';
 import { NavListComponent } from './../../../dialogs/nav-list/nav-list.component';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { ITextMask, TextMask } from './../../textmask';
-import { IMenuItem } from '../../imenuitem';
-import { IScreen } from '../../iscreen';
 import {
-  Component, ViewChild, AfterViewInit, DoCheck, OnInit, OnDestroy,
-  Output, Input, EventEmitter, Optional, ElementRef
+  Component, ViewChild, AfterViewInit, OnInit, OnDestroy,
+  Output, Input, EventEmitter
 } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
-import { MatSelectChange, MatFormField, MatFormFieldControl, MatInput, MatDialog } from '@angular/material';
-import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl, NgForm } from '@angular/forms';
+import { MatInput, MatDialog } from '@angular/material';
+import { FormGroup } from '@angular/forms';
 import { IFormElement } from '../../iformfield';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { ScreenService } from '../../../services/screen.service';
 import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-select';
 
@@ -127,7 +125,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
               })))
             );
         } else {
-          return Observable.of(<OptionEntry[]>[]);
+          return of(<OptionEntry[]>[]);
         }
       }
     };
