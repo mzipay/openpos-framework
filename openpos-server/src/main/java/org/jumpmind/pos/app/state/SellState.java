@@ -16,6 +16,7 @@ import org.jumpmind.pos.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @StatePermission(permissionId = "sell.main")
+@Requires({Prerequisite.OPEN_STORE, Prerequisite.OPEN_DEVICE})
 public class SellState implements IState {
 
     @In(scope=ScopeType.Node)

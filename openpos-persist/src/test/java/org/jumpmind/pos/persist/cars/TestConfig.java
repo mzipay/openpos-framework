@@ -44,7 +44,8 @@ public class TestConfig {
                     PersistTestUtil.testDbPlatform(), 
                     PersistTestUtil.getSessionContext(), 
                     Arrays.asList(CarEntity.class, CarStats.class, ServiceInvoice.class), 
-                    queryTemplates);
+                    queryTemplates,
+                    DBSessionFactory.getDmlTemplates("persist-test"));
             
 
             DBSession session = sessionFactory.createDbSession();

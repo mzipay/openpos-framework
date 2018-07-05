@@ -7,14 +7,12 @@
         "types": []
     },
     "include": [
-        "**/*.ts"
-    ],
-    "files": [
-        "../node_modules/@jumpmind/openpos-client-core-lib/index.ts",
-        "../node_modules/@stomp/ng2-stompjs/index.ts"
+        "**/*.ts",
+        "../node_modules/@jumpmind/openpos-client-core-lib/**/*.ts"
     ],
     "exclude": [
         "test.ts",
-        "**/*.spec.ts"
+        "**/*.spec.ts",
+        "../node_modules/@jumpmind/openpos-client-core-lib/**/*.spec.ts"
     ]
 }

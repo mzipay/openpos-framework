@@ -199,6 +199,7 @@ public class DatabaseSchema {
                     if (isPrimaryKey(field)) {
                         meta.getEntityIdFields().add(field);
                     }
+                    meta.getEntityFields().add(field);
                 }
             }       
             currentClass = currentClass.getSuperclass();
@@ -273,9 +274,33 @@ public class DatabaseSchema {
         return entityIdColumnsToFields;
     }
     
+    public Map<String, String> getEntityFieldsToColumns(Class<?> entityClass) {
+        Map<String, String> entityFieldsToColumns = new LinkedHashMap<>();
+        List<Field> fields = gettEntityFields(entityClass);
+        for (Field field : fields) {
+            org.jumpmind.pos.persist.Column colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.Column.class);
+            if (colAnnotation != null) {
+                String columnName = null;
+                if (!StringUtils.isEmpty(colAnnotation.name())) {                
+                    columnName = colAnnotation.name();
+                } else {
+                    columnName = camelToSnakeCase(field.getName());
+                } 
+                entityFieldsToColumns.put(field.getName(), columnName);
+            }
+        }        
+        return entityFieldsToColumns;
+    }    
+    
     public List<Field> gettEntityIdFields(Class<?> entityClass) {
         EntityMetaData meta = classMetadata.get(entityClass);
         List<Field> fields = meta.getEntityIdFields();
+        return fields;
+    }
+    
+    protected List<Field> gettEntityFields(Class<?> entityClass) {
+        EntityMetaData meta = classMetadata.get(entityClass);
+        List<Field> fields = meta.getEntityFields();
         return fields;
     }
 

@@ -1,8 +1,12 @@
 package org.jumpmind.pos.service;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.StringUtils;
 
-public class ServiceResult {
+public class ServiceResult implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     public static final String RESULT_SUCCESS = "SUCCESS";
     public static final String RESULT_NOT_FOUND = "NOT_FOUND";

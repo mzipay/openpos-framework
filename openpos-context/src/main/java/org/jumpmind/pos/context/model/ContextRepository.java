@@ -30,9 +30,11 @@ public class ContextRepository {
     private Query<ConfigModel> configLookup = new Query<ConfigModel>()
             .named("configLookup")
             .result(ConfigModel.class);
+    
     private Query<DeviceModel> devicesByTag = new Query<DeviceModel>()
             .named("devicesByTag")
             .result(DeviceModel.class);
+    
     private Query<ConfigModel> configsByTag = new Query<ConfigModel>()
             .named("configsByTag")
             .result(ConfigModel.class);
@@ -128,6 +130,18 @@ public class ContextRepository {
             Map<String, String> tags = additionalFieldsToTags(fields);
             taggedElement.setTags(tags);
         }        
+    }
+    
+    public void saveSequence(SequenceModel sequence) {
+        this.contextSession.save(sequence);
+    }
+    
+    public SequenceModel findCurrentSequence(String name) {
+        return this.contextSession.findByNaturalId(SequenceModel.class, name);
+    }
+    
+    public boolean allocateNextSequence(String name, long nextVal, long curVal) {
+        return this.contextSession.executeDml("allocateNextSequence", nextVal, name, curVal) > 0;
     }
     
     public static TagConfig getTagConfig() {

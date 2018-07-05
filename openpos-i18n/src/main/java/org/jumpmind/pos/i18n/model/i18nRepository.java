@@ -42,7 +42,7 @@ public class i18nRepository {
         Map<String, Object> params = generateHashMap(base, key, locale, brand);
         List<Resource> phrases = dbSession.query(patternLookup, params);
         String string = null;
-        if (phrases != null) {
+        if (phrases.size() > 0) {
             Resource row = phrases.stream().filter((p) -> p.getBrand().equals(brand)).findFirst().orElse(null);
             if (row == null) {
                 row = phrases.stream().filter((p) -> p.getBrand().equals("*")).findFirst().orElse(null);

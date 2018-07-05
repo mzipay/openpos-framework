@@ -7,18 +7,24 @@ import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
-@Table(name="Device")
+@Table(name = "Device")
 public class DeviceModel extends Entity implements ITaggedElement {
-    
-    @Column(primaryKey=true)
+
+    @Column(primaryKey = true)
     private String deviceId;
-    @Column
-    private String deviceType; // STORE/DC/WORKSTATION/HANDELD/CUSTOMER HANDHELD/WEBSITE, etc.
-    @Column(size="10") 
-    String locale;
-    @Column(size="254")
-    private String description;
     
+    @Column
+    private String deviceType; // STORE/DC/WORKSTATION/HANDELD/CUSTOMER
+                               // HANDHELD/WEBSITE, etc.
+    @Column(size = "10")
+    String locale;
+    
+    @Column
+    String businessUnitId;
+    
+    @Column(size = "254")
+    private String description;
+
     public String getDeviceId() {
         return deviceId;
     }
@@ -53,7 +59,6 @@ public class DeviceModel extends Entity implements ITaggedElement {
 
     private Map<String, String> tags = new LinkedHashMap<String, String>();
 
-    
     @Override
     public String getTagValue(String tagName) {
         return tags.get(tagName);
@@ -63,22 +68,29 @@ public class DeviceModel extends Entity implements ITaggedElement {
     public void setTagValue(String tagName, String tagValue) {
         tags.put(tagName, tagValue);
     }
-    
+
     @Override
     public void setTags(Map<String, String> tags) {
         this.tags.clear();
         this.tags.putAll(tags);
     }
-    
+
     @Override
     public void clearTagValue(String tagName) {
         tags.remove(tagName);
-    }    
-    
+    }
+
     @Override
     public Map<String, String> getTags() {
         return new LinkedHashMap<>(tags);
     }
-
+    
+    public void setBusinessUnitId(String businessUnitId) {
+        this.businessUnitId = businessUnitId;
+    }
+    
+    public String getBusinessUnitId() {
+        return businessUnitId;
+    }
 
 }

@@ -1,0 +1,6 @@
+---
+dmls:
+-
+  name: test
+  dml: > 
+   update me set x=? where y=?

@@ -1,5 +1,7 @@
 package org.jumpmind.pos.core.flow.ui;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
 import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,12 +10,18 @@ import org.jumpmind.pos.core.flow.IUI;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(SCOPE_PROTOTYPE)
 public class UIManager implements IUI {
     
     private IStateManager stateManager;
+
+    public void init(IStateManager stateManager) {
+        this.stateManager = stateManager;
+    }
 
     @Override
     public void prompt(String message) {
@@ -67,8 +75,5 @@ public class UIManager implements IUI {
         stateManager.showScreen(screen);
     }
     
-    public void setStateManager(IStateManager stateManager) {
-        this.stateManager = stateManager;
-    }
 
 }

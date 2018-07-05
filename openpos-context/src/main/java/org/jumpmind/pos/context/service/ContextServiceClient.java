@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.jumpmind.pos.context.model.DeviceModel;
 import org.jumpmind.pos.service.PosServerException;
 import org.jumpmind.pos.service.util.DateUtils;
 
@@ -32,6 +33,11 @@ public class ContextServiceClient {
         SimpleModule module = new SimpleModule();
         module.addDeserializer(BigDecimal.class, new BigDecimalDeserializer());
         mapper.registerModule(module);
+    }
+    
+    public DeviceModel getDevice() {
+        DeviceResult result = this.contextService.getDevice(deviceId);
+        return result.getDevice();
     }
 
     public Date getDate(String configName) {
