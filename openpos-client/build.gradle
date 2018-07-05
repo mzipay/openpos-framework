@@ -46,7 +46,7 @@ task npm_link_manual(type: NpmTask) {
 
 npm_link_manual.doFirst {
 	// Don't try to link if we can't locate the client lib.
-    if (check_core_lib_installed.result == null || check_core_lib_installed.execResult.result > 0) { 
+    if (check_core_lib_installed.result == null || check_core_lib_installed.result.result > 0) { 
 		println '@jumpmind/openpos-client-core-lib symlink not found, will not attempt to link projects.\n' +
 		'If you want to link in the @jumpmind/openpos-client-core-lib, you will need to have pulled the openpos-client-core-lib\n' +
 		'project, and run \'npm link\' from the home directory of that project.'
@@ -59,10 +59,6 @@ npm_link_manual.doFirst {
 npm_link_manual.dependsOn (check_core_lib_installed)
 
 task develop { dependsOn npm_install, npm_link_manual }
-
-develop.doFirst {
-	println(npm_link_manual.output())
-}
 
 task build {}
 build.dependsOn(npm_run_build)
