@@ -1,5 +1,5 @@
 import { OpenPOSDialogConfig } from './../../common/idialog';
-import { TemplateDirective } from './../../common/template.directive';
+import { TemplateDirective } from '../../shared/directives/template.directive';
 import { IScreen } from './../../common/iscreen';
 import { IPlugin } from './../../common/iplugin';
 import { PluginService } from './../../services/plugin.service';

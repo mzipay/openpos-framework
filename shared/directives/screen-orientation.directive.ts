@@ -1,5 +1,5 @@
-import { DeviceService } from './../services/device.service';
 import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
+import { DeviceService } from '../../services/device.service';
 
 export const MODE_LOCK_CURRENT = 'lock-current';
 export const MODE_PORTRAIT = 'portrait';

@@ -7,10 +7,8 @@ export { IScreen } from './iscreen';
 export { IItem } from './iitem';
 export { IMenuItem } from './imenuitem';
 export { AbstractTemplate } from './abstract-template';
-export { ScreenDirective } from './screen.directive';
 export { IDialog } from './idialog';
 export { ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType, FunctionActionIntercepter } from './action-intercepter';
-export * from './controls';
 export * from './screen-interfaces';
 export { IFormatter } from './formatters/iformatter';
 export { IWorkStation } from './iworkstation';
@@ -22,7 +20,6 @@ export { CordovaDevicePlugin } from './cordova-device-plugin';
 export { CordovaPlugin } from './cordova-plugin';
 export { Scan } from './scan';
 export { IForm } from './iform';
-export * from './screen-orientation.directive';
 export * from './ideviceresponse';
 export { DynamicScreenComponent } from './dynamic-screen/dynamic-screen.component';
 

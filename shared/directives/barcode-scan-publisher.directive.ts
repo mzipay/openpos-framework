@@ -1,10 +1,10 @@
 import { Subscription } from 'rxjs';
-import { Scan } from './scan';
-import { BarcodeScannerPlugin } from './../plugins/barcodescanner.plugin';
-import { PluginService } from './../services/plugin.service';
-import { SessionService } from './../services/session.service';
 import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { DeviceService } from '../services/device.service';
+import { BarcodeScannerPlugin } from '../../plugins/barcodescanner.plugin';
+import { SessionService } from '../../services/session.service';
+import { DeviceService } from '../../services/device.service';
+import { PluginService } from '../../services/plugin.service';
+import { Scan } from '../../common/scan';
 
 @Directive({
     selector: '[barcodeScanPublisher]'

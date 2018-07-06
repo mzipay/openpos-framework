@@ -13,7 +13,15 @@ import { MatKeyboardModule } from '../keyboard';
 import { 
     MarkDirtyOnSubmitDirective, 
     FormattedInputValueAccessor, 
-    FocusDirective } from './directives';
+    FocusDirective, 
+    ScreenOrientationDirective,
+    MimicScrollDirective,
+    MatExclusiveSelectionListDirective,
+    InactivityMonitorDirective,
+    BarcodeScanPublisherDirective,
+    ScreenDirective,
+    TemplateDirective,
+} from './directives';
 import { 
     PromptInputComponent, 
     IconComponent, 
@@ -24,7 +32,10 @@ import {
     ProductListComponent,
     SelectableItemListComponent,
     OverFlowListComponent,
-    ScanSomethingComponent
+    ScanSomethingComponent,
+    CheckoutListItemComponent,
+    FabToggleButtonComponent,
+    FabToggleGroupComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 
@@ -38,13 +49,23 @@ const components = [
     ProductListComponent,
     SelectableItemListComponent,
     OverFlowListComponent,
-    ScanSomethingComponent
+    ScanSomethingComponent,
+    CheckoutListItemComponent,
+    FabToggleButtonComponent,
+    FabToggleGroupComponent
 ]
 
 const directives = [
     MarkDirtyOnSubmitDirective,
     FormattedInputValueAccessor,
-    FocusDirective
+    FocusDirective,
+    ScreenOrientationDirective,
+    MimicScrollDirective,
+    MatExclusiveSelectionListDirective,
+    InactivityMonitorDirective,
+    BarcodeScanPublisherDirective,
+    ScreenDirective,
+    TemplateDirective
 ]
 
 const pipes = [

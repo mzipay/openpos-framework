@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { MatButtonToggleChange } from '@angular/material';
 
 @Component({
   selector: 'app-fab-toggle-button',

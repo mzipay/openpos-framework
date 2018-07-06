@@ -8,3 +8,6 @@ export * from './product-list/product-list.component';
 export * from './selectable-item-list/selectable-item-list.component';
 export * from './overflow-list/overflow-list.component';
 export * from './scan-something/scan-something.component';
+export * from './checkout-list-item/checkout-list-item.component';
+export * from './fab-toggle-button/fab-toggle-button.component';
+export * from './fab-toggle-group/fab-toggle-group.component';

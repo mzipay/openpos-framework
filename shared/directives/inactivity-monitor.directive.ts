@@ -1,5 +1,6 @@
 import { Directive, HostListener, Input, Output, EventEmitter, Renderer2, ElementRef } from '@angular/core';
-import { Configuration } from '../configuration/configuration';
+import { Configuration } from '../../configuration/configuration';
+
 
 @Directive({
     // tslint:disable-next-line:directive-selector

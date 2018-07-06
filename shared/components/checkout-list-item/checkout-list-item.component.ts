@@ -1,7 +1,7 @@
-import { ISellItem } from '../../isellitem';
 import { Component, Input } from '@angular/core';
-import { SessionService } from '../../..';
-import { IMenuItem } from '../../imenuitem';
+import { ISellItem } from '../../../common/isellitem';
+import { SessionService } from '../../../services/session.service';
+import { IMenuItem } from '../../../common/imenuitem';
 
 
 @Component({
