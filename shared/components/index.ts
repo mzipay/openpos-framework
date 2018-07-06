@@ -11,3 +11,5 @@ export * from './scan-something/scan-something.component';
 export * from './checkout-list-item/checkout-list-item.component';
 export * from './fab-toggle-button/fab-toggle-button.component';
 export * from './fab-toggle-group/fab-toggle-group.component';
+export * from './pop-tart/pop-tart.component';
+export * from './nav-list/nav-list.component';

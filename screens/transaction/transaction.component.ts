@@ -1,4 +1,3 @@
-import { NavListComponent } from './../../dialogs/nav-list/nav-list.component';
 import { MatDialog } from '@angular/material';
 import { DeviceService } from '../../services/device.service';
 import { ISellItem } from '../../common/isellitem';
@@ -10,6 +9,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ISellScreen } from '../templates';
 import { SelectableItemListComponentConfiguration, SelectionMode } from '../../shared/components/selectable-item-list/selectable-item-list.component';
+import { NavListComponent } from '../../shared/components/nav-list/nav-list.component';
 
 @Component({
   selector: 'app-transaction',

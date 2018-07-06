@@ -1,14 +1,8 @@
-import { PopTartComponent } from './dialogs/pop-tart/pop-tart.component';
-import { NavListComponent } from './dialogs/nav-list/nav-list.component';
-
 // Angular Includes
 import { NgModule, ErrorHandler } from '@angular/core';
 import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
-
-// Pipes
-import { PhonePipe } from './common/phone.pipe';
 
 // Services
 import { ScreenService } from './services/screen.service';
@@ -19,7 +13,6 @@ import { FormattersService } from './services/formatters.service';
 import { FileUploadService } from './services/file-upload.service';
 import { LocaleService, LocaleServiceImpl } from './services/locale.service';
 import { ErrorHandlerService } from './services/errorhandler.service';
-
 
 // Components
 import { LoaderComponent } from './common/loader/loader.component';
@@ -32,7 +25,6 @@ import { SelfCheckoutPaymentStatusComponent } from './self-checkout/self-checkou
 import { DeviceService } from './services/device.service';
 import { SelfCheckoutOptionsComponent } from './self-checkout/self-checkout-options/self-checkout-options.component';
 import { RequireAtleastOneValidatorDirective } from './common/validators/require-atleast-one.directive';
-import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
 
 // On Screen Keyboard
 import { ValidatorsService } from './services/validators.service';
@@ -50,8 +42,6 @@ import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-
         SelfCheckoutTransactionComponent,
         ConfirmationDialogComponent,
         SelfCheckoutOptionsComponent,
-        NavListComponent,
-        PopTartComponent,
         SelfCheckoutWithBarComponent,
         PersonalizationComponent
     ],
@@ -64,11 +54,7 @@ import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-
         SelfCheckoutStatusBarComponent,
         ConfirmationDialogComponent,
         RequireAtleastOneValidatorDirective,
-        AutoSelectOnFocus,
         SelfCheckoutOptionsComponent,
-        NavListComponent,
-        PopTartComponent,
-        PhonePipe,
         PhoneUSValidatorDirective,
         SelfCheckoutWithBarComponent,
         PersonalizationComponent
@@ -77,8 +63,7 @@ import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-
         SharedModule
     ],
     exports: [
-        LoaderComponent,
-        PhonePipe
+        LoaderComponent
     ],
     providers: [
         HttpClient,

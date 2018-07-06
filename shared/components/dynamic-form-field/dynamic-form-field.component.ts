@@ -1,4 +1,3 @@
-import { PopTartComponent } from './../../../dialogs/pop-tart/pop-tart.component';
 import { Subscription } from 'rxjs';
 import { ITextMask, TextMask } from '../../../shared/textmask';
 import {
@@ -14,6 +13,7 @@ import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ScreenService } from '../../../services/screen.service';
 import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-select';
+import { PopTartComponent } from '../pop-tart/pop-tart.component';
 
 @Component({
   selector: 'app-dynamic-form-field',

@@ -21,6 +21,7 @@ import {
     BarcodeScanPublisherDirective,
     ScreenDirective,
     TemplateDirective,
+    AutoSelectOnFocusDirective,
 } from './directives';
 import { 
     PromptInputComponent, 
@@ -35,9 +36,12 @@ import {
     ScanSomethingComponent,
     CheckoutListItemComponent,
     FabToggleButtonComponent,
-    FabToggleGroupComponent
+    FabToggleGroupComponent,
+    PopTartComponent,
+    NavListComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
+import { PhonePipe } from './pipes';
 
 const components = [
     PromptInputComponent,
@@ -52,7 +56,9 @@ const components = [
     ScanSomethingComponent,
     CheckoutListItemComponent,
     FabToggleButtonComponent,
-    FabToggleGroupComponent
+    FabToggleGroupComponent,
+    PopTartComponent,
+    NavListComponent
 ]
 
 const directives = [
@@ -64,12 +70,14 @@ const directives = [
     MatExclusiveSelectionListDirective,
     InactivityMonitorDirective,
     BarcodeScanPublisherDirective,
-    ScreenDirective,
-    TemplateDirective
+    AutoSelectOnFocusDirective,
+    TemplateDirective,
+    ScreenDirective
 ]
 
 const pipes = [
-    SafePipe
+    SafePipe,
+    PhonePipe
 ]
 
 @NgModule({

@@ -1,10 +1,10 @@
-import { Directive, Input, ElementRef, HostListener } from '@angular/core';
-import { DeviceService } from '../services';
+import { Directive, ElementRef, HostListener } from '@angular/core';
+import { DeviceService } from '../../services/device.service';
 
 @Directive({
     selector: '[autoSelectOnFocus]'
 })
-export class AutoSelectOnFocus {
+export class AutoSelectOnFocusDirective {
 
     private element: ElementRef;
     private touchEvent: boolean;

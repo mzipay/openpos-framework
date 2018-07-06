@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FormattersService } from '../services/formatters.service';
+import { FormattersService } from '../../services/formatters.service';
 
 @Pipe({ name: 'phone' })
 export class PhonePipe implements PipeTransform {
