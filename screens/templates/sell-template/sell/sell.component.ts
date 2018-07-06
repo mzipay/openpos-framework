@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { AbstractTemplate } from '../../../../common/abstract-template';
-import { SessionService } from '../../../../core';
+import { SessionService, AbstractTemplate } from '../../../../core';
 
 import { IMenuItem } from '../../../../common/imenuitem';
 import { ObservableMedia } from '@angular/flex-layout';
 import { ISellScreen } from '../..';
-import { StatusBarData } from '../../../../screens/status-bar/status-bar-data';
+import { StatusBarData } from '../../../../screens/';
 import { SellScreenUtils } from './iSellScreen';
 import { ISellTemplate } from './isell-template';
 

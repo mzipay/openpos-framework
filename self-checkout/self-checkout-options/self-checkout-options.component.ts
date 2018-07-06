@@ -1,6 +1,5 @@
-import { IScreen } from '../../common/iscreen';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {SessionService} from '../../core';
+import { SessionService, IScreen} from '../../core';
 import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../common/action-intercepter';
 import { IOptionItem } from '../../screens/choose-options/option-item.interface';
 

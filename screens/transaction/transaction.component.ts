@@ -3,7 +3,6 @@ import { Component, ViewChild, AfterViewInit, OnInit, AfterViewChecked, ElementR
 import { ObservableMedia } from '@angular/flex-layout';
 import { DeviceService } from '../../core';
 import { ISellItem } from '../../common/isellitem';
-import { IScreen } from '../../common/iscreen';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { SelectableItemListComponentConfiguration, SelectionMode } from '../../shared/components/selectable-item-list/selectable-item-list.component';

@@ -1,4 +1,4 @@
-import {IAbstractScreen} from './screen-interfaces/iAbstractScreen';
+import { IAbstractScreen } from './abstract-screen.interface';
 
 export interface IToastScreen extends IAbstractScreen {
 	message: string;
@@ -7,6 +7,6 @@ export interface IToastScreen extends IAbstractScreen {
 }
 
 export enum ToastType {
-    Success="Success",
-    Warn="Warn"
+    Success='Success',
+    Warn='Warn'
 }

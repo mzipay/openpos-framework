@@ -1,6 +1,5 @@
-import { IScreen } from '../../common/iscreen';
 import { AppInjector } from '../../core/app-injector';
-import { SessionService } from '../../core';
+import { SessionService, IScreen } from '../../core';
 
 export abstract class PosScreen<T> implements IScreen {
     screen: T;

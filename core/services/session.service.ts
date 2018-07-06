@@ -9,7 +9,7 @@ import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { ActionIntercepter } from '../../common/action-intercepter';
-import { ToastType, IToastScreen } from '../../common/toast-screen.interface';
+import { ToastType, IToastScreen } from '../interfaces';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { IUrlMenuItem } from '../../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';

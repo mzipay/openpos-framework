@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AppVersion } from './../../common/app-version';
-import { PluginService } from '../../core';
+import { PluginService, AppVersion } from '../../core';
 import { IMenuItem } from './../../common/imenuitem';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
@@ -11,18 +10,14 @@ declare var version: any; // read in from core at assets/version.js
     templateUrl: './version.component.html',
     styleUrls: ['./version.component.scss']
 })
-export class VersionComponent extends PosScreen<any> implements OnInit {
+export class VersionComponent extends PosScreen<any> {
 
     versions: { id: string, name: string, version: string }[];
     primaryAction: IMenuItem;
     otherActions: IMenuItem[];
-    appVersion = new AppVersion();
 
-    constructor(private pluginService: PluginService) {
+    constructor(private pluginService: PluginService, public appVersion: AppVersion) {
         super();
-    }
-
-    ngOnInit(): void {
     }
 
     buildScreen(): void {

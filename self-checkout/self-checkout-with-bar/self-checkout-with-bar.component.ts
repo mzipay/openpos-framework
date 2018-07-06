@@ -2,7 +2,7 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
 import { ISellTemplate } from '../../screens/templates/sell-template/sell/isell-template';
-import { AbstractTemplate } from '../../common/abstract-template';
+import { AbstractTemplate } from '../../core';
 import { SellScreenUtils } from '../../screens/templates/sell-template/sell/iSellScreen';
 import { SelfCheckoutStatusBarData } from '../self-checkout-statusbar/self-checkout-status-bar-data';
 

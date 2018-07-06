@@ -1,4 +1,4 @@
-import { IAbstractScreenTemplate } from "./iAbstractScreenTemplate";
+import { IAbstractScreenTemplate } from './abstract-screen-template.interface';
 
 export interface IAbstractScreen {
     name: string;

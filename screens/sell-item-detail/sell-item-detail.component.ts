@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
-import { IScreen } from '../../common/iscreen';
 import { ISellItem } from '../../common/isellitem';
 import { IPromoItem } from '../../common/ipromoitem';
 import { PosScreen } from '../pos-screen/pos-screen.component';

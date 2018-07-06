@@ -1,17 +1,16 @@
-import { IPlugin } from './iplugin';
-import { PluginService } from '../core';
+import { PluginService } from './plugin.service';
 import { Injectable } from '@angular/core';
+import { IPlugin } from '../../common/iplugin';
 
 declare var version: any; // read in from core at assets/version.js
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AppVersion {
 
     private _appVersion = null;
     private _buildVersion = null;
-
-    constructor() {
-    }
 
     public buildVersion(): string {
         if (!this._buildVersion) {
