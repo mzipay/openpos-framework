@@ -18,12 +18,7 @@ import { ErrorHandlerService } from './services/errorhandler.service';
 import { LoaderComponent } from './common/loader/loader.component';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 
-import { SelfCheckoutTransactionComponent } from './self-checkout/self-checkout-transaction/self-checkout-transaction.component';
-import { SelfCheckoutHomeComponent } from './self-checkout/self-checkout-home/self-checkout-home.component';
-import { SelfCheckoutStatusBarComponent } from './self-checkout/self-checkout-statusbar/self-checkout-statusbar.component';
-import { SelfCheckoutPaymentStatusComponent } from './self-checkout/self-checkout-payment-status/self-checkout-payment-status.component';
 import { DeviceService } from './services/device.service';
-import { SelfCheckoutOptionsComponent } from './self-checkout/self-checkout-options/self-checkout-options.component';
 import { RequireAtleastOneValidatorDirective } from './common/validators/require-atleast-one.directive';
 
 // On Screen Keyboard
@@ -32,31 +27,19 @@ import { DialogService } from './services/dialog.service';
 import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
 import { SharedModule } from './shared';
 import { DynamicScreenComponent, PersonalizationComponent } from './common';
-import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-bar/selfcheckout-with-bar.component';
 
 
 @NgModule({
     entryComponents: [
-        SelfCheckoutHomeComponent,
-        SelfCheckoutPaymentStatusComponent,
-        SelfCheckoutTransactionComponent,
         ConfirmationDialogComponent,
-        SelfCheckoutOptionsComponent,
-        SelfCheckoutWithBarComponent,
         PersonalizationComponent
     ],
     declarations: [
         DynamicScreenComponent,
-        SelfCheckoutTransactionComponent,
-        SelfCheckoutPaymentStatusComponent,
         LoaderComponent,
-        SelfCheckoutHomeComponent,
-        SelfCheckoutStatusBarComponent,
         ConfirmationDialogComponent,
         RequireAtleastOneValidatorDirective,
-        SelfCheckoutOptionsComponent,
         PhoneUSValidatorDirective,
-        SelfCheckoutWithBarComponent,
         PersonalizationComponent
     ],
     imports: [

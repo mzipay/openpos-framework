@@ -8,8 +8,8 @@ import { SelfCheckoutStatusBarData } from '../self-checkout-statusbar/self-check
 
 @Component({
   selector: 'app-selfcheckout-with-bar',
-  templateUrl: './selfcheckout-with-bar.component.html',
-  styleUrls: ['./selfcheckout-with-bar.component.scss']
+  templateUrl: './self-checkout-with-bar.component.html',
+  styleUrls: ['./self-checkout-with-bar.component.scss']
 })
 export class SelfCheckoutWithBarComponent extends AbstractTemplate implements OnInit {
 

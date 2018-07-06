@@ -4,5 +4,4 @@ export * from './services';
 export * from './plugins';
 export * from './common';
 export * from './screens';
-export * from './events';
 

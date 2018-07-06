@@ -16,7 +16,7 @@ import { ConfirmationDialogComponent } from '../common/confirmation-dialog/confi
 import { IUrlMenuItem } from '../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 import { Element, ActionMap } from '../common/dynamic-screen/dynamic-screen.component';
-import { IThemeChangingEvent } from '../events/ithemechanging.event';
+import { IThemeChangingEvent } from '../shared/events/theme-changing-event.interface';
 
 @Injectable()
 export class SessionService implements ILocaleService {
