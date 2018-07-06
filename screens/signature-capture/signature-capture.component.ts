@@ -1,33 +1,26 @@
 import { Component, AfterViewInit, DoCheck, HostListener } from '@angular/core';
 import 'signature_pad';
-import { IScreen } from '../../common/iscreen';
-import { SessionService } from '../../services/session.service';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-signature-capture',
   templateUrl: './signature-capture.component.html',
   styleUrls: ['./signature-capture.component.scss']
 })
-export class SignatureCaptureComponent implements AfterViewInit, DoCheck, IScreen {
+export class SignatureCaptureComponent extends PosScreen<any> implements AfterViewInit {
 
   static readonly DEFAULT_MEDIA_TYPE = 'image/jpeg';
 
-  screen:any;
   protected initialized: Boolean = false;
   protected signaturePad: SignaturePad;
   protected canvas: HTMLCanvasElement = null;
   protected wrapper: HTMLElement;
 
-  constructor(public readonly session: SessionService) {
+  constructor() {
+      super();
   }
 
-  show(screen: any) {
-    this.screen = screen;
-  }
-
-
-  ngDoCheck(): void {
-  }
+  buildScreen(){}
 
   ngAfterViewInit(): void {
     this.initialized = true;

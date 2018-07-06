@@ -1,5 +1,5 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
-import { DeviceService } from '../../services/device.service';
+import { DeviceService } from '../../core';
 
 @Directive({
     selector: '[autoSelectOnFocus]'

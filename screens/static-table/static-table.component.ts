@@ -1,17 +1,15 @@
 import { Component } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IScreen } from '../../common/iscreen';
 import { SelectionMode } from '../../common/selectionmode';
-import { SessionService } from '../../services/session.service';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
     selector: 'app-static-table',
     templateUrl: './static-table.component.html'
 })
-export class StaticTableComponent implements IScreen {
+export class StaticTableComponent extends PosScreen<any> {
 
-    screen: any;
     rowData: RowDatabase;
     dataSource: RowDataSource | null;
 
@@ -26,7 +24,8 @@ export class StaticTableComponent implements IScreen {
     /** Prompt text to display to user */
     text: string;
 
-    constructor(public session: SessionService) {
+    constructor() {
+        super();
     }
 
     private initColumnDefs(): void {
@@ -65,9 +64,7 @@ export class StaticTableComponent implements IScreen {
         return this.selectedRow === rowIndex;
     }
 
-    show(screen: any) {
-        this.screen = screen;
-
+    buildScreen() {
         this.selectionMode = SelectionMode[this.screen.selectionMode as string];
         this.initColumnDefs();
         this.rowData = new RowDatabase(this.screen.tableData);

@@ -1,20 +1,16 @@
 import { Component } from '@angular/core';
 import { ILoadingDialogScreen } from './loading-dialog-screen.interface';
-import { IScreen } from '../../common/iscreen';
-import { SessionService } from '../../services/session.service';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 
 @Component({
     selector: 'app-loading-dialog',
     templateUrl: './loading-dialog.component.html'
 })
-export class LoadingDialogComponent implements IScreen {
-    
+export class LoadingDialogComponent extends PosScreen<ILoadingDialogScreen> {
+
     screen: ILoadingDialogScreen;
 
-    constructor( public session: SessionService ){}
-
-    show(screen: any): void {
-        this.screen = screen;
+    buildScreen(): void {
     }
 }

@@ -1,9 +1,7 @@
 import { Subscription } from 'rxjs';
 import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { BarcodeScannerPlugin } from '../../plugins/barcodescanner.plugin';
-import { SessionService } from '../../services/session.service';
-import { DeviceService } from '../../services/device.service';
-import { PluginService } from '../../services/plugin.service';
+import { SessionService, DeviceService, PluginService } from '../../core';
 import { Scan } from '../../common/scan';
 
 @Directive({

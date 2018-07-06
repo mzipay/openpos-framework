@@ -1,29 +1,17 @@
-import {Component, AfterViewInit, DoCheck, OnInit} from '@angular/core';
-import { IScreen } from '../../common/iscreen';
-import { SessionService } from '../../services/session.service';
+import { Component } from '@angular/core';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-sale-retrieval',
   templateUrl: './sale-retrieval.component.html'
 })
-export class SaleRetrievalComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
+export class SaleRetrievalComponent extends PosScreen<any> {
 
-  screen: any;
-  constructor(public session: SessionService) {
-
-  }
-  public ngOnInit(): void {
+  constructor() {
+    super();
   }
 
-  show(screen: any) {
-    this.screen = screen;
-  }
-
-  ngDoCheck(): void {
-  }
-
-  ngAfterViewInit(): void {
-  }
+  buildScreen(){}
 
   selected(value: string) {
     this.session.onAction('Next', value);

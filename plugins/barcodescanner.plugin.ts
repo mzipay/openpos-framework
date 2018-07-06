@@ -1,8 +1,7 @@
-import { IDevicePlugin, IDeviceRequest, IDialog, ActionIntercepter, ActionIntercepterBehaviorType, IPlugin } from '../common';
-import { SessionService, DeviceService } from '../services';
+import { EventEmitter } from '@angular/core';
+import { IDeviceRequest, IPlugin } from '../common';
 import { CordovaDevicePlugin } from '../common/cordova-device-plugin';
 import { Scan } from '../common/scan';
-import { EventEmitter } from '@angular/core';
 
 export class BarcodeScannerPlugin extends CordovaDevicePlugin {
 

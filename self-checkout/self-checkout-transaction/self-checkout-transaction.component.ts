@@ -1,11 +1,9 @@
-import { DeviceService } from '../../services/device.service';
+import { DeviceService, SessionService } from '../../core';
 import { ISellItem } from '../../common/isellitem';
 import { IScreen } from '../../common/iscreen';
 import { IMenuItem } from '../../common/imenuitem';
-import { Component, ViewChild, AfterViewInit, AfterContentInit, AfterViewChecked, ElementRef, DoCheck, OnInit } from '@angular/core';
-import { SessionService } from '../../services/session.service';
+import { Component, ViewChild, AfterViewInit, AfterViewChecked, ElementRef, OnInit } from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-self-checkout-transaction',

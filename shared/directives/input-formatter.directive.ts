@@ -1,11 +1,11 @@
 import { Directive, Input, ElementRef, forwardRef, Renderer2, OnInit, HostListener } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { IFormatter } from '../../common/formatters/iformatter';
-import { FormattersService } from '../../services/formatters.service';
+import { IFormatter } from '../../shared';
+import { FormattersService } from '../../core';
 
 export const FORMATTED_INPUT_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => FormattedInputValueAccessor),
+    useExisting: forwardRef(() => InputFormatterDirective),
     multi: true
 };
 
@@ -15,7 +15,7 @@ export const FORMATTED_INPUT_VALUE_ACCESSOR: any = {
     providers: [FORMATTED_INPUT_VALUE_ACCESSOR]
 })
 // tslint:disable-next-line:directive-class-suffix
-export class FormattedInputValueAccessor implements ControlValueAccessor, OnInit {
+export class InputFormatterDirective implements ControlValueAccessor, OnInit {
 
     @Input() formatterName: string;
 

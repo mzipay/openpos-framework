@@ -1,23 +1,21 @@
 import { FormGroup, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { Component, AfterViewInit, OnInit } from '@angular/core';
-import { IScreen } from '../../common/iscreen';
-import { SessionService } from '../../services/session.service';
-import { ValidatorsService } from '../../services/validators.service';
+import { ValidatorsService } from '../../core';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-prompt',
   templateUrl: './prompt.component.html'
 })
-export class PromptComponent implements AfterViewInit, IScreen, OnInit {
+export class PromptComponent extends PosScreen<any> implements AfterViewInit, OnInit {
   initialized = false;
   promptFormGroup: FormGroup;
-  screen: any;
 
-  constructor(public session: SessionService, private validatorsService: ValidatorsService) {
+  constructor( private validatorsService: ValidatorsService) {
+      super();
   }
 
-  show(screen: any) {
-    this.screen = screen;
+  buildScreen() {
   }
 
   ngOnInit(): void {

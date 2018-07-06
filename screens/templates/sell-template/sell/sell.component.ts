@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AbstractTemplate } from '../../../../common/abstract-template';
-import { SessionService } from '../../../../services/session.service';
+import { SessionService } from '../../../../core';
 
 import { IMenuItem } from '../../../../common/imenuitem';
 import { ObservableMedia } from '@angular/flex-layout';

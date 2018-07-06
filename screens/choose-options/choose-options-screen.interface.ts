@@ -1,11 +1,18 @@
 import { IOptionItem } from './option-item.interface';
+import { IMenuItem } from '../../common';
 
 
-export interface IChooseOptionsScreen{
+export interface IChooseOptionsScreen {
     options: IOptionItem[];
     selectionMode: SelectionMode;
     displayStyle: DisplayStyle;
     promptText: string;
+    responseType: string;
+    responseText: string;
+    showComments: string;
+    comments: string;
+    actionButton: IMenuItem;
+    type: string;
 }
 
 export enum SelectionMode{

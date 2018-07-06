@@ -1,17 +1,15 @@
 import { IMenuItem } from './../../common/imenuitem';
 import { IItem } from './../../common/iitem';
-import { SessionService } from './../../services/session.service';
-import { IScreen } from './../../common/iscreen';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
-import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-till-count-other-tender',
   templateUrl: './till-count-other-tender.component.html',
   styleUrls: ['./till-count-other-tender.component.scss']
 })
-export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen {
+export class TillCountOtherTenderComponent extends PosScreen<any> {
 
   @ViewChild('amountInput') amountField: ElementRef;
 
@@ -30,23 +28,13 @@ export class TillCountOtherTenderComponent implements OnInit, OnDestroy, IScreen
     allowNegative: false
   });
 
-  constructor(public session: SessionService) {
-  }
-
-  show(screen: any) {
-    this.screen = screen;
-    this.items = screen.items;
-    this.totalAmount = 0;
-    if (screen.total) {
-      this.totalAmount = Number(screen.total);
-    }
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
+  buildScreen() {
+    this.items = this.screen.items;
     this.nextAction = this.screen.nextAction;
+    this.totalAmount = 0;
+    if (this.screen.total) {
+      this.totalAmount = Number(this.screen.total);
+    }
   }
 
   public doMenuItemAction(menuItem: IMenuItem, payLoad: any) {

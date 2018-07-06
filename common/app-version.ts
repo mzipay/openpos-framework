@@ -1,5 +1,5 @@
 import { IPlugin } from './iplugin';
-import { PluginService } from '../services';
+import { PluginService } from '../core';
 import { Injectable } from '@angular/core';
 
 declare var version: any; // read in from core at assets/version.js

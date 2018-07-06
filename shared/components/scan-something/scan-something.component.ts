@@ -1,7 +1,6 @@
 import { Component, Input, Optional, Inject, ViewChild, AfterViewInit } from '@angular/core';
-import { DeviceService } from '../../../services/device.service';
-import { SessionService } from '../../../services/session.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
+import { DeviceService, SessionService } from '../../../core';
 import { IScan } from '../../../screens/templates/sell-template/sell/isell-template';
 
 @Component({

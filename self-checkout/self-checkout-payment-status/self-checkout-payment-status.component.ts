@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { SessionService } from '../../services/session.service';
+import { SessionService } from '../../core';
 
 @Component({
   selector: 'app-self-checkout-payment-status-component',

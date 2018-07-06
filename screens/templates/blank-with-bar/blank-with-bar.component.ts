@@ -1,7 +1,7 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
 import { AbstractTemplate } from '../../../common/abstract-template';
-import { StatusBarData } from '../../../screens/status-bar/status-bar-data';
+import { StatusBarData } from '../../status-bar/status-bar-data';
 import { SellScreenUtils } from '../sell-template/sell/iSellScreen';
 
 @Component({

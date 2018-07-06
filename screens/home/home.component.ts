@@ -1,22 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { ObservableMedia} from '@angular/flex-layout';
-import { IScreen } from '../../common/iscreen';
 import { IMenuItem } from '../../common/imenuitem';
-import { SessionService } from '../../services/session.service';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html'
 })
-export class HomeComponent implements IScreen, OnInit {
+export class HomeComponent extends PosScreen<any> implements OnInit {
 
   screen: any;
   public menuItems: IMenuItem[];
   gutterSize = 40;
   gridColumns = 3;
 
-  constructor(public session: SessionService, public media: ObservableMedia) {
-
+  constructor( public media: ObservableMedia ) {
+    super();
   }
 
   ngOnInit() {
@@ -33,9 +32,8 @@ export class HomeComponent implements IScreen, OnInit {
     this.gutterSize = isLarge ? 20 : 10;
   }
 
-  show(screen: any) {
-    this.screen = screen;
-    this.menuItems = screen.menuItems;
+  buildScreen() {
+    this.menuItems = this.screen.menuItems;
   }
 
   onEnter(value: string) {

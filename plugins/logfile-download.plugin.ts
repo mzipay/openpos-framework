@@ -1,11 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { FileUploadService } from './../services/file-upload.service';
+import { FileUploadService } from '../core';
 import { CordovaDevicePlugin } from './../common/cordova-device-plugin';
-import { IPlugin } from '../common/iplugin';
 import { IDeviceRequest } from '../common/idevicerequest';
-import { ReflectiveInjector, Injector } from '@angular/core';
-import { SessionService, PluginService} from '../services';
 /*
  * A wrapper around the OpenPOSCordovaLogPlugin to provide operations to allow
  * the server to request download of one or more log files from the client.

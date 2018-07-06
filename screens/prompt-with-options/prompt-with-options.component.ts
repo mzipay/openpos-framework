@@ -2,8 +2,7 @@ import { FormGroup, FormControl, ValidatorFn, Validators } from '@angular/forms'
 import { Component, OnInit } from '@angular/core';
 import { ChooseOptionsComponent } from '../choose-options/choose-options.component';
 import { IMenuItem } from '../../common/imenuitem';
-import { SessionService } from '../../services/session.service';
-import { ValidatorsService } from '../../services/validators.service';
+import { ValidatorsService } from '../../core';
 
 @Component({
   selector: 'app-prompt-with-options',
@@ -14,8 +13,8 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
   actionButton: IMenuItem;
   promptFormGroup: FormGroup;
 
-  constructor(public session: SessionService, private validatorsService: ValidatorsService) {
-    super(session);
+  constructor( private validatorsService: ValidatorsService) {
+    super();
   }
 
   public ngOnInit(): void {

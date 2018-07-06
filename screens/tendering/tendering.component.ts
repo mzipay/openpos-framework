@@ -1,21 +1,19 @@
 
 import { Component, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { MatInput } from '@angular/material';
-import { IScreen } from '../../common/iscreen';
 import { IItem } from '../../common/iitem';
 import { IFormElement } from '../../common/iformfield';
 import { IMenuItem } from '../../common/imenuitem';
-import { SessionService } from '../../services/session.service';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
     selector: 'app-tendering',
     templateUrl: './tendering.component.html'
   })
-  export class TenderingComponent implements IScreen, AfterViewInit, OnDestroy{
+  export class TenderingComponent extends PosScreen<any> implements AfterViewInit, OnDestroy{
 
     @ViewChild('tenderAmountField') tenderAmountField: MatInput;
 
-    screen: any;
     text: string;
     tenderItems: IItem[];
     tenderAmount: IFormElement;
@@ -25,7 +23,8 @@ import { SessionService } from '../../services/session.service';
     itemActions: IMenuItem[] = [];
     actionButton: IMenuItem;
     
-    constructor(public session: SessionService) {
+    constructor() {
+        super();
     }
 
     ngAfterViewInit(): void {
@@ -36,9 +35,7 @@ import { SessionService } from '../../services/session.service';
         this.session.unregisterActionPayloads();
     }
 
-    show(screen: any): void {
-        this.screen = screen;
-
+    buildScreen(): void {
         this.text = this.screen.text;
         this.tenderItems = this.screen.tenderItems;
         this.tenderAmount = this.screen.tenderAmount;

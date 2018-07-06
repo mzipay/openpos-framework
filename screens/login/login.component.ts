@@ -1,16 +1,14 @@
-
-import { SessionService } from '../../services/session.service';
-import { IScreen } from '../../common/iscreen';
 import { Component } from '@angular/core';
 import { IMenuItem } from '../../common/imenuitem';
 import { IFormElement } from '../../common/iformfield';
 import { IForm } from '../../common/iform';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
   })
-  export class LoginComponent implements IScreen {
+  export class LoginComponent extends PosScreen<any> {
 
     public form: IForm;
     public screen: any;
@@ -23,11 +21,11 @@ import { IForm } from '../../common/iform';
     cancelButton: IFormElement;
     title: string;
 
-    constructor(public session: SessionService) {
+    constructor() {
+        super();
     }
 
-    show(screen: any): void {
-        this.screen = screen;
+    buildScreen(): void {
         this.form = this.screen.form;
         this.loginIdField = this.form.formElements.find((e) => e.id === 'userId');
         if (!this.loginIdField.pattern) {

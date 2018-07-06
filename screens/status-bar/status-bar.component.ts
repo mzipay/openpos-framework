@@ -1,9 +1,7 @@
 import { MatSnackBar } from '@angular/material';
 import { Component, Input } from '@angular/core';
 import { StatusBarData } from './status-bar-data';
-import { SessionService } from '../../services/session.service';
-import { PluginService } from '../../services/plugin.service';
-import { FileUploadService } from '../../services/file-upload.service';
+import { SessionService, PluginService, FileUploadService } from '../../core';
 import { IMenuItem } from '../../common/imenuitem';
 
 @Component({

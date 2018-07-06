@@ -1,27 +1,26 @@
-import { IScreen } from '../../common/iscreen';
 import { Component } from '@angular/core';
-import { SessionService } from '../../services/session.service';
 import { SelectableItemListComponentConfiguration, SelectionMode } from '../../shared/components/selectable-item-list/selectable-item-list.component';
 import { IMenuItem } from '../../common/imenuitem';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-selection-list',
   templateUrl: './selection-list.component.html',
   styleUrls: ['./selection-list.component.scss']
 })
-export class SelectionListComponent implements IScreen {
+export class SelectionListComponent extends PosScreen<any> {
 
-  screen: any;
-  listConfig = new SelectableItemListComponentConfiguration<any>();
+    listConfig = new SelectableItemListComponentConfiguration<any>();
   index: number = -1;
 
-  constructor(public session: SessionService) {
+  constructor() {
+      super();
   }
 
-  show(screen: any) {
+  buildScreen() {
     this.screen = screen;
     this.listConfig = new SelectableItemListComponentConfiguration<any>();
-    if (screen.multiSelect) {
+    if (this.screen.multiSelect) {
       this.listConfig.selectionMode = SelectionMode.Multiple;
     } else {
       this.listConfig.selectionMode = SelectionMode.Single;

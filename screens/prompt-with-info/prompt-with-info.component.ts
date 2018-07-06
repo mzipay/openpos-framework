@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { PromptComponent } from '../prompt/prompt.component';
-import { SessionService } from '../../services/session.service';
-import { ValidatorsService } from '../../services/validators.service';
+import { ValidatorsService } from '../../core';
 
 @Component({
   selector: 'app-prompt-with-info',
@@ -9,8 +8,8 @@ import { ValidatorsService } from '../../services/validators.service';
 })
 export class PromptWithInfoComponent extends PromptComponent {
 
-  constructor(public session: SessionService, private validators: ValidatorsService) {
-    super(session, validators);
+  constructor( private validators: ValidatorsService) {
+    super( validators);
   }
 
 

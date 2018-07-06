@@ -1,36 +1,24 @@
 
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { IMenuItem } from './../../common/imenuitem';
-import { SessionService } from './../../services/session.service';
-import { IScreen } from './../../common/iscreen';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-till-summary',
   templateUrl: './till-summary.component.html',
   styleUrls: ['./till-summary.component.scss']
 })
-export class TillSummaryComponent implements OnInit, AfterViewInit, IScreen {
+export class TillSummaryComponent extends PosScreen<any> {
 
-  nextAction: IMenuItem;
-  screen: any;
+    nextAction: IMenuItem;
 
-  constructor(public session: SessionService) {
-  }
+    buildScreen(){
+        this.nextAction = this.screen.nextAction;
+    }
 
-  show(screen: any) {
-    this.screen = screen;
-  }
-
-  ngOnInit() {
-    this.nextAction = this.screen.nextAction;
-  }
-
-  ngAfterViewInit(): void {
-  }
-
-  onNextAction() {
-    this.session.onAction(this.nextAction.action);
-  }
+    onNextAction() {
+        this.session.onAction(this.nextAction.action);
+    }
 
 }

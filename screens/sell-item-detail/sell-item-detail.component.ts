@@ -3,7 +3,7 @@ import {MatTableDataSource} from '@angular/material';
 import { IScreen } from '../../common/iscreen';
 import { ISellItem } from '../../common/isellitem';
 import { IPromoItem } from '../../common/ipromoitem';
-import { SessionService } from '../../services/session.service';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-sell-item-detail',
@@ -11,18 +11,17 @@ import { SessionService } from '../../services/session.service';
   styleUrls: ['./sell-item-detail.component.scss']
 })
 
-export class SellItemDetailComponent implements IScreen {
+export class SellItemDetailComponent extends PosScreen<any> {
   public item: ISellItem;
 
-  screen: any;
   promosDataSource : MatTableDataSource<IPromoItem>;
 
-  constructor(public session: SessionService ) {
+  constructor() {
+      super();
   }
 
-  show(screen: any) {
-    this.screen = screen;
-    this.item = screen.item;
+  buildScreen() {
+    this.item = this.screen.item;
     this.promosDataSource = new MatTableDataSource(this.screen.promos);
   }
 

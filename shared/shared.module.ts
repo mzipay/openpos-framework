@@ -12,7 +12,7 @@ import { MatKeyboardModule } from '../keyboard';
 
 import { 
     MarkDirtyOnSubmitDirective, 
-    FormattedInputValueAccessor, 
+    InputFormatterDirective, 
     FocusDirective, 
     ScreenOrientationDirective,
     MimicScrollDirective,
@@ -22,6 +22,8 @@ import {
     ScreenDirective,
     TemplateDirective,
     AutoSelectOnFocusDirective,
+    RequireAtleastOneValidatorDirective,
+    PhoneUSValidatorDirective
 } from './directives';
 import { 
     PromptInputComponent, 
@@ -38,7 +40,8 @@ import {
     FabToggleButtonComponent,
     FabToggleGroupComponent,
     PopTartComponent,
-    NavListComponent
+    NavListComponent,
+    FileViewerComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe } from './pipes';
@@ -58,12 +61,13 @@ const components = [
     FabToggleButtonComponent,
     FabToggleGroupComponent,
     PopTartComponent,
-    NavListComponent
+    NavListComponent,
+    FileViewerComponent
 ]
 
 const directives = [
     MarkDirtyOnSubmitDirective,
-    FormattedInputValueAccessor,
+    InputFormatterDirective,
     FocusDirective,
     ScreenOrientationDirective,
     MimicScrollDirective,
@@ -72,7 +76,9 @@ const directives = [
     BarcodeScanPublisherDirective,
     AutoSelectOnFocusDirective,
     TemplateDirective,
-    ScreenDirective
+    ScreenDirective,
+    RequireAtleastOneValidatorDirective,
+    PhoneUSValidatorDirective
 ]
 
 const pipes = [

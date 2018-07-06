@@ -1,4 +1,4 @@
-import { Directive, Input, ElementRef, forwardRef, Renderer2, OnInit, HostListener } from '@angular/core';
+import { Directive, HostListener } from '@angular/core';
 import { MatSelectionList, MatListOption } from '@angular/material';
 
 @Directive({

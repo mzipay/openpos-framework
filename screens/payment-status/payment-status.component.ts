@@ -1,22 +1,21 @@
 import {Component } from '@angular/core';
-import { IScreen } from '../../common/iscreen';
-import { SessionService } from '../../services/session.service';
 import { IMenuItem } from '../../common/imenuitem';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-payment-status',
   templateUrl: './payment-status.component.html'
 })
-export class PaymentStatusComponent implements IScreen {
+export class PaymentStatusComponent extends PosScreen<any> {
 
   screen: any;
   pinPadStatus = '0';
 
-  constructor(public session: SessionService) {
+  constructor() {
+      super();
   }
 
-  show(screen: any) {
-    this.screen = screen;
+  buildScreen() {
     this.pinPadStatus = this.screen.pinPadStatus;
   }
 

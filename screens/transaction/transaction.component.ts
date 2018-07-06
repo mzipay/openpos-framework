@@ -1,24 +1,22 @@
 import { MatDialog } from '@angular/material';
-import { DeviceService } from '../../services/device.service';
+import { Component, ViewChild, AfterViewInit, OnInit, AfterViewChecked, ElementRef} from '@angular/core';
+import { ObservableMedia } from '@angular/flex-layout';
+import { DeviceService } from '../../core';
 import { ISellItem } from '../../common/isellitem';
 import { IScreen } from '../../common/iscreen';
-import { Component, ViewChild, AfterViewInit, OnInit, AfterViewChecked, ElementRef} from '@angular/core';
-import { SessionService } from '../../services/session.service';
-import { ObservableMedia } from '@angular/flex-layout';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { ISellScreen } from '../templates';
 import { SelectableItemListComponentConfiguration, SelectionMode } from '../../shared/components/selectable-item-list/selectable-item-list.component';
 import { NavListComponent } from '../../shared/components/nav-list/nav-list.component';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
   styleUrls: ['./transaction.component.scss']
 })
-export class TransactionComponent implements AfterViewInit, AfterViewChecked, IScreen, OnInit {
+export class TransactionComponent extends PosScreen<any> implements AfterViewInit, AfterViewChecked, OnInit {
 
-  screen: ISellScreen;
   @ViewChild('box') vc;
   @ViewChild('scrollList') private scrollList: ElementRef;
   public size = -1;
@@ -31,13 +29,12 @@ export class TransactionComponent implements AfterViewInit, AfterViewChecked, IS
 
   public items: ISellItem[];
 
-  constructor(public session: SessionService, devices: DeviceService, 
+  constructor(devices: DeviceService, 
     private observableMedia: ObservableMedia, protected dialog: MatDialog) {
-
+        super();
     }
 
-  show(screen: any) {
-    this.screen = screen;
+  buildScreen() {
     this.selectedItems = this.screen.items.filter(item => this.screen.selectedItems.find(selectedItem => item.index === selectedItem.index));
     this.listConfig =  new SelectableItemListComponentConfiguration<ISellItem>();
     this.listConfig.selectionMode = SelectionMode.Multiple;

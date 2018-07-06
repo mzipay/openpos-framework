@@ -7,5 +7,7 @@ export * from './mat-exclusive-selection-list.directive';
 export * from './inactivity-monitor.directive';
 export * from './barcode-scan-publisher.directive';
 export * from './auto-select-on-focus.directive';
+export * from './require-at-least-one.directive';
+export * from './phone.directive';
 export * from './screen.directive';
 export * from './template.directive';

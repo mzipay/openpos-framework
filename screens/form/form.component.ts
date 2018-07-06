@@ -1,42 +1,26 @@
-import { Component, AfterViewInit, DoCheck, OnInit, Output, EventEmitter } from '@angular/core';
-import { IScreen } from '../../common/iscreen';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { IFormElement } from '../../common/iformfield';
-import { SessionService } from '../../services/session.service';
 import { IMenuItem } from '../../common/imenuitem';
 import { IForm } from '../../common/iform';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html'
 })
-export class FormComponent implements AfterViewInit, DoCheck, IScreen, OnInit {
+export class FormComponent extends PosScreen<any> {
 
-  screen: any;
   public form: IForm;
-  private lastSequenceNum: number;
   formButtons: IFormElement[];
   @Output() onFieldChanged = new EventEmitter<{formElement: IFormElement, event: Event}>();
 
-  constructor(public session: SessionService) {
+  constructor() {
+      super()
   }
 
-  show(screen: any) {
-    this.screen = screen;
-  }
-
-  ngDoCheck(): void {
-    if (this.screen.sequenceNumber !== this.lastSequenceNum) {
-      this.ngOnInit();
-      this.lastSequenceNum = this.screen.sequenceNumber;
-    }
-  }
-
-  ngOnInit(): void {
+  buildScreen() {
     this.form = this.screen.form;
     this.formButtons = this.screen.form.formElements.filter((e) => e.elementType === 'Button');
-  }
-
-  ngAfterViewInit(): void {
   }
 
   onFormElementChanged(formElement: IFormElement, event: Event): void {

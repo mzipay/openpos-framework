@@ -1,38 +1,34 @@
 import { IMenuItem } from './../../common/imenuitem';
-import { SessionService } from './../../services/session.service';
-import { IScreen } from './../../common/iscreen';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IFormElement } from '../../common/iformfield';
 import { IForm } from '../../common/iform';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-till-count',
   templateUrl: './till-count.component.html',
   styleUrls: ['./till-count.component.scss']
 })
-export class TillCountComponent implements OnInit, IScreen {
-  screen: any;
+export class TillCountComponent extends PosScreen<any> {
+
   nextAction: IMenuItem;
   public form: IForm;
   @ViewChild('tillForm') tillForm;
 
-  constructor(public session: SessionService) {
+  constructor() {
+      super();
   }
 
-  show(screen: any) {
+  buildScreen() {
     // After screen is initialized, all we need to do is
     // get an updated total from the server.  This saves
     // unnecessary rebuilding of the screen
-    if (! this.screen) {
-      this.screen = screen;
+    if (!this.screen) {
       this.form = this.screen.form;
       this.nextAction = this.screen.nextAction;
     } else {
-      this.screen.total = screen.total;
+      this.screen.total = this.screen.total;
     }
-  }
-
-  ngOnInit() {
   }
 
   onFieldChanged(eventData: {formElement: IFormElement, event: Event}) {

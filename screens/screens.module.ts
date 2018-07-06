@@ -22,7 +22,6 @@ import { SignatureCaptureComponent } from './signature-capture/signature-capture
 import { StaticTableComponent } from './static-table/static-table.component';
 import { ItemListComponent } from './item-list/item-list.component';
 import { LoginComponent } from './login/login.component';
-import { PersonalizationComponent } from '../common/personalization.component';
 import { OptionsComponent } from './options/options.component';
 import { TillCountComponent } from './till-count/till-count.component';
 import { TillCountOtherTenderComponent } from './till-count-other-tender/till-count-other-tender.component';
@@ -46,13 +45,11 @@ import { StatusBarComponent } from './status-bar/status-bar.component';
 import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';
 import { ChooseOptionsDialogComponent } from './choose-options/choose-options-dialog.component';
-import { FileViewerComponent } from './file-viewer/file-viewer.component';
 import { LoadingDialogComponent } from './loading-dialog/loading-dialog.component';
 import { LoginDialogComponent } from './login/login-dialog.component';
 import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { VersionComponent } from './version/version.component';
-import { ScreenService } from '../services/screen.service';
-import { DialogService } from '../services/dialog.service';
+import { ScreenService, DialogService } from '../core';
 import { ScreenConstants } from './screen.constants';
 
 const screens = [
@@ -93,7 +90,6 @@ const screens = [
 const dialogs = [
     ChooseOptionsDialogComponent,
     DynamicFormDialogComponent,
-    FileViewerComponent,
     LoadingDialogComponent,
     LoginDialogComponent,
     MultipleDynamicFormDialogComponent,

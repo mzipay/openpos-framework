@@ -1,10 +1,8 @@
 import { Component, ViewChildren, AfterViewInit, Input, QueryList } from '@angular/core';
-import { SessionService } from '../../../services/session.service';
 import { FormGroup, Validators, FormControl, ValidatorFn } from '@angular/forms';
+import { SessionService, ScreenService, ValidatorsService } from '../../../core';
+import { OpenPosValidators } from '../../../shared';
 import { IFormElement } from '../../../common/iformfield';
-import { ScreenService } from '../../../services/screen.service';
-import { OpenPosValidators } from '../../../common/validators/openpos-validators';
-import { ValidatorsService } from '../../../services/validators.service';
 import { IForm } from '../../../common/iform';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
 

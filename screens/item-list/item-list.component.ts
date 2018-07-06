@@ -1,18 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IScreen } from '../../common/iscreen';
 import { IItem } from '../../common/iitem';
 import { IMenuItem } from '../../common/imenuitem';
 import { ProductListComponent, ItemClickAction, MenuClickAction } from '../../shared/';
-import { SessionService } from '../../services/session.service';
 import { SelectionMode } from '../../common/selectionmode';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
     selector: 'app-item-list',
     templateUrl: './item-list.component.html'
 })
-export class ItemListComponent implements IScreen, OnInit {
+export class ItemListComponent extends PosScreen<any> implements OnInit {
 
-    screen: any;
     items: IItem[];
     itemActionName: string;
     text: string;
@@ -21,12 +19,11 @@ export class ItemListComponent implements IScreen, OnInit {
     selectionMode: string;
     @ViewChild('productList') productList: ProductListComponent;
 
-    constructor(public session: SessionService) {
+    constructor() {
+        super();
     }
 
-    show(screen: any) {
-        this.screen = screen;
-
+    buildScreen() {
         this.items = this.screen.items;
         this.itemActionName = this.screen.itemActionName;
         this.text = this.screen.text;

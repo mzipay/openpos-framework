@@ -1,18 +1,15 @@
 import { Component, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatInput } from '@angular/material';
-import { IScreen } from '../../common/iscreen';
-import { SessionService } from '../../services/session.service';
+import { PosScreen } from '../pos-screen/pos-screen.component'
 import { IForm } from '../../common/iform';
 
 @Component({
   selector: 'app-basic-item-search',
   templateUrl: './basic-item-search.component.html'
 })
-export class BasicItemSearchComponent implements IScreen, AfterViewInit, OnDestroy {
+export class BasicItemSearchComponent extends PosScreen<any> implements AfterViewInit, OnDestroy {
 
   @ViewChild(MatInput) firstInput: MatInput;
-
-  screen: any;
 
   searchCategories: ISearchCategory[];
   searchCategoryStructure: SearchCategoryStructure;
@@ -21,11 +18,11 @@ export class BasicItemSearchComponent implements IScreen, AfterViewInit, OnDestr
   searchCategoriesText: string;
   public displayCategoryIndex = 0;
 
-  constructor(public session: SessionService) {
+  constructor() {
+      super();
   }
 
-  show(screen: any) {
-    this.screen = screen;
+  buildScreen() {
     this.session.registerActionPayload(this.screen.template.localMenuItems[0].action, () => {
       return this.getSearchPayload();
     });
