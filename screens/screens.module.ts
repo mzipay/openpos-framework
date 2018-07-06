@@ -51,6 +51,9 @@ import { LoadingDialogComponent } from './loading-dialog/loading-dialog.componen
 import { LoginDialogComponent } from './login/login-dialog.component';
 import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { VersionComponent } from './version/version.component';
+import { ScreenService } from '../services/screen.service';
+import { DialogService } from '../services/dialog.service';
+import { ScreenConstants } from './screen.constants';
 
 const screens = [
     BasicItemSearchComponent,
@@ -63,7 +66,6 @@ const screens = [
     LoginComponent,
     PaymentStatusComponent,
     PromptComponent,
-    PersonalizationComponent,
     PromptWithOptionsComponent,
     PromptWithInfoComponent,
     TransactionComponent,
@@ -125,12 +127,26 @@ const components = [
         SharedModule
     ],
     exports: [
-        ...screens,
-        ...dialogs,
+
         ...templates,
         ...components
     ],
     providers: [
     ]
 })
-export class ScreensModule { }
+export class ScreensModule {
+    constructor(screenService: ScreenService, dialogService: DialogService) {
+        ScreenConstants.screens.forEach((screen) => {
+            screenService.addScreen(screen.name, screen.component);
+        });
+
+        ScreenConstants.dialogs.forEach((dialog) => {
+            dialogService.addDialog(dialog.name, dialog.component);
+        });
+
+        ScreenConstants.templates.forEach((template) => {
+            screenService.addScreen(template.name, template.component);
+        });
+    }
+
+ }

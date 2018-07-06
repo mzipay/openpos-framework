@@ -52,7 +52,7 @@ import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selec
 import { DialogService } from './services/dialog.service';
 import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
 import { SharedModule } from './shared';
-import { DynamicScreenComponent } from './common';
+import { DynamicScreenComponent, PersonalizationComponent } from './common';
 import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-bar/selfcheckout-with-bar.component';
 
 
@@ -66,7 +66,8 @@ import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-
         SelfCheckoutOptionsComponent,
         NavListComponent,
         PopTartComponent,
-        SelfCheckoutWithBarComponent
+        SelfCheckoutWithBarComponent,
+        PersonalizationComponent
     ],
     declarations: [
         DynamicScreenComponent,
@@ -93,7 +94,8 @@ import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-
         BarcodeScanPublisherDirective,
         MimicScrollDirective,
         ScreenOrientationDirective,
-        SelfCheckoutWithBarComponent
+        SelfCheckoutWithBarComponent,
+        PersonalizationComponent
     ],
     imports: [
         SharedModule
@@ -129,6 +131,11 @@ import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-
 })
 // Export services below under 'providers'
 export class OpenposCoreModule {
+
+    constructor(screenService: ScreenService){
+        screenService.addScreen('Personalization', PersonalizationComponent);
+    }
+
     static forRoot() {
         return {
             ngModule: OpenposCoreModule,

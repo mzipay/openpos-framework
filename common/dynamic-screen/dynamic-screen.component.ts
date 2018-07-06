@@ -1,4 +1,3 @@
-import { FileViewerComponent } from './../../dialogs/file-viewer/file-viewer.component';
 import { OpenPOSDialogConfig } from './../../common/idialog';
 import { TemplateDirective } from './../../common/template.directive';
 import { IScreen } from './../../common/iscreen';
@@ -15,7 +14,7 @@ import { IconService } from './../../services/icon.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { DialogService } from './../../services/dialog.service';
-import { AbstractTemplate } from '../..';
+import { AbstractTemplate, FileViewerComponent } from '../..';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
 import { Configuration } from '../../configuration/configuration';
