@@ -1,5 +1,4 @@
 import { AppVersion } from './../../common/app-version';
-import { IPlugin } from './../../common/iplugin';
 import { PluginService } from './../../services/plugin.service';
 import { IMenuItem } from './../../common/imenuitem';
 import { Component, OnInit } from '@angular/core';

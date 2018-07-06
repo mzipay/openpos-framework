@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ILoadingDialogScreen } from './iloading-dialog-screen';
+import { ILoadingDialogScreen } from './loading-dialog-screen.interface';
 import { IScreen } from '../../common/iscreen';
 import { SessionService } from '../../services/session.service';
 

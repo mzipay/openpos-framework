@@ -1,11 +1,11 @@
-import { VersionComponent } from './../dialogs/version/version.component';
+import { VersionComponent } from './../screens/version/version.component';
 import { IScreen } from '../common/iscreen';
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { SessionService } from '../services/session.service';
-import { ChooseOptionsDialogComponent } from '../dialogs/choose-options/choose-options-dialog.component';
-import { DynamicFormDialogComponent } from '../dialogs/dynamic-form/dynamic-form-dialog.component';
+import { ChooseOptionsDialogComponent } from '../screens/choose-options/choose-options-dialog.component';
+import { DynamicFormDialogComponent } from '../screens/dynamic-form/dynamic-form-dialog.component';
 
-import { MultipleDynamicFormDialogComponent } from '../dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
+import { MultipleDynamicFormDialogComponent } from '../screens/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { BasicItemSearchComponent } from '../screens/basic-item-search/basic-item-search.component';
 import { EmbeddedWebPageComponent } from '../screens/embedded-web-page/embedded-web-page.component';
 import { FormComponent } from '../screens/form/form.component';
@@ -36,8 +36,8 @@ import { CustomerSearchResultsComponent } from '../screens/customer-search-resul
 import { FullPageImageComponent } from '../screens/full-page-image/full-page-image.component';
 import { CallForAuthorizationComponent } from '../screens/call-for-authorization/call-for-authorization.component';
 import { DialogComponent } from '../screens/dialog/dialog.component';
-import { LoadingDialogComponent } from '../dialogs/loading-dialog/loading-dialog.component';
-import { LoginDialogComponent } from '../dialogs/login-dialog/login-dialog.component';
+import { LoadingDialogComponent } from '../screens/loading-dialog/loading-dialog.component';
+import { LoginDialogComponent } from '../screens/login/login-dialog.component';
 import { SelectionListComponent } from '../screens/selection-list/selection-list.component'
 import { TillSummaryComponent } from '../screens/till-summary/till-summary.component';
 

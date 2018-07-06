@@ -1,6 +1,6 @@
+import { Component } from '@angular/core';
 import { LoginComponent } from './../../screens/login/login.component';
 
-import { DoCheck, OnInit, Component } from '@angular/core';
 
 @Component({
     selector: 'app-login-dialog',

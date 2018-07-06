@@ -1,4 +1,3 @@
-import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.component';
 import { PopTartComponent } from './dialogs/pop-tart/pop-tart.component';
 import { NavListComponent } from './dialogs/nav-list/nav-list.component';
 
@@ -43,13 +42,6 @@ import { DeviceService } from './services/device.service';
 import { FabToggleGroupComponent } from './common/controls/fab-toggle-group/fab-toggle-group.component';
 import { FabToggleButtonComponent } from './common/controls/fab-toggle-button/fab-toggle-button.component';
 import { SelfCheckoutOptionsComponent } from './self-checkout/self-checkout-options/self-checkout-options.component';
-import { MultipleDynamicFormDialogComponent } from './dialogs/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
-import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-options-dialog.component';
-import { DynamicFormDialogComponent } from './dialogs/dynamic-form/dynamic-form-dialog.component';
-import { LoadingDialogComponent } from './dialogs/loading-dialog/loading-dialog.component';
-
-
-
 import { httpInterceptorProviders } from './http-intercepters';
 import { RequireAtleastOneValidatorDirective } from './common/validators/require-atleast-one.directive';
 import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
@@ -57,9 +49,7 @@ import { AutoSelectOnFocus } from './common/autoSelect-onFocus.directive';
 // On Screen Keyboard
 import { ValidatorsService } from './services/validators.service';
 import { MatExclusiveSelectionListDirective } from './common/mat-exclusive-selection-list.directive';
-import { FileViewerComponent } from './dialogs/file-viewer/file-viewer.component';
 import { DialogService } from './services/dialog.service';
-import { VersionComponent } from './dialogs/version/version.component';
 import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
 import { SharedModule } from './shared';
 import { DynamicScreenComponent } from './common';
@@ -68,28 +58,18 @@ import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-
 
 @NgModule({
     entryComponents: [
-        ChooseOptionsDialogComponent,
-        DynamicFormDialogComponent,
         SelfCheckoutHomeComponent,
-        LoginDialogComponent,
         SelfCheckoutPaymentStatusComponent,
         SelfCheckoutTransactionComponent,
-        FileViewerComponent,
         ConfirmationDialogComponent,
         CheckoutListItemComponent,
         SelfCheckoutOptionsComponent,
-        MultipleDynamicFormDialogComponent,
         NavListComponent,
         PopTartComponent,
-        LoadingDialogComponent,
-        VersionComponent,
         SelfCheckoutWithBarComponent
     ],
     declarations: [
         DynamicScreenComponent,
-        LoginDialogComponent,
-        ChooseOptionsDialogComponent,
-        DynamicFormDialogComponent,
         SelfCheckoutTransactionComponent,
         SelfCheckoutPaymentStatusComponent,
         LoaderComponent,
@@ -98,7 +78,6 @@ import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-
         ScreenDirective,
         TemplateDirective,
         ConfirmationDialogComponent,
-        FileViewerComponent,
         CheckoutListItemComponent,
         RequireAtleastOneValidatorDirective,
         AutoSelectOnFocus,
@@ -106,12 +85,9 @@ import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-
         FabToggleGroupComponent,
         FabToggleButtonComponent,
         SelfCheckoutOptionsComponent,
-        MultipleDynamicFormDialogComponent,
         NavListComponent,
         PopTartComponent,
         PhonePipe,
-        LoadingDialogComponent,
-        VersionComponent,
         InactivityMonitorDirective,
         PhoneUSValidatorDirective,
         BarcodeScanPublisherDirective,
@@ -128,7 +104,6 @@ import { SelfCheckoutWithBarComponent } from './self-checkout/selfcheckout-with-
         FabToggleGroupComponent,
         FabToggleButtonComponent,
         PhonePipe,
-        LoginDialogComponent,
         InactivityMonitorDirective,
         BarcodeScanPublisherDirective,
         MimicScrollDirective,

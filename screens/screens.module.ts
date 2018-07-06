@@ -44,9 +44,15 @@ import { SellLinkedCustomerComponent } from './templates/sell-template/sell-link
 import { SharedModule } from '../shared';
 import { StatusBarComponent } from './status-bar/status-bar.component';
 import { TillSummaryComponent } from './till-summary/till-summary.component';
+import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';
+import { ChooseOptionsDialogComponent } from './choose-options/choose-options-dialog.component';
+import { FileViewerComponent } from './file-viewer/file-viewer.component';
+import { LoadingDialogComponent } from './loading-dialog/loading-dialog.component';
+import { LoginDialogComponent } from './login/login-dialog.component';
+import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
+import { VersionComponent } from './version/version.component';
 
 const screens = [
-
     BasicItemSearchComponent,
     ChooseOptionsComponent,
     DialogComponent,
@@ -82,6 +88,16 @@ const screens = [
     SelectionListComponent
 ]
 
+const dialogs = [
+    ChooseOptionsDialogComponent,
+    DynamicFormDialogComponent,
+    FileViewerComponent,
+    LoadingDialogComponent,
+    LoginDialogComponent,
+    MultipleDynamicFormDialogComponent,
+    VersionComponent
+]
+
 const templates = [
     BlankComponent,
     BlankWithBarComponent,
@@ -96,10 +112,12 @@ const components = [
 @NgModule({
     entryComponents: [
         ...screens,
+        ...dialogs,
         ...templates
     ],
     declarations: [
         ...screens,
+        ...dialogs,
         ...templates,
         ...components
     ],
@@ -108,6 +126,7 @@ const components = [
     ],
     exports: [
         ...screens,
+        ...dialogs,
         ...templates,
         ...components
     ],
