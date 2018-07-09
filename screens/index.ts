@@ -2,3 +2,4 @@ export { DynamicScreenComponent } from './dynamic-screen/dynamic-screen.componen
 export { LoginComponent } from './login/login.component';
 export { PersonalizationComponent } from './personalization.component';
 export * from './signature-capture.component';
+export * from './catalog-browser/catalog-browser.component';

@@ -105,6 +105,7 @@ import { ChooseOptionsDialogComponent } from './dialogs/choose-options/choose-op
 import { DynamicFormDialogComponent } from './dialogs/dynamic-form/dynamic-form-dialog.component';
 import { LoadingDialogComponent } from './dialogs/loading-dialog/loading-dialog.component';
 import { SelectionListComponent } from './screens/selection-list/selection-list.component';
+import { CatalogBrowserComponent } from './screens/catalog-browser/catalog-browser.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -195,7 +196,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         PopTartComponent,
         LoadingDialogComponent,
         VersionComponent,
-        SelectionListComponent
+        SelectionListComponent,
+        CatalogBrowserComponent
     ],
     declarations: [
         DialogComponent,
@@ -281,7 +283,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         BarcodeScanPublisherDirective,
         MimicScrollDirective,
         ScreenOrientationDirective,
-        SelectionListComponent
+        SelectionListComponent,
+        CatalogBrowserComponent
     ],
     imports: [
         BrowserModule,

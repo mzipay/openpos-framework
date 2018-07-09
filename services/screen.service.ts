@@ -44,6 +44,7 @@ import { CallForAuthorizationComponent } from '../screens/call-for-authorization
 import { DialogComponent } from '../screens/dialog/dialog.component';
 import { MultipleDynamicFormComponent } from '../screens/multiple-dynamic-form/multiple-dynamic-form.component';
 import { SelectionListComponent } from '../screens/selection-list/selection-list.component'
+import { CatalogBrowserComponent } from './../screens/catalog-browser/catalog-browser.component';
 
 @Injectable()
 export class ScreenService {
@@ -89,6 +90,7 @@ export class ScreenService {
     this.screens.set('CallForAuthorization', CallForAuthorizationComponent);
     this.screens.set('MultipleDynamicForm', MultipleDynamicFormComponent);
     this.screens.set('SelectionList', SelectionListComponent);
+    this.screens.set('CatalogBrowser', CatalogBrowserComponent);
 
     // Default Dialog 
     this.screens.set('Dialog', DialogComponent);
