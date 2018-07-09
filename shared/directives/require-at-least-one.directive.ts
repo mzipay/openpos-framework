@@ -1,6 +1,6 @@
 import { Directive }  from '@angular/core';
 import { NG_VALIDATORS } from '@angular/forms';
-import { OpenPosValidators } from '../../shared';
+import { OpenPosValidators } from '../validators';
 
 @Directive({
     selector: '[requireAtleastOne]',
