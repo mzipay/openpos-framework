@@ -9,14 +9,16 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ActionIntercepter } from '../action-intercepter';
 import { ToastType, IToastScreen, IUrlMenuItem, IMenuItem } from '../interfaces';
-import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 import { IThemeChangingEvent } from '../../shared/events/theme-changing-event.interface';
 import { ActionMap, LoaderState, ConfirmationDialogComponent, Element } from '../components';
 import { IDeviceResponse, IDeviceRequest } from '../plugins';
+
+
+export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
     providedIn: 'root',
   })
-export class SessionService implements ILocaleService {
+export class SessionService {
 
     subNode$ = new BehaviorSubject<any[]>([]);
 
