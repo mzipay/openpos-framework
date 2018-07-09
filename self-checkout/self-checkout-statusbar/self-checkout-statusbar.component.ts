@@ -1,7 +1,6 @@
 import { MatDialog, MatDialogConfig, MatSnackBar } from '@angular/material';
 import { Component, Input } from '@angular/core';
-import { IMenuItem } from '../../common/imenuitem';
-import { SessionService } from '../../core';
+import { SessionService, IMenuItem } from '../../core';
 import { SelfCheckoutStatusBarData } from './self-checkout-status-bar-data';
 import { ScanSomethingComponent } from '../../shared';
 

@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { IMenuItem } from '../../../common/imenuitem';
-import { SessionService } from '../../../core';
+import { SessionService, IMenuItem } from '../../../core';
 
 @Component({
     selector: 'app-nav-list',

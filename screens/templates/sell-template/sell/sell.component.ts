@@ -1,14 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { SessionService, AbstractTemplate } from '../../../../core';
-
-import { IMenuItem } from '../../../../common/imenuitem';
 import { ObservableMedia } from '@angular/flex-layout';
-import { ISellScreen } from '../..';
-import { StatusBarData } from '../../../../screens/';
-import { SellScreenUtils } from './iSellScreen';
-import { ISellTemplate } from './isell-template';
+import { SessionService, AbstractTemplate, IMenuItem } from '../../../../core';
+import { StatusBarData } from '../../../status-bar/status-bar-data';
+import { SellScreenUtils, ISellScreen } from './sell-screen.interface';
+import { ISellTemplate } from './sell-template.interface';
 
 @Component({
   selector: 'app-sell',

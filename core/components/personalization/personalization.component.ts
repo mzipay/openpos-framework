@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SessionService } from '../../../core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { IScreen } from '../../../common';
+import { SessionService } from '../../services';
+import { IScreen } from '../../interfaces';
 
 @Component({
     selector: 'app-personalization',

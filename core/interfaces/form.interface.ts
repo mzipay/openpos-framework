@@ -1,4 +1,4 @@
-import { IFormElement } from "./iformfield";
+import { IFormElement } from './form-field.interface';
 
 export interface IForm {
     formElements: IFormElement[];

@@ -1,5 +1,5 @@
 import { IOptionItem } from './option-item.interface';
-import { IMenuItem } from '../../common';
+import { IMenuItem } from '../../core';
 
 
 export interface IChooseOptionsScreen {

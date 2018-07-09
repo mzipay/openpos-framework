@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { IMenuItem } from '../../common/imenuitem';
-import { IFormElement } from '../../common/iformfield';
-import { IForm } from '../../common/iform';
+import { IMenuItem, IFormElement, IForm } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 @Component({
     selector: 'app-login',

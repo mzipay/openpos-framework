@@ -1,7 +1,5 @@
-import { SelectionMode } from '../../../common/selectionmode';
-import { IMenuItem } from '../../../common/imenuitem';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { IItem } from '../../../common/iitem';
+import { IItem, IMenuItem, SelectionMode } from '../../../core';
 
 @Component({
     selector: 'app-product-list',

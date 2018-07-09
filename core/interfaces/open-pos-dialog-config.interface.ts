@@ -1,12 +1,4 @@
-import { IMenuItem } from './imenuitem';
 import { MatDialogConfig } from '@angular/material';
-
-export interface IDialog {
-    title: string;
-    buttons: IMenuItem[];
-    subType: string;
-    message: string[];
-}
 
 export interface OpenPOSDialogConfig extends MatDialogConfig {
     /** If true, will cause the dialog action chosen by the user to be invoked before

@@ -1,7 +1,5 @@
-import { IMenuItem } from './../../common/imenuitem';
 import { Component, ViewChild } from '@angular/core';
-import { IFormElement } from '../../common/iformfield';
-import { IForm } from '../../common/iform';
+import { IFormElement, IMenuItem, IForm } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({

@@ -1,15 +1,14 @@
-import { IMenuItem } from '../../common/imenuitem';
+
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { Injectable, EventEmitter, NgZone } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
-import { ActionIntercepter } from '../../common/action-intercepter';
-import { ToastType, IToastScreen } from '../interfaces';
 import { MatDialog, MatSnackBar } from '@angular/material';
-import { IUrlMenuItem } from '../../common/iurlmenuitem';
+import { Router } from '@angular/router';
+import { ActionIntercepter } from '../action-intercepter';
+import { ToastType, IToastScreen, IUrlMenuItem, IMenuItem } from '../interfaces';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 import { IThemeChangingEvent } from '../../shared/events/theme-changing-event.interface';
 import { ActionMap, LoaderState, ConfirmationDialogComponent, Element } from '../components';

@@ -1,4 +1,4 @@
-import { IField } from './ifield';
+import { IField } from './field.interface';
 export interface IItem {
     index: number;
     id: string;

@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, DoCheck } from '@angular/core';
-import { ITenderItem } from '../../common/itenderitem';
+import { ITenderItem } from '../../core';
 import { MatTableDataSource } from '@angular/material';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 

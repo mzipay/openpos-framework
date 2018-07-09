@@ -1,7 +1,7 @@
 
 import { Component } from '@angular/core';
 
-import { IMenuItem } from './../../common/imenuitem';
+import { IMenuItem } from './../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({

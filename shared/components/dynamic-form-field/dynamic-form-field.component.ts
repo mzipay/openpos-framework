@@ -8,9 +8,8 @@ import { FormGroup } from '@angular/forms';
 import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-select';
 import { Subscription, Observable, of  } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ITextMask, TextMask } from '../../../shared/textmask';
-import { SessionService, ScreenService } from '../../../core';
-import { IFormElement } from '../../../common/iformfield';
+import { ITextMask, TextMask } from '../../../shared';
+import { SessionService, ScreenService, IFormElement } from '../../../core';
 import { PopTartComponent } from '../pop-tart/pop-tart.component';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ObservableMedia} from '@angular/flex-layout';
-import { IMenuItem } from '../../common/imenuitem';
+import { IMenuItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSelectionList, MatListOption } from '@angular/material';
-import { IItem } from '../../common/iitem';
+import { IItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({

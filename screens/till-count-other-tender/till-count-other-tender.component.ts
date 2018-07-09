@@ -1,8 +1,7 @@
-import { IMenuItem } from './../../common/imenuitem';
-import { IItem } from './../../common/iitem';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { PosScreen } from '../pos-screen/pos-screen.component';
+import { IMenuItem, IItem } from './../../core';
 
 @Component({
   selector: 'app-till-count-other-tender',

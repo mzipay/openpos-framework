@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoginComponent } from './../../screens/login/login.component';
+import { LoginComponent } from './login.component';
 
 
 @Component({

@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IItem } from '../../common/iitem';
-import { IMenuItem } from '../../common/imenuitem';
 import { ProductListComponent, ItemClickAction, MenuClickAction } from '../../shared/';
-import { SelectionMode } from '../../common/selectionmode';
+import { SelectionMode, IItem, IMenuItem  } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({

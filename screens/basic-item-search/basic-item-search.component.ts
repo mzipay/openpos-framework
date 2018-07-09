@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatInput } from '@angular/material';
 import { PosScreen } from '../pos-screen/pos-screen.component'
-import { IForm } from '../../common/iform';
+import { IForm } from '../../core';
 
 @Component({
   selector: 'app-basic-item-search',

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PluginService, AppVersion } from '../../core';
-import { IMenuItem } from './../../common/imenuitem';
+import { PluginService, AppVersion, IMenuItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 declare var version: any; // read in from core at assets/version.js

@@ -1,7 +1,5 @@
-
-import { IForm } from '../../common/iform';
-import { ISellScreen } from '../templates/sell-template/sell/iSellScreen';
-
+import { ISellScreen } from '../templates/';
+import { IForm } from '../../core';
 
 export interface IMultipleDynamicFormScreen extends ISellScreen {
     forms: IMultipleFormOption[];

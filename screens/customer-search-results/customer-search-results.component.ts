@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { ICustomer } from '../../common/icustomer';
+import { ICustomer } from './customer.interface';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({

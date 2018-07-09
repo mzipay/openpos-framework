@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, DoCheck, HostListener } from '@angular/core';
+import { Component, AfterViewInit, HostListener } from '@angular/core';
 import 'signature_pad';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 

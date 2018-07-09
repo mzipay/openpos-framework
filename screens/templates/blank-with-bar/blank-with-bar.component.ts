@@ -2,7 +2,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
 import { AbstractTemplate } from '../../../core';
 import { StatusBarData } from '../../status-bar/status-bar-data';
-import { SellScreenUtils } from '../sell-template/sell/iSellScreen';
+import { SellScreenUtils } from '../sell-template/sell/sell-screen.interface';
 
 @Component({
   selector: 'app-blank-with-bar',

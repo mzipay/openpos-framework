@@ -1,4 +1,4 @@
-import { IForm } from '../../common/iform';
+import { IForm } from '../../core';
 
 export interface IOptionItem {
     displayValue: String;

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { SelectableItemListComponentConfiguration, SelectionMode } from '../../shared/components/selectable-item-list/selectable-item-list.component';
-import { IMenuItem } from '../../common/imenuitem';
+import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
+import { IMenuItem, SelectionMode } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({

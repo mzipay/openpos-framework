@@ -1,9 +1,7 @@
 
 import { Component, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { MatInput } from '@angular/material';
-import { IItem } from '../../common/iitem';
-import { IFormElement } from '../../common/iformfield';
-import { IMenuItem } from '../../common/imenuitem';
+import { IItem, IFormElement, IMenuItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({

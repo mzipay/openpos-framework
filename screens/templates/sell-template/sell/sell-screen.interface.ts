@@ -1,8 +1,7 @@
-import { IMenuItem } from '../../../../common/imenuitem';
-import { StatusBarData } from '../../../../screens/status-bar/status-bar-data';
+import { IMenuItem, ISellItem } from '../../../../core';
+import { StatusBarData } from '../../../status-bar/status-bar-data';
 import { SelfCheckoutStatusBarData } from '../../../../self-checkout/self-checkout-statusbar/self-checkout-status-bar-data';
-import { ISellTemplate } from './isell-template';
-import { ISellItem } from '../../../../common';
+import { ISellTemplate } from './sell-template.interface';
 
 export interface ISellScreen {
     name: string;

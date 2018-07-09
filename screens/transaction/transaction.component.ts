@@ -1,11 +1,10 @@
 import { MatDialog } from '@angular/material';
 import { Component, ViewChild, AfterViewInit, OnInit, AfterViewChecked, ElementRef} from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
-import { DeviceService } from '../../core';
-import { ISellItem } from '../../common/isellitem';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { SelectableItemListComponentConfiguration, SelectionMode } from '../../shared/components/selectable-item-list/selectable-item-list.component';
+import { DeviceService, ISellItem, SelectionMode } from '../../core';
+import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
 import { NavListComponent } from '../../shared/components/nav-list/nav-list.component';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 

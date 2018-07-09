@@ -1,7 +1,7 @@
 
 import { Component } from '@angular/core';
 import { ChooseOptionsComponent } from './choose-options.component';
-import { OpenPOSDialogConfig } from './../../common/idialog';
+import { OpenPOSDialogConfig } from './../../core';
 
 
 @Component({

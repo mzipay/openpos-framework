@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
-import { SessionService } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({

@@ -1,8 +1,8 @@
 
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import { IMenuItem } from '../../common/imenuitem';
-import { ILine } from './iLine';
+import { IMenuItem } from '../../core';
+import { ILine } from './line.interface';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({

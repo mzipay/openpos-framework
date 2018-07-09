@@ -1,4 +1,4 @@
-import { IMenuItem } from '../../common/imenuitem';
+import { IMenuItem } from '../../core';
 
 
 export class StatusBarData{

@@ -1,9 +1,5 @@
 import { Component, Input, ContentChild, TemplateRef, ElementRef, Output, EventEmitter } from '@angular/core';
-
-export enum SelectionMode {
-    Single,
-    Multiple
-}
+import { SelectionMode } from '../../../core';
 
 export class SelectableItemListComponentConfiguration<ItemType> {
     numResultsPerPage: number;

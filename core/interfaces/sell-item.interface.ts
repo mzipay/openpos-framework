@@ -1,5 +1,5 @@
-import { IMenuItem } from './imenuitem';
-import { IItem } from './iitem';
+import { IMenuItem } from './menu-item.interface';
+import { IItem } from './item.interface';
 
 export interface ISellItem extends IItem {
     posItemId: string;

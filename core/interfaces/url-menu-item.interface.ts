@@ -1,4 +1,4 @@
-import { IMenuItem } from './imenuitem';
+import { IMenuItem } from './menu-item.interface';
 
 export interface IUrlMenuItem extends IMenuItem {
     url: string;

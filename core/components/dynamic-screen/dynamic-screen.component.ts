@@ -2,22 +2,25 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
 import { Component, ViewChild, HostListener, ComponentRef, OnDestroy, OnInit, ComponentFactory } from '@angular/core';
 import { MatDialog, MatDialogRef, MatSnackBar,  MatSnackBarRef, SimpleSnackBar } from '@angular/material';
-
-import { PluginService } from '../../services/plugin.service';
-import { FileUploadService } from '../../services/file-upload.service';
-import { DeviceService } from '../../services/device.service';
-import { ScreenService } from '../../services/screen.service';
-import { SessionService } from '../../services/session.service';
-import { IconService } from '../../services/icon.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
-import { DialogService } from '../../services/dialog.service';
-import { IMenuItem } from '../../../common/imenuitem';
-import { IScreen } from '../../../core/interfaces/screen.interface';
+import { 
+    PluginService, 
+    FileUploadService,
+    DeviceService,
+    ScreenService,
+    SessionService,
+    IconService,
+    DialogService
+} from '../../services';
+import {
+    IMenuItem,
+    IScreen,
+    OpenPOSDialogConfig
+} from '../../interfaces';
 import { AbstractTemplate } from '../abstract-template';
 import { TemplateDirective, FileViewerComponent } from '../../../shared';
 import { Configuration } from '../../../configuration/configuration';
-import { OpenPOSDialogConfig } from '../../../common/idialog';
 import { IPlugin } from '../../plugins';
 
 @Component({

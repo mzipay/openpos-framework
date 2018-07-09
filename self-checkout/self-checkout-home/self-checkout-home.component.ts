@@ -1,6 +1,5 @@
-import { IMenuItem } from '../../common/imenuitem';
 import { Component, HostListener } from '@angular/core';
-import { SessionService, IScreen } from '../../core';
+import { SessionService, IScreen, IMenuItem } from '../../core';
 import { ObservableMedia } from '@angular/flex-layout';
 
 @Component({
