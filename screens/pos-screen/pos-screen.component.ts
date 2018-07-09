@@ -1,7 +1,7 @@
 import { AppInjector } from '../../core/app-injector';
-import { SessionService, IScreen } from '../../core';
+import { SessionService, IScreen, IAbstractScreen } from '../../core';
 
-export abstract class PosScreen<T> implements IScreen {
+export abstract class PosScreen<T extends IAbstractScreen> implements IScreen {
     screen: T;
     session: SessionService;
     constructor() {
