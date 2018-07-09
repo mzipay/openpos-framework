@@ -34,10 +34,7 @@ public class RegisterService {
         if (this.startupService.restart(nodeId)) {
             // TODO: Will probably need to also pass appId through web service call
             IStateManager stateManager = stateManagerFactory.retrieve("pos", nodeId);
-            // End existing conversation for the node and reset back to initial state
-            stateManager.endConversation();
-            // Restart action is handled by the Translator state and will reset subscriber on the remote VM
-            stateManager.doAction("Restart");
+            stateManager.init("pos", nodeId);
         }
     }
 }

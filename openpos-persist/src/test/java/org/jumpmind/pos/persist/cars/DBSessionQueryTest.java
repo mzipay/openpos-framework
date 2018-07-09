@@ -35,7 +35,6 @@ public class DBSessionQueryTest {
         }
 
         final String VIN = "KMHCN46C58U242743";
-        String rowId = null;
 
         {            
             DBSession db = sessionFactory.createDbSession();
@@ -154,9 +153,6 @@ public class DBSessionQueryTest {
         }
     }
     
-    private void result(Class<CarEntity> class1) {
-    }
-
     @Test
     public void testNoResults() {
         DBSession db = sessionFactory.createDbSession();
@@ -171,7 +167,8 @@ public class DBSessionQueryTest {
             params.put("model", "Falcon");
             
             List<CarEntity> falcons = db.query(byMakeAndModel, params);
-            assertNull(falcons);
+            assertNotNull(falcons);
+            assertEquals(0, falcons.size());
         }
     }        
     

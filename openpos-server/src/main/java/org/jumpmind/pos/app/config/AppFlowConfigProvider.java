@@ -25,6 +25,7 @@ package org.jumpmind.pos.app.config;
 import org.jumpmind.pos.app.state.CheckTransBalanceState;
 import org.jumpmind.pos.app.state.CommitTransState;
 import org.jumpmind.pos.app.state.HomeScreenState;
+import org.jumpmind.pos.app.state.ManageMenuState;
 import org.jumpmind.pos.app.state.SellState;
 import org.jumpmind.pos.app.state.TenderCashState;
 import org.jumpmind.pos.app.state.TenderCreditDebitState;
@@ -54,12 +55,16 @@ public class AppFlowConfigProvider extends AbstractFlowConfigProvider {
         config = new FlowConfig("Default");
         
         config.setInitialState(FlowBuilder.addState(HomeScreenState.class)
+                .withTransition("Manage", ManageMenuState.class)
                 .withTransition("Sell", SellState.class).build());
         config.add(FlowBuilder.addState(SellState.class)
                 .withTransition("Back", HomeScreenState.class)
                 .withTransition("Checkout", TenderMenuState.class)
                 .withSubTransition("CustomerSearch", getCustomerSearchConfig(appId, nodeId), "CustomerSearchFinished")
                 .build());
+        config.add(FlowBuilder.addState(ManageMenuState.class)
+                .withTransition("Back", HomeScreenState.class)
+                .build());        
         config.add(FlowBuilder.addState(TenderMenuState.class)
                 .withTransition("Back", SellState.class)
                 .withTransition("TenderCash", TenderCashState.class)

@@ -30,7 +30,7 @@ public class UnitStatus extends Entity implements Serializable {
     @Column
     private String unitStatus;
     
-    @Column(size="8")
+    @Column(size="10")
     private String businessDate;
     
     public UnitStatus(String unitId, String unitType, String unitStatus, String businessDate, Date createTime) {

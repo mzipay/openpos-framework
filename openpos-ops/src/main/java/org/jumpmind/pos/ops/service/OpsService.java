@@ -22,7 +22,7 @@ public class OpsService {
 
     @RequestMapping("/changeUnitStatus")
     public StatusChangeResult updateUnitStatus(StatusChangeRequest request) {
-        return null;
+        return endpointDispatcher.dispatch("/changeUnitStatus", request);
     }
 
 }

@@ -134,9 +134,7 @@ public class DBSession {
                 if (results.size() == 1) {
                     return results.get(0);
                 } else {
-                    throw new PersistException(
-                            String.format("findByNaturalId must result in 0 or 1 rows, " + "but instead resulted in %s rows. Sql used: %s",
-                                    results.size(), query.generateSQL(params).getSql()));
+                    return null;
                 }
             } else {
                 return null;

@@ -2,7 +2,6 @@ package org.jumpmind.pos.app.state.openclose;
 
 import org.jumpmind.pos.app.state.Prerequisite;
 import org.jumpmind.pos.app.state.Requires;
-import org.jumpmind.pos.context.model.DeviceModel;
 import org.jumpmind.pos.context.service.ContextServiceClient;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
@@ -11,10 +10,8 @@ import org.jumpmind.pos.core.flow.ITransitionStep;
 import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.flow.Transition;
-import org.jumpmind.pos.ops.model.UnitStatus;
-import org.jumpmind.pos.ops.model.UnitStatusConstants;
-import org.jumpmind.pos.ops.service.GetStatusResult;
 import org.jumpmind.pos.ops.service.OpsService;
+import org.jumpmind.pos.ops.service.OpsServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -28,9 +25,12 @@ public class OpenStoreStep implements ITransitionStep {
 
     @In(scope = ScopeType.Node)
     IStateManager stateManager;
-
+    
     @In(scope = ScopeType.Node)
     ContextServiceClient contextServiceClient;
+
+    @In(scope = ScopeType.Node)
+    OpsServiceClient opsServiceClient;
 
     Transition transition;
 
@@ -39,15 +39,7 @@ public class OpenStoreStep implements ITransitionStep {
         this.transition = transition;
         Class<?> targetClass = transition.getTargetState().getClass();
         Requires requires = targetClass.getAnnotation(Requires.class);
-        if (requires != null && isPrerequisite(requires, Prerequisite.OPEN_STORE)) {
-            DeviceModel device = contextServiceClient.getDevice();
-            GetStatusResult results = opsService.getUnitStatus(UnitStatusConstants.UNIT_TYPE_STORE, device.getBusinessUnitId());
-            UnitStatus unitStatus = results.getUnitStatus(device.getBusinessUnitId());
-            if (unitStatus == null || unitStatus.getUnitStatus().equals(UnitStatusConstants.STATUS_CLOSED)) {
-                return true;
-            }
-        }
-        return false;
+        return requires != null && isPrerequisite(requires, Prerequisite.OPEN_STORE) && !opsServiceClient.isStoreOpen();
     }
 
     @Override
@@ -68,6 +60,7 @@ public class OpenStoreStep implements ITransitionStep {
 
     @ActionHandler
     public void onOpenStore(Action action) {
+        this.opsServiceClient.openStore();
         this.transition.proceed();
     }
 

@@ -24,25 +24,30 @@ import org.apache.log4j.Logger;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
-import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.core.flow.In;
+import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.screen.HomeScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.ops.service.OpsServiceClient;
 
-public class HomeScreenState extends AbstractState implements IState {
-    
-    private Logger logger = Logger.getLogger(HomeScreenState.class);
+public class ManageMenuState extends AbstractState implements IState {
+
+    private Logger logger = Logger.getLogger(ManageMenuState.class);
+
+    @In(scope = ScopeType.Node)
+    OpsServiceClient opsServiceClient;
 
     @Override
     public void arrive(Action action) {
-        stateManager.endSession();
         stateManager.showScreen(buildScreen());
     }
-    
+
     @Override
     protected String getDefaultBundleName() {
-        return "home";
+        return "manage";
     }
-    
+
     @ActionHandler
     public void onSell(Action action) {
         logger.info("Sell action intercepted for testing purposes.");
@@ -51,13 +56,27 @@ public class HomeScreenState extends AbstractState implements IState {
 
     protected Screen buildScreen() {
         HomeScreen screen = new HomeScreen();
-        screen.addMenuItem(new MenuItem("Sell", "Sell", "credit_card"));
-        screen.addMenuItem(new MenuItem("AdvanceSearch", "Item Search", "search"));
-        screen.addMenuItem(new MenuItem("Manage", "Manage", "store"));
-        // TODO How do customers add their own links?
-        screen.setName("Home");
-        screen.setIcon("home");
+        if (opsServiceClient.isStoreOpen()) {
+            screen.addMenuItem(new MenuItem("CloseStore", "Close Store", "store"));
+        } else {
+            screen.addMenuItem(new MenuItem("OpenStore", "Open Store", "store"));
+        }
+        screen.setName("Manage");
+        screen.setIcon("store");
         screen.setType("Home");
+        screen.setBackButton(new MenuItem("Back"));
         return screen;
+    }
+
+    @ActionHandler
+    public void onOpenStore(Action action) {
+        this.opsServiceClient.openStore();
+        stateManager.showScreen(buildScreen());
+    }
+
+    @ActionHandler
+    public void onCloseStore(Action action) {
+        this.opsServiceClient.closeStore();
+        stateManager.showScreen(buildScreen());
     }
 }
