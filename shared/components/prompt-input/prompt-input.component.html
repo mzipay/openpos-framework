@@ -15,6 +15,18 @@
                     <app-show-errors [control]="promptFormGroup.controls['promptInputControl']"></app-show-errors>
                 </mat-error>
             </mat-form-field>
+
+            <mat-form-field fxFlexFill *ngSwitchCase="'TextArea'" ngClass="text-sm">
+                <textarea matInput [rows]="5" [cols]="40" [formControlName]="'promptInputControl'" [appFocus]="!readOnly" style="font-size:18px"
+                    [attr.minlength]="minLength" [attr.maxlength]="maxLength" [readonly]="readOnly" [attr.type]="isNumericField() ? 'tel' : 'text'" autoSelectOnFocus>
+                    </textarea>
+                    <mat-placeholder *ngIf="placeholderText" >{{placeholderText}}</mat-placeholder>
+                    <mat-placeholder *ngIf="!placeholderText">Comments</mat-placeholder>
+                    <mat-hint class="text-sm" align="start">{{hintText}}</mat-hint>
+                    <mat-error class="text-sm">
+                        <app-show-errors [control]="promptFormGroup.controls['promptInputControl']"></app-show-errors>
+                    </mat-error>
+            </mat-form-field>
         
             <mat-slide-toggle *ngSwitchCase="'ONOFF'" [formControlName]="'promptInputControl'" color="primary" ngClass="text-lg">
                 {{placeholderText}} {{onOffModel==true ? 'On' : 'Off'}}

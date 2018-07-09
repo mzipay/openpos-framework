@@ -25,7 +25,6 @@
         "core-js": "^2.5.7",
         "signature_pad": "2.3.0",
         "text-mask-addons": "^3.7.2",
-        "xml2js": "^0.4.19",
         "@types/signature_pad": "0.0.30",
         "@stomp/ng2-stompjs": "^6.0.0",
         "@stomp/stompjs": "^4.0.6",
