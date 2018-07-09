@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
-import { FileUploadService } from './file-upload.service';
-import { LogfileDownloadPlugin } from '../../plugins/logfile-download.plugin';
-import { InAppBrowserPlugin } from '../../plugins/inappbrowser.plugin';
-import { BarcodeScannerPlugin } from '../../plugins/barcodescanner.plugin';
 import { Subscription, BehaviorSubject, Subject } from 'rxjs';
-import { DEVICE_ERROR_RESPONSE_TYPE, DEVICE_RESPONSE_TYPE, DEVICE_DNE_RESPONSE_TYPE } from '../../common/ideviceresponse';
-import { IDevicePlugin } from '../../common/idevice-plugin';
+import { FileUploadService } from './file-upload.service';
+import { 
+    LogfileDownloadPlugin,
+    InAppBrowserPlugin,
+    BarcodeScannerPlugin,
+    DEVICE_ERROR_RESPONSE_TYPE, 
+    DEVICE_RESPONSE_TYPE, 
+    DEVICE_DNE_RESPONSE_TYPE,
+    IDevicePlugin,
+    IDeviceRequest
+ } from '../plugins';
 import { PluginService } from './plugin.service';
-import { IDeviceRequest } from '../../common/idevicerequest';
 import { SessionService } from './session.service';
 
 declare var cordova: any;

@@ -1,6 +1,3 @@
-export { IDevicePlugin } from './idevice-plugin';
-export { IDeviceRequest } from './idevicerequest';
-export { IPlugin } from './iplugin';
 export { IScreen } from '../core/interfaces/screen.interface';
 export { IItem } from './iitem';
 export { IMenuItem } from './imenuitem';
@@ -10,8 +7,4 @@ export { IWorkStation } from './iworkstation';
 export { ISellItem } from './isellitem';
 export { IFormElement } from './iformfield';
 export { ICheckboxField } from './iformfield';
-export { CordovaDevicePlugin } from './cordova-device-plugin';
-export { CordovaPlugin } from './cordova-plugin';
-export { Scan } from './scan';
 export { IForm } from './iform';
-export * from './ideviceresponse';

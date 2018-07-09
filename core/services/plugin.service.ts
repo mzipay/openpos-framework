@@ -1,8 +1,10 @@
-import { CordovaDevicePlugin } from '../../common/cordova-device-plugin';
-import { CordovaPlugin } from '../../common/cordova-plugin';
-import { IDevicePlugin } from '../../common/idevice-plugin';
-import { IPlugin } from '../../common/iplugin';
 import { Injectable } from '@angular/core';
+import { 
+    CordovaDevicePlugin,
+    CordovaPlugin,
+    IDevicePlugin,
+    IPlugin
+} from '../plugins';
 
 declare var cordova: any;
 

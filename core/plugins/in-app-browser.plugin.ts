@@ -1,4 +1,5 @@
-import { CordovaPlugin } from '../common/cordova-plugin';
+import { CordovaPlugin } from "./cordova-plugin";
+
 
 export class InAppBrowserPlugin extends CordovaPlugin {
 

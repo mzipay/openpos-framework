@@ -1,6 +1,5 @@
-import { IDeviceRequest } from './idevicerequest';
-import { IPlugin } from './iplugin';
-import { IDevicePlugin } from './idevice-plugin';
+import { IDeviceRequest } from './device-request.interface';
+import { IDevicePlugin } from './device-plugin.interface';
 
 declare var cordova: any;
 

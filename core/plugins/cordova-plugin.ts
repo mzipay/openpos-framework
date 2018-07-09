@@ -1,4 +1,4 @@
-import { IPlugin } from './iplugin';
+import { IPlugin } from './plugin.interface';
 
 declare var cordova: any;
 

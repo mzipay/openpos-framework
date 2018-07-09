@@ -1,6 +1,6 @@
-import { FileUploadService } from '../core';
-import { CordovaDevicePlugin } from './../common/cordova-device-plugin';
-import { IDeviceRequest } from '../common/idevicerequest';
+import { FileUploadService } from '../services';
+import { CordovaDevicePlugin } from './cordova-device-plugin';
+import { IDeviceRequest } from './device-request.interface';
 /*
  * A wrapper around the OpenPOSCordovaLogPlugin to provide operations to allow
  * the server to request download of one or more log files from the client.

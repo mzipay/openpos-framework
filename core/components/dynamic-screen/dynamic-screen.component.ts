@@ -13,12 +13,12 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { DialogService } from '../../services/dialog.service';
 import { IMenuItem } from '../../../common/imenuitem';
-import { IPlugin } from '../../../common/iplugin';
 import { IScreen } from '../../../core/interfaces/screen.interface';
 import { AbstractTemplate } from '../abstract-template';
 import { TemplateDirective, FileViewerComponent } from '../../../shared';
 import { Configuration } from '../../../configuration/configuration';
 import { OpenPOSDialogConfig } from '../../../common/idialog';
+import { IPlugin } from '../../plugins';
 
 @Component({
     selector: 'app-dynamic-screen',

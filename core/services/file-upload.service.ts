@@ -1,9 +1,9 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IPlugin } from '../../common/iplugin';
 import { SessionService } from './session.service';
 import { PluginService } from './plugin.service';
+import { IPlugin } from '../plugins';
 
 @Injectable({
     providedIn: 'root',

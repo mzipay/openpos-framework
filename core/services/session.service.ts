@@ -1,5 +1,3 @@
-import { IDeviceResponse } from '../../common/ideviceresponse';
-import { IDeviceRequest } from '../../common/idevicerequest';
 import { IMenuItem } from '../../common/imenuitem';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -15,7 +13,7 @@ import { IUrlMenuItem } from '../../common/iurlmenuitem';
 import { DEFAULT_LOCALE, ILocaleService } from './locale.service';
 import { IThemeChangingEvent } from '../../shared/events/theme-changing-event.interface';
 import { ActionMap, LoaderState, ConfirmationDialogComponent, Element } from '../components';
-
+import { IDeviceResponse, IDeviceRequest } from '../plugins';
 @Injectable({
     providedIn: 'root',
   })
