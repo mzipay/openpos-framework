@@ -87,6 +87,11 @@ public class MenuItem implements IUIAction, Serializable {
         this.action = action;
     }
 
+    public MenuItem action(String action) {
+        this.setAction(action);
+        return this;
+    }
+    
     @Override
     public String getTitle() {
         return title;
@@ -97,6 +102,11 @@ public class MenuItem implements IUIAction, Serializable {
         this.title = title;
     }
 
+    public MenuItem title(String title) {
+        this.setTitle(title);
+        return this;
+    }
+    
     @Override
     public String getIcon() {
         return icon;
@@ -107,6 +117,11 @@ public class MenuItem implements IUIAction, Serializable {
         this.icon = icon;
     }
 
+    public MenuItem icon(String icon) {
+        this.setIcon(icon);
+        return this;
+    }
+    
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -117,6 +132,11 @@ public class MenuItem implements IUIAction, Serializable {
         return enabled;
     }
     
+    public MenuItem enabled(boolean enabled) {
+        this.setEnabled(enabled);
+        return this;
+    }
+    
     public void setChildren(List<MenuItem> children) {
         this.children = children;
     }
@@ -125,22 +145,34 @@ public class MenuItem implements IUIAction, Serializable {
         return children;
     }
     
+    public MenuItem children(List<MenuItem> children) {
+        this.setChildren(children);
+        return this;
+    }
+    
     public String getConfirmationMessage() {
         return this.confirmationMessage;
     }
     
-    public void setConfirmationMessage( String confirmationMessage) {
+    public void setConfirmationMessage(String confirmationMessage) {
         this.confirmationMessage = confirmationMessage;
     }
 
+    public MenuItem confirmationMessage(String confirmationMessage) {
+        this.setConfirmationMessage(confirmationMessage);
+        return this;
+    }
 
     public boolean isSensitive() {
         return sensitive;
     }
 
-
     public void setSensitive(boolean sensitive) {
         this.sensitive = sensitive;
     }
 
+    public MenuItem sensitive(boolean sensitive) {
+        this.setSensitive(sensitive);
+        return this;
+    }
 }
