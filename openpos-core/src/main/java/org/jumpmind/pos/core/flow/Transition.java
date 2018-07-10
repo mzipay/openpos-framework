@@ -3,6 +3,7 @@ package org.jumpmind.pos.core.flow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.slf4j.Logger;
@@ -14,31 +15,30 @@ public class Transition {
     private final Logger logGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
     private final StateManagerLogger stateManagerLog = new StateManagerLogger(logGraphical);    
     
-    private AtomicReference<CountDownLatch> latch = new AtomicReference<>(new CountDownLatch(1));
+    private CountDownLatch latch;
 
-    private ITransitionStep currentTransitionStep;
     private List<? extends ITransitionStep> transitionSteps;
     private StateContext sourceStateContext;
     private IState targetState;
     private StateManager stateManager;
     private Action originalAction;
     private TransitionResult transitionResult;
-    private int stepIndex;
+    
+    private AtomicReference<ITransitionStep> currentTransitionStep = new AtomicReference<ITransitionStep>(null);
+    private AtomicInteger stepIndex = new AtomicInteger(0);
     
     public Transition(List<? extends ITransitionStep> transitionSteps, StateContext sourceStateContext, IState targetState) {
         super();
         this.transitionSteps = cloneSteps(transitionSteps);
         this.sourceStateContext = sourceStateContext;
         this.targetState = targetState;
+        
+        latch = new CountDownLatch(transitionSteps.size());
     }
-    
 
     public TransitionResult execute(StateManager stateManager, Action originalAction) {
         this.stateManager = stateManager;
         this.originalAction = originalAction;
-        currentTransitionStep = transitionSteps.get(0);
-        stepIndex = 0;
-        
         proceed();
         
         if (transitionResult == null) {
@@ -49,49 +49,72 @@ public class Transition {
     }
     
     public void proceed() {
-        if (stepIndex >= transitionSteps.size()) {
+        if (afterLastStep()) {
             if (transitionResult == null) {
                 transitionResult = TransitionResult.PROCEED;
             }
-            stateManager.performOutjections(currentTransitionStep);
-            latch.get().countDown();
+            stateManager.performOutjections(currentTransitionStep.get());
+            latch.countDown();
             return;
-        } else if (stepIndex > 0) {
-            CountDownLatch oldLatch = latch.get();
-            latch.set(new CountDownLatch(1));
-            oldLatch.countDown();
-            stateManager.performOutjections(currentTransitionStep);
+        } else if (afterFirstStep()) {
+            stateManager.performOutjections(currentTransitionStep.get());
+            latch.countDown();
         }
+        
+        int localStepIndex = stepIndex.getAndIncrement();
 
-        currentTransitionStep = transitionSteps.get(stepIndex++);
+        currentTransitionStep.set(transitionSteps.get(localStepIndex));
         
-        stateManager.performInjections(currentTransitionStep);
+        executeCurrentStep();
         
-        if (currentTransitionStep.isApplicable(this)) {
-            stateManagerLog.logTranistionStep(this, currentTransitionStep);
-            currentTransitionStep.arrive(this);
+        waitForEverybody();
+    }
+
+    private void waitForEverybody() {
+        try {
+            latch.await();
+        } catch (InterruptedException ex) {
+            throw new FlowException("Transition await interupted.", ex);
+        }    
+    }
+
+    protected boolean afterFirstStep() {
+        return stepIndex.get() > 0;
+    }
+
+    protected boolean afterLastStep() {
+        return stepIndex.get() >= transitionSteps.size();
+    }
+    
+    protected boolean executeCurrentStep() {
+        stateManager.performInjections(currentTransitionStep.get());
+        
+        boolean applicable = currentTransitionStep.get().isApplicable(this); 
+        
+        if (applicable) {
+            stateManagerLog.logTranistionStep(this, currentTransitionStep.get());
+            currentTransitionStep.get().arrive(this); // This could come right recurse right back in on same thread or return after showing a screen.
         } else {
             if (log.isDebugEnabled()) {                
-                log.debug("TransitionStep" + currentTransitionStep + " was not applicable.");
+                log.debug("TransitionStep" + currentTransitionStep.get() + " was not applicable.");
             }
             proceed(); // recurse
         }
         
-        try {
-            latch.get().await();
-        } catch (InterruptedException ex) {
-            throw new FlowException("Transition await interupted.", ex);
-        }        
-    }
-    
-    public boolean handleAction(Action action) {
-        return stateManager.handleAction(currentTransitionStep, action);
+        return applicable;
     }
     
     public void cancel() {
-        log.info("Transition was canncelled by " + currentTransitionStep);
+        log.info("Transition was canncelled by " + currentTransitionStep.get());
         transitionResult = TransitionResult.CANCEL;
-        latch.get().countDown();
+        stepIndex.set(Integer.MAX_VALUE);
+        while (latch.getCount() > 0) {            
+            latch.countDown();
+        }
+    }
+    
+    public boolean handleAction(Action action) {
+        return stateManager.handleAction(currentTransitionStep.get(), action);
     }
     
     protected List<? extends ITransitionStep> cloneSteps(List<? extends ITransitionStep> steps) {
@@ -110,7 +133,7 @@ public class Transition {
 
 
     public ITransitionStep getCurrentTransitionStep() {
-        return currentTransitionStep;
+        return currentTransitionStep.get();
     }
 
     public List<? extends ITransitionStep> getTransitionSteps() {
