@@ -21,12 +21,9 @@ export class TillCountComponent extends PosScreen<any> {
     // After screen is initialized, all we need to do is
     // get an updated total from the server.  This saves
     // unnecessary rebuilding of the screen
-    if (!this.screen) {
-      this.form = this.screen.form;
-      this.nextAction = this.screen.nextAction;
-    } else {
-      this.screen.total = this.screen.total;
-    }
+    this.form = this.screen.form;
+    this.nextAction = this.screen.nextAction;
+    this.screen.total = this.screen.total;
   }
 
   onFieldChanged(eventData: {formElement: IFormElement, event: Event}) {
