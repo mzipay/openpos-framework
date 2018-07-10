@@ -22,7 +22,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 @ComponentScan(
         basePackages = { "org.jumpmind.pos.persist" })
 @PropertySource(value = { "classpath:persist-test.properties"})
-public class TestConfig {
+public class TestPersistCarsConfig {
 
     protected DBSessionFactory sessionFactory;
     InputStream queryYamlStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("persist-test-query.yaml");

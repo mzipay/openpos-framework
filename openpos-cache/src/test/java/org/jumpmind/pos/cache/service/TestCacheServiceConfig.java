@@ -2,12 +2,11 @@ package org.jumpmind.pos.cache.service;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ComponentScan(
         basePackages = { "org.jumpmind.pos.cache" })
-public class TestConfig {
+public class TestCacheServiceConfig {
 
 //    protected DBSessionFactory sessionFactory;
 //    InputStream queryYamlStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("persist-test-query.yaml");

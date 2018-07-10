@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jumpmind.pos.persist.cars.TestConfig;
+import org.jumpmind.pos.persist.cars.TestPersistCarsConfig;
 import org.jumpmind.pos.service.PosServerException;
 import org.jumpmind.pos.service.util.DateUtils;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {TestConfig.class})
+@ContextConfiguration(classes= {TestPersistCarsConfig.class})
 public class ContextServiceClientTest {
     
     @Autowired

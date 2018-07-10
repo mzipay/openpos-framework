@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import org.jumpmind.pos.i18n.service.i18nEndpoint;
 import org.jumpmind.pos.persist.DBSession;
-import org.jumpmind.pos.persist.cars.TestConfig;
+import org.jumpmind.pos.persist.cars.TestPersistCarsConfig;
 import org.jumpmind.pos.i18n.model.Resource;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {TestConfig.class})
+@ContextConfiguration(classes= {TestPersistCarsConfig.class})
 public class i18nEndpointTest {	
 	
     @Autowired

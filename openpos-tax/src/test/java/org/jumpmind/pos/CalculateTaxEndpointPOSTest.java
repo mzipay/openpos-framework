@@ -8,7 +8,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jumpmind.pos.persist.cars.TestConfig;
+import org.jumpmind.pos.persist.cars.TestPersistCarsConfig;
 import org.jumpmind.pos.tax.model.TaxAmount;
 import org.jumpmind.pos.tax.model.TaxCalculationRequest;
 import org.jumpmind.pos.tax.model.TaxCalculationResponse;
@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {TestConfig.class})
+@ContextConfiguration(classes= {TestPersistCarsConfig.class})
 public class CalculateTaxEndpointPOSTest {
 
 	/* Designed for use with storedb in OrposToOpenposUtility */

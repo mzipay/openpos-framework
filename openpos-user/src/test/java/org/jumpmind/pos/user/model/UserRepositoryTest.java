@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import org.jumpmind.pos.persist.DBSession;
-import org.jumpmind.pos.persist.cars.TestConfig;
+import org.jumpmind.pos.persist.cars.TestPersistCarsConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.jumpmind.pos.user.model.UserRepository;
@@ -16,7 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {TestConfig.class})
+@ContextConfiguration(classes= {TestPersistCarsConfig.class})
 public class UserRepositoryTest {	
 	
     @Autowired

@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.Query;
-import org.jumpmind.pos.persist.cars.TestConfig;
+import org.jumpmind.pos.persist.cars.TestPersistCarsConfig;
 import org.jumpmind.pos.tax.model.Authority;
 import org.jumpmind.pos.tax.model.Group;
 import org.jumpmind.pos.tax.model.GroupRule;
@@ -24,7 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {TestConfig.class})
+@ContextConfiguration(classes= {TestPersistCarsConfig.class})
 public class TaxRepositoryTest {
 
 	/* Designed for use with registerdb in OrposToOpenposUtility */

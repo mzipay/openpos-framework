@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.List;
 
 import org.jumpmind.pos.persist.DBSession;
-import org.jumpmind.pos.persist.cars.TestConfig;
+import org.jumpmind.pos.persist.cars.TestPersistCarsConfig;
 import org.jumpmind.pos.service.model.ModuleInfo;
 import org.jumpmind.pos.service.test.model.TestTable;
 import org.junit.FixMethodOrder;
@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {TestConfig.class})
+@ContextConfiguration(classes= {TestPersistCarsConfig.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestModuleTest {
     
