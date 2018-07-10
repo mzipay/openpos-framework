@@ -43,7 +43,7 @@ import { TillSummaryComponent } from './till-summary/till-summary.component';
 export const ScreenConstants = {
     screens : [
         { name:'BasicItemSearch', component: BasicItemSearchComponent },
-        { name:'ChooseOptions ', component: ChooseOptionsComponent },
+        { name:'ChooseOptions', component: ChooseOptionsComponent },
         { name:'EmbeddedWebPage', component: EmbeddedWebPageComponent },
         { name:'Form', component: FormComponent },
         { name:'DynamicForm', component: DynamicFormComponent },
