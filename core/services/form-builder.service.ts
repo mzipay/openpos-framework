@@ -12,7 +12,7 @@ export class FormBuilder {
 
     constructor( private validatorService: ValidatorsService ){}
 
-    group( form: IForm): FormGroup {
+    group( form: IForm, extraValidators: ValidatorFn[] = []): FormGroup {
         const group: any = {};
         form.formElements.forEach(element => {
            group[element.id] = new FormControl(element.value, this.createControlValidators(element));
@@ -24,7 +24,7 @@ export class FormBuilder {
            }
         });
 
-        return new FormGroup(group, this.createFormLevelValidators(form) );
+        return new FormGroup(group, this.createFormLevelValidators(form, extraValidators) );
     }
 
     buildFormPayload( formGroup: FormGroup, form: IForm ): IForm {
@@ -50,7 +50,7 @@ export class FormBuilder {
    *
    * @param extraValidators Optional additional validators to be added to the form.
    */
-  private createControlValidators(element: IFormElement, extraValidators: ValidatorFn[] = []): ValidatorFn[] {
+  private createControlValidators(element: IFormElement, extraValidators: ValidatorFn[]=[]): ValidatorFn[] {
     let validators: ValidatorFn[] = [];
     if (element.required) {
       validators.push(Validators.required);
