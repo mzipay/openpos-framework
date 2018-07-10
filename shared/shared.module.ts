@@ -87,7 +87,9 @@ const pipes = [
 ]
 
 @NgModule({
-    entryComponents: [],
+    entryComponents: [
+        ...components
+    ],
     declarations: [
         ...directives,
         ...components,
