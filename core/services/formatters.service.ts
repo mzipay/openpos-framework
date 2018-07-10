@@ -13,7 +13,7 @@ import {
     StateIDNumberFormatter,
     DecimalFormatter,
     DoNothingFormatter
-} from '../../shared';
+} from '../../shared/formatters';
 
 
 @Injectable({

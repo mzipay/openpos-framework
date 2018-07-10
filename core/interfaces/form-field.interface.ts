@@ -1,4 +1,4 @@
-import { IMaskSpec } from '../../shared/';
+import { IMaskSpec } from '../../shared/textmask';
 export interface IFormElement {
     elementType: string;
     inputType: string;

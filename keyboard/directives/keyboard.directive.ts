@@ -4,7 +4,7 @@ import { MatKeyboardComponent } from '../components/keyboard/keyboard.component'
 import { MatKeyboardRef } from '../classes/keyboard-ref.class';
 import { MatKeyboardService } from '../services/keyboard.service';
 import { NgControl } from '@angular/forms';
-import { SessionService } from '../../core';
+import { SessionService } from '../../core/services';
 import { Configuration } from '../../configuration/configuration';
 
 @Directive({

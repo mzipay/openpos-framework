@@ -40,7 +40,7 @@ import { BlankWithBarComponent } from './templates/blank-with-bar/blank-with-bar
 import { SellComponent } from './templates/sell-template/sell/sell.component';
 import { SellLinkedCustomerComponent } from './templates/sell-template/sell-linked-customer/sell-linked-customer.component';
 
-import { SharedModule } from '../shared';
+import { SharedModule } from '../shared/shared.module';
 import { StatusBarComponent } from './status-bar/status-bar.component';
 import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';

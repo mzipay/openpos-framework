@@ -4,24 +4,23 @@ import { Component, ViewChild, HostListener, ComponentRef, OnDestroy, OnInit, Co
 import { MatDialog, MatDialogRef, MatSnackBar,  MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
-import { 
-    PluginService, 
-    FileUploadService,
-    DeviceService,
-    ScreenService,
-    SessionService,
-    IconService,
-    DialogService
-} from '../../services';
-import {
-    IMenuItem,
-    IScreen,
-    OpenPOSDialogConfig
-} from '../../interfaces';
 import { AbstractTemplate } from '../abstract-template';
-import { TemplateDirective, FileViewerComponent } from '../../../shared';
 import { Configuration } from '../../../configuration/configuration';
-import { IPlugin } from '../../plugins';
+import { IPlugin } from '../../plugins/plugin.interface';
+import { ScreenService } from '../../services/screen.service';
+import { DialogService } from '../../services/dialog.service';
+import { SessionService } from '../../services/session.service';
+import { DeviceService } from '../../services/device.service';
+import { IconService } from '../../services/icon.service';
+import { PluginService } from '../../services/plugin.service';
+import { FileUploadService } from '../../services/file-upload.service';
+import { IMenuItem } from '../../interfaces/menu-item.interface';
+import { ActionMap } from '../../interfaces/action-map.interface';
+import { IScreen } from '../../interfaces/screen.interface';
+import { Element } from '../../interfaces/element.interface';
+import { OpenPOSDialogConfig } from '../../interfaces/open-pos-dialog-config.interface';
+import { FileViewerComponent } from '../../../shared/components/file-viewer/file-viewer.component';
+import { TemplateDirective } from '../../../shared/directives/template.directive';
 
 @Component({
     selector: 'app-dynamic-screen',
@@ -572,22 +571,3 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     
 
 }
-
-export interface Element {
-    ID: string,
-    Time: string,
-    StackTrace: string,
-    Value: string
-}
-
-export interface State {
-    Name: string,
-    Class: string,
-    ActionMap: ActionMap[]
-}
-
-export interface ActionMap {
-    Action: string,
-    Destination: string,
-}
-

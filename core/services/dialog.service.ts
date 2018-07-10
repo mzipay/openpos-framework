@@ -1,5 +1,5 @@
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
-import { IScreen } from '../interfaces';
+import { IScreen } from '../interfaces/screen.interface';
 @Injectable({
     providedIn: 'root',
   })

@@ -12,3 +12,6 @@ export * from './open-pos-dialog-config.interface';
 export * from './url-menu-item.interface';
 export * from './selection-mode.enum';
 export * from './tender-item.interface';
+export * from './action-map.interface';
+export * from './element.interface';
+export * from './state.interface';

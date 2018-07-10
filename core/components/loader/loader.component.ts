@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoaderState } from './loader-state';
-import { SessionService } from '../../services';
+import { SessionService } from '../../services/session.service';
 
 @Component({
     selector: 'app-loader',

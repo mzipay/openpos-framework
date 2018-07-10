@@ -1,4 +1,4 @@
-import { FileUploadService } from '../services';
+import { FileUploadService } from '../services/file-upload.service';
 import { CordovaDevicePlugin } from './cordova-device-plugin';
 import { IDeviceRequest } from './device-request.interface';
 /*

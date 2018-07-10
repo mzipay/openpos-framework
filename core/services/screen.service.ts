@@ -2,7 +2,7 @@ import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@a
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SessionService } from './session.service';
-import { IScreen } from '../interfaces';
+import { IScreen } from '../interfaces/screen.interface';
 
 @Injectable({
     providedIn: 'root',

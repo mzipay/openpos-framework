@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
-import { OpenPosValidators } from '../../shared';
+import { OpenPosValidators } from '../../shared/validators';
 import { LocaleService } from './locale.service';
 
 @Injectable({

@@ -4,11 +4,13 @@ import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@ang
 import { HttpClient } from '@angular/common/http';
 import { BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
 
-import { SharedModule } from '../shared';
-import { DynamicScreenComponent, PersonalizationComponent, LoaderComponent } from './components';
-import { ScreenService } from './services';
-import { ConfirmationDialogComponent } from './components';
-import { AppInjector } from '../core/app-injector';
+import { SharedModule } from '../shared/shared.module';
+import { ScreenService } from './services/screen.service';
+import { AppInjector } from './app-injector';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { PersonalizationComponent } from './components/personalization/personalization.component';
+import { DynamicScreenComponent } from './components/dynamic-screen/dynamic-screen.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 
 @NgModule({
