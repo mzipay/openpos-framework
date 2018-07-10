@@ -1,5 +1,5 @@
 // Angular Includes
-import { NgModule, Injector } from '@angular/core';
+import { NgModule, Injector, Optional, SkipSelf } from '@angular/core';
 import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
@@ -13,6 +13,7 @@ import {
     DynamicScreenComponent,
     LoaderComponent
  } from './components';
+import { throwIfAlreadyLoaded } from './module-import-guard';
 
 @NgModule({
     entryComponents: [
@@ -42,7 +43,8 @@ import {
 })
 export class CoreModule {
 
-    constructor(screenService: ScreenService, private injector: Injector){
+    constructor(@Optional() @SkipSelf() parentModule: CoreModule, screenService: ScreenService, private injector: Injector){
+        throwIfAlreadyLoaded(parentModule, 'CoreModule');
         screenService.addScreen('Personalization', PersonalizationComponent);
         AppInjector.Instance = this.injector;
     }
