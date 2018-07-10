@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ObservableMedia } from '@angular/flex-layout';
@@ -12,7 +12,7 @@ import { ISellTemplate } from './sell-template.interface';
   templateUrl: './sell.component.html',
   styleUrls: ['./sell.component.scss']
 })
-export class SellComponent extends AbstractTemplate implements OnInit {
+export class SellComponent extends AbstractTemplate {
 
   template: ISellTemplate;
   screen: ISellScreen;
@@ -34,14 +34,11 @@ export class SellComponent extends AbstractTemplate implements OnInit {
     this.screen = screen;
     this.template = screen.template;
     this.statusBar = SellScreenUtils.getStatusBar(screen);
-  }
-
-  public ngOnInit(): void {
     if (this.template.localMenuItems.length > 0) {
-      this.initializeDrawerMediaSizeHandling();
-    } else {
-      this.drawerOpen = of(false);
-    }
+        this.initializeDrawerMediaSizeHandling();
+      } else {
+        this.drawerOpen = of(false);
+      }
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
