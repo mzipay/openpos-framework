@@ -1,7 +1,6 @@
 import { Component, ViewChildren, AfterViewInit, Input, QueryList } from '@angular/core';
-import { FormGroup, Validators, FormControl, ValidatorFn } from '@angular/forms';
-import { SessionService, ScreenService, ValidatorsService, IFormElement, IForm } from '../../../core';
-import { OpenPosValidators } from '../../validators';
+import { FormGroup } from '@angular/forms';
+import { SessionService, ScreenService, IFormElement, IForm, FormBuilder } from '../../../core';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
 
 @Component({
@@ -38,27 +37,16 @@ export class DynamicFormControlComponent implements AfterViewInit {
 
   set screenForm( screenForm: IForm){
     this._screenForm = screenForm;
-    const group: any = {};
-
     this.buttons = new Array<IFormElement>();
 
+    this.form = this.formBuilder.group(screenForm);
+
     screenForm.formElements.forEach(element => {
-
-      const ctlValidators: ValidatorFn[] = this.createControlValidators(element);
-      group[element.id] = new FormControl(element.value, ctlValidators);
-      // For a DATE type element, there is also a hidden field to handle picking of dates using
-      // a date picker, need to add a FormControl for that hidden input also.
-      if (element.inputType && element.inputType.toLowerCase().indexOf('date') >= 0) {
-        group[element.id + 'Hidden'] = new FormControl();
-      }
-
-      if (element.elementType === 'Button') {
+        if (element.elementType === 'Button') {
         this.buttons.push(element);
-      }
+        }
     });
 
-    const grpValidators: ValidatorFn[] = this.createFormLevelValidators();
-    this.form = new FormGroup(group, grpValidators);
   }
 
   @Input() submitAction: string;
@@ -77,7 +65,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
 
         this.session.registerActionPayload(action, () => {
           if (this.form.valid) {
-            this.buildFormPayload();
+            this.formBuilder.buildFormPayload(this.form, this._screenForm);
             return this.session.response = this._screenForm;
           } else {
             // Show errors for each of the fields where necessary
@@ -99,94 +87,24 @@ export class DynamicFormControlComponent implements AfterViewInit {
   private _screenForm: IForm;
   private _alternateSubmitActions: string[];
 
-  constructor(public session: SessionService, public screenService: ScreenService, private validatorService: ValidatorsService) {}
-
-  ngOnInit() {
-
-
-  }
-
-  /**
-   * Since an individual validator cannot be added after construction, this method
-   * provides a way to add extra validators onto those already provided by the form.
-   * A list of validators is returned which include the provided list of extraValidators.
-   * The returned list of validators can then be set on the form. See the setValidators method
-   * on the FormGroup class.
-   *
-   * @param extraValidators Optional additional validators to be added to the form.
-   */
-  createFormLevelValidators(extraValidators: ValidatorFn[] = []): ValidatorFn[] {
-    let validators: ValidatorFn[] = [];
-    if (this.screenForm.requiresAtLeastOneValue) {
-      validators.push(OpenPosValidators.RequireAtleastOne);
-    }
-
-    validators = validators.concat(extraValidators);
-    return validators;
-  }
-
-  /**
-   * Since an individual validator cannot be added after construction, this method
-   * provides a way to add extra validators onto those already normally assigned to the
-   * IFormElement.
-   * A list of validators is returned which include the provided list of extraValidators.
-   * The returned list of validators can then be set on the form. See the setValidators method
-   * on the FormComponent class.
-   *
-   * @param extraValidators Optional additional validators to be added to the form.
-   */
-  createControlValidators(element: IFormElement, extraValidators: ValidatorFn[] = []): ValidatorFn[] {
-    let validators: ValidatorFn[] = [];
-    if (element.required) {
-      validators.push(Validators.required);
-    }
-
-    if (element.pattern) {
-      validators.push(Validators.pattern(element.pattern));
-    }
-
-    if (element.minLength) {
-      validators.push(Validators.minLength(element.minLength));
-    }
-
-    if (element.maxLength) {
-      validators.push(Validators.maxLength(element.maxLength));
-    }
-
-    validators.push(this.validatorService.getValidator(element.inputType));
-
-    validators = validators.concat(extraValidators);
-    return validators;
-  }
+  constructor(public session: SessionService, public screenService: ScreenService, private formBuilder: FormBuilder) {}
 
   submitForm() {
     if (this.form.valid) {
-
-      this.buildFormPayload();
+      this.formBuilder.buildFormPayload(this.form, this._screenForm);
       this.session.onAction(this.submitAction, this._screenForm);
     }
   }
 
   onFieldChanged(formElement: IFormElement) {
     if (formElement.valueChangedAction) {
-      this.buildFormPayload();
+        this.formBuilder.buildFormPayload(this.form, this._screenForm);
       this.session.onValueChange(formElement.valueChangedAction, this._screenForm );
     }
   }
 
   onButtonClick(formElement: IFormElement) {
     this.session.onAction(formElement.buttonAction);
-  }
-
-  private buildFormPayload() {
-    this._screenForm.formElements.forEach(element => {
-      if (element.hasOwnProperty('value')) {
-        element.value = this.form.value[element.id];
-      }
-      if(element.hasOwnProperty('checked')) {
-        element.checked = (this.form.value[element.id]===true || this.form.value[element.id]==='checked');
-      }
-    });
   }
 }
 
