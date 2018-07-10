@@ -57,15 +57,18 @@ public class ManageMenuState extends AbstractState implements IState {
     protected Screen buildScreen() {
         HomeScreen screen = new HomeScreen();
         MenuItem openDevice = new MenuItem("OpenDevice", "Open Device", "tablet");
+        MenuItem closeStore = new MenuItem("CloseStore", "Close Store", "store");
+        MenuItem openStore = new MenuItem("OpenStore", "Open Store", "store");
         if (opsServiceClient.isStoreOpen()) {
-            screen.addMenuItem(new MenuItem("CloseStore", "Close Store", "store"));
+            closeStore.setEnabled(!opsServiceClient.areDevicesOpen());
+            screen.addMenuItem(closeStore);
             if (opsServiceClient.isDeviceOpen()) {
                 screen.addMenuItem(new MenuItem("CloseDevice", "Close Device", "tablet"));
             } else {
                 screen.addMenuItem(openDevice);
             }
         } else {
-            screen.addMenuItem(new MenuItem("OpenStore", "Open Store", "store"));
+            screen.addMenuItem(openStore);
             openDevice.setEnabled(false);
             screen.addMenuItem(openDevice);
         }

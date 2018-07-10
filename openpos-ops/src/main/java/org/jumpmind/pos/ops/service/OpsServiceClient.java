@@ -2,6 +2,7 @@ package org.jumpmind.pos.ops.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.jumpmind.pos.context.model.DeviceModel;
 import org.jumpmind.pos.context.service.ContextServiceClient;
@@ -33,12 +34,23 @@ public class OpsServiceClient {
     public boolean isDeviceOpen() {
         DeviceModel device = contextServiceClient.getDevice();
         GetStatusResult results = opsService.getUnitStatus(UnitStatusConstants.UNIT_TYPE_DEVICE, device.getDeviceId());
-        UnitStatus unitStatus = results.getUnitStatus(device.getBusinessUnitId());
+        UnitStatus unitStatus = results.getUnitStatus(device.getDeviceId());
         if (unitStatus == null || unitStatus.getUnitStatus().equals(UnitStatusConstants.STATUS_CLOSED)) {
             return false;
         } else {
             return true;
         }
+    }
+    
+    public boolean areDevicesOpen() {
+        GetStatusResult results = opsService.getUnitStatus(UnitStatusConstants.UNIT_TYPE_DEVICE, "*");
+        List<UnitStatus> statuses = results.getUnitStatuses();
+        for (UnitStatus unitStatus : statuses) {
+            if (unitStatus.getUnitStatus().equals(UnitStatusConstants.STATUS_OPEN)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     public void openStore() {

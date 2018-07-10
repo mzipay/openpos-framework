@@ -28,7 +28,9 @@ public class UnitStatusRepository {
     public List<UnitStatus> findUnitStatus(String unitType, String unitId) {
         Map<String, Object> params = new HashMap<>();
         params.put("unitType", unitType);
-        params.put("unitId", unitId);
+        if (!"*".equals(unitId)) {
+            params.put("unitId", unitId);
+        }
         List<UnitStatus> list = dbSession.findByFields(UnitStatus.class, params);        
         return getLatest(list);
     }
