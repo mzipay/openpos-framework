@@ -25,6 +25,7 @@ export class IconService {
         this.iconRegistry.addSvgIcon('percent', this.makeIconSafeUrl('percent.svg'));
         this.iconRegistry.addSvgIcon('openpos_percent', this.makeIconSafeUrl('percent.svg'));
         this.iconRegistry.addSvgIcon('openpos_rotate-3d', this.makeIconSafeUrl('rotate-3d.svg'));
+        this.iconRegistry.addSvgIcon('openpos_book-open-page-variant', this.makeIconSafeUrl('book-open-page-variant.svg'));
     }
 
     public addIcon(key: string, asset: string, served?: boolean) {

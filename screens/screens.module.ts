@@ -51,6 +51,7 @@ import { LoginDialogComponent } from './login/login-dialog.component';
 import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { VersionComponent } from './version/version.component';
 import { ScreenConstants } from './screen.constants';
+import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
 
 const screens = [
     BasicItemSearchComponent,
@@ -84,7 +85,8 @@ const screens = [
     FullPageImageComponent,
     CallForAuthorizationComponent,
     MultipleDynamicFormComponent,
-    SelectionListComponent
+    SelectionListComponent,
+    CatalogBrowserComponent
 ]
 
 const dialogs = [
