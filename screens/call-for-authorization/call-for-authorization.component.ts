@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-
-import { SessionService } from '../../services/session.service';
-import { IScreen } from '../..';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-call-for-authorization-component',
   templateUrl: './call-for-authorization.component.html'
 })
-export class CallForAuthorizationComponent implements OnInit, IScreen {
+export class CallForAuthorizationComponent extends PosScreen<any> implements OnInit {
 
   prompt = '';
   instructions = '';
 
-  constructor() { }
+  constructor() {
+      super();
+   }
 
-  show(screen: any) {
-
-    this.prompt = screen.prompt;
-    this.instructions = screen.instructions;
+  buildScreen() {
+    this.prompt = this.screen.prompt;
+    this.instructions = this.screen.instructions;
   }
 
   ngOnInit() {

@@ -1,25 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-
-import { SessionService } from '../../services/session.service';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-wait-component',
   templateUrl: './wait.component.html'
 })
-export class WaitComponent implements OnInit {
+export class WaitComponent extends PosScreen<any> {
 
   instructions = '';
   icon = '';
-  screen: any;
 
-  constructor(public session: SessionService) { }
-
-  show(screen: any) {
-    this.screen = screen;
-  }
-
-  ngOnInit() {
+  buildScreen(){
     this.instructions = this.screen.instructions;
     this.icon = this.screen.icon;
-  }
+  };
 }

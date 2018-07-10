@@ -1,18 +1,14 @@
-import { DeviceService } from '../../services/device.service';
-import { ISellItem } from '../../common/isellitem';
-import { IScreen } from '../../common/iscreen';
-import { IMenuItem } from '../../common/imenuitem';
-import { Component, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
-import { SessionService } from '../../services/session.service';
-import { ITenderItem } from '../../common/itenderitem';
+import { Component, AfterViewInit, DoCheck } from '@angular/core';
+import { ITenderItem } from '../../core';
 import { MatTableDataSource } from '@angular/material';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-change',
   templateUrl: './change.component.html',
   styleUrls: ['./change.component.scss']
 })
-export class ChangeComponent implements AfterViewInit, DoCheck, IScreen {
+export class ChangeComponent extends PosScreen<any> implements AfterViewInit, DoCheck {
 
   total: string;
   tendered: string;
@@ -21,13 +17,11 @@ export class ChangeComponent implements AfterViewInit, DoCheck, IScreen {
 
   itemsDataSource: MatTableDataSource<ITenderItem>;
 
-  constructor(public session: SessionService, devices: DeviceService) {
-
+  constructor() {
+    super()
   }
 
-  show(screen: any) {
-    this.screen = screen;
-  }
+  buildScreen() { }
 
   ngDoCheck(): void {
     if (typeof this.screen !== 'undefined') {

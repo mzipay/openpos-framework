@@ -1,26 +1,26 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { IScreen } from '../../common/iscreen';
-import { SessionService } from '../../services/session.service';
-import { ICustomer } from '../../common/icustomer';
+import { ICustomer } from './customer.interface';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-customer-search-results',
   templateUrl: './customer-search-results.component.html',
   styleUrls: ['./customer-search-results.component.scss']
 })
-export class CustomerSearchResultsComponent implements IScreen {
+export class CustomerSearchResultsComponent extends PosScreen<any> {
 
   @Input() submitAction: string;
   public customers: ICustomer[];
   selectedOptions: ICustomer[];
 
-  constructor(public session: SessionService) { }
+  constructor() { 
+      super()
+  }
 
-  show(screen: any) {
-
-    this.customers = screen.customers;
-    this.submitAction = screen.submitAction;
+  buildScreen() {
+    this.customers = this.screen.customers;
+    this.submitAction = this.screen.submitAction;
   }
 
   onSubmitAction(): void {

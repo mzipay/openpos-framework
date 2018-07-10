@@ -1,23 +1,18 @@
-import { SessionService } from './../../services/session.service';
-import { IScreen } from './../../common/iscreen';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-options',
   templateUrl: './options.component.html',
   styleUrls: ['./options.component.scss']
 })
-export class OptionsComponent implements OnInit, IScreen {
+export class OptionsComponent extends PosScreen<any> {
 
-  screen: any;
 
-  constructor(public session: SessionService) { }
-
-  ngOnInit() {
+  constructor() { 
+      super();
   }
 
-  show(screen: any) {
-    this.screen = screen;
-  }
+  buildScreen(){}
 
 }

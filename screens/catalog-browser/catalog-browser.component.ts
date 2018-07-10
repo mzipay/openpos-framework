@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { ISellItem } from './../../common/isellitem';
-import { IScreen } from './../../common/iscreen';
 import { MatPaginator } from '@angular/material';
+import { IScreen } from '../../core/components';
+import { ISellItem } from '../../core/interfaces';
 
 @Component({
     selector: 'app-catalog-browser',
