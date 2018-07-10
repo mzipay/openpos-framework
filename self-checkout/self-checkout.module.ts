@@ -1,6 +1,6 @@
 // Angular Includes
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../shared';
 import { ScreenService, DialogService } from '../core';
 import { ScreenConstants } from './screen.constants';
 import { SelfCheckoutWithBarComponent } from './self-checkout-with-bar/self-checkout-with-bar.component';

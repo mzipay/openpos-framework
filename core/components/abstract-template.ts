@@ -1,6 +1,6 @@
-import { IScreen } from '../interfaces/screen.interface';
+import { IScreen } from './dynamic-screen/screen.interface';
 import { ViewChild, ComponentFactory, ComponentRef, OnDestroy } from '@angular/core';
-import { ScreenDirective } from '../../shared/directives/screen.directive';
+import { ScreenDirective } from '../../shared';
 
 export abstract class AbstractTemplate implements IScreen, OnDestroy {
 

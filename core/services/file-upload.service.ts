@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { SessionService } from './session.service';
 import { PluginService } from './plugin.service';
-import { IPlugin } from '../plugins/plugin.interface';
+import { IPlugin } from '../plugins';
 
 @Injectable({
     providedIn: 'root',

@@ -1,4 +1,4 @@
-//import { SessionService } from '../../services/session.service';
+import { SessionService } from '../../services';
 import { Subject, timer } from 'rxjs';
 
 
@@ -14,7 +14,7 @@ export class LoaderState {
     private loaderSubject = new Subject<LoaderState>();
     observable = this.loaderSubject.asObservable();
 
-    constructor(/*protected sessionService: SessionService*/) {
+    constructor(protected sessionService: SessionService) {
         const t = timer(1000, 1000);
         t.subscribe(t => this.checkConnectionStatus());
     }
@@ -50,7 +50,7 @@ export class LoaderState {
     }
 
     protected checkConnectionStatus(): void {
-        /*if (!this.sessionService.isPersonalized()) {
+        if (!this.sessionService.isPersonalized()) {
             this.setVisible(false);
         } else {
             const sessionConnected = this.sessionService.connected();
@@ -59,6 +59,6 @@ export class LoaderState {
             } else if (sessionConnected && this._title === LoaderState.DISCONNECTED_TITLE) {
                 this.setVisible(false);
             }
-        }*/
+        }
     }
 }

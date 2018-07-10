@@ -6,21 +6,19 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { AbstractTemplate } from '../abstract-template';
 import { Configuration } from '../../../configuration/configuration';
-import { IPlugin } from '../../plugins/plugin.interface';
-import { ScreenService } from '../../services/screen.service';
-import { DialogService } from '../../services/dialog.service';
-import { SessionService } from '../../services/session.service';
-import { DeviceService } from '../../services/device.service';
-import { IconService } from '../../services/icon.service';
-import { PluginService } from '../../services/plugin.service';
-import { FileUploadService } from '../../services/file-upload.service';
-import { IMenuItem } from '../../interfaces/menu-item.interface';
-import { ActionMap } from '../../interfaces/action-map.interface';
-import { IScreen } from '../../interfaces/screen.interface';
-import { Element } from '../../interfaces/element.interface';
-import { OpenPOSDialogConfig } from '../../interfaces/open-pos-dialog-config.interface';
-import { FileViewerComponent } from '../../../shared/components/file-viewer/file-viewer.component';
-import { TemplateDirective } from '../../../shared/directives/template.directive';
+import { IPlugin } from '../../plugins';
+import { 
+    ScreenService, 
+    DialogService,
+    SessionService,
+    DeviceService,
+    IconService,
+    PluginService,
+    FileUploadService
+} from '../../services';
+import { IScreen } from './screen.interface';
+import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem } from '../../interfaces';
+import { FileViewerComponent, TemplateDirective } from '../../../shared';
 
 @Component({
     selector: 'app-dynamic-screen',

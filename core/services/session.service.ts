@@ -8,16 +8,20 @@ import { Location } from '@angular/common';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ActionIntercepter } from '../action-intercepter';
-import { IThemeChangingEvent } from '../../shared/events/theme-changing-event.interface';
+import { IThemeChangingEvent } from '../../shared/';
+// Importing the ../components barrel causes a circular reference since dynamic-screen references back to here,
+// so we will import those files directly
 import { LoaderState } from '../components/loader/loader-state';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
-import { IDeviceResponse } from '../plugins/device-response.interface';
-import { IDeviceRequest } from '../plugins/device-request.interface';
-import { IMenuItem } from '../interfaces/menu-item.interface';
-import { IUrlMenuItem } from '../interfaces/url-menu-item.interface';
-import { IToastScreen, ToastType } from '../interfaces/toast-screen.interface';
-import { Element } from '../interfaces/element.interface';
-import { ActionMap } from '../interfaces/action-map.interface';
+import { IDeviceResponse, IDeviceRequest } from '../plugins';
+import { 
+    IMenuItem,
+    IUrlMenuItem,
+    IToastScreen, 
+    ToastType,
+    Element,
+    ActionMap
+} from '../interfaces';
 
 export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
@@ -123,7 +127,7 @@ export class SessionService {
     constructor(private location: Location, private router: Router, public dialogService: MatDialog, public snackBar: MatSnackBar,
         public zone: NgZone) {
 
-        this.loaderState = new LoaderState();
+        this.loaderState = new LoaderState(this);
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });

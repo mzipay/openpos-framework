@@ -1,6 +1,9 @@
 // Angular Includes
 import { NgModule } from '@angular/core';
 
+import { SharedModule } from '../shared';
+import { ScreenService, DialogService } from '../core';
+
 // Screens
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { TenderingComponent } from './tendering/tendering.component';
@@ -39,8 +42,6 @@ import { BlankComponent } from './templates/blank/blank.component';
 import { BlankWithBarComponent } from './templates/blank-with-bar/blank-with-bar.component';
 import { SellComponent } from './templates/sell-template/sell/sell.component';
 import { SellLinkedCustomerComponent } from './templates/sell-template/sell-linked-customer/sell-linked-customer.component';
-
-import { SharedModule } from '../shared/shared.module';
 import { StatusBarComponent } from './status-bar/status-bar.component';
 import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';
@@ -49,7 +50,6 @@ import { LoadingDialogComponent } from './loading-dialog/loading-dialog.componen
 import { LoginDialogComponent } from './login/login-dialog.component';
 import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { VersionComponent } from './version/version.component';
-import { ScreenService, DialogService } from '../core';
 import { ScreenConstants } from './screen.constants';
 
 const screens = [

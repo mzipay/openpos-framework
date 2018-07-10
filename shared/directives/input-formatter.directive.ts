@@ -1,6 +1,6 @@
 import { Directive, Input, ElementRef, forwardRef, Renderer2, OnInit, HostListener } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { IFormatter } from '../formatters/formatter.interface';
+import { IFormatter } from '../formatters';
 import { FormattersService } from '../../core';
 
 export const FORMATTED_INPUT_VALUE_ACCESSOR: any = {
