@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import {  MatPaginator, PageEvent } from '@angular/material';
 import { IScreen } from '../../core/components';
-import { ISellItem } from '../../core/interfaces';
+import { ISellItem, IMenuItem } from '../../core/interfaces';
 import { SessionService } from '../../core';
 
 @Component({
@@ -15,7 +15,7 @@ import { SessionService } from '../../core';
   
     screen: IScreen;
     items: ISellItem[];
-    categories: string[];
+    categories: IMenuItem[];
     maxItemsPerPage: number;
     totalItems: number;
 
@@ -31,8 +31,13 @@ import { SessionService } from '../../core';
         this.totalItems = screen.itemTotalCount;
     }
 
-    public getPageData(event?: PageEvent) {
+    public onCategorySelected(category: IMenuItem, event?: any) {
+        this.sessionService.response = category.title;
+        this.sessionService.onAction(category.action);
+    }
+
+    public onPageEvent(event?: PageEvent) {
         this.sessionService.response = event;
-        this.sessionService.onAction('pageEvent');
+        this.sessionService.onAction('PageEvent');
     }
   }

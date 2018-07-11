@@ -12,9 +12,9 @@
             <mat-drawer-container fxFlex="1 1 auto">
                 <mat-drawer #drawer position="start" [mode]="drawerMode | async"  fxLayout="column" fxLayoutAlign="start stretch"
                     fxLayoutGap="4px" style="overflow-x:hidden;padding-bottom:20px">
-                    <p>Filter by:</p>
-                    <button mat-button color="primary" *ngFor="let c of categories" style="text-align: left">
-                        <span>&nbsp;{{c}}</span>
+                    <p>Filter:</p>
+                    <button mat-button color="primary" *ngFor="let c of categories" style="text-align: left" (click)="onCategorySelected(c, $event)">
+                        <span>&nbsp;{{c.title}}</span>
                     </button>
                 </mat-drawer>
                 <mat-drawer-content  fxFlex="1 1 auto" class="scrollable">
@@ -30,7 +30,7 @@
                     </mat-grid-list>
                 </mat-drawer-content>
             </mat-drawer-container>
-            <mat-paginator #paginator [length]="totalItems" [pageSize]="maxItemsPerPage" [pageSizeOptions]="[5, 10, 15]" (page)="getPageData($event)">
+            <mat-paginator #paginator [length]="totalItems" [pageSize]="maxItemsPerPage" [pageSizeOptions]="[5, 10, 15]" (page)="onPageEvent($event)">
             </mat-paginator>
         </mat-card-content>
     </mat-card>
