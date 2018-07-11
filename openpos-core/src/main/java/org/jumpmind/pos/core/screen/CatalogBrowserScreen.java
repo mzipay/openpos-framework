@@ -11,7 +11,7 @@ public class CatalogBrowserScreen extends Screen {
     
     private List<SellItem> items =  new ArrayList<>();
     private Integer maxItemsPerPage = DEFAULT_MAX_ITEMS_PER_PAGE;
-    private List<String> categories = new ArrayList<>();
+    private List<IUIAction> categories = new ArrayList<>();
     private Integer selectedItemQuantity;
     private Integer itemStartIndex = 0;
     private Integer itemEndIndex = DEFAULT_MAX_ITEMS_PER_PAGE-1;
@@ -55,24 +55,24 @@ public class CatalogBrowserScreen extends Screen {
         return this;
     }
     
-    public void addCategory(String... categories) {
+    public void addCategory(IUIAction... categories) {
         this.getCategories().addAll(Arrays.asList(categories));
     }
     
-    public void addCategory(String category) {
+    public void addCategory(IUIAction category) {
         this.getCategories().add(category);
     }
     
-    public CatalogBrowserScreen categories(List<String> categories) {
+    public CatalogBrowserScreen categories(List<IUIAction> categories) {
         this.setCategories(categories);
         return this;
     }
     
-    public List<String> getCategories() {
+    public List<IUIAction> getCategories() {
         return categories;
     }
     
-    public void setCategories(List<String> categories) {
+    public void setCategories(List<IUIAction> categories) {
         this.categories = categories;
     }
     

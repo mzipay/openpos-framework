@@ -8,4 +8,7 @@ public interface ILegacyImageGridBeanModel {
     public ILegacyImageGridBeanModel getCurrentCategoryModel();
     public int getCurrentPageNo();
     public void setCurrentPageNo(int pageNo);
+    public void setSelectedItemID(String selectedItemID);
+    public void setSelectedItemIsCategory(boolean isCategory);
+
 }
