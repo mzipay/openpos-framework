@@ -5,9 +5,12 @@
                 <mat-icon>{{formOption.icon}}</mat-icon><span>{{formOption.name}}</span>
             </div>
         </ng-template>
-        <div>
-            {{formOption.instructions}}
-        </div>
-        <app-dynamic-form-control [screenForm]="formOption.form" [submitAction]="formOption.submitAction"></app-dynamic-form-control>
+
+        <ng-template matTabContent>
+            <div>
+                {{formOption.instructions}}
+            </div>
+            <app-dynamic-form-control [screenForm]="formOption.form" [submitAction]="formOption.submitAction"></app-dynamic-form-control>
+        </ng-template>
     </mat-tab>
 </mat-tab-group>

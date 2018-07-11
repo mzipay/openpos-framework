@@ -9,12 +9,12 @@
                     <mat-icon>{{formOption.icon}}</mat-icon><span>{{formOption.name}}</span>
                 </div>
             </ng-template>
-            <div *ngIf="i===current">
+            <ng-template matTabContent>
                 <div class="text-sm" style="margin-bottom:15px;margin-top:15px">
                     {{formOption.instructions}}
                     <app-dynamic-form-control #frm [screenForm]="formOption.form" [submitAction]="formOption.submitAction"></app-dynamic-form-control>
                 </div>
-            </div>
+              </ng-template>
         </mat-tab>
     </mat-tab-group>
 </div>
