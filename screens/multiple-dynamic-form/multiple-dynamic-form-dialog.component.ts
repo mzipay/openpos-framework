@@ -1,0 +1,10 @@
+import { Component } from '@angular/core';
+import { MultipleDynamicFormComponent } from '../../screens/multiple-dynamic-form/multiple-dynamic-form.component';
+
+@Component({
+    selector: 'app-multiple-dynamic-form-dialog',
+    templateUrl: './multiple-dynamic-form-dialog.component.html'
+})
+export class MultipleDynamicFormDialogComponent extends MultipleDynamicFormComponent {
+    current:number = 0;
+}

@@ -11,9 +11,9 @@ To use this library add to following to your dependencies in `package.json`
 ## Development Setup
 For development on the library you'll want to link your client application to openpos-client-core-lib by the following steps.
 
-Run `npm link` to create a link to openpos-client-core-lib in your local npm cache under the name `@jumpmind\openpos-client-core-lib`
+Run `npm link` to create a link to openpos-client-core-lib in your local npm cache under the name `@jumpmind/openpos-client-core-lib`
 
-Then from your client application run `npm link @jumpmind\openpos-client-core-lib` to add a link to openpos-client-core-lib in your client node_modules.
+Then from your client application run `npm link @jumpmind/openpos-client-core-lib` to add a link to openpos-client-core-lib in your client node_modules.
 
 ## Debugging the core library
 In your launch.json file configuration section the following to change the mapping from the client node modules to the core source code

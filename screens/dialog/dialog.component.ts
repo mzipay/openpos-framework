@@ -1,38 +1,36 @@
-import { IMenuItem } from '../../common/imenuitem';
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { SessionService } from '../../services/session.service';
-import { FocusDirective } from '../../common/focus.directive';
-import { MatDialog, MatDialogRef } from '@angular/material';
-import { IScreen } from '../../common/iscreen';
-import { ILine } from '../iLine';
+
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
+import { IMenuItem } from '../../core';
+import { ILine } from './line.interface';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
   styleUrls: [ './dialog.component.scss']
 })
-export class DialogComponent implements IScreen {
+export class DialogComponent extends PosScreen<any> {
 
-  screen: any;
   primaryButton: IMenuItem;
   otherButtons: IMenuItem[];
   messages: string[];
   lines: ILine[];
 
-  constructor(public session: SessionService, public dialogRef: MatDialogRef<DialogComponent>) {
+  constructor( public dialogRef: MatDialogRef<DialogComponent> ) {
+      super();
   }
 
-  show(screen: any): void {
-    this.screen = screen;
+  buildScreen(): void {
     this.messages = this.screen.message;
     this.lines = this.screen.messageLines;
  
-    if( screen.buttons ){
-      this.primaryButton = screen.buttons[0];
+    if( this.screen.buttons ){
+      this.primaryButton = this.screen.buttons[0];
     }
 
-    if( screen.buttons && screen.buttons.length > 1 ){
-      this.otherButtons = screen.buttons.slice(1, screen.buttons.length);
+    if( this.screen.buttons && this.screen.buttons.length > 1 ){
+      this.otherButtons = this.screen.buttons.slice(1, this.screen.buttons.length);
     }
   }
 

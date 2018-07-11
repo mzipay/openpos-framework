@@ -1,1 +1,0 @@
-export {ISellScreen} from './sell-template/sell/iSellScreen';

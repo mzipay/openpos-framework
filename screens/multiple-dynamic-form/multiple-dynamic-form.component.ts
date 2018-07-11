@@ -1,16 +1,15 @@
-import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
-import { IScreen, AbstractTemplate } from '../..';
-import { IMultipleDynamicFormScreen } from './imultipleDynamicFormScreen';
+import { Component } from '@angular/core';
+import { IMultipleDynamicFormScreen } from './multiple-dynamic-form-screen.interface';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 
 @Component({
     selector: 'app-multiple-dynamic-form',
     templateUrl: './multiple-dynamic-form.component.html'
 })
-export class MultipleDynamicFormComponent implements IScreen {
+export class MultipleDynamicFormComponent extends PosScreen<IMultipleDynamicFormScreen> {
     screen: IMultipleDynamicFormScreen;
 
-    show(screen: any): void {
-        this.screen = screen;
+    buildScreen(): void {
     }
 }
