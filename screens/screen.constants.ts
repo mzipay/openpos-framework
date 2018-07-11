@@ -39,6 +39,7 @@ import { SaleRetrievalComponent } from './sale-retrieval/sale-retrieval.componen
 import { TillCountComponent } from './till-count/till-count.component';
 import { TillCountOtherTenderComponent } from './till-count-other-tender/till-count-other-tender.component';
 import { TillSummaryComponent } from './till-summary/till-summary.component';
+import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
 
 export const ScreenConstants = {
     screens : [
@@ -73,6 +74,7 @@ export const ScreenConstants = {
         { name:'CallForAuthorization', component: CallForAuthorizationComponent },
         { name:'MultipleDynamicForm', component: MultipleDynamicFormComponent },
         { name:'SelectionList', component: SelectionListComponent },
+        { name:'CatalogBrowser', component: CatalogBrowserComponent},
 
         // Default Dialog 
         { name:'Dialog', component: DialogComponent },

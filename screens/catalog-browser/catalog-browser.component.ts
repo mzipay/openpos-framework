@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material';
+import {  MatPaginator, PageEvent } from '@angular/material';
 import { IScreen } from '../../core/components';
 import { ISellItem } from '../../core/interfaces';
+import { SessionService } from '../../core';
 
 @Component({
     selector: 'app-catalog-browser',
@@ -18,7 +19,7 @@ import { ISellItem } from '../../core/interfaces';
     maxItemsPerPage: number;
     totalItems: number;
 
-    constructor() {
+    constructor(private sessionService: SessionService) {
 
     }
 
@@ -30,4 +31,8 @@ import { ISellItem } from '../../core/interfaces';
         this.totalItems = screen.itemTotalCount;
     }
 
+    public getPageData(event?: PageEvent) {
+        this.sessionService.response = event;
+        this.sessionService.onAction('pageEvent');
+    }
   }
