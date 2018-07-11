@@ -48,6 +48,7 @@ dependencies {
     compile project(":openpos-tax")
     compile project(":openpos-ops")
     compile project(":openpos-trans")
+    compile project(":openpos-customer")
     compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.13.10.RELEASE'
     compile "org.jumpmind.symmetric.schemaspy:schemaspy:5.0.0"
     testCompile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.20.1.Final'
