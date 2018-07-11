@@ -319,7 +319,8 @@ import { PhoneUSValidatorDirective } from './common/validators/phone.directive';
         InactivityMonitorDirective,
         BarcodeScanPublisherDirective,
         MimicScrollDirective,
-        ScreenOrientationDirective
+        ScreenOrientationDirective,
+        ScanSomethingComponent
     ],
     providers: [
         HttpClient,
