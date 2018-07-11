@@ -77,8 +77,12 @@ public class SellItem extends DefaultItem {
         this.menuItems = transactionMenuItems;
     }
     
-    public void setMenuItems(MenuItem... transactionMenuItems) {
-        this.menuItems = Arrays.asList(transactionMenuItems);
+    public void addMenuItems(MenuItem... transactionMenuItems) {
+        if (this.menuItems == null) {
+            this.setMenuItems(Arrays.asList(transactionMenuItems));
+        } else {
+            this.menuItems.addAll(Arrays.asList(transactionMenuItems));
+        }
     }
     
     public List<MenuItem> getMenuItems() {
