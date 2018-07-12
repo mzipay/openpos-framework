@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import {  MatPaginator, PageEvent } from '@angular/material';
 import { IScreen } from '../../core/components';
-import { ISellItem, IMenuItem } from '../../core/interfaces';
+import { ISellItem, IMenuItem, IForm, IFormElement, ICatalogBrowserForm } from '../../core/interfaces';
 import { SessionService } from '../../core';
 
 @Component({
@@ -18,6 +18,8 @@ import { SessionService } from '../../core';
     categories: IMenuItem[];
     maxItemsPerPage: number;
     totalItems: number;
+    selectedItemQuantity: IFormElement;
+    form: IForm;
 
     constructor(private sessionService: SessionService) {
 
@@ -29,15 +31,25 @@ import { SessionService } from '../../core';
         this.categories = screen.categories;
         this.maxItemsPerPage = screen.maxItemsPerPage;
         this.totalItems = screen.itemTotalCount;
+        this.form = screen.form;
+        this.selectedItemQuantity = this.form.formElements.find(e => e.id === 'selectedItemQuantity');
+    }
+
+    public onItemSelected(item: ISellItem) {
+        const returnForm: ICatalogBrowserForm = {selectedItems: [item], form: this.form};
+        this.sessionService.response = returnForm;
+        this.sessionService.onAction('ItemSelected');
     }
 
     public onCategorySelected(category: IMenuItem, event?: any) {
-        this.sessionService.response = category.title;
+        const returnForm: ICatalogBrowserForm = {selectedCategory: category, form: this.form};
+        this.sessionService.response = returnForm;
         this.sessionService.onAction(category.action);
     }
 
     public onPageEvent(event?: PageEvent) {
-        this.sessionService.response = event;
+        const returnForm: ICatalogBrowserForm = {pageEvent: event, form: this.form};
+        this.sessionService.response = returnForm;
         this.sessionService.onAction('PageEvent');
     }
   }

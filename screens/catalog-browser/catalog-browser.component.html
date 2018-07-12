@@ -18,12 +18,22 @@
                     </button>
                 </mat-drawer>
                 <mat-drawer-content  fxFlex="1 1 auto" class="scrollable">
+                    <mat-form-field>
+                        <input matInput [(ngModel)]="selectedItemQuantity.value" type="tel" [formatterName]="'NumericText'"
+                            [placeholder]="selectedItemQuantity.placeholder" [min]="selectedItemQuantity.min" [max]="selectedItemQuantity.max">
+                    </mat-form-field>
                     <mat-grid-list cols="5">
 
                         <mat-grid-tile *ngFor="let item of items">
                             <mat-card>
                                 <mat-card-content>
-                                    <img *ngIf="item.menuItems[0] && item.menuItems[0].title==='url'" src="{{item.menuItems[0].url}}" style="max-width: 150px; max-height: 300px" ><p>{{item.posItemId}}: {{item.description}}</p>
+                                    <button mat-button color=primary (click)="onItemSelected(item)" >
+                                    <div fxLayoutAlign="center center" fxLayout="column">
+                                        <img *ngIf="item.menuItems[0] && item.menuItems[0].title==='url'" src="{{item.menuItems[0].url}}" style="max-width: 150px; max-height: 300px" >
+                                        <p>{{item.posItemId}}: {{item.description}}</p>
+                                        <!-- span fxFlex="1 0 auto" class="text-sm">{{menuItem.title}}</span> -->
+                                    </div>
+                                    </button>
                                 </mat-card-content>
                             </mat-card>
                         </mat-grid-tile>
