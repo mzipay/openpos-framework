@@ -108,6 +108,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
   public onItemListChange(event: ISellItem[]): void {
     if(this.individualMenuClicked){
       this.individualMenuClicked = false;
+      this.selectedItems = event;
       return;
     }
     this.selectedItems = event;
