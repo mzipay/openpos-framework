@@ -1,5 +1,8 @@
 package org.jumpmind.pos.core.screen;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY)
 public interface IUIAction {
     public String getAction();
     public void setAction(String action);

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CatalogBrowserScreen extends Screen {
+public class CatalogBrowserScreen extends DynamicFormScreen {
     private static final long serialVersionUID = 1L;
 
     public static final int DEFAULT_MAX_ITEMS_PER_PAGE = 25;
+    public static final String FIELD_ID_SELECTED_ITEM_QUANTITY = "selectedItemQuantity";
     
     private List<SellItem> items =  new ArrayList<>();
     private Integer maxItemsPerPage = DEFAULT_MAX_ITEMS_PER_PAGE;
@@ -19,6 +20,7 @@ public class CatalogBrowserScreen extends Screen {
     
     public CatalogBrowserScreen() {
         setType(ScreenType.CatalogBrowser);
+        getForm().addNumericField(FIELD_ID_SELECTED_ITEM_QUANTITY, null, "", false);
     }
 
     public void addItems(SellItem... items) {
