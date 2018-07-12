@@ -5,7 +5,7 @@
 				<span>{{selectedItems.length}} Items Selected</span>
 				<span fxFlex="1 1 auto"></span>
 				<span>
-					<button *ngIf="!screen.readOnly && screen.selectedItems.length > 1" mat-icon-button color="primary-inverse" (click)="openItemsDialog(selectedItems)">
+					<button *ngIf="!screen.readOnly && selectedItems.length > 0" mat-icon-button color="primary-inverse" (click)="openItemsDialog(selectedItems)">
 						<mat-icon>more_vert</mat-icon>
 					</button>
 				</span>
@@ -37,7 +37,7 @@
 								</span>
 							</span>
 						</div>	
-						<div *ngIf="selectedItems.length < 2" fxAlign="right" >
+						<div *ngIf="selectedItems.length < 1" fxAlign="right" >
 							<button *ngIf="!screen.readOnly" mat-icon-button color="primary" (click)="openItemDialog(item)">
 								<mat-icon>more_vert</mat-icon>
 							</button>
