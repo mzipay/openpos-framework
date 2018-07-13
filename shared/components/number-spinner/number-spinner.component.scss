@@ -1,6 +1,24 @@
 input[type=number] {
-	text-align: center;
+    text-align: center;
+    border: 1px solid;
+    margin: 0;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-left: 1px;
+    margin-right: 1px;
 }
+
+/* Hide the spinner button that is internal to the input */
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+button {
+    min-width: 56px;
+}
+
 /*
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 

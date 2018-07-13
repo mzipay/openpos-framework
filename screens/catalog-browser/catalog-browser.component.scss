@@ -1,0 +1,30 @@
+.quantity-area {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+img {
+    max-width:100%;
+    max-height:100%;
+}
+
+.line-spacing-sm {
+    line-height: 18px;
+}
+
+mat-card {
+    padding: 4px;
+    margin: 5px;
+}
+
+mat-paginator {
+    font-size: 16px;
+}
+
+::ng-deep .mat-select-value-text {
+    font-size: 16px;
+}
+
+::ng-deep .mat-option-text {
+    font-size: 16px;
+}
