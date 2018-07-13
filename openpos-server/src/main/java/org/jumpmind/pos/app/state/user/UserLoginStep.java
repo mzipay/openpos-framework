@@ -75,17 +75,17 @@ public class UserLoginStep implements ITransitionStep {
     }
 
     protected void promptForLogin() {
-        stateManager.getUI().prompt(new PromptConfig().placeholder(resource("_loginUserId")).promptText(resource("_loginUserPromptText"))
-                .icon("lock").action(commonResource("_nextButton"), "UsernameEntered"));
+        stateManager.getUI().prompt(new PromptConfig().placeholder("key:user:login.userid").promptText("key:user:login.userprompttext")
+                .icon("lock").action("key:common:button.next", "UsernameEntered"));
     }
 
     protected void promptForPassword() {
         stateManager.getUI()
-                .prompt(new PromptConfig().placeholder(resource("_loginPassword")).promptText(resource("_loginPasswordPrompt"))
+                .prompt(new PromptConfig().placeholder("key:user:login.password").promptText("key:user:login.passwordprompt")
                         .promptType(IPromptScreen.TYPE_ALPHANUMERICPASSWORD).icon("lock")
                         // .addOtherAction(new MenuItem("ForgotPassword",
                         // "Forgot Password"))
-                        .action(commonResource("_nextButton"), "PasswordEntered").backAction("BackToUserPrompt"));
+                        .action("key:common:button.next", "PasswordEntered").backAction("BackToUserPrompt"));
 
     }
 

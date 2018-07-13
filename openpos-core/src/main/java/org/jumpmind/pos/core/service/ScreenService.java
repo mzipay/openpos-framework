@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ApplicationState;
 import org.jumpmind.pos.core.flow.FlowException;
+import org.jumpmind.pos.core.flow.IScreenInterceptor;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
 import org.jumpmind.pos.core.flow.SessionTimer;
@@ -70,7 +71,7 @@ public class ScreenService implements IScreenService {
     Logger logger = LoggerFactory.getLogger(getClass());
     Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
 
-    private ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     DevToolsMessage devToolsMessage;
@@ -82,12 +83,15 @@ public class ScreenService implements IScreenService {
     IStateManagerFactory stateManagerFactory;
 
     @Value("${org.jumpmind.pos.core.service.ScreenService.jsonIncludeNulls:true}")
-    private boolean jsonIncludeNulls = true;
+    boolean jsonIncludeNulls = true;
 
     @Autowired
-    private LogFormatter logFormatter;
+    LogFormatter logFormatter;
+    
+    @Autowired(required=false)
+    List<IScreenInterceptor> screenInterceptors;
 
-    private Map<String, Map<String, ApplicationState>> applicationStateByAppIdByNodeId = new HashMap<>();
+    Map<String, Map<String, ApplicationState>> applicationStateByAppIdByNodeId = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -285,6 +289,7 @@ public class ScreenService implements IScreenService {
                     Form form = buildForm(screen);
                     screen.put("form", form);
                 }
+                screen = interceptScreen(appId, nodeId, screen);
                 logScreenTransition(nodeId, screen);
             } catch (Exception ex) {
                 if (ex.toString().contains("org.jumpmind.pos.core.screen.ChangeScreen")) {
@@ -303,6 +308,15 @@ public class ScreenService implements IScreenService {
                 applicationState.setLastDialog(null);
             }
         }
+    }
+    
+    protected Screen interceptScreen(String appId, String nodeId, Screen screen) {
+        if (this.screenInterceptors != null) {
+            for (IScreenInterceptor screenInterceptor : screenInterceptors) {
+                return screenInterceptor.intercept(appId, nodeId, screen);
+            }
+        }
+        return screen;
     }
 
     protected void publishToClients(String appId, String nodeId, Object payload) {

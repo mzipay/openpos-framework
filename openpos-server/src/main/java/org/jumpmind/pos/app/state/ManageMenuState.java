@@ -21,6 +21,7 @@
 package org.jumpmind.pos.app.state;
 
 import org.apache.log4j.Logger;
+import org.jumpmind.pos.app.state.user.StatePermission;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
@@ -31,6 +32,7 @@ import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.ops.service.OpsServiceClient;
 
+@StatePermission(permissionId = "manage.main")
 public class ManageMenuState extends AbstractState implements IState {
 
     private Logger logger = Logger.getLogger(ManageMenuState.class);
@@ -102,4 +104,67 @@ public class ManageMenuState extends AbstractState implements IState {
         this.opsServiceClient.closeDevice();
         stateManager.showScreen(buildScreen());
     }
+    
+    /*
++----------------------------+
+| +------------------------+ |
+| |    Enter Busn Date     | |
+| |        [Prompt]        | |
+| +------------------------+ |
++----------------------------+
+{
+  "name" : "Enter Busn Date",
+  "type" : "Prompt",
+  "icon" : null,
+  "template" : {
+    "type" : "Sell",
+    "dialog" : false,
+    "statusBar" : { },
+    "localMenuItems" : [ ],
+    "transactionMenuItems" : [ ],
+    "scan" : null,
+    "workstation" : {
+      "storeId" : "00039",
+      "workstationId" : "011"
+    },
+    "operatorText" : null
+  },
+  "locale" : "en-US",
+  "sessionTimeoutMillis" : 60000,
+  "sessionTimeoutAction" : null,
+  "promptIcon" : "question_answer",
+  "placeholderText" : "Business Date ",
+  "text" : "Press Enter to accept the business date",
+  "responseText" : "07/10/2018",
+  "editable" : true,
+  "responseType" : "DATE",
+  "minLength" : null,
+  "maxLength" : null,
+  "action" : "Next",
+  "actionButton" : {
+    "action" : "Next",
+    "title" : "Next",
+    "icon" : "keyboard_arrow_right",
+    "enabled" : true,
+    "confirmationMessage" : null,
+    "children" : null,
+    "sensitive" : false
+  },
+  "comments" : "",
+  "showComments" : false,
+  "otherActions" : null,
+  "sequenceNumber" : 38,
+  "backButton" : {
+    "action" : "Undo",
+    "title" : "Back",
+    "icon" : null,
+    "enabled" : true,
+    "confirmationMessage" : null,
+    "children" : null,
+    "sensitive" : false
+  },
+  "theme" : "ascena_ann-theme",
+  "refreshAlways" : true
+}
+     */
 }

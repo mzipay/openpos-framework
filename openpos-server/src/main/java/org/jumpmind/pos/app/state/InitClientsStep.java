@@ -8,6 +8,8 @@ import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.InOut;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.flow.Transition;
+import org.jumpmind.pos.i18n.service.i18nService;
+import org.jumpmind.pos.i18n.service.i18nServiceClient;
 import org.jumpmind.pos.ops.service.OpsService;
 import org.jumpmind.pos.ops.service.OpsServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
-@Order(150)
+@Order(125)
 public class InitClientsStep implements ITransitionStep {
     
     @Autowired
@@ -23,6 +25,9 @@ public class InitClientsStep implements ITransitionStep {
     
     @Autowired
     OpsService opsService;
+    
+    @Autowired
+    i18nService i18nService;
 
     @In(scope = ScopeType.Node)
     IStateManager stateManager;
@@ -32,6 +37,9 @@ public class InitClientsStep implements ITransitionStep {
     
     @InOut(scope = ScopeType.Node)
     OpsServiceClient opsServiceClient;
+    
+    @InOut(scope = ScopeType.Node)
+    i18nServiceClient i18nServiceClient;
     
     public boolean isApplicable(Transition transition) {
         if (contextServiceClient == null) {
@@ -43,8 +51,9 @@ public class InitClientsStep implements ITransitionStep {
 
     @Override
     public void arrive(Transition transition) {
-        contextServiceClient = new ContextServiceClient(contextService, stateManager.getNodeId());
-        opsServiceClient = new OpsServiceClient(opsService, contextServiceClient);
+        this.contextServiceClient = new ContextServiceClient(contextService, stateManager.getNodeId());
+        this.opsServiceClient = new OpsServiceClient(opsService, contextServiceClient);
+        this.i18nServiceClient = new i18nServiceClient(contextServiceClient, i18nService);
         transition.proceed();
     }
 }

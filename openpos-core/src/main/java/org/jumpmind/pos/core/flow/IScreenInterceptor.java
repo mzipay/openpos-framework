@@ -4,6 +4,5 @@ import org.jumpmind.pos.core.screen.Screen;
 
 public interface IScreenInterceptor {
 
-    Screen intercept(Screen screen);
-    
+    public Screen intercept(String appId, String nodeId, Screen screen);
 }
