@@ -39,6 +39,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
     this.listConfig.numResultsPerPage = Number.MAX_VALUE;
     this.listConfig.items = this.screen.items;
     this.items = this.screen.items;
+    this.dialog.closeAll();
   }
 
   ngOnInit(): void {
