@@ -29,7 +29,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
 
     private ILegacySubsystem legacySubsystem;
 
-    private ITranslatorFactory screenTranslatorFactory;
+    private ITranslatorFactory translatorFactory;
 
     private ILegacyScreenInterceptor screenInterceptor;
 
@@ -43,12 +43,12 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
 
     private boolean lastScreenWasNoOp = false;
 
-    public TranslationManagerServer(ILegacyScreenInterceptor interceptor, ITranslatorFactory screenTranslatorFactory,
+    public TranslationManagerServer(ILegacyScreenInterceptor interceptor, ITranslatorFactory translatorFactory,
             Class<?> subsystemClass) {
         this.subsystemClass = subsystemClass;
         this.posSessionInfo = new POSSessionInfo();
         this.screenInterceptor = interceptor;
-        this.screenTranslatorFactory = screenTranslatorFactory;
+        this.translatorFactory = translatorFactory;
     }
 
     @Override
@@ -209,7 +209,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
                 }
 
                 if (!screenInterceptor.intercept(legacyScreen, previousScreen, subscriber, this, posSessionInfo)) {
-                    ITranslator newTranslator = screenTranslatorFactory.createScreenTranslator(legacyScreen, subscriber.getAppId(),
+                    ITranslator newTranslator = translatorFactory.createScreenTranslator(legacyScreen, subscriber.getAppId(),
                             subscriber.getProperties());
 
                     if (newTranslator != null) {
