@@ -1,0 +1,9 @@
+<div fxFlex="0 0 auto" fxLayout="row">	<!-- class="input-group"-->
+    <div > <!-- class="input-group-btn" -->
+        <button mat-raised-button (click)="decreaseValue()">-</button> <!-- class="btn btn-primary" -->
+    </div>
+    <input matInput [formControl]="numberPicker" [(ngModel)]="value" type="number" min="{{min}}" max="{{max}}" pattern="{{pattern}}"/>	 <!-- class="form-control"-->
+    <div> <!-- class="input-group-btn"-->
+        <button mat-raised-button (click)="increaseValue()">+</button> <!-- class="btn btn-primary" -->
+    </div>
+</div>

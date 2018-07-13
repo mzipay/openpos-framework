@@ -18,10 +18,13 @@
                     </button>
                 </mat-drawer>
                 <mat-drawer-content  fxFlex="1 1 auto" class="scrollable">
+                   <app-number-spinner [(ngModel)]="selectedItemQuantity.value" [min]="selectedItemQuantity.min" [max]="selectedItemQuantity.max"></app-number-spinner>
+                    <!--
                     <mat-form-field>
                         <input matInput [(ngModel)]="selectedItemQuantity.value" type="tel" [formatterName]="'NumericText'"
                             [placeholder]="selectedItemQuantity.placeholder" [min]="selectedItemQuantity.min" [max]="selectedItemQuantity.max">
                     </mat-form-field>
+                    -->
                     <mat-grid-list cols="5">
 
                         <mat-grid-tile *ngFor="let item of items">
