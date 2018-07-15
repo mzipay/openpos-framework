@@ -14,6 +14,8 @@ export class NumberSpinnerComponent extends AbstractValueAccessor implements OnI
     @Input() step: number = 1;
     @Input() precision: number = 1;
     @Input() inputDisabled: boolean = false;
+    @Input() maxlength: number;
+    @Input() minlength: number;
     // @Output() onChange: EventEmitter<number> = new EventEmitter();
 
     private numberPicker: FormControl;

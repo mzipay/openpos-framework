@@ -1,4 +1,4 @@
-input[type=number] {
+input[type=tel] {
     text-align: center;
     border: 1px solid;
     margin: 0;
@@ -6,6 +6,7 @@ input[type=number] {
     padding-right: 2px;
     margin-left: 1px;
     margin-right: 1px;
+    min-width: 4em;
 }
 
 /* Hide the spinner button that is internal to the input */
@@ -18,39 +19,3 @@ input::-webkit-inner-spin-button {
 button {
     min-width: 56px;
 }
-
-/*
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
-}
-input[type=number] {
-	text-align: center;
-}
-
-.input-group span.input-group-btn,.input-group input,.input-group button{
-    display: block;
-    width: 100%;
-    border-radius: 0;
-    margin: 0;
-}
-
-.input-group {
-    position: relative;   
-}
-.input-group span.data-up{
-    position: absolute;
-    top: 0;
-}
-.input-group span.data-dwn{
-    position: absolute;
-    bottom: 0;
-}
-.form-control.text-center {
-    margin: 34px 0;
-}
-.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group{
-    margin-left:0;
-}
-*/

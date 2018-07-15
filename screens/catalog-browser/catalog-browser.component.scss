@@ -12,6 +12,11 @@ img {
     line-height: 18px;
 }
 
+.grid-wrapper {
+    overflow-y: auto; 
+    height: 475px;
+}
+
 mat-card {
     padding: 4px;
     margin: 5px;

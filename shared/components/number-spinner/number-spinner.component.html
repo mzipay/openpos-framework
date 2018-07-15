@@ -2,7 +2,9 @@
     <div>
         <button mat-raised-button class="spinner-btn" (click)="decreaseValue()"><span class="text-sm">&#8211;</span></button>
     </div>
-    <input matInput [formControl]="numberPicker" [(ngModel)]="value" type="number" min="{{min}}" max="{{max}}" pattern="{{pattern}}"/>
+    <input matInput [formControl]="numberPicker" [(ngModel)]="value" type="tel" min="{{min}}" max="{{max}}" 
+    pattern="{{pattern}}" [formatterName]="'NumericText'" maxlength="{{maxlength}}" minlength="{{minlength}}" 
+        [ngStyle]="{'max-width' : maxlength ? (maxlength+1)+'em' : ''}"/>
     <div>
         <button mat-raised-button class="spinner-btn" (click)="increaseValue()"><span class="text-sm">+</span></button>
     </div>

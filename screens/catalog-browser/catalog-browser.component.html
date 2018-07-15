@@ -20,29 +20,24 @@
                 <mat-drawer-content  fxFlex="1 1 auto" fxLayout="column">
                     <div fxLayout="row" fxLayoutAlign="center center" class="quantity-area">
                         <label *ngIf="selectedItemQuantity.label" class="text-sm bold-text">{{selectedItemQuantity.label}}&nbsp;</label>
-                        <app-number-spinner [(ngModel)]="selectedItemQuantity.value" [min]="selectedItemQuantity.min" [max]="selectedItemQuantity.max"></app-number-spinner>
+                        <app-number-spinner [(ngModel)]="selectedItemQuantity.value" [min]="selectedItemQuantity.min" [max]="selectedItemQuantity.max" 
+                           [maxlength]="(selectedItemQuantity.max + '').length" autoSelectOnFocus></app-number-spinner>
                     </div> 
-                   <!--
-                    <mat-form-field>
-                        <input matInput [(ngModel)]="selectedItemQuantity.value" type="tel" [formatterName]="'NumericText'"
-                            [placeholder]="selectedItemQuantity.placeholder" [min]="selectedItemQuantity.min" [max]="selectedItemQuantity.max">
-                    </mat-form-field>
-                    -->
-                    <div style="overflow-y: auto; height: 475px">
-                    <mat-grid-list cols="5" rowHeight="9:10">
-                        <mat-grid-tile *ngFor="let item of items">
-                            <mat-card class="item-card">
-                                <mat-card-content fxLayoutAlign="center center" fxLayout="column">
-                                    <button mat-button (click)="onItemSelected(item)" class="line-spacing-sm" >
-                                        <div class="text-xs" style="overflow-wrap: break-word">{{item.posItemId}}</div>
-                                        <img *ngIf="item.menuItems[0] && item.menuItems[0].title==='url'" src="{{item.menuItems[0].url}}"  alt="{{item.posItemId}}" >
-                                        <div class="text-xs" style="overflow-wrap: break-word">{{item.description}}</div>
-                                    </button>
-                                </mat-card-content>
-                            </mat-card>
-                        </mat-grid-tile>
-                    </mat-grid-list>
-                </div>
+                    <div class="grid-wrapper">
+                        <mat-grid-list cols="5" rowHeight="9:10">
+                            <mat-grid-tile *ngFor="let item of items">
+                                <mat-card class="item-card">
+                                    <mat-card-content fxLayoutAlign="center center" fxLayout="column">
+                                        <button mat-button (click)="onItemSelected(item)" class="line-spacing-sm" >
+                                            <div class="text-xs" style="overflow-wrap: break-word">{{item.posItemId}}</div>
+                                            <img *ngIf="item.menuItems[0] && item.menuItems[0].title==='url'" src="{{item.menuItems[0].url}}"  alt="{{item.posItemId}}" >
+                                            <div class="text-xs" style="overflow-wrap: break-word">{{item.description}}</div>
+                                        </button>
+                                    </mat-card-content>
+                                </mat-card>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                    </div>
                 </mat-drawer-content>
             </mat-drawer-container>
             <mat-paginator #paginator [length]="totalItems" [pageSize]="maxItemsPerPage" [pageSizeOptions]="[5, 10, 15]" (page)="onPageEvent($event)">
