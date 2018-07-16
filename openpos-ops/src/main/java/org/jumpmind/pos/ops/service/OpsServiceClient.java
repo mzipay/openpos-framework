@@ -7,7 +7,8 @@ import java.util.List;
 import org.jumpmind.pos.context.model.DeviceModel;
 import org.jumpmind.pos.context.service.ContextServiceClient;
 import org.jumpmind.pos.ops.model.UnitStatus;
-import org.jumpmind.pos.ops.model.UnitStatusConstants;
+import org.jumpmind.pos.ops.model.UnitStatusModel;
+import org.jumpmind.pos.ops.model.UnitType;
 
 public class OpsServiceClient {
 
@@ -22,9 +23,9 @@ public class OpsServiceClient {
     
     public boolean isStoreOpen() {
         DeviceModel device = contextServiceClient.getDevice();
-        GetStatusResult results = opsService.getUnitStatus(UnitStatusConstants.UNIT_TYPE_STORE, device.getBusinessUnitId());
-        UnitStatus unitStatus = results.getUnitStatus(device.getBusinessUnitId());
-        if (unitStatus == null || unitStatus.getUnitStatus().equals(UnitStatusConstants.STATUS_CLOSED)) {
+        GetStatusResult results = opsService.getUnitStatus(UnitType.STORE.name(), device.getBusinessUnitId());
+        UnitStatusModel unitStatus = results.getUnitStatus(device.getBusinessUnitId());
+        if (unitStatus == null || unitStatus.getUnitStatus().equals(UnitStatus.CLOSED.name())) {
             return false;
         } else {
             return true;
@@ -33,9 +34,9 @@ public class OpsServiceClient {
     
     public boolean isDeviceOpen() {
         DeviceModel device = contextServiceClient.getDevice();
-        GetStatusResult results = opsService.getUnitStatus(UnitStatusConstants.UNIT_TYPE_DEVICE, device.getDeviceId());
-        UnitStatus unitStatus = results.getUnitStatus(device.getDeviceId());
-        if (unitStatus == null || unitStatus.getUnitStatus().equals(UnitStatusConstants.STATUS_CLOSED)) {
+        GetStatusResult results = opsService.getUnitStatus(UnitType.DEVICE.name(), device.getDeviceId());
+        UnitStatusModel unitStatus = results.getUnitStatus(device.getDeviceId());
+        if (unitStatus == null || unitStatus.getUnitStatus().equals(UnitStatus.CLOSED.name())) {
             return false;
         } else {
             return true;
@@ -43,10 +44,10 @@ public class OpsServiceClient {
     }
     
     public boolean areDevicesOpen() {
-        GetStatusResult results = opsService.getUnitStatus(UnitStatusConstants.UNIT_TYPE_DEVICE, "*");
-        List<UnitStatus> statuses = results.getUnitStatuses();
-        for (UnitStatus unitStatus : statuses) {
-            if (unitStatus.getUnitStatus().equals(UnitStatusConstants.STATUS_OPEN)) {
+        GetStatusResult results = opsService.getUnitStatus(UnitType.DEVICE.name(), "*");
+        List<UnitStatusModel> statuses = results.getUnitStatuses();
+        for (UnitStatusModel unitStatus : statuses) {
+            if (unitStatus.getUnitStatus().equals(UnitStatus.OPEN.name())) {
                 return true;
             }
         }
@@ -58,11 +59,11 @@ public class OpsServiceClient {
         // TODO where to get the business date from?
         request.setBusinessDay(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         request.setBusinessUnitId(contextServiceClient.getDevice().getBusinessUnitId());
-        request.setNewStatus(UnitStatusConstants.STATUS_OPEN);
+        request.setNewStatus(UnitStatus.OPEN.name());
         request.setRequestingDeviceId(contextServiceClient.getDevice().getDeviceId());
         request.setTimeOfRequest(new Date());
         request.setUnitId(request.getBusinessUnitId());
-        request.setUnitType(UnitStatusConstants.UNIT_TYPE_STORE);
+        request.setUnitType(UnitType.STORE.name());
         opsService.updateUnitStatus(request);
     }
     
@@ -71,11 +72,11 @@ public class OpsServiceClient {
         // TODO where to get the business date from?
         request.setBusinessDay(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         request.setBusinessUnitId(contextServiceClient.getDevice().getBusinessUnitId());
-        request.setNewStatus(UnitStatusConstants.STATUS_CLOSED);
+        request.setNewStatus(UnitStatus.CLOSED.name());
         request.setRequestingDeviceId(contextServiceClient.getDevice().getDeviceId());
         request.setTimeOfRequest(new Date());
         request.setUnitId(request.getBusinessUnitId());
-        request.setUnitType(UnitStatusConstants.UNIT_TYPE_STORE);
+        request.setUnitType(UnitType.STORE.name());
         opsService.updateUnitStatus(request);
     }
     
@@ -84,11 +85,11 @@ public class OpsServiceClient {
         // TODO where to get the business date from?
         request.setBusinessDay(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         request.setBusinessUnitId(contextServiceClient.getDevice().getDeviceId());
-        request.setNewStatus(UnitStatusConstants.STATUS_OPEN);
+        request.setNewStatus(UnitStatus.OPEN.name());
         request.setRequestingDeviceId(contextServiceClient.getDevice().getDeviceId());
         request.setTimeOfRequest(new Date());
         request.setUnitId(request.getBusinessUnitId());
-        request.setUnitType(UnitStatusConstants.UNIT_TYPE_DEVICE);
+        request.setUnitType(UnitType.DEVICE.name());
         opsService.updateUnitStatus(request);
     }
     
@@ -97,11 +98,11 @@ public class OpsServiceClient {
         // TODO where to get the business date from?
         request.setBusinessDay(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         request.setBusinessUnitId(contextServiceClient.getDevice().getDeviceId());
-        request.setNewStatus(UnitStatusConstants.STATUS_CLOSED);
+        request.setNewStatus(UnitStatus.CLOSED.name());
         request.setRequestingDeviceId(contextServiceClient.getDevice().getDeviceId());
         request.setTimeOfRequest(new Date());
         request.setUnitId(request.getBusinessUnitId());
-        request.setUnitType(UnitStatusConstants.UNIT_TYPE_DEVICE);
+        request.setUnitType(UnitType.DEVICE.name());
         opsService.updateUnitStatus(request);
     }
 

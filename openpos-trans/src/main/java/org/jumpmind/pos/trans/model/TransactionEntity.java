@@ -14,4 +14,30 @@ abstract public class TransactionEntity extends Entity {
     @Column(primaryKey = true)
     private String deviceId;
     
+    
+    public void setSequenceNumber(Long sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+    
+    
+    public Long getSequenceNumber() {
+        return sequenceNumber;
+    }
+    
+    public void setBusinessDate(String businessDate) {
+        this.businessDate = businessDate;
+    }
+    
+    public String getBusinessDate() {
+        return businessDate;
+    }
+    
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+    
+    public String getDeviceId() {
+        return deviceId;
+    }
+    
 }

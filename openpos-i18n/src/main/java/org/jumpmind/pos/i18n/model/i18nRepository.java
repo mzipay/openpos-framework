@@ -21,7 +21,7 @@ public class i18nRepository {
 
     final Logger log = LoggerFactory.getLogger(getClass());
 
-    private Query<Resource> patternLookup = new Query<Resource>().named("patternLookup").result(Resource.class);
+    private Query<ResourceModel> patternLookup = new Query<ResourceModel>().named("patternLookup").result(ResourceModel.class);
 
     @Autowired
     @Qualifier("i18nSession")
@@ -40,10 +40,10 @@ public class i18nRepository {
 
     public String getString(String base, String key, String locale, String brand) {        
         Map<String, Object> params = generateHashMap(base, key, locale, brand);
-        List<Resource> phrases = dbSession.query(patternLookup, params);
+        List<ResourceModel> phrases = dbSession.query(patternLookup, params);
         String string = null;
         if (phrases.size() > 0) {
-            Resource row = phrases.stream().filter((p) -> p.getBrand().equals(brand)).findFirst().orElse(null);
+            ResourceModel row = phrases.stream().filter((p) -> p.getBrand().equals(brand)).findFirst().orElse(null);
             if (row == null) {
                 row = phrases.stream().filter((p) -> p.getBrand().equals("*")).findFirst().orElse(null);
             }
@@ -52,7 +52,7 @@ public class i18nRepository {
         return string;
     }
 
-    public void save(Resource resource) {
+    public void save(ResourceModel resource) {
         dbSession.save(resource);
     }
 }

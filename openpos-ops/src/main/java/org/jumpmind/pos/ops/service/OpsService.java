@@ -23,10 +23,10 @@ public class OpsService {
         return endpointDispatcher.dispatch("/unitStatus/{unitType}/{unitId}", unitType, unitId);
     }
 
-    @RequestMapping(value="/changeUnitStatus", method=RequestMethod.POST)
+    @RequestMapping(value="/updateUnitStatus", method=RequestMethod.POST)
     @ResponseBody
     public StatusChangeResult updateUnitStatus(StatusChangeRequest request) {
-        return endpointDispatcher.dispatch("/changeUnitStatus", request);
+        return endpointDispatcher.dispatch("/updateUnitStatus", request);
     }
 
 }

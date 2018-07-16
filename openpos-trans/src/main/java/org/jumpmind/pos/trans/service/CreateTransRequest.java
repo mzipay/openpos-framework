@@ -5,14 +5,24 @@ import java.io.Serializable;
 public class CreateTransRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private String businessDate;
-    
+
     private String deviceId;
-    
+
     private String businessUnitId;
-    
+
     private String transType;
+
+    public CreateTransRequest() {
+    }
+
+    public CreateTransRequest(String businessDate, String deviceId, String businessUnitId, String transType) {
+        this.businessDate = businessDate;
+        this.deviceId = deviceId;
+        this.businessUnitId = businessUnitId;
+        this.transType = transType;
+    }
 
     public String getBusinessDate() {
         return businessDate;
@@ -45,6 +55,5 @@ public class CreateTransRequest implements Serializable {
     public void setTransType(String transType) {
         this.transType = transType;
     }
-    
-    
+
 }

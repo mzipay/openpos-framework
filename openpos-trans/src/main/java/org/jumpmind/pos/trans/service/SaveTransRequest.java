@@ -2,19 +2,26 @@ package org.jumpmind.pos.trans.service;
 
 import java.io.Serializable;
 
-import org.jumpmind.pos.trans.model.Transaction;
+import org.jumpmind.pos.trans.model.TransactionModel;
 
 public class SaveTransRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    Transaction transaction;
+    TransactionModel transaction;
     
-    public void setTransaction(Transaction transaction) {
+    public SaveTransRequest(TransactionModel model) {
+        this.transaction = model;
+    }
+    
+    public SaveTransRequest() {
+    }
+    
+    public void setTransaction(TransactionModel transaction) {
         this.transaction = transaction;
     }
     
-    public Transaction getTransaction() {
+    public TransactionModel getTransaction() {
         return transaction;
     }
 }

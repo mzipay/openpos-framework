@@ -7,7 +7,7 @@ import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.ScopeType;
-import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TenderMenuState extends AbstractState {
@@ -15,7 +15,7 @@ public class TenderMenuState extends AbstractState {
     @In(scope=ScopeType.Node)
     IStateManager stateManager;
     @In(scope=ScopeType.Session)
-    private User currentUser;    
+    private UserModel currentUser;    
     
     @Autowired
     DemoTransactionService demoTransactionService;

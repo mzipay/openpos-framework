@@ -6,8 +6,8 @@ import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
-@Table
-public class PasswordHistory extends Entity {
+@Table(name="password_history")
+public class PasswordHistoryModel extends Entity {
     
 
     @Column(primaryKey=true)

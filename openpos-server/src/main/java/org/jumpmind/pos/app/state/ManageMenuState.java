@@ -32,7 +32,7 @@ import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.ops.service.OpsServiceClient;
 
-@StatePermission(permissionId = "manage.main")
+@StatePermission(permissionId = "manage.menu")
 public class ManageMenuState extends AbstractState implements IState {
 
     private Logger logger = Logger.getLogger(ManageMenuState.class);

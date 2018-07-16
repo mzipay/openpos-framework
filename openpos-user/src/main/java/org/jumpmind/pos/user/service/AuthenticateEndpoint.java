@@ -7,8 +7,8 @@ import org.jumpmind.pos.cache.service.impl.ICache;
 import org.jumpmind.pos.context.service.ContextServiceClient;
 import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.service.In;
-import org.jumpmind.pos.user.model.PasswordHistory;
-import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.PasswordHistoryModel;
+import org.jumpmind.pos.user.model.UserModel;
 import org.jumpmind.pos.user.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -33,7 +33,7 @@ public class AuthenticateEndpoint {
             @RequestParam(value="username", defaultValue="") String username,
             @RequestParam(value="password", defaultValue="") String password) {
         
-        User user = userCache.getOrLoad(username, p -> {
+        UserModel user = userCache.getOrLoad(username, p -> {
                 return userRepository.findUser(username);
             }
         );
@@ -54,7 +54,7 @@ public class AuthenticateEndpoint {
         }
     }
 
-    private AuthenticationResult handleSuccess(User user) {
+    private AuthenticationResult handleSuccess(UserModel user) {
         AuthenticationResult result =  new AuthenticationResult("SUCCESS", user);
         long expiresInDays = passwordExpiresInDays(user);
         if (expiresInDays > 0 
@@ -68,7 +68,7 @@ public class AuthenticateEndpoint {
         return result;
     }
 
-    protected AuthenticationResult handlePasswordExpired(User user) {
+    protected AuthenticationResult handlePasswordExpired(UserModel user) {
         UserMessage message = new UserMessage();
         long expiresInDays = Math.abs(passwordExpiresInDays(user));
         message.setMessageCode("PASSWORD_EXPIRED");
@@ -82,7 +82,7 @@ public class AuthenticateEndpoint {
         return result;
     }
 
-    protected boolean checkPassword(User user, String password) {
+    protected boolean checkPassword(UserModel user, String password) {
         if (password.length() < 3) {
             user.setPasswordFailedAttempts(user.getPasswordFailedAttempts()+1);
             user.setLastPasswordAttempt(new Date());
@@ -95,7 +95,7 @@ public class AuthenticateEndpoint {
         return true;
     }
 
-    protected boolean checkLockout(User user) {
+    protected boolean checkLockout(UserModel user) {
         if (user.isLockedOutFlag()) {
             Date lastPasswordAttempt = user.getLastPasswordAttempt();
             if (lastPasswordAttempt != null) {      
@@ -112,19 +112,19 @@ public class AuthenticateEndpoint {
         return user.isLockedOutFlag();
     }
 
-    protected AuthenticationResult failAuthentication(User user, String message, String code) {
+    protected AuthenticationResult failAuthentication(UserModel user, String message, String code) {
         AuthenticationResult result = new AuthenticationResult("FAILURE");
         result.setAuthenticationCode(code);
         result.setResultMessage(message);
         return result;       
     }
     
-    protected long passwordExpiresInDays(User user) {
+    protected long passwordExpiresInDays(UserModel user) {
         if (CollectionUtils.isEmpty(user.getPasswordHistory())) {
             return -1;
         }
         
-        PasswordHistory passwordHistory = user.getPasswordHistory().get(0);
+        PasswordHistoryModel passwordHistory = user.getPasswordHistory().get(0);
         if (passwordHistory.getExpirationTime() != null) {
             Date now = new Date(); // TODO the server may not be the same timezone as client.
             long diffDays = org.jumpmind.pos.service.util.DateUtils.daysBetween(now, passwordHistory.getExpirationTime());

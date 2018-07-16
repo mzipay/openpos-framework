@@ -5,7 +5,7 @@ import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.Out;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.flow.Transition;
-import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class ManagerOverrideStep extends UserLoginStep {
     private StatePermissionCalculator permissionCalculator;
     
     @In(scope=ScopeType.Session, required=false)
-    private User currentUser;
+    private UserModel currentUser;
     
     @Out(scope=ScopeType.Conversation, required=false)
     private ManagerOverride managerOverride;
@@ -58,7 +58,7 @@ public class ManagerOverrideStep extends UserLoginStep {
     @Override
     protected void processResult() {
         if (isResultSuccessful()) {
-            User manager = getResultUser();
+            UserModel manager = getResultUser();
             if (permissionCalculator.isUserPrivileged(manager, statePermission)) {
                 managerOverride = new ManagerOverride();
                 managerOverride.setManagerUsername(manager.getUsername());

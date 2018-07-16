@@ -8,7 +8,7 @@ import org.jumpmind.pos.persist.Table;
 
 @Table(name = "workgroup",
        description = "A group within a workforce that normally works together and has similar access control permissions.")
-public class Workgroup extends Entity {
+public class WorkgroupModel extends Entity {
     
     @Column(primaryKey=true)
     private String workgroupId;
@@ -17,7 +17,7 @@ public class Workgroup extends Entity {
             description = "A description for the Workgroup.")
     private String description;
     
-    private List<Permission> permissions;
+    private List<PermissionModel> permissions;
 
     public String getWorkgroupId() {
     	return workgroupId;
@@ -35,11 +35,11 @@ public class Workgroup extends Entity {
         this.description = description;
     }
 
-    public List<Permission> getPermissions() {
+    public List<PermissionModel> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<Permission> permissions) {
+    public void setPermissions(List<PermissionModel> permissions) {
         this.permissions = permissions;
     }
 }

@@ -4,8 +4,8 @@ import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
-@Table(description = "Internationalization resource table")
-public class Resource extends Entity {
+@Table(name="resource", description = "Internationalization resource table")
+public class ResourceModel extends Entity {
 
     @Column(primaryKey = true)
     private String baseName;

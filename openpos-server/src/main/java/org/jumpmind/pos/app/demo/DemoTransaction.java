@@ -8,7 +8,7 @@ import org.jumpmind.pos.core.screen.SellItem;
 import org.jumpmind.pos.core.screen.TenderItem;
 import org.jumpmind.pos.core.screen.Transaction;
 import org.jumpmind.pos.core.screen.Workstation;
-import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.UserModel;
 
 public class DemoTransaction {
 
@@ -24,7 +24,7 @@ public class DemoTransaction {
     private List<Total> totals = new ArrayList<>();
     private List<SellItem> lineItems = new ArrayList<>();
     private List<TenderItem> tenderLineItems = new ArrayList<>();
-    private User user;
+    private UserModel user;
     
     public Transaction getTransaction() {
         return transaction;
@@ -86,10 +86,10 @@ public class DemoTransaction {
     public void setLineItems(List<SellItem> lineItems) {
         this.lineItems = lineItems;
     }
-    public User getUser() {
+    public UserModel getUser() {
         return user;
     }
-    public void setUser(User user) {
+    public void setUser(UserModel user) {
         this.user = user;
     }
     public List<TenderItem> getTenderLineItems() {
