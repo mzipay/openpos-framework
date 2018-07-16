@@ -1,4 +1,4 @@
-input[type=tel] {
+.spinner-input {
     text-align: center;
     border: 1px solid;
     margin: 0;
@@ -16,6 +16,6 @@ input::-webkit-inner-spin-button {
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
-button {
+.spinner-btn {
     min-width: 56px;
 }
