@@ -11,7 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractLegacyDialogScreenTranslator extends AbstractLegacyScreenTranslator<DialogScreen> {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /** Maximum number of lines OrPOS supports on a dialog */
     public static final int MAX_DIALOG_LINES = 17; // Defined in OrPOS DialogBean.MAX_LINES, but protected there
@@ -78,8 +79,8 @@ public abstract class AbstractLegacyDialogScreenTranslator extends AbstractLegac
     
     abstract protected void configureTypeAndButtons(ILegacyDialogBeanModel dialogModel);
     
-    protected void addDialogButton(String action, ILegacyDialogBeanModel dialogModel) {
-        addDialogButton(action, action, Optional.empty(), dialogModel);
+    protected String addDialogButton(String action, ILegacyDialogBeanModel dialogModel) {
+        return addDialogButton(action, action, Optional.empty(), dialogModel);
     }
 
     /**
@@ -92,7 +93,7 @@ public abstract class AbstractLegacyDialogScreenTranslator extends AbstractLegac
      * This parameter needs to be one of the BUTTON constant values from the DialogScreensIfc class. 
      * @param dialogModel
      */
-    protected void addDialogButton(String name, String action, Optional<Integer> orposButtonIndexOpt, ILegacyDialogBeanModel dialogModel) {
+    protected String addDialogButton(String name, String action, Optional<Integer> orposButtonIndexOpt, ILegacyDialogBeanModel dialogModel) {
         String letter = action;
         String[] letters = dialogModel.getLetters();
         if (letters != null && letters.length > 0) {
@@ -105,6 +106,7 @@ public abstract class AbstractLegacyDialogScreenTranslator extends AbstractLegac
             }*/
         }
         this.screen.getButtons().add(new MenuItem(translateButtonTitle(name, action), letter, true));
+        return letter;
     }
     
     protected String translateButtonTitle(String name, String action) {
