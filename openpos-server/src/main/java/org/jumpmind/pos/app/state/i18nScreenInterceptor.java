@@ -53,6 +53,11 @@ public class i18nScreenInterceptor implements IScreenInterceptor {
         return ret;
     }
 
+    /*
+     * TODO: caching needs to be added to the i18n service. we could
+     * cache metadata about the screen classes so we don't have to walk all the
+     * fields everytime a screen is shown
+     */
     @Override
     public Screen intercept(String appId, String deviceId, Screen screen) {
         init(appId, deviceId);
