@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @DependsOn(value = { "TransModule" })
-public class TransactionRepository {
+public class TransRepository {
 
     
     @Autowired
@@ -17,12 +17,12 @@ public class TransactionRepository {
     @Lazy
     private DBSession dbSession;
 
-    public void save(TransactionModel trans) {
+    public void save(TransModel trans) {
         dbSession.save(trans);
     }
     
     
-    public void save(TransactionQueueModel trans) {
+    public void save(TransQueueModel trans) {
         dbSession.save(trans);
     }
 }

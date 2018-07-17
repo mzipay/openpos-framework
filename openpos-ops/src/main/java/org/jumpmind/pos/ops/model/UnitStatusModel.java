@@ -6,7 +6,7 @@ import java.util.Date;
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
-import org.jumpmind.pos.trans.model.TransactionType;
+import org.jumpmind.pos.trans.model.TransType;
 
 @Table(name = "unit_status")
 public class UnitStatusModel extends Entity implements Serializable {
@@ -102,19 +102,19 @@ public class UnitStatusModel extends Entity implements Serializable {
         this.businessDate = businessDate;
     }
 
-    public TransactionType toTransactionType() {
+    public TransType toTransactionType() {
         if (unitStatus != null && unitType != null) {
             if (unitStatus.equals(UnitStatus.OPEN.name())) {
                 if (unitType.equals(UnitType.DEVICE.name())) {
-                    return TransactionType.OPEN_DEVICE;
+                    return TransType.OPEN_DEVICE;
                 } else if (unitType.equals(UnitType.STORE.name())) {
-                    return TransactionType.OPEN_BUSINESS_UNIT;
+                    return TransType.OPEN_BUSINESS_UNIT;
                 }
             } else if (unitStatus.equals(UnitStatus.CLOSED.name())) {
                 if (unitType.equals(UnitType.DEVICE.name())) {
-                    return TransactionType.CLOSE_DEVICE;
+                    return TransType.CLOSE_DEVICE;
                 } else if (unitType.equals(UnitType.STORE.name())) {
-                    return TransactionType.CLOSE_BUSINESS_UNIT;
+                    return TransType.CLOSE_BUSINESS_UNIT;
                 }
             }
         }

@@ -5,8 +5,8 @@ import java.util.Date;
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Table;
 
-@Table(name="transaction")
-public class TransactionModel extends TransactionEntity {
+@Table(name="trans")
+public class TransModel extends AbstractTransModel {
 
     @Column
     private String transType;

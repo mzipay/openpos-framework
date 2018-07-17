@@ -4,9 +4,9 @@ import java.util.Date;
 
 import org.jumpmind.pos.context.service.ContextService;
 import org.jumpmind.pos.service.Endpoint;
-import org.jumpmind.pos.trans.model.TransactionModel;
-import org.jumpmind.pos.trans.model.TransactionRepository;
-import org.jumpmind.pos.trans.model.TransactionStatus;
+import org.jumpmind.pos.trans.model.TransModel;
+import org.jumpmind.pos.trans.model.TransRepository;
+import org.jumpmind.pos.trans.model.TransStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,26 +16,26 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateTransEndpoint {
 
     @Autowired
-    TransactionRepository repository;
+    TransRepository repository;
     
     @Autowired
     ContextService contextService;
     
     @Autowired
-    SaveTransactionQueueEndpoint saveTransactionQueueEndpoint;
+    SaveTransQueueEndpoint saveTransactionQueueEndpoint;
     
     @Endpoint("/transaction/create")
     public CreateTransResult createTransaction(CreateTransRequest request) {
         long sequenceNumber = contextService.getNextSequence("TRANSACTION");
-        TransactionModel transaction = new TransactionModel();
+        TransModel transaction = new TransModel();
         transaction.setSequenceNumber(sequenceNumber);
         transaction.setBusinessDate(request.getBusinessDate());
         transaction.setBusinessUnitId(request.getBusinessUnitId());
         transaction.setDeviceId(request.getDeviceId());
         transaction.setTransType(request.getTransType());
-        transaction.setTransStatus(TransactionStatus.IN_PROGRESS.name());
+        transaction.setTransStatus(TransStatus.IN_PROGRESS.name());
         transaction.setBeginTime(new Date());
-        saveTransactionQueueEndpoint.save(transaction);
+        saveTransactionQueueEndpoint.aSyncSave(transaction);
         return new CreateTransResult(transaction);
     }
 }

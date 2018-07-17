@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/trans")
-public class TransactionService {
+public class TransService {
 
     @Autowired
-    SaveTransactionQueueEndpoint saveTransactionQueueEndpoint;
+    SaveTransQueueEndpoint saveTransactionQueueEndpoint;
     
     @Autowired
     private EndpointDispatcher endpointDispatcher;
@@ -26,7 +26,7 @@ public class TransactionService {
     
     @RequestMapping(value="/transactionqueue", method=RequestMethod.POST)
     public void saveTransactionQueue(SaveTransRequest request) {
-        saveTransactionQueueEndpoint.save(request.getTransaction());
+        saveTransactionQueueEndpoint.aSyncSave(request.getTransaction());
     }
 
     

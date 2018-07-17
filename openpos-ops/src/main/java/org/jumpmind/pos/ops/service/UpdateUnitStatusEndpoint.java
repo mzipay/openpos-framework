@@ -4,10 +4,10 @@ import org.jumpmind.pos.context.service.ContextService;
 import org.jumpmind.pos.ops.model.UnitStatusModel;
 import org.jumpmind.pos.ops.model.UnitStatusRepository;
 import org.jumpmind.pos.service.Endpoint;
-import org.jumpmind.pos.trans.model.TransactionModel;
+import org.jumpmind.pos.trans.model.TransModel;
 import org.jumpmind.pos.trans.service.CreateTransRequest;
 import org.jumpmind.pos.trans.service.SaveTransRequest;
-import org.jumpmind.pos.trans.service.TransactionService;
+import org.jumpmind.pos.trans.service.TransService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ public class UpdateUnitStatusEndpoint {
     ContextService contextService;
 
     @Autowired
-    TransactionService transService;
+    TransService transService;
 
     @Endpoint("/updateUnitStatus")
     public StatusChangeResult updateUnitStatus(StatusChangeRequest request) {
@@ -36,7 +36,7 @@ public class UpdateUnitStatusEndpoint {
         status.setUnitType(request.getUnitType());
         status.setUnitId(request.getUnitId());
 
-        TransactionModel transaction = transService.createTransaction(new CreateTransRequest(request.getBusinessDay(),
+        TransModel transaction = transService.createTransaction(new CreateTransRequest(request.getBusinessDay(),
                 request.getRequestingDeviceId(), request.getBusinessUnitId(), status.toTransactionType().name())).getTransaction();
         
         status.setSequenceNumber(transaction.getSequenceNumber());
