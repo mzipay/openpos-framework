@@ -17,8 +17,8 @@ export class SelectionListComponent extends PosScreen<any> {
       super();
   }
 
+
   buildScreen() {
-    this.screen = screen;
     this.listConfig = new SelectableItemListComponentConfiguration<any>();
     if (this.screen.multiSelect) {
       this.listConfig.selectionMode = SelectionMode.Multiple;

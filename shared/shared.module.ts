@@ -41,7 +41,8 @@ import {
     FabToggleGroupComponent,
     PopTartComponent,
     NavListComponent,
-    FileViewerComponent
+    FileViewerComponent,
+    NumberSpinnerComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe } from './pipes';
@@ -62,7 +63,8 @@ const components = [
     FabToggleGroupComponent,
     PopTartComponent,
     NavListComponent,
-    FileViewerComponent
+    FileViewerComponent,
+    NumberSpinnerComponent,
 ]
 
 const directives = [

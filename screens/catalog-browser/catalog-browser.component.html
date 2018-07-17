@@ -1,6 +1,5 @@
 <div fxFlex="1 1 auto" style="padding:16px;overflow-y:auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
-    <!-- <mat-card fxFlex class="page-content-card min-height lighter" fxLayout="column" fxLayoutAlign="start"> -->
-    <mat-card fxLayout="column">
+    <mat-card fxLayout="column" class="browser-card">
         <mat-card-title fxFlex="0 0 auto" class="text-md" fxLayoutAlign="start">
             <button mat-icon-button (click)="drawer.toggle()">
                 <mat-icon>menu</mat-icon>
@@ -10,39 +9,38 @@
     
         <mat-card-content fxFlex="1 1 auto" fxLayoutAlign="start" class="page-content-card scrollable-content-card" fxLayout="column">
             <mat-drawer-container fxFlex="1 1 auto">
-                        
-                <mat-drawer #drawer position="start" [mode]="drawerMode | async"  fxLayout="column" fxLayoutAlign="start stretch"
-                    fxLayoutGap="4px" style="overflow-x:hidden;padding-bottom:20px">
-                    <p>Filter by:</p>
-                    <button mat-button color="primary" *ngFor="let c of categories" style="text-align: left">
-                    <!-- app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon> -->
-                    <span>&nbsp;{{c}}</span>
+                <mat-drawer #drawer position="start" mode="push"  fxLayout="column" fxLayoutAlign="start stretch"
+                    fxLayoutGap="4px" class="filter-drawer">
+                    <p class="bold-text text-sm">Filter:</p>
+                    <button mat-button color="primary" *ngFor="let c of categories" style="text-align: left" (click)="onCategorySelected(c, $event)">
+                        <span>&nbsp;{{c.title}}</span>
                     </button>
-
-                    </mat-drawer>
-                <mat-drawer-content  fxFlex="1 1 auto" class="scrollable">
-                    <mat-grid-list cols="5">
-
-                        <mat-grid-tile *ngFor="let item of items">
-                            <mat-card>
-                                <mat-card-content>
-                                    <img *ngIf="item.menuItems[0] && item.menuItems[0].title==='url'" src="{{item.menuItems[0].url}}" style="max-width: 150px; max-height: 300px" ><p>{{item.posItemId}}: {{item.description}}</p>
-                                </mat-card-content>
-                            </mat-card>
-                        </mat-grid-tile>
-                    </mat-grid-list>
+                </mat-drawer>
+                <mat-drawer-content  fxFlex="1 1 auto" fxLayout="column">
+                    <div fxLayout="row" fxLayoutAlign="center center" class="quantity-area">
+                        <label *ngIf="selectedItemQuantity.label" class="text-sm bold-text">{{selectedItemQuantity.label}}&nbsp;</label>
+                        <app-number-spinner [(ngModel)]="selectedItemQuantity.value" [min]="selectedItemQuantity.min" [max]="selectedItemQuantity.max" 
+                           [maxlength]="(selectedItemQuantity.max + '').length" autoSelectOnFocus></app-number-spinner>
+                    </div> 
+                    <div class="grid-wrapper">
+                        <mat-grid-list cols="5" rowHeight="9:10">
+                            <mat-grid-tile *ngFor="let item of items">
+                                <mat-card class="item-card">
+                                    <mat-card-content fxLayoutAlign="center center" fxLayout="column">
+                                        <button mat-button (click)="onItemSelected(item)" class="line-spacing-sm" >
+                                            <div class="text-xs" style="overflow-wrap: break-word">{{item.posItemId}}</div>
+                                            <img *ngIf="item.menuItems[0] && item.menuItems[0].title==='url'" class="item-img" src="{{item.menuItems[0].url}}"  alt="{{item.posItemId}}" >
+                                            <div class="text-xs" style="overflow-wrap: break-word">{{item.description}}</div>
+                                        </button>
+                                    </mat-card-content>
+                                </mat-card>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                    </div>
                 </mat-drawer-content>
             </mat-drawer-container>
-            <mat-paginator #paginator [length]="totalItems" [pageSize]="maxItemsPerPage" [pageSizeOptions]="[5, 10, 15]">
-
+            <mat-paginator #paginator class="paginator" [length]="totalItems" [pageSize]="maxItemsPerPage" [pageSizeOptions]="[5, 10, 15]" (page)="onPageEvent($event)">
             </mat-paginator>
         </mat-card-content>
     </mat-card>
 </div>
-<!-- 
-<mat-card *ngFor="let item of items">
-    <mat-card-content>
-        <img *ngIf="item.menuItems[0] && item.menuItems[0].title==='url'" src="{{item.menuItems[0].url}}" style="max-width: 150px; max-height: 300px" ><p>{{item.posItemId}}: {{item.description}}</p>
-    </mat-card-content>
-</mat-card>
--->
