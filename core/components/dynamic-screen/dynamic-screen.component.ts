@@ -154,7 +154,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     @HostListener('document:keydown', ['$event'])
     handleKeydownEvent(event: any) { 
-    let key = event.key;
+        let key = event.key;
+        console.log('key ' + key)
         if ((key === 'Shift' || key === 'Alt' || key === 'd' || key === 'D') && this.keyCount === 0) {
             this.keyCount = 1;
         } else if ((key === 'Shift' || key === 'Alt' || key === 'd' || key === 'D') && this.keyCount === 1) {
@@ -182,7 +183,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         let x = event.clientX;
         let y = event.clientY;
         if (event.type === 'touchstart') {
-            console.log(event);
+            // console.log(event);
             x = event.changedTouches[0].pageX;
             y = event.changedTouches[0].pageY;
         }
@@ -198,11 +199,11 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
 
         if (y < 200 && x < 200 ) {
-            this.devClicks = ++this.devClicks;
-        } else if ( (y < 200 && x > screenWidth - 200) && this.devClicks === 1) {
-            this.devClicks = ++this.devClicks;
-        } else if ( (y > screenHeight - 200 && x > screenWidth - 200) && this.devClicks === 2) {
-            this.devClicks == ++this.devClicks;
+            this.devClicks = 1;
+        } else if ( (y < 200 && x > screenWidth - 200) && (this.devClicks === 1 || this.devClicks === 2)) {
+            this.devClicks = 2;
+        } else if ( (y > screenHeight - 200 && x > screenWidth - 200) && (this.devClicks === 2 || this.devClicks === 3)) {
+            this.devClicks = 3;
         } else if ( (y > screenHeight - 200 && x < 200) && this.devClicks === 3) {
             this.onDevMenuClick();
             this.devClicks = 0;
@@ -210,10 +211,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             this.devClicks = 0;
         }
 
-        // if (this.clickCount === 5) {
-        //     this.onDevMenuClick();
-        //     this.clickCount = 0;
-        // }
+        // console.log(this.devClicks + " y="+y + ",x="+x+",h="+screenHeight+",w="+screenWidth);
+
     }
 
     protected onStackTraceClose() {
