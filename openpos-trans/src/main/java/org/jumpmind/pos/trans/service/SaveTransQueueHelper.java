@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
-public class SaveTransQueueEndpoint {
+public class SaveTransQueueHelper {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -28,7 +28,7 @@ public class SaveTransQueueEndpoint {
 
     ObjectMapper mapper;
 
-    public SaveTransQueueEndpoint() {
+    public SaveTransQueueHelper() {
         mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         dateFormat.setTimeZone(TimeZone.getDefault());

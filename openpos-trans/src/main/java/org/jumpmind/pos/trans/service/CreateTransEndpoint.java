@@ -22,7 +22,7 @@ public class CreateTransEndpoint {
     ContextService contextService;
     
     @Autowired
-    SaveTransQueueEndpoint saveTransactionQueueEndpoint;
+    SaveTransQueueHelper saveTransactionQueueEndpoint;
     
     @Endpoint("/transaction/create")
     public CreateTransResult createTransaction(CreateTransRequest request) {

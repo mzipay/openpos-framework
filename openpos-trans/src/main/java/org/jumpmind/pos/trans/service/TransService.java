@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransService {
 
     @Autowired
-    SaveTransQueueEndpoint saveTransactionQueueEndpoint;
+    SaveTransQueueHelper saveTransactionQueueEndpoint;
     
     @Autowired
     private EndpointDispatcher endpointDispatcher;

@@ -19,7 +19,7 @@ public class FinalizeTransEndpoint {
     TransRepository repository;
     
     @Autowired
-    SaveTransQueueEndpoint saveTransactionQueueEndpoint;
+    SaveTransQueueHelper saveTransactionQueueEndpoint;
 
     @Endpoint("/transaction/finalize")
     public ServiceResult saveTransaction(SaveTransRequest request) {
