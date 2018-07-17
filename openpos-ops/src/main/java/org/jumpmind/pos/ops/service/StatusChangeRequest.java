@@ -11,8 +11,9 @@ public class StatusChangeRequest implements Serializable {
     String unitId;
     String newStatus;
     String requestingDeviceId;
-    String businessDay;
+    String businessDate;
     String businessUnitId;
+    String username;
     Date timeOfRequest = new Date();
 
     public String getUnitType() {
@@ -47,12 +48,12 @@ public class StatusChangeRequest implements Serializable {
         this.requestingDeviceId = requestingDeviceId;
     }
 
-    public String getBusinessDay() {
-        return businessDay;
+    public String getBusinessDate() {
+        return businessDate;
     }
 
-    public void setBusinessDay(String businessDay) {
-        this.businessDay = businessDay;
+    public void setBusinessDate(String businessDay) {
+        this.businessDate = businessDay;
     }
     
     public void setBusinessUnitId(String businessUnitId) {
@@ -67,9 +68,16 @@ public class StatusChangeRequest implements Serializable {
         this.timeOfRequest = dateOfRequest;
     }
     
-
     public Date getTimeOfRequest() {
         return timeOfRequest;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getUsername() {
+        return username;
     }
 
 }

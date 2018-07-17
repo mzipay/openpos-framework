@@ -215,7 +215,6 @@ public class DemoTransactionService {
     }
 
     public BigDecimal parse(String numberAsString) {
-        String numberAsStringSansSeperator = numberAsString.replaceAll(",", "");
         try {
             return new BigDecimal(numberAsString);        
         } catch (Exception ex) {

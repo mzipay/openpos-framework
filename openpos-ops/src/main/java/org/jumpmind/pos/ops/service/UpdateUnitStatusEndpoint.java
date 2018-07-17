@@ -28,7 +28,7 @@ public class UpdateUnitStatusEndpoint {
     @Endpoint("/updateUnitStatus")
     public StatusChangeResult updateUnitStatus(StatusChangeRequest request) {
         UnitStatusModel status = new UnitStatusModel();
-        status.setBusinessDate(request.getBusinessDay());
+        status.setBusinessDate(request.getBusinessDate());
         status.setBusinessUnitId(request.getBusinessUnitId());
         status.setCreateTime(request.getTimeOfRequest());
         status.setUnitStatus(request.getNewStatus());
@@ -36,8 +36,8 @@ public class UpdateUnitStatusEndpoint {
         status.setUnitType(request.getUnitType());
         status.setUnitId(request.getUnitId());
 
-        TransModel transaction = transService.createTransaction(new CreateTransRequest(request.getBusinessDay(),
-                request.getRequestingDeviceId(), request.getBusinessUnitId(), status.toTransactionType().name())).getTransaction();
+        TransModel transaction = transService.createTransaction(new CreateTransRequest(request.getBusinessDate(),
+                request.getRequestingDeviceId(), request.getBusinessUnitId(), status.toTransactionType().name(), request.getUsername())).getTransaction();
         
         status.setSequenceNumber(transaction.getSequenceNumber());
 

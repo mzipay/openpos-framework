@@ -13,15 +13,18 @@ public class CreateTransRequest implements Serializable {
     private String businessUnitId;
 
     private String transType;
+    
+    private String username;
 
     public CreateTransRequest() {
     }
 
-    public CreateTransRequest(String businessDate, String deviceId, String businessUnitId, String transType) {
+    public CreateTransRequest(String businessDate, String deviceId, String businessUnitId, String transType, String username) {
         this.businessDate = businessDate;
         this.deviceId = deviceId;
         this.businessUnitId = businessUnitId;
         this.transType = transType;
+        this.username = username;
     }
 
     public String getBusinessDate() {
@@ -54,6 +57,14 @@ public class CreateTransRequest implements Serializable {
 
     public void setTransType(String transType) {
         this.transType = transType;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getUsername() {
+        return username;
     }
 
 }

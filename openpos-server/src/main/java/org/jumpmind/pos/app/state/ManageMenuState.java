@@ -26,11 +26,14 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.In;
+import org.jumpmind.pos.core.flow.InOut;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.screen.HomeScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.ops.service.OpsServiceClient;
+import org.jumpmind.pos.trans.model.BusinessDate;
+import org.jumpmind.pos.user.model.UserModel;
 
 @StatePermission(permissionId = "manage.menu")
 public class ManageMenuState extends AbstractState implements IState {
@@ -39,6 +42,12 @@ public class ManageMenuState extends AbstractState implements IState {
 
     @In(scope = ScopeType.Node)
     OpsServiceClient opsServiceClient;
+    
+    @In(scope = ScopeType.Session)
+    UserModel currentUser;
+    
+    @InOut(scope = ScopeType.Session)
+    BusinessDate businessDate;
 
     @Override
     public void arrive(Action action) {
@@ -83,25 +92,28 @@ public class ManageMenuState extends AbstractState implements IState {
 
     @ActionHandler
     public void onOpenStore(Action action) {
-        this.opsServiceClient.openStore();
+        // TODO - prompt for business date in the future
+        BusinessDate date = new BusinessDate();
+        this.opsServiceClient.openStore(currentUser, date);
+        this.businessDate = date;
         stateManager.showScreen(buildScreen());
     }
 
     @ActionHandler
     public void onCloseStore(Action action) {
-        this.opsServiceClient.closeStore();
+        this.opsServiceClient.closeStore(currentUser, businessDate);
         stateManager.showScreen(buildScreen());
     }
     
     @ActionHandler
     public void onOpenDevice(Action action) {
-        this.opsServiceClient.openDevice();
+        this.opsServiceClient.openDevice(currentUser, businessDate);
         stateManager.showScreen(buildScreen());
     }
 
     @ActionHandler
     public void onCloseDevice(Action action) {
-        this.opsServiceClient.closeDevice();
+        this.opsServiceClient.closeDevice(currentUser, businessDate);
         stateManager.showScreen(buildScreen());
     }
     
