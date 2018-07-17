@@ -52,6 +52,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     logsAvailable = false;
 
+    keyCount = 0;
 
     savePointFileName: string;
 
@@ -149,6 +150,21 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     ngOnDestroy(): void {
         this.session.unsubscribe();
+    }
+
+    @HostListener('document:keypress', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent) { 
+    let key = event.key;
+    console.log(event.key);
+
+        if (key === 'd') {
+            this.keyCount = 1;
+        } else if (key === 'e' && this.keyCount === 1) {
+            this.keyCount = 2;
+        } else if (key === 'v' && this.keyCount === 2) {
+            this.keyCount = 0;
+            this.onDevMenuClick();
+        }
     }
 
     @HostListener('document:click', ['$event'])
