@@ -152,18 +152,26 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.session.unsubscribe();
     }
 
-    @HostListener('document:keypress', ['$event'])
-    handleKeyboardEvent(event: KeyboardEvent) { 
+    @HostListener('document:keydown', ['$event'])
+    handleKeydownEvent(event: any) { 
     let key = event.key;
-    console.log(event.key);
-
-        if (key === 'd') {
+        if ((key === 'Shift' || key === 'Alt' || key === 'd' || key === 'D') && this.keyCount === 0) {
             this.keyCount = 1;
-        } else if (key === 'e' && this.keyCount === 1) {
+        } else if ((key === 'Shift' || key === 'Alt' || key === 'd' || key === 'D') && this.keyCount === 1) {
             this.keyCount = 2;
-        } else if (key === 'v' && this.keyCount === 2) {
+        } else if ((key === 'Shift' || key === 'Alt' || key === 'd' || key === 'D') && this.keyCount === 2) {
             this.keyCount = 0;
             this.onDevMenuClick();
+        } else {
+            this.keyCount = 0;
+        }
+    }
+
+    @HostListener('document:keyup', ['$event'])
+    handleKeyupEvent(event: any) { 
+        let key = event.key;
+        if (key === 'Shift' || key === 'Alt' || key === 'd' || key === 'D') {
+            this.keyCount = 0;
         }
     }
 
