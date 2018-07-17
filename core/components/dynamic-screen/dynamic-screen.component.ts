@@ -155,11 +155,11 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     @HostListener('document:keydown', ['$event'])
     handleKeydownEvent(event: any) { 
     let key = event.key;
-        if ((key === 'Shift' || key === 'Alt' || key === 'd' || key === 'D') && this.keyCount === 0) {
+        if ((key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') && this.keyCount === 0) {
             this.keyCount = 1;
-        } else if ((key === 'Shift' || key === 'Alt' || key === 'd' || key === 'D') && this.keyCount === 1) {
+        } else if ((key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') && this.keyCount === 1) {
             this.keyCount = 2;
-        } else if ((key === 'Shift' || key === 'Alt' || key === 'd' || key === 'D') && this.keyCount === 2) {
+        } else if ((key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') && this.keyCount === 2) {
             this.keyCount = 0;
             this.onDevMenuClick();
         } else {
@@ -170,7 +170,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     @HostListener('document:keyup', ['$event'])
     handleKeyupEvent(event: any) { 
         let key = event.key;
-        if (key === 'Shift' || key === 'Alt' || key === 'd' || key === 'D') {
+        if (key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') {
             this.keyCount = 0;
         }
     }
