@@ -142,9 +142,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.session.obsStateClass$.subscribe(currentStateClass => this.currentStateClass = currentStateClass);
         this.session.obsStateActions$.subscribe(currentStateActions => this.currentStateActions = currentStateActions);
         this.session.obsSave$.subscribe(savePoints => this.savePoints = savePoints);
-        this.myPanel.expandedChange.subscribe((data) => {
-            this.matIcon = data ? 'keyboard_arrow_up' : 'keyboard_arrow_down';
-        });
+        
     }
 
 
@@ -155,25 +153,50 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     @HostListener('document:keydown', ['$event'])
     handleKeydownEvent(event: any) { 
     let key = event.key;
-        if ((key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') && this.keyCount === 0) {
+    // console.log(key);
+        if (key === 'ArrowUp' && this.keyCount != 1) {
             this.keyCount = 1;
-        } else if ((key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') && this.keyCount === 1) {
+        } else if (key === 'ArrowUp' && this.keyCount === 1) {
             this.keyCount = 2;
-        } else if ((key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') && this.keyCount === 2) {
-            this.keyCount = 0;
+        } else if (key === 'ArrowDown' && this.keyCount === 2) {
+            this.keyCount = 3;
+        } else if (key === 'ArrowDown' && this.keyCount === 3) {
+            this.keyCount = 4;
+        } else if (key === 'ArrowLeft' && this.keyCount === 4) {
+            this.keyCount = 5;
+        }   else if (key === 'ArrowRight' && this.keyCount === 5) {
+            this.keyCount = 6;
+        } else if (key === 'ArrowLeft' && this.keyCount === 6) {
+            this.keyCount = 7;
+        } else if (key === 'ArrowRight' && this.keyCount === 7) {
+            this.keyCount = 8;
+        } else if ((key === 'b' || key === 'B') && this.keyCount === 8) {
+            this.keyCount = 9;
+        } else if ((key === 'a' || key === 'A') && this.keyCount === 9) {
             this.onDevMenuClick();
+            this.keyCount = 0;
         } else {
             this.keyCount = 0;
         }
+        // if ((key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') && this.keyCount === 0) {
+        //     this.keyCount = 1;
+        // } else if ((key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') && this.keyCount === 1) {
+        //     this.keyCount = 2;
+        // } else if ((key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') && this.keyCount === 2) {
+        //     this.keyCount = 0;
+        //     this.onDevMenuClick();
+        // } else {
+        //     this.keyCount = 0;
+        // }
     }
 
-    @HostListener('document:keyup', ['$event'])
-    handleKeyupEvent(event: any) { 
-        let key = event.key;
-        if (key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') {
-            this.keyCount = 0;
-        }
-    }
+    // @HostListener('document:keyup', ['$event'])
+    // handleKeyupEvent(event: any) { 
+    //     let key = event.key;
+    //     if (key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') {
+    //         this.keyCount = 0;
+    //     }
+    // }
 
     @HostListener('document:click', ['$event'])
     documentClick(event: any) {
