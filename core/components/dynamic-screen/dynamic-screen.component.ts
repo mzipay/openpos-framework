@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
 import { Component, ViewChild, HostListener, ComponentRef, OnDestroy, OnInit, ComponentFactory } from '@angular/core';
-import { MatDialog, MatDialogRef, MatSnackBar,  MatSnackBarRef, SimpleSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar,  MatSnackBarRef, SimpleSnackBar, MatExpansionPanel } from '@angular/material';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { AbstractTemplate } from '../abstract-template';
@@ -41,6 +41,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     firstClickTime = Date.now();
 
     clickCount = 0;
+
+    devClicks = 0;
 
     logFilenames: string[];
 
@@ -98,6 +100,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     private disableDevMenu = false;
 
     @ViewChild(TemplateDirective) host: TemplateDirective;
+    @ViewChild('myPanel') myPanel: MatExpansionPanel;
+    matIcon = 'keyboard_arrow_down' || 'keyboard_arrow_up';
 
     screen: any;
     private lastSequenceNum: number;
@@ -137,7 +141,9 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.session.obsStateClass$.subscribe(currentStateClass => this.currentStateClass = currentStateClass);
         this.session.obsStateActions$.subscribe(currentStateActions => this.currentStateActions = currentStateActions);
         this.session.obsSave$.subscribe(savePoints => this.savePoints = savePoints);
-
+        this.myPanel.expandedChange.subscribe((data) => {
+            this.matIcon = data ? 'keyboard_arrow_up' : 'keyboard_arrow_down';
+        });
     }
 
 
@@ -148,6 +154,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     @HostListener('document:click', ['$event'])
     documentClick(event: any) {
         const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
         let x = event.clientX;
         let y = event.clientY;
         if (event.type === 'touchstart') {
@@ -166,11 +173,32 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             this.clickCount = ++this.clickCount;
         }
 
-        if (this.clickCount === 5) {
+        if (y < 200 && x < 200 ) {
+            this.devClicks = ++this.devClicks;
+        } else if ( (y < 200 && x > screenWidth - 200) && this.devClicks === 1) {
+            this.devClicks = ++this.devClicks;
+        } else if ( (y > screenHeight - 200 && x > screenWidth - 200) && this.devClicks === 2) {
+            this.devClicks == ++this.devClicks;
+        } else if ( (y > screenHeight - 200 && x < 200) && this.devClicks === 3) {
             this.onDevMenuClick();
-            this.clickCount = 0;
+            this.devClicks = 0;
+        } else {
+            this.devClicks = 0;
         }
+
+        // if (this.clickCount === 5) {
+        //     this.onDevMenuClick();
+        //     this.clickCount = 0;
+        // }
     }
+
+    protected onStackTraceClose() {
+        this.displayStackTrace = false;
+    }
+
+    expandPannel() {
+        this.myPanel.expanded = !this.myPanel.expanded;
+      }
 
     protected onDevMenuClick(): void {
         if (!this.showDevMenu) {
