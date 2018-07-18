@@ -4,4 +4,6 @@ export interface IMenuItem {
     title: string;
     icon: string;
     confirmationMessage: string;
+    buttonSize: string;
+    fontSize: string;
 }
