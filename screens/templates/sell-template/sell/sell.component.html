@@ -2,12 +2,8 @@
     <app-statusbar fxFlex="0 1 auto" [data]="statusBar"></app-statusbar>
     <div fxFlex="1 1 auto" style="padding:16px;overflow-y:auto" fxLayout="column" fxLayoutAlign="start"
         fxLayoutGap="16px">
-        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-            <app-scan-something fxFlex="1 1 auto" class="mat-elevation-z3" *ngIf="template.scan" 
-            [scanSomethingData]="template.scan"></app-scan-something>
-            <div *ngIf="screen.type === 'Transaction'" fxHide.xs fxFlex="0 1 auto" class="text-center">{{time|date:'MM/dd/yyyy'}}
-                <br>{{time|date:'shortTime'}}</div>
-        </div>
+        <app-scan-something class="mat-elevation-z3" *ngIf="template.scan" 
+        [scanSomethingData]="template.scan"></app-scan-something>
         <mat-card fxFlex class="page-content-card min-height lighter" fxLayout="column" fxLayoutAlign="start">
             <mat-card-title fxFlex="0 0 auto" class="text-md">
                 <ng-container *ngIf="template.transactionMenuItems?.length > 0; else prompt">
@@ -25,7 +21,6 @@
                 <ng-template #prompt>
                     <span fxFlexAlign="center" [ngClass]="{'warn bold-text':screen.customerFacing}">{{screen.prompt}}</span>
                 </ng-template>
-
                 <span fxFlex="1 1 auto"></span>
                 <span *ngIf="template && template.localMenuItems && template.localMenuItems.length">
                     <button mat-icon-button (click)="drawer.toggle()">
@@ -37,21 +32,24 @@
             <mat-card-content fxFlex="1 1 auto">
                 <mat-drawer-container fxFlex="1 1 auto">
                         <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async" fxLayout="column" fxLayoutAlign="start stretch"
-                            fxLayoutGap="4px" style="overflow-x:hidden;padding-bottom:20px">
-                            <button mat-button color="primary" *ngFor="let m of template.localMenuItems" (click)="doMenuItemAction(m)" style="text-align: left"
+                            fxLayoutGap="4px" style="overflow-x:hidden">
+                             <button mat-button color="primary" *ngFor="let m of template.localMenuItems" (click)="doMenuItemAction(m)" style="text-align: left"
                                 [disabled]="!isMenuItemEnabled(m)">
                                 <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
                                 <span [ngClass]="{'muted-color': ! m.enabled}">&nbsp;{{m.title}}</span>
                             </button>
                             <div fxFlex="1 1 auto"></div>
-                            <ng-container *ngIf="!screen.hideCustomer">
+                             <ng-container *ngIf="!screen.hideCustomer">
                                 <app-sell-linked-customer [screenType]="screen.type" [customerName]="screen.customerName" [noCustomerText]="screen.noCustomerText"></app-sell-linked-customer>
                             </ng-container>
                             <div *ngIf="screen.type === 'Transaction'" fxFlex="0 1 auto" class="sell-screen-logo"></div>
-                        </mat-drawer>
-                        <mat-drawer-content  fxFlex="1 1 auto">
-                            <ng-template appScreen></ng-template>
-                        </mat-drawer-content>
+                         </mat-drawer>
+                        <mat-drawer-content fxFlex="1 1 auto" fxLayout="column">
+                            <div fxFlex="stretch">
+                                <ng-template appScreen></ng-template>
+                            </div>
+                            <app-sell-status-section fxFlex="0 1 auto" [data]="statusSection"></app-sell-status-section>
+                         </mat-drawer-content>
                     </mat-drawer-container>
             </mat-card-content>
         </mat-card>

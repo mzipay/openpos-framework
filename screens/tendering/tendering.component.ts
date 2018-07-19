@@ -8,7 +8,7 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
     selector: 'app-tendering',
     templateUrl: './tendering.component.html'
   })
-  export class TenderingComponent extends PosScreen<any> implements AfterViewInit, OnDestroy{
+  export class TenderingComponent extends PosScreen<any> implements AfterViewInit, OnDestroy {
 
     @ViewChild('tenderAmountField') tenderAmountField: MatInput;
 
