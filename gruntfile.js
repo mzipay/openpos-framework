@@ -18,7 +18,8 @@ module.exports = function(grunt) {
                     src: [
                         '**/*',
                         '!**/node_modules/**',
-                        '!gruntfile.js'
+                        '!gruntfile.js',
+                        '!tslint.json'
                     ], 
                     dest: 
                     '.dist/'
