@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SellStatusSectionData } from './sell-status-section.data';
 import { timer } from 'rxjs'
+import { Configuration } from '../../../../configuration/configuration';
 
 @Component({
     selector: 'app-sell-status-section',
@@ -22,7 +23,10 @@ import { timer } from 'rxjs'
             }
             this.date = Date.now();
         });
-        
+    }
+
+    showRegisterStatus(): boolean {
+        return this.data.registerStatus && Configuration.showRegisterStatus;
     }
 
   }

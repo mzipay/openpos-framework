@@ -3,7 +3,7 @@
         {{date|date:'MM/dd/yyyy hh:mm:ss a'}}
     </div>
     <div>
-        <span *ngIf="data.registerStatus" [ngClass]="{'success':data.registerStatus === 'Online', 'warn':data.registerStatus === 'Offline'}">
+        <span *ngIf="showRegisterStatus()" [ngClass]="{'success':data.registerStatus === 'Online', 'warn':data.registerStatus === 'Offline'}">
             {{data.registerStatus}}
         </span>
         <span *ngIf="data.timestampBegin">

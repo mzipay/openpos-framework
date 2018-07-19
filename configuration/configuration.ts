@@ -2,5 +2,6 @@ export const Configuration = {
     mimicScroll: false,
     useOnScreenKeyboard: false,
     useTouchListener: true,
-    useSavePoints: true
+    useSavePoints: true,
+    showRegisterStatus: false
 };
