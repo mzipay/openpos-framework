@@ -21,6 +21,7 @@ public class SellTemplate extends AbstractTemplate {
     
     private Workstation workstation;
     private String operatorText;
+    private String registerStatus;
 
     public SellTemplate() {
         super("Sell");
@@ -98,6 +99,14 @@ public class SellTemplate extends AbstractTemplate {
 
     public void setWorkstation(Workstation workstation) {
         this.workstation = workstation;
+    }
+
+    public String getRegisterStatus() {
+        return registerStatus;
+    }
+
+    public void setRegisterStatus(String registerStatus) {
+        this.registerStatus = registerStatus;
     }       
 
 }

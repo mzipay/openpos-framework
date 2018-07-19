@@ -148,6 +148,13 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                 operatorText = posSessionInfo.getOperatorLoginId();
             }
             template.setOperatorText(WordUtils.capitalizeFully(operatorText));
+            
+            ILegacyStatusBeanModel statusModel = legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);
+            if( statusModel.isOnline() ) {
+                template.setRegisterStatus("Online");
+            } else {
+                template.setRegisterStatus("Offline");
+            }
         }
     }
 
