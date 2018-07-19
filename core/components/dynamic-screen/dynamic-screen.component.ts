@@ -124,8 +124,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit(): void {
-
-
         const self = this;
         
         this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
@@ -137,7 +135,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.session.obsSess$.subscribe(SessElements => this.SessElements = SessElements);
         this.session.obsConv$.subscribe(ConvElements => this.ConvElements = ConvElements);
         this.session.obsConf$.subscribe(ConfElements => this.ConfElements = ConfElements);
-        this.session.obsConf$.subscribe(FlowElements => this.FlowElements = FlowElements);
+        this.session.obsFlow$.subscribe(FlowElements => this.FlowElements = FlowElements);
         this.session.obsState$.subscribe(currentState => this.currentState = currentState);
         this.session.obsStateClass$.subscribe(currentStateClass => this.currentStateClass = currentStateClass);
         this.session.obsStateActions$.subscribe(currentStateActions => this.currentStateActions = currentStateActions);
