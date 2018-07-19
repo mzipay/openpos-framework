@@ -4,6 +4,7 @@ public enum FieldInputType {
     AlphanumericPassword,
     /** Allows alphabetic characters, numeric characters, and special characters */
     AlphanumericText,
+    GiftCode,
     NumericText,
     Checkbox,
     ComboBox,
