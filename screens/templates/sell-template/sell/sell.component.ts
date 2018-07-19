@@ -6,6 +6,7 @@ import { SessionService, AbstractTemplate, IMenuItem } from '../../../../core';
 import { StatusBarData } from '../../../status-bar/status-bar-data';
 import { SellScreenUtils, ISellScreen } from './sell-screen.interface';
 import { ISellTemplate } from './sell-template.interface';
+import { SellStatusSectionData } from '../sell-status-section/sell-status-section.data';
 
 @Component({
   selector: 'app-sell',
@@ -17,13 +18,12 @@ export class SellComponent extends AbstractTemplate {
   template: ISellTemplate;
   screen: ISellScreen;
   statusBar: StatusBarData;
+  statusSection: SellStatusSectionData;
 
   @ViewChild('drawer') drawer;
   public drawerOpen: Observable<boolean>;
 
   public drawerMode: Observable<string>;
-
-  public time = Date.now();
 
   constructor(public session: SessionService, private observableMedia: ObservableMedia) {
     super();
@@ -34,6 +34,7 @@ export class SellComponent extends AbstractTemplate {
     this.screen = screen;
     this.template = screen.template;
     this.statusBar = SellScreenUtils.getStatusBar(screen);
+    this.statusSection = SellScreenUtils.getStatusSection(this.template);
     if (this.template.localMenuItems.length > 0) {
         this.initializeDrawerMediaSizeHandling();
       } else {

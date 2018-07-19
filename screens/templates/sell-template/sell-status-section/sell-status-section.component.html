@@ -1,0 +1,13 @@
+<div fxFlex="1 1 auto" *ngIf="data" fxLayoutAlign="space-between" style="padding-top:5px" class="muted-color text-sm">
+    <div>
+        {{date|date:'MM/dd/yyyy hh:mm:ss a'}}
+    </div>
+    <div>
+        <span *ngIf="showRegisterStatus()" [ngClass]="{'success':data.registerStatus === 'Online', 'warn':data.registerStatus === 'Offline'}">
+            {{data.registerStatus}}
+        </span>
+        <span *ngIf="data.timestampBegin">
+            {{timer|hourminsec}}
+        </span>
+    </div>
+</div>

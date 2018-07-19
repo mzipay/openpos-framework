@@ -3,10 +3,10 @@ import { SessionService, IMenuItem, ISellItem } from '../../../core';
 
 
 @Component({
-  selector: 'app-checkout-list-item',
-  templateUrl: './checkout-list-item.component.html',
+  selector: 'app-item-card',
+  templateUrl: './item-card.component.html',
 })
-export class CheckoutListItemComponent {
+export class ItemCardComponent {
 
   @Input() item: ISellItem;
   @Input() session: SessionService;

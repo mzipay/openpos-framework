@@ -52,6 +52,7 @@ import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/mult
 import { VersionComponent } from './version/version.component';
 import { ScreenConstants } from './screen.constants';
 import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
+import { SellStatusSectionComponent } from './templates/sell-template/sell-status-section/sell-status-section.component';
 
 const screens = [
     BasicItemSearchComponent,
@@ -103,6 +104,7 @@ const templates = [
     BlankWithBarComponent,
     SellComponent,
     SellLinkedCustomerComponent,
+    SellStatusSectionComponent
 ]
 
 const components = [

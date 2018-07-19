@@ -272,6 +272,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.showDevMenu = !this.showDevMenu;
     }
 
+    protected useSavePoints(): boolean {
+        return Configuration.useSavePoints;
+    }
+
     protected onDevMenuRefresh() {
         console.log("refreshing tools... ")
         this.displayStackTrace = false;

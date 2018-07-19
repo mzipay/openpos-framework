@@ -41,14 +41,18 @@ module.exports = function(grunt) {
                 cwd: '.dist',
                 cmd: 'rm -rf node_modules'
             }
-        }
+        },
+        clean: {
+            node_modules: ['.dist/node_modules']
+          }
       });
        
       grunt.loadNpmTasks('grunt-sync');
       grunt.loadNpmTasks('grunt-contrib-watch');
       grunt.loadNpmTasks('grunt-exec');
+      grunt.loadNpmTasks('grunt-contrib-clean');
 
-      grunt.registerTask('default', ['sync', 'exec:link', 'exec:prune', 'watch']);
+      grunt.registerTask('default', ['sync', 'exec:link', 'clean:node_modules', 'watch']);
       grunt.registerTask('sync-files', ['sync']);
   
   };
