@@ -1,6 +1,5 @@
 <div fxFlex="1 1 auto" style="padding:16px;overflow-y:auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
-    <!-- <mat-card fxFlex class="page-content-card min-height lighter" fxLayout="column" fxLayoutAlign="start"> -->
-    <mat-card fxLayout="column">
+    <mat-card fxLayout="column" class="browser-card">
         <mat-card-title fxFlex="0 0 auto" class="text-md" fxLayoutAlign="start">
             <button mat-icon-button (click)="drawer.toggle()">
                 <mat-icon>menu</mat-icon>
@@ -11,7 +10,7 @@
         <mat-card-content fxFlex="1 1 auto" fxLayoutAlign="start" class="page-content-card scrollable-content-card" fxLayout="column">
             <mat-drawer-container fxFlex="1 1 auto">
                 <mat-drawer #drawer position="start" mode="push"  fxLayout="column" fxLayoutAlign="start stretch"
-                    fxLayoutGap="4px" style="overflow-x:hidden;padding-bottom:20px; padding-left: 5px">
+                    fxLayoutGap="4px" class="filter-drawer">
                     <p class="bold-text text-sm">Filter:</p>
                     <button mat-button color="primary" *ngFor="let c of categories" style="text-align: left" (click)="onCategorySelected(c, $event)">
                         <span>&nbsp;{{c.title}}</span>
@@ -30,7 +29,7 @@
                                     <mat-card-content fxLayoutAlign="center center" fxLayout="column">
                                         <button mat-button (click)="onItemSelected(item)" class="line-spacing-sm" >
                                             <div class="text-xs" style="overflow-wrap: break-word">{{item.posItemId}}</div>
-                                            <img *ngIf="item.menuItems[0] && item.menuItems[0].title==='url'" src="{{item.menuItems[0].url}}"  alt="{{item.posItemId}}" >
+                                            <img *ngIf="item.menuItems[0] && item.menuItems[0].title==='url'" class="item-img" src="{{item.menuItems[0].url}}"  alt="{{item.posItemId}}" >
                                             <div class="text-xs" style="overflow-wrap: break-word">{{item.description}}</div>
                                         </button>
                                     </mat-card-content>
@@ -40,7 +39,7 @@
                     </div>
                 </mat-drawer-content>
             </mat-drawer-container>
-            <mat-paginator #paginator [length]="totalItems" [pageSize]="maxItemsPerPage" [pageSizeOptions]="[5, 10, 15]" (page)="onPageEvent($event)">
+            <mat-paginator #paginator class="paginator" [length]="totalItems" [pageSize]="maxItemsPerPage" [pageSizeOptions]="[5, 10, 15]" (page)="onPageEvent($event)">
             </mat-paginator>
         </mat-card-content>
     </mat-card>

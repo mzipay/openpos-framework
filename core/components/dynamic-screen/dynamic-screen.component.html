@@ -7,9 +7,32 @@
         <div *ngIf="showDevMenu">
            
             <mat-expansion-panel class="devMenuPanel">
-                <mat-expansion-panel-header (click)="onDevMenuRefresh()">
+                    <mat-expansion-panel-header (click)="onDevMenuRefresh()">
+                            <mat-panel-description fxLayout="row" fxFlex fxLayoutAlign="start center" fxLayoutGap="10px">
+                              <div fxFlex="none" fxLayout = "row" fxLayoutAlign="left center">
+                              Developer Tools
+                              </div>
+                      
+                            <!-- <div class="actions" fxLayout fxFlex="20">
+                                    <button  mat-icon-button color="primary" (click)="expandPannel()" [disableRipple]="true">
+                                            <mat-icon>{{matIcon}}</mat-icon>
+                                    </button>
+                            </div> -->
+                      
+                            <div fxFlex=""></div>
+                      
+                            <div fxFlex="nogrow" fxLayoutAlign="right center">
+                              <button mat-icon-button color="primary"  (click)="onDevMenuClick()">
+                                  <mat-icon>close</mat-icon>
+                              </button>
+                            </div>
+                      
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                <!-- <mat-expansion-panel-header (click)="onDevMenuRefresh()">
+                    
                   Developer Tools
-                </mat-expansion-panel-header>
+                </mat-expansion-panel-header> -->
                 <mat-tab-group dynamicHeight>
                     <mat-tab label="State">
                     <div  class="stateTab" >
@@ -225,7 +248,17 @@
                         </div>
                         <div *ngIf="displayStackTrace" class="stacktrace">
                             <mat-card>
-                                <mat-card-title>Origin of: {{selected}}</mat-card-title>
+                                <mat-card-title>
+                                        <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
+                                                Origin of: {{selected}}
+                                        </div>
+                                        <div fxFlex=""></div>
+                                        <div fxFlex="nogrow" fxLayoutAlign="right center">
+                                            <button mat-icon-button (click)="onStackTraceClose()">
+                                                <mat-icon aria-label="delete">close</mat-icon>
+                                            </button>
+                                        </div>
+                                </mat-card-title>
                                 <mat-card-content [style.height.px]="'400'" class="stacktrace-content">
                                     {{stackTrace}}
                                 </mat-card-content>
@@ -296,7 +329,7 @@
                 </mat-tab-group>
                 
                 <mat-action-row>
-                    <div fxFlexFill fxLayout="row" fxLayoutAlign="left start" fxLayoutAlign.xs="left">
+                    <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
                         <mat-form-field appearance="standard">
                             <input matInput #newSavePoint
                             (keyup.enter)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''"
@@ -307,7 +340,15 @@
                                 </button>
                             </mat-icon>
                         </mat-form-field>
-                    </div>
+                        </div>
+                    <div fxFlex=""></div>
+                    <!-- <div fxFlex="nogrow" fxLayoutAlign="right center">
+                        <button mat-raised-button color="primary" (click)="onDevMenuClick()">
+                                Close Tools
+                        </button>
+                    </div> -->
+                    
+                    
                 </mat-action-row>
             </mat-expansion-panel>   
         </div> 

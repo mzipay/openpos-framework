@@ -3,7 +3,7 @@
     margin-bottom: 5px;
 }
 
-img {
+.item-img {
     max-width:100%;
     max-height:100%;
 }
@@ -17,19 +17,30 @@ img {
     height: 475px;
 }
 
-mat-card {
+.filter-drawer {
+    overflow-x:hidden;
+    padding-bottom:20px; 
+    padding-left: 5px
+}
+
+.item-card {
     padding: 4px;
     margin: 5px;
 }
 
-mat-paginator {
-    font-size: 16px;
+.browser-card {
+    padding: 4px;
+    margin: 5px;
 }
 
+.paginator {
+    font-size: 16px;
+}
+// Increase font size on paginator components
 ::ng-deep .mat-select-value-text {
     font-size: 16px;
 }
-
+// Increase font size on paginator components
 ::ng-deep .mat-option-text {
     font-size: 16px;
 }
