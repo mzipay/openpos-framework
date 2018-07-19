@@ -330,6 +330,12 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
     }
 
+    protected onSimulateScan(value: string) {
+        if (value) {
+            this.session.onAction('DevTools::Scan', value);
+        }
+    }
+
     protected onCreateSavePoint(newSavePoint: string) {
         if (newSavePoint) {
             this.session.addSaveFile(newSavePoint);
