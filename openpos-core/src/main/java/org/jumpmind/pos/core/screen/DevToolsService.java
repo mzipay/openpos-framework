@@ -16,11 +16,14 @@ import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.ScopeValue;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
+import org.jumpmind.pos.core.javapos.SimulatedScannerService;
 import org.jumpmind.pos.core.service.IScreenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import jpos.events.DataEvent;
 
 @Component
 public class DevToolsService {
@@ -49,6 +52,12 @@ public class DevToolsService {
         if (action.getName().contains("::Save")) {
             String saveName = action.getName().substring(16);
             saveState(stateManager, saveName);
+        } else if (action.getName().contains("DevTools::Scan")) {
+            SimulatedScannerService service = SimulatedScannerService.instance;
+            if (service != null) {
+                service.setScanData(((String)action.getData()).getBytes());
+                service.getCallbacks().fireDataEvent(new DataEvent(this, 1));
+            }
         } else if (action.getName().contains("DevTools::Load")) {
             String saveName = action.getName().substring(16);
             loadState(stateManager, saveName);

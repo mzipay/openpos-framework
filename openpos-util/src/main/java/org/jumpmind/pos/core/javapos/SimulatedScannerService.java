@@ -13,6 +13,13 @@ public class SimulatedScannerService extends AbstractSimulatedService implements
     private boolean decodeData;
     private String healthCheckText;
     private byte[] scanData;
+    
+    public static SimulatedScannerService instance;
+    
+    
+    public SimulatedScannerService() {
+        this.instance = this;
+    }
 
     @Override
     public void reset() {
