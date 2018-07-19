@@ -14,7 +14,7 @@
 	<span fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
 		<mat-icon *ngIf="data && data.operatorText"  class="material-icons">lock_open</mat-icon>
 		<span *ngIf="data && data.operatorText"  class="text-sm" fxHide.xs>
-			{{data.operatorText}}&nbsp;on Register&nbsp;#{{data.workstationId}}
+			{{data.operatorText}}&nbsp;on &nbsp;#{{data.workstationId}}-{{data.storeId}}
 		</span>
 		<button mat-icon-button *ngIf="data && data.logoutButton && data.screenType != 'Home'"
 			(click)="doMenuItemAction(data.logoutButton)" [disabled]="!isMenuItemEnabled(data.logoutButton)">

@@ -2,6 +2,7 @@ import { IMenuItem, ISellItem } from '../../../../core';
 import { StatusBarData } from '../../../status-bar/status-bar-data';
 import { SelfCheckoutStatusBarData } from '../../../../self-checkout/self-checkout-statusbar/self-checkout-status-bar-data';
 import { ISellTemplate } from './sell-template.interface';
+import { SellStatusSectionData } from '../sell-status-section/sell-status-section.data';
 
 export interface ISellScreen {
     name: string;
@@ -36,9 +37,21 @@ export class SellScreenUtils {
         statusBar.screenType = screen.type;
         if (screen.template.workstation) {
             statusBar.workstationId = screen.template.workstation.workstationId;
+            statusBar.storeId = screen.template.workstation.storeId;
         }
 
         return statusBar;
+    }
+
+    public static getStatusSection(template: ISellTemplate): SellStatusSectionData {
+        const statusSection = new SellStatusSectionData();
+
+        statusSection.registerNumber = template.workstation.workstationId;
+        statusSection.registerStatus = template.registerStatus;
+        statusSection.storeNumber = template.workstation.storeId;
+        statusSection.timestampBegin = template.timestampBegin;
+        
+        return statusSection;
     }
 
     public static getSelfCheckoutStatusBar(screen: ISellScreen): SelfCheckoutStatusBarData {

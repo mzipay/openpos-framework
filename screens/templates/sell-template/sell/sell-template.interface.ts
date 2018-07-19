@@ -8,6 +8,8 @@ export interface ISellTemplate {
     transactionMenuItems: IMenuItem[];
     workstation: IWorkStation;
     operatorText: string;
+    timestampBegin: number;
+    registerStatus: string;
 }
 
 export interface IScan {

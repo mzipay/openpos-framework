@@ -1,4 +1,4 @@
 export interface IWorkStation {
-    storeId: String;
-    workstationId: String;
+    storeId: string;
+    workstationId: string;
 }
