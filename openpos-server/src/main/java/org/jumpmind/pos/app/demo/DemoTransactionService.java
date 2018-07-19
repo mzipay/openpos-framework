@@ -18,7 +18,7 @@ import org.jumpmind.pos.core.screen.TenderItem;
 import org.jumpmind.pos.core.screen.TenderingScreen;
 import org.jumpmind.pos.core.template.Scan;
 import org.jumpmind.pos.core.template.SellTemplate;
-import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +42,7 @@ public class DemoTransactionService {
         FORMATTER.setGroupingUsed(true);
     }
 
-    public DemoTransaction startTransaction(User user, String nodeId) {
+    public DemoTransaction startTransaction(UserModel user, String nodeId) {
         DemoTransaction transaction = new DemoTransaction();
         transaction.getTransaction().setTransactionNumber(String.valueOf(transactionSequence.getAndIncrement()));
         transaction.getWorkstation().setWorkstationId(nodeId);
@@ -215,7 +215,6 @@ public class DemoTransactionService {
     }
 
     public BigDecimal parse(String numberAsString) {
-        String numberAsStringSansSeperator = numberAsString.replaceAll(",", "");
         try {
             return new BigDecimal(numberAsString);        
         } catch (Exception ex) {

@@ -7,6 +7,7 @@ INSERT INTO USR_WORKGROUP (workgroup_id, description, create_time, create_by, la
 
 INSERT INTO USR_PERMISSION (permission_id, create_time, create_by, last_update_by) VALUES ('sell.*', current_timestamp, 'test', 'test');
 INSERT INTO USR_PERMISSION (permission_id, create_time, create_by, last_update_by) VALUES ('sell.main', current_timestamp, 'test', 'test');
+INSERT INTO USR_PERMISSION (permission_id, create_time, create_by, last_update_by) VALUES ('manage.menu', current_timestamp, 'test', 'test');
 INSERT INTO USR_PERMISSION (permission_id, create_time, create_by, last_update_by) VALUES ('sell.none', current_timestamp, 'test', 'test');
 INSERT INTO USR_PERMISSION (permission_id, create_time, create_by, last_update_by) VALUES ('sellxmain', current_timestamp, 'test', 'test');
 INSERT INTO USR_PERMISSION (permission_id, create_time, create_by, last_update_by) VALUES ('sell.customer_search', current_timestamp, 'test', 'test');
@@ -14,6 +15,7 @@ INSERT INTO USR_PERMISSION (permission_id, create_time, create_by, last_update_b
 
 INSERT INTO USR_WORKGROUP_PERMISSION (workgroup_id, permission_id, create_time, create_by, last_update_by) VALUES ('1', 'sell.main', current_timestamp, 'test', 'test');
 INSERT INTO USR_WORKGROUP_PERMISSION (workgroup_id, permission_id, create_time, create_by, last_update_by) VALUES ('1', 'sell.customer_search', current_timestamp, 'test', 'test');
+INSERT INTO USR_WORKGROUP_PERMISSION (workgroup_id, permission_id, create_time, create_by, last_update_by) VALUES ('1', 'manage.menu', current_timestamp, 'test', 'test');
 INSERT INTO USR_WORKGROUP_PERMISSION (workgroup_id, permission_id, create_time, create_by, last_update_by) VALUES ('2', 'sell.main', current_timestamp, 'test', 'test');
 INSERT INTO USR_WORKGROUP_PERMISSION (workgroup_id, permission_id, create_time, create_by, last_update_by) VALUES ('3', 'sell.none', current_timestamp, 'test', 'test');
 INSERT INTO USR_WORKGROUP_PERMISSION (workgroup_id, permission_id, create_time, create_by, last_update_by) VALUES ('3', 'sellxmain', current_timestamp, 'test', 'test');

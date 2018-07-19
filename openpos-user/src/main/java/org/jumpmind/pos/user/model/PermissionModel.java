@@ -4,8 +4,8 @@ import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
-@Table(description = "A table that associates workgroups with resources and specifies their access level.")
-public class Permission extends Entity {
+@Table(name="permission", description = "A table that associates workgroups with resources and specifies their access level.")
+public class PermissionModel extends Entity {
 
     @Column(primaryKey=true,
             description = "e.g. sell.apply.discount OR sell.*")

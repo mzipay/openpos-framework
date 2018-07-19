@@ -13,6 +13,14 @@ public class TransactionSummary implements Serializable {
     String grandTotal;
 
     String workstationId;
+    
+    String storeNumber;
+    
+    String location;
+    
+    String transactionDate;
+    
+    int numberUnitsSold;
 
     public TransactionSummary() {
     }
@@ -54,6 +62,38 @@ public class TransactionSummary implements Serializable {
 
     public void setGrandTotal(String grandTotal) {
         this.grandTotal = grandTotal;
+    }
+    
+    public String getStoreNumber() {
+        return storeNumber;
+    }
+    
+    public void setStoreNumber(String storeNumber) {
+        this.storeNumber = storeNumber;
+    }
+    
+    public String getLocation() {
+        return location;
+    }
+    
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    
+    public String getTransactionDate() {
+        return transactionDate;
+    }
+    
+    public void setTransactionDate(String transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+    
+    public int getNumberUnitsSold() {
+        return numberUnitsSold;
+    }
+    
+    public void setNumberUnitsSold(int numberUnitsSold) {
+        this.numberUnitsSold = numberUnitsSold;
     }
 
 }

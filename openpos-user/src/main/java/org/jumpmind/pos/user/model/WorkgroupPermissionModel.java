@@ -4,8 +4,8 @@ import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
-@Table
-public class WorkgroupPermission extends Entity {
+@Table(name="workgroup_permission")
+public class WorkgroupPermissionModel extends Entity {
 
     @Column(primaryKey=true)
     private String workgroupId;

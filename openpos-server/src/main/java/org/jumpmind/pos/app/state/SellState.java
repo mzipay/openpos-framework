@@ -12,7 +12,7 @@ import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.InOut;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.screen.SellItemScreen;
-import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @StatePermission(permissionId = "sell.main")
@@ -23,7 +23,7 @@ public class SellState implements IState {
     IStateManager stateManager;
     
     @In(scope=ScopeType.Session)
-    private User currentUser;    
+    private UserModel currentUser;    
     
     @Autowired
     DemoTransactionService demoTransactionService;

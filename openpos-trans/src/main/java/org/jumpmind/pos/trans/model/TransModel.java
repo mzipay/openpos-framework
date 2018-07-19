@@ -5,14 +5,14 @@ import java.util.Date;
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Table;
 
-@Table
-public class Transaction extends TransactionEntity {
+@Table(name="trans")
+public class TransModel extends AbstractTransModel {
 
     @Column
-    private int transType;
+    private String transType;
 
     @Column
-    private int transStatus;
+    private String transStatus;
 
     @Column
     private String businessUnitId;
@@ -26,19 +26,19 @@ public class Transaction extends TransactionEntity {
     @Column
     private Date endTime;
 
-    public int getTransType() {
+    public String getTransType() {
         return transType;
     }
 
-    public void setTransType(int transType) {
+    public void setTransType(String transType) {
         this.transType = transType;
     }
 
-    public int getTransStatus() {
+    public String getTransStatus() {
         return transStatus;
     }
 
-    public void setTransStatus(int transStatus) {
+    public void setTransStatus(String transStatus) {
         this.transStatus = transStatus;
     }
 

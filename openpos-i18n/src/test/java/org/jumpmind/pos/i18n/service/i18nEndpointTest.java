@@ -6,7 +6,7 @@ import java.util.Locale;
 import org.jumpmind.pos.i18n.service.i18nEndpoint;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.cars.TestPersistCarsConfig;
-import org.jumpmind.pos.i18n.model.Resource;
+import org.jumpmind.pos.i18n.model.ResourceModel;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -849,7 +849,7 @@ public class i18nEndpointTest {
 	@Test
 	public void getStringDatabaseNoOverlapTest () {
  
-            Resource resource = new Resource();
+            ResourceModel resource = new ResourceModel();
             resource.setBaseName("common");
             resource.setLocale(Locale.US.toString());
             resource.setBrand("Target");
@@ -871,7 +871,7 @@ public class i18nEndpointTest {
 	@Test
 	public void getStringDatabaseNoBrandTest () {
 		  
-            Resource resource = new Resource();
+            ResourceModel resource = new ResourceModel();
             resource.setBaseName("common");
             resource.setLocale(Locale.US.toString());
             resource.setBrand("*");
@@ -893,7 +893,7 @@ public class i18nEndpointTest {
 	@Test
 	public void getStringDatabaseOverlapTest () {
 		
-            Resource resource = new Resource();
+            ResourceModel resource = new ResourceModel();
             resource.setBaseName("common");
             resource.setLocale(Locale.US.toString());
             resource.setBrand("*");
@@ -915,7 +915,7 @@ public class i18nEndpointTest {
 	@Test 
 	public void getStringDatabaseMultiLocaleTest () {
 		  
-            Resource resource = new Resource();
+            ResourceModel resource = new ResourceModel();
             resource.setBaseName("common");
             resource.setLocale(Locale.US.toString());
             resource.setBrand("*");
@@ -924,7 +924,7 @@ public class i18nEndpointTest {
             
             dbSession.save(resource);
             
-            Resource resource1 = new Resource();
+            ResourceModel resource1 = new ResourceModel();
             resource1.setBaseName("common");
             resource1.setLocale(Locale.FRANCE.toString());
             resource1.setBrand("*");
@@ -949,7 +949,7 @@ public class i18nEndpointTest {
 	@Test
 	public void getStringDatabaseBrandOverrideTest () {
 		
-	            Resource resource1 = new Resource();
+	            ResourceModel resource1 = new ResourceModel();
 	            resource1.setBaseName("common");
 	            resource1.setLocale(Locale.US.toString());
 	            resource1.setBrand("*");
@@ -958,7 +958,7 @@ public class i18nEndpointTest {
 	            
 	            dbSession.save(resource1);
 	            
-	            Resource resource = new Resource();
+	            ResourceModel resource = new ResourceModel();
 	            resource.setBaseName("common");
 	            resource.setLocale(Locale.US.toString());
 	            resource.setBrand("Target");
@@ -983,7 +983,7 @@ public class i18nEndpointTest {
 	@Test 
 	public void getStringDatabaseFormatTest () {
 			
-	            Resource resource = new Resource();
+	            ResourceModel resource = new ResourceModel();
 	            resource.setBaseName("common");
 	            resource.setLocale(Locale.US.toString());
 	            resource.setBrand("*");
@@ -1012,7 +1012,7 @@ public class i18nEndpointTest {
 		@Test
 		public void getStringDatabaseFormatBadPatternTest () {
 			
-	            Resource resource = new Resource();
+	            ResourceModel resource = new ResourceModel();
 	            resource.setBaseName("common");
 	            resource.setLocale(Locale.US.toString());
 	            resource.setBrand("*");

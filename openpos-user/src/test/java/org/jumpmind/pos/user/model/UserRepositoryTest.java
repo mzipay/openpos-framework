@@ -31,20 +31,20 @@ public class UserRepositoryTest {
 		
     	/* Workgroup Mappings */
     	
-		Workgroup workgroup = new Workgroup();
+		WorkgroupModel workgroup = new WorkgroupModel();
 		workgroup.setDescription("Retail");
 		workgroup.setWorkgroupId("1");
 		dbSession.save(workgroup);
 		{
-			WorkgroupPermission wp = new WorkgroupPermission();
+			WorkgroupPermissionModel wp = new WorkgroupPermissionModel();
 			wp.setWorkgroupId("1");
 			wp.setPermissionId("take_inventory");
 		
-			WorkgroupPermission wp1 = new WorkgroupPermission();
+			WorkgroupPermissionModel wp1 = new WorkgroupPermissionModel();
 			wp1.setWorkgroupId("1");
 			wp1.setPermissionId("use_till");
 		
-			WorkgroupPermission wp2 = new WorkgroupPermission();
+			WorkgroupPermissionModel wp2 = new WorkgroupPermissionModel();
 			wp2.setWorkgroupId("1");
 			wp2.setPermissionId("clock_out");
 			
@@ -53,20 +53,20 @@ public class UserRepositoryTest {
         	dbSession.save(wp2);
 		}
 	
-		Workgroup workgroup1 = new Workgroup();
+		WorkgroupModel workgroup1 = new WorkgroupModel();
         workgroup1.setDescription("Management");
         workgroup1.setWorkgroupId("2");
         dbSession.save(workgroup1);
         {   	
-        	WorkgroupPermission wp3 = new WorkgroupPermission();
+        	WorkgroupPermissionModel wp3 = new WorkgroupPermissionModel();
         	wp3.setWorkgroupId("2");
         	wp3.setPermissionId("use_till");
 		
-        	WorkgroupPermission wp4 = new WorkgroupPermission();
+        	WorkgroupPermissionModel wp4 = new WorkgroupPermissionModel();
         	wp4.setWorkgroupId("2");
         	wp4.setPermissionId("apply_discounts");
 		
-        	WorkgroupPermission wp5 = new WorkgroupPermission();
+        	WorkgroupPermissionModel wp5 = new WorkgroupPermissionModel();
         	wp5.setWorkgroupId("2");
         	wp5.setPermissionId("return_items");
         	
@@ -75,7 +75,7 @@ public class UserRepositoryTest {
         	dbSession.save(wp5);
         }
         
-        Workgroup workgroup2 = new Workgroup();
+        WorkgroupModel workgroup2 = new WorkgroupModel();
         workgroup2.setDescription("This workgroup has no permissions.");
         workgroup2.setWorkgroupId("No perm");
         dbSession.save(workgroup2);
@@ -85,23 +85,23 @@ public class UserRepositoryTest {
         
         /* Permissions */
         {
-        	Permission permission = new Permission();
+        	PermissionModel permission = new PermissionModel();
         	permission.setPermissionId("take_inventory");
         	dbSession.save(permission);
         
-        	Permission permission1 = new Permission();
+        	PermissionModel permission1 = new PermissionModel();
         	permission1.setPermissionId("use_till");
         	dbSession.save(permission1);
         
-        	Permission permission2 = new Permission();
+        	PermissionModel permission2 = new PermissionModel();
         	permission2.setPermissionId("clock_out");
         	dbSession.save(permission2);
         
-        	Permission permission3 = new Permission();
+        	PermissionModel permission3 = new PermissionModel();
         	permission3.setPermissionId("apply_discounts");
         	dbSession.save(permission3);
         
-        	Permission permission4 = new Permission();
+        	PermissionModel permission4 = new PermissionModel();
         	permission4.setPermissionId("return_items");
         	dbSession.save(permission4);
         }
@@ -109,32 +109,32 @@ public class UserRepositoryTest {
         
         /* Users */
         {
-        	User user = new User();
+        	UserModel user = new UserModel();
         	user.setUsername("Clerk");
         	user.setWorkgroupId("1");
         	dbSession.save(user);
         	
-        	User user1 = new User();
+        	UserModel user1 = new UserModel();
         	user1.setUsername("Salesman");
         	user1.setWorkgroupId("1");
         	dbSession.save(user1);
         
-        	User user2 = new User();
+        	UserModel user2 = new UserModel();
         	user2.setUsername("Store Manager");
         	user2.setWorkgroupId("2");
         	dbSession.save(user2);
         	
-        	User user3 = new User();
+        	UserModel user3 = new UserModel();
         	user3.setUsername("General Manager");
         	user3.setWorkgroupId("2");
         	dbSession.save(user3);   
         	
-        	User user4 = new User();
+        	UserModel user4 = new UserModel();
         	user4.setUsername("No Workplace");
         	user4.setWorkgroupId("none");
         	dbSession.save(user4);  
         	
-        	User user5 = new User();
+        	UserModel user5 = new UserModel();
         	user5.setUsername("No Permissions");
         	user5.setWorkgroupId("No perm");
         	dbSession.save(user5);
@@ -143,42 +143,42 @@ public class UserRepositoryTest {
     
     @Test
     public void findUserRetailTest () {
-    	User salesman = userRepository.findUser("Salesman");
+    	UserModel salesman = userRepository.findUser("Salesman");
     	assertEquals(salesman.getUsername(), "Salesman");
     	assertEquals(salesman.getWorkgroup().getDescription(), "Retail");
-    	List<Permission> permissions = salesman.getWorkgroup().getPermissions();
-    	for (Permission permission : permissions) {
+    	List<PermissionModel> permissions = salesman.getWorkgroup().getPermissions();
+    	for (PermissionModel permission : permissions) {
 			assertTrue(permission.getPermissionId().matches("take_inventory|use_till|clock_out"));
 		}
     }
     
     @Test
     public void findUserManagementTest () {
-    	User manager = userRepository.findUser("General Manager");
+    	UserModel manager = userRepository.findUser("General Manager");
     	assertEquals(manager.getUsername(), "General Manager");
     	assertEquals(manager.getWorkgroup().getDescription(), "Management");
-    	List<Permission> permissions = manager.getWorkgroup().getPermissions();
-    	for (Permission permission : permissions) {
+    	List<PermissionModel> permissions = manager.getWorkgroup().getPermissions();
+    	for (PermissionModel permission : permissions) {
 			assertTrue(permission.getPermissionId().matches("return_items|apply_discounts|use_till"));
 		}
     }
     
     @Test
     public void findUserNoUserTest () {
-    	User salesman = userRepository.findUser("invalid");
+    	UserModel salesman = userRepository.findUser("invalid");
     	assertTrue(salesman == null);
     }
     
     @Test
     public void findUserNoWorkplaceTest () {
-    	User salesman = userRepository.findUser("No Workplace");
+    	UserModel salesman = userRepository.findUser("No Workplace");
     	assertEquals(salesman.getUsername(), "No Workplace");
     	assertTrue(salesman.getWorkgroup().getDescription() == null);
     }
     
     @Test
     public void findUserNoPermissionsTest () {
-    	User salesman = userRepository.findUser("No Permissions");
+    	UserModel salesman = userRepository.findUser("No Permissions");
     	assertEquals(salesman.getUsername(), "No Permissions");
     	assertEquals(salesman.getWorkgroup().getDescription(), "This workgroup has no permissions.");
     	assertTrue(salesman.getWorkgroup().getPermissions() == null);

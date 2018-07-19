@@ -8,9 +8,9 @@ import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
-@Table(
+@Table(name="user",
         description = "Security Identifier granting and denying access to the systems of the retail enterprise, and recorded upon the transaction originating from those systems.")
-public class User extends Entity {
+public class UserModel extends Entity {
 
     @Column(primaryKey = true)
     protected String username;
@@ -45,9 +45,9 @@ public class User extends Entity {
     @Column
     protected String workgroupId;
 
-    protected List<PasswordHistory> passwordHistory = new ArrayList<>();
+    protected List<PasswordHistoryModel> passwordHistory = new ArrayList<>();
     
-    protected Workgroup workgroup = new Workgroup();
+    protected WorkgroupModel workgroup = new WorkgroupModel();
 
     public String getUsername() {
         return username;
@@ -81,15 +81,15 @@ public class User extends Entity {
         this.nickname = nickname;
     }
 
-    public List<PasswordHistory> getPasswordHistory() {
+    public List<PasswordHistoryModel> getPasswordHistory() {
         return passwordHistory;
     }
 
-    public void setPasswordHistory(List<PasswordHistory> passwordHistory) {
+    public void setPasswordHistory(List<PasswordHistoryModel> passwordHistory) {
         this.passwordHistory = passwordHistory;
     }
 
-    public void addPasswordHistory(PasswordHistory passwordHistoryEntry) {
+    public void addPasswordHistory(PasswordHistoryModel passwordHistoryEntry) {
         passwordHistoryEntry.setUsername(this.getUsername());
         passwordHistoryEntry.setPasswordSequence(passwordHistory.size() + 1);
         passwordHistory.add(passwordHistoryEntry);
@@ -151,11 +151,11 @@ public class User extends Entity {
         return workgroupId;
     }
     
-    public void setWorkgroup(Workgroup workgroup) {
+    public void setWorkgroup(WorkgroupModel workgroup) {
         this.workgroup = workgroup;
     }
     
-    public Workgroup getWorkgroup() {
+    public WorkgroupModel getWorkgroup() {
         return workgroup;
     }
 }

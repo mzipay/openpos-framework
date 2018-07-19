@@ -8,10 +8,13 @@ import org.jumpmind.pos.core.flow.ActionHandler;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.ITransitionStep;
 import org.jumpmind.pos.core.flow.In;
+import org.jumpmind.pos.core.flow.InOut;
 import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.flow.Transition;
 import org.jumpmind.pos.ops.service.OpsService;
 import org.jumpmind.pos.ops.service.OpsServiceClient;
+import org.jumpmind.pos.trans.model.BusinessDate;
+import org.jumpmind.pos.user.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -31,6 +34,12 @@ public class OpenStoreStep implements ITransitionStep {
 
     @In(scope = ScopeType.Node)
     OpsServiceClient opsServiceClient;
+    
+    @In(scope = ScopeType.Session)
+    UserModel currentUser;
+    
+    @InOut(scope = ScopeType.Session)
+    BusinessDate businessDate;
 
     Transition transition;
 
@@ -39,7 +48,8 @@ public class OpenStoreStep implements ITransitionStep {
         this.transition = transition;
         Class<?> targetClass = transition.getTargetState().getClass();
         Requires requires = targetClass.getAnnotation(Requires.class);
-        return requires != null && isPrerequisite(requires, Prerequisite.OPEN_STORE) && !opsServiceClient.isStoreOpen();
+        this.businessDate = opsServiceClient.getCurrentBusinessDate();
+        return requires != null && isPrerequisite(requires, Prerequisite.OPEN_STORE) && this.businessDate == null;
     }
 
     @Override
@@ -60,7 +70,10 @@ public class OpenStoreStep implements ITransitionStep {
 
     @ActionHandler
     public void onOpenStore(Action action) {
-        this.opsServiceClient.openStore();
+        // TODO - prompt for business date in the future
+        BusinessDate date = new BusinessDate();
+        this.opsServiceClient.openStore(currentUser, date);
+        this.businessDate = date;
         this.transition.proceed();
     }
 

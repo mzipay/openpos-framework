@@ -34,6 +34,20 @@ public class MenuItem implements IUIAction, Serializable {
     private String confirmationMessage;
     private List<MenuItem> children;
     private boolean sensitive;
+    private String buttonSize;
+    private String fontSize;
+
+    public final static String FONT_SIZE_XS = "text-xs";
+    public final static String FONT_SIZE_SM = "text-sm";
+    public final static String FONT_SIZE_MD = "text-md";
+    public final static String FONT_SIZE_LG = "text-lg";
+    public final static String FONT_SIZE_XL = "text-xl";
+
+    public final static String BUTTON_SIZE_XS = "menuItem-xs";
+    public final static String BUTTON_SIZE_SM = "menuItem-sm";
+    public final static String BUTTON_SIZE_MD = "menuItem-md";
+    public final static String BUTTON_SIZE_LG = "menuItem-lg";
+    public final static String BUTTON_SIZE_XL = "menuItem-xl";
     
     public MenuItem() {
     }
@@ -175,4 +189,21 @@ public class MenuItem implements IUIAction, Serializable {
         this.setSensitive(sensitive);
         return this;
     }
+
+    public String getButtonSize() {
+        return buttonSize;
+    }
+
+    public void setButtonSize(String buttonSize) {
+        this.buttonSize = buttonSize;
+    }
+
+    public String getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(String fontSize) {
+        this.fontSize = fontSize;
+    }
+    
 }

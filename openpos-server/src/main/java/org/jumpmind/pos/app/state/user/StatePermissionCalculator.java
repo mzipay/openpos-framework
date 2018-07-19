@@ -2,21 +2,21 @@ package org.jumpmind.pos.app.state.user;
 
 import java.util.List;
 
-import org.jumpmind.pos.user.model.Permission;
-import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.PermissionModel;
+import org.jumpmind.pos.user.model.UserModel;
 import org.springframework.stereotype.Component;
 
 @Component
 public class StatePermissionCalculator {
 
-    public boolean isUserPrivileged(User user, StatePermission statePermission) {
+    public boolean isUserPrivileged(UserModel user, StatePermission statePermission) {
         boolean privilege = false;
         if (statePermission == null) {
             privilege = true;
         } else if (user != null && user.getWorkgroup() != null) {
-            List<Permission> permissions = user.getWorkgroup().getPermissions();
+            List<PermissionModel> permissions = user.getWorkgroup().getPermissions();
             if (permissions != null) {
-                for (Permission p : permissions) {
+                for (PermissionModel p : permissions) {
                     if (isSufficientPermission(statePermission.permissionId(), p.getPermissionId())) {
                         privilege = true;
                         break;

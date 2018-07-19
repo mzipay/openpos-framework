@@ -8,28 +8,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
-import org.jumpmind.pos.user.model.User;
-import org.jumpmind.pos.user.model.Permission;
-import org.jumpmind.pos.user.model.Workgroup;
+import org.jumpmind.pos.user.model.UserModel;
+import org.jumpmind.pos.user.model.PermissionModel;
+import org.jumpmind.pos.user.model.WorkgroupModel;
 
 @Repository
 @DependsOn(value = { "UserModule" })
 public class UserRepository {
 
-    private Query<PasswordHistory> passwordHistoryLookup = new Query<PasswordHistory>().named("passwordHistoryLookup")
-            .result(PasswordHistory.class);
+    private Query<PasswordHistoryModel> passwordHistoryLookup = new Query<PasswordHistoryModel>().named("passwordHistoryLookup")
+            .result(PasswordHistoryModel.class);
     
-    private Query<Permission> workgroupPermissionsLookup = new Query<Permission>().named("workgroupPermissionsLookup")
-    		.result(Permission.class);
+    private Query<PermissionModel> workgroupPermissionsLookup = new Query<PermissionModel>().named("workgroupPermissionsLookup")
+    		.result(PermissionModel.class);
     
     @Autowired
     @Lazy
     private DBSession userSession;
 
-    public User findUser(String userName) {
-        User userLookedUp = userSession.findByNaturalId(User.class, userName);
+    public UserModel findUser(String userName) {
+        UserModel userLookedUp = userSession.findByNaturalId(UserModel.class, userName);
         if (userLookedUp != null) {
-            List<PasswordHistory> passwordHistory = userSession.query(passwordHistoryLookup, userLookedUp.getUsername());
+            List<PasswordHistoryModel> passwordHistory = userSession.query(passwordHistoryLookup, userLookedUp.getUsername());
             if (passwordHistory != null) {
                 userLookedUp.setPasswordHistory(passwordHistory);
             }
@@ -38,8 +38,8 @@ public class UserRepository {
         if (userLookedUp != null) {
             String workgroupId = userLookedUp.getWorkgroupId();
             if (workgroupId != null) {
-                Workgroup workgroup = userSession.findByNaturalId(Workgroup.class, workgroupId);
-                List<Permission> permissions = userSession.query(workgroupPermissionsLookup, workgroupId);
+                WorkgroupModel workgroup = userSession.findByNaturalId(WorkgroupModel.class, workgroupId);
+                List<PermissionModel> permissions = userSession.query(workgroupPermissionsLookup, workgroupId);
                 if (workgroup != null) {
                     if (permissions != null) {
                         workgroup.setPermissions(permissions);
@@ -51,10 +51,10 @@ public class UserRepository {
         return userLookedUp;
     }
 
-    public void save(User user) {
+    public void save(UserModel user) {
         userSession.save(user);
 
-        for (PasswordHistory passwordHistory : user.getPasswordHistory()) {
+        for (PasswordHistoryModel passwordHistory : user.getPasswordHistory()) {
             passwordHistory.setUsername(user.getUsername());
         }
 

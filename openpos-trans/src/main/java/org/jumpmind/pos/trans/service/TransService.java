@@ -13,13 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransService {
 
     @Autowired
+    SaveTransQueueHelper saveTransactionQueueEndpoint;
+    
+    @Autowired
     private EndpointDispatcher endpointDispatcher;
     
     @RequestMapping(value="/transaction", method=RequestMethod.POST)
     @ResponseBody
-    public ServiceResult saveTransaction(SaveTransRequest request) {
-        return endpointDispatcher.dispatch("/transaction", request);
+    public ServiceResult finalizeTransaction(SaveTransRequest request) {
+        return endpointDispatcher.dispatch("/transaction/finalize", request);
     }
+    
+    @RequestMapping(value="/transactionqueue", method=RequestMethod.POST)
+    public void saveTransactionQueue(SaveTransRequest request) {
+        saveTransactionQueueEndpoint.aSyncSave(request.getTransaction());
+    }
+
     
     @RequestMapping(value="/transaction/create", method=RequestMethod.PUT)
     @ResponseBody

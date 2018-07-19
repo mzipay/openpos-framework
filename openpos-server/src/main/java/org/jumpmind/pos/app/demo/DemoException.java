@@ -3,6 +3,8 @@ package org.jumpmind.pos.app.demo;
 
 public class DemoException extends RuntimeException {
 
+    private static final long serialVersionUID = 1L;
+
     public DemoException() {
         super();
         // TODO Auto-generated constructor stub

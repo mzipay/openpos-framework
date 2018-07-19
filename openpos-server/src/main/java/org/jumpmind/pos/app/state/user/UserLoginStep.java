@@ -18,7 +18,7 @@ import org.jumpmind.pos.core.flow.ui.PromptConfig;
 import org.jumpmind.pos.core.screen.IPromptScreen;
 import org.jumpmind.pos.i18n.service.i18nService;
 import org.jumpmind.pos.service.ServiceResult;
-import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.UserModel;
 import org.jumpmind.pos.user.service.AuthenticationResult;
 import org.jumpmind.pos.user.service.UserMessage;
 import org.jumpmind.pos.user.service.UserService;
@@ -34,7 +34,7 @@ public class UserLoginStep implements ITransitionStep {
     private UserService userService;
 
     @InOut(scope = ScopeType.Session, required=false)
-    protected User currentUser;
+    protected UserModel currentUser;
     
     @In(scope = ScopeType.Node)
     protected IStateManager stateManager;    
@@ -103,7 +103,7 @@ public class UserLoginStep implements ITransitionStep {
         return result.getResultStatus().equals("SUCCESS");
     }
 
-    protected User getResultUser() {
+    protected UserModel getResultUser() {
         return result.getUser();
     }
 

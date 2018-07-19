@@ -1,7 +1,10 @@
 package org.jumpmind.pos.app.state;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.jumpmind.pos.context.service.ContextService;
@@ -50,12 +53,16 @@ public class i18nScreenInterceptor implements IScreenInterceptor {
         return ret;
     }
 
+    /*
+     * TODO: caching needs to be added to the i18n service. we could
+     * cache metadata about the screen classes so we don't have to walk all the
+     * fields everytime a screen is shown
+     */
     @Override
     public Screen intercept(String appId, String deviceId, Screen screen) {
         init(appId, deviceId);
         if (screen != null) {
-            Class<?> clazz = screen.getClass();
-            processFields(clazz, screen);
+            processFields(screen);
 
         }
         return screen;
@@ -67,19 +74,50 @@ public class i18nScreenInterceptor implements IScreenInterceptor {
         }
     }
 
-    private final void processFields(Class<?> clazz, Object obj) {
+    private final void processFields(Object obj) {
+        Class<?> clazz = obj.getClass();
         while (clazz != null && obj != null) {
             Field[] fields = clazz.getDeclaredFields();
             for (Field field : fields) {
+                field.setAccessible(true);
                 Class<?> type = field.getType();
                 if (type.equals(String.class)) {
                     replace(field, obj);
+                } else if (Collection.class.isAssignableFrom(type)) {
+                    try {
+                        Collection<?> collection = (Collection<?>) field.get(obj);
+                        if (collection != null) {
+                            Iterator<?> i = collection.iterator();
+                            while (i.hasNext()) {
+                                Object fieldObj = i.next();
+                                if (fieldObj != null && !isWrapperType(fieldObj.getClass()) && !fieldObj.getClass().isPrimitive()) {
+                                    processFields(fieldObj);
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        logger.warn("", e);
+                    }
+                } else if (Map.class.isAssignableFrom(type)) {
+                    try {
+                        Map<?, ?> collection = (Map<?, ?>) field.get(obj);
+                        if (collection != null) {
+                            Iterator<?> i = collection.values().iterator();
+                            while (i.hasNext()) {
+                                Object fieldObj = i.next();
+                                if (fieldObj != null && !isWrapperType(fieldObj.getClass()) && !fieldObj.getClass().isPrimitive()) {
+                                    processFields(fieldObj);
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        logger.warn("", e);
+                    }
                 } else if (!isWrapperType(type) && !type.isPrimitive()) {
                     try {
-                        field.setAccessible(true);
                         Object fieldObj = field.get(obj);
                         if (fieldObj != null) {
-                            processFields(fieldObj.getClass(), fieldObj);
+                            processFields(fieldObj);
                         }
                     } catch (Exception e) {
                         logger.warn("", e);
@@ -89,11 +127,10 @@ public class i18nScreenInterceptor implements IScreenInterceptor {
             clazz = clazz.getSuperclass();
         }
     }
-    
+
     private final void replace(Field field, Object obj) {
         try {
-            field.setAccessible(true);
-            String value = (String)field.get(obj);
+            String value = (String) field.get(obj);
             if (value != null && value.startsWith("key:")) {
                 String[] parts = value.split(":");
                 String group = "common";
@@ -104,17 +141,17 @@ public class i18nScreenInterceptor implements IScreenInterceptor {
                 } else if (parts.length == 2) {
                     key = parts[1];
                 }
-                
+
                 if (key != null) {
                     value = i18nServiceClient.getString(group, key);
                     field.set(obj, value);
                 }
-                
+
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
             logger.error("Failed to replace key value with i18n resource", e);
-        } 
-        
+        }
+
     }
 
 }

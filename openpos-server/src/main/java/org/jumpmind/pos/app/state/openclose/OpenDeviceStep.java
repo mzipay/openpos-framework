@@ -12,6 +12,8 @@ import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.flow.Transition;
 import org.jumpmind.pos.ops.service.OpsService;
 import org.jumpmind.pos.ops.service.OpsServiceClient;
+import org.jumpmind.pos.trans.model.BusinessDate;
+import org.jumpmind.pos.user.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,12 @@ public class OpenDeviceStep implements ITransitionStep {
 
     @In(scope = ScopeType.Node)
     OpsServiceClient opsServiceClient;
+    
+    @In(scope = ScopeType.Session)
+    UserModel currentUser;
+    
+    @In(scope = ScopeType.Session, required=false)
+    BusinessDate businessDate;
 
     Transition transition;
 
@@ -60,7 +68,7 @@ public class OpenDeviceStep implements ITransitionStep {
 
     @ActionHandler
     public void onOpenDevice(Action action) {
-        this.opsServiceClient.openDevice();
+        this.opsServiceClient.openDevice(currentUser, businessDate);
         this.transition.proceed();
     }
 

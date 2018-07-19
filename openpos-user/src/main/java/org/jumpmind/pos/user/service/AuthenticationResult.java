@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.service.ServiceResult;
-import org.jumpmind.pos.user.model.User;
+import org.jumpmind.pos.user.model.UserModel;
 
 public class AuthenticationResult extends ServiceResult {
     
     private String authenticationCode;
-    private User user;
+    private UserModel user;
     private List<UserMessage> userMessages = new ArrayList<>();
 
     public AuthenticationResult() {
@@ -19,7 +19,7 @@ public class AuthenticationResult extends ServiceResult {
     public AuthenticationResult(String resultStatus) {
         setResultStatus(resultStatus);
     }
-    public AuthenticationResult(String resultStatus, User user) {
+    public AuthenticationResult(String resultStatus, UserModel user) {
         setResultStatus(resultStatus);
         this.user = user;
     }
@@ -32,11 +32,11 @@ public class AuthenticationResult extends ServiceResult {
         this.authenticationCode = authenticationCode;
     }
 
-    public User getUser() {
+    public UserModel getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserModel user) {
         this.user = user;
     }
 

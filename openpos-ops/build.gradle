@@ -5,4 +5,5 @@ dependencies {
     compile project(":openpos-service")
     compile project(":openpos-context")
     compile project(":openpos-trans")
+    compile project(":openpos-user")
 }
