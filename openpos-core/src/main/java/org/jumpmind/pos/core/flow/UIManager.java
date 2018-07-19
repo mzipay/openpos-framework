@@ -1,12 +1,11 @@
-package org.jumpmind.pos.core.flow.ui;
+package org.jumpmind.pos.core.flow;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jumpmind.pos.core.flow.IStateManager;
-import org.jumpmind.pos.core.flow.IUI;
+import org.jumpmind.pos.core.flow.ui.PromptConfig;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
@@ -19,7 +18,7 @@ public class UIManager implements IUI {
     
     private IStateManager stateManager;
 
-    public void init(IStateManager stateManager) {
+    protected void init(IStateManager stateManager) {
         this.stateManager = stateManager;
     }
 

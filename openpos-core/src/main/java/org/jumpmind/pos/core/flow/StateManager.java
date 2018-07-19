@@ -28,7 +28,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.config.SubTransition;
-import org.jumpmind.pos.core.flow.ui.UIManager;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IScreenService;
 import org.slf4j.Logger;
@@ -69,13 +68,18 @@ public class StateManager implements IStateManager {
     private ApplicationState applicationState = new ApplicationState();
     
     @Autowired
-    UIManager uiManager;
+    private UIManager uiManager;
+    
+    @Autowired
+    private TestManager testManager;
     
     @Value("${org.jumpmind.pos.core.flow.StateManager.autoSaveState:false}")
     private boolean autoSaveState = false;    
 
     private String appId;
+    
     private String nodeId;
+    
     private FlowConfig initialFlowConfig;
     
     private AtomicReference<Date> lastInteractionTime = new AtomicReference<Date>(new Date());
@@ -90,6 +94,7 @@ public class StateManager implements IStateManager {
         this.applicationState.setAppId(appId);
         this.applicationState.setNodeId(nodeId);
         this.uiManager.init(this);
+        this.testManager.init(this);
         
         boolean resumeState = false;
         

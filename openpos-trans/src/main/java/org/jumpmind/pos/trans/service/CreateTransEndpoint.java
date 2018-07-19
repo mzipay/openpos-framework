@@ -36,7 +36,7 @@ public class CreateTransEndpoint {
         transaction.setTransStatus(TransStatus.IN_PROGRESS.name());
         transaction.setBeginTime(new Date());
         transaction.setOperatorUsername(request.getUsername());
-        saveTransactionQueueEndpoint.aSyncSave(transaction);
+        saveTransactionQueueEndpoint.saveInBackground(transaction);
         return new CreateTransResult(transaction);
     }
 }

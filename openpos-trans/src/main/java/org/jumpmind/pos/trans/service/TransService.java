@@ -26,7 +26,7 @@ public class TransService {
     
     @RequestMapping(value="/transactionqueue", method=RequestMethod.POST)
     public void saveTransactionQueue(SaveTransRequest request) {
-        saveTransactionQueueEndpoint.aSyncSave(request.getTransaction());
+        saveTransactionQueueEndpoint.saveInBackground(request.getTransaction());
     }
 
     

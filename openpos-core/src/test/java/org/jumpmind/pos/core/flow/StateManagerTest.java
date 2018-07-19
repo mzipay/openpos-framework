@@ -23,7 +23,6 @@ import org.jumpmind.pos.core.flow.TestStates.TestScopesState;
 import org.jumpmind.pos.core.flow.TestStates.TransitionInterceptionState;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
-import org.jumpmind.pos.core.flow.ui.UIManager;
 import org.jumpmind.pos.core.service.ScreenService;
 import org.junit.Before;
 import org.junit.Test;

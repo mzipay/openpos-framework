@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +36,7 @@ import org.jumpmind.pos.core.model.IFormElement;
 import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
-import org.jumpmind.pos.core.screen.DevToolsMessage;
+import org.jumpmind.pos.core.screen.DevToolsService;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.FormScreen;
@@ -74,8 +76,8 @@ public class ScreenService implements IScreenService {
     ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    DevToolsMessage devToolsMessage;
-    
+    DevToolsService devToolsService;
+
     @Autowired
     SimpMessagingTemplate template;
 
@@ -87,9 +89,8 @@ public class ScreenService implements IScreenService {
 
     @Autowired
     LogFormatter logFormatter;
-    
-    @Autowired(required=false)
-    List<IScreenInterceptor> screenInterceptors;
+
+    Queue<IScreenInterceptor> screenInterceptors = new ConcurrentLinkedQueue<>();
 
     Map<String, Map<String, ApplicationState>> applicationStateByAppIdByNodeId = new HashMap<>();
 
@@ -97,6 +98,13 @@ public class ScreenService implements IScreenService {
     public void init() {
         if (!jsonIncludeNulls) {
             mapper.setSerializationInclusion(Include.NON_NULL);
+        }
+    }
+
+    @Autowired(required = false)
+    public void setScreenInterceptors(List<IScreenInterceptor> screenInterceptors) {
+        for (IScreenInterceptor screenInterceptor : screenInterceptors) {
+            this.screenInterceptors.add(screenInterceptor);
         }
     }
 
@@ -108,7 +116,11 @@ public class ScreenService implements IScreenService {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "app/{appId}/node/{nodeId}/{action}/{payload}")
-    public void getAction(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String action, @PathVariable String payload,
+    public void getAction(
+            @PathVariable String appId,
+            @PathVariable String nodeId,
+            @PathVariable String action,
+            @PathVariable String payload,
             HttpServletResponse resp) {
         logger.info("Received a request for {} {} {} {}", appId, nodeId, action, payload);
         IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
@@ -120,7 +132,10 @@ public class ScreenService implements IScreenService {
 
     @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{nodeId}/control/{controlId}")
     @ResponseBody
-    public String getComponentValues(@PathVariable String appId, @PathVariable String nodeId, @PathVariable String controlId,
+    public String getComponentValues(
+            @PathVariable String appId,
+            @PathVariable String nodeId,
+            @PathVariable String controlId,
             @RequestParam(name = "searchTerm", required = false) String searchTerm,
             @RequestParam(name = "sizeLimit", defaultValue = "1000") Integer sizeLimit) {
         logger.info("Received a request to load component values for {} {} {}", appId, nodeId, controlId);
@@ -173,9 +188,11 @@ public class ScreenService implements IScreenService {
         if (stateManager != null) {
             if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
                 stateManager.keepAlive();
-            } else if (action.getName().contains("DevTools")) {                
+            } else if (action.getName().contains("DevTools")) {
                 logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
-                DevToolRouter(action, stateManager, this, appId, nodeId);
+                Screen devToolsMessage = devToolsService.handleRequest(action, stateManager, appId, nodeId);
+                logger.info(logFormatter.toJsonString(devToolsMessage));
+                publishToClients(appId, nodeId, devToolsMessage);
             } else {
                 deserializeForm(stateManager.getApplicationState(), action);
 
@@ -200,49 +217,6 @@ public class ScreenService implements IScreenService {
                             .asList("The application received an unexpected error. Please report to the appropriate technical personnel"));
                     showScreen(appId, nodeId, errorDialog);
                 }
-            }
-        }
-    }
-
-    private void DevToolRouter(Action action, IStateManager stateManager, ScreenService screenService, String appId, String nodeId) {
-        devToolsMessage.createMessage(stateManager, this);
-        if (action.getName().contains("::Get")) {
-            devToolsMessage.setName("DevTools::Get");
-            logger.info(logFormatter.toJsonString(devToolsMessage));
-            publishToClients(appId, nodeId, devToolsMessage);
-        } else if (action.getName().contains("::Save")) {
-            devToolsMessage.setName("DevTools::Save");
-            String saveName = action.getName().substring(16);
-            devToolsMessage.saveState(stateManager, saveName);
-            publishToClients(appId, nodeId, devToolsMessage);
-        } else if (action.getName().contains("DevTools::Load")) {
-            devToolsMessage.setName("DevTools::Load");
-            String saveName = action.getName().substring(16);
-            devToolsMessage.loadState(stateManager, saveName);
-            publishToClients(appId, nodeId, devToolsMessage);
-        } else if (action.getName().contains("DevTools::RemoveSave")) {
-            devToolsMessage.setName("DevTools::RemoveSave");
-            String saveName = action.getName().substring(22);
-            devToolsMessage.removeSave(saveName);
-            publishToClients(appId, nodeId, devToolsMessage);
-        } else if (action.getName().contains("::Remove")) {
-            Map<String, String> element = action.getData();
-            if (action.getName().contains("::Node")) {
-                devToolsMessage.createMessage(stateManager, this, element, "Node", "remove");
-                devToolsMessage.setName("DevTools::Remove");
-                publishToClients(appId, nodeId, devToolsMessage);
-            } else if (action.getName().contains("::Session")) {
-                devToolsMessage.createMessage(stateManager, this, element, "Session", "remove");
-                devToolsMessage.setName("DevTools::Remove");
-                publishToClients(appId, nodeId, devToolsMessage);
-            } else if (action.getName().contains("::Conversation")) {
-                devToolsMessage.createMessage(stateManager, this, element, "Conversation", "remove");
-                devToolsMessage.setName("DevTools::Remove");
-                publishToClients(appId, nodeId, devToolsMessage);
-            } else if (action.getName().contains("::Config")) {
-                devToolsMessage.createMessage(stateManager, this, element, "Config", "remove");
-                devToolsMessage.setName("DevTools::Remove");
-                publishToClients(appId, nodeId, devToolsMessage);
             }
         }
     }
@@ -309,7 +283,7 @@ public class ScreenService implements IScreenService {
             }
         }
     }
-    
+
     protected Screen interceptScreen(String appId, String nodeId, Screen screen) {
         if (this.screenInterceptors != null) {
             for (IScreenInterceptor screenInterceptor : screenInterceptors) {
@@ -452,7 +426,7 @@ public class ScreenService implements IScreenService {
         for (int i = 0; i < LINE_COUNT; i++) {
             switch (i) {
                 case 0:
-                    buff.append(drawTop1(boxWidth+2));
+                    buff.append(drawTop1(boxWidth + 2));
                     break;
                 case 1:
                     buff.append(drawTop2(boxWidth));
@@ -467,11 +441,21 @@ public class ScreenService implements IScreenService {
                     buff.append(drawBottom1(boxWidth));
                     break;
                 case 6:
-                    buff.append(drawBottom2(boxWidth+2));
+                    buff.append(drawBottom2(boxWidth + 2));
                     break;
             }
         }
         return buff.toString();
+    }
+
+    @Override
+    public void addScreenInterceptor(IScreenInterceptor interceptor) {
+        this.screenInterceptors.add(interceptor);
+    }
+
+    @Override
+    public void removeScreenInterceptor(IScreenInterceptor interceptor) {
+        this.screenInterceptors.remove(interceptor);
     }
 
     protected String drawTop1(int boxWidth) {
@@ -491,14 +475,16 @@ public class ScreenService implements IScreenService {
 
     protected String drawFillerLine(int boxWidth) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + " " + VERITCAL_LINE).append(StringUtils.repeat(' ', boxWidth - 4)).append(VERITCAL_LINE + " " + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + " " + VERITCAL_LINE).append(StringUtils.repeat(' ', boxWidth - 4))
+                .append(VERITCAL_LINE + " " + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
 
     protected String drawTitleLine(int boxWidth, String name) {
         StringBuilder buff = new StringBuilder();
-        buff.append(VERITCAL_LINE + " " + VERITCAL_LINE).append(StringUtils.center(name, boxWidth - 4)).append(VERITCAL_LINE + " " + VERITCAL_LINE);
+        buff.append(VERITCAL_LINE + " " + VERITCAL_LINE).append(StringUtils.center(name, boxWidth - 4))
+                .append(VERITCAL_LINE + " " + VERITCAL_LINE);
         buff.append("\r\n");
         return buff.toString();
     }
