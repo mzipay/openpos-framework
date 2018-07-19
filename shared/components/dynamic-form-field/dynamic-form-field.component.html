@@ -40,7 +40,7 @@
         </mat-form-field>
     </ng-container>
 
-    <ng-container *ngIf="isDateInput()">
+    <ng-container *ngIf="isDateInput() && formField.elementType!='Display'">
         <app-dynamic-date-form-field *ngIf="formField.hideCalendar" [type]="formField.inputType" [(value)]="formField.value" [placeholder]="getPlaceholderText(formField)" 
         [hideCalendar]="formField.hideCalendar" [controlName]="formField.id" [hiddenControl]="formField.id+'Hidden'"[form]="formGroup"></app-dynamic-date-form-field>
         <app-dynamic-date-form-field *ngIf="!formField.hideCalendar" [type]="formField.inputType" [(value)]="formField.value" [placeholder]="getPlaceholderText(formField)" 
@@ -63,7 +63,7 @@
             <input *ngSwitchDefault [value]="formField.value" [name]="formField.id" [placeholder]="formField.label" matInput readonly=true>
             <textarea #displayMTA *ngSwitchCase="'Multiple'" [name]="formField.id" [placeholder]="formField.label" 
                 [attr.tabindex]="formField.tabindex || displayMTA.getAttribute('tabindex')" 
-                matTextareaAutosize matInput readonly=true>{{formField.values.join('')}}</textarea>
+                matTextareaAutosize matInput readonly=true>{{formField.values.join('\n')}}</textarea>
         </mat-form-field>
     </ng-container>
 
