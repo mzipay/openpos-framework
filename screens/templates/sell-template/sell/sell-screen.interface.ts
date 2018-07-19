@@ -45,12 +45,8 @@ export class SellScreenUtils {
 
     public static getStatusSection(template: ISellTemplate): SellStatusSectionData {
         const statusSection = new SellStatusSectionData();
-
-        statusSection.registerNumber = template.workstation.workstationId;
         statusSection.registerStatus = template.registerStatus;
-        statusSection.storeNumber = template.workstation.storeId;
-        statusSection.timestampBegin = template.timestampBegin;
-        
+        statusSection.timestampBegin = template.timestampBegin;        
         return statusSection;
     }
 
