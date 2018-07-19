@@ -336,7 +336,7 @@
                         </mat-action-row>
         
                     </mat-tab>
-                    <mat-tab label="Logs">
+                    <mat-tab *ngIf="logFilenames && logFilenames.length > 0" label="Logs">
                         <h1>Logs</h1>
                         <div class="logs">
                             <div *ngIf="!logsAvailable"  [style.height.px]="'300'"></div>
@@ -348,11 +348,57 @@
                             </ng-container>
                         </div>
                     </mat-tab>
+                    <mat-tab label="Scanner">
+                        <h1>Simulated Scanner</h1>
+                        <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
+                        <mat-form-field appearance="standard">
+                            <input matInput #scan
+                            (keyup.enter)="onSimulateScan(scan.value)"
+                            placeholder="Enter Scan Data" >
+                            <mat-icon matSuffix>
+                                <button mat-icon-button (click)="onSimulateScan(scan.value)">
+                                    <mat-icon svgIcon="barcode"></mat-icon>
+                                </button>
+                            </mat-icon>
+                        </mat-form-field>
+                    </div>
+                    </mat-tab>                    
                 </mat-tab-group>
                 
             </mat-expansion-panel>   
         </div> 
            
+        <div [matMenuTriggerFor]="devMenu">
+            <mat-menu #devMenu="matMenu" yPosition="below" xPosition="after">
+                <ng-container *ngIf="logsAvailable">
+                    <button mat-menu-item [matMenuTriggerFor]="logsMenu">Logs</button>
+                    <mat-divider></mat-divider>
+                </ng-container>
+                <button mat-menu-item (click)="onPersonalize()">Personalize</button>
+                <button mat-menu-item (click)="onDevRefreshView()">Refresh View</button>
+                <button mat-menu-item (click)="onDevClearLocalStorage()">Clear Local Storage</button>
+                <mat-divider></mat-divider>
+                <button mat-menu-item (click)="onDevRestartNode()">Restart Node</button>
+            </mat-menu>
+
+            <mat-menu #logsMenu="matMenu">
+                <button mat-menu-item [matMenuTriggerFor]="logShareMenu">Share</button>
+                <button mat-menu-item [matMenuTriggerFor]="logUploadMenu">Upload</button>
+                <button mat-menu-item [matMenuTriggerFor]="logViewMenu">View</button>
+            </mat-menu>
+
+            <mat-menu #logShareMenu="matMenu">
+                <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileSelected(m)">{{m}}</button>
+            </mat-menu>
+
+            <mat-menu #logUploadMenu="matMenu">
+                <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileUpload(m)">{{m}}</button>
+            </mat-menu>
+
+            <mat-menu #logViewMenu="matMenu">
+                <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileView(m)">{{m}}</button>
+            </mat-menu>
+        </div>
 
         <ng-template appTemplate></ng-template>
 
