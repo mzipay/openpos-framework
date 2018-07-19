@@ -336,7 +336,7 @@
                         </mat-action-row>
         
                     </mat-tab>
-                    <mat-tab label="Logs">
+                    <mat-tab *ngIf="logFilenames && logFilenames.length > 0" label="Logs">
                         <h1>Logs</h1>
                         <div class="logs">
                             <div *ngIf="!logsAvailable"  [style.height.px]="'300'"></div>
@@ -348,6 +348,21 @@
                             </ng-container>
                         </div>
                     </mat-tab>
+                    <mat-tab label="Scanner">
+                        <h1>Simulated Scanner</h1>
+                        <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
+                        <mat-form-field appearance="standard">
+                            <input matInput #scan
+                            (keyup.enter)="onSimulateScan(scan.value)"
+                            placeholder="Enter Scan Data" >
+                            <mat-icon matSuffix>
+                                <button mat-icon-button (click)="onSimulateScan(scan.value)">
+                                    <mat-icon svgIcon="barcode"></mat-icon>
+                                </button>
+                            </mat-icon>
+                        </mat-form-field>
+                    </div>
+                    </mat-tab>                    
                 </mat-tab-group>
                 
             </mat-expansion-panel>   
