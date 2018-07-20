@@ -3,7 +3,7 @@
 	<div fxFlexFill fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="16px">
 		<div #scrollList fxFlex="1 1 auto" style="overflow-y: auto; overflow-x: hidden;">
 
-			<app-checkout-list-item *ngFor="let i of items" [item]=i [session]=session [isReadOnly]=screen.readOnly></app-checkout-list-item>
+			<app-item-card *ngFor="let i of items" [item]=i [session]=session [isReadOnly]=screen.readOnly></app-item-card>
 
 			<div *ngIf="items.length == 0 && !screen.readOnly" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
 				<div class="primary text-md text-center" style="padding: 16px;">

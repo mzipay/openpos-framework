@@ -44,6 +44,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     devClicks = 0;
 
+    currentSelectedLogfilename: string;
     logFilenames: string[];
 
     logPlugin: IPlugin;
@@ -124,8 +125,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit(): void {
-
-
         const self = this;
         
         this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
@@ -137,7 +136,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.session.obsSess$.subscribe(SessElements => this.SessElements = SessElements);
         this.session.obsConv$.subscribe(ConvElements => this.ConvElements = ConvElements);
         this.session.obsConf$.subscribe(ConfElements => this.ConfElements = ConfElements);
-        this.session.obsConf$.subscribe(FlowElements => this.FlowElements = FlowElements);
+        this.session.obsFlow$.subscribe(FlowElements => this.FlowElements = FlowElements);
         this.session.obsState$.subscribe(currentState => this.currentState = currentState);
         this.session.obsStateClass$.subscribe(currentStateClass => this.currentStateClass = currentStateClass);
         this.session.obsStateActions$.subscribe(currentStateActions => this.currentStateActions = currentStateActions);
@@ -272,6 +271,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.showDevMenu = !this.showDevMenu;
     }
 
+    protected useSavePoints(): boolean {
+        return Configuration.useSavePoints;
+    }
+
     protected onDevMenuRefresh() {
         console.log("refreshing tools... ")
         this.displayStackTrace = false;
@@ -325,6 +328,12 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             console.log("Loaded Save Point: \'" + savePoint + "\'");
         } else {
             console.log("Unable to load Save Point: \'" + savePoint + "\'");
+        }
+    }
+
+    protected onSimulateScan(value: string) {
+        if (value) {
+            this.session.onAction('DevTools::Scan', value);
         }
     }
 
@@ -392,9 +401,14 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     public onLogfileSelected(logFilename: string): void {
+        this.currentSelectedLogfilename = logFilename;
+    }
+
+    public onLogfileShare(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
+            const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.shareLogFile(
-                logFilename,
+                targetFilename,
                 () => {
                 },
                 (error) => {
@@ -404,12 +418,13 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
     }
 
-    public onLogfileUpload(logFilename: string): void {
+    public onLogfileUpload(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
+            const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.getLogFilePath(
-                logFilename,
+                targetFilename,
                 (logfilePath) => {
-                    this.fileUploadService.uploadLocalDeviceFileToServer('log', logFilename, 'text/plain', logfilePath)
+                    this.fileUploadService.uploadLocalDeviceFileToServer('log', targetFilename, 'text/plain', logfilePath)
                         .then((result: { success: boolean, message: string }) => {
                             this.snackBar.open(result.message, 'Dismiss', {
                                 duration: 8000, verticalPosition: 'top'
@@ -428,16 +443,17 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
     }
 
-    public onLogfileView(logFilename: string): void {
+    public onLogfileView(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
+            const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.readLogFileContents(
-                logFilename,
+                targetFilename,
                 (logFileContents) => {
                     const dialogRef = this.dialog.open(FileViewerComponent, {
                         panelClass: 'full-screen-dialog',
                         maxWidth: '100vw', maxHeight: '100vh', width: '100vw'
                     });
-                    dialogRef.componentInstance.fileName = logFilename;
+                    dialogRef.componentInstance.fileName = targetFilename;
                     dialogRef.componentInstance.text = logFileContents;
                 },
                 (error) => {

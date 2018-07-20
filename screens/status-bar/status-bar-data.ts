@@ -9,5 +9,6 @@ export class StatusBarData{
     operatorText: String;
     logoutButton: IMenuItem;
     workstationId: String;
+    storeId: String;
 
 }

@@ -36,7 +36,7 @@ import {
     SelectableItemListComponent,
     OverFlowListComponent,
     ScanSomethingComponent,
-    CheckoutListItemComponent,
+    ItemCardComponent,
     FabToggleButtonComponent,
     FabToggleGroupComponent,
     PopTartComponent,
@@ -45,7 +45,7 @@ import {
     NumberSpinnerComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
-import { PhonePipe } from './pipes';
+import { PhonePipe, HourMinSecPipe } from './pipes';
 
 const components = [
     PromptInputComponent,
@@ -58,7 +58,7 @@ const components = [
     SelectableItemListComponent,
     OverFlowListComponent,
     ScanSomethingComponent,
-    CheckoutListItemComponent,
+    ItemCardComponent,
     FabToggleButtonComponent,
     FabToggleGroupComponent,
     PopTartComponent,
@@ -85,7 +85,8 @@ const directives = [
 
 const pipes = [
     SafePipe,
-    PhonePipe
+    PhonePipe,
+    HourMinSecPipe
 ]
 
 @NgModule({

@@ -282,7 +282,7 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Save Points" >
+                    <mat-tab *ngIf="useSavePoints()" label="Save Points" >
                         <h1>Save Points</h1>
                         
                         <div *ngIf="displaySavePoints" class="savePoints" [style.height.px]="'300'">
@@ -312,44 +312,59 @@
                                     </mat-card-content>   
                                 </mat-card>     
                         </div>
-                        <div *ngIf="!displaySavePoints" [style.height.px]="'300'"></div>
+                        <mat-action-row>
+                            <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
+                                <mat-form-field appearance="standard">
+                                    <input matInput #newSavePoint
+                                    (keyup.enter)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''"
+                                    placeholder="Create a Save Point" >
+                                    <mat-icon matSuffix>
+                                        <button mat-icon-button (click)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''">
+                                            <mat-icon aria-label="save">save</mat-icon>
+                                        </button>
+                                    </mat-icon>
+                                </mat-form-field>
+                                </div>
+                            <div fxFlex=""></div>
+                            <!-- <div fxFlex="nogrow" fxLayoutAlign="right center">
+                                <button mat-raised-button color="primary" (click)="onDevMenuClick()">
+                                        Close Tools
+                                </button>
+                            </div> -->
+                            
+                            
+                        </mat-action-row>
+        
                     </mat-tab>
-                    <mat-tab label="Logs">
+                    <mat-tab *ngIf="logFilenames && logFilenames.length > 0" label="Logs">
                         <h1>Logs</h1>
                         <div class="logs">
                             <div *ngIf="!logsAvailable"  [style.height.px]="'300'"></div>
                             <ng-container *ngIf="logsAvailable" [style.height.px]="'300'" >
                                 <mat-divider></mat-divider>
                                 <ul>
-                                    <li *ngFor="let m of logFilenames"><button mat-button [matMenuTriggerFor]="logsMenu">{{m}}</button></li>
+                                    <li *ngFor="let m of logFilenames"><button mat-button [matMenuTriggerFor]="logsMenu" (click)="onLogfileSelected(m)">{{m}}</button></li>
                                 </ul>
                             </ng-container>
                         </div>
                     </mat-tab>
-                </mat-tab-group>
-                
-                <mat-action-row>
-                    <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
+                    <mat-tab label="Scanner">
+                        <h1>Simulated Scanner</h1>
+                        <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
                         <mat-form-field appearance="standard">
-                            <input matInput #newSavePoint
-                            (keyup.enter)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''"
-                            placeholder="Create a Save Point" >
+                            <input matInput #scan
+                            (keyup.enter)="onSimulateScan(scan.value)"
+                            placeholder="Enter Scan Data" >
                             <mat-icon matSuffix>
-                                <button mat-icon-button (click)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''">
-                                    <mat-icon aria-label="save">save</mat-icon>
+                                <button mat-icon-button (click)="onSimulateScan(scan.value)">
+                                    <mat-icon svgIcon="barcode"></mat-icon>
                                 </button>
                             </mat-icon>
                         </mat-form-field>
-                        </div>
-                    <div fxFlex=""></div>
-                    <!-- <div fxFlex="nogrow" fxLayoutAlign="right center">
-                        <button mat-raised-button color="primary" (click)="onDevMenuClick()">
-                                Close Tools
-                        </button>
-                    </div> -->
-                    
-                    
-                </mat-action-row>
+                    </div>
+                    </mat-tab>                    
+                </mat-tab-group>
+                
             </mat-expansion-panel>   
         </div> 
            
@@ -367,21 +382,9 @@
             </mat-menu>
 
             <mat-menu #logsMenu="matMenu">
-                <button mat-menu-item [matMenuTriggerFor]="logShareMenu">Share</button>
-                <button mat-menu-item [matMenuTriggerFor]="logUploadMenu">Upload</button>
-                <button mat-menu-item [matMenuTriggerFor]="logViewMenu">View</button>
-            </mat-menu>
-
-            <mat-menu #logShareMenu="matMenu">
-                <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileSelected(m)">{{m}}</button>
-            </mat-menu>
-
-            <mat-menu #logUploadMenu="matMenu">
-                <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileUpload(m)">{{m}}</button>
-            </mat-menu>
-
-            <mat-menu #logViewMenu="matMenu">
-                <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileView(m)">{{m}}</button>
+                <button mat-menu-item (click)="onLogfileShare()">Share</button>
+                <button mat-menu-item (click)="onLogfileUpload()">Upload</button>
+                <button mat-menu-item (click)="onLogfileView()">View</button>
             </mat-menu>
         </div>
 
