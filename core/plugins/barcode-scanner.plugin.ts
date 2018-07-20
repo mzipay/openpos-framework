@@ -8,7 +8,7 @@ export class BarcodeScannerPlugin extends CordovaDevicePlugin {
 
     pluginId = 'barcodeScannerPlugin';
     pluginName = this.pluginId;
-    onBarcodeScanned : EventEmitter<Scan> = new EventEmitter<Scan>();
+    onBarcodeScanned: EventEmitter<Scan> = new EventEmitter<Scan>();
     private pluginImpl: IPlugin;
 
     constructor() {

@@ -1,7 +1,7 @@
 import { IMenuItem } from '../../core';
 
 
-export class StatusBarData{
+export class StatusBarData {
     backButton: IMenuItem;
     screenType: String;
     screenName: String;

@@ -24,12 +24,12 @@ export class DialogComponent extends PosScreen<any> {
   buildScreen(): void {
     this.messages = this.screen.message;
     this.lines = this.screen.messageLines;
- 
-    if( this.screen.buttons ){
+
+    if ( this.screen.buttons ) {
       this.primaryButton = this.screen.buttons[0];
     }
 
-    if( this.screen.buttons && this.screen.buttons.length > 1 ){
+    if ( this.screen.buttons && this.screen.buttons.length > 1 ) {
       this.otherButtons = this.screen.buttons.slice(1, this.screen.buttons.length);
     }
   }

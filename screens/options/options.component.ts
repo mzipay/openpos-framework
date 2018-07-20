@@ -8,11 +8,6 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 })
 export class OptionsComponent extends PosScreen<any> {
 
-
-  constructor() { 
-      super();
-  }
-
-  buildScreen(){}
+  buildScreen() {}
 
 }

@@ -7,9 +7,5 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 })
 export class EmbeddedWebPageComponent extends PosScreen<any> {
 
-  constructor( ) {
-      super();
-  }
-
-  buildScreen(){};
+  buildScreen() {}
 }

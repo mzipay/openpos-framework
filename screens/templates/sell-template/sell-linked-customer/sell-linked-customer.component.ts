@@ -6,8 +6,8 @@ import { Component, Input } from '@angular/core';
     styleUrls: ['./sell-linked-customer.component.scss']
   })
 
-  export class SellLinkedCustomerComponent {
+export class SellLinkedCustomerComponent {
     @Input() screenType: string;
     @Input() customerName: string;
     @Input() noCustomerText: string;
-  }
+}

@@ -13,8 +13,8 @@ export class OverFlowListComponent implements OnChanges {
     shownItems: any[];
     overflowItems: any[];
 
-    constructor(){
-        
+    constructor() {
+
     }
 
     showOverflowList(): boolean {

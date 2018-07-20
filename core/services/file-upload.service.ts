@@ -41,7 +41,7 @@ export class FileUploadService {
             (filePlugin: IPlugin) => {
                 if (filePlugin.impl) {
                     (<any>window).requestFileSystem((<any>window).PERSISTENT, 0, function (fs) {
-                        (<any>window).resolveLocalFileSystemURL(localfilepath, function(fileEntry){
+                        (<any>window).resolveLocalFileSystemURL(localfilepath, function(fileEntry) {
                             fileEntry.file(function (file) {
                                 const reader = new FileReader();
                                 reader.onloadend = function() {

@@ -7,12 +7,12 @@ import { SelfCheckoutWithBarComponent } from './self-checkout-with-bar/self-chec
 
 export const ScreenConstants = {
     screens : [
-        { name:'SelfCheckoutHome', component: SelfCheckoutHomeComponent },
-        { name:'SelfCheckoutPaymentStatus', component: SelfCheckoutPaymentStatusComponent },
-        { name:'SelfCheckoutTransaction', component: SelfCheckoutTransactionComponent },
-        { name:'SelfCheckoutOptions', component: SelfCheckoutOptionsComponent },
+        { name: 'SelfCheckoutHome', component: SelfCheckoutHomeComponent },
+        { name: 'SelfCheckoutPaymentStatus', component: SelfCheckoutPaymentStatusComponent },
+        { name: 'SelfCheckoutTransaction', component: SelfCheckoutTransactionComponent },
+        { name: 'SelfCheckoutOptions', component: SelfCheckoutOptionsComponent },
     ],
-    
+
     dialogs: [
         { name: 'SelfCheckoutHome', component: SelfCheckoutHomeComponent },
         { name: 'SelfCheckoutTransaction', component: SelfCheckoutTransactionComponent },

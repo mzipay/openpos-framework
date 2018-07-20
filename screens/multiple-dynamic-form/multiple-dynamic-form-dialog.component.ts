@@ -6,5 +6,5 @@ import { MultipleDynamicFormComponent } from '../../screens/multiple-dynamic-for
     templateUrl: './multiple-dynamic-form-dialog.component.html'
 })
 export class MultipleDynamicFormDialogComponent extends MultipleDynamicFormComponent {
-    current:number = 0;
+    current = 0;
 }

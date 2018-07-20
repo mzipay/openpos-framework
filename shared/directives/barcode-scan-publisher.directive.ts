@@ -3,15 +3,16 @@ import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { SessionService, DeviceService, PluginService, Scan, BarcodeScannerPlugin } from '../../core';
 
 @Directive({
+    // tslint:disable-next-line:directive-selector
     selector: '[barcodeScanPublisher]'
 })
 export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
 
     private barcodePlugin: BarcodeScannerPlugin;
     private barcodeEventSubscription: Subscription;
-    constructor(el: ElementRef, 
+    constructor(el: ElementRef,
         private sessionService: SessionService,
-        private deviceService: DeviceService, 
+        private deviceService: DeviceService,
         private pluginService: PluginService) {
     }
 
@@ -32,7 +33,7 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
                 });
             }).catch( error => console.log(`Failed to get barcodeScannerPlugin.  Error: ${error}`) );
          });
-    }    
+    }
 
     ngOnDestroy(): void {
         if (this.barcodeEventSubscription) {

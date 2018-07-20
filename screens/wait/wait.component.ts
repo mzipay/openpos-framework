@@ -10,8 +10,8 @@ export class WaitComponent extends PosScreen<any> {
   instructions = '';
   icon = '';
 
-  buildScreen(){
+  buildScreen() {
     this.instructions = this.screen.instructions;
     this.icon = this.screen.icon;
-  };
+  }
 }

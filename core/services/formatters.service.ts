@@ -3,9 +3,9 @@ import { LocaleService } from './locale.service';
 
 // Since input-formatter directive references the formatter service we cannot
 // import from the shared barrel here
-import { 
-    IFormatter, 
-    PhoneUSFormatter, 
+import {
+    IFormatter,
+    PhoneUSFormatter,
     PhoneCAFormatter,
     NumericFormatter,
     GiftCodeFormatter,

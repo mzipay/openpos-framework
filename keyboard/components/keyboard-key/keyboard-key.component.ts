@@ -14,6 +14,7 @@ export const VALUE_SPACE = ' ';
 export const VALUE_TAB = '\t';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'mat-keyboard-key',
   templateUrl: './keyboard-key.component.html',
   styleUrls: ['./keyboard-key.component.scss'],
