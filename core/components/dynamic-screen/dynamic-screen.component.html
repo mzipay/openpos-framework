@@ -343,7 +343,7 @@
                             <ng-container *ngIf="logsAvailable" [style.height.px]="'300'" >
                                 <mat-divider></mat-divider>
                                 <ul>
-                                    <li *ngFor="let m of logFilenames"><button mat-button [matMenuTriggerFor]="logsMenu">{{m}}</button></li>
+                                    <li *ngFor="let m of logFilenames"><button mat-button [matMenuTriggerFor]="logsMenu" (click)="onLogfileSelected(m)">{{m}}</button></li>
                                 </ul>
                             </ng-container>
                         </div>
@@ -382,21 +382,9 @@
             </mat-menu>
 
             <mat-menu #logsMenu="matMenu">
-                <button mat-menu-item [matMenuTriggerFor]="logShareMenu">Share</button>
-                <button mat-menu-item [matMenuTriggerFor]="logUploadMenu">Upload</button>
-                <button mat-menu-item [matMenuTriggerFor]="logViewMenu">View</button>
-            </mat-menu>
-
-            <mat-menu #logShareMenu="matMenu">
-                <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileSelected(m)">{{m}}</button>
-            </mat-menu>
-
-            <mat-menu #logUploadMenu="matMenu">
-                <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileUpload(m)">{{m}}</button>
-            </mat-menu>
-
-            <mat-menu #logViewMenu="matMenu">
-                <button mat-menu-item *ngFor="let m of logFilenames" (click)="onLogfileView(m)">{{m}}</button>
+                <button mat-menu-item (click)="onLogfileShare()">Share</button>
+                <button mat-menu-item (click)="onLogfileUpload()">Upload</button>
+                <button mat-menu-item (click)="onLogfileView()">View</button>
             </mat-menu>
         </div>
 
