@@ -2,6 +2,7 @@ import { FormGroup } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TextMask, IMaskSpec, ITextMask } from '../../textmask';
+import { FabToggleButtonComponent } from '../fab-toggle-button/fab-toggle-button.component';
 
 @Component({
     selector: 'app-prompt-input',
@@ -19,9 +20,11 @@ export class PromptInputComponent implements OnInit{
     @Input() minLength: number;
     @Input() maxLength: number;
     @Input() promptFormGroup: FormGroup;
-    @Input() readOnly: boolean = false;
+    @Input() readOnly: boolean;
+    @Input() onOffModel: boolean;
 
     inputType: string;
+    checked: boolean = true;
 
     formatter: string;
     _textMask: ITextMask; // Mask object built for text-mask
@@ -46,6 +49,13 @@ export class PromptInputComponent implements OnInit{
         }
     }
 
+    onCheck() {
+        if (this.responseText === 'ON') {
+            this.responseText = 'OFF';
+        } else {
+            this.responseText = 'ON';
+        }
+    }
     ngOnInit(): void {
         this.formatter = this.responseType;
 
