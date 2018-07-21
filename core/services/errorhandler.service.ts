@@ -10,11 +10,11 @@ export class ErrorHandlerService extends ErrorHandler {
 
   handleError(error) {
     if (! this.isRunningInBrowser()) {
-        console.group(">>>>> [OpenPOS] Exception <<<<<");
+        console.group('>>>>> [OpenPOS] Exception <<<<<');
         console.error(error);
         console.error(error.message);
         console.error('-------------------- STACK TRACE (start) --------------------');
-        try { console.error(error.stack.replace(/(.*@|file:\/\/).*(\/www\/.*)/g, "$1$2"));} catch(error) {}
+        try { console.error(error.stack.replace(/(.*@|file:\/\/).*(\/www\/.*)/g, '$1$2')); } catch (error) {}
         console.error('-------------------- STACK TRACE (end) ----------------------');
         console.groupEnd();
     }

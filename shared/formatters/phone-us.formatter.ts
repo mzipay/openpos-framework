@@ -22,7 +22,7 @@ export class PhoneUSFormatter implements IFormatter {
     }
 
     unFormatValue(value: string): string {
-        let n = value.replace(/\D/g, "");
+        const n = value.replace(/\D/g, '');
         return n;
     }
 

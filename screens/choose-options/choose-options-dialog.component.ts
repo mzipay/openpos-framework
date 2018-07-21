@@ -19,6 +19,4 @@ export class ChooseOptionsDialogComponent extends ChooseOptionsComponent {
             this.dialogProperties = screen.template.dialogProperties;
         }
     }
-    
-  
 }

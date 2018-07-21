@@ -8,6 +8,6 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 })
 export class DynamicFormComponent extends PosScreen<any> {
 
-  buildScreen(){};
+  buildScreen() {}
 
 }

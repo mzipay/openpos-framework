@@ -13,7 +13,7 @@ export class TillSummaryComponent extends PosScreen<any> {
 
     nextAction: IMenuItem;
 
-    buildScreen(){
+    buildScreen() {
         this.nextAction = this.screen.nextAction;
     }
 

@@ -8,7 +8,7 @@ import { TextMask, IMaskSpec, ITextMask } from '../../textmask';
     templateUrl: './prompt-input.component.html'
 })
 
-export class PromptInputComponent implements OnInit{
+export class PromptInputComponent implements OnInit {
 
     @Input() placeholderText: string;
     @Input() responseType: string;
@@ -19,7 +19,7 @@ export class PromptInputComponent implements OnInit{
     @Input() minLength: number;
     @Input() maxLength: number;
     @Input() promptFormGroup: FormGroup;
-    @Input() readOnly: boolean = false;
+    @Input() readOnly = false;
 
     inputType: string;
 
@@ -39,7 +39,7 @@ export class PromptInputComponent implements OnInit{
     }
 
     isDateField(): boolean {
-        if(this.responseType) {
+        if (this.responseType) {
             return this.responseType.toLowerCase().indexOf('date') >= 0;
         } else {
             return false;
@@ -54,7 +54,7 @@ export class PromptInputComponent implements OnInit{
             this._textMask = newMask;
         } else {
             this._textMask = TextMask.NO_MASK;
-        }        
+        }
     }
 
 }

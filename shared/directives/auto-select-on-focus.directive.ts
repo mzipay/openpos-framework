@@ -2,6 +2,7 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 import { DeviceService } from '../../core';
 
 @Directive({
+    // tslint:disable-next-line:directive-selector
     selector: '[autoSelectOnFocus]'
 })
 export class AutoSelectOnFocusDirective {

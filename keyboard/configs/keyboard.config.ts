@@ -7,19 +7,19 @@ export class MatKeyboardConfig {
   politeness?: AriaLivePoliteness = 'assertive';
 
   /** Message to be announced by the MatAriaLiveAnnouncer */
-  announcementMessage? = '';
+  announcementMessage ? = '';
 
   /** The view container to place the overlay for the keyboard into. */
   viewContainerRef?: ViewContainerRef = null;
 
   /** The length of time in milliseconds to wait before automatically dismissing the keyboard after blur. */
-  duration? = 0;
+  duration ? = 0;
 
   /** Enable a dark keyboard **/
-  darkTheme? = null;
+  darkTheme ? = null;
 
   /** Enable the debug view **/
-  isDebug? = false;
+  isDebug ? = false;
 
   /** Enable the debug view **/
   ngControl?: NgControl;

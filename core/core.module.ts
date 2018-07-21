@@ -7,7 +7,7 @@ import { BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
 import { SharedModule } from '../shared';
 import { ScreenService } from './services';
 import { AppInjector } from './app-injector';
-import { 
+import {
     ConfirmationDialogComponent,
     PersonalizationComponent,
     DynamicScreenComponent,
@@ -43,7 +43,7 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
 })
 export class CoreModule {
 
-    constructor(@Optional() @SkipSelf() parentModule: CoreModule, screenService: ScreenService, private injector: Injector){
+    constructor(@Optional() @SkipSelf() parentModule: CoreModule, screenService: ScreenService, private injector: Injector) {
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
         screenService.addScreen('Personalization', PersonalizationComponent);
         AppInjector.Instance = this.injector;

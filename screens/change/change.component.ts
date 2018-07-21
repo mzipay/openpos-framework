@@ -17,10 +17,6 @@ export class ChangeComponent extends PosScreen<any> implements AfterViewInit, Do
 
   itemsDataSource: MatTableDataSource<ITenderItem>;
 
-  constructor() {
-    super()
-  }
-
   buildScreen() { }
 
   ngDoCheck(): void {

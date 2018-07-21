@@ -12,7 +12,7 @@ import { SessionService } from '../../core';
   export class CatalogBrowserComponent implements IScreen {
     @ViewChild('drawer') drawer;
     @ViewChild(MatPaginator) paginator;
-  
+
     screen: IScreen;
     items: ISellItem[];
     categories: IMenuItem[];

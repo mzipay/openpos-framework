@@ -10,34 +10,16 @@ import { ShowErrorsComponent } from '../show-errors/show-errors.component';
   styleUrls: ['./dynamic-form-control.component.scss']
 })
 export class DynamicFormControlComponent implements AfterViewInit {
-  
+
   @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
   @ViewChild('formErrors') formErrors: ShowErrorsComponent;
 
-  ngAfterViewInit() {
-    // Delays less than 1 sec do not work correctly.
-    this.display(1000);
-  }
-
-  public display(delay: number) {
-    const nonReadonlyChildren = this.children.filter( child => {
-        if(child.field){
-          return child.field.readonly === false;
-        }
-        return false;
-      });
-  
-      if( nonReadonlyChildren.length > 0 ) {
-        setTimeout(() => nonReadonlyChildren[0].field.focus(), delay);
-      }
-  }
-  
-  @Input() 
-  get screenForm(): IForm{
+  @Input()
+  get screenForm(): IForm {
     return this._screenForm;
   }
 
-  set screenForm( screenForm: IForm){
+  set screenForm( screenForm: IForm) {
     this._screenForm = screenForm;
     this.buttons = new Array<IFormElement>();
 
@@ -55,12 +37,12 @@ export class DynamicFormControlComponent implements AfterViewInit {
 
   @Input() submitButtonText = 'Next';
 
-  @Input() 
-  get alternateSubmitActions(): string[]{
+  @Input()
+  get alternateSubmitActions(): string[] {
     return this._alternateSubmitActions;
   }
 
-  set alternateSubmitActions( actions: string[] ){
+  set alternateSubmitActions( actions: string[] ) {
     this._alternateSubmitActions = actions;
     if (actions) {
       actions.forEach(action => {
@@ -90,6 +72,24 @@ export class DynamicFormControlComponent implements AfterViewInit {
   private _alternateSubmitActions: string[];
 
   constructor(public session: SessionService, public screenService: ScreenService, private formBuilder: FormBuilder) {}
+
+  ngAfterViewInit() {
+    // Delays less than 1 sec do not work correctly.
+    this.display(1000);
+  }
+
+  public display(delay: number) {
+    const nonReadonlyChildren = this.children.filter( child => {
+        if (child.field) {
+          return child.field.readonly === false;
+        }
+        return false;
+      });
+
+      if ( nonReadonlyChildren.length > 0 ) {
+        setTimeout(() => nonReadonlyChildren[0].field.focus(), delay);
+      }
+  }
 
   submitForm() {
     if (this.form.valid) {
