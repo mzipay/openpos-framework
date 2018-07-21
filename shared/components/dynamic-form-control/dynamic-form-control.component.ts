@@ -1,7 +1,8 @@
-import { Component, ViewChildren, AfterViewInit, Input, QueryList } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, ViewChildren, AfterViewInit, Input, QueryList, ViewChild } from '@angular/core';
+import { FormGroup, AbstractControl } from '@angular/forms';
 import { SessionService, ScreenService, IFormElement, IForm, FormBuilder } from '../../../core';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
+import { ShowErrorsComponent } from '../show-errors/show-errors.component';
 
 @Component({
   selector: 'app-dynamic-form-control',
@@ -11,6 +12,7 @@ import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-fi
 export class DynamicFormControlComponent implements AfterViewInit {
   
   @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
+  @ViewChild('formErrors') formErrors: ShowErrorsComponent;
 
   ngAfterViewInit() {
     // Delays less than 1 sec do not work correctly.
@@ -93,6 +95,31 @@ export class DynamicFormControlComponent implements AfterViewInit {
     if (this.form.valid) {
       this.formBuilder.buildFormPayload(this.form, this._screenForm);
       this.session.onAction(this.submitAction, this._screenForm);
+    } else {
+        // Set focus on the first invalid field found
+        const invalidFieldKey = Object.keys(this.form.controls).find(key => {
+            const ctrl: AbstractControl = this.form.get(key);
+            return ctrl.invalid && ctrl.dirty;
+        });
+        if (invalidFieldKey) {
+            const invalidField = this.children.find(f => f.formField.id === invalidFieldKey).field;
+            if (invalidField) {
+                console.log(`Setting focus to invalid field '${invalidFieldKey}'`);
+                const invalidElement = document.getElementById(invalidFieldKey);
+                if (invalidElement) {
+                    invalidElement.scrollIntoView();
+                } else {
+                    invalidField.focus();
+                }
+            }
+        } else {
+            if (this.formErrors.shouldShowErrors()) {
+                const formErrorList = this.formErrors.listOfErrors();
+                if (formErrorList && formErrorList.length > 0) {
+                    document.getElementById('formErrorsWrapper').scrollIntoView();
+                }
+            }
+        }
     }
   }
 
