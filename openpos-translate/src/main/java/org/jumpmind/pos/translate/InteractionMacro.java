@@ -20,10 +20,17 @@ public class InteractionMacro {
         return this;
     }
 
+    public InteractionMacro runForScreen(String screenName) {
+        interactionQueue.add(new RunForScreen(screenName));
+        return this;
+    }
+
     public InteractionMacro orThisScreen(String screenName) {
         if (interactionQueue.size() > 0 && interactionQueue.getLast() instanceof WaitForScreen) {
-             ((WaitForScreen)interactionQueue.getLast()).screenNames.add(screenName);
-        } else {
+            ((WaitForScreen)interactionQueue.getLast()).screenNames.add(screenName);
+       } else if (interactionQueue.size() > 0 && interactionQueue.getLast() instanceof RunForScreen) {
+           ((RunForScreen)interactionQueue.getLast()).screenNames.add(screenName);
+      } else {
             throw new IllegalStateException("orThisScreen can only be called after waitForScreen");
         }
         return this;
@@ -86,6 +93,18 @@ public class InteractionMacro {
         Optional<EvaluateScreenMacro> evaluator = Optional.empty();
         
         public WaitForScreen(String screenName) {
+            screenNames.add(screenName);
+        }
+        
+        public Set<String> getScreenNames() {
+            return screenNames;
+        }
+    }
+
+    public class RunForScreen {
+        Set<String> screenNames = new HashSet<>();
+        
+        public RunForScreen(String screenName) {
             screenNames.add(screenName);
         }
         
