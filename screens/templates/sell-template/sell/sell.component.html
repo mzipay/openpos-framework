@@ -32,7 +32,7 @@
             <mat-card-content fxFlex="1 1 auto">
                 <mat-drawer-container fxFlex="1 1 auto">
                         <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async" fxLayout="column" fxLayoutAlign="start stretch"
-                            fxLayoutGap="4px" style="overflow-x:hidden">
+                            fxLayoutGap="4px" fxLayoutGap.lg="20px" style="overflow-x:hidden">
                              <button mat-button color="primary" *ngFor="let m of template.localMenuItems" (click)="doMenuItemAction(m)" style="text-align: left"
                                 [disabled]="!isMenuItemEnabled(m)">
                                 <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
