@@ -44,4 +44,5 @@ public interface ScreenType {
     public static final String SelectionList = "SelectionList";
     public static final String Wait = "Wait";
     public static final String WarrantyCoverage = "WarrentyCoverage";
+    public static final String ItemSearchResults = "ItemSearchResults";
 }
