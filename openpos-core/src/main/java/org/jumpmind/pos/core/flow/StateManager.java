@@ -221,8 +221,11 @@ public class StateManager implements IStateManager {
 
     @Override
     public void refreshScreen() {
+        // Hang onto the dialog since showing the last screen first will clear the last dialog from the screen 
+        // service
+        Screen lastDialog = screenService.getLastDialog(appId, nodeId);
         showScreen(screenService.getLastScreen(appId, nodeId));
-        showScreen(screenService.getLastDialog(appId, nodeId));
+        showScreen(lastDialog);
     }
 
     // Could come from a UI or a running state..
