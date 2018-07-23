@@ -23,7 +23,7 @@ export class PromptInputComponent implements OnInit {
     @Input() readOnly = false;
 
     inputType: string;
-    checked: boolean = true;
+    checked = true;
 
     formatter: string;
     _textMask: ITextMask; // Mask object built for text-mask
