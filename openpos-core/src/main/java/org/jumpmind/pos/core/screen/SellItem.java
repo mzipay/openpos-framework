@@ -18,6 +18,7 @@ public class SellItem extends DefaultItem {
     private String sellingPrice;
     private String quantity;
     private String discountAmount;
+    private String salesAssociate;
     private List<MenuItem> menuItems = new ArrayList<>();
     private boolean isGiftReceipt = false;
     private boolean isQuantityChangeable;
@@ -30,13 +31,14 @@ public class SellItem extends DefaultItem {
 
     @Override
     public String getSubtitle() {
-        String subTitle = String.format("Item: %s %s@%s", this.getPosItemId(), this.getQuantity(), this.getSellingPrice());
+        String subTitle = String.format("Item: %s %s@%s - Sales Associate: %s", this.getPosItemId(), this.getQuantity(), this.getSellingPrice(), this.getSalesAssociate());
         return subTitle;
     }
     
     @Override
     public void setSubtitle(String subtitle) {
         // do nothing
+    	// Oh.
     }
 
     public void setPosItemId(String posItemId) {
@@ -95,6 +97,14 @@ public class SellItem extends DefaultItem {
 
 	public void setDiscountAmount(String discountAmount) {
 		this.discountAmount = discountAmount;
+	}
+	
+	public String getSalesAssociate() {
+		return salesAssociate;
+	}
+
+	public void setSalesAssociate(String salesAssociate) {
+		this.salesAssociate = salesAssociate;
 	}
     
     public String getOriginalAmount() {
