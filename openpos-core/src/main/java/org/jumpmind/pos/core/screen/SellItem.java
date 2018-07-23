@@ -31,7 +31,14 @@ public class SellItem extends DefaultItem {
 
     @Override
     public String getSubtitle() {
-        String subTitle = String.format("Item: %s %s@%s - Sales Associate: %s", this.getPosItemId(), this.getQuantity(), this.getSellingPrice(), this.getSalesAssociate());
+    	String subTitle = "Item: %s %s@%s";
+    	if (this.salesAssociate != null && this.salesAssociate != "") {
+    		subTitle = subTitle + " - Sales Associate: %s";
+            subTitle = String.format(subTitle, this.getPosItemId(), this.getQuantity(), this.getSellingPrice(), this.getSalesAssociate());
+    	} else {
+    		subTitle = String.format(subTitle, this.getPosItemId(), this.getQuantity(), this.getSellingPrice());
+    	}
+
         return subTitle;
     }
     
