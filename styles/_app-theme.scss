@@ -70,6 +70,7 @@
     input.bordered{
         border-color: mat-color($foreground, divider);
         border-style: solid;
+        background-color: whitesmoke;
     }
 
     .mat-list.list-seperator{
