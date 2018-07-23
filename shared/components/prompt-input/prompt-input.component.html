@@ -28,8 +28,8 @@
                     </mat-error>
             </mat-form-field>
         
-            <mat-slide-toggle *ngSwitchCase="'ONOFF'" [formControlName]="'promptInputControl'" color="primary" ngClass="text-lg">
-                {{placeholderText}} {{onOffModel==true ? 'On' : 'Off'}}
+            <mat-slide-toggle *ngSwitchCase="'ONOFF'" [formControlName]="'promptInputControl'"  (click)="onCheck()" color="primary" ngClass="text-lg">
+                {{placeholderText}} {{responseText}} 
             </mat-slide-toggle>
         
             <mat-form-field fxFlexFill *ngSwitchCase="'ALPHANUMERICPASSWORD'" ngClass="text-lg">
