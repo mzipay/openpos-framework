@@ -36,6 +36,7 @@ import { CallForAuthorizationComponent } from './call-for-authorization/call-for
 import { MultipleDynamicFormComponent } from './multiple-dynamic-form/multiple-dynamic-form.component';
 import { SelectionListComponent } from './selection-list/selection-list.component';
 import { PrintPreviewComponent } from './print-preview/print-preview.component';
+import { ItemSearchResultsComponent } from './item-search-results/item-search-results.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -87,7 +88,8 @@ const screens = [
     CallForAuthorizationComponent,
     MultipleDynamicFormComponent,
     SelectionListComponent,
-    CatalogBrowserComponent
+    CatalogBrowserComponent,
+    ItemSearchResultsComponent
 ]
 
 const dialogs = [
