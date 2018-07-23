@@ -4,7 +4,7 @@
                 (click)="onMenuItemClick(menuItem)" >
             <div fxLayoutAlign="center center" fxLayout="column">
                 <app-icon fxFlex="1 0 auto" iconName="{{menuItem.icon}}" iconClass="material-icons mat-64"></app-icon>
-                <span fxFlex="1 0 auto" [ngClass]="menuItem.fontSize || 'text-sm'">{{menuItem.title}}</span>
+                {{menuItem.title}}
             </div>
         </button>
     </mat-card>
