@@ -4,14 +4,14 @@ import { IMenuItem, SelectionMode } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
-  selector: 'app-selection-list',
-  templateUrl: './selection-list.component.html',
-  styleUrls: ['./selection-list.component.scss']
+  selector: 'app-item-search-results',
+  templateUrl: './item-search-results.component.html',
+  styleUrls: ['./item-search-results.component.scss']
 })
-export class SelectionListComponent extends PosScreen<any> {
+export class ItemSearchResultsComponent extends PosScreen<any> {
 
   listConfig = new SelectableItemListComponentConfiguration<any>();
-  index = -1;
+  index: number = -1;
 
   constructor() {
     super();
@@ -25,7 +25,7 @@ export class SelectionListComponent extends PosScreen<any> {
       this.listConfig.selectionMode = SelectionMode.Single;
     }
     this.listConfig.numResultsPerPage = Number.MAX_VALUE;
-    this.listConfig.items = this.screen.selectionList;
+    this.listConfig.items = this.screen.items;
   }
 
   public onItemListChange(event: any[]): void {
@@ -34,7 +34,7 @@ export class SelectionListComponent extends PosScreen<any> {
   }
 
   public onItemChange(event: any): void {
-    this.index = this.screen.selectionList.indexOf(event);
+    this.index = this.listConfig.items.indexOf(event);
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {

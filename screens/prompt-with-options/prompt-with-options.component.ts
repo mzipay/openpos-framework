@@ -29,9 +29,9 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
       if (!this.screen.responseText) {
           value = 'false';
       }
-      //from server responseText is string , we are sending back as boolean
-      //ideally toggle control would return ON/OFF
-      value = (this.screen.responseText === 'ON') ? true :false;
+      // from server responseText is string , we are sending back as boolean
+      // ideally toggle control would return ON/OFF
+      value = (this.screen.responseText === 'ON') ? true : false;
       if (value) {
         this.screen.responseText = 'ON';
       } else {
