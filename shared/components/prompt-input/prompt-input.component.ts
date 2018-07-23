@@ -9,7 +9,7 @@ import { FabToggleButtonComponent } from '../fab-toggle-button/fab-toggle-button
     templateUrl: './prompt-input.component.html'
 })
 
-export class PromptInputComponent implements OnInit{
+export class PromptInputComponent implements OnInit {
 
     @Input() placeholderText: string;
     @Input() responseType: string;
@@ -20,8 +20,7 @@ export class PromptInputComponent implements OnInit{
     @Input() minLength: number;
     @Input() maxLength: number;
     @Input() promptFormGroup: FormGroup;
-    @Input() readOnly: boolean;
-    @Input() onOffModel: boolean;
+    @Input() readOnly = false;
 
     inputType: string;
     checked: boolean = true;
@@ -42,7 +41,7 @@ export class PromptInputComponent implements OnInit{
     }
 
     isDateField(): boolean {
-        if(this.responseType) {
+        if (this.responseType) {
             return this.responseType.toLowerCase().indexOf('date') >= 0;
         } else {
             return false;
@@ -64,7 +63,7 @@ export class PromptInputComponent implements OnInit{
             this._textMask = newMask;
         } else {
             this._textMask = TextMask.NO_MASK;
-        }        
+        }
     }
 
 }

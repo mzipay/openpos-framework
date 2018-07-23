@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { 
+import {
     CordovaDevicePlugin,
     CordovaPlugin,
     IDevicePlugin,

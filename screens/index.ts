@@ -16,7 +16,7 @@ export * from './home/home.component';
 export * from './item-list/item-list.component';
 export * from './login/login.component';
 export * from './multiple-dynamic-form/multiple-dynamic-form.component';
-export * from './multiple-dynamic-form/multiple-dynamic-form-screen.interface'
+export * from './multiple-dynamic-form/multiple-dynamic-form-screen.interface';
 export * from './options/options.component';
 export * from './payment-status/payment-status.component';
 export * from './print-preview/print-preview.component';

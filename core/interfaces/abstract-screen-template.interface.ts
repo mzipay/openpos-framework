@@ -1,3 +1,2 @@
-export interface IAbstractScreenTemplate{
-    
-}
+// tslint:disable-next-line:no-empty-interface
+export interface IAbstractScreenTemplate {}

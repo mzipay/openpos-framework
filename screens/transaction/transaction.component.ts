@@ -27,7 +27,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
 
   public items: ISellItem[];
 
-  constructor(devices: DeviceService, 
+  constructor(devices: DeviceService,
     private observableMedia: ObservableMedia, protected dialog: MatDialog) {
         super();
     }
@@ -53,7 +53,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
 
     let startSize = 3;
     sizeMap.forEach((size, mqAlias) => {
-      if( this.observableMedia.isActive(mqAlias)){
+      if ( this.observableMedia.isActive(mqAlias)) {
         startSize = size;
       }
     });
@@ -80,7 +80,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
 
   openItemsDialog(items: ISellItem[]) {
     let optionItems = [];
-    if(items.length > 1) {
+    if (items.length > 1) {
       optionItems = this.screen.multiSelectedMenuItems;
     } else {
       optionItems = items[0].menuItems;
@@ -100,20 +100,20 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
     });
   }
 
-  public getIndexes(items: ISellItem[]):number[] {
-    var indexes = [];
+  public getIndexes(items: ISellItem[]): number[] {
+    const indexes = [];
     items.forEach(item => indexes.push(item.index));
     return indexes;
   }
 
   public onItemListChange(event: ISellItem[]): void {
-    if(this.individualMenuClicked){
+    if (this.individualMenuClicked) {
       this.individualMenuClicked = false;
       this.selectedItems = event;
       return;
     }
     this.selectedItems = event;
-    this.session.onAction("SelectedItemsChanged", this.selectedItems);
+    this.session.onAction('SelectedItemsChanged', this.selectedItems);
   }
 
   ngAfterViewChecked() {

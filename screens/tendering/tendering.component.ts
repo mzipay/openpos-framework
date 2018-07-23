@@ -20,13 +20,13 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
     totalAmount: IFormElement;
     itemActions: IMenuItem[] = [];
     actionButton: IMenuItem;
-    
+
     constructor() {
         super();
     }
 
     ngAfterViewInit(): void {
-        setTimeout(() => this.tenderAmountField.focus(), 0); 
+        setTimeout(() => this.tenderAmountField.focus(), 0);
     }
 
     ngOnDestroy(): void {
@@ -53,5 +53,5 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
     onAction(): void {
         this.session.onAction(this.actionButton.action, this.tenderAmount.value);
     }
-        
+
 }

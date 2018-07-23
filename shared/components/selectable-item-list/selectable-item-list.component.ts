@@ -15,8 +15,8 @@ export class SelectableItemListComponentConfiguration<ItemType> {
 export class SelectableItemListComponent<ItemType> {
 
     @ContentChild(TemplateRef) itemTemplate: TemplateRef<ElementRef>;
-    
-    @Input() defaultSelect: boolean = false;
+
+    @Input() defaultSelect = false;
     @Input()
     set configuration(config: SelectableItemListComponentConfiguration<ItemType>) {
         this._config = config;
@@ -47,15 +47,15 @@ export class SelectableItemListComponent<ItemType> {
         }
         this.itemsToShow = this._config.items.slice((this.currentPage - 1) *
             this._config.numResultsPerPage, this._config.numResultsPerPage * this.currentPage);
-        
-        if(this.defaultSelect && this.itemsToShow.length == 1) {
-            this.onItemClick(this.itemsToShow[0]) 
+
+        if (this.defaultSelect && this.itemsToShow.length === 1) {
+            this.onItemClick(this.itemsToShow[0]);
         }
     }
 
     onNextPage() {
         this.currentPage++;
-        this.updateResultsToShow()
+        this.updateResultsToShow();
     }
 
     onPrevPage() {
@@ -66,7 +66,7 @@ export class SelectableItemListComponent<ItemType> {
     onItemClick(item: ItemType) {
         switch (this._config.selectionMode) {
             case SelectionMode.Multiple:
-                let i = this.selectedItemList.indexOf(item);
+                const i = this.selectedItemList.indexOf(item);
                 if (i >= 0) {
                     this.selectedItemList.splice(i, 1);
                 } else {
@@ -86,9 +86,7 @@ export class SelectableItemListComponent<ItemType> {
             case SelectionMode.Multiple:
                 return this.selectedItemList.includes(item);
             case SelectionMode.Single:
-                return this.selectedItem == item;
+                return this.selectedItem === item;
         }
     }
-
-
 }

@@ -7,11 +7,7 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 })
 export class SaleRetrievalComponent extends PosScreen<any> {
 
-  constructor() {
-    super();
-  }
-
-  buildScreen(){}
+  buildScreen() {}
 
   selected(value: string) {
     this.session.onAction('Next', value);

@@ -1,7 +1,8 @@
-import { Component, ViewChildren, AfterViewInit, Input, QueryList } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, ViewChildren, AfterViewInit, Input, QueryList, ViewChild } from '@angular/core';
+import { FormGroup, AbstractControl } from '@angular/forms';
 import { SessionService, ScreenService, IFormElement, IForm, FormBuilder } from '../../../core';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
+import { ShowErrorsComponent } from '../show-errors/show-errors.component';
 
 @Component({
   selector: 'app-dynamic-form-control',
@@ -9,33 +10,16 @@ import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-fi
   styleUrls: ['./dynamic-form-control.component.scss']
 })
 export class DynamicFormControlComponent implements AfterViewInit {
-  
+
   @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
+  @ViewChild('formErrors') formErrors: ShowErrorsComponent;
 
-  ngAfterViewInit() {
-    // Delays less than 1 sec do not work correctly.
-    this.display(1000);
-  }
-
-  public display(delay: number) {
-    const nonReadonlyChildren = this.children.filter( child => {
-        if(child.field){
-          return child.field.readonly === false;
-        }
-        return false;
-      });
-  
-      if( nonReadonlyChildren.length > 0 ) {
-        setTimeout(() => nonReadonlyChildren[0].field.focus(), delay);
-      }
-  }
-  
-  @Input() 
-  get screenForm(): IForm{
+  @Input()
+  get screenForm(): IForm {
     return this._screenForm;
   }
 
-  set screenForm( screenForm: IForm){
+  set screenForm( screenForm: IForm) {
     this._screenForm = screenForm;
     this.buttons = new Array<IFormElement>();
 
@@ -53,12 +37,12 @@ export class DynamicFormControlComponent implements AfterViewInit {
 
   @Input() submitButtonText = 'Next';
 
-  @Input() 
-  get alternateSubmitActions(): string[]{
+  @Input()
+  get alternateSubmitActions(): string[] {
     return this._alternateSubmitActions;
   }
 
-  set alternateSubmitActions( actions: string[] ){
+  set alternateSubmitActions( actions: string[] ) {
     this._alternateSubmitActions = actions;
     if (actions) {
       actions.forEach(action => {
@@ -89,10 +73,53 @@ export class DynamicFormControlComponent implements AfterViewInit {
 
   constructor(public session: SessionService, public screenService: ScreenService, private formBuilder: FormBuilder) {}
 
+  ngAfterViewInit() {
+    // Delays less than 1 sec do not work correctly.
+    this.display(1000);
+  }
+
+  public display(delay: number) {
+    const nonReadonlyChildren = this.children.filter( child => {
+        if (child.field) {
+          return child.field.readonly === false;
+        }
+        return false;
+      });
+
+      if ( nonReadonlyChildren.length > 0 ) {
+        setTimeout(() => nonReadonlyChildren[0].field.focus(), delay);
+      }
+  }
+
   submitForm() {
     if (this.form.valid) {
       this.formBuilder.buildFormPayload(this.form, this._screenForm);
       this.session.onAction(this.submitAction, this._screenForm);
+    } else {
+        // Set focus on the first invalid field found
+        const invalidFieldKey = Object.keys(this.form.controls).find(key => {
+            const ctrl: AbstractControl = this.form.get(key);
+            return ctrl.invalid && ctrl.dirty;
+        });
+        if (invalidFieldKey) {
+            const invalidField = this.children.find(f => f.formField.id === invalidFieldKey).field;
+            if (invalidField) {
+                console.log(`Setting focus to invalid field '${invalidFieldKey}'`);
+                const invalidElement = document.getElementById(invalidFieldKey);
+                if (invalidElement) {
+                    invalidElement.scrollIntoView();
+                } else {
+                    invalidField.focus();
+                }
+            }
+        } else {
+            if (this.formErrors.shouldShowErrors()) {
+                const formErrorList = this.formErrors.listOfErrors();
+                if (formErrorList && formErrorList.length > 0) {
+                    document.getElementById('formErrorsWrapper').scrollIntoView();
+                }
+            }
+        }
     }
   }
 

@@ -14,7 +14,7 @@ export class WarrantyCoverageComponent extends PosScreen<any> {
     warrantyCostTotal: string;
     @ViewChild(MatSelectionList) warrantyItemsSelectionList: MatSelectionList;
 
-    buildScreen(){
+    buildScreen() {
         this.text = this.screen.text;
         this.warrantyItemsSelectionList.selectedOptions.clear();
         this.warrantyItems = this.screen.warrantyItems;

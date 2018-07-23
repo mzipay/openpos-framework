@@ -12,10 +12,6 @@ export class FormComponent extends PosScreen<any> {
   formButtons: IFormElement[];
   @Output() onFieldChanged = new EventEmitter<{formElement: IFormElement, event: Event}>();
 
-  constructor() {
-      super()
-  }
-
   buildScreen() {
     this.form = this.screen.form;
     this.formButtons = this.screen.form.formElements.filter((e) => e.elementType === 'Button');

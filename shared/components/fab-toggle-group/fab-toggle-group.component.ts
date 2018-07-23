@@ -12,10 +12,10 @@ export class FabToggleGroupComponent implements AfterViewInit, DoCheck {
   @Input() value;
   @Output() valueChange = new EventEmitter();
 
-  @ContentChildren(FabToggleButtonComponent) toggleButtons : QueryList<FabToggleButtonComponent>;
+  @ContentChildren(FabToggleButtonComponent) toggleButtons: QueryList<FabToggleButtonComponent>;
 
-  constructor() { 
-      
+  constructor() {
+
   }
 
   ngAfterViewInit(): void {
@@ -25,21 +25,21 @@ export class FabToggleGroupComponent implements AfterViewInit, DoCheck {
   }
 
   ngDoCheck(): void {
-    if(!this.toggleButtons) return;
+    if (!this.toggleButtons) { return; }
     this.toggleButtons.forEach( button => {
-      if( button.value == this.value ){
+      if ( button.value === this.value ) {
         button.selected = true;
-      }else{
+      } else {
         button.selected = false;
       }
     });
   }
 
-  onToggleChange( source: FabToggleButtonComponent, value: any){
-    if( source.selected ){
+  onToggleChange( source: FabToggleButtonComponent, value: any) {
+    if ( source.selected ) {
       this.valueChange.emit(value);
-      this.toggleButtons.filter(button => button.value != source.value).forEach(button => button.setSelected(false));
-    } else if (this.toggleButtons.filter(button => button.selected == true).length < 1) {
+      this.toggleButtons.filter(button => button.value !== source.value).forEach(button => button.setSelected(false));
+    } else if (this.toggleButtons.filter(button => button.selected === true).length < 1) {
       this.valueChange.emit(null);
     }
 

@@ -16,18 +16,18 @@ const screens = [
     SelfCheckoutHomeComponent,
     SelfCheckoutPaymentStatusComponent,
     SelfCheckoutOptionsComponent
-]
+];
 
 const dialogs = [
-]
+];
 
 const templates = [
     SelfCheckoutWithBarComponent
-]
+];
 
 const components = [
     SelfCheckoutStatusBarComponent
-]
+];
 
 @NgModule({
     entryComponents: [

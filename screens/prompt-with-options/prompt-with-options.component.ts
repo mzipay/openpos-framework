@@ -37,7 +37,7 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
       } else {
         this.screen.responseText = 'OFF';
       }
-    }else{
+    } else {
       value = this.screen.responseText;
   }
 

@@ -11,7 +11,7 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 export class SelectionListComponent extends PosScreen<any> {
 
     listConfig = new SelectableItemListComponentConfiguration<any>();
-  index: number = -1;
+  index = -1;
 
   constructor() {
       super();

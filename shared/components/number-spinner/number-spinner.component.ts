@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { AbstractValueAccessor, MakeProvider } from "../abstract-value-accessor";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { AbstractValueAccessor, MakeProvider } from '../abstract-value-accessor';
 
 @Component({
     selector: 'app-number-spinner',
@@ -9,11 +9,11 @@ import { AbstractValueAccessor, MakeProvider } from "../abstract-value-accessor"
     styleUrls: ['./number-spinner.component.scss']
 })
 export class NumberSpinnerComponent extends AbstractValueAccessor implements OnInit {
-    @Input() min: number = 0;
-    @Input() max: number = 100;
-    @Input() step: number = 1;
-    @Input() precision: number = 1;
-    @Input() inputDisabled: boolean = false;
+    @Input() min = 0;
+    @Input() max = 100;
+    @Input() step = 1;
+    @Input() precision = 1;
+    @Input() inputDisabled = false;
     @Input() maxlength: number;
     @Input() minlength: number;
     // @Output() onChange: EventEmitter<number> = new EventEmitter();
@@ -40,7 +40,7 @@ export class NumberSpinnerComponent extends AbstractValueAccessor implements OnI
             if (this.precision != null) {
                 currentValue = this.round(currentValue, this.precision);
             }
-            //this.value = currentValue;
+            // this.value = currentValue;
             this.numberPicker.setValue(currentValue);
         }
     }
@@ -52,13 +52,13 @@ export class NumberSpinnerComponent extends AbstractValueAccessor implements OnI
             if (this.precision != null) {
                 currentValue = this.round(currentValue, this.precision);
             }
-            //this.value = currentValue;
+            // this.value = currentValue;
             this.numberPicker.setValue(currentValue);
         }
     }
 
     private round(value: number, precision: number): number {
-        let multiplier: number = Math.pow(10, precision || 0);
+        const multiplier: number = Math.pow(10, precision || 0);
         return Math.round(value * multiplier) / multiplier;
     }
 /*

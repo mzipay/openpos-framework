@@ -13,7 +13,7 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 export class SellItemDetailComponent extends PosScreen<any> {
   public item: ISellItem;
 
-  promosDataSource : MatTableDataSource<IPromoItem>;
+  promosDataSource: MatTableDataSource<IPromoItem>;
 
   constructor() {
       super();

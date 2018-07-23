@@ -1,4 +1,4 @@
 export interface IThemeChangingEvent {
-    currentTheme: string, 
-    newTheme: string
+    currentTheme: string;
+    newTheme: string;
 }

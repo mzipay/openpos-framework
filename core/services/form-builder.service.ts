@@ -10,7 +10,7 @@ import { ValidatorsService } from './validators.service';
 })
 export class FormBuilder {
 
-    constructor( private validatorService: ValidatorsService ){}
+    constructor( private validatorService: ValidatorsService ) {}
 
     group( form: IForm, extraValidators: ValidatorFn[] = []): FormGroup {
         const group: any = {};
@@ -50,7 +50,7 @@ export class FormBuilder {
    *
    * @param extraValidators Optional additional validators to be added to the form.
    */
-  private createControlValidators(element: IFormElement, extraValidators: ValidatorFn[]=[]): ValidatorFn[] {
+  private createControlValidators(element: IFormElement, extraValidators: ValidatorFn[]= []): ValidatorFn[] {
     let validators: ValidatorFn[] = [];
     if (element.required) {
       validators.push(Validators.required);

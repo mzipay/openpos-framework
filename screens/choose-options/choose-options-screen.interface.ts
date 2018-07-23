@@ -14,13 +14,13 @@ export interface IChooseOptionsScreen extends IAbstractScreen {
     actionButton: IMenuItem;
 }
 
-export enum SelectionMode{
-    None="None",
-    Single="Single",
-    Multiple="Multiple",
+export enum SelectionMode {
+    None= 'None',
+    Single= 'Single',
+    Multiple= 'Multiple',
 }
 
-export enum DisplayStyle{
-    ButtonList="ButtonList",
-    ButtonGrid="ButonGrid"
+export enum DisplayStyle {
+    ButtonList= 'ButtonList',
+    ButtonGrid= 'ButonGrid'
 }

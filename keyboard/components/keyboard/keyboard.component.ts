@@ -15,6 +15,7 @@ import { MatKeyboardKeyComponent } from '../keyboard-key/keyboard-key.component'
  * This should only be used internally by the keyboard service.
  */
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'mat-keyboard',
   templateUrl: './keyboard.component.html',
   styleUrls: ['./keyboard.component.scss'],

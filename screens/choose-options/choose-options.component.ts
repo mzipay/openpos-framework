@@ -18,10 +18,6 @@ export class ChooseOptionsComponent extends PosScreen<IChooseOptionsScreen> impl
   public optionItems: IOptionItem[];
   public promptText: string;
 
-  constructor() {
-      super()
-  }
-
   buildScreen() {
     this.optionItems = this.screen.options;
     this.currentView = this.screen.displayStyle;

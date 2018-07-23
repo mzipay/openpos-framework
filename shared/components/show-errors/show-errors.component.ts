@@ -49,10 +49,10 @@ export class ShowErrorsComponent {
     }
 
     private getMessage(type: string, params: any) {
-        if( Object.keys(ShowErrorsComponent.errorMessages).includes(type)){
+        if ( Object.keys(ShowErrorsComponent.errorMessages).includes(type)) {
             return ShowErrorsComponent.errorMessages[type](params);
         } else {
-            return "Invalid input";
+            return 'Invalid input';
         }
     }
 }
