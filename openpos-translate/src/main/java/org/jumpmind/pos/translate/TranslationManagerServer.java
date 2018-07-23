@@ -11,11 +11,12 @@ import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.NoOpScreen;
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.translate.InteractionMacro.AbortMacro;
 import org.jumpmind.pos.translate.InteractionMacro.DoOnActiveScreen;
 import org.jumpmind.pos.translate.InteractionMacro.DoOnScreen;
+import org.jumpmind.pos.translate.InteractionMacro.RunForScreen;
 import org.jumpmind.pos.translate.InteractionMacro.SendLetter;
 import org.jumpmind.pos.translate.InteractionMacro.WaitForScreen;
 import org.slf4j.Logger;
@@ -143,6 +144,22 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
                         }
                         match = wait.getScreenNames().contains(currentScreenName);
                         if (!match) {
+                            break;
+                        } else {
+                            current = next(objects);
+                        }
+                    } else if (current instanceof RunForScreen && screen != null) {
+                        RunForScreen wait = (RunForScreen) current;
+                        String currentScreenName = null;
+                        boolean match = false;
+                        if (screen.isDialog()) {
+                            currentScreenName = screen.getDialogResourceId();
+                        } else {
+                            currentScreenName = screen.getSpecName();
+                        }
+                        match = wait.getScreenNames().contains(currentScreenName);
+                        if (!match) {
+                            showScreen = true;
                             break;
                         } else {
                             current = next(objects);
