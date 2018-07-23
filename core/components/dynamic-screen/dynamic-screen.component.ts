@@ -592,7 +592,9 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             switch (this.session.getAppId()) {
                 case 'pos':
                     if (screen.type === 'Home') {
-                        this.classes = 'main-background';
+                        this.classes = 'pos main-background';
+                    } else {
+                        this.classes = 'pos';
                     }
                     break;
                 case 'selfcheckout':
