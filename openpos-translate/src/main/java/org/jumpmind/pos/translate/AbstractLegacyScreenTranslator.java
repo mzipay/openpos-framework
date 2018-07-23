@@ -24,6 +24,7 @@ import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.IUIAction;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.Workstation;
+import org.jumpmind.pos.core.template.BlankWithBarTemplate;
 import org.jumpmind.pos.core.template.SellTemplate;
 import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
 
@@ -109,6 +110,14 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
             template.setWorkstation(workstation);
         }
+        
+        if (legacyStoreProperties != null && screen.getTemplate() instanceof BlankWithBarTemplate) {
+            BlankWithBarTemplate template = screen.getTemplate();
+            Workstation workstation = new Workstation();
+            workstation.setStoreId(legacyStoreProperties.getStoreNumber());
+            workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
+            template.setWorkstation(workstation);
+        }
         setScreenProperties();
 
         if (getLegacyUIModel() != null) {
@@ -156,6 +165,17 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                 template.setRegisterStatus("Offline");
             }
         }
+        
+        if (screen.getTemplate() instanceof BlankWithBarTemplate) {
+            BlankWithBarTemplate template = screen.getTemplate();
+            String operatorText;
+            if (properties != null && STATUS_BAR_USER_TEXT_FIRST_LAST_NAME.equals(properties.get(STATUS_BAR_USER_TEXT_PROP))) {
+                operatorText = posSessionInfo.getOperatorName();
+            } else {
+                operatorText = posSessionInfo.getOperatorLoginId();
+            }
+            template.setOperatorText(WordUtils.capitalizeFully(operatorText));
+             }
     }
 
     protected String getScreenName() {
