@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
 import { AbstractTemplate } from '../abstract-template';
 import { Configuration } from '../../../configuration/configuration';
 import { IPlugin } from '../../plugins';
-import { 
-    ScreenService, 
+import {
+    ScreenService,
     DialogService,
     SessionService,
     DeviceService,
@@ -32,7 +32,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     ConvElements: Element[];
     ConfElements: Element[];
     FlowElements: Element[];
-    
+
 
     savePoints: string[];
 
@@ -44,6 +44,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     devClicks = 0;
 
+    currentSelectedLogfilename: string;
     logFilenames: string[];
 
     logPlugin: IPlugin;
@@ -113,7 +114,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
         protected router: Router, private pluginService: PluginService,
         private fileUploadService: FileUploadService,
-        private httpClient: HttpClient, private cd: ChangeDetectorRef, 
+        private httpClient: HttpClient, private cd: ChangeDetectorRef,
         private elRef: ElementRef, public renderer: Renderer2
         /* private devTableService: DevTableService */) {
             if (Configuration.useTouchListener) {
@@ -125,7 +126,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     ngOnInit(): void {
         const self = this;
-        
+
         this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
         this.session.subscribeForDialogUpdates((dialog: any): void => self.updateDialog(dialog));
         if (!this.registerWithServer()) {
@@ -140,7 +141,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.session.obsStateClass$.subscribe(currentStateClass => this.currentStateClass = currentStateClass);
         this.session.obsStateActions$.subscribe(currentStateActions => this.currentStateActions = currentStateActions);
         this.session.obsSave$.subscribe(savePoints => this.savePoints = savePoints);
-        
+
     }
 
 
@@ -149,10 +150,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     @HostListener('document:keydown', ['$event'])
-    handleKeydownEvent(event: any) { 
-    let key = event.key;
+    handleKeydownEvent(event: any) {
+    const key = event.key;
     // console.log(key);
-        if (key === 'ArrowUp' && this.keyCount != 1) {
+        if (key === 'ArrowUp' && this.keyCount !== 1) {
             this.keyCount = 1;
         } else if (key === 'ArrowUp' && this.keyCount === 1) {
             this.keyCount = 2;
@@ -189,7 +190,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     // @HostListener('document:keyup', ['$event'])
-    // handleKeyupEvent(event: any) { 
+    // handleKeyupEvent(event: any) {
     //     let key = event.key;
     //     if (key === 'Shift' || key === 'Alt' || key === 'Option' || key === 'd' || key === 'D') {
     //         this.keyCount = 0;
@@ -275,7 +276,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     protected onDevMenuRefresh() {
-        console.log("refreshing tools... ")
+        console.log('refreshing tools... ');
         this.displayStackTrace = false;
         this.currentState = 'Updating State... ';
         this.currentStateClass = 'Updating State...';
@@ -287,8 +288,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.ConfElements = [];
         this.FlowElements = [];
         setTimeout( () => {
-            this.session.onAction('DevTools::Get')
-            this.showUpdating = false
+            this.session.onAction('DevTools::Get');
+            this.showUpdating = false;
             }, 500
         );
         this.onCreateSavePoint(null);
@@ -324,9 +325,9 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     protected onLoadSavePoint(savePoint: string) {
         if (this.savePoints.includes(savePoint)) {
             this.session.onAction('DevTools::Load::' + savePoint);
-            console.log("Loaded Save Point: \'" + savePoint + "\'");
+            console.log('Loaded Save Point: \'' + savePoint + '\'');
         } else {
-            console.log("Unable to load Save Point: \'" + savePoint + "\'");
+            console.log('Unable to load Save Point: \'' + savePoint + '\'');
         }
     }
 
@@ -400,9 +401,14 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     public onLogfileSelected(logFilename: string): void {
+        this.currentSelectedLogfilename = logFilename;
+    }
+
+    public onLogfileShare(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
+            const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.shareLogFile(
-                logFilename,
+                targetFilename,
                 () => {
                 },
                 (error) => {
@@ -412,12 +418,13 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
     }
 
-    public onLogfileUpload(logFilename: string): void {
+    public onLogfileUpload(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
+            const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.getLogFilePath(
-                logFilename,
+                targetFilename,
                 (logfilePath) => {
-                    this.fileUploadService.uploadLocalDeviceFileToServer('log', logFilename, 'text/plain', logfilePath)
+                    this.fileUploadService.uploadLocalDeviceFileToServer('log', targetFilename, 'text/plain', logfilePath)
                         .then((result: { success: boolean, message: string }) => {
                             this.snackBar.open(result.message, 'Dismiss', {
                                 duration: 8000, verticalPosition: 'top'
@@ -436,16 +443,17 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
     }
 
-    public onLogfileView(logFilename: string): void {
+    public onLogfileView(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
+            const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.readLogFileContents(
-                logFilename,
+                targetFilename,
                 (logFileContents) => {
                     const dialogRef = this.dialog.open(FileViewerComponent, {
                         panelClass: 'full-screen-dialog',
                         maxWidth: '100vw', maxHeight: '100vh', width: '100vw'
                     });
-                    dialogRef.componentInstance.fileName = logFilename;
+                    dialogRef.componentInstance.fileName = targetFilename;
                     dialogRef.componentInstance.text = logFileContents;
                 },
                 (error) => {
@@ -649,6 +657,5 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
         this.lastDialogType = dialog.type;
     }
-    
 
 }

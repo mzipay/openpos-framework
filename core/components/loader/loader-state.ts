@@ -16,7 +16,7 @@ export class LoaderState {
 
     constructor(protected sessionService: SessionService) {
         const t = timer(1000, 1000);
-        t.subscribe(t => this.checkConnectionStatus());
+        t.subscribe(n => this.checkConnectionStatus());
     }
 
     get show() {

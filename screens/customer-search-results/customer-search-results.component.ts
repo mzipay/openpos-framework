@@ -14,10 +14,6 @@ export class CustomerSearchResultsComponent extends PosScreen<any> {
   public customers: ICustomer[];
   selectedOptions: ICustomer[];
 
-  constructor() { 
-      super()
-  }
-
   buildScreen() {
     this.customers = this.screen.customers;
     this.submitAction = this.screen.submitAction;

@@ -6,7 +6,7 @@
     "author": "Jumpmind",
     "license": "MIT",
     "private": true,
-    "scripts":{
+    "scripts": {
         "lint": "tslint --project ./tsconfig.json"
     },
     "dependencies": {

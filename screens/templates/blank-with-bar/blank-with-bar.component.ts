@@ -12,7 +12,7 @@ import { SellScreenUtils } from '../sell-template/sell/sell-screen.interface';
 export class BlankWithBarComponent extends AbstractTemplate implements OnInit {
 
   template: any;
-  statusBar : StatusBarData;
+  statusBar: StatusBarData;
 
   constructor(public overlayContainer: OverlayContainer) {
       super();

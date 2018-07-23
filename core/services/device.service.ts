@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Subscription, BehaviorSubject, Subject } from 'rxjs';
 import { FileUploadService } from './file-upload.service';
-import { 
+import {
     LogfileDownloadPlugin,
     InAppBrowserPlugin,
     BarcodeScannerPlugin,
-    DEVICE_ERROR_RESPONSE_TYPE, 
-    DEVICE_RESPONSE_TYPE, 
+    DEVICE_ERROR_RESPONSE_TYPE,
+    DEVICE_RESPONSE_TYPE,
     DEVICE_DNE_RESPONSE_TYPE,
     IDevicePlugin,
     IDeviceRequest
@@ -68,7 +68,7 @@ export class DeviceService {
   }
 
   public scan() {
-    if (this.screen.template && this.screen.template.scan &&  
+    if (this.screen.template && this.screen.template.scan &&
         this.screen.template.scan.scanType === 'CAMERA_CORDOVA') {
         console.log(`request to scan was made for: ${this.screen.template.scan.scanType}`);
         this.cordovaCameraScan();

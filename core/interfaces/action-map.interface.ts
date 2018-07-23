@@ -1,4 +1,4 @@
 export interface ActionMap {
-    Action: string,
-    Destination: string,
+    Action: string;
+    Destination: string;
 }

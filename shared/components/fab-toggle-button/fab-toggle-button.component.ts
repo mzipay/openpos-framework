@@ -5,7 +5,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: './fab-toggle-button.component.html',
   styleUrls: ['./fab-toggle-button.component.scss']
 })
-export class FabToggleButtonComponent{
+export class FabToggleButtonComponent {
 
     @Input()
     icon: string;
@@ -25,17 +25,17 @@ export class FabToggleButtonComponent{
     @Output()
     change: EventEmitter<FabToggleChange> = new EventEmitter<FabToggleChange>();
 
-  constructor() { 
-      
+  constructor() {
+
   }
 
-  onClick(){
+  onClick() {
     this.setSelected(!this.selected);
     this.change.emit(new FabToggleChange(this, this.value));
-    
+
   }
 
-  setSelected(value: boolean){
+  setSelected(value: boolean) {
     this.selected = value;
     this.selectedChange.emit(this.selected);
   }

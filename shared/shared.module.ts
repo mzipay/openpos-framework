@@ -10,10 +10,10 @@ import { SearchSelectModule } from '@oasisdigital/angular-material-search-select
 import { MaterialModule } from './material.module';
 import { MatKeyboardModule } from '../keyboard';
 
-import { 
-    MarkDirtyOnSubmitDirective, 
-    InputFormatterDirective, 
-    FocusDirective, 
+import {
+    MarkDirtyOnSubmitDirective,
+    InputFormatterDirective,
+    FocusDirective,
     ScreenOrientationDirective,
     MimicScrollDirective,
     MatExclusiveSelectionListDirective,
@@ -25,10 +25,10 @@ import {
     RequireAtleastOneValidatorDirective,
     PhoneUSValidatorDirective
 } from './directives';
-import { 
-    PromptInputComponent, 
-    IconComponent, 
-    ShowErrorsComponent, 
+import {
+    PromptInputComponent,
+    IconComponent,
+    ShowErrorsComponent,
     DynamicDateFormFieldComponent,
     DynamicFormFieldComponent,
     DynamicFormControlComponent,
@@ -65,7 +65,7 @@ const components = [
     NavListComponent,
     FileViewerComponent,
     NumberSpinnerComponent,
-]
+];
 
 const directives = [
     MarkDirtyOnSubmitDirective,
@@ -81,13 +81,13 @@ const directives = [
     ScreenDirective,
     RequireAtleastOneValidatorDirective,
     PhoneUSValidatorDirective
-]
+];
 
 const pipes = [
     SafePipe,
     PhonePipe,
     HourMinSecPipe
-]
+];
 
 @NgModule({
     entryComponents: [

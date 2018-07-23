@@ -20,6 +20,7 @@ export const HIDE_ANIMATION = `${AnimationDurations.EXITING} ${AnimationCurves.A
  * @docs-private
  */
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'mat-keyboard-container',
   templateUrl: './keyboard-container.component.html',
   styleUrls: ['./keyboard-container.component.scss'],

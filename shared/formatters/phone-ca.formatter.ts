@@ -3,7 +3,7 @@ import { IFormatter } from './formatter.interface';
 export class PhoneCAFormatter implements IFormatter {
 
     private newValueFilter = /^[0-9]{1,10}$/;
-    
+
     constructor() {
     }
 
@@ -24,7 +24,7 @@ export class PhoneCAFormatter implements IFormatter {
     }
 
     unFormatValue(value: string): string {
-        let n = value.replace(/\D/g, "");
+        const n = value.replace(/\D/g, '');
         return n;
     }
 

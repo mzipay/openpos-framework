@@ -14,10 +14,10 @@ import { IThemeChangingEvent } from '../../shared/';
 import { LoaderState } from '../components/loader/loader-state';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
 import { IDeviceResponse, IDeviceRequest } from '../plugins';
-import { 
+import {
     IMenuItem,
     IUrlMenuItem,
-    IToastScreen, 
+    IToastScreen,
     ToastType,
     Element,
     ActionMap
@@ -63,13 +63,13 @@ export class SessionService {
 
     currentState: string;
 
-    subState$ = new BehaviorSubject<string>("");
+    subState$ = new BehaviorSubject<string>('');
 
     obsState$: Observable<string>;
 
     currentStateClass: string;
 
-    subStateClass$ = new BehaviorSubject<string>("");
+    subStateClass$ = new BehaviorSubject<string>('');
 
     obsStateClass$: Observable<string>;
 
@@ -131,7 +131,7 @@ export class SessionService {
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
-        this.onServerConnect = Observable.create(observer => {this.onServerConnectObserver = observer;});
+        this.onServerConnect = Observable.create(observer => {this.onServerConnectObserver = observer; });
         this.obsNode$ = this.subNode$.asObservable();
         this.obsSess$ = this.subSess$.asObservable();
         this.obsConv$ = this.subConv$.asObservable();
@@ -160,7 +160,7 @@ export class SessionService {
         return !app;
     }
 
-    public personalize(serverName: string, serverPort: string, node: string | {storeId: string, deviceId: string}, 
+    public personalize(serverName: string, serverPort: string, node: string | {storeId: string, deviceId: string},
         sslEnabled?: boolean, refreshApp: boolean = true) {
 
         let nodeId = '';
@@ -262,7 +262,7 @@ export class SessionService {
         if (this.previousTheme !== theme) {
             console.log(`Theme changing from '${this.previousTheme}' to '${theme}'`);
             this.onThemeChanging.emit({currentTheme: this.previousTheme, newTheme: theme});
-            this.previousTheme = theme;          
+            this.previousTheme = theme;
         }
     }
 
@@ -523,10 +523,10 @@ export class SessionService {
                 // screen shown was a 'loading' screen, don't want to dismiss
                 // that prematurely
                 return;
-            } else if( json.type === 'Toast') {
+            } else if ( json.type === 'Toast') {
                 const toast = json as IToastScreen;
                 this.snackBar.open(toast.message, null, {
-                    duration:toast.duration,
+                    duration: toast.duration,
                     panelClass: this.getToastClass(toast.toastType)
                   });
             } else {
@@ -545,7 +545,7 @@ export class SessionService {
     }
 
     private getToastClass( type: ToastType ): string {
-        switch(type){
+        switch (type) {
             case ToastType.Success:
                 return 'toast-success';
             case ToastType.Warn:
@@ -556,24 +556,23 @@ export class SessionService {
     }
 
     private populateDevTables(json: any) {
-        if(json.currentState) {
-            console.log("Pulling current state actions...");
+        if (json.currentState) {
+            console.log('Pulling current state actions...');
             this.currentState = json.currentState.stateName;
             this.subState$.next(this.currentState);
             this.currentStateClass = json.currentState.stateClass;
             this.subStateClass$.next(this.currentStateClass);
             this.currentStateActions = [];
-            for(var i = 0; i < json.actionsSize; i = i + 2) {
+            for ( let i = 0; i < json.actionsSize; i = i + 2) {
                 this.currentStateActions.push({
                     Action: json.actions[i],
-                    Destination: json.actions[i+1]
+                    Destination: json.actions[i + 1]
 
                 });
                 this.subStateActions$.next(this.currentStateActions);
-                
             }
         }
-        if(json.scopes.ConversationScope) {
+        if (json.scopes.ConversationScope) {
             console.log('Pulling Conversation Scope Elements...');
             this.ConvElements = [];
             json.scopes.ConversationScope.forEach(element => {
@@ -581,15 +580,14 @@ export class SessionService {
                     this.ConvElements.push({
                         ID: element.name,
                         Time: element.date,
-                        StackTrace: element.stackTrace,  
-                        Value: element.value 
+                        StackTrace: element.stackTrace,
+                        Value: element.value
                     });
                     this.subConv$.next(this.ConvElements);
                 }
             });
-            
         }
-        if(json.scopes.SessionScope) {
+        if (json.scopes.SessionScope) {
             console.log('Pulling Session Scope Elements...');
             this.SessElements = [];
             json.scopes.SessionScope.forEach(element => {
@@ -597,15 +595,14 @@ export class SessionService {
                     this.SessElements.push({
                         ID: element.name,
                         Time: element.date,
-                        StackTrace: element.stackTrace,  
-                        Value: element.value 
+                        StackTrace: element.stackTrace,
+                        Value: element.value
                     });
                     this.subSess$.next(this.SessElements);
                 }
             });
-            
         }
-        if(json.scopes.NodeScope) {
+        if (json.scopes.NodeScope) {
             console.log('Pulling Node Scope Elements...');
             this.NodeElements = [];
             json.scopes.NodeScope.forEach(element => {
@@ -613,15 +610,14 @@ export class SessionService {
                     this.NodeElements.push({
                         ID: element.name,
                         Time: element.date,
-                        StackTrace: element.stackTrace,  
-                        Value: element.value 
+                        StackTrace: element.stackTrace,
+                        Value: element.value
                     });
                     this.subNode$.next(this.NodeElements);
                 }
             });
-            
         }
-        if(json.scopes.FlowScope) {
+        if (json.scopes.FlowScope) {
             console.log('Pulling Flow Scope Elements...');
             this.FlowElements = [];
             json.scopes.FlowScope.forEach(element => {
@@ -629,8 +625,8 @@ export class SessionService {
                     this.FlowElements.push({
                         ID: element.name,
                         Time: element.date,
-                        StackTrace: element.stackTrace,  
-                        Value: element.value 
+                        StackTrace: element.stackTrace,
+                        Value: element.value
                     });
                     this.subFlow$.next(this.FlowElements);
                 }
@@ -638,7 +634,7 @@ export class SessionService {
             console.log(this.FlowElements);
         }
 
-        if(json.scopes.ConfigScope) {
+        if (json.scopes.ConfigScope) {
             console.log('Pulling Config Scope Elements...');
             this.ConfElements = [];
             json.scopes.ConfigScope.forEach(element => {
@@ -646,8 +642,8 @@ export class SessionService {
                     this.ConfElements.push({
                         ID: element.name,
                         Time: element.date,
-                        StackTrace: element.stackTrace,  
-                        Value: element.value 
+                        StackTrace: element.stackTrace,
+                        Value: element.value
                     });
                     this.subConf$.next(this.ConfElements);
                 }
@@ -655,35 +651,35 @@ export class SessionService {
             console.log(this.ConfElements);
         }
 
-        if(json.saveFiles) {
+        if (json.saveFiles) {
             console.log('Pulling save files...');
             this.savePoints = [];
             json.saveFiles.forEach(saveName => {
                 this.savePoints.push(saveName);
                 this.subSave$.next(this.savePoints);
                 console.log(this.savePoints);
-            })
+            });
         }
     }
 
     public addSaveFile(newSavePoint: string) {
         if (newSavePoint) {
-            if(!this.savePoints.includes(newSavePoint)) {
+            if (!this.savePoints.includes(newSavePoint)) {
                 this.savePoints.push(newSavePoint);
                 this.subSave$.next(this.savePoints);
             }
           this.onAction('DevTools::Save::' + newSavePoint);
-          console.log("Save Point Created: \'" + newSavePoint + "\'");
+          console.log('Save Point Created: \'' + newSavePoint + '\'');
         }
     }
 
     public removeSaveFile(saveName: string) {
         console.log('Attempting to remove Save Point \'' + saveName + '\'...');
-        let index = this.savePoints.findIndex(item => {
+        const index = this.savePoints.findIndex(item => {
             return saveName === item;
         });
         if (index !== -1) {
-            this.onAction("DevTools::RemoveSave::" + saveName);
+            this.onAction('DevTools::RemoveSave::' + saveName);
             this.savePoints.splice(index, 1);
             this.subSave$.next(this.savePoints);
             console.log('Save Points updated: ');
@@ -693,11 +689,11 @@ export class SessionService {
 
     public removeNodeElement(element: Element) {
         console.log('Attempting to remove \'' + element.Value + '\'...');
-        let index = this.NodeElements.findIndex(item => {
+        const index = this.NodeElements.findIndex(item => {
             return element.Value === item.Value;
         });
         if (index !== -1) {
-            this.onAction("DevTools::Remove::Node", element);
+            this.onAction('DevTools::Remove::Node', element);
             this.NodeElements.splice(index, 1);
             this.subNode$.next(this.NodeElements);
             console.log('Node Scope updated: ');
@@ -707,11 +703,11 @@ export class SessionService {
 
     public removeSessionElement(element: Element) {
         console.log('Attempting to remove \'' + element.Value + '\'...');
-        let index = this.SessElements.findIndex(item => {
+        const index = this.SessElements.findIndex(item => {
             return element.Value === item.Value;
         });
         if (index !== -1) {
-            this.onAction("DevTools::Remove::Session", element);
+            this.onAction('DevTools::Remove::Session', element);
             this.SessElements.splice(index, 1);
             this.subSess$.next(this.SessElements);
             console.log('Session Scope updated: ');
@@ -721,11 +717,11 @@ export class SessionService {
 
     public removeConversationElement(element: Element) {
         console.log('Attempting to remove \'' + element.Value + '\'...');
-        let index = this.ConvElements.findIndex(item => {
+        const index = this.ConvElements.findIndex(item => {
             return element.Value === item.Value;
         });
         if (index !== -1) {
-            this.onAction("DevTools::Remove::Conversation", element);
+            this.onAction('DevTools::Remove::Conversation', element);
             this.ConvElements.splice(index, 1);
             this.subConv$.next(this.ConvElements);
             console.log('Conversation Scope updated: ');
@@ -735,11 +731,11 @@ export class SessionService {
 
     public removeConfigElement(element: Element) {
         console.log('Attempting to remove \'' + element.Value + '\'...');
-        let index = this.ConfElements.findIndex(item => {
+        const index = this.ConfElements.findIndex(item => {
             return element.Value === item.Value;
         });
         if (index !== -1) {
-            this.onAction("DevTools::Remove::Config", element);
+            this.onAction('DevTools::Remove::Config', element);
             this.ConfElements.splice(index, 1);
             this.subConf$.next(this.ConfElements);
             console.log('Config Scope updated: ');
@@ -749,11 +745,11 @@ export class SessionService {
 
     public removeFlowElement(element: Element) {
         console.log('Attempting to remove \'' + element.Value + '\'...');
-        let index = this.FlowElements.findIndex(item => {
+        const index = this.FlowElements.findIndex(item => {
             return element.Value === item.Value;
         });
         if (index !== -1) {
-            this.onAction("DevTools::Remove::Flow", element);
+            this.onAction('DevTools::Remove::Flow', element);
             this.FlowElements.splice(index, 1);
             this.subFlow$.next(this.FlowElements);
             console.log('Flow Scope updated: ');

@@ -10,16 +10,16 @@ export class LogfileDownloadPlugin extends CordovaDevicePlugin {
     pluginId = 'logfileDownloadPlugin';
     pluginName = this.pluginId;
     // private pluginImpl: IPlugin;
-    //private fileUploadService: FileUploadService;
+    // private fileUploadService: FileUploadService;
 
     constructor(private fileUploadService: FileUploadService) {
         super('openPOSCordovaLogPlugin');
     }
-    
+
     init(successCallback: () => void, errorCallback: (error?: string) => void): void {
         super.init(successCallback, errorCallback);
-        //const injector = Injector.create([{provide: FileUploadService, deps: []}]);
-        //this.fileUploadService = injector.get(FileUploadService);
+        // const injector = Injector.create([{provide: FileUploadService, deps: []}]);
+        // this.fileUploadService = injector.get(FileUploadService);
     }
 
     processRequest(deviceRequest: IDeviceRequest, successCallback: (response: any) => void, errorCallback: (error: string) => void) {
@@ -37,7 +37,7 @@ export class LogfileDownloadPlugin extends CordovaDevicePlugin {
                 console.log('download-files request received.');
                 if (this.impl) {
                     const logFiles = deviceRequest.payload || [];
-                    let uploadPromises: Promise<string>[] = [];
+                    const uploadPromises: Promise<string>[] = [];
                     logFiles.forEach(logfile => {
                         uploadPromises.push(this.uploadFile(logfile));
                     });
@@ -45,7 +45,7 @@ export class LogfileDownloadPlugin extends CordovaDevicePlugin {
 //                        results.forEach(result => console.log(`Promise result: ${JSON.stringify(result)}`));
 //                        console.log(`Messages received: ${messages}`);
                         successCallback(messages);
-                    }).catch( error => 
+                    }).catch( error =>
                         errorCallback(error)
                     );
                 } else {
@@ -55,14 +55,14 @@ export class LogfileDownloadPlugin extends CordovaDevicePlugin {
         }
     }
 
-    private uploadFile(logFilename: string) : Promise<string> {
+    private uploadFile(logFilename: string): Promise<string> {
         return new Promise<string>((resolve, reject) => {
             this.impl.getLogFilePath(
                 logFilename,
                 (logfilePath) => {
                     this.fileUploadService.uploadLocalDeviceFileToServer('log', logFilename, 'text/plain', logfilePath).then(
                         result => {
-                            resolve(result.message);    
+                            resolve(result.message);
                         }
                     ).catch(error => {
                         reject(error);
@@ -72,8 +72,8 @@ export class LogfileDownloadPlugin extends CordovaDevicePlugin {
                     console.log(error);
                     reject(error);
                 }
-            )
+            );
         });
-    } 
+    }
 
 }

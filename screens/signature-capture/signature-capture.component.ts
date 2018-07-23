@@ -16,11 +16,8 @@ export class SignatureCaptureComponent extends PosScreen<any> implements AfterVi
   protected canvas: HTMLCanvasElement = null;
   protected wrapper: HTMLElement;
 
-  constructor() {
-      super();
-  }
 
-  buildScreen(){}
+  buildScreen() {}
 
   ngAfterViewInit(): void {
     this.initialized = true;

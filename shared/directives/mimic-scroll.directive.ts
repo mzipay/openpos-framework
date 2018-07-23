@@ -6,6 +6,7 @@ import { SessionService } from '../../core';
 import { Configuration } from '../../configuration/configuration';
 
 @Directive({
+    // tslint:disable-next-line:directive-selector
     selector: 'mat-card-content'
 })
 export class MimicScrollDirective {

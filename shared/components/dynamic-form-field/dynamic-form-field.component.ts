@@ -83,8 +83,8 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   isNumericField(): boolean {
-    return (['NumericText', 'Money', 'Phone', 'PostalCode', 'Percent', 'PercentInt', 'Income', 'Decimal'].indexOf(this.formField.inputType) >= 0 
-        || this.formField.keyboardPreference == 'Numeric');
+    return (['NumericText', 'Money', 'Phone', 'PostalCode', 'Percent', 'PercentInt', 'Income', 'Decimal'].indexOf(this.formField.inputType) >= 0
+        || this.formField.keyboardPreference === 'Numeric');
   }
 
   onClick(event, formField: IFormElement) {
@@ -202,7 +202,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   isDateInput(): boolean {
     return this.formField.inputType && this.formField.inputType.toLowerCase().indexOf('date') >= 0;
   }
-  
+
   isSpecialCaseInput(): boolean {
     return ['ToggleButton', 'Checkbox', 'AutoComplete'].indexOf(this.formField.inputType) >= 0 ||
         this.isDateInput();

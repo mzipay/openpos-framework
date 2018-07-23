@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SellStatusSectionData } from './sell-status-section.data';
-import { timer } from 'rxjs'
+import { timer } from 'rxjs';
 import { Configuration } from '../../../../configuration/configuration';
 
 @Component({
@@ -13,13 +13,13 @@ import { Configuration } from '../../../../configuration/configuration';
     @Input()
     data: SellStatusSectionData;
 
-    date: number;
+    date = Date.now();
     timer: number;
 
     ngOnInit(): void {
         timer( 1000, 1000 ).subscribe( () => {
-            if( this.data.timestampBegin ){
-                this.timer = (Date.now() - this.data.timestampBegin)/1000; 
+            if ( this.data.timestampBegin ) {
+                this.timer = (Date.now() - this.data.timestampBegin) / 1000;
             }
             this.date = Date.now();
         });

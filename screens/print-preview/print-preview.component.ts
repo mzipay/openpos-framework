@@ -7,7 +7,5 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 })
 export class PrintPreviewComponent extends PosScreen<any> {
 
-    buildScreen(){};
-
-
+    buildScreen() {}
 }

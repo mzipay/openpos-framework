@@ -73,7 +73,7 @@ export class SellComponent extends AbstractTemplate {
       change => {
         return openMap.get(change.mqAlias);
       }
-    ),startWith(startOpen));
+    ), startWith(startOpen));
 
     const modeMap = new Map([
       ['xs', 'over'],
@@ -93,6 +93,6 @@ export class SellComponent extends AbstractTemplate {
       change => {
         return modeMap.get(change.mqAlias);
       }
-    ),startWith(startMode));
+    ), startWith(startMode));
   }
 }

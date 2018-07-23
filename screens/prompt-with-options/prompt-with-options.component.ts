@@ -31,9 +31,14 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
       }
       //from server responseText is string , we are sending back as boolean
       //ideally toggle control would return ON/OFF
-     value = (this.screen.responseText === 'ON') ? true :false;
-  }else{
-    value = this.screen.responseText;
+      value = (this.screen.responseText === 'ON') ? true :false;
+      if (value) {
+        this.screen.responseText = 'ON';
+      } else {
+        this.screen.responseText = 'OFF';
+      }
+    } else {
+      value = this.screen.responseText;
   }
 
     group['promptInputControl'] = new FormControl(value, validators);

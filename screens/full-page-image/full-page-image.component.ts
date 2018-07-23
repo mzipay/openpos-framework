@@ -6,10 +6,7 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
   templateUrl: './full-page-image.component.html'
 })
 export class FullPageImageComponent extends PosScreen<any> {
-  constructor() {
-      super();
-  }
 
-  buildScreen(){}
+    buildScreen() {}
 
 }

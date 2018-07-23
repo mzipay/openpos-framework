@@ -90,7 +90,7 @@ const screens = [
     SelectionListComponent,
     CatalogBrowserComponent,
     ItemSearchResultsComponent
-]
+];
 
 const dialogs = [
     ChooseOptionsDialogComponent,
@@ -99,7 +99,7 @@ const dialogs = [
     LoginDialogComponent,
     MultipleDynamicFormDialogComponent,
     VersionComponent
-]
+];
 
 const templates = [
     BlankComponent,
@@ -107,11 +107,11 @@ const templates = [
     SellComponent,
     SellLinkedCustomerComponent,
     SellStatusSectionComponent
-]
+];
 
 const components = [
     StatusBarComponent
-]
+];
 
 @NgModule({
     entryComponents: [

@@ -12,8 +12,8 @@ export class PercentageFormatter implements IFormatter {
     }
 
     allowKey(key: string, newValue: string): boolean {
-        const match = this.mode === PercentageFormatter.INTEGER_MODE ? 
-            PercentageFormatter.FILTER_REGEX_INTEGER_MODE.test(newValue) : 
+        const match = this.mode === PercentageFormatter.INTEGER_MODE ?
+            PercentageFormatter.FILTER_REGEX_INTEGER_MODE.test(newValue) :
             PercentageFormatter.FILTER_REGEX_DECIMAL_MODE.test(newValue);
         return match;
     }
