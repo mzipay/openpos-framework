@@ -332,7 +332,7 @@ export class SessionService {
             },
             heartbeat_in: 0, // Typical value 0 - disabled
             heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
-            reconnect_delay: 5000,
+            reconnect_delay: 250,  // Typical value is 5000, 0 disables.
             debug: this.stompDebug
         });
 
@@ -485,17 +485,20 @@ export class SessionService {
     }
 
     private queueLoading() {
+        // console.log(`queueLoading invoked`);
         this.loading = true;
         setTimeout(() => this.showLoading(LoaderState.LOADING_TITLE), 1000);
     }
 
     private showLoading(title: string, message?: string) {
+        // console.log(`showLoading invoked`);
         if (this.loading) {
             this.loaderState.setVisible(true, title, message);
         }
     }
 
     public cancelLoading() {
+        // console.log(`cancelLoading invoked`);
         this.loading = false;
         this.loaderState.setVisible(false);
     }
@@ -503,10 +506,16 @@ export class SessionService {
     /** Consume a message from the stompService */
     public onNextMessage = (message: Message) => {
         const json = JSON.parse(message.body);
+        // console.log(`Stomp message received.  type: ${json.type}`);
         if (json.clearDialog) {
             this.showDialog(null);
         } else {
             if (json.type === 'Loading') { // This is just a temporary hack
+                // Might be a previous instance of a Loading screen being shown,
+                // so dismiss it first. This occurs, for example, when mobile device is put
+                // to sleep while showing a loading dialog. Need to cancel it so that loader state
+                // gets reset.
+                this.loading && this.cancelLoading();
                 this.loading = true;
                 this.showLoading(json.title, json.message);
                 return;
