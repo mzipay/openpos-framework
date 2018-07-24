@@ -11,6 +11,7 @@ public class FormButton implements IFormElement, Serializable {
     private String id;
     private String icon;
     private boolean submitButton = false;
+    private String confirmationMessage;
 
     public FormButton() {
     }
@@ -77,6 +78,14 @@ public class FormButton implements IFormElement, Serializable {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getConfirmationMessage() {
+        return confirmationMessage;
+    }
+
+    public void setConfirmationMessage(String confirmationMessage) {
+        this.confirmationMessage = confirmationMessage;
     }
 
     
