@@ -62,6 +62,9 @@ public abstract class AbstractPromptScreenTranslator<T extends Screen> extends A
                 // If the reponseType has already been set before getting here, don't override it.
                 if(StringUtils.isEmpty(promptScreen.getResponseType()) ) {
                     promptScreen.setResponseType(responseFieldType);
+                    if( responseFieldType.equals(IPromptScreen.TYPE_CURRENCYTEXT)) {
+                        promptScreen.setResponseType(FieldInputType.Money.name());
+                    }
                 }
                 
                 if (promptAndResponseBeanModel.getMinLength() != null) {
