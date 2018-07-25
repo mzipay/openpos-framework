@@ -6,3 +6,9 @@
     //margin-right: 20px;
     margin: 5px 24px;
 }
+
+// Fix scrolling issues on child dynamic-form-control
+::ng-deep #dynamic-form > mat-card-content {
+    overflow: initial;
+    max-height: 100%;
+}
