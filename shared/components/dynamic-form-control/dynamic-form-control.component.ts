@@ -131,7 +131,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
   }
 
   onButtonClick(formElement: IFormElement) {
-    this.session.onAction(formElement.buttonAction);
+    this.session.onAction(formElement.buttonAction, null, formElement.confirmationMessage);
   }
 }
 

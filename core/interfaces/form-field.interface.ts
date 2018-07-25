@@ -21,6 +21,7 @@ export interface IFormElement {
     select: boolean;
     checked: boolean;
     keyboardPreference: string;
+    confirmationMessage: string;
 }
 
 export type LabelPositionType = 'before' | 'after';
