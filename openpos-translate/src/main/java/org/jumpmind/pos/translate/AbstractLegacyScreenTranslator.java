@@ -47,6 +47,8 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
     protected ILegacyStoreProperties legacyStoreProperties;
 
     protected IUIActionOverrider actionOverrider;
+    
+    private boolean cancelAsBack;
 
     public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
         super(legacyScreen, screenClass);
@@ -238,7 +240,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             Arrays.stream(globalNavSpec.getButtons())
                     .filter(buttonSpec -> Optional.ofNullable(enabledState.get(buttonSpec.getActionName())).orElse(buttonSpec.getEnabled()))
                     .forEachOrdered(enabledButtonSpec -> {
-                        if ("Undo".equals(enabledButtonSpec.getLabelTag())) {
+                        if ("Undo".equals(enabledButtonSpec.getLabelTag()) || (cancelAsBack && "Cancel".equals(enabledButtonSpec.getLabelTag()))) {
                             screen.setBackButton(new MenuItem("Back", enabledButtonSpec.getActionName(), true));
                         }
                     });
@@ -646,5 +648,13 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         String formattedPromptText = toFormattedString(resourceText,
                 promptAndResponseBeanModel != null ? promptAndResponseBeanModel.getArguments() : null);
         return formattedPromptText;
+    }
+
+    public boolean isCancelAsBack() {
+        return cancelAsBack;
+    }
+
+    public void setCancelAsBack(boolean cancelAsBack) {
+        this.cancelAsBack = cancelAsBack;
     }
 }
