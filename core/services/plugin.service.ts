@@ -83,6 +83,28 @@ export class PluginService {
         );
     }
 
+    public getPluginWithOptions(pluginId: string, doInitWhenNeeded: boolean = true, 
+      options?: {waitForCordovaInit?: boolean}): Promise<IPlugin> {
+            if (options && options.waitForCordovaInit) {
+            return new Promise((resolve, reject) => {
+                if (cordova) {
+                    document.addEventListener('deviceready', () => {
+                        this.getPlugin(pluginId, doInitWhenNeeded).then( plugin => {
+                            resolve(plugin);
+                        }).catch( error => {
+                            reject(error);
+                        });
+                    },
+                    false);
+                } else {
+                    reject(`Cordova not installed, plugin '${pluginId}' won't be fetched`);
+                }
+            });
+        } else {
+            return this.getPlugin(pluginId, doInitWhenNeeded);
+        }
+    }
+
     public getPlugin(pluginId: string, doInitWhenNeeded: boolean = true): Promise<IPlugin> {
         return new Promise( (resolve, reject) => {
             console.log(`Getting plugin '${pluginId}'...`);

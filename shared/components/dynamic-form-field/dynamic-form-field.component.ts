@@ -1,4 +1,3 @@
-
 import {
   Component, ViewChild, AfterViewInit, OnInit, OnDestroy,
   Output, Input, EventEmitter
@@ -9,7 +8,7 @@ import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-s
 import { Subscription, Observable, of  } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ITextMask, TextMask } from '../../../shared';
-import { SessionService, ScreenService, IFormElement } from '../../../core';
+import { SessionService, ScreenService, PluginService, IFormElement, Scan, BarcodeScannerPlugin } from '../../../core';
 import { PopTartComponent } from '../pop-tart/pop-tart.component';
 
 @Component({
@@ -28,6 +27,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   public keyboardLayout = 'en-US';
 
   valuesSubscription: Subscription;
+  private barcodeEventSubscription: Subscription;
 
   autoCompleteDataSource: DataSource = {
     displayValue(value: any): Observable<OptionEntry | null> {
@@ -44,7 +44,8 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
 
   public values: Array<string> = [];
 
-  constructor(public session: SessionService, public screenService: ScreenService, protected dialog: MatDialog) { }
+  constructor(public session: SessionService, public screenService: ScreenService, protected dialog: MatDialog, 
+    private pluginService: PluginService) { }
 
   ngOnInit() {
     if (this.formField.inputType === 'ComboBox' || this.formField.inputType === 'SubmitOptionList' ||
@@ -65,6 +66,26 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
 
     if (this.formField.inputType === 'AutoComplete') {
       this.updateAutoCompleteDataSource2();
+    }
+
+    if (this.formField.scanEnabled) {
+        this.pluginService.getPluginWithOptions('barcodeScannerPlugin', true, {waitForCordovaInit: true}).then(plugin => {
+            // the onBarcodeScanned will only emit an event when client code passes a scan
+            // event to the plugin.  This won't be called for cordova barcodescanner plugin
+            // camera-based scan events.  It should only be used for third party scan events
+            // which come from other sources such as a scan device
+            this.barcodeEventSubscription = (<BarcodeScannerPlugin> plugin).onBarcodeScanned.subscribe({
+                next: (scan: Scan) => {
+                    console.log(`dynamic-form-field ${this.formField.id} got scan event: ${scan.value}`);
+                    if (this.field.focused) {
+                        this.field.value = scan.value;
+                    }
+                }
+            });
+            console.log(`dynamic-form-field '${this.formField.id}' is subscribed for barcode scan events`);
+
+        }).catch( error => console.log(`Failed to get barcodeScannerPlugin.  Reason: ${error}`) );
+
     }
   }
 
@@ -206,6 +227,32 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   isSpecialCaseInput(): boolean {
     return ['ToggleButton', 'Checkbox', 'AutoComplete'].indexOf(this.formField.inputType) >= 0 ||
         this.isDateInput();
+  }
+
+  isScanAllowed(): boolean {
+    return this.formField.scanEnabled && ! this.formField.disabled &&
+        ['NumericText', 'AlphanumericText'].indexOf(this.formField.inputType) >= 0;
+  }
+
+  /**
+   * This method is invoked when the user presses the Scan button on the field.
+   * For device-based scan events, see the ngOnInit method.
+   * @param formField The field associated with the scan request.
+   */
+  onScan(formField: IFormElement): void {
+    this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin =>
+        plugin.processRequest(
+          {requestId: 'scan', deviceId: 'barcode-scanner', type: null, subType: null, payload: null},
+          (scan) => {
+            if (scan instanceof Scan && ! scan.cancelled) {
+                this.field.value = scan.value;
+            }
+          },
+          (error) => {
+            console.error('Scanning failed: ' + error);
+          }
+        )
+    );
   }
 }
 

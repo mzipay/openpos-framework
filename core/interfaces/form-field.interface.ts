@@ -22,6 +22,7 @@ export interface IFormElement {
     checked: boolean;
     keyboardPreference: string;
     confirmationMessage: string;
+    scanEnabled: boolean;
 }
 
 export type LabelPositionType = 'before' | 'after';
