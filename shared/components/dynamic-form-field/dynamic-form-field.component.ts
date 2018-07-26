@@ -76,9 +76,9 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
             // which come from other sources such as a scan device
             this.barcodeEventSubscription = (<BarcodeScannerPlugin> plugin).onBarcodeScanned.subscribe({
                 next: (scan: Scan) => {
-                    console.log(`dynamic-form-field ${this.formField.id} got scan event: ${scan.value}`);
+                    console.log(`dynamic-form-field '${this.formField.id}' got scan event: ${scan.value}`);
                     if (this.field.focused) {
-                        this.field.value = scan.value;
+                        this.setFieldValue(this.formField.id, scan.value);
                     }
                 }
             });
@@ -100,6 +100,10 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   ngOnDestroy(): void {
     if (this.valuesSubscription) {
       this.valuesSubscription.unsubscribe();
+    }
+
+    if (this.barcodeEventSubscription) {
+        this.barcodeEventSubscription.unsubscribe();
     }
   }
 
@@ -245,14 +249,21 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
           {requestId: 'scan', deviceId: 'barcode-scanner', type: null, subType: null, payload: null},
           (scan) => {
             if (scan instanceof Scan && ! scan.cancelled) {
-                this.field.value = scan.value;
+                // this.field.value = scan.value;
+                this.setFieldValue(formField.id, scan.value);
             }
           },
           (error) => {
-            console.error('Scanning failed: ' + error);
+            console.log('Scanning failed: ' + error);
           }
         )
-    );
+    ).catch( error => console.log(`Scanning failed: ${error}`));
+  }
+
+  private setFieldValue(fieldId: string, value: any) {
+    const patchGroup = {};
+    patchGroup[fieldId] = value;
+    this.formGroup.patchValue(patchGroup);
   }
 }
 
