@@ -18,22 +18,15 @@ export class NumberSpinnerComponent extends AbstractValueAccessor implements OnI
     @Input() minlength: number;
     // @Output() onChange: EventEmitter<number> = new EventEmitter();
 
-    private numberPicker: FormControl;
+    numberPicker: FormControl;
 
     constructor() { super(); }
 
-    // TODO: how do I bind to the value of the input using ngModel?
     ngOnInit() {
-
         this.numberPicker = new FormControl({ value: this.value, disabled: this.inputDisabled });
-        /*
-        this.numberPicker.registerOnChange(() => {
-            this.onChange.emit(this.numberPicker.value);
-        });
-        */
     }
 
-    protected increaseValue(): void {
+    public increaseValue(): void {
         let currentValue: number = Number(this.numberPicker.value);
         if (currentValue < this.max) {
             currentValue = currentValue + this.step;
@@ -45,7 +38,7 @@ export class NumberSpinnerComponent extends AbstractValueAccessor implements OnI
         }
     }
 
-    protected decreaseValue(): void {
+    public decreaseValue(): void {
         let currentValue: number = Number(this.numberPicker.value);
         if (currentValue > this.min) {
             currentValue = currentValue - this.step;
@@ -61,9 +54,4 @@ export class NumberSpinnerComponent extends AbstractValueAccessor implements OnI
         const multiplier: number = Math.pow(10, precision || 0);
         return Math.round(value * multiplier) / multiplier;
     }
-/*
-    public getValue(): number {
-        return this.numberPicker.value;
-    }
-*/
 }
