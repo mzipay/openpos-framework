@@ -7,14 +7,21 @@ import java.util.List;
 
 public class Form implements Serializable {
 
-    public static final String PATTERN_EMAIL =  "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
-    public static final String PATTERN_MONEY =  "^(\\d{0,9}\\.\\d{0,2}|\\d{1,9})$";
-    public static final String PATTERN_PERCENT =  "^100$|^\\d{0,2}(\\.\\d{1,2})?$|^\\d{0,2}(\\.)?"; // 100-0, Only two decimal places allowed.
-    public static final String PATTERN_DATE = "^(\\d{2})/(\\d{2})/(\\d{4}$)";
-    public static final String PATTERN_YY_DATE = "^(\\d{2})/(\\d{2})/(\\d{2}$)";
-    public static final String PATTERN_NO_YEAR_DATE = "^(\\d{2})/(\\d{2})$";
-    // TODO: This pattern may be too restrictive. 
-    public static final String PATTERN_US_PHONE_NUMBER = "^\\d{10}$";
+    /** Use {@link FieldPattern#EMAIL} instead*/@Deprecated()
+    public static final String PATTERN_EMAIL =  FieldPattern.EMAIL;
+    /** Use {@link FieldPattern#MONEY} instead*/@Deprecated()
+    public static final String PATTERN_MONEY =  FieldPattern.MONEY;
+    /** Use {@link FieldPattern#PERCENT} instead*/@Deprecated()
+    public static final String PATTERN_PERCENT =  FieldPattern.PERCENT;
+    /** Use {@link FieldPattern#DATE} instead*/@Deprecated()
+    public static final String PATTERN_DATE = FieldPattern.DATE;
+    /** Use {@link FieldPattern#YY_DATE} instead*/@Deprecated()
+    public static final String PATTERN_YY_DATE = FieldPattern.YY_DATE;
+    /** Use {@link FieldPattern#NO_YEAR_DATE} instead*/@Deprecated()
+    public static final String PATTERN_NO_YEAR_DATE = FieldPattern.NO_YEAR_DATE;
+    /** Use {@link FieldPattern#US_PHONE_NUMBER} instead*/@Deprecated()
+    public static final String PATTERN_US_PHONE_NUMBER = FieldPattern.US_PHONE_NUMBER;
+    
     private static final long serialVersionUID = 1L;
 
     private List<IFormElement> formElements = new ArrayList<IFormElement>();
@@ -117,7 +124,7 @@ public class Form implements Serializable {
     
     public static FormField createDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Date, required);
-        formField.setPattern(PATTERN_DATE);
+        formField.setPattern(FieldPattern.DATE);
         formField.setValue(value);
         formField.put("hideCalendar", hideCalendar);
         return formField;
@@ -136,7 +143,7 @@ public class Form implements Serializable {
 	public static FormField createNoYearDateField(String fieldId, String label, String value, boolean required,
 			boolean hideCalendar) {
 		FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.NoYearDate, required);
-		formField.setPattern(PATTERN_NO_YEAR_DATE);
+		formField.setPattern(FieldPattern.NO_YEAR_DATE);
 		formField.setValue(value);
 		formField.put("hideCalendar", hideCalendar);
 		return formField;
@@ -191,7 +198,7 @@ public class Form implements Serializable {
     
     public static FormField createMoneyField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Money, required);
-        formField.setPattern(PATTERN_MONEY);
+        formField.setPattern(FieldPattern.MONEY);
         formField.setValue(value);
         return formField;
     }
@@ -204,7 +211,7 @@ public class Form implements Serializable {
     
     public static FormField createEmailField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.AlphanumericText, required);
-        formField.setPattern(PATTERN_EMAIL);
+        formField.setPattern(FieldPattern.EMAIL);
         formField.setValue(value);
         return formField;
     }
