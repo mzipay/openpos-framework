@@ -10,3 +10,4 @@ export * from './phone-ca.formatter';
 export * from './phone-us.formatter';
 export * from './postal-code.formatter';
 export * from './state-id-number.formatter';
+export * from './word-text.formatter';
