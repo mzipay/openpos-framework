@@ -20,7 +20,7 @@
                     <app-prompt-input #promptInput *ngIf="screen.editable" [placeholderText]="screen.placeholderText" [responseType]="screen.responseType"
                     [promptIcon]="screen.promptIcon" [responseText]="screen.responseText" [hintText]="screen.text" [maskSpec]="screen.promptMask" 
                     [minLength]="screen.minLength" [maxLength]="screen.maxLength"
-                    [promptFormGroup]="promptFormGroup"></app-prompt-input>
+                    [promptFormGroup]="promptFormGroup" [keyboardPreference]="screen.keyboardPreference"></app-prompt-input>
             </mat-card-content>
             <mat-card-actions *ngIf="screen.actionButton" align="end">
                 <button mat-raised-button type="submit" color=primary>
