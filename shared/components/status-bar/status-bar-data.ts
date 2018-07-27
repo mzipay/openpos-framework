@@ -1,4 +1,4 @@
-import { IMenuItem } from '../../core';
+import { IMenuItem } from '../../../core';
 
 
 export class StatusBarData {
@@ -10,5 +10,4 @@ export class StatusBarData {
     logoutButton: IMenuItem;
     workstationId: String;
     storeId: String;
-
 }

@@ -11,7 +11,7 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 export class ItemSearchResultsComponent extends PosScreen<any> {
 
   listConfig = new SelectableItemListComponentConfiguration<any>();
-  index: number = -1;
+  index = -1;
 
   constructor() {
     super();
@@ -29,8 +29,8 @@ export class ItemSearchResultsComponent extends PosScreen<any> {
   }
 
   public onItemListChange(event: any[]): void {
-    //this.selectedItems = event;
-    //this.session.onAction("SelectedItemsChanged", this.selectedItems);
+    // this.selectedItems = event;
+    // this.session.onAction("SelectedItemsChanged", this.selectedItems);
   }
 
   public onItemChange(event: any): void {

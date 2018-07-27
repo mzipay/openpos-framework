@@ -29,8 +29,8 @@ export class SelectionListComponent extends PosScreen<any> {
   }
 
   public onItemListChange(event: any[]): void {
-    //this.selectedItems = event;
-    //this.session.onAction("SelectedItemsChanged", this.selectedItems);
+    // this.selectedItems = event;
+    // this.session.onAction("SelectedItemsChanged", this.selectedItems);
   }
 
   public onItemChange(event: any): void {
