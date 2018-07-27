@@ -22,7 +22,6 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
     const validators: ValidatorFn[] = [];
     validators.push(Validators.required);
     validators.push(this.validatorsService.getValidator(this.screen.responseType));
-
     let value;
 
     if (this.screen.responseType === 'ONOFF') {

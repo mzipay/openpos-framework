@@ -33,6 +33,10 @@ export class PromptComponent extends PosScreen<any> implements AfterViewInit, On
       validators.push(Validators.maxLength(this.screen.maxLength));
     }
 
+    if (this.screen.pattern) {
+        validators.push(Validators.pattern(this.screen.pattern));
+    }
+
     group['promptInputControl'] = new FormControl(this.screen.responseText, validators);
     // When showing a DATE, there is also a hidden field to handle picking of dates using
     // a date picker, need to add a FormControl for that also.
