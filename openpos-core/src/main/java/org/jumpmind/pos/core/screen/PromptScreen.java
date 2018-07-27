@@ -23,6 +23,7 @@ public class PromptScreen extends Screen implements IPromptScreen {
     private String comments = "";
     private boolean showComments = false;
     private List<MenuItem> otherActions;
+    private String pattern;
     
 
     public PromptScreen() {
@@ -159,5 +160,12 @@ public class PromptScreen extends Screen implements IPromptScreen {
 	    }
 	    this.otherActions.add(action);
 	}
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
     
+    public String getPattern() {
+        return this.pattern;
+    }
 }

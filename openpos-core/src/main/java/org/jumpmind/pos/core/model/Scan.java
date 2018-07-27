@@ -8,6 +8,7 @@ public class Scan implements Serializable {
     private String value;
     private String format;
     private Boolean cancelled;
+    private String source;
     
     public Scan() {     
     }
@@ -40,4 +41,13 @@ public class Scan implements Serializable {
     public void setCancelled(Boolean cancelled) {
         this.cancelled = cancelled;
     }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+    
 }

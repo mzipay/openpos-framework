@@ -23,7 +23,6 @@ public class FormField implements IFormElement, IField, Serializable {
     private String value;
     private boolean required = true;
     private boolean sensitive = false;
-    private KeyboardType keyboardPreference;
 
     public FormField() {
     }
@@ -257,12 +256,17 @@ public class FormField implements IFormElement, IField, Serializable {
         return this;
     }
 
-    public KeyboardType getKeyboardPreference() {
-        return keyboardPreference;
-    }
-
     public void setKeyboardPreference(KeyboardType keyboardPreference) {
-        this.keyboardPreference = keyboardPreference;
+        this.put("keyboardPreference", keyboardPreference);
     }
 
+    public FormField scanEnabled(Boolean scanEnabled) {
+        this.setScanEnabled(scanEnabled);
+        return this;
+    }
+
+    public void setScanEnabled(Boolean scanEnabled) {
+        this.put("scanEnabled", scanEnabled);
+    }
+    
 }

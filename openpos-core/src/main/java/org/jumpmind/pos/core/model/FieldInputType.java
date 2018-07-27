@@ -26,5 +26,7 @@ public enum FieldInputType {
     NoYearDate,
     DateMMDDYY,
     ToggleButton,
-    AutoComplete
+    AutoComplete,
+    /** Allows a-z, A-Z, 0-9 */
+    WordText
 }
