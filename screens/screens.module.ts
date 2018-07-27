@@ -43,7 +43,6 @@ import { BlankComponent } from './templates/blank/blank.component';
 import { BlankWithBarComponent } from './templates/blank-with-bar/blank-with-bar.component';
 import { SellComponent } from './templates/sell-template/sell/sell.component';
 import { SellLinkedCustomerComponent } from './templates/sell-template/sell-linked-customer/sell-linked-customer.component';
-import { StatusBarComponent } from './status-bar/status-bar.component';
 import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';
 import { ChooseOptionsDialogComponent } from './choose-options/choose-options-dialog.component';
@@ -110,7 +109,7 @@ const templates = [
 ];
 
 const components = [
-    StatusBarComponent
+
 ];
 
 @NgModule({

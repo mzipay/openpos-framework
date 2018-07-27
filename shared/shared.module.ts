@@ -42,7 +42,9 @@ import {
     PopTartComponent,
     NavListComponent,
     FileViewerComponent,
-    NumberSpinnerComponent
+    NumberSpinnerComponent,
+    StatusBarComponent,
+    FooterBarComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe } from './pipes';
@@ -65,6 +67,8 @@ const components = [
     NavListComponent,
     FileViewerComponent,
     NumberSpinnerComponent,
+    StatusBarComponent,
+    FooterBarComponent
 ];
 
 const directives = [
