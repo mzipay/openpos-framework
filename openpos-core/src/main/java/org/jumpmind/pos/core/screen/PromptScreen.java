@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.core.model.FieldInputType;
+import org.jumpmind.pos.core.model.KeyboardType;
 
 public class PromptScreen extends Screen implements IPromptScreen {
 
@@ -24,6 +25,7 @@ public class PromptScreen extends Screen implements IPromptScreen {
     private boolean showComments = false;
     private List<MenuItem> otherActions;
     private String pattern;
+    private KeyboardType keyboardPreference;
     
 
     public PromptScreen() {
@@ -167,5 +169,13 @@ public class PromptScreen extends Screen implements IPromptScreen {
     
     public String getPattern() {
         return this.pattern;
+    }
+
+    public KeyboardType getKeyboardPreference() {
+        return keyboardPreference;
+    }
+
+    public void setKeyboardPreference(KeyboardType keyboardPreference) {
+        this.keyboardPreference = keyboardPreference;
     }
 }
