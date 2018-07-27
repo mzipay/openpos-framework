@@ -21,6 +21,7 @@ export class PromptInputComponent implements OnInit {
     @Input() maxLength: number;
     @Input() promptFormGroup: FormGroup;
     @Input() readOnly = false;
+    @Input() keyboardPreference: string;
 
     inputType: string;
     checked = true;
@@ -34,7 +35,7 @@ export class PromptInputComponent implements OnInit {
     isNumericField(): boolean {
         if (this.responseType) {
             return ['numerictext', 'money', 'phone', 'postalCode', 'percent', 'percentint', 'income', 'decimal']
-              .indexOf(this.responseType.toLowerCase()) >= 0;
+              .indexOf(this.responseType.toLowerCase()) >= 0 || this.keyboardPreference === 'Numeric';
         } else {
             return false;
         }

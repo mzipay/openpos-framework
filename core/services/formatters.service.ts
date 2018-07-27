@@ -15,6 +15,7 @@ import {
     IncomeFormatter,
     StateIDNumberFormatter,
     DecimalFormatter,
+    WordTextFormatter,
     DoNothingFormatter
 } from '../../shared/formatters';
 
@@ -56,6 +57,7 @@ export class FormattersService {
         NOLOCALEFormatters.set('income', new IncomeFormatter());
         NOLOCALEFormatters.set('stateidnumber', new StateIDNumberFormatter());
         NOLOCALEFormatters.set('decimal', new DecimalFormatter());
+        NOLOCALEFormatters.set('wordtext', new WordTextFormatter());
     }
 
     getFormatter(name: string): IFormatter {
