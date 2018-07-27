@@ -277,7 +277,7 @@ public class ScreenService implements IScreenService {
             publishToClients(appId, nodeId, screen);
             if (screen.getTemplate().isDialog()) {
                 applicationState.setLastDialog(screen);
-            } else {
+            } else if( screen.getType() != "Toast") {
                 applicationState.setLastScreen(screen);
                 applicationState.setLastDialog(null);
             }
