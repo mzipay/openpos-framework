@@ -14,17 +14,20 @@ import {
     LoaderComponent
  } from './components';
 import { throwIfAlreadyLoaded } from './module-import-guard';
+import { StartupComponent } from './components/startup/startup.component';
 
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,
-        PersonalizationComponent
+        PersonalizationComponent,
+        StartupComponent
     ],
     declarations: [
         DynamicScreenComponent,
         LoaderComponent,
         ConfirmationDialogComponent,
-        PersonalizationComponent
+        PersonalizationComponent,
+        StartupComponent
     ],
     imports: [
         SharedModule
@@ -46,6 +49,7 @@ export class CoreModule {
     constructor(@Optional() @SkipSelf() parentModule: CoreModule, screenService: ScreenService, private injector: Injector) {
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
         screenService.addScreen('Personalization', PersonalizationComponent);
+        screenService.addScreen('Startup', StartupComponent);
         AppInjector.Instance = this.injector;
     }
 }

@@ -1,4 +1,3 @@
-
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
@@ -9,23 +8,32 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ActionIntercepter } from '../action-intercepter';
 import { IThemeChangingEvent } from '../../shared/';
-// Importing the ../components barrel causes a circular reference since dynamic-screen references back to here,
-// so we will import those files directly
 import { LoaderState } from '../components/loader/loader-state';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
 import { IDeviceResponse, IDeviceRequest } from '../plugins';
 import {
-    IMenuItem,
-    IUrlMenuItem,
-    IToastScreen,
-    ToastType,
-    Element,
-    ActionMap
+    IStartupTask
 } from '../interfaces';
 
-export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
     providedIn: 'root',
-  })
+})
 export class StartupService {
+
+    private tasks = new Map<string, IStartupTask>();
+
+    constructor() {
+    }
+
+    public addStartupTask(task: IStartupTask): void {
+        this.tasks.set(task.name, task);
+    }
+
+    public runTasks(): void {
+        const list = Array.from(this.tasks);
+        list.sort((a, b) => a[1].order - b[1].order );
+        list.forEach(element => {
+           const task = element[1];
+        });
+    }
 }
