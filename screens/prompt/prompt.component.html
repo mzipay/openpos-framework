@@ -4,7 +4,7 @@
         <mat-card-content>
             <app-prompt-input #promptInput [placeholderText]="screen.placeholderText" [responseType]="screen.responseType" [promptIcon]="screen.promptIcon"
                 [responseText]="screen.responseText" [hintText]="screen.text" [maskSpec]="screen.promptMask" [minLength]="screen.minLength"
-                [maxLength]="screen.maxLength" [promptFormGroup]="promptFormGroup"></app-prompt-input>
+                [maxLength]="screen.maxLength" [promptFormGroup]="promptFormGroup" [keyboardPreference]="screen.keyboardPreference"></app-prompt-input>
             <div style="height:50px"></div>
         </mat-card-content>
         <mat-card-actions *ngIf="screen.otherActions || screen.actionButton" align="end">

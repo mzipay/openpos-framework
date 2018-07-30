@@ -34,7 +34,7 @@
                 <mat-option *ngFor="let value of values" [value]="value">{{value}}</mat-option>
             </mat-select>
 
-            <textarea *ngSwitchCase="'TextArea'" style="width:50%" [value]="formField.value" [formControlName]="formField.id" [readonly]="formField.disabled" [name]="formField.id" [placeholder]="getPlaceholderText(formField)"
+            <textarea *ngSwitchCase="'TextArea'" [value]="formField.value" [formControlName]="formField.id" [readonly]="formField.disabled" [name]="formField.id" [placeholder]="getPlaceholderText(formField)"
                 matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled" [required]="formField.required" (change)="onFormElementChanged(formField)"></textarea>       
 
             <mat-error>
