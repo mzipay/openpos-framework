@@ -35,7 +35,7 @@ export class FormComponent extends PosScreen<any> {
 
   onItemAction(menuItem: IMenuItem, $event): void {
     this.session.response = this.form;
-    this.session.onAction(menuItem.action, null, menuItem.confirmationMessage);
+    this.session.onAction(menuItem, null);
   }
 
   onButtonAction(action: string) {

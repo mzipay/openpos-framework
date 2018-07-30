@@ -1,4 +1,5 @@
 import { IMaskSpec } from '../../shared/textmask';
+import { IConfirmationDialog } from './confirmation-dialog.interface';
 export interface IFormElement {
     elementType: string;
     inputType: string;
@@ -21,6 +22,7 @@ export interface IFormElement {
     select: boolean;
     checked: boolean;
     keyboardPreference: string;
+    confirmationDialog: IConfirmationDialog;
     confirmationMessage: string;
     scanEnabled: boolean;
 }

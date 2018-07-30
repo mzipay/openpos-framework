@@ -47,7 +47,7 @@ export class SelectionListComponent extends PosScreen<any> {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem.action, this.index, menuItem.confirmationMessage);
+    this.session.onAction(menuItem);
   }
 
 }

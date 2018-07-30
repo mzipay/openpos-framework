@@ -42,7 +42,7 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, AfterVie
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem.action, null, menuItem.confirmationMessage);
+    this.session.onAction(menuItem);
   }
 
   scrollToBottom(): void {
