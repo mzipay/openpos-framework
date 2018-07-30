@@ -47,6 +47,6 @@ export class HomeComponent extends PosScreen<any> implements OnInit {
   }
 
   onMenuItemClick(menuItem: IMenuItem) {
-      this.session.onAction(menuItem, null, menuItem.confirmationMessage );
+      this.session.onAction( menuItem );
   }
 }

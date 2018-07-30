@@ -16,7 +16,7 @@ export class StatusBarComponent {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem.action, null, menuItem.confirmationMessage);
+    this.session.onAction(menuItem);
   }
 
   public isMenuItemEnabled(m: IMenuItem): boolean {
