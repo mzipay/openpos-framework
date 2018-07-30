@@ -18,6 +18,15 @@ export class SelectionListComponent extends PosScreen<any> {
   }
 
   buildScreen() {
+    if (this.screen.template.localMenuItems) {
+      var i: number;
+      for (i = 0; i < this.screen.template.localMenuItems.length; i++) {
+        this.session.registerActionPayload(this.screen.template.localMenuItems[i].action, () => {
+          return this.index;
+        });
+      }
+    }
+
     this.listConfig = new SelectableItemListComponentConfiguration<any>();
     if (this.screen.multiSelect) {
       this.listConfig.selectionMode = SelectionMode.Multiple;
