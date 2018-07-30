@@ -25,6 +25,10 @@ public class SelectionListScreen extends Screen {
         this.selectionList = selectionList;
     }
 
+    public void addSelection(SelectionListItem selection) {
+        selectionList.add(selection);
+    }
+
     public void addSelection(String title, String body) {
         SelectionListItem selection = new SelectionListItem(title, body);
         selectionList.add(selection);
