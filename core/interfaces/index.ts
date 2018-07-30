@@ -13,6 +13,6 @@ export * from './selection-mode.enum';
 export * from './tender-item.interface';
 export * from './action-map.interface';
 export * from './element.interface';
-export * from './state.interface';
 export * from './catalog-browser-form.interface';
 export * from './transaction-summary.interface';
+export * from './startup-task.interface';
