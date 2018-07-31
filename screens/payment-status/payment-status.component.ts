@@ -20,7 +20,7 @@ export class PaymentStatusComponent extends PosScreen<any> {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem.action, null, menuItem.confirmationMessage );
+    this.session.onAction(menuItem);
   }
 
 }

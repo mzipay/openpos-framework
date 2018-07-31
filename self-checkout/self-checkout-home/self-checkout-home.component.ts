@@ -42,7 +42,7 @@ export class SelfCheckoutHomeComponent implements IScreen {
 
   onMenuItemClick(menuItem: IMenuItem) {
     if (!this.actionSent) {
-      this.session.onAction(menuItem, null, menuItem.confirmationMessage);
+      this.session.onAction(menuItem);
       this.actionSent = true;
     }
   }

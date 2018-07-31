@@ -19,7 +19,7 @@ export class NavListComponent {
     }
 
     public doMenuItemAction(menuItem: IMenuItem, payLoad: any) {
-        this.session.onAction(menuItem.action, payLoad, menuItem.confirmationMessage);
+        this.session.onAction(menuItem, payLoad );
         this.dialogRef.close();
     }
 

@@ -38,6 +38,10 @@ export class LoaderState {
         return this._message;
     }
 
+    set message(msg: string) {
+        this._message = msg;
+    }
+
     setVisible(visible: boolean, title?: string, message?: string) {
         if (visible && (!this._show || title === LoaderState.DISCONNECTED_TITLE)) {
             this.setLoaderText(title, message);
@@ -62,7 +66,7 @@ export class LoaderState {
         } else {
             const sessionConnected = this.sessionService.connected();
             if (!sessionConnected) {
-                this.setVisible(true, LoaderState.DISCONNECTED_TITLE);
+                this.setVisible(true, LoaderState.DISCONNECTED_TITLE, this.message);
             } else if (sessionConnected && this._title === LoaderState.DISCONNECTED_TITLE) {
                 this.setVisible(false);
             }

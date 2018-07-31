@@ -22,6 +22,7 @@ import {
     Element,
     ActionMap
 } from '../interfaces';
+import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
 
 export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
@@ -399,13 +400,13 @@ export class SessionService {
         this.onAction(action, payload, null, true);
     }
 
-    public async onAction(action: string | IMenuItem, payload?: any, confirm?: string, isValueChangedAction?: boolean) {
+    public async onAction(action: string | IMenuItem, payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
         if (action) {
             let actionString = '';
             // we need to figure out if we are a menuItem or just a string
             if (action.hasOwnProperty('action')) {
                 const menuItem = <IMenuItem>(action);
-                confirm = menuItem.confirmationMessage;
+                confirm = menuItem.confirmationDialog;
                 actionString = menuItem.action;
                 // check to see if we are an IURLMenuItem
                 if (menuItem.hasOwnProperty('url')) {
@@ -424,8 +425,14 @@ export class SessionService {
 
             if (confirm) {
                 console.log('Confirming action');
+                let confirmD: IConfirmationDialog;
+                if (confirm.hasOwnProperty('message')) {
+                    confirmD = <IConfirmationDialog>confirm;
+                } else {
+                    confirmD = { title: '', message: <string>confirm, cancelButtonName: 'No', confirmButtonName: 'Yes'};
+                }
                 const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
-                dialogRef.componentInstance.title = confirm;
+                dialogRef.componentInstance.confirmDialog = confirmD;
                 const result = await dialogRef.afterClosed().toPromise();
 
                 // if we didn't confirm return and don't send the action to the server
@@ -516,12 +523,15 @@ export class SessionService {
         if (json.clearDialog) {
             this.showDialog(null);
         } else {
-            if (json.type === 'Loading') { // This is just a temporary hack
+            if (json.type === 'Loading') {
+                // This is just a temporary hack
                 // Might be a previous instance of a Loading screen being shown,
                 // so dismiss it first. This occurs, for example, when mobile device is put
                 // to sleep while showing a loading dialog. Need to cancel it so that loader state
                 // gets reset.
-                this.loading && this.cancelLoading();
+                if ( this.loading ) {
+                    this.cancelLoading();
+                }
                 this.loading = true;
                 this.showLoading(json.title, json.message);
                 return;

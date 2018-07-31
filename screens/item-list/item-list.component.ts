@@ -58,7 +58,7 @@ export class ItemListComponent extends PosScreen<any> implements OnInit {
 
     onMenuItemClick(itemInfo: MenuClickAction): void {
         this.session.response = itemInfo.item;
-        this.session.onAction(itemInfo.menuItem.action, null, itemInfo.menuItem.confirmationMessage );
+        this.session.onAction(itemInfo.menuItem);
     }
 
     isItemSelectedDisabled(): boolean {
