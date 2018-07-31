@@ -12,23 +12,20 @@ import { StartupService } from '../../services/startup.service';
 export class StartupComponent implements IScreen, AfterViewInit {
 
 
-    title = 'Starting ...';
-    messages = [];
+    title = 'Initializing ...';
+    message: string = null;
 
-    constructor(public session: SessionService, startup: StartupService) {
+    constructor(public session: SessionService, public startup: StartupService) {
     }
 
     ngAfterViewInit(): void {
         setTimeout(() => {
-
+           this.startup.runTasks(this);
+           this.session.showDialog(null);
         }, 500);
     }
 
     show(screen: any): void {
-    }
-
-    public getLocalTheme(): string {
-        return this.session.getTheme();
     }
 
 }

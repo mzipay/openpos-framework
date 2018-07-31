@@ -1,5 +1,7 @@
+import { StartupComponent } from './../components/startup/startup.component';
+
 export interface IStartupTask {
     name: string;
     order: number;
-    execute(): boolean;
+    execute(startupComponent: StartupComponent): boolean;
 }

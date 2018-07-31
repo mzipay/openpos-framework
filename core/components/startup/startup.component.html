@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>{{title}}</h2>
 <mat-dialog-content>
-    <span *ngFor="let m of messages">{{m}}</span>
+    <span *ngIf="message">{{message}}</span>
     <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
 </mat-dialog-content>

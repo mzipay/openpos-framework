@@ -83,8 +83,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     private snackBarRef: MatSnackBarRef<SimpleSnackBar>;
 
-    private personalized: boolean;
-
     private registered: boolean;
 
     private installedScreen: IScreen;
@@ -461,37 +459,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
     }
 
-    public registerWithServer(): boolean {
-        if (!this.registered && this.isPersonalized()) {
-            console.log('initializing the application');
-            this.session.unsubscribe();
-            this.session.subscribe(this.normalizeAppIdFromUrl());
-            this.registered = true;
-        }
-        return this.registered;
-    }
-
-    protected normalizeAppIdFromUrl(): string {
-        let appId = this.router.url.substring(1);
-        if (appId.indexOf('#') > 0) {
-            appId = appId.substring(0, appId.indexOf('#'));
-        }
-        if (appId.indexOf('/') > 0) {
-            appId = appId.substring(0, appId.indexOf('/'));
-        }
-        return appId;
-    }
-
-    protected isPersonalized(): boolean {
-        if (!this.personalized && this.session.isPersonalized()) {
-            this.personalized = true;
-            console.log('already personalized.  setting needs personalization to false');
-        }
-        return this.personalized;
-    }
-
     protected updateDialog(dialog?: any): void {
-        // this.registerWithServer();
         if (dialog) {
             const dialogType = this.dialogService.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
             if (!this.dialogOpening) {
@@ -514,12 +482,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     protected updateTemplateAndScreen(screen?: any): void {
-        // this.registerWithServer();
-
-        if (!this.isPersonalized() && !screen) {
-            console.log('setting up the personalization screen');
-            screen = this.session.getPersonalizationScreen();
-        } else if (!screen) {
+        if (!screen) {
             screen = { type: 'Blank', template: { type: 'Blank', dialog: false } };
         }
 
