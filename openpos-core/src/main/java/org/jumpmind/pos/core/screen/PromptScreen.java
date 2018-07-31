@@ -26,6 +26,7 @@ public class PromptScreen extends Screen implements IPromptScreen {
     private List<MenuItem> otherActions;
     private String pattern;
     private KeyboardType keyboardPreference;
+    private Boolean scanEnabled;
     
 
     public PromptScreen() {
@@ -177,5 +178,13 @@ public class PromptScreen extends Screen implements IPromptScreen {
 
     public void setKeyboardPreference(KeyboardType keyboardPreference) {
         this.keyboardPreference = keyboardPreference;
+    }
+
+    public Boolean getScanEnabled() {
+        return scanEnabled;
+    }
+
+    public void setScanEnabled(Boolean scanEnabled) {
+        this.scanEnabled = scanEnabled;
     }
 }
