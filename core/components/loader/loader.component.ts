@@ -46,10 +46,6 @@ export class LoaderComponent implements OnInit, OnDestroy {
     }
 
     public getLocalTheme(): string {
-        if (localStorage.getItem('theme')) {
-            return localStorage.getItem('theme');
-        } else {
-            return 'openpos-theme';
-        }
+        return this.session.getTheme();
     }
 }

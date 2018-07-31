@@ -1,3 +1,4 @@
+import { DialogService } from './services/dialog.service';
 // Angular Includes
 import { NgModule, Injector, Optional, SkipSelf } from '@angular/core';
 import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
@@ -46,10 +47,10 @@ import { StartupComponent } from './components/startup/startup.component';
 })
 export class CoreModule {
 
-    constructor(@Optional() @SkipSelf() parentModule: CoreModule, screenService: ScreenService, private injector: Injector) {
+    constructor(@Optional() @SkipSelf() parentModule: CoreModule, screenService: ScreenService, dialogService: DialogService, private injector: Injector) {
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
         screenService.addScreen('Personalization', PersonalizationComponent);
-        screenService.addScreen('Startup', StartupComponent);
+        dialogService.addDialog('Startup', StartupComponent);
         AppInjector.Instance = this.injector;
     }
 }

@@ -238,10 +238,13 @@ export class SessionService {
     }
 
     public getTheme(): string {
+        const theme = localStorage.getItem('theme');
         if (this.screen && this.screen.theme) {
             return this.screen.theme;
+        } else if (theme) {
+            return theme;
         } else {
-            return localStorage.getItem('theme');
+            return 'openpos-theme';
         }
     }
 
@@ -351,6 +354,7 @@ export class SessionService {
         this.state = this.stompService.state.pipe(map((state: number) => StompState[state]));
 
         this.subscribed = true;
+        this.loaderState.monitorConnection();
         this.onServerConnectObserver.next(true);
     }
 
@@ -475,8 +479,10 @@ export class SessionService {
     }
 
     public keepAlive() {
-        console.log(`>>> KeepAlive`);
-        this.publish('KeepAlive');
+        if (this.subscribed) {
+            console.log(`>>> KeepAlive`);
+            this.publish('KeepAlive');
+        }
     }
 
     private publish(actionString: string) {

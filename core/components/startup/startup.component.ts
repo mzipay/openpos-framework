@@ -12,6 +12,7 @@ import { StartupService } from '../../services/startup.service';
 export class StartupComponent implements IScreen, AfterViewInit {
 
 
+    title = 'Starting ...';
     messages = [];
 
     constructor(public session: SessionService, startup: StartupService) {
@@ -24,6 +25,10 @@ export class StartupComponent implements IScreen, AfterViewInit {
     }
 
     show(screen: any): void {
+    }
+
+    public getLocalTheme(): string {
+        return this.session.getTheme();
     }
 
 }

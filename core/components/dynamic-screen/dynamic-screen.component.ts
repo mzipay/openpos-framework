@@ -129,9 +129,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
         this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
         this.session.subscribeForDialogUpdates((dialog: any): void => self.updateDialog(dialog));
-        if (!this.registerWithServer()) {
-            this.updateTemplateAndScreen();
-        }
+        this.updateDialog({ type: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%' } }});
         this.session.obsNode$.subscribe(NodeElements => this.NodeElements = NodeElements);
         this.session.obsSess$.subscribe(SessElements => this.SessElements = SessElements);
         this.session.obsConv$.subscribe(ConvElements => this.ConvElements = ConvElements);
@@ -493,7 +491,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     protected updateDialog(dialog?: any): void {
-        this.registerWithServer();
+        // this.registerWithServer();
         if (dialog) {
             const dialogType = this.dialogService.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
             if (!this.dialogOpening) {
@@ -516,7 +514,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     protected updateTemplateAndScreen(screen?: any): void {
-        this.registerWithServer();
+        // this.registerWithServer();
 
         if (!this.isPersonalized() && !screen) {
             console.log('setting up the personalization screen');
