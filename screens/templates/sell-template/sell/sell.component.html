@@ -1,10 +1,10 @@
 <div fxFlexFill fxLayout="column">
-    <app-statusbar fxFlex="0 1 auto" [data]="statusBar"></app-statusbar>
-    <div fxFlex="1 1 auto" style="padding:16px;overflow-y:auto" fxLayout="column" fxLayoutAlign="start"
+    <app-statusbar fxFlex="0 0 auto" [data]="statusBar"></app-statusbar>
+    <div fxFlex="0 1 100%" style="padding:16px;overflow-y:auto" fxLayout="column" fxLayoutAlign="start"
         fxLayoutGap="16px">
-        <app-scan-something class="mat-elevation-z3" *ngIf="template.scan" 
+        <app-scan-something fxFlex="0 0 auto" class="mat-elevation-z3" *ngIf="template.scan" 
         [scanSomethingData]="template.scan"></app-scan-something>
-        <mat-card fxFlex class="page-content-card min-height lighter" fxLayout="column" fxLayoutAlign="start">
+        <mat-card fxFlex="0 1 100%" class="page-content-card min-height lighter" fxLayout="column" fxLayoutAlign="start">
             <mat-card-title fxFlex="0 0 auto" class="text-md">
                 <ng-container *ngIf="template.transactionMenuItems?.length > 0; else prompt">
                     <button mat-button class="text-md" style="padding-left:0px;" [matMenuTriggerFor]="transactionMenu">
@@ -28,9 +28,9 @@
                     </button>
                 </span>
             </mat-card-title>
-            <mat-card-subtitle *ngIf="screen.subtitle" class="text-md">{{screen.subtitle}}</mat-card-subtitle>
-            <mat-card-content fxFlex="1 1 auto">
-                <mat-drawer-container fxFlex="1 1 auto">
+            <mat-card-subtitle fxFlex="0 0 auto" *ngIf="screen.subtitle" class="text-md">{{screen.subtitle}}</mat-card-subtitle>
+            <mat-card-content fxFlex="0 1 100%">
+                <mat-drawer-container fxFlex="0 1 100%">
                         <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async" fxLayout="column" fxLayoutAlign="start stretch"
                             fxLayoutGap="4px" fxLayoutGap.lg="20px" style="overflow-x:hidden">
                              <button mat-button color="primary" *ngFor="let m of template.localMenuItems" (click)="doMenuItemAction(m)" style="text-align: left"
@@ -44,8 +44,8 @@
                             </ng-container>
                             <div *ngIf="screen.type === 'Transaction'" fxFlex="0 1 auto" class="sell-screen-logo"></div>
                          </mat-drawer>
-                        <mat-drawer-content fxFlex="1 1 auto" fxLayout="column">
-                            <div fxFlex="stretch">
+                        <mat-drawer-content fxFlex="0 1 100%" fxLayout="column">
+                            <div style="flex:1 1 50%; min-height: 50%">
                                 <ng-template appScreen></ng-template>
                             </div>
                             <app-sell-status-section fxFlex="0 1 auto" [data]="statusSection"></app-sell-status-section>
