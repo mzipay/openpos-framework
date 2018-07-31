@@ -6,7 +6,12 @@
                     but want to be able to use local icons.  TODO: problem with styling however, sizing not working
                     for SVG icon
                 -->
-                <app-icon matPrefix iconClass="material-icons primary" [iconName]="promptIcon"></app-icon>
+                <button *ngIf="isScanAllowed(); else iconBlock" type="button" mat-button matPrefix mat-icon-button (click)="onScan()">
+                    <mat-icon svgIcon="barcode"></mat-icon>
+                </button> 
+                <ng-template #iconBlock>
+                    <app-icon matPrefix iconClass="material-icons primary" [iconName]="promptIcon"></app-icon>
+                </ng-template>
                 <input matInput [formControlName]="'promptInputControl'" [formatterName]="formatter" [appFocus]="!readOnly" 
                        [attr.minlength]="minLength" [attr.maxlength]="maxLength" [readonly]="readOnly" [attr.type]="isNumericField() ? 'tel' : 'text'" autoSelectOnFocus>
                 <mat-placeholder>{{placeholderText}}</mat-placeholder>
