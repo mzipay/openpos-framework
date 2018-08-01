@@ -6,3 +6,5 @@ export * from './sell-template/sell/sell.component';
 export * from './sell-template/sell/workstation.interface';
 export * from './sell-template/sell-linked-customer/sell-linked-customer.component';
 export * from './sell-template/sell-status-section/sell-status-section.data';
+export * from './sell-template/sell/scan.interface';
+export * from './sell-template/sell/status-bar.interface';

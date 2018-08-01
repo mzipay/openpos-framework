@@ -1,7 +1,7 @@
 import { MatSnackBar } from '@angular/material';
 import { Component, Input } from '@angular/core';
 import { StatusBarData } from './status-bar-data';
-import { SessionService, PluginService, FileUploadService, IMenuItem } from '../../core';
+import { SessionService, PluginService, FileUploadService, IMenuItem } from '../../../core';
 @Component({
   selector: 'app-statusbar',
   templateUrl: './status-bar.component.html'
@@ -16,7 +16,7 @@ export class StatusBarComponent {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem.action, null, menuItem.confirmationMessage);
+    this.session.onAction(menuItem);
   }
 
   public isMenuItemEnabled(m: IMenuItem): boolean {

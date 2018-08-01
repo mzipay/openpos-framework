@@ -22,16 +22,15 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
     const validators: ValidatorFn[] = [];
     validators.push(Validators.required);
     validators.push(this.validatorsService.getValidator(this.screen.responseType));
-
     let value;
 
     if (this.screen.responseType === 'ONOFF') {
       if (!this.screen.responseText) {
           value = 'false';
       }
-      //from server responseText is string , we are sending back as boolean
-      //ideally toggle control would return ON/OFF
-      value = (this.screen.responseText === 'ON') ? true :false;
+      // from server responseText is string , we are sending back as boolean
+      // ideally toggle control would return ON/OFF
+      value = (this.screen.responseText === 'ON') ? true : false;
       if (value) {
         this.screen.responseText = 'ON';
       } else {

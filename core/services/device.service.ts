@@ -9,7 +9,8 @@ import {
     DEVICE_RESPONSE_TYPE,
     DEVICE_DNE_RESPONSE_TYPE,
     IDevicePlugin,
-    IDeviceRequest
+    IDeviceRequest,
+    Scan
  } from '../plugins';
 import { PluginService } from './plugin.service';
 import { SessionService } from './session.service';
@@ -67,23 +68,26 @@ export class DeviceService {
       console.log('LogfileDownloadPlugin initialized.');
   }
 
-  public scan() {
+  public scan(source?: string) {
     if (this.screen.template && this.screen.template.scan &&
         this.screen.template.scan.scanType === 'CAMERA_CORDOVA') {
         console.log(`request to scan was made for: ${this.screen.template.scan.scanType}`);
-        this.cordovaCameraScan();
+        this.cordovaCameraScan(source);
     } else {
         console.log(`FAILED to invoke scan. Is there a screen.template.scan.scanType?`) ;
     }
   }
 
-  public cordovaCameraScan() {
+  public cordovaCameraScan(source?: string) {
     if (!this.session.isRunningInBrowser() && cordova) {
       this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin =>
         plugin.processRequest(
           {requestId: 'scan', deviceId: 'barcode-scanner', type: null, subType: null, payload: null},
           (response) => {
             if (response && ! response.cancelled) {
+              if (response instanceof Scan && source && ! response.source) {
+                  response.source = source;
+              }
               this.session.response = response;
               this.session.onAction('Scan');
             }

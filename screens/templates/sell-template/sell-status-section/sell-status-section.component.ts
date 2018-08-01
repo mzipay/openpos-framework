@@ -13,7 +13,7 @@ import { Configuration } from '../../../../configuration/configuration';
     @Input()
     data: SellStatusSectionData;
 
-    date: number;
+    date = Date.now();
     timer: number;
 
     ngOnInit(): void {

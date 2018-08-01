@@ -1,0 +1,12 @@
+<div fxFlexFill fxLayout="column" style="padding-top: 16px;">
+	<app-selectable-item-list fxFlex="1 1 auto" [configuration]="listConfig" (selectedItemChange)="onItemChange($event)" (selectedItemListChange)="onItemListChange($event)">
+		<app-item-card *ngFor="let i of screen.items" [item]=i [session]=session [isReadOnly]=screen.readOnly></app-item-card>
+	</app-selectable-item-list>
+	<div fxLayout="row">
+		<div fxFlex="1 1 auto"></div>
+		<button *ngIf="screen.actionButton" mat-raised-button color="primary" (click)="doMenuItemAction(screen.actionButton)">
+			<span>{{screen.actionButton.title ? screen.actionButton.title : 'Next'}}</span>
+			<mat-icon *ngIf="screen.actionButton.icon" class="material-icons">{{screen.actionButton.icon}}</mat-icon>
+		</button>
+	</div>
+</div>

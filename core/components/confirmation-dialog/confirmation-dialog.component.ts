@@ -1,18 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { IConfirmationDialog } from '../../interfaces/confirmation-dialog.interface';
 
 @Component({
   selector: 'app-confirmation-dialog',
   templateUrl: './confirmation-dialog.component.html',
   styleUrls: ['./confirmation-dialog.component.scss']
 })
-export class ConfirmationDialogComponent implements OnInit {
+export class ConfirmationDialogComponent {
 
-  public title: String;
-  public message: String;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+    public confirmDialog: IConfirmationDialog;
 }

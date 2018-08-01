@@ -134,7 +134,7 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, AfterVi
     onMenuItemClick(itemInfo: MenuClickAction): void {
         console.log('### list-item component onMenuItemClick() fired');
         this.session.response = itemInfo.item;
-        this.session.onAction(itemInfo.menuItem.action, null, itemInfo.menuItem.confirmationMessage );
+        this.session.onAction(itemInfo.menuItem);
     }
 
     isItemSelected(item: IItem): boolean  {

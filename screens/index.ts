@@ -28,8 +28,6 @@ export * from './selection-list/selection-list.component';
 export * from './sell-item-detail/sell-item-detail.component';
 export * from './signature-capture/signature-capture.component';
 export * from './static-table/static-table.component';
-export * from './status-bar/status-bar-data';
-export * from './status-bar/status-bar.component';
 export * from './tendering/tendering.component';
 export * from './till-count/till-count.component';
 export * from './till-count-other-tender/till-count-other-tender.component';

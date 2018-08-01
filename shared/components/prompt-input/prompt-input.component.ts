@@ -1,15 +1,17 @@
+import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TextMask, IMaskSpec, ITextMask } from '../../textmask';
 import { FabToggleButtonComponent } from '../fab-toggle-button/fab-toggle-button.component';
+import { PluginService, Scan, BarcodeScannerPlugin } from '../../../core';
 
 @Component({
     selector: 'app-prompt-input',
     templateUrl: './prompt-input.component.html'
 })
 
-export class PromptInputComponent implements OnInit {
+export class PromptInputComponent implements OnInit, OnDestroy {
 
     @Input() placeholderText: string;
     @Input() responseType: string;
@@ -21,20 +23,23 @@ export class PromptInputComponent implements OnInit {
     @Input() maxLength: number;
     @Input() promptFormGroup: FormGroup;
     @Input() readOnly = false;
+    @Input() keyboardPreference: string;
+    @Input() scanEnabled = false;
 
     inputType: string;
-    checked: boolean = true;
+    checked = true;
 
     formatter: string;
     _textMask: ITextMask; // Mask object built for text-mask
+    private barcodeEventSubscription: Subscription;
 
-    constructor(private datePipe: DatePipe) {
+    constructor(private datePipe: DatePipe, private pluginService: PluginService) {
     }
 
     isNumericField(): boolean {
         if (this.responseType) {
             return ['numerictext', 'money', 'phone', 'postalCode', 'percent', 'percentint', 'income', 'decimal']
-              .indexOf(this.responseType.toLowerCase()) >= 0;
+                .indexOf(this.responseType.toLowerCase()) >= 0 || this.keyboardPreference === 'Numeric';
         } else {
             return false;
         }
@@ -55,6 +60,7 @@ export class PromptInputComponent implements OnInit {
             this.responseText = 'ON';
         }
     }
+
     ngOnInit(): void {
         this.formatter = this.responseType;
 
@@ -64,6 +70,61 @@ export class PromptInputComponent implements OnInit {
         } else {
             this._textMask = TextMask.NO_MASK;
         }
+
+        if (this.scanEnabled) {
+            this.pluginService.getPluginWithOptions('barcodeScannerPlugin', true, { waitForCordovaInit: true }).then(plugin => {
+                // the onBarcodeScanned will only emit an event when client code passes a scan
+                // event to the plugin.  This won't be called for cordova barcodescanner plugin
+                // camera-based scan events.  It should only be used for third party scan events
+                // which come from other sources such as a scan device
+                this.barcodeEventSubscription = (<BarcodeScannerPlugin>plugin).onBarcodeScanned.subscribe({
+                    next: (scan: Scan) => {
+                        console.log(`app-prompt-input got scan event: ${scan.value}`);
+                        this.setFieldValue(scan.value);
+                    }
+                });
+                console.log(`app-prompt-input is subscribed for barcode scan events`);
+
+            }).catch(error => console.log(`Failed to get barcodeScannerPlugin.  Reason: ${error}`));
+        }
+    }
+
+    ngOnDestroy(): void {
+        if (this.barcodeEventSubscription) {
+            this.barcodeEventSubscription.unsubscribe();
+        }
+    }
+
+    isScanAllowed(): boolean {
+        return this.scanEnabled &&
+            ['numerictext', 'alphanumerictext'].indexOf(this.responseType.toLowerCase()) >= 0;
+    }
+
+    /**
+      * This method is invoked when the user presses the Scan button on the field.
+      * For device-based scan events, see the ngOnInit method.
+      */
+    onScan(): void {
+        this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin =>
+            plugin.processRequest(
+                { requestId: 'scan', deviceId: 'barcode-scanner', type: null, subType: null, payload: null },
+                (scan) => {
+                    if (scan instanceof Scan && !scan.cancelled) {
+                        this.setFieldValue(scan.value);
+                    }
+                },
+                (error) => {
+                    console.error('Scanning failed: ' + error);
+                }
+            )
+        ).catch(error => console.log(`Scanning failed: ${error}`)
+        );
+    }
+
+    private setFieldValue(value: any) {
+        const patchGroup = {};
+        patchGroup['promptInputControl'] = value;
+        this.promptFormGroup.patchValue(patchGroup);
     }
 
 }

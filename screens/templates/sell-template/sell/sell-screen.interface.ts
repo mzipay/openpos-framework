@@ -1,5 +1,5 @@
 import { IMenuItem, ISellItem } from '../../../../core';
-import { StatusBarData } from '../../../status-bar/status-bar-data';
+import { StatusBarData } from '../../../../shared';
 import { SelfCheckoutStatusBarData } from '../../../../self-checkout/self-checkout-statusbar/self-checkout-status-bar-data';
 import { ISellTemplate } from './sell-template.interface';
 import { SellStatusSectionData } from '../sell-status-section/sell-status-section.data';

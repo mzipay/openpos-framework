@@ -14,7 +14,10 @@
                 [formatterName]="formField.inputType" [required]="formField.required" (change)="onFormElementChanged(formField)"
                 [attr.minlength]="formField.minLength" [attr.maxlength]="formField.maxLength" [readonly]="formField.disabled"
                 [keyboardLayout]="keyboardLayout" [attr.type]="isNumericField() ? 'tel' : 'text'" autoSelectOnFocus>
-
+            <button *ngIf="isScanAllowed()" type="button" mat-button matSuffix mat-icon-button (click)="onScan(formField)">
+                <mat-icon svgIcon="barcode"></mat-icon>
+            </button>
+                 
             <input class="poptart" *ngSwitchCase="'PopTart'" matInput [formControlName]="formField.id" [formControl]="formGroup.controls[formField.id]" [placeholder]="getPlaceholderText(formField)"
                  [required]="formField.required" (click)="openPopTart()" 
                  onfocus="this.blur()" readonly id="{{formField.id}}">                
@@ -31,7 +34,7 @@
                 <mat-option *ngFor="let value of values" [value]="value">{{value}}</mat-option>
             </mat-select>
 
-            <textarea *ngSwitchCase="'TextArea'" style="width:50%" [value]="formField.value" [formControlName]="formField.id" [name]="formField.id" [placeholder]="getPlaceholderText(formField)"
+            <textarea *ngSwitchCase="'TextArea'" [value]="formField.value" [formControlName]="formField.id" [readonly]="formField.disabled" [name]="formField.id" [placeholder]="getPlaceholderText(formField)"
                 matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled" [required]="formField.required" (change)="onFormElementChanged(formField)"></textarea>       
 
             <mat-error>

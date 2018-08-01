@@ -9,8 +9,6 @@ export class LogfileDownloadPlugin extends CordovaDevicePlugin {
 
     pluginId = 'logfileDownloadPlugin';
     pluginName = this.pluginId;
-    // private pluginImpl: IPlugin;
-    // private fileUploadService: FileUploadService;
 
     constructor(private fileUploadService: FileUploadService) {
         super('openPOSCordovaLogPlugin');
@@ -18,8 +16,6 @@ export class LogfileDownloadPlugin extends CordovaDevicePlugin {
 
     init(successCallback: () => void, errorCallback: (error?: string) => void): void {
         super.init(successCallback, errorCallback);
-        // const injector = Injector.create([{provide: FileUploadService, deps: []}]);
-        // this.fileUploadService = injector.get(FileUploadService);
     }
 
     processRequest(deviceRequest: IDeviceRequest, successCallback: (response: any) => void, errorCallback: (error: string) => void) {

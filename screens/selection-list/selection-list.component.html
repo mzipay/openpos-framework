@@ -1,16 +1,13 @@
-<div fxFlexFill fxLayout="column" style="padding-top: 16px;">
-	<mat-card fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px" class="lighter" style="height: 100%; margin: 18px;">
-		<div *ngIf="screen.instructions" fxLayoutAlign="center center" class="text-md text-center" style="padding: 16px;">
-			<b>{{screen.instructions}}</b>
-		</div>
-		<app-selectable-item-list fxFlex [configuration]="listConfig" (selectedItemChange)="onItemChange($event)" (selectedItemListChange)="onItemListChange($event)">
-			<mat-card *ngFor="let sel of screen.selectionList">
-				<mat-card-title *ngIf="sel.title">{{sel.title}}</mat-card-title>
-				<mat-card-content *ngIf="sel.body">{{sel.body}}</mat-card-content>
-			</mat-card>
-		</app-selectable-item-list>
-		<div fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="end">
-			<button *ngFor="let m of screen.buttons" mat-raised-button color="primary" [disabled]="index<0" (click)="doMenuItemAction(m)">{{m.title}}</button>
-		</div>
-	</mat-card>
+<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
+	<app-selectable-item-list fxFlex [configuration]="listConfig" (selectedItemChange)="onItemChange($event)" (selectedItemListChange)="onItemListChange($event)">
+		<mat-card *ngFor="let sel of screen.selectionList">
+			<mat-card-title *ngIf="sel.title">{{sel.title}}</mat-card-title>
+			<mat-card-content *ngIf="sel.body">
+				<p *ngFor="let line of sel.body">{{line}}</p>
+			</mat-card-content>
+		</mat-card>
+	</app-selectable-item-list>
+	<div fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="end">
+		<button *ngFor="let m of screen.buttons" mat-raised-button color="primary" [disabled]="index<0" (click)="doMenuItemAction(m)">{{m.title}}</button>
+	</div>
 </div>

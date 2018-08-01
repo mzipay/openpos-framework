@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ObservableMedia } from '@angular/flex-layout';
 import { SessionService, AbstractTemplate, IMenuItem } from '../../../../core';
-import { StatusBarData } from '../../../status-bar/status-bar-data';
+import { StatusBarData } from '../../../../shared';
 import { SellScreenUtils, ISellScreen } from './sell-screen.interface';
 import { ISellTemplate } from './sell-template.interface';
 import { SellStatusSectionData } from '../sell-status-section/sell-status-section.data';
@@ -43,7 +43,7 @@ export class SellComponent extends AbstractTemplate {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem.action, null, menuItem.confirmationMessage);
+    this.session.onAction(menuItem);
   }
 
   public isMenuItemEnabled(m: IMenuItem): boolean {
