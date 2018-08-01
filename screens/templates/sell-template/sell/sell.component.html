@@ -45,10 +45,10 @@
                             <div *ngIf="screen.type === 'Transaction'" fxFlex="0 1 auto" class="sell-screen-logo"></div>
                          </mat-drawer>
                         <mat-drawer-content fxFlex="0 1 100%" fxLayout="column">
-                            <div fxFlex="1 1 calc(100% - 27px)">
+                            <div style="flex:1 1 50%; min-height: 50%">
                                 <ng-template appScreen></ng-template>
                             </div>
-                            <app-sell-status-section fxFlex="0 1 27px" [data]="statusSection"></app-sell-status-section>
+                            <app-sell-status-section fxFlex="0 1 auto" [data]="statusSection"></app-sell-status-section>
                          </mat-drawer-content>
                     </mat-drawer-container>
             </mat-card-content>

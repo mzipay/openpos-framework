@@ -1,6 +1,6 @@
 <div fxFlexFill fxLayout="column" style="padding-top: 16px;">
 	<app-selectable-item-list fxFlex="1 1 auto" [configuration]="listConfig" (selectedItemChange)="onItemChange($event)" (selectedItemListChange)="onItemListChange($event)">
-		<app-item-card *ngFor="let i of items" [item]=i [session]=session [isReadOnly]=screen.readOnly></app-item-card>
+		<app-item-card *ngFor="let i of screen.items" [item]=i [session]=session [isReadOnly]=screen.readOnly></app-item-card>
 	</app-selectable-item-list>
 	<div fxLayout="row">
 		<div fxFlex="1 1 auto"></div>
