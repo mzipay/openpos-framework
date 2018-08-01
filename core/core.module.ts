@@ -1,3 +1,4 @@
+import { DevMenuComponent } from './components/dynamic-screen/dev-menu.component';
 import { SessionService } from './services/session.service';
 import { PersonalizationStartupTask } from './components/startup/personalization-startup-task';
 import { StartupService } from './services/startup.service';
@@ -29,6 +30,7 @@ import { PersonalizationService } from './services/personalization.service';
     ],
     declarations: [
         DynamicScreenComponent,
+        DevMenuComponent,
         LoaderComponent,
         ConfirmationDialogComponent,
         PersonalizationComponent,

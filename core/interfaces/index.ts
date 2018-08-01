@@ -16,3 +16,4 @@ export * from './element.interface';
 export * from './catalog-browser-form.interface';
 export * from './transaction-summary.interface';
 export * from './startup-task.interface';
+export * from './message-handler.interface';

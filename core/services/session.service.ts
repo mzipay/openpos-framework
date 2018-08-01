@@ -1,7 +1,8 @@
+import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { PersonalizationService } from './personalization.service';
 
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subscription, BehaviorSubject, Subject } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { Injectable, EventEmitter, NgZone } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
@@ -119,6 +120,12 @@ export class SessionService {
 
     public onServerConnect: Observable<boolean>;
     private onServerConnectObserver: any;
+
+    private messageSubject = new Subject<any>();
+
+    public registerMessageHandler(type: string, handler: IMessageHandler): Subscription {
+        return this.messageSubject.pipe(filter(s => s.type === type)).subscribe(s => handler.handle(s));
+    }
 
     constructor(private location: Location, private router: Router, public dialogService: MatDialog, public snackBar: MatSnackBar,
         public zone: NgZone, protected personalization: PersonalizationService) {
@@ -244,7 +251,7 @@ export class SessionService {
 
         console.log('subscribing to server at: ' + currentTopic);
 
-        this.messages = this.stompService.subscribe(currentTopic as string);
+        this.messages = this.stompService.subscribe(currentTopic);
 
         // Subscribe a function to be run on_next message
         this.subscription = this.messages.subscribe(this.onNextMessage);
@@ -416,6 +423,7 @@ export class SessionService {
     /** Consume a message from the stompService */
     public onNextMessage = (message: Message) => {
         const json = JSON.parse(message.body);
+        this.messageSubject.next(json);
         // console.log(`Stomp message received.  type: ${json.type}`);
         if (json.clearDialog) {
             this.showDialog(null);
