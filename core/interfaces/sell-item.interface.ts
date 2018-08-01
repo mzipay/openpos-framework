@@ -10,4 +10,5 @@ export interface ISellItem extends IItem {
     sellingPrice: string;
     color: string;
     size: string;
+    longDescription: string;
 }
