@@ -16,11 +16,12 @@ public class ChooseOptionsScreen extends DynamicFormScreen {
         ButtonGrid
     }
     
-    
     private List<OptionItem> options;
     private SelectionMode selectionMode = SelectionMode.Single;
     private DisplayStyle displayStyle = DisplayStyle.ButtonList;
     private String promptText;
+    
+    private List<OptionItem> additionalButtons;
     
     public ChooseOptionsScreen( ) {
         this( new ArrayList<OptionItem>() );
@@ -101,5 +102,13 @@ public class ChooseOptionsScreen extends DynamicFormScreen {
     public void setDisplayStyle(DisplayStyle displayStyle) {
         this.displayStyle = displayStyle;
     }
-    
+
+    public List<OptionItem> getAdditionalButtons() {
+        return additionalButtons;
+    }
+
+    public void setAdditionalButtons(List<OptionItem> additionalButtons) {
+        this.additionalButtons = additionalButtons;
+    }
+
 }

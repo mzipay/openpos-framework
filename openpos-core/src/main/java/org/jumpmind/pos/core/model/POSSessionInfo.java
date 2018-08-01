@@ -1,7 +1,9 @@
 package org.jumpmind.pos.core.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -21,6 +23,7 @@ public class POSSessionInfo implements Serializable {
     private Boolean storeOpen = null;
     private boolean trainingMode = false;
     private boolean adminMode = false;
+    private List<String> itemsToAddToTheSale = new ArrayList<>();
     
     private Map<String, Object> attributes = new HashMap<>();
 
@@ -137,6 +140,22 @@ public class POSSessionInfo implements Serializable {
     
     public boolean isAdminMode() {
         return adminMode;
+    }
+    
+    public void setItemsToAddToTheSale(List<String> itemsToAddToTheSale) {
+        this.itemsToAddToTheSale = itemsToAddToTheSale;
+    }
+    
+    public List<String> getItemsToAddToTheSale() {
+        return itemsToAddToTheSale;
+    }
+    
+    public boolean hasItemsToAddToTheSale()  {
+    	return ((this.itemsToAddToTheSale != null) && (this.itemsToAddToTheSale.size() > 0));
+    }
+        
+    public void clearItemsToAddToTheSale()  {
+    	this.itemsToAddToTheSale = new ArrayList<>();
     }
 
     @Override

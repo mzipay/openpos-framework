@@ -2,6 +2,8 @@ package org.jumpmind.pos.core.model;
 
 import java.io.Serializable;
 
+import org.jumpmind.pos.core.screen.ConfirmationDialog;
+
 public class FormButton implements IFormElement, Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -11,7 +13,7 @@ public class FormButton implements IFormElement, Serializable {
     private String id;
     private String icon;
     private boolean submitButton = false;
-    private String confirmationMessage;
+    private ConfirmationDialog confirmationDialog;
 
     public FormButton() {
     }
@@ -81,12 +83,24 @@ public class FormButton implements IFormElement, Serializable {
     }
 
     public String getConfirmationMessage() {
-        return confirmationMessage;
+    	if ( confirmationDialog != null ) {
+    		confirmationDialog.getMessage();
+    	} 
+        return null;
     }
 
     public void setConfirmationMessage(String confirmationMessage) {
-        this.confirmationMessage = confirmationMessage;
+    	if( this.confirmationDialog == null ) {
+    		this.confirmationDialog = new ConfirmationDialog();
+    	}
+        this.confirmationDialog.setMessage(confirmationMessage);
     }
 
-    
+	public ConfirmationDialog getConfirmationDialog() {
+		return confirmationDialog;
+	}
+
+	public void setConfirmationDialog(ConfirmationDialog confirmationDialog) {
+		this.confirmationDialog = confirmationDialog;
+	}
 }

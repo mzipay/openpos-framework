@@ -31,7 +31,7 @@ public class MenuItem implements IUIAction, Serializable {
     private String title;
     private String icon;
     private boolean enabled = true;
-    private String confirmationMessage;
+    private ConfirmationDialog confirmationDialog;
     private List<MenuItem> children;
     private boolean sensitive;
     private String buttonSize;
@@ -73,8 +73,14 @@ public class MenuItem implements IUIAction, Serializable {
     
     public MenuItem(String action, String title, String icon, String confirmationMessage) {
         this(action, title, icon );
-        this.confirmationMessage = confirmationMessage;
+        this.confirmationDialog = new ConfirmationDialog();
+        this.confirmationDialog.setMessage(confirmationMessage);
     }  
+    
+    public MenuItem(String action, String title, String icon, ConfirmationDialog confirmationDialog) {
+    	this(action, title, icon );
+    	this.confirmationDialog = confirmationDialog;
+    }
     
     public MenuItem(String title, String action, boolean enabled) {
         super();
@@ -165,11 +171,20 @@ public class MenuItem implements IUIAction, Serializable {
     }
     
     public String getConfirmationMessage() {
-        return this.confirmationMessage;
+    	if( this.confirmationDialog != null ) {
+            return this.confirmationDialog.getMessage();
+    	}
+    	
+    	return null;
     }
     
     public void setConfirmationMessage(String confirmationMessage) {
-        this.confirmationMessage = confirmationMessage;
+    	
+    	if( this.confirmationDialog == null ) {
+    		this.confirmationDialog = new ConfirmationDialog();
+    	}
+    	    	
+        this.confirmationDialog.setMessage(confirmationMessage);
     }
 
     public MenuItem confirmationMessage(String confirmationMessage) {
@@ -205,5 +220,15 @@ public class MenuItem implements IUIAction, Serializable {
     public void setFontSize(String fontSize) {
         this.fontSize = fontSize;
     }
+
+
+	public ConfirmationDialog getConfirmationDialog() {
+		return confirmationDialog;
+	}
+
+
+	public void setConfirmationDialog(ConfirmationDialog confirmationDialog) {
+		this.confirmationDialog = confirmationDialog;
+	}
     
 }

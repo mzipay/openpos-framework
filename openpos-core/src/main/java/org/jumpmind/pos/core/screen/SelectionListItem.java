@@ -1,6 +1,8 @@
 package org.jumpmind.pos.core.screen;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectionListItem implements Serializable {
 
@@ -8,15 +10,16 @@ public class SelectionListItem implements Serializable {
 
     private String title;
 
-    private String body;
+    private List<String> body;
 
     public SelectionListItem() {
-
+        this.body = new ArrayList<String>();
     }
 
     public SelectionListItem(String title, String body) {
         this.title = title;
-        this.body = body;
+        this.body = new ArrayList<String>();
+        this.body.add(body);
     }
 
     public String getTitle() {
@@ -27,12 +30,16 @@ public class SelectionListItem implements Serializable {
         this.title = title;
     }
 
-    public String getBody() {
+    public List<String> getBody() {
         return body;
     }
 
-    public void setBody(String body) {
+    public void setBody(List<String> body) {
         this.body = body;
+    }
+    
+    public void addLine(String line) {
+        this.body.add(line);
     }
 
 }
