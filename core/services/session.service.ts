@@ -1,3 +1,4 @@
+import { PersonalizationService } from './personalization.service';
 
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -90,8 +91,6 @@ export class SessionService {
 
     private appId: String;
 
-    private deviceName: string;
-
     private subscribed: boolean;
 
     private subscription: any;
@@ -101,8 +100,6 @@ export class SessionService {
     private messages: Observable<Message>;
 
     public onDeviceRequest = new EventEmitter<IDeviceRequest>();
-    public onThemeChanging = new EventEmitter<IThemeChangingEvent>();
-    private previousTheme: string;
 
     private screenSource = new BehaviorSubject<any>(null);
 
@@ -118,15 +115,13 @@ export class SessionService {
 
     private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
-    private serverBaseUrl: string;
-
     loaderState: LoaderState;
 
     public onServerConnect: Observable<boolean>;
     private onServerConnectObserver: any;
 
     constructor(private location: Location, private router: Router, public dialogService: MatDialog, public snackBar: MatSnackBar,
-        public zone: NgZone) {
+        public zone: NgZone, protected personalization: PersonalizationService) {
 
         this.loaderState = new LoaderState(this);
         this.zone.onError.subscribe((e) => {
@@ -161,55 +156,6 @@ export class SessionService {
         return !app;
     }
 
-    public personalize(serverName: string, serverPort: string, node: string | {storeId: string, deviceId: string},
-        sslEnabled?: boolean, refreshApp: boolean = true) {
-
-        let nodeId = '';
-        if (typeof node === 'string') {
-            nodeId = node;
-        } else {
-            nodeId = node.storeId + '-' + node.deviceId;
-        }
-        console.log(`personalizing with server: ${serverName}, port: ${serverPort}, nodeid: ${nodeId}`);
-        localStorage.setItem('serverName', serverName);
-        localStorage.setItem('serverPort', serverPort);
-        localStorage.setItem('nodeId', nodeId);
-        if (sslEnabled) {
-            localStorage.setItem('sslEnabled', '' + sslEnabled);
-        } else {
-            localStorage.setItem('sslEnabled', 'false');
-        }
-        this.serverBaseUrl = null; // will be regenerated on next fetch
-        if (refreshApp) {
-            this.refreshApp();
-        }
-
-    }
-
-    public dePersonalize() {
-        this.unsubscribe();
-        const theme = this.getTheme();
-        localStorage.removeItem('serverName');
-        localStorage.removeItem('serverPort');
-        localStorage.removeItem('nodeId');
-        localStorage.removeItem('theme');
-        localStorage.removeItem('sslEnabled');
-        this.setTheme(theme);
-    }
-
-    private getWebsocketUrl(): string {
-        let protocol = 'ws://';
-        if (this.isSslEnabled()) {
-            protocol = 'wss://';
-        }
-        let url: string = protocol + this.getServerName();
-        if (this.getServerPort()) {
-            url = url + ':' + this.getServerPort();
-        }
-        url = url + '/api/websocket';
-        return url;
-    }
-
     private buildTopicName(): string {
         return '/topic/app/' + this.appId + '/node/' + this.getNodeId();
     }
@@ -217,7 +163,7 @@ export class SessionService {
     public showScreen(screen: any) {
         this.screen = screen;
         if (screen && screen.theme) {
-            this.setTheme(screen.theme);
+            this.personalization.setTheme(screen.theme, false);
         }
         this.screenSource.next(screen);
     }
@@ -233,57 +179,8 @@ export class SessionService {
         this.dialogSource.next(this.dialog);
     }
 
-    public getPersonalizationScreen(): any {
-        // tslint:disable-next-line:max-line-length
-        return { type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000), name: 'Device Setup', refreshAlways: true, template: { type: 'Blank', dialog: false } };
-    }
-
-    public getTheme(): string {
-        const theme = localStorage.getItem('theme');
-        if (this.screen && this.screen.theme) {
-            return this.screen.theme;
-        } else if (theme) {
-            return theme;
-        } else {
-            return 'openpos-theme';
-        }
-    }
-
     public setAuthToken(token: string) {
         this.authToken = token;
-    }
-
-    public isSslEnabled(): boolean {
-        return 'true' === localStorage.getItem('sslEnabled');
-    }
-
-    public setSslEnabled(enabled: boolean) {
-        localStorage.setItem('sslEnabled', enabled + '');
-    }
-
-    public setTheme(theme: string) {
-        localStorage.setItem('theme', theme);
-        if (this.previousTheme !== theme) {
-            console.log(`Theme changing from '${this.previousTheme}' to '${theme}'`);
-            this.onThemeChanging.emit({currentTheme: this.previousTheme, newTheme: theme});
-            this.previousTheme = theme;
-        }
-    }
-
-    public setServerName(name: string) {
-        localStorage.setItem('serverName', name);
-    }
-
-    public getServerName(): string {
-        return localStorage.getItem('serverName');
-    }
-
-    public getDeviceName(): string {
-        return localStorage.getItem('deviceName');
-    }
-
-    public setDeviceName(deviceName: string): void {
-        localStorage.setItem('deviceName', deviceName);
     }
 
     public getAppId(): String {
@@ -311,7 +208,7 @@ export class SessionService {
     }
 
     public isPersonalized(): boolean {
-        if (this.getServerName() && this.getNodeId() && this.getServerPort()) {
+        if (this.personalization.getServerName() && this.getNodeId() && this.getServerPort()) {
             return true;
         } else {
             return false;
@@ -327,7 +224,7 @@ export class SessionService {
             return;
         }
 
-        const url = this.getWebsocketUrl();
+        const url = this.personalization.getWebsocketUrl();
         console.log('creating new stomp service at: ' + url);
         this.stompService = new StompService({
             url: url,
@@ -782,21 +679,6 @@ export class SessionService {
         }
     }
 
-    private getUrlNodeId() {
-        const urlPath = this.location.path();
-        let urlNodeId = '';
-        if (urlPath) {
-            const urlTree = this.router.parseUrl(urlPath);
-            if (urlTree) {
-                if (urlTree.queryParams['nodeId']) {
-                    urlNodeId = urlTree.queryParams['nodeId'];
-                    console.log('nodeId found on query parameters: [' + urlNodeId + ']');
-                }
-            }
-        }
-        return urlNodeId;
-    }
-
     public registerActionPayload(actionName: string, actionValue: Function) {
         this.actionPayloads.set(actionName, actionValue);
     }
@@ -825,17 +707,8 @@ export class SessionService {
         return 'USD';
     }
 
-    public getServerBaseURL(): string {
-        if (!this.serverBaseUrl) {
-            const protocol = this.isSslEnabled() ? 'https' : 'http';
-            this.serverBaseUrl = `${protocol}://${this.getServerName()}${this.getServerPort() ? `:${this.getServerPort()}` : ''}`;
-            console.log(`Generated serverBaseURL: ${this.serverBaseUrl}`);
-        }
-        return this.serverBaseUrl;
-    }
-
     public getApiServerBaseURL(): string {
-        return `${this.getServerBaseURL()}/api`;
+        return `${this.personalization.getServerBaseURL()}/api`;
     }
 
     getLocale(): string {
