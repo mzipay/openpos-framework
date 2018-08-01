@@ -19,6 +19,7 @@ import {
 } from './components';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { StartupComponent } from './components/startup/startup.component';
+import { PersonalizationService } from './services/personalization.service';
 
 @NgModule({
     entryComponents: [
@@ -50,14 +51,14 @@ import { StartupComponent } from './components/startup/startup.component';
 })
 export class CoreModule {
 
-    constructor(@Optional() @SkipSelf() parentModule: CoreModule, sessionService: SessionService,
+    constructor(@Optional() @SkipSelf() parentModule: CoreModule, personalization: PersonalizationService, sessionService: SessionService,
         screenService: ScreenService, dialogService: DialogService,
         startupService: StartupService, private injector: Injector) {
 
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
         screenService.addScreen('Personalization', PersonalizationComponent);
         dialogService.addDialog('Startup', StartupComponent);
-        startupService.addStartupTask(new PersonalizationStartupTask(sessionService));
+        startupService.addStartupTask(new PersonalizationStartupTask(personalization, sessionService));
         AppInjector.Instance = this.injector;
     }
 }

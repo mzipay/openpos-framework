@@ -2,20 +2,21 @@ import { SessionService } from './session.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Injectable } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
+import { PersonalizationService } from './personalization.service';
 
 @Injectable({
     providedIn: 'root',
   })
 export class IconService {
     constructor(private iconRegistry: MatIconRegistry,
-        private sanitizer: DomSanitizer, private sessionService: SessionService) {
+        private sanitizer: DomSanitizer, private personalization: PersonalizationService, private sessionService: SessionService) {
         this.sessionService.onServerConnect.subscribe(personalized => {
             this.init();
         });
     }
 
     private init() {
-        console.log(`Icon service is initializing using base server url: ${this.sessionService.getServerBaseURL()}`);
+        console.log(`Icon service is initializing using base server url: ${this.personalization.getServerBaseURL()}`);
         this.iconRegistry.addSvgIcon('openpos_calculator', this.makeIconSafeUrl('calculator.svg'));
         this.iconRegistry.addSvgIcon('openpos_cash', this.makeIconSafeUrl('cash.svg'));
         this.iconRegistry.addSvgIcon('openpos_cash-multiple', this.makeIconSafeUrl('cash-multiple.svg'));
@@ -39,6 +40,6 @@ export class IconService {
     }
 
     private makeIconSafeUrl(iconFilename: string): SafeResourceUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(`${this.sessionService.getServerBaseURL()}/img/${iconFilename}`);
+        return this.sanitizer.bypassSecurityTrustResourceUrl(`${this.personalization.getServerBaseURL()}/img/${iconFilename}`);
     }
 }

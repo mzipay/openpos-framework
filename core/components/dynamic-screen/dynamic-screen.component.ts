@@ -19,6 +19,7 @@ import {
 import { IScreen } from './screen.interface';
 import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem } from '../../interfaces';
 import { FileViewerComponent, TemplateDirective } from '../../../shared';
+import { PersonalizationService } from '../../services/personalization.service';
 
 @Component({
     selector: 'app-dynamic-screen',
@@ -107,7 +108,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     private lastSequenceNum: number;
     private lastScreenName: string;
 
-    constructor(public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
+    constructor(private personalization: PersonalizationService, public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
         public deviceService: DeviceService, public dialog: MatDialog,
         public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
         protected router: Router, private pluginService: PluginService,
@@ -354,8 +355,9 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     public onPersonalize() {
-        this.session.dePersonalize();
-        this.session.showScreen(this.session.getPersonalizationScreen());
+        this.personalization.dePersonalize();
+        this.session.unsubscribe();
+        this.session.showScreen(this.personalization.getPersonalizationScreen());
     }
 
     public onDevClearLocalStorage() {
@@ -368,7 +370,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         const prom = new Promise<{ success: boolean, message: string }>((resolve, reject) => {
             const port = this.session.getServerPort();
             const nodeId = this.session.getNodeId().toString();
-            const url = `${this.session.getServerBaseURL()}/register/restart/node/${nodeId}`;
+            const url = `${this.personalization.getServerBaseURL()}/register/restart/node/${nodeId}`;
             const httpClient = this.httpClient;
             httpClient.get(url).subscribe(response => {
                 const msg = `Node '${nodeId}' restarted successfully.`;
@@ -506,10 +508,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             this.installedTemplate = this.currentTemplateRef.instance as AbstractTemplate;
             this.previousScreenType = screenType;
             this.previousScreenName = screenName;
-            if (this.session.getTheme() !== this.currentTheme) {
+            if (this.personalization.getTheme() !== this.currentTheme) {
                 this.overlayContainer.getContainerElement().classList.remove(this.currentTheme);
-                this.overlayContainer.getContainerElement().classList.add(this.session.getTheme());
-                this.currentTheme = this.session.getTheme();
+                this.overlayContainer.getContainerElement().classList.add(this.personalization.getTheme());
+                this.currentTheme = this.personalization.getTheme();
             }
             this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(screenType));
         }
@@ -617,6 +619,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         }
 
         this.lastDialogType = dialog.type;
+    }
+
+    protected get theme() {
+       return this.personalization.getTheme();
     }
 
 }

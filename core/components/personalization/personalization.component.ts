@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { SessionService } from '../../services';
 import { IScreen } from '../dynamic-screen/screen.interface';
+import { PersonalizationService } from '../../services/personalization.service';
 
 @Component({
     selector: 'app-personalization',
@@ -14,7 +15,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
     secondFormGroup: FormGroup;
     checkTimeout: any;
 
-    constructor(public session: SessionService, private formBuilder: FormBuilder, private http: HttpClient) {
+    constructor(private personalization: PersonalizationService, private session: SessionService, private formBuilder: FormBuilder, private http: HttpClient) {
     }
 
     ngOnInit() {
@@ -33,7 +34,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
     }
 
     public personalize() {
-        this.session.personalize(this.firstFormGroup.get('serverName').value, this.firstFormGroup.get('serverPort').value,
+        this.personalization.personalize(this.firstFormGroup.get('serverName').value, this.firstFormGroup.get('serverPort').value,
             {storeId: this.secondFormGroup.get('storeNumber').value, deviceId: this.secondFormGroup.get('deviceNumber').value},
             this.firstFormGroup.get('sslEnabled').value);
     }
