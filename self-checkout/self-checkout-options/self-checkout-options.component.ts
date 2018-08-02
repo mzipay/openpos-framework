@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SessionService, IScreen, ActionIntercepter, ActionIntercepterBehaviorType } from '../../core';
+import { SessionService, IScreen, ActionIntercepter, ActionIntercepterBehaviorType, IMenuItem } from '../../core';
 import { IOptionItem } from '../../screens/choose-options/option-item.interface';
 
 
@@ -34,14 +34,14 @@ export class SelfCheckoutOptionsComponent implements IScreen, OnInit, OnDestroy 
     this.session.unregisterActionIntercepter(SelfCheckoutOptionsComponent.UNDO);
   }
 
-  onMakeOptionSelection( option: IOptionItem): void {
-    if ( option.form.formElements.length > 0 ) {
+  onMakeOptionSelection(option: IOptionItem): void {
+    if (option.form.formElements.length > 0) {
       this.selectedOption = option;
       this.currentView = 'OptionForm';
       this.session.registerActionIntercepter(SelfCheckoutOptionsComponent.UNDO,
         new ActionIntercepter((payload) => { this.onBackButtonPressed(); }, ActionIntercepterBehaviorType.block));
     } else {
-      this.session.onAction( option.value );
+      this.session.onAction(option.value);
     }
   }
 
