@@ -83,8 +83,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.session.unsubscribe();
     }
 
-
-
     protected updateDialog(dialog?: any): void {
         if (dialog) {
             const dialogType = this.dialogService.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
