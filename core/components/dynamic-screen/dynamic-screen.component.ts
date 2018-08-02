@@ -241,7 +241,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.lastDialogType = dialog.type;
     }
 
-    protected get theme() {
+    public get theme() {
        return this.personalization.getTheme();
     }
 

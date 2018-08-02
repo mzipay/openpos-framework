@@ -404,22 +404,22 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
         }
     }
 
-    protected onDevRefreshView() {
+    public onDevRefreshView() {
         this.personalization.refreshApp();
     }
 
-    protected onPersonalize() {
+    public onPersonalize() {
         this.personalization.dePersonalize();
         this.session.unsubscribe();
         this.session.showScreen(this.personalization.getPersonalizationScreen());
     }
 
-    protected onDevClearLocalStorage() {
+    public onDevClearLocalStorage() {
         localStorage.clear();
         this.personalization.refreshApp();
     }
 
-    protected onDevRestartNode(): Promise<{ success: boolean, message: string }> {
+    public onDevRestartNode(): Promise<{ success: boolean, message: string }> {
         const prom = new Promise<{ success: boolean, message: string }>((resolve, reject) => {
             const port = this.personalization.getServerPort();
             const nodeId = this.personalization.getNodeId().toString();
@@ -451,11 +451,11 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
         return prom;
     }
 
-    protected onLogfileSelected(logFilename: string): void {
+    public onLogfileSelected(logFilename: string): void {
         this.currentSelectedLogfilename = logFilename;
     }
 
-    protected onLogfileShare(logFilename?: string): void {
+    public onLogfileShare(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.shareLogFile(
@@ -494,7 +494,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
         }
     }
 
-    protected onLogfileView(logFilename?: string): void {
+    public onLogfileView(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.readLogFileContents(
