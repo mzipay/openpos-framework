@@ -3,7 +3,7 @@
 
     <mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
         <mat-card-content #scrollList ngClass.xs="xs">
-            <mat-toolbar *ngIf="selectedItems.length > 0" class="page-content-card" color="primary" >
+            <mat-toolbar *ngIf="areAnyItemsSelected()" class="page-content-card" color="primary" >
                 <span>{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</span>
                 <span fxFlex="1 1 auto"></span>
                 <span>
@@ -27,27 +27,13 @@
                                 -->
                             </span>
                         </div>	
-                        <!--
-                        <div *ngIf="item.isGiftReceipt" fxAlign="right center">
-                            <mat-icon color="muted-color">redeem</mat-icon>&nbsp;&nbsp;
-                        </div>
-                        -->	
                         <div fxAlign="right">
                             <span class="primary text-md">
                                 <span class="super-currency-symbol">$</span>{{item.amount}}
-                                <!--						
-                                <br>
-                                <span>
-                                    <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">
-                                        <span class="super-currency-symbol">$</span>{{item.originalAmount}}</p>
-                                    <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">-
-                                        <span class="super-currency-symbol">$</span>{{item.discountAmount}}</p>
-                                </span>
-                                -->
                             </span>
                         </div>	
                         <div fxAlign="right" >
-                            <button *ngIf="isAnyActionPresent()" mat-icon-button color="primary" (click)="openItemDialog(item)">
+                            <button *ngIf="isAnyActionPresent() && isSingleItemSelected() && isItemSelected(item)" mat-icon-button color="primary" (click)="openItemDialog(item)">
                                 <mat-icon>more_vert</mat-icon>
                             </button>
                         </div>
@@ -59,31 +45,7 @@
 </div>
 
 <!--
-    This is the original mat-card code.
-
-    <mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
-        <mat-card-content>
-            <ng-container *ngIf="selectionMode === 'Single'; else elseblock">
-                <mat-nav-list>
-                    <ng-container *ngTemplateOutlet="itemsList"></ng-container>
-                </mat-nav-list>
-            </ng-container>
-            <ng-template #elseblock>
-                <!-- Angular will not allow a mat-selection-list here, get  "NullInjectorError: No provider for MatSelectionList!" - ->
-                <ng-container *ngTemplateOutlet="itemsList"></ng-container>
-            </ng-template>
-        </mat-card-content>
-        <mat-card-actions *ngIf="screen.actionButton" align="end">
-			<button mat-raised-button type="submit" (click)="onActionButtonClick()" color=primary>
-				<span>Next</span>
-				<mat-icon *ngIf="screen.actionButton.icon" class="material-icons">{{screen.actionButton.icon}}</mat-icon>
-			</button>
-		</mat-card-actions>
-    </mat-card>
--->
-
-<!--
-    This was how the product list was displayed.
+    This was how the product list was originally displayed.
 
 <ng-template #itemsList>
     <app-product-list #productList [showItemIcon]="! isItemClickDisabled() && selectionMode ==='Single'" [items]="items" 
