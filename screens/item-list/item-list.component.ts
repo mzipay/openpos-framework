@@ -51,29 +51,28 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, AfterVi
 
         //  Copied from transaction.component buildScreen() method...
 
-        console.log('### this.items has ' + (this ? this.items.length : 'unknown') + ' item(s)');
+        // console.log('### this.items has ' + (this ? this.items.length : 'unknown') + ' item(s)');
      
         this.listConfig = new SelectableItemListComponentConfiguration<IItem>();
         this.listConfig.selectionMode = SelectionMode.Multiple;
         this.listConfig.numResultsPerPage = Number.MAX_VALUE;
         this.listConfig.items = this.screen.items;
-        console.log('### Initialized listConfig attribute');
+        // console.log('### Initialized listConfig attribute');
  
-        console.log('### About to initialize the selectedItems attribute...');
+        // console.log('### About to initialize the selectedItems attribute...');
         if (this.screen.selectedItems)  {
-            console.log('### screen.selectedItems attribute is populated');
             this.selectedItems = this.screen.items.filter(item => this.screen.selectedItems.find(selectedItem => item.index === selectedItem.index));
-            console.log('### set selectedItems attribute, ' + (this.selectedItems ? this.selectedItems.length : 'unknown') + ' item(s) selected');
+            // console.log('### set selectedItems attribute, ' + (this.selectedItems ? this.selectedItems.length : 'unknown') + ' item(s) selected');
         }  else  {
-            console.log('### screen.selectedItems attribute is not populated, initializing selectedItems to empty');
+            // console.log('### screen.selectedItems attribute is not populated, initializing selectedItems to empty');
             this.selectedItems = new Array<IItem>();
         }
-        console.log('### Set selectedItems attribute, ' + (this.selectedItems ? this.selectedItems.length : 'unknown') + ' item(s) selected');
+        // console.log('### Set selectedItems attribute, ' + (this.selectedItems ? this.selectedItems.length : 'unknown') + ' item(s) selected');
 
         this.determineAvailableActions();
 
         this.dialog.closeAll();
-        console.log('### list-item component buildScreen() completed successfully');
+        // console.log('### list-item component buildScreen() completed successfully');
     }
 
     ngOnInit(): void {
@@ -85,8 +84,8 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, AfterVi
 
     ngAfterViewChecked() {
         if (this.items && this.size !== this.items.length) {
-          this.scrollToBottom();
-          this.size = this.items.length;
+            // this.scrollToBottom();
+            this.size = this.items.length;
         }
     }
         
@@ -99,13 +98,13 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, AfterVi
     }
 
     onItemClick(itemInfo: ItemClickAction): void {
-        console.log('### list-item component onItemClick() fired');
+        // console.log('### list-item component onItemClick() fired');
         this.session.response = itemInfo.item;
         this.session.onAction(this.itemActionName);
     }
 
     onItemSelected(itemInfo: ItemClickAction): void {
-        console.log('### list-item component onItemClick() fired');
+        // console.log('### list-item component onItemClick() fired');
         if (this.getSelectionModeAsEnum() === SelectionMode.Multiple) {
             this.session.response = this.selectedItems;
             // this.session.response = this.productList.selectedItems;
@@ -113,26 +112,23 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, AfterVi
     }
 
     public onItemListChange(event: IItem[]): void {
-        console.log('### list-item component onItemListChange() fired');
+        // console.log('### list-item component onItemListChange() fired');
            
         if (this.individualMenuClicked) {
-            console.log('### individualMenuClicked was set, flipping to false');
+            // console.log('### individualMenuClicked was set, flipping to false');
             this.individualMenuClicked = false;
-            this.selectedItems = event;
-            return;
         }
 
         this.selectedItems = event;
-        // this.session.onAction('SelectedItemsChanged', this.selectedItems);
-     }
+    }
 
     onActionButtonClick(): void {
-        console.log('### list-item component onActionButtonClick() fired');
+        // console.log('### list-item component onActionButtonClick() fired');
         this.session.onAction(this.screen.actionButton.action, null);
     }
 
     onMenuItemClick(itemInfo: MenuClickAction): void {
-        console.log('### list-item component onMenuItemClick() fired');
+        // console.log('### list-item component onMenuItemClick() fired');
         this.session.response = itemInfo.item;
         this.session.onAction(itemInfo.menuItem);
     }
@@ -167,6 +163,18 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, AfterVi
         return this.itemDisplayActionPresent;
     }
 
+    areAnyItemsSelected(): boolean  {
+        return (this.selectedItems.length > 0);
+    }
+
+    isSingleItemSelected(): boolean  {
+        return (this.selectedItems.length === 1);
+    }
+
+    areMultipleItemsSelected(): boolean  {
+        return (this.selectedItems.length > 1);
+    }
+
     showItemDetailScreen(items: IItem[]) {
         //  Send the Item Display action to the page.
         this.session.onAction('ItemDisplay', items);
@@ -179,7 +187,7 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, AfterVi
     }
  
     openItemDialog(item: IItem) {
-        console.log('### User clicked the More Vertical icon for a single item');
+        // console.log('### User clicked the More Vertical icon for a single item');
         this.individualMenuClicked = true;
         this.openItemsDialog([item]);
       }
@@ -240,13 +248,13 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, AfterVi
     private determineAvailableActions(): void  {
         for (const menu of this.itemActions) {
             if (menu.action === 'ItemDisplay')  {
-                console.log('### ItemDisplay action IS present');
+                // console.log('### ItemDisplay action IS present');
                 this.itemDisplayActionPresent = true;
             }  else if (menu.action === 'Add')  {
-                console.log('### Add action IS present');
+                // console.log('### Add action IS present');
                 this.addActionPresent = true;
             }  else if (menu.action === 'Next')  {
-                console.log('### Next action IS present');
+                // console.log('### Next action IS present');
                 this.nextActionPresent = true;
             }
         }
