@@ -29,8 +29,8 @@ import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface
 export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
     providedIn: 'root',
-  })
-export class SessionService {
+})
+export class SessionService implements IMessageHandler {
 
     private screen: any;
 
@@ -50,13 +50,9 @@ export class SessionService {
 
     private messages: Observable<Message>;
 
-    public onDeviceRequest = new EventEmitter<IDeviceRequest>();
-
     private screenSource = new BehaviorSubject<any>(null);
 
     private dialogSource = new BehaviorSubject<any>(null);
-
-    private loading: boolean;
 
     private stompService: StompService;
 
@@ -73,10 +69,6 @@ export class SessionService {
 
     private messageSubject = new Subject<any>();
 
-    public registerMessageHandler(type: string, handler: IMessageHandler): Subscription {
-        return this.messageSubject.pipe(filter(s => s.type === type)).subscribe(s => handler.handle(s));
-    }
-
     constructor(private location: Location, private router: Router, public dialogService: MatDialog, public snackBar: MatSnackBar,
         public zone: NgZone, protected personalization: PersonalizationService) {
 
@@ -84,7 +76,12 @@ export class SessionService {
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
-        this.onServerConnect = Observable.create(observer => {this.onServerConnectObserver = observer; });
+        this.onServerConnect = Observable.create(observer => { this.onServerConnectObserver = observer; });
+        this.messageSubject.pipe(filter(s => !['DevTools', 'DeviceRequest'].includes(s.type)), filter(s => !s.clearDialog)).subscribe(s => this.handle(s));
+    }
+
+    public registerMessageHandler(handler: IMessageHandler, ...types: string[]): Subscription {
+        return this.messageSubject.pipe(filter(s => types.includes(s.type))).subscribe(s => handler.handle(s));
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -105,7 +102,7 @@ export class SessionService {
     }
 
     private buildTopicName(): string {
-        return '/topic/app/' + this.appId + '/node/' + this.getNodeId();
+        return '/topic/app/' + this.appId + '/node/' + this.personalization.getNodeId();
     }
 
     public showScreen(screen: any) {
@@ -135,39 +132,11 @@ export class SessionService {
         return this.appId;
     }
 
-    public setServerPort(port: string) {
-        localStorage.setItem('serverPort', port);
-    }
-
-    public getServerPort(): string {
-        return localStorage.getItem('serverPort');
-    }
-
-    public getNodeId(): string {
-        return localStorage.getItem('nodeId');
-    }
-
-    public setNodeId(id: string) {
-        localStorage.setItem('nodeId', id);
-    }
-
-    public refreshApp() {
-        window.location.href = 'index.html';
-    }
-
-    public isPersonalized(): boolean {
-        if (this.personalization.getServerName() && this.getNodeId() && this.getServerPort()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public connected(): boolean {
         return this.stompService && this.stompService.connected();
     }
 
-    public subscribe(appName: String) {
+    public subscribe(appId: String) {
         if (this.subscribed) {
             return;
         }
@@ -187,7 +156,7 @@ export class SessionService {
 
         // Give preference to nodeId query parameter if it's present, then fallback to
         // local storage
-        this.appId = appName;
+        this.appId = appId;
         const currentTopic = this.buildTopicName();
 
         console.log('subscribing to server at: ' + currentTopic);
@@ -195,7 +164,13 @@ export class SessionService {
         this.messages = this.stompService.subscribe(currentTopic);
 
         // Subscribe a function to be run on_next message
-        this.subscription = this.messages.subscribe(this.onNextMessage);
+        this.subscription = this.messages.subscribe((message: Message) => {
+            const json = JSON.parse(message.body);
+            if (json.clearDialog) {
+                this.showDialog(null);
+            }
+            this.messageSubject.next(json);
+        });
 
         this.state = this.stompService.state.pipe(map((state: number) => StompState[state]));
 
@@ -228,7 +203,7 @@ export class SessionService {
         const sendResponseBackToServer: Function = () => {
             // tslint:disable-next-line:max-line-length
             console.log(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
-            this.stompService.publish(`/app/device/app/${this.appId}/node/${this.getNodeId()}/device/${deviceResponse.deviceId}`,
+            this.stompService.publish(`/app/device/app/${this.appId}/node/${this.personalization.getNodeId()}/device/${deviceResponse.deviceId}`,
                 JSON.stringify(deviceResponse));
         };
 
@@ -274,7 +249,7 @@ export class SessionService {
                 if (confirm.hasOwnProperty('message')) {
                     confirmD = <IConfirmationDialog>confirm;
                 } else {
-                    confirmD = { title: '', message: <string>confirm, cancelButtonName: 'No', confirmButtonName: 'Yes'};
+                    confirmD = { title: '', message: <string>confirm, cancelButtonName: 'No', confirmButtonName: 'Yes' };
                 }
                 const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
                 dialogRef.componentInstance.confirmDialog = confirmD;
@@ -304,7 +279,7 @@ export class SessionService {
                 }
             }
 
-            if (processAction && !this.loading) {
+            if (processAction && !this.loaderState.loading) {
                 const sendToServer: Function = () => {
                     console.log(`>>> Post action "${actionString}"`);
                     this.publish(actionString);
@@ -322,7 +297,7 @@ export class SessionService {
                     this.queueLoading();
                 }
             } else {
-                console.log(`Not sending action: ${actionString}.  processAction: ${processAction}, loading:${this.loading}`);
+                console.log(`Not sending action: ${actionString}.  processAction: ${processAction}, loading:${this.loaderState.loading}`);
             }
 
         } else {
@@ -338,80 +313,62 @@ export class SessionService {
     }
 
     private publish(actionString: string) {
-        this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
+        this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.personalization.getNodeId(),
             JSON.stringify({ name: actionString, data: this.response }));
     }
 
     private queueLoading() {
         // console.log(`queueLoading invoked`);
-        this.loading = true;
+        this.loaderState.loading = true;
         setTimeout(() => this.showLoading(LoaderState.LOADING_TITLE), 1000);
     }
 
     private showLoading(title: string, message?: string) {
         // console.log(`showLoading invoked`);
-        if (this.loading) {
+        if (this.loaderState.loading) {
             this.loaderState.setVisible(true, title, message);
         }
     }
 
     public cancelLoading() {
         // console.log(`cancelLoading invoked`);
-        this.loading = false;
+        this.loaderState.loading = false;
         this.loaderState.setVisible(false);
     }
 
-    /** Consume a message from the stompService */
-    public onNextMessage = (message: Message) => {
-        const json = JSON.parse(message.body);
-        this.messageSubject.next(json);
-        // console.log(`Stomp message received.  type: ${json.type}`);
-        if (json.clearDialog) {
-            this.showDialog(null);
-        } else {
-            if (json.type === 'Loading') {
-                // This is just a temporary hack
-                // Might be a previous instance of a Loading screen being shown,
-                // so dismiss it first. This occurs, for example, when mobile device is put
-                // to sleep while showing a loading dialog. Need to cancel it so that loader state
-                // gets reset.
-                if ( this.loading ) {
-                    this.cancelLoading();
-                }
-                this.loading = true;
-                this.showLoading(json.title, json.message);
-                return;
-            } else if (json.type === 'DevTools') {
-                // Moved to imessagehandler
-            } else if (json.template && json.template.dialog) {
-                this.showDialog(json);
-            } else if (json.type === 'NoOp') {
-                this.response = null;
-                return; // As with DeviceRequest, return to avoid dismissing loading screen
-            } else if (json.type === 'DeviceRequest') {
-                this.onDeviceRequest.emit(json);
-                // Return explicitly in the case that the prior
-                // screen shown was a 'loading' screen, don't want to dismiss
-                // that prematurely
-                return;
-            } else if ( json.type === 'Toast') {
-                const toast = json as IToastScreen;
-                this.snackBar.open(toast.message, null, {
-                    duration: toast.duration,
-                    panelClass: this.getToastClass(toast.toastType)
-                  });
-            } else {
-                this.response = null;
-                this.showScreen(json);
-                this.showDialog(null);
+    handle(message: any) {
+        if (message.type === 'Loading') {
+            // This is just a temporary hack
+            // Might be a previous instance of a Loading screen being shown,
+            // so dismiss it first. This occurs, for example, when mobile device is put
+            // to sleep while showing a loading dialog. Need to cancel it so that loader state
+            // gets reset.
+            if (this.loaderState.loading) {
+                this.cancelLoading();
             }
-            this.cancelLoading();
+            this.loaderState.loading = true;
+            this.showLoading(message.title, message.message);
+            return;
+        } else if (message.template && message.template.dialog) {
+            this.showDialog(message);
+        } else if (message.type === 'NoOp') {
+            this.response = null;
+            return; // As with DeviceRequest, return to avoid dismissing loading screen
+        } else if (message.type === 'Toast') {
+            const toast = message as IToastScreen;
+            this.snackBar.open(toast.message, null, {
+                duration: toast.duration,
+                panelClass: this.getToastClass(toast.toastType)
+            });
+        } else {
+            this.response = null;
+            this.showScreen(message);
+            this.showDialog(null);
         }
+        this.cancelLoading();
     }
 
-
-
-    private getToastClass( type: ToastType ): string {
+    private getToastClass(type: ToastType): string {
         switch (type) {
             case ToastType.Success:
                 return 'toast-success';

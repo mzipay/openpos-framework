@@ -121,7 +121,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
 
     ngOnInit(): void {
         const self = this;
-        this.session.registerMessageHandler('DevTools', this);
+        this.session.registerMessageHandler(this, 'DevTools');
     }
 
     private populateDevTables(message: any) {
@@ -390,7 +390,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
 
     protected onCreateSavePoint(newSavePoint: string) {
         if (newSavePoint) {
-            this.session.addSaveFile(newSavePoint);
+            this.addSaveFile(newSavePoint);
         }
         if (!this.displaySavePoints && this.savePoints.length > 0) {
             this.displaySavePoints = true;
@@ -398,14 +398,14 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
     }
 
     protected onSavePointRemove(savePoint: string) {
-        this.session.removeSaveFile(savePoint);
+        this.removeSaveFile(savePoint);
         if (this.savePoints.length === 0) {
             this.displaySavePoints = false;
         }
     }
 
     protected onDevRefreshView() {
-        this.session.refreshApp();
+        this.personalization.refreshApp();
     }
 
     protected onPersonalize() {
@@ -416,7 +416,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
 
     protected onDevClearLocalStorage() {
         localStorage.clear();
-        this.session.refreshApp();
+        this.personalization.refreshApp();
     }
 
     protected onDevRestartNode(): Promise<{ success: boolean, message: string }> {

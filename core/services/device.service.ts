@@ -1,3 +1,4 @@
+import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { Injectable } from '@angular/core';
 import { Subscription, BehaviorSubject, Subject } from 'rxjs';
 import { FileUploadService } from './file-upload.service';
@@ -20,7 +21,7 @@ declare var cordova: any;
 @Injectable({
     providedIn: 'root',
   })
-export class DeviceService {
+export class DeviceService implements IMessageHandler {
 
   public onDeviceReady: Subject<string> = new BehaviorSubject<string>(null);
 
@@ -41,12 +42,12 @@ export class DeviceService {
     },
     false);
 
-    // Listen for requests made from the server targeted to a specific device
-    this.session.onDeviceRequest.subscribe({
-      next: (event: IDeviceRequest) => {
-        this.onDeviceRequest(event);
-      }
-    });
+    this.session.registerMessageHandler(this, 'DeviceRequest');
+
+  }
+
+  handle(message: any) {
+      this.onDeviceRequest(message);
   }
 
   protected initializeBarcodeScannerPlugin(): void {

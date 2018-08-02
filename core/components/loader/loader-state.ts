@@ -16,6 +16,8 @@ export class LoaderState {
     observable = this.loaderSubject.asObservable();
     private timerSubscription: Subscription = null;
 
+    public loading = false;
+
     constructor(private sessionService: SessionService, private personalization: PersonalizationService) {
     }
 
