@@ -343,7 +343,7 @@ public class Form implements Serializable {
     // This means different things to different elements. 
     public String getString(String id) {
         for (IFormElement element : formElements) {
-            if (element.getId().equals(id)) {
+            if (id.equals(element.getId())) {
                 if (element instanceof FormField) {
                     return ((FormField)element).getValue();                            
                 }

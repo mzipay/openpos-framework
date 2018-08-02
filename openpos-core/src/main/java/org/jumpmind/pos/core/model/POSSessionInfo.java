@@ -149,6 +149,14 @@ public class POSSessionInfo implements Serializable {
     public List<String> getItemsToAddToTheSale() {
         return itemsToAddToTheSale;
     }
+    
+    public boolean hasItemsToAddToTheSale()  {
+    	return ((this.itemsToAddToTheSale != null) && (this.itemsToAddToTheSale.size() > 0));
+    }
+        
+    public void clearItemsToAddToTheSale()  {
+    	this.itemsToAddToTheSale = new ArrayList<>();
+    }
 
     @Override
     public String toString() {
