@@ -41,6 +41,7 @@ import { TillCountComponent } from './till-count/till-count.component';
 import { TillCountOtherTenderComponent } from './till-count-other-tender/till-count-other-tender.component';
 import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
+import { JournalSearchResultsComponent } from './journal-search-results/journal-search-results.component';
 
 export const ScreenConstants = {
     screens : [
@@ -77,6 +78,7 @@ export const ScreenConstants = {
         { name: 'SelectionList', component: SelectionListComponent },
         { name: 'CatalogBrowser', component: CatalogBrowserComponent},
         { name:'ItemSearchResults', component: ItemSearchResultsComponent },
+        { name: 'JournalDetail', component: JournalSearchResultsComponent },
 
         // Default Dialog
         { name: 'Dialog', component: DialogComponent },
@@ -126,7 +128,7 @@ export const ScreenConstants = {
 
     templates: [
         // Templates
-        { name: 'Blank', component: BlankComponent },
+        { name: 'Blank', component: BlankComponent },   
         { name: 'BlankWithBar', component: BlankWithBarComponent },
         { name: 'Sell', component: SellComponent },
     ]
