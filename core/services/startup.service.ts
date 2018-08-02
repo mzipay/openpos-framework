@@ -5,6 +5,7 @@ import {
     IStartupTask
 } from '../interfaces';
 import { Router } from '@angular/router';
+import { PersonalizationService } from './personalization.service';
 
 @Injectable({
     providedIn: 'root',
@@ -13,7 +14,7 @@ export class StartupService {
 
     private tasks = new Map<string, IStartupTask>();
 
-    constructor(protected session: SessionService, protected router: Router) {
+    constructor(private personalization: PersonalizationService, private session: SessionService, protected router: Router) {
     }
 
     public addStartupTask(task: IStartupTask): void {
@@ -28,7 +29,7 @@ export class StartupService {
            return task.execute(startupComponent);
         });
 
-        if (this.session.isPersonalized()) {
+        if (this.personalization.isPersonalized()) {
             this.session.unsubscribe();
             this.session.subscribe(this.normalizeAppIdFromUrl());
         }

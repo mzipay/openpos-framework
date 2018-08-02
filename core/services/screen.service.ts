@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SessionService } from './session.service';
 import { IScreen } from '../components';
+import { PersonalizationService } from './personalization.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,7 +13,8 @@ export class ScreenService {
   private screens = new Map<string, Type<IScreen>>();
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, private http: HttpClient,
-    private sessionService: SessionService) { }
+    private personalization: PersonalizationService,
+    private session: SessionService) { }
 
   public addScreen(name: string, type: Type<IScreen>): void {
     if (this.screens.get(name)) {
@@ -37,9 +39,9 @@ export class ScreenService {
   }
 
   public getFieldValues(fieldId: string, searchTerm?: string): Observable<any> {
-    const url: string = this.sessionService.getApiServerBaseURL() + '/app/'
-      + this.sessionService.getAppId() + '/node/'
-      + this.sessionService.getNodeId() + '/control/'
+    const url: string = this.personalization.getApiServerBaseURL() + '/app/'
+      + this.session.getAppId() + '/node/'
+      + this.personalization.getNodeId() + '/control/'
       + fieldId;
 
     const httpParams = {};

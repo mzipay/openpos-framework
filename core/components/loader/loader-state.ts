@@ -1,5 +1,6 @@
 import { SessionService } from '../../services';
 import { Subject, timer, Subscription } from 'rxjs';
+import { PersonalizationService } from '../../services/personalization.service';
 
 
 export class LoaderState {
@@ -15,7 +16,7 @@ export class LoaderState {
     observable = this.loaderSubject.asObservable();
     private timerSubscription: Subscription = null;
 
-    constructor(protected sessionService: SessionService) {
+    constructor(private sessionService: SessionService, private personalization: PersonalizationService) {
     }
 
     public monitorConnection() {
@@ -61,7 +62,7 @@ export class LoaderState {
     }
 
     protected checkConnectionStatus(): void {
-        if (!this.sessionService.isPersonalized()) {
+        if (!this.personalization.isPersonalized()) {
             this.setVisible(false);
         } else {
             const sessionConnected = this.sessionService.connected();

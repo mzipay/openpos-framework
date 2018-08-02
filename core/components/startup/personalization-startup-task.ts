@@ -9,13 +9,13 @@ export class PersonalizationStartupTask implements IStartupTask {
 
     order = 500;
 
-    constructor(private personalization: PersonalizationService, protected session: SessionService) {
+    constructor(private personalization: PersonalizationService, private session: SessionService) {
 
     }
 
     execute(startupComponent: StartupComponent): boolean {
         startupComponent.message = 'Checking if device is personalized';
-        if (!this.session.isPersonalized()) {
+        if (!this.personalization.isPersonalized()) {
             this.session.showScreen(this.personalization.getPersonalizationScreen());
             return false;
         }  else  {

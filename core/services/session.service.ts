@@ -32,56 +32,6 @@ export const DEFAULT_LOCALE = 'en-US';
   })
 export class SessionService {
 
-    subNode$ = new BehaviorSubject<any[]>([]);
-
-    obsNode$: Observable<Element[]>;
-
-    subConv$ = new BehaviorSubject<any[]>([]);
-
-    obsConv$: Observable<Element[]>;
-
-    subSess$ = new BehaviorSubject<any[]>([]);
-
-    obsSess$: Observable<Element[]>;
-
-    subConf$ = new BehaviorSubject<any[]>([]);
-
-    obsConf$: Observable<Element[]>;
-
-    subFlow$ = new BehaviorSubject<any[]>([]);
-
-    obsFlow$: Observable<Element[]>;
-
-    subSave$ = new BehaviorSubject<string[]>([]);
-
-    obsSave$: Observable<string[]>;
-
-    NodeElements: Element[] = [];
-    SessElements: Element[] = [];
-    ConvElements: Element[] = [];
-    ConfElements: Element[] = [];
-    FlowElements: Element[] = [];
-    savePoints: string[] = [];
-
-
-    currentState: string;
-
-    subState$ = new BehaviorSubject<string>('');
-
-    obsState$: Observable<string>;
-
-    currentStateClass: string;
-
-    subStateClass$ = new BehaviorSubject<string>('');
-
-    obsStateClass$: Observable<string>;
-
-    currentStateActions: ActionMap[] = [];
-
-    subStateActions$ = new BehaviorSubject<any[]>([]);
-
-    obsStateActions$: Observable<ActionMap[]>;
-
     private screen: any;
 
     public dialog: any;
@@ -130,20 +80,11 @@ export class SessionService {
     constructor(private location: Location, private router: Router, public dialogService: MatDialog, public snackBar: MatSnackBar,
         public zone: NgZone, protected personalization: PersonalizationService) {
 
-        this.loaderState = new LoaderState(this);
+        this.loaderState = new LoaderState(this, personalization);
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
         this.onServerConnect = Observable.create(observer => {this.onServerConnectObserver = observer; });
-        this.obsNode$ = this.subNode$.asObservable();
-        this.obsSess$ = this.subSess$.asObservable();
-        this.obsConv$ = this.subConv$.asObservable();
-        this.obsConf$ = this.subConf$.asObservable();
-        this.obsFlow$ = this.subFlow$.asObservable();
-        this.obsState$ = this.subState$.asObservable();
-        this.obsStateClass$ = this.subStateClass$.asObservable();
-        this.obsStateActions$ = this.subStateActions$.asObservable();
-        this.obsSave$ = this.subSave$.asObservable();
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -441,7 +382,7 @@ export class SessionService {
                 this.showLoading(json.title, json.message);
                 return;
             } else if (json.type === 'DevTools') {
-                this.devToolRouter(json);
+                // Moved to imessagehandler
             } else if (json.template && json.template.dialog) {
                 this.showDialog(json);
             } else if (json.type === 'NoOp') {
@@ -468,11 +409,7 @@ export class SessionService {
         }
     }
 
-    private devToolRouter(json) {
-        if (json.name === 'DevTools::Get') {
-            this.populateDevTables(json);
-        }
-    }
+
 
     private getToastClass( type: ToastType ): string {
         switch (type) {
@@ -483,208 +420,6 @@ export class SessionService {
         }
 
         return null;
-    }
-
-    private populateDevTables(json: any) {
-        if (json.currentState) {
-            console.log('Pulling current state actions...');
-            this.currentState = json.currentState.stateName;
-            this.subState$.next(this.currentState);
-            this.currentStateClass = json.currentState.stateClass;
-            this.subStateClass$.next(this.currentStateClass);
-            this.currentStateActions = [];
-            for ( let i = 0; i < json.actionsSize; i = i + 2) {
-                this.currentStateActions.push({
-                    Action: json.actions[i],
-                    Destination: json.actions[i + 1]
-
-                });
-                this.subStateActions$.next(this.currentStateActions);
-            }
-        }
-        if (json.scopes.ConversationScope) {
-            console.log('Pulling Conversation Scope Elements...');
-            this.ConvElements = [];
-            json.scopes.ConversationScope.forEach(element => {
-                if (!this.ConvElements.includes(element, 0)) {
-                    this.ConvElements.push({
-                        ID: element.name,
-                        Time: element.date,
-                        StackTrace: element.stackTrace,
-                        Value: element.value
-                    });
-                    this.subConv$.next(this.ConvElements);
-                }
-            });
-        }
-        if (json.scopes.SessionScope) {
-            console.log('Pulling Session Scope Elements...');
-            this.SessElements = [];
-            json.scopes.SessionScope.forEach(element => {
-                if (!this.SessElements.includes(element, 0)) {
-                    this.SessElements.push({
-                        ID: element.name,
-                        Time: element.date,
-                        StackTrace: element.stackTrace,
-                        Value: element.value
-                    });
-                    this.subSess$.next(this.SessElements);
-                }
-            });
-        }
-        if (json.scopes.NodeScope) {
-            console.log('Pulling Node Scope Elements...');
-            this.NodeElements = [];
-            json.scopes.NodeScope.forEach(element => {
-                if (!this.NodeElements.includes(element, 0)) {
-                    this.NodeElements.push({
-                        ID: element.name,
-                        Time: element.date,
-                        StackTrace: element.stackTrace,
-                        Value: element.value
-                    });
-                    this.subNode$.next(this.NodeElements);
-                }
-            });
-        }
-        if (json.scopes.FlowScope) {
-            console.log('Pulling Flow Scope Elements...');
-            this.FlowElements = [];
-            json.scopes.FlowScope.forEach(element => {
-                if (!this.FlowElements.includes(element, 0)) {
-                    this.FlowElements.push({
-                        ID: element.name,
-                        Time: element.date,
-                        StackTrace: element.stackTrace,
-                        Value: element.value
-                    });
-                    this.subFlow$.next(this.FlowElements);
-                }
-            });
-            console.log(this.FlowElements);
-        }
-
-        if (json.scopes.ConfigScope) {
-            console.log('Pulling Config Scope Elements...');
-            this.ConfElements = [];
-            json.scopes.ConfigScope.forEach(element => {
-                if (!this.ConfElements.includes(element, 0)) {
-                    this.ConfElements.push({
-                        ID: element.name,
-                        Time: element.date,
-                        StackTrace: element.stackTrace,
-                        Value: element.value
-                    });
-                    this.subConf$.next(this.ConfElements);
-                }
-            });
-            console.log(this.ConfElements);
-        }
-
-        if (json.saveFiles) {
-            console.log('Pulling save files...');
-            this.savePoints = [];
-            json.saveFiles.forEach(saveName => {
-                this.savePoints.push(saveName);
-                this.subSave$.next(this.savePoints);
-                console.log(this.savePoints);
-            });
-        }
-    }
-
-    public addSaveFile(newSavePoint: string) {
-        if (newSavePoint) {
-            if (!this.savePoints.includes(newSavePoint)) {
-                this.savePoints.push(newSavePoint);
-                this.subSave$.next(this.savePoints);
-            }
-          this.onAction('DevTools::Save::' + newSavePoint);
-          console.log('Save Point Created: \'' + newSavePoint + '\'');
-        }
-    }
-
-    public removeSaveFile(saveName: string) {
-        console.log('Attempting to remove Save Point \'' + saveName + '\'...');
-        const index = this.savePoints.findIndex(item => {
-            return saveName === item;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::RemoveSave::' + saveName);
-            this.savePoints.splice(index, 1);
-            this.subSave$.next(this.savePoints);
-            console.log('Save Points updated: ');
-            console.log(this.savePoints);
-        }
-    }
-
-    public removeNodeElement(element: Element) {
-        console.log('Attempting to remove \'' + element.Value + '\'...');
-        const index = this.NodeElements.findIndex(item => {
-            return element.Value === item.Value;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::Remove::Node', element);
-            this.NodeElements.splice(index, 1);
-            this.subNode$.next(this.NodeElements);
-            console.log('Node Scope updated: ');
-            console.log(this.NodeElements);
-        }
-    }
-
-    public removeSessionElement(element: Element) {
-        console.log('Attempting to remove \'' + element.Value + '\'...');
-        const index = this.SessElements.findIndex(item => {
-            return element.Value === item.Value;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::Remove::Session', element);
-            this.SessElements.splice(index, 1);
-            this.subSess$.next(this.SessElements);
-            console.log('Session Scope updated: ');
-            console.log(this.NodeElements);
-        }
-    }
-
-    public removeConversationElement(element: Element) {
-        console.log('Attempting to remove \'' + element.Value + '\'...');
-        const index = this.ConvElements.findIndex(item => {
-            return element.Value === item.Value;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::Remove::Conversation', element);
-            this.ConvElements.splice(index, 1);
-            this.subConv$.next(this.ConvElements);
-            console.log('Conversation Scope updated: ');
-            console.log(this.ConvElements);
-        }
-    }
-
-    public removeConfigElement(element: Element) {
-        console.log('Attempting to remove \'' + element.Value + '\'...');
-        const index = this.ConfElements.findIndex(item => {
-            return element.Value === item.Value;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::Remove::Config', element);
-            this.ConfElements.splice(index, 1);
-            this.subConf$.next(this.ConfElements);
-            console.log('Config Scope updated: ');
-            console.log(this.ConfElements);
-        }
-    }
-
-    public removeFlowElement(element: Element) {
-        console.log('Attempting to remove \'' + element.Value + '\'...');
-        const index = this.FlowElements.findIndex(item => {
-            return element.Value === item.Value;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::Remove::Flow', element);
-            this.FlowElements.splice(index, 1);
-            this.subFlow$.next(this.FlowElements);
-            console.log('Flow Scope updated: ');
-            console.log(this.FlowElements);
-        }
     }
 
     public registerActionPayload(actionName: string, actionValue: Function) {

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
 import { Component, ViewChild, HostListener, ComponentRef, OnDestroy, OnInit, ComponentFactory } from '@angular/core';
-import { MatDialog, MatDialogRef, MatSnackBar,  MatSnackBarRef, SimpleSnackBar, MatExpansionPanel } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar, MatSnackBarRef, SimpleSnackBar, MatExpansionPanel } from '@angular/material';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { AbstractTemplate } from '../abstract-template';
@@ -17,7 +17,7 @@ import {
     FileUploadService
 } from '../../services';
 import { IScreen } from './screen.interface';
-import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem } from '../../interfaces';
+import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem, IMessageHandler } from '../../interfaces';
 import { FileViewerComponent, TemplateDirective } from '../../../shared';
 import { PersonalizationService } from '../../services/personalization.service';
 
@@ -26,7 +26,7 @@ import { PersonalizationService } from '../../services/personalization.service';
     templateUrl: './dev-menu.component.html',
     styleUrls: ['./dev-menu.component.scss'],
 })
-export class DevMenuComponent implements OnInit {
+export class DevMenuComponent implements OnInit, IMessageHandler {
 
     NodeElements: Element[];
     SessElements: Element[];
@@ -106,31 +106,126 @@ export class DevMenuComponent implements OnInit {
         private httpClient: HttpClient, private cd: ChangeDetectorRef,
         private elRef: ElementRef, public renderer: Renderer2) {
 
-            if (Configuration.useTouchListener) {
-                this.renderer.listen(elRef.nativeElement, 'touchstart', (event) => {
-                    this.documentClick(event);
-                });
-            }
-            
+        if (Configuration.useTouchListener) {
+            this.renderer.listen(elRef.nativeElement, 'touchstart', (event) => {
+                this.documentClick(event);
+            });
+        }
+    }
+
+    handle(message: any) {
+        if (message.name === 'DevTools::Get') {
+            this.populateDevTables(message);
+        }
     }
 
     ngOnInit(): void {
         const self = this;
-        this.session.obsNode$.subscribe(NodeElements => this.NodeElements = NodeElements);
-        this.session.obsSess$.subscribe(SessElements => this.SessElements = SessElements);
-        this.session.obsConv$.subscribe(ConvElements => this.ConvElements = ConvElements);
-        this.session.obsConf$.subscribe(ConfElements => this.ConfElements = ConfElements);
-        this.session.obsFlow$.subscribe(FlowElements => this.FlowElements = FlowElements);
-        this.session.obsState$.subscribe(currentState => this.currentState = currentState);
-        this.session.obsStateClass$.subscribe(currentStateClass => this.currentStateClass = currentStateClass);
-        this.session.obsStateActions$.subscribe(currentStateActions => this.currentStateActions = currentStateActions);
-        this.session.obsSave$.subscribe(savePoints => this.savePoints = savePoints);
+        this.session.registerMessageHandler('DevTools', this);
+    }
+
+    private populateDevTables(message: any) {
+        if (message.currentState) {
+            console.log('Pulling current state actions...');
+            this.currentState = message.currentState.stateName;
+            this.currentStateClass = message.currentState.stateClass;
+            this.currentStateActions = [];
+            for (let i = 0; i < message.actionsSize; i = i + 2) {
+                this.currentStateActions.push({
+                    Action: message.actions[i],
+                    Destination: message.actions[i + 1]
+
+                });
+            }
+        }
+        if (message.scopes.ConversationScope) {
+            console.log('Pulling Conversation Scope Elements...');
+            this.ConvElements = [];
+            message.scopes.ConversationScope.forEach(element => {
+                if (!this.ConvElements.includes(element, 0)) {
+                    this.ConvElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace,
+                        Value: element.value
+                    });
+                }
+            });
+        }
+        if (message.scopes.SessionScope) {
+            console.log('Pulling Session Scope Elements...');
+            this.SessElements = [];
+            message.scopes.SessionScope.forEach(element => {
+                if (!this.SessElements.includes(element, 0)) {
+                    this.SessElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace,
+                        Value: element.value
+                    });
+                }
+            });
+        }
+        if (message.scopes.NodeScope) {
+            console.log('Pulling Node Scope Elements...');
+            this.NodeElements = [];
+            message.scopes.NodeScope.forEach(element => {
+                if (!this.NodeElements.includes(element, 0)) {
+                    this.NodeElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace,
+                        Value: element.value
+                    });
+                }
+            });
+        }
+        if (message.scopes.FlowScope) {
+            console.log('Pulling Flow Scope Elements...');
+            this.FlowElements = [];
+            message.scopes.FlowScope.forEach(element => {
+                if (!this.FlowElements.includes(element, 0)) {
+                    this.FlowElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace,
+                        Value: element.value
+                    });
+                }
+            });
+            console.log(this.FlowElements);
+        }
+
+        if (message.scopes.ConfigScope) {
+            console.log('Pulling Config Scope Elements...');
+            this.ConfElements = [];
+            message.scopes.ConfigScope.forEach(element => {
+                if (!this.ConfElements.includes(element, 0)) {
+                    this.ConfElements.push({
+                        ID: element.name,
+                        Time: element.date,
+                        StackTrace: element.stackTrace,
+                        Value: element.value
+                    });
+                }
+            });
+            console.log(this.ConfElements);
+        }
+
+        if (message.saveFiles) {
+            console.log('Pulling save files...');
+            this.savePoints = [];
+            message.saveFiles.forEach(saveName => {
+                this.savePoints.push(saveName);
+                console.log(this.savePoints);
+            });
+        }
     }
 
     @HostListener('document:keydown', ['$event'])
     handleKeydownEvent(event: any) {
-    const key = event.key;
-    // console.log(key);
+        const key = event.key;
+        // console.log(key);
         if (key === 'ArrowUp' && this.keyCount !== 1) {
             this.keyCount = 1;
         } else if (key === 'ArrowUp' && this.keyCount === 1) {
@@ -141,7 +236,7 @@ export class DevMenuComponent implements OnInit {
             this.keyCount = 4;
         } else if (key === 'ArrowLeft' && this.keyCount === 4) {
             this.keyCount = 5;
-        }   else if (key === 'ArrowRight' && this.keyCount === 5) {
+        } else if (key === 'ArrowRight' && this.keyCount === 5) {
             this.keyCount = 6;
         } else if (key === 'ArrowLeft' && this.keyCount === 6) {
             this.keyCount = 7;
@@ -179,13 +274,13 @@ export class DevMenuComponent implements OnInit {
             this.clickCount = ++this.clickCount;
         }
 
-        if (y < 200 && x < 200 ) {
+        if (y < 200 && x < 200) {
             this.devClicks = 1;
-        } else if ( (y < 200 && x > screenWidth - 200) && (this.devClicks === 1 || this.devClicks === 2)) {
+        } else if ((y < 200 && x > screenWidth - 200) && (this.devClicks === 1 || this.devClicks === 2)) {
             this.devClicks = 2;
-        } else if ( (y > screenHeight - 200 && x > screenWidth - 200) && (this.devClicks === 2 || this.devClicks === 3)) {
+        } else if ((y > screenHeight - 200 && x > screenWidth - 200) && (this.devClicks === 2 || this.devClicks === 3)) {
             this.devClicks = 3;
-        } else if ( (y > screenHeight - 200 && x < 200) && this.devClicks === 3) {
+        } else if ((y > screenHeight - 200 && x < 200) && this.devClicks === 3) {
             this.onDevMenuClick();
             this.devClicks = 0;
         } else {
@@ -243,33 +338,33 @@ export class DevMenuComponent implements OnInit {
         this.SessElements = [];
         this.ConfElements = [];
         this.FlowElements = [];
-        setTimeout( () => {
+        setTimeout(() => {
             this.session.onAction('DevTools::Get');
             this.showUpdating = false;
-            }, 500
+        }, 500
         );
         this.onCreateSavePoint(null);
 
     }
 
     protected onNodeRemove(element: Element) {
-        this.session.removeNodeElement(element);
+        this.removeNodeElement(element);
     }
 
     protected onSessRemove(element: Element) {
-        this.session.removeSessionElement(element);
+        this.removeSessionElement(element);
     }
 
     protected onConvRemove(element: Element) {
-        this.session.removeConversationElement(element);
+        this.removeConversationElement(element);
     }
 
     protected onConfRemove(element: Element) {
-        this.session.removeConfigElement(element);
+        this.removeConfigElement(element);
     }
 
     protected onFlowRemove(element: Element) {
-        this.session.removeFlowElement(element);
+        this.removeFlowElement(element);
     }
 
     protected onStackTrace(element: Element) {
@@ -309,25 +404,25 @@ export class DevMenuComponent implements OnInit {
         }
     }
 
-    public onDevRefreshView() {
+    protected onDevRefreshView() {
         this.session.refreshApp();
     }
 
-    public onPersonalize() {
+    protected onPersonalize() {
         this.personalization.dePersonalize();
         this.session.unsubscribe();
         this.session.showScreen(this.personalization.getPersonalizationScreen());
     }
 
-    public onDevClearLocalStorage() {
+    protected onDevClearLocalStorage() {
         localStorage.clear();
         this.session.refreshApp();
     }
 
-    public onDevRestartNode(): Promise<{ success: boolean, message: string }> {
+    protected onDevRestartNode(): Promise<{ success: boolean, message: string }> {
         const prom = new Promise<{ success: boolean, message: string }>((resolve, reject) => {
-            const port = this.session.getServerPort();
-            const nodeId = this.session.getNodeId().toString();
+            const port = this.personalization.getServerPort();
+            const nodeId = this.personalization.getNodeId().toString();
             const url = `${this.personalization.getServerBaseURL()}/register/restart/node/${nodeId}`;
             const httpClient = this.httpClient;
             httpClient.get(url).subscribe(response => {
@@ -356,11 +451,11 @@ export class DevMenuComponent implements OnInit {
         return prom;
     }
 
-    public onLogfileSelected(logFilename: string): void {
+    protected onLogfileSelected(logFilename: string): void {
         this.currentSelectedLogfilename = logFilename;
     }
 
-    public onLogfileShare(logFilename?: string): void {
+    protected onLogfileShare(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.shareLogFile(
@@ -374,7 +469,7 @@ export class DevMenuComponent implements OnInit {
         }
     }
 
-    public onLogfileUpload(logFilename?: string): void {
+    protected onLogfileUpload(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.getLogFilePath(
@@ -399,7 +494,7 @@ export class DevMenuComponent implements OnInit {
         }
     }
 
-    public onLogfileView(logFilename?: string): void {
+    protected onLogfileView(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.readLogFileContents(
@@ -419,4 +514,91 @@ export class DevMenuComponent implements OnInit {
         }
     }
 
+    protected addSaveFile(newSavePoint: string) {
+        if (newSavePoint) {
+            if (!this.savePoints.includes(newSavePoint)) {
+                this.savePoints.push(newSavePoint);
+            }
+          this.session.onAction('DevTools::Save::' + newSavePoint);
+          console.log('Save Point Created: \'' + newSavePoint + '\'');
+        }
+    }
+
+    protected removeSaveFile(saveName: string) {
+        console.log('Attempting to remove Save Point \'' + saveName + '\'...');
+        const index = this.savePoints.findIndex(item => {
+            return saveName === item;
+        });
+        if (index !== -1) {
+            this.session.onAction('DevTools::RemoveSave::' + saveName);
+            this.savePoints.splice(index, 1);
+            console.log('Save Points updated: ');
+            console.log(this.savePoints);
+        }
+    }
+
+    protected removeNodeElement(element: Element) {
+        console.log('Attempting to remove \'' + element.Value + '\'...');
+        const index = this.NodeElements.findIndex(item => {
+            return element.Value === item.Value;
+        });
+        if (index !== -1) {
+            this.session.onAction('DevTools::Remove::Node', element);
+            this.NodeElements.splice(index, 1);
+            console.log('Node Scope updated: ');
+            console.log(this.NodeElements);
+        }
+    }
+
+    public removeSessionElement(element: Element) {
+        console.log('Attempting to remove \'' + element.Value + '\'...');
+        const index = this.SessElements.findIndex(item => {
+            return element.Value === item.Value;
+        });
+        if (index !== -1) {
+            this.session.onAction('DevTools::Remove::Session', element);
+            this.SessElements.splice(index, 1);
+            console.log('Session Scope updated: ');
+            console.log(this.NodeElements);
+        }
+    }
+
+    protected removeConversationElement(element: Element) {
+        console.log('Attempting to remove \'' + element.Value + '\'...');
+        const index = this.ConvElements.findIndex(item => {
+            return element.Value === item.Value;
+        });
+        if (index !== -1) {
+            this.session.onAction('DevTools::Remove::Conversation', element);
+            this.ConvElements.splice(index, 1);
+            console.log('Conversation Scope updated: ');
+            console.log(this.ConvElements);
+        }
+    }
+
+    protected removeConfigElement(element: Element) {
+        console.log('Attempting to remove \'' + element.Value + '\'...');
+        const index = this.ConfElements.findIndex(item => {
+            return element.Value === item.Value;
+        });
+        if (index !== -1) {
+            this.session.onAction('DevTools::Remove::Config', element);
+            this.ConfElements.splice(index, 1);
+            console.log('Config Scope updated: ');
+            console.log(this.ConfElements);
+        }
+    }
+
+    protected removeFlowElement(element: Element) {
+        console.log('Attempting to remove \'' + element.Value + '\'...');
+        const index = this.FlowElements.findIndex(item => {
+            return element.Value === item.Value;
+        });
+        if (index !== -1) {
+            this.session.onAction('DevTools::Remove::Flow', element);
+            this.FlowElements.splice(index, 1);
+            console.log('Flow Scope updated: ');
+            console.log(this.FlowElements);
+        }
+    }
 }
