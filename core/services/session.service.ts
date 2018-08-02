@@ -112,7 +112,7 @@ export class SessionService {
 
     private stompService: StompService;
 
-    private stompDebug = true;
+    private stompDebug = false;
 
     private actionPayloads: Map<string, Function> = new Map<string, Function>();
 
