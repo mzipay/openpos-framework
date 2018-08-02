@@ -469,7 +469,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
         }
     }
 
-    protected onLogfileUpload(logFilename?: string): void {
+    public onLogfileUpload(logFilename?: string): void {
         if (this.logPlugin && this.logPlugin.impl) {
             const targetFilename = logFilename || this.currentSelectedLogfilename;
             this.logPlugin.impl.getLogFilePath(
