@@ -1,5 +1,5 @@
 import { IMessageHandler } from './../interfaces/message-handler.interface';
-import { PersonalizationService } from './personalization.service';
+import { PersonalizationService, DEFAULT_LOCALE } from './personalization.service';
 
 import { Observable, Subscription, BehaviorSubject, Subject } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
@@ -26,7 +26,7 @@ import {
 } from '../interfaces';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
 
-export const DEFAULT_LOCALE = 'en-US';
+// export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
     providedIn: 'root',
 })

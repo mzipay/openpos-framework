@@ -9,3 +9,4 @@ export * from './validators.service';
 export * from './file-upload.service';
 export * from './app-version';
 export * from './form-builder.service';
+export * from './personalization.service';
