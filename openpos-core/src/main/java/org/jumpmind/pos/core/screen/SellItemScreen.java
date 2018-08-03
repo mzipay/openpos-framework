@@ -24,6 +24,7 @@ public class SellItemScreen extends PromptScreen {
     private String noCustomerText;
     private List<Total> totals = new ArrayList<>();
     private MenuItem loyaltyButton;
+    private MenuItem promoButton;
     private List<MenuItem> multiSelectedMenuItems;
 
     public SellItemScreen() {
@@ -139,6 +140,14 @@ public class SellItemScreen extends PromptScreen {
 	public void setLoyaltyButton(MenuItem loyaltyButton) {
 		this.loyaltyButton = loyaltyButton;
 	}
+
+    public MenuItem getPromoButton() {
+        return promoButton;
+    }
+
+    public void setPromoButton(MenuItem promoButton) {
+        this.promoButton = promoButton;
+    }
 
     public List<MenuItem> getMultiSelectedMenuItems() {
         return multiSelectedMenuItems;
