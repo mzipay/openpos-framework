@@ -36,6 +36,12 @@
 				<div fxFlex="2 1 auto"></div>
 
 				<div>
+					<div fxLayout="column" fxLayoutAlign="center center">
+						<button mat-button *ngIf="screen.promoButton" (click)="doMenuItemAction(screen.promoButton)" class="promo-button text-sm">
+							<mat-icon class="top">{{screen.promoButton.icon}}</mat-icon>
+							<span>{{screen.promoButton.title}}</span>
+						</button>
+					</div>
 					<button mat-button *ngIf="!screen.customer && screen.loyaltyButton" (click)="doMenuItemAction(screen.loyaltyButton)" class="loyalty-button text-md">
 						<span style="padding-right: 8px;">{{screen.loyaltyButton.title}}</span>
 						<mat-icon [svgIcon]="screen.loyaltyButton.icon" class="top"></mat-icon>

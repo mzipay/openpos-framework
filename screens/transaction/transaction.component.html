@@ -2,7 +2,7 @@
 	<mat-card fxFlex="0 1 100%" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
 		<mat-card-content #scrollList ngClass.xs="xs">
 			<mat-toolbar *ngIf="selectedItems.length > 0" class="page-content-card" color="primary" >
-				<span>{{selectedItems.length}} Items Selected</span>
+				<span>{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</span>
 				<span fxFlex="1 1 auto"></span>
 				<span>
 					<button *ngIf="!screen.readOnly && selectedItems.length > 0" mat-icon-button color="primary-inverse" (click)="openItemsDialog(selectedItems)">
