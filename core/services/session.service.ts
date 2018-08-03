@@ -282,7 +282,7 @@ export class SessionService implements IMessageHandler {
             if (processAction && !this.loaderState.loading) {
                 const sendToServer: Function = () => {
                     console.log(`>>> Post action "${actionString}"`);
-                    this.publish(actionString);
+                    this.publish(actionString, 'Screen');
                 };
 
                 // see if we have any intercepters registered
@@ -308,13 +308,13 @@ export class SessionService implements IMessageHandler {
     public keepAlive() {
         if (this.subscribed) {
             console.log(`>>> KeepAlive`);
-            this.publish('KeepAlive');
+            this.publish('KeepAlive', 'KeepAlive');
         }
     }
 
-    private publish(actionString: string) {
+    public publish(actionString: string, type: string, payload?: any) {
         this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.personalization.getNodeId(),
-            JSON.stringify({ name: actionString, data: this.response }));
+            JSON.stringify({ name: actionString, type: type, data: payload ? payload : this.response }));
     }
 
     private queueLoading() {

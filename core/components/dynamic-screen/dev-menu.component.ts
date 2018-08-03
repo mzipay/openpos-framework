@@ -28,6 +28,8 @@ import { PersonalizationService } from '../../services/personalization.service';
 })
 export class DevMenuComponent implements OnInit, IMessageHandler {
 
+    static MSG_TYPE = 'DevTools';
+
     NodeElements: Element[];
     SessElements: Element[];
     ConvElements: Element[];
@@ -318,7 +320,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
                 this.logsAvailable = false;
             });
         }
-        this.session.onAction('DevTools::Get');
+        this.session.publish('DevTools::Get', DevMenuComponent.MSG_TYPE);
         this.showDevMenu = !this.showDevMenu;
     }
 
@@ -339,7 +341,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
         this.ConfElements = [];
         this.FlowElements = [];
         setTimeout(() => {
-            this.session.onAction('DevTools::Get');
+            this.session.publish('DevTools::Get', DevMenuComponent.MSG_TYPE);
             this.showUpdating = false;
         }, 500
         );
@@ -375,7 +377,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
 
     protected onLoadSavePoint(savePoint: string) {
         if (this.savePoints.includes(savePoint)) {
-            this.session.onAction('DevTools::Load::' + savePoint);
+            this.session.publish('DevTools::Load::' + savePoint, DevMenuComponent.MSG_TYPE);
             console.log('Loaded Save Point: \'' + savePoint + '\'');
         } else {
             console.log('Unable to load Save Point: \'' + savePoint + '\'');
@@ -384,7 +386,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
 
     protected onSimulateScan(value: string) {
         if (value) {
-            this.session.onAction('DevTools::Scan', value);
+            this.session.publish('DevTools::Scan', value);
         }
     }
 
@@ -519,7 +521,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
             if (!this.savePoints.includes(newSavePoint)) {
                 this.savePoints.push(newSavePoint);
             }
-          this.session.onAction('DevTools::Save::' + newSavePoint);
+          this.session.publish('DevTools::Save::' + newSavePoint, DevMenuComponent.MSG_TYPE);
           console.log('Save Point Created: \'' + newSavePoint + '\'');
         }
     }
@@ -530,7 +532,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
             return saveName === item;
         });
         if (index !== -1) {
-            this.session.onAction('DevTools::RemoveSave::' + saveName);
+            this.session.publish('DevTools::RemoveSave::' + saveName, DevMenuComponent.MSG_TYPE);
             this.savePoints.splice(index, 1);
             console.log('Save Points updated: ');
             console.log(this.savePoints);
@@ -543,7 +545,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
             return element.Value === item.Value;
         });
         if (index !== -1) {
-            this.session.onAction('DevTools::Remove::Node', element);
+            this.session.publish('DevTools::Remove::Node', DevMenuComponent.MSG_TYPE, element);
             this.NodeElements.splice(index, 1);
             console.log('Node Scope updated: ');
             console.log(this.NodeElements);
@@ -556,7 +558,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
             return element.Value === item.Value;
         });
         if (index !== -1) {
-            this.session.onAction('DevTools::Remove::Session', element);
+            this.session.publish('DevTools::Remove::Session', DevMenuComponent.MSG_TYPE, element);
             this.SessElements.splice(index, 1);
             console.log('Session Scope updated: ');
             console.log(this.NodeElements);
@@ -569,7 +571,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
             return element.Value === item.Value;
         });
         if (index !== -1) {
-            this.session.onAction('DevTools::Remove::Conversation', element);
+            this.session.publish('DevTools::Remove::Conversation', DevMenuComponent.MSG_TYPE, element);
             this.ConvElements.splice(index, 1);
             console.log('Conversation Scope updated: ');
             console.log(this.ConvElements);
@@ -582,7 +584,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
             return element.Value === item.Value;
         });
         if (index !== -1) {
-            this.session.onAction('DevTools::Remove::Config', element);
+            this.session.publish('DevTools::Remove::Config', DevMenuComponent.MSG_TYPE, element);
             this.ConfElements.splice(index, 1);
             console.log('Config Scope updated: ');
             console.log(this.ConfElements);
@@ -595,7 +597,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
             return element.Value === item.Value;
         });
         if (index !== -1) {
-            this.session.onAction('DevTools::Remove::Flow', element);
+            this.session.publish('DevTools::Remove::Flow', DevMenuComponent.MSG_TYPE, element);
             this.FlowElements.splice(index, 1);
             console.log('Flow Scope updated: ');
             console.log(this.FlowElements);
