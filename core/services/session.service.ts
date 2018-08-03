@@ -1,6 +1,8 @@
+import { IMessageHandler } from './../interfaces/message-handler.interface';
+import { PersonalizationService, DEFAULT_LOCALE } from './personalization.service';
 
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subscription, BehaviorSubject, Subject } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { Injectable, EventEmitter, NgZone } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
@@ -24,61 +26,11 @@ import {
 } from '../interfaces';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
 
-export const DEFAULT_LOCALE = 'en-US';
+// export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
     providedIn: 'root',
-  })
-export class SessionService {
-
-    subNode$ = new BehaviorSubject<any[]>([]);
-
-    obsNode$: Observable<Element[]>;
-
-    subConv$ = new BehaviorSubject<any[]>([]);
-
-    obsConv$: Observable<Element[]>;
-
-    subSess$ = new BehaviorSubject<any[]>([]);
-
-    obsSess$: Observable<Element[]>;
-
-    subConf$ = new BehaviorSubject<any[]>([]);
-
-    obsConf$: Observable<Element[]>;
-
-    subFlow$ = new BehaviorSubject<any[]>([]);
-
-    obsFlow$: Observable<Element[]>;
-
-    subSave$ = new BehaviorSubject<string[]>([]);
-
-    obsSave$: Observable<string[]>;
-
-    NodeElements: Element[] = [];
-    SessElements: Element[] = [];
-    ConvElements: Element[] = [];
-    ConfElements: Element[] = [];
-    FlowElements: Element[] = [];
-    savePoints: string[] = [];
-
-
-    currentState: string;
-
-    subState$ = new BehaviorSubject<string>('');
-
-    obsState$: Observable<string>;
-
-    currentStateClass: string;
-
-    subStateClass$ = new BehaviorSubject<string>('');
-
-    obsStateClass$: Observable<string>;
-
-    currentStateActions: ActionMap[] = [];
-
-    subStateActions$ = new BehaviorSubject<any[]>([]);
-
-    obsStateActions$: Observable<ActionMap[]>;
+})
+export class SessionService implements IMessageHandler {
 
     private screen: any;
 
@@ -90,8 +42,6 @@ export class SessionService {
 
     private appId: String;
 
-    private deviceName: string;
-
     private subscribed: boolean;
 
     private subscription: any;
@@ -100,48 +50,38 @@ export class SessionService {
 
     private messages: Observable<Message>;
 
-    public onDeviceRequest = new EventEmitter<IDeviceRequest>();
-    public onThemeChanging = new EventEmitter<IThemeChangingEvent>();
-    private previousTheme: string;
-
     private screenSource = new BehaviorSubject<any>(null);
 
     private dialogSource = new BehaviorSubject<any>(null);
 
-    private loading: boolean;
-
     private stompService: StompService;
 
-    private stompDebug = true;
+    private stompDebug = false;
 
     private actionPayloads: Map<string, Function> = new Map<string, Function>();
 
     private actionIntercepters: Map<string, ActionIntercepter> = new Map();
-
-    private serverBaseUrl: string;
 
     loaderState: LoaderState;
 
     public onServerConnect: Observable<boolean>;
     private onServerConnectObserver: any;
 
-    constructor(private location: Location, private router: Router, public dialogService: MatDialog, public snackBar: MatSnackBar,
-        public zone: NgZone) {
+    private messageSubject = new Subject<any>();
 
-        this.loaderState = new LoaderState(this);
+    constructor(private location: Location, private router: Router, public dialogService: MatDialog, public snackBar: MatSnackBar,
+        public zone: NgZone, protected personalization: PersonalizationService) {
+
+        this.loaderState = new LoaderState(this, personalization);
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
-        this.onServerConnect = Observable.create(observer => {this.onServerConnectObserver = observer; });
-        this.obsNode$ = this.subNode$.asObservable();
-        this.obsSess$ = this.subSess$.asObservable();
-        this.obsConv$ = this.subConv$.asObservable();
-        this.obsConf$ = this.subConf$.asObservable();
-        this.obsFlow$ = this.subFlow$.asObservable();
-        this.obsState$ = this.subState$.asObservable();
-        this.obsStateClass$ = this.subStateClass$.asObservable();
-        this.obsStateActions$ = this.subStateActions$.asObservable();
-        this.obsSave$ = this.subSave$.asObservable();
+        this.onServerConnect = Observable.create(observer => { this.onServerConnectObserver = observer; });
+        this.messageSubject.pipe(filter(s => !['DevTools', 'DeviceRequest'].includes(s.type)), filter(s => !s.clearDialog)).subscribe(s => this.handle(s));
+    }
+
+    public registerMessageHandler(handler: IMessageHandler, ...types: string[]): Subscription {
+        return this.messageSubject.pipe(filter(s => types.includes(s.type))).subscribe(s => handler.handle(s));
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -161,63 +101,14 @@ export class SessionService {
         return !app;
     }
 
-    public personalize(serverName: string, serverPort: string, node: string | {storeId: string, deviceId: string},
-        sslEnabled?: boolean, refreshApp: boolean = true) {
-
-        let nodeId = '';
-        if (typeof node === 'string') {
-            nodeId = node;
-        } else {
-            nodeId = node.storeId + '-' + node.deviceId;
-        }
-        console.log(`personalizing with server: ${serverName}, port: ${serverPort}, nodeid: ${nodeId}`);
-        localStorage.setItem('serverName', serverName);
-        localStorage.setItem('serverPort', serverPort);
-        localStorage.setItem('nodeId', nodeId);
-        if (sslEnabled) {
-            localStorage.setItem('sslEnabled', '' + sslEnabled);
-        } else {
-            localStorage.setItem('sslEnabled', 'false');
-        }
-        this.serverBaseUrl = null; // will be regenerated on next fetch
-        if (refreshApp) {
-            this.refreshApp();
-        }
-
-    }
-
-    public dePersonalize() {
-        this.unsubscribe();
-        const theme = this.getTheme();
-        localStorage.removeItem('serverName');
-        localStorage.removeItem('serverPort');
-        localStorage.removeItem('nodeId');
-        localStorage.removeItem('theme');
-        localStorage.removeItem('sslEnabled');
-        this.setTheme(theme);
-    }
-
-    private getWebsocketUrl(): string {
-        let protocol = 'ws://';
-        if (this.isSslEnabled()) {
-            protocol = 'wss://';
-        }
-        let url: string = protocol + this.getServerName();
-        if (this.getServerPort()) {
-            url = url + ':' + this.getServerPort();
-        }
-        url = url + '/api/websocket';
-        return url;
-    }
-
     private buildTopicName(): string {
-        return '/topic/app/' + this.appId + '/node/' + this.getNodeId();
+        return '/topic/app/' + this.appId + '/node/' + this.personalization.getNodeId();
     }
 
     public showScreen(screen: any) {
         this.screen = screen;
         if (screen && screen.theme) {
-            this.setTheme(screen.theme);
+            this.personalization.setTheme(screen.theme, false);
         }
         this.screenSource.next(screen);
     }
@@ -233,98 +124,24 @@ export class SessionService {
         this.dialogSource.next(this.dialog);
     }
 
-    public getPersonalizationScreen(): any {
-        // tslint:disable-next-line:max-line-length
-        return { type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000), name: 'Device Setup', refreshAlways: true, template: { type: 'Blank', dialog: false } };
-    }
-
-    public getTheme(): string {
-        if (this.screen && this.screen.theme) {
-            return this.screen.theme;
-        } else {
-            return localStorage.getItem('theme');
-        }
-    }
-
     public setAuthToken(token: string) {
         this.authToken = token;
-    }
-
-    public isSslEnabled(): boolean {
-        return 'true' === localStorage.getItem('sslEnabled');
-    }
-
-    public setSslEnabled(enabled: boolean) {
-        localStorage.setItem('sslEnabled', enabled + '');
-    }
-
-    public setTheme(theme: string) {
-        localStorage.setItem('theme', theme);
-        if (this.previousTheme !== theme) {
-            console.log(`Theme changing from '${this.previousTheme}' to '${theme}'`);
-            this.onThemeChanging.emit({currentTheme: this.previousTheme, newTheme: theme});
-            this.previousTheme = theme;
-        }
-    }
-
-    public setServerName(name: string) {
-        localStorage.setItem('serverName', name);
-    }
-
-    public getServerName(): string {
-        return localStorage.getItem('serverName');
-    }
-
-    public getDeviceName(): string {
-        return localStorage.getItem('deviceName');
-    }
-
-    public setDeviceName(deviceName: string): void {
-        localStorage.setItem('deviceName', deviceName);
     }
 
     public getAppId(): String {
         return this.appId;
     }
 
-    public setServerPort(port: string) {
-        localStorage.setItem('serverPort', port);
-    }
-
-    public getServerPort(): string {
-        return localStorage.getItem('serverPort');
-    }
-
-    public getNodeId(): string {
-        return localStorage.getItem('nodeId');
-    }
-
-    public setNodeId(id: string) {
-        localStorage.setItem('nodeId', id);
-    }
-
-    public refreshApp() {
-        window.location.href = 'index.html';
-    }
-
-    public isPersonalized(): boolean {
-        if (this.getServerName() && this.getNodeId() && this.getServerPort()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public connected(): boolean {
         return this.stompService && this.stompService.connected();
     }
 
-    public subscribe(appName: String) {
+    public subscribe(appId: String) {
         if (this.subscribed) {
             return;
         }
 
-        const url = this.getWebsocketUrl();
+        const url = this.personalization.getWebsocketUrl();
         console.log('creating new stomp service at: ' + url);
         this.stompService = new StompService({
             url: url,
@@ -339,19 +156,26 @@ export class SessionService {
 
         // Give preference to nodeId query parameter if it's present, then fallback to
         // local storage
-        this.appId = appName;
+        this.appId = appId;
         const currentTopic = this.buildTopicName();
 
         console.log('subscribing to server at: ' + currentTopic);
 
-        this.messages = this.stompService.subscribe(currentTopic as string);
+        this.messages = this.stompService.subscribe(currentTopic);
 
         // Subscribe a function to be run on_next message
-        this.subscription = this.messages.subscribe(this.onNextMessage);
+        this.subscription = this.messages.subscribe((message: Message) => {
+            const json = JSON.parse(message.body);
+            if (json.clearDialog) {
+                this.showDialog(null);
+            }
+            this.messageSubject.next(json);
+        });
 
         this.state = this.stompService.state.pipe(map((state: number) => StompState[state]));
 
         this.subscribed = true;
+        this.loaderState.monitorConnection();
         this.onServerConnectObserver.next(true);
     }
 
@@ -379,7 +203,7 @@ export class SessionService {
         const sendResponseBackToServer: Function = () => {
             // tslint:disable-next-line:max-line-length
             console.log(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
-            this.stompService.publish(`/app/device/app/${this.appId}/node/${this.getNodeId()}/device/${deviceResponse.deviceId}`,
+            this.stompService.publish(`/app/device/app/${this.appId}/node/${this.personalization.getNodeId()}/device/${deviceResponse.deviceId}`,
                 JSON.stringify(deviceResponse));
         };
 
@@ -425,7 +249,7 @@ export class SessionService {
                 if (confirm.hasOwnProperty('message')) {
                     confirmD = <IConfirmationDialog>confirm;
                 } else {
-                    confirmD = { title: '', message: <string>confirm, cancelButtonName: 'No', confirmButtonName: 'Yes'};
+                    confirmD = { title: '', message: <string>confirm, cancelButtonName: 'No', confirmButtonName: 'Yes' };
                 }
                 const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
                 dialogRef.componentInstance.confirmDialog = confirmD;
@@ -455,7 +279,7 @@ export class SessionService {
                 }
             }
 
-            if (processAction && !this.loading) {
+            if (processAction && !this.loaderState.loading) {
                 const sendToServer: Function = () => {
                     console.log(`>>> Post action "${actionString}"`);
                     this.publish(actionString);
@@ -473,7 +297,7 @@ export class SessionService {
                     this.queueLoading();
                 }
             } else {
-                console.log(`Not sending action: ${actionString}.  processAction: ${processAction}, loading:${this.loading}`);
+                console.log(`Not sending action: ${actionString}.  processAction: ${processAction}, loading:${this.loaderState.loading}`);
             }
 
         } else {
@@ -482,88 +306,69 @@ export class SessionService {
     }
 
     public keepAlive() {
-        console.log(`>>> KeepAlive`);
-        this.publish('KeepAlive');
+        if (this.subscribed) {
+            console.log(`>>> KeepAlive`);
+            this.publish('KeepAlive');
+        }
     }
 
     private publish(actionString: string) {
-        this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.getNodeId(),
+        this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.personalization.getNodeId(),
             JSON.stringify({ name: actionString, data: this.response }));
     }
 
     private queueLoading() {
         // console.log(`queueLoading invoked`);
-        this.loading = true;
+        this.loaderState.loading = true;
         setTimeout(() => this.showLoading(LoaderState.LOADING_TITLE), 1000);
     }
 
     private showLoading(title: string, message?: string) {
         // console.log(`showLoading invoked`);
-        if (this.loading) {
+        if (this.loaderState.loading) {
             this.loaderState.setVisible(true, title, message);
         }
     }
 
     public cancelLoading() {
         // console.log(`cancelLoading invoked`);
-        this.loading = false;
+        this.loaderState.loading = false;
         this.loaderState.setVisible(false);
     }
 
-    /** Consume a message from the stompService */
-    public onNextMessage = (message: Message) => {
-        const json = JSON.parse(message.body);
-        // console.log(`Stomp message received.  type: ${json.type}`);
-        if (json.clearDialog) {
-            this.showDialog(null);
-        } else {
-            if (json.type === 'Loading') {
-                // This is just a temporary hack
-                // Might be a previous instance of a Loading screen being shown,
-                // so dismiss it first. This occurs, for example, when mobile device is put
-                // to sleep while showing a loading dialog. Need to cancel it so that loader state
-                // gets reset.
-                if ( this.loading ) {
-                    this.cancelLoading();
-                }
-                this.loading = true;
-                this.showLoading(json.title, json.message);
-                return;
-            } else if (json.type === 'DevTools') {
-                this.devToolRouter(json);
-            } else if (json.template && json.template.dialog) {
-                this.showDialog(json);
-            } else if (json.type === 'NoOp') {
-                this.response = null;
-                return; // As with DeviceRequest, return to avoid dismissing loading screen
-            } else if (json.type === 'DeviceRequest') {
-                this.onDeviceRequest.emit(json);
-                // Return explicitly in the case that the prior
-                // screen shown was a 'loading' screen, don't want to dismiss
-                // that prematurely
-                return;
-            } else if ( json.type === 'Toast') {
-                const toast = json as IToastScreen;
-                this.snackBar.open(toast.message, null, {
-                    duration: toast.duration,
-                    panelClass: this.getToastClass(toast.toastType)
-                  });
-            } else {
-                this.response = null;
-                this.showScreen(json);
-                this.showDialog(null);
+    handle(message: any) {
+        if (message.type === 'Loading') {
+            // This is just a temporary hack
+            // Might be a previous instance of a Loading screen being shown,
+            // so dismiss it first. This occurs, for example, when mobile device is put
+            // to sleep while showing a loading dialog. Need to cancel it so that loader state
+            // gets reset.
+            if (this.loaderState.loading) {
+                this.cancelLoading();
             }
-            this.cancelLoading();
+            this.loaderState.loading = true;
+            this.showLoading(message.title, message.message);
+            return;
+        } else if (message.template && message.template.dialog) {
+            this.showDialog(message);
+        } else if (message.type === 'NoOp') {
+            this.response = null;
+            return; // As with DeviceRequest, return to avoid dismissing loading screen
+        } else if (message.type === 'Toast') {
+            const toast = message as IToastScreen;
+            this.snackBar.open(toast.message, null, {
+                duration: toast.duration,
+                panelClass: this.getToastClass(toast.toastType)
+            });
+        } else {
+            this.response = null;
+            this.showScreen(message);
+            this.showDialog(null);
         }
+        this.cancelLoading();
     }
 
-    private devToolRouter(json) {
-        if (json.name === 'DevTools::Get') {
-            this.populateDevTables(json);
-        }
-    }
-
-    private getToastClass( type: ToastType ): string {
+    private getToastClass(type: ToastType): string {
         switch (type) {
             case ToastType.Success:
                 return 'toast-success';
@@ -572,223 +377,6 @@ export class SessionService {
         }
 
         return null;
-    }
-
-    private populateDevTables(json: any) {
-        if (json.currentState) {
-            console.log('Pulling current state actions...');
-            this.currentState = json.currentState.stateName;
-            this.subState$.next(this.currentState);
-            this.currentStateClass = json.currentState.stateClass;
-            this.subStateClass$.next(this.currentStateClass);
-            this.currentStateActions = [];
-            for ( let i = 0; i < json.actionsSize; i = i + 2) {
-                this.currentStateActions.push({
-                    Action: json.actions[i],
-                    Destination: json.actions[i + 1]
-
-                });
-                this.subStateActions$.next(this.currentStateActions);
-            }
-        }
-        if (json.scopes.ConversationScope) {
-            console.log('Pulling Conversation Scope Elements...');
-            this.ConvElements = [];
-            json.scopes.ConversationScope.forEach(element => {
-                if (!this.ConvElements.includes(element, 0)) {
-                    this.ConvElements.push({
-                        ID: element.name,
-                        Time: element.date,
-                        StackTrace: element.stackTrace,
-                        Value: element.value
-                    });
-                    this.subConv$.next(this.ConvElements);
-                }
-            });
-        }
-        if (json.scopes.SessionScope) {
-            console.log('Pulling Session Scope Elements...');
-            this.SessElements = [];
-            json.scopes.SessionScope.forEach(element => {
-                if (!this.SessElements.includes(element, 0)) {
-                    this.SessElements.push({
-                        ID: element.name,
-                        Time: element.date,
-                        StackTrace: element.stackTrace,
-                        Value: element.value
-                    });
-                    this.subSess$.next(this.SessElements);
-                }
-            });
-        }
-        if (json.scopes.NodeScope) {
-            console.log('Pulling Node Scope Elements...');
-            this.NodeElements = [];
-            json.scopes.NodeScope.forEach(element => {
-                if (!this.NodeElements.includes(element, 0)) {
-                    this.NodeElements.push({
-                        ID: element.name,
-                        Time: element.date,
-                        StackTrace: element.stackTrace,
-                        Value: element.value
-                    });
-                    this.subNode$.next(this.NodeElements);
-                }
-            });
-        }
-        if (json.scopes.FlowScope) {
-            console.log('Pulling Flow Scope Elements...');
-            this.FlowElements = [];
-            json.scopes.FlowScope.forEach(element => {
-                if (!this.FlowElements.includes(element, 0)) {
-                    this.FlowElements.push({
-                        ID: element.name,
-                        Time: element.date,
-                        StackTrace: element.stackTrace,
-                        Value: element.value
-                    });
-                    this.subFlow$.next(this.FlowElements);
-                }
-            });
-            console.log(this.FlowElements);
-        }
-
-        if (json.scopes.ConfigScope) {
-            console.log('Pulling Config Scope Elements...');
-            this.ConfElements = [];
-            json.scopes.ConfigScope.forEach(element => {
-                if (!this.ConfElements.includes(element, 0)) {
-                    this.ConfElements.push({
-                        ID: element.name,
-                        Time: element.date,
-                        StackTrace: element.stackTrace,
-                        Value: element.value
-                    });
-                    this.subConf$.next(this.ConfElements);
-                }
-            });
-            console.log(this.ConfElements);
-        }
-
-        if (json.saveFiles) {
-            console.log('Pulling save files...');
-            this.savePoints = [];
-            json.saveFiles.forEach(saveName => {
-                this.savePoints.push(saveName);
-                this.subSave$.next(this.savePoints);
-                console.log(this.savePoints);
-            });
-        }
-    }
-
-    public addSaveFile(newSavePoint: string) {
-        if (newSavePoint) {
-            if (!this.savePoints.includes(newSavePoint)) {
-                this.savePoints.push(newSavePoint);
-                this.subSave$.next(this.savePoints);
-            }
-          this.onAction('DevTools::Save::' + newSavePoint);
-          console.log('Save Point Created: \'' + newSavePoint + '\'');
-        }
-    }
-
-    public removeSaveFile(saveName: string) {
-        console.log('Attempting to remove Save Point \'' + saveName + '\'...');
-        const index = this.savePoints.findIndex(item => {
-            return saveName === item;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::RemoveSave::' + saveName);
-            this.savePoints.splice(index, 1);
-            this.subSave$.next(this.savePoints);
-            console.log('Save Points updated: ');
-            console.log(this.savePoints);
-        }
-    }
-
-    public removeNodeElement(element: Element) {
-        console.log('Attempting to remove \'' + element.Value + '\'...');
-        const index = this.NodeElements.findIndex(item => {
-            return element.Value === item.Value;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::Remove::Node', element);
-            this.NodeElements.splice(index, 1);
-            this.subNode$.next(this.NodeElements);
-            console.log('Node Scope updated: ');
-            console.log(this.NodeElements);
-        }
-    }
-
-    public removeSessionElement(element: Element) {
-        console.log('Attempting to remove \'' + element.Value + '\'...');
-        const index = this.SessElements.findIndex(item => {
-            return element.Value === item.Value;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::Remove::Session', element);
-            this.SessElements.splice(index, 1);
-            this.subSess$.next(this.SessElements);
-            console.log('Session Scope updated: ');
-            console.log(this.NodeElements);
-        }
-    }
-
-    public removeConversationElement(element: Element) {
-        console.log('Attempting to remove \'' + element.Value + '\'...');
-        const index = this.ConvElements.findIndex(item => {
-            return element.Value === item.Value;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::Remove::Conversation', element);
-            this.ConvElements.splice(index, 1);
-            this.subConv$.next(this.ConvElements);
-            console.log('Conversation Scope updated: ');
-            console.log(this.ConvElements);
-        }
-    }
-
-    public removeConfigElement(element: Element) {
-        console.log('Attempting to remove \'' + element.Value + '\'...');
-        const index = this.ConfElements.findIndex(item => {
-            return element.Value === item.Value;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::Remove::Config', element);
-            this.ConfElements.splice(index, 1);
-            this.subConf$.next(this.ConfElements);
-            console.log('Config Scope updated: ');
-            console.log(this.ConfElements);
-        }
-    }
-
-    public removeFlowElement(element: Element) {
-        console.log('Attempting to remove \'' + element.Value + '\'...');
-        const index = this.FlowElements.findIndex(item => {
-            return element.Value === item.Value;
-        });
-        if (index !== -1) {
-            this.onAction('DevTools::Remove::Flow', element);
-            this.FlowElements.splice(index, 1);
-            this.subFlow$.next(this.FlowElements);
-            console.log('Flow Scope updated: ');
-            console.log(this.FlowElements);
-        }
-    }
-
-    private getUrlNodeId() {
-        const urlPath = this.location.path();
-        let urlNodeId = '';
-        if (urlPath) {
-            const urlTree = this.router.parseUrl(urlPath);
-            if (urlTree) {
-                if (urlTree.queryParams['nodeId']) {
-                    urlNodeId = urlTree.queryParams['nodeId'];
-                    console.log('nodeId found on query parameters: [' + urlNodeId + ']');
-                }
-            }
-        }
-        return urlNodeId;
     }
 
     public registerActionPayload(actionName: string, actionValue: Function) {
@@ -819,17 +407,8 @@ export class SessionService {
         return 'USD';
     }
 
-    public getServerBaseURL(): string {
-        if (!this.serverBaseUrl) {
-            const protocol = this.isSslEnabled() ? 'https' : 'http';
-            this.serverBaseUrl = `${protocol}://${this.getServerName()}${this.getServerPort() ? `:${this.getServerPort()}` : ''}`;
-            console.log(`Generated serverBaseURL: ${this.serverBaseUrl}`);
-        }
-        return this.serverBaseUrl;
-    }
-
     public getApiServerBaseURL(): string {
-        return `${this.getServerBaseURL()}/api`;
+        return `${this.personalization.getServerBaseURL()}/api`;
     }
 
     getLocale(): string {

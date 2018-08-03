@@ -28,7 +28,8 @@ export class DialogService {
     if (dialogType) {
         return this.componentFactoryResolver.resolveComponentFactory(dialogType);
     } else {
-        return null;
+        console.error(`Could not fine a dialog type of: ${type}.  Please register it with the screen service`);
+        return this.componentFactoryResolver.resolveComponentFactory(this.dialogs.get('Blank'));
     }
   }
 }

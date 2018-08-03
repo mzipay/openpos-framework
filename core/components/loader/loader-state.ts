@@ -1,5 +1,6 @@
 import { SessionService } from '../../services';
-import { Subject, timer } from 'rxjs';
+import { Subject, timer, Subscription } from 'rxjs';
+import { PersonalizationService } from '../../services/personalization.service';
 
 
 export class LoaderState {
@@ -13,10 +14,19 @@ export class LoaderState {
 
     private loaderSubject = new Subject<LoaderState>();
     observable = this.loaderSubject.asObservable();
+    private timerSubscription: Subscription = null;
 
-    constructor(protected sessionService: SessionService) {
+    public loading = false;
+
+    constructor(private sessionService: SessionService, private personalization: PersonalizationService) {
+    }
+
+    public monitorConnection() {
+        if (this.timerSubscription) {
+            this.timerSubscription.unsubscribe();
+        }
         const t = timer(1000, 1000);
-        t.subscribe(n => this.checkConnectionStatus());
+        this.timerSubscription = t.subscribe(n => this.checkConnectionStatus());
     }
 
     get show() {
@@ -54,7 +64,7 @@ export class LoaderState {
     }
 
     protected checkConnectionStatus(): void {
-        if (!this.sessionService.isPersonalized()) {
+        if (!this.personalization.isPersonalized()) {
             this.setVisible(false);
         } else {
             const sessionConnected = this.sessionService.connected();

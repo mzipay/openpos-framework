@@ -1,5 +1,5 @@
-<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
-	<app-selectable-item-list fxFlex [configuration]="listConfig" (selectedItemChange)="onItemChange($event)" (selectedItemListChange)="onItemListChange($event)">
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px" style="overflow: auto">
+	<app-selectable-item-list fxFlex="0 1 100%" [configuration]="listConfig" (selectedItemChange)="onItemChange($event)" (selectedItemListChange)="onItemListChange($event)">
 		<mat-card *ngFor="let sel of screen.selectionList">
 			<mat-card-title *ngIf="sel.title">{{sel.title}}</mat-card-title>
 			<mat-card-content *ngIf="sel.body">

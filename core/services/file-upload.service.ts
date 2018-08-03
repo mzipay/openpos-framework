@@ -4,17 +4,18 @@ import { HttpClient } from '@angular/common/http';
 import { SessionService } from './session.service';
 import { PluginService } from './plugin.service';
 import { IPlugin } from '../plugins';
+import { PersonalizationService } from './personalization.service';
 
 @Injectable({
     providedIn: 'root',
   })
 export class FileUploadService {
-    constructor(private sessionService: SessionService, private pluginService: PluginService, private httpClient: HttpClient) {
+    constructor(private personalization: PersonalizationService, private session: SessionService, private pluginService: PluginService, private httpClient: HttpClient) {
 
     }
 
     protected getUploadServiceUrl(): string {
-        const url = `${this.sessionService.getServerBaseURL()}/fileupload/uploadToNode`;
+        const url = `${this.personalization.getServerBaseURL()}/fileupload/uploadToNode`;
         return url;
     }
 
@@ -32,7 +33,7 @@ export class FileUploadService {
 
             const httpClient = this.httpClient;
             const formData = new FormData();
-            formData.append('nodeId', this.sessionService.getNodeId().toString());
+            formData.append('nodeId', this.personalization.getNodeId().toString());
             formData.append('targetContext', context);
             formData.append('filename', filename);
 

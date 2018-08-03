@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoaderState } from './loader-state';
 import { SessionService } from '../../services/session.service';
+import { PersonalizationService } from '../../services/personalization.service';
 
 @Component({
     selector: 'app-loader',
@@ -19,7 +20,8 @@ export class LoaderComponent implements OnInit, OnDestroy {
     private subscription: any;
 
     constructor(
-        public session: SessionService,
+        private personalization: PersonalizationService,
+        private session: SessionService,
     ) { }
 
     ngOnInit() {
@@ -46,10 +48,6 @@ export class LoaderComponent implements OnInit, OnDestroy {
     }
 
     public getLocalTheme(): string {
-        if (localStorage.getItem('theme')) {
-            return localStorage.getItem('theme');
-        } else {
-            return 'openpos-theme';
-        }
+        return this.personalization.getTheme();
     }
 }

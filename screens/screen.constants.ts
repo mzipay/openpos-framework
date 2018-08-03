@@ -124,11 +124,12 @@ export const ScreenConstants = {
         { name: 'Version', component: VersionComponent },
         { name: 'SelectionList', component: SelectionListComponent },
         { name: 'SelectionList', component: ItemSearchResultsComponent },
+        { name: 'Blank', component: BlankComponent },
     ],
 
     templates: [
         // Templates
-        { name: 'Blank', component: BlankComponent },   
+        { name: 'Blank', component: BlankComponent },
         { name: 'BlankWithBar', component: BlankWithBarComponent },
         { name: 'Sell', component: SellComponent },
     ]

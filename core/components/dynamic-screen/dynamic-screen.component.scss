@@ -5,20 +5,6 @@
     z-index: 1000;
 }
 
-.devMenuPanel {
-    z-index: 501;  // Z index of loader dialog + 1
-    position: relative;
-    width:100%;
-}
-
-.devButton {
-    position: relative;
-    cursor: pointer;
-    margin-right: .5em;
-    height: 34px;
-    width: 200px;
-}
-
 .actions {
     margin-right: -30px;
     margin-top: 0px;
@@ -31,26 +17,6 @@
     width: 55vw;
   }
 
-  .savePoints {
-      width: 600px;
-      overflow: auto;
-  }
-  
-  .stacktrace {
-    position: fixed;
-
-    right: 45px;
-    top: 100px;
-    width: 40vw;
-
-  }
-
-  .stacktrace-content {
-    overflow: scroll;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 10px;
-    line-height: 13px;
-  }
 
 .muted {
     color: "accent";
@@ -60,23 +26,6 @@
     word-wrap: break-word;
 }
 
-/* Structure */
-table {
-    table-layout: fixed;
-    width: 100%;
-}
-
-.stateTab {
-    height: 520px;
-    overflow: auto;
-    
-}
-
 .saveForm {
     padding-left: 10px;
-}
-
-.logs {
-    width: 30vw;
-    overflow: auto;
 }

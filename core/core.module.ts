@@ -1,3 +1,8 @@
+import { DevMenuComponent } from './components/dynamic-screen/dev-menu.component';
+import { SessionService } from './services/session.service';
+import { PersonalizationStartupTask } from './components/startup/personalization-startup-task';
+import { StartupService } from './services/startup.service';
+import { DialogService } from './services/dialog.service';
 // Angular Includes
 import { NgModule, Injector, Optional, SkipSelf } from '@angular/core';
 import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
@@ -12,19 +17,24 @@ import {
     PersonalizationComponent,
     DynamicScreenComponent,
     LoaderComponent
- } from './components';
+} from './components';
 import { throwIfAlreadyLoaded } from './module-import-guard';
+import { StartupComponent } from './components/startup/startup.component';
+import { PersonalizationService } from './services/personalization.service';
 
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,
-        PersonalizationComponent
+        PersonalizationComponent,
+        StartupComponent
     ],
     declarations: [
         DynamicScreenComponent,
+        DevMenuComponent,
         LoaderComponent,
         ConfirmationDialogComponent,
-        PersonalizationComponent
+        PersonalizationComponent,
+        StartupComponent
     ],
     imports: [
         SharedModule
@@ -43,9 +53,14 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
 })
 export class CoreModule {
 
-    constructor(@Optional() @SkipSelf() parentModule: CoreModule, screenService: ScreenService, private injector: Injector) {
+    constructor(@Optional() @SkipSelf() parentModule: CoreModule, personalization: PersonalizationService, sessionService: SessionService,
+        screenService: ScreenService, dialogService: DialogService,
+        startupService: StartupService, private injector: Injector) {
+
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
         screenService.addScreen('Personalization', PersonalizationComponent);
+        dialogService.addDialog('Startup', StartupComponent);
+        startupService.addStartupTask(new PersonalizationStartupTask(personalization, sessionService));
         AppInjector.Instance = this.injector;
     }
 }
