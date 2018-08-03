@@ -1,17 +1,17 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
     <!-- The mat-card tag below was copied from transaction.component. -->
 
-    <mat-card fxFlex="1 1 auto" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
-        <mat-card-content #scrollList ngClass.xs="xs">
-            <mat-toolbar *ngIf="areAnyItemsSelected()" class="page-content-card" color="primary" >
-                <span>{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</span>
-                <span fxFlex="1 1 auto"></span>
-                <span>
-                    <button *ngIf="!screen.readOnly && isAddActionPresent()" mat-icon-button color="primary-inverse" (click)="addItemsToSale(selectedItems)">
-                        <mat-icon>add_circle</mat-icon>
-                    </button>
-                </span>
-            </mat-toolbar>
+    <mat-card fxFlex="0 1 100%" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start" style="padding-top:6px;">
+        <mat-toolbar *ngIf="areAnyItemsSelected()" class="page-content-card" color="primary" style="padding-top:20px;padding-bottom:20px;">
+            <span>{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</span>
+            <span fxFlex="1 1 auto"></span>
+            <span>
+                <button *ngIf="!screen.readOnly && isAddActionPresent()" mat-icon-button color="primary-inverse" (click)="addItemsToSale(selectedItems)">
+                    <mat-icon>add_circle</mat-icon>
+                </button>
+            </span>
+        </mat-toolbar>
+        <mat-card-content #scrollList ngClass.xs="xs" style="padding-top:6px;">
             <app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems" (selectedItemListChange)="onItemListChange($event)">
                 <ng-template let-item>
                     <div fxLayoutAlign="space-between" fxLayout.xs="column">
