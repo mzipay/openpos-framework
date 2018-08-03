@@ -1,5 +1,5 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" class="serrated-edge">
-    
+
     <mat-card fxFlex="1 1 100%" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
         <mat-card-title>Journal Entry {{screen.index}}/{{screen.size}}</mat-card-title>
 
@@ -13,7 +13,7 @@
             (page)="pageEvent = $event"></mat-paginator>-->
 
         <mat-card-content fxFlex="1 1 100%">
-            <textarea fxFlex="1 1 100%">{{screen.text}}</textarea>
+                <textarea fxFlex="1 1 100%" readonly style="resize: none;">{{screen.text}}</textarea>
         </mat-card-content>
     </mat-card>
     
