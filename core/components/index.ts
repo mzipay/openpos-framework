@@ -5,3 +5,4 @@ export * from './loader/loader.component';
 export * from './loader/loader-state';
 export * from './personalization/personalization.component';
 export * from './abstract-template';
+export * from './startup/startup.component';
