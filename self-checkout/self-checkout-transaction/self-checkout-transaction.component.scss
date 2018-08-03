@@ -33,6 +33,13 @@
     }
 }
 
+.promo-button {
+    height: 35px;
+    border-bottom-style: solid; 
+    border-bottom-width: 1px;
+    border-color: rgba(0, 0, 0, 0.712); 
+}
+
 .border-button:disabled {
     border-color:gray; 
 }
