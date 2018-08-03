@@ -120,11 +120,7 @@ abstract public class AbstractScreenTranslator<T extends Screen> implements ITra
 
     public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,
             Form formResults) {
-        if (action != null && "Reload".equals(action.getName())) {
-            subscriber.showScreen(getScreen());
-        } else {
-            tmServer.sendAction(action.getName());
-        }
+        tmServer.sendAction(action.getName());
     } 
     
     public void setBackButton(String action) {
