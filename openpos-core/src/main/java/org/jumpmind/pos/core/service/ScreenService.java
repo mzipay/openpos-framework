@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.Action;
@@ -33,10 +33,10 @@ import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
 import org.jumpmind.pos.core.model.FormListField;
 import org.jumpmind.pos.core.model.IFormElement;
+import org.jumpmind.pos.core.model.Message;
 import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
-import org.jumpmind.pos.core.screen.DevToolsService;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.FormScreen;
@@ -48,11 +48,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,18 +63,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SuppressWarnings("deprecation")
 @CrossOrigin
 @Controller
-public class ScreenService implements IScreenService {
+public class ScreenService implements IScreenService, IActionListener {
 
     Logger logger = LoggerFactory.getLogger(getClass());
     Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
 
     ObjectMapper mapper = new ObjectMapper();
-
-    @Autowired
-    DevToolsService devToolsService;
-
-    @Autowired
-    SimpMessagingTemplate template;
 
     @Autowired
     IStateManagerFactory stateManagerFactory;
@@ -89,6 +78,9 @@ public class ScreenService implements IScreenService {
 
     @Autowired
     LogFormatter logFormatter;
+    
+    @Autowired
+    IMessageService messageService;
 
     Queue<IScreenInterceptor> screenInterceptors = new ConcurrentLinkedQueue<>();
 
@@ -108,40 +100,18 @@ public class ScreenService implements IScreenService {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "ping")
-    @ResponseBody
-    public String ping() {
-        logger.info("Received a ping request");
-        return "{ \"pong\": \"true\" }";
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "app/{appId}/node/{nodeId}/{action}/{payload}")
-    public void getAction(
-            @PathVariable String appId,
-            @PathVariable String nodeId,
-            @PathVariable String action,
-            @PathVariable String payload,
-            HttpServletResponse resp) {
-        logger.info("Received a request for {} {} {} {}", appId, nodeId, action, payload);
-        IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
-        if (stateManager != null) {
-            logger.info("Calling stateManager.doAction with: {}", action);
-            stateManager.doAction(new Action(action, payload));
-        }
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{nodeId}/control/{controlId}")
+    @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{deviceId}/control/{controlId}")
     @ResponseBody
     public String getComponentValues(
             @PathVariable String appId,
-            @PathVariable String nodeId,
+            @PathVariable String deviceId,
             @PathVariable String controlId,
             @RequestParam(name = "searchTerm", required = false) String searchTerm,
             @RequestParam(name = "sizeLimit", defaultValue = "1000") Integer sizeLimit) {
-        logger.info("Received a request to load component values for {} {} {}", appId, nodeId, controlId);
-        String result = getComponentValues(appId, nodeId, controlId, getLastScreen(appId, nodeId), searchTerm, sizeLimit);
+        logger.info("Received a request to load component values for {} {} {}", appId, deviceId, controlId);
+        String result = getComponentValues(appId, deviceId, controlId, getLastScreen(appId, deviceId), searchTerm, sizeLimit);
         if (result == null) {
-            result = getComponentValues(appId, nodeId, controlId, getLastDialog(appId, nodeId), searchTerm, sizeLimit);
+            result = getComponentValues(appId, deviceId, controlId, getLastDialog(appId, deviceId), searchTerm, sizeLimit);
         }
         if (result == null) {
             result = "[]";
@@ -149,7 +119,7 @@ public class ScreenService implements IScreenService {
         return result;
     }
 
-    private String getComponentValues(String appId, String nodeId, String controlId, Screen screen, String searchTerm, Integer sizeLimit) {
+    private String getComponentValues(String appId, String deviceId, String controlId, Screen screen, String searchTerm, Integer sizeLimit) {
         String result = null;
         if (screen instanceof IHasForm) {
             IHasForm dynamicScreen = (IHasForm) screen;
@@ -173,56 +143,59 @@ public class ScreenService implements IScreenService {
                     throw new RuntimeException("Error while serializing the component values.", e);
                 }
                 result = new String(out.toByteArray());
-                logger.info("Responding to request to load component values {} {} {} with {} values", appId, nodeId, controlId,
+                logger.info("Responding to request to load component values {} {} {} with {} values", appId, deviceId, controlId,
                         valueList.size());
             } else {
-                logger.info("Unable to find the valueList for the requested component {} {} {}.", appId, nodeId, controlId);
+                logger.info("Unable to find the valueList for the requested component {} {} {}.", appId, deviceId, controlId);
             }
         }
         return result;
     }
+    
 
-    @MessageMapping("action/app/{appId}/node/{nodeId}")
-    public void action(@DestinationVariable String appId, @DestinationVariable String nodeId, Action action) {
-        IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
+    @Override
+    public Collection<String> getRegisteredTypes() {        
+        return Arrays.asList(new String[] { "Screen"});
+    }
+
+    @Override
+    public void actionOccured(String appId, String deviceId, Action action) {
+        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
         if (stateManager != null) {
             if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
                 stateManager.keepAlive();
-            } else if (action.getName().contains("DevTools")) {
-                logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
-                Screen devToolsMessage = devToolsService.handleRequest(action, stateManager, appId, nodeId);
-                logger.info(logFormatter.toJsonString(devToolsMessage));
-                publishToClients(appId, nodeId, devToolsMessage);
             } else {
                 deserializeForm(stateManager.getApplicationState(), action);
 
-                logger.info("Received action from {}\n{}", nodeId, logFormatter.toJsonString(action));
+                logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
 
-                Screen lastDialog = removeLastDialog(appId, nodeId);
+                Screen lastDialog = removeLastDialog(appId, deviceId);
                 if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getType())) {
-                    logger.debug("Instructing node {} to clear dialog.", nodeId);
-                    publishToClients(appId, nodeId, "{\"clearDialog\":true }");
+                    logger.debug("Instructing node {} to clear dialog.", deviceId);
+                    Message msg = new Message();
+                    msg.put("clearDialog", true);
+                    messageService.sendMessage(appId, deviceId, msg);
                 }
 
                 try {
                     logger.debug("Posting action {}", action);
                     stateManager.doAction(action);
                 } catch (Throwable ex) {
-                    logger.error(String.format("Unexpected exception while processing action from %s: %s", nodeId, action), ex);
+                    logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
                     DialogScreen errorDialog = new DialogScreen();
                     errorDialog.asDialog(new DialogProperties(true));
                     errorDialog.setIcon("error");
                     errorDialog.setTitle("Internal Server Error");
                     errorDialog.setMessage(Arrays
                             .asList("The application received an unexpected error. Please report to the appropriate technical personnel"));
-                    showScreen(appId, nodeId, errorDialog);
+                    showScreen(appId, deviceId, errorDialog);
                 }
             }
         }
     }
 
-    protected Screen removeLastDialog(String appId, String nodeId) {
-        ApplicationState applicationState = getApplicationState(appId, nodeId);
+    protected Screen removeLastDialog(String appId, String deviceId) {
+        ApplicationState applicationState = getApplicationState(appId, deviceId);
         if (applicationState != null && applicationState.getLastDialog() != null) {
             Screen lastDialog = applicationState.getLastDialog();
             applicationState.setLastDialog(null);
@@ -233,8 +206,8 @@ public class ScreenService implements IScreenService {
     }
 
     @Override
-    public Screen getLastDialog(String appId, String nodeId) {
-        ApplicationState applicationState = getApplicationState(appId, nodeId);
+    public Screen getLastDialog(String appId, String deviceId) {
+        ApplicationState applicationState = getApplicationState(appId, deviceId);
         if (applicationState != null) {
             return applicationState.getLastDialog();
         } else {
@@ -243,8 +216,8 @@ public class ScreenService implements IScreenService {
     }
 
     @Override
-    public Screen getLastScreen(String appId, String nodeId) {
-        ApplicationState applicationState = getApplicationState(appId, nodeId);
+    public Screen getLastScreen(String appId, String deviceId) {
+        ApplicationState applicationState = getApplicationState(appId, deviceId);
         if (applicationState != null) {
             return applicationState.getLastScreen();
         } else {
@@ -253,8 +226,8 @@ public class ScreenService implements IScreenService {
     }
 
     @Override
-    public void showScreen(String appId, String nodeId, Screen screen) {
-        ApplicationState applicationState = getApplicationState(appId, nodeId);
+    public void showScreen(String appId, String deviceId, Screen screen) {
+        ApplicationState applicationState = getApplicationState(appId, deviceId);
         if (screen != null) {
             screen.setSequenceNumber(applicationState.incrementAndScreenSequenceNumber());
             try {
@@ -263,8 +236,8 @@ public class ScreenService implements IScreenService {
                     Form form = buildForm(screen);
                     screen.put("form", form);
                 }
-                screen = interceptScreen(appId, nodeId, screen);
-                logScreenTransition(nodeId, screen);
+                screen = interceptScreen(appId, deviceId, screen);
+                logScreenTransition(deviceId, screen);
             } catch (Exception ex) {
                 if (ex.toString().contains("org.jumpmind.pos.core.screen.ChangeScreen")) {
                     logger.error(
@@ -274,7 +247,7 @@ public class ScreenService implements IScreenService {
                     logger.error("Failed to write screen to JSON", ex);
                 }
             }
-            publishToClients(appId, nodeId, screen);
+            messageService.sendMessage(appId, deviceId, screen);
             if (screen.getTemplate().isDialog()) {
                 applicationState.setLastDialog(screen);
             } else if( screen.getType() != "Toast") {
@@ -284,26 +257,13 @@ public class ScreenService implements IScreenService {
         }
     }
 
-    protected Screen interceptScreen(String appId, String nodeId, Screen screen) {
+    protected Screen interceptScreen(String appId, String deviceId, Screen screen) {
         if (this.screenInterceptors != null) {
             for (IScreenInterceptor screenInterceptor : screenInterceptors) {
-                return screenInterceptor.intercept(appId, nodeId, screen);
+                return screenInterceptor.intercept(appId, deviceId, screen);
             }
         }
         return screen;
-    }
-
-    protected void publishToClients(String appId, String nodeId, Object payload) {
-        try {
-            StringBuilder topic = new StringBuilder(128);
-            topic.append("/topic/app/").append(appId).append("/node/").append(nodeId);
-            payload = payload instanceof String ? ((String) payload).getBytes("UTF-8")
-                    : mapper.writerWithDefaultPrettyPrinter().writeValueAsString(payload).getBytes("UTF-8");
-            Message<?> message = MessageBuilder.withPayload(payload).build();
-            this.template.send(topic.toString(), message);
-        } catch (Exception ex) {
-            throw new FlowException("Failed to serialize message for node: " + nodeId + " " + payload, ex);
-        }
     }
 
     protected void deserializeForm(ApplicationState applicationState, Action action) {
@@ -368,10 +328,10 @@ public class ScreenService implements IScreenService {
     }
 
     @Override
-    public void refresh(String appId, String nodeId) {
-        ApplicationState applicationState = getApplicationState(appId, nodeId);
+    public void refresh(String appId, String deviceId) {
+        ApplicationState applicationState = getApplicationState(appId, deviceId);
         if (applicationState != null && applicationState.getLastScreen() != null) {
-            showScreen(appId, nodeId, applicationState.getLastScreen());
+            showScreen(appId, deviceId, applicationState.getLastScreen());
         }
     }
 
@@ -399,12 +359,12 @@ public class ScreenService implements IScreenService {
         }
     }
 
-    protected void logScreenTransition(String nodeId, Screen screen) throws JsonProcessingException {
+    protected void logScreenTransition(String deviceId, Screen screen) throws JsonProcessingException {
         if (loggerGraphical.isInfoEnabled()) {
-            logger.info("Show screen on node \"" + nodeId + "\"\n" + drawBox(screen.getName(), screen.getType())
+            logger.info("Show screen on node \"" + deviceId + "\"\n" + drawBox(screen.getName(), screen.getType())
                     + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
         } else {
-            logger.info("Show screen on node \"" + nodeId + "\"\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
+            logger.info("Show screen on node \"" + deviceId + "\"\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
         }
     }
 
@@ -512,10 +472,10 @@ public class ScreenService implements IScreenService {
         return buff.toString();
     }
 
-    protected ApplicationState getApplicationState(String appId, String nodeId) {
+    protected ApplicationState getApplicationState(String appId, String deviceId) {
         Map<String, ApplicationState> applicationStateByNodeId = this.applicationStateByAppIdByNodeId.get(appId);
         if (applicationStateByNodeId != null) {
-            return applicationStateByNodeId.get(nodeId);
+            return applicationStateByNodeId.get(deviceId);
         } else {
             return null;
         }
@@ -529,5 +489,6 @@ public class ScreenService implements IScreenService {
         }
         applicationStateByNodeId.put(applicationState.getNodeId(), applicationState);
     }
+
 
 }

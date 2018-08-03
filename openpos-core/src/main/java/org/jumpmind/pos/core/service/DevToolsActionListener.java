@@ -1,7 +1,9 @@
-package org.jumpmind.pos.core.screen;
+package org.jumpmind.pos.core.service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +15,15 @@ import org.jumpmind.pos.core.flow.ApplicationStateSerializer;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
+import org.jumpmind.pos.core.flow.IStateManagerFactory;
 import org.jumpmind.pos.core.flow.ScopeValue;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.javapos.SimulatedScannerService;
-import org.jumpmind.pos.core.service.IScreenService;
+import org.jumpmind.pos.core.model.Message;
+import org.jumpmind.pos.core.screen.ScopeField;
+import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.core.screen.ScreenType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,29 +32,30 @@ import org.springframework.stereotype.Component;
 import jpos.events.DataEvent;
 
 @Component
-public class DevToolsService {
+public class DevToolsActionListener implements IActionListener {
 
     @Autowired
     private ApplicationStateSerializer applicationStateSerializer;
 
-    @Autowired
-    private IScreenService screenService;
-
     private static final String SAVE_PATH = "./savepoints";
 
     final Logger logger = LoggerFactory.getLogger(getClass());
-
-    public Screen createMessage(IStateManager sm) {
-        Screen screen = new Screen();
-        screen.setType(ScreenType.DevTools);
-        screen.setName("DevTools::Get");
-        screen.setRefreshAlways(true);
-        setScopes(sm, screen);
-        setCurrentStateAndActions(sm, screen);
-        return screen;
+    
+    @Autowired
+    IStateManagerFactory stateManagerFactory;
+    
+    @Autowired
+    IMessageService messageService;
+    
+    @Override
+    public Collection<String> getRegisteredTypes() {        
+        return Arrays.asList(new String[] { "DevTools" });
     }
-
-    public Screen handleRequest(Action action, IStateManager stateManager, String appId, String nodeId) {
+    
+    @Override
+    public void actionOccured(String appId, String deviceId, Action action) {
+        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
+        
         if (action.getName().contains("::Save")) {
             String saveName = action.getName().substring(16);
             saveState(stateManager, saveName);
@@ -81,7 +88,17 @@ public class DevToolsService {
 
         }
 
-        return createMessage(stateManager);
+        messageService.sendMessage(appId, deviceId, createMessage(stateManager));
+    }
+    
+    private Message createMessage(IStateManager sm) {
+        Screen screen = new Screen();
+        screen.setType(ScreenType.DevTools);
+        screen.setName("DevTools::Get");
+        screen.setRefreshAlways(true);
+        setScopes(sm, screen);
+        setCurrentStateAndActions(sm, screen);
+        return screen;
     }
 
     private void setCurrentStateAndActions(IStateManager sm, Screen screen) {
@@ -104,7 +121,7 @@ public class DevToolsService {
         }
     }
 
-    public void loadSaveFiles(Screen screen) {
+    private void loadSaveFiles(Screen screen) {
 
         List<String> saveFiles = new ArrayList<>();
         File dir = null;
@@ -179,10 +196,9 @@ public class DevToolsService {
         boolean resumeState = false;
 
         try {
-            ApplicationState applicationState = new ApplicationState();
-            applicationState = applicationStateSerializer.deserialize(sm, filename);
+            ApplicationState applicationState = applicationStateSerializer.deserialize(sm, filename);
             sm.setApplicationState(applicationState);
-            screenService.setApplicationState(applicationState);
+//            screenService.setApplicationState(applicationState);
             sm.getApplicationState().getScope().setNodeScope("stateManager", sm);
             resumeState = true;
             logger.info("Loaded save state " + filename);

@@ -28,6 +28,7 @@ public class Action implements Serializable, Cloneable {
     
     private String name;
     private Object data;
+    private String type;
     private transient Action causedBy; // Used when renaming an action during a substate return.
 
     public Action() {
@@ -70,6 +71,14 @@ public class Action implements Serializable, Cloneable {
 
     public void setCausedBy(Action causedBy) {
         this.causedBy = causedBy;
+    }
+    
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+    public String getType() {
+        return type;
     }
 
     @Override

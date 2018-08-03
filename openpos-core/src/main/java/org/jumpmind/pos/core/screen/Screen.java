@@ -1,26 +1,15 @@
 package org.jumpmind.pos.core.screen;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.core.model.Message;
 import org.jumpmind.pos.core.template.AbstractTemplate;
 import org.jumpmind.pos.core.template.BlankWithBarTemplate;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Screen implements Serializable {
+public class Screen extends Message {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Put properties in this map if they are optional. When not set, they don't
-     * show up in the json which means less overhead.
-     */
-    private Map<String, Object> optionalProperties = new HashMap<String, Object>();
 
     private String name;
     private String type;
@@ -67,28 +56,6 @@ public class Screen implements Serializable {
         return new ObjectMapper().convertValue(actionData, convertToInstanceOf);
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> any() {
-        return this.optionalProperties;
-    }
-
-    @JsonAnySetter
-    public void put(String name, Object value) {
-        this.optionalProperties.put(name, value);
-    }
-
-    public boolean contains(String name) {
-        return this.optionalProperties.containsKey(name);
-    }
-
-    public Object get(String name) {
-        return optionalProperties.get(name);
-    }
-
-    public void clearAdditionalProperties() {
-        this.optionalProperties.clear();
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -131,15 +98,15 @@ public class Screen implements Serializable {
     }
 
     public void setTheme(String theme) {
-        this.optionalProperties.put("theme", theme);
+        this.put("theme", theme);
     }
 
     public void setReadOnly(boolean isReadOnly) {
-        this.optionalProperties.put("readOnly", isReadOnly);
+        this.put("readOnly", isReadOnly);
     }
 
     public void setUseOnScreenKeyboard(boolean useOnScreenKeyboard) {
-        this.optionalProperties.put("useOnScreenKeyboard", useOnScreenKeyboard);
+        this.put("useOnScreenKeyboard", useOnScreenKeyboard);
     }
 
     public String getLocale() {
@@ -151,7 +118,7 @@ public class Screen implements Serializable {
     }
 
     public void setRefreshAlways(boolean refreshAlways) {
-        this.optionalProperties.put("refreshAlways", refreshAlways);
+        this.put("refreshAlways", refreshAlways);
     }
 
     public int getSessionTimeoutMillis() {
