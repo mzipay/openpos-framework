@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.jumpmind.pos.core.javapos.SimulatedPOSPrinterService.PrintLineFeedEscapeSequence;
 import org.springframework.stereotype.Component;
 
 // TODO should be called just ActionHandler, need to repackage annotation of the same name.
