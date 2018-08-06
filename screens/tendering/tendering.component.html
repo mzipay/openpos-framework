@@ -54,7 +54,7 @@
             <mat-list class="list-seperator" ngClass.xs="xs">
                 <mat-list-item *ngFor="let item of tenderItems">
 					<p matLine>{{item.description}}</p>
-					<span class="text-md">{{item.amount.indexOf('(') >=0 ? item.amount : item.amount|currency:session.getCurrencyDenomination():true:'1.2'}}</span>
+					<span class="text-md">{{item.amount.indexOf('(') >=0 ? item.amount : item.amount|currency:session.getCurrencyDenomination():'symbol':'1.2'}}</span>
 				</mat-list-item>
             </mat-list>
             <div *ngIf="tenderItems.length == 0" class="text-md"
