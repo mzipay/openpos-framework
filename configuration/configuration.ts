@@ -3,5 +3,6 @@ export const Configuration = {
     useOnScreenKeyboard: false,
     useTouchListener: true,
     useSavePoints: true,
-    showRegisterStatus: false
+    showRegisterStatus: false,
+    keepAliveMillis: 30000
 };

@@ -18,7 +18,7 @@ export class InactivityMonitorDirective {
         }
     }
 
-    @Input() keepAliveMillis = 30000;
+    @Input() keepAliveMillis = Configuration.keepAliveMillis;
 
     @Output() issueKeepAlive: EventEmitter<string> = new EventEmitter<string>();
 
