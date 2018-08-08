@@ -33,7 +33,7 @@
                             </span>
                         </div>	
                         <div fxAlign="right" >
-                            <button *ngIf="isAnyActionPresent()" mat-icon-button color="primary" (click)="openItemDialog(item)">
+                            <button *ngIf="isAnyActionPresent() && selectedItems.length == 0" mat-icon-button color="primary" (click)="openItemDialog(item)">
                                 <mat-icon>more_vert</mat-icon>
                             </button>
                         </div>
