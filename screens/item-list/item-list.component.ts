@@ -40,7 +40,7 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, AfterVi
     }
 
     buildScreen() {
-        console.log('### Called list-item component buildScreen()...');
+        // console.log('### Called list-item component buildScreen()...');
 
         this.items = this.screen.items;
         this.itemActionName = this.screen.itemActionName;
@@ -70,6 +70,7 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, AfterVi
         // console.log('### Set selectedItems attribute, ' + (this.selectedItems ? this.selectedItems.length : 'unknown') + ' item(s) selected');
 
         this.determineAvailableActions();
+        // console.log('### Available actions: Item Display? ' + this.itemDisplayActionPresent + ", Add? " + this.addActionPresent + ", Next? " + this.nextActionPresent)
 
         this.dialog.closeAll();
         // console.log('### list-item component buildScreen() completed successfully');
