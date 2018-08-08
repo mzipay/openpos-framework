@@ -155,7 +155,7 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Override
     public Collection<String> getRegisteredTypes() {        
-        return Arrays.asList(new String[] { "Screen"});
+        return Arrays.asList(new String[] { "Screen", "KeepAlive"});
     }
 
     @Override
