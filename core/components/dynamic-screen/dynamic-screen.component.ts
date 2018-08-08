@@ -202,7 +202,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             closeable = dialog.template.dialogProperties.closeable;
             closeAction = dialog.template.dialogProperties.closeAction;
         }
-        const dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: false };
+        // By default we want to not allow the user to close by clicking off
+        // By default we need the dialog to grab focus so you cannont execute actions on the screen
+        // behind by hitting enter
+        const dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: true };
         const dialogComponent = dialogComponentFactory.componentType;
         if (dialog.template.dialogProperties) {
             // Merge in any dialog properties provided on the screen
