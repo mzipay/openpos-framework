@@ -37,5 +37,7 @@ export * from './wait/wait.component';
 export * from './warranty-coverage/warranty-coverage.component';
 export * from './catalog-browser/catalog-browser.component';
 
+export * from './pos-screen/pos-screen.component';
+
 export * from './templates';
 export * from './screens.module';
