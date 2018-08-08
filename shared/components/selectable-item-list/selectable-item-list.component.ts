@@ -49,7 +49,16 @@ export class SelectableItemListComponent<ItemType> {
             this._config.numResultsPerPage, this._config.numResultsPerPage * this.currentPage);
 
         if (this.defaultSelect && this.itemsToShow.length === 1) {
-            this.onItemClick(this.itemsToShow[0]);
+            switch (this._config.selectionMode) {
+                case SelectionMode.Single:
+                    this.selectedItem = this.itemsToShow[0];
+                    this.selectedItemChange.emit(this.selectedItem);
+                    break;
+                case SelectionMode.Multiple:
+                    this.selectedItemList.push(this.itemsToShow[0]);
+                    this.selectedItemListChange.emit(this.selectedItemList);
+                    break;
+            }
         }
     }
 
