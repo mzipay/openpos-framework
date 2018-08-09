@@ -75,6 +75,7 @@ public class DeviceService implements IDeviceService {
         if (request instanceof DevicePluginRequest) {
             screen.put("pluginId", ((DevicePluginRequest)request).getPluginId());
         }
+        // Save off the type of the screen because we need to set the type of the message to 'DeviceRequest'
         screen.put("screenType", screen.getType());
         screen.setType(DefaultDeviceRequest.DEFAULT_TYPE);
     }
