@@ -9,8 +9,10 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.device.DefaultDeviceResponse;
+import org.jumpmind.pos.core.device.DevicePluginRequest;
 import org.jumpmind.pos.core.device.IDeviceRequest;
 import org.jumpmind.pos.core.device.IDeviceResponse;
+import org.jumpmind.pos.core.screen.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class DeviceService implements IDeviceService {
     @Autowired
     private SimpMessagingTemplate template;
 
+    @Autowired
+    private ScreenService screenService;
+    
     private HashMap<String, DeviceResponseMapEntry> requestToResponseMap = new HashMap<>();
 
     
@@ -46,14 +51,31 @@ public class DeviceService implements IDeviceService {
         if (StringUtils.isBlank(request.getRequestId())) {
             request.setRequestId((requestSequenceNumber++) + "");
         }
-        
         String mapKey = makeRequestResponseMapKey(appId, nodeId, request.getDeviceId(), request.getRequestId());
         this.requestToResponseMap.put(mapKey, new DeviceResponseMapEntry(futureResponse));
-        logger.info("Now sending request to node '{}' with id: {}, type: {}, subtype: {} ...", nodeId, request.getRequestId(), request.getType(), request.getSubType() );
-        this.template.convertAndSend(String.format("/topic/app/%s/node/%s", appId, nodeId), request);
+        
+        if (request.getPayload() instanceof Screen) {
+            logger.info("Now redirecting DeviceRequest for node '{}' with id: {}, type: {}, subtype: {} to the ScreenService to show the provided screen payload ...", nodeId, request.getRequestId(), request.getType(), request.getSubType() );
+            Screen screen = (Screen) request.getPayload();
+            this.decorateScreenAsDeviceRequest(screen, request);
+            this.screenService.showScreen(appId, nodeId, screen);
+        } else {
+            logger.info("Now sending request to node '{}' with id: {}, type: {}, subtype: {} ...", nodeId, request.getRequestId(), request.getType(), request.getSubType() );
+            this.template.convertAndSend(String.format("/topic/app/%s/node/%s", appId, nodeId), request);
+        }
         return futureResponse;
     }
     
+    private void decorateScreenAsDeviceRequest(Screen screen, IDeviceRequest request) {
+        // Add the deviceId, requestId and, optionally, the pluginId to the screen so that the screen can still appear to be 
+        // device request to the client
+        screen.put("requestId", request.getRequestId());
+        screen.put("deviceId", request.getDeviceId());
+        if (request instanceof DevicePluginRequest) {
+            screen.put("pluginId", ((DevicePluginRequest)request).getPluginId());
+        }
+    }
+
     @MessageMapping("device/app/{appId}/node/{nodeId}/device/{deviceId}")
     public void onDeviceResponse(@DestinationVariable String appId, @DestinationVariable String nodeId, @DestinationVariable String deviceId, DefaultDeviceResponse response) {
         String sourceRequestId = response.getRequestId();
