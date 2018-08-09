@@ -8,6 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jumpmind.pos.core.device.DefaultDeviceRequest;
 import org.jumpmind.pos.core.device.DefaultDeviceResponse;
 import org.jumpmind.pos.core.device.DevicePluginRequest;
 import org.jumpmind.pos.core.device.IDeviceRequest;
@@ -74,6 +75,8 @@ public class DeviceService implements IDeviceService {
         if (request instanceof DevicePluginRequest) {
             screen.put("pluginId", ((DevicePluginRequest)request).getPluginId());
         }
+        screen.put("screenType", screen.getType());
+        screen.setType(DefaultDeviceRequest.DEFAULT_TYPE);
     }
 
     @MessageMapping("device/app/{appId}/node/{nodeId}/device/{deviceId}")
