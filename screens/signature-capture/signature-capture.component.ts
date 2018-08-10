@@ -1,6 +1,8 @@
 import { Component, AfterViewInit, HostListener } from '@angular/core';
 import 'signature_pad';
 import { PosScreen } from '../pos-screen/pos-screen.component';
+import { Configuration } from '../..';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-signature-capture',
@@ -16,6 +18,9 @@ export class SignatureCaptureComponent extends PosScreen<any> implements AfterVi
   protected canvas: HTMLCanvasElement = null;
   protected wrapper: HTMLElement;
 
+  constructor(public snackBar: MatSnackBar) {
+      super();
+  }
 
   buildScreen() {}
 
@@ -66,19 +71,56 @@ export class SignatureCaptureComponent extends PosScreen<any> implements AfterVi
 
     const dataUrl: string|null = this.signaturePad.toDataURL(mediaType);
     const dataPoints = this.signaturePad.toData();
+
     let encodedImage: string|null = null;
     if (dataUrl) {
       const matches: RegExpMatchArray|null = dataUrl.match(/^data:.+\/(.+);base64,(.*)$/);
       encodedImage = matches && matches.length > 2 ? matches[2] : null;
     }
     const signatureData: ISignature = {
-      pointGroups: this.signaturePad.toData(),
+      pointGroups: dataPoints,
       mediaType: mediaType,
       base64EncodedImage: encodedImage
     };
 
+    if (! this.isSignatureSizeValid(signatureData)) {
+        this.snackBar.open('Signature is too large, please try again', 'Dismiss', {
+            duration: 8000, verticalPosition: 'top'
+        });
+        return;
+    }
+
     this.session.response = signatureData;
     this.session.onAction(this.screen.saveAction.action);
+  }
+
+  protected isSignatureSizeValid(sigData: ISignature) {
+
+    if (Configuration.maxSignaturePoints >= 0) {
+        let totalSignaturePoints = 0;
+        if (sigData.pointGroups) {
+            sigData.pointGroups.forEach(pArray => totalSignaturePoints += pArray.length);
+            console.log(`Total signature points: ${totalSignaturePoints}`);
+        }
+
+        if (totalSignaturePoints > Configuration.maxSignaturePoints) {
+            console.log(`Signature point count of ${totalSignaturePoints} exceeds the Configuration.maxSignaturePoints of ` +
+            `${Configuration.maxSignaturePoints}`);
+            return false;
+        }
+    }
+
+    if (Configuration.maxResponseSizeBytes >= 0) {
+        const signatureResponseSize = JSON.stringify(sigData).length;
+        console.log(`Signature response size: ${signatureResponseSize}`);
+        if (signatureResponseSize > Configuration.maxResponseSizeBytes) {
+            console.log(`Signature response size of ${signatureResponseSize} exceeds the Configuration.maxResponseSizeBytes of ` +
+              `${Configuration.maxResponseSizeBytes}`);
+            return false;
+        }
+    }
+
+    return true;
   }
 }
 
