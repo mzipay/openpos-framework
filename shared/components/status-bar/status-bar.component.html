@@ -13,7 +13,10 @@
 	<span fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
 		<mat-icon *ngIf="data && data.operatorText"  class="material-icons">lock_open</mat-icon>
 		<span *ngIf="data && data.operatorText"  class="text-sm" fxHide.xs>
-			{{data.operatorText}}&nbsp;on &nbsp;#{{data.workstationId}}-{{data.storeId}}
+			{{data.operatorText}}&nbsp;on&nbsp;
+			<span *ngIf="data.tillAmountThreshold > 0" class="success">#{{data.workstationId}}-{{data.storeId}}</span>
+			<span *ngIf="data.tillAmountThreshold < 0" class="warn">#{{data.workstationId}}-{{data.storeId}}</span>
+			<span *ngIf="data.tillAmountThreshold == 0">#{{data.workstationId}}-{{data.storeId}}</span>
 		</span>
 		<button mat-icon-button *ngIf="data && data.logoutButton && data.screenType != 'Home'"
 			(click)="doMenuItemAction(data.logoutButton)" [disabled]="!isMenuItemEnabled(data.logoutButton)">

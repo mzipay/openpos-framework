@@ -10,4 +10,5 @@ export class StatusBarData {
     logoutButton: IMenuItem;
     workstationId: String;
     storeId: String;
+    tillAmountThreshold: number;
 }
