@@ -42,6 +42,9 @@ export class StartupService {
         if (appId.indexOf('/') > 0) {
             appId = appId.substring(0, appId.indexOf('/'));
         }
+        if (appId.indexOf('?') > 0) {
+            appId = appId.substring(0, appId.indexOf('?'));
+        }
         return appId;
     }
 }
