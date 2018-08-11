@@ -6,4 +6,6 @@ public interface IStateManagerFactory {
     
     IStateManager retrieve(String appId, String nodeId);
     
+    void removeSessionIdAuth(String sessionId);
+    
 }

@@ -20,6 +20,7 @@
 package org.jumpmind.pos.core.flow;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -87,6 +88,8 @@ public class StateManager implements IStateManager {
     private long sessionTimeoutMillis = 0;
     
     private Action sessionTimeoutAction;
+    
+    private Map<String, Boolean> sessionAuthenticated = new HashMap<>();
 
     public void init(String appId, String nodeId) {
         this.appId = appId;
@@ -110,7 +113,6 @@ public class StateManager implements IStateManager {
         }
         
         applicationState.getScope().setNodeScope("stateManager", this);
-        screenService.setApplicationState(applicationState);
         
         if (resumeState) {
             refreshScreen();
@@ -118,6 +120,25 @@ public class StateManager implements IStateManager {
             applicationState.setCurrentContext(new StateContext(initialFlowConfig, null, null));
             transitionTo(new Action("Startup"), initialFlowConfig.getInitialState());
         }
+    }
+    
+    @Override
+    public void setSessionAuthenticated(String sessionId, boolean authenticated) {
+        this.sessionAuthenticated.put(sessionId, authenticated);
+    }
+    
+    public void removeSessionAuthentication(String sessionId) {
+        this.sessionAuthenticated.remove(sessionId);
+    }
+    
+    @Override
+    public boolean isSessionAuthenticated(String sessionId) {        
+        return this.sessionAuthenticated.get(sessionId) != null && this.sessionAuthenticated.get(sessionId);
+    }
+    
+    @Override
+    public boolean areAllSessionsAuthenticated() {
+        return !sessionAuthenticated.values().contains(false);
     }
 
     protected void transitionTo(Action action, StateConfig stateConfig) {
