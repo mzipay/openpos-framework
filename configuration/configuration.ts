@@ -4,5 +4,6 @@ export const Configuration = {
     useTouchListener: true,
     useSavePoints: true,
     showRegisterStatus: false,
-    keepAliveMillis: 30000
+    keepAliveMillis: 30000,
+    compatibilityVersion: 'v1'
 };
