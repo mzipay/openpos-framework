@@ -5,5 +5,7 @@ export const Configuration = {
     useSavePoints: true,
     showRegisterStatus: false,
     keepAliveMillis: 30000,
-    compatibilityVersion: 'v1'
+    compatibilityVersion: 'v1',
+    maxSignaturePoints: -1,
+    maxResponseSizeBytes: 79500
 };
