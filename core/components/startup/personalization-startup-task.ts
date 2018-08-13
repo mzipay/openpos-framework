@@ -9,18 +9,22 @@ export class PersonalizationStartupTask implements IStartupTask {
 
     order = 500;
 
-    constructor(private personalization: PersonalizationService, private session: SessionService) {
+    constructor(protected personalization: PersonalizationService, protected session: SessionService) {
 
     }
 
-    execute(startupComponent: StartupComponent): boolean {
-        startupComponent.message = 'Checking if device is personalized';
-        if (!this.personalization.isPersonalized()) {
-            this.session.showScreen(this.personalization.getPersonalizationScreen());
-            return false;
-        }  else  {
-            return true;
-        }
+    execute(startupComponent: StartupComponent): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            console.log('PersonalizationStartupTask is executing...');
+            startupComponent.message = 'Checking if device is personalized';
+            if (!this.personalization.isPersonalized()) {
+                this.session.showScreen(this.personalization.getPersonalizationScreen());
+                resolve(false);
+            }  else  {
+                resolve(true);
+            }
+            console.log('PersonalizationStartupTask finished.');
+        });
     }
 
 }

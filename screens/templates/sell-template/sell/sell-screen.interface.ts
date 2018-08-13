@@ -38,6 +38,7 @@ export class SellScreenUtils {
         if (screen.template.workstation) {
             statusBar.workstationId = screen.template.workstation.workstationId;
             statusBar.storeId = screen.template.workstation.storeId;
+            statusBar.tillThresholdStatus = screen.template.workstation.tillThresholdStatus;
         }
 
         return statusBar;
