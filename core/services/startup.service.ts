@@ -32,10 +32,10 @@ export class StartupService {
                 const currentTask = element[1];
                 return currentTask.execute(startupComponent);
             },
-            // condition when execution should stop.  taskResult
-            // will be null for first task due to way that array.reduce
-            // runs.  This will cause the task execution to stop
+            // The condition below will cause the task execution to stop
             // upon the first failed task.
+            // taskResult will be null for first task due to way that
+            // array.reduce() runs.
             taskResult => taskResult !== null && ! taskResult
         );
 
