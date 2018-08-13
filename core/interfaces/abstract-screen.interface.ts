@@ -1,5 +1,5 @@
 export interface IAbstractScreen {
     name: string;
-    type: string;
+    screenType: string;
     locale: string;
 }

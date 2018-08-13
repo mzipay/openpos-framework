@@ -6,7 +6,7 @@ import { SellStatusSectionData } from '../sell-status-section/sell-status-sectio
 
 export interface ISellScreen {
     name: string;
-    type: string;
+    screenType: string;
     backButton: IMenuItem;
     logoutButton: IMenuItem;
     template: ISellTemplate;
@@ -34,7 +34,7 @@ export class SellScreenUtils {
         statusBar.operatorText = screen.template.operatorText;
         statusBar.screenIcon = screen.icon;
         statusBar.screenName = screen.name;
-        statusBar.screenType = screen.type;
+        statusBar.screenType = screen.screenType;
         if (screen.template.workstation) {
             statusBar.workstationId = screen.template.workstation.workstationId;
             statusBar.storeId = screen.template.workstation.storeId;

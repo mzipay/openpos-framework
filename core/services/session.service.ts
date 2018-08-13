@@ -78,7 +78,7 @@ export class SessionService implements IMessageHandler {
             console.error(`[OpenPOS]${e}`);
         });
         this.onServerConnect = Observable.create(observer => { this.onServerConnectObserver = observer; });
-        this.messageSubject.pipe(filter(s => !['DevTools', 'DeviceRequest'].includes(s.type)), filter(s => !s.clearDialog)).subscribe(s => this.handle(s));
+        this.messageSubject.pipe(filter(s => ['Screen'].includes(s.type)), filter(s => !s.clearDialog)).subscribe(s => this.handle(s));
     }
 
     public registerMessageHandler(handler: IMessageHandler, ...types: string[]): Subscription {
@@ -339,7 +339,7 @@ export class SessionService implements IMessageHandler {
     }
 
     handle(message: any) {
-        if (message.type === 'Loading') {
+        if (message.screenType === 'Loading') {
             // This is just a temporary hack
             // Might be a previous instance of a Loading screen being shown,
             // so dismiss it first. This occurs, for example, when mobile device is put
@@ -353,10 +353,10 @@ export class SessionService implements IMessageHandler {
             return;
         } else if (message.template && message.template.dialog) {
             this.showDialog(message);
-        } else if (message.type === 'NoOp') {
+        } else if (message.screenType === 'NoOp') {
             this.response = null;
             return; // As with DeviceRequest, return to avoid dismissing loading screen
-        } else if (message.type === 'Toast') {
+        } else if (message.screenType === 'Toast') {
             const toast = message as IToastScreen;
             this.snackBar.open(toast.message, null, {
                 duration: toast.duration,
