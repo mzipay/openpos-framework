@@ -1,3 +1,4 @@
+import { Configuration } from './../../configuration/configuration';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { PersonalizationService, DEFAULT_LOCALE } from './personalization.service';
 
@@ -147,6 +148,9 @@ export class SessionService implements IMessageHandler {
             url: url,
             headers: {
                 authToken: this.authToken,
+                compatibilityVersion: Configuration.compatibilityVersion,
+                appId: appId,
+                nodeId: this.personalization.getNodeId()
             },
             heartbeat_in: 0, // Typical value 0 - disabled
             heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
@@ -154,8 +158,6 @@ export class SessionService implements IMessageHandler {
             debug: this.stompDebug
         });
 
-        // Give preference to nodeId query parameter if it's present, then fallback to
-        // local storage
         this.appId = appId;
         const currentTopic = this.buildTopicName();
 
