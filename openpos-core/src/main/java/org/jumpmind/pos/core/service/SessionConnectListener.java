@@ -22,10 +22,10 @@ public class SessionConnectListener implements ApplicationListener<SessionConnec
     
     Map<String, Boolean> sessionCompatible = Collections.synchronizedMap(new HashMap<>());
     
-    @Value("${openpos.auth.token}")
+    @Value("${openpos.auth.token:#{null}}")
     String serverAuthToken;  
     
-    @Value("${openpos.compatibility.version}")
+    @Value("${openpos.compatibility.version:#{null}}")
     String serverCompatibilityVersion; 
 
     public void onApplicationEvent(SessionConnectEvent event) {
