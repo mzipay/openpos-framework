@@ -24,16 +24,44 @@ export class StartupService {
     public runTasks(startupComponent: StartupComponent): void {
         const list = Array.from(this.tasks);
         list.sort((a, b) => a[1].order - b[1].order );
-        list.every(element => {
-           const task = element[1];
-           return task.execute(startupComponent);
-        });
+
+        // Run the tasks in order
+        this.promiseLoop(list,
+            // For the operation to execute, just run the task
+            element => {
+                const currentTask = element[1];
+                return currentTask.execute(startupComponent);
+            },
+            // condition when execution should stop.  taskResult
+            // will be null for first task due to way that array.reduce
+            // runs.  This will cause the task execution to stop
+            // upon the first failed task.
+            taskResult => taskResult !== null && ! taskResult
+        );
 
         if (this.personalization.isPersonalized()) {
             this.session.unsubscribe();
             this.session.subscribe(this.normalizeAppIdFromUrl());
         }
     }
+
+    private promiseLoop<T, R>(
+        array: T[],
+        operation: (T) => Promise<R>,
+        predicate: (R) => boolean = v => false,
+        initial: R = null): Promise<R> {
+
+        return array.reduce((promise: Promise<R>, current: T) => {
+            return promise.then((value: R) => {
+                console.log(`Promise returned: ${value}`);
+                if (predicate(value)) {
+                    return promise;
+                }
+                return operation(current);
+            });
+        }, Promise.resolve(initial));
+    }
+
     protected normalizeAppIdFromUrl(): string {
         let appId = this.router.url.substring(1);
         if (appId.indexOf('#') > 0) {
