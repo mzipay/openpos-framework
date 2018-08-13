@@ -9,6 +9,7 @@ import org.jumpmind.pos.core.screen.DialogScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,10 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
     IMessageService messageService;
     
     @Autowired
-    SessionAuthTracker sessionAuthTracker;
+    SessionConnectListener sessionAuthTracker;
+    
+    @Value("${openpos.incompatible.version.message:The compatibility version of the client does not match the server}")
+    String incompatibleVersionMessage; 
 
     @Override
     public void onApplicationEvent(SessionSubscribeEvent event) {
@@ -44,16 +48,24 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             }
 
             stateManager.setSessionAuthenticated(sessionId, sessionAuthTracker.isSessionAuthenticated(sessionId));
+            stateManager.setSessionCompatible(sessionId, sessionAuthTracker.isSessionCompatible(sessionId));
 
-            if (stateManager.isSessionAuthenticated(sessionId)) {
-                stateManager.refreshScreen();
-            } else {
+            if (!stateManager.isSessionAuthenticated(sessionId)) {
                 DialogScreen errorDialog = new DialogScreen();
                 errorDialog.asDialog(new DialogProperties(false));
                 errorDialog.setIcon("error");
                 errorDialog.setTitle("Failed Authentication");
                 errorDialog.setMessage(Arrays.asList("The client and server authentication tokens did not match"));
                 messageService.sendMessage(appId, nodeId, errorDialog);
+            } else if (!stateManager.isSessionCompatible(sessionId)) {
+                DialogScreen errorDialog = new DialogScreen();
+                errorDialog.asDialog(new DialogProperties(false));
+                errorDialog.setIcon("error");
+                errorDialog.setTitle("Incompatible Versions");
+                errorDialog.setMessage(Arrays.asList(incompatibleVersionMessage));
+                messageService.sendMessage(appId, nodeId, errorDialog);
+            } else {
+                stateManager.refreshScreen();
             }
 
         } catch (Exception ex) {

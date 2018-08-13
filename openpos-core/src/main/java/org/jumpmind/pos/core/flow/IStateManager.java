@@ -48,5 +48,10 @@ public interface IStateManager {
 	public void setSessionAuthenticated(String sessionId, boolean authenticated);
 	public boolean isSessionAuthenticated(String sessionId);
 	public boolean areAllSessionsAuthenticated();
+    public void setSessionCompatible(String sessionId, boolean compatible);
+    public boolean isSessionCompatible(String sessionId);
+    public boolean areAllSessionsCompatible();
+	
+	
     
 }

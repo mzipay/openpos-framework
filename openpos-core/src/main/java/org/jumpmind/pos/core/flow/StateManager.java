@@ -90,6 +90,9 @@ public class StateManager implements IStateManager {
     private Action sessionTimeoutAction;
     
     private Map<String, Boolean> sessionAuthenticated = new HashMap<>();
+    
+    private Map<String, Boolean> sessionCompatible = new HashMap<>();
+
 
     public void init(String appId, String nodeId) {
         this.appId = appId;
@@ -139,6 +142,25 @@ public class StateManager implements IStateManager {
     @Override
     public boolean areAllSessionsAuthenticated() {
         return !sessionAuthenticated.values().contains(false);
+    }
+    
+    @Override
+    public void setSessionCompatible(String sessionId, boolean compatible) {
+        this.sessionCompatible.put(sessionId, compatible);
+    }
+    
+    @Override
+    public boolean isSessionCompatible(String sessionId) {        
+        return this.sessionCompatible.get(sessionId) != null && this.sessionCompatible.get(sessionId);
+    }
+    
+    @Override
+    public boolean areAllSessionsCompatible() {        
+        return !sessionCompatible.values().contains(false);
+    }
+    
+    public void removeSessionCompatible(String sessionId) {
+        this.sessionCompatible.remove(sessionId);
     }
 
     protected void transitionTo(Action action, StateConfig stateConfig) {

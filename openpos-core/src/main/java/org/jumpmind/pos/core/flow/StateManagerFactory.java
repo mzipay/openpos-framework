@@ -48,11 +48,12 @@ public class StateManagerFactory implements IStateManagerFactory {
     private Map<String, Map<String, StateManager>> stateManagersByAppIdByNodeId = new HashMap<>();
 
     @Override
-    public void removeSessionIdAuth(String sessionId) {
+    public void removeSessionIdVariables(String sessionId) {
         synchronized (this) {
             for (Map<String, StateManager> map : stateManagersByAppIdByNodeId.values()) {
                 for (StateManager stateManager : map.values()) {
                     stateManager.removeSessionAuthentication(sessionId);
+                    stateManager.removeSessionCompatible(sessionId);
                 }
             }
         }

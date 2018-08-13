@@ -246,10 +246,13 @@ public class ScreenService implements IScreenService, IActionListener {
                     logger.error("Failed to write screen to JSON", ex);
                 }
             }
-            if (stateManager.areAllSessionsAuthenticated()) {
-                messageService.sendMessage(appId, deviceId, screen);
-            } else {
+            if (!stateManager.areAllSessionsAuthenticated()) {
                 logger.warn("Not sending screen because a session is attached that is not authenticated");
+            } else if (!stateManager.areAllSessionsCompatible()) {
+                logger.warn("Not sending screen because a session is attached that is not compatible");
+
+            } else {
+                messageService.sendMessage(appId, deviceId, screen);
             }
             if (screen.getTemplate().isDialog()) {
                 applicationState.setLastDialog(screen);
