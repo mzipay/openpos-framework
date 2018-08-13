@@ -75,7 +75,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         const self = this;
         this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
         this.session.subscribeForDialogUpdates((dialog: any): void => self.updateDialog(dialog));
-        this.updateDialog({ type: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%' } }});
+        this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%' } }});
     }
 
 
@@ -87,7 +87,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         if (dialog) {
             const dialogType = this.dialogService.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
             if (!this.dialogOpening) {
-                if (this.dialogRef && (dialog.type !== this.lastDialogType || dialog.type === 'Dialog')) {
+                if (this.dialogRef && (dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog')) {
                     console.log('closing dialog');
                     this.dialogRef.close();
                     this.dialogRef = null;
@@ -107,18 +107,18 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     protected updateTemplateAndScreen(screen?: any): void {
         if (!screen) {
-            screen = { type: 'Blank', template: { type: 'Blank', dialog: false } };
+            screen = { screenType: 'Blank', template: { type: 'Blank', dialog: false } };
         }
 
         if (screen &&
             (screen.refreshAlways
-                || screen.type !== this.previousScreenType
+                || screen.screenType !== this.previousScreenType
                 || screen.name !== this.previousScreenName)
         ) {
             this.logSwitchScreens(screen);
 
             const templateName = screen.template.type;
-            const screenType = screen.type;
+            const screenType = screen.screenType;
             const screenName = screen.name;
             const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName);
             const viewContainerRef = this.host.viewContainerRef;
@@ -146,10 +146,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     protected logSwitchScreens(screen: any) {
-        let msg = `>>> Switching screens from "${this.previousScreenType}" to "${screen.type}"`;
+        let msg = `>>> Switching screens from "${this.previousScreenType}" to "${screen.screenType}"`;
         let nameLogged = false;
         let sequenceLogged = false;
-        if (screen.name && screen.name !== screen.type) {
+        if (screen.name && screen.name !== screen.screenType) {
             nameLogged = true;
             msg += ` (name "${screen.name}"`;
         }
@@ -174,14 +174,14 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             this.classes = '';
             switch (this.session.getAppId()) {
                 case 'pos':
-                    if (screen.type === 'Home') {
+                    if (screen.screenType === 'Home') {
                         this.classes = 'pos main-background';
                     } else {
                         this.classes = 'pos';
                     }
                     break;
                 case 'selfcheckout':
-                    if (screen.type === 'SelfCheckoutHome') {
+                    if (screen.screenType === 'SelfCheckoutHome') {
                         this.classes = 'self-checkout-home selfcheckout';
                     } else {
                         this.classes = 'selfcheckout';
@@ -195,7 +195,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     protected openDialog(dialog: any) {
-        const dialogComponentFactory: ComponentFactory<IScreen> = this.dialogService.resolveDialog(dialog.type);
+        const dialogComponentFactory: ComponentFactory<IScreen> = this.dialogService.resolveDialog(dialog.screenType);
         let closeable = false;
         let closeAction = null;
         if (dialog.template.dialogProperties) {
@@ -217,16 +217,16 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             console.log(`Dialog options: ${JSON.stringify(dialogProperties)}`);
         }
 
-        if (!this.dialogRef || dialog.type !== this.lastDialogType || dialog.type === 'Dialog'
+        if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
             || dialog.refreshAlways) {
             this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
         } else {
-            console.log(`Using previously created dialogRef. current dialog type: ${dialog.type}, last dialog type: ${this.lastDialogType}`);
+            console.log(`Using previously created dialogRef. current dialog type: ${dialog.screenType}, last dialog type: ${this.lastDialogType}`);
         }
 
         this.dialogRef.componentInstance.show(dialog, this);
         this.dialogOpening = false;
-        console.log('Dialog \'' + dialog.type + '\' opened');
+        console.log('Dialog \'' + dialog.screenType + '\' opened');
         if (dialogProperties.executeActionBeforeClose) {
             // Some dialogs may need to execute the chosen action before
             // they close so that actionPayloads can be included with the action
@@ -241,7 +241,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             );
         }
 
-        this.lastDialogType = dialog.type;
+        this.lastDialogType = dialog.screenType;
     }
 
     public get theme() {
