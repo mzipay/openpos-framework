@@ -7,7 +7,7 @@ public class PrintPreviewScreen extends Screen {
     private String printText = "";
 
     	public PrintPreviewScreen() {
-    		this.setType(ScreenType.PrintPreview);
+    		this.setScreenType(ScreenType.PrintPreview);
     	}
     
 	public String getPrintText() {

@@ -20,7 +20,7 @@ public class ItemListScreen extends Screen {
     private MenuItem actionButton = null;
 
     public ItemListScreen() {
-        setType(ScreenType.ItemList);
+        setScreenType(ScreenType.ItemList);
     }
     
     

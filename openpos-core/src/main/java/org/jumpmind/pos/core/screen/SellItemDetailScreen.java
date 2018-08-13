@@ -13,7 +13,7 @@ public class SellItemDetailScreen extends Screen {
     private List<PromoItem> promos = new ArrayList<>();
 
     public SellItemDetailScreen() {
-        setType(ScreenType.SellItemDetail);
+        setScreenType(ScreenType.SellItemDetail);
     }
 
     public List<MenuItem> getItemActions() {

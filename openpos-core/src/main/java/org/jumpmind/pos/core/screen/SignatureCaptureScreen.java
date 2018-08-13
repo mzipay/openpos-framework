@@ -12,7 +12,7 @@ public class SignatureCaptureScreen extends Screen {
     
 
     public SignatureCaptureScreen() {
-        setType(ScreenType.SignatureCapture);
+        setScreenType(ScreenType.SignatureCapture);
     }
 
     public String getText() {

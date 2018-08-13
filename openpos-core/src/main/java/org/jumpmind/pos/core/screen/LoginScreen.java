@@ -12,7 +12,7 @@ public class LoginScreen extends DynamicFormScreen {
     private MenuItem forgotPasswordAction;
 
     public LoginScreen() {
-        setType(ScreenType.Login);
+        setScreenType(ScreenType.Login);
 
         FormField userIdField = new FormField("userId", null, FieldElementType.Input, FieldInputType.AlphanumericText, true, "");
         userIdField.setPlaceholder("User ID");

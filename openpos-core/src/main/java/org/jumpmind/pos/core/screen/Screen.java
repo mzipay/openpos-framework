@@ -12,7 +12,7 @@ public class Screen extends Message {
     private static final long serialVersionUID = 1L;
 
     private String name;
-    private String type;
+    private String screenType;
     private String icon;
     private AbstractTemplate template = new BlankWithBarTemplate();
     private String locale;
@@ -20,10 +20,11 @@ public class Screen extends Message {
     private Action sessionTimeoutAction;
 
     public Screen() {
+        this.setType("Screen");
     }
 
     public Screen(String name, String type) {
-        this.type = type;
+        this.screenType = type;
         this.name = name;
     }
 
@@ -64,16 +65,16 @@ public class Screen extends Message {
         return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setScreenType(String type) {
+        this.screenType = type;
     }
 
-    public String getType() {
-        return this.type;
+    public String getScreenType() {
+        return this.screenType;
     }
 
     public boolean isScreenOfType(String type) {
-        return this.type == type;
+        return this.screenType == type;
     }
 
     public void setBackButton(MenuItem backButton) {

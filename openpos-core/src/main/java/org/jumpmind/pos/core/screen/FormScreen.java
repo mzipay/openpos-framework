@@ -11,7 +11,7 @@ public class FormScreen extends Screen implements IHasForm {
     private MenuItem itemAction;
 
     public FormScreen() {
-        setType(ScreenType.Form);
+        setScreenType(ScreenType.Form);
     }
 
     public void setForm(Form form) {

@@ -14,7 +14,7 @@ public class ChangeScreen extends Screen {
     private String balanceDue;
     
     public ChangeScreen() {
-        setType(ScreenType.Change);
+        setScreenType(ScreenType.Change);
     }
     
     public String getTotal() {

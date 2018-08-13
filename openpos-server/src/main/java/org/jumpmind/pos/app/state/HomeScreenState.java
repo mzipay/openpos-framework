@@ -57,7 +57,7 @@ public class HomeScreenState extends AbstractState implements IState {
         // TODO How do customers add their own links?
         screen.setName("Home");
         screen.setIcon("home");
-        screen.setType("Home");
+        screen.setScreenType("Home");
         return screen;
     }
 }

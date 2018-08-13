@@ -76,8 +76,8 @@ public class DeviceService implements IDeviceService {
             screen.put("pluginId", ((DevicePluginRequest)request).getPluginId());
         }
         // Save off the type of the screen because we need to set the type of the message to 'DeviceRequest'
-        screen.put("screenType", screen.getType());
-        screen.setType(DefaultDeviceRequest.DEFAULT_TYPE);
+        screen.put("screenType", screen.getScreenType());
+        screen.setScreenType(DefaultDeviceRequest.DEFAULT_TYPE);
     }
 
     @MessageMapping("device/app/{appId}/node/{nodeId}/device/{deviceId}")

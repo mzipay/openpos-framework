@@ -15,7 +15,7 @@ public class MultipleDynamicFormScreen extends Screen implements IHasForm{
 	private Form submittedForm;
 	
 	public MultipleDynamicFormScreen() {
-		setType(ScreenType.MultipleDynamicForm);
+		setScreenType(ScreenType.MultipleDynamicForm);
 	}
 
 	public List<MultipleFormOption> getForms() {

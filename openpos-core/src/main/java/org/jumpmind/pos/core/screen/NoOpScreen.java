@@ -5,7 +5,7 @@ public class NoOpScreen extends Screen {
     private static final long serialVersionUID = 1L;
 
     public NoOpScreen() {
-        this.setType(ScreenType.NoOp);
+        this.setScreenType(ScreenType.NoOp);
     }
 
 }

@@ -16,7 +16,7 @@ public class TableScreen extends Screen {
     private String selectAction;
     
     public TableScreen() {
-        setType(ScreenType.Table);
+        setScreenType(ScreenType.Table);
     }
 
     public void setSelectAction(String selectAction) {

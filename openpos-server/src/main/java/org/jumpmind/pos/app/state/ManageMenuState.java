@@ -85,7 +85,7 @@ public class ManageMenuState extends AbstractState implements IState {
         }
         screen.setName("Manage");
         screen.setIcon("store");
-        screen.setType("Home");
+        screen.setScreenType("Home");
         screen.setBackButton(new MenuItem("Back"));
         return screen;
     }

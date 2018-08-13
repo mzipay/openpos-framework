@@ -19,7 +19,7 @@ public class CatalogBrowserScreen extends DynamicFormScreen {
     private Integer itemTotalCount;
     
     public CatalogBrowserScreen() {
-        setType(ScreenType.CatalogBrowser);
+        setScreenType(ScreenType.CatalogBrowser);
         getForm().addNumericField(FIELD_ID_SELECTED_ITEM_QUANTITY, null, "", false);
     }
 

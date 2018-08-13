@@ -49,7 +49,7 @@ public class BasicItemSearchScreen extends Screen {
 
     
     public BasicItemSearchScreen() {
-        this.setType(ScreenType.BasicItemSearch);
+        this.setScreenType(ScreenType.BasicItemSearch);
     }
     
     public void addSearchCategory(SearchCategory searchCategory) {

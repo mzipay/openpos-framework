@@ -30,7 +30,7 @@ public class PromptScreen extends Screen implements IPromptScreen {
     
 
     public PromptScreen() {
-        setType(ScreenType.Prompt);
+        setScreenType(ScreenType.Prompt);
     }
 
     @Override

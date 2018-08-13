@@ -22,7 +22,6 @@ import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.javapos.SimulatedScannerService;
 import org.jumpmind.pos.core.model.Message;
 import org.jumpmind.pos.core.screen.ScopeField;
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.ScreenType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,17 +91,16 @@ public class DevToolsActionListener implements IActionListener {
     }
     
     private Message createMessage(IStateManager sm) {
-        Screen screen = new Screen();
-        screen.setType(ScreenType.DevTools);
-        screen.setName("DevTools::Get");
-        screen.setRefreshAlways(true);
-        setScopes(sm, screen);
-        setCurrentStateAndActions(sm, screen);
-        return screen;
+        Message message = new Message();
+        message.setType(ScreenType.DevTools);
+        message.put("name", "DevTools::Get");
+        setScopes(sm, message);
+        setCurrentStateAndActions(sm, message);
+        return message;
     }
 
-    private void setCurrentStateAndActions(IStateManager sm, Screen screen) {
-        loadSaveFiles(screen);
+    private void setCurrentStateAndActions(IStateManager sm, Message message) {
+        loadSaveFiles(message);
 
         List<String> actions = new ArrayList<>();
         IState currentState = sm.getCurrentState();
@@ -115,13 +113,13 @@ public class DevToolsActionListener implements IActionListener {
                 actions.add(key);
                 actions.add(sc.getActionToStateMapping().get(key).toString().replace("class ", ""));
             }
-            screen.put("actions", actions);
-            screen.put("actionsSize", actions.size());
-            screen.put("currentState", sm.getApplicationState().getCurrentContext().getFlowConfig().getStateConfig(currentState));
+            message.put("actions", actions);
+            message.put("actionsSize", actions.size());
+            message.put("currentState", sm.getApplicationState().getCurrentContext().getFlowConfig().getStateConfig(currentState));
         }
     }
 
-    private void loadSaveFiles(Screen screen) {
+    private void loadSaveFiles(Message message) {
 
         List<String> saveFiles = new ArrayList<>();
         File dir = null;
@@ -142,10 +140,10 @@ public class DevToolsActionListener implements IActionListener {
             logger.warn("Cannot load save files from " + SAVE_PATH);
         }
 
-        screen.put("saveFiles", saveFiles);
+        message.put("saveFiles", saveFiles);
     }
 
-    private void setScopes(IStateManager sm, Screen screen) {
+    private void setScopes(IStateManager sm, Message message) {
         try {
             Map<String, List<ScopeField>> scopes = new HashMap<>();
             scopes.put("ConversationScope", buildScope(sm.getApplicationState().getScope().getConversationScope()));
@@ -153,7 +151,7 @@ public class DevToolsActionListener implements IActionListener {
             scopes.put("SessionScope", buildScope(sm.getApplicationState().getScope().getSessionScope()));
             scopes.put("FlowScope", buildScope(sm.getApplicationState().getCurrentContext().getFlowScope()));
             scopes.put("ConfigScope", buildConfigScope(sm.getApplicationState().getCurrentContext().getFlowConfig().getConfigScope()));
-            screen.put("scopes", scopes);
+            message.put("scopes", scopes);
         } catch (Exception ex) {
             logger.warn("Error loading in Developer Tool application scopes. Deleting local storage may fix this.", ex);
         }

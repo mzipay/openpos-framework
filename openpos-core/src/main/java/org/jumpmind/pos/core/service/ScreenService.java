@@ -165,7 +165,7 @@ public class ScreenService implements IScreenService, IActionListener {
                 logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
 
                 Screen lastDialog = removeLastDialog(appId, deviceId);
-                if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getType())) {
+                if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getScreenType())) {
                     logger.debug("Instructing node {} to clear dialog.", deviceId);
                     Message msg = new Message();
                     msg.put("clearDialog", true);
@@ -256,7 +256,7 @@ public class ScreenService implements IScreenService, IActionListener {
             }
             if (screen.getTemplate().isDialog()) {
                 applicationState.setLastDialog(screen);
-            } else if (screen.getType() != "Toast") {
+            } else if (screen.getScreenType() != "Toast") {
                 applicationState.setLastScreen(screen);
                 applicationState.setLastDialog(null);
             }
@@ -328,7 +328,7 @@ public class ScreenService implements IScreenService, IActionListener {
                 .getAnnotation(org.jumpmind.pos.core.model.annotations.Screen.class);
         if (screenAnnotation != null) {
             screen.setName(screenAnnotation.name());
-            screen.setType(screenAnnotation.type());
+            screen.setScreenType(screenAnnotation.type());
         }
     }
 
@@ -367,7 +367,7 @@ public class ScreenService implements IScreenService, IActionListener {
 
     protected void logScreenTransition(String deviceId, Screen screen) throws JsonProcessingException {
         if (loggerGraphical.isInfoEnabled()) {
-            logger.info("Show screen on node \"" + deviceId + "\"\n" + drawBox(screen.getName(), screen.getType())
+            logger.info("Show screen on node \"" + deviceId + "\"\n" + drawBox(screen.getName(), screen.getScreenType())
                     + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
         } else {
             logger.info("Show screen on node \"" + deviceId + "\"\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));

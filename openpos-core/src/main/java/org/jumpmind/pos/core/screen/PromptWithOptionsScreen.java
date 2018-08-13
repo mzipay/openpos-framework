@@ -16,7 +16,7 @@ public class PromptWithOptionsScreen extends PromptScreen {
     public PromptWithOptionsScreen(List<OptionItem> options) {
         super();
         this.options = options;
-        setType(ScreenType.PromptWithOptions);
+        setScreenType(ScreenType.PromptWithOptions);
     }
 
     public void addOption(OptionItem option) {

@@ -32,7 +32,7 @@ public class ChooseOptionsScreen extends DynamicFormScreen {
     }
 
     public ChooseOptionsScreen( List<OptionItem> options, SelectionMode selectionMode ) {
-        setType(ScreenType.ChooseOptions);
+        setScreenType(ScreenType.ChooseOptions);
         this.options = options;
         this.selectionMode = selectionMode;
     }

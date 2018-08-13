@@ -12,7 +12,7 @@ public class ItemSearchResultsScreen extends PromptScreen {
     private List<SellItem> items = new ArrayList<>();
 
     public ItemSearchResultsScreen() {
-        this.setType(ScreenType.ItemSearchResults);
+        this.setScreenType(ScreenType.ItemSearchResults);
         this.setTemplate(new SellTemplate());
     }
 

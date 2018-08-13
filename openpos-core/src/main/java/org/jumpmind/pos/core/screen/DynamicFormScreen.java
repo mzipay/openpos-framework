@@ -20,7 +20,7 @@ public class DynamicFormScreen extends Screen implements IHasForm {
     private List<String> alternateSubmitActions = new ArrayList<String>();
 
     public DynamicFormScreen() {
-        setType(ScreenType.DynamicForm);
+        setScreenType(ScreenType.DynamicForm);
         setTemplate(new SellTemplate());
     }
 

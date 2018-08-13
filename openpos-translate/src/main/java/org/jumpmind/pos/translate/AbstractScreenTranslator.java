@@ -78,7 +78,7 @@ abstract public class AbstractScreenTranslator<T extends Screen> implements ITra
     }
 
     public T build() {
-        logger.info("{} is building a screen of type '{}'", getClass().getSimpleName(), getScreen().getType());
+        logger.info("{} is building a screen of type '{}'", getClass().getSimpleName(), getScreen().getScreenType());
         if (isBlank(screen.getIcon())) {
             screen.setIcon(iconRegistry.get(screen.getName()));
         }
