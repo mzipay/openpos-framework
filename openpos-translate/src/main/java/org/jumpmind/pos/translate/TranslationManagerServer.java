@@ -229,6 +229,8 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
                     ITranslator newTranslator = translatorFactory.createScreenTranslator(legacyScreen, subscriber.getAppId(),
                             subscriber.getProperties());
 
+                    this.lastTranslatorByAppId.put(subscriber.getAppId(), newTranslator);
+                    
                     if (newTranslator != null) {
                         newTranslator.setPosSessionInfo(posSessionInfo);
                     }
@@ -242,11 +244,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
                         ((IActionTranslator) newTranslator).translate(this, subscriber, legacyScreen);
                     }
 
-                    this.lastTranslatorByAppId.put(subscriber.getAppId(), newTranslator);
-
-                } else {
-//                    this.lastTranslatorByAppId.put(subscriber.getAppId(), null);
-                }
+                } 
             }
         }
         return screenShown;

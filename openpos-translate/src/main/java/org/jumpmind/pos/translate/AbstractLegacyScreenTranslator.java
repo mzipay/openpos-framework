@@ -107,13 +107,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         buildStatusItems();
         
         ILegacyStatusBeanModel statusModel = legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);
-        int tillStatus;
-        if(statusModel.getScreenName() == null) {
-            tillStatus = this.posSessionInfo.getTillThresholdStatus();
-        } else {
-            tillStatus = statusModel.checkThresholdStatus(legacyStoreProperties.getStoreNumber());
-            this.posSessionInfo.setTillThresholdStatus(tillStatus);
-        }
+        int tillStatus = statusModel.checkThresholdStatus(posSessionInfo);
         
         if (legacyStoreProperties != null && screen.getTemplate() instanceof SellTemplate) {
             SellTemplate template = screen.getTemplate();
