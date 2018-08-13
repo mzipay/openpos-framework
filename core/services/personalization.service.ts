@@ -90,7 +90,7 @@ export class PersonalizationService {
 
     public getPersonalizationScreen(): any {
         // tslint:disable-next-line:max-line-length
-        return { type: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000), name: 'Device Setup', refreshAlways: true, template: { type: 'Blank', dialog: false } };
+        return { screenType: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000), name: 'Device Setup', refreshAlways: true, template: { type: 'Blank', dialog: false } };
     }
 
     public getTheme(): string {
