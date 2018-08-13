@@ -6,3 +6,4 @@ export * from './loader/loader-state';
 export * from './personalization/personalization.component';
 export * from './abstract-template';
 export * from './startup/startup.component';
+export * from './startup/personalization-startup-task';
