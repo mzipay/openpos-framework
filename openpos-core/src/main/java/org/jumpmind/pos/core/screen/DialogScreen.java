@@ -21,7 +21,7 @@ public class DialogScreen extends Screen {
     private DialogProperties dialogProperties;
     
     public DialogScreen() {
-        setType(ScreenType.Dialog);
+        setScreenType(ScreenType.Dialog);
         getTemplate().setDialog(true);
     }
     

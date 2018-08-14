@@ -13,7 +13,7 @@ public class JournalDetailScreen extends Screen {
     private int size;
     
     public JournalDetailScreen() {
-        setType(ScreenType.JournalDetail);
+        setScreenType(ScreenType.JournalDetail);
         setTemplate(new SellTemplate());
     }
     

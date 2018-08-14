@@ -24,6 +24,7 @@ public class POSSessionInfo implements Serializable {
     private boolean trainingMode = false;
     private boolean adminMode = false;
     private List<String> itemsToAddToTheSale = new ArrayList<>();
+    private int tillThresholdStatus = 0;
     
     private Map<String, Object> attributes = new HashMap<>();
 
@@ -164,5 +165,13 @@ public class POSSessionInfo implements Serializable {
                 append("operatorLoginId", operatorLoginId).
                 append("operatorName", operatorName).
                 toString();
+    }
+
+    public int getTillThresholdStatus() {
+        return tillThresholdStatus;
+    }
+
+    public void setTillThresholdStatus(int tillThresholdStatus) {
+        this.tillThresholdStatus = tillThresholdStatus;
     }
 }

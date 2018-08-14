@@ -25,7 +25,7 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Screen
                 this.excludeLabelTags.add(string);
             }
         }
-        screen.setType(ScreenType.Options);
+        screen.setScreenType(ScreenType.Options);
         screen.setIcon(icon);
         SellTemplate template = new SellTemplate();
         screen.setTemplate(template);

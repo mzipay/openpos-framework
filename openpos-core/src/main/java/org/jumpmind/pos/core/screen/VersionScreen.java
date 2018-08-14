@@ -12,7 +12,7 @@ public class VersionScreen extends Screen {
     private List<MenuItem> localMenuItems = new ArrayList<>();
 
     public VersionScreen() {
-        setType(ScreenType.Version);
+        setScreenType(ScreenType.Version);
     }
 
     public List<Version> getVersions() {

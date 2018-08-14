@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -78,13 +76,11 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Autowired
     LogFormatter logFormatter;
-    
+
     @Autowired
     IMessageService messageService;
 
     Queue<IScreenInterceptor> screenInterceptors = new ConcurrentLinkedQueue<>();
-
-    Map<String, Map<String, ApplicationState>> applicationStateByAppIdByNodeId = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -151,11 +147,10 @@ public class ScreenService implements IScreenService, IActionListener {
         }
         return result;
     }
-    
 
     @Override
-    public Collection<String> getRegisteredTypes() {        
-        return Arrays.asList(new String[] { "Screen"});
+    public Collection<String> getRegisteredTypes() {
+        return Arrays.asList(new String[] { "Screen", "KeepAlive" });
     }
 
     @Override
@@ -170,7 +165,7 @@ public class ScreenService implements IScreenService, IActionListener {
                 logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
 
                 Screen lastDialog = removeLastDialog(appId, deviceId);
-                if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getType())) {
+                if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getScreenType())) {
                     logger.debug("Instructing node {} to clear dialog.", deviceId);
                     Message msg = new Message();
                     msg.put("clearDialog", true);
@@ -195,7 +190,8 @@ public class ScreenService implements IScreenService, IActionListener {
     }
 
     protected Screen removeLastDialog(String appId, String deviceId) {
-        ApplicationState applicationState = getApplicationState(appId, deviceId);
+        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
+        ApplicationState applicationState = stateManager.getApplicationState();
         if (applicationState != null && applicationState.getLastDialog() != null) {
             Screen lastDialog = applicationState.getLastDialog();
             applicationState.setLastDialog(null);
@@ -207,7 +203,8 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Override
     public Screen getLastDialog(String appId, String deviceId) {
-        ApplicationState applicationState = getApplicationState(appId, deviceId);
+        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
+        ApplicationState applicationState = stateManager.getApplicationState();
         if (applicationState != null) {
             return applicationState.getLastDialog();
         } else {
@@ -217,7 +214,8 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Override
     public Screen getLastScreen(String appId, String deviceId) {
-        ApplicationState applicationState = getApplicationState(appId, deviceId);
+        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
+        ApplicationState applicationState = stateManager.getApplicationState();
         if (applicationState != null) {
             return applicationState.getLastScreen();
         } else {
@@ -227,8 +225,9 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Override
     public void showScreen(String appId, String deviceId, Screen screen) {
-        ApplicationState applicationState = getApplicationState(appId, deviceId);
-        if (screen != null) {
+        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
+        if (screen != null && stateManager != null) {
+            ApplicationState applicationState = stateManager.getApplicationState();
             screen.setSequenceNumber(applicationState.incrementAndScreenSequenceNumber());
             try {
                 applyAnnotations(screen);
@@ -247,10 +246,17 @@ public class ScreenService implements IScreenService, IActionListener {
                     logger.error("Failed to write screen to JSON", ex);
                 }
             }
-            messageService.sendMessage(appId, deviceId, screen);
+            if (!stateManager.areAllSessionsAuthenticated()) {
+                logger.warn("Not sending screen because a session is attached that is not authenticated");
+            } else if (!stateManager.areAllSessionsCompatible()) {
+                logger.warn("Not sending screen because a session is attached that is not compatible");
+
+            } else {
+                messageService.sendMessage(appId, deviceId, screen);
+            }
             if (screen.getTemplate().isDialog()) {
                 applicationState.setLastDialog(screen);
-            } else if( screen.getType() != "Toast") {
+            } else if (screen.getScreenType() != "Toast") {
                 applicationState.setLastScreen(screen);
                 applicationState.setLastDialog(null);
             }
@@ -292,7 +298,6 @@ public class ScreenService implements IScreenService, IActionListener {
 
     protected Form buildForm(Screen screen) {
         Form form = new Form();
-
         for (Field field : screen.getClass().getDeclaredFields()) {
             FormTextField textFieldAnnotation = field.getAnnotation(FormTextField.class);
             if (textFieldAnnotation != null) {
@@ -323,13 +328,14 @@ public class ScreenService implements IScreenService, IActionListener {
                 .getAnnotation(org.jumpmind.pos.core.model.annotations.Screen.class);
         if (screenAnnotation != null) {
             screen.setName(screenAnnotation.name());
-            screen.setType(screenAnnotation.type());
+            screen.setScreenType(screenAnnotation.type());
         }
     }
 
     @Override
     public void refresh(String appId, String deviceId) {
-        ApplicationState applicationState = getApplicationState(appId, deviceId);
+        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
+        ApplicationState applicationState = stateManager.getApplicationState();
         if (applicationState != null && applicationState.getLastScreen() != null) {
             showScreen(appId, deviceId, applicationState.getLastScreen());
         }
@@ -361,7 +367,7 @@ public class ScreenService implements IScreenService, IActionListener {
 
     protected void logScreenTransition(String deviceId, Screen screen) throws JsonProcessingException {
         if (loggerGraphical.isInfoEnabled()) {
-            logger.info("Show screen on node \"" + deviceId + "\"\n" + drawBox(screen.getName(), screen.getType())
+            logger.info("Show screen on node \"" + deviceId + "\"\n" + drawBox(screen.getName(), screen.getScreenType())
                     + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
         } else {
             logger.info("Show screen on node \"" + deviceId + "\"\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen));
@@ -471,24 +477,5 @@ public class ScreenService implements IScreenService, IActionListener {
         buff.append("\r\n");
         return buff.toString();
     }
-
-    protected ApplicationState getApplicationState(String appId, String deviceId) {
-        Map<String, ApplicationState> applicationStateByNodeId = this.applicationStateByAppIdByNodeId.get(appId);
-        if (applicationStateByNodeId != null) {
-            return applicationStateByNodeId.get(deviceId);
-        } else {
-            return null;
-        }
-    }
-
-    public void setApplicationState(ApplicationState applicationState) {
-        Map<String, ApplicationState> applicationStateByNodeId = this.applicationStateByAppIdByNodeId.get(applicationState.getAppId());
-        if (applicationStateByNodeId == null) {
-            applicationStateByNodeId = new HashMap<>();
-            this.applicationStateByAppIdByNodeId.put(applicationState.getAppId(), applicationStateByNodeId);
-        }
-        applicationStateByNodeId.put(applicationState.getNodeId(), applicationState);
-    }
-
 
 }

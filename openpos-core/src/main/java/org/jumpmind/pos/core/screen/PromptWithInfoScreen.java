@@ -26,7 +26,7 @@ public class PromptWithInfoScreen extends PromptScreen {
         if (infoFields != null) {
             infoFields.stream().forEachOrdered(f -> this.form.addFormElement(f));
         }
-        this.setType(ScreenType.PromptWithInfo);
+        this.setScreenType(ScreenType.PromptWithInfo);
     }
     
     public void addInfoField(FormDisplayField infoField) {

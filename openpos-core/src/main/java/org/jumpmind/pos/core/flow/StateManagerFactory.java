@@ -48,6 +48,18 @@ public class StateManagerFactory implements IStateManagerFactory {
     private Map<String, Map<String, StateManager>> stateManagersByAppIdByNodeId = new HashMap<>();
 
     @Override
+    public void removeSessionIdVariables(String sessionId) {
+        synchronized (this) {
+            for (Map<String, StateManager> map : stateManagersByAppIdByNodeId.values()) {
+                for (StateManager stateManager : map.values()) {
+                    stateManager.removeSessionAuthentication(sessionId);
+                    stateManager.removeSessionCompatible(sessionId);
+                }
+            }
+        }
+    }
+
+    @Override
     public IStateManager retrieve(String appId, String nodeId) {
         Map<String, StateManager> stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
         if (stateManagersByNodeId != null) {
@@ -75,23 +87,23 @@ public class StateManagerFactory implements IStateManagerFactory {
                 if (stateManager == null) {
                     stateManager = applicationContext.getBean(StateManager.class);
                     stateManager.setInitialFlowConfig(flowConfigProvider.getConfig(appId, nodeId));
-                    stateManager.init(appId, nodeId);
                     stateManagersByNodeId.put(nodeId, stateManager);
+                    stateManager.init(appId, nodeId);
                 }
             }
         }
         return stateManager;
     }
-    
+
     public List<StateManager> getAllStateManagers() {
         List<StateManager> allStateManagers = new ArrayList<>();
-        
+
         for (Map<String, StateManager> stateManagersByNodeId : stateManagersByAppIdByNodeId.values()) {
             for (StateManager stateManager : stateManagersByNodeId.values()) {
                 allStateManagers.add(stateManager);
             }
         }
-        
+
         return allStateManagers;
     }
 

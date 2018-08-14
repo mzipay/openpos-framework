@@ -21,7 +21,7 @@ public class TenderingScreen extends Screen {
     private MenuItem actionButton;
     
     public TenderingScreen() {
-        setType(ScreenType.Tendering);
+        setScreenType(ScreenType.Tendering);
     }
     
     public List<IItem> getTenderItems() {

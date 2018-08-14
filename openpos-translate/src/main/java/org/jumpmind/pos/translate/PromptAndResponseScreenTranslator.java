@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.FieldInputType;
+import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
 import org.jumpmind.pos.core.template.SellTemplate;
@@ -12,6 +14,7 @@ import org.jumpmind.pos.core.template.SellTemplate;
 public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends AbstractPromptScreenTranslator<T> {
 
     private boolean addLocalMenuItems = false;
+    protected InteractionMacro undoMacro;
 
     public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems) {
         this(legacyScreen, screenClass, addLocalMenuItems, (FieldInputType) null);
@@ -59,5 +62,18 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
     protected void addActionButton() {
         screen.setActionButton(new MenuItem("Next", "Next", "keyboard_arrow_right"));
     }
+    
+    public void setUndoMacro(InteractionMacro undoMacro) {
+        this.undoMacro = undoMacro;
+    }
 
+    @Override
+    public void handleAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,
+            Form formResults) {
+        if ("Undo".equals(action.getName()) && undoMacro != null) {
+            tmServer.executeMacro(undoMacro);
+        } else {
+            super.handleAction(subscriber, tmServer, action, formResults);
+        }
+    }
 }

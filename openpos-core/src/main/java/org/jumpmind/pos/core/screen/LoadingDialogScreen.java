@@ -10,7 +10,7 @@ public class LoadingDialogScreen extends Screen {
 	private String dismissAction;
 	
 	public LoadingDialogScreen() {
-		this.setType(ScreenType.LoadingDialog);
+		this.setScreenType(ScreenType.LoadingDialog);
 		this.asDialog();
 	}
 	

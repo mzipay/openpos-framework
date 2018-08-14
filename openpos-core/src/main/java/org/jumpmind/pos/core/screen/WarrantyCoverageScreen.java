@@ -13,7 +13,7 @@ public class WarrantyCoverageScreen extends Screen {
     private String text;
     
     public WarrantyCoverageScreen() {
-        setType(ScreenType.WarrantyCoverage);
+        setScreenType(ScreenType.WarrantyCoverage);
     }
 
     public List<IItem> getWarrantyItems() {

@@ -10,7 +10,7 @@ public class HomeScreen extends Screen {
     List<MenuItem> menuItems = new ArrayList<>();
 
     public HomeScreen() {
-        this.setType(ScreenType.Home);
+        this.setScreenType(ScreenType.Home);
     }
 
     public void setMenuItems(List<MenuItem> menuItems) {

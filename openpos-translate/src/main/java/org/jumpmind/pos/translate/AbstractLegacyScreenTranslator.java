@@ -105,11 +105,16 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         buildBackButton();
         logAvailableLocalMenuItems();
         buildStatusItems();
+        
+        ILegacyStatusBeanModel statusModel = legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);
+        int tillStatus = statusModel.checkThresholdStatus(posSessionInfo);
+        
         if (legacyStoreProperties != null && screen.getTemplate() instanceof SellTemplate) {
             SellTemplate template = screen.getTemplate();
             Workstation workstation = new Workstation();
             workstation.setStoreId(legacyStoreProperties.getStoreNumber());
             workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
+            workstation.setTillThresholdStatus(tillStatus);
             template.setWorkstation(workstation);
         }
         
@@ -118,6 +123,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             Workstation workstation = new Workstation();
             workstation.setStoreId(legacyStoreProperties.getStoreNumber());
             workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
+            workstation.setTillThresholdStatus(tillStatus);
             template.setWorkstation(workstation);
         }
         setScreenProperties();

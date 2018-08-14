@@ -9,6 +9,8 @@ public class Workstation implements Serializable {
     String storeId;
     
     String workstationId;
+    
+    int tillThresholdStatus;
 
     public String getStoreId() {
         return storeId;
@@ -24,6 +26,14 @@ public class Workstation implements Serializable {
 
     public void setWorkstationId(String workstationId) {
         this.workstationId = workstationId;
+    }
+    
+    public int getTillThresholdStatus() {
+        return tillThresholdStatus;
+    }
+    
+    public void setTillThresholdStatus(int tillThresholdStatus) {
+        this.tillThresholdStatus = tillThresholdStatus;
     }
     
     

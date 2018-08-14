@@ -14,7 +14,7 @@ public class SelectionListScreen extends Screen {
     private boolean multiSelect = false;
 
     public SelectionListScreen() {
-        this.setType(ScreenType.SelectionList);
+        this.setScreenType(ScreenType.SelectionList);
     }
 
     public List<SelectionListItem> getSelectionList() {

@@ -3,7 +3,6 @@ package org.jumpmind.pos.core.service;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletResponse;
 
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.FlowException;
@@ -11,13 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,22 +58,9 @@ public class MessageService implements IMessageService {
         return "{ \"pong\": \"true\" }";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "app/{appId}/node/{nodeId}/{action}/{payload}")
-    public void getAction(
-            @PathVariable String appId,
-            @PathVariable String nodeId,
-            @PathVariable String action,
-            @PathVariable String payload,
-            HttpServletResponse resp) {
-        logger.info("Received a request for {} {} {} {}", appId, nodeId, action, payload);
-        for (IActionListener iActionListener : actionListeners) {
-            // ???
-        }
-    }
-
 
     @MessageMapping("action/app/{appId}/node/{nodeId}")
-    public void action(@DestinationVariable String appId, @DestinationVariable String nodeId, Action action) {
+    public void action(@DestinationVariable String appId, @DestinationVariable String nodeId, @Payload Action action, Message<?> message) {
         for (IActionListener actionListener : actionListeners) {
             if (action.getType() != null && actionListener.getRegisteredTypes() != null &&
                     actionListener.getRegisteredTypes().contains(action.getType())) {

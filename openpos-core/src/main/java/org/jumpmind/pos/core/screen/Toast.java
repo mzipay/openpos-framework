@@ -17,7 +17,7 @@ public class Toast extends Screen {
 	}
 	
 	public Toast() {
-		setType("Toast");
+		setScreenType("Toast");
 		setName("Toast");
 	}
 	

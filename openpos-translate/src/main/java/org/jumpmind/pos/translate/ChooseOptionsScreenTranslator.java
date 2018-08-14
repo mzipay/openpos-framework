@@ -27,7 +27,7 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
     
     public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass, boolean filterDisabledOptions, String[] filteredOptions) {
         super(headlessScreen, screenClass);
-        screen.setType(ScreenType.ChooseOptions);
+        screen.setScreenType(ScreenType.ChooseOptions);
         this.filterDisabledOptions = filterDisabledOptions;
         this.filteredOptions = filteredOptions;
     }
@@ -44,7 +44,7 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
         super(headlessScreen, screenClass);
         this.optionItemEvalFunc = optionFilter;
         this.filterDisabledOptions = optionFilter == null;  // If there is an optionFilter, let the optionFilter handle filtering
-        screen.setType(ScreenType.ChooseOptions);
+        screen.setScreenType(ScreenType.ChooseOptions);
     }
     
     public void setUndoMacro(InteractionMacro undoMacro) {

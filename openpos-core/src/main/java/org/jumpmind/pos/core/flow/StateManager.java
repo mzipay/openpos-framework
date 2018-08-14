@@ -20,6 +20,7 @@
 package org.jumpmind.pos.core.flow;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -87,6 +88,11 @@ public class StateManager implements IStateManager {
     private long sessionTimeoutMillis = 0;
     
     private Action sessionTimeoutAction;
+    
+    private Map<String, Boolean> sessionAuthenticated = new HashMap<>();
+    
+    private Map<String, Boolean> sessionCompatible = new HashMap<>();
+
 
     public void init(String appId, String nodeId) {
         this.appId = appId;
@@ -110,7 +116,6 @@ public class StateManager implements IStateManager {
         }
         
         applicationState.getScope().setNodeScope("stateManager", this);
-        screenService.setApplicationState(applicationState);
         
         if (resumeState) {
             refreshScreen();
@@ -118,6 +123,44 @@ public class StateManager implements IStateManager {
             applicationState.setCurrentContext(new StateContext(initialFlowConfig, null, null));
             transitionTo(new Action("Startup"), initialFlowConfig.getInitialState());
         }
+    }
+    
+    @Override
+    public void setSessionAuthenticated(String sessionId, boolean authenticated) {
+        this.sessionAuthenticated.put(sessionId, authenticated);
+    }
+    
+    public void removeSessionAuthentication(String sessionId) {
+        this.sessionAuthenticated.remove(sessionId);
+    }
+    
+    @Override
+    public boolean isSessionAuthenticated(String sessionId) {        
+        return this.sessionAuthenticated.get(sessionId) != null && this.sessionAuthenticated.get(sessionId);
+    }
+    
+    @Override
+    public boolean areAllSessionsAuthenticated() {
+        return !sessionAuthenticated.values().contains(false);
+    }
+    
+    @Override
+    public void setSessionCompatible(String sessionId, boolean compatible) {
+        this.sessionCompatible.put(sessionId, compatible);
+    }
+    
+    @Override
+    public boolean isSessionCompatible(String sessionId) {        
+        return this.sessionCompatible.get(sessionId) != null && this.sessionCompatible.get(sessionId);
+    }
+    
+    @Override
+    public boolean areAllSessionsCompatible() {        
+        return !sessionCompatible.values().contains(false);
+    }
+    
+    public void removeSessionCompatible(String sessionId) {
+        this.sessionCompatible.remove(sessionId);
     }
 
     protected void transitionTo(Action action, StateConfig stateConfig) {
@@ -376,13 +419,15 @@ public class StateManager implements IStateManager {
 
     @Override
     public void showScreen(Screen screen) {
+        keepAlive();
+
         if (applicationState.getCurrentContext() == null) {
             throw new FlowException("There is no applicationState.getCurrentContext() on this StateManager.  HINT: States should use @In(scope=ScopeType.Node) to get the StateManager, not @Autowired.");
         }
         if (applicationState.getCurrentContext().getState() != null && applicationState.getCurrentContext().getState() instanceof IScreenInterceptor) {
             screen = ((IScreenInterceptor)applicationState.getCurrentContext().getState()).intercept(appId, nodeId, screen);            
         }
-        
+                
         if (screen != null) {
             sessionTimeoutMillis = screen.getSessionTimeoutMillis();
             sessionTimeoutAction = screen.getSessionTimeoutAction();

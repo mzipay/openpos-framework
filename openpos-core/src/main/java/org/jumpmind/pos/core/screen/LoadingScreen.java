@@ -14,7 +14,7 @@ public class LoadingScreen extends Screen {
     private List<String> message = new ArrayList<>();
 
     public LoadingScreen() {
-        setType(ScreenType.Loading);
+        setScreenType(ScreenType.Loading);
     }
 
     public String getTitle() {

@@ -42,10 +42,16 @@ public interface IStateManager {
     public IState getCurrentState();
     public IUI getUI();
     public ApplicationState getApplicationState();
-	//public StateContext getCurrentStateContext();
-	//public FlowConfig getCurrentConfig();
 	public void performOutjections(Object object);
 	public void setApplicationState(ApplicationState applicationState);
 	public void performInjections(Object object);
+	public void setSessionAuthenticated(String sessionId, boolean authenticated);
+	public boolean isSessionAuthenticated(String sessionId);
+	public boolean areAllSessionsAuthenticated();
+    public void setSessionCompatible(String sessionId, boolean compatible);
+    public boolean isSessionCompatible(String sessionId);
+    public boolean areAllSessionsCompatible();
+	
+	
     
 }

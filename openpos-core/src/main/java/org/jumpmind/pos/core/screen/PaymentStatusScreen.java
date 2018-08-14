@@ -15,6 +15,6 @@ public class PaymentStatusScreen extends Screen {
     }
 
     public PaymentStatusScreen() {
-        setType(ScreenType.PaymentStatus);
+        setScreenType(ScreenType.PaymentStatus);
     }
 }
