@@ -24,6 +24,7 @@ import { SellItemDetailComponent } from './sell-item-detail/sell-item-detail.com
 import { SignatureCaptureComponent } from './signature-capture/signature-capture.component';
 import { StaticTableComponent } from './static-table/static-table.component';
 import { ItemListComponent } from './item-list/item-list.component';
+import { MultiselectItemListComponent } from './multiselect-item-list/multiselect-item-list.component';
 import { LoginComponent } from './login/login.component';
 import { OptionsComponent } from './options/options.component';
 import { TillCountComponent } from './till-count/till-count.component';
@@ -63,6 +64,7 @@ const screens = [
     FormComponent,
     HomeComponent,
     ItemListComponent,
+    MultiselectItemListComponent,
     LoginComponent,
     PaymentStatusComponent,
     PromptComponent,
