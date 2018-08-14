@@ -26,11 +26,15 @@ export class StartupService {
         list.sort((a, b) => a[1].order - b[1].order );
 
         // Run the tasks in order
-        this.promiseLoop(list,
+        this.promiseLoop(
+            list,
             // For the operation to execute, just run the task
             element => {
                 const currentTask = element[1];
-                return currentTask.execute(startupComponent);
+                console.log(`${currentTask.name} startup task is executing...`);
+                const resultPromise = currentTask.execute(startupComponent);
+                resultPromise.then(result => console.log(`${currentTask.name} startup task finished with result: '${result}'.`));
+                return resultPromise;
             },
             // The condition below will cause the task execution to stop
             // upon the first failed task.
@@ -53,7 +57,6 @@ export class StartupService {
 
         return array.reduce((promise: Promise<R>, current: T) => {
             return promise.then((value: R) => {
-                console.log(`Promise returned: ${value}`);
                 if (predicate(value)) {
                     return promise;
                 }
