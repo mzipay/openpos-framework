@@ -1,0 +1,58 @@
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
+    <!-- The mat-card tag below was copied from transaction.component. -->
+
+    <mat-card fxFlex="0 1 100%" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start" style="padding-top:6px;">
+        <mat-toolbar *ngIf="areAnyItemsSelected()" class="page-content-card" color="primary" style="padding-top:20px;padding-bottom:20px;">
+            <span>{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</span>
+            <span fxFlex="1 1 auto"></span>
+            <span>
+                <button *ngIf="!screen.readOnly && isAddActionPresent()" mat-icon-button color="primary-inverse" (click)="addItemsToSale(selectedItems)">
+                    <mat-icon>add_circle</mat-icon>
+                </button>
+            </span>
+        </mat-toolbar>
+        <mat-card-content #scrollList ngClass.xs="xs" style="padding-top:6px;">
+            <app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems" (selectedItemListChange)="onItemListChange($event)">
+                <ng-template let-item>
+                    <div fxLayoutAlign="space-between" fxLayout.xs="column">
+                        <div fxFlex="90" fxAlign="left" >
+                            {{item.description}}<br/>
+                            <span class="muted-color">
+                                {{item.subtitle}}&nbsp;
+                                <!---
+                                <mat-chip-list>
+                                    {{item.subtitle}}&nbsp;
+                                    <mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
+                                </mat-chip-list>
+                                -->
+                            </span>
+                        </div>	
+                        <div fxAlign="right">
+                            <span class="primary text-md">
+                                <span class="super-currency-symbol">$</span>{{item.amount}}
+                            </span>
+                        </div>	
+                        <div fxAlign="right" >
+                            <button *ngIf="isAnyActionPresent() && selectedItems.length == 0" mat-icon-button color="primary" (click)="openItemDialog(item)">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                        </div>
+                     </div>
+                </ng-template>
+            </app-selectable-item-list> 
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<!--
+    This was how the product list was originally displayed.
+
+<ng-template #itemsList>
+    <app-product-list #productList [showItemIcon]="! isItemClickDisabled() && selectionMode ==='Single'" [items]="items" 
+        (itemClick)="isItemClickDisabled() || onItemClick($event)"
+        (itemSelected)="isItemSelectedDisabled() || onItemSelected($event)"
+        [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)"
+        [itemClass]="condensedListDisplay ? 'item-list-condensed' : ''" [selectionMode]='getSelectionModeAsEnum()'>
+    </app-product-list>
+</ng-template>
+-->

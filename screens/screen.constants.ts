@@ -1,3 +1,4 @@
+import { MultiselectItemListComponent } from './multiselect-item-list/multiselect-item-list.component';
 import { BasicItemSearchComponent } from './basic-item-search/basic-item-search.component';
 import { ChooseOptionsComponent } from './choose-options/choose-options.component';
 import { EmbeddedWebPageComponent } from './embedded-web-page/embedded-web-page.component';
@@ -53,6 +54,7 @@ export const ScreenConstants = {
         { name: 'Login', component: LoginComponent },
         { name: 'Home', component: HomeComponent },
         { name: 'ItemList', component: ItemListComponent },
+        { name: 'MultiselectItemList', component: MultiselectItemListComponent },
         { name: 'PaymentStatus', component: PaymentStatusComponent },
         { name: 'Prompt', component: PromptComponent },
         { name: 'PromptWithOptions', component: PromptWithOptionsComponent },
@@ -100,6 +102,7 @@ export const ScreenConstants = {
         { name: 'LoginDialog', component: LoginDialogComponent },
         { name: 'Home', component: HomeComponent },
         { name: 'ItemList', component: ItemListComponent },
+        { name: 'MultiselectItemList', component: MultiselectItemListComponent },
         { name: 'PaymentStatus', component: PaymentStatusComponent },
         { name: 'Prompt', component: PromptComponent },
         { name: 'PromptWithOptions', component: PromptWithOptionsComponent },
