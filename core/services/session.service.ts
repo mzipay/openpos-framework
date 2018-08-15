@@ -358,7 +358,7 @@ export class SessionService implements IMessageHandler {
             return; // As with DeviceRequest, return to avoid dismissing loading screen
         } else if (message.screenType === 'Toast') {
             const toast = message as IToastScreen;
-            this.snackBar.open(toast.message, null, {
+            this.snackBar.open(toast.message, toast.duration === 0 ? 'X' : null, {
                 duration: toast.duration,
                 panelClass: this.getToastClass(toast.toastType)
             });
