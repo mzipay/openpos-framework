@@ -46,6 +46,11 @@ export class InputFormatterDirective implements ControlValueAccessor, OnInit {
         this.onTouched = fn;
     }
 
+    @HostListener('blur', ['$event'])
+    handleBlur(event) {
+        this.onTouched();
+    }
+
     @HostListener('input', ['$event'])
     handleInput(event) {
         const value = event.target.value;
