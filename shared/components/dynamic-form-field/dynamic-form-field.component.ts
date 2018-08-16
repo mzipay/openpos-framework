@@ -7,7 +7,8 @@ import { FormGroup } from '@angular/forms';
 import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-select';
 import { Subscription, Observable, of  } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ITextMask, TextMask, DynamicDateFormFieldComponent } from '../../../shared';
+import { ITextMask, TextMask } from '../../textmask';
+import { DynamicDateFormFieldComponent } from '../dynamic-date-form-field/dynamic-date-form-field.component';
 import { SessionService, ScreenService, PluginService, IFormElement, Scan, BarcodeScannerPlugin } from '../../../core';
 import { PopTartComponent } from '../pop-tart/pop-tart.component';
 
