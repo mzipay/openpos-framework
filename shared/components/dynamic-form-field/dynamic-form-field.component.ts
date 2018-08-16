@@ -7,9 +7,10 @@ import { FormGroup } from '@angular/forms';
 import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-select';
 import { Subscription, Observable, of  } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ITextMask, TextMask } from '../../../shared';
+import { ITextMask, TextMask, DynamicDateFormFieldComponent } from '../../../shared';
 import { SessionService, ScreenService, PluginService, IFormElement, Scan, BarcodeScannerPlugin } from '../../../core';
 import { PopTartComponent } from '../pop-tart/pop-tart.component';
+import { IDynamicFormField } from './dynamic-form-field.interface';
 
 @Component({
   selector: 'app-dynamic-form-field',
@@ -19,10 +20,13 @@ import { PopTartComponent } from '../pop-tart/pop-tart.component';
 export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(MatInput) field: MatInput;
+  @ViewChild(DynamicDateFormFieldComponent) dateField: DynamicDateFormFieldComponent;
 
   @Input() formField: IFormElement;
 
   @Input() formGroup: FormGroup;
+
+  public controlName: string;
 
   public keyboardLayout = 'en-US';
 
@@ -44,10 +48,28 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
 
   public values: Array<string> = [];
 
+  public focus(): void {
+    if ( this.field ) {
+        this.field.focus();
+    }
+    if ( this.dateField ) {
+        this.dateField.focus();
+    }
+  }
+
+  public isReadOnly(): boolean {
+      if (this.field) {
+          return this.field.readonly;
+      }
+      return false;
+  }
+
   constructor(public session: SessionService, public screenService: ScreenService, protected dialog: MatDialog, 
     private pluginService: PluginService) { }
 
   ngOnInit() {
+    this.controlName = this.formField.id;
+
     if (this.formField.inputType === 'ComboBox' || this.formField.inputType === 'SubmitOptionList' ||
       this.formField.inputType === 'ToggleButton' || this.formField.inputType === 'PopTart') {
       this.valuesSubscription = this.screenService.getFieldValues(this.formField.id).subscribe((data) => {

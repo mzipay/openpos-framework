@@ -3,6 +3,7 @@ import { FormGroup, AbstractControl } from '@angular/forms';
 import { SessionService, ScreenService, IFormElement, IForm, FormBuilder } from '../../../core';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
 import { ShowErrorsComponent } from '../show-errors/show-errors.component';
+import { IDynamicFormField } from '../dynamic-form-field/dynamic-form-field.interface';
 
 @Component({
   selector: 'app-dynamic-form-control',
@@ -80,14 +81,11 @@ export class DynamicFormControlComponent implements AfterViewInit {
 
   public display(delay: number) {
     const nonReadonlyChildren = this.children.filter( child => {
-        if (child.field) {
-          return child.field.readonly === false;
-        }
-        return false;
+         return child.isReadOnly() === false;
       });
 
       if ( nonReadonlyChildren.length > 0 ) {
-        setTimeout(() => nonReadonlyChildren[0].field.focus(), delay);
+        setTimeout(() => nonReadonlyChildren[0].focus(), delay);
       }
   }
 
@@ -102,7 +100,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
             return ctrl.invalid && ctrl.dirty;
         });
         if (invalidFieldKey) {
-            const invalidField = this.children.find(f => f.formField.id === invalidFieldKey).field;
+            const invalidField = this.children.find(f => f.controlName === invalidFieldKey).field;
             if (invalidField) {
                 console.log(`Setting focus to invalid field '${invalidFieldKey}'`);
                 const invalidElement = document.getElementById(invalidFieldKey);

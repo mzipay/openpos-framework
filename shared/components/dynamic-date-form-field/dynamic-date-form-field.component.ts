@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, Optional } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Optional, ViewChild } from '@angular/core';
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
 import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { MatDatepickerInputEvent } from '@angular/material';
-
+import { MatDatepickerInputEvent, MatInput } from '@angular/material';
+import { IDynamicFormField } from '../dynamic-form-field/dynamic-form-field.interface';
 
 @Component({
     selector: 'app-dynamic-date-form-field',
@@ -21,6 +21,8 @@ import { MatDatepickerInputEvent } from '@angular/material';
                          datePipe: createAutoCorrectedDatePipe('mm/dd/yy') }]
     ]);
 
+    @ViewChild(MatInput) field: MatInput;
+
     @Input() type: string;
     @Input() value: string;
     @Input() placeholder: string;
@@ -32,8 +34,6 @@ import { MatDatepickerInputEvent } from '@angular/material';
     @Input() form: FormGroup;
 
     @Output() valueChange = new EventEmitter<any>();
-
-
 
     dateMask = DynamicDateFormFieldComponent.dateMasks.get('date').mask; // [/\d/, /\d/, '/', /\d/, /\d/,'/', /\d/, /\d/, /\d/, /\d/];
     autoCorrectedDatePipe = DynamicDateFormFieldComponent.dateMasks.get('date').datePipe;
@@ -52,6 +52,11 @@ import { MatDatepickerInputEvent } from '@angular/material';
 
         }
     }
+
+    public focus(): void {
+        this.field.focus();
+    }
+
     public onDateEntered(): void {
       if (this.value) {
         this.value = this.value.replace(/_/g, '');
