@@ -3,7 +3,6 @@ import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrect
 import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MatDatepickerInputEvent, MatInput } from '@angular/material';
-import { IDynamicFormField } from '../dynamic-form-field/dynamic-form-field.interface';
 
 @Component({
     selector: 'app-dynamic-date-form-field',
