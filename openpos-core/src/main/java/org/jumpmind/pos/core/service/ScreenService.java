@@ -168,7 +168,7 @@ public class ScreenService implements IScreenService, IActionListener {
                 if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getScreenType())) {
                     logger.debug("Instructing node {} to clear dialog.", deviceId);
                     Message msg = new Message();
-                    msg.put("clearDialog", true);
+                    msg.put("type", "ClearDialog");
                     messageService.sendMessage(appId, deviceId, msg);
                 }
 
