@@ -24,6 +24,7 @@ public class Screen extends Message {
     }
 
     public Screen(String name, String type) {
+        this();
         this.screenType = type;
         this.name = name;
     }
