@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { SessionService, DeviceService, PluginService, Scan, BarcodeScannerPlugin } from '../../core';
+import { SessionService, DeviceService, PluginService, Scan, BarcodeScannerPlugin, DialogService } from '../../core';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
@@ -13,6 +13,7 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
     constructor(el: ElementRef,
         private sessionService: SessionService,
         private deviceService: DeviceService,
+        private dialogService: DialogService,
         private pluginService: PluginService) {
     }
 
@@ -42,7 +43,7 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
     }
 
     publishBarcode(scan: Scan) {
-        if (! this.sessionService.dialog) {
+        if (! this.dialogService.isDialogOpen()) {
             // Publish barcode to the server
             console.log(`Got barcode scan, publishing '${scan.value}'...`);
             this.sessionService.response = scan;

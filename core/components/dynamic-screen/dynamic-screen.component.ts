@@ -20,6 +20,7 @@ import { IScreen } from './screen.interface';
 import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem } from '../../interfaces';
 import { FileViewerComponent, TemplateDirective } from '../../../shared';
 import { PersonalizationService } from '../../services/personalization.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
     selector: 'app-dynamic-screen',
@@ -30,11 +31,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     private showUpdating = false;
 
-    private dialogRef: MatDialogRef<IScreen>;
-
     private previousScreenType: string;
-
-    private dialogOpening: boolean;
 
     private previousScreenName: string;
 
@@ -45,8 +42,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     private currentTemplateRef: ComponentRef<IScreen>;
 
     private installedTemplate: AbstractTemplate;
-
-    private lastDialogType: string;
 
     public classes = '';
 
@@ -62,9 +57,9 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     private lastSequenceNum: number;
     private lastScreenName: string;
 
-    constructor(private personalization: PersonalizationService, public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
-        public deviceService: DeviceService, public dialog: MatDialog,
-        public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
+    constructor(private personalization: PersonalizationService, public screenService: ScreenService, public session: SessionService, public toast: ToastService,
+        public deviceService: DeviceService,
+        public iconService: IconService, public overlayContainer: OverlayContainer,
         protected router: Router, private pluginService: PluginService,
         private fileUploadService: FileUploadService,
         private httpClient: HttpClient, private cd: ChangeDetectorRef,
@@ -74,35 +69,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     ngOnInit(): void {
         const self = this;
         this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
-        this.session.subscribeForDialogUpdates((dialog: any): void => self.updateDialog(dialog));
-        this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%' } }});
     }
-
 
     ngOnDestroy(): void {
         this.session.unsubscribe();
-    }
-
-    protected updateDialog(dialog?: any): void {
-        if (dialog) {
-            const dialogType = this.dialogService.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
-            if (!this.dialogOpening) {
-                if (this.dialogRef && (dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog')) {
-                    console.log('closing dialog');
-                    this.dialogRef.close();
-                    this.dialogRef = null;
-                }
-                console.log('opening dialog \'' + dialogType + '\'');
-                this.dialogOpening = true;
-                setTimeout(() => this.openDialog(dialog), 0);
-            } else {
-                console.log(`Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}`);
-            }
-        } else if (!dialog && this.dialogRef) {
-            console.log('closing dialog ref');
-            this.dialogRef.close();
-            this.dialogRef = null;
-        }
     }
 
     protected updateTemplateAndScreen(screen?: any): void {
@@ -192,56 +162,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
                     break;
             }
         }
-    }
-
-    protected openDialog(dialog: any) {
-        const dialogComponentFactory: ComponentFactory<IScreen> = this.dialogService.resolveDialog(dialog.screenType);
-        let closeable = false;
-        let closeAction = null;
-        if (dialog.template.dialogProperties) {
-            closeable = dialog.template.dialogProperties.closeable;
-            closeAction = dialog.template.dialogProperties.closeAction;
-        }
-        // By default we want to not allow the user to close by clicking off
-        // By default we need the dialog to grab focus so you cannont execute actions on the screen
-        // behind by hitting enter
-        const dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: true };
-        const dialogComponent = dialogComponentFactory.componentType;
-        if (dialog.template.dialogProperties) {
-            // Merge in any dialog properties provided on the screen
-            for (const key in dialog.template.dialogProperties) {
-                if (dialog.template.dialogProperties.hasOwnProperty(key)) {
-                    dialogProperties[key] = dialog.template.dialogProperties[key];
-                }
-            }
-            console.log(`Dialog options: ${JSON.stringify(dialogProperties)}`);
-        }
-
-        if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
-            || dialog.refreshAlways) {
-            this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
-        } else {
-            console.log(`Using previously created dialogRef. current dialog type: ${dialog.screenType}, last dialog type: ${this.lastDialogType}`);
-        }
-
-        this.dialogRef.componentInstance.show(dialog, this);
-        this.dialogOpening = false;
-        console.log('Dialog \'' + dialog.screenType + '\' opened');
-        if (dialogProperties.executeActionBeforeClose) {
-            // Some dialogs may need to execute the chosen action before
-            // they close so that actionPayloads can be included with the action
-            // before the dialog is destroyed.
-            this.dialogRef.beforeClose().subscribe(result => {
-                this.session.onAction(closeAction || result);
-            });
-        } else {
-            this.dialogRef.afterClosed().subscribe(result => {
-                this.session.onAction(closeAction || result);
-            }
-            );
-        }
-
-        this.lastDialogType = dialog.screenType;
     }
 
     public get theme() {
