@@ -1,5 +1,5 @@
 <div class="lighter" fxFlexFill fxLayout="row" fxLayoutAlign="center center">
-    <mat-card class="login-card-content" class="login-card-content mat-elevation-z0 login-dialog-div">
+    <mat-card class="login-card-content" [ngClass]="{'mat-elevation-z0': session.dialog, 'login-dialog-div': session.dialog}">
         <mat-card-title *ngIf="title">{{title}}</mat-card-title>
         <mat-card-content class="login-card-content" style="padding: 24px;">
             <mat-error>
