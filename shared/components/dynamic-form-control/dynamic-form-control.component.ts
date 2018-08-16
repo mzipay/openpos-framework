@@ -3,7 +3,6 @@ import { FormGroup, AbstractControl } from '@angular/forms';
 import { SessionService, ScreenService, IFormElement, IForm, FormBuilder } from '../../../core';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
 import { ShowErrorsComponent } from '../show-errors/show-errors.component';
-import { IDynamicFormField } from '../dynamic-form-field/dynamic-form-field.interface';
 
 @Component({
   selector: 'app-dynamic-form-control',

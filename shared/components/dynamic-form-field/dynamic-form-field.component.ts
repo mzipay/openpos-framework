@@ -10,7 +10,6 @@ import { map } from 'rxjs/operators';
 import { ITextMask, TextMask, DynamicDateFormFieldComponent } from '../../../shared';
 import { SessionService, ScreenService, PluginService, IFormElement, Scan, BarcodeScannerPlugin } from '../../../core';
 import { PopTartComponent } from '../pop-tart/pop-tart.component';
-import { IDynamicFormField } from './dynamic-form-field.interface';
 
 @Component({
   selector: 'app-dynamic-form-field',
@@ -64,7 +63,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
       return false;
   }
 
-  constructor(public session: SessionService, public screenService: ScreenService, protected dialog: MatDialog, 
+  constructor(public session: SessionService, public screenService: ScreenService, protected dialog: MatDialog,
     private pluginService: PluginService) { }
 
   ngOnInit() {
