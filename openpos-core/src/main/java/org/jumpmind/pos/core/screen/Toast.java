@@ -13,7 +13,7 @@ public class Toast extends Screen {
 	}
 	
 	public static Toast CreateWarningToast( String message ) {
-		return new Toast(message) {{ setToastType(ToastType.Warn);}};
+		return new Toast(message) {{ setToastType(ToastType.Warn); setDuration(0);}};
 	}
 	
 	public Toast() {
@@ -49,6 +49,5 @@ public class Toast extends Screen {
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
-
 }
 
