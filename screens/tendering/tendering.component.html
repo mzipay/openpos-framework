@@ -36,7 +36,7 @@
                         [(ngModel)]="tenderAmount.value"
                         [placeholder]="tenderAmount.placeholder"
                         [required]="tenderAmount.required"
-                        [formatterName]="'money'" novalidate type="tel" pattern="[0-9]*" autofocus>
+                        [formatterName]="'money'" novalidate type="tel" pattern="{{tenderAmount.pattern ? tenderAmount.pattern : '[\.0-9]*'}}" autofocus>
                     <mat-error>
                             <app-show-errors [control]="field"></app-show-errors>
                     </mat-error>
