@@ -3,19 +3,49 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { SessionService } from '../../services';
 import { IScreen } from '../dynamic-screen/screen.interface';
-import { StartupService } from '../../services/startup.service';
+import { StartupService, StartupStatus } from '../../services/startup.service';
 
 @Component({
     selector: 'app-startup',
-    templateUrl: './startup.component.html'
+    templateUrl: './startup.component.html',
+    styleUrls: ['startup.component.scss']
 })
-export class StartupComponent implements IScreen, AfterViewInit {
-
+export class StartupComponent implements IScreen, OnInit, AfterViewInit {
 
     title = 'Initializing ...';
-    message: string = null;
+    _messages: string[] = [];
+    startupFailed = false;
 
     constructor(public session: SessionService, public startup: StartupService) {
+    }
+
+    ngOnInit(): void {
+        this.startup.onStartupCompleted.subscribe(status => {
+            if (status === StartupStatus.Failure) {
+                this.startupFailed = true;
+            }
+        });
+    }
+
+    set message(msg: string) {
+        this._messages.push(msg);
+    }
+
+    get message(): string {
+        if (this._messages.length > 0) {
+            return this._messages.slice(-1)[0];
+        } else {
+            return null;
+        }
+    }
+
+    getAllMessages(): string[] {
+        return this._messages;
+    }
+
+    log(msg: string) {
+        console.log(msg);
+        this.message = msg;
     }
 
     ngAfterViewInit(): void {

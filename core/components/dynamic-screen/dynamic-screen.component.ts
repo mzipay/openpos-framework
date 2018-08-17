@@ -14,7 +14,9 @@ import {
     DeviceService,
     IconService,
     PluginService,
-    FileUploadService
+    FileUploadService,
+    StartupService,
+    StartupStatus
 } from '../../services';
 import { IScreen } from './screen.interface';
 import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem } from '../../interfaces';
@@ -68,14 +70,19 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         protected router: Router, private pluginService: PluginService,
         private fileUploadService: FileUploadService,
         private httpClient: HttpClient, private cd: ChangeDetectorRef,
-        private elRef: ElementRef, public renderer: Renderer2) {
+        private elRef: ElementRef, public renderer: Renderer2,
+        private startupService: StartupService) {
     }
 
     ngOnInit(): void {
         const self = this;
-        this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
-        this.session.subscribeForDialogUpdates((dialog: any): void => self.updateDialog(dialog));
-        this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%' } }});
+        this.startupService.onStartupCompleted.subscribe(startupStatus => {
+            if (startupStatus === StartupStatus.Success) {
+                this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
+                this.session.subscribeForDialogUpdates((dialog: any): void => self.updateDialog(dialog));
+            }
+        });
+        this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%',  panelClass: 'startup-dialog-container' } }});
     }
 
 
