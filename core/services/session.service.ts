@@ -78,7 +78,7 @@ export class SessionService implements IMessageHandler {
             console.error(`[OpenPOS]${e}`);
         });
         this.onServerConnect = Observable.create(observer => { this.onServerConnectObserver = observer; });
-        this.messageSubject.pipe(filter(s => ['Screen'].includes(s.type)), filter(s => !s.clearDialog)).subscribe(s => this.handle(s));
+        this.messageSubject.pipe(filter(s => ['Screen'].includes(s.type)), filter(s => s.type !== 'ClearDialog')).subscribe(s => this.handle(s));
     }
 
     public registerMessageHandler(handler: IMessageHandler, ...types: string[]): Subscription {
@@ -168,7 +168,7 @@ export class SessionService implements IMessageHandler {
         // Subscribe a function to be run on_next message
         this.subscription = this.messages.subscribe((message: Message) => {
             const json = JSON.parse(message.body);
-            if (json.clearDialog) {
+            if (json.type === 'ClearDialog') {
                 this.showDialog(null);
             }
             this.messageSubject.next(json);
