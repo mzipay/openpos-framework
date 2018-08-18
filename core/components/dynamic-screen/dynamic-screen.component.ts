@@ -80,6 +80,13 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             if (startupStatus === StartupStatus.Success) {
                 this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
                 this.session.subscribeForDialogUpdates((dialog: any): void => self.updateDialog(dialog));
+            } else if (startupStatus === StartupStatus.Failure) {
+                // If we failed, make sure we at least allow the Personalization screen to be shown
+                this.session.subscribeForScreenUpdates((screen: any): void => {
+                    if (screen && screen.screenType === 'Personalization' ) {
+                        self.updateTemplateAndScreen(screen);
+                    }
+                });
             }
         });
         this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%',  panelClass: 'startup-dialog-container' } }});

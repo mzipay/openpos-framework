@@ -65,8 +65,7 @@ export class SessionService implements IMessageHandler {
 
     loaderState: LoaderState;
 
-    public onServerConnect: Observable<boolean>;
-    private onServerConnectObserver: any;
+    public onServerConnect: BehaviorSubject<boolean>;
 
     private messageSubject = new Subject<any>();
 
@@ -77,7 +76,7 @@ export class SessionService implements IMessageHandler {
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
-        this.onServerConnect = Observable.create(observer => { this.onServerConnectObserver = observer; });
+        this.onServerConnect = new BehaviorSubject<boolean>(false);
         this.messageSubject.pipe(filter(s => ['Screen'].includes(s.type)), filter(s => s.type !== 'ClearDialog')).subscribe(s => this.handle(s));
     }
 
@@ -178,7 +177,13 @@ export class SessionService implements IMessageHandler {
 
         this.subscribed = true;
         this.loaderState.monitorConnection();
-        this.onServerConnectObserver.next(true);
+        this.state.subscribe(stompState => {
+            if (stompState === 'CONNECTED') {
+                if (! this.onServerConnect.value) {
+                    this.onServerConnect.next(true);
+                }
+            }
+        });
     }
 
     public unsubscribe() {

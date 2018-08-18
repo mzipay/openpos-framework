@@ -10,8 +10,10 @@ import { PersonalizationService } from './personalization.service';
 export class IconService {
     constructor(private iconRegistry: MatIconRegistry,
         private sanitizer: DomSanitizer, private personalization: PersonalizationService, private sessionService: SessionService) {
-        this.sessionService.onServerConnect.subscribe(personalized => {
-            this.init();
+        this.sessionService.onServerConnect.subscribe(connected => {
+            if (connected) {
+                this.init();
+            }
         });
     }
 
