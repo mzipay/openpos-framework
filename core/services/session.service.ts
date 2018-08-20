@@ -8,7 +8,7 @@ import { Message } from '@stomp/stompjs';
 import { Injectable, EventEmitter, NgZone } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { ActionIntercepter } from '../action-intercepter';
 import { IThemeChangingEvent } from '../../shared/';
@@ -69,7 +69,7 @@ export class SessionService implements IMessageHandler {
 
     private messageSubject = new Subject<any>();
 
-    constructor(private location: Location, private router: Router, public dialogService: MatDialog, public snackBar: MatSnackBar,
+    constructor(private location: Location, private router: Router, public dialogService: MatDialog,
         public zone: NgZone, protected personalization: PersonalizationService) {
 
         this.loaderState = new LoaderState(this, personalization);
