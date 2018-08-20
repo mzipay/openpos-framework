@@ -21,6 +21,7 @@ import {
 import { IScreen } from './screen.interface';
 import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem } from '../../interfaces';
 import { FileViewerComponent, TemplateDirective } from '../../../shared';
+import { PersonalizationService, ToastService } from '../..';
 
 @Component({
     selector: 'app-dynamic-screen',
@@ -71,6 +72,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         private httpClient: HttpClient,
         private cd: ChangeDetectorRef,
         private elRef: ElementRef,
+        private startupService: StartupService,
         public renderer: Renderer2) {
     }
 
@@ -79,7 +81,6 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.startupService.onStartupCompleted.subscribe(startupStatus => {
             if (startupStatus === StartupStatus.Success) {
                 this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
-                this.session.subscribeForDialogUpdates((dialog: any): void => self.updateDialog(dialog));
             } else if (startupStatus === StartupStatus.Failure) {
                 // If we failed, make sure we at least allow the Personalization screen to be shown
                 this.session.subscribeForScreenUpdates((screen: any): void => {
@@ -89,8 +90,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
                 });
             }
         });
-        this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%',  panelClass: 'startup-dialog-container' } }});
-    }
+     }
 
     ngOnDestroy(): void {
         this.session.unsubscribe();
