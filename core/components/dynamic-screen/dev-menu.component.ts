@@ -327,7 +327,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
         }
         this.showDevMenu = !this.showDevMenu;
         if (! this.personalization.isPersonalized()) {
-            // Due to a bug in the UI/WKWebview, the below is needed on cordova to get the
+            // Due to a bug in the WKWebview, the below is needed on cordova to get the
             // DevMenu to show on the iPad when personalization has failed.  Without this code,
             // the DevMenu is invisible until the iPad is rotated. With this code, though, there
             // is a side affect that two expansion panels are shown (one with content, one without).
