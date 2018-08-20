@@ -44,7 +44,11 @@ export class StartupService {
             // array.reduce() runs.
             taskResult => taskResult !== null && ! taskResult
         ).then(allSuccess => {
+            console.log(`Result of running all tasks: ${allSuccess}`);
             this.onStartupCompleted.next(allSuccess ? StartupStatus.Success : StartupStatus.Failure);
+        }).catch(error => {
+            console.log(`One or more startup tasks failed. Reason: ${error}`);
+            this.onStartupCompleted.next(StartupStatus.Failure)
         });
 
         if (this.personalization.isPersonalized()) {
