@@ -16,12 +16,13 @@ import {
     PluginService,
     FileUploadService,
     StartupService,
-    StartupStatus
+    StartupStatus,
+    PersonalizationService,
+    ToastService
 } from '../../services';
 import { IScreen } from './screen.interface';
 import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem } from '../../interfaces';
 import { FileViewerComponent, TemplateDirective } from '../../../shared';
-import { PersonalizationService, ToastService } from '../..';
 
 @Component({
     selector: 'app-dynamic-screen',
