@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { SessionService } from '../../services';
+import { SessionService, DialogService } from '../../services';
 import { IScreen } from '../dynamic-screen/screen.interface';
 import { StartupService, StartupStatus } from '../../services/startup.service';
 
@@ -16,7 +16,7 @@ export class StartupComponent implements IScreen, OnInit, AfterViewInit {
     _messages: string[] = [];
     startupFailed = false;
 
-    constructor(public session: SessionService, public startup: StartupService) {
+    constructor(public dialog: DialogService, public startup: StartupService) {
     }
 
     ngOnInit(): void {
@@ -51,7 +51,7 @@ export class StartupComponent implements IScreen, OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         setTimeout(() => {
            this.startup.runTasks(this);
-           this.session.showDialog(null);
+           this.dialog.closeDialog();
         }, 500);
     }
 

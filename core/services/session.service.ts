@@ -2,13 +2,13 @@ import { Configuration } from './../../configuration/configuration';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { PersonalizationService, DEFAULT_LOCALE } from './personalization.service';
 
-import { Observable, Subscription, BehaviorSubject, Subject } from 'rxjs';
+import { Observable, Subscription, BehaviorSubject, Subject, merge } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { Injectable, EventEmitter, NgZone } from '@angular/core';
 import { StompService, StompState } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { ActionIntercepter } from '../action-intercepter';
 import { IThemeChangingEvent } from '../../shared/';
@@ -35,8 +35,6 @@ export class SessionService implements IMessageHandler {
 
     private screen: any;
 
-    public dialog: any;
-
     public state: Observable<string>;
 
     public response: any;
@@ -53,8 +51,6 @@ export class SessionService implements IMessageHandler {
 
     private screenSource = new BehaviorSubject<any>(null);
 
-    private dialogSource = new BehaviorSubject<any>(null);
-
     private stompService: StompService;
 
     private stompDebug = false;
@@ -67,9 +63,10 @@ export class SessionService implements IMessageHandler {
 
     public onServerConnect: BehaviorSubject<boolean>;
 
-    private messageSubject = new Subject<any>();
+    private stompJsonMessages$ = new Subject<any>();
+    private sessionMessages$ = new Subject<any>();
 
-    constructor(private location: Location, private router: Router, public dialogService: MatDialog, public snackBar: MatSnackBar,
+    constructor(private location: Location, private router: Router, public dialogService: MatDialog,
         public zone: NgZone, protected personalization: PersonalizationService) {
 
         this.loaderState = new LoaderState(this, personalization);
@@ -77,22 +74,25 @@ export class SessionService implements IMessageHandler {
             console.error(`[OpenPOS]${e}`);
         });
         this.onServerConnect = new BehaviorSubject<boolean>(false);
-        this.messageSubject.pipe(filter(s => ['Screen'].includes(s.type)), filter(s => s.type !== 'ClearDialog')).subscribe(s => this.handle(s));
+        this.stompJsonMessages$.pipe(
+                    filter(s => ['Screen'].includes(s.type))
+                )
+            .subscribe(s => this.handle(s));
+    }
+
+    public getMessages( ...types: string[]): Observable<any> {
+        return  merge(
+            this.stompJsonMessages$,
+            this.sessionMessages$ ).pipe(filter(s => types.includes(s.type)));
     }
 
     public registerMessageHandler(handler: IMessageHandler, ...types: string[]): Subscription {
-        return this.messageSubject.pipe(filter(s => types.includes(s.type))).subscribe(s => handler.handle(s));
+        return this.stompJsonMessages$.pipe(filter(s => types.includes(s.type))).subscribe(s => handler.handle(s));
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
         return this.screenSource.asObservable().subscribe(
             screen => this.zone.run(() => callback(screen))
-        );
-    }
-
-    public subscribeForDialogUpdates(callback: (dialog: any) => any): Subscription {
-        return this.dialogSource.asObservable().subscribe(
-            dialog => this.zone.run(() => callback(dialog))
         );
     }
 
@@ -111,17 +111,6 @@ export class SessionService implements IMessageHandler {
             this.personalization.setTheme(screen.theme, false);
         }
         this.screenSource.next(screen);
-    }
-
-    public showDialog(dialogObj: any) {
-        if (!dialogObj) {
-            this.dialog = null;
-        } else if (dialogObj.template.dialog) {
-            console.log(`SessionService.showDialog invoked. dialogObj: ${dialogObj}`);
-            this.dialog = dialogObj;
-            this.response = null;
-        }
-        this.dialogSource.next(this.dialog);
     }
 
     public setAuthToken(token: string) {
@@ -167,10 +156,7 @@ export class SessionService implements IMessageHandler {
         // Subscribe a function to be run on_next message
         this.subscription = this.messages.subscribe((message: Message) => {
             const json = JSON.parse(message.body);
-            if (json.type === 'ClearDialog') {
-                this.showDialog(null);
-            }
-            this.messageSubject.next(json);
+            this.stompJsonMessages$.next(json);
         });
 
         this.state = this.stompService.state.pipe(map((state: number) => StompState[state]));
@@ -299,7 +285,8 @@ export class SessionService implements IMessageHandler {
                 } else {
                     sendToServer();
                     if (!isValueChangedAction) {
-                        this.showDialog(null);
+                        // not sure if this is the best way to do this, but its how we are doing it for now
+                        this.sessionMessages$.next({ clearDialog: true});
                     }
                     this.queueLoading();
                 }
@@ -362,34 +349,16 @@ export class SessionService implements IMessageHandler {
             this.loaderState.loading = true;
             this.showLoading(message.title, message.message);
             return;
-        } else if (message.template && message.template.dialog) {
-            this.showDialog(message);
         } else if (message.screenType === 'NoOp') {
             this.response = null;
             return; // As with DeviceRequest, return to avoid dismissing loading screen
         } else if (message.screenType === 'Toast') {
-            const toast = message as IToastScreen;
-            this.snackBar.open(toast.message, toast.duration === 0 ? 'X' : null, {
-                duration: toast.duration,
-                panelClass: this.getToastClass(toast.toastType)
-            });
-        } else {
+
+        } else if ( message.template && !message.template.dialog ) {
             this.response = null;
             this.showScreen(message);
-            this.showDialog(null);
         }
         this.cancelLoading();
-    }
-
-    private getToastClass(type: ToastType): string {
-        switch (type) {
-            case ToastType.Success:
-                return 'toast-success';
-            case ToastType.Warn:
-                return 'toast-warn';
-        }
-
-        return null;
     }
 
     public registerActionPayload(actionName: string, actionValue: Function) {
