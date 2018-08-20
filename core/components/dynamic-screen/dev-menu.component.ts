@@ -320,7 +320,11 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
                 this.logsAvailable = false;
             });
         }
-        this.session.publish('DevTools::Get', DevMenuComponent.MSG_TYPE);
+        if (this.personalization.isPersonalized()) {
+            this.session.publish('DevTools::Get', DevMenuComponent.MSG_TYPE);
+        } else {
+            console.log(`DevTools can't fetch server status since device is not yet personalized.`);
+        }
         this.showDevMenu = !this.showDevMenu;
     }
 
@@ -413,6 +417,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
     public onPersonalize() {
         this.personalization.dePersonalize();
         this.session.unsubscribe();
+        this.session.cancelLoading();
         this.session.showScreen(this.personalization.getPersonalizationScreen());
     }
 

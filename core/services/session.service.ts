@@ -320,8 +320,14 @@ export class SessionService implements IMessageHandler {
     }
 
     public publish(actionString: string, type: string, payload?: any) {
-        this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.personalization.getNodeId(),
-            JSON.stringify({ name: actionString, type: type, data: payload ? payload : this.response }));
+        const nodeId = this.personalization.getNodeId();
+        if (this.appId && nodeId) {
+            this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.personalization.getNodeId(),
+                JSON.stringify({ name: actionString, type: type, data: payload ? payload : this.response }));
+        } else {
+            console.log(`Can't publish action '${actionString}' of type '${type}' ` +
+                `due to undefined App ID (${this.appId}) or Node Id (${nodeId})`);
+        }
     }
 
     private queueLoading() {
