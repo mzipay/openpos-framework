@@ -11,4 +11,3 @@ export * from './app-version';
 export * from './form-builder.service';
 export * from './personalization.service';
 export * from './startup.service';
-export * from './toast.service';
