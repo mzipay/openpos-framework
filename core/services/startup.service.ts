@@ -48,7 +48,7 @@ export class StartupService {
             this.onStartupCompleted.next(allSuccess ? StartupStatus.Success : StartupStatus.Failure);
         }).catch(error => {
             console.log(`One or more startup tasks failed. Reason: ${error}`);
-            this.onStartupCompleted.next(StartupStatus.Failure)
+            this.onStartupCompleted.next(StartupStatus.Failure);
         });
 
         if (this.personalization.isPersonalized()) {
