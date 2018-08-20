@@ -1,6 +1,6 @@
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { IScreen } from '../components';
-import { SessionService } from '.';
+import { SessionService } from './session.service';
 import { filter, map } from 'rxjs/operators';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatDialogRef, MatDialog } from '@angular/material';
@@ -18,10 +18,10 @@ export class DialogService {
 
     private lastDialogType: string;
 
-    constructor(private componentFactoryResolver: ComponentFactoryResolver, private sessionService: SessionService, public dialog: MatDialog ) {
+    constructor(private componentFactoryResolver: ComponentFactoryResolver, public session: SessionService, public dialog: MatDialog ) {
 
         // Get just the messages we care about for managing dialogs
-        const $dialogMessages = sessionService.getMessages('Screen', 'ClearDialog');
+        const $dialogMessages = session.getMessages('Screen', 'ClearDialog');
 
         // Pipe all the messages for dialog updates
         $dialogMessages.pipe(
@@ -39,6 +39,7 @@ export class DialogService {
         this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%' } }});
     }
 
+
     public addDialog(name: string, type: Type<IScreen>): void {
         if (this.dialogs.get(name)) {
         // tslint:disable-next-line:max-line-length
@@ -49,10 +50,11 @@ export class DialogService {
     }
 
     public hasDialog(name: string): boolean {
+
         return this.dialogs.has(name);
     }
 
-    public resolveDialog(type: string): ComponentFactory<IScreen> {
+    private resolveDialog(type: string): ComponentFactory<IScreen> {
         const dialogType: Type<IScreen> = this.dialogs.get(type);
         if (dialogType) {
             return this.componentFactoryResolver.resolveComponentFactory(dialogType);
@@ -130,11 +132,11 @@ export class DialogService {
             // they close so that actionPayloads can be included with the action
             // before the dialog is destroyed.
             this.dialogRef.beforeClose().subscribe(result => {
-                this.sessionService.onAction(closeAction || result);
+                this.session.onAction(closeAction || result);
             });
         } else {
             this.dialogRef.afterClosed().subscribe(result => {
-                this.sessionService.onAction(closeAction || result);
+                this.session.onAction(closeAction || result);
             }
             );
         }
@@ -142,5 +144,3 @@ export class DialogService {
         this.lastDialogType = dialog.screenType;
     }
 }
-
-

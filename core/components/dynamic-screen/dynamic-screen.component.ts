@@ -21,8 +21,6 @@ import {
 import { IScreen } from './screen.interface';
 import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem } from '../../interfaces';
 import { FileViewerComponent, TemplateDirective } from '../../../shared';
-import { PersonalizationService } from '../../services/personalization.service';
-import { ToastService } from '../../services/toast.service';
 
 @Component({
     selector: 'app-dynamic-screen',
@@ -59,14 +57,21 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     private lastSequenceNum: number;
     private lastScreenName: string;
 
-    constructor(private personalization: PersonalizationService, public screenService: ScreenService, public session: SessionService, public toast: ToastService,
+    constructor(
+        private personalization: PersonalizationService,
+        public screenService: ScreenService,
+        public session: SessionService,
+        public toast: ToastService,
         public deviceService: DeviceService,
-        public iconService: IconService, public overlayContainer: OverlayContainer,
-        protected router: Router, private pluginService: PluginService,
+        public iconService: IconService,
+        public overlayContainer: OverlayContainer,
+        protected router: Router,
+        private pluginService: PluginService,
         private fileUploadService: FileUploadService,
-        private httpClient: HttpClient, private cd: ChangeDetectorRef,
-        private elRef: ElementRef, public renderer: Renderer2,
-        private startupService: StartupService) {
+        private httpClient: HttpClient,
+        private cd: ChangeDetectorRef,
+        private elRef: ElementRef,
+        public renderer: Renderer2) {
     }
 
     ngOnInit(): void {
