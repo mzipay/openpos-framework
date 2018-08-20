@@ -5,6 +5,7 @@ import { filter, map } from 'rxjs/operators';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { OpenPOSDialogConfig } from '../interfaces';
+import { StartupService, StartupStatus } from './startup.service';
 @Injectable({
     providedIn: 'root',
   })
@@ -18,23 +19,32 @@ export class DialogService {
 
     private lastDialogType: string;
 
-    constructor(private componentFactoryResolver: ComponentFactoryResolver, public session: SessionService, public dialog: MatDialog ) {
+    constructor(
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private session: SessionService,
+        private dialog: MatDialog,
+        private startupService: StartupService) {
 
         // Get just the messages we care about for managing dialogs
         const $dialogMessages = session.getMessages('Screen', 'ClearDialog');
 
-        // Pipe all the messages for dialog updates
-        $dialogMessages.pipe(
+        this.startupService.onStartupCompleted.subscribe(startupStatus => {
+            if (startupStatus === StartupStatus.Success) {
+
+                // Pipe all the messages for dialog updates
+                $dialogMessages.pipe(
                     filter( m => (m.template && m.template.dialog) )
                 )
-            .subscribe( m => this.updateDialog(m) );
+                .subscribe( m => this.updateDialog(m) );
 
-        // We want to close the dialog if we get a clear dialog message or its a screen message that isn't a dialog
-        $dialogMessages.pipe(
-                filter( m => m.clearDialog || (m.template && !m.template.dialog))
-            )
-        .subscribe( m => this.closeDialog() );
+                // We want to close the dialog if we get a clear dialog message or its a screen message that isn't a dialog
+                $dialogMessages.pipe(
+                        filter( m => m.clearDialog || (m.template && !m.template.dialog))
+                    )
+                .subscribe( m => this.closeDialog() );
 
+            }
+        });
 
         this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%' } }});
     }
