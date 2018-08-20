@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs';
 import { SessionService } from './session.service';
 import { StartupComponent } from './../components/startup/startup.component';
 import { Injectable, EventEmitter, NgZone } from '@angular/core';
@@ -13,6 +14,7 @@ import { PersonalizationService } from './personalization.service';
 export class StartupService {
 
     private tasks = new Map<string, IStartupTask>();
+    onStartupCompleted = new BehaviorSubject<StartupStatus>(StartupStatus.Starting);
 
     constructor(private personalization: PersonalizationService, private session: SessionService, protected router: Router) {
     }
@@ -31,9 +33,9 @@ export class StartupService {
             // For the operation to execute, just run the task
             element => {
                 const currentTask = element[1];
-                console.log(`${currentTask.name} startup task is executing...`);
+                startupComponent.log(`${currentTask.name} startup task is executing...`);
                 const resultPromise = currentTask.execute(startupComponent);
-                resultPromise.then(result => console.log(`${currentTask.name} startup task finished with result: '${result}'.`));
+                resultPromise.then(result => startupComponent.log(`${currentTask.name} startup task ${result ? 'succeeded' : 'failed'}.`));
                 return resultPromise;
             },
             // The condition below will cause the task execution to stop
@@ -41,12 +43,16 @@ export class StartupService {
             // taskResult will be null for first task due to way that
             // array.reduce() runs.
             taskResult => taskResult !== null && ! taskResult
-        );
+        ).then(allSuccess => {
+            this.onStartupCompleted.next(allSuccess ? StartupStatus.Success : StartupStatus.Failure);
+        });
 
         if (this.personalization.isPersonalized()) {
             this.session.unsubscribe();
             this.session.subscribe(this.normalizeAppIdFromUrl());
         }
+
+
     }
 
     private promiseLoop<T, R>(
@@ -78,4 +84,10 @@ export class StartupService {
         }
         return appId;
     }
+}
+
+export enum StartupStatus {
+    Starting,
+    Success,
+    Failure
 }

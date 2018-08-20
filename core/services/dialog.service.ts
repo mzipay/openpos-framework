@@ -10,9 +10,10 @@ import { OpenPOSDialogConfig } from '../interfaces';
   })
 export class DialogService {
 
-    private dialogs = new Map<string, Type<IScreen>>();
+  private dialogs = new Map<string, Type<IScreen>>();
 
-    private dialogRef: MatDialogRef<IScreen>;
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) {
+  }
 
     private dialogOpening: boolean;
 
@@ -38,6 +39,8 @@ export class DialogService {
 
         this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%' } }});
     }
+    this.dialogs.set(name, type);
+  }
 
 
     public addDialog(name: string, type: Type<IScreen>): void {
