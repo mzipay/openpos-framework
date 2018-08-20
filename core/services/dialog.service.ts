@@ -46,7 +46,7 @@ export class DialogService {
             }
         });
 
-        this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%' } }});
+        this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%', panelClass: 'startup-dialog-container' } }});
     }
 
 

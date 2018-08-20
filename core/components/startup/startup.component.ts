@@ -51,7 +51,6 @@ export class StartupComponent implements IScreen, OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         setTimeout(() => {
            this.startup.runTasks(this);
-           this.dialog.closeDialog();
         }, 500);
     }
 
