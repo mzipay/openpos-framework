@@ -2,10 +2,14 @@ package org.jumpmind.pos.core.screen;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.KeyboardType;
+import org.jumpmind.pos.core.model.Validator;
 
 public class PromptScreen extends Screen implements IPromptScreen {
 
@@ -25,7 +29,6 @@ public class PromptScreen extends Screen implements IPromptScreen {
     private boolean showComments = false;
     private List<MenuItem> otherActions;
     private String pattern;
-    private KeyboardType keyboardPreference;
     private Boolean scanEnabled;
     
 
@@ -172,12 +175,8 @@ public class PromptScreen extends Screen implements IPromptScreen {
         return this.pattern;
     }
 
-    public KeyboardType getKeyboardPreference() {
-        return keyboardPreference;
-    }
-
     public void setKeyboardPreference(KeyboardType keyboardPreference) {
-        this.keyboardPreference = keyboardPreference;
+        this.put("keyboardPreference", keyboardPreference);
     }
 
     public Boolean getScanEnabled() {
@@ -187,4 +186,20 @@ public class PromptScreen extends Screen implements IPromptScreen {
     public void setScanEnabled(Boolean scanEnabled) {
         this.scanEnabled = scanEnabled;
     }
+    
+    public void setValidators(Set<Validator> validators) {
+        this.put("validators", validators);
+    }
+    
+    public void addValidators(Validator ...validators) {
+        if (validators != null && validators.length > 0) {
+            if (! this.contains("validators")) {
+                this.put("validators", new HashSet<Validator>());
+            }
+            @SuppressWarnings("unchecked")
+            Set<Validator> theValidators = (Set<Validator>) this.get("validators");
+            theValidators.addAll(Arrays.asList(validators));
+        }
+    }
+    
 }
