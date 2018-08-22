@@ -111,4 +111,12 @@ export class OpenPosValidators {
     static DateMMDDYYYY(c: FormControl) {
         return OpenPosValidators.DateValidator(c, 'MMDDYYYY');
     }
+    /** Validates if the value of the given control is greater than 0 */
+    static GT_0(c: FormControl) {
+        return Number(c.value) > 0 ? null : {
+            'gt_0': {
+                valid: false
+            }
+        };
+    }
 }

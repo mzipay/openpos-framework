@@ -25,6 +25,7 @@ export interface IFormElement {
     confirmationDialog: IConfirmationDialog;
     confirmationMessage: string;
     scanEnabled: boolean;
+    validators?: string[];
 }
 
 export type LabelPositionType = 'before' | 'after';
