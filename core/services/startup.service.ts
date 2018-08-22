@@ -14,9 +14,19 @@ import { PersonalizationService } from './personalization.service';
 export class StartupService {
 
     private tasks = new Map<string, IStartupTask>();
+    private _startupFailureTask: IStartupTask;
+
     onStartupCompleted = new BehaviorSubject<StartupStatus>(StartupStatus.Starting);
 
     constructor(private personalization: PersonalizationService, private session: SessionService, protected router: Router) {
+    }
+
+    set startupFailureTask(task: IStartupTask) {
+        this._startupFailureTask = task;
+    }
+
+    get startupFailureTask(): IStartupTask {
+        return this._startupFailureTask;
     }
 
     public addStartupTask(task: IStartupTask): void {
@@ -45,18 +55,40 @@ export class StartupService {
             taskResult => taskResult !== null && ! taskResult
         ).then(allSuccess => {
             console.log(`Result of running all tasks: ${allSuccess}`);
-            this.onStartupCompleted.next(allSuccess ? StartupStatus.Success : StartupStatus.Failure);
+            this.handleStartupTaskResult(<boolean> allSuccess, startupComponent);
         }).catch(error => {
             console.log(`One or more startup tasks failed. Reason: ${error}`);
-            this.onStartupCompleted.next(StartupStatus.Failure);
+            this.handleStartupTaskResult(false, startupComponent);
         });
 
-        if (this.personalization.isPersonalized()) {
-            this.session.unsubscribe();
-            this.session.subscribe(this.normalizeAppIdFromUrl());
+        // Note that this will run before the startup tasks have finished.  May want to
+        // rethink that at some point.  Doesn't seem to hurt in failure scenarios I have
+        // tested however and it allows for startup tasks to check the connection.
+        this.doSubscription(startupComponent);
+    }
+
+    private handleStartupTaskResult(startupTasksSuccessful: boolean, startupComponent: StartupComponent) {
+        if (!startupTasksSuccessful && this.startupFailureTask) {
+            console.log(`${this.startupFailureTask.name} startup failure handler task is executing...`);
+            this.startupFailureTask.execute(startupComponent).then(failureTaskResult => {
+                console.log(`${this.startupFailureTask.name} startup failure handler task ${failureTaskResult ? 'succeeded' : 'failed'}.`);
+                this.onStartupCompleted.next(startupTasksSuccessful ? StartupStatus.Success : StartupStatus.Failure);
+            }).catch( error => {
+                console.log(`${this.startupFailureTask.name} startup failure handler task failed'. Reason: ${error}`);
+                this.onStartupCompleted.next(StartupStatus.Failure);
+            });
+        } else {
+            this.onStartupCompleted.next(startupTasksSuccessful ? StartupStatus.Success : StartupStatus.Failure);
         }
+    }
 
-
+    private doSubscription(startupComponent: StartupComponent) {
+        if (this.personalization.isPersonalized()) {
+            const appId = this.normalizeAppIdFromUrl();
+            startupComponent.log(`[StartupService] Subscribing to server using appId '${appId}'...`);
+            this.session.unsubscribe();
+            this.session.subscribe(appId);
+        }
     }
 
     private promiseLoop<T, R>(
