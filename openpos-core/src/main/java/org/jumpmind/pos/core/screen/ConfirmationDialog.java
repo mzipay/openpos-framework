@@ -11,6 +11,19 @@ public class ConfirmationDialog implements Serializable {
 	private String confirmButtonName = "Yes";
 	private String cancelButtonName = "No";
 	
+	public ConfirmationDialog() {
+	    
+	}
+	
+	public ConfirmationDialog(String message) {
+	    this.message = message;
+	}
+	
+	public ConfirmationDialog(String message, String title) {
+	    this.message = message;
+	    this.title = title;
+	}
+	
 	public String getTitle() {
 		return title;
 	}
