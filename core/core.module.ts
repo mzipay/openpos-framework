@@ -21,6 +21,7 @@ import {
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { StartupComponent } from './components/startup/startup.component';
 import { PersonalizationService } from './services/personalization.service';
+import { StompRService } from '@stomp/ng2-stompjs';
 
 @NgModule({
     entryComponents: [
@@ -48,7 +49,8 @@ import { PersonalizationService } from './services/personalization.service';
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         DatePipe,
         BreakpointObserver,
-        MediaMatcher
+        MediaMatcher,
+        StompRService,
     ]
 })
 export class CoreModule {

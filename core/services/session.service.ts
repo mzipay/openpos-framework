@@ -6,7 +6,7 @@ import { Observable, Subscription, BehaviorSubject, Subject, merge } from 'rxjs'
 import { map, filter } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { Injectable, EventEmitter, NgZone } from '@angular/core';
-import { StompService, StompState } from '@stomp/ng2-stompjs';
+import { StompService, StompState, StompRService } from '@stomp/ng2-stompjs';
 import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
@@ -51,8 +51,6 @@ export class SessionService implements IMessageHandler {
 
     private screenSource = new BehaviorSubject<any>(null);
 
-    private stompService: StompService;
-
     private stompDebug = false;
 
     private actionPayloads: Map<string, Function> = new Map<string, Function>();
@@ -66,8 +64,11 @@ export class SessionService implements IMessageHandler {
     private stompJsonMessages$ = new Subject<any>();
     private sessionMessages$ = new Subject<any>();
 
-    constructor(private location: Location, private router: Router, public dialogService: MatDialog,
-        public zone: NgZone, protected personalization: PersonalizationService) {
+    constructor(
+        private stompService: StompRService,
+        public dialogService: MatDialog,
+        public zone: NgZone,
+        protected personalization: PersonalizationService) {
 
         this.loaderState = new LoaderState(this, personalization);
         this.zone.onError.subscribe((e) => {
@@ -136,7 +137,7 @@ export class SessionService implements IMessageHandler {
 
         const url = this.personalization.getWebsocketUrl();
         console.log('creating new stomp service at: ' + url);
-        this.stompService = new StompService({
+        this.stompService.config = {
             url: url,
             headers: {
                 authToken: this.authToken,
@@ -148,7 +149,8 @@ export class SessionService implements IMessageHandler {
             heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
             reconnect_delay: 250,  // Typical value is 5000, 0 disables.
             debug: this.stompDebug
-        });
+        };
+        this.stompService.initAndConnect();
 
         this.appId = appId;
         const currentTopic = this.buildTopicName();
@@ -190,7 +192,6 @@ export class SessionService implements IMessageHandler {
 
         console.log('disconnecting from stomp service');
         this.stompService.disconnect();
-        this.stompService = null;
         this.messages = null;
 
         this.subscribed = false;
