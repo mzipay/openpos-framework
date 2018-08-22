@@ -87,7 +87,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     if (this.formField.inputType === 'AutoComplete') {
-      this.updateAutoCompleteDataSource2();
+      this.updateAutoCompleteDataSource();
     }
 
     if (this.formField.scanEnabled) {
@@ -141,7 +141,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  updateAutoCompleteDataSource2() {
+  updateAutoCompleteDataSource() {
     const fld: IFormElement = this.formField;
     const scrnSvc: ScreenService = this.screenService;
     this.autoCompleteDataSource = {
@@ -173,36 +173,6 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
       }
     };
 
-  }
-
-  updateAutoCompleteDataSource() {
-    this.valuesSubscription = this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
-      const values: Array<string> = data;
-      console.log('asynchronously received ' + values.length + ' items for ' + this.formField.id);
-      this.formGroup.get(this.formField.id).setValue(this.formField.value);
-      this.autoCompleteDataSource = {
-        displayValue(value: any): Observable<OptionEntry | null> {
-          const display = <string>value;
-          return of({
-            value,
-            display,
-            details: {}
-          });
-        },
-
-        search(term: string): Observable<OptionEntry[]> {
-          console.log(`autocomplete searching for '${term}'`);
-          const lowerTerm = typeof term === 'string' ? term.toLowerCase() : '';
-          return of(values
-            .filter((c: any) => c.toLowerCase().indexOf(lowerTerm) >= 0)
-            .slice(0, 1000).map((v: any) => ({
-              value: v,
-              display: v,
-              details: {}
-            })));
-        }
-      };
-    });
   }
 
   onFormElementChanged(formElement: IFormElement): void {

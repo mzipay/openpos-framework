@@ -81,6 +81,10 @@ export class SessionService implements IMessageHandler {
             .subscribe(s => this.handle(s));
     }
 
+    public sendMessage(message: any) {
+        this.sessionMessages$.next(message);
+    }
+
     public getMessages( ...types: string[]): Observable<any> {
         return  merge(
             this.stompJsonMessages$,

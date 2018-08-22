@@ -25,6 +25,10 @@ export class PromptComponent extends PosScreen<any> implements AfterViewInit, On
     validators.push(Validators.required);
     validators.push(this.validatorsService.getValidator(this.screen.responseType));
 
+    if (this.screen.validators) {
+        this.screen.validators.forEach(v => validators.push(this.validatorsService.getValidator(v)));
+    }
+
     if (this.screen.minLength) {
       validators.push(Validators.minLength(this.screen.minLength));
     }
