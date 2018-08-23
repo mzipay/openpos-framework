@@ -20,19 +20,21 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.deviceService.onDeviceReady.subscribe(message => {
-            this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin => {
-                console.log('BarcodeScanPublisherDirective INITTED, got barcodeScannerPlugin');
-                this.barcodePlugin = <BarcodeScannerPlugin> plugin;
-                // the onBarcodeScanned will only emit an event when client code passes a scan
-                // event to the plugin.  This won't be called for cordova barcodescanner plugin
-                // camera-based scan events.  It should only be used for third party scan events
-                // which come from other sources such as a scan device
-                this.barcodeEventSubscription = this.barcodePlugin.onBarcodeScanned.subscribe({
-                    next: (scan: Scan) => {
-                        this.publishBarcode(scan);
-                    }
-                });
-            }).catch( error => console.log(`Failed to get barcodeScannerPlugin.  Error: ${error}`) );
+            if (message) {
+                this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin => {
+                    console.log('BarcodeScanPublisherDirective INITTED, got barcodeScannerPlugin');
+                    this.barcodePlugin = <BarcodeScannerPlugin> plugin;
+                    // the onBarcodeScanned will only emit an event when client code passes a scan
+                    // event to the plugin.  This won't be called for cordova barcodescanner plugin
+                    // camera-based scan events.  It should only be used for third party scan events
+                    // which come from other sources such as a scan device
+                    this.barcodeEventSubscription = this.barcodePlugin.onBarcodeScanned.subscribe({
+                        next: (scan: Scan) => {
+                            this.publishBarcode(scan);
+                        }
+                    });
+                }).catch( error => console.log(`Failed to get barcodeScannerPlugin.  Error: ${error}`) );
+            }
          });
     }
 

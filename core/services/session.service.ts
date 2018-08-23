@@ -68,7 +68,8 @@ export class SessionService implements IMessageHandler {
         private stompService: StompRService,
         public dialogService: MatDialog,
         public zone: NgZone,
-        protected personalization: PersonalizationService) {
+        protected personalization: PersonalizationService
+    ) {
 
         this.loaderState = new LoaderState(this, personalization);
         this.zone.onError.subscribe((e) => {
@@ -174,6 +175,8 @@ export class SessionService implements IMessageHandler {
                 if (! this.onServerConnect.value) {
                     this.onServerConnect.next(true);
                 }
+            } else if (['DISCONNECTING', 'CLOSED'].indexOf(stompState) !== -1) {
+                console.log('!!!!!!!!!!!!!!!!!!! Got STOMP disconnect');
             }
         });
     }

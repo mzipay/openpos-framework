@@ -28,7 +28,7 @@ export class ScreenOrientationDirective implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.deviceService.onDeviceReady.subscribe(message => {
-            if (this.deviceService.isRunningInCordova()) {
+            if (message && this.deviceService.isRunningInCordova()) {
                 if (window.screen && (<any>window.screen).orientation) {
                     this._enabled = true;
                     const currentOrientation = (<any>window.screen).orientation.type;

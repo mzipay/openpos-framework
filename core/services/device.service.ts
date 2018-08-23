@@ -24,6 +24,7 @@ declare var cordova: any;
 export class DeviceService implements IMessageHandler {
 
   public onDeviceReady: Subject<string> = new BehaviorSubject<string>(null);
+  public onAppEnteringBackground: Subject<boolean> = new BehaviorSubject<boolean>(null);
 
   private screen: any;
 
@@ -32,15 +33,25 @@ export class DeviceService implements IMessageHandler {
 
   constructor(protected session: SessionService, public pluginService: PluginService, private fileUploadService: FileUploadService) {
     this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
-    document.addEventListener('deviceready', () => {
-      console.log('cordova devices are ready for the device service');
-      this.initializeInAppBrowserPlugin();
-      this.initializeBarcodeScannerPlugin();
-      this.initializeLogfileDownloadPlugin();
-      this._isRunningInCordova = true;
-      this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
-    },
-    false);
+    document.addEventListener('deviceready',
+        () => {
+            console.log('cordova devices are ready for the device service');
+            this.initializeInAppBrowserPlugin();
+            this.initializeBarcodeScannerPlugin();
+            this.initializeLogfileDownloadPlugin();
+            this._isRunningInCordova = true;
+            this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
+        },
+        false
+    );
+    // For iOS in particular listen for the 'resign' event which is sent as we are entering into the background
+    document.addEventListener('resign',
+        () => {
+            console.log('OpenPOS is about to enter into the background');
+            this.onAppEnteringBackground.next(true);
+        },
+        false
+    );
 
     this.session.registerMessageHandler(this, 'DeviceRequest');
 

@@ -47,6 +47,14 @@ export class DialogService {
         });
 
         this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%', panelClass: 'startup-dialog-container' } }});
+        this.startupService.onStartupCompleted.subscribe(startupStatus => {
+            if (startupStatus === StartupStatus.Success) {
+                // Ensure the startup dialog is closed if we have a successful startup
+                if (this.isDialogOpen('Startup')) {
+                    this.closeDialog();
+                }
+            }
+        });
     }
 
 
@@ -82,7 +90,12 @@ export class DialogService {
         }
     }
 
-    public isDialogOpen(): boolean {
+    /** screenType - If given behaviro will only report true if there is a dialog open AND it's of the given type */
+    public isDialogOpen(screenType?: string): boolean {
+        if (screenType) {
+            return screenType === this.lastDialogType && this.dialogRef !== null;
+        }
+
         return this.dialogRef !== null;
     }
 
