@@ -14,12 +14,22 @@
 				<ng-template let-item>
 					<div fxLayoutAlign="space-between" fxLayout.xs="column" >
 						<div fxFlex="90" fxAlign="left">
-							{{item.description}}
+							<span [ngClass]="item.prop65Item ? 'warn' : ''">
+								{{item.description}}
+							</span>
 							<span class="muted-color">
 								<mat-chip-list>
 									{{item.subtitle}}&nbsp;
 									<mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
 								</mat-chip-list>
+							</span>
+							<span *ngIf="item.prop65Item" class="muted-color">
+								<table>
+									<tr>
+										<td style="text-align:left;vertical-align:middle;padding-right:10px"><mat-icon color="primary">warning</mat-icon></td>
+										<td style="text-align:left;vertical-align:middle;">{{item.prop65WarningText}}</td>
+									</tr>
+								</table>
 							</span>
 						</div>							
 						<div *ngIf="item.isGiftReceipt" fxAlign="right center">

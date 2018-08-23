@@ -11,4 +11,6 @@ export interface ISellItem extends IItem {
     color: string;
     size: string;
     longDescription: string;
+    prop65Item: boolean;
+    prop65WarningText: string;
 }
