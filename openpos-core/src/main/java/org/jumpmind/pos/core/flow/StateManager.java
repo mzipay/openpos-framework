@@ -119,9 +119,11 @@ public class StateManager implements IStateManager {
         
         if (resumeState) {
             refreshScreen();
-        } else {            
+        } else if (initialFlowConfig != null) {            
             applicationState.setCurrentContext(new StateContext(initialFlowConfig, null, null));
             transitionTo(new Action("Startup"), initialFlowConfig.getInitialState());
+        } else {
+            throw new RuntimeException("Could not find a flow config for " + appId);
         }
     }
     
