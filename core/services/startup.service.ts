@@ -111,14 +111,15 @@ export class StartupService {
 
     protected normalizeAppIdFromUrl(): string {
         let appId = this.router.url.substring(1);
+        console.log('calculating appid from ' + appId);
+        if (appId.indexOf('?') > 0) {
+            appId = appId.substring(0, appId.indexOf('?'));
+        }
         if (appId.indexOf('#') > 0) {
             appId = appId.substring(0, appId.indexOf('#'));
         }
         if (appId.indexOf('/') > 0) {
             appId = appId.substring(0, appId.indexOf('/'));
-        }
-        if (appId.indexOf('?') > 0) {
-            appId = appId.substring(0, appId.indexOf('?'));
         }
         return appId;
     }
