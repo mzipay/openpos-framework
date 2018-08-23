@@ -37,7 +37,10 @@ export class PersonalizationService {
 
     public onThemeChanging = new EventEmitter<IThemeChangingEvent>();
 
+    public onPersonalized: BehaviorSubject<boolean>;
+
     constructor(private location: Location, private router: Router) {
+        this.onPersonalized = new BehaviorSubject(this.isPersonalized());
     }
 
     public personalize(serverName: string, serverPort: string, node: string | {storeId: string, deviceId: string},
@@ -62,7 +65,7 @@ export class PersonalizationService {
         if (refreshApp) {
             this.refreshApp();
         }
-
+        this.onPersonalized.next(this.isPersonalized());
     }
 
     public dePersonalize() {
@@ -73,6 +76,7 @@ export class PersonalizationService {
         localStorage.removeItem('theme');
         localStorage.removeItem('sslEnabled');
         this.setTheme(theme,  true);
+        this.onPersonalized.next(false);
     }
 
     public getWebsocketUrl(): string {

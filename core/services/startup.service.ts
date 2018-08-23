@@ -83,12 +83,14 @@ export class StartupService {
     }
 
     private doSubscription(startupComponent: StartupComponent) {
-        if (this.personalization.isPersonalized()) {
-            const appId = this.normalizeAppIdFromUrl();
-            startupComponent.log(`[StartupService] Subscribing to server using appId '${appId}'...`);
-            this.session.unsubscribe();
-            this.session.subscribe(appId);
-        }
+        this.personalization.onPersonalized.subscribe(isPersonalized => {
+            if (isPersonalized && ! this.session.connected()) {
+                const appId = this.normalizeAppIdFromUrl();
+                startupComponent.log(`[StartupService] Subscribing to server using appId '${appId}'...`);
+                this.session.unsubscribe();
+                this.session.subscribe(appId);
+            }
+        });
     }
 
     private promiseLoop<T, R>(
