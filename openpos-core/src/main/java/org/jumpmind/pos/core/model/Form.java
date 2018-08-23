@@ -198,7 +198,6 @@ public class Form implements Serializable {
     
     public static FormField createMoneyField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Money, required);
-        formField.setPattern(FieldPattern.MONEY);
         formField.setValue(value);
         return formField;
     }
