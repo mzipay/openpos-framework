@@ -72,10 +72,12 @@ public class MenuItem implements IUIAction, Serializable {
     }
     
     public MenuItem(String action, String title, String icon, String confirmationMessage) {
-        this(action, title, icon );
-        this.confirmationDialog = new ConfirmationDialog();
-        this.confirmationDialog.setMessage(confirmationMessage);
-    }  
+        this(action, title, icon);
+        if (confirmationMessage != null) {
+            this.confirmationDialog = new ConfirmationDialog();
+            this.confirmationDialog.setMessage(confirmationMessage);
+        }
+    }
     
     public MenuItem(String action, String title, String icon, ConfirmationDialog confirmationDialog) {
     	this(action, title, icon );
