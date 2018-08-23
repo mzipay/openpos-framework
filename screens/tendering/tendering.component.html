@@ -37,7 +37,7 @@
                             style="text-align: center" 
                             [placeholder]="tenderAmount.placeholder"
                             [required]="tenderAmount.required"
-                            [formatterName]="'money'" novalidate type="tel" pattern="{{tenderAmount.pattern ? tenderAmount.pattern : '[\.0-9]*'}}" autofocus>
+                            [formatterName]="'money'" novalidate type="tel" pattern="{{tenderAmount.pattern ? tenderAmount.pattern : ''}}" autofocus>
                         <mat-error class="text-xs">
                             <app-show-errors [control]="tenderFormGroup.controls['tenderAmtFld']"></app-show-errors>
                         </mat-error>

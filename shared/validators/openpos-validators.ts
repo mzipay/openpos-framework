@@ -113,7 +113,11 @@ export class OpenPosValidators {
     }
     /** Validates if the value of the given control is greater than 0 */
     static GT_0(c: FormControl) {
-        return Number(c.value) > 0 ? null : {
+        let value = c.value;
+        if (value) {
+            value = value.replace(',', '');
+        }
+        return Number(value) > 0 ? null : {
             'gt_0': {
                 valid: false
             }
