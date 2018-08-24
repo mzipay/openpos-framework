@@ -17,13 +17,13 @@
 		<div class="self-checkout-logo"></div>
 
 		<div fxLayout="row" fxLayoutAlign=" center">
-			<button *ngIf="data.showSkip" mat-button (click)="this.session.onAction('Skip')">
+			<button *ngIf="data.showSkip" class="icon-statusbar skip-icon" mat-button (click)="this.session.onAction('Skip')">
 				<h2>SKIP</h2>
 			</button>
 		</div>
 
 		<button *ngIf="data.showAdmin" mat-button (click)="onAdminLogin()">
-			<mat-icon svgIcon="openpos_admin" class="icon-statusbar"></mat-icon>
+			<mat-icon svgIcon="openpos_admin" class="icon-statusbar admin-login-icon"></mat-icon>
 		</button>
 
 	</div>
