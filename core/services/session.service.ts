@@ -26,6 +26,7 @@ import {
     ActionMap
 } from '../interfaces';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
+import { AppInjector, DeviceService } from '..';
 
 // export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
@@ -170,13 +171,24 @@ export class SessionService implements IMessageHandler {
 
         this.subscribed = true;
         this.loaderState.monitorConnection();
+        // On iOS need to enter into loading state when the app is backgrounded, otherwise
+        // user can execute actions as app is coming back to foreground.
+        const deviceService = AppInjector.Instance.get(DeviceService);
+        deviceService.onAppEnteringBackground.subscribe(backgrounded => {
+            if (backgrounded) {
+                this.loaderState.loading = true;
+                console.log('Entering into background, showing Loading dialog...');
+                this.showLoading(LoaderState.DISCONNECTED_TITLE);
+            }
+        });
+
         this.state.subscribe(stompState => {
             if (stompState === 'CONNECTED') {
                 if (! this.onServerConnect.value) {
                     this.onServerConnect.next(true);
                 }
-            } else if (['DISCONNECTING', 'CLOSED'].indexOf(stompState) !== -1) {
-                console.log('!!!!!!!!!!!!!!!!!!! Got STOMP disconnect');
+            } else if (stompState === 'DISCONNECTING') {
+                console.log('STOMP disconnecting');
             }
         });
     }

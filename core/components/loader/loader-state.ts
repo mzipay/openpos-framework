@@ -1,7 +1,5 @@
-import { SessionService, DeviceService, PersonalizationService } from '../../services';
+import { SessionService, PersonalizationService } from '../../services';
 import { Subject, timer, Subscription } from 'rxjs';
-import { AppInjector } from '../..';
-
 
 export class LoaderState {
 
@@ -23,14 +21,6 @@ export class LoaderState {
     }
 
     public monitorConnection() {
-        const deviceService = AppInjector.Instance.get(DeviceService);
-        deviceService.onAppEnteringBackground.subscribe(backgrounded => {
-            if (backgrounded) {
-                console.log('Entering into or coming out of background, showing Loading dialog...');
-                this.setVisible(true, LoaderState.DISCONNECTED_TITLE, this.message);
-            }
-        });
-
         if (this.timerSubscription) {
             this.timerSubscription.unsubscribe();
         }
