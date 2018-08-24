@@ -85,7 +85,13 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             } else if (startupStatus === StartupStatus.Failure) {
                 // If we failed, make sure we at least allow the Personalization screen to be shown
                 this.session.subscribeForScreenUpdates((screen: any): void => {
-                    if (screen && screen.screenType === 'Personalization' ) {
+                    // This logic will allow us to recover and show screens if our connection 
+                    // is restored after a failed startup, but the app hasn't been restarted.
+                    // May need to revise this logic if there are cases where connection is OK
+                    // but there are other causes for startup failure where we don't want to allow
+                    // screens to show.
+                    const connected = this.session.connected();
+                    if (connected || (!connected && screen && screen.screenType === 'Personalization' )) {
                         self.updateTemplateAndScreen(screen);
                     }
                 });

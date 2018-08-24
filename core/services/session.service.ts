@@ -163,6 +163,7 @@ export class SessionService implements IMessageHandler {
 
         // Subscribe a function to be run on_next message
         this.subscription = this.messages.subscribe((message: Message) => {
+            // console.log('Got message');
             const json = JSON.parse(message.body);
             this.stompJsonMessages$.next(json);
         });
