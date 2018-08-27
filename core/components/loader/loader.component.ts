@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { LoaderState } from './loader-state';
 import { SessionService } from '../../services/session.service';
 import { PersonalizationService } from '../../services/personalization.service';
@@ -22,16 +22,23 @@ export class LoaderComponent implements OnInit, OnDestroy {
     constructor(
         private personalization: PersonalizationService,
         private session: SessionService,
+        private changeRef: ChangeDetectorRef
     ) { }
 
     ngOnInit() {
         this.subscription = this.session.loaderState.observable
             .subscribe((state: LoaderState) => {
+                const stateChanging = this.show !== state.show;
                 this.title = state.title ? state.title : LoaderState.LOADING_TITLE;
                 this.message = state.message;
                 this.show = state.show;
                 this.connected = !state.show;
                 this.loading = state.show;
+                // For iOS when returning from the background, angular doesn't
+                // always run a change detection.
+                if (stateChanging) {
+                    this.changeRef.detectChanges();
+                }
             });
     }
 

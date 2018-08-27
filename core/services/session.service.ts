@@ -44,7 +44,7 @@ export class SessionService implements IMessageHandler {
 
     private subscribed: boolean;
 
-    private subscription: any;
+    private subscription: Subscription;
 
     private authToken: string;
 
@@ -386,6 +386,7 @@ export class SessionService implements IMessageHandler {
     }
 
     handle(message: any) {
+        // console.log(`Got message: ${message.screenType}`);
         if (message.screenType === 'Loading') {
             // This is just a temporary hack
             // Might be a previous instance of a Loading screen being shown,

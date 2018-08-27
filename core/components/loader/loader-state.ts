@@ -14,7 +14,7 @@ export class LoaderState {
     observable = this.loaderSubject.asObservable();
     private timerSubscription: Subscription = null;
 
-    public loading = false;
+    private _loading = false;
 
     constructor(private sessionService: SessionService,
         private personalization: PersonalizationService) {
@@ -26,6 +26,14 @@ export class LoaderState {
         }
         const t = timer(1000, 1000);
         this.timerSubscription = t.subscribe(n => this.checkConnectionStatus());
+    }
+
+    get loading(): boolean {
+        return this._loading;
+    }
+
+    set loading(loading: boolean) {
+        this._loading = loading;
     }
 
     get show() {
