@@ -59,6 +59,9 @@ export class SessionService implements IMessageHandler {
     private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
     loaderState: LoaderState;
+    private appBackgroundSubscription: Subscription;
+    private appForegroundSubscription: Subscription;
+    private stompStateSubscription: Subscription;
 
     public onServerConnect: BehaviorSubject<boolean>;
 
@@ -175,23 +178,48 @@ export class SessionService implements IMessageHandler {
         // On iOS need to enter into loading state when the app is backgrounded, otherwise
         // user can execute actions as app is coming back to foreground.
         const deviceService = AppInjector.Instance.get(DeviceService);
-        deviceService.onAppEnteringBackground.subscribe(backgrounded => {
-            if (backgrounded) {
-                this.loaderState.loading = true;
-                console.log('Entering into background, showing Loading dialog...');
-                this.showLoading(LoaderState.DISCONNECTED_TITLE);
-            }
-        });
-
-        this.state.subscribe(stompState => {
-            if (stompState === 'CONNECTED') {
-                if (! this.onServerConnect.value) {
-                    this.onServerConnect.next(true);
+        if (! this.appBackgroundSubscription) {
+            this.appBackgroundSubscription = deviceService.onAppEnteringBackground.subscribe(backgrounded => {
+                if (backgrounded) {
+                    this.handleBackgrounding();
                 }
-            } else if (stompState === 'DISCONNECTING') {
-                console.log('STOMP disconnecting');
-            }
-        });
+            });
+        }
+        if (! this.appForegroundSubscription) {
+            this.appForegroundSubscription = deviceService.onAppEnteringForeground.subscribe(foregrounded => {
+                if (foregrounded) {
+                    this.handleForegrounding();
+                }
+            });
+        }
+
+        if (! this.stompStateSubscription) {
+            this.stompStateSubscription = this.state.subscribe(stompState => {
+                if (stompState === 'CONNECTED') {
+                    if (! this.onServerConnect.value) {
+                        this.onServerConnect.next(true);
+                    }
+                } else if (stompState === 'DISCONNECTING') {
+                    console.log('STOMP disconnecting');
+                }
+            });
+        }
+    }
+
+    private handleBackgrounding() {
+        this.loaderState.loading = true;
+        console.log(`Blocking input as app enters into background`);
+        this.showLoading(LoaderState.DISCONNECTED_TITLE);
+        // Input will get unblocked once re-subscribed to server and current screen is shown
+        console.log('Entering into background, unsubscribing');
+        this.unsubscribe();
+    }
+
+    private handleForegrounding() {
+        console.log(`Entering into foreground, re-subscribing`);
+        if (this.getAppId()) {
+            this.subscribe(this.getAppId());
+        }
     }
 
     public unsubscribe() {

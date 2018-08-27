@@ -25,6 +25,7 @@ export class DeviceService implements IMessageHandler {
 
   public onDeviceReady: Subject<string> = new BehaviorSubject<string>(null);
   public onAppEnteringBackground: Subject<boolean> = new BehaviorSubject<boolean>(null);
+  public onAppEnteringForeground: Subject<boolean> = new BehaviorSubject<boolean>(null);
 
   private screen: any;
 
@@ -49,6 +50,13 @@ export class DeviceService implements IMessageHandler {
         () => {
             console.log('OpenPOS is about to enter into the background');
             this.onAppEnteringBackground.next(true);
+        },
+        false
+    );
+    document.addEventListener('resume',
+        () => {
+            console.log('OpenPOS is about to enter into the foreground');
+            this.onAppEnteringForeground.next(true);
         },
         false
     );
