@@ -44,6 +44,9 @@ public class StateManagerFactory implements IStateManagerFactory {
 
     @Autowired
     ApplicationContext applicationContext;
+    
+    @Autowired(required=false)
+    IErrorHandler errorHandler;
 
     private Map<String, Map<String, StateManager>> stateManagersByAppIdByNodeId = new HashMap<>();
 
@@ -86,6 +89,7 @@ public class StateManagerFactory implements IStateManagerFactory {
             synchronized (this) {
                 if (stateManager == null) {
                     stateManager = applicationContext.getBean(StateManager.class);
+                    stateManager.setErrorHandler(errorHandler);
                     stateManager.setInitialFlowConfig(flowConfigProvider.getConfig(appId, nodeId));
                     stateManagersByNodeId.put(nodeId, stateManager);
                     stateManager.init(appId, nodeId);

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 // TODO should be called just ActionHandler, need to repackage annotation of the same name.
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Component;
 public class ActionHandlerImpl {
     
     private static final String METHOD_ON_ANY = "onAnyAction";
+    
+    @Autowired(required=false)
+    private IErrorHandler errorHandler;
 
     
     public boolean canHandleAction(Object state, Action action) {
@@ -27,10 +31,10 @@ public class ActionHandlerImpl {
         }
     }
 
-    public boolean handleAction(Object state, Action action) {        
+    public boolean handleAction(IStateManager stateManager, Object state, Action action) {        
         Method actionMethod = getActionMethod(state, action);
         if (actionMethod != null) {
-            invokeActionMethod(state, action, actionMethod);
+            invokeActionMethod(stateManager, state, action, actionMethod);
             return true;
         } else {
             return false;
@@ -42,10 +46,10 @@ public class ActionHandlerImpl {
                 && !isCalledFromState(state);
     }
     
-    public boolean handleAnyAction(Object state, Action action) {
+    public boolean handleAnyAction(IStateManager stateManager, Object state, Action action) {
         Method anyActionMethod = getAnyActionMethod(state);
         if (anyActionMethod != null) {
-            invokeActionMethod(state, action, anyActionMethod);
+            invokeActionMethod(stateManager, state, action, anyActionMethod);
             return true;
         } else {
             return false;
@@ -84,7 +88,7 @@ public class ActionHandlerImpl {
         return null;
     }
 
-    protected void invokeActionMethod(Object state, Action action, Method method) {
+    protected void invokeActionMethod(IStateManager stateManager, Object state, Action action, Method method) {
         method.setAccessible(true);
         List<Object> arguments = new ArrayList<Object>();
         try {
@@ -100,7 +104,11 @@ public class ActionHandlerImpl {
 
             method.invoke(state, arguments.toArray(new Object[arguments.size()]));
         } catch (Exception ex) {
-            throw new FlowException("Failed to invoke method " + method, ex);
+            if (errorHandler != null) {
+                errorHandler.handleError(stateManager, ex);
+            } else {
+                throw new FlowException("Failed to invoke method " + method, ex);
+            }
         }
     }
     

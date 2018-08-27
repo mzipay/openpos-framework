@@ -92,7 +92,8 @@ public class StateManager implements IStateManager {
     private Map<String, Boolean> sessionAuthenticated = new HashMap<>();
     
     private Map<String, Boolean> sessionCompatible = new HashMap<>();
-
+    
+    private IErrorHandler errorHandler;
 
     public void init(String appId, String nodeId) {
         this.appId = appId;
@@ -125,6 +126,10 @@ public class StateManager implements IStateManager {
         } else {
             throw new RuntimeException("Could not find a flow config for " + appId);
         }
+    }
+    
+    public void setErrorHandler(IErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
     }
     
     @Override
@@ -211,12 +216,20 @@ public class StateManager implements IStateManager {
             performInjections(newState);
             
             if (resumeSuspendedState == null || returnActionName == null) {
-                applicationState.getCurrentContext().getState().arrive(action);
+                try {
+                    applicationState.getCurrentContext().getState().arrive(action);
+                } catch (RuntimeException ex) {
+                    if (this.errorHandler != null) {
+                        this.errorHandler.handleError(this, ex);
+                    } else {
+                        throw ex;
+                    }
+                }
             } else {
                 Action returnAction = new Action(returnActionName, action.getData());    
                 returnAction.setCausedBy(action);
                 if (actionHandler.canHandleAction(applicationState.getCurrentContext().getState(), returnAction)) {
-                    actionHandler.handleAction(applicationState.getCurrentContext().getState(), returnAction);
+                    actionHandler.handleAction(this, applicationState.getCurrentContext().getState(), returnAction);
                 }  else {
                     throw new FlowException(String.format("Unexpected return action from substate: \"%s\". No @ActionHandler %s.on%s() method found.", 
                             returnAction.getName(), applicationState.getCurrentContext().getState().getClass().getName(), returnAction.getName()));                    
@@ -320,7 +333,7 @@ public class StateManager implements IStateManager {
         } else if (subStateConfig != null) {
             transitionToSubState(action, subStateConfig);
         } else if (actionHandler.canHandleAnyAction(applicationState.getCurrentContext().getState())) {
-            actionHandler.handleAnyAction(applicationState.getCurrentContext().getState(), action);
+            actionHandler.handleAnyAction(this, applicationState.getCurrentContext().getState(), action);
         } else if (globalTransitionStateClass != null) {
             transitionToState(action, globalTransitionStateClass);
         } else if (globalSubStateConfig != null) {
@@ -346,7 +359,7 @@ public class StateManager implements IStateManager {
     }
     
     protected boolean handleAction(Object state, Action action) {
-        return actionHandler.handleAction(state, action);
+        return actionHandler.handleAction(this, state, action);
     }
     
     protected boolean handleAction(Action action) {        
