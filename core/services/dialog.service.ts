@@ -90,7 +90,7 @@ export class DialogService {
         }
     }
 
-    /** screenType - If given behaviro will only report true if there is a dialog open AND it's of the given type */
+    /** screenType - If given, behavior will only report true if there is a dialog open AND it's of the given type */
     public isDialogOpen(screenType?: string): boolean {
         if (screenType) {
             return screenType === this.lastDialogType && this.dialogRef !== null;
