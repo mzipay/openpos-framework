@@ -33,6 +33,7 @@ export class LoaderState {
     }
 
     set loading(loading: boolean) {
+        // console.log(`Setting _loading: ${loading}`);
         this._loading = loading;
     }
 

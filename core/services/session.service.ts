@@ -367,26 +367,26 @@ export class SessionService implements IMessageHandler {
     }
 
     private queueLoading() {
-        // console.log(`queueLoading invoked`);
+        //console.log(`queueLoading invoked`);
         this.loaderState.loading = true;
         setTimeout(() => this.showLoading(LoaderState.LOADING_TITLE), 1000);
     }
 
     private showLoading(title: string, message?: string) {
-        // console.log(`showLoading invoked`);
+        //console.log(`showLoading invoked`);
         if (this.loaderState.loading) {
             this.loaderState.setVisible(true, title, message);
         }
     }
 
     public cancelLoading() {
-        // console.log(`cancelLoading invoked`);
+        //console.log(`cancelLoading invoked`);
         this.loaderState.loading = false;
         this.loaderState.setVisible(false);
     }
 
     handle(message: any) {
-        // console.log(`Got message: ${message.screenType}`);
+        //console.log(`Got message: ${message.screenType}`);
         if (message.screenType === 'Loading') {
             // This is just a temporary hack
             // Might be a previous instance of a Loading screen being shown,

@@ -1,8 +1,8 @@
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { IScreen } from '../components';
 import { SessionService } from './session.service';
-import { filter, map } from 'rxjs/operators';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { OpenPOSDialogConfig } from '../interfaces';
 import { StartupService, StartupStatus } from './startup.service';
@@ -19,18 +19,22 @@ export class DialogService {
 
     private lastDialogType: string;
 
+    // Used for notifying when current dialog has closed so that, in case of consec. dialogs,
+    // the next dialog won't be opened until current one is closed.
+    private dialogClosed = new BehaviorSubject<boolean>(true);
+
     constructor(
         private componentFactoryResolver: ComponentFactoryResolver,
         private session: SessionService,
         private dialog: MatDialog,
         private startupService: StartupService) {
 
+
         // Get just the messages we care about for managing dialogs
         const $dialogMessages = session.getMessages('Screen', 'ClearDialog');
 
         this.startupService.onStartupCompleted.subscribe(startupStatus => {
-            if (startupStatus === StartupStatus.Success) {
-
+            if (startupStatus === StartupStatus.Success || startupStatus === StartupStatus.Failure) {
                 // Pipe all the messages for dialog updates
                 $dialogMessages.pipe(
                     filter( m => (m.template && m.template.dialog) )
@@ -77,14 +81,14 @@ export class DialogService {
         if (dialogType) {
             return this.componentFactoryResolver.resolveComponentFactory(dialogType);
         } else {
-            console.error(`Could not fine a dialog type of: ${type}.  Please register it with the screen service`);
+            console.error(`Could not find a dialog type of: ${type}.  Please register it with the screen service`);
             return this.componentFactoryResolver.resolveComponentFactory(this.dialogs.get('Blank'));
         }
     }
 
     public closeDialog() {
         if (this.dialogRef) {
-            console.log('closing dialog ref');
+            console.log('[DialogService] closing dialog ref');
             this.dialogRef.close();
             this.dialogRef = null;
         }
@@ -103,16 +107,18 @@ export class DialogService {
         if (dialog) {
             const dialogType = this.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
             if (!this.dialogOpening) {
-                if (this.dialogRef && (dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog')) {
-                    console.log('closing dialog');
-                    this.dialogRef.close();
-                    this.dialogRef = null;
-                }
-                console.log('opening dialog \'' + dialogType + '\'');
-                this.dialogOpening = true;
-                setTimeout(() => this.openDialog(dialog), 0);
+                // console.log(`[DialogService] dialogRef=${this.dialogRef}, dialog.screenType=${dialog.screenType}, this.lastDialogType=${this.lastDialogType}`);
+                this.closeDialog();
+                // Don't open next dialog until current one has closed.
+                this.dialogClosed.subscribe(complete => {
+                    if (complete) {
+                        console.log('[DialogService] opening dialog \'' + dialogType + '\'');
+                        this.dialogOpening = true;
+                        setTimeout(() => this.openDialog(dialog), 0);
+                    }
+                });
             } else {
-                console.log(`Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}`);
+                console.log(`[DialogService] Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}`);
             }
         }
     }
@@ -140,6 +146,10 @@ export class DialogService {
             console.log(`Dialog options: ${JSON.stringify(dialogProperties)}`);
         }
 
+        if (this.dialogClosed) {
+            this.dialogClosed.unsubscribe();
+        }
+
         if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
             || dialog.refreshAlways) {
             this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
@@ -147,23 +157,21 @@ export class DialogService {
             console.log(`Using previously created dialogRef. current dialog type: ${dialog.screenType}, last dialog type: ${this.lastDialogType}`);
         }
 
+        this.session.loaderState.loading = false;
+
         this.dialogRef.componentInstance.show(dialog);
         this.dialogOpening = false;
-        console.log('Dialog \'' + dialog.screenType + '\' opened');
-        if (dialogProperties.executeActionBeforeClose) {
-            // Some dialogs may need to execute the chosen action before
-            // they close so that actionPayloads can be included with the action
-            // before the dialog is destroyed.
-            this.dialogRef.beforeClose().subscribe(result => {
-                this.session.onAction(closeAction || result);
-            });
-        } else {
-            this.dialogRef.afterClosed().subscribe(result => {
-                this.session.onAction(closeAction || result);
+        this.dialogClosed = new BehaviorSubject<boolean>(false);
+        console.log('[DialogService] Dialog \'' + dialog.screenType + '\' opened');
+        this.dialogRef.beforeClose().subscribe(result => {
+            const action = closeAction || result;
+            // console.log(`[DialogService] beforeClose running. action: ${action}`);
+            this.session.onAction(action);
+            if (action) {
+                this.session.loaderState.loading = true;
             }
-            );
-        }
-
+            this.dialogClosed.next(true);
+        });
         this.lastDialogType = dialog.screenType;
     }
 }

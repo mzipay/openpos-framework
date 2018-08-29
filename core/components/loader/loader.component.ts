@@ -28,6 +28,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.subscription = this.session.loaderState.observable
             .subscribe((state: LoaderState) => {
+                // console.log(`Got new LoaderState: show=${state.show}`)
                 const stateChanging = this.show !== state.show;
                 this.title = state.title ? state.title : LoaderState.LOADING_TITLE;
                 this.message = state.message;
