@@ -7,6 +7,7 @@ import java.util.List;
 public interface ILegacySaleReturnLineItem {
     String getPosItemID();
     int getLineNumber();
+    String getAltItemId();
     String getItemID();
     String getItemDescription();
     BigDecimal getItemQuantityDecimal();

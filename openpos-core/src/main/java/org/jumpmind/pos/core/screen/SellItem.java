@@ -14,6 +14,7 @@ public class SellItem extends DefaultItem {
     private static final long serialVersionUID = 1L;
     
     private String posItemId;
+    private String altItemId;
     private String originalAmount;
     private String sellingPrice;
     private String quantity;
@@ -54,6 +55,14 @@ public class SellItem extends DefaultItem {
     
     public String getPosItemId() {
         return posItemId;
+    }
+    
+    public void setAltItemId(String altItemId) {
+        this.altItemId = altItemId;
+    }
+    
+    public String getAltItemId() {
+        return altItemId;
     }
 
     public String getQuantity() {
