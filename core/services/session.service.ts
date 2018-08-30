@@ -97,7 +97,7 @@ export class SessionService implements IMessageHandler {
     }
 
     public registerMessageHandler(handler: IMessageHandler, ...types: string[]): Subscription {
-        return this.stompJsonMessages$.pipe(filter(s => types.includes(s.type))).subscribe(s => handler.handle(s));
+        return this.stompJsonMessages$.pipe(filter(s => types ? types.includes(s.type) : true)).subscribe(s => handler.handle(s));
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -167,8 +167,12 @@ export class SessionService implements IMessageHandler {
         // Subscribe a function to be run on_next message
         this.subscription = this.messages.subscribe((message: Message) => {
             // console.log('Got message');
-            const json = JSON.parse(message.body);
-            this.stompJsonMessages$.next(json);
+            if (this.isMessageVersionValid(message)) {
+                const json = JSON.parse(message.body);
+                this.stompJsonMessages$.next(json);
+            } else {
+                this.stompJsonMessages$.next(this.buildIncompatibleVersionScreen());
+            }
         });
 
         this.state = this.stompService.state.pipe(map((state: number) => StompState[state]));
@@ -204,6 +208,27 @@ export class SessionService implements IMessageHandler {
                 }
             });
         }
+    }
+
+    private buildIncompatibleVersionScreen(): any {
+
+        return {
+            type: 'Screen',
+            screenType: 'Dialog',
+            template: {dialog: true, type: 'BlankWithBar'},
+            dialogProperties: {closeable: false},
+            title: 'Incompatible Versions',
+            message: [Configuration.incompatibleVersionMessage]
+        };
+    }
+
+    private isMessageVersionValid(message: Message): boolean {
+        const valid = message.headers.compatibilityVersion === Configuration.compatibilityVersion;
+        if (! valid) {
+            console.log(`INCOMPATIBLE VERSIONS. Client compatibilityVersion: ${Configuration.compatibilityVersion}, ` +
+            `server compatibilityVersion: ${message.headers.compatibilityVersion}`);
+        }
+        return valid;
     }
 
     private handleBackgrounding() {

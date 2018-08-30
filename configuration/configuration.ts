@@ -6,6 +6,7 @@ export const Configuration = {
     showRegisterStatus: false,
     keepAliveMillis: 30000,
     compatibilityVersion: 'v1',
+    incompatibleVersionMessage: 'Application is not compatible with the server.',
     maxSignaturePoints: -1,
     maxResponseSizeBytes: 79500
 };
