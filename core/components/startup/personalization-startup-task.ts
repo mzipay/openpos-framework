@@ -23,6 +23,7 @@ export class PersonalizationStartupTask implements IStartupTask {
             }  else  {
                 startupComponent.message = 'Device is already personalized.';
                 resolve(true);
+                this.personalization.notifyPersonalized();
             }
         });
     }

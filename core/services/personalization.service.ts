@@ -40,7 +40,11 @@ export class PersonalizationService {
     public onPersonalized: BehaviorSubject<boolean>;
 
     constructor(private location: Location, private router: Router) {
-        this.onPersonalized = new BehaviorSubject(this.isPersonalized());
+        this.onPersonalized = new BehaviorSubject(null);
+    }
+
+    public notifyPersonalized() {
+        this.onPersonalized.next(true);
     }
 
     public personalize(serverName: string, serverPort: string, node: string | {storeId: string, deviceId: string},
