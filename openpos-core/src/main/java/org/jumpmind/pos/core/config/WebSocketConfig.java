@@ -5,11 +5,19 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageType;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.messaging.support.ChannelInterceptorAdapter;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.concurrent.DefaultManagedTaskScheduler;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.socket.WebSocketHandler;
@@ -35,6 +43,9 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     
     ObjectMapper mapper = new ObjectMapper();
     
+    @Value("${openpos.compatibility.version:v1}") // Default to 'v1' so pre-existing clients aren't broken
+    String serverCompatibilityVersion; 
+    
     @Override
     public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
         registration.setMessageSizeLimit(80000); //75681
@@ -49,6 +60,28 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 		config.setPathMatcher(new AntPathMatcher("."));
 	}
 	
+   @Override
+    public void configureClientOutboundChannel(ChannelRegistration registration) {
+       registration.interceptors(new ChannelInterceptorAdapter() {
+           @Override
+           public Message<?> preSend(Message<?> message, MessageChannel channel) {
+               Message<?> returnMessage = message;
+               SimpMessageHeaderAccessor accessor = SimpMessageHeaderAccessor.wrap(message);
+               if(accessor != null) {
+                   SimpMessageType messageType = accessor.getMessageType();
+                   if(messageType == SimpMessageType.MESSAGE) {
+                       // Add compatibility version to message headers going out to client
+                       if (WebSocketConfig.this.serverCompatibilityVersion != null) {
+                           accessor.addNativeHeader(MessageUtils.COMPATIBILITY_VERSION_HEADER, WebSocketConfig.this.serverCompatibilityVersion);
+                           returnMessage = MessageBuilder.createMessage(message.getPayload(), accessor.getMessageHeaders());
+                       }
+                   }
+               }
+               return returnMessage;
+           }
+       });
+    }
+
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {

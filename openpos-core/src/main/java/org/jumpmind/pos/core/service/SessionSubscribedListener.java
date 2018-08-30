@@ -2,6 +2,7 @@ package org.jumpmind.pos.core.service;
 
 import java.util.Arrays;
 
+import org.jumpmind.pos.core.config.MessageUtils;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
 import org.jumpmind.pos.core.screen.DialogProperties;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 @Component
-public class SessionSubscribedListener implements ApplicationListener<SessionSubscribeEvent> {
+public class SessionSubscribedListener implements ApplicationListener<SessionSubscribeEvent>, MessageUtils {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -37,6 +38,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
         Message<?> msg = event.getMessage();
         String sessionId = (String) msg.getHeaders().get("simpSessionId");
         String topicName = (String) msg.getHeaders().get("simpDestination");
+        String compatibilityVersion = this.getHeader(msg, MessageUtils.COMPATIBILITY_VERSION_HEADER);
         String nodeId = topicName.substring(topicName.indexOf("/node/") + "/node/".length());
         String appId = topicName.substring(topicName.indexOf("/app/") + "/app/".length(), topicName.indexOf("/node/"));
         logger.info("session subscribing: {}", sessionId);
@@ -59,6 +61,12 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
                 messageService.sendMessage(appId, nodeId, errorDialog);
             } else if (!stateManager.isSessionCompatible(sessionId)) {
                 DialogScreen errorDialog = new DialogScreen();
+                // If there is no compatibility version, the client is an older client that used the type attribute
+                // instead of the screenType attribute for the screen type value. In that case need to set the type attribute or
+                // the dialog will not display on older clients
+                if (compatibilityVersion == null) {
+                    errorDialog.setType(errorDialog.getScreenType());
+                }
                 errorDialog.asDialog(new DialogProperties(false));
                 errorDialog.setIcon("error");
                 errorDialog.setTitle("Incompatible Versions");
@@ -72,6 +80,5 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             logger.error("Failed to subscribe to " + topicName, ex);
         }
     }
-
 
 }
