@@ -218,7 +218,7 @@ export class SessionService implements IMessageHandler {
             template: {dialog: true, type: 'BlankWithBar'},
             dialogProperties: {closeable: false},
             title: 'Incompatible Versions',
-            message: [Configuration.incompatibleVersionMessage]
+            message: Configuration.incompatibleVersionMessage.split('\n')
         };
     }
 
