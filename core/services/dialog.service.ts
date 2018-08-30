@@ -163,15 +163,53 @@ export class DialogService {
         this.dialogOpening = false;
         this.dialogClosed = new BehaviorSubject<boolean>(false);
         console.log('[DialogService] Dialog \'' + dialog.screenType + '\' opened');
+        if (dialogProperties.executeActionBeforeClose) {
+            this.handleActionBeforeClose(closeAction);
+        } else {
+            this.handleActionAfterClose(closeAction);
+        }
+
+        this.lastDialogType = dialog.screenType;
+    }
+
+    private handleActionBeforeClose(closeAction: any) {
+        console.log(`Using 'BeforeClose' logic`);
+        // Some dialogs may need to execute the chosen action before
+        // they close so that actionPayloads can be included with the action
+        // before the dialog is destroyed.
         this.dialogRef.beforeClose().subscribe(result => {
             const action = closeAction || result;
-            // console.log(`[DialogService] beforeClose running. action: ${action}`);
             this.session.onAction(action);
+            // Block input while closing
             if (action) {
                 this.session.loaderState.loading = true;
             }
             this.dialogClosed.next(true);
         });
-        this.lastDialogType = dialog.screenType;
+    }
+
+    private handleActionAfterClose(closeAction: any) {
+        // Temp hack to stop user actions while the dialog is closing
+        console.log(`Using 'AfterClose' logic`);
+        // Disable actions while the dialog is closing
+        this.dialogRef.beforeClose().subscribe(result => {
+            const action = closeAction || result;
+            // Disable input while we are closing if there is an action for this dialog to be returned
+            if (action) {
+                this.session.loaderState.loading = true;
+            }
+        });
+        this.dialogRef.afterClosed().subscribe(result => {
+            const action = closeAction || result;
+            // Need to temporarily allow input again
+            this.session.loaderState.loading = false;
+            // Send the action through
+            this.session.onAction(closeAction || result);
+            // Block input again
+            if (action) {
+                this.session.loaderState.loading = true;
+            }
+            this.dialogClosed.next(true);
+        });
     }
 }
