@@ -70,7 +70,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
                 errorDialog.asDialog(new DialogProperties(false));
                 errorDialog.setIcon("error");
                 errorDialog.setTitle("Incompatible Versions");
-                errorDialog.setMessage(Arrays.asList(incompatibleVersionMessage));
+                errorDialog.setMessage(Arrays.asList(incompatibleVersionMessage.split("\n")));
                 messageService.sendMessage(appId, nodeId, errorDialog);
             } else {
                 stateManager.refreshScreen();
