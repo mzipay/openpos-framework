@@ -1,5 +1,7 @@
 package org.jumpmind.pos.core.screen;
 
+import static org.apache.commons.lang.StringUtils.isEmpty;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,13 +34,14 @@ public class SellItem extends DefaultItem {
 
     @Override
     public String getSubtitle() {
-    	String subTitle = "Item: %s %s@%s";
-    	if (this.salesAssociate != null && this.salesAssociate != "") {
-    		subTitle = subTitle + " - Sales Associate: %s";
-            subTitle = String.format(subTitle, this.getPosItemId(), this.getQuantity(), this.getSellingPrice(), this.getSalesAssociate());
-    	} else {
-    		subTitle = String.format(subTitle, this.getPosItemId(), this.getQuantity(), this.getSellingPrice());
-    	}
+        String subTitle = "Item: %s%s %s@%s";
+        String altItemId = isEmpty(this.getAltItemId()) ? "" : "/" + this.getAltItemId();
+        if (this.salesAssociate != null && this.salesAssociate != "") {
+            subTitle = subTitle + " - Sales Associate: %s";
+            subTitle = String.format(subTitle, this.getPosItemId(), altItemId, this.getQuantity(), this.getSellingPrice(), this.getSalesAssociate());
+        } else {
+            subTitle = String.format(subTitle, this.getPosItemId(), altItemId, this.getQuantity(), this.getSellingPrice());
+        }
 
         return subTitle;
     }
