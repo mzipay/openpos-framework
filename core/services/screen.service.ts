@@ -34,7 +34,7 @@ export class ScreenService {
         if (screenType) {
             return this.componentFactoryResolver.resolveComponentFactory(screenType);
         } else {
-            console.error(`Could not fine a screen type of: ${type}.  Please register it with the screen service`);
+            console.error(`Could not find a screen type of: ${type}.  Please register it with the screen service`);
             return this.resolveScreen('Blank');
         }
     }
