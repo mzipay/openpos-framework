@@ -128,7 +128,7 @@ public class TranslatorState implements IState {
                     try {
                         response = futureResponse.get(request.getTimeout(), TimeUnit.MILLISECONDS);
                         if (response != null) {
-                            logger.info("Reponse of type '{}' received from device '{}', for request id: {}", response.getType(), response.getDeviceId(), response.getRequestId() );
+                            logger.info("Response of type '{}' received from device '{}', for request id: {}", response.getType(), response.getDeviceId(), response.getRequestId() );
                         } else {
                             logger.warn("Received a null response for request id: {}", request.getRequestId());
                         }
