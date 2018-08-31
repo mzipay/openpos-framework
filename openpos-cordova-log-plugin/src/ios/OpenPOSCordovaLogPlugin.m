@@ -85,7 +85,7 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
     if (fileExists) {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:logFilePath];
     } else {
-        NSString* errorMsg = [NSString stringWithFormat:@"[OpenPOSCordovaLogPlugin]Log file '%@' not found.",logFilename];
+        NSString* errorMsg = [NSString stringWithFormat:@"[OpenPOSCordovaLogPlugin] Log file '%@' not found.",logFilename];
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMsg];
         logFilePath = nil;
     }
@@ -122,14 +122,14 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
     if (fileExists) {
         logfileContent = [NSString stringWithContentsOfFile:logFilePath encoding:NSUTF8StringEncoding error:&readError];
         if (readError) {
-            NSLog(@"[OpenPOSCordovaLogPlugin]ERROR while reading from file '%@': %@", logFilePath, readError);
+            NSLog(@"[OpenPOSCordovaLogPlugin] ERROR while reading from file '%@': %@", logFilePath, readError);
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[readError localizedDescription]];
             logfileContent = nil;
         } else {
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:logfileContent];
         }
     } else {
-        NSString* errorMsg = [NSString stringWithFormat:@"[OpenPOSCordovaLogPlugin]Log file '%@' not found.",logFilename];
+        NSString* errorMsg = [NSString stringWithFormat:@"[OpenPOSCordovaLogPlugin] Log file '%@' not found.",logFilename];
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMsg];
         logfileContent = nil;
     }
@@ -149,14 +149,14 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
         NSURL *logFileURL = [NSURL fileURLWithPath:logFilePath];
         BOOL shareSuccess = [self shareViaActivityView: logFileURL];
         if (! shareSuccess) {
-            NSString *msg = @"[OpenPOSCordovaLogPlugin]Failed to resolve an app that can share a text file";
+            NSString *msg = @"[OpenPOSCordovaLogPlugin] Failed to resolve an app that can share a text file";
             NSLog(@"%@",msg);
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:msg];
         } else {
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         }
     } else {
-        NSString* errorMsg = [NSString stringWithFormat:@"[OpenPOSCordovaLogPlugin]Log file '%@' not found.",logFilename];
+        NSString* errorMsg = [NSString stringWithFormat:@"[OpenPOSCordovaLogPlugin] Log file '%@' not found.",logFilename];
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMsg];
     }
     
@@ -168,27 +168,30 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
    ***************************************************************
 */
 - (void)pluginInitialize {
-
-    /* Start thread to check when it's time to roll the current log file. */
-    if ([self isCapturingLogOutputEnabled]) {
-        [self startRollLogCheckTask];
-    }
-    NSLog(@"OpenPOSCordovaLogPlugin intializing...");
-
-    self._appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSLog(@"[OpenPOSCordovaLogPlugin]appVersion detected as: %@", self._appVersion);
-
     NSString* logDirPref = [self.commandDelegate.settings objectForKey: [@"OpenPOSCordovaLogPlugin.logDir" lowercaseString]];
     if (logDirPref != nil) {
         self._logDir = logDirPref;
-        NSLog(@"[OpenPOSCordovaLogPlugin]logDir read from pref: '%@'", self._logDir);
     }
 
     NSString* logSuffixPref = [self.commandDelegate.settings objectForKey: [@"OpenPOSCordovaLogPlugin.logSuffix" lowercaseString]];
     if (logSuffixPref != nil) {
         self._logFileSuffix = logSuffixPref;
-        NSLog(@"[OpenPOSCordovaLogPlugin]logSuffix read from pref: '%@'", self._logFileSuffix);
     }
+
+    /* Start thread to check when it's time to roll the current log file. 
+       Redirect logging to a file. */
+    if ([self isCapturingLogOutputEnabled]) {
+        [self startRollLogCheckTask];
+        // Only redirect if stderr isn't already associated with a 'terminal' (e.g., a console)
+        [self captureConsoleOutputToOpenPOSLogFile];
+    } else {
+        NSLog(@"[OpenPOSCordovaLogPlugin] initializing (without log redirection)...");
+    }
+
+
+    self._appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSLog(@"[OpenPOSCordovaLogPlugin] appVersion detected as: %@", self._appVersion);
+
 
     self._logRetentionDays = DEFAULT_LOG_RETENTION_DAYS;
     NSString* logRetentionDaysPref = [self.commandDelegate.settings objectForKey: [@"OpenPOSCordovaLogPlugin.logRetentionDays" lowercaseString]];
@@ -197,7 +200,7 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
         NSNumber *logRetDaysNum = [formatter numberFromString:logRetentionDaysPref];
         if (logRetDaysNum != nil) {
             self._logRetentionDays = [logRetDaysNum intValue];
-            NSLog(@"[OpenPOSCordovaLogPlugin]logRetentionDays read from pref: '%@'", logRetentionDaysPref);
+            NSLog(@"[OpenPOSCordovaLogPlugin] logRetentionDays read from pref: '%@'", logRetentionDaysPref);
         }
     }
 
@@ -205,14 +208,10 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
     // that we can divert logging to our own file
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
     
-    NSLog(@"[OpenPOSCordovaLogPlugin]initialization complete.");
+    NSLog(@"[OpenPOSCordovaLogPlugin] initialization complete.");
 }
 
 - (void) finishLaunching:(NSNotification *)notification {
-    // Only redirect if stderr isn't already associated with a 'terminal' (e.g., a console)
-    if ([self isCapturingLogOutputEnabled]) {
-        [self captureConsoleOutputToOpenPOSLogFile];
-    }
 }
 
 /* ***************************************************************
@@ -282,7 +281,7 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
                                     attributes:nil
                                     error:&error];
     if (error != nil) {
-        NSLog(@"[OpenPOSCordovaLogPlugin]Error creating Logs directory at %@: %@", logsDirectory, error);
+        NSLog(@"[OpenPOSCordovaLogPlugin] Error creating Logs directory at %@: %@", logsDirectory, error);
     }
     
     return logsDirectory;
@@ -361,19 +360,19 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
 }
 
 - (void) _purgeOldLogFiles {
-    NSLog(@"[OpenPOSCordovaLogPlugin]>>> PURGE LOGS: Running...");
+    NSLog(@"[OpenPOSCordovaLogPlugin] >>> PURGE LOGS: Running...");
     NSFileManager* fileMgr = [NSFileManager defaultManager];
     
     NSArray *logFileNames = [self getLogFileList:TRUE sortOrder:@"ASC"];
     if (logFileNames != nil) {
         NSUInteger fileCount = [logFileNames count];
-        NSLog(@"[OpenPOSCordovaLogPlugin]>>> PURGE LOGS: Got list of log files. size: %lu", fileCount);
+        NSLog(@"[OpenPOSCordovaLogPlugin] >>> PURGE LOGS: Got list of log files. size: %lu", fileCount);
 
         NSDate *oldestFileDate = [[NSDate date] dateByAddingTimeInterval:(-1*self._logRetentionDays*24*60*60)];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
 
-        NSLog(@"[OpenPOSCordovaLogPlugin]>>> PURGE LOGS: Checking for log files to purge that are older than %@ (%i days ago). %lu files to review...", 
+        NSLog(@"[OpenPOSCordovaLogPlugin] >>> PURGE LOGS: Checking for log files to purge that are older than %@ (%i days ago). %lu files to review...", 
           [dateFormatter stringFromDate: oldestFileDate],
           self._logRetentionDays, 
           fileCount );
@@ -391,24 +390,24 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
                     success = [fileMgr removeItemAtPath:logFileNames[i] error:&err];
                     if (success) {
                         deleteCount++;
-                        NSLog(@"[OpenPOSCordovaLogPlugin]>>> PURGE LOGS: Purged file '%@' with last modified date '%@'", filename, [dateFormatter stringFromDate: modifiedDate]);
+                        NSLog(@"[OpenPOSCordovaLogPlugin] >>> PURGE LOGS: Purged file '%@' with last modified date '%@'", filename, [dateFormatter stringFromDate: modifiedDate]);
                     } else {
                         if (err) {
-                            NSLog(@"[OpenPOSCordovaLogPlugin]>>> PURGE LOGS: Failed to purge file '%@'. Reason: '%@'", filename, err);
+                            NSLog(@"[OpenPOSCordovaLogPlugin] >>> PURGE LOGS: Failed to purge file '%@'. Reason: '%@'", filename, err);
                         } else {
-                            NSLog(@"[OpenPOSCordovaLogPlugin]>>> PURGE LOGS: Failed to purge file '%@'. Reason: Unknown", filename);
+                            NSLog(@"[OpenPOSCordovaLogPlugin] >>> PURGE LOGS: Failed to purge file '%@'. Reason: Unknown", filename);
                         }
                     }
                 }
             } else {
-                NSLog(@"[OpenPOSCordovaLogPlugin]>>> PURGE LOGS: Failed to get file attributes for '%@'. Reason: Unknown", filename);
+                NSLog(@"[OpenPOSCordovaLogPlugin] >>> PURGE LOGS: Failed to get file attributes for '%@'. Reason: Unknown", filename);
             }
         }
         if (deleteCount > 0) {
-            NSLog(@"[OpenPOSCordovaLogPlugin]>>> PURGE LOGS: %i file(s) purged successfully.", deleteCount);
+            NSLog(@"[OpenPOSCordovaLogPlugin] >>> PURGE LOGS: %i file(s) purged successfully.", deleteCount);
         }    
     } else {
-        NSLog(@"[OpenPOSCordovaLogPlugin]>>> PURGE LOGS: No files found to purge");
+        NSLog(@"[OpenPOSCordovaLogPlugin] >>> PURGE LOGS: No files found to purge");
     }
 }
 
@@ -420,9 +419,10 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
     self._curLogFile = freopen([logFilePathCurrentDate cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
     self._curLogFileName = logFilePathCurrentDate;
 
-    NSLog(@"[OpenPOSCordovaLogPlugin]logDir is: '%@'", self._logDir);
-    NSLog(@"[OpenPOSCordovaLogPlugin]logFileSuffix is: '%@'", self._logFileSuffix);
-    NSLog(@"[OpenPOSCordovaLogPlugin]current log file is: '%@'", self._curLogFileName);
+    NSLog(@"[OpenPOSCordovaLogPlugin] initializing with log redirection...");
+    NSLog(@"[OpenPOSCordovaLogPlugin] logDir is: '%@'", self._logDir);
+    NSLog(@"[OpenPOSCordovaLogPlugin] logFileSuffix is: '%@'", self._logFileSuffix);
+    NSLog(@"[OpenPOSCordovaLogPlugin] current log file is: '%@'", self._curLogFileName);
 }
 
 - (UIViewController *) documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
@@ -442,7 +442,7 @@ NSInteger const DEFAULT_LOG_RETENTION_DAYS = 14;
         // If the day changed, need to roll the log file to a new file
         if ([currentDateParts day] != [self._lastCheckedDateParts day]) {
             self._lastCheckedDateParts = currentDateParts;
-            NSLog(@"[OpenPOSCordovaLogPlugin]Date has changed, rolling the log file...");
+            NSLog(@"[OpenPOSCordovaLogPlugin] Date has changed, rolling the log file...");
             [self rollOpenPOSLogFile]; // roll the log file
         }
 
