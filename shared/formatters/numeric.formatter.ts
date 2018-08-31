@@ -1,6 +1,7 @@
 import { IFormatter } from './formatter.interface';
 
 export class NumericFormatter implements IFormatter {
+    static readonly CHAR_REGEX = /[^0-9]/g;
     static readonly FILTER_REGEX = /^[0-9]$/;
 
 
@@ -9,7 +10,8 @@ export class NumericFormatter implements IFormatter {
     }
 
     formatValue(value: string): string {
-        return value;
+        // remove any invalid chars
+        return value !== null ? value.replace(NumericFormatter.CHAR_REGEX, '') : null;
     }
 
     unFormatValue(value: string): string {
