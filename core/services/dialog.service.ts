@@ -204,7 +204,7 @@ export class DialogService {
             // Need to temporarily allow input again
             this.session.loaderState.loading = false;
             // Send the action through
-            this.session.onAction(closeAction || result);
+            this.session.onAction(action);
             // Block input again
             if (action) {
                 this.session.loaderState.loading = true;
