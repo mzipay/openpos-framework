@@ -79,7 +79,7 @@ export const ScreenConstants = {
         { name: 'MultipleDynamicForm', component: MultipleDynamicFormComponent },
         { name: 'SelectionList', component: SelectionListComponent },
         { name: 'CatalogBrowser', component: CatalogBrowserComponent},
-        { name:'ItemSearchResults', component: ItemSearchResultsComponent },
+        { name: 'ItemSearchResults', component: ItemSearchResultsComponent },
         { name: 'JournalDetail', component: JournalSearchResultsComponent },
 
         // Default Dialog

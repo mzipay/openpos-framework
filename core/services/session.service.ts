@@ -80,7 +80,7 @@ export class SessionService implements IMessageHandler {
             console.error(`[OpenPOS]${e}`);
         });
         this.onServerConnect = new BehaviorSubject<boolean>(false);
-        this.stompJsonMessages$.pipe(
+        this.getMessages().pipe(
                     filter(s => ['Screen'].includes(s.type))
                 )
             .subscribe(s => this.handle(s));
@@ -93,11 +93,11 @@ export class SessionService implements IMessageHandler {
     public getMessages( ...types: string[]): Observable<any> {
         return  merge(
             this.stompJsonMessages$,
-            this.sessionMessages$ ).pipe(filter(s => types.includes(s.type)));
+            this.sessionMessages$ ).pipe(filter(s => types && types.length > 0 ? types.includes(s.type) : true));
     }
 
     public registerMessageHandler(handler: IMessageHandler, ...types: string[]): Subscription {
-        return this.stompJsonMessages$.pipe(filter(s => types ? types.includes(s.type) : true)).subscribe(s => handler.handle(s));
+        return this.stompJsonMessages$.pipe(filter(s => types && types.length > 0 ? types.includes(s.type) : true)).subscribe(s => handler.handle(s));
     }
 
     public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
@@ -190,7 +190,7 @@ export class SessionService implements IMessageHandler {
             });
         }
         if (! this.appForegroundSubscription) {
-            this.appForegroundSubscription = deviceService.onAppEnteringForeground.subscribe(foregrounded => {
+            this.appForegroundSubscription = deviceService.onAppEnteredForeground.subscribe(foregrounded => {
                 if (foregrounded) {
                     this.handleForegrounding();
                 }
@@ -232,19 +232,36 @@ export class SessionService implements IMessageHandler {
     }
 
     private handleBackgrounding() {
-        this.loaderState.loading = true;
-        console.log(`Blocking input as app enters into background`);
-        this.showLoading(LoaderState.DISCONNECTED_TITLE);
+        // Show splash screen when running on iOS
+        // Ascena has a Startup task that automatically dismisses the splash screen.
+        // If other retailers are using iOS will need to implement the same, move this code
+        // to Ascena, or find the right place in the core to dismiss the splash screen
+        if ((<any>(window.navigator)).splashscreen) {
+            console.log('Showing splashscreen');
+            (<any>(window.navigator)).splashscreen.show();
+        }
+
+        this.sendMessage({
+            type: 'Screen',
+            screenType: 'Wait',
+            template: {type: 'Blank'},
+            title: 'Point of Sale is Loading',
+            instructions: 'Please wait while Point of Sale is loading...'
+        });
+        this.cancelLoading();
         // Input will get unblocked once re-subscribed to server and current screen is shown
         console.log('Entering into background, unsubscribing');
         this.unsubscribe();
     }
 
     private handleForegrounding() {
-        console.log(`Entering into foreground, re-subscribing`);
-        if (this.getAppId()) {
-            this.subscribe(this.getAppId());
-        }
+        setTimeout( () => {
+            console.log(`Entering into foreground, re-subscribing`);
+            if (this.getAppId()) {
+                // Force app reload
+                window.location.href = 'index.html';
+            }
+        }, 0);
     }
 
     public unsubscribe() {
@@ -393,26 +410,30 @@ export class SessionService implements IMessageHandler {
     }
 
     private queueLoading() {
-        //console.log(`queueLoading invoked`);
         this.loaderState.loading = true;
-        setTimeout(() => this.showLoading(LoaderState.LOADING_TITLE), 1000);
+        setTimeout(() => {
+            console.log(`queueLoading timeout fired, invoking showLoading`);
+            this.showLoading(LoaderState.LOADING_TITLE);
+        }, 1000);
+
     }
 
     private showLoading(title: string, message?: string) {
-        //console.log(`showLoading invoked`);
+        console.log(`showLoading method invoked`);
         if (this.loaderState.loading) {
+            console.log(`showLoading is showing the loading dialog NOW`);
             this.loaderState.setVisible(true, title, message);
         }
     }
 
     public cancelLoading() {
-        //console.log(`cancelLoading invoked`);
+        console.log(`cancelLoading invoked`);
         this.loaderState.loading = false;
         this.loaderState.setVisible(false);
     }
 
     handle(message: any) {
-        //console.log(`Got message: ${message.screenType}`);
+        console.log(`Got message: ${message.screenType}`);
         if (message.screenType === 'Loading') {
             // This is just a temporary hack
             // Might be a previous instance of a Loading screen being shown,

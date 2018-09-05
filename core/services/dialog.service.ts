@@ -2,7 +2,6 @@ import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@a
 import { IScreen } from '../components';
 import { SessionService } from './session.service';
 import { filter } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { OpenPOSDialogConfig } from '../interfaces';
 import { StartupService, StartupStatus } from './startup.service';
@@ -18,10 +17,6 @@ export class DialogService {
     private dialogOpening: boolean;
 
     private lastDialogType: string;
-
-    // Used for notifying when current dialog has closed so that, in case of consec. dialogs,
-    // the next dialog won't be opened until current one is closed.
-    private dialogClosed = new BehaviorSubject<boolean>(true);
 
     constructor(
         private componentFactoryResolver: ComponentFactoryResolver,
@@ -109,14 +104,9 @@ export class DialogService {
             if (!this.dialogOpening) {
                 // console.log(`[DialogService] dialogRef=${this.dialogRef}, dialog.screenType=${dialog.screenType}, this.lastDialogType=${this.lastDialogType}`);
                 this.closeDialog();
-                // Don't open next dialog until current one has closed.
-                this.dialogClosed.subscribe(complete => {
-                    if (complete) {
-                        console.log('[DialogService] opening dialog \'' + dialogType + '\'');
-                        this.dialogOpening = true;
-                        setTimeout(() => this.openDialog(dialog), 0);
-                    }
-                });
+                console.log('opening dialog \'' + dialogType + '\'');
+                this.dialogOpening = true;
+                setTimeout(() => this.openDialog(dialog), 0);
             } else {
                 console.log(`[DialogService] Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}`);
             }
@@ -146,23 +136,19 @@ export class DialogService {
             console.log(`Dialog options: ${JSON.stringify(dialogProperties)}`);
         }
 
-        if (this.dialogClosed) {
-            this.dialogClosed.unsubscribe();
-        }
-
         if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
             || dialog.refreshAlways) {
+            console.log('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
             this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
         } else {
             console.log(`Using previously created dialogRef. current dialog type: ${dialog.screenType}, last dialog type: ${this.lastDialogType}`);
         }
 
-        this.session.loaderState.loading = false;
-
+        console.log('[DialogService] Dialog \'' + dialog.screenType + '\' showing...');
         this.dialogRef.componentInstance.show(dialog);
+        console.log('[DialogService] Dialog \'' + dialog.screenType + '\' opened/shown');
         this.dialogOpening = false;
-        this.dialogClosed = new BehaviorSubject<boolean>(false);
-        console.log('[DialogService] Dialog \'' + dialog.screenType + '\' opened');
+
         if (dialogProperties.executeActionBeforeClose) {
             this.handleActionBeforeClose(closeAction);
         } else {
@@ -180,36 +166,15 @@ export class DialogService {
         this.dialogRef.beforeClose().subscribe(result => {
             const action = closeAction || result;
             this.session.onAction(action);
-            // Block input while closing
-            if (action) {
-                this.session.loaderState.loading = true;
-            }
-            this.dialogClosed.next(true);
         });
     }
 
     private handleActionAfterClose(closeAction: any) {
         // Temp hack to stop user actions while the dialog is closing
         console.log(`Using 'AfterClose' logic`);
-        // Disable actions while the dialog is closing
-        this.dialogRef.beforeClose().subscribe(result => {
-            const action = closeAction || result;
-            // Disable input while we are closing if there is an action for this dialog to be returned
-            if (action) {
-                this.session.loaderState.loading = true;
-            }
-        });
         this.dialogRef.afterClosed().subscribe(result => {
             const action = closeAction || result;
-            // Need to temporarily allow input again
-            this.session.loaderState.loading = false;
-            // Send the action through
             this.session.onAction(action);
-            // Block input again
-            if (action) {
-                this.session.loaderState.loading = true;
-            }
-            this.dialogClosed.next(true);
         });
     }
 }
