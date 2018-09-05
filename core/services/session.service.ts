@@ -418,7 +418,9 @@ export class SessionService implements IMessageHandler {
         if (this.appId && nodeId) {
             this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.personalization.getNodeId(),
                 JSON.stringify({ name: actionString, type: type, data: payload ? payload : this.response }));
-            this.response = null;
+            if (actionString !== 'KeepAlive') {
+                this.response = null;
+            }
         } else {
             console.log(`Can't publish action '${actionString}' of type '${type}' ` +
                 `due to undefined App ID (${this.appId}) or Node Id (${nodeId})`);
