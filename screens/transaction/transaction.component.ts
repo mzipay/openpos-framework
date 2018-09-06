@@ -100,10 +100,6 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
     });
   }
 
-  itemDescriptionClass(item: ISellItem): string  {
-    return (item.prop65Item ? 'warn' : null);
-  }
-
   public getIndexes(items: ISellItem[]): number[] {
     const indexes = [];
     items.forEach(item => indexes.push(item.index));
