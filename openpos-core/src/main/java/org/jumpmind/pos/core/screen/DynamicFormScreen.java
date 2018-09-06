@@ -17,6 +17,8 @@ public class DynamicFormScreen extends Screen implements IHasForm {
     
     private String submitButtonText = "Next";
     
+    private String submitIcon = "keyboard_arrow_right";
+    
     private List<String> alternateSubmitActions = new ArrayList<String>();
 
     public DynamicFormScreen() {
@@ -62,6 +64,14 @@ public class DynamicFormScreen extends Screen implements IHasForm {
 
 	public void setSubmitButtonText(String submitButtonText) {
 		this.submitButtonText = submitButtonText;
+	}
+
+	public String getSubmitIcon() {
+		return submitIcon;
+	}
+
+	public void setSubmitIcon(String submitIcon) {
+		this.submitIcon = submitIcon;
 	}
     
 }

@@ -287,5 +287,9 @@ public class FormField implements IFormElement, IField, Serializable {
         }
         return this;
     }
+
+	public void setHintText(String hintText) {
+		this.put("hintText", hintText);
+	}
     
 }
