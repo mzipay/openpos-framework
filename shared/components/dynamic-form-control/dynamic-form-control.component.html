@@ -14,7 +14,7 @@
         <div fxFlex="1 1 auto"></div>
         <button fxFlex="0 0 auto" type="submit" mat-raised-button color=primary *ngIf="submitAction">
             <span>{{submitButtonText}}</span>
-            <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
+            <mat-icon *ngIf="submitIcon" class="material-icons">{{submitIcon}}</mat-icon>
         </button>
     </mat-card-actions>
 </form>
