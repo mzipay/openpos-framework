@@ -5,25 +5,18 @@ import { PersonalizationService, DEFAULT_LOCALE } from './personalization.servic
 import { Observable, Subscription, BehaviorSubject, Subject, merge } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
-import { Injectable, EventEmitter, NgZone } from '@angular/core';
-import { StompService, StompState, StompRService } from '@stomp/ng2-stompjs';
-import { Location } from '@angular/common';
+import { Injectable, NgZone } from '@angular/core';
+import { StompState, StompRService } from '@stomp/ng2-stompjs';
 import { MatDialog } from '@angular/material';
-import { Router } from '@angular/router';
 import { ActionIntercepter } from '../action-intercepter';
-import { IThemeChangingEvent } from '../../shared/';
 // Importing the ../components barrel causes a circular reference since dynamic-screen references back to here,
 // so we will import those files directly
 import { LoaderState } from '../components/loader/loader-state';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
-import { IDeviceResponse, IDeviceRequest } from '../plugins';
+import { IDeviceResponse } from '../plugins';
 import {
     IMenuItem,
-    IUrlMenuItem,
-    IToastScreen,
-    ToastType,
-    Element,
-    ActionMap
+    IUrlMenuItem
 } from '../interfaces';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
 import { AppInjector, DeviceService } from '..';
