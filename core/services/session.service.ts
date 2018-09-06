@@ -255,12 +255,9 @@ export class SessionService implements IMessageHandler {
     }
 
     private handleForegrounding() {
-        setTimeout( () => {
-            console.log(`Entering into foreground, re-subscribing`);
-            if (this.getAppId()) {
-                // Force app reload
-                window.location.href = 'index.html';
-            }
+        setTimeout(() => {
+            console.log(`Entering into foreground, re-loading app`);
+            window.location.href = 'index.html';
         }, 0);
     }
 
