@@ -259,6 +259,13 @@ public class Form implements Serializable {
         return formField;
     }
     
+    public FormField addPasswordField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.AlphanumericPassword, required);
+        formField.setValue(value);
+        formElements.add(formField);
+        return formField;
+    }
+    
     public FormField addTextAreaField(String fieldId, String label, String value, boolean required) {
     		FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.TextArea, required);
     		formField.setValue(value);
@@ -273,6 +280,13 @@ public class Form implements Serializable {
     		formField.setValue(value);
     		formElements.add(formField);
     		return formField;
+    }
+    
+    public FormButton addButton( String id, String label, String buttonAction ) {
+    	FormButton formButton = new FormButton(id, label, buttonAction);
+    	
+    	formElements.add(formButton);
+    	return formButton;
     }
     
     public FormField getTextField(String fieldId) {
