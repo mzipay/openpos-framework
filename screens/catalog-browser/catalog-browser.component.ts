@@ -44,6 +44,7 @@ import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface'
             console.log('>>>>>>>>>>> INVALID');
         }
         */
+        // TODO: replace with proper form validation.  Addresses issue with empty quantity not handled on server side
         if (!this.selectedItemQuantity.value) {
             this.selectedItemQuantity.value = '0';
         }
