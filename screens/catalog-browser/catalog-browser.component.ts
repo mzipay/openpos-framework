@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import {  MatPaginator, PageEvent } from '@angular/material';
-import { IScreen } from '../../core/components';
 import { ISellItem, IMenuItem, IForm, IFormElement, ICatalogBrowserForm } from '../../core/interfaces';
-import { SessionService } from '../../core';
+// import { SessionService, FormBuilder, ValidatorsService } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface';
+// import { ValidatorFn, FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-catalog-browser',
@@ -21,7 +21,12 @@ import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface'
     totalItems: number;
     selectedItemQuantity: IItemQuantityFormElement;
     form: IForm;
-
+//    formGroup: FormGroup;
+/*
+    constructor(private formBuilder: FormBuilder, private validatorsService: ValidatorsService) {
+        super();
+    }
+*/
     buildScreen() {
         this.items = this.screen.items;
         this.categories = this.screen.categories;
@@ -29,9 +34,19 @@ import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface'
         this.totalItems = this.screen.itemTotalCount;
         this.form = this.screen.form;
         this.selectedItemQuantity = <IItemQuantityFormElement> this.form.formElements.find(e => e.id === 'selectedItemQuantity');
+        // this.formGroup = this.formBuilder.group(this.form);
     }
 
     public onItemSelected(item: ISellItem) {
+        /*
+        this.formGroup.updateValueAndValidity();
+        if (!this.formGroup.valid) {
+            console.log('>>>>>>>>>>> INVALID');
+        }
+        */
+        if (!this.selectedItemQuantity.value) {
+            this.selectedItemQuantity.value = '0';
+        }
         const returnForm: ICatalogBrowserForm = {selectedItems: [item], form: this.form};
         this.session.response = returnForm;
         this.session.onAction('ItemSelected');

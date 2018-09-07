@@ -46,7 +46,8 @@ export class DeviceService implements IMessageHandler {
         },
         false
     );
-    // For iOS in particular listen for the 'resign' event which is sent as we are entering into the background
+    // For iOS in particular listen for the 'resign' event which is sent as we are either transitioning into the background
+    // or resiging status as the active app.
     document.addEventListener('resign',
         () => {
             console.log('OpenPOS is about to enter into the background');
