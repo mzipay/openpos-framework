@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ValidatorFn, ValidationErrors, AbstractControl } from '@angular/forms';
 
 export class OpenPosValidators {
 
@@ -121,6 +121,35 @@ export class OpenPosValidators {
             'gt_0': {
                 valid: false
             }
+        };
+    }
+
+    static LESS_THAN( limit: Number ): ValidatorFn {
+
+        return (c: AbstractControl): ValidationErrors | null => {
+            let value = c.value;
+            if (value) {
+                value = value.replace(',', '');
+            }
+            return Number(value) < limit ? null : {
+                'less_than' : {
+                    valid: false
+                }
+            };
+        };
+    }
+
+    static GREATER_THAN(limit: Number): ValidatorFn {
+        return (c: AbstractControl): ValidationErrors | null => {
+            let value = c.value;
+            if (value) {
+                value = value.replace(',', '');
+            }
+            return Number(value) > limit ? null : {
+                'greater_than' : {
+                    valid: false
+                }
+            };
         };
     }
 }

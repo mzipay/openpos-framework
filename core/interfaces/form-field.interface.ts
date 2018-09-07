@@ -1,5 +1,6 @@
 import { IMaskSpec } from '../../shared/textmask';
 import { IConfirmationDialog } from './confirmation-dialog.interface';
+import { ValidatorFn } from '@angular/forms';
 export interface IFormElement {
     elementType: string;
     inputType: string;
@@ -26,6 +27,7 @@ export interface IFormElement {
     confirmationMessage: string;
     scanEnabled: boolean;
     validators?: string[];
+    additionalValidators?: ValidatorFn[];
 }
 
 export type LabelPositionType = 'before' | 'after';
