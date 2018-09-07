@@ -80,6 +80,8 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     ngOnInit(): void {
         const self = this;
         this.startupService.onStartupCompleted.subscribe(startupStatus => {
+            // console.log(`Got startupStatus: ${StartupStatus[startupStatus]}`);
+
             if (startupStatus === StartupStatus.Success) {
                 this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
             } else if (startupStatus === StartupStatus.Failure) {
