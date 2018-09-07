@@ -3,7 +3,7 @@
     <ng-template ngSwitchCase="ButtonList">
             <mat-card-title fxLayoutAlign="space-between">
                 <span>{{promptText}}</span>
-                <button mat-icon-button [mat-dialog-close]="dialogProperties.closeAction || 'Close'" style="margin:-15px">
+                <button mat-icon-button style="margin:-15px" (click)="session.onAction(dialogProperties.closeAction || 'Close')">
                     <mat-icon>close</mat-icon>
                 </button>
             </mat-card-title>

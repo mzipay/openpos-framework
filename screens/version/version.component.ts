@@ -1,3 +1,4 @@
+import { SessionService } from './../../core/services/session.service';
 import { Component, OnInit } from '@angular/core';
 import { PluginService, AppVersion, IMenuItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
@@ -15,7 +16,7 @@ export class VersionComponent extends PosScreen<any> {
     primaryAction: IMenuItem;
     otherActions: IMenuItem[];
 
-    constructor(private pluginService: PluginService, public appVersion: AppVersion) {
+    constructor(public session: SessionService, private pluginService: PluginService, public appVersion: AppVersion) {
         super();
     }
 

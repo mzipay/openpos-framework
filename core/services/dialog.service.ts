@@ -116,10 +116,8 @@ export class DialogService {
     private openDialog(dialog: any) {
         const dialogComponentFactory: ComponentFactory<IScreen> = this.resolveDialog(dialog.screenType);
         let closeable = false;
-        let closeAction = null;
         if (dialog.template.dialogProperties) {
             closeable = dialog.template.dialogProperties.closeable;
-            closeAction = dialog.template.dialogProperties.closeAction;
         }
         // By default we want to not allow the user to close by clicking off
         // By default we need the dialog to grab focus so you cannont execute actions on the screen
@@ -149,32 +147,7 @@ export class DialogService {
         console.log('[DialogService] Dialog \'' + dialog.screenType + '\' opened/shown');
         this.dialogOpening = false;
 
-        if (dialogProperties.executeActionBeforeClose) {
-            this.handleActionBeforeClose(closeAction);
-        } else {
-            this.handleActionAfterClose(closeAction);
-        }
-
         this.lastDialogType = dialog.screenType;
     }
 
-    private handleActionBeforeClose(closeAction: any) {
-        console.log(`Using 'BeforeClose' logic`);
-        // Some dialogs may need to execute the chosen action before
-        // they close so that actionPayloads can be included with the action
-        // before the dialog is destroyed.
-        this.dialogRef.beforeClose().subscribe(result => {
-            const action = closeAction || result;
-            this.session.onAction(action);
-        });
-    }
-
-    private handleActionAfterClose(closeAction: any) {
-        // Temp hack to stop user actions while the dialog is closing
-        console.log(`Using 'AfterClose' logic`);
-        this.dialogRef.afterClosed().subscribe(result => {
-            const action = closeAction || result;
-            this.session.onAction(action);
-        });
-    }
 }

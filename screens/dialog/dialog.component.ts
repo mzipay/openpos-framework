@@ -1,3 +1,4 @@
+import { SessionService } from './../../core/services/session.service';
 
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
@@ -17,7 +18,7 @@ export class DialogComponent extends PosScreen<any> {
   messages: string[];
   lines: ILine[];
 
-  constructor( public dialogRef: MatDialogRef<DialogComponent> ) {
+  constructor(public session: SessionService, public dialogRef: MatDialogRef<DialogComponent> ) {
       super();
   }
 
