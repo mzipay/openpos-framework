@@ -31,7 +31,6 @@ import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
 import org.jumpmind.pos.core.model.FormListField;
 import org.jumpmind.pos.core.model.IFormElement;
-import org.jumpmind.pos.core.model.Message;
 import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
@@ -164,13 +163,13 @@ public class ScreenService implements IScreenService, IActionListener {
 
                 logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
 
-                Screen lastDialog = removeLastDialog(appId, deviceId);
-                if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getScreenType())) {
-                    logger.debug("Instructing node {} to clear dialog.", deviceId);
-                    Message msg = new Message();
-                    msg.put("type", "ClearDialog");
-                    messageService.sendMessage(appId, deviceId, msg);
-                }
+//                Screen lastDialog = removeLastDialog(appId, deviceId);
+//                if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getScreenType())) {
+//                    logger.debug("Instructing node {} to clear dialog.", deviceId);
+//                    Message msg = new Message();
+//                    msg.put("type", "ClearDialog");
+//                    messageService.sendMessage(appId, deviceId, msg);
+//                }
 
                 try {
                     logger.debug("Posting action {}", action);
@@ -329,15 +328,6 @@ public class ScreenService implements IScreenService, IActionListener {
         if (screenAnnotation != null) {
             screen.setName(screenAnnotation.name());
             screen.setScreenType(screenAnnotation.type());
-        }
-    }
-
-    @Override
-    public void refresh(String appId, String deviceId) {
-        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
-        ApplicationState applicationState = stateManager.getApplicationState();
-        if (applicationState != null && applicationState.getLastScreen() != null) {
-            showScreen(appId, deviceId, applicationState.getLastScreen());
         }
     }
 
