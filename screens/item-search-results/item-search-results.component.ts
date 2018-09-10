@@ -29,8 +29,6 @@ export class ItemSearchResultsComponent extends PosScreen<any> {
   }
 
   public onItemListChange(event: any[]): void {
-    // this.selectedItems = event;
-    // this.session.onAction("SelectedItemsChanged", this.selectedItems);
   }
 
   public onItemChange(event: any): void {
@@ -38,7 +36,7 @@ export class ItemSearchResultsComponent extends PosScreen<any> {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem);
+    this.session.onAction(menuItem, this.index);
   }
 
 }
