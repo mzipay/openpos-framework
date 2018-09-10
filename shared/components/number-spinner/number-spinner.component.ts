@@ -16,6 +16,7 @@ export class NumberSpinnerComponent extends AbstractValueAccessor implements OnI
     @Input() inputDisabled = false;
     @Input() maxlength: number;
     @Input() minlength: number;
+    @Input() required = false;
     // @Output() onChange: EventEmitter<number> = new EventEmitter();
 
     numberPicker: FormControl;
@@ -34,7 +35,7 @@ export class NumberSpinnerComponent extends AbstractValueAccessor implements OnI
                 currentValue = this.round(currentValue, this.precision);
             }
             // this.value = currentValue;
-            this.numberPicker.setValue(currentValue);
+            this.numberPicker.setValue(currentValue.toString());
         }
     }
 
@@ -46,7 +47,7 @@ export class NumberSpinnerComponent extends AbstractValueAccessor implements OnI
                 currentValue = this.round(currentValue, this.precision);
             }
             // this.value = currentValue;
-            this.numberPicker.setValue(currentValue);
+            this.numberPicker.setValue(currentValue.toString());
         }
     }
 

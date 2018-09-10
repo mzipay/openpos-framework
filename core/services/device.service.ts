@@ -32,6 +32,7 @@ export class DeviceService implements IMessageHandler {
 
   private screenSubscription: Subscription;
   private _isRunningInCordova: boolean = null;
+  private cameraScanInProgress = false;
 
   constructor(protected session: SessionService, public pluginService: PluginService, private fileUploadService: FileUploadService) {
     this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
@@ -46,24 +47,25 @@ export class DeviceService implements IMessageHandler {
         },
         false
     );
-    // For iOS in particular listen for the 'resign' event which is sent as we are entering into the background
+    // For iOS in particular listen for the 'resign' event which is sent as we are either transitioning into the background
+    // or resiging status as the active app.
     document.addEventListener('resign',
         () => {
-            console.log('OpenPOS is about to enter into the background');
+            console.log(`OpenPOS received app 'resign' notification`);
             this.onAppEnteringBackground.next(true);
         },
         false
     );
     document.addEventListener('resume',
         () => {
-            console.log('OpenPOS is entering into the foreground');
+            console.log(`OpenPOS received app 'resume' notification`);
             this.onAppEnteringForeground.next(true);
         },
         false
     );
     document.addEventListener('active',
         () => {
-            console.log('OpenPOS has entered into the foreground');
+            console.log(`OpenPOS received app 'active' notification`);
             this.onAppEnteredForeground.next(true);
         },
         false
@@ -71,6 +73,21 @@ export class DeviceService implements IMessageHandler {
 
     this.session.registerMessageHandler(this, 'DeviceRequest');
 
+  }
+
+  public async isInAppBrowserActive() {
+    try {
+        const inAppPlugin = <InAppBrowserPlugin> await this.pluginService.getPlugin('InAppBrowser');
+        return inAppPlugin.isActive();
+    } catch (error) {
+        console.log(`InAppBrowser plugin not available. Reason: ${error}`);
+        return false;
+    }
+  }
+
+  public isCameraScanInProgress() {
+      console.log(`isCameraScanInProgress? ${this.cameraScanInProgress}`);
+      return this.cameraScanInProgress;
   }
 
   handle(message: any) {
@@ -108,7 +125,8 @@ export class DeviceService implements IMessageHandler {
 
   public cordovaCameraScan(source?: string) {
     if (!this.session.isRunningInBrowser() && cordova) {
-      this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin =>
+      this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin => {
+        this.cameraScanInProgress = true;
         plugin.processRequest(
           {requestId: 'scan', deviceId: 'barcode-scanner', type: null, subType: null, payload: null},
           (response) => {
@@ -119,14 +137,17 @@ export class DeviceService implements IMessageHandler {
               this.session.response = response;
               this.session.onAction('Scan');
             }
-          },
+            this.cameraScanInProgress = false;
+        },
           (error) => {
+            this.cameraScanInProgress = false;
             console.error('Scanning failed: ' + error);
           }
-        )
-      ).catch(error =>
-        console.error(`barcodeScannerPlugin error: ${error}`)
-      );
+        );
+      }).catch(error => {
+        this.cameraScanInProgress = false;
+        console.error(`barcodeScannerPlugin error: ${error}`);
+      });
     }
   }
 

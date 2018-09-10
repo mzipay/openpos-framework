@@ -18,6 +18,7 @@ export class PersonalizationStartupTask implements IStartupTask {
             startupComponent.message = 'Checking if device is personalized.';
             if (!this.personalization.isPersonalized()) {
                 startupComponent.message = 'Launching personalization screen.';
+                // console.log(`Showing personalization screen`);
                 this.session.showScreen(this.personalization.getPersonalizationScreen());
                 resolve(true);
             }  else  {

@@ -4,6 +4,7 @@ import { CordovaPlugin } from './cordova-plugin';
 export class InAppBrowserPlugin extends CordovaPlugin {
 
     ref: any;
+    private _active = false;
 
     constructor() {
         super('InAppBrowser');
@@ -17,15 +18,29 @@ export class InAppBrowserPlugin extends CordovaPlugin {
 
     open(url, target, options?: any): Window {
         this.ref = this.impl.open(url, target, options);
+        if (this.ref) {
+            this._active = true;
+        }
+        this.ref.addEventListener('exit', () => {
+            this._active = false;
+            console.log('InAppBrowser exited');
+        });
         return this.ref;
+    }
+
+    isActive(): boolean {
+        console.log(`InAppBrowser active? ${this._active}`);
+        return this._active;
     }
 
     show(): void {
         this.ref.show();
+        this._active = true;
     }
 
     hide(): void {
         this.ref.hide();
+        this._active = false;
     }
 
     init(successCallback: () => void, errorCallback: (error?: string) => void): void {

@@ -74,6 +74,9 @@ export class FormBuilder {
     }
 
     validators = validators.concat(extraValidators);
+    if ( !!element.additionalValidators ) {
+      validators = validators.concat(element.additionalValidators);
+    }
     return validators;
   }
 

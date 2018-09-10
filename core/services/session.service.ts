@@ -13,13 +13,14 @@ import { ActionIntercepter } from '../action-intercepter';
 // so we will import those files directly
 import { LoaderState } from '../components/loader/loader-state';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
-import { IDeviceResponse } from '../plugins';
+import { IDeviceResponse, InAppBrowserPlugin } from '../plugins';
 import {
     IMenuItem,
     IUrlMenuItem
 } from '../interfaces';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
-import { AppInjector, DeviceService } from '..';
+import { AppInjector, DeviceService, PluginService } from '..';
+import { async } from 'rxjs/internal/scheduler/async';
 
 // export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
@@ -60,6 +61,7 @@ export class SessionService implements IMessageHandler {
 
     private stompJsonMessages$ = new Subject<any>();
     private sessionMessages$ = new Subject<any>();
+    private inBackground = false;
 
     constructor(
         private stompService: StompRService,
@@ -176,16 +178,26 @@ export class SessionService implements IMessageHandler {
         // user can execute actions as app is coming back to foreground.
         const deviceService = AppInjector.Instance.get(DeviceService);
         if (! this.appBackgroundSubscription) {
-            this.appBackgroundSubscription = deviceService.onAppEnteringBackground.subscribe(backgrounded => {
+            this.appBackgroundSubscription = deviceService.onAppEnteringBackground.subscribe(async(backgrounded) => {
                 if (backgrounded) {
-                    this.handleBackgrounding();
+                    const allowBackgroundHandling = !deviceService.isCameraScanInProgress() && ! await deviceService.isInAppBrowserActive();
+                    if (allowBackgroundHandling) {
+                        this.handleBackgrounding();
+                    } else {
+                        console.log(`Skipping background handling`);
+                    }
                 }
             });
         }
         if (! this.appForegroundSubscription) {
             this.appForegroundSubscription = deviceService.onAppEnteredForeground.subscribe(foregrounded => {
+                const allowForegroundHandling = this.inBackground;
                 if (foregrounded) {
-                    this.handleForegrounding();
+                    if (allowForegroundHandling) {
+                        this.handleForegrounding();
+                    } else {
+                        console.log(`Skipping foreground handling`);
+                    }
                 }
             });
         }
@@ -245,15 +257,14 @@ export class SessionService implements IMessageHandler {
         // Input will get unblocked once re-subscribed to server and current screen is shown
         console.log('Entering into background, unsubscribing');
         this.unsubscribe();
+        this.inBackground = true;
     }
 
     private handleForegrounding() {
-        setTimeout( () => {
-            console.log(`Entering into foreground, re-subscribing`);
-            if (this.getAppId()) {
-                // Force app reload
-                window.location.href = 'index.html';
-            }
+        setTimeout(() => {
+            console.log(`Entering into foreground, re-loading app`);
+            window.location.href = 'index.html';
+            this.inBackground = false;
         }, 0);
     }
 
@@ -309,7 +320,15 @@ export class SessionService implements IMessageHandler {
                 if (menuItem.hasOwnProperty('url')) {
                     const urlMenuItem = <IUrlMenuItem>menuItem;
                     console.log(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode}, with options: ${urlMenuItem.options}`);
-                    window.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
+                    const pluginService = AppInjector.Instance.get(PluginService);
+                    // Use inAppBrowserPlugin when available since it tracks whether or not the browser is active.
+                    pluginService.getPlugin('InAppBrowser').then(plugin => {
+                        const inAppPlugin = <InAppBrowserPlugin> plugin;
+                        inAppPlugin.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
+                    }).catch(error => {
+                        console.log(`InAppBrowser not found, using window.open. Reason: ${error}`);
+                        window.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
+                    });
                     if (!actionString || 0 === actionString.length) {
                         return;
                     }
