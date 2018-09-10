@@ -1,0 +1,15 @@
+.side-image {
+    height: 100px; 
+    cursor: pointer;
+}
+
+.selected-image {
+    height: 448px; 
+    padding-left: 8px;
+}
+
+.image-list {
+    padding-right: 8px; 
+    max-height: 448px; 
+    overflow: auto;
+}
