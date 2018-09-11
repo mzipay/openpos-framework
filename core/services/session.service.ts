@@ -165,11 +165,13 @@ export class SessionService implements IMessageHandler {
 
         // Subscribe a function to be run on_next message
         this.subscription = this.messages.subscribe((message: Message) => {
-            // console.log('Got message');
+            console.log('Got STOMP message');
             if (this.isMessageVersionValid(message)) {
                 const json = JSON.parse(message.body);
+                this.logStompJson(json);
                 this.stompJsonMessages$.next(json);
             } else {
+                console.log(`Showing incompatible version screen`);
                 this.stompJsonMessages$.next(this.buildIncompatibleVersionScreen());
             }
         });
@@ -216,6 +218,14 @@ export class SessionService implements IMessageHandler {
                     console.log('STOMP disconnecting');
                 }
             });
+        }
+    }
+
+    private logStompJson(json: any) {
+        if (json) {
+          console.log(`[logStompJson] type: ${json.type}, screenType: ${json.screenType}`);
+        } else {
+          console.log(`[logStompJson] ${json}`);
         }
     }
 
