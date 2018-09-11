@@ -223,7 +223,7 @@ export class SessionService implements IMessageHandler {
 
     private logStompJson(json: any) {
         if (json) {
-          console.log(`[logStompJson] type: ${json.type}, screenType: ${json.screenType}`);
+          console.log(`[logStompJson] type: ${json.type}, screenType: ${json.screenType}, seqNo: ${json.sequenceNumber}`);
         } else {
           console.log(`[logStompJson] ${json}`);
         }
