@@ -63,12 +63,12 @@
 	</mat-card>
 
 	<app-overflow-list fxFlex="0 0 auto" *ngIf="screen.transaction.transactionNumber" [numberItemsToShow]="overFlowListSize | async"
-	 [items]="screen.totals"></app-overflow-list>
+	 [items]="amountTotals"></app-overflow-list>
 
 	<mat-card *ngIf="screen.transaction.transactionNumber" fxFlex="0 0 auto" class="page-content-card dark">
 		<mat-card-content fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" class="text-lg">
-			<div *ngIf="items.length == 1"><span fxFlex class="text-md">{{items.length}} Item</span></div>
-			<div *ngIf="items.length > 1"><span fxFlex class="text-md">{{items.length}} Items</span></div>
+			<div *ngIf="itemTotal == 1"><span fxFlex class="text-md">{{itemTotal}} Item</span></div>
+			<div *ngIf="itemTotal > 1"><span fxFlex class="text-md">{{itemTotal}} Items</span></div>
 			<span fxFlex="1 1 auto"></span>
 			<span fxFlex class="text-right">Total</span>
 			<span fxFlex [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
