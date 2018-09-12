@@ -60,6 +60,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
                 errorDialog.setMessage(Arrays.asList("The client and server authentication tokens did not match"));
                 messageService.sendMessage(appId, nodeId, errorDialog);
             } else if (!stateManager.isSessionCompatible(sessionId)) {
+                logger.warn("Client compatiblity version of '{}' for nodeId '{}' is not compatible with the server", compatibilityVersion, nodeId);
                 DialogScreen errorDialog = new DialogScreen();
                 // If there is no compatibility version, the client is an older client that used the type attribute
                 // instead of the screenType attribute for the screen type value. In that case need to set the type attribute or
