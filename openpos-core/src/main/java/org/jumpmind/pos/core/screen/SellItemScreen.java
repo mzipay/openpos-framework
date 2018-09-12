@@ -133,7 +133,12 @@ public class SellItemScreen extends PromptScreen {
     }
     
 	public void setItemTotal(String total) {
-	    this.totals.add(new Total(ITEM_TOTAL_NAME, total, TotalType.Quantity));
+	    Total itemTotal = this.getItemTotal();
+	    if (itemTotal == null) {
+	        this.totals.add(new Total(ITEM_TOTAL_NAME, total, TotalType.Quantity));
+	    } else {
+	        itemTotal.setAmount(total);
+	    }
 	}
 
 	@JsonIgnore
