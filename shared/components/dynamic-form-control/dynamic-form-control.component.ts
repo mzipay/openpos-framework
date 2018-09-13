@@ -1,6 +1,6 @@
 import { Component, ViewChildren, AfterViewInit, Input, QueryList, ViewChild } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
-import { SessionService, ScreenService, IFormElement, IForm, FormBuilder } from '../../../core';
+import { SessionService, ScreenService, IFormElement, IForm, FormBuilder, IMenuItem } from '../../../core';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
 import { ShowErrorsComponent } from '../show-errors/show-errors.component';
 
@@ -33,9 +33,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
 
   }
 
-  @Input() submitAction: string;
-
-  @Input() submitButtonText = 'Next';
+  @Input() submitButton: IMenuItem;
 
   @Input()
   get alternateSubmitActions(): string[] {
@@ -91,7 +89,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
   submitForm() {
     if (this.form.valid) {
       this.formBuilder.buildFormPayload(this.form, this._screenForm);
-      this.session.onAction(this.submitAction, this._screenForm);
+      this.session.onAction(this.submitButton, this._screenForm);
     } else {
         // Set focus on the first invalid field found
         const invalidFieldKey = Object.keys(this.form.controls).find(key => {

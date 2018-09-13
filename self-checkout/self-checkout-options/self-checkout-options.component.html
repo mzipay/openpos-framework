@@ -29,7 +29,10 @@
 
         <ng-template ngSwitchCase="OptionForm">
             <mat-card fxFlex="0 0 35%" style="padding-left: 30px; padding-right: 30px;">
-                <app-dynamic-form-control fxFlexFill [submitButtonText]="'Enter'" [screenForm]="selectedOption.form" [submitAction]="selectedOption.value"></app-dynamic-form-control>
+                <app-dynamic-form-control 
+                fxFlexFill 
+                [submitButton]="{action: selectedOption.value, title:'Enter', icon:'keyboard_arrow_right'}"
+                [screenForm]="selectedOption.form"></app-dynamic-form-control>
             </mat-card>
         </ng-template>
     </div>

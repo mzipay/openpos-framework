@@ -12,9 +12,9 @@
             <mat-icon *ngIf="button.icon" class="material-icons">{{button.icon}}</mat-icon>
         </button>
         <div fxFlex="1 1 auto"></div>
-        <button fxFlex="0 0 auto" type="submit" mat-raised-button color=primary *ngIf="submitAction">
-            <span>{{submitButtonText}}</span>
-            <mat-icon *ngIf="submitIcon" class="material-icons">{{submitIcon}}</mat-icon>
+        <button fxFlex="0 0 auto" type="submit" mat-raised-button color=primary *ngIf="submitButton">
+            <span>{{submitButton.title}}</span>
+            <mat-icon *ngIf="submitButton.icon" class="material-icons">{{submitButton.icon}}</mat-icon>
         </button>
     </mat-card-actions>
 </form>
