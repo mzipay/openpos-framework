@@ -41,6 +41,7 @@ public abstract class AbstractPromptScreenTranslator<T extends Screen> extends A
             String enterDataValue = promptResponseSpec.getPropertyValue("enterData");
             boolean enterData = "true".equals(enterDataValue != null ? enterDataValue.toLowerCase() : "false");
 
+            // The promptAndResponseBeanModel will be returned by getSpecPropertyValue if it is set, otherwise it uses the spec value
             String minLength = getSpecPropertyValue(promptResponseSpec, "minLength", promptAndResponseBeanModel.getMinLength());
             String maxLength = getSpecPropertyValue(promptResponseSpec, "maxLength", promptAndResponseBeanModel.getMaxLength());
 
@@ -67,10 +68,10 @@ public abstract class AbstractPromptScreenTranslator<T extends Screen> extends A
                     }
                 }
                 
-                if (promptAndResponseBeanModel.getMinLength() != null) {
+                if (minLength != null) {
                     promptScreen.setMinLength(Integer.parseInt(minLength));
                 }
-                if (promptAndResponseBeanModel.getMaxLength() != null) {
+                if (maxLength != null) {
                     promptScreen.setMaxLength(Integer.parseInt(maxLength));
                 }
             } else {

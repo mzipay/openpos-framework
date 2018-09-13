@@ -2,6 +2,8 @@ package org.jumpmind.pos.core.template;
 
 import java.io.Serializable;
 
+import org.jumpmind.pos.core.model.FieldInputType;
+
 public class Scan implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -10,12 +12,13 @@ public class Scan implements Serializable {
         CAMERA_CORDOVA, NONE
     }
 
-    protected Integer scanMinLength = 1;
-    protected Integer scanMaxLength = 22;
-    protected ScanType scanType;
-    protected String scanActionName;
-    protected String scanSomethingText = "Scan/Key Something";
-    protected boolean autoFocusOnScan = false;
+    private Integer scanMinLength = 1;
+    private Integer scanMaxLength = 22;
+    private ScanType scanType;
+    private String scanActionName;
+    private String scanSomethingText = "Scan/Key Something";
+    private boolean autoFocusOnScan = false;
+    private FieldInputType inputType = FieldInputType.AlphanumericText;
 
     public Integer getScanMinLength() {
         return scanMinLength;
@@ -63,6 +66,14 @@ public class Scan implements Serializable {
 
     public void setAutoFocusOnScan(boolean autoFocusOnScan) {
         this.autoFocusOnScan = autoFocusOnScan;
+    }
+
+    public FieldInputType getInputType() {
+        return inputType;
+    }
+
+    public void setInputType(FieldInputType inputType) {
+        this.inputType = inputType;
     }
 
 }

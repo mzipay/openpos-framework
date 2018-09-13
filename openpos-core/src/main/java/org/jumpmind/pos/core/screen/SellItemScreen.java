@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.core.model.Total;
+import org.jumpmind.pos.core.model.Total.TotalType;
 import org.jumpmind.pos.core.template.SellTemplate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class SellItemScreen extends PromptScreen {
-
     private static final long serialVersionUID = 1L;
-
+    public static final String ITEM_TOTAL_NAME = "itemTotal";
+    
     private List<SellItem> items = new ArrayList<>();
     private List<SellItem> selectedItems = new ArrayList<>();
     
@@ -125,6 +128,25 @@ public class SellItemScreen extends PromptScreen {
 		this.totals.add(new Total(name, amount ));
 	}
 
+    public void addTotal(Total total) {
+        this.totals.add(total);
+    }
+    
+	public void setItemTotal(String total) {
+	    Total itemTotal = this.getItemTotal();
+	    if (itemTotal == null) {
+	        this.totals.add(new Total(ITEM_TOTAL_NAME, total, TotalType.Quantity));
+	    } else {
+	        itemTotal.setAmount(total);
+	    }
+	}
+
+	@JsonIgnore
+    public Total getItemTotal() {
+        return this.totals.stream().filter(
+            t -> t.getType() == TotalType.Quantity && ITEM_TOTAL_NAME.equalsIgnoreCase(t.getName())).findFirst().orElse(null);
+    }
+    
 	public String getNoCustomerText() {
 		return noCustomerText;
 	}
