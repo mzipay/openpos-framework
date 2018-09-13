@@ -1,3 +1,4 @@
+import { Logger } from './logger.service';
 import { SessionService } from './session.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Injectable } from '@angular/core';
@@ -8,7 +9,7 @@ import { PersonalizationService } from './personalization.service';
     providedIn: 'root',
   })
 export class IconService {
-    constructor(private iconRegistry: MatIconRegistry,
+    constructor(private log: Logger, private iconRegistry: MatIconRegistry,
         private sanitizer: DomSanitizer, private personalization: PersonalizationService, private sessionService: SessionService) {
         this.sessionService.onServerConnect.subscribe(connected => {
             if (connected) {
@@ -18,7 +19,7 @@ export class IconService {
     }
 
     private init() {
-        console.log(`Icon service is initializing using base server url: ${this.personalization.getServerBaseURL()}`);
+        this.log.info(`Icon service is initializing using base server url: ${this.personalization.getServerBaseURL()}`);
         this.iconRegistry.addSvgIcon('openpos_calculator', this.makeIconSafeUrl('calculator.svg'));
         this.iconRegistry.addSvgIcon('openpos_cash', this.makeIconSafeUrl('cash.svg'));
         this.iconRegistry.addSvgIcon('openpos_cash-multiple', this.makeIconSafeUrl('cash-multiple.svg'));

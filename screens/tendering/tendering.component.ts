@@ -1,15 +1,17 @@
 import { Component, ViewChild, OnDestroy, AfterViewInit, OnInit } from '@angular/core';
 import { MatInput } from '@angular/material';
-import { IItem, IFormElement, IMenuItem, ValidatorsService, ActionIntercepter, 
-    ActionIntercepterBehavior, ActionIntercepterBehaviorType } from '../../core';
+import {
+    IItem, IFormElement, IMenuItem, ValidatorsService, ActionIntercepter,
+    ActionIntercepterBehavior, ActionIntercepterBehaviorType
+} from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { FormGroup, ValidatorFn, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-tendering',
     templateUrl: './tendering.component.html'
-  })
-  export class TenderingComponent extends PosScreen<any> implements OnInit, AfterViewInit, OnDestroy {
+})
+export class TenderingComponent extends PosScreen<any> implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild('tenderAmountField') tenderAmountField: MatInput;
 
@@ -54,7 +56,7 @@ import { FormGroup, ValidatorFn, FormControl } from '@angular/forms';
         const validators: ValidatorFn[] = [];
 
         if (this.tenderAmount.validators) {
-            this.tenderAmount.validators.forEach( v => {
+            this.tenderAmount.validators.forEach(v => {
                 const fn = this.validatorsService.getValidator(v);
                 if (fn) {
                     validators.push(fn);
@@ -74,12 +76,12 @@ import { FormGroup, ValidatorFn, FormControl } from '@angular/forms';
 
         if (this.screen.template.localMenuItems) {
             this.screen.template.localMenuItems.forEach(element => {
-                this.session.registerActionPayload( element.action, () => this.tenderFormGroup.get('tenderAmtFld').value );
+                this.session.registerActionPayload(element.action, () => this.tenderFormGroup.get('tenderAmtFld').value);
                 this.session.registerActionIntercepter(element.action,
-                    new ActionIntercepter((payload) => { 
+                    new ActionIntercepter(this.log, (payload) => {
                         const value = this.tenderFormGroup.get('tenderAmtFld').value;
-                        console.log(`Returning value of ${value}.  Payload: ${JSON.stringify(payload)}`);
-                        return value; 
+                        this.log.info(`Returning value of ${value}.  Payload: ${JSON.stringify(payload)}`);
+                        return value;
                     },
                         // Will only block if the formGroup is inValid
                         new ActionIntercepterBehavior(ActionIntercepterBehaviorType.block,
@@ -88,8 +90,8 @@ import { FormGroup, ValidatorFn, FormControl } from '@angular/forms';
                     )
                 );
             });
-//                this.session.registerActionPayload( element.action, () => this.tenderFormGroup.get('tenderAmtFld').value );
-//            });
+            //                this.session.registerActionPayload( element.action, () => this.tenderFormGroup.get('tenderAmtFld').value );
+            //            });
         }
 
     }

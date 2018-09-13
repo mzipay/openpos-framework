@@ -1,3 +1,4 @@
+import { Logger } from './../../services/logger.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -15,7 +16,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
     secondFormGroup: FormGroup;
     checkTimeout: any;
 
-    constructor(private personalization: PersonalizationService, private session: SessionService, private formBuilder: FormBuilder, private http: HttpClient) {
+    constructor(private log: Logger, private personalization: PersonalizationService, private session: SessionService, private formBuilder: FormBuilder, private http: HttpClient) {
     }
 
     ngOnInit() {
@@ -56,15 +57,15 @@ export class PersonalizationComponent implements IScreen, OnInit {
                         url = url + ':' + serverPort;
                     }
                     url = url + '/ping';
-                    console.log('testing url: ' + url);
+                    this.log.info('testing url: ' + url);
 
                     this.http.get(url, {}).subscribe(
                         (data) => {
-                            console.log('successful validation of ' + url);
+                            this.log.info('successful validation of ' + url);
                             resolve(null);
                         },
                         (err: HttpErrorResponse) => {
-                            console.log('bad validation of ' + url + ' with an error message of :' + err.message);
+                            this.log.info('bad validation of ' + url + ' with an error message of :' + err.message);
                             resolve({ noping: err.message });
                         });
                 }

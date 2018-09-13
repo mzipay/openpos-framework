@@ -1,10 +1,12 @@
+import { Logger } from './services/logger.service';
+
 
 export class ActionIntercepter {
 
   private intercepter: FunctionActionIntercepter;
   private behavior: ActionIntercepterBehavior;
 
-  constructor( intercepter: FunctionActionIntercepter, behavior: (ActionIntercepterBehavior|ActionIntercepterBehaviorType) ) {
+  constructor(private log: Logger, intercepter: FunctionActionIntercepter, behavior: (ActionIntercepterBehavior|ActionIntercepterBehaviorType) ) {
     this.intercepter = intercepter;
     if (behavior instanceof ActionIntercepterBehavior) {
       this.behavior = behavior;
@@ -16,24 +18,24 @@ export class ActionIntercepter {
   public intercept( payload: any,  continueWith: Function ) {
       switch (this.behavior.type) {
         case ActionIntercepterBehaviorType.before:
-          console.log( 'Intercepting Action' );
+          this.log.info( 'Intercepting Action' );
           this.intercepter( payload );
-          console.log( 'Continuing with default action handler');
+          this.log.info( 'Continuing with default action handler');
           continueWith();
           break;
 
         case ActionIntercepterBehaviorType.block:
-          console.log( 'Intercepting Action');
+          this.log.info( 'Intercepting Action');
           this.intercepter( payload );
           if (this.behavior.optionalContinueEval) {
             if (this.behavior.optionalContinueEval(payload)) {
-              console.log( 'continueEval returned true, continuing with default action handler');
+              this.log.info( 'continueEval returned true, continuing with default action handler');
               continueWith();
             } else {
-              console.log( 'continueEval returned false, skipping default action handler');
+              this.log.info( 'continueEval returned false, skipping default action handler');
             }
           } else {
-            console.log( 'Skipping default action handler');
+            this.log.info( 'Skipping default action handler');
           }
           break;
       }

@@ -1,27 +1,26 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SessionService, IScreen, ActionIntercepter, ActionIntercepterBehaviorType, IMenuItem } from '../../core';
 import { IOptionItem } from '../../screens/choose-options/option-item.interface';
-
+import { PosScreen } from '../../screens/pos-screen/pos-screen.component';
 
 @Component({
   selector: 'app-self-checkout-options',
   templateUrl: './self-checkout-options.component.html',
   styleUrls: ['./self-checkout-options.component.scss']
 })
-export class SelfCheckoutOptionsComponent implements IScreen, OnInit, OnDestroy {
+export class SelfCheckoutOptionsComponent extends PosScreen<any> implements  OnInit, OnDestroy {
 
   static readonly UNDO = 'Undo';
-  screen: any;
   public currentView: string;
   public selectedOption: IOptionItem;
   public optionItems: IOptionItem[];
   public promptText: string;
 
   constructor(public session: SessionService) {
+      super();
   }
 
-  show(screen: any) {
-    this.screen = screen;
+  buildScreen() {
     this.optionItems = this.screen.options;
     this.currentView = this.screen.displayStyle;
     this.promptText = this.screen.prompt;
@@ -39,7 +38,7 @@ export class SelfCheckoutOptionsComponent implements IScreen, OnInit, OnDestroy 
       this.selectedOption = option;
       this.currentView = 'OptionForm';
       this.session.registerActionIntercepter(SelfCheckoutOptionsComponent.UNDO,
-        new ActionIntercepter((payload) => { this.onBackButtonPressed(); }, ActionIntercepterBehaviorType.block));
+        new ActionIntercepter(this.log, (payload) => { this.onBackButtonPressed(); }, ActionIntercepterBehaviorType.block));
     } else {
       this.session.onAction(option.value);
     }

@@ -103,7 +103,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      this.log.info('The dialog was closed');
     });
   }
 

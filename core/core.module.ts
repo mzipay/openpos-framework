@@ -50,7 +50,7 @@ import { StompRService } from '@stomp/ng2-stompjs';
         DatePipe,
         BreakpointObserver,
         MediaMatcher,
-        StompRService,
+        StompRService
     ]
 })
 export class CoreModule {

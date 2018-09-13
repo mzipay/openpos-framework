@@ -1,3 +1,4 @@
+import { Logger } from './../../services/logger.service';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
 import { Component, ViewChild, HostListener, ComponentRef, OnDestroy, OnInit, ComponentFactory } from '@angular/core';
@@ -60,6 +61,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     private lastScreenName: string;
 
     constructor(
+        private log: Logger,
         private personalization: PersonalizationService,
         public screenService: ScreenService,
         public session: SessionService,
@@ -80,7 +82,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     ngOnInit(): void {
         const self = this;
         this.startupService.onStartupCompleted.subscribe(startupStatus => {
-            // console.log(`Got startupStatus: ${StartupStatus[startupStatus]}`);
+            this.log.debug(`Got startupStatus: ${StartupStatus[startupStatus]}`);
 
             if (startupStatus === StartupStatus.Success) {
                 this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
@@ -166,7 +168,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             msg += `)`;
         }
 
-        console.log(msg);
+        this.log.info(msg);
     }
 
     protected updateClasses(screen: any) {

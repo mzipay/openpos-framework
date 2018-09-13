@@ -1,3 +1,4 @@
+import { Logger } from './logger.service';
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -12,14 +13,14 @@ export class ScreenService {
 
     private screens = new Map<string, Type<IScreen>>();
 
-    constructor(private componentFactoryResolver: ComponentFactoryResolver, private http: HttpClient,
+    constructor(private log: Logger, private componentFactoryResolver: ComponentFactoryResolver, private http: HttpClient,
         private personalization: PersonalizationService,
         private session: SessionService) { }
 
     public addScreen(name: string, type: Type<IScreen>): void {
         if (this.screens.get(name)) {
             // tslint:disable-next-line:max-line-length
-            console.log(`replacing registration for screen of type ${this.screens.get(name).name} with ${type.name} for the key of ${name} in the screen service`);
+            this.log.info(`replacing registration for screen of type ${this.screens.get(name).name} with ${type.name} for the key of ${name} in the screen service`);
             this.screens.delete(name);
         }
         this.screens.set(name, type);
@@ -49,7 +50,7 @@ export class ScreenService {
         if (searchTerm) {
             httpParams['searchTerm'] = searchTerm;
         }
-        console.log(`Requesting field values from the server using url: ${url}, params: '${JSON.stringify(httpParams)}'`);
+        this.log.info(`Requesting field values from the server using url: ${url}, params: '${JSON.stringify(httpParams)}'`);
         return this.http.get(url, { params: httpParams });
     }
 

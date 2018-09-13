@@ -1,3 +1,5 @@
+import { AppInjector } from './../app-injector';
+import { Logger } from './../services/logger.service';
 import { IDeviceRequest } from './device-request.interface';
 import { IDevicePlugin } from './device-plugin.interface';
 
@@ -7,8 +9,10 @@ export class CordovaDevicePlugin implements IDevicePlugin {
     pluginId: string;
     pluginName?: string;
     impl: any;
+    protected log: Logger;
 
     constructor(pluginId: string) {
+        this.log = AppInjector.Instance.get(Logger);
         this.pluginId = pluginId;
         if (typeof cordova !== 'undefined') {
             if (cordova.plugins[pluginId]) {
@@ -22,7 +26,7 @@ export class CordovaDevicePlugin implements IDevicePlugin {
         if (typeof this.impl.init === 'function') {
             this.impl.init(successCallback, errorCallback);
         } else {
-            console.log(`plugin '${this.pluginId} does not have init() method, nothing to do`);
+            this.log.info(`plugin '${this.pluginId} does not have init() method, nothing to do`);
             successCallback();
         }
     }

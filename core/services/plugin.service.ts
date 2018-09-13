@@ -1,3 +1,4 @@
+import { Logger } from './logger.service';
 import { Injectable } from '@angular/core';
 import {
     CordovaDevicePlugin,
@@ -15,9 +16,9 @@ export class PluginService {
 
     private plugins = new Map<string, PluginMapEntry>();
 
-    constructor() {
+    constructor(private log: Logger) {
         document.addEventListener('deviceready', () => {
-            console.log('cordova devices are ready for the plugin service');
+            this.log.info('cordova devices are ready for the plugin service');
             // cordova file plugin doesn't put itself in cordova.plugins, so add it there if present.
             // Makes it possible for us to access plugins dynamically by name.
             // There apparently is not a consistent way to access references to
@@ -25,10 +26,10 @@ export class PluginService {
             if (cordova.file) {
                 if (! cordova.plugins || ! cordova.plugins['file']) {
                     cordova.plugins['file'] = cordova.file;
-                    console.log('PluginService added cordova-plugin-file to cordova.plugins');
+                    this.log.info('PluginService added cordova-plugin-file to cordova.plugins');
                 }
             } else {
-                console.log(`Failed to load the Cordova 'file' plugin. Log file uploads will not work unless this is resolved.` +
+                this.log.info(`Failed to load the Cordova 'file' plugin. Log file uploads will not work unless this is resolved.` +
                     ` Is the Cordova 'file' plugin included in the project?`);
             }
           },
@@ -41,41 +42,41 @@ export class PluginService {
 
     public addPlugin(pluginId: string, plugin: IPlugin) {
         this.plugins[pluginId] = {plugin: plugin, initialized: false};
-        console.log(`plugin '${pluginId}' added to the PluginService`);
+        this.log.info(`plugin '${pluginId}' added to the PluginService`);
     }
 
     public configurePlugin(pluginId: string, pluginConfig: any): Promise<boolean> {
-        console.log(`Configuring plugin '${pluginId}'...`);
+        this.log.info(`Configuring plugin '${pluginId}'...`);
         return new Promise<boolean>( (resolve, reject) => {
             this.getPlugin(pluginId, false).then(
                 plugin => {
-                    console.log(`Got plugin '${pluginId}'...`);
+                    this.log.info(`Got plugin '${pluginId}'...`);
                     if (typeof plugin.configure !== 'undefined') {
-                        console.log(`Invoking plugin.configure for '${pluginId}'...`);
+                        this.log.info(`Invoking plugin.configure for '${pluginId}'...`);
                         resolve(plugin.configure(pluginConfig));
-                        console.log(`'${pluginId}' configured.`);
+                        this.log.info(`'${pluginId}' configured.`);
                     } else if (plugin.impl && typeof plugin.impl.configure === 'function') {
-                        console.log(`Invoking plugin.impl.configure for '${pluginId}'...`);
+                        this.log.info(`Invoking plugin.impl.configure for '${pluginId}'...`);
                         resolve(plugin.impl.configure(pluginConfig));
-                        console.log(`'${pluginId}' configured.`);
+                        this.log.info(`'${pluginId}' configured.`);
                     } else if (plugin.hasOwnProperty('config')) {
-                        console.log(`Setting plugin.config for '${pluginId}'...`);
+                        this.log.info(`Setting plugin.config for '${pluginId}'...`);
                         plugin.config = pluginConfig;
                         resolve(true);
-                        console.log(`'${pluginId}' configured.`);
+                        this.log.info(`'${pluginId}' configured.`);
                     } else if (plugin.impl && plugin.impl.hasOwnProperty('config')) {
-                        console.log(`Setting plugin.impl.config for '${pluginId}'...`);
+                        this.log.info(`Setting plugin.impl.config for '${pluginId}'...`);
                         plugin.impl.config = pluginConfig;
                         resolve(true);
-                        console.log(`'${pluginId}' configured.`);
+                        this.log.info(`'${pluginId}' configured.`);
                     } else {
-                        console.log(`No method of configuration is available for plugin '${pluginId}'`);
+                        this.log.info(`No method of configuration is available for plugin '${pluginId}'`);
                         resolve(false);
                     }
                 }
             ).catch(
                 (error) => {
-                    console.log(error);
+                    this.log.info(error);
                     reject(error);
                 }
             );
@@ -107,16 +108,16 @@ export class PluginService {
 
     public getPlugin(pluginId: string, doInitWhenNeeded: boolean = true): Promise<IPlugin> {
         return new Promise( (resolve, reject) => {
-            console.log(`Getting plugin '${pluginId}'...`);
+            this.log.info(`Getting plugin '${pluginId}'...`);
             let pluginEntry: PluginMapEntry = this.plugins[pluginId];
             let initRequired = false;
             let targetPlugin: IPlugin;
             if (pluginEntry) {
                 initRequired = ! pluginEntry.initialized;
                 targetPlugin = pluginEntry.plugin;
-                console.log(`Plugin '${pluginId}' found. initRequired? ${initRequired}`);
+                this.log.info(`Plugin '${pluginId}' found. initRequired? ${initRequired}`);
             } else {
-                console.log(`Plugin '${pluginId}' is being fetched for the first time.`);
+                this.log.info(`Plugin '${pluginId}' is being fetched for the first time.`);
                 if (this.isCordovaPlugin(pluginId)) {
                     // let cdvPlugin = null;
                     if (cordova.plugins && cordova.plugins[pluginId]
@@ -128,7 +129,7 @@ export class PluginService {
 
                     pluginEntry = {plugin: targetPlugin, initialized: false};
                     this.plugins[pluginId] = pluginEntry;
-                    console.log(`Added plugin '${pluginId}' to map.`);
+                    this.log.info(`Added plugin '${pluginId}' to map.`);
                     if (doInitWhenNeeded) {
                         initRequired = true;
                     }
@@ -141,29 +142,29 @@ export class PluginService {
             }
 
             if (doInitWhenNeeded && initRequired) {
-                console.log(`Initializing plugin '${pluginId}'...`);
+                this.log.info(`Initializing plugin '${pluginId}'...`);
                 this.pluginInit(targetPlugin).then(
                     (inittedPlugin) => {
                         pluginEntry.initialized = true;
                         // this.plugins[pluginId] = inittedPlugin;
                         // plugin = inittedPlugin;
-                        console.log(`plugin '${pluginId}' initialized`);
+                        this.log.info(`plugin '${pluginId}' initialized`);
                         resolve(inittedPlugin);
                     }
                 ).catch(
                     (error) => {
                         if (error) {
                             reject(error);
-                            console.log(error);
+                            this.log.info(error);
                         } else {
                             const err = `plugin '${pluginId}' failed to initialize`;
-                            console.log(err);
+                            this.log.info(err);
                             reject(err);
                         }
                     }
                 );
             } else {
-                console.log(`Init of plugin '${pluginId}' not required.`);
+                this.log.info(`Init of plugin '${pluginId}' not required.`);
                 resolve(targetPlugin);
             }
         });

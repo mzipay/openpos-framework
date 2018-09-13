@@ -40,7 +40,6 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     }
 
     buildScreen() {
-        // console.log('### Called list-item component buildScreen()...');
 
         this.items = this.screen.items;
         this.itemActionName = this.screen.itemActionName;
@@ -51,29 +50,19 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
 
         //  Copied from transaction.component buildScreen() method...
 
-        // console.log('### this.items has ' + (this ? this.items.length : 'unknown') + ' item(s)');
-
         this.listConfig = new SelectableItemListComponentConfiguration<IItem>();
         this.listConfig.selectionMode = SelectionMode.Multiple;
         this.listConfig.numResultsPerPage = Number.MAX_VALUE;
         this.listConfig.items = this.screen.items;
-        // console.log('### Initialized listConfig attribute');
-
-        // console.log('### About to initialize the selectedItems attribute...');
         if (this.screen.selectedItems) {
             this.selectedItems = this.screen.items.filter(item => this.screen.selectedItems.find(selectedItem => item.index === selectedItem.index));
-            // console.log('### set selectedItems attribute, ' + (this.selectedItems ? this.selectedItems.length : 'unknown') + ' item(s) selected');
         } else {
-            // console.log('### screen.selectedItems attribute is not populated, initializing selectedItems to empty');
             this.selectedItems = new Array<IItem>();
         }
-        // console.log('### Set selectedItems attribute, ' + (this.selectedItems ? this.selectedItems.length : 'unknown') + ' item(s) selected');
 
         this.determineAvailableActions();
-        // console.log('### Available actions: Item Display? ' + this.itemDisplayActionPresent + ", Add? " + this.addActionPresent + ", Next? " + this.nextActionPresent)
 
         this.dialog.closeAll();
-        // console.log('### list-item component buildScreen() completed successfully');
     }
 
     ngOnInit(): void {
@@ -99,13 +88,11 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     }
 
     onItemClick(itemInfo: ItemClickAction): void {
-        // console.log('### list-item component onItemClick() fired');
         this.session.response = itemInfo.item;
         this.session.onAction(this.itemActionName);
     }
 
     onItemSelected(itemInfo: ItemClickAction): void {
-        // console.log('### list-item component onItemClick() fired');
         if (this.getSelectionModeAsEnum() === SelectionMode.Multiple) {
             this.session.response = this.selectedItems;
             // this.session.response = this.productList.selectedItems;
@@ -113,10 +100,8 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     }
 
     public onItemListChange(event: IItem[]): void {
-        // console.log('### list-item component onItemListChange() fired');
 
         if (this.individualMenuClicked) {
-            // console.log('### individualMenuClicked was set, flipping to false');
             this.individualMenuClicked = false;
         }
 
@@ -124,12 +109,10 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     }
 
     onActionButtonClick(): void {
-        // console.log('### list-item component onActionButtonClick() fired');
         this.session.onAction(this.screen.actionButton.action, null);
     }
 
     onMenuItemClick(itemInfo: MenuClickAction): void {
-        // console.log('### list-item component onMenuItemClick() fired');
         this.session.response = itemInfo.item;
         this.session.onAction(itemInfo.menuItem);
     }
@@ -188,7 +171,6 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     }
 
     openItemDialog(item: IItem) {
-        // console.log('### User clicked the More Vertical icon for a single item');
         this.individualMenuClicked = true;
         this.openItemsDialog([item]);
     }
@@ -214,7 +196,7 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
+            this.log.info('The dialog was closed');
         });
     }
 
@@ -249,13 +231,13 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     private determineAvailableActions(): void {
         for (const menu of this.itemActions) {
             if (menu.action === 'ItemDisplay') {
-                // console.log('### ItemDisplay action IS present');
+                // this.log.info('### ItemDisplay action IS present');
                 this.itemDisplayActionPresent = true;
             } else if (menu.action === 'Add') {
-                // console.log('### Add action IS present');
+                // this.log.info('### Add action IS present');
                 this.addActionPresent = true;
             } else if (menu.action === 'Next') {
-                // console.log('### Next action IS present');
+                // this.log.info('### Next action IS present');
                 this.nextActionPresent = true;
             }
         }

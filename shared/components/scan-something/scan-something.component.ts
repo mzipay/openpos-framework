@@ -1,3 +1,4 @@
+import { Logger } from './../../../core/services/logger.service';
 import { Component, Input, Optional, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
 import { DeviceService, SessionService } from '../../../core';
@@ -18,7 +19,7 @@ export class ScanSomethingComponent implements AfterViewInit {
 
   public barcode: string;
 
-  constructor(private session: SessionService, public devices: DeviceService,
+  constructor(private log: Logger, private session: SessionService, public devices: DeviceService,
     @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: IScan) {
 
@@ -65,7 +66,7 @@ export class ScanSomethingComponent implements AfterViewInit {
     const content = event.clipboardData.getData('text/plain');
     const filteredContent = this.filterBarcodeValue(content);
     if (filteredContent !== content) {
-      console.log(`Clipboard data contains invalid characters for barcode, suppressing pasted content '${content}'`);
+      this.log.info(`Clipboard data contains invalid characters for barcode, suppressing pasted content '${content}'`);
     }
     return filteredContent === content;
   }

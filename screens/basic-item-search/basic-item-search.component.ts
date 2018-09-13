@@ -77,7 +77,7 @@ export class BasicItemSearchComponent extends PosScreen<any> implements AfterVie
         const targetValue = srcSearchCategoryValues.values[valueIdx];
         if (targetValue.selected && targetValue.attributes['name'] !== '<All>') {
           this.displayCategoryIndex = catIdx + 1;
-          console.log('setting display to ' + (catIdx + 1) + ' because ' + targetValue.attributes['name'] + ' was selected');
+          this.log.info('setting display to ' + (catIdx + 1) + ' because ' + targetValue.attributes['name'] + ' was selected');
         }
       }
     }

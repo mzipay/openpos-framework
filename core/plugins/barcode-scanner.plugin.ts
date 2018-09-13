@@ -20,18 +20,18 @@ export class BarcodeScannerPlugin extends CordovaDevicePlugin {
     }
 
     processRequest(deviceRequest: IDeviceRequest, successCallback: (response: any) => void, errorCallback: (error: string) => void) {
-        console.log(`Attempting to invoke camera scanner via plugin '${this.pluginId}'`);
+        this.log.info(`Attempting to invoke camera scanner via plugin '${this.pluginId}'`);
         this.impl.scan(
           function (result) {
             if (! result.cancelled) {
                 successCallback(new Scan(result.text, result.format));
-                console.log('We got a barcode\n' +
+                this.log.info('We got a barcode\n' +
                 'Result: ' + result.text + '\n' +
                 'Format: ' + result.format + '\n' +
                 'Cancelled: ' + result.cancelled);
               } else {
                 successCallback(new Scan(null, null, true));
-                console.log('Barcode scan cancelled');
+                this.log.info('Barcode scan cancelled');
             }
           },
           function (error) {
@@ -56,7 +56,7 @@ export class BarcodeScannerPlugin extends CordovaDevicePlugin {
     }
 
     emitBarcode(scan: Scan) {
-        console.log(`Emitting barcode from BarcodeScannerPlugin: ${JSON.stringify(scan)}`);
+        this.log.info(`Emitting barcode from BarcodeScannerPlugin: ${JSON.stringify(scan)}`);
         this.onBarcodeScanned.emit(scan);
     }
 }

@@ -19,7 +19,6 @@ export class ProductListComponent {
     selectedItems: number[] = [];
 
     onItemClick(item: IItem, event: any): void {
-        console.log(`productList.onItemClick: ${item}`);
         this.itemClick.emit({item, event});
     }
 
@@ -33,7 +32,6 @@ export class ProductListComponent {
     }
 
     onMenuItemClick(item: IItem, menuItem: IMenuItem, event: any): void {
-        console.log(`productList.onMenuItemClick: ${menuItem}`);
         this.menuItemClick.emit({item, menuItem, event});
     }
 

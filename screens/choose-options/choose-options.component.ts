@@ -33,7 +33,7 @@ export class ChooseOptionsComponent extends PosScreen<IChooseOptionsScreen> impl
       this.selectedOption = option;
       this.currentView = 'OptionForm';
       this.session.registerActionIntercepter(ChooseOptionsComponent.UNDO,
-        new ActionIntercepter((payload) => { this.onBackButtonPressed(); }, ActionIntercepterBehaviorType.block));
+        new ActionIntercepter(this.log, (payload) => { this.onBackButtonPressed(); }, ActionIntercepterBehaviorType.block));
     } else {
       this.session.onAction( option.value );
     }

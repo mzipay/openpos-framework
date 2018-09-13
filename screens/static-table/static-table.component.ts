@@ -45,7 +45,6 @@ export class StaticTableComponent extends PosScreen<any> {
                 }
             );
             this.columnIds = this.columns.map(c => c.columnId);
-            // console.log('selectionMode:' + this.selectionMode);
 
             // If our selection mode allows for selection of a Single table row
             // or Multiple table rows, add an extra '_selection' column to the front
@@ -55,7 +54,6 @@ export class StaticTableComponent extends PosScreen<any> {
                 this.columnIds.unshift('_selection');
             }
 
-            // console.log('columnIds:' + this.columnIds);
             this.columns.forEach((col) => { this.columnsById[col.columnId] = col; });
         }
     }

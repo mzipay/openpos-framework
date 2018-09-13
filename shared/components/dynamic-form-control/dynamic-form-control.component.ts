@@ -101,7 +101,6 @@ export class DynamicFormControlComponent implements AfterViewInit {
         if (invalidFieldKey) {
             const invalidField = this.children.find(f => f.controlName === invalidFieldKey).field;
             if (invalidField) {
-                console.log(`Setting focus to invalid field '${invalidFieldKey}'`);
                 const invalidElement = document.getElementById(invalidFieldKey);
                 if (invalidElement) {
                     invalidElement.scrollIntoView();

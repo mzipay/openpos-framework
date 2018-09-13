@@ -1,3 +1,4 @@
+import { Logger } from './../../services/logger.service';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -16,7 +17,7 @@ export class StartupComponent implements IScreen, OnInit, AfterViewInit {
     _messages: string[] = [];
     startupFailed = false;
 
-    constructor(public dialog: DialogService, public startup: StartupService) {
+    constructor(private logger: Logger, public dialog: DialogService, public startup: StartupService) {
     }
 
     ngOnInit(): void {
@@ -44,7 +45,7 @@ export class StartupComponent implements IScreen, OnInit, AfterViewInit {
     }
 
     log(msg: string) {
-        console.log(msg);
+        this.logger.info(msg);
         this.message = msg;
     }
 
