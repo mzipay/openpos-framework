@@ -4,9 +4,9 @@ import { SessionService, IScreen, IAbstractScreen } from '../../core';
 
 export abstract class PosScreen<T extends IAbstractScreen> implements IScreen {
 
-    protected screen: T;
-    protected session: SessionService;
-    protected log: Logger;
+    screen: T;
+    session: SessionService;
+    log: Logger;
 
     constructor() {
         this.session = AppInjector.Instance.get(SessionService);
