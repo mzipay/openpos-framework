@@ -13,17 +13,14 @@ public class DynamicFormScreen extends Screen implements IHasForm {
 
     private Form form = new Form();
     
-    private String submitAction = "Next";
-    
-    private String submitButtonText = "Next";
-    
-    private String submitIcon = "keyboard_arrow_right";
+    private MenuItem submitButton;
     
     private List<String> alternateSubmitActions = new ArrayList<String>();
 
     public DynamicFormScreen() {
         setScreenType(ScreenType.DynamicForm);
         setTemplate(new SellTemplate());
+        submitButton = new MenuItem("Next", "Next", "keyboard_arrow_right");
     }
 
     public void setForm(Form form) {
@@ -38,12 +35,13 @@ public class DynamicFormScreen extends Screen implements IHasForm {
         return form.getString(id);
     }
     
+    @Deprecated
     public void setSubmitAction(String submitAction) {
-        this.submitAction = submitAction;
+        submitButton.setAction(submitAction);
     }
-    
+    @Deprecated
     public String getSubmitAction() {
-        return submitAction;
+        return submitButton.getAction();
     }
     
     public void addAlternateSubmitAction(String action) {
@@ -58,20 +56,32 @@ public class DynamicFormScreen extends Screen implements IHasForm {
         this.alternateSubmitActions = alternateActions;
     }
 
+    @Deprecated
 	public String getSubmitButtonText() {
-		return submitButtonText;
+		return submitButton.getTitle();
 	}
 
+    @Deprecated
 	public void setSubmitButtonText(String submitButtonText) {
-		this.submitButtonText = submitButtonText;
+		submitButton.setTitle(submitButtonText);
 	}
 
+    @Deprecated
 	public String getSubmitIcon() {
-		return submitIcon;
+		return submitButton.getIcon();
 	}
 
+    @Deprecated
 	public void setSubmitIcon(String submitIcon) {
-		this.submitIcon = submitIcon;
+		this.submitButton.setIcon(submitIcon);
+	}
+
+	public MenuItem getSubmitButton() {
+		return submitButton;
+	}
+
+	public void setSubmitButton(MenuItem submitButton) {
+		this.submitButton = submitButton;
 	}
     
 }
