@@ -13,6 +13,15 @@ export class DynamicFormControlComponent implements AfterViewInit {
 
   @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
   @ViewChild('formErrors') formErrors: ShowErrorsComponent;
+  form: FormGroup;
+
+  buttons: IFormElement[];
+
+  private _screenForm: IForm;
+  private _alternateSubmitActions: string[];
+  @Input() submitButton: IMenuItem;
+
+  constructor(public session: SessionService, public screenService: ScreenService, private formBuilder: FormBuilder) {}
 
   @Input()
   get screenForm(): IForm {
@@ -32,8 +41,6 @@ export class DynamicFormControlComponent implements AfterViewInit {
     });
 
   }
-
-  @Input() submitButton: IMenuItem;
 
   @Input()
   get alternateSubmitActions(): string[] {
@@ -62,14 +69,6 @@ export class DynamicFormControlComponent implements AfterViewInit {
     }
   }
 
-  form: FormGroup;
-
-  buttons: IFormElement[];
-
-  private _screenForm: IForm;
-  private _alternateSubmitActions: string[];
-
-  constructor(public session: SessionService, public screenService: ScreenService, private formBuilder: FormBuilder) {}
 
   ngAfterViewInit() {
     // Delays less than 1 sec do not work correctly.
