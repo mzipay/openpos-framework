@@ -15,6 +15,10 @@ public class Message implements Serializable {
     
     public Message() {
     }
+
+    public Message(String type) {
+        this.type = type;
+    }
     
     /**
      * Put properties in this map if they are optional. When not set, they don't
