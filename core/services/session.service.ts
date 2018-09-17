@@ -165,6 +165,10 @@ export class SessionService implements IMessageHandler {
         // Subscribe a function to be run on_next message
         this.subscription = this.messages.subscribe((message: Message) => {
             this.log.info('Got STOMP message');
+            if ( this.inBackground ) {
+                this.log.info('Leaving background');
+                this.inBackground = false;
+            }
             if (this.isMessageVersionValid(message)) {
                 const json = JSON.parse(message.body);
                 this.logStompJson(json);
@@ -268,17 +272,15 @@ export class SessionService implements IMessageHandler {
         });
         this.cancelLoading();
         // Input will get unblocked once re-subscribed to server and current screen is shown
-        this.log.info('Entering into background, unsubscribing');
-        this.unsubscribe();
+        this.log.info('Entering into background');
         this.inBackground = true;
     }
 
     private handleForegrounding() {
-        setTimeout(() => {
-            this.log.info(`Entering into foreground, re-loading app`);
-            window.location.href = 'index.html';
-            this.inBackground = false;
-        }, 0);
+        // check for any changes while were are inactive
+        // We'll reset the inBackground flag after we receive the response
+        this.log.info('Start coming back into forground. Requesting screen refresh');
+        this.publish('Refresh', 'Screen');
     }
 
     public unsubscribe() {
@@ -423,6 +425,10 @@ export class SessionService implements IMessageHandler {
     }
 
     public publish(actionString: string, type: string, payload?: any) {
+        const deviceService = AppInjector.Instance.get(DeviceService);
+        if ( this.inBackground && deviceService.isRunningInCordova) {
+            return;
+        }
         const nodeId = this.personalization.getNodeId();
         if (this.appId && nodeId) {
             this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.personalization.getNodeId(),
