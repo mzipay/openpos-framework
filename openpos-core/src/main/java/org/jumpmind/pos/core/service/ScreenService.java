@@ -158,7 +158,13 @@ public class ScreenService implements IScreenService, IActionListener {
         if (stateManager != null) {
             if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
                 stateManager.keepAlive();
+            } else if( "Refresh".equals(action.getName())) {
+            	Screen lastDialog = getLastDialog(appId, deviceId);
+            	logger.debug("Received Refresh Action");
+            	showScreen(appId, deviceId, getLastScreen(appId, deviceId));
+            	showScreen(appId, deviceId, lastDialog);
             } else {
+         
                 deserializeForm(stateManager.getApplicationState(), action);
 
                 logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
