@@ -1,5 +1,6 @@
 
 var exec = require('cordova/exec');
+var logger = require('cordova/plugin/ios/logger');
 
 const PLUGIN_NAME = 'OpenPOSCordovaLogPlugin';
 
@@ -7,7 +8,8 @@ var OpenPOSCordovaLogPlugin = {
   pluginId: 'openPOSCordovaLogPlugin',
   pluginName: PLUGIN_NAME,
   config: {
-    buildNumber: '0'
+    buildNumber: '0',
+    level: 'DEBUG'
   },
 
   init: function(successCallback, errorCallback) {
@@ -139,8 +141,13 @@ function _configure(pluginConfig) {
     if (pluginConfig.buildNumber !== 'undefined' && pluginConfig.buildNumber) {
       OpenPOSCordovaLogPlugin.config.buildNumber = pluginConfig.buildNumber;
     }
+
+    if (pluginConfig.level !== 'undefined' && pluginConfig.level) {
+        OpenPOSCordovaLogPlugin.config.level = pluginConfig.level;
+    }
   }
-  
+
+  logger.level(OpenPOSCordovaLogPlugin.config.level);
   exec(
     function() {},
     function(error) {},
