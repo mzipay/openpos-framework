@@ -151,9 +151,9 @@ public class Screen extends Message {
         this.put("subtitle", Arrays.asList(list));
     }
     
-    public void setSubtitle(List<String> list) {
-        this.put("subtitle", list);
-    }
+    // public void setSubtitleList(List<String> list) {
+    //    this.put("subtitle", list);
+    // }
     
     /**
      * Indicator for marking the screen as "Customer Facing", meaning that the screen is intended for the customer to 
