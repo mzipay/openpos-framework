@@ -1,5 +1,8 @@
 package org.jumpmind.pos.core.screen;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Message;
 import org.jumpmind.pos.core.template.AbstractTemplate;
@@ -143,8 +146,13 @@ public class Screen extends Message {
         this.put("prompt", prompt);
     }
     
-    public void setSubtitle(String subtitle) {
-        this.put("subtitle", subtitle);
+    // @JsonIgnore
+    public void setSubtitle(String ... list) {
+        this.put("subtitle", Arrays.asList(list));
+    }
+    
+    public void setSubtitle(List<String> list) {
+        this.put("subtitle", list);
     }
     
     /**
