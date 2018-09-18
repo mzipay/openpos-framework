@@ -168,6 +168,10 @@ export class SessionService implements IMessageHandler {
             if ( this.inBackground ) {
                 this.log.info('Leaving background');
                 this.inBackground = false;
+                if ((<any>(window.navigator)).splashscreen) {
+                    this.log.debug('Hiding splashscreen');
+                    (<any>(window.navigator)).splashscreen.hide();
+                }
             }
             if (this.isMessageVersionValid(message)) {
                 const json = JSON.parse(message.body);
@@ -279,7 +283,7 @@ export class SessionService implements IMessageHandler {
     private handleForegrounding() {
         // check for any changes while were are inactive
         // We'll reset the inBackground flag after we receive the response
-        this.log.info('Start coming back into forground. Requesting screen refresh');
+        this.log.info('Start coming back into foreground. Requesting screen refresh');
         this.publish('Refresh', 'Screen');
     }
 
@@ -426,7 +430,9 @@ export class SessionService implements IMessageHandler {
 
     public publish(actionString: string, type: string, payload?: any) {
         const deviceService = AppInjector.Instance.get(DeviceService);
-        if ( this.inBackground && deviceService.isRunningInCordova) {
+        // Block any actions if we are backgrounded and running in cordova
+        // (unless we are coming back out of the background)
+        if (this.inBackground && deviceService.isRunningInCordova() && actionString !== 'Refresh') {
             return;
         }
         const nodeId = this.personalization.getNodeId();
