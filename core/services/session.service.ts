@@ -168,10 +168,6 @@ export class SessionService implements IMessageHandler {
             if ( this.inBackground ) {
                 this.log.info('Leaving background');
                 this.inBackground = false;
-                if ((<any>(window.navigator)).splashscreen) {
-                    this.log.debug('Hiding splashscreen');
-                    (<any>(window.navigator)).splashscreen.hide();
-                }
             }
             if (this.isMessageVersionValid(message)) {
                 const json = JSON.parse(message.body);
@@ -266,7 +262,7 @@ export class SessionService implements IMessageHandler {
             this.log.info('Showing splashscreen');
             (<any>(window.navigator)).splashscreen.show();
         }
-
+/* Commenting out for now, may want to add back in if BigLots needs it
         this.sendMessage({
             type: 'Screen',
             screenType: 'Wait',
@@ -274,6 +270,7 @@ export class SessionService implements IMessageHandler {
             title: 'Point of Sale is Loading',
             instructions: 'Please wait while Point of Sale is loading...'
         });
+*/
         this.cancelLoading();
         // Input will get unblocked once re-subscribed to server and current screen is shown
         this.log.info('Entering into background');
@@ -285,6 +282,10 @@ export class SessionService implements IMessageHandler {
         // We'll reset the inBackground flag after we receive the response
         this.log.info('Start coming back into foreground. Requesting screen refresh');
         this.publish('Refresh', 'Screen');
+        if ((<any>(window.navigator)).splashscreen) {
+            this.log.debug('Hiding splashscreen');
+            (<any>(window.navigator)).splashscreen.hide();
+        }
     }
 
     public unsubscribe() {
