@@ -8,6 +8,7 @@ import org.jumpmind.pos.core.model.Message;
 import org.jumpmind.pos.core.template.AbstractTemplate;
 import org.jumpmind.pos.core.template.BlankWithBarTemplate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Screen extends Message {
@@ -146,14 +147,14 @@ public class Screen extends Message {
         this.put("prompt", prompt);
     }
     
-    // @JsonIgnore
     public void setSubtitle(String ... list) {
         this.put("subtitle", Arrays.asList(list));
     }
     
-    // public void setSubtitleList(List<String> list) {
-    //    this.put("subtitle", list);
-    // }
+    @JsonIgnore
+    public void setSubtitleList(List<String> list) {
+    	this.put("subtitle", list);
+    }
     
     /**
      * Indicator for marking the screen as "Customer Facing", meaning that the screen is intended for the customer to 
