@@ -152,7 +152,7 @@ public class Screen extends Message {
     }
     
     @JsonIgnore
-    public void setSubtitleList(List<String> list) {
+    public void setSubtitle(List<String> list) {
     	this.put("subtitle", list);
     }
     
