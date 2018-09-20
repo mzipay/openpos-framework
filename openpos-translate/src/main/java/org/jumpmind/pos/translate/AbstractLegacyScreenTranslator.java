@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.ModeConstants;
@@ -30,7 +29,6 @@ import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
 
 public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends AbstractScreenTranslator<T>
         implements ILegacyBeanAccessor {
-
     public final static String LOCAL_NAV_PANEL_KEY = "LocalNavigationPanel";
     public final static String GLOBAL_NAV_PANEL_KEY = "GlobalNavigationPanel";
     public final static String PROMPT_RESPONSE_PANEL_KEY = "PromptAndResponsePanel";
@@ -511,12 +509,14 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                 if (buttonModel.getNewButtons() != null && buttonModel.getNewButtons().length > 0) {
                     buttonSpecs = buttonModel.getNewButtons();
                 } else {
-                    buttonSpecs = ((ILegacyButtonSpec[]) ArrayUtils.addAll(localNavSpec.getButtons(), buttonModel.getNewButtons()));
+                    // Why was this adding in the new buttons?  That list is either null or empty here.
+                	// buttonSpecs = ((ILegacyButtonSpec[]) ArrayUtils.addAll(localNavSpec.getButtons(), buttonModel.getNewButtons()));
+                    buttonSpecs = localNavSpec.getButtons();
                 }
             } else {
                 buttonSpecs = localNavSpec.getButtons();
             }
-
+        	
             for (ILegacyButtonSpec buttonSpec : buttonSpecs) {
                 if (buttonSpec != null && 
                         !(toExclude.contains(buttonSpec.getLabelTag())
@@ -537,7 +537,6 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                     }
 
                     if (buttonModel != null) {
-
                         // Modify existing buttons
                         ILegacyButtonSpec[] modifyButtonSpecs = buttonModel.getModifyButtons();
 
@@ -545,20 +544,25 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                             for (ILegacyButtonSpec modifiedSpec : modifyButtonSpecs) {
                                 if (modifiedSpec.getActionName().equals(action)) {
                                     if (modifiedSpec.getEnabledFlag() != null) {
-                                        // Discovered while implementing the
-                                        // GET_AMOUNT_FOR_GIFT_CARD screen that
-                                        // the enabledFlag
-                                        // may be null in the modified spec,
-                                        // which causes getEnabled() to return
-                                        // false. Hoping
-                                        // that if I only override the enabled
-                                        // value when the enabledFlag is
-                                        // non-null, that
-                                        // it will yield better results.
+                                        //  Discovered while implementing the GET_AMOUNT_FOR_GIFT_CARD
+                                    	//  screen that the enabledFlag may be null in the modified spec,
+                                        //  which causes getEnabled() to return false.  Hoping that if I
+                                        //  only override the enabled value when the enabledFlag is
+                                        //  non-null that it will yield better results.
                                         enabled = modifiedSpec.getEnabledFlag();
                                     }
                                     if (isNotBlank(modifiedSpec.getLabel())) {
                                         label = modifiedSpec.getLabel();
+                                    }
+                                    if (enabled)  {
+                                    	//  Some of the buttons may appear more than once in the
+                                    	//  modified spec list.  This happens on Tender Options,
+                                    	//  for example, because we potentially have multiple
+                                    	//  scenarios like special order and lease in the same
+                                    	//  cart.  Once we find an active version of the given
+                                    	//  item, go on to the next button.  If we don't do this,
+                                    	//  then last one wins. -- JAB 09/20/2018
+                                    	break;
                                     }
                                 }
                             }
@@ -587,19 +591,14 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                     } catch (InstantiationException | IllegalAccessException e) {
                         logger.error(String.format("Failed to create action of type %s for action '%s'", actionClass.getName(), action), e);
                     }
-
                 }
             }
         }
 
         return generatedActions;
-
     }
     
     protected String translate(String tag, String defaultValue, Object... params) {
-        
-        
-        
         return null;
     }
 
