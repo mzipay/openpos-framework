@@ -26,3 +26,16 @@ td {
 .line-item-detail-actions {
     text-align: right;
 }
+
+.mat-list-item-content {
+    align-items: start;
+}
+
+.itemContent > div:not(:first-child) {
+    padding-left: 20px;
+}
+
+.header {
+    white-space: nowrap;
+    color: gray;
+}

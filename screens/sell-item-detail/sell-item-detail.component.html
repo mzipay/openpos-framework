@@ -2,23 +2,28 @@
         <mat-card fxFlexFill class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
             <mat-card-content>
                 <mat-list fxFlexFill class="list-seperator field-list" ngClass="xs" >
-
-                    <mat-list-item *ngFor="let field of screen.item.fields" fxFlexFill fxLayout="row" fxLayoutAlign="space-between start">
-                        <ng-container *ngIf="!field.subfields; else multifield">
-                            <div fxLayout="column">
-                                <span>{{field.label}}</span>
-                                <span class="text-md">{{field.value || 'N/A'}}</span>
-                            </div>
-                        </ng-container>
-                        <ng-template #multifield>
-                            <div *ngFor="let subfield of field.subfields" fxFlex fxLayout="column">
-                                <span>{{subfield.label}}</span>
-                                <span class="text-md">{{subfield.value || 'N/A'}}</span>
-                                <span *ngFor="let id of subfield.list" class="text-md">
-                                    {{id}}
-                                </span>
-                            </div>
-                        </ng-template>
+    
+                    <mat-list-item *ngFor="let field of screen.item.fields" style="height: unset;" >
+                        <div class="itemContent" fxFlexFill fxLayout="row" fxLayout.xs="column" 
+                            fxLayoutAlign="space-between start" fxLayoutGap="10px" style="padding: 5px;">
+    
+                            <ng-container *ngIf="!field.subfields; else multifield">
+                                <div fxLayout="column">
+                                    <span matLine header>{{field.label}}</span>
+                                    <span matLine class="text-md">{{field.value || 'N/A'}}</span>
+                                </div>
+                            </ng-container>
+                            <ng-template #multifield>
+                                <div *ngFor="let subfield of field.subfields" fxLayout="column">
+                                    <span matLine header>{{subfield.label}}</span>
+                                    <span matLine class="text-md">{{subfield.value || 'N/A'}}</span>
+                                    <span matLine *ngFor="let id of subfield.list" class="text-md">
+                                        {{id}}
+                                    </span>
+                                </div>
+                            </ng-template>
+    
+                        </div>
                     </mat-list-item>
                     
                     <mat-list-item>
@@ -26,7 +31,7 @@
                         <p matLine *ngIf="promosDataSource.filteredData.length === 0"class="text-md">N/A</p> 
                     </mat-list-item>
                 </mat-list>
-
+    
                 <ng-container *ngIf="promosDataSource.filteredData.length > 0">
                     <mat-table #table [dataSource]="promosDataSource">
                         <ng-container matColumnDef="desc">
