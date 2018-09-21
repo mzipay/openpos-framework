@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
 import { IMenuItem, SelectionMode } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
@@ -9,6 +9,8 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
   styleUrls: ['./item-search-results.component.scss']
 })
 export class ItemSearchResultsComponent extends PosScreen<any> {
+
+  @ViewChild('scrollList') private scrollList: ElementRef;
 
   listConfig = new SelectableItemListComponentConfiguration<any>();
   index = -1;
@@ -26,11 +28,10 @@ export class ItemSearchResultsComponent extends PosScreen<any> {
     }
     this.listConfig.numResultsPerPage = Number.MAX_VALUE;
     this.listConfig.items = this.screen.items;
+    this.scrollToTop();
   }
 
   public onItemListChange(event: any[]): void {
-    // this.selectedItems = event;
-    // this.session.onAction("SelectedItemsChanged", this.selectedItems);
   }
 
   public onItemChange(event: any): void {
@@ -38,7 +39,13 @@ export class ItemSearchResultsComponent extends PosScreen<any> {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem);
+    this.session.onAction(menuItem, this.index);
+  }
+
+  scrollToTop(): void {
+    try {
+      this.scrollList.nativeElement.scrollTop = 0;
+    } catch (err) { }
   }
 
 }

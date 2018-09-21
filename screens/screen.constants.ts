@@ -27,6 +27,7 @@ import { CallForAuthorizationComponent } from './call-for-authorization/call-for
 import { MultipleDynamicFormComponent } from './multiple-dynamic-form/multiple-dynamic-form.component';
 import { SelectionListComponent } from './selection-list/selection-list.component';
 import { ItemSearchResultsComponent } from './item-search-results/item-search-results.component';
+import { ItemOptionsComponent } from './item-options/item-options.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { BlankComponent } from './templates/blank/blank.component';
 import { BlankWithBarComponent } from './templates/blank-with-bar/blank-with-bar.component';
@@ -80,6 +81,7 @@ export const ScreenConstants = {
         { name: 'SelectionList', component: SelectionListComponent },
         { name: 'CatalogBrowser', component: CatalogBrowserComponent},
         { name: 'ItemSearchResults', component: ItemSearchResultsComponent },
+        { name: 'ItemOptions', component: ItemOptionsComponent },
         { name: 'JournalDetail', component: JournalSearchResultsComponent },
 
         // Default Dialog
@@ -126,7 +128,8 @@ export const ScreenConstants = {
         { name: 'CallForAuthorization', component: CallForAuthorizationComponent },
         { name: 'Version', component: VersionComponent },
         { name: 'SelectionList', component: SelectionListComponent },
-        { name: 'SelectionList', component: ItemSearchResultsComponent },
+        { name: 'ItemSearchResults', component: ItemSearchResultsComponent },
+        { name: 'ItemOptions', component: ItemOptionsComponent },
         { name: 'Blank', component: BlankComponent },
     ],
 

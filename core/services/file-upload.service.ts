@@ -5,12 +5,13 @@ import { SessionService } from './session.service';
 import { PluginService } from './plugin.service';
 import { IPlugin } from '../plugins';
 import { PersonalizationService } from './personalization.service';
+import { Logger } from './logger.service';
 
 @Injectable({
     providedIn: 'root',
   })
 export class FileUploadService {
-    constructor(private personalization: PersonalizationService, private session: SessionService, private pluginService: PluginService, private httpClient: HttpClient) {
+    constructor(private log: Logger, private personalization: PersonalizationService, private session: SessionService, private pluginService: PluginService, private httpClient: HttpClient) {
 
     }
 
@@ -26,10 +27,10 @@ export class FileUploadService {
             if (! filename.startsWith('file:')) {
                 localfilepath = `file://${localfilepath}`;
             }
-            console.log(`File to upload: ${localfilepath}`);
+            this.log.info(`File to upload: ${localfilepath}`);
 
             const url = this.getUploadServiceUrl();
-            console.log(`File upload endpoint url: ${url}`);
+            this.log.info(`File upload endpoint url: ${url}`);
 
             const httpClient = this.httpClient;
             const formData = new FormData();
@@ -41,23 +42,23 @@ export class FileUploadService {
             this.pluginService.getPlugin('file').then(
             (filePlugin: IPlugin) => {
                 if (filePlugin.impl) {
-                    (<any>window).requestFileSystem((<any>window).PERSISTENT, 0, function (fs) {
-                        (<any>window).resolveLocalFileSystemURL(localfilepath, function(fileEntry) {
-                            fileEntry.file(function (file) {
+                    (<any>window).requestFileSystem((<any>window).PERSISTENT, 0, (fs) => {
+                        (<any>window).resolveLocalFileSystemURL(localfilepath, (fileEntry) => {
+                            fileEntry.file( (file) => {
                                 const reader = new FileReader();
-                                reader.onloadend = function() {
+                                reader.onloadend = () => {
                                     // Create a blob based on the FileReader "result", which we asked to be retrieved as an ArrayBuffer
-                                    const blob = new Blob([new Uint8Array(this.result)], { type: contentType });
+                                    const blob = new Blob([new Uint8Array(<ArrayBuffer>reader.result)], { type: contentType });
                                     formData.append('file', blob);
                                     httpClient.post(url, formData, {observe: 'response'}).subscribe( response => {
                                         const msg = `File ${filename} uploaded to server successfully.`;
-                                        console.log(msg);
-                                        console.log(`File upload response: ${JSON.stringify(response)}`);
+                                        this.log.info(msg);
+                                        this.log.info(`File upload response: ${JSON.stringify(response)}`);
                                         resolve({success: true, message: msg});
                                     },
                                     err => {
                                         const msg = `Upload Error occurred: ${JSON.stringify(err)}`;
-                                        console.log(msg);
+                                        this.log.info(msg);
                                         const statusCode = err.status || (err.error ? err.error.status : null);
                                         let errMsg = '';
                                         if (err.error) {
@@ -79,7 +80,7 @@ export class FileUploadService {
                     }, function (fsErr) { handleError(prom, 'Error getting persistent filesystem!', fsErr); });
                 } else {
                     const msg = `file plugin not found, cannot upload file ${filename}`;
-                    console.log(msg);
+                    this.log.warn(msg);
                     reject({success: false, message: msg});
                 }
             }
@@ -90,6 +91,6 @@ export class FileUploadService {
 }
 
 function handleError(returnPromise, msg, e) {
-    console.error(`${msg}; Error code: ${e.code}, ${JSON.stringify(e)}`);
+    this.log.error(`${msg}; Error code: ${e.code}, ${JSON.stringify(e)}`);
     returnPromise.reject({success: false, message: msg});
 }

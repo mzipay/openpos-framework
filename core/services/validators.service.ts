@@ -1,3 +1,4 @@
+import { Logger } from './logger.service';
 import { Injectable } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
 // Since there are directives in shared that import validator service using the ../../shared
@@ -12,7 +13,7 @@ export class ValidatorsService {
 
     private validators = new Map<string, Map<string, ValidatorFn>>();
 
-    constructor(private localeService: LocaleService) {
+    constructor(private log: Logger, private localeService: LocaleService) {
         const USValidators = new Map<string, ValidatorFn>();
         const NOLOCALEValidators = new Map<string, ValidatorFn>();
         const CAValidators = new Map<string, ValidatorFn>();
@@ -27,6 +28,7 @@ export class ValidatorsService {
         NOLOCALEValidators.set('email', Validators.email);
         NOLOCALEValidators.set('postalcode', Validators.minLength(5));
         NOLOCALEValidators.set('gt_0', OpenPosValidators.GT_0);
+        NOLOCALEValidators.set('gte_0', OpenPosValidators.GTE_0);
 
         this.validators.set('en-us', USValidators);
         this.validators.set('us', USValidators);
@@ -51,7 +53,7 @@ export class ValidatorsService {
                 return this.validators.get('NO-LOCALE').get(lname);
             }
         }
-        console.log(`No validator found for locale '${locale}' validator name '${name}'. Using an 'always valid' validator`);
+        this.log.info(`No validator found for locale '${locale}' validator name '${name}'. Using an 'always valid' validator`);
         return () => null;
     }
 

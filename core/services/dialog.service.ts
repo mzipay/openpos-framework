@@ -1,3 +1,5 @@
+import { Logger } from './logger.service';
+
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { IScreen } from '../components';
 import { SessionService } from './session.service';
@@ -19,6 +21,7 @@ export class DialogService {
     private lastDialogType: string;
 
     constructor(
+        private log: Logger,
         private componentFactoryResolver: ComponentFactoryResolver,
         private session: SessionService,
         private dialog: MatDialog,
@@ -60,7 +63,7 @@ export class DialogService {
     public addDialog(name: string, type: Type<IScreen>): void {
         if (this.dialogs.get(name)) {
         // tslint:disable-next-line:max-line-length
-        console.log(`replacing registration for screen of type ${this.dialogs.get(name).name} with ${type.name} for the key of ${name} in the screen service`);
+        this.log.info(`replacing registration for screen of type ${this.dialogs.get(name).name} with ${type.name} for the key of ${name} in the screen service`);
         this.dialogs.delete(name);
         }
         this.dialogs.set(name, type);
@@ -83,7 +86,7 @@ export class DialogService {
 
     public closeDialog() {
         if (this.dialogRef) {
-            console.log('[DialogService] closing dialog ref');
+            this.log.info('[DialogService] closing dialog ref');
             this.dialogRef.close();
             this.dialogRef = null;
         }
@@ -102,13 +105,13 @@ export class DialogService {
         if (dialog) {
             const dialogType = this.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
             if (!this.dialogOpening) {
-                // console.log(`[DialogService] dialogRef=${this.dialogRef}, dialog.screenType=${dialog.screenType}, this.lastDialogType=${this.lastDialogType}`);
+                // this.log.info(`[DialogService] dialogRef=${this.dialogRef}, dialog.screenType=${dialog.screenType}, this.lastDialogType=${this.lastDialogType}`);
                 this.closeDialog();
-                console.log('opening dialog \'' + dialogType + '\'');
+                this.log.info('opening dialog \'' + dialogType + '\'');
                 this.dialogOpening = true;
                 setTimeout(() => this.openDialog(dialog), 0);
             } else {
-                console.log(`[DialogService] Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}`);
+                this.log.info(`[DialogService] Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}`);
             }
         }
     }
@@ -131,20 +134,20 @@ export class DialogService {
                     dialogProperties[key] = dialog.template.dialogProperties[key];
                 }
             }
-            console.log(`Dialog options: ${JSON.stringify(dialogProperties)}`);
+            this.log.info(`Dialog options: ${JSON.stringify(dialogProperties)}`);
         }
 
         if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
             || dialog.refreshAlways) {
-            console.log('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
+            this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
             this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
         } else {
-            console.log(`Using previously created dialogRef. current dialog type: ${dialog.screenType}, last dialog type: ${this.lastDialogType}`);
+            this.log.info(`Using previously created dialogRef. current dialog type: ${dialog.screenType}, last dialog type: ${this.lastDialogType}`);
         }
 
-        console.log('[DialogService] Dialog \'' + dialog.screenType + '\' showing...');
+        this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' showing...');
         this.dialogRef.componentInstance.show(dialog);
-        console.log('[DialogService] Dialog \'' + dialog.screenType + '\' opened/shown');
+        this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opened/shown');
         this.dialogOpening = false;
 
         this.lastDialogType = dialog.screenType;

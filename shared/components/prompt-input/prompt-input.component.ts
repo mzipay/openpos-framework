@@ -1,3 +1,4 @@
+import { Logger } from './../../../core/services/logger.service';
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
@@ -33,7 +34,7 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     _textMask: ITextMask; // Mask object built for text-mask
     private barcodeEventSubscription: Subscription;
 
-    constructor(private datePipe: DatePipe, private pluginService: PluginService) {
+    constructor(private log: Logger, private datePipe: DatePipe, private pluginService: PluginService) {
     }
 
     isNumericField(): boolean {
@@ -79,13 +80,13 @@ export class PromptInputComponent implements OnInit, OnDestroy {
                 // which come from other sources such as a scan device
                 this.barcodeEventSubscription = (<BarcodeScannerPlugin>plugin).onBarcodeScanned.subscribe({
                     next: (scan: Scan) => {
-                        console.log(`app-prompt-input got scan event: ${scan.value}`);
+                        this.log.info(`app-prompt-input got scan event: ${scan.value}`);
                         this.setFieldValue(scan.value);
                     }
                 });
-                console.log(`app-prompt-input is subscribed for barcode scan events`);
+                this.log.info(`app-prompt-input is subscribed for barcode scan events`);
 
-            }).catch(error => console.log(`Failed to get barcodeScannerPlugin.  Reason: ${error}`));
+            }).catch(error => this.log.info(`Failed to get barcodeScannerPlugin.  Reason: ${error}`));
         }
     }
 
@@ -117,7 +118,7 @@ export class PromptInputComponent implements OnInit, OnDestroy {
                     console.error('Scanning failed: ' + error);
                 }
             )
-        ).catch(error => console.log(`Scanning failed: ${error}`)
+        ).catch(error => this.log.info(`Scanning failed: ${error}`)
         );
     }
 

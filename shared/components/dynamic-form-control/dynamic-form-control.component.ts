@@ -1,6 +1,6 @@
 import { Component, ViewChildren, AfterViewInit, Input, QueryList, ViewChild } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
-import { SessionService, ScreenService, IFormElement, IForm, FormBuilder } from '../../../core';
+import { SessionService, ScreenService, IFormElement, IForm, FormBuilder, IMenuItem } from '../../../core';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
 import { ShowErrorsComponent } from '../show-errors/show-errors.component';
 
@@ -13,6 +13,15 @@ export class DynamicFormControlComponent implements AfterViewInit {
 
   @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
   @ViewChild('formErrors') formErrors: ShowErrorsComponent;
+  form: FormGroup;
+
+  buttons: IFormElement[];
+
+  private _screenForm: IForm;
+  private _alternateSubmitActions: string[];
+  @Input() submitButton: IMenuItem;
+
+  constructor(public session: SessionService, public screenService: ScreenService, private formBuilder: FormBuilder) {}
 
   @Input()
   get screenForm(): IForm {
@@ -32,10 +41,6 @@ export class DynamicFormControlComponent implements AfterViewInit {
     });
 
   }
-
-  @Input() submitAction: string;
-
-  @Input() submitButtonText = 'Next';
 
   @Input()
   get alternateSubmitActions(): string[] {
@@ -64,14 +69,6 @@ export class DynamicFormControlComponent implements AfterViewInit {
     }
   }
 
-  form: FormGroup;
-
-  buttons: IFormElement[];
-
-  private _screenForm: IForm;
-  private _alternateSubmitActions: string[];
-
-  constructor(public session: SessionService, public screenService: ScreenService, private formBuilder: FormBuilder) {}
 
   ngAfterViewInit() {
     // Delays less than 1 sec do not work correctly.
@@ -91,7 +88,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
   submitForm() {
     if (this.form.valid) {
       this.formBuilder.buildFormPayload(this.form, this._screenForm);
-      this.session.onAction(this.submitAction, this._screenForm);
+      this.session.onAction(this.submitButton, this._screenForm);
     } else {
         // Set focus on the first invalid field found
         const invalidFieldKey = Object.keys(this.form.controls).find(key => {
@@ -101,7 +98,6 @@ export class DynamicFormControlComponent implements AfterViewInit {
         if (invalidFieldKey) {
             const invalidField = this.children.find(f => f.controlName === invalidFieldKey).field;
             if (invalidField) {
-                console.log(`Setting focus to invalid field '${invalidFieldKey}'`);
                 const invalidElement = document.getElementById(invalidFieldKey);
                 if (invalidElement) {
                     invalidElement.scrollIntoView();

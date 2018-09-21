@@ -63,7 +63,7 @@ export class SignatureCaptureComponent extends PosScreen<any> implements AfterVi
 
   onSaveSignature(): void {
     if ( this.signaturePad.isEmpty()) {
-      console.log('Signature is empty');
+      this.log.info('Signature is empty');
       return;
     }
     const mediaType: string = this.screen.signatureMediaType ?
@@ -100,11 +100,11 @@ export class SignatureCaptureComponent extends PosScreen<any> implements AfterVi
         let totalSignaturePoints = 0;
         if (sigData.pointGroups) {
             sigData.pointGroups.forEach(pArray => totalSignaturePoints += pArray.length);
-            console.log(`Total signature points: ${totalSignaturePoints}`);
+            this.log.info(`Total signature points: ${totalSignaturePoints}`);
         }
 
         if (totalSignaturePoints > Configuration.maxSignaturePoints) {
-            console.log(`Signature point count of ${totalSignaturePoints} exceeds the Configuration.maxSignaturePoints of ` +
+            this.log.info(`Signature point count of ${totalSignaturePoints} exceeds the Configuration.maxSignaturePoints of ` +
             `${Configuration.maxSignaturePoints}`);
             return false;
         }
@@ -112,9 +112,9 @@ export class SignatureCaptureComponent extends PosScreen<any> implements AfterVi
 
     if (Configuration.maxResponseSizeBytes >= 0) {
         const signatureResponseSize = JSON.stringify(sigData).length;
-        console.log(`Signature response size: ${signatureResponseSize}`);
+        this.log.info(`Signature response size: ${signatureResponseSize}`);
         if (signatureResponseSize > Configuration.maxResponseSizeBytes) {
-            console.log(`Signature response size of ${signatureResponseSize} exceeds the Configuration.maxResponseSizeBytes of ` +
+            this.log.info(`Signature response size of ${signatureResponseSize} exceeds the Configuration.maxResponseSizeBytes of ` +
               `${Configuration.maxResponseSizeBytes}`);
             return false;
         }

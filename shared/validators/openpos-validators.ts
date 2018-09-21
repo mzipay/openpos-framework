@@ -67,7 +67,6 @@ export class OpenPosValidators {
                 let year = Number(dateParts[2]);
                 const strYear = year + '';
                 const formatYCount = (format.match(/y/ig) || []).length;
-                // console.log(`strYr: ${strYear}`);
                 // Assume current century for 2 digit year
                 if (strYear.length === 1 || strYear.length === 2 ) {
                     const curDate = new Date();
@@ -85,16 +84,12 @@ export class OpenPosValidators {
                         century = curCentury - 100;
                     }
                     year = century + year;
-                    // console.log(`Year is: ${year}`);
                 }
                 const date = new Date(year, month - 1, dayOfMonth);
-                // console.log(`Checking validity of entered date '${month}/${dayOfMonth}/${year}' ` +
                 // `vs. parsed date '${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}'`);
                 if (month === date.getMonth() + 1 && dayOfMonth === date.getDate() && year === date.getFullYear()) {
-                    // console.log('Date is valid');
                     return null;
                 } else {
-                    // console.log('Date is not valid');
                     return {
                         'date': {
                             valid: false
@@ -124,6 +119,18 @@ export class OpenPosValidators {
         };
     }
 
+    static GTE_0(c: FormControl) {
+        let value = c.value;
+        if (value) {
+            value = value.replace(',', '');
+        }
+        return Number(value) >= 0 ? null : {
+            'gt_0': {
+                valid: false
+            }
+        };
+    }
+
     static LESS_THAN( limit: Number ): ValidatorFn {
 
         return (c: AbstractControl): ValidationErrors | null => {
@@ -139,6 +146,21 @@ export class OpenPosValidators {
         };
     }
 
+    static LESS_THAN_OR_EQUAL( limit: Number ): ValidatorFn {
+
+        return (c: AbstractControl): ValidationErrors | null => {
+            let value = c.value;
+            if (value) {
+                value = value.replace(',', '');
+            }
+            return Number(value) <= limit ? null : {
+                'less_than_equal' : {
+                    valid: false
+                }
+            };
+        };
+    }
+
     static GREATER_THAN(limit: Number): ValidatorFn {
         return (c: AbstractControl): ValidationErrors | null => {
             let value = c.value;
@@ -147,6 +169,20 @@ export class OpenPosValidators {
             }
             return Number(value) > limit ? null : {
                 'greater_than' : {
+                    valid: false
+                }
+            };
+        };
+    }
+
+    static GREATER_THAN_OR_EQUAL(limit: Number): ValidatorFn {
+        return (c: AbstractControl): ValidationErrors | null => {
+            let value = c.value;
+            if (value) {
+                value = value.replace(',', '');
+            }
+            return Number(value) >= limit ? null : {
+                'greater_than_equal' : {
                     valid: false
                 }
             };

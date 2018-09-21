@@ -1,3 +1,5 @@
+import { Logger } from './logger.service';
+
 import { Configuration } from './../../configuration/configuration';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { PersonalizationService, DEFAULT_LOCALE } from './personalization.service';
@@ -64,6 +66,7 @@ export class SessionService implements IMessageHandler {
     private inBackground = false;
 
     constructor(
+        private log: Logger,
         private stompService: StompRService,
         public dialogService: MatDialog,
         public zone: NgZone,
@@ -136,7 +139,7 @@ export class SessionService implements IMessageHandler {
         }
 
         const url = this.personalization.getWebsocketUrl();
-        console.log('creating new stomp service at: ' + url);
+        this.log.info('creating new stomp service at: ' + url);
         this.stompService.config = {
             url: url,
             headers: {
@@ -155,17 +158,23 @@ export class SessionService implements IMessageHandler {
         this.appId = appId;
         const currentTopic = this.buildTopicName();
 
-        console.log('subscribing to server at: ' + currentTopic);
+        this.log.info('subscribing to server at: ' + currentTopic);
 
         this.messages = this.stompService.subscribe(currentTopic);
 
         // Subscribe a function to be run on_next message
         this.subscription = this.messages.subscribe((message: Message) => {
-            // console.log('Got message');
+            this.log.info('Got STOMP message');
+            if ( this.inBackground ) {
+                this.log.info('Leaving background');
+                this.inBackground = false;
+            }
             if (this.isMessageVersionValid(message)) {
                 const json = JSON.parse(message.body);
+                this.logStompJson(json);
                 this.stompJsonMessages$.next(json);
             } else {
+                this.log.info(`Showing incompatible version screen`);
                 this.stompJsonMessages$.next(this.buildIncompatibleVersionScreen());
             }
         });
@@ -184,7 +193,7 @@ export class SessionService implements IMessageHandler {
                     if (allowBackgroundHandling) {
                         this.handleBackgrounding();
                     } else {
-                        console.log(`Skipping background handling`);
+                        this.log.info(`Skipping background handling`);
                     }
                 }
             });
@@ -196,7 +205,7 @@ export class SessionService implements IMessageHandler {
                     if (allowForegroundHandling) {
                         this.handleForegrounding();
                     } else {
-                        console.log(`Skipping foreground handling`);
+                        this.log.info(`Skipping foreground handling`);
                     }
                 }
             });
@@ -209,9 +218,17 @@ export class SessionService implements IMessageHandler {
                         this.onServerConnect.next(true);
                     }
                 } else if (stompState === 'DISCONNECTING') {
-                    console.log('STOMP disconnecting');
+                    this.log.info('STOMP disconnecting');
                 }
             });
+        }
+    }
+
+    private logStompJson(json: any) {
+        if (json) {
+          this.log.info(`[logStompJson] type: ${json.type}, screenType: ${json.screenType}, seqNo: ${json.sequenceNumber}`);
+        } else {
+          this.log.info(`[logStompJson] ${json}`);
         }
     }
 
@@ -230,7 +247,7 @@ export class SessionService implements IMessageHandler {
     private isMessageVersionValid(message: Message): boolean {
         const valid = message.headers.compatibilityVersion === Configuration.compatibilityVersion;
         if (! valid) {
-            console.log(`INCOMPATIBLE VERSIONS. Client compatibilityVersion: ${Configuration.compatibilityVersion}, ` +
+            this.log.info(`INCOMPATIBLE VERSIONS. Client compatibilityVersion: ${Configuration.compatibilityVersion}, ` +
             `server compatibilityVersion: ${message.headers.compatibilityVersion}`);
         }
         return valid;
@@ -242,10 +259,10 @@ export class SessionService implements IMessageHandler {
         // If other retailers are using iOS will need to implement the same, move this code
         // to Ascena, or find the right place in the core to dismiss the splash screen
         if ((<any>(window.navigator)).splashscreen) {
-            console.log('Showing splashscreen');
+            this.log.info('Showing splashscreen');
             (<any>(window.navigator)).splashscreen.show();
         }
-
+/* Commenting out for now, may want to add back in if BigLots needs it
         this.sendMessage({
             type: 'Screen',
             screenType: 'Wait',
@@ -253,19 +270,22 @@ export class SessionService implements IMessageHandler {
             title: 'Point of Sale is Loading',
             instructions: 'Please wait while Point of Sale is loading...'
         });
+*/
         this.cancelLoading();
         // Input will get unblocked once re-subscribed to server and current screen is shown
-        console.log('Entering into background, unsubscribing');
-        this.unsubscribe();
+        this.log.info('Entering into background');
         this.inBackground = true;
     }
 
     private handleForegrounding() {
-        setTimeout(() => {
-            console.log(`Entering into foreground, re-loading app`);
-            window.location.href = 'index.html';
-            this.inBackground = false;
-        }, 0);
+        // check for any changes while were are inactive
+        // We'll reset the inBackground flag after we receive the response
+        this.log.info('Start coming back into foreground. Requesting screen refresh');
+        this.publish('Refresh', 'Screen');
+        if ((<any>(window.navigator)).splashscreen) {
+            this.log.debug('Hiding splashscreen');
+            (<any>(window.navigator)).splashscreen.hide();
+        }
     }
 
     public unsubscribe() {
@@ -273,14 +293,14 @@ export class SessionService implements IMessageHandler {
             return;
         }
 
-        console.log('unsubscribing from stomp service ...');
+        this.log.info('unsubscribing from stomp service ...');
 
         // This will internally unsubscribe from Stomp Broker
         // There are two subscriptions - one created explicitly, the other created in the template by use of 'async'
         this.subscription.unsubscribe();
         this.subscription = null;
 
-        console.log('disconnecting from stomp service');
+        this.log.info('disconnecting from stomp service');
         this.stompService.disconnect();
         this.messages = null;
 
@@ -290,7 +310,7 @@ export class SessionService implements IMessageHandler {
     public onDeviceResponse(deviceResponse: IDeviceResponse) {
         const sendResponseBackToServer: Function = () => {
             // tslint:disable-next-line:max-line-length
-            console.log(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
+            this.log.info(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
             this.stompService.publish(`/app/device/app/${this.appId}/node/${this.personalization.getNodeId()}/device/${deviceResponse.deviceId}`,
                 JSON.stringify(deviceResponse));
         };
@@ -319,14 +339,14 @@ export class SessionService implements IMessageHandler {
                 // check to see if we are an IURLMenuItem
                 if (menuItem.hasOwnProperty('url')) {
                     const urlMenuItem = <IUrlMenuItem>menuItem;
-                    console.log(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode}, with options: ${urlMenuItem.options}`);
+                    this.log.info(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode}, with options: ${urlMenuItem.options}`);
                     const pluginService = AppInjector.Instance.get(PluginService);
                     // Use inAppBrowserPlugin when available since it tracks whether or not the browser is active.
                     pluginService.getPlugin('InAppBrowser').then(plugin => {
                         const inAppPlugin = <InAppBrowserPlugin> plugin;
                         inAppPlugin.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
                     }).catch(error => {
-                        console.log(`InAppBrowser not found, using window.open. Reason: ${error}`);
+                        this.log.info(`InAppBrowser not found, using window.open. Reason: ${error}`);
                         window.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
                     });
                     if (!actionString || 0 === actionString.length) {
@@ -337,10 +357,10 @@ export class SessionService implements IMessageHandler {
                 actionString = <string>action;
             }
 
-            console.log(`action is: ${actionString}`);
+            this.log.info(`action is: ${actionString}`);
 
             if (confirm) {
-                console.log('Confirming action');
+                this.log.info('Confirming action');
                 let confirmD: IConfirmationDialog;
                 if (confirm.hasOwnProperty('message')) {
                     confirmD = <IConfirmationDialog>confirm;
@@ -353,7 +373,7 @@ export class SessionService implements IMessageHandler {
 
                 // if we didn't confirm return and don't send the action to the server
                 if (!result) {
-                    console.log('Canceling action');
+                    this.log.info('Canceling action');
                     return;
                 }
             }
@@ -366,18 +386,18 @@ export class SessionService implements IMessageHandler {
             if (payload != null) {
                 this.response = payload;
             } else if (this.actionPayloads.has(actionString)) {
-                console.log(`Checking registered action payload for ${actionString}`);
+                this.log.info(`Checking registered action payload for ${actionString}`);
                 try {
                     this.response = this.actionPayloads.get(actionString)();
                 } catch (e) {
-                    console.log(`invalid action payload for ${actionString}: ` + e);
+                    this.log.info(`invalid action payload for ${actionString}: ` + e);
                     processAction = false;
                 }
             }
 
             if (processAction && !this.loaderState.loading) {
                 const sendToServer: Function = () => {
-                    console.log(`>>> Post action "${actionString}"`);
+                    this.log.info(`>>> Post action "${actionString}"`);
                     this.publish(actionString, 'Screen');
                 };
 
@@ -394,22 +414,28 @@ export class SessionService implements IMessageHandler {
                     this.queueLoading();
                 }
             } else {
-                console.log(`Not sending action: ${actionString}.  processAction: ${processAction}, loading:${this.loaderState.loading}`);
+                this.log.info(`Not sending action: ${actionString}.  processAction: ${processAction}, loading:${this.loaderState.loading}`);
             }
 
         } else {
-            console.log(`received an invalid action: ${action}`);
+            this.log.info(`received an invalid action: ${action}`);
         }
     }
 
     public keepAlive() {
         if (this.subscribed) {
-            console.log(`>>> KeepAlive`);
+            this.log.info(`>>> KeepAlive`);
             this.publish('KeepAlive', 'KeepAlive');
         }
     }
 
     public publish(actionString: string, type: string, payload?: any) {
+        const deviceService = AppInjector.Instance.get(DeviceService);
+        // Block any actions if we are backgrounded and running in cordova
+        // (unless we are coming back out of the background)
+        if (this.inBackground && deviceService.isRunningInCordova() && actionString !== 'Refresh') {
+            return;
+        }
         const nodeId = this.personalization.getNodeId();
         if (this.appId && nodeId) {
             this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.personalization.getNodeId(),
@@ -418,7 +444,7 @@ export class SessionService implements IMessageHandler {
                 this.response = null;
             }
         } else {
-            console.log(`Can't publish action '${actionString}' of type '${type}' ` +
+            this.log.info(`Can't publish action '${actionString}' of type '${type}' ` +
                 `due to undefined App ID (${this.appId}) or Node Id (${nodeId})`);
         }
     }
@@ -426,28 +452,28 @@ export class SessionService implements IMessageHandler {
     private queueLoading() {
         this.loaderState.loading = true;
         setTimeout(() => {
-            console.log(`queueLoading timeout fired, invoking showLoading`);
+            this.log.info(`queueLoading timeout fired, invoking showLoading`);
             this.showLoading(LoaderState.LOADING_TITLE);
         }, 1000);
 
     }
 
     private showLoading(title: string, message?: string) {
-        console.log(`showLoading method invoked`);
+        this.log.info(`showLoading method invoked`);
         if (this.loaderState.loading) {
-            console.log(`showLoading is showing the loading dialog NOW`);
+            this.log.info(`showLoading is showing the loading dialog NOW`);
             this.loaderState.setVisible(true, title, message);
         }
     }
 
     public cancelLoading() {
-        console.log(`cancelLoading invoked`);
+        this.log.info(`cancelLoading invoked`);
         this.loaderState.loading = false;
         this.loaderState.setVisible(false);
     }
 
     handle(message: any) {
-        console.log(`Got message: ${message.screenType}`);
+        this.log.info(`Got message: ${message.screenType}`);
         if (message.screenType === 'Loading') {
             // This is just a temporary hack
             // Might be a previous instance of a Loading screen being shown,

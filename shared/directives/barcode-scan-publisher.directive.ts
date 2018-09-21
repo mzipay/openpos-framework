@@ -1,3 +1,4 @@
+import { Logger } from './../../core/services/logger.service';
 import { Subscription } from 'rxjs';
 import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { SessionService, DeviceService, PluginService, Scan, BarcodeScannerPlugin, DialogService } from '../../core';
@@ -11,6 +12,7 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
     private barcodePlugin: BarcodeScannerPlugin;
     private barcodeEventSubscription: Subscription;
     constructor(el: ElementRef,
+        private log: Logger,
         private sessionService: SessionService,
         private deviceService: DeviceService,
         private dialogService: DialogService,
@@ -22,7 +24,7 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
         this.deviceService.onDeviceReady.subscribe(message => {
             if (message) {
                 this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin => {
-                    console.log('BarcodeScanPublisherDirective INITTED, got barcodeScannerPlugin');
+                    this.log.info('BarcodeScanPublisherDirective INITTED, got barcodeScannerPlugin');
                     this.barcodePlugin = <BarcodeScannerPlugin> plugin;
                     // the onBarcodeScanned will only emit an event when client code passes a scan
                     // event to the plugin.  This won't be called for cordova barcodescanner plugin
@@ -33,7 +35,7 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
                             this.publishBarcode(scan);
                         }
                     });
-                }).catch( error => console.log(`Failed to get barcodeScannerPlugin.  Error: ${error}`) );
+                }).catch( error => this.log.info(`Failed to get barcodeScannerPlugin.  Error: ${error}`) );
             }
          });
     }
@@ -47,11 +49,11 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
     publishBarcode(scan: Scan) {
         if (! this.dialogService.isDialogOpen()) {
             // Publish barcode to the server
-            console.log(`Got barcode scan, publishing '${scan.value}'...`);
+            this.log.info(`Got barcode scan, publishing '${scan.value}'...`);
             this.sessionService.response = scan;
             this.sessionService.onAction('Scan');
         } else {
-            console.log(`Not publishing barcode '${scan.value}' because a dialog is showing`);
+            this.log.info(`Not publishing barcode '${scan.value}' because a dialog is showing`);
         }
     }
 }

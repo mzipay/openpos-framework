@@ -30,7 +30,7 @@
             <input *ngSwitchCase="'AlphanumericPassword'" matInput [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)"
                 type="password" [required]="formField.required">
 
-            <mat-select *ngSwitchCase="'ComboBox'" [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)" (change)="onFormElementChanged(formField)"
+            <mat-select *ngSwitchCase="'ComboBox'" [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)" (selectionChange)="onFormElementChanged(formField)"
                 [required]="formField.required">
                 <mat-option *ngFor="let value of values" [value]="value">{{value}}</mat-option>
             </mat-select>
@@ -60,6 +60,13 @@
     <ng-container *ngIf="formField.inputType==='Checkbox'">
         <mat-checkbox [formControlName]="formField.id" [required]="formField.required" [value]="formField.value" [labelPosition]="formField.labelPosition"
             [attr.disabled]="formField.disabled" [checked]="formField.checked" (change)="onFormElementChanged(formField)">{{formField.label}}</mat-checkbox>
+    </ng-container>
+
+    <ng-container *ngIf="formField.inputType==='Counter'">
+        <app-counter [formGroup]="formGroup" [controlName]="formField.id" [label]="formField.label" 
+        [(value)]="formField.value" [minVal]="formField.minValue" [maxVal]="formField.maxValue" 
+        [required]="formField.required" [readOnly]="formField.disabled" [keyboardLayout]="keyboardLayout" 
+        [attrType]="isNumericField() ? 'tel' : 'text'" (valueChange)="onFormElementChanged(formField)"></app-counter>
     </ng-container>
 
     <ng-container *ngIf="formField.elementType==='Display'">

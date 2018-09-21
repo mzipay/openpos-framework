@@ -16,7 +16,7 @@ export interface ISellScreen {
     theme: string;
     placeholderText: string;
     hideCustomer: boolean;
-    subtitle: string;
+    subtitle: string[];
     items: ISellItem[];
     selectedItems: ISellItem[];
     multiSelectedMenuItems: IMenuItem[];

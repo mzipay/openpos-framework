@@ -1,3 +1,4 @@
+import { Logger } from './logger.service';
 import { BehaviorSubject } from 'rxjs';
 import { SessionService } from './session.service';
 import { StartupComponent } from './../components/startup/startup.component';
@@ -18,7 +19,7 @@ export class StartupService {
 
     onStartupCompleted = new BehaviorSubject<StartupStatus>(StartupStatus.Starting);
 
-    constructor(private personalization: PersonalizationService, private session: SessionService, protected router: Router) {
+    constructor(private log: Logger, private personalization: PersonalizationService, private session: SessionService, protected router: Router) {
     }
 
     set startupFailureTask(task: IStartupTask) {
@@ -54,10 +55,10 @@ export class StartupService {
             // array.reduce() runs.
             taskResult => taskResult !== null && ! taskResult
         ).then(allSuccess => {
-            console.log(`Result of running all tasks: ${allSuccess}`);
+            this.log.info(`Result of running all tasks: ${allSuccess}`);
             this.handleStartupTaskResult(<boolean> allSuccess, startupComponent);
         }).catch(error => {
-            console.log(`One or more startup tasks failed. Reason: ${error}`);
+            this.log.info(`One or more startup tasks failed. Reason: ${error}`);
             this.handleStartupTaskResult(false, startupComponent);
         });
 
@@ -69,12 +70,12 @@ export class StartupService {
 
     private handleStartupTaskResult(startupTasksSuccessful: boolean, startupComponent: StartupComponent) {
         if (!startupTasksSuccessful && this.startupFailureTask) {
-            console.log(`${this.startupFailureTask.name} startup failure handler task is executing...`);
+            this.log.info(`${this.startupFailureTask.name} startup failure handler task is executing...`);
             this.startupFailureTask.execute(startupComponent).then(failureTaskResult => {
-                console.log(`${this.startupFailureTask.name} startup failure handler task ${failureTaskResult ? 'succeeded' : 'failed'}.`);
+                this.log.info(`${this.startupFailureTask.name} startup failure handler task ${failureTaskResult ? 'succeeded' : 'failed'}.`);
                 this.onStartupCompleted.next(startupTasksSuccessful ? StartupStatus.Success : StartupStatus.Failure);
             }).catch( error => {
-                console.log(`${this.startupFailureTask.name} startup failure handler task failed'. Reason: ${error}`);
+                this.log.info(`${this.startupFailureTask.name} startup failure handler task failed'. Reason: ${error}`);
                 this.onStartupCompleted.next(StartupStatus.Failure);
             });
         } else {
@@ -111,7 +112,7 @@ export class StartupService {
 
     protected normalizeAppIdFromUrl(): string {
         let appId = this.router.url.substring(1);
-        console.log('calculating appid from ' + appId);
+        this.log.info('calculating appid from ' + appId);
         if (appId.indexOf('?') > 0) {
             appId = appId.substring(0, appId.indexOf('?'));
         }

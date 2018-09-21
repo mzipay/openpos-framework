@@ -1,3 +1,4 @@
+import { Logger } from './logger.service';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { Injectable } from '@angular/core';
 import { Subscription, BehaviorSubject, Subject } from 'rxjs';
@@ -34,11 +35,11 @@ export class DeviceService implements IMessageHandler {
   private _isRunningInCordova: boolean = null;
   private cameraScanInProgress = false;
 
-  constructor(protected session: SessionService, public pluginService: PluginService, private fileUploadService: FileUploadService) {
+  constructor(private log: Logger, protected session: SessionService, public pluginService: PluginService, private fileUploadService: FileUploadService) {
     this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
     document.addEventListener('deviceready',
         () => {
-            console.log('cordova devices are ready for the device service');
+            this.log.info('cordova devices are ready for the device service');
             this.initializeInAppBrowserPlugin();
             this.initializeBarcodeScannerPlugin();
             this.initializeLogfileDownloadPlugin();
@@ -51,21 +52,21 @@ export class DeviceService implements IMessageHandler {
     // or resiging status as the active app.
     document.addEventListener('resign',
         () => {
-            console.log(`OpenPOS received app 'resign' notification`);
+            this.log.info(`OpenPOS received app 'resign' notification`);
             this.onAppEnteringBackground.next(true);
         },
         false
     );
     document.addEventListener('resume',
         () => {
-            console.log(`OpenPOS received app 'resume' notification`);
+            this.log.info(`OpenPOS received app 'resume' notification`);
             this.onAppEnteringForeground.next(true);
         },
         false
     );
     document.addEventListener('active',
         () => {
-            console.log(`OpenPOS received app 'active' notification`);
+            this.log.info(`OpenPOS received app 'active' notification`);
             this.onAppEnteredForeground.next(true);
         },
         false
@@ -80,13 +81,13 @@ export class DeviceService implements IMessageHandler {
         const inAppPlugin = <InAppBrowserPlugin> await this.pluginService.getPlugin('InAppBrowser');
         return inAppPlugin.isActive();
     } catch (error) {
-        console.log(`InAppBrowser plugin not available. Reason: ${error}`);
+        this.log.info(`InAppBrowser plugin not available. Reason: ${error}`);
         return false;
     }
   }
 
   public isCameraScanInProgress() {
-      console.log(`isCameraScanInProgress? ${this.cameraScanInProgress}`);
+      this.log.info(`isCameraScanInProgress? ${this.cameraScanInProgress}`);
       return this.cameraScanInProgress;
   }
 
@@ -104,22 +105,22 @@ export class DeviceService implements IMessageHandler {
   protected initializeInAppBrowserPlugin(): void {
       const inAppBrowserPlugin = new InAppBrowserPlugin();
       this.pluginService.addPlugin(inAppBrowserPlugin.pluginId, inAppBrowserPlugin);
-      console.log('InAppBrowserPlugin initialized.');
+      this.log.info('InAppBrowserPlugin initialized.');
   }
 
   protected initializeLogfileDownloadPlugin(): void {
       const logfileDownloadPlugin = new LogfileDownloadPlugin(this.fileUploadService);
       this.pluginService.addPlugin(logfileDownloadPlugin.pluginId, logfileDownloadPlugin);
-      console.log('LogfileDownloadPlugin initialized.');
+      this.log.info('LogfileDownloadPlugin initialized.');
   }
 
   public scan(source?: string) {
     if (this.screen.template && this.screen.template.scan &&
         this.screen.template.scan.scanType === 'CAMERA_CORDOVA') {
-        console.log(`request to scan was made for: ${this.screen.template.scan.scanType}`);
+        this.log.info(`request to scan was made for: ${this.screen.template.scan.scanType}`);
         this.cordovaCameraScan(source);
     } else {
-        console.log(`FAILED to invoke scan. Is there a screen.template.scan.scanType?`) ;
+        this.log.info(`FAILED to invoke scan. Is there a screen.template.scan.scanType?`) ;
     }
   }
 
@@ -152,15 +153,15 @@ export class DeviceService implements IMessageHandler {
   }
 
   public onDeviceRequest = (request: IDeviceRequest) => {
-    console.log(`request received for device: ${request.deviceId}`);
+    this.log.info(`request received for device: ${request.deviceId}`);
     // targetted plugin is assumed to be a cordova plugin
 
     const pluginLookupKey = request.pluginId ? request.pluginId : request.deviceId;
     const targetPluginPromise: Promise<IDevicePlugin> = this.pluginService.getDevicePlugin(pluginLookupKey);
 
     targetPluginPromise.then( (targetPlugin: IDevicePlugin) => {
-        console.log(`targetPlugin = pluginId: ${targetPlugin.pluginId}, pluginName: ${targetPlugin.pluginName}`);
-        console.log(`Sending request '${request.subType}:${request.requestId}' to device/plugin '${pluginLookupKey}'...`);
+        this.log.info(`targetPlugin = pluginId: ${targetPlugin.pluginId}, pluginName: ${targetPlugin.pluginName}`);
+        this.log.info(`Sending request '${request.subType}:${request.requestId}' to device/plugin '${pluginLookupKey}'...`);
         targetPlugin.processRequest(
           request,
           (response) => {
@@ -194,7 +195,7 @@ export class DeviceService implements IMessageHandler {
             payload: msg
           }
         );
-        console.log(msg);
+        this.log.info(msg);
       }
     );
   }

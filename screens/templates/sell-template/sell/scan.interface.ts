@@ -5,4 +5,5 @@ export interface IScan {
     scanActionName: string;
     scanSomethingText: string;
     autoFocusOnScan: boolean;
+    inputType: string;
 }

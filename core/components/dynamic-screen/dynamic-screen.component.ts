@@ -1,3 +1,4 @@
+import { Logger } from './../../services/logger.service';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
 import { Component, ViewChild, HostListener, ComponentRef, OnDestroy, OnInit, ComponentFactory } from '@angular/core';
@@ -60,6 +61,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     private lastScreenName: string;
 
     constructor(
+        private log: Logger,
         private personalization: PersonalizationService,
         public screenService: ScreenService,
         public session: SessionService,
@@ -80,14 +82,14 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     ngOnInit(): void {
         const self = this;
         this.startupService.onStartupCompleted.subscribe(startupStatus => {
-            // console.log(`Got startupStatus: ${StartupStatus[startupStatus]}`);
+            this.log.debug(`Got startupStatus: ${StartupStatus[startupStatus]}`);
 
             if (startupStatus === StartupStatus.Success) {
                 this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
             } else if (startupStatus === StartupStatus.Failure) {
                 // If we failed, make sure we at least allow the Personalization screen to be shown
                 this.session.subscribeForScreenUpdates((screen: any): void => {
-                    // This logic will allow us to recover and show screens if our connection 
+                    // This logic will allow us to recover and show screens if our connection
                     // is restored after a failed startup, but the app hasn't been restarted.
                     // May need to revise this logic if there are cases where connection is OK
                     // but there are other causes for startup failure where we don't want to allow
@@ -120,7 +122,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             const templateName = screen.template.type;
             const screenType = screen.screenType;
             const screenName = screen.name;
-            const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName);
+            const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName, this.theme);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
             if (this.currentTemplateRef) {
@@ -135,7 +137,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
                 this.overlayContainer.getContainerElement().classList.add(this.personalization.getTheme());
                 this.currentTheme = this.personalization.getTheme();
             }
-            this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(screenType));
+            this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(screenType, this.theme));
         }
         this.disableDevMenu = screen.template.disableDevMenu;
         this.installedTemplate.show(screen);
@@ -166,7 +168,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             msg += `)`;
         }
 
-        console.log(msg);
+        this.log.info(msg);
     }
 
     protected updateClasses(screen: any) {

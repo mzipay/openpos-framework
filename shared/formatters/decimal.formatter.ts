@@ -5,7 +5,6 @@ export class DecimalFormatter implements IFormatter {
 
 
     allowKey(key: string, newValue: string): boolean {
-        console.log(`newValue: ${newValue}`);
         return DecimalFormatter.FILTER_REGEX.test(newValue);
     }
 

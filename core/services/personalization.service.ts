@@ -1,3 +1,4 @@
+import { Logger } from './logger.service';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
@@ -39,7 +40,7 @@ export class PersonalizationService {
 
     public onPersonalized: BehaviorSubject<boolean>;
 
-    constructor(private location: Location, private router: Router) {
+    constructor(private log: Logger, private location: Location, private router: Router) {
         this.onPersonalized = new BehaviorSubject(null);
     }
 
@@ -56,7 +57,7 @@ export class PersonalizationService {
         } else {
             nodeId = node.storeId + '-' + node.deviceId;
         }
-        console.log(`personalizing with server: ${serverName}, port: ${serverPort}, nodeid: ${nodeId}`);
+        this.log.info(`personalizing with server: ${serverName}, port: ${serverPort}, nodeid: ${nodeId}`);
         localStorage.setItem('serverName', serverName);
         localStorage.setItem('serverPort', serverPort);
         localStorage.setItem('nodeId', nodeId);
@@ -123,7 +124,7 @@ export class PersonalizationService {
     public setTheme(theme: string, storeLocal: boolean) {
         localStorage.setItem('theme', theme);
         if (this.previousTheme !== theme) {
-            console.log(`Theme changing from '${this.previousTheme}' to '${theme}'`);
+            this.log.info(`Theme changing from '${this.previousTheme}' to '${theme}'`);
             this.onThemeChanging.emit({currentTheme: this.previousTheme, newTheme: theme});
             this.previousTheme = theme;
         }
@@ -177,7 +178,7 @@ export class PersonalizationService {
         if (!this.serverBaseUrl) {
             const protocol = this.isSslEnabled() ? 'https' : 'http';
             this.serverBaseUrl = `${protocol}://${this.getServerName()}${this.getServerPort() ? `:${this.getServerPort()}` : ''}`;
-            console.log(`Generated serverBaseURL: ${this.serverBaseUrl}`);
+            this.log.info(`Generated serverBaseURL: ${this.serverBaseUrl}`);
         }
         return this.serverBaseUrl;
     }

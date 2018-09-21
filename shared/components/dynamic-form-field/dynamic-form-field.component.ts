@@ -1,3 +1,4 @@
+import { Logger } from './../../../core/services/logger.service';
 import {
   Component, ViewChild, AfterViewInit, OnInit, OnDestroy,
   Output, Input, EventEmitter
@@ -64,7 +65,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
       return false;
   }
 
-  constructor(public session: SessionService, public screenService: ScreenService, protected dialog: MatDialog,
+  constructor(private log: Logger, public session: SessionService, public screenService: ScreenService, protected dialog: MatDialog,
     private pluginService: PluginService) { }
 
   ngOnInit() {
@@ -74,13 +75,14 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
       this.formField.inputType === 'ToggleButton' || this.formField.inputType === 'PopTart') {
       this.valuesSubscription = this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
         this.values = data;
-        console.log('asynchronously received ' + this.values.length + ' items for ' + this.formField.id);
+        this.log.info('asynchronously received ' + this.values.length + ' items for ' + this.formField.id);
       });
     }
 
     if (this.formField.inputType === 'NumericText' ||
       this.formField.inputType === 'Phone' ||
-      this.formField.inputType === 'PostalCode') {
+      this.formField.inputType === 'PostalCode' ||
+      this.formField.inputType === 'Counter') {
       this.keyboardLayout = 'Numeric';
     } else if (this.formField.label === 'Email') {
       this.keyboardLayout = 'Email';
@@ -98,15 +100,15 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
             // which come from other sources such as a scan device
             this.barcodeEventSubscription = (<BarcodeScannerPlugin> plugin).onBarcodeScanned.subscribe({
                 next: (scan: Scan) => {
-                    console.log(`dynamic-form-field '${this.formField.id}' got scan event: ${scan.value}`);
+                    this.log.info(`dynamic-form-field '${this.formField.id}' got scan event: ${scan.value}`);
                     if (this.field.focused) {
                         this.setFieldValue(this.formField.id, scan.value);
                     }
                 }
             });
-            console.log(`dynamic-form-field '${this.formField.id}' is subscribed for barcode scan events`);
+            this.log.info(`dynamic-form-field '${this.formField.id}' is subscribed for barcode scan events`);
 
-        }).catch( error => console.log(`Failed to get barcodeScannerPlugin.  Reason: ${error}`) );
+        }).catch( error => this.log.info(`Failed to get barcodeScannerPlugin.  Reason: ${error}`) );
 
     }
   }
@@ -130,7 +132,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   isNumericField(): boolean {
-    return (['NumericText', 'Money', 'Phone', 'PostalCode', 'Percent', 'PercentInt', 'Income', 'Decimal'].indexOf(this.formField.inputType) >= 0
+    return (['NumericText', 'Money', 'Phone', 'PostalCode', 'Percent', 'PercentInt', 'Income', 'Decimal', 'Counter'].indexOf(this.formField.inputType) >= 0
         || this.formField.keyboardPreference === 'Numeric');
   }
 
@@ -146,7 +148,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
     const scrnSvc: ScreenService = this.screenService;
     this.autoCompleteDataSource = {
       displayValue(value: any): Observable<OptionEntry | null> {
-        console.log(`being asked to display value for: ${value}`);
+        this.log.info(`being asked to display value for: ${value}`);
         const display = <string>value;
         return of({
           value,
@@ -158,7 +160,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
       search(term: string): Observable<OptionEntry[]> {
         const lowerTerm = term ? term.toLowerCase() : '';
         if (lowerTerm) {
-          console.log(`autocomplete searching for '${lowerTerm}' on field '${fld.id}'`);
+          this.log.info(`autocomplete searching for '${lowerTerm}' on field '${fld.id}'`);
           return (<Observable<Array<string>>>scrnSvc.getFieldValues(fld.id, lowerTerm))
             .pipe(
               map(searchResults => searchResults.map(v => ({
@@ -198,7 +200,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('pop tart closed with value of: ' + result);
+      this.log.info('pop tart closed with value of: ' + result);
       this.formGroup.get(this.formField.id).setValue(result);
       this.onFormElementChanged(this.formField);
     });
@@ -221,7 +223,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   isSpecialCaseInput(): boolean {
-    return ['ToggleButton', 'Checkbox', 'AutoComplete'].indexOf(this.formField.inputType) >= 0 ||
+    return ['ToggleButton', 'Checkbox', 'AutoComplete', 'Counter'].indexOf(this.formField.inputType) >= 0 ||
         this.isDateInput();
   }
 
@@ -245,10 +247,10 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
             }
           },
           (error) => {
-            console.log('Scanning failed: ' + error);
+            this.log.info('Scanning failed: ' + error);
           }
         )
-    ).catch( error => console.log(`Scanning failed: ${error}`));
+    ).catch( error => this.log.info(`Scanning failed: ${error}`));
   }
 
   private setFieldValue(fieldId: string, value: any) {
