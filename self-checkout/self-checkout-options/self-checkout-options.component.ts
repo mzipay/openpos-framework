@@ -14,7 +14,6 @@ export class SelfCheckoutOptionsComponent extends PosScreen<any> implements  OnI
   public currentView: string;
   public selectedOption: IOptionItem;
   public optionItems: IOptionItem[];
-  public promptText: string;
 
   constructor(public session: SessionService) {
       super();
@@ -23,7 +22,6 @@ export class SelfCheckoutOptionsComponent extends PosScreen<any> implements  OnI
   buildScreen() {
     this.optionItems = this.screen.options;
     this.currentView = this.screen.displayStyle;
-    this.promptText = this.screen.prompt;
   }
 
   ngOnInit(): void {
