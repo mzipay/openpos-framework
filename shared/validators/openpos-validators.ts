@@ -62,11 +62,21 @@ export class OpenPosValidators {
                     }
                 };
             } else {
-                const month = Number(dateParts[0]);
-                const dayOfMonth = Number(dateParts[1]);
-                let year = Number(dateParts[2]);
+                // Currently assumes date is a 3 part date with month, day, year components
+                const formatUpper = format.toUpperCase().replace(/\//g, '');
+                let lastChar = '';
+                const partPos = [];
+                for (const v of formatUpper) {
+                    if (v !== lastChar) {
+                        partPos.push(v);
+                    }
+                    lastChar = v;
+                }
+                const month = Number(dateParts[partPos.indexOf('M')]);
+                const dayOfMonth = Number(dateParts[partPos.indexOf('D')]);
+                let year = Number(dateParts[partPos.indexOf('Y')]);
+                console.log(`year: ${year}, month: ${month}, dayOfMonth: ${dayOfMonth}`);
                 const strYear = year + '';
-                const formatYCount = (format.match(/y/ig) || []).length;
                 // Assume current century for 2 digit year
                 if (strYear.length === 1 || strYear.length === 2 ) {
                     const curDate = new Date();
@@ -106,6 +116,10 @@ export class OpenPosValidators {
     static DateMMDDYYYY(c: FormControl) {
         return OpenPosValidators.DateValidator(c, 'MMDDYYYY');
     }
+    static DateDDMMYYYY(c: FormControl) {
+        return OpenPosValidators.DateValidator(c, 'DDMMYYYY');
+    }
+
     /** Validates if the value of the given control is greater than 0 */
     static GT_0(c: FormControl) {
         let value = c.value;

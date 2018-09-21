@@ -22,6 +22,7 @@ export class ShowErrorsComponent {
         'phone' : () => 'Phone number is invalid',
         'date': () => 'Date is invalid',
         'datemmddyy': () => 'Date is invalid',
+        'dateddmmyyyy': () => 'Date is invalid',
         'noyeardate': () => 'Date is invalid',
         'gt_0': () => 'Value must be greater than 0'
     };

@@ -17,7 +17,9 @@ import { MatDatepickerInputEvent, MatInput } from '@angular/material';
         ['noyeardate', { mask: [/\d/, /\d/, '/', /\d/, /\d/], format: 'MM/dd',
                          datePipe: createAutoCorrectedDatePipe('mm/dd') }],
         ['datemmddyy', { mask: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/], format: 'MM/dd/yy',
-                         datePipe: createAutoCorrectedDatePipe('mm/dd/yy') }]
+                         datePipe: createAutoCorrectedDatePipe('mm/dd/yy') }],
+        ['dateddmmyyyy', { mask: DynamicDateFormFieldComponent.DEFAULT_MASK, format: 'dd/MM/yyyy',
+                         datePipe: createAutoCorrectedDatePipe('dd/mm/yyyy') }]
     ]);
 
     @ViewChild(MatInput) field: MatInput;
@@ -34,7 +36,7 @@ import { MatDatepickerInputEvent, MatInput } from '@angular/material';
 
     @Output() valueChange = new EventEmitter<any>();
 
-    dateMask = DynamicDateFormFieldComponent.dateMasks.get('date').mask; // [/\d/, /\d/, '/', /\d/, /\d/,'/', /\d/, /\d/, /\d/, /\d/];
+    dateMask = DynamicDateFormFieldComponent.dateMasks.get('date').mask;
     autoCorrectedDatePipe = DynamicDateFormFieldComponent.dateMasks.get('date').datePipe;
     format = DynamicDateFormFieldComponent.dateMasks.get('date').format;
     dateValue: Date;
@@ -70,22 +72,35 @@ import { MatDatepickerInputEvent, MatInput } from '@angular/material';
     }
 
     public onDateChange(): void {
-      const dates = this.value.split('/');
-      if (dates.length > 1) {
+      const dateParts = this.value.split('/');
+      const formatUpper = this.format.toUpperCase().replace(/\//g, '');
+      let lastChar = '';
+      const partPos = [];
+      for (const v of formatUpper) {
+          if (v !== lastChar) {
+              partPos.push(v);
+          }
+          lastChar = v;
+      }
+
+      if (dateParts.length > 1) {
         // JavaScript counts months from 0 to 11. January is 0. December is 11.
-        const month = parseInt(dates[0], 10) - 1;
-        const day = parseInt(dates[1], 10);
-        const year = (new Date()).getFullYear;
-        if (dates.length > 2) {
-          const y = parseInt(dates[2], 10);
-          this.dateValue = new Date(y, month, day, 0, 0, 0, 0);
-        } else {
-          const todayYear = (new Date()).getFullYear();
-          this.dateValue = new Date(todayYear, month, day, 0, 0, 0, 0);
+        const month = Number(dateParts[partPos.indexOf('M')]) - 1;
+        const dayOfMonth = Number(dateParts[partPos.indexOf('D')]);
+        let year = (new Date()).getFullYear();
+
+        if (dateParts.length > 2) {
+          year = Number(dateParts[partPos.indexOf('Y')]);
+        }
+
+        const dateValue = new Date(year, month, dayOfMonth, 0, 0, 0, 0);
+//        console.log(`dateValue = ${dateValue}, year: ${year}, month: ${month}, dayOfMonth: ${dayOfMonth}`);
+
+        if (this.hiddenControl) {
+            this.form.get(this.hiddenControl).setValue(dateValue);
         }
       }
     }
-
   }
 
   interface DateFormatEntry {
