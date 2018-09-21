@@ -20,13 +20,32 @@ public enum FieldInputType {
     Phone,
     Money,
     Income,
-    /** DDMMyyyy format */
+    /** MM/dd/yyyy format */
     Date,
-    /** DDMM format */
+    /** MM/dd format */
     NoYearDate,
     DateMMDDYY,
+    DateDDMMYYYY,
     ToggleButton,
     AutoComplete,
     /** Allows a-z, A-Z, 0-9 */
-    WordText
+    WordText;
+    
+    public static FieldInputType toDateInputType(String dateFormat) {
+        switch (dateFormat) {
+            case "MMdd":
+            case "MM/dd":
+                return NoYearDate;
+            case "MMddyy":
+            case "MM/dd/yy":
+                return DateMMDDYY;
+            case "ddMMyyyy":
+            case "dd/MM/yyyy":
+                return DateDDMMYYYY;
+            case "MMddyyyy":
+            case "MM/dd/yyyy":
+            default:
+                return Date;
+        }
+    }
 }

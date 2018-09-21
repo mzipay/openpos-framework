@@ -28,6 +28,7 @@ public interface ILegacyPOSBeanService {
     ILegacyBooleanWithReasonBeanModel getLegacyBooleanWithReasonBeanModel(ILegacyScreen legacyScreen);
     ILegacyParameterManager getLegacyParameterManager(ILegacyScreen legacyScreen);
     ILegacyImageGridBeanModel getLegacyImageGridBeanModel(ILegacyScreen legacyScreen);
+    ILegacyDateTimeUtilities getLegacyDateTimeUtilities();
     
     <T> T toILegacyInstance(Object legacyObject);
     
