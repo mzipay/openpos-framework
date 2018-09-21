@@ -46,6 +46,10 @@
         background-color: map-get($mat-grey, 300);
     }
 
+    .primary-background {
+        background-color: $app-primary;
+    }
+
     mat-card.dark{
         background-color: mat-color($foreground, icon);
         color: white;

@@ -62,6 +62,13 @@
             [attr.disabled]="formField.disabled" [checked]="formField.checked" (change)="onFormElementChanged(formField)">{{formField.label}}</mat-checkbox>
     </ng-container>
 
+    <ng-container *ngIf="formField.inputType==='Counter'">
+        <app-counter [formGroup]="formGroup" [controlName]="formField.id" [label]="formField.label" 
+        [(value)]="formField.value" [minVal]="formField.minValue" [maxVal]="formField.maxValue" 
+        [required]="formField.required" [readOnly]="formField.disabled" [keyboardLayout]="keyboardLayout" 
+        [attrType]="isNumericField() ? 'tel' : 'text'" (valueChange)="onFormElementChanged(formField)"></app-counter>
+    </ng-container>
+
     <ng-container *ngIf="formField.elementType==='Display'">
         <mat-form-field style="width:100%" [ngSwitch]="formField.valueDisplayMode">
             <input *ngSwitchDefault [value]="formField.value" [name]="formField.id" [placeholder]="formField.label" matInput readonly=true>

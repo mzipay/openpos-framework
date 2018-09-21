@@ -43,7 +43,8 @@ import {
     NavListComponent,
     FileViewerComponent,
     NumberSpinnerComponent,
-    StatusBarComponent
+    StatusBarComponent,
+    CounterComponent,
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe } from './pipes';
@@ -66,7 +67,8 @@ const components = [
     NavListComponent,
     FileViewerComponent,
     NumberSpinnerComponent,
-    StatusBarComponent
+    StatusBarComponent,
+    CounterComponent
 ];
 
 const directives = [

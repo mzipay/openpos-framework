@@ -28,6 +28,7 @@ export class ValidatorsService {
         NOLOCALEValidators.set('email', Validators.email);
         NOLOCALEValidators.set('postalcode', Validators.minLength(5));
         NOLOCALEValidators.set('gt_0', OpenPosValidators.GT_0);
+        NOLOCALEValidators.set('gte_0', OpenPosValidators.GTE_0);
 
         this.validators.set('en-us', USValidators);
         this.validators.set('us', USValidators);
