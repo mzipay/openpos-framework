@@ -29,7 +29,9 @@ public enum FieldInputType {
     ToggleButton,
     AutoComplete,
     /** Allows a-z, A-Z, 0-9 */
-    WordText;
+    WordText,
+    Counter
+    ;
     
     public static FieldInputType toDateInputType(String dateFormat) {
         switch (dateFormat) {

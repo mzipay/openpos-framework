@@ -108,18 +108,36 @@ public class Form implements Serializable {
         formElements.add(field);
         return field;        
     }
-    
+
+    public CounterField addCounterField(String fieldId, String label) {
+        return addCounterField(fieldId, label, false, null, null);
+    }
+
+    public CounterField addCounterField(String fieldId, String label, boolean required) {
+        return addCounterField(fieldId, label, required, null, null);
+    }
+
+    public CounterField addCounterField(String fieldId, String label, boolean required, Integer minValue) {
+        return addCounterField(fieldId, label, required, minValue, null);
+    }
+
+    public CounterField addCounterField(String fieldId, String label, boolean required, Integer minValue, Integer maxValue) {
+        CounterField field = new CounterField(fieldId, label, required, minValue, maxValue);
+        formElements.add(field);
+        return field;
+    }
+
     public FormListField addListField(String fieldId, String label, String placeholder, boolean required, List<String> values) {
-    		FormListField field = new FormListField(fieldId, label, placeholder, values);
-    		field.setRequired(required);
-    		formElements.add(field);
-    		return field;
+        FormListField field = new FormListField(fieldId, label, placeholder, values);
+        field.setRequired(required);
+        formElements.add(field);
+        return field;
     }
     
     public ToggleField addToggleButton(String fieldId, String label, List<String> values, String defaultVal) {
-    		ToggleField field = new ToggleField(fieldId, label, values, defaultVal);
-    		formElements.add(field);
-    		return field;
+        ToggleField field = new ToggleField(fieldId, label, values, defaultVal);
+        formElements.add(field);
+        return field;
     }
     
     public static FormField createDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
@@ -267,19 +285,19 @@ public class Form implements Serializable {
     }
     
     public FormField addTextAreaField(String fieldId, String label, String value, boolean required) {
-    		FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.TextArea, required);
-    		formField.setValue(value);
-    		formElements.add(formField);
-    		return formField;
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.TextArea, required);
+        formField.setValue(value);
+        formElements.add(formField);
+        return formField;
     }
-    
-    public FormField addDisplayField( String fieldId, String label, String value, FieldInputType type ) {
-    		FormField formField = new FormField(fieldId, label, null );
-    		formField.setElementType(FieldElementType.Display);
-    		formField.setInputType(type);
-    		formField.setValue(value);
-    		formElements.add(formField);
-    		return formField;
+
+    public FormField addDisplayField(String fieldId, String label, String value, FieldInputType type) {
+        FormField formField = new FormField(fieldId, label, null);
+        formField.setElementType(FieldElementType.Display);
+        formField.setInputType(type);
+        formField.setValue(value);
+        formElements.add(formField);
+        return formField;
     }
     
     public FormButton addButton( String id, String label, String buttonAction ) {
@@ -323,7 +341,7 @@ public class Form implements Serializable {
     }
         
     public IFormElement getFormElement(String elementId) {
-        return formElements.stream().filter(f->elementId.equals(f.getId())).findFirst().orElse(null);
+        return formElements.stream().filter(f -> elementId.equals(f.getId())).findFirst().orElse(null);
     }
     
     public String getFormElementValue(String elementId) {
@@ -358,7 +376,7 @@ public class Form implements Serializable {
         for (IFormElement element : formElements) {
             if (id.equals(element.getId())) {
                 if (element instanceof FormField) {
-                    return ((FormField)element).getValue();                            
+                    return ((FormField) element).getValue();
                 }
             }
         }
@@ -377,5 +395,4 @@ public class Form implements Serializable {
 		formErrors.add(error);
 	}
 
-    
 }
