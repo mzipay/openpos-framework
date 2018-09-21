@@ -25,6 +25,7 @@ export class ValidatorsService {
         NOLOCALEValidators.set('date', OpenPosValidators.DateMMDDYYYY);
         NOLOCALEValidators.set('datemmddyy', OpenPosValidators.DateMMDDYY);
         NOLOCALEValidators.set('dateddmmyyyy', OpenPosValidators.DateDDMMYYYY);
+        NOLOCALEValidators.set('dateddmmyy', OpenPosValidators.DateDDMMYY);
 
         NOLOCALEValidators.set('email', Validators.email);
         NOLOCALEValidators.set('postalcode', Validators.minLength(5));
