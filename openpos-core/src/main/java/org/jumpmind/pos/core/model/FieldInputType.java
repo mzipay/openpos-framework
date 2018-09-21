@@ -25,6 +25,7 @@ public enum FieldInputType {
     /** MM/dd format */
     NoYearDate,
     DateMMDDYY,
+    DateDDMMYY,
     DateDDMMYYYY,
     ToggleButton,
     AutoComplete,
@@ -44,6 +45,9 @@ public enum FieldInputType {
             case "ddMMyyyy":
             case "dd/MM/yyyy":
                 return DateDDMMYYYY;
+            case "ddMMyy":
+            case "dd/MM/yy":
+                return DateDDMMYY;
             case "MMddyyyy":
             case "MM/dd/yyyy":
             default:
