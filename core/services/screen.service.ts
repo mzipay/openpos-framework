@@ -30,13 +30,19 @@ export class ScreenService {
         return this.screens.has(name);
     }
 
-    public resolveScreen(type: string): ComponentFactory<IScreen> {
-        const screenType: Type<IScreen> = this.screens.get(type);
+    public resolveScreen(type: string, theme: string): ComponentFactory<IScreen> {
+        const themeScreen = type + '_' + theme;
+        let screenType: Type<IScreen>;
+        if (this.hasScreen(themeScreen)) {
+            screenType = this.screens.get(themeScreen);
+        } else {
+            screenType = this.screens.get(type);
+        }
         if (screenType) {
             return this.componentFactoryResolver.resolveComponentFactory(screenType);
         } else {
             console.error(`Could not find a screen type of: ${type}.  Please register it with the screen service`);
-            return this.resolveScreen('Blank');
+            return this.resolveScreen('Blank', theme);
         }
     }
 

@@ -89,7 +89,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             } else if (startupStatus === StartupStatus.Failure) {
                 // If we failed, make sure we at least allow the Personalization screen to be shown
                 this.session.subscribeForScreenUpdates((screen: any): void => {
-                    // This logic will allow us to recover and show screens if our connection 
+                    // This logic will allow us to recover and show screens if our connection
                     // is restored after a failed startup, but the app hasn't been restarted.
                     // May need to revise this logic if there are cases where connection is OK
                     // but there are other causes for startup failure where we don't want to allow
@@ -122,7 +122,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
             const templateName = screen.template.type;
             const screenType = screen.screenType;
             const screenName = screen.name;
-            const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName);
+            const templateComponentFactory: ComponentFactory<IScreen> = this.screenService.resolveScreen(templateName, this.theme);
             const viewContainerRef = this.host.viewContainerRef;
             viewContainerRef.clear();
             if (this.currentTemplateRef) {
@@ -137,7 +137,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
                 this.overlayContainer.getContainerElement().classList.add(this.personalization.getTheme());
                 this.currentTheme = this.personalization.getTheme();
             }
-            this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(screenType));
+            this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(screenType, this.theme));
         }
         this.disableDevMenu = screen.template.disableDevMenu;
         this.installedTemplate.show(screen);
