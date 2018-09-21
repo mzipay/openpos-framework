@@ -17,3 +17,4 @@ export * from './file-viewer/file-viewer.component';
 export * from './number-spinner/number-spinner.component';
 export * from './status-bar/status-bar-data';
 export * from './status-bar/status-bar.component';
+export * from './counter/counter.component';

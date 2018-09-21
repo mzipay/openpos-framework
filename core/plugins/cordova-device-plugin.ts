@@ -15,9 +15,11 @@ export class CordovaDevicePlugin implements IDevicePlugin {
         this.log = AppInjector.Instance.get(Logger);
         this.pluginId = pluginId;
         if (typeof cordova !== 'undefined') {
-            if (cordova.plugins[pluginId]) {
+            if ( typeof cordova.plugins !== 'undefined' && cordova.plugins[pluginId] ) {
                 this.impl = cordova.plugins[pluginId];
                 this.pluginName = this.impl.pluginName;
+            } else {
+                this.log.warn(`No plugin ${pluginId} found`);
             }
         }
     }

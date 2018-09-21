@@ -4,7 +4,8 @@ import { SessionService } from '../../core';
 
 @Component({
   selector: 'app-self-checkout-payment-status-component',
-  templateUrl: './self-checkout-payment-status.component.html'
+  templateUrl: './self-checkout-payment-status.component.html',
+  styleUrls: ['./self-checkout-payment-status.component.scss']
 })
 export class SelfCheckoutPaymentStatusComponent implements OnInit {
 
