@@ -119,6 +119,18 @@ export class OpenPosValidators {
         };
     }
 
+    static GTE_0(c: FormControl) {
+        let value = c.value;
+        if (value) {
+            value = value.replace(',', '');
+        }
+        return Number(value) >= 0 ? null : {
+            'gt_0': {
+                valid: false
+            }
+        };
+    }
+
     static LESS_THAN( limit: Number ): ValidatorFn {
 
         return (c: AbstractControl): ValidationErrors | null => {
@@ -134,6 +146,21 @@ export class OpenPosValidators {
         };
     }
 
+    static LESS_THAN_OR_EQUAL( limit: Number ): ValidatorFn {
+
+        return (c: AbstractControl): ValidationErrors | null => {
+            let value = c.value;
+            if (value) {
+                value = value.replace(',', '');
+            }
+            return Number(value) <= limit ? null : {
+                'less_than_equal' : {
+                    valid: false
+                }
+            };
+        };
+    }
+
     static GREATER_THAN(limit: Number): ValidatorFn {
         return (c: AbstractControl): ValidationErrors | null => {
             let value = c.value;
@@ -142,6 +169,20 @@ export class OpenPosValidators {
             }
             return Number(value) > limit ? null : {
                 'greater_than' : {
+                    valid: false
+                }
+            };
+        };
+    }
+
+    static GREATER_THAN_OR_EQUAL(limit: Number): ValidatorFn {
+        return (c: AbstractControl): ValidationErrors | null => {
+            let value = c.value;
+            if (value) {
+                value = value.replace(',', '');
+            }
+            return Number(value) >= limit ? null : {
+                'greater_than_equal' : {
                     valid: false
                 }
             };
