@@ -23,3 +23,8 @@
     padding: 0px;
     margin: 0px;
 }
+
+::ng-deep .error {
+    text-align: center;
+    font-size: smaller;
+}
