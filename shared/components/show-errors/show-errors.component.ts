@@ -5,9 +5,7 @@ import { AbstractControlDirective, AbstractControl } from '@angular/forms';
     selector: 'app-show-errors',
     template: `
     <div *ngIf="shouldShowErrors()">
-        <span *ngFor="let error of listOfErrors()">
-        {{error}}<br/>
-        </span>
+        <span>{{listOfErrors()[0]}}<br/></span>
     </div>
     `,
 })

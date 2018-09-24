@@ -105,8 +105,10 @@ export class DialogService {
         if (dialog) {
             const dialogType = this.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
             if (!this.dialogOpening) {
-                // this.log.info(`[DialogService] dialogRef=${this.dialogRef}, dialog.screenType=${dialog.screenType}, this.lastDialogType=${this.lastDialogType}`);
-                this.closeDialog();
+                if ( !this.isDialogOpen(dialog.screenType)) {
+                    this.closeDialog();
+                }
+
                 this.log.info('opening dialog \'' + dialogType + '\'');
                 this.dialogOpening = true;
                 setTimeout(() => this.openDialog(dialog), 0);
