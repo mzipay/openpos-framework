@@ -47,7 +47,7 @@ import {
     CounterComponent,
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
-import { PhonePipe, HourMinSecPipe } from './pipes';
+import { PhonePipe, HourMinSecPipe, LocalizedDatePipe } from './pipes';
 
 const components = [
     PromptInputComponent,
@@ -90,7 +90,8 @@ const directives = [
 const pipes = [
     SafePipe,
     PhonePipe,
-    HourMinSecPipe
+    HourMinSecPipe,
+    LocalizedDatePipe
 ];
 
 @NgModule({

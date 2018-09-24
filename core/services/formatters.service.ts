@@ -17,7 +17,9 @@ import {
     StateIDNumberFormatter,
     DecimalFormatter,
     WordTextFormatter,
-    DoNothingFormatter
+    DoNothingFormatter,
+    DateTimeFormatter,
+    DateTimeCAFormatter
 } from '../../shared/formatters';
 
 
@@ -37,9 +39,12 @@ export class FormattersService {
 
         const CAFormatters = new Map<string, IFormatter>();
         CAFormatters.set('phone', new PhoneCAFormatter());
+        CAFormatters.set('datetime', new DateTimeCAFormatter());
+
         // Some screens are dependent on 'ca' value, so don't change.  If you have other
         // ca formatters that are language specific, add a second entry in the map for them.
         this.formatters.set('ca', CAFormatters);
+        this.formatters.set('en-ca', CAFormatters);
 
         // If there isn't a specific formatter for a given locale, we fall back these
         const NOLOCALEFormatters = new Map<string, IFormatter>();
@@ -59,13 +64,13 @@ export class FormattersService {
         NOLOCALEFormatters.set('stateidnumber', new StateIDNumberFormatter());
         NOLOCALEFormatters.set('decimal', new DecimalFormatter());
         NOLOCALEFormatters.set('wordtext', new WordTextFormatter());
+        NOLOCALEFormatters.set('datetime', new DateTimeFormatter());
     }
 
     getFormatter(name: string): IFormatter {
 
         const locale = this.localeService.getLocale();
         if (name && locale) {
-
             const lname = name.toLowerCase();
             const llocale = locale.toLowerCase();
             // see if we have a validator map for the current locale

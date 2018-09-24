@@ -1,6 +1,6 @@
 <div *ngIf="data" fxLayoutAlign="space-between" style="padding-top:5px;" class="muted-color text-sm">
     <div>
-        {{date|date:'MM/dd/yyyy hh:mm:ss a'}}
+        {{date|localizeddatetime}}
     </div>
     <div>
         <span *ngIf="showRegisterStatus()" [ngClass]="{'success':data.registerStatus === 'Online', 'warn':data.registerStatus === 'Offline'}">
