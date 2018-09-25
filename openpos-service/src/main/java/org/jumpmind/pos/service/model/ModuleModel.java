@@ -4,8 +4,8 @@ import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
-@Table
-public class ModuleInfo extends Entity {
+@Table(name="module")
+public class ModuleModel extends Entity {
 
     @Column(primaryKey=true) 
     String installationId;
@@ -13,10 +13,10 @@ public class ModuleInfo extends Entity {
     @Column
     String currentVersion;
     
-    public ModuleInfo() {
+    public ModuleModel() {
     }
     
-    public ModuleInfo(String installationId, String currentVersion) {
+    public ModuleModel(String installationId, String currentVersion) {
         this.installationId = installationId;
         this.currentVersion = currentVersion;
     }

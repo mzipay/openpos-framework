@@ -10,8 +10,8 @@ import org.jumpmind.pos.persist.Table;
  * @author elong
  * 
  */
-@Table(description = "A group of Items for which a TaxAuthority defines TaxGroupRules.")
-public class Group extends Entity implements Comparable<Group> {
+@Table(name="group", description = "A group of Items for which a TaxAuthority defines TaxGroupRules.")
+public class GroupModel extends Entity implements Comparable<GroupModel> {
 
     @Column(primaryKey = true)
     private String id;
@@ -25,14 +25,14 @@ public class Group extends Entity implements Comparable<Group> {
     @Column()
     private String receiptPrintCode;
 
-    public Group() {
+    public GroupModel() {
     }
 
-    public Group(String id) {
+    public GroupModel(String id) {
         this.id = id;
     }
 
-    public Group(String id, String name, String description, String receiptPrintCode) {
+    public GroupModel(String id, String name, String description, String receiptPrintCode) {
         this.id = id;
         this.groupName = name;
         this.description = description;
@@ -44,16 +44,16 @@ public class Group extends Entity implements Comparable<Group> {
     }
 
     public boolean equals(Object o) {
-        if (o != null && o instanceof Group) {
-            Group group = (Group) o;
+        if (o != null && o instanceof GroupModel) {
+            GroupModel group = (GroupModel) o;
             return group.getId().equals(id);
         }
         return false;
     }
 
-    public int compareTo(Group o) {
-        if (o != null && o instanceof Group) {
-            Group group = (Group) o;
+    public int compareTo(GroupModel o) {
+        if (o != null && o instanceof GroupModel) {
+            GroupModel group = (GroupModel) o;
             return group.getId().compareTo(id);
         }
         return -1;

@@ -13,9 +13,9 @@ import org.jumpmind.pos.persist.Table;
  * @author elong
  * 
  */
-@Table(
+@Table(name="rate_rule",
         description = "A rule denoting what percentage or dollar amount of tax is applied to a particular taxable total in a RetailTransaction.")
-public class RateRule extends Entity {
+public class RateRuleModel extends Entity {
     
     public static final int TYPE_PERCENT_RATE = 1;
     public static final int TYPE_FLAT_RATE = 2;

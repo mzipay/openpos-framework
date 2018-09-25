@@ -1,4 +1,4 @@
-package org.jumpmind.pos.service.test;
+package org.jumpmind.pos.test;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.jumpmind.pos.persist.DBSession;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class TestModule extends AbstractModule {
     
-    static final String NAME = "service-test";
+    static final String NAME = "test";
     
     private String dynamicVersion = "0.0.1";
 

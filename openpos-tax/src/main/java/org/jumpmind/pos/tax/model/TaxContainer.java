@@ -9,19 +9,19 @@ import java.util.TreeMap;
 
 public class TaxContainer {
 
-    private SortedMap<GroupRule, List<TaxableItem>> itemsMap;
+    private SortedMap<GroupRuleModel, List<TaxableItem>> itemsMap;
 
     public TaxContainer() {
-        itemsMap = new TreeMap<GroupRule, List<TaxableItem>>(new GroupRuleComparator());
+        itemsMap = new TreeMap<GroupRuleModel, List<TaxableItem>>(new GroupRuleComparator());
     }
 
-    public void add(Collection<GroupRule> groupRules, TaxableItem item) {
-        for (GroupRule groupRule : groupRules) {
+    public void add(Collection<GroupRuleModel> groupRules, TaxableItem item) {
+        for (GroupRuleModel groupRule : groupRules) {
             add(groupRule, item);
         }
     }
 
-    public void add(GroupRule groupRule, TaxableItem item) {
+    public void add(GroupRuleModel groupRule, TaxableItem item) {
         if (groupRule != null) {
             List<TaxableItem> items = itemsMap.get(groupRule);
             if (items == null) {
@@ -42,11 +42,11 @@ public class TaxContainer {
         // TODO: implement collapseTaxGroups()
     }
 
-    public Collection<GroupRule> getGroupRules() {
+    public Collection<GroupRuleModel> getGroupRules() {
         return itemsMap.keySet();
     }
 
-    public Collection<TaxableItem> getItems(GroupRule groupRule) {
+    public Collection<TaxableItem> getItems(GroupRuleModel groupRule) {
         return itemsMap.get(groupRule);
     }
 
@@ -57,7 +57,7 @@ public class TaxContainer {
      * @return boolean whether to use compounding on tax calculation
      */
     public boolean usesCompounding() {
-        for (GroupRule groupRule : itemsMap.keySet()) {
+        for (GroupRuleModel groupRule : itemsMap.keySet()) {
             if (!groupRule.usesCompounding()) {
                 return false;
             }
@@ -67,7 +67,7 @@ public class TaxContainer {
 
     public String toString() {
         StringBuilder builder = new StringBuilder(getClass().getSimpleName() + ": ");
-        for (GroupRule groupRule : itemsMap.keySet()) {
+        for (GroupRuleModel groupRule : itemsMap.keySet()) {
             if (itemsMap.get(groupRule) != null) {
                 builder.append(groupRule.toString() + " (" + itemsMap.get(groupRule).size() + " line items)\n");
             }
@@ -75,9 +75,9 @@ public class TaxContainer {
         return builder.toString();
     }
 
-    class GroupRuleComparator implements Comparator<GroupRule> {
+    class GroupRuleComparator implements Comparator<GroupRuleModel> {
 
-        public int compare(GroupRule o1, GroupRule o2) {
+        public int compare(GroupRuleModel o1, GroupRuleModel o2) {
             Integer i1 = o1.getCompoundSequenceNumber();
             Integer i2 = o2.getCompoundSequenceNumber();
             if (i1 != null && i2 != null && !i1.equals(i2)) {

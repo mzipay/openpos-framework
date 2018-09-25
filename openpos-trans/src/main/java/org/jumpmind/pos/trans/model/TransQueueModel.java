@@ -5,7 +5,7 @@ import java.sql.Types;
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Table;
 
-@Table(name="trans_queue")
+@Table(name="queue")
 public class TransQueueModel  extends AbstractTransModel {
     
     @Column(type=Types.CLOB)

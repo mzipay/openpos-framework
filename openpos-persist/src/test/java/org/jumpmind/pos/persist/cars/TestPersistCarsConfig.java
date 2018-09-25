@@ -13,12 +13,10 @@ import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-@Configuration
 @ComponentScan(
         basePackages = { "org.jumpmind.pos.persist" })
 @PropertySource(value = { "classpath:persist-test.properties"})

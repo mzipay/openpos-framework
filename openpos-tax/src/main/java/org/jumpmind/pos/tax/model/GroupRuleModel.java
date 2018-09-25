@@ -16,8 +16,8 @@ import org.jumpmind.pos.persist.Table;
  * @author elong
  * 
  */
-@Table(description = "A rule that prescribes how a particular tax is to be applied to a group Items.")
-public class GroupRule extends Entity implements Comparable<GroupRule> {
+@Table(name="group_rule", description = "A rule that prescribes how a particular tax is to be applied to a group Items.")
+public class GroupRuleModel extends Entity implements Comparable<GroupRuleModel> {
 
     @Column(primaryKey = true)
     private String id;
@@ -54,11 +54,11 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
     @Column()
     private BigDecimal cycleAmount;
 
-    private Group group;
+    private GroupModel group;
 
-    private Collection<RateRule> rateRules;
+    private Collection<RateRuleModel> rateRules;
 
-    private Authority authority;
+    private AuthorityModel authority;
 
     public String getId() {
         return id;
@@ -81,14 +81,14 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
     }
 
     public boolean equals(Object o) {
-        if (o != null && o instanceof GroupRule) {
-            GroupRule groupRule = (GroupRule) o;
+        if (o != null && o instanceof GroupRuleModel) {
+            GroupRuleModel groupRule = (GroupRuleModel) o;
             return groupRule.getAuthorityId().equals(authorityId) && groupRule.getGroup().equals(group);
         }
         return false;
     }
 
-    public int compareTo(GroupRule groupRule) {
+    public int compareTo(GroupRuleModel groupRule) {
         int compare = -1;
         if (groupRule != null) {
             compare = groupRule.getAuthorityId().compareTo(authorityId);
@@ -99,24 +99,24 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
         return compare;
     }
 
-    public void addRateRule(RateRule rateRule) {
+    public void addRateRule(RateRuleModel rateRule) {
         if (rateRules == null) {
-            rateRules = new ArrayList<RateRule>();
+            rateRules = new ArrayList<RateRuleModel>();
         }
         rateRules.add(rateRule);
     }
 
-    public RateRule getFirstRateRule() {
+    public RateRuleModel getFirstRateRule() {
         if (rateRules != null && rateRules.size() > 0) {
             return rateRules.iterator().next();
         }
         return null;
     }
 
-    public RateRule getLastRateRule() {
-        RateRule rateRule = null;
+    public RateRuleModel getLastRateRule() {
+        RateRuleModel rateRule = null;
         if (rateRules != null) {
-            Iterator<RateRule> iter = rateRules.iterator();
+            Iterator<RateRuleModel> iter = rateRules.iterator();
             while (iter.hasNext()) {
                 rateRule = iter.next();
             }
@@ -126,8 +126,8 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
 
     public BigDecimal getTaxPercent() {
         if (rateRules != null && rateRules.size() == 1) {
-            RateRule rateRule = rateRules.iterator().next();
-            if (rateRule.getTypeCode() == RateRule.TYPE_PERCENT_RATE) {
+            RateRuleModel rateRule = rateRules.iterator().next();
+            if (rateRule.getTypeCode() == RateRuleModel.TYPE_PERCENT_RATE) {
                 return rateRule.getTaxPercent();
             }
         }
@@ -170,11 +170,11 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
         this.ruleName = name;
     }
 
-    public Group getGroup() {
+    public GroupModel getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public void setGroup(GroupModel group) {
         this.group = group;
     }
 
@@ -186,11 +186,11 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
         this.taxOnGrossAmountFlag = taxOnGrossAmountFlag;
     }
 
-    public Collection<RateRule> getRateRules() {
+    public Collection<RateRuleModel> getRateRules() {
         return rateRules;
     }
 
-    public void setRateRules(Collection<RateRule> rateRules) {
+    public void setRateRules(Collection<RateRuleModel> rateRules) {
         this.rateRules = rateRules;
     }
 
@@ -218,11 +218,11 @@ public class GroupRule extends Entity implements Comparable<GroupRule> {
         this.groupId = groupId;
     }
 
-    public void setAuthority(Authority authority) {
+    public void setAuthority(AuthorityModel authority) {
         this.authority = authority;
     }
 
-    public Authority getAuthority() {
+    public AuthorityModel getAuthority() {
         return authority;
     }
 
