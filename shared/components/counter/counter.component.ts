@@ -20,6 +20,7 @@ import { FormGroup } from '@angular/forms';
     @Input() readOnly: boolean;
     @Input() keyboardLayout: string;
     @Input() attrType: string;
+    @Input() placeholder: string;
 
     @Output() valueChange = new EventEmitter<any>();
 

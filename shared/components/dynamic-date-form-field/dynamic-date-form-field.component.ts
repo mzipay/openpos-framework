@@ -3,6 +3,7 @@ import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrect
 import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MatDatepickerInputEvent, MatInput } from '@angular/material';
+import { DateUtils, DatePartPositions } from '../../utils/date.utils';
 
 @Component({
     selector: 'app-dynamic-date-form-field',
@@ -17,7 +18,11 @@ import { MatDatepickerInputEvent, MatInput } from '@angular/material';
         ['noyeardate', { mask: [/\d/, /\d/, '/', /\d/, /\d/], format: 'MM/dd',
                          datePipe: createAutoCorrectedDatePipe('mm/dd') }],
         ['datemmddyy', { mask: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/], format: 'MM/dd/yy',
-                         datePipe: createAutoCorrectedDatePipe('mm/dd/yy') }]
+                         datePipe: createAutoCorrectedDatePipe('mm/dd/yy') }],
+        ['dateddmmyy', { mask: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/], format: 'dd/MM/yy',
+                         datePipe: createAutoCorrectedDatePipe('dd/mm/yy') }],
+        ['dateddmmyyyy', { mask: DynamicDateFormFieldComponent.DEFAULT_MASK, format: 'dd/MM/yyyy',
+                         datePipe: createAutoCorrectedDatePipe('dd/mm/yyyy') }]
     ]);
 
     @ViewChild(MatInput) field: MatInput;
@@ -34,10 +39,11 @@ import { MatDatepickerInputEvent, MatInput } from '@angular/material';
 
     @Output() valueChange = new EventEmitter<any>();
 
-    dateMask = DynamicDateFormFieldComponent.dateMasks.get('date').mask; // [/\d/, /\d/, '/', /\d/, /\d/,'/', /\d/, /\d/, /\d/, /\d/];
+    dateMask = DynamicDateFormFieldComponent.dateMasks.get('date').mask;
     autoCorrectedDatePipe = DynamicDateFormFieldComponent.dateMasks.get('date').datePipe;
     format = DynamicDateFormFieldComponent.dateMasks.get('date').format;
     dateValue: Date;
+    private datePartPos: DatePartPositions;
 
     constructor(@Optional() private datePipe: DatePipe) {
     }
@@ -48,6 +54,7 @@ import { MatDatepickerInputEvent, MatInput } from '@angular/material';
             this.dateMask = DynamicDateFormFieldComponent.dateMasks.get(lowerType).mask;
             this.autoCorrectedDatePipe = DynamicDateFormFieldComponent.dateMasks.get(lowerType).datePipe;
             this.format = DynamicDateFormFieldComponent.dateMasks.get(lowerType).format;
+            this.datePartPos = DateUtils.datePartPositions(this.format);
 
         }
     }
@@ -70,22 +77,26 @@ import { MatDatepickerInputEvent, MatInput } from '@angular/material';
     }
 
     public onDateChange(): void {
-      const dates = this.value.split('/');
-      if (dates.length > 1) {
+      const dateParts = this.value.split('/');
+      if (dateParts.length > 1) {
         // JavaScript counts months from 0 to 11. January is 0. December is 11.
-        const month = parseInt(dates[0], 10) - 1;
-        const day = parseInt(dates[1], 10);
-        const year = (new Date()).getFullYear;
-        if (dates.length > 2) {
-          const y = parseInt(dates[2], 10);
-          this.dateValue = new Date(y, month, day, 0, 0, 0, 0);
-        } else {
-          const todayYear = (new Date()).getFullYear();
-          this.dateValue = new Date(todayYear, month, day, 0, 0, 0, 0);
+        const month = Number(dateParts[this.datePartPos.monthPos]) - 1;
+        const dayOfMonth = Number(dateParts[this.datePartPos.dayOfMonthPos]);
+        let year = (new Date()).getFullYear();
+
+        if (dateParts.length > 2) {
+          year = Number(dateParts[this.datePartPos.yearPos]);
+        }
+
+        year = DateUtils.normalizeDateYear(month, dayOfMonth, year);
+        const dateValue = new Date(year, month, dayOfMonth, 0, 0, 0, 0);
+//        console.log(`dateValue = ${dateValue}, year: ${year}, month: ${month}, dayOfMonth: ${dayOfMonth}`);
+
+        if (this.hiddenControl) {
+            this.form.get(this.hiddenControl).setValue(dateValue);
         }
       }
     }
-
   }
 
   interface DateFormatEntry {

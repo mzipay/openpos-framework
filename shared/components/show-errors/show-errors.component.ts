@@ -5,9 +5,7 @@ import { AbstractControlDirective, AbstractControl } from '@angular/forms';
     selector: 'app-show-errors',
     template: `
     <div *ngIf="shouldShowErrors()">
-        <span *ngFor="let error of listOfErrors()">
-        {{error}}<br/>
-        </span>
+        <span>{{listOfErrors()[0]}}<br/></span>
     </div>
     `,
 })
@@ -22,6 +20,8 @@ export class ShowErrorsComponent {
         'phone' : () => 'Phone number is invalid',
         'date': () => 'Date is invalid',
         'datemmddyy': () => 'Date is invalid',
+        'dateddmmyy': () => 'Date is invalid',
+        'dateddmmyyyy': () => 'Date is invalid',
         'noyeardate': () => 'Date is invalid',
         'gt_0': () => 'Value must be greater than 0'
     };

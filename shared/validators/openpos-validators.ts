@@ -1,4 +1,5 @@
 import { FormControl, FormGroup, ValidatorFn, ValidationErrors, AbstractControl } from '@angular/forms';
+import { DateUtils } from '../utils/date.utils';
 
 export class OpenPosValidators {
 
@@ -62,29 +63,12 @@ export class OpenPosValidators {
                     }
                 };
             } else {
-                const month = Number(dateParts[0]);
-                const dayOfMonth = Number(dateParts[1]);
-                let year = Number(dateParts[2]);
-                const strYear = year + '';
-                const formatYCount = (format.match(/y/ig) || []).length;
-                // Assume current century for 2 digit year
-                if (strYear.length === 1 || strYear.length === 2 ) {
-                    const curDate = new Date();
-                    const curYear = curDate.getFullYear();
-                    // Make assumptions about year in same way that Java SimpleDateFormat does
-                    const lowerYear = curYear - 80;
-                    const upperYear = curYear + 20;
-                    const curCentury = curYear - (curYear % 100);
-                    let century = curCentury;
-                    if (
-                        curCentury + year > upperYear ||
-                        (curCentury + year === upperYear && month > curDate.getMonth() + 1) ||
-                        (curCentury + year === upperYear && month === curDate.getMonth() + 1 && dayOfMonth > curDate.getDate())
-                     ) {
-                        century = curCentury - 100;
-                    }
-                    year = century + year;
-                }
+                // Currently assumes date is a 3 part date with month, day, year components
+                const partPos = DateUtils.datePartPositions(format);
+                const month = Number(dateParts[partPos.monthPos]);
+                const dayOfMonth = Number(dateParts[partPos.dayOfMonthPos]);
+                let year = Number(dateParts[partPos.yearPos]);
+                year = DateUtils.normalizeDateYear(month, dayOfMonth, year);
                 const date = new Date(year, month - 1, dayOfMonth);
                 // `vs. parsed date '${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}'`);
                 if (month === date.getMonth() + 1 && dayOfMonth === date.getDate() && year === date.getFullYear()) {
@@ -106,6 +90,13 @@ export class OpenPosValidators {
     static DateMMDDYYYY(c: FormControl) {
         return OpenPosValidators.DateValidator(c, 'MMDDYYYY');
     }
+    static DateDDMMYYYY(c: FormControl) {
+        return OpenPosValidators.DateValidator(c, 'DDMMYYYY');
+    }
+    static DateDDMMYY(c: FormControl) {
+        return OpenPosValidators.DateValidator(c, 'DDMMYY');
+    }
+
     /** Validates if the value of the given control is greater than 0 */
     static GT_0(c: FormControl) {
         let value = c.value;
