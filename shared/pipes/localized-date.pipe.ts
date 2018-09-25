@@ -8,7 +8,6 @@ export class LocalizedDatePipe implements PipeTransform {
     }
 
     transform(value: any) {
-        const formatter = this.formatters.getFormatter('datetime');
         return this.formatters.getFormatter('datetime').formatValue(value);
     }
 
