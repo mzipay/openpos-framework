@@ -29,7 +29,7 @@ export class DialogService {
 
 
         // Get just the messages we care about for managing dialogs
-        const $dialogMessages = session.getMessages('Screen', 'ClearDialog');
+        const $dialogMessages = session.getMessages('Screen');
 
         this.startupService.onStartupCompleted.subscribe(startupStatus => {
             if (startupStatus === StartupStatus.Success || startupStatus === StartupStatus.Failure) {
@@ -41,7 +41,7 @@ export class DialogService {
 
                 // We want to close the dialog if we get a clear dialog message or its a screen message that isn't a dialog
                 $dialogMessages.pipe(
-                        filter( m => m.clearDialog || (m.template && !m.template.dialog))
+                        filter( m => m.template && !m.template.dialog)
                     )
                 .subscribe( m => this.closeDialog() );
 
@@ -103,6 +103,7 @@ export class DialogService {
 
     private updateDialog(dialog?: any): void {
         if (dialog) {
+            this.closeDialog();
             const dialogType = this.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
             if (!this.dialogOpening) {
                 if ( !this.isDialogOpen(dialog.screenType)) {
