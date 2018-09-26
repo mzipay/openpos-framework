@@ -113,7 +113,7 @@ public class i18nScreenInterceptor implements IScreenInterceptor {
                     } catch (Exception e) {
                         logger.warn("", e);
                     }
-                } else if (!isWrapperType(type) && !type.isPrimitive()) {
+                } else if (!isWrapperType(type) && !type.isPrimitive() && !type.isEnum()) {
                     try {
                         Object fieldObj = field.get(obj);
                         if (fieldObj != null) {
