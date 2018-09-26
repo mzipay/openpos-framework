@@ -47,9 +47,14 @@ public class DatabaseSchema {
         loadTables(db);
         loadExtensions(db);
         platform.prefixDatabase(tablePrefix, db);
+        for (Table table : db.getTables()) {
+            String tableName = table.getName();
+            if (tableName.endsWith("_")) {
+                table.setName(tableName.substring(0, tableName.length()-1));
+            }
+        }
         return db;
     }   
-    
     
     public Table getTable(Class<?> entityClass) {
         if (entityClass == null) {
@@ -182,11 +187,7 @@ public class DatabaseSchema {
         EntityMetaData meta = new EntityMetaData();
         Table dbTable = new Table();
         org.jumpmind.pos.persist.Table tblAnnotation = entityClass.getAnnotation(org.jumpmind.pos.persist.Table.class);
-        if (!StringUtils.isEmpty(tblAnnotation.name())) {            
-            dbTable.setName(tblAnnotation.name());
-        } else {
-            dbTable.setName(camelToSnakeCase(entityClass.getSimpleName()));
-        }
+        dbTable.setName(tblAnnotation.name());
         dbTable.setDescription(tblAnnotation.description());        
 
         Class<?> currentClass = entityClass; 

@@ -5,7 +5,7 @@ import java.util.Date;
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Table;
 
-@Table(name="trans")
+@Table(name="")
 public class TransModel extends AbstractTransModel {
 
     @Column

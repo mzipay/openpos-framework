@@ -13,6 +13,7 @@ include 'openpos-tax'
 include 'openpos-trans'
 include 'openpos-ops'
 include 'openpos-customer'
+include 'openpos-test-module'
 
 rootProject.children.each { project ->
     project.projectDir = new File(openposDir + project.projectDir.getName())
