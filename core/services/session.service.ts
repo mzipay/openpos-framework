@@ -398,6 +398,7 @@ export class SessionService implements IMessageHandler {
             if (processAction && !this.loaderState.loading) {
                 const sendToServer: Function = () => {
                     this.log.info(`>>> Post action "${actionString}"`);
+                    this.queueLoading();
                     this.publish(actionString, 'Screen');
                 };
 
@@ -411,7 +412,6 @@ export class SessionService implements IMessageHandler {
                         // not sure if this is the best way to do this, but its how we are doing it for now
                         this.sessionMessages$.next({ clearDialog: true});
                     }
-                    this.queueLoading();
                 }
             } else {
                 this.log.info(`Not sending action: ${actionString}.  processAction: ${processAction}, loading:${this.loaderState.loading}`);
