@@ -169,14 +169,6 @@ public class ScreenService implements IScreenService, IActionListener {
 
                 logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
 
-//                Screen lastDialog = removeLastDialog(appId, deviceId);
-//                if (lastDialog != null && ScreenType.Dialog.equals(lastDialog.getScreenType())) {
-//                    logger.debug("Instructing node {} to clear dialog.", deviceId);
-//                    Message msg = new Message();
-//                    msg.put("type", "ClearDialog");
-//                    messageService.sendMessage(appId, deviceId, msg);
-//                }
-
                 try {
                     logger.debug("Posting action {}", action);
                     stateManager.doAction(action);
