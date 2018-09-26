@@ -7,3 +7,4 @@ export * from './personalization/personalization.component';
 export * from './abstract-template';
 export * from './startup/startup.component';
 export * from './startup/personalization-startup-task';
+export * from './startup/startup-task-data';

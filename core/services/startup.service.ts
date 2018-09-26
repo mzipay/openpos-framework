@@ -1,133 +1,91 @@
 import { Logger } from './logger.service';
-import { BehaviorSubject } from 'rxjs';
-import { SessionService } from './session.service';
-import { StartupComponent } from './../components/startup/startup.component';
-import { Injectable, EventEmitter, NgZone } from '@angular/core';
+import { concat, throwError, Observable, Subject, ReplaySubject } from 'rxjs';
+import { Injectable, InjectionToken, Inject } from '@angular/core';
 import {
     IStartupTask
 } from '../interfaces';
-import { Router } from '@angular/router';
-import { PersonalizationService } from './personalization.service';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute } from '@angular/router';
+import { map, catchError } from 'rxjs/operators';
+import { MatDialog } from '@angular/material';
+import { ComponentType } from '@angular/cdk/overlay/index';
+
+export const STARTUP_TASKS = new InjectionToken<IStartupTask[]>('Startup Tasks');
+export const STARTUP_COMPONENT = new InjectionToken<ComponentType<any>>('Startup Component');
+export const STARTUP_FAILED_COMPONENT = new InjectionToken<ComponentType<any>>('Startup Failed Component');
 
 @Injectable({
     providedIn: 'root',
 })
-export class StartupService {
+export class StartupService implements CanActivate {
 
-    private tasks = new Map<string, IStartupTask>();
-    private _startupFailureTask: IStartupTask;
+    private dedupedTasks = new Map<string, IStartupTask>();
 
-    onStartupCompleted = new BehaviorSubject<StartupStatus>(StartupStatus.Starting);
+    public startupTaskMessages$ = new ReplaySubject<string>();
 
-    constructor(private log: Logger, private personalization: PersonalizationService, private session: SessionService, protected router: Router) {
+    constructor(
+        @Inject(STARTUP_TASKS) tasks: Array<IStartupTask>,
+        @Inject(STARTUP_COMPONENT) private startupComponent: ComponentType<any>,
+        @Inject(STARTUP_FAILED_COMPONENT) private startupFailedComponent: ComponentType<any>,
+        private matDialog: MatDialog,
+        private log: Logger,
+        protected router: Router,
+        protected route: ActivatedRoute) {
+
+        // This might not be the best way but it's the best I could come up with for now.
+        // This allows task defined in the core module to be overriden by vendor specific modules
+        // for example overriding the personalization task
+        tasks.forEach( task => this.dedupedTasks.set(task.name, task));
     }
 
-    set startupFailureTask(task: IStartupTask) {
-        this._startupFailureTask = task;
-    }
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 
-    get startupFailureTask(): IStartupTask {
-        return this._startupFailureTask;
-    }
-
-    public addStartupTask(task: IStartupTask): void {
-        this.tasks.set(task.name, task);
-    }
-
-    public runTasks(startupComponent: StartupComponent): void {
-        const list = Array.from(this.tasks);
-        list.sort((a, b) => a[1].order - b[1].order );
-
-        // Run the tasks in order
-        this.promiseLoop(
-            list,
-            // For the operation to execute, just run the task
-            element => {
-                const currentTask = element[1];
-                startupComponent.log(`${currentTask.name} startup task is executing...`);
-                const resultPromise = currentTask.execute(startupComponent);
-                resultPromise.then(result => startupComponent.log(`${currentTask.name} startup task ${result ? 'succeeded' : 'failed'}.`));
-                return resultPromise;
-            },
-            // The condition below will cause the task execution to stop
-            // upon the first failed task.
-            // taskResult will be null for first task due to way that
-            // array.reduce() runs.
-            taskResult => taskResult !== null && ! taskResult
-        ).then(allSuccess => {
-            this.log.info(`Result of running all tasks: ${allSuccess}`);
-            this.handleStartupTaskResult(<boolean> allSuccess, startupComponent);
-        }).catch(error => {
-            this.log.info(`One or more startup tasks failed. Reason: ${error}`);
-            this.handleStartupTaskResult(false, startupComponent);
-        });
-
-        // Note that this will run before the startup tasks have finished.  May want to
-        // rethink that at some point.  Doesn't seem to hurt in failure scenarios I have
-        // tested however and it allows for startup tasks to check the connection.
-        this.doSubscription(startupComponent);
-    }
-
-    private handleStartupTaskResult(startupTasksSuccessful: boolean, startupComponent: StartupComponent) {
-        if (!startupTasksSuccessful && this.startupFailureTask) {
-            this.log.info(`${this.startupFailureTask.name} startup failure handler task is executing...`);
-            this.startupFailureTask.execute(startupComponent).then(failureTaskResult => {
-                this.log.info(`${this.startupFailureTask.name} startup failure handler task ${failureTaskResult ? 'succeeded' : 'failed'}.`);
-                this.onStartupCompleted.next(startupTasksSuccessful ? StartupStatus.Success : StartupStatus.Failure);
-            }).catch( error => {
-                this.log.info(`${this.startupFailureTask.name} startup failure handler task failed'. Reason: ${error}`);
-                this.onStartupCompleted.next(StartupStatus.Failure);
+        const startupDialogRef = this.matDialog.open(
+            this.startupComponent,
+            {
+                disableClose: true,
+                hasBackdrop: false
             });
-        } else {
-            this.onStartupCompleted.next(startupTasksSuccessful ? StartupStatus.Success : StartupStatus.Failure);
-        }
-    }
 
-    private doSubscription(startupComponent: StartupComponent) {
-        this.personalization.onPersonalized.subscribe(isPersonalized => {
-            if (isPersonalized && ! this.session.connected()) {
-                const appId = this.normalizeAppIdFromUrl();
-                startupComponent.log(`[StartupService] Subscribing to server using appId '${appId}'...`);
-                this.session.unsubscribe();
-                this.session.subscribe(appId);
-            }
-        });
-    }
+        const list = Array.from(this.dedupedTasks.values());
+        list.sort((a, b) => a.order - b.order );
 
-    private promiseLoop<T, R>(
-        array: T[],
-        operation: (T) => Promise<R>,
-        predicate: (R) => boolean = v => false,
-        initial: R = null): Promise<R> {
+        // Get an array of task observables and attach task name to messages and errors
+        const tasks = list.map( task => task.execute( { route, state }).pipe(
+            map( message => `${task.name}: ${message}`),
+            catchError( error => throwError(`${task.name}: ${error}`))) );
 
-        return array.reduce((promise: Promise<R>, current: T) => {
-            return promise.then((value: R) => {
-                if (predicate(value)) {
-                    return promise;
+        const allMessages = [];
+
+        // Run all tasks in order
+        return Observable.create( (result: Subject<boolean>) => {
+            concat(...tasks).subscribe(
+                {
+                    next: (message) => {
+                        this.startupTaskMessages$.next(message);
+                        this.log.info(message);
+                        allMessages.push(message);
+                    },
+                    error: (error) => {
+                        this.log.info(error);
+                        result.next(false);
+                        startupDialogRef.close();
+                        this.matDialog.open(
+                            this.startupFailedComponent, {
+                                disableClose: true,
+                                hasBackdrop: false,
+                                data: {
+                                    error: error,
+                                    messages: allMessages
+                                }
+                            }).afterClosed().subscribe( () => location.reload() );
+                    },
+                    complete: () => {
+                        this.log.info('Task completed');
+                        result.next(true);
+                        startupDialogRef.close();
+                    }
                 }
-                return operation(current);
-            });
-        }, Promise.resolve(initial));
+            );
+        });
     }
-
-    protected normalizeAppIdFromUrl(): string {
-        let appId = this.router.url.substring(1);
-        this.log.info('calculating appid from ' + appId);
-        if (appId.indexOf('?') > 0) {
-            appId = appId.substring(0, appId.indexOf('?'));
-        }
-        if (appId.indexOf('#') > 0) {
-            appId = appId.substring(0, appId.indexOf('#'));
-        }
-        if (appId.indexOf('/') > 0) {
-            appId = appId.substring(0, appId.indexOf('/'));
-        }
-        return appId;
-    }
-}
-
-export enum StartupStatus {
-    Starting,
-    Success,
-    Failure
 }
