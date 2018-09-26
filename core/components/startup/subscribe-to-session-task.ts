@@ -5,10 +5,12 @@ import { SessionService } from '../../services';
 import { Router } from '@angular/router';
 import { Logger } from '../../services/logger.service';
 import { StartupTaskData } from './startup-task-data';
+import { StartupTaskNames } from './startup-task-names';
+import { delay } from 'rxjs/operators';
 
 @Injectable()
 export class SubscribeToSessionTask implements IStartupTask {
-    name = 'SubscribeToSession';
+    name = StartupTaskNames.SUBSCRIBE_TO_SESSION;
     order = 600;
 
     constructor(
