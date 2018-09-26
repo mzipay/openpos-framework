@@ -3,11 +3,11 @@ import { PersonalizationService } from '../../services/personalization.service';
 import { Observable, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { PersonalizationComponent } from '../personalization/personalization.component';
-import { StartupTaskData } from './startup-task-data';
+import { StartupTaskNames } from './startup-task-names';
 
 export class PersonalizationStartupTask implements IStartupTask {
 
-    name = 'Personalization';
+    name = StartupTaskNames.PERSONALIZATION;
 
     order = 500;
 
@@ -15,16 +15,23 @@ export class PersonalizationStartupTask implements IStartupTask {
 
     }
 
-    execute( data: StartupTaskData ): Observable<string> {
+    execute(): Observable<string> {
         return Observable.create( (message: Subject<string>) => {
             message.next('Checking if device is personalized.');
             if (!this.personalization.isPersonalized()) {
                 message.next('Launching personalization screen.');
-                this.matDialog.open(PersonalizationComponent);
+                this.matDialog.open(
+                    PersonalizationComponent, {
+                        disableClose: true,
+                        hasBackdrop: false
+                    }
+                    ).afterClosed().subscribe( () => {
+                        message.complete();
+                     } );
             }  else  {
                 message.next('Device is already personalized.');
+                message.complete();
             }
-            message.complete();
         });
     }
 

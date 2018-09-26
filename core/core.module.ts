@@ -66,11 +66,8 @@ import { MatDialog } from '@angular/material';
 })
 export class CoreModule {
 
-    constructor(@Optional() @SkipSelf() parentModule: CoreModule,
-        screenService: ScreenService, private injector: Injector) {
-
+    constructor(@Optional() @SkipSelf() parentModule: CoreModule, private injector: Injector) {
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
-        screenService.addScreen('Personalization', PersonalizationComponent);
         AppInjector.Instance = this.injector;
     }
 }
