@@ -56,7 +56,7 @@ public class i18nScreenInterceptor implements IScreenInterceptor {
     /*
      * TODO: caching needs to be added to the i18n service. we could
      * cache metadata about the screen classes so we don't have to walk all the
-     * fields everytime a screen is shown
+     * fields every time a screen is shown
      */
     @Override
     public Screen intercept(String appId, String deviceId, Screen screen) {
@@ -90,7 +90,7 @@ public class i18nScreenInterceptor implements IScreenInterceptor {
                             Iterator<?> i = collection.iterator();
                             while (i.hasNext()) {
                                 Object fieldObj = i.next();
-                                if (fieldObj != null && !isWrapperType(fieldObj.getClass()) && !fieldObj.getClass().isPrimitive()) {
+                                if (fieldObj != null && shouldProcessFields(fieldObj.getClass())) {
                                     processFields(fieldObj);
                                 }
                             }
@@ -105,7 +105,7 @@ public class i18nScreenInterceptor implements IScreenInterceptor {
                             Iterator<?> i = collection.values().iterator();
                             while (i.hasNext()) {
                                 Object fieldObj = i.next();
-                                if (fieldObj != null && !isWrapperType(fieldObj.getClass()) && !fieldObj.getClass().isPrimitive()) {
+                                if (fieldObj != null && shouldProcessFields(fieldObj.getClass())) {
                                     processFields(fieldObj);
                                 }
                             }
@@ -113,7 +113,7 @@ public class i18nScreenInterceptor implements IScreenInterceptor {
                     } catch (Exception e) {
                         logger.warn("", e);
                     }
-                } else if (!isWrapperType(type) && !type.isPrimitive() && !type.isEnum()) {
+                } else if (shouldProcessFields(type)) {
                     try {
                         Object fieldObj = field.get(obj);
                         if (fieldObj != null) {
@@ -126,6 +126,10 @@ public class i18nScreenInterceptor implements IScreenInterceptor {
             }
             clazz = clazz.getSuperclass();
         }
+    }
+    
+    private boolean shouldProcessFields(Class<?> clazz) {
+        return !isWrapperType(clazz) && !clazz.isPrimitive() && !clazz.isEnum(); 
     }
 
     private final void replace(Field field, Object obj) {
