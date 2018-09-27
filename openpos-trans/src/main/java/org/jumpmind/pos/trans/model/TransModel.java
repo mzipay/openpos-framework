@@ -5,8 +5,10 @@ import java.util.Date;
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Table;
 
-@Table(name="")
+@Table(name="trans")
 public class TransModel extends AbstractTransModel {
+
+    private static final long serialVersionUID = 1L;
 
     @Column
     private String transType;

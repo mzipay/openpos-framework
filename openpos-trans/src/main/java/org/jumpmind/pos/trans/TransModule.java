@@ -30,7 +30,7 @@ public class TransModule extends AbstractModule {
 
     @Override
     public String getTablePrefix() {
-        return "trans";
+        return "tx";
     }
 
     @Override

@@ -20,17 +20,12 @@ import org.yaml.snakeyaml.constructor.Constructor;
 public class DBSessionFactory {
 
     private static Logger log = Logger.getLogger(DBSessionFactory.class);
-
-    private DatabaseSchema databaseSchema;
-
-    private Map<String, QueryTemplate> queryTemplates;
     
+    private DatabaseSchema databaseSchema;
+    private Map<String, QueryTemplate> queryTemplates;
     private Map<String, DmlTemplate> dmlTemplates;
-
     private IDatabasePlatform databasePlatform;
-
     private Map<String, String> sessionContext;
-
     private List<Class<?>> entities;
 
     public void init(IDatabasePlatform databasePlatform, Map<String, String> sessionContext, List<Class<?>> entities) {
@@ -54,6 +49,7 @@ public class DBSessionFactory {
         this.initSchema();
     }
     
+    
     protected void initSchema() {
         this.databaseSchema = new DatabaseSchema();
         databaseSchema.init(sessionContext.get("module.tablePrefix"), databasePlatform,
@@ -61,13 +57,17 @@ public class DBSessionFactory {
                 this.entities.stream().filter(e -> e.getAnnotation(Extends.class) != null).collect(Collectors.toList()));
     }
 
-    public void reloadSchema() {
-        this.initSchema();
+    public void createAndUpgrade() {
         databaseSchema.createAndUpgrade();
     }
 
     public DBSession createDbSession() {
         return new DBSession(null, null, databaseSchema, databasePlatform, sessionContext, queryTemplates, dmlTemplates);
+    }
+    
+    public org.jumpmind.db.model.Table getTableForEnhancement(Class<?> entityClazz) {
+        List<org.jumpmind.db.model.Table> tables = this.databaseSchema.getTables(entityClazz);
+        return tables != null && tables.size() > 0 ? tables.get(0) : null;
     }
 
     public static QueryTemplates getQueryTemplates(String tablePrefix) {
@@ -102,14 +102,6 @@ public class DBSessionFactory {
         } catch (Exception ex) {
             throw new PersistException("Failed to load " + tablePrefix + "-query.yaml", ex);
         }
-    }
-
-    public DatabaseSchema getDatabaseSchema() {
-        return databaseSchema;
-    }
-
-    public void setDatabaseSchema(DatabaseSchema databaseSchema) {
-        this.databaseSchema = databaseSchema;
     }
 
     protected Map<String, QueryTemplate> buildQueryTemplatesMap(QueryTemplates queryTemplates) {

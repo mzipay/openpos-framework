@@ -8,6 +8,8 @@ import org.jumpmind.pos.persist.Table;
 @Table(name="queue")
 public class TransQueueModel  extends AbstractTransModel {
     
+    private static final long serialVersionUID = 1L;
+
     @Column(type=Types.CLOB)
     String payload;
     

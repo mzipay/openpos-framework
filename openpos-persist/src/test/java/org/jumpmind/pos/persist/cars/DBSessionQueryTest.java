@@ -27,6 +27,9 @@ public class DBSessionQueryTest {
     @Autowired
     private DBSessionFactory sessionFactory;
 
+    final static String VIN = "KMHCN46C58U242743";
+    
+    
     @Before
     public void setup() {
         {            
@@ -34,11 +37,10 @@ public class DBSessionQueryTest {
             db.executeSql("TRUNCATE TABLE CAR_CAR");
         }
 
-        final String VIN = "KMHCN46C58U242743";
 
         {            
             DBSession db = sessionFactory.createDbSession();
-            CarEntity someHyundai = new CarEntity();
+            CarModel someHyundai = new CarModel();
             someHyundai.setVin(VIN);
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Accent");
@@ -47,7 +49,7 @@ public class DBSessionQueryTest {
         }
         {            
             DBSession db = sessionFactory.createDbSession();
-            CarEntity someHyundai = new CarEntity();
+            CarModel someHyundai = new CarModel();
             someHyundai.setVin(VIN + "2342");
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Elantra");
@@ -56,7 +58,7 @@ public class DBSessionQueryTest {
         }             
         {            
             DBSession db = sessionFactory.createDbSession();
-            CarEntity someHyundai = new CarEntity();
+            CarModel someHyundai = new CarModel();
             someHyundai.setVin(VIN + "4554");
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Santa Fe");
@@ -69,15 +71,15 @@ public class DBSessionQueryTest {
     public void testSingleParamQuery() {
         DBSession db = sessionFactory.createDbSession();
 
-        Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
+        Query<CarModel> byMakeAndModel = new Query<CarModel>()
                 .named("byMakeAndModel")
-                .result(CarEntity.class);
+                .result(CarModel.class);
 
-        List<CarEntity> hyundais = db.query(byMakeAndModel, "Hyundai");
+        List<CarModel> hyundais = db.query(byMakeAndModel, "Hyundai");
         assertEquals(3, hyundais.size());
 
         {
-            CarEntity hyundaiLookupedUp = hyundais.get(0);
+            CarModel hyundaiLookupedUp = hyundais.get(0);
             assertNotNull(hyundaiLookupedUp);
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());
             assertEquals("Accent", hyundaiLookupedUp.getModel());
@@ -85,7 +87,7 @@ public class DBSessionQueryTest {
         }
 
         {            
-            CarEntity hyundaiLookupedUp = hyundais.get(1);
+            CarModel hyundaiLookupedUp = hyundais.get(1);
             assertNotNull(hyundaiLookupedUp);
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());
             assertEquals("Elantra", hyundaiLookupedUp.getModel());
@@ -97,19 +99,19 @@ public class DBSessionQueryTest {
     public void testMultiParamQuery() {
         DBSession db = sessionFactory.createDbSession();
         
-        Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
+        Query<CarModel> byMakeAndModel = new Query<CarModel>()
                 .named("byMakeAndModel")
-                .result(CarEntity.class);
+                .result(CarModel.class);
         
         Map<String, Object> params = new HashMap<>();
         params.put("make", "Hyundai");
         params.put("model", "Accent");
         
-        List<CarEntity> hyundais = db.query(byMakeAndModel, params);
+        List<CarModel> hyundais = db.query(byMakeAndModel, params);
         assertEquals(1, hyundais.size());
         
         {
-            CarEntity hyundaiLookupedUp = hyundais.get(0);
+            CarModel hyundaiLookupedUp = hyundais.get(0);
             assertNotNull(hyundaiLookupedUp);
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());
             assertEquals("Accent", hyundaiLookupedUp.getModel());
@@ -122,18 +124,18 @@ public class DBSessionQueryTest {
     public void testOptionalParamQuery() {
         DBSession db = sessionFactory.createDbSession();
         
-        Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
+        Query<CarModel> byMakeAndModel = new Query<CarModel>()
                 .named("byMakeAndModel")
-                .result(CarEntity.class);        
+                .result(CarModel.class);        
         
         {
             Map<String, Object> params = new HashMap<>();
             params.put("make", "Hyundai");
             params.put("model", "Accent");
             
-            List<CarEntity> hyundais = db.query(byMakeAndModel, params);
+            List<CarModel> hyundais = db.query(byMakeAndModel, params);
             assertEquals(1, hyundais.size());
-            CarEntity hyundaiLookupedUp = hyundais.get(0);
+            CarModel hyundaiLookupedUp = hyundais.get(0);
             assertNotNull(hyundaiLookupedUp);
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());
             assertEquals("Accent", hyundaiLookupedUp.getModel());
@@ -143,9 +145,9 @@ public class DBSessionQueryTest {
             Map<String, Object> params = new HashMap<>();
             params.put("make", "Hyundai");
             
-            List<CarEntity> hyundais = db.query(byMakeAndModel, params);
+            List<CarModel> hyundais = db.query(byMakeAndModel, params);
             assertEquals(3, hyundais.size());
-            CarEntity hyundaiLookupedUp = hyundais.get(0);
+            CarModel hyundaiLookupedUp = hyundais.get(0);
             assertNotNull(hyundaiLookupedUp);
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());
             assertEquals("Accent", hyundaiLookupedUp.getModel());
@@ -157,16 +159,16 @@ public class DBSessionQueryTest {
     public void testNoResults() {
         DBSession db = sessionFactory.createDbSession();
         
-        Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
+        Query<CarModel> byMakeAndModel = new Query<CarModel>()
                 .named("byMakeAndModel")
-                .result(CarEntity.class);
+                .result(CarModel.class);
         
         {
             Map<String, Object> params = new HashMap<>();
             params.put("make", "Ford");
             params.put("model", "Falcon");
             
-            List<CarEntity> falcons = db.query(byMakeAndModel, params);
+            List<CarModel> falcons = db.query(byMakeAndModel, params);
             assertNotNull(falcons);
             assertEquals(0, falcons.size());
         }
@@ -176,11 +178,11 @@ public class DBSessionQueryTest {
     public void testNoWhereClause() {
         DBSession db = sessionFactory.createDbSession();
         
-        Query<CarEntity> allCars = new Query<CarEntity>()
-                .result(CarEntity.class);
+        Query<CarModel> allCars = new Query<CarModel>()
+                .result(CarModel.class);
         
         {
-            List<CarEntity> cars = db.query(allCars);
+            List<CarModel> cars = db.query(allCars);
             assertEquals(3, cars.size());
         }
     }
@@ -189,18 +191,18 @@ public class DBSessionQueryTest {
     public void testOnlyOptionalWhere() {
         DBSession db = sessionFactory.createDbSession();
         
-        Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
+        Query<CarModel> byMakeAndModel = new Query<CarModel>()
                 .named("byMakeAndModel")
-                .result(CarEntity.class);
+                .result(CarModel.class);
         
         {
             Map<String, Object> params = new HashMap<>();
             params.put("make", "Hyundai");
             params.put("model", "Accent");
             
-            List<CarEntity> hyundais = db.query(byMakeAndModel, params);
+            List<CarModel> hyundais = db.query(byMakeAndModel, params);
             assertEquals(1, hyundais.size());
-            CarEntity hyundaiLookupedUp = hyundais.get(0);
+            CarModel hyundaiLookupedUp = hyundais.get(0);
             assertNotNull(hyundaiLookupedUp);
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());
             assertEquals("Accent", hyundaiLookupedUp.getModel());
@@ -210,9 +212,9 @@ public class DBSessionQueryTest {
             Map<String, Object> params = new HashMap<>();
             params.put("make", "Hyundai");
             
-            List<CarEntity> hyundais = db.query(byMakeAndModel, params);
+            List<CarModel> hyundais = db.query(byMakeAndModel, params);
             assertEquals(3, hyundais.size());
-            CarEntity hyundaiLookupedUp = hyundais.get(0);
+            CarModel hyundaiLookupedUp = hyundais.get(0);
             assertNotNull(hyundaiLookupedUp);
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());
             assertEquals("Accent", hyundaiLookupedUp.getModel());
@@ -224,9 +226,9 @@ public class DBSessionQueryTest {
     public void testMissingParameter() {
         DBSession db = sessionFactory.createDbSession();
         
-        Query<CarEntity> byMakeAndModel = new Query<CarEntity>()
+        Query<CarModel> byMakeAndModel = new Query<CarModel>()
                 .named("byMakeAndModel")
-                .result(CarEntity.class);
+                .result(CarModel.class);
         
         Map<String, Object> params = new HashMap<>();
         db.query(byMakeAndModel, params);
@@ -251,15 +253,15 @@ public class DBSessionQueryTest {
     @Test
     public void testCarSearchYaml() {
         DBSession db = sessionFactory.createDbSession();
-        Query<CarEntity> carsSearch = new Query<CarEntity>()
+        Query<CarModel> carsSearch = new Query<CarModel>()
                 .named("carSearch")
-                .result(CarEntity.class);
+                .result(CarModel.class);
         
         {          
             Map<String, Object> params = new HashMap<>();
             params.put("make", "Hyundai");
             
-            List<CarEntity> searchResults = db.query(carsSearch, params);
+            List<CarModel> searchResults = db.query(carsSearch, params);
             assertEquals(3, searchResults.size());
             assertEquals("Accent", searchResults.get(0).getModel());
             assertEquals("Elantra", searchResults.get(1).getModel());
@@ -270,7 +272,7 @@ public class DBSessionQueryTest {
             params.put("make", "Hyundai");
             params.put("model", "Accent");
             
-            List<CarEntity> searchResults = db.query(carsSearch, params);
+            List<CarModel> searchResults = db.query(carsSearch, params);
             assertEquals(1, searchResults.size());
             assertEquals("Accent", searchResults.get(0).getModel());
         }
@@ -279,7 +281,7 @@ public class DBSessionQueryTest {
             params.put("make", "Hyundai");
             params.put("year", "2005");
             
-            List<CarEntity> searchResults = db.query(carsSearch, params);
+            List<CarModel> searchResults = db.query(carsSearch, params);
             assertEquals(1, searchResults.size());
             assertEquals("Accent", searchResults.get(0).getModel());
         }
@@ -308,15 +310,15 @@ public class DBSessionQueryTest {
         db.executeScript(new StringReader("update car_car set color = 'grey' where model = 'Accent';"
                 + "update car_car set color = 'blue' where model = 'Elantra';"));
         
-        sessionFactory.reloadSchema();
+        sessionFactory.createAndUpgrade();
         db.close();
         db = sessionFactory.createDbSession();
         
-        Query<CarEntity> allCars = new Query<CarEntity>()
-                .result(CarEntity.class);
+        Query<CarModel> allCars = new Query<CarModel>()
+                .result(CarModel.class);
         
         {
-            List<CarEntity> cars = db.query(allCars);
+            List<CarModel> cars = db.query(allCars);
             assertEquals(3, cars.size());
             assertNull(cars.get(0).getAdditionalField("color"));
             assertEquals("grey", cars.get(1).getAdditionalField("color"));
@@ -326,20 +328,20 @@ public class DBSessionQueryTest {
     
     @Test 
     public void testLiteralQueryReplacementInSelectClause() {
-        sessionFactory.reloadSchema();
+        sessionFactory.createAndUpgrade();
         DBSession db = sessionFactory.createDbSession();
         db.executeScript(new StringReader("update car_car set color = 'grey' where model = 'Accent';"
                 + "update car_car set color = 'blue' where model = 'Elantra';"));
         
-        Query<CarEntity> carsByLiteralReplacementInSelectClause = new Query<CarEntity>()
+        Query<CarModel> carsByLiteralReplacementInSelectClause = new Query<CarModel>()
                 .named("carsByLiteralReplacementInSelectClause")
-                .result(CarEntity.class);
+                .result(CarModel.class);
         
         Map<String, Object> params = new HashMap<>();
         params.put("columnName", "color");
         params.put("columnValue", "blue");
         
-        List<CarEntity> cars = db.query(carsByLiteralReplacementInSelectClause, params);
+        List<CarModel> cars = db.query(carsByLiteralReplacementInSelectClause, params);
         assertEquals(1, cars.size());
         assertEquals("Hyundai", cars.get(0).getMake());
         assertEquals("Elantra", cars.get(0).getModel());
@@ -347,20 +349,20 @@ public class DBSessionQueryTest {
     }
     @Test 
     public void testLiteralQueryReplacementInWhereClause() {
-        sessionFactory.reloadSchema();
+        sessionFactory.createAndUpgrade();
         DBSession db = sessionFactory.createDbSession();
         db.executeScript(new StringReader("update car_car set color = 'grey' where model = 'Accent';"
                 + "update car_car set color = 'blue' where model = 'Elantra';"));
         
-        Query<CarEntity> carsByLiteralFieldMatch = new Query<CarEntity>()
+        Query<CarModel> carsByLiteralFieldMatch = new Query<CarModel>()
                 .named("carsByLiteralReplacementInWhereClause")
-                .result(CarEntity.class);
+                .result(CarModel.class);
         
         Map<String, Object> params = new HashMap<>();
         params.put("columnName", "color");
         params.put("columnValue", "blue");
         
-        List<CarEntity> cars = db.query(carsByLiteralFieldMatch, params);
+        List<CarModel> cars = db.query(carsByLiteralFieldMatch, params);
         assertEquals(1, cars.size());
         assertEquals("Hyundai", cars.get(0).getMake());
         assertEquals("Elantra", cars.get(0).getModel());
@@ -369,23 +371,46 @@ public class DBSessionQueryTest {
     
     @Test 
     public void testLiteralQueryReplacementInOptionalWhereClause() {
-        sessionFactory.reloadSchema();
+        sessionFactory.createAndUpgrade();
         DBSession db = sessionFactory.createDbSession();
         db.executeScript(new StringReader("update car_car set color = 'grey' where model = 'Accent';"
                 + "update car_car set color = 'blue' where model = 'Elantra';"));
         
-        Query<CarEntity> carsByLiteralReplacementInOptionalWhereClause = new Query<CarEntity>()
+        Query<CarModel> carsByLiteralReplacementInOptionalWhereClause = new Query<CarModel>()
                 .named("carsByLiteralReplacementInOptionalWhereClause")
-                .result(CarEntity.class);
+                .result(CarModel.class);
         
         Map<String, Object> params = new HashMap<>();
         params.put("columnName", "color");
         params.put("columnValue", "blue");
         
-        List<CarEntity> cars = db.query(carsByLiteralReplacementInOptionalWhereClause, params);
+        List<CarModel> cars = db.query(carsByLiteralReplacementInOptionalWhereClause, params);
         assertEquals(1, cars.size());
         assertEquals("Hyundai", cars.get(0).getMake());
         assertEquals("Elantra", cars.get(0).getModel());
         assertEquals("blue", cars.get(0).getAdditionalField("color"));
+    }
+    
+    
+    @Test
+    public void testTwoTableSubclassSaveAndQuery() {
+        sessionFactory.createAndUpgrade();
+        DBSession db = sessionFactory.createDbSession();
+        RaceCarModel raceCar = new RaceCarModel();
+        raceCar.setVin(VIN + "6140");
+        raceCar.setMake("Toyota");
+        raceCar.setModel("Tercel");
+        raceCar.setModelYear("1995");
+        raceCar.setTurboCharged(true);
+        db.save(raceCar);
+        
+        RaceCarModel fromDb = db.findByNaturalId(RaceCarModel.class, raceCar.getVin());
+        assertEquals(raceCar.getVin(), fromDb.getVin());
+        assertEquals(raceCar.getMake(), fromDb.getMake());
+        assertEquals(raceCar.isTurboCharged(), fromDb.isTurboCharged());
+        
+        CarModel subclass = db.findByNaturalId(CarModel.class, raceCar.getVin());
+        assertEquals(raceCar.getVin(), subclass.getVin());
+        assertEquals(raceCar.getMake(), subclass.getMake());
     }
 }

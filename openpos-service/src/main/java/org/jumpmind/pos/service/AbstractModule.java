@@ -206,7 +206,7 @@ abstract public class AbstractModule implements Module {
 
         scripts.executePreInstallScripts(fromVersion, getVersion());
         schemaListener.beforeSchemaCreate(sessionFactory);
-        sessionFactory.getDatabaseSchema().createAndUpgrade();
+        sessionFactory.createAndUpgrade();
         upgradeDbFromXml();
         schemaListener.afterSchemaCreate(sessionFactory);
         scripts.executePostInstallScripts(fromVersion, getVersion());

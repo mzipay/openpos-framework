@@ -9,7 +9,6 @@ import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.DatabaseScriptContainer;
 import org.jumpmind.pos.persist.driver.Driver;
-import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -37,11 +36,10 @@ public class TestPersistCarsConfig {
             sessionContext.put("CREATE_BY", "openpos-test");
             sessionContext.put("LAST_UPDATE_BY", "openpos-test");
             
-            sessionFactory.setDatabaseSchema(new DatabaseSchema());
             sessionFactory.init(
                     PersistTestUtil.testDbPlatform(), 
                     PersistTestUtil.getSessionContext(), 
-                    Arrays.asList(CarEntity.class, CarStats.class, ServiceInvoice.class), 
+                    Arrays.asList(CarModel.class, CarStats.class, ServiceInvoice.class, RaceCarModel.class), 
                     queryTemplates,
                     DBSessionFactory.getDmlTemplates("persist-test"));
             
@@ -62,7 +60,7 @@ public class TestPersistCarsConfig {
 
         scripts.executePreInstallScripts(fromVersion, "0.0.1");
 
-        sessionFactory.getDatabaseSchema().createAndUpgrade();
+        sessionFactory.createAndUpgrade();
 
         scripts.executePostInstallScripts(fromVersion, "0.0.1");
     }

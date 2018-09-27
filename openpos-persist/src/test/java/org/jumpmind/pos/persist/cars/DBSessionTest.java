@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
-import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +23,7 @@ public class DBSessionTest {
 
     @Before
     public void setup() {
-        sessionFactory.setDatabaseSchema(new DatabaseSchema());
-        sessionFactory.init(PersistTestUtil.testDbPlatform(), PersistTestUtil.getSessionContext(), Arrays.asList(CarEntity.class),
+        sessionFactory.init(PersistTestUtil.testDbPlatform(), PersistTestUtil.getSessionContext(), Arrays.asList(CarModel.class),
                 DBSessionFactory.getQueryTemplates("persist-test"), DBSessionFactory.getDmlTemplates("persist-test"));
     }
 
@@ -35,7 +33,7 @@ public class DBSessionTest {
         final String VIN2 = "KMHCN46C58U2427432342";
         {
             DBSession db = sessionFactory.createDbSession();
-            CarEntity someHyundai = new CarEntity();
+            CarModel someHyundai = new CarModel();
             someHyundai.setVin(VIN1);
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Accent");
@@ -44,7 +42,7 @@ public class DBSessionTest {
         }
         {
             DBSession db = sessionFactory.createDbSession();
-            CarEntity someHyundai = new CarEntity();
+            CarModel someHyundai = new CarModel();
             someHyundai.setVin(VIN2);
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Elantra");
@@ -54,7 +52,7 @@ public class DBSessionTest {
 
         {
             DBSession db = sessionFactory.createDbSession();
-            CarEntity hyundaiLookupedUp = db.findByNaturalId(CarEntity.class, VIN1);
+            CarModel hyundaiLookupedUp = db.findByNaturalId(CarModel.class, VIN1);
             assertNotNull(hyundaiLookupedUp);
             assertEquals(VIN1, hyundaiLookupedUp.getVin());
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());
@@ -66,7 +64,7 @@ public class DBSessionTest {
 
         {
             DBSession db = sessionFactory.createDbSession();
-            CarEntity hyundaiLookupedUp = db.findByNaturalId(CarEntity.class, VIN1);
+            CarModel hyundaiLookupedUp = db.findByNaturalId(CarModel.class, VIN1);
             assertNotNull(hyundaiLookupedUp);
             assertEquals(VIN1, hyundaiLookupedUp.getVin());
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());

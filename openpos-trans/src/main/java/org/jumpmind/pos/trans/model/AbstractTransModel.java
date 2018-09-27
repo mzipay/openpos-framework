@@ -5,6 +5,8 @@ import org.jumpmind.pos.persist.Entity;
 
 abstract public class AbstractTransModel extends Entity {
 
+    private static final long serialVersionUID = 1L;
+
     @Column(primaryKey = true)
     private Long sequenceNumber;
     
