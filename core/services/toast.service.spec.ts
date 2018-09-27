@@ -1,8 +1,5 @@
-import { StompService } from '@stomp/ng2-stompjs';
 import { TestBed } from '@angular/core/testing';
 import { SessionService } from './session.service';
-import { PersonalizationService } from './personalization.service';
-import { NgZone } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { ToastService } from './toast.service';
 import { of } from 'rxjs';
@@ -30,9 +27,10 @@ describe('ToastService', () => {
 
         TestBed.configureTestingModule({
             providers: [
-                ToastService,
+
+                { provide: SessionService, useValue: sessionSpy },
                 { provide: MatSnackBar, useValue: matSnackSpy },
-                { provide: SessionService, useValue: sessionSpy }
+                ToastService,
             ]
         });
 
@@ -46,7 +44,7 @@ describe('ToastService', () => {
     });
 
     describe('constructor', () => {
-        it('should call StompService.publish when called', () => {
+        it('should call MatSnackBar.open when called', () => {
             expect(matSnackBarSpy.open.calls.count).toBeTruthy();
             expect(matSnackBarSpy.open).toHaveBeenCalledWith(
                     testToast.message,

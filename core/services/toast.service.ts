@@ -8,7 +8,7 @@ import { filter } from 'rxjs/operators';
     providedIn: 'root',
   })
 export class ToastService {
-    constructor( private snackBar: MatSnackBar, private sessionService: SessionService ) {
+    constructor( private snackBar: MatSnackBar, sessionService: SessionService ) {
         sessionService.getMessages('Screen').pipe(
             filter( s => s.screenType === 'Toast')
         ).subscribe(m => this.showToast(m));
