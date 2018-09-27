@@ -1,31 +1,39 @@
-import { SessionService } from './../../services/session.service';
 import { IStartupTask } from '../../interfaces';
-import { StartupComponent } from './startup.component';
 import { PersonalizationService } from '../../services/personalization.service';
+import { Observable, Subject } from 'rxjs';
+import { MatDialog } from '@angular/material';
+import { PersonalizationComponent } from '../personalization/personalization.component';
+import { StartupTaskNames } from './startup-task-names';
 
 export class PersonalizationStartupTask implements IStartupTask {
 
-    name = 'Personalization';
+    name = StartupTaskNames.PERSONALIZATION;
 
     order = 500;
 
-    constructor(protected personalization: PersonalizationService, protected session: SessionService) {
+    constructor(protected personalization: PersonalizationService, protected matDialog: MatDialog) {
 
     }
 
-    execute(startupComponent: StartupComponent): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
-            startupComponent.message = 'Checking if device is personalized.';
+    execute(): Observable<string> {
+        return Observable.create( (message: Subject<string>) => {
+            message.next('Checking if device is personalized.');
             if (!this.personalization.isPersonalized()) {
-                startupComponent.message = 'Launching personalization screen.';
-                this.session.showScreen(this.personalization.getPersonalizationScreen());
-                resolve(true);
+                message.next('Launching personalization screen.');
+                this.matDialog.open(
+                    PersonalizationComponent, {
+                        disableClose: true,
+                        hasBackdrop: false
+                    }
+                    ).afterClosed().subscribe( () => {
+                        message.complete();
+                     } );
             }  else  {
-                startupComponent.message = 'Device is already personalized.';
-                resolve(true);
-                this.personalization.notifyPersonalized();
+                message.next('Device is already personalized.');
+                message.complete();
             }
         });
     }
+
 
 }

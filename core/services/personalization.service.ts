@@ -38,18 +38,11 @@ export class PersonalizationService {
 
     public onThemeChanging = new EventEmitter<IThemeChangingEvent>();
 
-    public onPersonalized: BehaviorSubject<boolean>;
-
-    constructor(private log: Logger, private location: Location, private router: Router) {
-        this.onPersonalized = new BehaviorSubject(null);
-    }
-
-    public notifyPersonalized() {
-        this.onPersonalized.next(true);
+    constructor(private log: Logger ) {
     }
 
     public personalize(serverName: string, serverPort: string, node: string | {storeId: string, deviceId: string},
-        sslEnabled?: boolean, refreshApp: boolean = true) {
+        sslEnabled?: boolean ) {
 
         let nodeId = '';
         if (typeof node === 'string') {
@@ -67,10 +60,6 @@ export class PersonalizationService {
             localStorage.setItem('sslEnabled', 'false');
         }
         this.serverBaseUrl = null; // will be regenerated on next fetch
-        if (refreshApp) {
-            this.refreshApp();
-        }
-        this.onPersonalized.next(this.isPersonalized());
     }
 
     public dePersonalize() {
@@ -81,7 +70,6 @@ export class PersonalizationService {
         localStorage.removeItem('theme');
         localStorage.removeItem('sslEnabled');
         this.setTheme(theme,  true);
-        this.onPersonalized.next(false);
     }
 
     public getWebsocketUrl(): string {

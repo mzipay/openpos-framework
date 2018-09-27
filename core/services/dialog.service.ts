@@ -6,7 +6,7 @@ import { SessionService } from './session.service';
 import { filter } from 'rxjs/operators';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { OpenPOSDialogConfig } from '../interfaces';
-import { StartupService, StartupStatus } from './startup.service';
+import { StartupService } from './startup.service';
 @Injectable({
     providedIn: 'root',
   })
@@ -31,7 +31,19 @@ export class DialogService {
         // Get just the messages we care about for managing dialogs
         const $dialogMessages = session.getMessages('Screen');
 
-        this.startupService.onStartupCompleted.subscribe(startupStatus => {
+        // Pipe all the messages for dialog updates
+        $dialogMessages.pipe(
+            filter( m => (m.template && m.template.dialog) )
+        )
+        .subscribe( m => this.updateDialog(m) );
+
+        // We want to close the dialog if we get a clear dialog message or its a screen message that isn't a dialog
+        $dialogMessages.pipe(
+                filter( m => m.clearDialog || (m.template && !m.template.dialog))
+            )
+        .subscribe( m => this.closeDialog() );
+
+ /*       this.startupService.onStartupCompleted.subscribe(startupStatus => {
             if (startupStatus === StartupStatus.Success || startupStatus === StartupStatus.Failure) {
                 // Pipe all the messages for dialog updates
                 $dialogMessages.pipe(
@@ -46,9 +58,9 @@ export class DialogService {
                 .subscribe( m => this.closeDialog() );
 
             }
-        });
+        });*/
 
-        this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%', panelClass: 'startup-dialog-container' } }});
+        /*this.updateDialog({ screenType: 'Startup', template: { type: 'Blank', dialog: true, dialogProperties: { width: '60%', panelClass: 'startup-dialog-container' } }});
         this.startupService.onStartupCompleted.subscribe(startupStatus => {
             if (startupStatus === StartupStatus.Success) {
                 // Ensure the startup dialog is closed if we have a successful startup
@@ -56,7 +68,7 @@ export class DialogService {
                     this.closeDialog();
                 }
             }
-        });
+        });*/
     }
 
 
@@ -70,7 +82,6 @@ export class DialogService {
     }
 
     public hasDialog(name: string): boolean {
-
         return this.dialogs.has(name);
     }
 

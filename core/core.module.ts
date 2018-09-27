@@ -1,8 +1,8 @@
 import { DevMenuComponent } from './components/dynamic-screen/dev-menu.component';
 import { SessionService } from './services/session.service';
 import { PersonalizationStartupTask } from './components/startup/personalization-startup-task';
-import { StartupService } from './services/startup.service';
-import { DialogService } from './services/dialog.service';
+import { STARTUP_TASKS, STARTUP_COMPONENT, StartupService, STARTUP_FAILED_COMPONENT } from './services/startup.service';
+
 // Angular Includes
 import { NgModule, Injector, Optional, SkipSelf } from '@angular/core';
 import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
@@ -22,12 +22,18 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
 import { StartupComponent } from './components/startup/startup.component';
 import { PersonalizationService } from './services/personalization.service';
 import { StompRService } from '@stomp/ng2-stompjs';
+import { SubscribeToSessionTask } from './components/startup/subscribe-to-session-task';
+import { Router } from '@angular/router';
+import { Logger } from './services/logger.service';
+import { StartupFailedComponent } from './components/startup/startup-failed.component';
+import { MatDialog } from '@angular/material';
 
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,
         PersonalizationComponent,
-        StartupComponent
+        StartupComponent,
+        StartupFailedComponent
     ],
     declarations: [
         DynamicScreenComponent,
@@ -35,7 +41,8 @@ import { StompRService } from '@stomp/ng2-stompjs';
         LoaderComponent,
         ConfirmationDialogComponent,
         PersonalizationComponent,
-        StartupComponent
+        StartupComponent,
+        StartupFailedComponent
     ],
     imports: [
         SharedModule
@@ -50,19 +57,17 @@ import { StompRService } from '@stomp/ng2-stompjs';
         DatePipe,
         BreakpointObserver,
         MediaMatcher,
-        StompRService
+        StompRService,
+        { provide: STARTUP_TASKS, useClass: PersonalizationStartupTask, multi: true, deps: [PersonalizationService, MatDialog]},
+        { provide: STARTUP_TASKS, useClass: SubscribeToSessionTask, multi: true, deps: [SessionService, Router, Logger]},
+        { provide: STARTUP_COMPONENT, useValue: StartupComponent },
+        { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent}
     ]
 })
 export class CoreModule {
 
-    constructor(@Optional() @SkipSelf() parentModule: CoreModule, personalization: PersonalizationService, sessionService: SessionService,
-        screenService: ScreenService, dialogService: DialogService,
-        startupService: StartupService, private injector: Injector) {
-
+    constructor(@Optional() @SkipSelf() parentModule: CoreModule, private injector: Injector) {
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
-        screenService.addScreen('Personalization', PersonalizationComponent);
-        dialogService.addDialog('Startup', StartupComponent);
-        startupService.addStartupTask(new PersonalizationStartupTask(personalization, sessionService));
         AppInjector.Instance = this.injector;
     }
 }

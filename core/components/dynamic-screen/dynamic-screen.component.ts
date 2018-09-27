@@ -17,7 +17,6 @@ import {
     PluginService,
     FileUploadService,
     StartupService,
-    StartupStatus,
     PersonalizationService,
     ToastService
 } from '../../services';
@@ -81,7 +80,10 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
 
     ngOnInit(): void {
         const self = this;
-        this.startupService.onStartupCompleted.subscribe(startupStatus => {
+        this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
+
+
+        /*this.startupService.onStartupCompleted.subscribe(startupStatus => {
             this.log.debug(`Got startupStatus: ${StartupStatus[startupStatus]}`);
 
             if (startupStatus === StartupStatus.Success) {
@@ -100,7 +102,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
                     }
                 });
             }
-        });
+        });*/
      }
 
     ngOnDestroy(): void {

@@ -1,7 +1,8 @@
-import { StartupComponent } from './../components/startup/startup.component';
+import { Observable } from 'rxjs';
+import { StartupTaskData } from '../components/startup/startup-task-data';
 
 export interface IStartupTask {
     name: string;
     order: number;
-    execute(startupComponent: StartupComponent): Promise<boolean>;
+    execute( data?: StartupTaskData): Observable<string>;
 }
