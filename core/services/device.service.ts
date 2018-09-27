@@ -37,6 +37,31 @@ export class DeviceService implements IMessageHandler {
 
   constructor(private log: Logger, protected session: SessionService, public pluginService: PluginService, private fileUploadService: FileUploadService) {
     this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
+    // On iOS need to enter into loading state when the app is backgrounded, otherwise
+    // user can execute actions as app is coming back to foreground.
+
+    this.onAppEnteringBackground.subscribe(async(backgrounded) => {
+        if (backgrounded) {
+            const allowBackgroundHandling = !this.isCameraScanInProgress() && ! await this.isInAppBrowserActive();
+            if (allowBackgroundHandling) {
+                this.handleBackgrounding();
+            } else {
+                this.log.info(`Skipping background handling`);
+            }
+        }
+    });
+
+    this.onAppEnteredForeground.subscribe(foregrounded => {
+        const allowForegroundHandling = this.session.inBackground;
+        if (foregrounded) {
+            if (allowForegroundHandling) {
+                this.handleForegrounding();
+            } else {
+                this.log.info(`Skipping foreground handling`);
+            }
+        }
+    });
+
     document.addEventListener('deviceready',
         () => {
             this.log.info('cordova devices are ready for the device service');
@@ -211,5 +236,33 @@ export class DeviceService implements IMessageHandler {
   public isRunningInBrowser(): boolean {
     return this.session.isRunningInBrowser();
   }
+
+
+    private handleBackgrounding() {
+        // Show splash screen when running on iOS
+        // Ascena has a Startup task that automatically dismisses the splash screen.
+        // If other retailers are using iOS will need to implement the same, move this code
+        // to Ascena, or find the right place in the core to dismiss the splash screen
+        if ((<any>(window.navigator)).splashscreen) {
+            this.log.info('Showing splashscreen');
+            (<any>(window.navigator)).splashscreen.show();
+        }
+
+        this.session.cancelLoading();
+        // Input will get unblocked once re-subscribed to server and current screen is shown
+        this.log.info('Entering into background');
+        this.session.inBackground = true;
+    }
+
+    private handleForegrounding() {
+        // check for any changes while were are inactive
+        // We'll reset the inBackground flag after we receive the response
+        this.log.info('Start coming back into foreground. Requesting screen refresh');
+        this.session.publish('Refresh', 'Screen');
+        if ((<any>(window.navigator)).splashscreen) {
+            this.log.debug('Hiding splashscreen');
+            (<any>(window.navigator)).splashscreen.hide();
+        }
+    }
 
 }

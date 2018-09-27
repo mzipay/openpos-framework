@@ -7,7 +7,7 @@ import { PersonalizationService, DEFAULT_LOCALE } from './personalization.servic
 import { Observable, Subscription, BehaviorSubject, Subject, merge } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, forwardRef, Inject } from '@angular/core';
 import { StompState, StompRService } from '@stomp/ng2-stompjs';
 import { MatDialog } from '@angular/material';
 import { ActionIntercepter } from '../action-intercepter';
@@ -22,9 +22,7 @@ import {
 } from '../interfaces';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
 import { PluginService } from './plugin.service';
-import { DeviceService } from './device.service';
 import { AppInjector } from '../app-injector';
-import { async } from 'rxjs/internal/scheduler/async';
 
 // export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
@@ -57,15 +55,13 @@ export class SessionService implements IMessageHandler {
     private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
     loaderState: LoaderState;
-    private appBackgroundSubscription: Subscription;
-    private appForegroundSubscription: Subscription;
     private stompStateSubscription: Subscription;
 
     public onServerConnect: BehaviorSubject<boolean>;
 
     private stompJsonMessages$ = new Subject<any>();
     private sessionMessages$ = new Subject<any>();
-    private inBackground = false;
+    public inBackground = false;
 
     constructor(
         private log: Logger,
@@ -185,33 +181,7 @@ export class SessionService implements IMessageHandler {
 
         this.subscribed = true;
         this.loaderState.monitorConnection();
-        // On iOS need to enter into loading state when the app is backgrounded, otherwise
-        // user can execute actions as app is coming back to foreground.
-        const deviceService = AppInjector.Instance.get(DeviceService);
-        if (! this.appBackgroundSubscription) {
-            this.appBackgroundSubscription = deviceService.onAppEnteringBackground.subscribe(async(backgrounded) => {
-                if (backgrounded) {
-                    const allowBackgroundHandling = !deviceService.isCameraScanInProgress() && ! await deviceService.isInAppBrowserActive();
-                    if (allowBackgroundHandling) {
-                        this.handleBackgrounding();
-                    } else {
-                        this.log.info(`Skipping background handling`);
-                    }
-                }
-            });
-        }
-        if (! this.appForegroundSubscription) {
-            this.appForegroundSubscription = deviceService.onAppEnteredForeground.subscribe(foregrounded => {
-                const allowForegroundHandling = this.inBackground;
-                if (foregrounded) {
-                    if (allowForegroundHandling) {
-                        this.handleForegrounding();
-                    } else {
-                        this.log.info(`Skipping foreground handling`);
-                    }
-                }
-            });
-        }
+
 
         if (! this.stompStateSubscription) {
             this.stompStateSubscription = this.state.subscribe(stompState => {
@@ -255,40 +225,6 @@ export class SessionService implements IMessageHandler {
         return valid;
     }
 
-    private handleBackgrounding() {
-        // Show splash screen when running on iOS
-        // Ascena has a Startup task that automatically dismisses the splash screen.
-        // If other retailers are using iOS will need to implement the same, move this code
-        // to Ascena, or find the right place in the core to dismiss the splash screen
-        if ((<any>(window.navigator)).splashscreen) {
-            this.log.info('Showing splashscreen');
-            (<any>(window.navigator)).splashscreen.show();
-        }
-/* Commenting out for now, may want to add back in if BigLots needs it
-        this.sendMessage({
-            type: 'Screen',
-            screenType: 'Wait',
-            template: {type: 'Blank'},
-            title: 'Point of Sale is Loading',
-            instructions: 'Please wait while Point of Sale is loading...'
-        });
-*/
-        this.cancelLoading();
-        // Input will get unblocked once re-subscribed to server and current screen is shown
-        this.log.info('Entering into background');
-        this.inBackground = true;
-    }
-
-    private handleForegrounding() {
-        // check for any changes while were are inactive
-        // We'll reset the inBackground flag after we receive the response
-        this.log.info('Start coming back into foreground. Requesting screen refresh');
-        this.publish('Refresh', 'Screen');
-        if ((<any>(window.navigator)).splashscreen) {
-            this.log.debug('Hiding splashscreen');
-            (<any>(window.navigator)).splashscreen.hide();
-        }
-    }
 
     public unsubscribe() {
         if (!this.subscribed) {
@@ -432,10 +368,9 @@ export class SessionService implements IMessageHandler {
     }
 
     public publish(actionString: string, type: string, payload?: any) {
-        const deviceService = AppInjector.Instance.get(DeviceService);
         // Block any actions if we are backgrounded and running in cordova
         // (unless we are coming back out of the background)
-        if (this.inBackground && deviceService.isRunningInCordova() && actionString !== 'Refresh') {
+        if (this.inBackground && actionString !== 'Refresh') {
             return;
         }
         const nodeId = this.personalization.getNodeId();
