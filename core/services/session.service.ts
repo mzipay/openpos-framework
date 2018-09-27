@@ -21,7 +21,9 @@ import {
     IUrlMenuItem
 } from '../interfaces';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
-import { AppInjector, DeviceService, PluginService } from '..';
+import { PluginService } from './plugin.service';
+import { DeviceService } from './device.service';
+import { AppInjector } from '../app-injector';
 import { async } from 'rxjs/internal/scheduler/async';
 
 // export const DEFAULT_LOCALE = 'en-US';
