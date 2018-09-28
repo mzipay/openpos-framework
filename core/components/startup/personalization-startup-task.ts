@@ -4,7 +4,11 @@ import { Observable, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { PersonalizationComponent } from '../personalization/personalization.component';
 import { StartupTaskNames } from './startup-task-names';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+    providedIn: 'root',
+})
 export class PersonalizationStartupTask implements IStartupTask {
 
     name = StartupTaskNames.PERSONALIZATION;
