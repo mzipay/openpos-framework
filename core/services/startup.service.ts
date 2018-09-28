@@ -29,12 +29,10 @@ export class StartupService implements CanActivate {
     constructor(
         @Inject(STARTUP_TASKS) tasks: Array<IStartupTask>,
         @Optional() @Inject(STARTUP_FAILED_TASK) private failedTask: IStartupTask,
-        @Inject(STARTUP_COMPONENT) private startupComponent: ComponentType<any>,
-        @Inject(STARTUP_FAILED_COMPONENT) private startupFailedComponent: ComponentType<any>,
+        @Optional() @Inject(STARTUP_COMPONENT) private startupComponent: ComponentType<any>,
+        @Optional() @Inject(STARTUP_FAILED_COMPONENT) private startupFailedComponent: ComponentType<any>,
         private matDialog: MatDialog,
-        private log: Logger,
-        protected router: Router,
-        protected route: ActivatedRoute) {
+        private log: Logger) {
 
         // This might not be the best way but it's the best I could come up with for now.
         // This allows task defined in the core module to be overriden by vendor specific modules
@@ -44,12 +42,14 @@ export class StartupService implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 
-        this.startupDialogRef = this.matDialog.open(
-            this.startupComponent,
-            {
-                disableClose: true,
-                hasBackdrop: false
-            });
+        if ( this.startupComponent ) {
+            this.startupDialogRef = this.matDialog.open(
+                this.startupComponent,
+                {
+                    disableClose: true,
+                    hasBackdrop: false
+                });
+        }
 
         const list = Array.from(this.dedupedTasks.values());
         list.sort((a, b) => a.order - b.order );
@@ -75,7 +75,9 @@ export class StartupService implements CanActivate {
                     complete: () => {
                         this.log.info('All Startup Tasks completed successfully');
                         result.next(true);
-                        this.startupDialogRef.close();
+                        if ( this.startupDialogRef ) {
+                            this.startupDialogRef.close();
+                        }
                     }
                 }
             );
@@ -108,15 +110,20 @@ export class StartupService implements CanActivate {
     }
 
     private showFailure( error: string ) {
-        this.startupDialogRef.close();
-        this.matDialog.open(
-            this.startupFailedComponent, {
-                disableClose: true,
-                hasBackdrop: false,
-                data: {
-                    error: error,
-                    messages: this.allMessages
-                }
-            }).afterClosed().subscribe( () => location.reload() );
+        if ( this.startupDialogRef ) {
+            this.startupDialogRef.close();
+        }
+
+        if ( this.startupFailedComponent ) {
+            this.matDialog.open(
+                this.startupFailedComponent, {
+                    disableClose: true,
+                    hasBackdrop: false,
+                    data: {
+                        error: error,
+                        messages: this.allMessages
+                    }
+                }).afterClosed().subscribe( () => location.reload() );
+        }
     }
 }
