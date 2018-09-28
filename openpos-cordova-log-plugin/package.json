@@ -1,6 +1,6 @@
 {
   "name": "openpos-cordova-log-plugin",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "cordova": {
     "id": "openpos-cordova-log-plugin",
     "platforms": [
