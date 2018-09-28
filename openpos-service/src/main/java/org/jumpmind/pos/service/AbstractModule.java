@@ -37,7 +37,7 @@ import org.jumpmind.pos.persist.DatabaseScriptContainer;
 import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.Table;
 import org.jumpmind.pos.persist.driver.Driver;
-import org.jumpmind.pos.service.model.ModuleInfo;
+import org.jumpmind.pos.service.model.ModuleModel;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.ISecurityService;
 import org.jumpmind.security.SecurityServiceFactory;
@@ -82,7 +82,7 @@ abstract public class AbstractModule implements Module {
 
     protected List<Class<?>> getClassesForPackageAndAnnotation(String packageName, Class<? extends Annotation> annotation) {
         List<Class<?>> classes = new ArrayList<Class<?>>();
-        classes.add(ModuleInfo.class);
+        classes.add(ModuleModel.class);
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(true);
         scanner.addIncludeFilter(new AnnotationTypeFilter(annotation));
         for (BeanDefinition bd : scanner.findCandidateComponents(packageName)) {
@@ -190,7 +190,7 @@ abstract public class AbstractModule implements Module {
 
         try {
 
-            ModuleInfo info = session.findByNaturalId(ModuleInfo.class, installationId);
+            ModuleModel info = session.findByNaturalId(ModuleModel.class, installationId);
             if (info != null) {
                 fromVersion = info.getCurrentVersion();
             }
@@ -206,12 +206,12 @@ abstract public class AbstractModule implements Module {
 
         scripts.executePreInstallScripts(fromVersion, getVersion());
         schemaListener.beforeSchemaCreate(sessionFactory);
-        sessionFactory.getDatabaseSchema().createAndUpgrade();
+        sessionFactory.createAndUpgrade();
         upgradeDbFromXml();
         schemaListener.afterSchemaCreate(sessionFactory);
         scripts.executePostInstallScripts(fromVersion, getVersion());
 
-        session.save(new ModuleInfo(installationId, getVersion()));
+        session.save(new ModuleModel(installationId, getVersion()));
     }
 
     protected void upgradeDbFromXml() {

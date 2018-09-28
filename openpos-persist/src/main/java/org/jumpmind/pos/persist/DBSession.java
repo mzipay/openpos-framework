@@ -11,7 +11,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -66,7 +65,7 @@ public class DBSession {
         this.queryTemplates = queryTemplates;
     }
 
-    public <T> List<T> findAll(Class<T> clazz) {
+    public <T extends Entity> List<T> findAll(Class<T> clazz) {
         QueryTemplate queryTemplate = new QueryTemplate();
         Query<T> query = new Query<T>().result(clazz);
         query.setQueryTemplate(queryTemplate);
@@ -143,8 +142,8 @@ public class DBSession {
             throw new PersistException("findByNaturalId failed", ex);
         }
     }
-    
-    public <T> List<T> findByFields(Class<T> entityClass, Map<String, Object> fieldValues) {
+
+    public <T extends Entity> List<T> findByFields(Class<T> entityClass, Map<String, Object> fieldValues) {
         Map<String, String> fieldsToColumns = databaseSchema.getEntityFieldsToColumns(entityClass);
 
         QueryTemplate queryTemplate = new QueryTemplate();
@@ -195,27 +194,27 @@ public class DBSession {
         return jdbcTemplate.update(sql, params);
     }
 
-    public <T> List<T> query(Query<T> query) {
+    public <T extends Entity> List<T> query(Query<T> query) {
         return query(query, (Map<String, Object>) null);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> List<T> query(Query<T> query, String singleParam) {
+    public <T extends Entity> List<T> query(Query<T> query, String singleParam) {
         populdateDefaultSelect(query);
         try {
-            SqlStatement sqlStatement = query.generateSQL(singleParam);
-            return (List<T>) queryInternal(query.getResultClass(), sqlStatement.getSql(), Arrays.asList(singleParam));
+            List<SqlStatement> sqlStatements = query.generateSQL(singleParam);
+            return (List<T>) queryInternal(query.getResultClass(), sqlStatements);
         } catch (Exception ex) {
             throw new PersistException("Failed to query target class " + query.getResultClass(), ex);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public <T> List<T> query(Query<T> query, Map<String, Object> params) {
+    public <T extends Entity> List<T> query(Query<T> query, Map<String, Object> params) {
         populdateDefaultSelect(query);
         try {
-            SqlStatement sqlStatement = query.generateSQL(params);
-            return (List<T>) queryInternal(query.getResultClass(), sqlStatement.getSql(), sqlStatement.getValues());
+            List<SqlStatement> sqlStatements = query.generateSQL(params);
+            return (List<T>) queryInternal(query.getResultClass(), sqlStatements);
         } catch (Exception ex) {
             throw new PersistException("Failed to query result class " + query.getResultClass(), ex);
         }
@@ -224,44 +223,14 @@ public class DBSession {
     @SuppressWarnings("unchecked")
     protected <T> void populdateDefaultSelect(Query<T> query) {
         boolean isEntityResult = Entity.class.isAssignableFrom(query.getResultClass());
-
-        if (query.getQueryTemplate() == null) {
-            if (!StringUtils.isEmpty(query.getName())) {
-                if (!queryTemplates.containsKey(query.getName())) {
-                    throw new PersistException(
-                            "No query templates found for query named '" + query.getName() + "'. Check your *-query.yaml config.");
-                }
-                query.setQueryTemplate(queryTemplates.get(query.getName()));
-            } else {
-                query.setQueryTemplate(new QueryTemplate());
-            }
+        if (queryTemplates.containsKey(query.getName())) {
+            query.setQueryTemplate(queryTemplates.get(query.getName()));
         }
 
-        if (isEntityResult && StringUtils.isEmpty(query.getQueryTemplate().getSelect())) {
+        if (isEntityResult && (query.getQueryTemplate().getSelects() == null || query.getQueryTemplate().getSelects().size() == 0)) {
             Class<? extends Entity> entityClass = (Class<? extends Entity>) query.getResultClass();
-            query.getQueryTemplate().setSelect(getSelectSql(entityClass));
+            query.getQueryTemplate().setSelects(getSelectSql(entityClass));
         }
-    }
-
-    // TODO support transactions.
-    public void startTransaction() {
-        checkTransactionNotStarted();
-        currentTransaction = new Transaction();
-    }
-
-    private void checkTransactionNotStarted() {
-        if (currentTransaction != null) {
-            throw new PersistException("Transaction already started.  The previous transaction must be committed "
-                    + "or rolled back before starting another transacstion. " + currentTransaction);
-        }
-    }
-
-    public void commitTransaction() {
-        checkTransactionStarted();
-    }
-
-    public void rollbackTransaction() {
-        checkTransactionStarted();
     }
 
     protected LinkedHashMap<String, Column> mapObjectToTable(Class<?> resultClass, Table table) {
@@ -278,34 +247,39 @@ public class DBSession {
     }
 
     public void save(Entity entity) {
-        Table table = getValidatedTable(entity);
+        List<Table> tables = getValidatedTables(entity);
+        for (Table table : tables) {
 
-        EntitySystemInfo entitySystemInfo = new EntitySystemInfo(entity);
+            EntitySystemInfo entitySystemInfo = new EntitySystemInfo(entity);
 
-        if (entitySystemInfo.isNew()) {
-            try {
-                insert(entity, table);
-            } catch (DuplicateKeyException ex) {
-                log.debug("Insert of entity failed, failing over to an update. " + entity, ex);
-                int updateCount = update(entity, table);
-                if (updateCount < 1) {
-                    throw new PersistException("Failed to perform an insert or update on entity. Do the DB primary key and unique fields "
-                            + "match what's understood by the code?  " + entity, ex);
+            if (entitySystemInfo.isNew()) {
+                try {
+                    insert(entity, table);
+                } catch (DuplicateKeyException ex) {
+                    log.debug("Insert of entity failed, failing over to an update. " + entity, ex);
+                    int updateCount = update(entity, table);
+                    if (updateCount < 1) {
+                        throw new PersistException("Failed to perform an insert or update on entity. Do the DB primary key and unique fields "
+                                + "match what's understood by the code?  " + entity, ex);
+                    }
                 }
-            }
-        } else {
-            if (update(entity, table) == 0) {
-                insert(entity, table);
+            } else {
+                if (update(entity, table) == 0) {
+                    insert(entity, table);
+                }
             }
         }
     }
 
-    protected String getSelectSql(Class<? extends Entity> entity) {
-        Table table = getValidatedTable(entity);
-        DmlStatement statement = databasePlatform.createDmlStatement(DmlType.SELECT, table.getCatalog(), table.getSchema(), table.getName(),
-                null, table.getColumns(), null, null);
-        String sql = statement.getSql();
-        return sql;
+    protected List<String> getSelectSql(Class<? extends Entity> entity) {
+        List<String> sqls = new ArrayList<>();
+        List<Table> tables = getValidatedTables(entity);
+        for (Table table : tables) {
+            DmlStatement statement = databasePlatform.createDmlStatement(DmlType.SELECT_ALL, table.getCatalog(), table.getSchema(),
+                    table.getName(), null, table.getColumns(), null, null);
+            sqls.add(statement.getSql());
+        }
+        return sqls;
     }
 
     protected void insert(Entity entity, Table table) {
@@ -372,21 +346,20 @@ public class DBSession {
         }
     }
 
-    protected org.jumpmind.db.model.Table getValidatedTable(Entity entity) {
+    protected List<Table> getValidatedTables(Entity entity) {
         if (entity == null) {
             throw new PersistException("Failed to locate a database table for null entity class.");
         }
-        return getValidatedTable(entity.getClass());
+        return getValidatedTables(entity.getClass());
     }
 
-    protected Table getValidatedTable(Class<?> entityClass) {
-        org.jumpmind.db.model.Table table = databaseSchema.getTable(entityClass);
-        if (table == null) {
+    protected List<Table> getValidatedTables(Class<?> entityClass) {
+        List<Table> tables = databaseSchema.getTables(entityClass);
+        if (tables == null || tables.size() == 0) {
             throw new PersistException("Failed to locate a database table for entity class: '" + entityClass
-                    + "'. Mapped entities in this session are: " + databaseSchema.getClassMetadata().keySet()
-                    + " Make sure the correct dbSession is used with the module by using the correct @Qualifier");
+                    + "'. Make sure the correct dbSession is used with the module by using the correct @Qualifier");
         }
-        return table;
+        return tables;
     }
 
     protected void checkTransactionStarted() {
@@ -395,48 +368,46 @@ public class DBSession {
         }
     }
 
-    protected <T extends Entity> List<T> find(Class<T> entityClass, Table table, String whereClause, List<Object> params) {
-        try {
-            entityClass.newInstance();
-            String sql = getSelectSql(entityClass) + whereClause;
-            return queryInternal(entityClass, sql, params);
-        } catch (Exception ex) {
-            throw new PersistException("Failed to query entityClass " + entityClass + " table: " + table, ex);
-        }
-    }
-
-    protected <T> List<T> queryInternal(Class<T> resultClass, String sql, List<Object> params)
+    protected <T extends Entity> List<T> queryInternal(Class<T> resultClass, List<SqlStatement> statements)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        List<Row> rows = jdbcTemplate.query(sql, new DefaultMapper(), params.toArray());
         List<T> objects = new ArrayList<T>();
-
-        for (Row row : rows) {
-            T object = resultClass.newInstance();
-
-            PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(object);
-
-            LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<String>();
-
-            for (int i = 0; i < propertyDescriptors.length; i++) {
-                String propertyName = propertyDescriptors[i].getName();
-                String columnName = DatabaseSchema.camelToSnakeCase(propertyName);
-
-                if (row.containsKey(columnName)) {
-                    Object value = row.get(columnName);
-                    ReflectUtils.setProperty(object, propertyName, value);
-                    matchedColumns.put(columnName, null);
+        for(SqlStatement statement : statements) {
+            List<Row> rows = jdbcTemplate.query(statement.getSql(), new DefaultMapper(), statement.getValues().toArray());
+            for (int j = 0; j < rows.size(); j++) {
+                Row row = rows.get(j);
+                T object = null;
+                if (objects.size() > j) {
+                    object = objects.get(j);
+                } else {
+                    object = resultClass.newInstance();
+                    objects.add(object);
                 }
+
+                PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(object);
+
+                LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<String>();
+
+                for (int i = 0; i < propertyDescriptors.length; i++) {
+                    String propertyName = propertyDescriptors[i].getName();
+                    String columnName = DatabaseSchema.camelToSnakeCase(propertyName);
+
+                    if (row.containsKey(columnName)) {
+                        Object value = row.get(columnName);
+                        ReflectUtils.setProperty(object, propertyName, value);
+                        matchedColumns.put(columnName, null);
+                    }
+                }
+
+                if (object instanceof Entity) {
+                    addUnmatchedColumns(row, matchedColumns, (Entity) object);
+                    decorateRetrievedEntity((Entity) object);
+                }
+              
             }
 
-            if (object instanceof Entity) {
-                addUnmatchedColumns(row, matchedColumns, (Entity) object);
-                decorateRetrievedEntity((Entity) object);
-            }
-            objects.add(object);
         }
-
-
+        
         return objects;
 
     }

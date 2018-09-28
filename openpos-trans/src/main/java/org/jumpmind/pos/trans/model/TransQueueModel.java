@@ -5,9 +5,11 @@ import java.sql.Types;
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Table;
 
-@Table(name="trans_queue")
+@Table(name="queue")
 public class TransQueueModel  extends AbstractTransModel {
     
+    private static final long serialVersionUID = 1L;
+
     @Column(type=Types.CLOB)
     String payload;
     

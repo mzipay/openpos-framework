@@ -10,11 +10,11 @@ import java.util.Map;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.Query;
 import org.jumpmind.pos.persist.cars.TestPersistCarsConfig;
-import org.jumpmind.pos.tax.model.Authority;
-import org.jumpmind.pos.tax.model.Group;
-import org.jumpmind.pos.tax.model.GroupRule;
-import org.jumpmind.pos.tax.model.Jurisdiction;
-import org.jumpmind.pos.tax.model.RateRule;
+import org.jumpmind.pos.tax.model.AuthorityModel;
+import org.jumpmind.pos.tax.model.GroupModel;
+import org.jumpmind.pos.tax.model.GroupRuleModel;
+import org.jumpmind.pos.tax.model.JurisdictionModel;
+import org.jumpmind.pos.tax.model.RateRuleModel;
 import org.jumpmind.pos.tax.model.TaxRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,29 +36,29 @@ public class TaxRepositoryTest {
 	@Qualifier("taxSession")
 	DBSession dbSession;
 	
-	private Query<RateRule> taxRateRuleLookup2 = new Query<RateRule>().named("taxRateRuleLookup2").result(RateRule.class);
+	private Query<RateRuleModel> taxRateRuleLookup2 = new Query<RateRuleModel>().named("taxRateRuleLookup2").result(RateRuleModel.class);
     
-    private Query<GroupRule> taxGroupRuleLookup = new Query<GroupRule>().named("taxGroupRuleLookup").result(GroupRule.class);
+    private Query<GroupRuleModel> taxGroupRuleLookup = new Query<GroupRuleModel>().named("taxGroupRuleLookup").result(GroupRuleModel.class);
 
 	@Test
 	public void matchAuthoritiesTest() {
-		List<Jurisdiction> jurisdictions = taxRepository.findTaxJurisdictions("700010040");
-		Authority authAct = dbSession.findByNaturalId(Authority.class, "8");
-		Jurisdiction jurisdiction = jurisdictions.get(0);
-		Authority authExp = jurisdiction.getAuthority();
+		List<JurisdictionModel> jurisdictions = taxRepository.findTaxJurisdictions("700010040");
+		AuthorityModel authAct = dbSession.findByNaturalId(AuthorityModel.class, "8");
+		JurisdictionModel jurisdiction = jurisdictions.get(0);
+		AuthorityModel authExp = jurisdiction.getAuthority();
 		assertEquals(authExp.getId(), jurisdiction.getAuthorityId());
 		assertEquals(authAct.compareTo(authExp), 0);
 	}
 	
 	@Test
 	public void matchGroupRulesTest() {
-		List<Jurisdiction> jurisdictions = taxRepository.findTaxJurisdictions("700010040");
-		Authority authAct = dbSession.findByNaturalId(Authority.class, "8");
+		List<JurisdictionModel> jurisdictions = taxRepository.findTaxJurisdictions("700010040");
+		AuthorityModel authAct = dbSession.findByNaturalId(AuthorityModel.class, "8");
 		String authorityId = authAct.getId();
-		Jurisdiction jurisdiction = jurisdictions.get(0);
-		Authority authExp = jurisdiction.getAuthority();
-		List<GroupRule> groupRulesExp = (List<GroupRule>) authExp.getGroupRules();
-		List<GroupRule> groupRulesAct = dbSession.query(taxGroupRuleLookup, authorityId);
+		JurisdictionModel jurisdiction = jurisdictions.get(0);
+		AuthorityModel authExp = jurisdiction.getAuthority();
+		List<GroupRuleModel> groupRulesExp = (List<GroupRuleModel>) authExp.getGroupRules();
+		List<GroupRuleModel> groupRulesAct = dbSession.query(taxGroupRuleLookup, authorityId);
 		for (int i = 0; i < groupRulesAct.size(); i++) {
 			//assertEquals(groupRulesExp.get(i).toString(), groupRulesAct.get(i).toString());
 			assertEquals(groupRulesExp.get(i).getAuthority(), authExp);
@@ -69,19 +69,19 @@ public class TaxRepositoryTest {
 	
 	@Test
 	public void matchRateRulesTest() {
-		List<Jurisdiction> jurisdictions = taxRepository.findTaxJurisdictions("700010040");
-		Jurisdiction jurisdiction = jurisdictions.get(0);
-		Authority authority = jurisdiction.getAuthority();
-		List<GroupRule> groupRules = (List<GroupRule>) authority.getGroupRules();
-		GroupRule groupRule = groupRules.get(0);
+		List<JurisdictionModel> jurisdictions = taxRepository.findTaxJurisdictions("700010040");
+		JurisdictionModel jurisdiction = jurisdictions.get(0);
+		AuthorityModel authority = jurisdiction.getAuthority();
+		List<GroupRuleModel> groupRules = (List<GroupRuleModel>) authority.getGroupRules();
+		GroupRuleModel groupRule = groupRules.get(0);
 		String groupId = groupRule.getGroupId();
 		String authorityId = authority.getId();
 		
 		Map<String, Object> params = new HashMap<>();	
 		params.put("groupId", groupId);
 		params.put("authorityId", authorityId);
-		List<RateRule> rateRulesAct = dbSession.query(taxRateRuleLookup2, params);
-		List<RateRule> rateRulesExp = (List<RateRule>) groupRule.getRateRules();
+		List<RateRuleModel> rateRulesAct = dbSession.query(taxRateRuleLookup2, params);
+		List<RateRuleModel> rateRulesExp = (List<RateRuleModel>) groupRule.getRateRules();
 		for (int i = 0; i < rateRulesAct.size(); i++) {
 			//assertEquals(rateRulesAct.get(i).toString(), rateRulesExp.get(i).toString());
 		}
@@ -89,11 +89,11 @@ public class TaxRepositoryTest {
 	
 	@Test
 	public void checkResultTest() {
-		List<Jurisdiction> jurisdictions = taxRepository.findTaxJurisdictions("51115040");
-		for (Jurisdiction jurisdiction : jurisdictions) {
+		List<JurisdictionModel> jurisdictions = taxRepository.findTaxJurisdictions("51115040");
+		for (JurisdictionModel jurisdiction : jurisdictions) {
 			if (jurisdiction.getAuthorityId().equals("2398")) {
-				GroupRule groupRule = jurisdiction.getAuthority().getGroupRule("10002");
-				RateRule rateRule = groupRule.getFirstRateRule();
+				GroupRuleModel groupRule = jurisdiction.getAuthority().getGroupRule("10002");
+				RateRuleModel rateRule = groupRule.getFirstRateRule();
 				
 				assertEquals(jurisdiction.getAuthority().getAuthName(), "CALIFORNIA");
 				assertEquals(groupRule.getGroup().getGroupName(), "Candy");
@@ -107,11 +107,11 @@ public class TaxRepositoryTest {
 	
 	@Test
 	public void checkResultWideAuthorityTest() {
-		List<Jurisdiction> jurisdictions = taxRepository.findTaxJurisdictions("430370620");
-		for (Jurisdiction jurisdiction : jurisdictions) {
+		List<JurisdictionModel> jurisdictions = taxRepository.findTaxJurisdictions("430370620");
+		for (JurisdictionModel jurisdiction : jurisdictions) {
 			if (jurisdiction.getAuthorityId().equals("34975")) {
-				GroupRule groupRule = jurisdiction.getAuthority().getGroupRule("10015");
-				RateRule rateRule = groupRule.getFirstRateRule();
+				GroupRuleModel groupRule = jurisdiction.getAuthority().getGroupRule("10015");
+				RateRuleModel rateRule = groupRule.getFirstRateRule();
 				
 				assertEquals(jurisdiction.getAuthority().getAuthName(), "TENNESSEE");
 				assertEquals(groupRule.getGroup().getGroupName(), "Women's Accessories");
@@ -127,11 +127,11 @@ public class TaxRepositoryTest {
 	
 	@Test
 	public void checkResultWideGroupTest() {
-		List<Jurisdiction> jurisdictions = taxRepository.findTaxJurisdictions("10730150");
-		for (Jurisdiction jurisdiction : jurisdictions) {
+		List<JurisdictionModel> jurisdictions = taxRepository.findTaxJurisdictions("10730150");
+		for (JurisdictionModel jurisdiction : jurisdictions) {
 			if (jurisdiction.getAuthorityId().equals("11")) {
-				GroupRule groupRule = jurisdiction.getAuthority().getGroupRule("535");
-				RateRule rateRule = groupRule.getFirstRateRule();
+				GroupRuleModel groupRule = jurisdiction.getAuthority().getGroupRule("535");
+				RateRuleModel rateRule = groupRule.getFirstRateRule();
 				
 				assertEquals(jurisdiction.getAuthority().getAuthName(), "ALABAMA");
 				assertEquals(groupRule.getGroup().getGroupName(), "CONTAINERS");
@@ -147,11 +147,11 @@ public class TaxRepositoryTest {
 	
 	@Test
 	public void checkResultWideRateRuleTest() {
-		List<Jurisdiction> jurisdictions = taxRepository.findTaxJurisdictions("130010030");
-		for (Jurisdiction jurisdiction : jurisdictions) {
+		List<JurisdictionModel> jurisdictions = taxRepository.findTaxJurisdictions("130010030");
+		for (JurisdictionModel jurisdiction : jurisdictions) {
 			if (jurisdiction.getAuthorityId().equals("7488")) {
-				GroupRule groupRule = jurisdiction.getAuthority().getGroupRule("110");
-				RateRule rateRule = groupRule.getFirstRateRule();
+				GroupRuleModel groupRule = jurisdiction.getAuthority().getGroupRule("110");
+				RateRuleModel rateRule = groupRule.getFirstRateRule();
 				
 				assertEquals(jurisdiction.getAuthority().getAuthName(), "IDAHO");
 				assertEquals(groupRule.getGroup().getGroupName(), "CASUAL BLOUSES"); 
@@ -245,15 +245,15 @@ public class TaxRepositoryTest {
 	
 	@Test
 	public void matchGroupTest() {
-		List<Jurisdiction> jurisdictions = taxRepository.findTaxJurisdictions("700010040");
-		Jurisdiction jurisdiction = jurisdictions.get(0);
-		Authority authority = jurisdiction.getAuthority();
-		List<GroupRule> groupRules = (List<GroupRule>) authority.getGroupRules();
-		for (GroupRule groupRule : groupRules) {
+		List<JurisdictionModel> jurisdictions = taxRepository.findTaxJurisdictions("700010040");
+		JurisdictionModel jurisdiction = jurisdictions.get(0);
+		AuthorityModel authority = jurisdiction.getAuthority();
+		List<GroupRuleModel> groupRules = (List<GroupRuleModel>) authority.getGroupRules();
+		for (GroupRuleModel groupRule : groupRules) {
 			String groupID = groupRule.getGroupId();		
 			
-			Group groupAct = dbSession.findByNaturalId(Group.class, groupID);
-			Group groupExp = groupRule.getGroup();
+			GroupModel groupAct = dbSession.findByNaturalId(GroupModel.class, groupID);
+			GroupModel groupExp = groupRule.getGroup();
 			assertEquals(groupAct, groupExp);
 		}
 	}

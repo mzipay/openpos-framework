@@ -33,6 +33,11 @@ public class CounterField extends FormField {
         this(id, label, required, minValue);
         this.setMaxValue(maxValue);
     }
+    
+    public CounterField(String id, String label, boolean required, Integer minValue, Integer maxValue, String value) {
+        this(id, label, required, minValue, maxValue);
+        this.setValue(value);
+    }
 
     public Integer getMinValue() {
         return minValue;

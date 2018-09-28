@@ -1,5 +1,6 @@
 package org.jumpmind.pos.persist;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,8 +8,10 @@ import java.util.Map;
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
 
-public abstract class Entity {
+public abstract class Entity implements Serializable {
     
+    private static final long serialVersionUID = 1L;
+
     @Column(required=true,
             description="Timestamp when this entry was created.")
     private Date createTime = new Date();

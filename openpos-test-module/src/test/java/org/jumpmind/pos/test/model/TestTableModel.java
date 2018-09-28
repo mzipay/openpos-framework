@@ -1,11 +1,11 @@
-package org.jumpmind.pos.service.test.model;
+package org.jumpmind.pos.test.model;
 
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Entity;
 import org.jumpmind.pos.persist.Table;
 
-@Table
-public class TestTable extends Entity {
+@Table(name="table")
+public class TestTableModel extends Entity {
 
     @Column(primaryKey = true)
     int id;

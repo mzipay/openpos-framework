@@ -16,8 +16,8 @@ import org.jumpmind.pos.persist.Table;
  * @author elong
  * 
  */
-@Table(description = "A government authority that levies sales taxes and on whose behalf the store collects these sales taxes.")
-public class Authority extends Entity implements Comparable<Authority> {
+@Table(name="authority", description = "A government authority that levies sales taxes and on whose behalf the store collects these sales taxes.")
+public class AuthorityModel extends Entity implements Comparable<AuthorityModel> {
 
     @Column(primaryKey = true)
     private String id;
@@ -31,12 +31,12 @@ public class Authority extends Entity implements Comparable<Authority> {
     @Column
     private Integer roundingDigitsQuantity;
 
-    private Collection<GroupRule> groupRules;
+    private Collection<GroupRuleModel> groupRules;
 
-    public Authority() {
+    public AuthorityModel() {
     }
 
-    public Authority(String id) {
+    public AuthorityModel(String id) {
         this.id = id;
     }
 
@@ -45,31 +45,31 @@ public class Authority extends Entity implements Comparable<Authority> {
     }
 
     public boolean equals(Object o) {
-        if (o != null && o instanceof Authority) {
-            Authority authority = (Authority) o;
+        if (o != null && o instanceof AuthorityModel) {
+            AuthorityModel authority = (AuthorityModel) o;
             return authority.getId().equals(id);
         }
         return false;
     }
 
-    public int compareTo(Authority o) {
-        if (o != null && o instanceof Authority) {
-            Authority authority = (Authority) o;
+    public int compareTo(AuthorityModel o) {
+        if (o != null && o instanceof AuthorityModel) {
+            AuthorityModel authority = (AuthorityModel) o;
             return authority.getId().compareTo(id);
         }
         return -1;
     }
 
-    public void addGroupRule(GroupRule groupRule) {
+    public void addGroupRule(GroupRuleModel groupRule) {
         if (groupRules == null) {
-            groupRules = new ArrayList<GroupRule>();
+            groupRules = new ArrayList<GroupRuleModel>();
         }
         groupRules.add(groupRule);
     }
 
-    public GroupRule getGroupRule(String groupId) {
+    public GroupRuleModel getGroupRule(String groupId) {
     	if (groupRules != null) {
-    		for (GroupRule groupRule : groupRules) {
+    		for (GroupRuleModel groupRule : groupRules) {
     			if (groupRule.getGroup().getId().equals(groupId)) {
     				return groupRule;
     			}
@@ -130,11 +130,11 @@ public class Authority extends Entity implements Comparable<Authority> {
         this.roundingDigitsQuantity = roundingDigitsQuantity;
     }
 
-    public Collection<GroupRule> getGroupRules() {
+    public Collection<GroupRuleModel> getGroupRules() {
         return groupRules;
     }
 
-    public void setGroupRules(Collection<GroupRule> groupRules) {
+    public void setGroupRules(Collection<GroupRuleModel> groupRules) {
         this.groupRules = groupRules;
     }
 

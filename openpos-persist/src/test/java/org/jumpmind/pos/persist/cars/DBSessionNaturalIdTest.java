@@ -11,7 +11,6 @@ import java.util.Date;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.PersistException;
-import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,11 +27,10 @@ public class DBSessionNaturalIdTest {
 
     @Before
     public void setup() {
-        sessionFactory.setDatabaseSchema(new DatabaseSchema());
         sessionFactory.init(
                 PersistTestUtil.testDbPlatform(), 
                 PersistTestUtil.getSessionContext(), 
-                Arrays.asList(CarEntity.class, ServiceInvoice.class),
+                Arrays.asList(CarModel.class, ServiceInvoice.class),
                 DBSessionFactory.getQueryTemplates("persist-test"),
                 DBSessionFactory.getDmlTemplates("persist-test"));        
         {            
@@ -42,11 +40,10 @@ public class DBSessionNaturalIdTest {
         }
 
         final String VIN = "KMHCN46C58U242743";
-        String rowId = null;
 
         {            
             DBSession db = sessionFactory.createDbSession();
-            CarEntity someHyundai = new CarEntity();
+            CarModel someHyundai = new CarModel();
             someHyundai.setVin(VIN);
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Accent");
@@ -55,7 +52,7 @@ public class DBSessionNaturalIdTest {
         }
         {            
             DBSession db = sessionFactory.createDbSession();
-            CarEntity someHyundai = new CarEntity();
+            CarModel someHyundai = new CarModel();
             someHyundai.setVin(VIN + "2342");
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Elantra");
@@ -64,7 +61,7 @@ public class DBSessionNaturalIdTest {
         }             
         {            
             DBSession db = sessionFactory.createDbSession();
-            CarEntity someHyundai = new CarEntity();
+            CarModel someHyundai = new CarModel();
             someHyundai.setVin(VIN + "4554");
             someHyundai.setMake("Hyundai");
             someHyundai.setModel("Sante Fe");
@@ -95,7 +92,7 @@ public class DBSessionNaturalIdTest {
         final String VIN = "KMHCN46C58U242743";
         {            
             DBSession db = sessionFactory.createDbSession();
-            CarEntity hyundaiLookupedUp = db.findByNaturalId(CarEntity.class, VIN);
+            CarModel hyundaiLookupedUp = db.findByNaturalId(CarModel.class, VIN);
             assertNotNull(hyundaiLookupedUp);
             assertEquals(VIN, hyundaiLookupedUp.getVin());
             assertEquals("Hyundai", hyundaiLookupedUp.getMake());

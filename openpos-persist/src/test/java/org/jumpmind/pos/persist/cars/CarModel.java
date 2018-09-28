@@ -6,8 +6,10 @@ import org.jumpmind.pos.persist.Table;
 
 @Table(name="car",
         description = "A basic concept of an automobile fit to drive down the road.")
-public class CarEntity extends Entity {
+public class CarModel extends Entity {
 
+    private static final long serialVersionUID = 1L;
+    
     @Column(primaryKey=true)
     private String vin;
     @Column    

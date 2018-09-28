@@ -39,8 +39,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-import javax.print.attribute.standard.PrinterLocation;
-
 import org.jumpmind.properties.TypedProperties;
 
 public class ConnectionWrapper implements Connection {

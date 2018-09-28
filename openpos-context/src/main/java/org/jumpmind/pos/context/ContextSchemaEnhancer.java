@@ -43,9 +43,7 @@ public class ContextSchemaEnhancer implements IDBSchemaListener {
     }
     
     protected void enchanceTaggedTable(Class<?> entityClass, List<TagModel> tags, boolean includeInPk) {
-        EntityMetaData entityMetaData = 
-                sessionFactory.getDatabaseSchema().getClassMetadata().get(entityClass);
-        Table table = entityMetaData.getTable();
+        Table table = sessionFactory.getTableForEnhancement(entityClass);
         warnOrphanedTagColumns(tags, table);
         modifyTagColumns(tags, table, includeInPk);
         addTagColumns(tags, table, includeInPk);

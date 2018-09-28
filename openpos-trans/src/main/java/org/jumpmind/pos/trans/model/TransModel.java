@@ -8,6 +8,8 @@ import org.jumpmind.pos.persist.Table;
 @Table(name="trans")
 public class TransModel extends AbstractTransModel {
 
+    private static final long serialVersionUID = 1L;
+
     @Column
     private String transType;
 
