@@ -15,6 +15,7 @@ export class LoaderState {
     private timerSubscription: Subscription = null;
 
     private _loading = false;
+    private _enabled = false;
 
     constructor(private sessionService: SessionService,
         private personalization: PersonalizationService) {
@@ -26,6 +27,14 @@ export class LoaderState {
         }
         const t = timer(1000, 1000);
         this.timerSubscription = t.subscribe(n => this.checkConnectionStatus());
+    }
+
+    get enabled(): boolean {
+        return this._enabled;
+    }
+
+    set enabled(enable: boolean) {
+        this._enabled = enable;
     }
 
     get loading(): boolean {
@@ -71,7 +80,7 @@ export class LoaderState {
     }
 
     protected checkConnectionStatus(): void {
-        if (!this.personalization.isPersonalized()) {
+        if (! this.enabled || !this.personalization.isPersonalized()) {
             this.setVisible(false);
         } else {
             const sessionConnected = this.sessionService.connected();

@@ -27,6 +27,7 @@ import { Router } from '@angular/router';
 import { Logger } from './services/logger.service';
 import { StartupFailedComponent } from './components/startup/startup-failed.component';
 import { MatDialog } from '@angular/material';
+import { FinalStartupTask } from './components/startup/final-startup-task';
 
 @NgModule({
     entryComponents: [
@@ -60,6 +61,7 @@ import { MatDialog } from '@angular/material';
         StompRService,
         { provide: STARTUP_TASKS, useClass: PersonalizationStartupTask, multi: true, deps: [PersonalizationService, MatDialog]},
         { provide: STARTUP_TASKS, useClass: SubscribeToSessionTask, multi: true, deps: [SessionService, Router, Logger]},
+        { provide: STARTUP_TASKS, useClass: FinalStartupTask, multi: true, deps: [SessionService]},
         { provide: STARTUP_COMPONENT, useValue: StartupComponent },
         { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent}
     ]

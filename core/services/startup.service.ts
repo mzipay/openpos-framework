@@ -53,11 +53,13 @@ export class StartupService implements CanActivate {
 
         const list = Array.from(this.dedupedTasks.values());
         list.sort((a, b) => a.order - b.order );
+        this.logTaskOrder(list);
 
         // Get an array of task observables and attach task name to messages and errors
         const tasks = list.map( task => task.execute( { route, state }).pipe(
             map( message => `${task.name}: ${message}`),
             catchError( error => throwError(`${task.name}: ${error}`))) );
+
 
 
         // Run all tasks in order
@@ -67,10 +69,11 @@ export class StartupService implements CanActivate {
                     next: (message) => { this.handleMessage(message); },
                     error: (error) => {
                         result.next(false);
+                        this.log.info('Startup failed');
                         this.handleError( error );
                     },
                     complete: () => {
-                        this.log.info('Task completed');
+                        this.log.info('All Startup Tasks completed successfully');
                         result.next(true);
                         this.startupDialogRef.close();
                     }
@@ -82,6 +85,7 @@ export class StartupService implements CanActivate {
     private handleMessage( message: string ) {
         this.startupTaskMessages$.next(message);
         this.log.info(message);
+//        console.log(message);
         this.allMessages.push(message);
     }
 
@@ -99,7 +103,11 @@ export class StartupService implements CanActivate {
         }
     }
 
-    private showFailure( error: string ){
+    private logTaskOrder(tasks: IStartupTask[]) {
+        this.log.info(`The following startup tasks will run: ${tasks.map(t => `${t.name}(${t.order})`).join(', ')}`);
+    }
+
+    private showFailure( error: string ) {
         this.startupDialogRef.close();
         this.matDialog.open(
             this.startupFailedComponent, {
