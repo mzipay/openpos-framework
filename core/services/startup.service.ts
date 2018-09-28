@@ -85,7 +85,6 @@ export class StartupService implements CanActivate {
     private handleMessage( message: string ) {
         this.startupTaskMessages$.next(message);
         this.log.info(message);
-//        console.log(message);
         this.allMessages.push(message);
     }
 
