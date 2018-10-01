@@ -1,10 +1,10 @@
 import { Logger } from './logger.service';
-import { concat, throwError, Observable, Subject, ReplaySubject } from 'rxjs';
+import { concat, throwError, Observable, Subject, ReplaySubject, of } from 'rxjs';
 import { Injectable, InjectionToken, Inject, Optional } from '@angular/core';
 import {
     IStartupTask
 } from '../interfaces';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { map, catchError } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { ComponentType } from '@angular/cdk/overlay/index';
@@ -27,7 +27,7 @@ export class StartupService implements CanActivate {
     private startupDialogRef: MatDialogRef<any>;
 
     constructor(
-        @Inject(STARTUP_TASKS) tasks: Array<IStartupTask>,
+        @Optional() @Inject(STARTUP_TASKS) tasks: Array<IStartupTask>,
         @Optional() @Inject(STARTUP_FAILED_TASK) private failedTask: IStartupTask,
         @Optional() @Inject(STARTUP_COMPONENT) private startupComponent: ComponentType<any>,
         @Optional() @Inject(STARTUP_FAILED_COMPONENT) private startupFailedComponent: ComponentType<any>,
@@ -37,10 +37,17 @@ export class StartupService implements CanActivate {
         // This might not be the best way but it's the best I could come up with for now.
         // This allows task defined in the core module to be overriden by vendor specific modules
         // for example overriding the personalization task
-        tasks.forEach( task => this.dedupedTasks.set(task.name, task));
+        if ( tasks ) {
+            tasks.forEach( task => this.dedupedTasks.set(task.name, task));
+        }
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+        // The reality is that we will probably always have atleast 2 tasks (personalize and subscribe to stomp)
+        // But to be safe we will check first
+        if ( this.dedupedTasks.size < 1 ) {
+            return of(true);
+        }
 
         if ( this.startupComponent ) {
             this.startupDialogRef = this.matDialog.open(
@@ -96,7 +103,8 @@ export class StartupService implements CanActivate {
             this.failedTask.execute().subscribe(
                 {
                     next: (message) => this.handleMessage(message),
-                    complete: () => this.showFailure(error)
+                    complete: () => this.showFailure(error),
+                    error: (e) => this.log.error(`Error while running failure task: ${e}`)
                 }
             );
         } else {
