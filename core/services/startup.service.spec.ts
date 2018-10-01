@@ -1,57 +1,114 @@
 import { TestBed } from '@angular/core/testing';
-import { StartupService, STARTUP_TASKS } from './startup.service';
-import { MatDialog } from '@angular/material';
+import { StartupService, STARTUP_TASKS, STARTUP_COMPONENT, STARTUP_FAILED_COMPONENT, STARTUP_FAILED_TASK } from './startup.service';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { IStartupTask } from '../interfaces';
-import { Observable, of } from 'rxjs';
 import { scan } from 'rxjs/operators';
+import { StartupComponent } from '../components/startup/startup.component';
+import { StartupFailedComponent } from '../components/startup/startup-failed.component';
+import { cold, getTestScheduler } from 'jasmine-marbles';
 
 describe('StartupService', () => {
 
-    // Test tasks
-    class TestTask1 implements IStartupTask {
-        name = 'Test1';        order = 100;
-        execute(): Observable<string> { return of('Test1'); }
-    }
-
-    class TestTask2 implements IStartupTask {
-        name = 'Test2';        order = 1;
-        execute(): Observable<string> { return of('Test2'); }
-    }
-
-    class TestTask3 implements IStartupTask {
-        name = 'Test1';        order = 11;
-        execute(): Observable<string> { return of('Test3'); }
-    }
-
     let startupService: StartupService;
+    let matDialog: jasmine.SpyObj<MatDialog>;
+    let matDialogRef: jasmine.SpyObj<MatDialogRef<any>>;
+    let resultMessages = '';
+    let result: boolean;
+    let startupTaskProviders: any[];
 
-    beforeEach(() => {
+    function addTask(type: IStartupTask) {
+        startupTaskProviders.push( { provide: STARTUP_TASKS, useValue: type, multi: true });
+    }
+
+    function setup() {
         const matDialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
+        const matDialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close', 'afterClosed']);
+        matDialogRef = matDialogRefSpy;
 
         TestBed.configureTestingModule({
             providers: [
                 StartupService,
+                { provide: STARTUP_COMPONENT, useValue: StartupComponent },
+                { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent},
+                { provide: STARTUP_FAILED_TASK, useValue: {name: 'FailureTask', order: 100, execute: () => cold('--x|', {x: 'FailureTask'})}},
                 { provide: MatDialog, useValue: matDialogSpy },
-                { provide: STARTUP_TASKS, useClass: TestTask1, multi: true },
-                { provide: STARTUP_TASKS, useClass: TestTask2, multi: true },
-                { provide: STARTUP_TASKS, useClass: TestTask3, multi: true }
+                ...startupTaskProviders
             ]
         });
 
         startupService = TestBed.get(StartupService);
+        matDialog = TestBed.get(MatDialog);
+        matDialog.open.and.returnValue(matDialogRefSpy);
+
+        // never complete so we don't restart
+        matDialogRef.afterClosed.and.returnValue(cold('---', {x: null}));
+
+        // collect all the messages
+        startupService.startupTaskMessages$.pipe(
+            scan((acc, curr) => acc + curr, ''))
+            .subscribe((messages) => resultMessages = messages);
+
+
+        // collect the result of the route activation
+        startupService.canActivate( null, null).subscribe( (r) => {
+                result = r;
+            });
+    }
+
+    beforeEach(() => {
+        startupTaskProviders = [];
     });
 
     describe('canActivate', () => {
-        it('should run all deduped tasks in order', async () => {
-            let resultMessages = '';
-            startupService.startupTaskMessages$.pipe(
-                scan((acc, curr) => acc + curr, ''))
-                .subscribe((messages) => resultMessages = messages);
+        it('should return true if there are no tasks', () => {
+            // do the test module setup
+            setup();
 
-            const result = await startupService.canActivate( null, null).toPromise();
+            getTestScheduler().flush();
 
+            expect(matDialog.open).not.toHaveBeenCalled();
+            expect(resultMessages).toBe('');
             expect(result).toBeTruthy();
-            expect(resultMessages).toBe('Test2Test3');
+        });
+
+        it('should run all deduped tasks in order and return true', () => {
+            // add tasks
+            addTask({name: 'TestTask1', order: 100, execute: () => cold('--x|', {x: 'Test1'})});
+            addTask({name: 'TestTask2', order: 1, execute: () => cold('--x|', {x: 'Test2'})});
+            addTask({name: 'TestTask1', order: 11, execute: () => cold('--x|', {x: 'Test3'})});
+
+            // do the test module setup
+            setup();
+
+            getTestScheduler().flush();
+
+            expect(matDialog.open).toHaveBeenCalledWith(StartupComponent, jasmine.anything());
+            expect(matDialogRef.close).toHaveBeenCalledTimes(1);
+            expect(resultMessages).toBe('TestTask2: Test2TestTask1: Test3');
+            expect(result).toBeTruthy();
+        });
+
+        it('should not run any tasks after one fails', () => {
+            // add tasks
+            addTask({name: 'TestTask1', order: 100, execute: () => cold('--x|', {x: 'Test1'})} );
+            addTask({name: 'TestTask2', order: 1, execute: () => cold('--x|', {x: 'Test2'})} );
+            addTask({name: 'TestTask3', order: 11, execute: () => cold('--#|', null, new Error('Test3Failed')) });
+
+            setup();
+
+            getTestScheduler().flush();
+
+            expect(result).toBeFalsy();
+            expect(resultMessages).toBe('TestTask2: Test2FailureTask');
+            expect(matDialog.open).toHaveBeenCalledWith(StartupComponent, jasmine.anything());
+            expect(matDialogRef.close).toHaveBeenCalledTimes(1);
+            expect(matDialog.open).toHaveBeenCalledWith(StartupFailedComponent, {
+                disableClose: jasmine.anything(),
+                hasBackdrop: jasmine.anything(),
+                data: {
+                    error: 'TestTask3: Error: Test3Failed',
+                    messages: ['TestTask2: Test2', 'FailureTask']
+                }});
         });
     });
 
