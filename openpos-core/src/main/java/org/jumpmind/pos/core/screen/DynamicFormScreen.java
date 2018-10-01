@@ -37,11 +37,14 @@ public class DynamicFormScreen extends Screen implements IHasForm {
     
     @Deprecated
     public void setSubmitAction(String submitAction) {
+        if(submitButton == null) {
+            submitButton = new MenuItem();
+        }
         submitButton.setAction(submitAction);
     }
     @Deprecated
     public String getSubmitAction() {
-        return submitButton.getAction();
+        return submitButton == null ? null :submitButton.getAction();
     }
     
     public void addAlternateSubmitAction(String action) {
@@ -58,21 +61,27 @@ public class DynamicFormScreen extends Screen implements IHasForm {
 
     @Deprecated
 	public String getSubmitButtonText() {
-		return submitButton.getTitle();
+		return submitButton == null ? null: submitButton.getTitle();
 	}
 
     @Deprecated
 	public void setSubmitButtonText(String submitButtonText) {
+        if(submitButton == null) {
+            submitButton = new MenuItem();
+        }
 		submitButton.setTitle(submitButtonText);
 	}
 
     @Deprecated
 	public String getSubmitIcon() {
-		return submitButton.getIcon();
+		return submitButton == null ? null: submitButton.getIcon();
 	}
 
     @Deprecated
 	public void setSubmitIcon(String submitIcon) {
+        if(submitButton == null) {
+            submitButton = new MenuItem();
+        }
 		this.submitButton.setIcon(submitIcon);
 	}
 
