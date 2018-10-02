@@ -76,7 +76,7 @@ export class StartupService implements CanActivate {
                     next: (message) => { this.handleMessage(message); },
                     error: (error) => {
                         result.next(false);
-                        this.log.info('Startup failed');
+                        this.log.error('Startup failed');
                         this.handleError( error );
                     },
                     complete: () => {
@@ -98,7 +98,7 @@ export class StartupService implements CanActivate {
     }
 
     private handleError( error: string ) {
-        this.log.info(error);
+        this.log.error(error);
         if ( this.failedTask ) {
             this.failedTask.execute().subscribe(
                 {
