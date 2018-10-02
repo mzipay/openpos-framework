@@ -3,13 +3,13 @@ package org.jumpmind.pos.user.model;
 import java.util.Date;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 @Table(
         name = "operator_security_question",
         description = "A record of the Operator's answer to a security question that is put to the Operator when they have forgotten their Password and the system is trying to verify their identity and allow a new Password to be set.")
-public class UserSecurityQuestionModel extends Entity {
+public class UserSecurityQuestionModel extends AbstractModel {
 
     @Column(primaryKey = true,
             size = "16",

@@ -65,14 +65,14 @@ public class DBSession {
         this.queryTemplates = queryTemplates;
     }
 
-    public <T extends Entity> List<T> findAll(Class<T> clazz) {
+    public <T extends AbstractModel> List<T> findAll(Class<T> clazz) {
         QueryTemplate queryTemplate = new QueryTemplate();
         Query<T> query = new Query<T>().result(clazz);
         query.setQueryTemplate(queryTemplate);
         return query(query, new HashMap<>());
     }
 
-    public <T extends Entity> T findByNaturalId(Class<T> entityClass, String id) {
+    public <T extends AbstractModel> T findByNaturalId(Class<T> entityClass, String id) {
         Map<String, String> naturalColumnsToFields = databaseSchema.getEntityIdColumnsToFields(entityClass);
 
         if (naturalColumnsToFields.size() != 1) {
@@ -102,7 +102,7 @@ public class DBSession {
         }
     }
 
-    public <T extends Entity> T findByNaturalId(Class<T> entityClass, EntityId id) {
+    public <T extends AbstractModel> T findByNaturalId(Class<T> entityClass, EntityId id) {
         Map<String, String> entityIdColumnsToFields = databaseSchema.getEntityIdColumnsToFields(entityClass);
 
         QueryTemplate queryTemplate = new QueryTemplate();
@@ -143,7 +143,7 @@ public class DBSession {
         }
     }
 
-    public <T extends Entity> List<T> findByFields(Class<T> entityClass, Map<String, Object> fieldValues) {
+    public <T extends AbstractModel> List<T> findByFields(Class<T> entityClass, Map<String, Object> fieldValues) {
         Map<String, String> fieldsToColumns = databaseSchema.getEntityFieldsToColumns(entityClass);
 
         QueryTemplate queryTemplate = new QueryTemplate();
@@ -194,12 +194,12 @@ public class DBSession {
         return jdbcTemplate.update(sql, params);
     }
 
-    public <T extends Entity> List<T> query(Query<T> query) {
+    public <T extends AbstractModel> List<T> query(Query<T> query) {
         return query(query, (Map<String, Object>) null);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Entity> List<T> query(Query<T> query, String singleParam) {
+    public <T extends AbstractModel> List<T> query(Query<T> query, String singleParam) {
         populdateDefaultSelect(query);
         try {
             List<SqlStatement> sqlStatements = query.generateSQL(singleParam);
@@ -210,7 +210,7 @@ public class DBSession {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Entity> List<T> query(Query<T> query, Map<String, Object> params) {
+    public <T extends AbstractModel> List<T> query(Query<T> query, Map<String, Object> params) {
         populdateDefaultSelect(query);
         try {
             List<SqlStatement> sqlStatements = query.generateSQL(params);
@@ -222,13 +222,13 @@ public class DBSession {
 
     @SuppressWarnings("unchecked")
     protected <T> void populdateDefaultSelect(Query<T> query) {
-        boolean isEntityResult = Entity.class.isAssignableFrom(query.getResultClass());
+        boolean isEntityResult = AbstractModel.class.isAssignableFrom(query.getResultClass());
         if (queryTemplates.containsKey(query.getName())) {
             query.setQueryTemplate(queryTemplates.get(query.getName()));
         }
 
         if (isEntityResult && (query.getQueryTemplate().getSelects() == null || query.getQueryTemplate().getSelects().size() == 0)) {
-            Class<? extends Entity> entityClass = (Class<? extends Entity>) query.getResultClass();
+            Class<? extends AbstractModel> entityClass = (Class<? extends AbstractModel>) query.getResultClass();
             query.getQueryTemplate().setSelects(getSelectSql(entityClass));
         }
     }
@@ -246,7 +246,7 @@ public class DBSession {
         return columnNames;
     }
 
-    public void save(Entity entity) {
+    public void save(AbstractModel entity) {
         List<Table> tables = getValidatedTables(entity);
         for (Table table : tables) {
 
@@ -271,7 +271,7 @@ public class DBSession {
         }
     }
 
-    protected List<String> getSelectSql(Class<? extends Entity> entity) {
+    protected List<String> getSelectSql(Class<? extends AbstractModel> entity) {
         List<String> sqls = new ArrayList<>();
         List<Table> tables = getValidatedTables(entity);
         for (Table table : tables) {
@@ -282,7 +282,7 @@ public class DBSession {
         return sqls;
     }
 
-    protected void insert(Entity entity, Table table) {
+    protected void insert(AbstractModel entity, Table table) {
         if (StringUtils.isEmpty(entity.getCreateBy())) {
             entity.setCreateBy(sessionContext.get("CREATE_BY"));
         }
@@ -292,7 +292,7 @@ public class DBSession {
         excecuteDml(DmlType.INSERT, entity, table);
     }
 
-    protected int update(Entity entity, Table table) {
+    protected int update(AbstractModel entity, Table table) {
         if (StringUtils.isEmpty(entity.getCreateBy())) {
             entity.setCreateBy(sessionContext.get("CREATE_BY"));
         }
@@ -346,7 +346,7 @@ public class DBSession {
         }
     }
 
-    protected List<Table> getValidatedTables(Entity entity) {
+    protected List<Table> getValidatedTables(AbstractModel entity) {
         if (entity == null) {
             throw new PersistException("Failed to locate a database table for null entity class.");
         }
@@ -368,7 +368,7 @@ public class DBSession {
         }
     }
 
-    protected <T extends Entity> List<T> queryInternal(Class<T> resultClass, List<SqlStatement> statements)
+    protected <T extends AbstractModel> List<T> queryInternal(Class<T> resultClass, List<SqlStatement> statements)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
         List<T> objects = new ArrayList<T>();
@@ -399,9 +399,9 @@ public class DBSession {
                     }
                 }
 
-                if (object instanceof Entity) {
-                    addUnmatchedColumns(row, matchedColumns, (Entity) object);
-                    decorateRetrievedEntity((Entity) object);
+                if (object instanceof AbstractModel) {
+                    addUnmatchedColumns(row, matchedColumns, (AbstractModel) object);
+                    decorateRetrievedEntity((AbstractModel) object);
                 }
               
             }
@@ -412,7 +412,7 @@ public class DBSession {
 
     }
 
-    private void addUnmatchedColumns(Row row, Map<String, String> matchedColumns, Entity entity) {
+    private void addUnmatchedColumns(Row row, Map<String, String> matchedColumns, AbstractModel entity) {
         for (String rowColumn : row.keySet()) {
             if (!matchedColumns.containsKey(rowColumn)) {
                 entity.setAdditionalField(rowColumn, row.get(rowColumn));
@@ -420,13 +420,13 @@ public class DBSession {
         }
     }
 
-    protected void decorateRetrievedEntity(Entity entity) {
+    protected void decorateRetrievedEntity(AbstractModel entity) {
         EntitySystemInfo entitySystemInfo = new EntitySystemInfo(entity);
         entitySystemInfo.setRetrievalTime(new Date());
     }
 
-    public void saveAll(List<? extends Entity> entities) {
-        for (Entity entity : entities) {
+    public void saveAll(List<? extends AbstractModel> entities) {
+        for (AbstractModel entity : entities) {
             save(entity);
         }
     }

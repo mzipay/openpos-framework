@@ -3,11 +3,11 @@ package org.jumpmind.pos.user.model;
 import java.util.Date;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 @Table(name="password_history")
-public class PasswordHistoryModel extends Entity {
+public class PasswordHistoryModel extends AbstractModel {
     
 
     @Column(primaryKey=true)

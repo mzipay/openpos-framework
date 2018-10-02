@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 /**
@@ -17,7 +17,7 @@ import org.jumpmind.pos.persist.Table;
  * 
  */
 @Table(name="authority", description = "A government authority that levies sales taxes and on whose behalf the store collects these sales taxes.")
-public class AuthorityModel extends Entity implements Comparable<AuthorityModel> {
+public class AuthorityModel extends AbstractModel implements Comparable<AuthorityModel> {
 
     @Column(primaryKey = true)
     private String id;

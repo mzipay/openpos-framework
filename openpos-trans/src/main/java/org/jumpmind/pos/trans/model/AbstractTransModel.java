@@ -1,9 +1,9 @@
 package org.jumpmind.pos.trans.model;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 
-abstract public class AbstractTransModel extends Entity {
+abstract public class AbstractTransModel extends AbstractModel {
 
     private static final long serialVersionUID = 1L;
 

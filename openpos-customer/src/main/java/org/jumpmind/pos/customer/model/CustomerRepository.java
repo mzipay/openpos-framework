@@ -1,12 +1,6 @@
 package org.jumpmind.pos.customer.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
 import org.jumpmind.pos.persist.DBSession;
-import org.jumpmind.pos.persist.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;

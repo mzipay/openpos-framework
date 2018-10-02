@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 /**
@@ -17,7 +17,7 @@ import org.jumpmind.pos.persist.Table;
  * 
  */
 @Table(name="group_rule", description = "A rule that prescribes how a particular tax is to be applied to a group Items.")
-public class GroupRuleModel extends Entity implements Comparable<GroupRuleModel> {
+public class GroupRuleModel extends AbstractModel implements Comparable<GroupRuleModel> {
 
     @Column(primaryKey = true)
     private String id;

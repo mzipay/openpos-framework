@@ -31,7 +31,7 @@ import org.mapstruct.Qualifier;
 @Target({ElementType.TYPE, ElementType.FIELD})
 @Qualifier
 public @interface Table {
-    String name() default "";
+    String name();
     String description() default "";
     boolean definesPrimaryKey() default false;
 }

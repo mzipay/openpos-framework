@@ -1,11 +1,11 @@
 package org.jumpmind.pos.service.model;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 @Table(name="module")
-public class ModuleModel extends Entity {
+public class ModuleModel extends AbstractModel {
 
     @Column(primaryKey=true) 
     String installationId;

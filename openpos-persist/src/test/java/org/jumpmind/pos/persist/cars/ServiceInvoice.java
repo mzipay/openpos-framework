@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 @Table(name="service_invoice")
-public class ServiceInvoice extends Entity {
+public class ServiceInvoice extends AbstractModel {
     
     @Column(primaryKey=true)
     private Date invoiceDate;

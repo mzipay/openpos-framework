@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
 
-public abstract class Entity implements Serializable {
+public abstract class AbstractModel implements Serializable {
     
     private static final long serialVersionUID = 1L;
 

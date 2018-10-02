@@ -18,7 +18,7 @@ public class SimulatedScannerService extends AbstractSimulatedService implements
     
     
     public SimulatedScannerService() {
-        this.instance = this;
+        SimulatedScannerService.instance = this;
     }
 
     @Override

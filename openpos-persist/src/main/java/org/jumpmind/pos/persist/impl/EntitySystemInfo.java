@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 
 public class EntitySystemInfo {
     
@@ -20,7 +20,7 @@ public class EntitySystemInfo {
     private Map<String, Object> systemData;
 
     @SuppressWarnings("unchecked")
-    public EntitySystemInfo(Entity entity) {
+    public EntitySystemInfo(AbstractModel entity) {
         Field field = FieldUtils.getField(entity.getClass(), "systemInfo", FORCE_ACCESS);
         try {
         	if (field != null) {

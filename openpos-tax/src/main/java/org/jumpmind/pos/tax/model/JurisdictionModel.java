@@ -1,11 +1,13 @@
 package org.jumpmind.pos.tax.model;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 @Table(name="jurisdiction", description = "Tax Jurisdiction")
-public class JurisdictionModel extends Entity {
+public class JurisdictionModel extends AbstractModel {
+
+    private static final long serialVersionUID = 1L;
 
     @Column(primaryKey = true)
     private String id;

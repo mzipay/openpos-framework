@@ -3,7 +3,6 @@ package org.jumpmind.pos.tax.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.Query;

@@ -1,7 +1,7 @@
 package org.jumpmind.pos.tax.model;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 /**
@@ -11,7 +11,9 @@ import org.jumpmind.pos.persist.Table;
  * 
  */
 @Table(name="group", description = "A group of Items for which a TaxAuthority defines TaxGroupRules.")
-public class GroupModel extends Entity implements Comparable<GroupModel> {
+public class GroupModel extends AbstractModel implements Comparable<GroupModel> {
+
+    private static final long serialVersionUID = 1L;
 
     @Column(primaryKey = true)
     private String id;

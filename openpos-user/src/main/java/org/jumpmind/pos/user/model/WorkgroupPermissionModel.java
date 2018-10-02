@@ -1,11 +1,11 @@
 package org.jumpmind.pos.user.model;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 @Table(name="workgroup_permission")
-public class WorkgroupPermissionModel extends Entity {
+public class WorkgroupPermissionModel extends AbstractModel {
 
     @Column(primaryKey=true)
     private String workgroupId;

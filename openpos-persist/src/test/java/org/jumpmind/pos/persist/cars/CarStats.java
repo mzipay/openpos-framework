@@ -1,8 +1,8 @@
 package org.jumpmind.pos.persist.cars;
 
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 
-public class CarStats extends Entity {
+public class CarStats extends AbstractModel {
     
     private static final long serialVersionUID = 1L;
     private int count;

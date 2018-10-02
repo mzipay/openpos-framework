@@ -3,12 +3,12 @@ package org.jumpmind.pos.user.model;
 import java.util.List;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 @Table(name = "workgroup",
        description = "A group within a workforce that normally works together and has similar access control permissions.")
-public class WorkgroupModel extends Entity {
+public class WorkgroupModel extends AbstractModel {
     
     @Column(primaryKey=true)
     private String workgroupId;

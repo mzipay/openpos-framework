@@ -4,11 +4,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 @Table(name = "Device")
-public class DeviceModel extends Entity implements ITaggedElement {
+public class DeviceModel extends AbstractModel implements ITaggedElement {
+
+    private static final long serialVersionUID = 1L;
 
     @Column(primaryKey = true)
     private String deviceId;

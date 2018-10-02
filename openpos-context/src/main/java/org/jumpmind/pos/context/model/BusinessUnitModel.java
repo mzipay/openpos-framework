@@ -1,12 +1,13 @@
 package org.jumpmind.pos.context.model;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 @Table(name="business_unit")
-public class BusinessUnitModel extends Entity {
+public class BusinessUnitModel extends AbstractModel {
 
+    private static final long serialVersionUID = 1L;
     @Column(primaryKey = true)
     private String businessUnitId;
     

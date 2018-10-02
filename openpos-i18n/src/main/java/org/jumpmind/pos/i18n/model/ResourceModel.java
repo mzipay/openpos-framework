@@ -1,11 +1,11 @@
 package org.jumpmind.pos.i18n.model;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 @Table(name="resource", description = "Internationalization resource table")
-public class ResourceModel extends Entity {
+public class ResourceModel extends AbstractModel {
 
     @Column(primaryKey = true)
     private String baseName;

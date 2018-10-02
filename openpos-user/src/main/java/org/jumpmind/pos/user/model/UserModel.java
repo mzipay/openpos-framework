@@ -5,12 +5,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 
 @Table(name="user",
         description = "Security Identifier granting and denying access to the systems of the retail enterprise, and recorded upon the transaction originating from those systems.")
-public class UserModel extends Entity {
+public class UserModel extends AbstractModel {
 
     @Column(primaryKey = true)
     protected String username;

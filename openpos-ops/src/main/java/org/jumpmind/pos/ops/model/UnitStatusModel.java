@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.jumpmind.pos.persist.Column;
-import org.jumpmind.pos.persist.Entity;
+import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Table;
 import org.jumpmind.pos.trans.model.TransType;
 
 @Table(name = "unit_status")
-public class UnitStatusModel extends Entity implements Serializable {
+public class UnitStatusModel extends AbstractModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
