@@ -4,6 +4,7 @@ import { SelectionMode } from '../../../core';
 export class SelectableItemListComponentConfiguration<ItemType> {
     numResultsPerPage: number;
     items: ItemType[];
+    defaultSelectItemIndex: number;
     selectionMode: SelectionMode;
 }
 
@@ -48,7 +49,18 @@ export class SelectableItemListComponent<ItemType> {
         this.itemsToShow = this._config.items.slice((this.currentPage - 1) *
             this._config.numResultsPerPage, this._config.numResultsPerPage * this.currentPage);
 
-        if (this.defaultSelect && this.itemsToShow.length === 1) {
+        if (this.defaultSelect && this._config.defaultSelectItemIndex !== null && this._config.defaultSelectItemIndex !== undefined) {
+            switch (this._config.selectionMode) {
+                case SelectionMode.Single:
+                    this.selectedItem = this.itemsToShow[this._config.defaultSelectItemIndex];
+                    this.selectedItemChange.emit(this.selectedItem);
+                    break;
+                case SelectionMode.Multiple:
+                    this.selectedItemList.push(this.itemsToShow[this._config.defaultSelectItemIndex]);
+                    this.selectedItemListChange.emit(this.selectedItemList);
+                    break;
+            }
+        } else if (this.defaultSelect && this.itemsToShow.length === 1) {
             switch (this._config.selectionMode) {
                 case SelectionMode.Single:
                     this.selectedItem = this.itemsToShow[0];
