@@ -15,6 +15,8 @@ import org.jumpmind.pos.core.screen.IPromptScreen;
 
 public abstract class AbstractPromptScreenTranslator<T extends Screen> extends AbstractLegacyScreenTranslator<T> {
 
+    private boolean minMaxLengthRestrictionEnabled = true;
+    
 	public AbstractPromptScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
 	    this(legacyScreen, screenClass, null, null);
 	}
@@ -68,11 +70,15 @@ public abstract class AbstractPromptScreenTranslator<T extends Screen> extends A
                     }
                 }
                 
-                if (minLength != null) {
-                    promptScreen.setMinLength(Integer.parseInt(minLength));
-                }
-                if (maxLength != null) {
-                    promptScreen.setMaxLength(Integer.parseInt(maxLength));
+                // Only set the response min/max length if it hasn't already been set at this point.  Callers may have
+                // already set values on the screen.
+                if (this.isMinMaxLengthRestrictionEnabled()) {
+                    if (minLength != null && promptScreen.getMinLength() == null) {
+                        promptScreen.setMinLength(Integer.parseInt(minLength));
+                    }
+                    if (maxLength != null && promptScreen.getMaxLength() == null) {
+                        promptScreen.setMaxLength(Integer.parseInt(maxLength));
+                    }
                 }
             } else {
                 promptScreen.setEditable(false);
@@ -154,6 +160,14 @@ public abstract class AbstractPromptScreenTranslator<T extends Screen> extends A
 
     protected void setScreenResponseText(String responseText) {
         legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen).setResponseText(responseText);
+    }
+
+    public boolean isMinMaxLengthRestrictionEnabled() {
+        return minMaxLengthRestrictionEnabled;
+    }
+
+    public void setMinMaxLengthRestrictionEnabled(boolean minMaxLengthRestrictionEnabled) {
+        this.minMaxLengthRestrictionEnabled = minMaxLengthRestrictionEnabled;
     }
 
 }
