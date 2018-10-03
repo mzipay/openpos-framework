@@ -18,7 +18,7 @@ public class ItemRepository {
 //    private Query<RateRuleModel> taxRateRuleLookup = new Query<RateRuleModel>().named("taxRateRuleLookup").result(RateRuleModel.class);
 
     @Autowired
-    @Qualifier("itemSession")
+    @Qualifier("itmSession")
     @Lazy
     private DBSession dbSession;
 

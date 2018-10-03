@@ -1,8 +1,6 @@
 package org.jumpmind.pos.tax.service;
 
 import org.jumpmind.pos.service.EndpointDispatcher;
-import org.jumpmind.pos.tax.model.TaxCalculationRequest;
-import org.jumpmind.pos.tax.model.TaxCalculationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

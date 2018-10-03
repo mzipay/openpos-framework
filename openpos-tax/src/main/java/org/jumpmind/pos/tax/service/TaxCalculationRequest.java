@@ -1,8 +1,10 @@
-package org.jumpmind.pos.tax.model;
+package org.jumpmind.pos.tax.service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.jumpmind.pos.tax.model.TaxableItem;
 
 public class TaxCalculationRequest {
 

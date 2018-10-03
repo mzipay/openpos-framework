@@ -10,10 +10,10 @@ import java.util.List;
 
 import org.jumpmind.pos.persist.cars.TestPersistCarsConfig;
 import org.jumpmind.pos.tax.model.TaxAmount;
-import org.jumpmind.pos.tax.model.TaxCalculationRequest;
-import org.jumpmind.pos.tax.model.TaxCalculationResponse;
 import org.jumpmind.pos.tax.model.TaxableItem;
 import org.jumpmind.pos.tax.service.CalculateTaxEndpoint;
+import org.jumpmind.pos.tax.service.TaxCalculationRequest;
+import org.jumpmind.pos.tax.service.TaxCalculationResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

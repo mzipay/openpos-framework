@@ -19,6 +19,8 @@ import org.jumpmind.pos.persist.Table;
 @Table(name="authority", description = "A government authority that levies sales taxes and on whose behalf the store collects these sales taxes.")
 public class AuthorityModel extends AbstractModel implements Comparable<AuthorityModel> {
 
+    private static final long serialVersionUID = 1L;
+
     @Column(primaryKey = true)
     private String id;
 
