@@ -1,11 +1,13 @@
-package org.jumpmind.pos.tax.model;
+package org.jumpmind.pos.tax.service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.jumpmind.pos.tax.model.ItemTax;
+import org.jumpmind.pos.tax.model.TaxAmount;
 
 public class TaxCalculationResponse {
 

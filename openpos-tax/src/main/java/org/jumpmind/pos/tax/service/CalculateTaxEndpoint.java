@@ -12,8 +12,6 @@ import org.jumpmind.pos.tax.model.ItemTax;
 import org.jumpmind.pos.tax.model.JurisdictionModel;
 import org.jumpmind.pos.tax.model.RateRuleModel;
 import org.jumpmind.pos.tax.model.TaxAmount;
-import org.jumpmind.pos.tax.model.TaxCalculationRequest;
-import org.jumpmind.pos.tax.model.TaxCalculationResponse;
 import org.jumpmind.pos.tax.model.TaxConstants;
 import org.jumpmind.pos.tax.model.TaxContainer;
 import org.jumpmind.pos.tax.model.TaxRepository;

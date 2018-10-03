@@ -8,10 +8,10 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 import org.jumpmind.pos.tax.model.TaxAmount;
-import org.jumpmind.pos.tax.model.TaxCalculationRequest;
-import org.jumpmind.pos.tax.model.TaxCalculationResponse;
 import org.jumpmind.pos.tax.model.TaxableItem;
 import org.jumpmind.pos.tax.service.CalculateTaxEndpoint;
+import org.jumpmind.pos.tax.service.TaxCalculationRequest;
+import org.jumpmind.pos.tax.service.TaxCalculationResponse;
 import org.junit.Before;
 import org.junit.Test;
 

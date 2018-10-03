@@ -19,6 +19,8 @@ import org.jumpmind.pos.persist.Table;
 @Table(name="group_rule", description = "A rule that prescribes how a particular tax is to be applied to a group Items.")
 public class GroupRuleModel extends AbstractModel implements Comparable<GroupRuleModel> {
 
+    private static final long serialVersionUID = 1L;
+
     @Column(primaryKey = true)
     private String id;
 
