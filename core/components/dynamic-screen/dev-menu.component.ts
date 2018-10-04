@@ -21,6 +21,7 @@ import { IScreen } from './screen.interface';
 import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem, IMessageHandler } from '../../interfaces';
 import { FileViewerComponent, TemplateDirective } from '../../../shared';
 import { PersonalizationService } from '../../services/personalization.service';
+import { PersonalizationComponent } from '../personalization/personalization.component';
 
 @Component({
     selector: 'app-dev-menu',
@@ -427,7 +428,8 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
         this.personalization.dePersonalize();
         this.session.unsubscribe();
         this.session.cancelLoading();
-        this.session.showScreen(this.personalization.getPersonalizationScreen());
+
+        this.dialog.open( PersonalizationComponent ).afterClosed().subscribe( () => this.personalization.refreshApp() );
     }
 
     public onDevClearLocalStorage() {

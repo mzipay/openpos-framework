@@ -85,11 +85,6 @@ export class PersonalizationService {
         return url;
     }
 
-    public getPersonalizationScreen(): any {
-        // tslint:disable-next-line:max-line-length
-        return { type: 'Screen', screenType: 'Personalization', sequenceNumber: Math.floor(Math.random() * 2000), name: 'Device Setup', refreshAlways: true, template: { type: 'Blank', dialog: false } };
-    }
-
     public getTheme(): string {
         const localTheme = localStorage.getItem('theme');
         if (this.theme) {
