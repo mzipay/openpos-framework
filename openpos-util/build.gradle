@@ -1,5 +1,9 @@
 apply from: '../openpos-core/common.gradle'
 
 dependencies {
-   compile group: 'org.javapos', name: 'javapos', version: '1.14.1'
+    compile group: 'org.javapos', name: 'javapos', version: '1.14.1'
+    compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion") {
+        exclude module: "spring-boot-starter-tomcat"
+        exclude module: "spring-boot-starter-logging"
+    }   
 }

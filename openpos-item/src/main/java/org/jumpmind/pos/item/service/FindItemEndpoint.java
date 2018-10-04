@@ -15,6 +15,8 @@ public class FindItemEndpoint {
 
     @Endpoint("/findItem")
     public FindItemResponse find(FindItemRequest request) {
+        String itemId = request.getItemId();
+        
         // 1. look up in item id
         // 2. look up in biz unit item
         // 3. look up in item

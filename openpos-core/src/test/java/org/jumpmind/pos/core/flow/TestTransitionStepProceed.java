@@ -1,9 +1,7 @@
 package org.jumpmind.pos.core.flow;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jumpmind.pos.core.service.DeviceService;
 import org.junit.Assert;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestTransitionStepProceed implements ITransitionStep {
     

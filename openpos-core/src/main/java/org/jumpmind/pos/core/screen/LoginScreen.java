@@ -27,14 +27,14 @@ public class LoginScreen extends DynamicFormScreen {
     @Override
     public Screen asDialog() {
         super.asDialog();
-        setSubmitAction("Login");
+        setSubmitButton(new MenuItem("Login"));
         return this;
     }
     
     @Override
     public Screen asDialog(DialogProperties dialogProperties) {
         super.asDialog(dialogProperties);
-        setSubmitAction("Login");
+        setSubmitButton(new MenuItem("Login"));
         return this;
     }
 
