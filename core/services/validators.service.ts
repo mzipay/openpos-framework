@@ -35,6 +35,7 @@ export class ValidatorsService {
         this.validators.set('en-us', USValidators);
         this.validators.set('us', USValidators);
         this.validators.set('ca', CAValidators);
+        this.validators.set('en-ca', CAValidators);
 
         this.validators.set('NO-LOCALE', NOLOCALEValidators);
     }
