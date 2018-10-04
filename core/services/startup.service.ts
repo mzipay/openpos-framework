@@ -53,6 +53,8 @@ export class StartupService implements CanActivate {
             this.startupDialogRef = this.matDialog.open(
                 this.startupComponent,
                 {
+                    width: '80%',
+                    height: '80%',
                     disableClose: true,
                     hasBackdrop: false
                 });
@@ -126,6 +128,8 @@ export class StartupService implements CanActivate {
                 this.startupFailedComponent, {
                     disableClose: true,
                     hasBackdrop: false,
+                    width: '80%',
+                    height: '80%',
                     data: {
                         error: error,
                         messages: this.allMessages
