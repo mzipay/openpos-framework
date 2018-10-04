@@ -53,7 +53,7 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
             this.sessionService.response = scan;
             this.sessionService.onAction('Scan');
         } else {
-            this.log.info(`Not publishing barcode '${scan.value}' because a dialog is showing`);
+            this.log.warn(`Not publishing barcode '${scan.value}' because a dialog is showing`);
         }
     }
 }
