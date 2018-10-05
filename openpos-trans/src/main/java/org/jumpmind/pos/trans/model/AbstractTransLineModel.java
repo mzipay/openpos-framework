@@ -11,7 +11,7 @@ public class AbstractTransLineModel extends AbstractTransModel {
     
     boolean voided;
     
-    ItemEntryMethodCode entryMethodCode;    
+    LineEntryMethodCode entryMethodCode;    
     
     public void setLineSequenceNumber(int lineSequenceNumber) {
         this.lineSequenceNumber = lineSequenceNumber;
@@ -29,11 +29,11 @@ public class AbstractTransLineModel extends AbstractTransModel {
         this.voided = voided;
     }
 
-    public ItemEntryMethodCode getEntryMethodCode() {
+    public LineEntryMethodCode getEntryMethodCode() {
         return entryMethodCode;
     }
 
-    public void setEntryMethodCode(ItemEntryMethodCode entryMethodCode) {
+    public void setEntryMethodCode(LineEntryMethodCode entryMethodCode) {
         this.entryMethodCode = entryMethodCode;
     }
 

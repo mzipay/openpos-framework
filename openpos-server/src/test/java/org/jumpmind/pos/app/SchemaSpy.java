@@ -9,7 +9,7 @@ public class SchemaSpy {
 
     public static void main(String[] args) throws Exception {
         FileUtils.deleteDirectory(new File("build/schemaspy"));
-        Main.main(new String[] { "-t","src/test/resources/schemaspy.properties","-u","","-p","","-o","build/schemaspy","-s","PUBLIC"});
+        Main.main(new String[] { "-t","src/test/resources/schemaspy.properties","-u","","-p","","-o","build/schemaspy","-s","PUBLIC", "-gv", "/usr/local/Cellar/graphviz/2.40.1", "-renderer", ":quartz"});
     }
 
 }

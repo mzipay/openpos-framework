@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class CustomerModule extends AbstractModule {
 
-    protected final static String NAME = "customer";
+    protected final static String NAME = "cust";
 
     @Override
     public String getName() {
@@ -30,7 +30,7 @@ public class CustomerModule extends AbstractModule {
 
     @Override
     public String getTablePrefix() {
-        return "customer";
+        return NAME;
     }
 
     @Override
