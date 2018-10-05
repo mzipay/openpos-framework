@@ -10,6 +10,8 @@ import org.jumpmind.pos.persist.Table;
        description = "A group within a workforce that normally works together and has similar access control permissions.")
 public class WorkgroupModel extends AbstractModel {
     
+    private static final long serialVersionUID = 1L;
+
     @Column(primaryKey=true)
     private String workgroupId;
 

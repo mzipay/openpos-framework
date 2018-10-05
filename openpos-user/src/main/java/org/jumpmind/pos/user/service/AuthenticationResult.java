@@ -8,6 +8,7 @@ import org.jumpmind.pos.user.model.UserModel;
 
 public class AuthenticationResult extends ServiceResult {
     
+    private static final long serialVersionUID = 1L;
     private String authenticationCode;
     private UserModel user;
     private List<UserMessage> userMessages = new ArrayList<>();

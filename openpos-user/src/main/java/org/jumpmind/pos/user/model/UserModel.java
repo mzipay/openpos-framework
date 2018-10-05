@@ -12,6 +12,8 @@ import org.jumpmind.pos.persist.Table;
         description = "Security Identifier granting and denying access to the systems of the retail enterprise, and recorded upon the transaction originating from those systems.")
 public class UserModel extends AbstractModel {
 
+    private static final long serialVersionUID = 1L;
+
     @Column(primaryKey = true)
     protected String username;
     

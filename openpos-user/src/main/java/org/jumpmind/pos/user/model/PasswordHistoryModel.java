@@ -10,6 +10,7 @@ import org.jumpmind.pos.persist.Table;
 public class PasswordHistoryModel extends AbstractModel {
     
 
+    private static final long serialVersionUID = 1L;
     @Column(primaryKey=true)
     private String username;
     @Column(primaryKey=true)

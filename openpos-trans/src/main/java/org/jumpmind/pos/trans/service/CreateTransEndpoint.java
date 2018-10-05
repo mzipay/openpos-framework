@@ -33,9 +33,9 @@ public class CreateTransEndpoint {
         transaction.setBusinessUnitId(request.getBusinessUnitId());
         transaction.setDeviceId(request.getDeviceId());
         transaction.setTransType(request.getTransType());
-        transaction.setTransStatus(TransStatus.IN_PROGRESS.name());
+        transaction.setTransStatus(TransStatus.IN_PROGRESS);
         transaction.setBeginTime(new Date());
-        transaction.setOperatorUsername(request.getUsername());
+        transaction.setUsername(request.getUsername());
         saveTransactionQueueEndpoint.saveInBackground(transaction);
         return new CreateTransResult(transaction);
     }

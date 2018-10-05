@@ -7,6 +7,8 @@ import org.jumpmind.pos.persist.Table;
 @Table(name="permission", description = "A table that associates workgroups with resources and specifies their access level.")
 public class PermissionModel extends AbstractModel {
 
+    private static final long serialVersionUID = 1L;
+
     @Column(primaryKey=true,
             description = "e.g. sell.apply.discount OR sell.*")
     private String permissionId;

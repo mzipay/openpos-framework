@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ChangePasswordEndpoint {
     
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     
     @Autowired
-    private UserHelper userHelper;
+    UserHelper userHelper;
 
     @Endpoint("/changePassword")
     public ServiceResult changePassword(
@@ -31,7 +31,7 @@ public class ChangePasswordEndpoint {
             ServiceResult serviceResult = new ServiceResult();
             serviceResult.setResultStatus("FAILURE");
             
-            String currentPassword = userHelper.getCurrentPassword(user);
+            //String currentPassword = userHelper.getCurrentPassword(user);
 
             // TODO check existing password. Support password hashed.
 //            if (!StringUtils.equals(oldPassword, currentPassword)) {

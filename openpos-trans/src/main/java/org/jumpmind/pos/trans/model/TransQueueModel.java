@@ -14,7 +14,7 @@ public class TransQueueModel  extends AbstractTransModel {
     String payload;
     
     @Column
-    String transStatus;
+    TransStatus transStatus;
     
     public TransQueueModel() {
     }
@@ -35,11 +35,11 @@ public class TransQueueModel  extends AbstractTransModel {
         return payload;
     }
     
-    public void setTransStatus(String transStatus) {
+    public void setTransStatus(TransStatus transStatus) {
         this.transStatus = transStatus;
     }
     
-    public String getTransStatus() {
+    public TransStatus getTransStatus() {
         return transStatus;
     }
 }

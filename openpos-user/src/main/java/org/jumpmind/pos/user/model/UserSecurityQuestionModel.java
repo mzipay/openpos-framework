@@ -11,6 +11,8 @@ import org.jumpmind.pos.persist.Table;
         description = "A record of the Operator's answer to a security question that is put to the Operator when they have forgotten their Password and the system is trying to verify their identity and allow a new Password to be set.")
 public class UserSecurityQuestionModel extends AbstractModel {
 
+    private static final long serialVersionUID = 1L;
+
     @Column(primaryKey = true,
             size = "16",
             description = "The corresponding SecurityQuestion id.")

@@ -7,6 +7,8 @@ import org.jumpmind.pos.persist.Table;
 @Table(name="workgroup_permission")
 public class WorkgroupPermissionModel extends AbstractModel {
 
+    private static final long serialVersionUID = 1L;
+
     @Column(primaryKey=true)
     private String workgroupId;
     

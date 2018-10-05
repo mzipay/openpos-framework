@@ -25,7 +25,7 @@ public class FinalizeTransEndpoint {
     public ServiceResult saveTransaction(SaveTransRequest request) {
         TransModel transaction = request.getTransaction();
         transaction.setEndTime(new Date());
-        transaction.setTransStatus(TransStatus.COMPLETED.name());
+        transaction.setTransStatus(TransStatus.COMPLETED);
         repository.save(transaction);
         saveTransactionQueueEndpoint.save(transaction);
         return new ServiceResult();

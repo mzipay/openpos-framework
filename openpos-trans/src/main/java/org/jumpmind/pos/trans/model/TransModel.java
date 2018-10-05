@@ -14,19 +14,22 @@ public class TransModel extends AbstractTransModel {
     private String transType;
 
     @Column
-    private String transStatus;
+    private TransStatus transStatus;
 
     @Column
     private String businessUnitId;
 
     @Column
-    private String operatorUsername;
+    private String username;
 
     @Column
     private Date beginTime;
 
     @Column
-    private Date endTime;
+    private Date endTime;      
+    
+    @Column
+    private boolean keyedOffline;
 
     public String getTransType() {
         return transType;
@@ -36,11 +39,11 @@ public class TransModel extends AbstractTransModel {
         this.transType = transType;
     }
 
-    public String getTransStatus() {
+    public TransStatus getTransStatus() {
         return transStatus;
     }
 
-    public void setTransStatus(String transStatus) {
+    public void setTransStatus(TransStatus transStatus) {
         this.transStatus = transStatus;
     }
 
@@ -52,12 +55,12 @@ public class TransModel extends AbstractTransModel {
         this.businessUnitId = businessUnitId;
     }
 
-    public String getOperatorUsername() {
-        return operatorUsername;
+    public String getUsername() {
+        return username;
     }
 
-    public void setOperatorUsername(String operatorUsername) {
-        this.operatorUsername = operatorUsername;
+    public void setUsername(String operatorUsername) {
+        this.username = operatorUsername;
     }
 
     public Date getBeginTime() {
@@ -74,6 +77,14 @@ public class TransModel extends AbstractTransModel {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public boolean isKeyedOffline() {
+        return keyedOffline;
+    }
+
+    public void setKeyedOffline(boolean keyedOffline) {
+        this.keyedOffline = keyedOffline;
     }
 
     
