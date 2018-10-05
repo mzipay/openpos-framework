@@ -1,6 +1,6 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px;">
 	<mat-card fxFlex="0 1 100%" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
-		<mat-card-content #scrollList ngClass.xs="xs">
+		<mat-card-content fxFlex="100%" #scrollList ngClass.xs="xs">
 			<mat-toolbar *ngIf="selectedItems.length > 0" class="page-content-card" color="primary" >
 				<span>{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</span>
 				<span fxFlex="1 1 auto"></span>
@@ -12,7 +12,7 @@
 			</mat-toolbar>
 			<app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems" (selectedItemListChange)="onItemListChange($event)">
 				<ng-template let-item>
-					<div fxLayoutAlign="space-between" fxLayout.xs="column" >
+					<div fxLayoutAlign="space-between" fxLayout.xs="column" [ngClass]="item.type" style="margin:-15px;padding:15px">
 						<div fxFlex="90" fxAlign="left">
 							<span [ngClass]="item.prop65Item ? 'warn' : ''">
 								{{item.description}}
