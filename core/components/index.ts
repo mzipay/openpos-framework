@@ -9,3 +9,4 @@ export * from './startup/startup.component';
 export * from './startup/personalization-startup-task';
 export * from './startup/startup-task-data';
 export * from './startup/startup-task-names';
+export * from './openpos-app/openpos-app.component';

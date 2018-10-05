@@ -16,14 +16,15 @@ import {
     ConfirmationDialogComponent,
     PersonalizationComponent,
     DynamicScreenComponent,
-    LoaderComponent
+    LoaderComponent,
+    OpenposAppComponent
 } from './components';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { StartupComponent } from './components/startup/startup.component';
 import { PersonalizationService } from './services/personalization.service';
 import { StompRService } from '@stomp/ng2-stompjs';
 import { SubscribeToSessionTask } from './components/startup/subscribe-to-session-task';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Logger } from './services/logger.service';
 import { StartupFailedComponent } from './components/startup/startup-failed.component';
 import { MatDialog } from '@angular/material';
@@ -37,6 +38,7 @@ import { FinalStartupTask } from './components/startup/final-startup-task';
         StartupFailedComponent
     ],
     declarations: [
+        OpenposAppComponent,
         DynamicScreenComponent,
         DevMenuComponent,
         LoaderComponent,
@@ -46,10 +48,12 @@ import { FinalStartupTask } from './components/startup/final-startup-task';
         StartupFailedComponent
     ],
     imports: [
-        SharedModule
+        SharedModule,
+        RouterModule
     ],
     exports: [
-        LoaderComponent
+        LoaderComponent,
+        OpenposAppComponent
     ],
     providers: [
         HttpClient,
