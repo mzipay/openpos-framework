@@ -82,7 +82,7 @@ export class DialogService {
             return screenType === this.lastDialogType && this.dialogRef !== null;
         }
 
-        return this.dialogRef !== null;
+        return this.dialogRef && this.dialogRef !== null;
     }
 
     private updateDialog(dialog?: any): void {
