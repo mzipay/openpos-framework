@@ -1,7 +1,10 @@
 <div *ngIf="label" class="label">
-        {{label}}
+    {{label}}
 </div>
 <div [formGroup]="formGroup" class="counter">
+    <div *ngIf="iconName">
+        <app-icon matPrefix iconName="{{iconName}}" iconClass="material-icons"></app-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
     <button mat-icon-button type="button" class="primary-background" [disabled]="minusDisabled" (click)="decrementQty()">
         <mat-icon>remove</mat-icon>
     </button>
@@ -18,4 +21,3 @@
 <mat-error>
     <app-show-errors class="error" [control]="formGroup.controls[controlName]"></app-show-errors>
 </mat-error>
-

@@ -21,6 +21,7 @@ import { FormGroup } from '@angular/forms';
     @Input() keyboardLayout: string;
     @Input() attrType: string;
     @Input() placeholder: string;
+    @Input() iconName: string;
 
     @Output() valueChange = new EventEmitter<any>();
 
