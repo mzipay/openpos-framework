@@ -54,6 +54,12 @@ export class SellComponent extends AbstractTemplate {
     return enabled;
   }
 
+  public onStatusClick($event: any) {
+    if (this.template.allowRegisterStatusClickAction) {
+      this.session.onAction('OfflineStatusClick');
+    }
+  }
+
   private initializeDrawerMediaSizeHandling() {
     const openMap = new Map([
       ['xs', false],

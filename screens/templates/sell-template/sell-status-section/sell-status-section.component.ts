@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { SellStatusSectionData } from './sell-status-section.data';
 import { timer } from 'rxjs';
 import { Configuration } from '../../../../configuration/configuration';
@@ -13,6 +13,8 @@ import { Configuration } from '../../../../configuration/configuration';
     @Input()
     data: SellStatusSectionData;
 
+    @Output() registerStatusClick: EventEmitter<void> = new EventEmitter<void>();
+    
     date = Date.now();
     timer: number;
 
@@ -26,7 +28,10 @@ import { Configuration } from '../../../../configuration/configuration';
     }
 
     showRegisterStatus(): boolean {
-        return this.data.registerStatus && Configuration.showRegisterStatus;
+        return this.data.registerStatus && Configuration.showRegisterStatus && this.data.registerStatus === 'Offline';
     }
 
+    onRegisterStatusClick(): void {
+        this.registerStatusClick.emit();
+    }
   }

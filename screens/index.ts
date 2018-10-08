@@ -38,6 +38,8 @@ export * from './warranty-coverage/warranty-coverage.component';
 export * from './catalog-browser/catalog-browser.component';
 export * from './multiselect-item-list/multiselect-item-list.component';
 export * from './item-options/item-options.component';
+export * from './system-status/system-status.component';
+export { ISystemStatusScreen } from './system-status/system-status-screen.interface';
 
 export * from './pos-screen/pos-screen.component';
 

@@ -12,5 +12,6 @@ export interface ISellTemplate {
     operatorText: string;
     timestampBegin: number;
     registerStatus: string;
+    allowRegisterStatusClickAction: boolean;
 }
 

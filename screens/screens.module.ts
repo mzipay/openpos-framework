@@ -39,6 +39,7 @@ import { SelectionListComponent } from './selection-list/selection-list.componen
 import { PrintPreviewComponent } from './print-preview/print-preview.component';
 import { ItemSearchResultsComponent } from './item-search-results/item-search-results.component';
 import { ItemOptionsComponent } from './item-options/item-options.component';
+import { SystemStatusComponent } from './system-status/system-status.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -56,6 +57,7 @@ import { ScreenConstants } from './screen.constants';
 import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
 import { SellStatusSectionComponent } from './templates/sell-template/sell-status-section/sell-status-section.component';
 import { JournalSearchResultsComponent } from './journal-search-results/journal-search-results.component';
+import { SystemStatusDialogComponent } from './system-status/system-status-dialog.component';
 
 const screens = [
     BasicItemSearchComponent,
@@ -94,7 +96,8 @@ const screens = [
     CatalogBrowserComponent,
     ItemSearchResultsComponent,
     ItemOptionsComponent,
-    JournalSearchResultsComponent
+    JournalSearchResultsComponent,
+    SystemStatusComponent
 ];
 
 const dialogs = [
@@ -103,7 +106,8 @@ const dialogs = [
     LoadingDialogComponent,
     LoginDialogComponent,
     MultipleDynamicFormDialogComponent,
-    VersionComponent
+    VersionComponent,
+    SystemStatusDialogComponent
 ];
 
 const templates = [

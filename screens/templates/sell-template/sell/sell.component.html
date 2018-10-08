@@ -55,7 +55,7 @@
                             <div style="flex:1 1 50%; min-height: 50%">
                                 <ng-template appScreen></ng-template>
                             </div>
-                            <app-sell-status-section fxFlex="0 1 auto" [data]="statusSection"></app-sell-status-section>
+                            <app-sell-status-section fxFlex="0 1 auto" [data]="statusSection" (registerStatusClick)="onStatusClick($event)"></app-sell-status-section>
                          </mat-drawer-content>
                     </mat-drawer-container>
             </mat-card-content>
