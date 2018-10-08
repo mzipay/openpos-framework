@@ -2,7 +2,7 @@ import { Logger } from './../../services/logger.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { SessionService } from '../../services';
+import { SessionService, PingResult } from '../../services';
 import { IScreen } from '../dynamic-screen/screen.interface';
 import { PersonalizationService } from '../../services/personalization.service';
 
@@ -40,8 +40,23 @@ export class PersonalizationComponent implements IScreen, OnInit {
             this.firstFormGroup.get('sslEnabled').value);
     }
 
-    serverValidator = (control: AbstractControl) => {
+    serverValidator = async (control: AbstractControl) => {
         clearTimeout(this.checkTimeout);
+        const serverName = control.get('serverName').value;
+        const serverPort = control.get('serverPort').value;
+        const sslEnabled: boolean = control.get('sslEnabled').value;
+
+        this.checkTimeout = new Promise((resolve, reject) => setTimeout(resolve(null), 1000));
+        const result = await Promise.all([
+            this.session.ping({serverName: serverName, serverPort: serverPort, useSsl: sslEnabled}),
+            this.checkTimeout
+        ]);
+        if (result[0].success) {
+            return null;
+        } else {
+            return result[0];
+        }
+/*
         return new Promise((resolve, reject) => {
             this.checkTimeout = setTimeout(() => {
                 const serverName = control.get('serverName').value;
@@ -72,6 +87,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
 
             }, 1000);
         });
+        */
     }
 
 }

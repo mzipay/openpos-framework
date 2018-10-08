@@ -23,6 +23,7 @@ import {
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
 import { PluginService } from './plugin.service';
 import { AppInjector } from '../app-injector';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 // export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
@@ -68,7 +69,8 @@ export class SessionService implements IMessageHandler {
         private stompService: StompRService,
         public dialogService: MatDialog,
         public zone: NgZone,
-        protected personalization: PersonalizationService
+        protected personalization: PersonalizationService,
+        private http: HttpClient
     ) {
 
         this.loaderState = new LoaderState(this, personalization);
@@ -225,6 +227,43 @@ export class SessionService implements IMessageHandler {
         return valid;
     }
 
+    public async ping(pingParams?: PingParams): Promise<PingResult> {
+        let url = '';
+        if (pingParams) {
+            let protocol = 'http://';
+            if (pingParams.useSsl) {
+                protocol = 'https://';
+            }
+            url = protocol + pingParams.serverName;
+            if (pingParams.serverPort) {
+                url = url + ':' + pingParams.serverPort;
+            }
+            url = url + '/ping';
+
+        } else {
+            url = `${this.personalization.getServerBaseURL()}/ping`;
+        }
+
+        this.log.info('testing url: ' + url);
+
+        let pingError: any = null;
+        try {
+            const httpResult = await this.http.get(url, {}).toPromise();
+            if (httpResult) {
+                this.log.info('successful validation of ' + url);
+                return {success: true};
+            } else {
+                pingError = {message: '?'};
+            }
+        } catch (error) {
+            pingError = error;
+        }
+
+        if (pingError) {
+            this.log.info('bad validation of ' + url + ' with an error message of :' + pingError.message);
+            return { success: false, message: pingError.message };
+        }
+    }
 
     public unsubscribe() {
         if (!this.subscribed) {
@@ -474,7 +513,15 @@ export class SessionService implements IMessageHandler {
         }
         return returnLocale || DEFAULT_LOCALE;
     }
-
 }
 
+export interface PingResult {
+    success: boolean;
+    message?: string;
+}
 
+export interface PingParams {
+    serverName: string;
+    serverPort: string;
+    useSsl: boolean;
+}

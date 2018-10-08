@@ -14,8 +14,8 @@
                     <span *ngIf="firstFormGroup.status === 'PENDING'">
                         Trying to ping server ...
                     </span>
-                    <span class="warn" *ngIf="firstFormGroup.errors && firstFormGroup.errors.noping ">
-                        Could not ping the server: {{firstFormGroup.errors.noping}}
+                    <span class="warn" *ngIf="firstFormGroup.errors && firstFormGroup.errors.message">
+                        Could not ping the server: {{firstFormGroup.errors.message}}
                     </span>
                     <span class="warn" *ngIf="firstFormGroup.get('serverPort').errors && firstFormGroup.get('serverPort').errors.pattern ">
                         The port should be numbers only
