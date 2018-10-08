@@ -17,6 +17,7 @@ public class DefaultItem implements IItem, Serializable {
     private List<String> labels = new ArrayList<>();
     private List<FormDisplayField> fields = new ArrayList<>();;
     private boolean selected = false;
+    private String type;
 
     public DefaultItem() {}
     
@@ -107,6 +108,14 @@ public class DefaultItem implements IItem, Serializable {
     
     public void addLabel( String label ) {
         this.labels.add( label );
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
     
 }
