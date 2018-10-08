@@ -46,6 +46,7 @@ import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.compo
 import { JournalSearchResultsComponent } from './journal-search-results/journal-search-results.component';
 import { SystemStatusComponent } from './system-status/system-status.component';
 import { SystemStatusDialogComponent } from './system-status/system-status-dialog.component';
+import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 
 export const ScreenConstants = {
     screens : [
@@ -98,6 +99,7 @@ export const ScreenConstants = {
         { name: 'MultipleDynamicForm', component: MultipleDynamicFormDialogComponent },
         { name: 'Dialog', component: DialogComponent },
         { name: 'LoadingDialog', component: LoadingDialogComponent },
+        { name: 'Prompt', component: PromptDialogComponent },
 
         // Copied from the screen service. may eventually want to make dialog specific versions of these
         { name: 'BasicItemSearch', component: BasicItemSearchComponent },
@@ -109,7 +111,6 @@ export const ScreenConstants = {
         { name: 'ItemList', component: ItemListComponent },
         { name: 'MultiselectItemList', component: MultiselectItemListComponent },
         { name: 'PaymentStatus', component: PaymentStatusComponent },
-        { name: 'Prompt', component: PromptComponent },
         { name: 'PromptWithOptions', component: PromptWithOptionsComponent },
         { name: 'PromptWithInfo', component: PromptWithInfoComponent },
         { name: 'Transaction', component: TransactionComponent },
