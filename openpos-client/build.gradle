@@ -5,7 +5,7 @@ plugins {
 node { 
   version = '9.3.0' 
   npmVersion = '5.6.0' 
-  download = true 
+  download = false 
   workDir = file("${openposDir}/node")
   nodeModulesDir = file("./")  
 } 
@@ -24,15 +24,6 @@ task npmClean(type: Delete) {
 	delete "./coverage"
 }
 clean.dependsOn(npmClean)
-
-npmSetup.doFirst {
-  if (gradle.startParameter.taskNames.contains('develop')) {
-	// Use shared copy of node when setting up dev environment.
-	// This allows check_core_lib_installed to find openpos-client-core-lib
-	// in the developers shared node modules.
-    node.download = false; 
-  }
-}
 
 task check_core_lib_installed(type: NpmTask) {  
   ignoreExitValue true  
