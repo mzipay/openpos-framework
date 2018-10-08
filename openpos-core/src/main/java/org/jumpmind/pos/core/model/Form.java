@@ -251,6 +251,18 @@ public class Form implements Serializable {
         return formField;
     }
     
+    public FormField createUSPostalCodeField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.USPostalCode, required);
+        formField.setValue(value);
+        return formField;
+    }
+    
+    public FormField addUSPostalCodeField(String fieldId, String label, String value, boolean required) {
+        FormField formField = createUSPostalCodeField(fieldId, label, value, required);
+        formElements.add(formField);
+        return formField;
+    }
+    
     public static FormField createPhoneField(String fieldId, String label, String value, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Phone, required);
         formField.setValue(value);

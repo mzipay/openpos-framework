@@ -16,6 +16,7 @@ public enum FieldInputType {
     Percent,
     /** Only allows values of 100, 0 or 2 digit positive integer percentage */
     PercentInt,
+    USPostalCode,
     PostalCode,
     Phone,
     Money,

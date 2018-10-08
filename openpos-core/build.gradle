@@ -29,8 +29,6 @@ processResources {
 }
 
 dependencies {
-
-	compile project(":openpos-cache")
 	compile project(":openpos-util")
     compile "net.java.dev.jna:jna:$jnaVersion"
     compile "net.java.dev.jna:jna-platform:$jnaVersion"
