@@ -13,6 +13,6 @@ public interface ILegacyCurrency {
     String toGroupFormattedString();
     String toGroupFormattedString(Locale paramLocale);
     BigDecimal toBigDecimal();
-    
     <T> T toTargetPlafCurrency();
+    void setValue(BigDecimal value);
 }
