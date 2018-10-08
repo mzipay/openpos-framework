@@ -1,2 +1,0 @@
-State		Geocode		Authority		Group			Item Cost		Tax
-

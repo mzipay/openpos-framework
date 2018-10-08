@@ -1,7 +1,0 @@
----
-dmls:
--
-  name: allocateNextSequence
-  dml: >
-   update ctx_sequence set current_value=?, last_update_time=current_timestamp 
-     where sequence_name=? and current_value=?

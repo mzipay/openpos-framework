@@ -1,1 +1,0 @@
-alter table car_car add color varchar(128);
