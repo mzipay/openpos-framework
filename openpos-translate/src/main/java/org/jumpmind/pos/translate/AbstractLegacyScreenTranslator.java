@@ -18,10 +18,10 @@ import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.ModeConstants;
 import org.jumpmind.pos.core.model.Form;
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
 import org.jumpmind.pos.core.screen.IUIAction;
 import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.Workstation;
 import org.jumpmind.pos.core.template.BlankWithBarTemplate;
 import org.jumpmind.pos.core.template.SellTemplate;
@@ -165,7 +165,8 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             template.setOperatorText(WordUtils.capitalizeFully(operatorText));
             
             ILegacyStatusBeanModel statusModel = legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);
-            if( statusModel.isOnline() ) {
+
+            if( statusModel.isOnline(legacyScreen) ) {
                 template.setRegisterStatus("Online");
             } else {
                 template.setRegisterStatus("Offline");
