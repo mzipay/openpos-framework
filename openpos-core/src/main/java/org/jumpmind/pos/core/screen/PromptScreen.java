@@ -34,7 +34,6 @@ public class PromptScreen extends Screen implements IPromptScreen {
 
     public PromptScreen() {
         setScreenType(ScreenType.Prompt);
-        asDialog();
     }
 
     @Override

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.Form;
+import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
 import org.jumpmind.pos.core.template.SellTemplate;
@@ -14,6 +15,7 @@ import org.jumpmind.pos.core.template.SellTemplate;
 public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends AbstractPromptScreenTranslator<T> {
 
     private boolean addLocalMenuItems = false;
+    private boolean showAsDialog = false;
     protected InteractionMacro undoMacro;
 
     public PromptAndResponseScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, boolean addLocalMenuItems) {
@@ -50,11 +52,26 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
         super.buildMainContent();
         screen.setRefreshAlways(true);
         this.configureScreenResponseField();
+        if( showAsDialog ) {
+            DialogProperties props = new DialogProperties();
+            props.setMinWidth("50%");
+            screen.asDialog(props);
+            MenuItem back = (MenuItem)screen.get("backButton");
+            if( back != null ) { 
+                screen.addOtherAction( new MenuItem( back.getAction(), "Back"));
+            }
+        }
         if (addLocalMenuItems) {
             List<MenuItem> localNavButtons = generateUIActionsForLocalNavButtons(MenuItem.class, true);
             localNavButtons = localNavButtons.stream().filter(p -> !(p.getTitle().equals("Next"))).collect(Collectors.toList());
-            SellTemplate template = screen.getTemplate();
-            template.setLocalMenuItems(localNavButtons);
+            if( showAsDialog ) {
+                localNavButtons.forEach(b -> {
+                    screen.addOtherAction(b);
+                });
+            } else {
+                SellTemplate template = screen.getTemplate();
+                template.setLocalMenuItems(localNavButtons);
+            }
         }
         addActionButton();
     }
@@ -65,6 +82,10 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
     
     public void setUndoMacro(InteractionMacro undoMacro) {
         this.undoMacro = undoMacro;
+    }
+    
+    public void setShowAsDialog( boolean showAsDialog ) {
+        this.showAsDialog = showAsDialog;
     }
 
     @Override
