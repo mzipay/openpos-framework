@@ -21,8 +21,6 @@ public class SellTemplate extends AbstractTemplate {
     
     private Workstation workstation;
     private String operatorText;
-    private String registerStatus;
-    private boolean allowRegisterStatusClickAction = false;
 
     public SellTemplate() {
         super("Sell");
@@ -101,21 +99,4 @@ public class SellTemplate extends AbstractTemplate {
     public void setWorkstation(Workstation workstation) {
         this.workstation = workstation;
     }
-
-    public String getRegisterStatus() {
-        return registerStatus;
-    }
-
-    public void setRegisterStatus(String registerStatus) {
-        this.registerStatus = registerStatus;
-    }
-
-    public boolean isAllowRegisterStatusClickAction() {
-        return allowRegisterStatusClickAction;
-    }
-
-    public void setAllowRegisterStatusClickAction(boolean allowRegisterStatusClickAction) {
-        this.allowRegisterStatusClickAction = allowRegisterStatusClickAction;
-    }       
-
 }

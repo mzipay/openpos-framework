@@ -165,12 +165,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             template.setOperatorText(WordUtils.capitalizeFully(operatorText));
             
             ILegacyStatusBeanModel statusModel = legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);
-
-            if( statusModel.isOnline(legacyScreen) ) {
-                template.setRegisterStatus("Online");
-            } else {
-                template.setRegisterStatus("Offline");
-            }
+            template.setSystemStatus(statusModel.getSystemStatus());
         }
         
         if (screen.getTemplate() instanceof BlankWithBarTemplate) {

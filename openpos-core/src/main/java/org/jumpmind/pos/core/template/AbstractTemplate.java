@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jumpmind.pos.core.model.SystemStatus;
 import org.jumpmind.pos.core.screen.DialogProperties;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -21,6 +22,7 @@ public abstract class AbstractTemplate implements Serializable {
 
     private String type;
     private boolean dialog = false;
+    private SystemStatus systemStatus;
 
     protected AbstractTemplate(String type) {
         this.type = type;
@@ -58,6 +60,14 @@ public abstract class AbstractTemplate implements Serializable {
     
     public void disableDevMenu() {
         this.put("disableDevMenu", true);
+    }
+
+    public SystemStatus getSystemStatus() {
+        return systemStatus;
+    }
+
+    public void setSystemStatus(SystemStatus systemStatus) {
+        this.systemStatus = systemStatus;
     }
 
 }

@@ -35,7 +35,6 @@ public interface ScreenType {
     public static final String SelfCheckoutTransaction = "SelfCheckoutTransaction";
     public static final String SellItemDetail = "SellItemDetail";
     public static final String SignatureCapture = "SignatureCapture";
-    public static final String SystemStatus = "SystemStatus";
     public static final String Table = "Table";
     public static final String Tendering = "Tendering";
     public static final String TillCurrencyCount = "TillCurrencyCount";
