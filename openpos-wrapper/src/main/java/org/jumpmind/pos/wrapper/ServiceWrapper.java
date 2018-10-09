@@ -40,7 +40,10 @@ public class ServiceWrapper {
     protected static String getHomeDir() {
         String homeDir = System.getenv(OPENPOS_HOME);
         if (isBlank(homeDir)) {
-            homeDir = System.getProperty("user.dir");
+            homeDir = System.getenv("SYM_HOME");
+            if (isBlank(homeDir)) {
+                homeDir = System.getProperty("user.dir");
+            }
         }
         return homeDir;
     }
