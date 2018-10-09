@@ -1,6 +1,8 @@
+import { ISystemStatus } from '../../../../core/interfaces/system-status.interface';
+
 export class SellStatusSectionData {
     storeNumber: string;
     registerNumber: string;
-    registerStatus: string;
+    systemStatus: ISystemStatus;
     timestampBegin: number;
 }

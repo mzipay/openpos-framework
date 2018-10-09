@@ -4,6 +4,8 @@ export const Configuration = {
     useTouchListener: true,
     useSavePoints: true,
     showRegisterStatus: false,
+    clickableRegisterStatus: false,
+    offlineOnlyRegisterStatus: false,
     keepAliveMillis: 30000,
     compatibilityVersion: 'v1',
     incompatibleVersionMessage: 'Application is not compatible with the server.',
