@@ -24,6 +24,8 @@ import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface
 import { PluginService } from './plugin.service';
 import { AppInjector } from '../app-injector';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { PingParams } from '../interfaces/ping-params.interface';
+import { PingResult } from '../interfaces/ping-result.interface';
 
 // export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
@@ -515,13 +517,3 @@ export class SessionService implements IMessageHandler {
     }
 }
 
-export interface PingResult {
-    success: boolean;
-    message?: string;
-}
-
-export interface PingParams {
-    serverName: string;
-    serverPort: string;
-    useSsl: boolean;
-}

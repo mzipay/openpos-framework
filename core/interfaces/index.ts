@@ -17,3 +17,5 @@ export * from './catalog-browser-form.interface';
 export * from './transaction-summary.interface';
 export * from './startup-task.interface';
 export * from './message-handler.interface';
+export * from './ping-params.interface';
+export * from './ping-result.interface';
