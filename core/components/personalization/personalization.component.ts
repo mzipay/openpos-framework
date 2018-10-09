@@ -46,48 +46,17 @@ export class PersonalizationComponent implements IScreen, OnInit {
         const serverPort = control.get('serverPort').value;
         const sslEnabled: boolean = control.get('sslEnabled').value;
 
-        this.checkTimeout = new Promise((resolve, reject) => setTimeout(resolve(null), 1000));
-        const result = await Promise.all([
-            this.session.ping({serverName: serverName, serverPort: serverPort, useSsl: sslEnabled}),
-            this.checkTimeout
-        ]);
-        if (result[0].success) {
-            return null;
-        } else {
-            return result[0];
-        }
-/*
         return new Promise((resolve, reject) => {
-            this.checkTimeout = setTimeout(() => {
-                const serverName = control.get('serverName').value;
-                const serverPort = control.get('serverPort').value;
-                const sslEnabled: boolean = control.get('sslEnabled').value;
-                if (serverName) {
-                    let protocol = 'http://';
-                    if (sslEnabled) {
-                        protocol = 'https://';
-                    }
-                    let url: string = protocol + serverName;
-                    if (serverPort) {
-                        url = url + ':' + serverPort;
-                    }
-                    url = url + '/ping';
-                    this.log.info('testing url: ' + url);
-
-                    this.http.get(url, {}).subscribe(
-                        (data) => {
-                            this.log.info('successful validation of ' + url);
-                            resolve(null);
-                        },
-                        (err: HttpErrorResponse) => {
-                            this.log.info('bad validation of ' + url + ' with an error message of :' + err.message);
-                            resolve({ noping: err.message });
-                        });
+            this.checkTimeout = setTimeout(async () => {
+                const result = await this.session.ping({serverName: serverName, serverPort: serverPort, useSsl: sslEnabled});
+                if (result.success) {
+                    resolve(null);
+                } else {
+                    this.log.info(`Ping failed with error: ${result.message}`);
+                    resolve(result);
                 }
-
             }, 1000);
         });
-        */
     }
 
 }
