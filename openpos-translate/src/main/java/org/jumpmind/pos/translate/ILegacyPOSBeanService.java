@@ -39,4 +39,5 @@ public interface ILegacyPOSBeanService {
     
     ILegacyCurrency getLegacyCurrencyInstance(String currencyStringValue);
     ILegacyCurrency getLegacyCurrencyInstance(BigDecimal currencyDecimalValue);
+    <T> ILegacyCurrency getLegacyCurrencyInstance(T currencyInstance);
 }
