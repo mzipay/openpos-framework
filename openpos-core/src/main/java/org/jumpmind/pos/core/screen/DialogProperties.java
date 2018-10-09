@@ -10,6 +10,8 @@ public class DialogProperties implements Serializable {
 
     private String width;
     private String height;
+    private String minWidth;
+    private String minHeight;
     private boolean executeActionBeforeClose = false;
     private boolean closeable = false;
     private boolean autoFocus = false;
@@ -84,6 +86,22 @@ public class DialogProperties implements Serializable {
     public DialogProperties autoFocus(boolean autoFocus) {
         this.setAutoFocus(autoFocus);
         return this;
+    }
+
+    public String getMinWidth() {
+        return minWidth;
+    }
+
+    public void setMinWidth(String minWidth) {
+        this.minWidth = minWidth;
+    }
+
+    public String getMinHeight() {
+        return minHeight;
+    }
+
+    public void setMinHeight(String minHeight) {
+        this.minHeight = minHeight;
     }
     
 }
