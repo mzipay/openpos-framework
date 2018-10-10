@@ -68,6 +68,14 @@ export class FormBuilder {
       validators.push(Validators.maxLength(element.maxLength));
     }
 
+    if (element.minValue) {
+        validators.push(Validators.min(element.minValue));
+    }
+
+    if (element.maxValue) {
+        validators.push(Validators.max(element.maxValue));
+    }
+
     validators.push(this.validatorService.getValidator(element.inputType));
     if (element.validators) {
         element.validators.forEach(v => validators.push(this.validatorService.getValidator(v)));

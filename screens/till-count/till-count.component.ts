@@ -1,3 +1,4 @@
+import { DynamicFormControlComponent } from './../../shared/components/dynamic-form-control/dynamic-form-control.component';
 import { Component, ViewChild } from '@angular/core';
 import { IFormElement, IMenuItem, IForm } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
@@ -11,7 +12,7 @@ export class TillCountComponent extends PosScreen<any> {
 
   nextAction: IMenuItem;
   public form: IForm;
-  @ViewChild('tillForm') tillForm;
+  @ViewChild('tillForm') tillForm: DynamicFormControlComponent;
 
   constructor() {
       super();
@@ -33,8 +34,10 @@ export class TillCountComponent extends PosScreen<any> {
   }
 
   onNextAction() {
-    this.session.response = this.screen.form;
-    this.session.onAction(this.nextAction.action);
+    if (this.tillForm.form.valid) {
+        this.session.response = this.screen.form;
+        this.session.onAction(this.nextAction.action);
+    }
   }
 
 }
