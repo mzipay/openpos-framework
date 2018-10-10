@@ -55,7 +55,7 @@ import { VersionComponent } from './version/version.component';
 import { ScreenConstants } from './screen.constants';
 import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
 import { SellStatusSectionComponent } from './templates/sell-template/sell-status-section/sell-status-section.component';
-import { JournalSearchResultsComponent } from './journal-search-results/journal-search-results.component';
+import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { SystemStatusDialogComponent } from './system-status/system-status-dialog.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 
@@ -96,7 +96,7 @@ const screens = [
     CatalogBrowserComponent,
     ItemSearchResultsComponent,
     ItemOptionsComponent,
-    JournalSearchResultsComponent,
+    DetailTextScreenComponent,
 ];
 
 const dialogs = [
