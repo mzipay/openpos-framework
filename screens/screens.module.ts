@@ -39,7 +39,6 @@ import { SelectionListComponent } from './selection-list/selection-list.componen
 import { PrintPreviewComponent } from './print-preview/print-preview.component';
 import { ItemSearchResultsComponent } from './item-search-results/item-search-results.component';
 import { ItemOptionsComponent } from './item-options/item-options.component';
-import { SystemStatusComponent } from './system-status/system-status.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -98,7 +97,6 @@ const screens = [
     ItemSearchResultsComponent,
     ItemOptionsComponent,
     JournalSearchResultsComponent,
-    SystemStatusComponent
 ];
 
 const dialogs = [

@@ -1,9 +1,9 @@
 import { IWorkStation } from './workstation.interface';
-import { IMenuItem } from './../../../../core';
+import { IMenuItem, IAbstractScreenTemplate } from './../../../../core';
 import { IScan } from './scan.interface';
 import { IStatusBar } from './status-bar.interface';
 
-export interface ISellTemplate {
+export interface ISellTemplate extends IAbstractScreenTemplate {
     scan: IScan;
     statusBar: IStatusBar;
     localMenuItems: IMenuItem[];
@@ -11,7 +11,5 @@ export interface ISellTemplate {
     workstation: IWorkStation;
     operatorText: string;
     timestampBegin: number;
-    registerStatus: string;
-    allowRegisterStatusClickAction: boolean;
 }
 
