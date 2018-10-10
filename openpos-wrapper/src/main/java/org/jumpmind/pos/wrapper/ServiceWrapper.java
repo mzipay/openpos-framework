@@ -1,6 +1,5 @@
 package org.jumpmind.pos.wrapper;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -17,7 +16,7 @@ public class ServiceWrapper {
     	if (args.length >= 2) {
     		configFileName = args[1];
     	} else {
-    		configFileName = getHomeDir() + File.separator + "config/openpos_service.conf";
+    		configFileName = "../config/openpos_service.conf";
     	}
         WrapperHelper.run(args, getHomeDir(), configFileName, "../lib/openpos-wrapper.jar");
     }
