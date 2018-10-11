@@ -337,6 +337,15 @@ public class Form implements Serializable {
         return null;
     }
     
+    public FormListField getListField(String fieldId) {
+        IFormElement formElement = this.getFormElement(fieldId);
+        if (formElement != null && formElement instanceof FormListField) {
+            return (FormListField) formElement;
+        }
+        
+        return null;
+    }
+    
     public void addSeparator() {
         formElements.add(new FormDisplayField(FieldElementType.Separator));
     }
