@@ -17,7 +17,7 @@ public interface ScreenType {
     public static final String Form = "Form";
     public static final String Home = "Home";
     public static final String ItemList = "ItemList";
-    public static final String JournalDetail = "JournalDetail";
+    public static final String DetailText = "DetailText";
     public static final String Loading = "Loading";
     public static final String LoadingDialog = "LoadingDialog";
     public static final String Login = "Login";
