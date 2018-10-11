@@ -12,6 +12,7 @@ public interface ScreenType {
     public static final String DevTools = "DevTools";
     public static final String Dialog = "Dialog";
     public static final String DynamicForm = "DynamicForm";
+    public static final String DynamicList = "DynamicList";
     public static final String EmbeddedWebPage = "EmbeddedWebPage";
     public static final String Form = "Form";
     public static final String Home = "Home";
