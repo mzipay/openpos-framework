@@ -452,6 +452,7 @@ export class SessionService implements IMessageHandler {
 
     handle(message: any) {
         this.log.info(`Got message: ${message.screenType}`);
+        let cancelLoading = false;
         if (message.screenType === 'Loading') {
             // This is just a temporary hack
             // Might be a previous instance of a Loading screen being shown,
@@ -468,12 +469,18 @@ export class SessionService implements IMessageHandler {
             this.response = null;
             return; // As with DeviceRequest, return to avoid dismissing loading screen
         } else if (message.screenType === 'Toast') {
-
+            cancelLoading = true;
         } else if ( message.template && !message.template.dialog ) {
             this.response = null;
             this.showScreen(message);
+            cancelLoading = false; // Dynamic Screen Component will handle it
+        } else {
+            cancelLoading = true;
         }
-        this.cancelLoading();
+
+        if (cancelLoading) {
+            this.cancelLoading();
+        }
     }
 
     public registerActionPayload(actionName: string, actionValue: Function) {
