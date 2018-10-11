@@ -43,7 +43,7 @@ import { TillCountComponent } from './till-count/till-count.component';
 import { TillCountOtherTenderComponent } from './till-count-other-tender/till-count-other-tender.component';
 import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
-import { JournalSearchResultsComponent } from './journal-search-results/journal-search-results.component';
+import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 
 export const ScreenConstants = {
@@ -83,7 +83,7 @@ export const ScreenConstants = {
         { name: 'CatalogBrowser', component: CatalogBrowserComponent},
         { name: 'ItemSearchResults', component: ItemSearchResultsComponent },
         { name: 'ItemOptions', component: ItemOptionsComponent },
-        { name: 'JournalDetail', component: JournalSearchResultsComponent },
+        { name: 'DetailText', component: DetailTextScreenComponent },
 
         // Default Dialog
         { name: 'Dialog', component: DialogComponent },
