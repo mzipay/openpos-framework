@@ -87,13 +87,8 @@ export class DialogService {
 
     private updateDialog(dialog?: any): void {
         if (dialog) {
-            this.closeDialog();
             const dialogType = this.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
             if (!this.dialogOpening) {
-                if ( !this.isDialogOpen(dialog.screenType)) {
-                    this.closeDialog();
-                }
-
                 this.log.info('opening dialog \'' + dialogType + '\'');
                 this.dialogOpening = true;
                 setTimeout(() => this.openDialog(dialog), 0);
@@ -126,6 +121,8 @@ export class DialogService {
 
         if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
             || dialog.refreshAlways) {
+            this.log.info(`[DialogService] Dialog closing before opening a new one`);
+            this.closeDialog();
             this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
             this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
         } else {
