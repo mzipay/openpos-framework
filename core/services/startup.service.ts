@@ -56,7 +56,8 @@ export class StartupService implements CanActivate {
                     width: '80%',
                     height: '80%',
                     disableClose: true,
-                    hasBackdrop: false
+                    hasBackdrop: false,
+                    panelClass: 'openpos-default-theme'
                 });
         }
 
@@ -133,7 +134,8 @@ export class StartupService implements CanActivate {
                     data: {
                         error: error,
                         messages: this.allMessages
-                    }
+                    },
+                    panelClass: 'openpos-default-theme'
                 }).afterClosed().subscribe( () => location.reload() );
         }
     }

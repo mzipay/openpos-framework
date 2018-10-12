@@ -27,7 +27,8 @@ export class PersonalizationStartupTask implements IStartupTask {
                 this.matDialog.open(
                     PersonalizationComponent, {
                         disableClose: true,
-                        hasBackdrop: false
+                        hasBackdrop: false,
+                        panelClass: 'openpos-default-theme'
                     }
                     ).afterClosed().subscribe( () => {
                         message.complete();

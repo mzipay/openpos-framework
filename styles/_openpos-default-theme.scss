@@ -1,0 +1,12 @@
+@mixin openpos-default-theme{
+    $openpos-default-app-primary: mat-palette($mat-blue);
+    $openpos-default-app-accent : mat-palette($mat-blue-grey);
+    $openpos-default-app-warn : mat-palette($mat-red);
+
+    $openpos-default-theme: mat-light-theme($openpos-default-app-primary, $openpos-default-app-accent, $openpos-default-app-warn);
+
+    .openpos-default-theme {
+        @include angular-material-theme($openpos-default-theme);
+        @include app-theme($openpos-default-theme);
+    }
+}
