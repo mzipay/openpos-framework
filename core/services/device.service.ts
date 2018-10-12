@@ -239,15 +239,18 @@ export class DeviceService implements IMessageHandler {
 
 
     private handleBackgrounding() {
+        /* 10/12/18 -- Commented out showing of splashscreen due to improved show/cancel loading
+           that we added.  Will remove once fully vetted in QA.
         // Show splash screen when running on iOS
         // Ascena has a Startup task that automatically dismisses the splash screen.
         // If other retailers are using iOS will need to implement the same, move this code
         // to Ascena, or find the right place in the core to dismiss the splash screen
+
         if ((<any>(window.navigator)).splashscreen) {
             this.log.info('Showing splashscreen');
             (<any>(window.navigator)).splashscreen.show();
         }
-
+        */
         this.session.cancelLoading();
         // Input will get unblocked once re-subscribed to server and current screen is shown
         this.log.info('Entering into background');
@@ -257,12 +260,15 @@ export class DeviceService implements IMessageHandler {
     private handleForegrounding() {
         // check for any changes while were are inactive
         // We'll reset the inBackground flag after we receive the response
-        this.log.info('Start coming back into foreground. Requesting screen refresh');
         this.session.publish('Refresh', 'Screen');
+        this.log.info('Start coming back into foreground. Screen refresh requested.');
+        /* 10/12/18 -- Commented out hiding of splashscreen due to improved show/cancel loading
+           that we added.  Will remove once fully vetted in QA.
         if ((<any>(window.navigator)).splashscreen) {
             this.log.debug('Hiding splashscreen');
             (<any>(window.navigator)).splashscreen.hide();
         }
+        */
     }
 
 }
