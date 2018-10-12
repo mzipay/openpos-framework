@@ -29,18 +29,21 @@ import { Logger } from './services/logger.service';
 import { StartupFailedComponent } from './components/startup/startup-failed.component';
 import { MatDialog } from '@angular/material';
 import { FinalStartupTask } from './components/startup/final-startup-task';
+import { DialogContentComponent } from './components/dialog-content/dialog-content.component';
 
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,
         PersonalizationComponent,
         StartupComponent,
-        StartupFailedComponent
+        StartupFailedComponent,
+        DialogContentComponent
     ],
     declarations: [
         OpenposAppComponent,
         DynamicScreenComponent,
         DevMenuComponent,
+        DialogContentComponent,
         LoaderComponent,
         ConfirmationDialogComponent,
         PersonalizationComponent,

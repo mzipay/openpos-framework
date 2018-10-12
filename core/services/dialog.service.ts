@@ -1,20 +1,21 @@
 import { Logger } from './logger.service';
 
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
-import { IScreen } from '../components';
 import { SessionService } from './session.service';
 import { filter } from 'rxjs/operators';
+import { IScreen } from '../components/dynamic-screen/screen.interface';
+import { DialogContentComponent } from '../components/dialog-content/dialog-content.component';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { OpenPOSDialogConfig } from '../interfaces';
 import { StartupService } from './startup.service';
 @Injectable({
     providedIn: 'root',
-  })
+})
 export class DialogService {
 
     private dialogs = new Map<string, Type<IScreen>>();
 
-    private dialogRef: MatDialogRef<IScreen>;
+    private dialogRef: MatDialogRef<DialogContentComponent>;
 
     private dialogOpening: boolean;
 
@@ -33,23 +34,23 @@ export class DialogService {
 
         // Pipe all the messages for dialog updates
         $dialogMessages.pipe(
-            filter( m => (m.template && m.template.dialog) )
+            filter(m => (m.template && m.template.dialog))
         )
-        .subscribe( m => this.updateDialog(m) );
+            .subscribe(m => this.updateDialog(m));
 
         // We want to close the dialog if we get a clear dialog message or its a screen message that isn't a dialog
         $dialogMessages.pipe(
-                filter( m => m.clearDialog || (m.template && !m.template.dialog))
-            )
-        .subscribe( m => this.closeDialog() );
+            filter(m => m.clearDialog || (m.template && !m.template.dialog))
+        )
+            .subscribe(m => this.closeDialog());
     }
 
 
     public addDialog(name: string, type: Type<IScreen>): void {
         if (this.dialogs.get(name)) {
-        // tslint:disable-next-line:max-line-length
-        this.log.info(`replacing registration for screen of type ${this.dialogs.get(name).name} with ${type.name} for the key of ${name} in the screen service`);
-        this.dialogs.delete(name);
+            // tslint:disable-next-line:max-line-length
+            this.log.info(`replacing registration for screen of type ${this.dialogs.get(name).name} with ${type.name} for the key of ${name} in the screen service`);
+            this.dialogs.delete(name);
         }
         this.dialogs.set(name, type);
     }
@@ -108,7 +109,7 @@ export class DialogService {
         // By default we need the dialog to grab focus so you cannont execute actions on the screen
         // behind by hitting enter
         const dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: true };
-        const dialogComponent = dialogComponentFactory.componentType;
+        // const dialogComponent = dialogComponentFactory.componentType;
         if (dialog.template.dialogProperties) {
             // Merge in any dialog properties provided on the screen
             for (const key in dialog.template.dialogProperties) {
@@ -121,13 +122,16 @@ export class DialogService {
 
         if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
             || dialog.refreshAlways) {
-            this.log.info(`[DialogService] Dialog closing before opening a new one`);
-            this.closeDialog();
-            this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
-            this.dialogRef = this.dialog.open(dialogComponent, dialogProperties);
-            this.dialogRef.afterClosed().subscribe(() => {
-                this.session.cancelLoading();
-            });
+            if (!this.dialogRef) {
+                this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
+                this.dialogRef = this.dialog.open(DialogContentComponent, dialogProperties);
+                this.dialogRef.afterClosed().subscribe(() => {
+                    this.session.cancelLoading();
+                });
+            } else {
+                this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' refreshing content...');
+            }
+            this.dialogRef.componentInstance.installScreen(dialogComponentFactory);
         } else {
             this.log.info(`Using previously created dialogRef. current dialog type: ${dialog.screenType}, last dialog type: ${this.lastDialogType}`);
         }
