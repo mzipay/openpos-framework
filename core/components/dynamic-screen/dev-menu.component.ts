@@ -399,8 +399,9 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
     }
 
     protected onSimulateScan(value: string) {
+        this.log.info('onSimulatedScan(' + value + ')');
         if (value) {
-            this.session.publish('DevTools::Scan', value);
+            this.session.publish('DevTools::Scan', DevMenuComponent.MSG_TYPE, value);
         }
     }
 
