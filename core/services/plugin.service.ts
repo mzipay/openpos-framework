@@ -6,6 +6,7 @@ import {
     IDevicePlugin,
     IPlugin
 } from '../plugins';
+import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 
 declare var cordova: any;
 
@@ -15,9 +16,16 @@ declare var cordova: any;
 export class PluginService {
 
     private plugins = new Map<string, PluginMapEntry>();
+    private onDeviceReady: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+    private onDeviceReadySubscription: Subscription;
 
     constructor(private log: Logger) {
         document.addEventListener('deviceready', () => {
+            // Internally notify that deviceready has been received. The corodova-monkey-patch-fix
+            // partially broke deviceready events, so we no longer receive deviceready if cordova
+            // has already published the event once.  This works around the issue so that barcode
+            // scanning functions still work correctly on barcode dynamic form fields.
+            this.onDeviceReady.next('deviceready');
             this.log.info('cordova devices are ready for the plugin service');
             // cordova file plugin doesn't put itself in cordova.plugins, so add it there if present.
             // Makes it possible for us to access plugins dynamically by name.
@@ -84,19 +92,32 @@ export class PluginService {
         );
     }
 
-    public getPluginWithOptions(pluginId: string, doInitWhenNeeded: boolean = true, 
+    public getPluginWithOptions(pluginId: string, doInitWhenNeeded: boolean = true,
       options?: {waitForCordovaInit?: boolean}): Promise<IPlugin> {
-            if (options && options.waitForCordovaInit) {
+        // waitForCordovaInit addresses a race condition where a cordova dependent plugin
+        // could be attempted to be fetched before it has been added to the plugin service.
+        // I believe this was happening the barcodescanner plugin. May need to revisit how
+        // this is done in the future.
+        if (options && options.waitForCordovaInit) {
             return new Promise((resolve, reject) => {
                 if (cordova) {
-                    document.addEventListener('deviceready', () => {
-                        this.getPlugin(pluginId, doInitWhenNeeded).then( plugin => {
-                            resolve(plugin);
-                        }).catch( error => {
-                            reject(error);
-                        });
-                    },
-                    false);
+                    // After we added the corodova-monkey-patch-fix, cordova no longer published
+                    // 'deviceready' event upon subscription after cordova had initially
+                    // posted the deviceready event. I am working around that problem by using
+                    // a BehaviorSubject internally to this class to mimic prior behavior
+                    // provided by cordova.
+                    this.onDeviceReadySubscription = this.onDeviceReady.subscribe(ready => {
+                        if (ready) {
+                            this.getPlugin(pluginId, doInitWhenNeeded).then( plugin => {
+                                resolve(plugin);
+                            }).catch( error => {
+                                reject(error);
+                            });
+                        }
+                        if (this.onDeviceReadySubscription) {
+                            this.onDeviceReadySubscription.unsubscribe();
+                        }
+                    });
                 } else {
                     reject(`Cordova not installed, plugin '${pluginId}' won't be fetched`);
                 }

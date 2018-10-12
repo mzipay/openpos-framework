@@ -2,6 +2,9 @@ import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { SellStatusSectionData } from './sell-status-section.data';
 import { timer } from 'rxjs';
 import { Configuration } from '../../../../configuration/configuration';
+import { SystemStatusType } from '../../../../core/interfaces/system-status-type.enum';
+import { MatDialog } from '@angular/material';
+import { SystemStatusDialogComponent } from '../../../system-status/system-status-dialog.component';
 
 @Component({
     selector: 'app-sell-status-section',
@@ -13,10 +16,11 @@ import { Configuration } from '../../../../configuration/configuration';
     @Input()
     data: SellStatusSectionData;
 
-    @Output() registerStatusClick: EventEmitter<void> = new EventEmitter<void>();
-    
     date = Date.now();
     timer: number;
+
+    constructor(protected dialog: MatDialog) {
+    }
 
     ngOnInit(): void {
         timer( 1000, 1000 ).subscribe( () => {
@@ -28,10 +32,28 @@ import { Configuration } from '../../../../configuration/configuration';
     }
 
     showRegisterStatus(): boolean {
-        return this.data.registerStatus && Configuration.showRegisterStatus && this.data.registerStatus === 'Offline';
+        if (this.data.systemStatus && Configuration.showRegisterStatus) {
+            return Configuration.offlineOnlyRegisterStatus ?
+                this.data.systemStatus.overallSystemStatus === SystemStatusType.Offline : true;
+        } else {
+            return false;
+        }
     }
 
     onRegisterStatusClick(): void {
-        this.registerStatusClick.emit();
+        if (Configuration.clickableRegisterStatus) {
+            const dialogRef = this.dialog.open(SystemStatusDialogComponent, {
+                width: '40%',
+                data: {
+                    devices: this.data.systemStatus.devices,
+                    deviceHeader: 'Device/Database',
+                    statusHeader: 'Status',
+                    disableClose: false,
+                    autoFocus: false
+                }
+            });
+
+            dialogRef.afterClosed().subscribe(result => {});
+        }
     }
   }

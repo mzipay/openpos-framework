@@ -69,6 +69,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         public iconService: IconService,
         public overlayContainer: OverlayContainer,
         protected router: Router,
+        private dialogService: DialogService,
         private pluginService: PluginService,
         private fileUploadService: FileUploadService,
         private httpClient: HttpClient,
@@ -146,7 +147,12 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.installedScreen.show(screen, this, this.installedTemplate);
 
         this.updateClasses(screen);
-
+        if (! this.dialogService.isDialogOpen()) {
+            this.session.cancelLoading();
+        } else {
+            // Dialog service will handle cancelLoading
+            this.log.info(`Dialog is open, screen skipped cancelLoading`);
+        }
     }
 
     protected logSwitchScreens(screen: any) {
