@@ -13,3 +13,4 @@ export * from './state-id-number.formatter';
 export * from './word-text.formatter';
 export * from './datetime.formatter';
 export * from './datetime-ca.formatter';
+export * from './postal-code-ca.formatter';
