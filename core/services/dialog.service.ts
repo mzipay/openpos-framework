@@ -130,6 +130,8 @@ export class DialogService {
                 });
             } else {
                 this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' refreshing content...');
+                this.dialogRef.updateSize('' + dialogProperties.minWidth, '' + dialogProperties.minHeight);
+                this.dialogRef.disableClose = dialogProperties.disableClose;
             }
             this.dialogRef.componentInstance.installScreen(dialogComponentFactory);
         } else {
