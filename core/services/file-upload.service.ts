@@ -32,8 +32,9 @@ export class FileUploadService {
             formData.append('filename', filename);
             try {
                 const fileBlob = await this.readFile(localfilepath, contentType);
+                this.log.info(`File ${filename} read successfully.  Size is: ${fileBlob.size} bytes. Will now attempt to upload...`);
                 formData.append('file', fileBlob);
-                return await this.uploadFile(url, filename, formData);
+                return this.uploadFile(url, filename, formData);
             } catch (error) {
                 if ('success' in error && 'message' in error) {
                     return error;
