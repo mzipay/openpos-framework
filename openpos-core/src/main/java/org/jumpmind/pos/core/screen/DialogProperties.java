@@ -8,6 +8,11 @@ import java.io.Serializable;
 public class DialogProperties implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Use this to force a new dialog to be create if dialogs are being shown back to back.  The default behavior
+     * is to reuse the previous dialog and just swap out the content.
+     */
+    private boolean forceReopen = false;
     private String width;
     private String height;
     private String minWidth;
@@ -21,6 +26,14 @@ public class DialogProperties implements Serializable {
     
     public DialogProperties(boolean closeable) {
         this.closeable = closeable;
+    }
+    
+    public void setForceReopen(boolean forceReopen) {
+        this.forceReopen = forceReopen;
+    }
+    
+    public boolean isForceReopen() {
+        return forceReopen;
     }
     
     public String getWidth() {
