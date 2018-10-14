@@ -13,3 +13,4 @@ export * from './personalization.service';
 export * from './startup.service';
 export * from './toast.service';
 export * from './logger.service';
+export * from './cordova.service';

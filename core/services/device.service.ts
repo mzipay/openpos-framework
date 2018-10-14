@@ -16,8 +16,9 @@ import {
 } from '../plugins';
 import { PluginService } from './plugin.service';
 import { SessionService } from './session.service';
+import { CordovaService } from './cordova.service';
 
-declare var cordova: any;
+// declare var cordova: any;
 
 @Injectable({
     providedIn: 'root',
@@ -31,12 +32,12 @@ export class DeviceService implements IMessageHandler {
 
     private screen: any;
 
-    private screenSubscription: Subscription;
-    private _isRunningInCordova: boolean = null;
     private cameraScanInProgress = false;
 
-    constructor(private log: Logger, protected session: SessionService, public pluginService: PluginService, private fileUploadService: FileUploadService) {
-        this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
+    constructor(private log: Logger, protected session: SessionService,
+        private cordovaService: CordovaService,
+        public pluginService: PluginService,
+        private fileUploadService: FileUploadService) {
         // On iOS need to enter into loading state when the app is backgrounded, otherwise
         // user can execute actions as app is coming back to foreground.
 
@@ -62,17 +63,15 @@ export class DeviceService implements IMessageHandler {
             }
         });
 
-        document.addEventListener('deviceready',
-            () => {
+        this.cordovaService.onDeviceReady.subscribe(m => {
+            if (m === 'deviceready') {
                 this.log.info('cordova devices are ready for the device service');
                 this.initializeInAppBrowserPlugin();
                 this.initializeBarcodeScannerPlugin();
                 this.initializeLogfileDownloadPlugin();
-                this._isRunningInCordova = true;
-                this.onDeviceReady.next(`Application is initialized on platform '${cordova.platform}'`);
-            },
-            false
-        );
+                this.onDeviceReady.next(`Application is initialized on platform '${this.cordovaService.cordova.platform}'`);
+            }
+        });
         // For iOS in particular listen for the 'resign' event which is sent as we are either transitioning into the background
         // or resiging status as the active app.
         document.addEventListener('resign',
@@ -150,7 +149,7 @@ export class DeviceService implements IMessageHandler {
     }
 
     public cordovaCameraScan(source?: string) {
-        if (!this.session.isRunningInBrowser() && cordova) {
+        if (this.cordovaService.isRunningInCordova()) {
             this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin => {
                 this.cameraScanInProgress = true;
                 plugin.processRequest(
@@ -226,11 +225,7 @@ export class DeviceService implements IMessageHandler {
     }
 
     public isRunningInCordova(): boolean {
-        if (this._isRunningInCordova == null) {
-            this._isRunningInCordova = typeof cordova !== 'undefined' && !this.session.isRunningInBrowser();
-        }
-
-        return this._isRunningInCordova;
+        return this.cordovaService.isRunningInCordova();
     }
 
     public isRunningInBrowser(): boolean {
