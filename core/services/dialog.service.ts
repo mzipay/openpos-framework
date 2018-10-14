@@ -102,8 +102,10 @@ export class DialogService {
     private openDialog(dialog: any) {
         const dialogComponentFactory: ComponentFactory<IScreen> = this.resolveDialog(dialog.screenType);
         let closeable = false;
+        let forceReopen = false;
         if (dialog.template.dialogProperties) {
             closeable = dialog.template.dialogProperties.closeable;
+            forceReopen = dialog.template.dialogProperties.forceReopen;
         }
         // By default we want to not allow the user to close by clicking off
         // By default we need the dialog to grab focus so you cannont execute actions on the screen
@@ -122,6 +124,11 @@ export class DialogService {
 
         if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
             || dialog.refreshAlways) {
+
+            if (forceReopen) {
+                this.closeDialog();
+            }
+
             if (!this.dialogRef) {
                 this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
                 this.dialogRef = this.dialog.open(DialogContentComponent, dialogProperties);
