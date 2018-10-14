@@ -31,13 +31,17 @@ export class DeviceService implements IMessageHandler {
     public onAppEnteredForeground: Subject<boolean> = new BehaviorSubject<boolean>(null);
 
     private screen: any;
-
+    
+    private screenSubscription: Subscription;
     private cameraScanInProgress = false;
 
     constructor(private log: Logger, protected session: SessionService,
         private cordovaService: CordovaService,
         public pluginService: PluginService,
         private fileUploadService: FileUploadService) {
+        
+        this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
+        
         // On iOS need to enter into loading state when the app is backgrounded, otherwise
         // user can execute actions as app is coming back to foreground.
 
@@ -166,12 +170,12 @@ export class DeviceService implements IMessageHandler {
                     },
                     (error) => {
                         this.cameraScanInProgress = false;
-                        console.error('Scanning failed: ' + error);
+                        this.log.error('Scanning failed: ' + error);
                     }
                 );
             }).catch(error => {
                 this.cameraScanInProgress = false;
-                console.error(`barcodeScannerPlugin error: ${error}`);
+                this.log.error(`barcodeScannerPlugin error: ${error}`);
             });
         }
     }
