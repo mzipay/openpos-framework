@@ -19,7 +19,8 @@ import {
     WordTextFormatter,
     DoNothingFormatter,
     DateTimeFormatter,
-    DateTimeCAFormatter
+    DateTimeCAFormatter,
+    PostalCodeCAFormatter
 } from '../../shared/formatters';
 
 
@@ -40,6 +41,7 @@ export class FormattersService {
         const CAFormatters = new Map<string, IFormatter>();
         CAFormatters.set('phone', new PhoneCAFormatter());
         CAFormatters.set('datetime', new DateTimeCAFormatter());
+        CAFormatters.set('postalcode', new PostalCodeCAFormatter());
 
         // Some screens are dependent on 'ca' value, so don't change.  If you have other
         // ca formatters that are language specific, add a second entry in the map for them.
