@@ -17,4 +17,10 @@
     background-color: white;
   }
 
+  .cdk-overlay-container {
+      // default Angular value is 1000, but we have the dev menu and 
+      // loader at that level. Adjusting value upward so that Angular components
+      // such as mat-menu will still render on top when used within our dev menu
+      z-index: 1100;  
+  }
 }

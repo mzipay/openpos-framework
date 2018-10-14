@@ -520,7 +520,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
                 targetFilename,
                 (logFileContents) => {
                     const dialogRef = this.dialog.open(FileViewerComponent, {
-                        panelClass: 'full-screen-dialog',
+                        panelClass: 'openpos-default-theme',
                         maxWidth: '100vw', maxHeight: '100vh', width: '100vw'
                     });
                     dialogRef.componentInstance.fileName = targetFilename;

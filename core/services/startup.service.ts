@@ -125,7 +125,7 @@ export class StartupService implements CanActivate {
         }
 
         if ( this.startupFailedComponent ) {
-            this.matDialog.open(
+            const startupFailedRef = this.matDialog.open(
                 this.startupFailedComponent, {
                     disableClose: true,
                     hasBackdrop: false,
@@ -136,7 +136,18 @@ export class StartupService implements CanActivate {
                         messages: this.allMessages
                     },
                     panelClass: 'openpos-default-theme'
-                }).afterClosed().subscribe( () => location.reload() );
+                }
+            );
+            const startupFailedCompInst = startupFailedRef.componentInstance;
+            startupFailedRef.afterClosed().subscribe( () => {
+                if (startupFailedCompInst) {
+                    if (startupFailedCompInst.appReloadOnCloseEnabled) {
+                        location.reload();
+                    }
+                } else {
+                    location.reload();
+                }
+            });
         }
     }
 }
