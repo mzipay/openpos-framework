@@ -5,6 +5,7 @@ import { Logger } from './logger.service';
 import { FileUploadResult } from './../interfaces/file-upload-result.interface';
 import { PersonalizationService } from './personalization.service';
 import { CordovaService } from './cordova.service';
+import { Subscription } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -50,16 +51,35 @@ export class FileUploadService {
 
     }
 
-    public uploadFile(url: string, filename: string, formData: FormData): Promise<FileUploadResult> {
-        // TODO: what is best way to make this async
-        const prom = new Promise<FileUploadResult>((resolve, reject) => {
-            this.httpClient.post(url, formData, {observe: 'response'}).subscribe( response => {
+    public uploadFile(url: string, filename: string, formData: FormData, timeoutMillis = 20000): Promise<FileUploadResult> {
+        let fileUploadTimer: any = null;
+        let uploadSub: Subscription = null;
+
+        const timeoutPromise = new Promise<FileUploadResult>((resolve, reject) => {
+            fileUploadTimer = setTimeout( () => {
+                this.log.info(`upload timed out`);
+                if (uploadSub) {
+                    uploadSub.unsubscribe();
+                }
+                resolve({success: false, message: `Upload request for '${filename}' timed out.`});
+            },
+            timeoutMillis);
+        });
+
+        const uploadPromise = new Promise<FileUploadResult>((resolve, reject) => {
+            uploadSub = this.httpClient.post(url, formData, {observe: 'response'}).subscribe( response => {
+                if (fileUploadTimer) {
+                    clearTimeout(fileUploadTimer);
+                }
                 const msg = `File ${filename} uploaded to server successfully.`;
                 this.log.info(msg);
                 this.log.info(`File upload response: ${JSON.stringify(response)}`);
                 resolve({success: true, message: msg});
             },
             err => {
+                if (fileUploadTimer) {
+                    clearTimeout(fileUploadTimer);
+                }
                 const msg = `Upload Error occurred: ${JSON.stringify(err)}`;
                 this.log.error(msg);
                 const statusCode = err.status || (err.error ? err.error.status : null);
@@ -77,7 +97,8 @@ export class FileUploadService {
                 reject({success: false, message: returnMsg});
             });
         });
-        return prom;
+
+        return Promise.race([timeoutPromise, uploadPromise]);
     }
 
     protected readFile(localfilepath: string, contentType: string): Promise<Blob> {
