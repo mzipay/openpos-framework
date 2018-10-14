@@ -21,8 +21,7 @@ export class BarcodeScannerPlugin extends CordovaDevicePlugin {
 
     processRequest(deviceRequest: IDeviceRequest, successCallback: (response: any) => void, errorCallback: (error: string) => void) {
         this.log.info(`Attempting to invoke camera scanner via plugin '${this.pluginId}'`);
-        this.impl.scan(
-          function (result) {
+        this.impl.scan( (result) => {
             if (! result.cancelled) {
                 successCallback(new Scan(result.text, result.format));
                 this.log.info('We got a barcode\n' +
@@ -34,7 +33,7 @@ export class BarcodeScannerPlugin extends CordovaDevicePlugin {
                 this.log.info('Barcode scan cancelled');
             }
           },
-          function (error) {
+          (error) => {
             const msg = `Scanning failed: ${error}`;
             console.error(msg);
             errorCallback(msg);
