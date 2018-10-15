@@ -428,6 +428,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
     }
 
     public onPersonalize() {
+        this.devMenuPanel.close();
         this.personalization.dePersonalize();
         this.session.unsubscribe();
         this.session.cancelLoading();
