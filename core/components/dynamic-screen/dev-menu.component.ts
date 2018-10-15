@@ -101,8 +101,10 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
     private disableDevMenu = false;
 
     @ViewChild(TemplateDirective) host: TemplateDirective;
+    @ViewChild('devMenuPanel') devMenuPanel: MatExpansionPanel;
 
-    constructor(private log: Logger, private personalization: PersonalizationService, public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
+    constructor(private log: Logger, private personalization: PersonalizationService, 
+        public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
         public deviceService: DeviceService, public dialog: MatDialog,
         public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
         protected router: Router, private pluginService: PluginService,
@@ -497,12 +499,12 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
                     this.fileUploadService.uploadLocalDeviceFileToServer('log', targetFilename, 'text/plain', logfilePath)
                         .then((result: { success: boolean, message: string }) => {
                             this.snackBar.open(result.message, 'Dismiss', {
-                                duration: 8000, verticalPosition: 'top'
+                                duration: 8000, verticalPosition: 'bottom'
                             });
                         })
                         .catch((result: { success: boolean, message: string }) => {
                             this.snackBar.open(result.message, 'Dismiss', {
-                                duration: 8000, verticalPosition: 'top'
+                                duration: 8000, verticalPosition: 'bottom'
                             });
                         });
                 },
@@ -519,6 +521,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
             this.logPlugin.impl.readLogFileContents(
                 targetFilename,
                 (logFileContents) => {
+                    this.devMenuPanel.close();
                     const dialogRef = this.dialog.open(FileViewerComponent, {
                         panelClass: 'openpos-default-theme',
                         maxWidth: '100vw', maxHeight: '100vh', width: '100vw'

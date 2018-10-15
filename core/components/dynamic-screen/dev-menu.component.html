@@ -1,5 +1,5 @@
 <div *ngIf="showDevMenu">
-    <mat-expansion-panel class="devMenuPanel">
+    <mat-expansion-panel #devMenuPanel class="devMenuPanel">
         <mat-expansion-panel-header (click)="onDevMenuRefresh()">
             <mat-panel-description fxLayout="row" fxFlex fxLayoutAlign="start center" fxLayoutGap="10px">
                 <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center">
@@ -332,11 +332,23 @@
                     <div *ngIf="!logsAvailable" [style.height.px]="'300'"></div>
                     <ng-container *ngIf="logsAvailable" [style.height.px]="'300'">
                         <mat-divider></mat-divider>
+                        <table id="logs-table">
+                            <tbody>
+                                <tr *ngFor="let m of logFilenames">
+                                    <td>{{m}}</td>
+                                    <td><button mat-icon-button (click)="onLogfileUpload(m)" aria-label="Upload"><mat-icon>publish</mat-icon></button></td>
+                                    <td><button mat-icon-button (click)="onLogfileView(m)" aria-label="View"><mat-icon>pageview</mat-icon></button></td>
+                                    <td><button mat-icon-button (click)="onLogfileShare(m)" aria-label="Share"><mat-icon>share</mat-icon></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--
                         <ul>
                             <li *ngFor="let m of logFilenames">
                                 <button mat-button [matMenuTriggerFor]="logsMenu" (click)="onLogfileSelected(m)">{{m}}</button>
                             </li>
                         </ul>
+                        -->
                     </ng-container>
                 </div>
             </mat-tab>
@@ -370,10 +382,11 @@
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="onDevRestartNode()">Restart Node</button>
     </mat-menu>
-
+<!--
     <mat-menu #logsMenu="matMenu">
         <button mat-menu-item (click)="onLogfileShare()">Share</button>
         <button mat-menu-item (click)="onLogfileUpload()">Upload</button>
         <button mat-menu-item (click)="onLogfileView()">View</button>
     </mat-menu>
+    -->
 </div>

@@ -82,6 +82,17 @@ table {
 }
 
 .logs {
-    width: 30vw;
+    width: 50vw;
     overflow: auto;
+}
+
+#logs-table {
+    display: block; 
+    width: 100%;
+    td {
+        padding-top: 5px;
+        padding-left: 5px;
+        padding-right: 5px;
+        white-space: nowrap;
+    }
 }
