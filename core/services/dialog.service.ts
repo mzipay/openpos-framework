@@ -7,7 +7,8 @@ import { IScreen } from '../components/dynamic-screen/screen.interface';
 import { DialogContentComponent } from '../components/dialog-content/dialog-content.component';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { OpenPOSDialogConfig } from '../interfaces';
-import { StartupService } from './startup.service';
+import { Observable, BehaviorSubject } from 'rxjs';
+
 @Injectable({
     providedIn: 'root',
 })
@@ -21,30 +22,38 @@ export class DialogService {
 
     private lastDialogType: string;
 
+    private $dialogMessages = new BehaviorSubject<any>(null);
+
     constructor(
         private log: Logger,
         private componentFactoryResolver: ComponentFactoryResolver,
         private session: SessionService,
-        private dialog: MatDialog,
-        private startupService: StartupService) {
+        private dialog: MatDialog) {
 
+        // Use BehaviorSubject to hang on to most recent dialog so it can be displayed
+        // once dialog service has started. Handles case where server is 'showing' a dialog
+        // but client is starting up. If we wait to subscribe until start() method, we can
+        // miss the dialog.
+        this.session.getMessages('Screen').subscribe(s => { if (s) { this.$dialogMessages.next(s); } } );
+    }
 
-        // Get just the messages we care about for managing dialogs
-        const $dialogMessages = session.getMessages('Screen');
+    public start() {
+        // Defer set up of dialog subcriptions for updating dialogs until service has been started.
+        // Addresses problem of dialogs from server side being shown before app startup has finished.
+        // We use a Startup Task to invoke this start method at nearly the end of startup.
 
         // Pipe all the messages for dialog updates
-        $dialogMessages.pipe(
+        this.$dialogMessages.pipe(
             filter(m => (m.template && m.template.dialog))
         )
             .subscribe(m => this.updateDialog(m));
 
         // We want to close the dialog if we get a clear dialog message or its a screen message that isn't a dialog
-        $dialogMessages.pipe(
+        this.$dialogMessages.pipe(
             filter(m => m.clearDialog || (m.template && !m.template.dialog))
         )
             .subscribe(m => this.closeDialog());
     }
-
 
     public addDialog(name: string, type: Type<IScreen>): void {
         if (this.dialogs.get(name)) {

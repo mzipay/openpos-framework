@@ -22,6 +22,7 @@ import {
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { StartupComponent } from './components/startup/startup.component';
 import { PersonalizationService } from './services/personalization.service';
+import { DialogService } from './services/dialog.service';
 import { StompRService } from '@stomp/ng2-stompjs';
 import { SubscribeToSessionTask } from './components/startup/subscribe-to-session-task';
 import { Router, RouterModule } from '@angular/router';
@@ -30,6 +31,7 @@ import { StartupFailedComponent } from './components/startup/startup-failed.comp
 import { MatDialog } from '@angular/material';
 import { FinalStartupTask } from './components/startup/final-startup-task';
 import { DialogContentComponent } from './components/dialog-content/dialog-content.component';
+import { DialogServiceStartupTask } from './components/startup/dialog-service-startup-task';
 
 @NgModule({
     entryComponents: [
@@ -68,6 +70,7 @@ import { DialogContentComponent } from './components/dialog-content/dialog-conte
         StompRService,
         { provide: STARTUP_TASKS, useClass: PersonalizationStartupTask, multi: true, deps: [PersonalizationService, MatDialog]},
         { provide: STARTUP_TASKS, useClass: SubscribeToSessionTask, multi: true, deps: [SessionService, Router, Logger]},
+        { provide: STARTUP_TASKS, useClass: DialogServiceStartupTask, multi: true, deps: [DialogService]},
         { provide: STARTUP_TASKS, useClass: FinalStartupTask, multi: true, deps: [SessionService]},
         { provide: STARTUP_COMPONENT, useValue: StartupComponent },
         { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent}
