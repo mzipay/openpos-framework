@@ -38,7 +38,7 @@ export class DialogService {
     }
 
     public start() {
-        // Defer set up of dialog subcriptions for updating dialogs until service has been started.
+        // Defer set up of dialog subscriptions for updating dialogs until service has been started.
         // Addresses problem of dialogs from server side being shown before app startup has finished.
         // We use a Startup Task to invoke this start method at nearly the end of startup.
 
