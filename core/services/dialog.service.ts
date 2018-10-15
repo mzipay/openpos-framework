@@ -141,15 +141,13 @@ export class DialogService {
             if (!this.dialogRef) {
                 this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
                 this.dialogRef = this.dialog.open(DialogContentComponent, dialogProperties);
-                this.dialogRef.afterClosed().subscribe(() => {
-                    this.session.cancelLoading();
-                });
             } else {
                 this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' refreshing content...');
                 this.dialogRef.updateSize('' + dialogProperties.minWidth, '' + dialogProperties.minHeight);
                 this.dialogRef.disableClose = dialogProperties.disableClose;
             }
             this.dialogRef.componentInstance.installScreen(dialogComponentFactory);
+            this.session.cancelLoading();
         } else {
             this.log.info(`Using previously created dialogRef. current dialog type: ${dialog.screenType}, last dialog type: ${this.lastDialogType}`);
         }

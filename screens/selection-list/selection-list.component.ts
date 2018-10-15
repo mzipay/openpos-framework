@@ -19,7 +19,7 @@ export class SelectionListComponent extends PosScreen<any> {
 
   buildScreen() {
     if (this.screen.template.localMenuItems) {
-      var i: number;
+      let i: number;
       for (i = 0; i < this.screen.template.localMenuItems.length; i++) {
         this.session.registerActionPayload(this.screen.template.localMenuItems[i].action, () => {
           return this.index;
@@ -47,7 +47,7 @@ export class SelectionListComponent extends PosScreen<any> {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
-    this.session.onAction(menuItem);
+    this.session.onAction(menuItem, this.index);
   }
 
 }
