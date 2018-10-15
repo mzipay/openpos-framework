@@ -36,6 +36,11 @@ public class DialogProperties implements Serializable {
         return forceReopen;
     }
     
+    public DialogProperties forceReopen(boolean forceReopen) {
+        this.setForceReopen(forceReopen);
+        return this;
+    }
+    
     public String getWidth() {
         return width;
     }
