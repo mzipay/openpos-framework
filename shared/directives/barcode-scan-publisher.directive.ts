@@ -1,7 +1,7 @@
 import { Logger } from './../../core/services/logger.service';
 import { Subscription } from 'rxjs';
 import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { SessionService, DeviceService, PluginService, Scan, BarcodeScannerPlugin, DialogService } from '../../core';
+import { SessionService, PluginService, Scan, BarcodeScannerPlugin, DialogService, CordovaService } from '../../core';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
@@ -13,16 +13,17 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
     private barcodeEventSubscription: Subscription;
     constructor(el: ElementRef,
         private log: Logger,
+        private cordovaService: CordovaService,
         private sessionService: SessionService,
-        private deviceService: DeviceService,
         private dialogService: DialogService,
         private pluginService: PluginService) {
     }
 
 
     ngOnInit(): void {
-        this.deviceService.onDeviceReady.subscribe(message => {
+        this.cordovaService.onDeviceReady.subscribe(message => {
             if (message) {
+                this.log.info(`BarcodeScanPublisherDirective got deviceready`);
                 this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin => {
                     this.log.info('BarcodeScanPublisherDirective INITTED, got barcodeScannerPlugin');
                     this.barcodePlugin = <BarcodeScannerPlugin> plugin;
@@ -37,7 +38,7 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
                     });
                 }).catch( error => this.log.info(`Failed to get barcodeScannerPlugin.  Error: ${error}`) );
             }
-         });
+        });
     }
 
     ngOnDestroy(): void {
