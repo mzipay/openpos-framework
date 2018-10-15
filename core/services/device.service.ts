@@ -18,8 +18,6 @@ import { PluginService } from './plugin.service';
 import { SessionService } from './session.service';
 import { CordovaService } from './cordova.service';
 
-// declare var cordova: any;
-
 @Injectable({
     providedIn: 'root',
 })
@@ -31,7 +29,7 @@ export class DeviceService implements IMessageHandler {
     public onAppEnteredForeground: Subject<boolean> = new BehaviorSubject<boolean>(null);
 
     private screen: any;
-    
+
     private screenSubscription: Subscription;
     private cameraScanInProgress = false;
 
@@ -39,9 +37,9 @@ export class DeviceService implements IMessageHandler {
         private cordovaService: CordovaService,
         public pluginService: PluginService,
         private fileUploadService: FileUploadService) {
-        
+
         this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
-        
+
         // On iOS need to enter into loading state when the app is backgrounded, otherwise
         // user can execute actions as app is coming back to foreground.
 
@@ -143,6 +141,9 @@ export class DeviceService implements IMessageHandler {
     }
 
     public scan(source?: string) {
+        // TODO: should be able to modify this method to pass in the screen instead of 
+        // subscribing to all screen updates.  The only place that invokes this method
+        // is the scan-something.component.
         if (this.screen.template && this.screen.template.scan &&
             this.screen.template.scan.scanType === 'CAMERA_CORDOVA') {
             this.log.info(`request to scan was made for: ${this.screen.template.scan.scanType}`);

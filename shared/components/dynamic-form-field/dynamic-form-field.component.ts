@@ -243,6 +243,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
           {requestId: 'scan', deviceId: 'barcode-scanner', type: null, subType: null, payload: null},
           (scan) => {
             if (scan instanceof Scan && ! scan.cancelled) {
+                this.log.info(`Scan value of '${scan.value}' received for field '${formField.id}'`);
                 this.setFieldValue(formField.id, scan.value);
             }
           },
