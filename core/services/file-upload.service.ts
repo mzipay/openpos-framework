@@ -33,6 +33,8 @@ export class FileUploadService {
             formData.append('filename', filename);
             try {
                 const fileBlob = await this.readFile(localfilepath, contentType);
+                // For testing large file uploads
+                // const fileBlob = await this.readMockFile(localfilepath, contentType);
                 this.log.info(`File ${filename} read successfully.  Size is: ${fileBlob.size} bytes. Will now attempt to upload...`);
                 formData.append('file', fileBlob);
                 return this.uploadFile(url, filename, formData);
@@ -99,6 +101,16 @@ export class FileUploadService {
         });
 
         return Promise.race([timeoutPromise, uploadPromise]);
+    }
+
+    private readMockFile(localfilepath: string, contentType: string): Promise<Blob> {
+        const giantArray = [];
+        const repeat = '0123457890012345789001234578900123457890012345789001234578900123457890012345789001234578900123457890';
+        for (let i = 0; i < 500000; i++) {
+            giantArray.push(repeat);
+        }
+        const blob = new Blob(giantArray, { type: contentType });
+        return Promise.resolve(blob);
     }
 
     protected readFile(localfilepath: string, contentType: string): Promise<Blob> {
