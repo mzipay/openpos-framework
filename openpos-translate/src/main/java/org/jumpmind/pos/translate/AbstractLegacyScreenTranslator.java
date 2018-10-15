@@ -347,6 +347,16 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         return this.legacyScreen.getResourceBundleFilename();
     }
 
+    protected boolean isPanelButtonPresent(String panelKey, String actionName) {
+        List<ILegacyButtonSpec> allPanelButtons = this.getPanelButtons(panelKey, Optional.of(false));
+        return allPanelButtons.stream().anyMatch(buttonSpec -> actionName.equals(buttonSpec.getActionName()));
+    }
+    
+    protected boolean isPanelButtonEnabled(String panelKey, String actionName) {
+        List<ILegacyButtonSpec> enabledPanelButtons = this.getPanelButtons(panelKey, Optional.of(true));
+        return enabledPanelButtons.stream().anyMatch(buttonSpec -> actionName.equals(buttonSpec.getActionName()));
+    }
+    
     protected List<ILegacyButtonSpec> getPanelButtons(String panelKey, Optional<Boolean> enabledButtonsOnlyOpt) {
         ILegacyAssignmentSpec assignmentPanelSpec = getLegacyAssignmentSpec(panelKey);
         List<ILegacyButtonSpec> buttons = new ArrayList<>();
