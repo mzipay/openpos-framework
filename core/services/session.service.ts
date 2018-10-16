@@ -389,7 +389,7 @@ export class SessionService implements IMessageHandler {
                     sendToServer();
                     if (!isValueChangedAction) {
                         // not sure if this is the best way to do this, but its how we are doing it for now
-                        this.sessionMessages$.next({ clearDialog: true});
+                        this.sessionMessages$.next({ type: 'ClearDialog', clearDialog: true});
                     }
                 }
             } else {
