@@ -35,7 +35,7 @@ export class SellComponent extends AbstractTemplate {
     this.template = screen.template;
     this.statusBar = SellScreenUtils.getStatusBar(screen);
     this.statusSection = SellScreenUtils.getStatusSection(this.template);
-    if (this.template.localMenuItems.length > 0) {
+    if (this.template.localMenuItems && this.template.localMenuItems.length > 0) {
         this.initializeDrawerMediaSizeHandling();
       } else {
         this.drawerOpen = of(false);
