@@ -1,4 +1,5 @@
 package org.jumpmind.pos.core.config;
+
 import java.util.Map;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
@@ -34,76 +35,98 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     final protected Logger logger = LoggerFactory.getLogger(getClass());
-    
+
     @Autowired
     MutableBoolean initialized;
-    
+
     @Autowired
     Environment env;
-    
+
     ObjectMapper mapper = new ObjectMapper();
-    
-    @Value("${openpos.compatibility.version:v1}") // Default to 'v1' so pre-existing clients aren't broken
-    String serverCompatibilityVersion; 
-    
+
+    @Value("${openpos.compatibility.version:v1}") // Default to 'v1' so
+                                                  // pre-existing clients aren't
+                                                  // broken
+    String serverCompatibilityVersion;
+
     @Override
     public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
-        registration.setMessageSizeLimit(80000); //75681
+        registration.setMessageSizeLimit(80000); // 75681
         registration.setSendBufferSizeLimit(80000);
     }
-    
-	@Override
-	public void configureMessageBroker(MessageBrokerRegistry config) {
-		config.enableSimpleBroker("/topic").setTaskScheduler(new DefaultManagedTaskScheduler())
-				.setHeartbeatValue(new long[] { 0, 20000 });
-		config.setApplicationDestinationPrefixes("/app");
-		config.setPathMatcher(new AntPathMatcher("."));
-	}
-	
-   @Override
-    public void configureClientOutboundChannel(ChannelRegistration registration) {
-       registration.interceptors(new ChannelInterceptorAdapter() {
-           @Override
-           public Message<?> preSend(Message<?> message, MessageChannel channel) {
-               Message<?> returnMessage = message;
-               SimpMessageHeaderAccessor accessor = SimpMessageHeaderAccessor.wrap(message);
-               if(accessor != null) {
-                   SimpMessageType messageType = accessor.getMessageType();
-                   if(messageType == SimpMessageType.MESSAGE) {
-                       // Add compatibility version to message headers going out to client
-                       if (WebSocketConfig.this.serverCompatibilityVersion != null) {
-                           accessor.addNativeHeader(MessageUtils.COMPATIBILITY_VERSION_HEADER, WebSocketConfig.this.serverCompatibilityVersion);
-                           returnMessage = MessageBuilder.createMessage(message.getPayload(), accessor.getMessageHeaders());
-                       }
-                   }
-               }
-               return returnMessage;
-           }
-       });
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic").setTaskScheduler(new DefaultManagedTaskScheduler()).setHeartbeatValue(new long[] { 0, 20000 });
+        config.setApplicationDestinationPrefixes("/app");
+        config.setPathMatcher(new AntPathMatcher("."));
     }
 
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        /*
+         * https://stackoverflow.com/questions/29689838/sockjs-receive-stomp-
+         * messages-from-spring-websocket-out-of-order
+         */
+        registration.taskExecutor().corePoolSize(1);
+    }
 
-	@Override
-	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/api").setAllowedOrigins("*").withSockJS().setInterceptors(new HandshakeInterceptor() {
+    @Override
+    public void configureClientOutboundChannel(ChannelRegistration registration) {
+        /*
+         * https://stackoverflow.com/questions/29689838/sockjs-receive-stomp-
+         * messages-from-spring-websocket-out-of-order
+         */
+        registration.taskExecutor().corePoolSize(1);
+        registration.interceptors(new ChannelInterceptorAdapter() {
+            @Override
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+                Message<?> returnMessage = message;
+                SimpMessageHeaderAccessor accessor = SimpMessageHeaderAccessor.wrap(message);
+                if (accessor != null) {
+                    SimpMessageType messageType = accessor.getMessageType();
+                    if (messageType == SimpMessageType.MESSAGE) {
+                        // Add compatibility version to message headers going
+                        // out to client
+                        if (WebSocketConfig.this.serverCompatibilityVersion != null) {
+                            accessor.addNativeHeader(MessageUtils.COMPATIBILITY_VERSION_HEADER,
+                                    WebSocketConfig.this.serverCompatibilityVersion);
+                            returnMessage = MessageBuilder.createMessage(message.getPayload(), accessor.getMessageHeaders());
+                        }
+                    }
+                }
+                return returnMessage;
+            }
+        });
+    }
 
-		    @Override
-		    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-		            Exception exception) {
-		    }
-		    
-		    @Override
-		    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-		            Map<String, Object> attributes) throws Exception {
-		        if (!initialized.booleanValue()) {
-		            logger.info("Rejected websocket communication attempt because the server is not initialized");
-		            return false;
-		        } else {
-		            return true;
-		        }
-		        
-		    }
-		});
-	}
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/api").setAllowedOrigins("*").withSockJS().setInterceptors(new HandshakeInterceptor() {
+
+            @Override
+            public void afterHandshake(
+                    ServerHttpRequest request,
+                    ServerHttpResponse response,
+                    WebSocketHandler wsHandler,
+                    Exception exception) {
+            }
+
+            @Override
+            public boolean beforeHandshake(
+                    ServerHttpRequest request,
+                    ServerHttpResponse response,
+                    WebSocketHandler wsHandler,
+                    Map<String, Object> attributes) throws Exception {
+                if (!initialized.booleanValue()) {
+                    logger.info("Rejected websocket communication attempt because the server is not initialized");
+                    return false;
+                } else {
+                    return true;
+                }
+
+            }
+        });
+    }
 
 }
