@@ -34,7 +34,7 @@ export class DialogService {
         // once dialog service has started. Handles case where server is 'showing' a dialog
         // but client is starting up. If we wait to subscribe until start() method, we can
         // miss the dialog.
-        this.session.getMessages('Screen', 'ClearDialog').subscribe(s => { if (s) { this.$dialogMessages.next(s); } } );
+        this.session.getMessages('Screen').subscribe(s => { if (s) { this.$dialogMessages.next(s); } } );
     }
 
     public start() {
@@ -45,12 +45,14 @@ export class DialogService {
         // Pipe all the messages for dialog updates
         this.$dialogMessages.pipe(
             filter(m => (m.template && m.template.dialog))
-        ).subscribe(m => this.updateDialog(m));
+        )
+            .subscribe(m => this.updateDialog(m));
 
         // We want to close the dialog if we get a clear dialog message or its a screen message that isn't a dialog
         this.$dialogMessages.pipe(
-            filter(m => m.clearDialog || (m.type === 'Screen' && m.screenType === 'Loading'))
-        ).subscribe(m => this.closeDialog());
+            filter(m => m.type === 'Screen' && m.screenType === 'Loading')
+        )
+            .subscribe(m => this.closeDialog());
     }
 
     public addDialog(name: string, type: Type<IScreen>): void {
