@@ -44,13 +44,13 @@ export class DialogService {
 
         // Pipe all the messages for dialog updates
         this.$dialogMessages.pipe(
-            filter(m => (m.template && m.template.dialog))
+            filter(m => (m && m.template && m.template.dialog))
         )
             .subscribe(m => this.updateDialog(m));
 
         // We want to close the dialog if we get a clear dialog message or its a screen message that isn't a dialog
         this.$dialogMessages.pipe(
-            filter(m => m.type === 'Screen' && m.screenType === 'Loading')
+            filter(m => m && m.type === 'Screen' && m.screenType === 'Loading')
         )
             .subscribe(m => this.closeDialog(false));
     }
@@ -88,6 +88,8 @@ export class DialogService {
             }
             this.dialogRef.close();
             this.dialogRef = null;
+        } else if (cancelLoading) {
+            this.session.cancelLoading();
         }
     }
 
