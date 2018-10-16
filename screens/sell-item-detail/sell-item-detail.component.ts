@@ -24,4 +24,8 @@ export class SellItemDetailComponent extends PosScreen<any> {
     this.promosDataSource = new MatTableDataSource(this.screen.promos);
   }
 
+  onIdClick(id: any) {
+    this.session.onAction('LinkClicked', id);
+  }
+
 }

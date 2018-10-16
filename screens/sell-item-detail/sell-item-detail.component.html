@@ -20,9 +20,12 @@
                                     <span matLine *ngFor="let id of subfield.list" class="text-md">
                                         {{id}}
                                     </span>
+                                    <span matLine *ngFor="let id of subfield.links" class="text-md primary" (click)="onIdClick(id)">
+                                        {{id}}
+                                    </span>
                                 </div>
                             </ng-template>
-    
+
                         </div>
                     </mat-list-item>
                     
