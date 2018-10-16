@@ -147,8 +147,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
         this.installedScreen.show(screen, this, this.installedTemplate);
 
         this.updateClasses(screen);
-        this.dialogService.closeDialog();
-        this.session.cancelLoading();
+        this.dialogService.closeDialog(true);
     }
 
     protected logSwitchScreens(screen: any) {

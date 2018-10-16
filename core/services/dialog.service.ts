@@ -52,7 +52,7 @@ export class DialogService {
         this.$dialogMessages.pipe(
             filter(m => m.type === 'Screen' && m.screenType === 'Loading')
         )
-            .subscribe(m => this.closeDialog());
+            .subscribe(m => this.closeDialog(false));
     }
 
     public addDialog(name: string, type: Type<IScreen>): void {
@@ -78,9 +78,14 @@ export class DialogService {
         }
     }
 
-    public closeDialog() {
+    public closeDialog(cancelLoading: boolean) {
         if (this.dialogRef) {
             this.log.info('[DialogService] closing dialog ref');
+            if (cancelLoading) {
+              this.dialogRef.afterClosed().subscribe(result => {
+                  this.session.cancelLoading();
+              });
+            }
             this.dialogRef.close();
             this.dialogRef = null;
         }
@@ -135,7 +140,7 @@ export class DialogService {
             || dialog.refreshAlways) {
 
             if (forceReopen) {
-                this.closeDialog();
+                this.closeDialog(false);
             }
 
             if (!this.dialogRef) {
