@@ -50,7 +50,7 @@ export class DialogService {
 
         // We want to close the dialog if we get a clear dialog message or its a screen message that isn't a dialog
         this.$dialogMessages.pipe(
-            filter(m => m.clearDialog || (m.template && !m.template.dialog))
+            filter(m => m.type === 'Screen' && m.screenType === 'Loading')
         )
             .subscribe(m => this.closeDialog());
     }
