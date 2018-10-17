@@ -380,8 +380,8 @@ export class DynamicListControlComponent implements OnInit {
     }
     
     public log(message : string)  {
-        if (message)  {
-            console.log(message);
-        }
+        // if (message)  {
+        //     console.log(message);
+        // }
     }
 }
