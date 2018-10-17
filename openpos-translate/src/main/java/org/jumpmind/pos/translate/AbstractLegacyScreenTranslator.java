@@ -237,6 +237,29 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                     assignmentPanelSpec.getBeanSpecName());
             Map<String, Boolean> enabledState = parseButtonStates(assignmentPanelSpec);
 
+            // Check if there is an override of the button state for the Undo button in the GlobalButtonBeanModel
+            ILegacyPOSBaseBeanModel model = legacyPOSBeanService.getLegacyPOSBaseBeanModel(this.legacyScreen);
+            if (model.getGlobalButtonBeanModel() != null) {
+                ILegacyButtonSpec[] modifyButtons = model.getGlobalButtonBeanModel().getModifyButtons();
+                if (modifyButtons != null) {
+                    Arrays.stream(modifyButtons).filter( modBtnSpec -> 
+                            ("Undo".equals(modBtnSpec.getActionName()) || "Undo".equals(modBtnSpec.getLabelTag())) || 
+                            (cancelAsBack && (("Cancel".equals(modBtnSpec.getActionName()) || "Cancel".equals(modBtnSpec.getLabelTag())))))
+                        .forEachOrdered( modBtnSpec -> {
+                            Boolean specButtonState = enabledState.get(modBtnSpec.getActionName());
+                            if (specButtonState != null) {
+                                if (! specButtonState.equals(modBtnSpec.getEnabled())) {
+                                    logger.info("Changing enabled state of '{}' button from '{}' to '{}' due to override in screen bean model", 
+                                            modBtnSpec.getActionName(), specButtonState, modBtnSpec.getEnabled());
+                                    enabledState.put(modBtnSpec.getActionName(), modBtnSpec.getEnabled());
+                                }   
+                            } else {
+                                enabledState.put(modBtnSpec.getActionName(), modBtnSpec.getEnabled());   
+                            }
+                        });
+                }
+            }
+            
             Arrays.stream(globalNavSpec.getButtons())
                     .filter(buttonSpec -> Optional.ofNullable(enabledState.get(buttonSpec.getActionName())).orElse(buttonSpec.getEnabled()))
                     .forEachOrdered(enabledButtonSpec -> {
