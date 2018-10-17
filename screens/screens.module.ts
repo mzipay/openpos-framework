@@ -6,6 +6,7 @@ import { ScreenService, DialogService } from '../core';
 
 // Screens
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
+import { DynamicListComponent } from './dynamic-list/dynamic-list.component';
 import { TenderingComponent } from './tendering/tendering.component';
 import { WarrantyCoverageComponent } from './warranty-coverage/warranty-coverage.component';
 import { SaleRetrievalComponent } from './sale-retrieval/sale-retrieval.component';
@@ -47,6 +48,7 @@ import { SellComponent } from './templates/sell-template/sell/sell.component';
 import { SellLinkedCustomerComponent } from './templates/sell-template/sell-linked-customer/sell-linked-customer.component';
 import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';
+import { DynamicListDialogComponent } from './dynamic-list/dynamic-list-dialog.component';
 import { ChooseOptionsDialogComponent } from './choose-options/choose-options-dialog.component';
 import { LoadingDialogComponent } from './loading-dialog/loading-dialog.component';
 import { LoginDialogComponent } from './login/login-dialog.component';
@@ -85,6 +87,7 @@ const screens = [
     TillCountComponent,
     TillCountOtherTenderComponent,
     DynamicFormComponent,
+    DynamicListComponent,
     ChangeComponent,
     PrintPreviewComponent,
     WaitComponent,
@@ -102,6 +105,7 @@ const screens = [
 const dialogs = [
     ChooseOptionsDialogComponent,
     DynamicFormDialogComponent,
+    DynamicListDialogComponent,
     LoadingDialogComponent,
     LoginDialogComponent,
     MultipleDynamicFormDialogComponent,
