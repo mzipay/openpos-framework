@@ -63,19 +63,15 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     }
 
     @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        /*
-         * https://stackoverflow.com/questions/29689838/sockjs-receive-stomp-
-         * messages-from-spring-websocket-out-of-order
-         */
-        registration.taskExecutor().corePoolSize(1);
-    }
-
-    @Override
     public void configureClientOutboundChannel(ChannelRegistration registration) {
         /*
          * https://stackoverflow.com/questions/29689838/sockjs-receive-stomp-
          * messages-from-spring-websocket-out-of-order
+         * 
+         * Also tried setting the poolSize to 1 on the clientInboundChannel configuration, but then we started to see
+         * DeviceResponses sent back from the client getting dropped.  Perhaps the inbound problem on the websocket is due to
+         * near-simultaneously transmission of various messages types (Screens, DeviceResponse, KeepAlive) from the client to the 
+         * server, making the problem more prevalent?  Something to keep an eye on.
          */
         registration.taskExecutor().corePoolSize(1);
         registration.interceptors(new ChannelInterceptorAdapter() {
