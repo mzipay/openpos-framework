@@ -300,7 +300,7 @@ export class DynamicListControlComponent implements OnInit {
         }
     }
 
-    public onSubmit(action : string)  {
+    public onSubmit(action : string = null)  {
         this.log('onSubmit() called with action ' + (action ? action : '*undefined*'));
         this.list.formErrors = [];
         let isValid = true;
