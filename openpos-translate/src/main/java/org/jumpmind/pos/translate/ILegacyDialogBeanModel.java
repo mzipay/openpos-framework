@@ -35,7 +35,8 @@ public interface ILegacyDialogBeanModel {
         CANCEL_HANDENTER,
         RETRY_TENDER,
         PHONE_NOT_LINKED,
-        YES_NO_PRINT;
+        YES_NO_PRINT,
+        BYPASS_CONTINUE
     }
     
     enum ButtonType {
@@ -60,7 +61,8 @@ public interface ILegacyDialogBeanModel {
         BUTTON_PRINT, 
         BUTTON_SIGNUP, 
         BUTTON_SUSPEND, 
-        BUTTON_TENDER        
+        BUTTON_TENDER,
+        BUTTON_BYPASS
     }
     
     String getResourceID();
