@@ -17,11 +17,7 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     itemActions: IMenuItem[] = [];
     condensedListDisplay: false;
     selectionMode: string;
-    // @ViewChild('productList') productList: ProductListComponent;
 
-    //  ----------------------------------
-    //  Copied from transaction.component
-    // @ViewChild('box') vc;
     @ViewChild('scrollList') private scrollList: ElementRef;
     public size = -1;
     initialized = false;
@@ -74,7 +70,6 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
 
     ngAfterViewChecked() {
         if (this.items && this.size !== this.items.length) {
-            // this.scrollToBottom();
             this.size = this.items.length;
         }
     }
@@ -95,7 +90,6 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     onItemSelected(itemInfo: ItemClickAction): void {
         if (this.getSelectionModeAsEnum() === SelectionMode.Multiple) {
             this.session.response = this.selectedItems;
-            // this.session.response = this.productList.selectedItems;
         }
     }
 
@@ -160,7 +154,6 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     }
 
     showItemDetailScreen(items: IItem[]) {
-        //  Send the Item Display action to the page.
         this.session.onAction('ItemDisplay', items);
     }
 
@@ -177,7 +170,7 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
 
     openItemsDialog(items: IItem[]): void {
         let optionItems = [];
-        this.session.response = items;  // this.getIndexes(items);
+        this.session.response = items;
 
         if (items.length > 1) {
             //  NOTE: There are currently no available options for multiple selections.
@@ -217,9 +210,6 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     }
 
     private getAddActionName(): string {
-        //  The Add action is named differently for different callers.  Return the
-        //  name that matches our scenario.
-
         if (this.addActionPresent) {
             //  Sell Item -> Inquiry scenario.
             return 'Add';
