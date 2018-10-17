@@ -366,7 +366,7 @@ export class DynamicListControlComponent implements OnInit {
 
             this.log('Form has ' + this.list.formErrors.length + ' error(s)');
             isValid = false;
-            document.getElementById('formErrorsWrapper').scrollIntoView();
+            // document.getElementById('formErrorsWrapper').scrollIntoView();
 
         }  else  {
             //  No errors, perform the submit action.

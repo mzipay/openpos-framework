@@ -1,5 +1,5 @@
 <form id="dynamic-list" (ngSubmit)="onSubmit()" novalidate>
-    <div class="dynamic-list" [formGroup]="form" fxLayout="column" fxLayoutAlign="start">
+    <div class="dynamic-list" fxLayout="column" fxLayoutAlign="start">
         <div fxLayout="row" fxLayoutAlign="start">
             <!--  Add Value field. -->
             <mat-card *ngIf="list.addValueField" fxFlex="1 1 auto" class="page-content-card value-field" fxLayout="row" fxLayoutAlign="start">
