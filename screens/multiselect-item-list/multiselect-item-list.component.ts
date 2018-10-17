@@ -51,7 +51,7 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
         //  Copied from transaction.component buildScreen() method...
 
         this.listConfig = new SelectableItemListComponentConfiguration<IItem>();
-        this.listConfig.selectionMode = SelectionMode.Multiple;
+        this.listConfig.selectionMode = this.getSelectionModeAsEnum();
         this.listConfig.numResultsPerPage = Number.MAX_VALUE;
         this.listConfig.items = this.screen.items;
         if (this.screen.selectedItems) {
@@ -166,7 +166,7 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
 
     addItemsToSale(items: IItem[]) {
         //  Send the appropriate Add action to the page.
-        const message = (items.length === 1 ? 'Add the selected item to the transaction?' : 'Add the ' + items.length + ' selected items to the transaction?')
+        const message = (items.length === 1 ? 'Add the selected item to the transaction?' : 'Add the ' + items.length + ' selected items to the transaction?');
         this.session.onAction(this.getAddActionName(), items, message);
     }
 
@@ -200,6 +200,10 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
         });
     }
 
+    doItemAction(item: IItem): void {
+        this.session.onAction(this.itemActions[0], [item]);
+    }
+
     public getIndexes(items: IItem[]): number[] {
         const indexes = [];
         items.forEach(item => indexes.push(item.index));
@@ -213,7 +217,7 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     }
 
     private getAddActionName(): string {
-        //  The Add action is named differently for different callers.  Return the 
+        //  The Add action is named differently for different callers.  Return the
         //  name that matches our scenario.
 
         if (this.addActionPresent) {
@@ -221,7 +225,7 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
             return 'Add';
         } else if (this.nextActionPresent) {
             //  Sell Item -> Non-Marchandise scenario.
-            return 'Next'
+            return 'Next';
         }
 
         // If we made it here, there is no Add action for this scenario.

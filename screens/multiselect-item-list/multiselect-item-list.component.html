@@ -33,8 +33,18 @@
                             </span>
                         </div>	
                         <div fxAlign="right" >
-                            <button *ngIf="isAnyActionPresent() && selectedItems.length == 0" mat-icon-button color="primary" (click)="openItemDialog(item)">
+                            <button *ngIf="isAnyActionPresent() && selectedItems.length == 0 && itemActions.length > 1" mat-icon-button color="primary" (click)="openItemDialog(item)">
                                 <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <button *ngIf="isAnyActionPresent() && !isAddActionPresent() && 
+                            selectedItems.length == 0 && itemActions.length === 1" mat-icon-button color="primary" 
+                            (click)="doItemAction(item)">
+                                <mat-icon>keyboard_arrow_right</mat-icon>
+                            </button>
+                            <button *ngIf="isAnyActionPresent() && isAddActionPresent() && 
+                            selectedItems.length == 0 && itemActions.length === 1" mat-icon-button color="primary" 
+                            (click)="addItemsToSale([item])">
+                                <mat-icon *ngIf="isAddActionPresent()">add_circle</mat-icon>
                             </button>
                         </div>
                      </div>
