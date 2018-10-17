@@ -34,12 +34,11 @@ import org.jumpmind.pos.core.model.IFormElement;
 import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
-import org.jumpmind.pos.core.screen.DialogProperties;
-import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.FormScreen;
 import org.jumpmind.pos.core.screen.IHasForm;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.ScreenType;
+import org.jumpmind.pos.core.screen.Toast;
 import org.jumpmind.pos.util.LogFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -174,13 +173,7 @@ public class ScreenService implements IScreenService, IActionListener {
                     stateManager.doAction(action);
                 } catch (Throwable ex) {
                     logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
-                    DialogScreen errorDialog = new DialogScreen();
-                    errorDialog.asDialog(new DialogProperties(true));
-                    errorDialog.setIcon("error");
-                    errorDialog.setTitle("Internal Server Error");
-                    errorDialog.setMessage(Arrays
-                            .asList("The application received an unexpected error. Please report to the appropriate technical personnel"));
-                    showScreen(appId, deviceId, errorDialog);
+                    showScreen(appId, deviceId, Toast.createWarningToast("The application received an unexpected error. Please report to the appropriate technical personnel"));
                 }
             }
         }

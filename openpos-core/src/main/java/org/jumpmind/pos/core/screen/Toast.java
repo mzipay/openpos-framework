@@ -8,13 +8,13 @@ public class Toast extends Screen {
     private ToastType toastType;
     private int duration = 2500;
 
-    public static Toast CreateSuccessToast(String message) {
+    public static Toast createSuccessToast(String message) {
         Toast toast = new Toast(message);
         toast.setToastType(ToastType.Success);
         return toast;
     }
 
-    public static Toast CreateWarningToast(String message) {
+    public static Toast createWarningToast(String message) {
         Toast toast = new Toast(message);
         toast.setToastType(ToastType.Warn);
         toast.setDuration(0);
