@@ -4,6 +4,7 @@ import { ChooseOptionsComponent } from './choose-options/choose-options.componen
 import { EmbeddedWebPageComponent } from './embedded-web-page/embedded-web-page.component';
 import { FormComponent } from './form/form.component';
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
+import { DynamicListComponent } from './dynamic-list/dynamic-list.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { ItemListComponent } from './item-list/item-list.component';
@@ -34,6 +35,7 @@ import { SellComponent } from './templates/sell-template/sell/sell.component';
 import { ChooseOptionsDialogComponent } from './choose-options/choose-options-dialog.component';
 import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';
 import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
+import { DynamicListDialogComponent } from './dynamic-list/dynamic-list-dialog.component';
 import { LoadingDialogComponent } from './loading-dialog/loading-dialog.component';
 import { LoginDialogComponent } from './login/login-dialog.component';
 import { VersionComponent } from './version/version.component';
@@ -45,6 +47,7 @@ import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.compo
 import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 
+
 export const ScreenConstants = {
     screens : [
         { name: 'BasicItemSearch', component: BasicItemSearchComponent },
@@ -52,6 +55,7 @@ export const ScreenConstants = {
         { name: 'EmbeddedWebPage', component: EmbeddedWebPageComponent },
         { name: 'Form', component: FormComponent },
         { name: 'DynamicForm', component: DynamicFormComponent },
+        { name: 'DynamicList', component: DynamicListComponent },
         { name: 'Login', component: LoginComponent },
         { name: 'Home', component: HomeComponent },
         { name: 'ItemList', component: ItemListComponent },
@@ -91,6 +95,7 @@ export const ScreenConstants = {
         // To make a dialog screen available add it here and in entryComponents in the app.module.ts
         { name: 'ChooseOptions', component: ChooseOptionsDialogComponent },
         { name: 'DynamicForm', component: DynamicFormDialogComponent },
+        { name: 'DynamicList', component: DynamicListDialogComponent },
         { name: 'MultipleDynamicForm', component: MultipleDynamicFormDialogComponent },
         { name: 'Dialog', component: DialogComponent },
         { name: 'LoadingDialog', component: LoadingDialogComponent },

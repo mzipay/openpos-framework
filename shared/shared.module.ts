@@ -48,6 +48,7 @@ import {
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe } from './pipes';
+import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
 
 const components = [
     PromptInputComponent,
@@ -56,6 +57,7 @@ const components = [
     DynamicDateFormFieldComponent,
     DynamicFormFieldComponent,
     DynamicFormControlComponent,
+    DynamicListControlComponent,
     ProductListComponent,
     SelectableItemListComponent,
     OverFlowListComponent,
