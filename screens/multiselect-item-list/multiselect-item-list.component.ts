@@ -165,10 +165,6 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
 
     openItemsDialog(items: IItem[]): void {
         let optionItems = [];
-<<<<<<< HEAD
-=======
-        this.session.response = items;
->>>>>>> branch 'master' of https://github.com/JumpMind/openpos-client-core-lib.git
 
         if (items.length > 1) {
             //  NOTE: There are currently no available options for multiple selections.

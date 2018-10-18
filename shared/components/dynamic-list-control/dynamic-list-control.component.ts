@@ -10,28 +10,28 @@ import { forEach } from '@angular/router/src/utils/collection';
     selector: 'app-dynamic-list-control',
     templateUrl: './dynamic-list-control.component.html',
     styleUrls: ['./dynamic-list-control.component.scss']
-  })
+})
 
 export class DynamicListControlComponent implements OnInit {
 
     @Input() formGroup: FormGroup;
     @Input() controlName: string;
-    @Input() list : IListComponent;  // @ViewChild('list') 
+    @Input() list: IListComponent;  // @ViewChild('list') 
     @Input() submitButton: IMenuItem;
     @Input() keyboardLayout: string;
 
     @Output() valueChange = new EventEmitter<any>();
- 
+
     form: FormGroup;
     buttons: IFormElement[];
 
-    private _initialized : boolean = false;
-    private _hasAddValueField : boolean = false;
-    private _hasSummaryField  : boolean = false;
-    private _isText : boolean = false;
-    private _isNumeric : boolean = false;
-    private _isMoney : boolean = false;
-    private _total : number = 0;
+    private _initialized = false;
+    private _hasAddValueField = false;
+    private _hasSummaryField = false;
+    private _isText = false;
+    private _isNumeric = false;
+    private _isMoney = false;
+    private _total = 0;
 
     private _alternateSubmitActions: string[];
     private _screenForm: IForm;
@@ -42,11 +42,11 @@ export class DynamicListControlComponent implements OnInit {
     }
 
     @Input()
-    get screenForm() : IForm {
+    get screenForm(): IForm {
         return this._screenForm;
     }
-  
-    set screenForm(screenForm : IForm) {
+
+    set screenForm(screenForm: IForm) {
         this._screenForm = screenForm;
         this.buttons = new Array<IFormElement>();
 
@@ -60,27 +60,27 @@ export class DynamicListControlComponent implements OnInit {
     }
 
     @Input()
-    get alternateSubmitActions() : string[] {
+    get alternateSubmitActions(): string[] {
         return this._alternateSubmitActions;
     }
 
-    set alternateSubmitActions(actions : string[]) {
+    set alternateSubmitActions(actions: string[]) {
         this._alternateSubmitActions = actions;
         if (actions) {
             actions.forEach(action => {
                 this.session.registerActionPayload(action, () => {
-                if (this.form.valid) {
-                    this.formBuilder.buildFormPayload(this.form, this._screenForm);
-                    return this.session.response = this._screenForm;
-                    
-                } else {
-                    // Show errors for each of the fields where necessary
-                    Object.keys(this.form.controls).forEach(f => {
-                        const control = this.form.get(f);
-                        control.markAsTouched({onlySelf: true});
-                    });
-                    throw Error('form is invalid');
-                }
+                    if (this.form.valid) {
+                        this.formBuilder.buildFormPayload(this.form, this._screenForm);
+                        return this._screenForm;
+
+                    } else {
+                        // Show errors for each of the fields where necessary
+                        Object.keys(this.form.controls).forEach(f => {
+                            const control = this.form.get(f);
+                            control.markAsTouched({ onlySelf: true });
+                        });
+                        throw Error('form is invalid');
+                    }
                 });
             });
         }
@@ -88,7 +88,7 @@ export class DynamicListControlComponent implements OnInit {
 
     ngOnInit(): void {
         this.log('Initializing DynamicListControlComponent...')
-         if (!this.list.valueList)  {
+        if (!this.list.valueList) {
             this.list.valueList = [];
             this.log('Value List was undefined, initialized to empty');
         }
@@ -106,9 +106,9 @@ export class DynamicListControlComponent implements OnInit {
         this.log('Summary label: ' + this.list.summaryField.label + ', value: ' + this.list.summaryField.value + ', icon: ' + this.list.summaryField.iconName);
         this.log('Requires at least one value: ' + this.list.requiresAtLeastOneValue);
 
-        if (!this.form)  {
+        if (!this.form) {
             this.log('Form Group is not populated');
-            if (this.formGroup)  {
+            if (this.formGroup) {
                 this.form = this.formGroup;
                 this.log('Able to populate Form Group from @Input');
             }
@@ -120,26 +120,26 @@ export class DynamicListControlComponent implements OnInit {
         this.log('Managing a ' + (this._isNumeric ? '' : 'non-') + 'numeric list');
         this._isText = (!this._isNumeric && !this._isMoney);
         this.log('Managing a ' + (this._isText ? '' : 'non-') + 'text list');
-    
+
         this._initialized = true;
         this.log('initialized = ' + this._initialized);
     }
 
-    public getValue(index : number) : string  {
-        if ((index < 0) || (index >= this.list.valueList.length))  {
+    public getValue(index: number): string {
+        if ((index < 0) || (index >= this.list.valueList.length)) {
             return null;
-        }  else  {
+        } else {
             return this.list.valueList[index];
         }
     }
 
-    public addValue(value: string, index : number = -1) : void  {
+    public addValue(value: string, index: number = -1): void {
         this.log('Adding value ' + value + ' at position ' + index + ', current field value ' + this.list.addValueField.value);
-        if (this.list.addingAllowed && this.list.addValueField && !this.isEmptyValue(value))  {
+        if (this.list.addingAllowed && this.list.addValueField && !this.isEmptyValue(value)) {
             this.log('Adding is allowed and enabled and a value has been entered');
-            if (index < 0)  {
+            if (index < 0) {
                 this.list.valueList.push(this.list.addValueField.value);
-            }  else  {
+            } else {
                 this.list.valueList.splice(index, 0, this.list.addValueField.value);
             }
 
@@ -151,14 +151,14 @@ export class DynamicListControlComponent implements OnInit {
         }
     }
 
-    public removeValue(index : number) : void {
+    public removeValue(index: number): void {
         this.log('Removing value at position ' + index);
-        if (this.list.removingAllowed)  {
+        if (this.list.removingAllowed) {
             this.updateSummaryValue(this.getValue(index), false);
 
-            if (index < 0)  {
+            if (index < 0) {
                 this.list.valueList.pop();
-            }  else  {
+            } else {
                 this.list.valueList.splice(index, 1);
             }
 
@@ -166,12 +166,12 @@ export class DynamicListControlComponent implements OnInit {
         }
     }
 
-    public displayValue(value : string) : string  {    
-        if (this._isMoney)  {
+    public displayValue(value: string): string {
+        if (this._isMoney) {
             const amount = parseFloat(this.toCleanValue(value));
             return '$' + amount.toFixed(2);
 
-        }  else if  (this._isNumeric)  {
+        } else if (this._isNumeric) {
             return value;
         }
 
@@ -180,102 +180,102 @@ export class DynamicListControlComponent implements OnInit {
         return value;
     }
 
-    public onAddValueFieldChange(value : string)  {
-        if (this.hasAddValueField())  {
+    public onAddValueFieldChange(value: string) {
+        if (this.hasAddValueField()) {
             this.list.addValueField.value = value;
         }
     }
 
-    public updateSummaryValue(value : string, increment : boolean = true)  {
-        if (this._hasSummaryField)  {
-            if (this._isNumeric)  {
+    public updateSummaryValue(value: string, increment: boolean = true) {
+        if (this._hasSummaryField) {
+            if (this._isNumeric) {
                 const amount = parseFloat(this.toCleanValue(value));
                 this._total += (increment ? amount : -amount);
                 this.log('Total is now ' + this._total);
                 this.list.summaryField.value = this.displayValue(this._total.toString());
             }
-       }
+        }
     }
 
-    public initializeAddValueField() : void  {
-        if (this._hasAddValueField)  {
+    public initializeAddValueField(): void {
+        if (this._hasAddValueField) {
             this.list.addValueField.value = this.displayValue(this._isNumeric ? '0' : '');
         }
     }
 
-    public isMoneyType() : boolean  {
+    public isMoneyType(): boolean {
         return this._isMoney;
     }
 
-    public isNumericType() : boolean  {
+    public isNumericType(): boolean {
         return this._isNumeric;
     }
 
-    public isTextType() : boolean  {
+    public isTextType(): boolean {
         return this._isText;
     }
 
-    public getSummaryValue() : string  {
+    public getSummaryValue(): string {
         return (this._hasSummaryField ? this.list.summaryField.value : null);
     }
 
-    public setSummaryValue(value : string)  {
-        if (this._hasSummaryField)  {
+    public setSummaryValue(value: string) {
+        if (this._hasSummaryField) {
             this.list.summaryField.value = this.displayValue(value);
         }
     }
 
-    private toCleanValue(value : string)  {
-        if (value)  {
+    private toCleanValue(value: string) {
+        if (value) {
             const pos = value.indexOf('$');
             return (pos < 0 ? value : value.substring(pos + 1))
         }
         return (this._isNumeric ? '0' : '');
     }
 
-    private isEmptyValue(value : string)  {
-        if (this._isText)  {
+    private isEmptyValue(value: string) {
+        if (this._isText) {
             return (value == null || value.length === 0);
-        }  else if (this._isNumeric)  {
+        } else if (this._isNumeric) {
             return (parseFloat(this.toCleanValue(value)) === 0);
         }
         return false;
     }
 
-    public hasAddValueField() : boolean  {
-    //    this.log('hasAddValueField() returning ' + this._hasAddValueField);
+    public hasAddValueField(): boolean {
+        //    this.log('hasAddValueField() returning ' + this._hasAddValueField);
         return this._hasAddValueField;
     }
 
-    public getAddValueFieldLabel() : string  {
-        if (this.hasAddValueField())  {
+    public getAddValueFieldLabel(): string {
+        if (this.hasAddValueField()) {
             this.log('getAddValueFieldLabel() returning ' + (this.list.addValueField.label ? this.list.addValueField.label : 'NULL'));
             return this.list.addValueField.label;
         }
     }
 
-    public getAddValueFieldValue() : string  {
-        if (this.hasAddValueField())  {
+    public getAddValueFieldValue(): string {
+        if (this.hasAddValueField()) {
             this.log('getAddValueFieldValue() returning ' + (this.list.addValueField.value ? this.list.addValueField.value : 'BLANK'));
             return (this.list.addValueField.value ? this.list.addValueField.value : '');
         }
     }
 
-    public hasSummaryField() : boolean  {
-    //    this.log('hasSummaryField() returning ' + this._hasSummaryField);
+    public hasSummaryField(): boolean {
+        //    this.log('hasSummaryField() returning ' + this._hasSummaryField);
         return this._hasSummaryField;
     }
 
-    public getSummaryField() : IFormElement  {
-    //    this.log('getSummaryField() returning ' + (this.list.summaryField ? 'object' : 'NULL'));
+    public getSummaryField(): IFormElement {
+        //    this.log('getSummaryField() returning ' + (this.list.summaryField ? 'object' : 'NULL'));
         return (this.hasSummaryField() ? this.list.summaryField : null);
     }
 
-    public hasValueListItems() : boolean  {
+    public hasValueListItems(): boolean {
         return (this.list.valueList && (this.list.valueList.length > 0));
     }
 
-    public getValueList() : Array<string>  {
+    public getValueList(): Array<string> {
         return this.list.valueList;
     }
 
@@ -283,16 +283,16 @@ export class DynamicListControlComponent implements OnInit {
         this.valueChange.emit(formElement);
     }
 
-    public onButtonClick(button : IMenuItem)  {
-        if (button.action)  {
-            if (button.action === this.submitButton.action)  {
+    public onButtonClick(button: IMenuItem) {
+        if (button.action) {
+            if (button.action === this.submitButton.action) {
                 this.onSubmit(this.submitButton.action);
 
-            }  else if (this.alternateSubmitActions)  {
+            } else if (this.alternateSubmitActions) {
                 //  Is this an alternate submit action?
 
-                for (var action in this.alternateSubmitActions)  {
-                    if (action === button.action)  {
+                for (var action in this.alternateSubmitActions) {
+                    if (action === button.action) {
                         this.onSubmit(action);
                     }
                 }
@@ -300,7 +300,7 @@ export class DynamicListControlComponent implements OnInit {
         }
     }
 
-    public onSubmit(action : string = null)  {
+    public onSubmit(action: string = null) {
         this.log('onSubmit() called with action ' + (action ? action : '*undefined*'));
         this.list.formErrors = [];
         let isValid = true;
@@ -308,7 +308,7 @@ export class DynamicListControlComponent implements OnInit {
         //  If we didn't get an action, use the submit button's action or
         //  a default if we don't have one.
 
-        if (!action)  {
+        if (!action) {
             action = (this.submitButton && this.submitButton.action ? this.submitButton.action : 'Next');
         }
         this.log('Submit action is ' + action);
@@ -318,41 +318,41 @@ export class DynamicListControlComponent implements OnInit {
         //  If the list says it must have at least one value, it is an error if we
         //  have no items.
 
-        if (this.list.requiresAtLeastOneValue && (this.list.valueList.length < 1))  {
+        if (this.list.requiresAtLeastOneValue && (this.list.valueList.length < 1)) {
             this.list.formErrors.push('The ' + this.list.valueListHeader + ' list must contain at least one value');
         }
 
         //  Walk the list of values and make sure they are all valid.
 
-        for (let i = 0; i < this.list.valueList.length; i++)  {
+        for (let i = 0; i < this.list.valueList.length; i++) {
             //  All of the items in the list must have a value.
 
-            if (this.isEmptyValue(this.list.valueList[i]))  {
+            if (this.isEmptyValue(this.list.valueList[i])) {
                 this.list.formErrors.push('Item #' + (i + 1) + ' has no value');
             }
 
             //  Perform type-specific validations.
 
-            if (this._isNumeric)  {
+            if (this._isNumeric) {
                 const value = parseFloat(this.toCleanValue(this.list.valueList[i]));
-                if (!isNaN(this.list.addValueField.minValue) && value < this.list.addValueField.minValue)  {
+                if (!isNaN(this.list.addValueField.minValue) && value < this.list.addValueField.minValue) {
                     this.list.formErrors.push('Item #' + (i + 1) + ' is less than the minimum value ' + this.list.addValueField.minValue);
 
-                }  else if (!isNaN(this.list.addValueField.maxValue) && value > this.list.addValueField.maxValue)  {
+                } else if (!isNaN(this.list.addValueField.maxValue) && value > this.list.addValueField.maxValue) {
                     this.list.formErrors.push('Item #' + (i + 1) + ' is greater than the maximum value ' + this.list.addValueField.maxValue);
                 }
 
-            }  else if (this._isText)  {
-                if (this.list.valueList[i].length < this.list.addValueField.minLength)  {
+            } else if (this._isText) {
+                if (this.list.valueList[i].length < this.list.addValueField.minLength) {
                     this.list.formErrors.push('Item #' + (i + 1) + ' is shorter than the minimum length ' + this.list.addValueField.minLength);
 
-                }  else if (this.list.valueList[i].length > this.list.addValueField.maxLength)  {
+                } else if (this.list.valueList[i].length > this.list.addValueField.maxLength) {
                     this.list.formErrors.push('Item #' + (i + 1) + ' is longer than the maximum length ' + this.list.addValueField.maxLength);
                 }
 
-                if (this.list.valueType === 'NumericText')  {
+                if (this.list.valueType === 'NumericText') {
                     const dummy = parseInt(this.list.valueList[i], 10);
-                    if (isNaN(dummy))  {
+                    if (isNaN(dummy)) {
                         this.list.formErrors.push('Item #' + (i + 1) + ' is not numeric')
                     }
                 }
@@ -360,7 +360,7 @@ export class DynamicListControlComponent implements OnInit {
         }
 
         //  See if we had any errors.
-        
+
         if (this.list.formErrors && this.list.formErrors.length > 0) {
             //  There were errors.
 
@@ -368,7 +368,7 @@ export class DynamicListControlComponent implements OnInit {
             isValid = false;
             // document.getElementById('formErrorsWrapper').scrollIntoView();
 
-        }  else  {
+        } else {
             //  No errors, perform the submit action.
 
             this.log('Form has no errors, firing action ' + action + '...');
@@ -378,8 +378,8 @@ export class DynamicListControlComponent implements OnInit {
         this.log('onSubmit() returning ' + isValid);
         return isValid;
     }
-    
-    public log(message : string)  {
+
+    public log(message: string) {
         // if (message)  {
         //     console.log(message);
         // }
