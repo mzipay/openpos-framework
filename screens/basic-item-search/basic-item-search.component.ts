@@ -46,11 +46,10 @@ export class BasicItemSearchComponent extends PosScreen<any> implements AfterVie
 
   onValueSelected(value: ISearchCategoryValue, categoryName: string): void {
     value.selected = true;
-    this.session.response = {
-      'selectedCategoryValue': value,
-      'searchFieldForm': this.searchFieldForm
-    };
-    this.session.onAction(`on${categoryName}Selected`);
+    this.session.onAction(`on${categoryName}Selected`, {
+        'selectedCategoryValue': value,
+        'searchFieldForm': this.searchFieldForm
+      });
   }
 
   getSearchPayload() {
@@ -64,8 +63,7 @@ export class BasicItemSearchComponent extends PosScreen<any> implements AfterVie
 
   onSubmitAction(submitAction: string): void {
     // Collect the field values
-    this.session.response = this.getSearchPayload();
-    this.session.onAction(submitAction);
+    this.session.onAction(submitAction, this.getSearchPayload());
   }
 
   protected refreshContent(): void {

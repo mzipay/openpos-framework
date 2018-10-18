@@ -2,7 +2,7 @@ import { Logger } from './../../services/logger.service';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
 import { Component, ViewChild, HostListener, ComponentRef, OnDestroy, OnInit, ComponentFactory } from '@angular/core';
-import { MatDialog, MatDialogRef, MatSnackBar,  MatSnackBarRef, SimpleSnackBar, MatExpansionPanel } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar, MatSnackBarRef, SimpleSnackBar, MatExpansionPanel } from '@angular/material';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { AbstractTemplate } from '../abstract-template';
@@ -21,7 +21,7 @@ import {
     ToastService
 } from '../../services';
 import { IScreen } from './screen.interface';
-import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem } from '../../interfaces';
+import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem, IMessageHandler } from '../../interfaces';
 import { FileViewerComponent, TemplateDirective } from '../../../shared';
 
 @Component({
@@ -29,7 +29,7 @@ import { FileViewerComponent, TemplateDirective } from '../../../shared';
     templateUrl: './dynamic-screen.component.html',
     styleUrls: ['./dynamic-screen.component.scss'],
 })
-export class DynamicScreenComponent implements OnDestroy, OnInit {
+export class DynamicScreenComponent implements OnDestroy, OnInit, IMessageHandler {
 
     private showUpdating = false;
 
@@ -80,34 +80,20 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit(): void {
-        const self = this;
-        this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
-
-
-        /*this.startupService.onStartupCompleted.subscribe(startupStatus => {
-            this.log.debug(`Got startupStatus: ${StartupStatus[startupStatus]}`);
-
-            if (startupStatus === StartupStatus.Success) {
-                this.session.subscribeForScreenUpdates((screen: any): void => self.updateTemplateAndScreen(screen));
-            } else if (startupStatus === StartupStatus.Failure) {
-                // If we failed, make sure we at least allow the Personalization screen to be shown
-                this.session.subscribeForScreenUpdates((screen: any): void => {
-                    // This logic will allow us to recover and show screens if our connection
-                    // is restored after a failed startup, but the app hasn't been restarted.
-                    // May need to revise this logic if there are cases where connection is OK
-                    // but there are other causes for startup failure where we don't want to allow
-                    // screens to show.
-                    const connected = this.session.connected();
-                    if (connected || (!connected && screen && screen.screenType === 'Personalization' )) {
-                        self.updateTemplateAndScreen(screen);
-                    }
-                });
-            }
-        });*/
-     }
+        this.session.registerMessageHandler(this);
+    }
 
     ngOnDestroy(): void {
         this.session.unsubscribe();
+    }
+
+    handle(message: any) {
+        if (message.template &&
+            !message.template.dialog &&
+            message.screenType !== 'NoOp' &&
+            message.screenType !== 'Toast') {
+            this.updateTemplateAndScreen(message);
+        }
     }
 
     protected updateTemplateAndScreen(screen?: any): void {
@@ -200,7 +186,7 @@ export class DynamicScreenComponent implements OnDestroy, OnInit {
     }
 
     public get theme() {
-       return this.personalization.getTheme();
+        return this.personalization.getTheme();
     }
 
 }

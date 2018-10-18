@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ProductListComponent, ItemClickAction, MenuClickAction } from '../../shared/';
 import { SelectionMode, IItem, IMenuItem  } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
@@ -7,7 +7,7 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
     selector: 'app-item-list',
     templateUrl: './item-list.component.html'
 })
-export class ItemListComponent extends PosScreen<any> implements OnInit {
+export class ItemListComponent extends PosScreen<any> implements OnInit, OnDestroy {
 
     items: IItem[];
     itemActionName: string;
@@ -15,6 +15,7 @@ export class ItemListComponent extends PosScreen<any> implements OnInit {
     itemActions: IMenuItem[] = [];
     condensedListDisplay: false;
     selectionMode: string;
+    localMenuItems: IMenuItem[];
     @ViewChild('productList') productList: ProductListComponent;
 
     constructor() {
@@ -27,10 +28,20 @@ export class ItemListComponent extends PosScreen<any> implements OnInit {
         this.text = this.screen.text;
         this.itemActions = this.screen.itemActions;
         this.condensedListDisplay = this.screen.condensedListDisplay;
+        this.localMenuItems = this.screen.template.localMenuItems;
         this.selectionMode = this.screen.selectionMode;
+
     }
 
     ngOnInit(): void {
+    }
+
+    ngOnDestroy(): void {
+        if (this.localMenuItems) {
+            this.localMenuItems.forEach(element => {
+                this.session.unregisterActionPayloads();
+            });
+        }
     }
 
     getSelectionModeAsEnum(): SelectionMode {
@@ -42,23 +53,25 @@ export class ItemListComponent extends PosScreen<any> implements OnInit {
     }
 
     onItemClick(itemInfo: ItemClickAction): void {
-        this.session.response = itemInfo.item;
-        this.session.onAction(this.itemActionName);
+        this.session.onAction(this.itemActionName, itemInfo.item);
     }
 
     onItemSelected(itemInfo: ItemClickAction): void {
         if (this.getSelectionModeAsEnum() === SelectionMode.Multiple) {
-            this.session.response = this.productList.selectedItems;
+            if (this.localMenuItems) {
+                this.localMenuItems.forEach(element => {
+                    this.session.registerActionPayload(element.action, () => this.productList.selectedItems);
+                });
+            }
         }
     }
 
     onActionButtonClick(): void {
-        this.session.onAction(this.screen.actionButton.action, null);
+        this.session.onAction(this.screen.actionButton.action, this.productList.selectedItems);
     }
 
     onMenuItemClick(itemInfo: MenuClickAction): void {
-        this.session.response = itemInfo.item;
-        this.session.onAction(itemInfo.menuItem);
+        this.session.onAction(itemInfo.menuItem, itemInfo.item);
     }
 
     isItemSelectedDisabled(): boolean {

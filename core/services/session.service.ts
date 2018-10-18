@@ -37,19 +37,11 @@ export class SessionService implements IMessageHandler {
 
     public state: Observable<string>;
 
-    public response: any;
-
     private appId: String;
-
-    private subscribed: boolean;
 
     private subscription: Subscription;
 
     private authToken: string;
-
-    private messages: Observable<Message>;
-
-    private screenSource = new BehaviorSubject<any>(null);
 
     private stompDebug = false;
 
@@ -58,11 +50,12 @@ export class SessionService implements IMessageHandler {
     private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
     loaderState: LoaderState;
+
     private stompStateSubscription: Subscription;
 
     public onServerConnect: BehaviorSubject<boolean>;
 
-    private stompJsonMessages$ = new Subject<any>();
+    private stompJsonMessages$ = new BehaviorSubject<any>(false);
     private sessionMessages$ = new Subject<any>();
     public inBackground = false;
 
@@ -80,10 +73,7 @@ export class SessionService implements IMessageHandler {
             console.error(`[OpenPOS]${e}`);
         });
         this.onServerConnect = new BehaviorSubject<boolean>(false);
-        this.getMessages().pipe(
-                    filter(s => ['Screen'].includes(s.type))
-                )
-            .subscribe(s => this.handle(s));
+        this.registerMessageHandler(this, 'Screen');
     }
 
     public sendMessage(message: any) {
@@ -97,13 +87,9 @@ export class SessionService implements IMessageHandler {
     }
 
     public registerMessageHandler(handler: IMessageHandler, ...types: string[]): Subscription {
-        return this.stompJsonMessages$.pipe(filter(s => types && types.length > 0 ? types.includes(s.type) : true)).subscribe(s => handler.handle(s));
-    }
-
-    public subscribeForScreenUpdates(callback: (screen: any) => any): Subscription {
-        return this.screenSource.asObservable().subscribe(
-            screen => this.zone.run(() => callback(screen))
-        );
+        return merge(
+            this.stompJsonMessages$,
+            this.sessionMessages$ ).pipe(filter(s => types && types.length > 0 ? types.includes(s.type) : true)).subscribe(s => this.zone.run(() => handler.handle(s)));
     }
 
     public isRunningInBrowser(): boolean {
@@ -113,14 +99,6 @@ export class SessionService implements IMessageHandler {
 
     private buildTopicName(): string {
         return '/topic/app/' + this.appId + '/node/' + this.personalization.getNodeId();
-    }
-
-    public showScreen(screen: any) {
-        this.screen = screen;
-        if (screen && screen.theme) {
-            this.personalization.setTheme(screen.theme, false);
-        }
-        this.screenSource.next(screen);
     }
 
     public setAuthToken(token: string) {
@@ -136,7 +114,7 @@ export class SessionService implements IMessageHandler {
     }
 
     public subscribe(appId: String) {
-        if (this.subscribed) {
+        if (this.subscription) {
             return;
         }
 
@@ -162,12 +140,12 @@ export class SessionService implements IMessageHandler {
 
         this.log.info('subscribing to server at: ' + currentTopic);
 
-        this.messages = this.stompService.subscribe(currentTopic);
+        const messages: Observable<Message> = this.stompService.subscribe(currentTopic);
 
         // Subscribe a function to be run on_next message
-        this.subscription = this.messages.subscribe((message: Message) => {
+        this.subscription = messages.subscribe((message: Message) => {
             this.log.info('Got STOMP message');
-            if ( this.inBackground ) {
+            if (this.inBackground) {
                 this.log.info('Leaving background');
                 this.inBackground = false;
             }
@@ -183,7 +161,6 @@ export class SessionService implements IMessageHandler {
 
         this.state = this.stompService.state.pipe(map((state: number) => StompState[state]));
 
-        this.subscribed = true;
         this.loaderState.monitorConnection();
 
 
@@ -201,15 +178,16 @@ export class SessionService implements IMessageHandler {
     }
 
     private logStompJson(json: any) {
-        if (json) {
+        if (json && json.sequenceNumber && json.screenType) {
           this.log.info(`[logStompJson] type: ${json.type}, screenType: ${json.screenType}, seqNo: ${json.sequenceNumber}`);
+        } else if (json) {
+            this.log.info(`[logStompJson] type: ${json.type}`);
         } else {
           this.log.info(`[logStompJson] ${json}`);
         }
     }
 
     private buildIncompatibleVersionScreen(): any {
-
         return {
             type: 'Screen',
             screenType: 'Dialog',
@@ -268,7 +246,7 @@ export class SessionService implements IMessageHandler {
     }
 
     public unsubscribe() {
-        if (!this.subscribed) {
+        if (!this.subscription) {
             return;
         }
 
@@ -281,9 +259,6 @@ export class SessionService implements IMessageHandler {
 
         this.log.info('disconnecting from stomp service');
         this.stompService.disconnect();
-        this.messages = null;
-
-        this.subscribed = false;
     }
 
     public onDeviceResponse(deviceResponse: IDeviceResponse) {
@@ -309,6 +284,7 @@ export class SessionService implements IMessageHandler {
 
     public async onAction(action: string | IMenuItem, payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
         if (action) {
+            let response: any = null;
             let actionString = '';
             // we need to figure out if we are a menuItem or just a string
             if (action.hasOwnProperty('action')) {
@@ -363,11 +339,11 @@ export class SessionService implements IMessageHandler {
             // Check if we have registered action payload
             // Otherwise we will send whatever is in this.response
             if (payload != null) {
-                this.response = payload;
+                response = payload;
             } else if (this.actionPayloads.has(actionString)) {
                 this.log.info(`Checking registered action payload for ${actionString}`);
                 try {
-                    this.response = this.actionPayloads.get(actionString)();
+                    response = this.actionPayloads.get(actionString)();
                 } catch (e) {
                     this.log.info(`invalid action payload for ${actionString}: ` + e);
                     processAction = false;
@@ -378,19 +354,15 @@ export class SessionService implements IMessageHandler {
                 const sendToServer: Function = () => {
                     this.log.info(`>>> Post action "${actionString}"`);
                     this.queueLoading();
-                    this.publish(actionString, 'Screen');
+                    this.publish(actionString, 'Screen', response);
                 };
 
                 // see if we have any intercepters registered
                 // otherwise just send the action
                 if (this.actionIntercepters.has(actionString)) {
-                    this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
+                    this.actionIntercepters.get(actionString).intercept(response, sendToServer);
                 } else {
                     sendToServer();
-                    if (!isValueChangedAction) {
-                        // not sure if this is the best way to do this, but its how we are doing it for now
-                        this.sessionMessages$.next({ clearDialog: true});
-                    }
                 }
             } else {
                 this.log.info(`Not sending action: ${actionString}.  processAction: ${processAction}, loading:${this.loaderState.loading}`);
@@ -402,7 +374,7 @@ export class SessionService implements IMessageHandler {
     }
 
     public keepAlive() {
-        if (this.subscribed) {
+        if (this.subscription) {
             this.log.info(`>>> KeepAlive`);
             this.publish('KeepAlive', 'KeepAlive');
         }
@@ -417,10 +389,7 @@ export class SessionService implements IMessageHandler {
         const nodeId = this.personalization.getNodeId();
         if (this.appId && nodeId) {
             this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.personalization.getNodeId(),
-                JSON.stringify({ name: actionString, type: type, data: payload ? payload : this.response }));
-            if (actionString !== 'KeepAlive') {
-                this.response = null;
-            }
+                JSON.stringify({ name: actionString, type: type, data: payload }));
         } else {
             this.log.info(`Can't publish action '${actionString}' of type '${type}' ` +
                 `due to undefined App ID (${this.appId}) or Node Id (${nodeId})`);
@@ -452,7 +421,9 @@ export class SessionService implements IMessageHandler {
 
     handle(message: any) {
         this.log.info(`Got message: ${message.screenType}`);
-        let cancelLoading = false;
+        if (message && message.theme) {
+            this.personalization.setTheme(message.theme, false);
+        }
         if (message.screenType === 'Loading') {
             // This is just a temporary hack
             // Might be a previous instance of a Loading screen being shown,
@@ -465,21 +436,6 @@ export class SessionService implements IMessageHandler {
             this.loaderState.loading = true;
             this.showLoading(message.title, message.message);
             return;
-        } else if (message.screenType === 'NoOp') {
-            this.response = null;
-            return; // As with DeviceRequest, return to avoid dismissing loading screen
-        } else if (message.screenType === 'Toast') {
-            cancelLoading = true;
-        } else if ( message.template && !message.template.dialog ) {
-            this.response = null;
-            this.showScreen(message);
-            cancelLoading = false; // Dynamic Screen Component will handle it
-        } else {
-            cancelLoading = true;
-        }
-
-        if (cancelLoading) {
-            this.cancelLoading();
         }
     }
 

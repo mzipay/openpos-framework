@@ -88,15 +88,10 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     }
 
     onItemClick(itemInfo: ItemClickAction): void {
-        this.session.response = itemInfo.item;
-        this.session.onAction(this.itemActionName);
+        this.session.onAction(this.itemActionName, itemInfo.item);
     }
 
     onItemSelected(itemInfo: ItemClickAction): void {
-        if (this.getSelectionModeAsEnum() === SelectionMode.Multiple) {
-            this.session.response = this.selectedItems;
-            // this.session.response = this.productList.selectedItems;
-        }
     }
 
     public onItemListChange(event: IItem[]): void {
@@ -109,12 +104,11 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     }
 
     onActionButtonClick(): void {
-        this.session.onAction(this.screen.actionButton.action, null);
+        this.session.onAction(this.screen.actionButton.action, this.selectedItems);
     }
 
     onMenuItemClick(itemInfo: MenuClickAction): void {
-        this.session.response = itemInfo.item;
-        this.session.onAction(itemInfo.menuItem);
+        this.session.onAction(itemInfo.menuItem, itemInfo.item);
     }
 
     isItemSelected(item: IItem): boolean {
@@ -166,7 +160,7 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
 
     addItemsToSale(items: IItem[]) {
         //  Send the appropriate Add action to the page.
-        const message = (items.length === 1 ? 'Add the selected item to the transaction?' : 'Add the ' + items.length + ' selected items to the transaction?')
+        const message = (items.length === 1 ? 'Add the selected item to the transaction?' : 'Add the ' + items.length + ' selected items to the transaction?');
         this.session.onAction(this.getAddActionName(), items, message);
     }
 
@@ -177,7 +171,6 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
 
     openItemsDialog(items: IItem[]): void {
         let optionItems = [];
-        this.session.response = items;  // this.getIndexes(items);
 
         if (items.length > 1) {
             //  NOTE: There are currently no available options for multiple selections.
@@ -190,6 +183,7 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
             width: '70%',
             data: {
                 optionItems: optionItems,
+                payload: this.selectedItems,
                 disableClose: false,
                 autoFocus: false
             }

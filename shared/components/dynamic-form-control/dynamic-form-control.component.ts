@@ -55,7 +55,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
         this.session.registerActionPayload(action, () => {
           if (this.form.valid) {
             this.formBuilder.buildFormPayload(this.form, this._screenForm);
-            return this.session.response = this._screenForm;
+            return this._screenForm;
           } else {
             // Show errors for each of the fields where necessary
             Object.keys(this.form.controls).forEach(f => {

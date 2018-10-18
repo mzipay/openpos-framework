@@ -78,8 +78,7 @@ export class StaticTableComponent extends PosScreen<any> {
 
     onAction(action: string) {
         if (action) {
-            this.session.response = this.selectedRow;
-            this.session.onAction(action);
+            this.session.onAction(action, this.selectedRow);
         }
     }
 }

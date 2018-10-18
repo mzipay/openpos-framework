@@ -1,3 +1,4 @@
+import { IMessageHandler } from './../../../core/interfaces/message-handler.interface';
 import { Logger } from './../../../core/services/logger.service';
 import { Component, Input, Optional, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
@@ -9,7 +10,7 @@ import { IScan } from '../../../screens';
   templateUrl: './scan-something.component.html',
   styleUrls: ['./scan-something.component.scss']
 })
-export class ScanSomethingComponent implements AfterViewInit {
+export class ScanSomethingComponent implements AfterViewInit, IMessageHandler {
 
   @ViewChild(MatInput)
   input: MatInput;
@@ -23,10 +24,16 @@ export class ScanSomethingComponent implements AfterViewInit {
     @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: IScan) {
 
-    this.session.subscribeForScreenUpdates((screen: any): void => this.focusFirst());
+    this.session.registerMessageHandler(this, 'Screen');
 
     if (data) {
       this.scanSomethingData = data;
+    }
+  }
+
+  handle(message: any) {
+    if (message.template && !message.template.dialog) {
+        this.focusFirst();
     }
   }
 

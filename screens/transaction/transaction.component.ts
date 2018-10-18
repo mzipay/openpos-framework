@@ -76,8 +76,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
   }
 
   onEnter(value: string) {
-    this.session.response = value;
-    this.session.onAction('Next');
+    this.session.onAction('Next', value);
   }
 
   openItemDialog(item: ISellItem) {
@@ -92,11 +91,11 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
     } else {
       optionItems = items[0].menuItems;
     }
-    this.session.response = this.getIndexes(items);
     const dialogRef = this.dialog.open(NavListComponent, {
       width: '70%',
       data: {
         optionItems: optionItems,
+        payload: this.getIndexes(items),
         disableClose: false,
         autoFocus: false
      }

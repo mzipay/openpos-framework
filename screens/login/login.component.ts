@@ -51,23 +51,19 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
     }
 
     onSubmitAction(): void {
-        this.session.response = this.form;
-        this.session.onAction(this.submitAction);
+        this.session.onAction(this.submitAction, this.form);
     }
 
     onOkButton(): void {
-        this.session.response = this.form;
-        this.session.onAction(this.okButton.buttonAction);
+        this.session.onAction(this.okButton.buttonAction, this.form);
     }
 
     onChangePasswordAction(): void {
-        this.session.response = this.form;
-        this.session.onAction(this.changePasswordAction.action);
+        this.session.onAction(this.changePasswordAction.action, this.form);
     }
 
     onForgotPasswordAction(): void {
-        this.session.response = this.form;
-        this.session.onAction(this.forgotPasswordAction);
+        this.session.onAction(this.forgotPasswordAction, this.form);
     }
 }
 

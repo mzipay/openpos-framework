@@ -29,14 +29,12 @@ export class TillCountComponent extends PosScreen<any> {
 
   onFieldChanged(eventData: {formElement: IFormElement, event: Event}) {
     this.form = this.screen.form;
-    this.session.response = this.form;
-    this.session.onAction('formChanged');
+    this.session.onAction('formChanged', this.form);
   }
 
   onNextAction() {
     if (this.tillForm.form.valid) {
-        this.session.response = this.screen.form;
-        this.session.onAction(this.nextAction.action);
+        this.session.onAction(this.nextAction.action, this.screen.form);
     }
   }
 

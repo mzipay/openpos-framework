@@ -7,7 +7,6 @@ import { ScreenService, DialogService } from '../core';
 // Screens
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { TenderingComponent } from './tendering/tendering.component';
-import { WarrantyCoverageComponent } from './warranty-coverage/warranty-coverage.component';
 import { SaleRetrievalComponent } from './sale-retrieval/sale-retrieval.component';
 import { EmbeddedWebPageComponent } from './embedded-web-page/embedded-web-page.component';
 import { PromptComponent } from './prompt/prompt.component';
@@ -79,7 +78,6 @@ const screens = [
     StaticTableComponent,
     SaleRetrievalComponent,
     TenderingComponent,
-    WarrantyCoverageComponent,
     OptionsComponent,
     TillSummaryComponent,
     TillCountComponent,

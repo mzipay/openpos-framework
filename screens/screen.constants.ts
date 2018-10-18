@@ -16,7 +16,6 @@ import { SellItemDetailComponent } from './sell-item-detail/sell-item-detail.com
 import { SignatureCaptureComponent } from './signature-capture/signature-capture.component';
 import { StaticTableComponent } from './static-table/static-table.component';
 import { TenderingComponent } from './tendering/tendering.component';
-import { WarrantyCoverageComponent } from './warranty-coverage/warranty-coverage.component';
 import { OptionsComponent } from './options/options.component';
 import { ChangeComponent } from './change/change.component';
 import { PrintPreviewComponent } from './print-preview/print-preview.component';
@@ -67,7 +66,6 @@ export const ScreenConstants = {
         { name: 'Table', component: StaticTableComponent },
         { name: 'SaleRetrieval', component: SaleRetrievalComponent },
         { name: 'Tendering', component: TenderingComponent },
-        { name: 'WarrantyCoverage', component: WarrantyCoverageComponent },
         { name: 'TillCurrencyCount', component: TillCountComponent },
         { name: 'TillOtherTenderCount', component: TillCountOtherTenderComponent },
         { name: 'TillSummary', component: TillSummaryComponent },
@@ -116,7 +114,6 @@ export const ScreenConstants = {
         { name: 'Table', component: StaticTableComponent },
         { name: 'SaleRetrieval', component: SaleRetrievalComponent },
         { name: 'Tendering', component: TenderingComponent },
-        { name: 'WarrantyCoverage', component: WarrantyCoverageComponent },
         { name: 'TillCurrencyCount', component: TillCountComponent },
         { name: 'TillOtherTenderCount', component: TillCountOtherTenderComponent },
         { name: 'TillSummary', component: TillSummaryComponent },

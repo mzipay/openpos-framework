@@ -30,15 +30,12 @@ export class DeviceService implements IMessageHandler {
 
     private screen: any;
 
-    private screenSubscription: Subscription;
     private cameraScanInProgress = false;
 
     constructor(private log: Logger, protected session: SessionService,
         private cordovaService: CordovaService,
         public pluginService: PluginService,
         private fileUploadService: FileUploadService) {
-
-        this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
 
         // On iOS need to enter into loading state when the app is backgrounded, otherwise
         // user can execute actions as app is coming back to foreground.
@@ -98,7 +95,7 @@ export class DeviceService implements IMessageHandler {
             false
         );
 
-        this.session.registerMessageHandler(this, 'DeviceRequest');
+        this.session.registerMessageHandler(this, 'DeviceRequest', 'Screen');
 
     }
 
@@ -118,7 +115,11 @@ export class DeviceService implements IMessageHandler {
     }
 
     handle(message: any) {
-        this.onDeviceRequest(message);
+        if (message && message.type === 'Screen' &&  message.template && !message.template.dialog) {
+            this.screen = message;
+        } else if (message && message.type === 'DeviceRequest') {
+            this.onDeviceRequest(message);
+        }
     }
 
     protected initializeBarcodeScannerPlugin(): void {
@@ -164,8 +165,7 @@ export class DeviceService implements IMessageHandler {
                             if (response instanceof Scan && source && !response.source) {
                                 response.source = source;
                             }
-                            this.session.response = response;
-                            this.session.onAction('Scan');
+                            this.session.onAction('Scan', response);
                         }
                         this.cameraScanInProgress = false;
                     },

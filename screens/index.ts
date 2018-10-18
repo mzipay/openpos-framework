@@ -34,7 +34,6 @@ export * from './till-count-other-tender/till-count-other-tender.component';
 export * from './till-summary/till-summary.component';
 export * from './transaction/transaction.component';
 export * from './wait/wait.component';
-export * from './warranty-coverage/warranty-coverage.component';
 export * from './catalog-browser/catalog-browser.component';
 export * from './multiselect-item-list/multiselect-item-list.component';
 export * from './item-options/item-options.component';

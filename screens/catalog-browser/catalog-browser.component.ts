@@ -43,19 +43,16 @@ import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface'
             this.selectedItemQuantity.value = '0';
         }
         const returnForm: ICatalogBrowserForm = {selectedItems: [item], form: this.form};
-        this.session.response = returnForm;
-        this.session.onAction('ItemSelected');
+        this.session.onAction('ItemSelected', returnForm);
     }
 
     public onCategorySelected(category: IMenuItem, event?: any) {
         const returnForm: ICatalogBrowserForm = {selectedCategory: category, form: this.form};
-        this.session.response = returnForm;
-        this.session.onAction(category.action);
+        this.session.onAction(category.action, returnForm);
     }
 
     public onPageEvent(event?: PageEvent) {
         const returnForm: ICatalogBrowserForm = {pageEvent: event, form: this.form};
-        this.session.response = returnForm;
-        this.session.onAction('PageEvent');
+        this.session.onAction('PageEvent', returnForm);
     }
   }

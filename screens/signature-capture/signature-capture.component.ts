@@ -90,8 +90,7 @@ export class SignatureCaptureComponent extends PosScreen<any> implements AfterVi
         return;
     }
 
-    this.session.response = signatureData;
-    this.session.onAction(this.screen.saveAction.action);
+    this.session.onAction(this.screen.saveAction.action, signatureData);
   }
 
   protected isSignatureSizeValid(sigData: ISignature) {

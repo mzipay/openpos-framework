@@ -4,14 +4,14 @@ import { MatKeyboardComponent } from '../components/keyboard/keyboard.component'
 import { MatKeyboardRef } from '../classes/keyboard-ref.class';
 import { MatKeyboardService } from '../services/keyboard.service';
 import { NgControl } from '@angular/forms';
-import { SessionService } from '../../core';
+import { SessionService, IMessageHandler } from '../../core';
 import { Configuration } from '../../configuration/configuration';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
     selector: 'input:not([type=checkbox]), textarea'
 })
-export class KeyboardDirective implements OnDestroy {
+export class KeyboardDirective implements OnDestroy, IMessageHandler {
 
     private _keyboardRef: MatKeyboardRef<MatKeyboardComponent>;
 
@@ -38,12 +38,18 @@ export class KeyboardDirective implements OnDestroy {
     constructor(public session: SessionService, private _elementRef: ElementRef,
         private _keyboardService: MatKeyboardService,
         @Optional() @Self() private _control?: NgControl) {
-        this.screenSubscription = this.session.subscribeForScreenUpdates((screen: any): void => this.screen = screen);
+        this.screenSubscription = this.session.registerMessageHandler(this, 'Screen');
     }
 
     ngOnDestroy() {
         this._hideKeyboard();
         this.screenSubscription.unsubscribe();
+    }
+
+    handle(message: any) {
+        if (message.template && !message.template.dialog) {
+            this.screen = message;
+        }
     }
 
     @HostListener('focus', ['$event'])
