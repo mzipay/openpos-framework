@@ -31,7 +31,7 @@
         "core-js": "^2.5.7",
         "hammer-timejs": "^1.1.0",
         "hammerjs": "^2.0.8",
-        "rxjs": "^6.2.1",
+        "rxjs": "6.2.1",
         "signature_pad": "2.3.0",
         "text-mask-addons": "^3.7.2",
         "zone.js": "^0.8.26",
