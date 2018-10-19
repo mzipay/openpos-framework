@@ -18,6 +18,8 @@ public class ItemListScreen extends Screen {
     private boolean condensedListDisplay = false;
     private String action = "Next";
     private MenuItem actionButton = null;
+    private String customerName;
+    private String noCustomerText;
 
     public ItemListScreen() {
         setScreenType(ScreenType.ItemList);
@@ -115,6 +117,22 @@ public class ItemListScreen extends Screen {
 
     public void setActionButton(MenuItem actionButton) {
         this.actionButton = actionButton;
+    }
+    
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+    
+    public String getCustomerName() {
+        return customerName;
+    }
+    
+    public void setNoCustomerText(String noCustomerText) {
+        this.noCustomerText = noCustomerText;
+    }
+    
+    public String getNoCustomerText() {
+        return noCustomerText;
     }
 
     
