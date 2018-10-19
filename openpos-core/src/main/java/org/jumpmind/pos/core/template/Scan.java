@@ -15,10 +15,20 @@ public class Scan implements Serializable {
     private Integer scanMinLength = 1;
     private Integer scanMaxLength = 22;
     private ScanType scanType;
-    private String scanActionName;
+    private String scanActionName = "Scan";
     private String scanSomethingText = "Scan/Key Something";
     private boolean autoFocusOnScan = false;
     private FieldInputType inputType = FieldInputType.AlphanumericText;
+    
+    public Scan autoFocusOnScan() {
+        this.autoFocusOnScan = true;
+        return this;
+    }
+    
+    public Scan scanSomethingText(String text) {
+        this.scanSomethingText = text;
+        return this;
+    }
 
     public Integer getScanMinLength() {
         return scanMinLength;
