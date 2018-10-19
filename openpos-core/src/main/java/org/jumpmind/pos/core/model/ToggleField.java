@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class ToggleField extends FormField implements IDynamicListField {
     private static final long serialVersionUID = 1L;
@@ -59,6 +60,7 @@ public class ToggleField extends FormField implements IDynamicListField {
         return values;
     }
     
+    @JsonSetter("values")
     public void setValues(List<String> values) {
         this.values = values;
     }
