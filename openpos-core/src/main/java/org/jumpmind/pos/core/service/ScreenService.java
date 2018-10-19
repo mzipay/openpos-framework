@@ -26,10 +26,12 @@ import org.jumpmind.pos.core.flow.IScreenInterceptor;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
 import org.jumpmind.pos.core.flow.SessionTimer;
+import org.jumpmind.pos.core.model.ComboField;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
-import org.jumpmind.pos.core.model.IDynamicListField;
+import org.jumpmind.pos.core.model.FormListField;
 import org.jumpmind.pos.core.model.IFormElement;
+import org.jumpmind.pos.core.model.ToggleField;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
 import org.jumpmind.pos.core.screen.FormScreen;
@@ -117,11 +119,16 @@ public class ScreenService implements IScreenService, IActionListener {
             IHasForm dynamicScreen = (IHasForm) screen;
             IFormElement formElement = dynamicScreen.getForm().getFormElement(controlId);
 
+            // TODO: Look at combining FormListField and ComboField or at least
+            // inheriting off of each other.
             List<String> valueList = null;
-            if (formElement instanceof IDynamicListField) {
-                valueList = ((IDynamicListField) formElement).searchValues(searchTerm, sizeLimit);
+            if (formElement instanceof FormListField) {
+                valueList = ((FormListField) formElement).searchValues(searchTerm, sizeLimit);
+            } else if (formElement instanceof ComboField) {
+                valueList = ((ComboField) formElement).searchValues(searchTerm, sizeLimit);
+            } else if (formElement instanceof ToggleField) {
+                valueList = ((ToggleField) formElement).searchValues(searchTerm, sizeLimit);
             }
-
             if (valueList != null) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 try {

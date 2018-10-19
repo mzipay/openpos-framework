@@ -3,18 +3,14 @@ package org.jumpmind.pos.core.model;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-public class ComboField extends FormField implements IDynamicListField {
+public class ComboField extends FormField {
     
     private static final long serialVersionUID = 1L;
 
     private List<String> values;
     
     private String valueChangedAction;
-    private boolean dynamicListEnabled = true;
-
+    
     public ComboField() {
         setInputType(FieldInputType.ComboBox);
         setElementType(FieldElementType.Input);
@@ -40,7 +36,6 @@ public class ComboField extends FormField implements IDynamicListField {
         this.values = values;
     }
     
-    @Override
     public List<String> searchValues(String searchTerm, Integer sizeLimit) {
         if (searchTerm != null) {
             return values != null ? 
@@ -53,21 +48,6 @@ public class ComboField extends FormField implements IDynamicListField {
         }
     }
     
-    /**
-     * Provides the optional list of values to send over in the Screen JSON.
-     *  
-     * In the JSON generated, the values property will either be null when dynamicListEnabled=true or 
-     * will be the actual list of values. If dynamicListEnabled=true, then values can
-     * be fetched via callback from the client to server.
-     */
-    @JsonGetter("values")
-    public List<String> getValuesDynamic() {
-        // Values will be fetched dynamically if dynamicListEnabled = true, 
-        // so don't return the values in Json
-        return this.isDynamicListEnabled() ? null : values;
-    }
-
-    @JsonIgnore
     public List<String> getValues() {
         return values;
     }
@@ -87,16 +67,6 @@ public class ComboField extends FormField implements IDynamicListField {
      */
     public void setValueChangedAction(String valueChangedAction) {
         this.valueChangedAction = valueChangedAction;
-    }
-    
-    @Override
-    public void setDynamicListEnabled(boolean enabled) {
-        this.dynamicListEnabled = enabled;
-    }
-    
-    @Override
-    public boolean isDynamicListEnabled() { 
-        return this.dynamicListEnabled;
     }
     
 }
