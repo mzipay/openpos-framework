@@ -384,7 +384,11 @@ export class SessionService implements IMessageHandler {
                 // see if we have any intercepters registered
                 // otherwise just send the action
                 if (this.actionIntercepters.has(actionString)) {
-                    this.actionIntercepters.get(actionString).intercept(this.response, sendToServer);
+                    const interceptor = this.actionIntercepters.get(actionString);
+                    interceptor.intercept(this.response, sendToServer);
+                    if (interceptor.options && interceptor.options.showLoadingAfterIntercept) {
+                        this.queueLoading();
+                    }
                 } else {
                     sendToServer();
                     if (!isValueChangedAction) {
