@@ -6,7 +6,8 @@ export class ActionIntercepter {
   private intercepter: FunctionActionIntercepter;
   private behavior: ActionIntercepterBehavior;
 
-  constructor(private log: Logger, intercepter: FunctionActionIntercepter, behavior: (ActionIntercepterBehavior|ActionIntercepterBehaviorType) ) {
+  constructor(private log: Logger, intercepter: FunctionActionIntercepter, behavior: (ActionIntercepterBehavior|ActionIntercepterBehaviorType),
+        public options?: ActionIntercepterOptions ) {
     this.intercepter = intercepter;
     if (behavior instanceof ActionIntercepterBehavior) {
       this.behavior = behavior;
@@ -55,4 +56,8 @@ export class ActionIntercepterBehavior {
 export enum ActionIntercepterBehaviorType {
   before,
   block
+}
+
+export interface ActionIntercepterOptions {
+    showLoadingAfterIntercept?: boolean;
 }

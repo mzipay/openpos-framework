@@ -360,7 +360,11 @@ export class SessionService implements IMessageHandler {
                 // see if we have any intercepters registered
                 // otherwise just send the action
                 if (this.actionIntercepters.has(actionString)) {
-                    this.actionIntercepters.get(actionString).intercept(response, sendToServer);
+                    const interceptor = this.actionIntercepters.get(actionString);
+                    interceptor.intercept(response, sendToServer);
+                    if (interceptor.options && interceptor.options.showLoadingAfterIntercept) {
+                        this.queueLoading();
+                    }
                 } else {
                     sendToServer();
                 }
@@ -384,10 +388,12 @@ export class SessionService implements IMessageHandler {
         // Block any actions if we are backgrounded and running in cordova
         // (unless we are coming back out of the background)
         if (this.inBackground && actionString !== 'Refresh') {
+            this.log.info(`Blocked action '${actionString}' because app is in background.`);
             return;
         }
         const nodeId = this.personalization.getNodeId();
         if (this.appId && nodeId) {
+            this.log.info(`Publishing action '${actionString}' of type '${type}' to server...`);
             this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.personalization.getNodeId(),
                 JSON.stringify({ name: actionString, type: type, data: payload }));
         } else {
