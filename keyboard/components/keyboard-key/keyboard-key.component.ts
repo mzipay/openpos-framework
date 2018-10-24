@@ -258,7 +258,7 @@ export class MatKeyboardKeyComponent implements OnInit {
       // IE
       this.input.nativeElement.focus();
 
-      return window.document['selection'].createRange().text.length;
+      return (window.document['selection'] as any).createRange().text.length;
     }
   }
 
@@ -275,8 +275,8 @@ export class MatKeyboardKeyComponent implements OnInit {
     } else if ('selection' in window.document) {
       // IE
       this.input.nativeElement.focus();
-      const sel = window.document['selection'].createRange();
-      const selLen = window.document['selection'].createRange().text.length;
+      const sel = (window.document['selection'] as any).createRange();
+      const selLen = (window.document['selection'] as any).createRange().text.length;
       sel.moveStart('character', -this.control.value.length);
 
       return sel.text.length - selLen;
