@@ -1,0 +1,6 @@
+
+@import './side-nav/sid-nav-theme';
+
+@mixin template-themes($theme) {
+    @include side-nav-theme($theme);
+}
