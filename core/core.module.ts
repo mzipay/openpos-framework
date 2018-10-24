@@ -10,7 +10,6 @@ import { HttpClient } from '@angular/common/http';
 import { BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
 
 import { SharedModule } from '../shared';
-import { ScreenService } from './services';
 import { AppInjector } from './app-injector';
 import {
     ConfirmationDialogComponent,
