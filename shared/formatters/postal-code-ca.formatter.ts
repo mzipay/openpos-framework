@@ -1,12 +1,10 @@
 import { IFormatter } from './formatter.interface';
 
 export class PostalCodeCAFormatter implements IFormatter {
-    static readonly CHAR_REGEX = /[^0-9a-zA-Z \-]/g;
     static readonly FILTER_REGEXS = [
         /[abceghjklmnprstvxyABCEGHJKLMNPRSTVXY]/,
         /[0-9]/,
         /[abceghjklmnprstvwxyzABCEGHJKLMNPRSTVWXYZ]/,
-        / /,
         /[0-9]/,
         /[abceghjklmnprstvwxyzABCEGHJKLMNPRSTVWXYZ]/,
         /[0-9]/
@@ -21,12 +19,21 @@ export class PostalCodeCAFormatter implements IFormatter {
     }
 
     formatValue(value: string): string {
-        // remove any invalid chars
-        let returnValue = value.replace(PostalCodeCAFormatter.CHAR_REGEX, '');
-        // trim to max len of 20
-        if (returnValue && returnValue.length > 20) {
-            returnValue = returnValue.substring(0, 20);
+        let returnValue = value;
+        if (returnValue && returnValue.length > PostalCodeCAFormatter.FILTER_REGEXS.length) {
+            returnValue = returnValue.substring(0, PostalCodeCAFormatter.FILTER_REGEXS.length);
         }
+
+        const replacementValues = [];
+        for (let i = 0; i < returnValue.length; i++) {
+            const allowChar = PostalCodeCAFormatter.FILTER_REGEXS[i].test(returnValue.charAt(i)) ? returnValue.charAt(i) : '';
+            // Check each char against allowed pattern and stop once invalid char is encountered
+            if (! allowChar && i < returnValue.length - 1) {
+                break;
+            }
+            replacementValues.push(allowChar);
+        }
+        returnValue = replacementValues.join('');
         return returnValue;
     }
 
