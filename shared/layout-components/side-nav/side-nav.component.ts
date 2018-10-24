@@ -1,22 +1,18 @@
 import { Component } from '@angular/core';
-import { AbstractTemplate, OpenposMediaService } from '../../../core';
-import { ISideNavTemplate } from './side-nav.interface';
+import { OpenposMediaService } from '../../../core';
 import { Observable } from 'rxjs';
 
 @Component({
+    selector: 'app-side-nav',
     templateUrl: './side-nav.component.html',
     styleUrls: ['./side-nav.component.scss']
   })
-  export class SideNavComponent extends AbstractTemplate<ISideNavTemplate> {
+  export class SideNavComponent {
 
     public drawerOpen: Observable<boolean>;
     public drawerMode: Observable<string>;
 
     constructor( private mediaService: OpenposMediaService ) {
-        super();
-    }
-
-    buildTemplate() {
         const openMap = new Map([
             ['xs', false],
             ['sm', true],
@@ -36,5 +32,4 @@ import { Observable } from 'rxjs';
         this.drawerOpen = this.mediaService.mediaObservableFromMap(openMap);
         this.drawerMode = this.mediaService.mediaObservableFromMap(modeMap);
     }
-
 }

@@ -49,6 +49,7 @@ import {
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
+import { SideNavComponent } from './layout-components';
 
 const components = [
     PromptInputComponent,
@@ -70,7 +71,8 @@ const components = [
     FileViewerComponent,
     NumberSpinnerComponent,
     StatusBarComponent,
-    CounterComponent
+    CounterComponent,
+    SideNavComponent
 ];
 
 const directives = [
