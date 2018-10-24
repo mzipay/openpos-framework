@@ -1,5 +1,6 @@
-import { Directive, HostListener, Input, Output, EventEmitter, Renderer2, ElementRef } from '@angular/core';
+import { Directive, HostListener, Input, Renderer2, ElementRef } from '@angular/core';
 import { Configuration } from '../../configuration/configuration';
+import { SessionService } from '../../core';
 
 
 @Directive({
@@ -10,7 +11,7 @@ export class InactivityMonitorDirective {
 
     static lastKeepAliveFlushTime: number = new Date().getTime();
 
-    constructor(private elRef: ElementRef, public renderer: Renderer2) {
+    constructor(private elRef: ElementRef, public renderer: Renderer2, private session: SessionService) {
         if (Configuration.useTouchListener) {
             this.renderer.listen(elRef.nativeElement, 'touchstart', (event) => {
                 this.touchEvent(event);
@@ -19,8 +20,6 @@ export class InactivityMonitorDirective {
     }
 
     @Input() keepAliveMillis = Configuration.keepAliveMillis;
-
-    @Output() issueKeepAlive: EventEmitter<string> = new EventEmitter<string>();
 
     private timerHandle: any;
     private _timeoutActive;
@@ -44,7 +43,7 @@ export class InactivityMonitorDirective {
         const nextFlushTime = InactivityMonitorDirective.lastKeepAliveFlushTime + this.keepAliveMillis;
         if (now > nextFlushTime) {
             InactivityMonitorDirective.lastKeepAliveFlushTime = now;
-            this.issueKeepAlive.emit('KeepAlive');
+            this.session.keepAlive();
         }
     }
 }

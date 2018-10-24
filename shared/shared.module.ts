@@ -19,11 +19,11 @@ import {
     MatExclusiveSelectionListDirective,
     InactivityMonitorDirective,
     BarcodeScanPublisherDirective,
-    ScreenDirective,
-    TemplateDirective,
     AutoSelectOnFocusDirective,
     RequireAtleastOneValidatorDirective,
-    PhoneUSValidatorDirective
+    PhoneUSValidatorDirective,
+    OpenposScreenOutletDirective,
+    ScreenDirective
 } from './directives';
 import {
     PromptInputComponent,
@@ -83,10 +83,10 @@ const directives = [
     InactivityMonitorDirective,
     BarcodeScanPublisherDirective,
     AutoSelectOnFocusDirective,
-    TemplateDirective,
-    ScreenDirective,
     RequireAtleastOneValidatorDirective,
-    PhoneUSValidatorDirective
+    PhoneUSValidatorDirective,
+    OpenposScreenOutletDirective,
+    ScreenDirective
 ];
 
 const pipes = [
