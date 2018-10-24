@@ -13,8 +13,6 @@ public class DialogProperties implements Serializable {
      * is to reuse the previous dialog and just swap out the content.
      */
     private boolean forceReopen = false;
-    private String width;
-    private String height;
     private String minWidth;
     private String minHeight;
     private boolean executeActionBeforeClose = false;
@@ -38,19 +36,6 @@ public class DialogProperties implements Serializable {
     
     public DialogProperties forceReopen(boolean forceReopen) {
         this.setForceReopen(forceReopen);
-        return this;
-    }
-    
-    public String getWidth() {
-        return width;
-    }
-
-    public void setWidth(String width) {
-        this.width = width;
-    }
-    
-    public DialogProperties width(String width) {
-        this.setWidth(width);
         return this;
     }
 
@@ -80,19 +65,6 @@ public class DialogProperties implements Serializable {
         return this;
     }
 	
-	public String getHeight() {
-		return height;
-	}
-
-	public void setHeight(String height) {
-		this.height = height;
-	}
-	
-    public DialogProperties height(String height) {
-        this.setHeight(height);
-        return this;
-    }
-	
 	public void setAutoFocus(boolean autoFocus) {
         this.autoFocus = autoFocus;
     }
@@ -114,12 +86,22 @@ public class DialogProperties implements Serializable {
         this.minWidth = minWidth;
     }
 
+    public DialogProperties minWidth(String minWidth) {
+        this.setMinWidth(minWidth);
+        return this;
+    }
+    
     public String getMinHeight() {
         return minHeight;
     }
 
     public void setMinHeight(String minHeight) {
         this.minHeight = minHeight;
+    }
+
+    public DialogProperties minHeight(String minHeight) {
+        this.setMinHeight(minHeight);
+        return this;
     }
     
 }

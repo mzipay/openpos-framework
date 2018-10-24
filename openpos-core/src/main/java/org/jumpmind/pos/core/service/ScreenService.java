@@ -152,7 +152,7 @@ public class ScreenService implements IScreenService, IActionListener {
                 stateManager.keepAlive();
             } else if( "Refresh".equals(action.getName())) {
             	Screen lastDialog = getLastDialog(appId, deviceId);
-            	logger.debug("Received Refresh Action");
+            	logger.info("Received Refresh action from {}", deviceId);
             	showScreen(appId, deviceId, getLastScreen(appId, deviceId));
             	showScreen(appId, deviceId, lastDialog);
             } else {

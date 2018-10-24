@@ -16,7 +16,7 @@ public class ToggleField extends FormField implements IDynamicListField {
     private boolean dynamicListEnabled = true;
 
     public ToggleField() {
-    		setInputType(FieldInputType.ToggleButton);
+            setInputType(FieldInputType.ToggleButton);
         setElementType(FieldElementType.Input);
     }
     
