@@ -86,12 +86,22 @@ public class DialogProperties implements Serializable {
         this.minWidth = minWidth;
     }
 
+    public DialogProperties minWidth(String minWidth) {
+        this.setMinWidth(minWidth);
+        return this;
+    }
+    
     public String getMinHeight() {
         return minHeight;
     }
 
     public void setMinHeight(String minHeight) {
         this.minHeight = minHeight;
+    }
+
+    public DialogProperties minHeight(String minHeight) {
+        this.setMinHeight(minHeight);
+        return this;
     }
     
 }

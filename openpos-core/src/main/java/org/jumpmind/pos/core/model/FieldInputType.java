@@ -28,6 +28,8 @@ public enum FieldInputType {
     DateMMDDYY,
     DateDDMMYY,
     DateDDMMYYYY,
+    Month,
+    DayOfMonth,
     ToggleButton,
     AutoComplete,
     /** Allows a-z, A-Z, 0-9 */
