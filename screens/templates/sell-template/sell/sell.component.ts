@@ -1,8 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { ObservableMedia } from '@angular/flex-layout';
-import { SessionService, AbstractTemplate, IMenuItem } from '../../../../core';
+import { AbstractTemplate, IMenuItem, OpenposMediaService } from '../../../../core';
 import { StatusBarData } from '../../../../shared';
 import { SellScreenUtils, ISellScreen } from './sell-screen.interface';
 import { ISellTemplate } from './sell-template.interface';
@@ -13,7 +12,7 @@ import { SellStatusSectionData } from '../sell-status-section/sell-status-sectio
   templateUrl: './sell.component.html',
   styleUrls: ['./sell.component.scss']
 })
-export class SellComponent extends AbstractTemplate {
+export class SellComponent extends AbstractTemplate<any> {
 
   template: ISellTemplate;
   screen: ISellScreen;
@@ -25,7 +24,7 @@ export class SellComponent extends AbstractTemplate {
 
   public drawerMode: Observable<string>;
 
-  constructor(public session: SessionService, private observableMedia: ObservableMedia) {
+  constructor(private mediaService: OpenposMediaService) {
     super();
 
   }
@@ -33,7 +32,11 @@ export class SellComponent extends AbstractTemplate {
   show(screen: any) {
     this.screen = screen;
     this.template = screen.template;
-    this.statusBar = SellScreenUtils.getStatusBar(screen);
+    this.buildTemplate();
+  }
+
+  buildTemplate() {
+    this.statusBar = SellScreenUtils.getStatusBar(this.screen);
     this.statusSection = SellScreenUtils.getStatusSection(this.template);
     if (this.template.localMenuItems && this.template.localMenuItems.length > 0) {
         this.initializeDrawerMediaSizeHandling();
@@ -56,43 +59,22 @@ export class SellComponent extends AbstractTemplate {
 
   private initializeDrawerMediaSizeHandling() {
     const openMap = new Map([
-      ['xs', false],
-      ['sm', true],
-      ['md', true],
-      ['lg', true],
-      ['xl', true]
+        ['xs', false],
+        ['sm', true],
+        ['md', true],
+        ['lg', true],
+        ['xl', true]
     ]);
-
-    let startOpen: boolean;
-    openMap.forEach((open, mqAlias) => {
-      if (this.observableMedia.isActive(mqAlias)) {
-        startOpen = open;
-      }
-    });
-    this.drawerOpen = this.observableMedia.asObservable().pipe(map(
-      change => {
-        return openMap.get(change.mqAlias);
-      }
-    ), startWith(startOpen));
 
     const modeMap = new Map([
-      ['xs', 'over'],
-      ['sm', 'side'],
-      ['md', 'side'],
-      ['lg', 'side'],
-      ['xl', 'side']
-    ]);
+        ['xs', 'over'],
+        ['sm', 'side'],
+        ['md', 'side'],
+        ['lg', 'side'],
+        ['xl', 'side']
+      ]);
 
-    let startMode: string;
-    modeMap.forEach((mode, mqAlias) => {
-      if (this.observableMedia.isActive(mqAlias)) {
-        startMode = mode;
-      }
-    });
-    this.drawerMode = this.observableMedia.asObservable().pipe(map(
-      change => {
-        return modeMap.get(change.mqAlias);
-      }
-    ), startWith(startMode));
+    this.drawerOpen = this.mediaService.mediaObservableFromMap(openMap);
+    this.drawerMode = this.mediaService.mediaObservableFromMap(modeMap);
   }
 }

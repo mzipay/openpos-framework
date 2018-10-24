@@ -1,16 +1,24 @@
 import { IScreen } from './dynamic-screen/screen.interface';
-import { ViewChild, ComponentFactory, ComponentRef, OnDestroy } from '@angular/core';
+import { Logger, SessionService } from '../services';
+import { AppInjector } from '../app-injector';
+import { ViewChild, ComponentRef, ComponentFactory } from '@angular/core';
 import { ScreenDirective } from '../../shared';
+import { ComponentFactoryResolver } from '@angular/core/src/render3';
 
-export abstract class AbstractTemplate implements IScreen, OnDestroy {
+export abstract class AbstractTemplate<T> implements IScreen {
 
     @ViewChild(ScreenDirective) host: ScreenDirective;
-
     private currentScreenRef: ComponentRef<IScreen>;
 
     private actionDisablers = new Map<string, actionShouldBeDisabled>();
+    template: T;
+
+    session: SessionService;
+    log: Logger;
 
     constructor() {
+        this.session = AppInjector.Instance.get(SessionService);
+        this.log = AppInjector.Instance.get(Logger);
     }
 
     public installScreen(screenComponentFactory: ComponentFactory<IScreen>): IScreen {
@@ -19,17 +27,23 @@ export abstract class AbstractTemplate implements IScreen, OnDestroy {
         if (this.currentScreenRef) {
             this.currentScreenRef.destroy();
         }
+
         this.currentScreenRef = viewContainerRef.createComponent(screenComponentFactory);
         return this.currentScreenRef.instance;
     }
 
-    ngOnDestroy(): void {
+    ngOnDestry(): void {
         if (this.currentScreenRef) {
             this.currentScreenRef.destroy();
         }
     }
 
-    abstract show(screen: any);
+    show(screen: any) {
+        this.template = screen.template;
+        this.buildTemplate();
+    }
+
+    abstract buildTemplate();
 
     // tslint:disable-next-line:no-shadowed-variable
     registerActionDisabler(action: string, actionShouldBeDisabled) {

@@ -9,7 +9,7 @@ import { SellScreenUtils } from '../sell-template/sell/sell-screen.interface';
   templateUrl: './blank-with-bar.component.html',
   styleUrls: ['./blank-with-bar.component.scss']
 })
-export class BlankWithBarComponent extends AbstractTemplate implements OnInit {
+export class BlankWithBarComponent extends AbstractTemplate<any> implements OnInit {
 
   template: any;
   statusBar: StatusBarData;
@@ -25,5 +25,7 @@ export class BlankWithBarComponent extends AbstractTemplate implements OnInit {
     this.template = template;
     this.statusBar = SellScreenUtils.getStatusBar(template);
   }
+
+  buildTemplate() {}
 
 }

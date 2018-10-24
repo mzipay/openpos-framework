@@ -10,7 +10,7 @@ import { SelfCheckoutStatusBarData } from '../self-checkout-statusbar/self-check
   templateUrl: './self-checkout-with-bar.component.html',
   styleUrls: ['./self-checkout-with-bar.component.scss']
 })
-export class SelfCheckoutWithBarComponent extends AbstractTemplate implements OnInit {
+export class SelfCheckoutWithBarComponent extends AbstractTemplate<any> implements OnInit {
 
   template: ISellTemplate;
   statusBar: SelfCheckoutStatusBarData;
@@ -26,6 +26,8 @@ export class SelfCheckoutWithBarComponent extends AbstractTemplate implements On
     this.template = screen.template;
     this.statusBar = SellScreenUtils.getSelfCheckoutStatusBar( screen );
   }
+
+  buildTemplate() {}
 
 }
 

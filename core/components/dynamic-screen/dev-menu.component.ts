@@ -19,7 +19,7 @@ import {
 } from '../../services';
 import { IScreen } from './screen.interface';
 import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem, IMessageHandler } from '../../interfaces';
-import { FileViewerComponent, TemplateDirective } from '../../../shared';
+import { FileViewerComponent } from '../../../shared';
 import { PersonalizationService } from '../../services/personalization.service';
 import { PersonalizationComponent } from '../personalization/personalization.component';
 
@@ -92,7 +92,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
 
     private currentTemplateRef: ComponentRef<IScreen>;
 
-    private installedTemplate: AbstractTemplate;
+    private installedTemplate: AbstractTemplate<any>;
 
     private lastDialogType: string;
 
@@ -100,7 +100,6 @@ export class DevMenuComponent implements OnInit, IMessageHandler {
 
     private disableDevMenu = false;
 
-    @ViewChild(TemplateDirective) host: TemplateDirective;
     @ViewChild('devMenuPanel') devMenuPanel: MatExpansionPanel;
 
     constructor(private log: Logger, private personalization: PersonalizationService, 

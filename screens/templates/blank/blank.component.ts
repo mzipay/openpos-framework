@@ -7,7 +7,7 @@ import { AbstractTemplate } from '../../../core';
   templateUrl: './blank.component.html',
   styleUrls: ['./blank.component.scss']
 })
-export class BlankComponent extends AbstractTemplate implements OnInit {
+export class BlankComponent extends AbstractTemplate<any> implements OnInit {
 
   template: any;
 
@@ -22,4 +22,5 @@ export class BlankComponent extends AbstractTemplate implements OnInit {
     this.template = template;
   }
 
+  buildTemplate() {}
 }

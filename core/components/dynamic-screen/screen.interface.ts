@@ -1,7 +1,6 @@
-import { DynamicScreenComponent } from './dynamic-screen.component';
 import { AbstractTemplate } from '../abstract-template';
 
 
 export interface IScreen {
-    show(screen: any, app?: DynamicScreenComponent, template?: AbstractTemplate): void;
+    show(screen: any, template?: AbstractTemplate<any>): void;
 }
