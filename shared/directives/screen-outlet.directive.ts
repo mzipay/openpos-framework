@@ -30,6 +30,10 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     public currentTheme: string;
 
+
+    private installedScreen: IScreen;
+    private installedTemplate: AbstractTemplate<any>;
+
     constructor(
         private log: Logger,
         private personalization: PersonalizationService,
@@ -88,15 +92,10 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             const componentFactory = this.screenService.resolveScreen(screenToCreate, this.theme);
             this._componentRef = this._viewContainerRef.createComponent(componentFactory, this._viewContainerRef.length, this._viewContainerRef.parentInjector);
 
-            if ( this._componentRef.instance.show ) {
-                this._componentRef.instance.show( screen );
-            }
-
             // If we accept an inner screen meaning we are a template, install the screen
             if ( this._componentRef.instance.installScreen ) {
-                const template = this._componentRef.instance as AbstractTemplate<any>;
-                const installedScreen = template.installScreen(this.screenService.resolveScreen(this.screenTypeName, this.theme)) as IScreen;
-                installedScreen.show( screen, template);
+                this.installedTemplate = this._componentRef.instance as AbstractTemplate<any>;
+                this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(this.screenTypeName, this.theme)) as IScreen;
             }
             if (this.personalization.getTheme() !== this.currentTheme) {
 
@@ -108,6 +107,15 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             // Add the new theme
             this.renderer.addClass(this._componentRef.location.nativeElement, this.currentTheme );
         }
+
+        if ( this._componentRef.instance.show ) {
+            this._componentRef.instance.show( screen );
+        }
+
+        if ( this.installedScreen ) {
+            this.installedScreen.show( screen, this.installedTemplate);
+        }
+
         this.updateClasses(screen);
         this.dialogService.closeDialog(true);
     }
