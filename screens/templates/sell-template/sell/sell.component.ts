@@ -2,10 +2,11 @@ import { Component, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AbstractTemplate, IMenuItem, OpenposMediaService } from '../../../../core';
-import { StatusBarData } from '../../../../shared';
+import { StatusBarData, NavListComponent } from '../../../../shared';
 import { SellScreenUtils, ISellScreen } from './sell-screen.interface';
 import { ISellTemplate } from './sell-template.interface';
 import { SellStatusSectionData } from '../sell-status-section/sell-status-section.data';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-sell',
@@ -24,9 +25,8 @@ export class SellComponent extends AbstractTemplate<any> {
 
   public drawerMode: Observable<string>;
 
-  constructor(private mediaService: OpenposMediaService) {
+  constructor(private mediaService: OpenposMediaService, protected dialog: MatDialog) {
     super();
-
   }
 
   show(screen: any) {
@@ -55,6 +55,24 @@ export class SellComponent extends AbstractTemplate<any> {
       enabled = false;
     }
     return enabled;
+  }
+
+  public openTransactionSubmenu() {
+    let optionItems = [];
+    optionItems = this.template.transactionMenuItems;
+    const dialogRef = this.dialog.open(NavListComponent, {
+      width: '70%',
+      data: {
+        optionItems: optionItems,
+        payload: null,
+        disableClose: false,
+        autoFocus: false
+     }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.log.info('The dialog was closed');
+    });
   }
 
   private initializeDrawerMediaSizeHandling() {

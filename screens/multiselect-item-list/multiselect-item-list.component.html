@@ -6,8 +6,15 @@
             <span>{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</span>
             <span fxFlex="1 1 auto"></span>
             <span>
-                <button *ngIf="!screen.readOnly && isAddActionPresent()" mat-icon-button color="primary-inverse" (click)="addItemsToSale(selectedItems)">
+                <button *ngIf="!screen.readOnly && isAddActionPresent() && 
+                (selectedItems.length > 1 || (selectedItems.length === 1 && itemActions.length === 1))" mat-icon-button color="primary-inverse" 
+                (click)="addItemsToSale(selectedItems)">
                     <mat-icon>add_circle</mat-icon>
+                </button>
+                <button *ngIf="!screen.readOnly && isAddActionPresent() && 
+                selectedItems.length === 1 && itemActions.length > 1" mat-icon-button color="primary-inverse" 
+                (click)="openItemDialog(selectedItems[0])">
+                    <mat-icon>more_vert</mat-icon>
                 </button>
             </span>
         </mat-toolbar>
@@ -19,12 +26,6 @@
                             {{item.description}}<br/>
                             <span class="muted-color">
                                 {{item.subtitle}}&nbsp;
-                                <!---
-                                <mat-chip-list>
-                                    {{item.subtitle}}&nbsp;
-                                    <mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
-                                </mat-chip-list>
-                                -->
                             </span>
                         </div>	
                         <div fxAlign="right">
@@ -53,16 +54,3 @@
         </mat-card-content>
     </mat-card>
 </div>
-
-<!--
-    This was how the product list was originally displayed.
-
-<ng-template #itemsList>
-    <app-product-list #productList [showItemIcon]="! isItemClickDisabled() && selectionMode ==='Single'" [items]="items" 
-        (itemClick)="isItemClickDisabled() || onItemClick($event)"
-        (itemSelected)="isItemSelectedDisabled() || onItemSelected($event)"
-        [showItemMenu]="itemActions.length > 0" [menuItemActions]="itemActions" (menuItemClick)="onMenuItemClick($event)"
-        [itemClass]="condensedListDisplay ? 'item-list-condensed' : ''" [selectionMode]='getSelectionModeAsEnum()'>
-    </app-product-list>
-</ng-template>
--->
