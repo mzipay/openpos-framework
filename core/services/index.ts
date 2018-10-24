@@ -14,3 +14,4 @@ export * from './startup.service';
 export * from './toast.service';
 export * from './logger.service';
 export * from './cordova.service';
+export * from './openpos-media.service';
