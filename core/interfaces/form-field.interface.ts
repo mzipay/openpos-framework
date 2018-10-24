@@ -32,10 +32,6 @@ export interface IFormElement {
     additionalValidators?: ValidatorFn[];
 }
 
-export interface IDynamicListField {
-    dynamicListEnabled: boolean;
-}
-
 export type LabelPositionType = 'before' | 'after';
 export interface ICheckboxField extends IFormElement {
     labelPosition: LabelPositionType;

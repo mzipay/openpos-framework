@@ -11,7 +11,7 @@
                     <ng-container *ngTemplateOutlet="itemsList"></ng-container>
             </ng-template>
         </mat-card-content>
-        <mat-card-actions *ngIf="screen.actionButton" align="end">
+        <mat-card-actions *ngIf="screen.actionButton" fxFlexAlign="end">
 			<button mat-raised-button type="submit" (click)="onActionButtonClick()" color=primary>
 				<span>Next</span>
 				<mat-icon *ngIf="screen.actionButton.icon" class="material-icons">{{screen.actionButton.icon}}</mat-icon>
