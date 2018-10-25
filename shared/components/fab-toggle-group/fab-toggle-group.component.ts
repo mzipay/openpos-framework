@@ -12,7 +12,7 @@ export class FabToggleGroupComponent implements AfterViewInit, DoCheck {
   @Input() value;
   @Output() valueChange = new EventEmitter();
 
-  @ContentChildren(FabToggleButtonComponent) toggleButtons: QueryList<FabToggleButtonComponent>;
+  @ContentChildren(FabToggleButtonComponent, {descendants: true}) toggleButtons: QueryList<FabToggleButtonComponent>;
 
   constructor() {
 

@@ -5,7 +5,7 @@
             background-color: white;
         }
         
-        .mat-fab.selected{
+        .mat-fab.mat-accent.selected{
             border: solid 1px mat-color(map-get($theme, accent));
         }
 }
