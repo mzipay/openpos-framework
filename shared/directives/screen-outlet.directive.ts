@@ -105,7 +105,8 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             }
 
             // Add the new theme
-            this.renderer.addClass(this._componentRef.location.nativeElement, this.currentTheme );
+            const parent = this.renderer.parentNode( this._componentRef.location.nativeElement );
+            this.renderer.addClass(parent, this.currentTheme );
         }
 
         if ( this._componentRef.instance.show ) {
