@@ -20,7 +20,7 @@ export class ValidatorsService {
 
         USValidators.set('phone', OpenPosValidators.PhoneUS);
         CAValidators.set('phone', OpenPosValidators.PhoneCA);
-        CAValidators.set('postalcode', Validators.minLength(7));
+        CAValidators.set('postalcode', Validators.minLength(6));
 
         NOLOCALEValidators.set('giftcode', OpenPosValidators.GiftCode);
         NOLOCALEValidators.set('date', OpenPosValidators.DateMMDDYYYY);
