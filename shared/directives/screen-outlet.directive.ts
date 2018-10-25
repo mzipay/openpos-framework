@@ -96,6 +96,10 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
                 this.installedTemplate = this._componentRef.instance as AbstractTemplate<any>;
                 this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(this.screenTypeName, this.theme)) as IScreen;
             }
+
+            const parent = this.renderer.parentNode( this._componentRef.location.nativeElement );
+            this.renderer.removeClass(parent, this.currentTheme );
+
             if (this.personalization.getTheme() !== this.currentTheme) {
 
                 this.overlayContainer.getContainerElement().classList.remove(this.currentTheme);
@@ -104,7 +108,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             }
 
             // Add the new theme
-            this.renderer.addClass(this._componentRef.location.nativeElement, this.currentTheme );
+            this.renderer.addClass(parent, this.currentTheme );
         }
 
         if ( this._componentRef.instance.show ) {
