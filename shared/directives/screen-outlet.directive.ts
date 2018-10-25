@@ -57,8 +57,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     }
 
     handle(message: any) {
-        if (message.template &&
-            !message.template.dialog &&
+        if ( (!message.template || !message.template.dialog) &&
             message.screenType !== 'NoOp' &&
             message.screenType !== 'Toast') {
             this.updateTemplateAndScreen(message);

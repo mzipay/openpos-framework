@@ -1,13 +1,13 @@
 @import '~@angular/material/theming';
 @import './themes/component-theme-mixins';
-@import '../screens/templates/template-themes';
+@import '../shared/layout-components/layout-component-themes';
 
 @include mat-core();
 
 @mixin app-theme($theme) {
 
     @include component-theme-mixins($theme);
-    @include template-themes($theme);
+    @include layout-component-themes($theme);
 
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));

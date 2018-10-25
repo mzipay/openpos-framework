@@ -46,10 +46,13 @@ import {
     StatusBarComponent,
     CounterComponent,
     DatePartPickerComponent
+    PrimaryButtonComponent,
+    SecondaryButtonComponent,
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
+import { SideNavComponent } from './layout-components';
 
 const components = [
     PromptInputComponent,
@@ -71,8 +74,7 @@ const components = [
     FileViewerComponent,
     NumberSpinnerComponent,
     StatusBarComponent,
-    CounterComponent,
-    DatePartPickerComponent
+    CounterComponent
 ];
 
 const directives = [

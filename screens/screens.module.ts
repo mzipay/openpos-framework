@@ -59,7 +59,6 @@ import { SellStatusSectionComponent } from './templates/sell-template/sell-statu
 import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { SystemStatusDialogComponent } from './system-status/system-status-dialog.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
-import { SideNavComponent } from './templates/side-nav/side-nav.component';
 
 const screens = [
     BasicItemSearchComponent,
@@ -118,8 +117,7 @@ const templates = [
     BlankWithBarComponent,
     SellComponent,
     SellLinkedCustomerComponent,
-    SellStatusSectionComponent,
-    SideNavComponent
+    SellStatusSectionComponent
 ];
 
 const components = [

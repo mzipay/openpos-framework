@@ -46,8 +46,6 @@ import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
 import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
-import { SideNavComponent } from './templates/side-nav/side-nav.component';
-
 
 export const ScreenConstants = {
     screens : [
@@ -141,8 +139,7 @@ export const ScreenConstants = {
         // Templates
         { name: 'Blank', component: BlankComponent },
         { name: 'BlankWithBar', component: BlankWithBarComponent },
-        { name: 'Sell', component: SellComponent },
-        { name: 'SideNav', component: SideNavComponent }
+        { name: 'Sell', component: SellComponent }
     ]
 
 };

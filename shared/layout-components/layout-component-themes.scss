@@ -1,6 +1,6 @@
 
 @import './side-nav/sid-nav-theme';
 
-@mixin template-themes($theme) {
+@mixin layout-component-themes($theme) {
     @include side-nav-theme($theme);
 }

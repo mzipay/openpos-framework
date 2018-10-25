@@ -6,5 +6,6 @@ export * from './validators';
 export * from './textmask';
 export * from './events';
 export * from './utils';
+export * from './layout-components';
 
 export * from './shared.module';
