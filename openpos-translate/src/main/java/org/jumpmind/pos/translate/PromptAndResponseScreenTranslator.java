@@ -55,6 +55,7 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
         if( showAsDialog ) {
             DialogProperties props = new DialogProperties();
             props.setMinWidth("50%");
+            props.setForceReopen(false);
             screen.asDialog(props);
             MenuItem back = (MenuItem)screen.get("backButton");
             if( back != null ) { 
