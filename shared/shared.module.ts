@@ -45,6 +45,8 @@ import {
     NumberSpinnerComponent,
     StatusBarComponent,
     CounterComponent,
+    PrimaryButtonComponent,
+    SecondaryButtonComponent,
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe } from './pipes';
@@ -72,7 +74,9 @@ const components = [
     NumberSpinnerComponent,
     StatusBarComponent,
     CounterComponent,
-    SideNavComponent
+    SideNavComponent,
+    PrimaryButtonComponent,
+    SecondaryButtonComponent
 ];
 
 const directives = [

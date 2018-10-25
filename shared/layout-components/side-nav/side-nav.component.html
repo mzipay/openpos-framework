@@ -1,6 +1,6 @@
 <mat-sidenav-container fxFlexFill fxLayout="column">
     <mat-sidenav #sidenav position="start" [mode]="drawerMode | async" [opened]="drawerOpen | async">
-        <ng-content select=".nav"></ng-content>
+        <ng-content select="[nav]"></ng-content>
     </mat-sidenav>
     <mat-sidenav-content class="side-nav-content" fxFlex="0 1 100%" fxLayout="column">
         <mat-toolbar fxHide fxShow.xs fxFlex="0 0 auto" fxLayout="row">
@@ -8,14 +8,14 @@
                 <app-icon iconName="menu"></app-icon>
             </button>
             <div class="toolbar-header-text">
-                <ng-content select=".header"></ng-content>
+                <ng-content select="[header]"></ng-content>
             </div>
         </mat-toolbar>
         <div style="flex:1 1 50%; min-height: 50%; overflow: auto">
-            <ng-content select=".content"></ng-content>
+            <ng-content select="[content]"></ng-content>
         </div>
         <div fxFlex="0 0 auto">
-            <ng-content select=".footer"></ng-content>
+            <ng-content select="[footer]"></ng-content>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

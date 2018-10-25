@@ -1,5 +1,5 @@
 import { SessionService, AppInjector } from '../../core';
-
+// TODO unsubscribe
 export abstract class ScreenPart<T> {
 
     sessionService: SessionService;
