@@ -45,7 +45,7 @@ import {
     NumberSpinnerComponent,
     StatusBarComponent,
     CounterComponent,
-    DatePartPickerComponent
+    DatePartPickerComponent,
     PrimaryButtonComponent,
     SecondaryButtonComponent,
 } from './components';
@@ -74,7 +74,11 @@ const components = [
     FileViewerComponent,
     NumberSpinnerComponent,
     StatusBarComponent,
-    CounterComponent
+    CounterComponent,
+    DatePartPickerComponent,
+    PrimaryButtonComponent,
+    SecondaryButtonComponent,
+    SideNavComponent
 ];
 
 const directives = [
