@@ -1,5 +1,5 @@
 
-@import './side-nav/sid-nav-theme';
+@import './side-nav/side-nav-theme';
 
 @mixin layout-component-themes($theme) {
     @include side-nav-theme($theme);

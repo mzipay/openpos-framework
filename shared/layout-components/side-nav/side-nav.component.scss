@@ -4,6 +4,21 @@
     font-size: 17px;
 }
 
+.mat-drawer-content{
+    padding:0px;
+}
+
 .side-nav-content{
-    padding: 0px;
+    padding: 10px;
+}
+
+.side-nav{
+    padding:0px;
+    border-right-width: 1px;
+    border-right-style: solid;
+}
+
+.desktop-header{
+    border-top-width: 5px;
+    border-top-style: solid;
 }
