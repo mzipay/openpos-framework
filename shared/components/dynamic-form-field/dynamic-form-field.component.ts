@@ -219,7 +219,8 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   isDateInput(): boolean {
-    return this.formField.inputType && this.formField.inputType.toLowerCase().indexOf('date') >= 0;
+    return this.formField.inputType && this.formField.inputType !== 'DatePartChooser' &&
+       this.formField.inputType.toLowerCase().indexOf('date') >= 0;
   }
 
   isSpecialCaseInput(): boolean {

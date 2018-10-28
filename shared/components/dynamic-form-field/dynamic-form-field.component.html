@@ -70,6 +70,13 @@
         [attrType]="isNumericField() ? 'tel' : 'text'" (valueChange)="onFormElementChanged(formField)"></app-counter>
     </ng-container>
 
+    <ng-container *ngIf="formField.inputType==='DatePartChooser'">
+        <app-date-part-chooser-field [formGroup]="formGroup" [controlName]="formField.id" [label]="formField.label" 
+            [(model)]="formField" [required]="formField.required" [iconName]="formField.iconName" [formatterName]="formField.formatter || formField.inputType"
+            (valueChange)="onFormElementChanged(formField)">
+        </app-date-part-chooser-field>
+    </ng-container>
+    
     <ng-container *ngIf="formField.elementType==='Display'">
         <mat-form-field style="width:100%" [ngSwitch]="formField.valueDisplayMode">
             <input *ngSwitchDefault [value]="formField.value" [name]="formField.id" [placeholder]="formField.label" matInput readonly=true>

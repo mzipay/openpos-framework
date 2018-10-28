@@ -22,6 +22,9 @@ export class FabToggleButtonComponent {
     @Input()
     disabled: boolean;
 
+    @Input()
+    size: 'mini' | 'normal' = 'normal';
+
     @Output()
     selectedChange = new EventEmitter();
 

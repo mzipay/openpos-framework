@@ -18,7 +18,9 @@ export * from './number-spinner/number-spinner.component';
 export * from './status-bar/status-bar-data';
 export * from './status-bar/status-bar.component';
 export * from './counter/counter.component';
-export * from './date-part-picker/date-part-picker.component';
+export * from './date-part-chooser/date-part-chooser.component';
+export * from './date-part-chooser/date-part-chooser-field/date-part-chooser-field.component';
+export * from './date-part-chooser/date-part-chooser-dialog/date-part-chooser-dialog.component';
 
 export * from './primary-button/primary-button.component';
 export * from './secondary-button/secondary-button.component';

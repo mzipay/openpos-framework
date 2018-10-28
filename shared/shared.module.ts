@@ -45,7 +45,9 @@ import {
     NumberSpinnerComponent,
     StatusBarComponent,
     CounterComponent,
-    DatePartPickerComponent,
+    DatePartChooserComponent,
+    DatePartChooserFieldComponent,
+    DatePartChooserDialogComponent,
     PrimaryButtonComponent,
     SecondaryButtonComponent,
 } from './components';
@@ -75,7 +77,9 @@ const components = [
     NumberSpinnerComponent,
     StatusBarComponent,
     CounterComponent,
-    DatePartPickerComponent,
+    DatePartChooserComponent,
+    DatePartChooserFieldComponent,
+    DatePartChooserDialogComponent,
     PrimaryButtonComponent,
     SecondaryButtonComponent,
     SideNavComponent

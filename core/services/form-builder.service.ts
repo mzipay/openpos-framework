@@ -19,7 +19,7 @@ export class FormBuilder {
 
            // For a DATE type element, there is also a hidden field to handle picking of dates using
            // a date picker, need to add a FormControl for that hidden input also.
-           if (element.inputType && element.inputType.toLowerCase().indexOf('date') >= 0) {
+           if (element.inputType && element.inputType !== 'DatePartChooser' && element.inputType.toLowerCase().indexOf('date') >= 0) {
              group[element.id + 'Hidden'] = new FormControl();
            }
         });
