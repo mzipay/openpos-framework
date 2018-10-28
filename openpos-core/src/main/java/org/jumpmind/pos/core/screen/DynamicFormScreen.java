@@ -2,6 +2,7 @@ package org.jumpmind.pos.core.screen;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jumpmind.pos.core.model.Form;
@@ -57,6 +58,10 @@ public class DynamicFormScreen extends Screen implements IHasForm {
 
     public void setAlternateSubmitActions(List<String> alternateActions) {
         this.alternateSubmitActions = alternateActions;
+    }
+    
+    public void setAlternateSubmitActions(String ...alternateActions) {
+        this.setAlternateSubmitActions(Arrays.asList(alternateActions));
     }
 
     @Deprecated

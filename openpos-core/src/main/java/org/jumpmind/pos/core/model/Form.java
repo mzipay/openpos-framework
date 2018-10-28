@@ -361,6 +361,10 @@ public class Form implements Serializable {
         }
     }
         
+    public boolean hasFormElement(String elementId) {
+        return this.getFormElement(elementId) != null;
+    }
+
     public IFormElement getFormElement(String elementId) {
         return formElements.stream().filter(f -> elementId.equals(f.getId())).findFirst().orElse(null);
     }
