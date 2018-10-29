@@ -54,12 +54,25 @@ export class DatePartChooserFieldComponent implements OnInit, AfterViewInit {
         }
     }
 
+    private isLeapYear(year: number): boolean {
+        return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
+    }
+
     formatForDisplay(): string {
         const d: Date = new Date();
+        d.setDate(1);  // Default to first of the month
         if (this.model.month) {
             d.setMonth(this.model.month - 1);
         }
         if (this.model.dayOfMonth) {
+            if (this.model.month === 2 && this.model.dayOfMonth === 29) {
+                // adjust year to nearest leap year
+                let year = d.getFullYear();
+                while (! this.isLeapYear(year) && year > 0) {
+                    year--;
+                }
+                d.setFullYear(year);
+            }
             d.setDate(this.model.dayOfMonth);
         }
         if (this.model.year) {

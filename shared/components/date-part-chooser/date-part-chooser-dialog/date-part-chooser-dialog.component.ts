@@ -1,5 +1,5 @@
-import { IDatePartChooserField } from '../../../../core/interfaces';
-import { Input, Component, OnInit, Output, Inject } from "@angular/core";
+import { IDateParts, DatePartChooserMode } from '../../../../core/interfaces';
+import { Input, Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 @Component({
@@ -12,13 +12,14 @@ export class DatePartChooserDialogComponent implements OnInit {
 
     @Input() title: string;
     @Input() closeButton: boolean;
-    @Input() dateParts: IDatePartChooserField;
+    @Input() dateParts: IDateParts;
+    @Input() mode: DatePartChooserMode;
 
     constructor(@Inject(MAT_DIALOG_DATA) public data: any,
         public dialogRef: MatDialogRef<DatePartChooserDialogComponent>) {
         if (data) {
             if (data.dateParts) {
-                this.dateParts = <IDatePartChooserField> data.dateParts;
+                this.dateParts = <IDateParts> data.dateParts;
             }
             if (data.title) {
                 this.title = data.title;
@@ -26,8 +27,15 @@ export class DatePartChooserDialogComponent implements OnInit {
             if (! data.disableClose) {
                 this.closeButton = true;
             }
+            this.mode = data.mode;
         }
 
+    }
+
+    onDateChange($event: IDateParts) {
+        this.dateParts.month = $event.month;
+        this.dateParts.dayOfMonth = $event.dayOfMonth;
+        this.dateParts.year = $event.year;
     }
 
     ngOnInit(): void {

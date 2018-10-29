@@ -1,5 +1,6 @@
 import { Component, ContentChildren, QueryList, AfterViewInit, Input, Output, EventEmitter, DoCheck } from '@angular/core';
 import { FabToggleButtonComponent } from '../fab-toggle-button/fab-toggle-button.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-fab-toggle-group',
@@ -11,6 +12,7 @@ export class FabToggleGroupComponent implements AfterViewInit, DoCheck {
 
   @Input() value;
   @Output() valueChange = new EventEmitter();
+  private buttonChangeSubscriptions: Subscription[] = [];
 
   @ContentChildren(FabToggleButtonComponent, {descendants: true}) toggleButtons: QueryList<FabToggleButtonComponent>;
 
@@ -18,9 +20,20 @@ export class FabToggleGroupComponent implements AfterViewInit, DoCheck {
 
   }
 
-  ngAfterViewInit(): void {
+  private subscribeForChildChanges() {
+    this.buttonChangeSubscriptions = [];
     this.toggleButtons.forEach( button => {
-      button.change.subscribe(event => this.onToggleChange(event.source, event.value));
+        const subscr = button.change.subscribe(event => this.onToggleChange(event.source, event.value));
+        this.buttonChangeSubscriptions.push(subscr);
+      });
+  }
+
+  ngAfterViewInit(): void {
+    this.subscribeForChildChanges();
+    // Handle cases when children are updated dynamically
+    this.toggleButtons.changes.subscribe( x => {
+        this.buttonChangeSubscriptions.forEach(s => s.unsubscribe());
+        this.subscribeForChildChanges();
     });
   }
 

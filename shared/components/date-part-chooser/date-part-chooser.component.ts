@@ -1,9 +1,6 @@
-import { IDatePartChooserField } from './../../../core/interfaces';
-import { Input, Component, OnInit, Output, Inject } from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { DatePartChooserMode } from '../../../core/interfaces';
-import { Title } from '@angular/platform-browser';
+import { Input, Component, OnInit, Output, EventEmitter, ViewChild } from "@angular/core";
+import { DatePartChooserMode, IDateParts } from '../../../core/interfaces';
+import { FabToggleGroupComponent } from "../fab-toggle-group/fab-toggle-group.component";
 
 @Component({
     selector: 'app-date-part-chooser',
@@ -23,36 +20,21 @@ export class DatePartChooserComponent implements OnInit {
 
     _dateChooserModeType = DatePartChooserMode;
 
-    // @Input() formGroup: FormGroup;
-    // @Input() controlName: string;
-    // @Input() required: boolean;
-    // @Input() placeholder: string;
-    // @Input() label: string;
-
-    @Input() title: string;
     @Input() mode: DatePartChooserMode = DatePartChooserMode.MonthDate;
-    @Output() @Input() month: number;
+    @Input() month: number;
     @Input() dayOfMonth: number;
     @Input() year: number;
+    @Output() change = new EventEmitter<IDateParts>();
+    @ViewChild('monthGroup') monthGroup: FabToggleGroupComponent;
 
-    constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-        public dialogRef: MatDialogRef<DatePartChooserComponent>) {
-        if (data) {
-            if (data.dateParts) {
-                const dateParts = <IDatePartChooserField> data.dateParts;
-                this.month = dateParts.month;
-                this.dayOfMonth = dateParts.dayOfMonth;
-                this.year = dateParts.year;
-                this.mode = dateParts.mode;
-            }
-            if (data.title) {
-                this.title = data.title;
-            }
-        }
-
+    constructor() {
     }
 
     ngOnInit(): void {
+    }
+
+    onDateChange($event: any) {
+        this.change.emit({month: this.month, dayOfMonth: this.dayOfMonth, year: this.year});
     }
 
     get months() {
@@ -71,10 +53,3 @@ export class DatePartChooserComponent implements OnInit {
         }
     }
 }
-/*
-export enum DatePartChooserMode {
-    MonthDate = 'MonthDate',
-    MonthYear = 'MonthYear',
-    MonthDateYear = 'MonthDateYear'
-}
-*/

@@ -6,7 +6,13 @@ export enum DatePartChooserMode {
     MonthDateYear = 'MonthDateYear'
 }
 
-export interface IDatePartChooserField  extends IFormElement {
+export interface IDateParts {
+    month: number;
+    dayOfMonth: number;
+    year: number;
+}
+
+export interface IDatePartChooserField extends IFormElement {
     month: number;
     dayOfMonth: number;
     year: number;
