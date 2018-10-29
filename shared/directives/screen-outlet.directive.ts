@@ -46,7 +46,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.session.registerMessageHandler(this);
+        this.session.registerMessageHandler(this, 'Screen');
     }
 
     ngOnDestroy(): void {
@@ -59,6 +59,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     handle(message: any) {
         if ( (!message.template || !message.template.dialog) &&
             message.screenType !== 'NoOp' &&
+            message.screenType !== 'Loading' &&
             message.screenType !== 'Toast') {
             this.updateTemplateAndScreen(message);
         }
