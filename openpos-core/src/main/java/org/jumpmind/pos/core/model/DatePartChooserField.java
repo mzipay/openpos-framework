@@ -17,6 +17,7 @@ public class DatePartChooserField extends FormField {
     private Integer year;
     private String formatter;
     private DatePartChooserMode mode = DatePartChooserMode.MonthDate;
+    private String popupTitle;
     
     public DatePartChooserField() {
         setInputType(FieldInputType.DatePartChooser);
@@ -108,6 +109,24 @@ public class DatePartChooserField extends FormField {
         this.mode = mode;
     }
 
+    public DatePartChooserField mode(DatePartChooserMode mode) {
+        this.setMode(mode);
+        return this;
+    }
+    
+    public String getPopupTitle() {
+        return popupTitle;
+    }
+
+    public void setPopupTitle(String popupTitle) {
+        this.popupTitle = popupTitle;
+    }
+
+    public DatePartChooserField popupTitle(String popupTitle) {
+        this.setPopupTitle(popupTitle);
+        return this;
+    }
+    
     public static class DatePickerValues {
         public Integer month;
         public Integer dayOfMonth;
