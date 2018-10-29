@@ -17,5 +17,6 @@ export interface IDatePartChooserField extends IFormElement {
     dayOfMonth: number;
     year: number;
     mode: DatePartChooserMode;
+    popupTitle?: string;
 }
 
