@@ -25,6 +25,9 @@ export class FabToggleButtonComponent {
     @Input()
     size: 'mini' | 'normal' = 'normal';
 
+    @Input()
+    allowUncheck = true;
+
     @Output()
     selectedChange = new EventEmitter();
 
@@ -36,6 +39,10 @@ export class FabToggleButtonComponent {
     }
 
     onClick() {
+        if (! this.allowUncheck && this.selected) {
+            return;
+        }
+
         this.setSelected(!this.selected);
         this.change.emit(new FabToggleChange(this, this.value));
 
