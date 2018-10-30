@@ -28,13 +28,12 @@ public enum FieldInputType {
     DateMMDDYY,
     DateDDMMYY,
     DateDDMMYYYY,
-    Month,
-    DayOfMonth,
     ToggleButton,
     AutoComplete,
     /** Allows a-z, A-Z, 0-9 */
     WordText,
-    Counter
+    Counter,
+    DatePartChooser
     ;
     
     public static FieldInputType toDateInputType(String dateFormat) {
