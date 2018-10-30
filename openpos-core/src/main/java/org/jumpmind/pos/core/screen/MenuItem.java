@@ -36,6 +36,7 @@ public class MenuItem implements IUIAction, Serializable {
     private boolean sensitive;
     private String buttonSize;
     private String fontSize;
+    private boolean active = false;
 
     public final static String FONT_SIZE_XS = "text-xs";
     public final static String FONT_SIZE_SM = "text-sm";
@@ -66,6 +67,13 @@ public class MenuItem implements IUIAction, Serializable {
         this(action, title);
         this.icon = icon;
     }
+    
+    public MenuItem(String action, String title, String icon, boolean active) {
+        this(action, title);
+        this.icon = icon;
+        this.active = active;
+    }
+    
     
     public MenuItem(String action, String title, IIcon icon) {
         this(action, title, icon.getName());
@@ -231,6 +239,16 @@ public class MenuItem implements IUIAction, Serializable {
 
 	public void setConfirmationDialog(ConfirmationDialog confirmationDialog) {
 		this.confirmationDialog = confirmationDialog;
+	}
+
+
+	public boolean isActive() {
+		return active;
+	}
+
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
     
 }
