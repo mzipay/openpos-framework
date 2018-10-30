@@ -73,7 +73,12 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
          * near-simultaneously transmission of various messages types (Screens, DeviceResponse, KeepAlive) from the client to the 
          * server, making the problem more prevalent?  Something to keep an eye on.
          */
-        registration.taskExecutor().corePoolSize(1);
+        /*
+         * Changing maxPoolSize to 1 so that hopefully clears problem of screen being simultaneously sent from server.  We saw 
+         * this from issue in the lab on 10/29 (SS-9583) when the iPad was coming back out of the background and requested a screen refresh
+         * at the same time that the subscribe was running.
+         */
+        registration.taskExecutor().maxPoolSize(1).corePoolSize(1);
         registration.interceptors(new ChannelInterceptorAdapter() {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
