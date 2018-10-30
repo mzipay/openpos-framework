@@ -10,12 +10,14 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 export class PromptComponent extends PosScreen<any> implements AfterViewInit, OnInit {
   initialized = false;
   promptFormGroup: FormGroup;
+  instructions: string;
 
   constructor( private validatorsService: ValidatorsService) {
       super();
   }
 
   buildScreen() {
+    this.instructions = this.screen.instructions;
   }
 
   ngOnInit(): void {
