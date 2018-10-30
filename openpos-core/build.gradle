@@ -40,7 +40,7 @@ dependencies {
     compile "org.jumpmind.symmetric:symmetric-util:$symmetricVersion"
     compile "io.springfox:springfox-swagger2:$springfoxSwaggerVersion"
     compile "io.springfox:springfox-swagger-ui:$springfoxSwaggerVersion"
-        
+    
     compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion") {
         exclude module: "spring-boot-starter-tomcat"
         exclude module: "spring-boot-starter-logging"
