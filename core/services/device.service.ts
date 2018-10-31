@@ -260,7 +260,7 @@ export class DeviceService implements IMessageHandler {
     private handleForegrounding() {
         // check for any changes while were are inactive
         // We'll reset the inBackground flag after we receive the response
-        this.session.publish('Refresh', 'Screen');
+        this.session.refreshScreen();
         this.log.info('Start coming into foreground. Screen refresh requested.');
         /* 10/12/18 -- Commented out hiding of splashscreen due to improved show/cancel loading
             that we added.  Will remove once fully vetted in QA.
