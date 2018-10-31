@@ -384,6 +384,10 @@ export class SessionService implements IMessageHandler {
         }
     }
 
+    public refreshScreen() {
+        this.publish('Refresh', 'Screen');
+    }
+
     public publish(actionString: string, type: string, payload?: any) {
         // Block any actions if we are backgrounded and running in cordova
         // (unless we are coming back out of the background)

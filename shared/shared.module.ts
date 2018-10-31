@@ -23,7 +23,8 @@ import {
     RequireAtleastOneValidatorDirective,
     PhoneUSValidatorDirective,
     OpenposScreenOutletDirective,
-    ScreenDirective
+    ScreenDirective,
+    AutocompleteDirective
 } from './directives';
 import {
     PromptInputComponent,
@@ -98,7 +99,8 @@ const directives = [
     RequireAtleastOneValidatorDirective,
     PhoneUSValidatorDirective,
     OpenposScreenOutletDirective,
-    ScreenDirective
+    ScreenDirective,
+    AutocompleteDirective
 ];
 
 const pipes = [
