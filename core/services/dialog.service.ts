@@ -145,7 +145,7 @@ export class DialogService {
                 this.closeDialog(false);
             }
 
-            if (!this.dialogRef) {
+            if (!this.dialogRef || !this.dialogRef.componentInstance) {
                 this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
                 this.dialogRef = this.dialog.open(DialogContentComponent, dialogProperties);
             } else {
