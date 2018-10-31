@@ -1,23 +1,28 @@
 package org.jumpmind.pos.core.config;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.support.ChannelInterceptorAdapter;
+import org.springframework.messaging.support.ExecutorChannelInterceptor;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.concurrent.DefaultManagedTaskScheduler;
 import org.springframework.util.AntPathMatcher;
@@ -41,6 +46,9 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Autowired
     Environment env;
+    
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -61,6 +69,70 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         config.setApplicationDestinationPrefixes("/app");
         config.setPathMatcher(new AntPathMatcher("."));
     }
+    
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new ExecutorChannelInterceptor() {
+            
+            Set<String> subscribed = new HashSet<>();
+            
+            @Override
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {                
+                return message;
+            }
+            
+            @Override
+            public boolean preReceive(MessageChannel channel) {                
+                return true;
+            }
+            
+            @Override
+            public void postSend(Message<?> message, MessageChannel channel, boolean sent) {
+            }
+            
+            @Override
+            public Message<?> postReceive(Message<?> message, MessageChannel channel) {                
+                return message;
+            }
+            
+            @Override
+            public void afterSendCompletion(Message<?> message, MessageChannel channel, boolean sent, Exception ex) {
+            }
+            
+            @Override
+            public void afterReceiveCompletion(Message<?> message, MessageChannel channel, Exception ex) {
+            }
+            
+            @Override
+            public Message<?> beforeHandle(Message<?> message, MessageChannel channel, MessageHandler handler) {                
+                return message;
+            }
+            
+            @Override
+            public void afterMessageHandled(Message<?> message, MessageChannel channel, MessageHandler handler, Exception ex) {
+                SimpMessageHeaderAccessor accessor = SimpMessageHeaderAccessor.wrap(message);
+                if (accessor.getMessageType() == SimpMessageType.SUBSCRIBE) {
+                    String sessionId = (String) message.getHeaders().get("simpSessionId");
+                    String topicName = (String) message.getHeaders().get("simpDestination");
+                    String subscriber = sessionId + "---" + topicName;
+                    if (!subscribed.contains(subscriber)) {
+                        boolean publish = false;
+                        synchronized (this) {
+                            if (!subscribed.contains(subscriber)) {
+                                subscribed.add(subscriber);
+                                publish = true;
+                            }
+                        }
+                        if (publish) {
+                            applicationEventPublisher.publishEvent(new SessionSubscribedEvent(this, message));
+                        }
+                        
+                    }
+                }
+            }
+        });
+                
+    }    
 
     @Override
     public void configureClientOutboundChannel(ChannelRegistration registration) {
