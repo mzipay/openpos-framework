@@ -46,7 +46,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Autowired
     Environment env;
-    
+
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
@@ -69,49 +69,60 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         config.setApplicationDestinationPrefixes("/app");
         config.setPathMatcher(new AntPathMatcher("."));
     }
-    
+
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new ExecutorChannelInterceptor() {
-            
+
             Set<String> subscribed = new HashSet<>();
-            
+
             @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {                
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 return message;
             }
-            
+
             @Override
-            public boolean preReceive(MessageChannel channel) {                
+            public boolean preReceive(MessageChannel channel) {
                 return true;
             }
-            
+
             @Override
             public void postSend(Message<?> message, MessageChannel channel, boolean sent) {
             }
-            
+
             @Override
-            public Message<?> postReceive(Message<?> message, MessageChannel channel) {                
+            public Message<?> postReceive(Message<?> message, MessageChannel channel) {
                 return message;
             }
-            
+
             @Override
             public void afterSendCompletion(Message<?> message, MessageChannel channel, boolean sent, Exception ex) {
             }
-            
+
             @Override
             public void afterReceiveCompletion(Message<?> message, MessageChannel channel, Exception ex) {
             }
-            
+
             @Override
-            public Message<?> beforeHandle(Message<?> message, MessageChannel channel, MessageHandler handler) {                
+            public Message<?> beforeHandle(Message<?> message, MessageChannel channel, MessageHandler handler) {
                 return message;
             }
-            
+
             @Override
             public void afterMessageHandled(Message<?> message, MessageChannel channel, MessageHandler handler, Exception ex) {
                 SimpMessageHeaderAccessor accessor = SimpMessageHeaderAccessor.wrap(message);
                 if (accessor.getMessageType() == SimpMessageType.SUBSCRIBE) {
+                    /*
+                     * https://stackoverflow.com/questions/29194530/stomp-over-
+                     * websocket-using-spring-and-sockjs-message-lost
+                     * 
+                     * Publish a new session subscribed event AFTER the client
+                     * has been subscribed to the broker. Before spring was
+                     * publishing the event after receiving the message but not
+                     * necessarily after the subscription occurred. There was a
+                     * race condition because the subscription was being done on
+                     * a separate thread.
+                     */
                     String sessionId = (String) message.getHeaders().get("simpSessionId");
                     String topicName = (String) message.getHeaders().get("simpDestination");
                     String subscriber = sessionId + "---" + topicName;
@@ -126,13 +137,13 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
                         if (publish) {
                             applicationEventPublisher.publishEvent(new SessionSubscribedEvent(this, message));
                         }
-                        
+
                     }
                 }
             }
         });
-                
-    }    
+
+    }
 
     @Override
     public void configureClientOutboundChannel(ChannelRegistration registration) {
@@ -140,15 +151,20 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
          * https://stackoverflow.com/questions/29689838/sockjs-receive-stomp-
          * messages-from-spring-websocket-out-of-order
          * 
-         * Also tried setting the poolSize to 1 on the clientInboundChannel configuration, but then we started to see
-         * DeviceResponses sent back from the client getting dropped.  Perhaps the inbound problem on the websocket is due to
-         * near-simultaneously transmission of various messages types (Screens, DeviceResponse, KeepAlive) from the client to the 
-         * server, making the problem more prevalent?  Something to keep an eye on.
+         * Also tried setting the poolSize to 1 on the clientInboundChannel
+         * configuration, but then we started to see DeviceResponses sent back
+         * from the client getting dropped. Perhaps the inbound problem on the
+         * websocket is due to near-simultaneously transmission of various
+         * messages types (Screens, DeviceResponse, KeepAlive) from the client
+         * to the server, making the problem more prevalent? Something to keep
+         * an eye on.
          */
         /*
-         * Changing maxPoolSize to 1 so that hopefully clears problem of screen being simultaneously sent from server.  We saw 
-         * this from issue in the lab on 10/29 (SS-9583) when the iPad was coming back out of the background and requested a screen refresh
-         * at the same time that the subscribe was running.
+         * Changing maxPoolSize to 1 so that hopefully clears problem of screen
+         * being simultaneously sent from server. We saw this from issue in the
+         * lab on 10/29 (SS-9583) when the iPad was coming back out of the
+         * background and requested a screen refresh at the same time that the
+         * subscribe was running.
          */
         registration.taskExecutor().maxPoolSize(1).corePoolSize(1);
         registration.interceptors(new ChannelInterceptorAdapter() {
