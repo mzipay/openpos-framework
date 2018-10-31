@@ -11,3 +11,4 @@ export * from './require-at-least-one.directive';
 export * from './phone.directive';
 export * from './screen-outlet.directive';
 export * from './screen.directive';
+export * from './autocomplete.directive';

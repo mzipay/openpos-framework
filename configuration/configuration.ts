@@ -10,5 +10,6 @@ export const Configuration = {
     compatibilityVersion: 'v1',
     incompatibleVersionMessage: 'Application is not compatible with the server.',
     maxSignaturePoints: -1,
-    maxResponseSizeBytes: 79500
+    maxResponseSizeBytes: 79500,
+    enableAutocomplete: false,
 };
