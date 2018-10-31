@@ -3,6 +3,7 @@ package org.jumpmind.pos.core.service;
 import java.util.Arrays;
 
 import org.jumpmind.pos.core.config.MessageUtils;
+import org.jumpmind.pos.core.config.SessionSubscribedEvent;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
 import org.jumpmind.pos.core.screen.DialogProperties;
@@ -14,10 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 @Component
-public class SessionSubscribedListener implements ApplicationListener<SessionSubscribeEvent>, MessageUtils {
+public class SessionSubscribedListener implements ApplicationListener<SessionSubscribedEvent>, MessageUtils {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -34,7 +34,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
     String incompatibleVersionMessage; 
 
     @Override
-    public void onApplicationEvent(SessionSubscribeEvent event) {
+    public void onApplicationEvent(SessionSubscribedEvent event) {
         Message<?> msg = event.getMessage();
         String sessionId = (String) msg.getHeaders().get("simpSessionId");
         String topicName = (String) msg.getHeaders().get("simpDestination");
