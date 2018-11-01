@@ -30,7 +30,6 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     public currentTheme: string;
 
-
     private installedScreen: IScreen;
     private installedTemplate: AbstractTemplate<any>;
 
@@ -46,7 +45,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.session.registerMessageHandler(this, 'Screen');
+        this.session.getMessages('Screen').subscribe( (message) => this.handle(message) );
     }
 
     ngOnDestroy(): void {
@@ -119,6 +118,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         if ( this.installedScreen ) {
             this.installedScreen.show( screen, this.installedTemplate);
         }
+
 
         this.updateClasses(screen);
         this.dialogService.closeDialog(true);
