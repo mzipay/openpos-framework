@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatDialog,
   MatDialogRef,
@@ -75,7 +76,8 @@ import {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NoopAnimationsModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -109,7 +111,8 @@ import {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NoopAnimationsModule
   ],
   providers: [
     MatDialog
