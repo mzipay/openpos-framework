@@ -45,6 +45,7 @@ import {
     NumberSpinnerComponent,
     StatusBarComponent,
     CounterComponent,
+    MessageDialogComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe } from './pipes';
@@ -70,7 +71,8 @@ const components = [
     FileViewerComponent,
     NumberSpinnerComponent,
     StatusBarComponent,
-    CounterComponent
+    CounterComponent,
+    MessageDialogComponent
 ];
 
 const directives = [
