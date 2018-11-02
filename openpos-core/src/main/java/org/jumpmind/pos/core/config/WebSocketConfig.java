@@ -1,8 +1,6 @@
 package org.jumpmind.pos.core.config;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.slf4j.Logger;
@@ -19,10 +17,9 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
+import org.springframework.messaging.simp.broker.AbstractBrokerMessageHandler;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.messaging.support.ChannelInterceptorAdapter;
-import org.springframework.messaging.support.ExecutorChannelInterceptor;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.concurrent.DefaultManagedTaskScheduler;
 import org.springframework.util.AntPathMatcher;
@@ -72,46 +69,12 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new ExecutorChannelInterceptor() {
-
-            Set<String> subscribed = new HashSet<>();
-
-            @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                return message;
-            }
-
-            @Override
-            public boolean preReceive(MessageChannel channel) {
-                return true;
-            }
-
-            @Override
-            public void postSend(Message<?> message, MessageChannel channel, boolean sent) {
-            }
-
-            @Override
-            public Message<?> postReceive(Message<?> message, MessageChannel channel) {
-                return message;
-            }
-
-            @Override
-            public void afterSendCompletion(Message<?> message, MessageChannel channel, boolean sent, Exception ex) {
-            }
-
-            @Override
-            public void afterReceiveCompletion(Message<?> message, MessageChannel channel, Exception ex) {
-            }
-
-            @Override
-            public Message<?> beforeHandle(Message<?> message, MessageChannel channel, MessageHandler handler) {
-                return message;
-            }
+        registration.interceptors(new ExecutorChannelInterceptorAdapter() {
 
             @Override
             public void afterMessageHandled(Message<?> message, MessageChannel channel, MessageHandler handler, Exception ex) {
                 SimpMessageHeaderAccessor accessor = SimpMessageHeaderAccessor.wrap(message);
-                if (accessor.getMessageType() == SimpMessageType.SUBSCRIBE) {
+                if (accessor.getMessageType() == SimpMessageType.SUBSCRIBE && handler instanceof AbstractBrokerMessageHandler) {
                     /*
                      * https://stackoverflow.com/questions/29194530/stomp-over-
                      * websocket-using-spring-and-sockjs-message-lost
@@ -123,22 +86,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
                      * race condition because the subscription was being done on
                      * a separate thread.
                      */
-                    String sessionId = (String) message.getHeaders().get("simpSessionId");
-                    String topicName = (String) message.getHeaders().get("simpDestination");
-                    String subscriber = sessionId + "---" + topicName;
-                    if (!subscribed.contains(subscriber)) {
-                        boolean publish = false;
-                        synchronized (this) {
-                            if (!subscribed.contains(subscriber)) {
-                                subscribed.add(subscriber);
-                                publish = true;
-                            }
-                        }
-                        if (publish) {
-                            applicationEventPublisher.publishEvent(new SessionSubscribedEvent(this, message));
-                        }
-
-                    }
+                    applicationEventPublisher.publishEvent(new SessionSubscribedEvent(this, message));
                 }
             }
         });
@@ -167,7 +115,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
          * subscribe was running.
          */
         registration.taskExecutor().maxPoolSize(1).corePoolSize(1);
-        registration.interceptors(new ChannelInterceptorAdapter() {
+        registration.interceptors(new ExecutorChannelInterceptorAdapter() {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 Message<?> returnMessage = message;
@@ -185,6 +133,15 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
                     }
                 }
                 return returnMessage;
+            }
+
+            @Override
+            public void afterMessageHandled(Message<?> message, MessageChannel channel, MessageHandler handler, Exception ex) {
+                SimpMessageHeaderAccessor accessor = SimpMessageHeaderAccessor.wrap(message);
+                SimpMessageType messageType = accessor.getMessageType();
+                if (messageType == SimpMessageType.MESSAGE) {
+                    logger.info("Post send of message: " + new String((byte[]) message.getPayload()));
+                }
             }
         });
     }
