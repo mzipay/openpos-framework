@@ -41,9 +41,8 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
         String compatibilityVersion = this.getHeader(msg, MessageUtils.COMPATIBILITY_VERSION_HEADER);
         String nodeId = topicName.substring(topicName.indexOf("/node/") + "/node/".length());
         String appId = topicName.substring(topicName.indexOf("/app/") + "/app/".length(), topicName.indexOf("/node/"));
-        logger.info("session subscribing: {}", sessionId);
         try {
-            logger.info("subscribing to {}", topicName);
+            logger.info("session {} subscribed to {}", sessionId, topicName);
             IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
             if (stateManager == null) {
                 stateManager = stateManagerFactory.create(appId, nodeId);
