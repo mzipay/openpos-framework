@@ -239,7 +239,7 @@ public class ScreenService implements IScreenService, IActionListener {
             }
             if (screen.getTemplate() != null && screen.getTemplate().isDialog()) {
                 applicationState.setLastDialog(screen);
-            } else if (screen.getScreenType() != "Toast") {
+            } else if (!screen.getScreenType().equals("Toast") && !screen.getScreenType().equals("NoOp")) {
                 applicationState.setLastScreen(screen);
                 applicationState.setLastDialog(null);
             }
