@@ -98,21 +98,6 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         /*
          * https://stackoverflow.com/questions/29689838/sockjs-receive-stomp-
          * messages-from-spring-websocket-out-of-order
-         * 
-         * Also tried setting the poolSize to 1 on the clientInboundChannel
-         * configuration, but then we started to see DeviceResponses sent back
-         * from the client getting dropped. Perhaps the inbound problem on the
-         * websocket is due to near-simultaneously transmission of various
-         * messages types (Screens, DeviceResponse, KeepAlive) from the client
-         * to the server, making the problem more prevalent? Something to keep
-         * an eye on.
-         */
-        /*
-         * Changing maxPoolSize to 1 so that hopefully clears problem of screen
-         * being simultaneously sent from server. We saw this from issue in the
-         * lab on 10/29 (SS-9583) when the iPad was coming back out of the
-         * background and requested a screen refresh at the same time that the
-         * subscribe was running.
          */
         registration.taskExecutor().maxPoolSize(1).corePoolSize(1);
         registration.interceptors(new ExecutorChannelInterceptorAdapter() {
