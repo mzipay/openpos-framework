@@ -51,6 +51,7 @@ import {
     DatePartChooserDialogComponent,
     PrimaryButtonComponent,
     SecondaryButtonComponent,
+    MessageDialogComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe } from './pipes';
@@ -83,7 +84,8 @@ const components = [
     DatePartChooserDialogComponent,
     PrimaryButtonComponent,
     SecondaryButtonComponent,
-    SideNavComponent
+    SideNavComponent,
+    MessageDialogComponent
 ];
 
 const directives = [
