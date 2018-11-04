@@ -90,9 +90,10 @@ public class FlowConfig {
         return initialState;
     }
 
-    public void setInitialState(StateConfig initialState) {
+    public FlowConfig setInitialState(StateConfig initialState) {
         add(initialState);
         this.initialState = initialState;
+        return this;
     }
 
     public Map<String, Object> getConfigScope() {
