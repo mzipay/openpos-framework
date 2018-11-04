@@ -31,7 +31,7 @@ public abstract class AbstractLegacyStartupService implements ILegacyStartupServ
     @Value("${orpos.headless.working.dir}")
     private String appWorkingDir;
 
-    @Value("${rmi.registry.port}")
+    @Value("${rmi.registry.port:9598}")
     private int rmiRegistryPort;
 
     /** Comma separated list of port numbers to use for remote debugging */

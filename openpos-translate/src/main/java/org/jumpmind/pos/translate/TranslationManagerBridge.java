@@ -27,10 +27,10 @@ public class TranslationManagerBridge implements ITranslationManager {
     @Autowired
     RMICallbackProxyManager rmiCallbackProxyManager;
 
-    @Value("${rmi.registry.port}")
+    @Value("${rmi.registry.port:9598}")
     int rmiRegistryPort;
 
-    @Value("${external.process.enabled}")
+    @Value("${external.process.enabled:false}")
     boolean externalProcessEnabled;
     
     ITranslationManagerSubscriber subscriber;
