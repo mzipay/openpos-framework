@@ -11,7 +11,6 @@ import { TrainingElement } from './training-element';
 export class TrainingWrapperComponent {
 
     trainingDialogComponent = TrainingDialogComponent;
-    trainingInjectors: Map<string, Injector> = new Map<string, Injector>();
     trainingData: TrainingElement[];
 
     public currentTheme: string;
@@ -24,31 +23,27 @@ export class TrainingWrapperComponent {
     }
 
     updateTrainingData(componentRef: ComponentRef<any>, screen: any) {
-        this.trainingData = [
-            {
-                key: 'training1',
-                instructions: 'These are instructions on how to use this component 1',
-                projectableNodes: [[componentRef.location.nativeElement.querySelector('[training1]')]]
-            },
-            {
-                key: 'training2',
-                instructions: 'These are instructions on how to use this component 2',
-                projectableNodes: [[componentRef.location.nativeElement.querySelector('[training2]')]]
-            },
-        ];
+        if (screen.trainingInstructions && Object.keys(screen.trainingInstructions).length > 0) {
+            const training = screen.trainingInstructions;
+            this.trainingData = [];
 
-        if (this.trainingData && this.trainingData.length > 0) {
-            for (const element of this.trainingData) {
-                this.trainingInjectors.set(element.key,
-                    ReflectiveInjector.resolveAndCreate([
-                        { provide: INSTRUCTIONS_DATA, useValue: element.instructions }
-                    ], this.injector));
+            for (const key in training) {
+                if (training.hasOwnProperty(key)) {
+                    const element = new TrainingElement();
+                    element.key = key;
+
+                    // Inject instructions to the TrainingDialogComponent
+                    element.instructions = ReflectiveInjector.resolveAndCreate([
+                        { provide: INSTRUCTIONS_DATA, useValue: training[key] }
+                    ], this.injector);
+
+                    // Create projectable nodes for the TrainingDialogComponent
+                    element.projectableNodes = [[componentRef.location.nativeElement.querySelector('[' + key + ']')]];
+
+                    this.trainingData.push(element);
+                }
             }
         }
-    }
-
-    getInjector(element: TrainingElement): Injector {
-        return this.trainingInjectors.get(element.key);
     }
 
     close() {

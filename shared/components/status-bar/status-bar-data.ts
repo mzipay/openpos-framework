@@ -11,4 +11,5 @@ export class StatusBarData {
     workstationId: String;
     storeId: String;
     tillThresholdStatus: number;
+    trainingEnabled: boolean;
 }

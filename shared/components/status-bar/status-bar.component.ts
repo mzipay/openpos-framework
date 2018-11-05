@@ -1,7 +1,7 @@
 import { MatSnackBar } from '@angular/material';
 import { Component, Input } from '@angular/core';
 import { StatusBarData } from './status-bar-data';
-import { SessionService, PluginService, FileUploadService, IMenuItem } from '../../../core';
+import { SessionService, PluginService, FileUploadService, IMenuItem, TrainingOverlayService } from '../../../core';
 @Component({
   selector: 'app-statusbar',
   templateUrl: './status-bar.component.html'
@@ -12,7 +12,7 @@ export class StatusBarComponent {
 
   constructor(private session: SessionService,
     private pluginService: PluginService, private fileUploadService: FileUploadService,
-    public snackBar: MatSnackBar) {
+    public snackBar: MatSnackBar, private trainingService: TrainingOverlayService) {
   }
 
   public doMenuItemAction(menuItem: IMenuItem) {
@@ -27,5 +27,8 @@ export class StatusBarComponent {
     return enabled;
   }
 
+  public onTraining() {
+    this.trainingService.open();
+  }
 
 }
