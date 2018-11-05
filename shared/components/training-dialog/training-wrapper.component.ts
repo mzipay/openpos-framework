@@ -13,8 +13,6 @@ export class TrainingWrapperComponent {
     trainingDialogComponent = TrainingDialogComponent;
     trainingData: TrainingElement[];
 
-    public currentTheme: string;
-
     constructor(public injector: Injector, @Inject(TrainingOverlayRef) public dialogRef: TrainingOverlayRef) {
     }
 

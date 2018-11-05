@@ -8,7 +8,7 @@ import { INSTRUCTIONS_DATA } from './training-token';
 })
 export class TrainingDialogComponent implements OnInit {
 
-  private instructions;
+  public instructions;
 
   constructor(@Inject(INSTRUCTIONS_DATA) public instructionsData) { }
 
