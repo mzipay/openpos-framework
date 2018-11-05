@@ -33,7 +33,7 @@ public class DatePartChooserField extends FormField {
         this.setLabel(label);
     }
 
-    public DatePartChooserField(String fieldId, String label, DatePickerValues value) {
+    public DatePartChooserField(String fieldId, String label, DateChooserValues value) {
         this(fieldId, label);
         if (value != null) {
             this.month = value.month;
@@ -43,7 +43,7 @@ public class DatePartChooserField extends FormField {
         
     }
     
-    public DatePartChooserField(String fieldId, String label, DatePickerValues value, String placeholder) {
+    public DatePartChooserField(String fieldId, String label, DateChooserValues value, String placeholder) {
         this(fieldId, label, value);
         this.setPlaceholder(placeholder);
     }
@@ -127,23 +127,23 @@ public class DatePartChooserField extends FormField {
         return this;
     }
     
-    public static class DatePickerValues {
+    public static class DateChooserValues {
         public Integer month;
         public Integer dayOfMonth;
         public Integer year;
 
-        public DatePickerValues() {
+        public DateChooserValues() {
         }
-        public DatePickerValues(Integer month) {
+        public DateChooserValues(Integer month) {
             this.month = month;
         }
         
-        public DatePickerValues(Integer month, Integer dayOfMonth) {
+        public DateChooserValues(Integer month, Integer dayOfMonth) {
             this(month);
             this.dayOfMonth = dayOfMonth;
         }
         
-        public DatePickerValues(Integer month, Integer dayOfMonth, Integer year) {
+        public DateChooserValues(Integer month, Integer dayOfMonth, Integer year) {
             this(month, dayOfMonth);
             this.year = year;
         }
