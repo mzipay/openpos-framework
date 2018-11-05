@@ -68,6 +68,7 @@ export class FormattersService {
         NOLOCALEFormatters.set('decimal', new DecimalFormatter());
         NOLOCALEFormatters.set('wordtext', new WordTextFormatter());
         NOLOCALEFormatters.set('datetime', new DateTimeFormatter());
+        NOLOCALEFormatters.set('monthdate', new DateTimeFormatter('MM/dd'));
     }
 
     getFormatter(name: string): IFormatter {

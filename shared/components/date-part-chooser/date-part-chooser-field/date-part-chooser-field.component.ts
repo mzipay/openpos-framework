@@ -18,7 +18,6 @@ export class DatePartChooserFieldComponent implements OnInit, AfterViewInit {
     @Input() controlName: string;
     @Input() required: boolean;
     @Input() placeholder: string;
-    @Input() label: string;
     @Input() iconName: string;
     @Input() formatterName: string;
     @Input() deleteAllowed = true;
@@ -125,6 +124,7 @@ export class DatePartChooserFieldComponent implements OnInit, AfterViewInit {
             this.model.month = dateParts.month;
             this.model.dayOfMonth = dateParts.dayOfMonth;
             this.model.year = dateParts.year;
+            this.setFieldValue(this.formatForDisplay());
             this.change.emit(this.model);
         });
 
