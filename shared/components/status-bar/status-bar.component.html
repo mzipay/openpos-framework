@@ -18,6 +18,9 @@
 			<span *ngIf="data.tillThresholdStatus < 0" class="warn">#{{data.workstationId}}-{{data.storeId}}</span>
 			<span *ngIf="data.tillThresholdStatus == 0">#{{data.workstationId}}-{{data.storeId}}</span>
 		</span>
+		
+		<button mat-raised-button *ngIf="data.trainingEnabled" (click)="onTraining()"> Training </button>
+
 		<button mat-icon-button *ngIf="data && data.logoutButton && data.screenType != 'Home'"
 			(click)="doMenuItemAction(data.logoutButton)" [disabled]="!isMenuItemEnabled(data.logoutButton)">
 			<app-icon *ngIf="data.logoutButton.icon" [iconName]="data.logoutButton.icon"></app-icon>

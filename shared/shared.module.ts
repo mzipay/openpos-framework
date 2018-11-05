@@ -51,6 +51,8 @@ import {
     DatePartChooserDialogComponent,
     PrimaryButtonComponent,
     SecondaryButtonComponent,
+    TrainingDialogComponent,
+    TrainingWrapperComponent,
     MessageDialogComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
@@ -85,6 +87,8 @@ const components = [
     PrimaryButtonComponent,
     SecondaryButtonComponent,
     SideNavComponent,
+    TrainingDialogComponent,
+    TrainingWrapperComponent,
     MessageDialogComponent
 ];
 
