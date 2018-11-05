@@ -51,6 +51,8 @@ import {
     DatePartChooserDialogComponent,
     PrimaryButtonComponent,
     SecondaryButtonComponent,
+    TrainingDialogComponent,
+    TrainingWrapperComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe } from './pipes';
@@ -83,7 +85,9 @@ const components = [
     DatePartChooserDialogComponent,
     PrimaryButtonComponent,
     SecondaryButtonComponent,
-    SideNavComponent
+    SideNavComponent,
+    TrainingDialogComponent,
+    TrainingWrapperComponent
 ];
 
 const directives = [

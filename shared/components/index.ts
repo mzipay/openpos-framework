@@ -24,3 +24,8 @@ export * from './date-part-chooser/date-part-chooser-dialog/date-part-chooser-di
 
 export * from './primary-button/primary-button.component';
 export * from './secondary-button/secondary-button.component';
+export * from './training-dialog/training-dialog.component';
+export * from './training-dialog/training-wrapper.component';
+export * from './training-dialog/training-overlay-ref';
+export * from './training-dialog/training-token';
+export * from './training-dialog/training-element';

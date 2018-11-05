@@ -3,7 +3,11 @@ import {
     Directive,
     ViewContainerRef,
     OnInit,
-    OnDestroy} from '@angular/core';
+    OnDestroy,
+    Output,
+    EventEmitter,
+    Input
+} from '@angular/core';
 import { Renderer2 } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import {
@@ -21,6 +25,8 @@ import {
 export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     private _componentRef: ComponentRef<any>|null = null;
+    @Output() componentEmitter = new EventEmitter<{componentRef: ComponentRef<any>, screen: any}>();
+    @Input() unsubscribe = true;
 
     public templateTypeName: string;
     public screenTypeName: string;
@@ -29,7 +35,6 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     public classes = '';
 
     public currentTheme: string;
-
 
     private installedScreen: IScreen;
     private installedTemplate: AbstractTemplate<any>;
@@ -50,8 +55,10 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.session.unsubscribe();
-        if ( this._componentRef ) {
+        if (this.unsubscribe === true) {
+            this.session.unsubscribe();
+        }
+        if (this._componentRef) {
             this._componentRef.destroy();
         }
     }
@@ -122,6 +129,9 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
         this.updateClasses(screen);
         this.dialogService.closeDialog(true);
+
+        // Output the componentRef and screen to the training-wrapper
+        this.componentEmitter.emit({componentRef: this._componentRef, screen: screen});
     }
 
     protected logSwitchScreens(screen: any) {
