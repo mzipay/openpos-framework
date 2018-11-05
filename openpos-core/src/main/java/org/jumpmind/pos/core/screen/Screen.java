@@ -1,7 +1,9 @@
 package org.jumpmind.pos.core.screen;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Message;
@@ -22,6 +24,7 @@ public class Screen extends Message {
     private String locale;
     private int sessionTimeoutMillis;
     private Action sessionTimeoutAction;
+    private Map<String, String> trainingInstructions;
 
     public Screen() {
         this.setType("Screen");
@@ -175,5 +178,20 @@ public class Screen extends Message {
 
     public void setSessionTimeoutAction(Action sessionTimeoutAction) {
         this.sessionTimeoutAction = sessionTimeoutAction;
+    }
+
+    public Map<String, String> getTrainingInstructions() {
+        return trainingInstructions;
+    }
+
+    public void setTrainingInstructions(Map<String, String> trainingInstructions) {
+        this.trainingInstructions = trainingInstructions;
+    }
+    
+    public void addTrainingInstuctions(String key, String instructions) {
+        if (this.trainingInstructions == null) {
+            this.trainingInstructions = new HashMap<String, String>();
+        }
+        this.trainingInstructions.put(key, instructions);
     }
 }
