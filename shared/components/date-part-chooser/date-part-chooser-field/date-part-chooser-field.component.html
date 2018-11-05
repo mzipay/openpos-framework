@@ -4,7 +4,7 @@
      <input class="no-user-select" matInput [formControlName]="controlName" [placeholder]="placeholder"
         [required]="required" (click)="openDatePartChooser()" onfocus="this.blur()" readonly>                
     
-    <button type="button" mat-button matSuffix mat-icon-button (click)="openDatePartChooser()"><mat-icon>more_vert</mat-icon></button>
+    <button type="button" mat-button matSuffix mat-icon-button (click)="openDatePartChooser()" [disabled]="!modifyAllowed"><mat-icon>more_vert</mat-icon></button>
     <button *ngIf="deleteAllowed" type="button" mat-button matSuffix mat-icon-button (click)="onDelete()"><mat-icon>{{deleteIcon}}</mat-icon></button>
     <mat-error>
         <app-show-errors class="error" [control]="formGroup.controls[controlName]"></app-show-errors>

@@ -52,7 +52,8 @@ import {
     PrimaryButtonComponent,
     SecondaryButtonComponent,
     TrainingDialogComponent,
-    TrainingWrapperComponent
+    TrainingWrapperComponent,
+    MessageDialogComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe } from './pipes';
@@ -87,7 +88,8 @@ const components = [
     SecondaryButtonComponent,
     SideNavComponent,
     TrainingDialogComponent,
-    TrainingWrapperComponent
+    TrainingWrapperComponent,
+    MessageDialogComponent
 ];
 
 const directives = [

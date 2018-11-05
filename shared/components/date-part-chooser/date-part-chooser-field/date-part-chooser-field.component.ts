@@ -24,6 +24,7 @@ export class DatePartChooserFieldComponent implements OnInit, AfterViewInit {
     @Input() deleteAllowed = true;
     @Output() delete = new EventEmitter<IDatePartChooserField>();
     @Input() deleteIcon = 'delete_forever';
+    @Input() modifyAllowed = true;
     @Input() model: IDatePartChooserField;
 
     @Output() change = new EventEmitter<any>();
@@ -86,6 +87,9 @@ export class DatePartChooserFieldComponent implements OnInit, AfterViewInit {
     }
 
     openDatePartChooser() {
+        if (! this.modifyAllowed) {
+            return;
+        }
         const today = new Date();
         const dateParts = {
             month: today.getMonth() + 1,

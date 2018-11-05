@@ -224,7 +224,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   isSpecialCaseInput(): boolean {
-    return ['ToggleButton', 'Checkbox', 'AutoComplete', 'Counter'].indexOf(this.formField.inputType) >= 0 ||
+    return ['ToggleButton', 'Checkbox', 'AutoComplete', 'Counter', 'DatePartChooser'].indexOf(this.formField.inputType) >= 0 ||
         this.isDateInput();
   }
 

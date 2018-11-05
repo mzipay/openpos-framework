@@ -35,6 +35,10 @@ export class CordovaService {
     public get cordova(): any {
         return this.isRunningInCordova() ? cordova : null;
     }
+
+    public isPluginsAvailable() {
+        return this.isRunningInCordova() && this.plugins;
+    }
 }
 
 
