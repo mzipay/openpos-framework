@@ -20,7 +20,7 @@ public class CatalogBrowserScreen extends DynamicFormScreen {
     
     public CatalogBrowserScreen() {
         setScreenType(ScreenType.CatalogBrowser);
-        getForm().addNumericField(FIELD_ID_SELECTED_ITEM_QUANTITY, null, "", false);
+        // getForm().addNumericField(FIELD_ID_SELECTED_ITEM_QUANTITY, null, "", false);
     }
 
     public void addItems(SellItem... items) {
