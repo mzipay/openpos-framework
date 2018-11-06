@@ -4,6 +4,8 @@ import { ISellItem, IMenuItem, IForm, IFormElement, ICatalogBrowserForm } from '
 // import { SessionService, FormBuilder, ValidatorsService } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface';
+import { FormGroup } from '@angular/forms';
+import { FormBuilder } from '../../core/services';
 // import { ValidatorFn, FormGroup } from '@angular/forms';
 
 @Component({
@@ -21,12 +23,12 @@ import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface'
     totalItems: number;
     selectedItemQuantity: IItemQuantityFormElement;
     form: IForm;
-//    formGroup: FormGroup;
-/*
-    constructor(private formBuilder: FormBuilder, private validatorsService: ValidatorsService) {
+    formGroup: FormGroup;
+
+    constructor(private formBuilder: FormBuilder) {
         super();
     }
-*/
+
     buildScreen() {
         this.items = this.screen.items;
         this.categories = this.screen.categories;
@@ -34,7 +36,7 @@ import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface'
         this.totalItems = this.screen.itemTotalCount;
         this.form = this.screen.form;
         this.selectedItemQuantity = <IItemQuantityFormElement> this.form.formElements.find(e => e.id === 'selectedItemQuantity');
-        // this.formGroup = this.formBuilder.group(this.form);
+        this.formGroup = this.formBuilder.group(this.form);
     }
 
     public onItemSelected(item: ISellItem) {
