@@ -7,12 +7,12 @@ export class DateTimeFormatter implements IFormatter {
     private datePipe: DatePipe;
 
 
-    constructor() {
+    constructor(public format?: string) {
         this.datePipe = new DatePipe('en-US');
     }
 
     formatValue(theDate: Date): string {
-        const formattedDate = this.datePipe.transform(theDate, DateTimeFormatter.DATETIME_FORMAT);
+        const formattedDate = this.datePipe.transform(theDate, this.format || DateTimeFormatter.DATETIME_FORMAT);
         return formattedDate;
     }
 

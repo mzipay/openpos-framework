@@ -71,8 +71,11 @@
     </ng-container>
 
     <ng-container *ngIf="formField.inputType==='DatePartChooser'">
-        <app-date-part-chooser-field [formGroup]="formGroup" [controlName]="formField.id" [label]="formField.label" 
-            [(model)]="formField" [required]="formField.required" [iconName]="formField.iconName" [formatterName]="formField.formatter || formField.inputType"
+        <app-date-part-chooser-field [formGroup]="formGroup" [controlName]="formField.id"
+            [placeholder]="getPlaceholderText(formField)" 
+            [(model)]="formField" [required]="formField.required" [iconName]="formField.iconName" 
+            [formatterName]="formField.formatter || formField.mode || formField.inputType"
+            [modifyAllowed]="!formField.disabled" [deleteAllowed]="!formField.disabled"
             (change)="onFormElementChanged(formField)">
         </app-date-part-chooser-field>
     </ng-container>

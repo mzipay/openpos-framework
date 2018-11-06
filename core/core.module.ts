@@ -31,6 +31,7 @@ import { MatDialog } from '@angular/material';
 import { FinalStartupTask } from './components/startup/final-startup-task';
 import { DialogContentComponent } from './components/dialog-content/dialog-content.component';
 import { DialogServiceStartupTask } from './components/startup/dialog-service-startup-task';
+import { TrainingOverlayService } from './services/training-overlay.service';
 import { ToastService } from './services';
 
 @NgModule({
@@ -73,12 +74,13 @@ import { ToastService } from './services';
         { provide: STARTUP_TASKS, useClass: DialogServiceStartupTask, multi: true, deps: [DialogService]},
         { provide: STARTUP_TASKS, useClass: FinalStartupTask, multi: true, deps: [SessionService]},
         { provide: STARTUP_COMPONENT, useValue: StartupComponent },
-        { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent}
+        { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent},
+        TrainingOverlayService
     ]
 })
 export class CoreModule {
 
-    constructor(@Optional() @SkipSelf() parentModule: CoreModule, private injector: Injector, toastService: ToastService ) {
+    constructor(@Optional() @SkipSelf() parentModule: CoreModule, private injector: Injector, toastService: ToastService) {
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
         AppInjector.Instance = this.injector;
     }
