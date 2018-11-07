@@ -34,7 +34,7 @@ export class DialogService {
         // once dialog service has started. Handles case where server is 'showing' a dialog
         // but client is starting up. If we wait to subscribe until start() method, we can
         // miss the dialog.
-        this.session.getMessages('Screen').subscribe(s => { if (s) { this.$dialogMessages.next(s); } } );
+        this.session.getMessages('Dialog').subscribe(s => { if (s) { this.$dialogMessages.next(s); } } );
     }
 
     public start() {
@@ -43,16 +43,8 @@ export class DialogService {
         // We use a Startup Task to invoke this start method at nearly the end of startup.
 
         // Pipe all the messages for dialog updates
-        this.$dialogMessages.pipe(
-            filter(m => (m && m.template && m.template.dialog))
-        )
-            .subscribe(m => this.updateDialog(m));
+        this.$dialogMessages.subscribe(m => this.updateDialog(m));
 
-        // We want to close the dialog if we get a clear dialog message or its a screen message that isn't a dialog
-        this.$dialogMessages.pipe(
-            filter(m => m && m.type === 'Screen' && m.screenType === 'Loading')
-        )
-            .subscribe(m => this.closeDialog(false));
     }
 
     public addDialog(name: string, type: Type<IScreen>): void {
@@ -119,20 +111,20 @@ export class DialogService {
         const dialogComponentFactory: ComponentFactory<IScreen> = this.resolveDialog(dialog.screenType);
         let closeable = false;
         let forceReopen = false;
-        if (dialog.template.dialogProperties) {
-            closeable = dialog.template.dialogProperties.closeable;
-            forceReopen = dialog.template.dialogProperties.forceReopen;
+        if (dialog.dialogProperties) {
+            closeable = dialog.dialogProperties.closeable;
+            forceReopen = dialog.dialogProperties.forceReopen;
         }
         // By default we want to not allow the user to close by clicking off
         // By default we need the dialog to grab focus so you cannont execute actions on the screen
         // behind by hitting enter
         const dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: true };
         // const dialogComponent = dialogComponentFactory.componentType;
-        if (dialog.template.dialogProperties) {
+        if (dialog.dialogProperties) {
             // Merge in any dialog properties provided on the screen
-            for (const key in dialog.template.dialogProperties) {
-                if (dialog.template.dialogProperties.hasOwnProperty(key)) {
-                    dialogProperties[key] = dialog.template.dialogProperties[key];
+            for (const key in dialog.dialogProperties) {
+                if (dialog.dialogProperties.hasOwnProperty(key)) {
+                    dialogProperties[key] = dialog.dialogProperties[key];
                 }
             }
             this.log.info(`Dialog options: ${JSON.stringify(dialogProperties)}`);
