@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Message;
+import org.jumpmind.pos.core.model.MessageType;
 import org.jumpmind.pos.core.template.AbstractTemplate;
 import org.jumpmind.pos.core.template.BlankWithBarTemplate;
 
@@ -27,13 +28,18 @@ public class Screen extends Message {
     private Map<String, String> trainingInstructions;
 
     public Screen() {
-        this.setType("Screen");
+        this.setType(MessageType.Screen);
     }
 
-    public Screen(String name, String type) {
+    public Screen(String name, String screenType) {
         this();
-        this.screenType = type;
+        this.screenType = screenType;
         this.name = name;
+    }
+    
+    public boolean isDialog() {
+        String type = getType();
+        return type != null && type.equals(MessageType.Dialog);
     }
 
     /**
@@ -53,11 +59,15 @@ public class Screen extends Message {
      *            rendering on the server side.
      */
     public Screen asDialog(DialogProperties dialogProperties) {
-        this.template.setDialog(true);
+        this.setType(MessageType.Dialog);
         if (dialogProperties != null) {
-            this.template.setDialogProperties(dialogProperties);
+            this.setDialogProperties(dialogProperties);
         }
         return this;
+    }
+    
+    public void setDialogProperties(DialogProperties dialogProperties) {
+        this.put("dialogProperties", dialogProperties);
     }
 
     // TODO i don't really like this method here
@@ -194,4 +204,5 @@ public class Screen extends Message {
         }
         this.trainingInstructions.put(key, instructions);
     }
+    
 }

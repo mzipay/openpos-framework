@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jumpmind.pos.core.model.SystemStatus;
-import org.jumpmind.pos.core.screen.DialogProperties;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -21,7 +20,6 @@ public abstract class AbstractTemplate implements Serializable {
     private Map<String, Object> optionalProperties = new HashMap<String, Object>();
 
     private String type;
-    private boolean dialog = false;
     private SystemStatus systemStatus;
 
     protected AbstractTemplate(String type) {
@@ -44,18 +42,6 @@ public abstract class AbstractTemplate implements Serializable {
     @JsonAnySetter
     public void put(String name, Object value) {
         this.optionalProperties.put(name, value);
-    }
-
-    public void setDialog(boolean dialog) {
-        this.dialog = dialog;
-    }
-
-    public boolean isDialog() {
-        return dialog;
-    }
-
-    public void setDialogProperties(DialogProperties dialogProperties) {
-        this.put("dialogProperties", dialogProperties);
     }
     
     public void disableDevMenu() {

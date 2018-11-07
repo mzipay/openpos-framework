@@ -30,6 +30,7 @@ import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
 import org.jumpmind.pos.core.model.IDynamicListField;
 import org.jumpmind.pos.core.model.IFormElement;
+import org.jumpmind.pos.core.model.MessageType;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
 import org.jumpmind.pos.core.screen.FormScreen;
@@ -237,7 +238,7 @@ public class ScreenService implements IScreenService, IActionListener {
             } else {
                 messageService.sendMessage(appId, deviceId, screen);
             }
-            if (screen.getTemplate() != null && screen.getTemplate().isDialog()) {
+            if (screen.isDialog()) {
                 applicationState.setLastDialog(screen);
             } else if (!screen.getScreenType().equals("Toast") && !screen.getScreenType().equals("NoOp")) {
                 applicationState.setLastScreen(screen);
