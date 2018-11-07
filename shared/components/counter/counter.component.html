@@ -1,7 +1,7 @@
 <div *ngIf="label" class="label">
     {{label}}
 </div>
-<div [formGroup]="formGroup" class="counter" [ngClass]="{'center': centered}">
+<div [formGroup]="formGroup" class="counter">
     <div *ngIf="iconName" class="icon">
         <app-icon matPrefix iconName="{{iconName}}" iconClass="material-icons"></app-icon>
     </div>

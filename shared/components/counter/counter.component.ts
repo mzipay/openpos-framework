@@ -22,7 +22,6 @@ import { FormGroup } from '@angular/forms';
     @Input() attrType: string;
     @Input() placeholder: string;
     @Input() iconName: string;
-    @Input() centered: boolean;
 
     @Output() valueChange = new EventEmitter<any>();
 
