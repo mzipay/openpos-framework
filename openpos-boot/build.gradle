@@ -1,0 +1,20 @@
+apply from: '../openpos-core/common.gradle'
+
+ext {
+   jnaVersion = '4.1.0'
+}
+
+dependencies {
+    compile "net.java.dev.jna:jna:$jnaVersion"
+    compile "net.java.dev.jna:jna-platform:$jnaVersion"
+    compile 'org.json:json:20180813'
+    testCompile 'com.github.tomakehurst:wiremock:2.19.0'
+}
+
+jar {
+    manifest {
+        attributes(
+                "Main-Class": "org.jumpmind.boot.Boot",
+                "Class-Path": configurations.compile.collect { it.getName() }.join(' '))
+    }
+}
