@@ -122,14 +122,14 @@ export class PluginService {
 
     public getPlugin(pluginId: string, doInitWhenNeeded: boolean = true): Promise<IPlugin> {
         return new Promise( (resolve, reject) => {
-            this.log.info(`Getting plugin '${pluginId}'...`);
+            this.log.debug(`Getting plugin '${pluginId}'...`);
             let pluginEntry: PluginMapEntry = this.plugins[pluginId];
             let initRequired = false;
             let targetPlugin: IPlugin;
             if (pluginEntry) {
                 initRequired = ! pluginEntry.initialized;
                 targetPlugin = pluginEntry.plugin;
-                this.log.info(`Plugin '${pluginId}' found. initRequired? ${initRequired}`);
+                this.log.debug(`Plugin '${pluginId}' found. initRequired? ${initRequired}`);
             } else {
                 this.log.info(`Plugin '${pluginId}' is being fetched for the first time.`);
                 if (this.isCordovaPlugin(pluginId)) {
@@ -176,7 +176,7 @@ export class PluginService {
                     }
                 );
             } else {
-                this.log.info(`Init of plugin '${pluginId}' not required.`);
+                this.log.debug(`Init of plugin '${pluginId}' not required.`);
                 resolve(targetPlugin);
             }
         });
