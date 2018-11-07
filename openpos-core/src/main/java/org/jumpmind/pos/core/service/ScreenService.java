@@ -205,6 +205,11 @@ public class ScreenService implements IScreenService, IActionListener {
             return null;
         }
     }
+    
+    @Override
+    public void showToast(String appId, String nodeId, Toast toast) {
+        messageService.sendMessage(appId, nodeId, toast);
+    }
 
     @Override
     public void showScreen(String appId, String deviceId, Screen screen) {
@@ -239,7 +244,7 @@ public class ScreenService implements IScreenService, IActionListener {
             }
             if (screen.isDialog()) {
                 applicationState.setLastDialog(screen);
-            } else if (!screen.getScreenType().equals("Toast") && !screen.getScreenType().equals("NoOp")) {
+            } else if (!screen.getScreenType().equals("NoOp")) {
                 applicationState.setLastScreen(screen);
                 applicationState.setLastDialog(null);
             }

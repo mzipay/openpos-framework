@@ -23,6 +23,7 @@ package org.jumpmind.pos.core.flow;
 import java.util.Map;
 
 import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.core.screen.Toast;
 
 
 public interface IStateManager {
@@ -38,6 +39,7 @@ public interface IStateManager {
     public void endConversation();
     public void endSession();
     public void showScreen(Screen screen);
+    public void showToast(Toast toast);
     public void refreshScreen();
     public IState getCurrentState();
     public IUI getUI();

@@ -30,6 +30,7 @@ import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.config.SubTransition;
 import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.core.screen.Toast;
 import org.jumpmind.pos.core.service.IScreenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -429,6 +430,17 @@ public class StateManager implements IStateManager {
 
     public void setInitialFlowConfig(FlowConfig initialFlowConfig) {
         this.initialFlowConfig = initialFlowConfig;
+    }
+    
+    @Override
+    public void showToast(Toast toast) {
+        keepAlive();
+
+        if (applicationState.getCurrentContext() == null) {
+            throw new FlowException("There is no applicationState.getCurrentContext() on this StateManager.  HINT: States should use @In(scope=ScopeType.Node) to get the StateManager, not @Autowired.");
+        }               
+        
+        screenService.showToast(appId, nodeId, toast);
     }
 
     @Override
