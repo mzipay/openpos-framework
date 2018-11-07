@@ -1,9 +1,8 @@
 
 .counter {
     display: flex;
-    justify-content: center;
     height: 50px; 
-    padding:10px;
+    padding:20px;
     
     .mat-icon-button{
         color: white;
@@ -17,9 +16,17 @@
 
 }
 
+.center {
+    justify-content: center;
+}
+
+.icon {
+    padding-right: 15px;
+}
+
 .label {
     color: gray;
-    font-size: smaller;
+    font-size: small;
     padding: 0px;
     margin: 0px;
 }
