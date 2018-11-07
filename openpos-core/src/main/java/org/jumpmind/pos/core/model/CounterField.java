@@ -7,6 +7,7 @@ public class CounterField extends FormField {
     
     private Integer minValue;
     private Integer maxValue;
+    private boolean centered;
     
     public CounterField() {
         setInputType(FieldInputType.Counter);
@@ -53,6 +54,14 @@ public class CounterField extends FormField {
 
     public void setMaxValue(Integer maxValue) {
         this.maxValue = maxValue;
+    }
+
+    public boolean isCentered() {
+        return centered;
+    }
+
+    public void setCentered(boolean centered) {
+        this.centered = centered;
     }
     
 }
