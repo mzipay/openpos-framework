@@ -30,7 +30,6 @@ import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
 import org.jumpmind.pos.core.model.IDynamicListField;
 import org.jumpmind.pos.core.model.IFormElement;
-import org.jumpmind.pos.core.model.MessageType;
 import org.jumpmind.pos.core.model.annotations.FormButton;
 import org.jumpmind.pos.core.model.annotations.FormTextField;
 import org.jumpmind.pos.core.screen.FormScreen;
@@ -167,7 +166,7 @@ public class ScreenService implements IScreenService, IActionListener {
                     stateManager.doAction(action);
                 } catch (Throwable ex) {
                     logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
-                    showScreen(appId, deviceId, Toast.createWarningToast("The application received an unexpected error. Please report to the appropriate technical personnel"));
+                    messageService.sendMessage(appId, deviceId, Toast.createWarningToast("The application received an unexpected error. Please report to the appropriate technical personnel"));
                 }
             }
         }

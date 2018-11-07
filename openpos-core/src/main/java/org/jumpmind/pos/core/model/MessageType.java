@@ -7,5 +7,6 @@ public final class MessageType {
     
     public static final String Screen = "Screen";
     public static final String Dialog = "Dialog";
+    public static final String Toast = "Toast";
     
 }

@@ -1,6 +1,9 @@
 package org.jumpmind.pos.core.screen;
 
-public class Toast extends Screen {
+import org.jumpmind.pos.core.model.Message;
+import org.jumpmind.pos.core.model.MessageType;
+
+public class Toast extends Message {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,8 +25,7 @@ public class Toast extends Screen {
     }
 
     public Toast() {
-        setScreenType("Toast");
-        setName("Toast");
+        setType(MessageType.Toast);
     }
 
     public Toast(String message) {
