@@ -3,13 +3,17 @@ import { Configuration } from '../..';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
-    selector: 'input:not([type=checkbox]), textarea, form'
+    selector: 'input:not([type=checkbox]), textarea, form, mat-form-field'
 })
 export class AutocompleteDirective {
 
     constructor(public elementRef: ElementRef) {
         if (!Configuration.enableAutocomplete) {
-            elementRef.nativeElement.setAttribute('autocomplete', 'off');
+            if (elementRef.nativeElement.getAttribute('type') === 'password') {
+                elementRef.nativeElement.setAttribute('autocomplete', 'new-password');
+            } else {
+                elementRef.nativeElement.setAttribute('autocomplete', 'off');
+            }
         }
     }
 }
