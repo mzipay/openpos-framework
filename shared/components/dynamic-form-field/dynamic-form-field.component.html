@@ -79,6 +79,11 @@
             (change)="onFormElementChanged(formField)">
         </app-date-part-chooser-field>
     </ng-container>
+
+    <ng-container *ngIf="formField.inputType==='Time'">
+        <app-time-chooser [value]="formField.value" [formGroup]="formGroup" [controlName]="formField.id" [label]="formField.label"
+            [required]="formField.required" [keyboardLayout]="keyboardLayout" [iconName]="formField.iconName" (change)="onFormElementChanged(formField)"></app-time-chooser>
+    </ng-container>
     
     <ng-container *ngIf="formField.elementType==='Display'">
         <mat-form-field style="width:100%" [ngSwitch]="formField.valueDisplayMode">
