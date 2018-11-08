@@ -11,7 +11,7 @@ import { Configuration } from '../../configuration/configuration';
     // tslint:disable-next-line:directive-selector
     selector: 'input:not([type=checkbox]), textarea'
 })
-export class KeyboardDirective implements OnDestroy, IMessageHandler {
+export class KeyboardDirective implements OnDestroy, IMessageHandler<any> {
 
     private _keyboardRef: MatKeyboardRef<MatKeyboardComponent>;
 

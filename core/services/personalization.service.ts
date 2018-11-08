@@ -24,7 +24,6 @@ import {
 } from '../interfaces';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
 
-export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
     providedIn: 'root',
   })
@@ -105,7 +104,10 @@ export class PersonalizationService {
     }
 
     public setTheme(theme: string, storeLocal: boolean) {
-        localStorage.setItem('theme', theme);
+        this.theme = theme;
+        if (storeLocal) {
+            localStorage.setItem('theme', theme);
+        }
         if (this.previousTheme !== theme) {
             this.log.info(`Theme changing from '${this.previousTheme}' to '${theme}'`);
             this.onThemeChanging.emit({currentTheme: this.previousTheme, newTheme: theme});

@@ -11,7 +11,6 @@ export class FinalStartupTask implements IStartupTask {
 
     execute(): Observable<string> {
         return Observable.create( (message: Subject<string>) => {
-            this.sessionService.loaderState.enabled = true;
             message.complete();
         });
     }

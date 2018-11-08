@@ -10,7 +10,7 @@ import { IScan } from '../../../screens';
   templateUrl: './scan-something.component.html',
   styleUrls: ['./scan-something.component.scss']
 })
-export class ScanSomethingComponent implements AfterViewInit, IMessageHandler {
+export class ScanSomethingComponent implements AfterViewInit, IMessageHandler<any> {
 
   @ViewChild(MatInput)
   input: MatInput;
