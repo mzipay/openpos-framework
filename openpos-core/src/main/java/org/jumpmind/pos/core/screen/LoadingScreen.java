@@ -1,7 +1,6 @@
 package org.jumpmind.pos.core.screen;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.jumpmind.pos.core.model.MessageType;
 
 /**
  * Represents status screen/dialog.
@@ -11,10 +10,16 @@ public class LoadingScreen extends Screen {
     private static final long serialVersionUID = 1L;
 
     private String title;
-    private List<String> message = new ArrayList<>();
+    private String message;
 
     public LoadingScreen() {
+        setType(MessageType.Loading);
         setScreenType(ScreenType.Loading);
+    }
+    
+    public LoadingScreen(String title) {
+        this();
+        this.title = title;
     }
 
     public String getTitle() {
@@ -25,23 +30,12 @@ public class LoadingScreen extends Screen {
         this.title = title;
     }
 
-    public List<String> getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(List<String> message) {
-        if (message == null) {
-            this.message.clear();
-        } else {
-            this.message = message;
-        }
-    }
-
     public void setMessage(String message) {
-        this.message.clear();
-        if (message != null) {
-            this.message.add(message);
-        }
+        this.message = message;
     }
     
 }

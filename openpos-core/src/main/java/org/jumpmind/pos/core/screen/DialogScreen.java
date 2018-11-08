@@ -25,6 +25,12 @@ public class DialogScreen extends Screen {
         setScreenType(ScreenType.Dialog);
     }
     
+    public DialogScreen(String title, MenuItem button) {
+        this();
+        this.title = title;
+        this.addButton(button);
+    }
+    
     public List<MenuItem> getButtons() {
         return buttons;
     }

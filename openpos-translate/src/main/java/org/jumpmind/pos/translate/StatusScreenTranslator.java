@@ -1,8 +1,5 @@
 package org.jumpmind.pos.translate;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jumpmind.pos.core.screen.LoadingScreen;
 
 public class StatusScreenTranslator extends AbstractLegacyScreenTranslator<LoadingScreen> {
@@ -29,20 +26,11 @@ public class StatusScreenTranslator extends AbstractLegacyScreenTranslator<Loadi
     }
 
     public StatusScreenTranslator(ILegacyScreen legacyScreen, String title, String message) {
-        this(legacyScreen, title, message != null ? Arrays.asList(message) : null);
-    }
-    
-    public StatusScreenTranslator(ILegacyScreen legacyScreen, String title, String... messages) {
-        this(legacyScreen, title, Arrays.asList(messages));
-    }
-
-    public StatusScreenTranslator(ILegacyScreen legacyScreen, String title, List<String> message) {
         super(legacyScreen, LoadingScreen.class);
         getScreen().setTitle(title);
         getScreen().setMessage(message);
     }
 
-    
     @Override
     public void buildMainContent() {
        super.buildMainContent();
@@ -51,7 +39,7 @@ public class StatusScreenTranslator extends AbstractLegacyScreenTranslator<Loadi
                this.getResourceBundleFilename()).orElse(null);
        
        if (getMode() == Mode.UseMessageForTitle) {
-           getScreen().setTitle(this.hasMessage() ? getScreen().getMessage().get(0) : statusText);
+           getScreen().setTitle(this.hasMessage() ? getScreen().getMessage() : statusText);
            getScreen().setMessage((String) null);
        } else { // Default
            
@@ -79,6 +67,6 @@ public class StatusScreenTranslator extends AbstractLegacyScreenTranslator<Loadi
     }
     
     protected boolean hasMessage() {
-        return getScreen().getMessage().size() != 0;
+        return getScreen().getMessage() != null;
     }
 }
