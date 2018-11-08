@@ -96,6 +96,11 @@
         background-color: white;
     }
 
+    .mat-mini-fab.mat-primary-inverse{
+        color:$app-primary;
+        background-color: white;
+    }
+
     .mat-fab .mat-button-wrapper {
         padding: 0;
     }
@@ -149,5 +154,4 @@
     app-prompt-input app-icon {
         padding: 5px;
     }
-    
 }

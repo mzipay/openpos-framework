@@ -56,7 +56,7 @@ import {
     MessageDialogComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
-import { PhonePipe, HourMinSecPipe, LocalizedDatePipe } from './pipes';
+import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
 import { SideNavComponent } from './layout-components';
 
@@ -113,7 +113,8 @@ const pipes = [
     SafePipe,
     PhonePipe,
     HourMinSecPipe,
-    LocalizedDatePipe
+    LocalizedDatePipe,
+    ValueFormatterPipe
 ];
 
 @NgModule({

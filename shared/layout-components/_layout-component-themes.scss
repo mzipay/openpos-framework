@@ -3,4 +3,5 @@
 
 @mixin layout-component-themes($theme) {
     @include side-nav-theme($theme);
+
 }

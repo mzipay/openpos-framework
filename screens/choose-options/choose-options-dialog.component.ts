@@ -15,8 +15,8 @@ export class ChooseOptionsDialogComponent extends ChooseOptionsComponent {
 
     show(screen: any) {
         super.show(screen);
-        if (screen.template && screen.template.dialogProperties) {
-            this.dialogProperties = screen.template.dialogProperties;
+        if (screen.dialogProperties) {
+            this.dialogProperties = screen.dialogProperties;
         }
     }
 }

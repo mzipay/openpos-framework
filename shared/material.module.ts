@@ -76,8 +76,7 @@ import {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule,
-    NoopAnimationsModule
+    MatTooltipModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -111,8 +110,7 @@ import {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule,
-    NoopAnimationsModule
+    MatTooltipModule
   ],
   providers: [
     MatDialog
