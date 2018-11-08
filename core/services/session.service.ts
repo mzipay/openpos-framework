@@ -60,6 +60,8 @@ export class SessionService implements IMessageHandler<any> {
 
     private sessionMessages$ = new Subject<any>();
 
+    private disconnectedMessage = LoaderState.DISCONNECTED_TITLE;
+
     constructor(
         private log: Logger,
         private stompService: StompRService,
@@ -68,8 +70,6 @@ export class SessionService implements IMessageHandler<any> {
         protected personalization: PersonalizationService,
         private http: HttpClient
     ) {
-
-        // this.loaderState = new LoaderState(this, personalization);
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
@@ -137,15 +137,6 @@ export class SessionService implements IMessageHandler<any> {
         };
         this.stompService.initAndConnect();
 
-        this.stompService.state.subscribe((state: number) => {
-            console.log(`Current state: ${StompState[state]}`);
-            if (state === StompState.CONNECTED) {
-
-            } else if (state === StompState.DISCONNECTING) {
-
-            }
-        });
-
         this.appId = appId;
         const currentTopic = this.buildTopicName();
 
@@ -176,11 +167,11 @@ export class SessionService implements IMessageHandler<any> {
                 if (stompState === 'CONNECTED') {
                     this.log.info('STOMP connecting');
                     if (!this.onServerConnect.value) {
-                        this.onServerConnect.next(true);                        
+                        this.onServerConnect.next(true);
                     }
                     this.sendMessage(new CancelLoadingMessage());
                 } else if (stompState === 'DISCONNECTING') {
-                    this.log.info('STOMP disconnecting');                    
+                    this.log.info('STOMP disconnecting');
                 } else if (stompState === 'CLOSED') {
                     this.log.info('STOMP closed');
                     this.sendDisconnected();
@@ -195,7 +186,7 @@ export class SessionService implements IMessageHandler<any> {
     }
 
     private sendDisconnected() {
-        this.sendMessage(new ImmediateLoadingMessage(LoaderState.DISCONNECTED_TITLE));
+        this.sendMessage(new ImmediateLoadingMessage(this.disconnectedMessage));
     }
 
     handle(message: any) {
@@ -410,6 +401,14 @@ export class SessionService implements IMessageHandler<any> {
         if (this.subscription) {
             this.log.info(`>>> KeepAlive`);
             this.publish('KeepAlive', 'KeepAlive');
+        }
+    }
+
+    public setDisconnectedMessage(message: string) {
+        if (message) {
+            this.disconnectedMessage = message;
+        } else {
+            this.disconnectedMessage = LoaderState.DISCONNECTED_TITLE;
         }
     }
 
