@@ -1,8 +1,9 @@
+import { ILoading } from './../interfaces/loading.interface';
 import { Logger } from './logger.service';
 
 import { Configuration } from './../../configuration/configuration';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
-import { PersonalizationService, DEFAULT_LOCALE } from './personalization.service';
+import { PersonalizationService } from './personalization.service';
 
 import { Observable, Subscription, BehaviorSubject, Subject, merge } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
@@ -26,14 +27,12 @@ import { AppInjector } from '../app-injector';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { PingParams } from '../interfaces/ping-params.interface';
 import { PingResult } from '../interfaces/ping-result.interface';
+import { queue } from 'rxjs/internal/scheduler/queue';
 
-// export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
     providedIn: 'root',
 })
-export class SessionService implements IMessageHandler {
-
-    private screen: any;
+export class SessionService implements IMessageHandler<any> {
 
     public state: Observable<string>;
 
@@ -49,15 +48,17 @@ export class SessionService implements IMessageHandler {
 
     private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
-    loaderState: LoaderState;
+    private waitingForResponse = false;
+
+    public inBackground = false;
 
     private stompStateSubscription: Subscription;
 
     public onServerConnect: BehaviorSubject<boolean>;
 
     private stompJsonMessages$ = new BehaviorSubject<any>(false);
+
     private sessionMessages$ = new Subject<any>();
-    public inBackground = false;
 
     constructor(
         private log: Logger,
@@ -68,28 +69,29 @@ export class SessionService implements IMessageHandler {
         private http: HttpClient
     ) {
 
-        this.loaderState = new LoaderState(this, personalization);
+        // this.loaderState = new LoaderState(this, personalization);
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
         this.onServerConnect = new BehaviorSubject<boolean>(false);
-        this.registerMessageHandler(this, 'Screen');
+
+        this.registerMessageHandler(this);
     }
 
     public sendMessage(message: any) {
         this.sessionMessages$.next(message);
     }
 
-    public getMessages( ...types: string[]): Observable<any> {
-        return  merge(
-            this.stompJsonMessages$,
-            this.sessionMessages$ ).pipe(filter(s => types && types.length > 0 ? types.includes(s.type) : true));
-    }
-
-    public registerMessageHandler(handler: IMessageHandler, ...types: string[]): Subscription {
+    public getMessages(...types: string[]): Observable<any> {
         return merge(
             this.stompJsonMessages$,
-            this.sessionMessages$ ).pipe(filter(s => types && types.length > 0 ? types.includes(s.type) : true)).subscribe(s => this.zone.run(() => handler.handle(s)));
+            this.sessionMessages$).pipe(filter(s => types && types.length > 0 ? types.includes(s.type) : true));
+    }
+
+    public registerMessageHandler(handler: IMessageHandler<any>, ...types: string[]): Subscription {
+        return merge(
+            this.stompJsonMessages$,
+            this.sessionMessages$).pipe(filter(s => types && types.length > 0 ? types.includes(s.type) : true)).subscribe(s => this.zone.run(() => handler.handle(s)));
     }
 
     public isRunningInBrowser(): boolean {
@@ -135,6 +137,15 @@ export class SessionService implements IMessageHandler {
         };
         this.stompService.initAndConnect();
 
+        this.stompService.state.subscribe((state: number) => {
+            console.log(`Current state: ${StompState[state]}`);
+            if (state === StompState.CONNECTED) {
+
+            } else if (state === StompState.DISCONNECTING) {
+
+            }
+        });
+
         this.appId = appId;
         const currentTopic = this.buildTopicName();
 
@@ -142,7 +153,6 @@ export class SessionService implements IMessageHandler {
 
         const messages: Observable<Message> = this.stompService.subscribe(currentTopic);
 
-        // Subscribe a function to be run on_next message
         this.subscription = messages.subscribe((message: Message) => {
             this.log.info('Got STOMP message');
             if (this.inBackground) {
@@ -161,29 +171,46 @@ export class SessionService implements IMessageHandler {
 
         this.state = this.stompService.state.pipe(map((state: number) => StompState[state]));
 
-        this.loaderState.monitorConnection();
-
-
-        if (! this.stompStateSubscription) {
+        if (!this.stompStateSubscription) {
             this.stompStateSubscription = this.state.subscribe(stompState => {
                 if (stompState === 'CONNECTED') {
-                    if (! this.onServerConnect.value) {
-                        this.onServerConnect.next(true);
+                    this.log.info('STOMP connecting');
+                    if (!this.onServerConnect.value) {
+                        this.onServerConnect.next(true);                        
                     }
+                    this.sendMessage(new CancelLoadingMessage());
                 } else if (stompState === 'DISCONNECTING') {
-                    this.log.info('STOMP disconnecting');
+                    this.log.info('STOMP disconnecting');                    
+                } else if (stompState === 'CLOSED') {
+                    this.log.info('STOMP closed');
+                    this.sendDisconnected();
                 }
             });
+        }
+
+        if (!this.connected()) {
+            this.sendDisconnected();
+        }
+
+    }
+
+    private sendDisconnected() {
+        this.sendMessage(new ImmediateLoadingMessage(LoaderState.DISCONNECTED_TITLE));
+    }
+
+    handle(message: any) {
+        if (message && message.theme) {
+            this.personalization.setTheme(message.theme, false);
         }
     }
 
     private logStompJson(json: any) {
         if (json && json.sequenceNumber && json.screenType) {
-          this.log.info(`[logStompJson] type: ${json.type}, screenType: ${json.screenType}, seqNo: ${json.sequenceNumber}`);
+            this.log.info(`[logStompJson] type: ${json.type}, screenType: ${json.screenType}, seqNo: ${json.sequenceNumber}`);
         } else if (json) {
             this.log.info(`[logStompJson] type: ${json.type}`);
         } else {
-          this.log.info(`[logStompJson] ${json}`);
+            this.log.info(`[logStompJson] ${json}`);
         }
     }
 
@@ -191,8 +218,8 @@ export class SessionService implements IMessageHandler {
         return {
             type: 'Screen',
             screenType: 'Dialog',
-            template: {dialog: true, type: 'BlankWithBar'},
-            dialogProperties: {closeable: false},
+            template: { dialog: true, type: 'BlankWithBar' },
+            dialogProperties: { closeable: false },
             title: 'Incompatible Versions',
             message: Configuration.incompatibleVersionMessage.split('\n')
         };
@@ -200,9 +227,9 @@ export class SessionService implements IMessageHandler {
 
     private isMessageVersionValid(message: Message): boolean {
         const valid = message.headers.compatibilityVersion === Configuration.compatibilityVersion;
-        if (! valid) {
+        if (!valid) {
             this.log.info(`INCOMPATIBLE VERSIONS. Client compatibilityVersion: ${Configuration.compatibilityVersion}, ` +
-            `server compatibilityVersion: ${message.headers.compatibilityVersion}`);
+                `server compatibilityVersion: ${message.headers.compatibilityVersion}`);
         }
         return valid;
     }
@@ -231,9 +258,9 @@ export class SessionService implements IMessageHandler {
             const httpResult = await this.http.get(url, {}).toPromise();
             if (httpResult) {
                 this.log.info('successful validation of ' + url);
-                return {success: true};
+                return { success: true };
             } else {
-                pingError = {message: '?'};
+                pingError = { message: '?' };
             }
         } catch (error) {
             pingError = error;
@@ -298,7 +325,7 @@ export class SessionService implements IMessageHandler {
                     const pluginService = AppInjector.Instance.get(PluginService);
                     // Use inAppBrowserPlugin when available since it tracks whether or not the browser is active.
                     pluginService.getPlugin('InAppBrowser').then(plugin => {
-                        const inAppPlugin = <InAppBrowserPlugin> plugin;
+                        const inAppPlugin = <InAppBrowserPlugin>plugin;
                         inAppPlugin.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
                     }).catch(error => {
                         this.log.info(`InAppBrowser not found, using window.open. Reason: ${error}`);
@@ -350,11 +377,13 @@ export class SessionService implements IMessageHandler {
                 }
             }
 
-            if (processAction && !this.loaderState.loading) {
+            if (processAction && !this.waitingForResponse) {
                 const sendToServer: Function = () => {
                     this.log.info(`>>> Post action "${actionString}"`);
                     this.queueLoading();
-                    this.publish(actionString, 'Screen', response);
+                    if (!this.publish(actionString, 'Screen', response)) {
+                        this.cancelLoading();
+                    }
                 };
 
                 // see if we have any intercepters registered
@@ -369,7 +398,7 @@ export class SessionService implements IMessageHandler {
                     sendToServer();
                 }
             } else {
-                this.log.info(`Not sending action: ${actionString}.  processAction: ${processAction}, loading:${this.loaderState.loading}`);
+                this.log.info(`Not sending action: ${actionString}.  processAction: ${processAction}, waitingForResponse:${this.waitingForResponse}`);
             }
 
         } else {
@@ -388,65 +417,34 @@ export class SessionService implements IMessageHandler {
         this.publish('Refresh', 'Screen');
     }
 
-    public publish(actionString: string, type: string, payload?: any) {
+    public publish(actionString: string, type: string, payload?: any): boolean {
         // Block any actions if we are backgrounded and running in cordova
         // (unless we are coming back out of the background)
         if (this.inBackground && actionString !== 'Refresh') {
             this.log.info(`Blocked action '${actionString}' because app is in background.`);
-            return;
+            return false;
         }
         const nodeId = this.personalization.getNodeId();
         if (this.appId && nodeId) {
             this.log.info(`Publishing action '${actionString}' of type '${type}' to server...`);
-            this.stompService.publish('/app/action/app/' + this.appId + '/node/' + this.personalization.getNodeId(),
+            this.stompService.publish('/app/action/app/' + this.appId + '/node/' + nodeId,
                 JSON.stringify({ name: actionString, type: type, data: payload }));
+            return true;
         } else {
             this.log.info(`Can't publish action '${actionString}' of type '${type}' ` +
                 `due to undefined App ID (${this.appId}) or Node Id (${nodeId})`);
+            return false;
         }
     }
 
     private queueLoading() {
-        this.loaderState.loading = true;
-        setTimeout(() => {
-            this.log.info(`queueLoading timeout fired, invoking showLoading`);
-            this.showLoading(LoaderState.LOADING_TITLE);
-        }, 1000);
-
-    }
-
-    private showLoading(title: string, message?: string) {
-        this.log.info(`showLoading method invoked`);
-        if (this.loaderState.loading) {
-            this.log.info(`showLoading is showing the loading dialog NOW`);
-            this.loaderState.setVisible(true, title, message);
-        }
+        this.waitingForResponse = true;
+        this.sendMessage(new QueueLoadingMessage(LoaderState.LOADING_TITLE));
     }
 
     public cancelLoading() {
-        this.log.info(`cancelLoading invoked`);
-        this.loaderState.loading = false;
-        this.loaderState.setVisible(false);
-    }
-
-    handle(message: any) {
-        this.log.info(`Got message: ${message.screenType}`);
-        if (message && message.theme) {
-            this.personalization.setTheme(message.theme, false);
-        }
-        if (message.screenType === 'Loading') {
-            // This is just a temporary hack
-            // Might be a previous instance of a Loading screen being shown,
-            // so dismiss it first. This occurs, for example, when mobile device is put
-            // to sleep while showing a loading dialog. Need to cancel it so that loader state
-            // gets reset.
-            if (this.loaderState.loading) {
-                this.cancelLoading();
-            }
-            this.loaderState.loading = true;
-            this.showLoading(message.title, message.message);
-            return;
-        }
+        this.waitingForResponse = false;
+        this.sendMessage(new CancelLoadingMessage());
     }
 
     public registerActionPayload(actionName: string, actionValue: Function) {
@@ -481,12 +479,34 @@ export class SessionService implements IMessageHandler {
         return `${this.personalization.getServerBaseURL()}/api`;
     }
 
-    getLocale(): string {
-        let returnLocale: string;
-        if (this.screen) {
-            returnLocale = this.screen.locale;
-        }
-        return returnLocale || DEFAULT_LOCALE;
+}
+
+export class QueueLoadingMessage implements ILoading {
+    type = 'Loading';
+    title: string;
+    queue = true;
+    cancel = false;
+
+    constructor(text: string) {
+        this.title = text;
     }
 }
+
+export class ImmediateLoadingMessage implements ILoading {
+    type = 'Loading';
+    title: string;
+    queue = false;
+    cancel = false;
+
+    constructor(text: string) {
+        this.title = text;
+    }
+}
+
+export class CancelLoadingMessage implements ILoading {
+    type = 'Loading';
+    cancel = true;
+    queue = false;
+}
+
 

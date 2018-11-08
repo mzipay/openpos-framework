@@ -1,4 +1,5 @@
 import { Component} from '@angular/core';
+import { PersonalizationService } from '../../services';
 @Component({
     selector: 'app-dynamic-screen',
     templateUrl: './dynamic-screen.component.html',
@@ -6,4 +7,10 @@ import { Component} from '@angular/core';
 })
 export class DynamicScreenComponent {
 
+    constructor(private personalization: PersonalizationService) {
+    }
+
+    getTheme() {
+        return this.personalization.getTheme();
+    }
 }

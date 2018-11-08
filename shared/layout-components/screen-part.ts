@@ -12,7 +12,7 @@ export abstract class ScreenPart<T> implements OnDestroy {
     constructor() {
         this.sessionService = AppInjector.Instance.get(SessionService);
         this.subscription = this.sessionService.getMessages('Screen')
-            .pipe(filter( s => (!s.template || !s.template.dialog) && s.screenType !== 'Loading' && s.screenType !== 'Toast')).subscribe( s => {
+            .pipe(filter( s => s.screenType !== 'Loading')).subscribe( s => {
             this.screenData = s;
             this.screenDataUpdated();
         });
