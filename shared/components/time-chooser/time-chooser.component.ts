@@ -29,7 +29,6 @@ export class TimeChooserComponent implements OnInit {
 
   onTimeChange() {
     this.value = this.formatTime();
-    console.log(this.value);
     this.change.emit(this.value);
     this.formGroup.controls[this.controlName].setValue(this.value);
   }
@@ -45,8 +44,9 @@ export class TimeChooserComponent implements OnInit {
   }
 
   private convertTo24(): string {
-    let h24 = Number.parseInt(this.hours, 10);
+    let h24 = 0;
     if (this.hours) {
+      h24 = Number.parseInt(this.hours, 10);
       if (h24 < 12 && this.amPm === 'pm') {
         h24 += 12;
       } else if (h24 === 12 && this.amPm === 'am') {
