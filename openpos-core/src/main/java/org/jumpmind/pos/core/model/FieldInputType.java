@@ -33,7 +33,8 @@ public enum FieldInputType {
     /** Allows a-z, A-Z, 0-9 */
     WordText,
     Counter,
-    DatePartChooser
+    DatePartChooser,
+    Time
     ;
     
     public static FieldInputType toDateInputType(String dateFormat) {

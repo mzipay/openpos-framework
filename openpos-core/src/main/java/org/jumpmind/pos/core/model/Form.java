@@ -178,6 +178,13 @@ public class Form implements Serializable {
 		return this.addNoYearDateField(fieldId, label, value, required, false);
 	}
     
+	public FormField addTimeField(String fieldId, String label, String value, boolean required) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Time, required);
+        formField.setValue(value);
+        formElements.add(formField);
+        return formField;
+    }
+	
     public FormField addIncomeField(String fieldId, String label, String value, boolean required) {
         FormField formField = createIncomeField(fieldId, label, value, required);
         formElements.add(formField);
