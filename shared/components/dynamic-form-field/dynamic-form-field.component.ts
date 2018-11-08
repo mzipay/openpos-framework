@@ -82,7 +82,8 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
     if (this.formField.inputType === 'NumericText' ||
       this.formField.inputType === 'Phone' ||
       this.formField.inputType === 'PostalCode' ||
-      this.formField.inputType === 'Counter') {
+      this.formField.inputType === 'Counter' ||
+      this.formField.inputType === 'Time') {
       this.keyboardLayout = 'Numeric';
     } else if (this.formField.label === 'Email') {
       this.keyboardLayout = 'Email';
@@ -132,7 +133,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   isNumericField(): boolean {
-    return (['NumericText', 'Money', 'Phone', 'PostalCode', 'Percent', 'PercentInt', 'Income', 'Decimal', 'Counter'].indexOf(this.formField.inputType) >= 0
+    return (['NumericText', 'Money', 'Phone', 'PostalCode', 'Percent', 'PercentInt', 'Income', 'Decimal', 'Counter', 'Time'].indexOf(this.formField.inputType) >= 0
         || this.formField.keyboardPreference === 'Numeric');
   }
 
@@ -224,7 +225,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   isSpecialCaseInput(): boolean {
-    return ['ToggleButton', 'Checkbox', 'AutoComplete', 'Counter', 'DatePartChooser'].indexOf(this.formField.inputType) >= 0 ||
+    return ['ToggleButton', 'Checkbox', 'AutoComplete', 'Counter', 'DatePartChooser', 'Time'].indexOf(this.formField.inputType) >= 0 ||
         this.isDateInput();
   }
 
