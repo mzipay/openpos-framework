@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jumpmind.pos.core.model.MessageType;
+
 public class DialogScreen extends Screen {
 
     private static final long serialVersionUID = 1L;
@@ -16,13 +18,11 @@ public class DialogScreen extends Screen {
     
     private List<String> message = new ArrayList<>();
     
-    private List<Line> messageLines = new ArrayList<>();
-    
-    private DialogProperties dialogProperties;
+    private List<Line> messageLines = new ArrayList<>();    
     
     public DialogScreen() {
+        setType(MessageType.Dialog);
         setScreenType(ScreenType.Dialog);
-        getTemplate().setDialog(true);
     }
     
     public List<MenuItem> getButtons() {
@@ -61,14 +61,6 @@ public class DialogScreen extends Screen {
     
     public List<String> getMessage() {
         return message;
-    }
-
-    protected DialogProperties getDialogProperties() {
-        return dialogProperties;
-    }
-
-    protected void setDialogProperties(DialogProperties dialogProperties) {
-        this.dialogProperties = dialogProperties;
     }
     
     public void setSubType(String subType) {

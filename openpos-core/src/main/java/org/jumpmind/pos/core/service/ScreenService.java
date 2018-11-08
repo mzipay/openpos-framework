@@ -166,7 +166,7 @@ public class ScreenService implements IScreenService, IActionListener {
                     stateManager.doAction(action);
                 } catch (Throwable ex) {
                     logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
-                    showScreen(appId, deviceId, Toast.createWarningToast("The application received an unexpected error. Please report to the appropriate technical personnel"));
+                    messageService.sendMessage(appId, deviceId, Toast.createWarningToast("The application received an unexpected error. Please report to the appropriate technical personnel"));
                 }
             }
         }
@@ -205,6 +205,11 @@ public class ScreenService implements IScreenService, IActionListener {
             return null;
         }
     }
+    
+    @Override
+    public void showToast(String appId, String nodeId, Toast toast) {
+        messageService.sendMessage(appId, nodeId, toast);
+    }
 
     @Override
     public void showScreen(String appId, String deviceId, Screen screen) {
@@ -237,9 +242,9 @@ public class ScreenService implements IScreenService, IActionListener {
             } else {
                 messageService.sendMessage(appId, deviceId, screen);
             }
-            if (screen.getTemplate() != null && screen.getTemplate().isDialog()) {
+            if (screen.isDialog()) {
                 applicationState.setLastDialog(screen);
-            } else if (!screen.getScreenType().equals("Toast") && !screen.getScreenType().equals("NoOp")) {
+            } else if (!screen.getScreenType().equals("NoOp")) {
                 applicationState.setLastScreen(screen);
                 applicationState.setLastDialog(null);
             }
