@@ -41,7 +41,8 @@
                             </button>
                             <div fxFlex="1 1 auto"></div>
                              <ng-container *ngIf="!screen.hideCustomer">
-                                <app-sell-linked-customer [screenType]="screen.screenType" [customerName]="screen.customerName" [noCustomerText]="screen.noCustomerText"></app-sell-linked-customer>
+                                <app-sell-linked-customer [screenType]="screen.screenType" [customerName]="screen.customerName" [noCustomerText]="screen.noCustomerText"
+                                    [loyaltyButton]="screen.loyaltyButton"></app-sell-linked-customer>
                             </ng-container>
                             <div *ngIf="screen.screenType === 'Transaction'" fxFlex="0 1 auto" class="sell-screen-logo"></div>
                          </mat-drawer>

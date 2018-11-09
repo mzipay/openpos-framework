@@ -1,4 +1,5 @@
-<button mat-button *ngIf="customerName || screenType === 'Transaction'" color="accent" style="text-align: left">
+<button mat-button *ngIf="customerName || screenType === 'Transaction'" color="accent" style="text-align: left" (click)="onClick()"
+    disableRipple="!loyaltyButton" [ngClass]="{'customer-read-only': !loyaltyButton}">
     <ng-container *ngIf="customerName">
         <mat-icon>person</mat-icon>&nbsp;
         <span class="text-sm">{{customerName}}</span>
