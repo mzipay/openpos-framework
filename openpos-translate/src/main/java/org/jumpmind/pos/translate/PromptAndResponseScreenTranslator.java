@@ -8,6 +8,7 @@ import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DialogProperties;
+import org.jumpmind.pos.core.screen.IconType;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
 import org.jumpmind.pos.core.template.SellTemplate;
@@ -78,7 +79,7 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
     }
     
     protected void addActionButton() {
-        screen.setActionButton(new MenuItem("Next", "Next", "keyboard_arrow_right"));
+        screen.setActionButton(new MenuItem("Next", "Next", IconType.Forward));
     }
     
     public void setUndoMacro(InteractionMacro undoMacro) {

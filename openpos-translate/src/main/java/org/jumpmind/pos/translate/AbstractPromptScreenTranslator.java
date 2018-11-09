@@ -12,6 +12,7 @@ import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.IPromptScreen;
+import org.jumpmind.pos.core.screen.IconType;
 
 public abstract class AbstractPromptScreenTranslator<T extends Screen> extends AbstractLegacyScreenTranslator<T> {
 
@@ -85,17 +86,17 @@ public abstract class AbstractPromptScreenTranslator<T extends Screen> extends A
             }
 
             if (IPromptScreen.TYPE_ALPHANUMERICPASSWORD.equals(promptScreen.getResponseType())) {
-                promptScreen.setPromptIcon("lock");
+                promptScreen.setPromptIcon(IconType.Login);
             } else if( IPromptScreen.TYPE_PHONE.equals(promptScreen.getResponseType())) {
-            		promptScreen.setPromptIcon("phone");
+            		promptScreen.setPromptIcon(IconType.Phone);
             } else if(FieldInputType.Money.name().equalsIgnoreCase(promptScreen.getResponseType())) {
                 // TODO: I'd like to use cash icon here, but needs to have adjustment to styling for case when using
                 // a local icon.  just use default icon for now
                 // promptScreen.setPromptIcon(new LocalIcon("cash-multiple").getName());
-                promptScreen.setPromptIcon("question_answer");
+                promptScreen.setPromptIcon(IconType.DefaultPrompt);
             }
             else {
-                promptScreen.setPromptIcon("question_answer");
+                promptScreen.setPromptIcon(IconType.DefaultPrompt);
             }
         }
 

@@ -20,7 +20,7 @@ public class DynamicListScreen extends Screen {
     public DynamicListScreen() {
         setScreenType(ScreenType.DynamicList);
         setTemplate(new SellTemplate());
-        submitButton = new MenuItem("Next", "Next", "keyboard_arrow_right");
+        submitButton = new MenuItem("Next", "Next", IconType.Forward);
     }
 
     public void setList(DynamicList list) {

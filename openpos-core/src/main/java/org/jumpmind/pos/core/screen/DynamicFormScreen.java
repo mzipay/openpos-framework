@@ -21,7 +21,7 @@ public class DynamicFormScreen extends Screen implements IHasForm {
     public DynamicFormScreen() {
         setScreenType(ScreenType.DynamicForm);
         setTemplate(new SellTemplate());
-        submitButton = new MenuItem("Next", "Next", "keyboard_arrow_right");
+        submitButton = new MenuItem("Next", "Next", IconType.Forward);
     }
 
     public void setForm(Form form) {

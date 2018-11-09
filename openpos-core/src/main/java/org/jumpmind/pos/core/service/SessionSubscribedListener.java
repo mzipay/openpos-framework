@@ -8,6 +8,7 @@ import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
+import org.jumpmind.pos.core.screen.IconType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             if (!stateManager.isSessionAuthenticated(sessionId)) {
                 DialogScreen errorDialog = new DialogScreen();
                 errorDialog.asDialog(new DialogProperties(false));
-                errorDialog.setIcon("error");
+                errorDialog.setIcon(IconType.Error);
                 errorDialog.setTitle("Failed Authentication");
                 errorDialog.setMessage(Arrays.asList("The client and server authentication tokens did not match"));
                 messageService.sendMessage(appId, nodeId, errorDialog);
@@ -68,7 +69,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
                     errorDialog.setType(errorDialog.getScreenType());
                 }
                 errorDialog.asDialog(new DialogProperties(false));
-                errorDialog.setIcon("error");
+                errorDialog.setIcon(IconType.Error);
                 errorDialog.setTitle("Incompatible Versions");
                 errorDialog.setMessage(Arrays.asList(incompatibleVersionMessage.split("\n")));
                 messageService.sendMessage(appId, nodeId, errorDialog);

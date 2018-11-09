@@ -16,6 +16,7 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
     protected InteractionMacro undoMacro;
     protected boolean filterDisabledOptions = true;
     private String[] filteredOptions;
+    protected String icon;
 
     public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass) {
         this(headlessScreen, screenClass, true);
@@ -26,11 +27,17 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
     }
     
     public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass, boolean filterDisabledOptions, String[] filteredOptions) {
+        this(headlessScreen, screenClass, filterDisabledOptions, filteredOptions, "");
+    }
+    
+    public ChooseOptionsScreenTranslator(ILegacyScreen headlessScreen, Class<T> screenClass, boolean filterDisabledOptions, String[] filteredOptions, String icon) {
         super(headlessScreen, screenClass);
         screen.setScreenType(ScreenType.ChooseOptions);
         this.filterDisabledOptions = filterDisabledOptions;
         this.filteredOptions = filteredOptions;
+        this.icon = icon;
     }
+    
     
     /**
      * Constructor to be used for modifying OptionItems or excluding them.
@@ -59,6 +66,7 @@ public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extend
         String formattedPromptText = this.getPromptText(this.getLegacyUIModel(), this.getLegacyAssignmentSpec(PROMPT_RESPONSE_PANEL_KEY), 
                 legacyScreen.getResourceBundleFilename()).orElse(null);
         screen.setPromptText(formattedPromptText);
+        screen.setIcon(this.icon);
     }
     
     protected void buildOptions() {
