@@ -1,70 +1,75 @@
+import { IMenuItem } from './../../core/interfaces/menu-item.interface';
 import { FormGroup, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { ValidatorsService } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
-  selector: 'app-prompt',
-  templateUrl: './prompt.component.html'
+    selector: 'app-prompt',
+    templateUrl: './prompt.component.html'
 })
 export class PromptComponent extends PosScreen<any> implements AfterViewInit, OnInit {
-  initialized = false;
-  promptFormGroup: FormGroup;
-  instructions: string;
+    initialized = false;
+    promptFormGroup: FormGroup;
+    instructions: string;
 
-  constructor( private validatorsService: ValidatorsService) {
-      super();
-  }
-
-  buildScreen() {
-    this.instructions = this.screen.instructions;
-  }
-
-  ngOnInit(): void {
-
-    const group: any = {};
-    const validators: ValidatorFn[] = [];
-    validators.push(Validators.required);
-    validators.push(this.validatorsService.getValidator(this.screen.responseType));
-
-    if (this.screen.validators) {
-        this.screen.validators.forEach(v => validators.push(this.validatorsService.getValidator(v)));
+    constructor(private validatorsService: ValidatorsService) {
+        super();
     }
 
-    if (this.screen.minLength) {
-      validators.push(Validators.minLength(this.screen.minLength));
+    buildScreen() {
+        this.instructions = this.screen.instructions;
     }
 
-    if (this.screen.maxLength) {
-      validators.push(Validators.maxLength(this.screen.maxLength));
+    ngOnInit(): void {
+
+        const group: any = {};
+        const validators: ValidatorFn[] = [];
+        validators.push(Validators.required);
+        validators.push(this.validatorsService.getValidator(this.screen.responseType));
+
+        if (this.screen.validators) {
+            this.screen.validators.forEach(v => validators.push(this.validatorsService.getValidator(v)));
+        }
+
+        if (this.screen.minLength) {
+            validators.push(Validators.minLength(this.screen.minLength));
+        }
+
+        if (this.screen.maxLength) {
+            validators.push(Validators.maxLength(this.screen.maxLength));
+        }
+
+        if (this.screen.pattern) {
+            validators.push(Validators.pattern(this.screen.pattern));
+        }
+
+        group['promptInputControl'] = new FormControl(this.screen.responseText, validators);
+        // When showing a DATE, there is also a hidden field to handle picking of dates using
+        // a date picker, need to add a FormControl for that also.
+        if (this.screen.responseType && this.screen.responseType !== 'DatePartChooser' && this.screen.responseType.toLowerCase().indexOf('date') >= 0) {
+            group['promptInputHiddenDateControl'] = new FormControl();
+        }
+        this.promptFormGroup = new FormGroup(group);
     }
 
-    if (this.screen.pattern) {
-        validators.push(Validators.pattern(this.screen.pattern));
+    ngAfterViewInit(): void {
+        this.initialized = true;
     }
 
-    group['promptInputControl'] = new FormControl(this.screen.responseText, validators);
-    // When showing a DATE, there is also a hidden field to handle picking of dates using
-    // a date picker, need to add a FormControl for that also.
-    if (this.screen.responseType && this.screen.responseType !== 'DatePartChooser' && this.screen.responseType.toLowerCase().indexOf('date') >= 0) {
-      group['promptInputHiddenDateControl'] = new FormControl();
+    onAction(menuItm: IMenuItem) {
+        this.session.onAction(menuItm);
     }
-    this.promptFormGroup = new FormGroup(group);
-  }
 
-  ngAfterViewInit(): void {
-    this.initialized = true;
-  }
-
-  onFormSubmit(): void {
-    if (this.promptFormGroup.valid) {
-      const payload = this.promptFormGroup.value['promptInputControl'];
-      if (this.screen.actionButton) {
-        this.session.onAction(this.screen.actionButton.action, payload);
-      } else {
-        this.session.onAction(this.screen.action, payload);
-      }
+    onFormSubmit(): void {
+        if (this.promptFormGroup.valid) {
+            const payload = this.promptFormGroup.value['promptInputControl'];
+            if (this.screen.actionButton) {
+                this.session.onAction(this.screen.actionButton.action, payload);
+            } else {
+                this.session.onAction(this.screen.action, payload);
+            }
+        }
     }
-  }
 
 }

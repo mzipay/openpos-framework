@@ -9,7 +9,7 @@
             <div style="height:50px"></div>
         </mat-card-content>
         <mat-card-actions *ngIf="screen.otherActions || screen.actionButton" align="end">
-            <button *ngFor="let menuItem of screen.otherActions" mat-raised-button (click)="session.onAction(menuItem)">
+            <button *ngFor="let menuItem of screen.otherActions" mat-raised-button (click)="onAction(menuItem)">
                 <span>{{menuItem.title}}</span>
                 <mat-icon *ngIf="menuItem.icon" class="material-icons">{{menuItem.icon}}</mat-icon>
             </button>
