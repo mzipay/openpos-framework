@@ -7,20 +7,32 @@
    text-align: center;
 }
 
-.options-prompt {
-    font-weight: bold;
-}
-
 .options-icon {
-    width: 300px; 
+    width: 400px; 
     height: 100px; 
-    padding-top: 32px;
+    padding-top: 0px;
 }
 
 .options-title {
-    padding-top: 64px;
-    padding-bottom: 32px;
-    font-weight: bold; 
+    font-size: 36px;
+    font-weight: bold;
+    p {
+        margin-top: 0px;
+        margin-bottom: 64px;
+    }
+}
+
+.options-prompt {
+    font-size: 26px;
+    p {
+        max-width: 400px;
+        margin-top: 64px;
+        margin-bottom: 64px;
+    }
+}
+
+.options-buttons {
+    padding-bottom: 64px;
 }
 
 .options-form {

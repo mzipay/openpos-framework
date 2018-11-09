@@ -149,6 +149,7 @@ export class DialogService {
             this.session.cancelLoading();
         } else {
             this.log.info(`Using previously created dialogRef. current dialog type: ${dialog.screenType}, last dialog type: ${this.lastDialogType}`);
+            this.session.cancelLoading();
         }
 
         this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' showing...');
