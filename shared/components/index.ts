@@ -14,7 +14,6 @@ export * from './fab-toggle-group/fab-toggle-group.component';
 export * from './pop-tart/pop-tart.component';
 export * from './nav-list/nav-list.component';
 export * from './file-viewer/file-viewer.component';
-export * from './number-spinner/number-spinner.component';
 export * from './status-bar/status-bar-data';
 export * from './status-bar/status-bar.component';
 export * from './counter/counter.component';
