@@ -17,20 +17,12 @@
                     </button>
                 </mat-drawer>
                 <mat-drawer-content  fxFlex="1 1 auto" fxLayout="column">
-                    <div fxLayout="row" fxLayoutAlign="center center" class="quantity-area">
-<!--                        <label *ngIf="selectedItemQuantity.label" class="text-sm bold-text">{{selectedItemQuantity.label}}&nbsp;</label> 
-
-[formGroup]="formGroup"
-(valueChange)="onFormElementChanged(formField)"
--->
-                        <app-counter [formGroup]="formGroup" [controlName]="selectedItemQuantity.id" [label]="selectedItemQuantity.label" 
+                    <div fxLayout="row" fxLayoutAlign="center center" class="content-top">
+                        <label *ngIf="selectedItemQuantity.label" class="text-sm bold-text">{{selectedItemQuantity.label}}&nbsp;</label> 
+                        <app-counter [formGroup]="formGroup" [controlName]="selectedItemQuantity.id" 
                         [(value)]="selectedItemQuantity.value" [minVal]="selectedItemQuantity.minValue" [maxVal]="selectedItemQuantity.maxValue" 
                         [required]="selectedItemQuantity.required" [readOnly]="selectedItemQuantity.disabled" [iconName]="selectedItemQuantity.iconName"
-                        [attrType]="'tel'" autoSelectOnFocus></app-counter>
-                        <!--
-                        <app-number-spinner [(ngModel)]="selectedItemQuantity.value" [min]="selectedItemQuantity.min" [max]="selectedItemQuantity.max" 
-                           [maxlength]="(selectedItemQuantity.max + '').length" autoSelectOnFocus></app-number-spinner>
-                           -->
+                        [attrType]="'tel'" (valueChange)="onItemQuantityChange($event)" autoSelectOnFocus appFocus></app-counter>
                     </div> 
                     <div class="grid-wrapper">
                         <mat-grid-list cols="5" rowHeight="9:10">

@@ -40,14 +40,18 @@ import { FormBuilder } from '../../core/services';
     }
 
     public onItemSelected(item: ISellItem) {
-        // TODO: replace with proper form validation.  Addresses issue with empty quantity not handled on server side
-        if (!this.selectedItemQuantity.value) {
-            this.selectedItemQuantity.value = '0';
+        if (this.formGroup.valid) {
+            const returnForm: ICatalogBrowserForm = {selectedItems: [item], form: this.form};
+            this.session.onAction('ItemSelected', returnForm);
+        } else {
+            this.showErrors();
         }
-        const returnForm: ICatalogBrowserForm = {selectedItems: [item], form: this.form};
-        this.session.onAction('ItemSelected', returnForm);
     }
 
+    private showErrors() {
+        // Forces redisplay of error
+        this.formGroup.controls[this.selectedItemQuantity.id].markAsDirty();
+    }
     public onCategorySelected(category: IMenuItem, event?: any) {
         const returnForm: ICatalogBrowserForm = {selectedCategory: category, form: this.form};
         this.session.onAction(category.action, returnForm);
@@ -56,5 +60,10 @@ import { FormBuilder } from '../../core/services';
     public onPageEvent(event?: PageEvent) {
         const returnForm: ICatalogBrowserForm = {pageEvent: event, form: this.form};
         this.session.onAction('PageEvent', returnForm);
+    }
+
+    onItemQuantityChange(value: string) {
+        const newValue = this.formGroup.controls[this.selectedItemQuantity.id].value;
+        this.selectedItemQuantity.value = newValue;
     }
   }
