@@ -5,7 +5,7 @@ import { Configuration } from './../../configuration/configuration';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { PersonalizationService } from './personalization.service';
 
-import { Observable, Subscription, BehaviorSubject, Subject, merge } from 'rxjs';
+import { Observable, Subscription, BehaviorSubject, Subject, merge, combineLatest, of } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { Injectable, NgZone, forwardRef, Inject } from '@angular/core';
@@ -49,6 +49,7 @@ export class SessionService implements IMessageHandler<any> {
     private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
     private waitingForResponse = false;
+    private actionDisablers = new Map<string, BehaviorSubject<boolean>>();
 
     public inBackground = false;
 
@@ -468,6 +469,23 @@ export class SessionService implements IMessageHandler<any> {
 
     public unregisterActionIntercepter(actionName: string) {
         this.actionIntercepters.delete(actionName);
+    }
+
+
+    public registerActionDisabler(action: string, disabler: Observable<boolean>) {
+        if ( !this.actionDisablers.has(action)) {
+            this.actionDisablers.set(action, new BehaviorSubject<boolean>(false));
+        }
+
+        disabler.subscribe( value => this.actionDisablers.get(action).next(value));
+    }
+
+    public actionIsDisabled(action: string): Observable<boolean> {
+        if (!this.actionDisablers.has(action)) {
+            this.actionDisablers.set(action, new BehaviorSubject<boolean>(false));
+        }
+
+        return this.actionDisablers.get(action);
     }
 
     public getCurrencyDenomination(): string {
