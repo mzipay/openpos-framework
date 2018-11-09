@@ -472,12 +472,12 @@ export class SessionService implements IMessageHandler<any> {
     }
 
 
-    public registerActionDisabler(action: string, disabler: Observable<boolean>) {
+    public registerActionDisabler(action: string, disabler: Observable<boolean>): Subscription {
         if ( !this.actionDisablers.has(action)) {
             this.actionDisablers.set(action, new BehaviorSubject<boolean>(false));
         }
 
-        disabler.subscribe( value => this.actionDisablers.get(action).next(value));
+        return disabler.subscribe( value => this.actionDisablers.get(action).next(value));
     }
 
     public actionIsDisabled(action: string): Observable<boolean> {
