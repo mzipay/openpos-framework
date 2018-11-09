@@ -9,11 +9,11 @@
     <mat-dialog-actions *ngIf="screen.otherActions || screen.actionButton" fxLayoutAlign="space-between">
         <button type="button" *ngFor="let menuItem of screen.otherActions" mat-raised-button (click)="session.onAction(menuItem)">
             <span>{{menuItem.title}}</span>
-            <mat-icon *ngIf="menuItem.icon" class="material-icons">{{menuItem.icon}}</mat-icon>
+            <app-icon *ngIf="menuItem.icon" [iconClass]="material-icons" [iconName]="menuItem.icon"></app-icon>
         </button>
         <button type="submit" mat-raised-button  color="primary">
             <span>{{screen.actionButton.title}}</span>
-            <mat-icon *ngIf="screen.actionButton.icon" class="material-icons">{{screen.actionButton.icon}}</mat-icon>
+            <app-icon *ngIf="screen.actionButton.icon" [iconClass]="material-icons" [iconName]="screen.actionButton.icon"></app-icon>
         </button>
     </mat-dialog-actions>
 </form>

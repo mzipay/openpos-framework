@@ -11,12 +11,10 @@
         <mat-card-actions *ngIf="screen.otherActions || screen.actionButton" align="end">
             <button *ngFor="let menuItem of screen.otherActions" mat-raised-button (click)="onAction(menuItem)">
                 <span>{{menuItem.title}}</span>
-                <!-- <mat-icon *ngIf="menuItem.icon" class="material-icons">{{menuItem.icon}}</mat-icon> -->
                 <app-icon *ngIf="menuItem.icon" [iconClass]="material-icons" [iconName]="menuItem.icon"></app-icon>
             </button>
             <button mat-raised-button  color=primary (click)="onFormSubmit()">
                 <span>{{screen.actionButton.title}}</span>
-                <!-- <mat-icon *ngIf="screen.actionButton.icon" class="material-icons">{{screen.actionButton.icon}}</mat-icon> -->
                 <app-icon *ngIf="screen.actionButton.icon" [iconClass]="material-icons" [iconName]="screen.actionButton.icon"></app-icon>
             </button>
         </mat-card-actions>

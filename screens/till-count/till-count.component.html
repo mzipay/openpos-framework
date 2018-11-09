@@ -15,7 +15,7 @@
     <div fxFlex="0 0 auto" fxLayoutAlign="end"  style="padding:10px 0px">
         <button *ngIf="nextAction" type="submit" mat-raised-button color=primary (click)="onNextAction()" form="dynamic-form">
             <span>Next</span>
-            <mat-icon class="material-icons">{{nextAction.icon}}</mat-icon>
+            <app-icon [iconClass]="material-icons" [iconName]="nextAction.icon"></app-icon>
         </button>
     </div>
 </div>

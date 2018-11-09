@@ -5,7 +5,7 @@
 	<mat-card ngStyle.xl="width:50%" ngStyle.lg="width:60%" ngStyle.md="width:90%" ngStyle.sm="width:90%" ngStyle.xs="width:90%">
 		<mat-card-content>
 			<div style="margin-bottom:10px" fxLayout="row" fxLayoutAlign=" center">
-				<mat-icon *ngIf="screen.textIcon" class="material-icons" color="primary" style="margin-right:5px">{{screen.textIcon}}</mat-icon>
+				<app-icon *ngIf="screen.textIcon" color="primary" style="margin-right:5px" [iconClass]="material-icons"[iconName]="screen.textIcon"></app-icon>
 				<label class="text-md">{{screen.text}}</label>
             </div>
             <div *ngIf="screen.instructions" class="text-sm">{{screen.instructions}}</div>

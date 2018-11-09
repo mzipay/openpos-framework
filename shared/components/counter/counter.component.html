@@ -3,7 +3,7 @@
 </div>
 <div [formGroup]="formGroup" class="counter">
     <div *ngIf="iconName" class="icon">
-        <app-icon matPrefix iconName="{{iconName}}" iconClass="material-icons"></app-icon>
+        <app-icon matPrefix [iconName]="iconName" [iconClass]="material-icons"></app-icon>
     </div>
     <button mat-icon-button type="button" class="primary-background" [disabled]="minusDisabled" (click)="decrementQty()">
         <mat-icon>remove</mat-icon>

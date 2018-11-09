@@ -13,7 +13,7 @@
       <div fxLayoutAlign="end">
           <button type="submit" mat-button color="primary-inverse" (click)="onNextAction()" [disabled]="!nextAction.enabled" [appFocus]="true">
               <span>Next</span>
-              <mat-icon class="material-icons">{{nextAction.icon}}</mat-icon>
+              <app-icon [iconClass]="material-icons" [iconName]="nextAction.icon"></app-icon>
           </button>      
       </div>
   </ng-container>

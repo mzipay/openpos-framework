@@ -2,7 +2,7 @@
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '../shared';
-import { ScreenService, DialogService } from '../core';
+import { ScreenService, DialogService, IconService } from '../core';
 
 // Screens
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
@@ -59,6 +59,7 @@ import { SellStatusSectionComponent } from './templates/sell-template/sell-statu
 import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { SystemStatusDialogComponent } from './system-status/system-status-dialog.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
+import { IconConstants } from './icon.constants';
 
 const screens = [
     BasicItemSearchComponent,
@@ -148,7 +149,7 @@ const components = [
     ]
 })
 export class ScreensModule {
-    constructor(screenService: ScreenService, dialogService: DialogService) {
+    constructor(screenService: ScreenService, dialogService: DialogService, iconService: IconService) {
         ScreenConstants.screens.forEach((screen) => {
             screenService.addScreen(screen.name, screen.component);
         });
@@ -159,6 +160,10 @@ export class ScreensModule {
 
         ScreenConstants.templates.forEach((template) => {
             screenService.addScreen(template.name, template.component);
+        });
+
+        IconConstants.icons.forEach((icon) => {
+            iconService.addIcon(icon.name, icon.iconDef);
         });
     }
 
