@@ -1,11 +1,12 @@
 import { Logger } from './../../../core/services/logger.service';
 import { Subscription } from 'rxjs';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TextMask, IMaskSpec, ITextMask } from '../../textmask';
 import { FabToggleButtonComponent } from '../fab-toggle-button/fab-toggle-button.component';
 import { PluginService, Scan, BarcodeScannerPlugin } from '../../../core';
+import { ErrorStateMatcher } from '@angular/material';
 
 @Component({
     selector: 'app-prompt-input',
@@ -29,6 +30,7 @@ export class PromptInputComponent implements OnInit, OnDestroy {
 
     inputType: string;
     checked = true;
+    errorMatcher = new MyErrorStateMatcher();
 
     formatter: string;
     _textMask: ITextMask; // Mask object built for text-mask
@@ -128,4 +130,11 @@ export class PromptInputComponent implements OnInit, OnDestroy {
         this.promptFormGroup.patchValue(patchGroup);
     }
 
+}
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+    isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+      const isSubmitted = form && form.submitted;
+      return (control && (control.dirty && control.invalid));  // show error only when dirty and invalid
+    }
 }
