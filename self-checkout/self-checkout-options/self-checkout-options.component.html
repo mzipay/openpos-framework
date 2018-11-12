@@ -2,24 +2,23 @@
     <div fxFlexFill fxFlex="1 1 60%" fxLayout="column" fxLayoutAlign="center stretch" [ngSwitch]="currentView">
         <ng-template ngSwitchCase="ButtonList">
             <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.icon">
-                <mat-icon [svgIcon]="screen.icon" class="options-icon"></mat-icon>
+                <app-icon iconName="{{screen.icon}}" iconClass="options-icon"></app-icon>
             </div>
-            <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.title" class="text-md options-title">
+            <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.title" class="options-title">
                 <p>{{screen.title}}</p>
             </div>
-            <div fxFlex="0 0 auto" *ngIf="screen.optionsImage">
-                <div fxLayoutAlign="center center" style="padding: 0px; margin:8px;">
-                    <div [ngClass]="screen.optionsImage"></div>
-                </div>
+            <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.optionsImage">
+                <div [ngClass]="screen.optionsImage"></div>
             </div>
-            <div fxFlex="0 0 15%" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="64px" class="text-md text-center options-prompt" *ngIf="screen.prompt">
+            <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.prompt" class="text-center options-prompt">
                 <p>{{screen.prompt}}</p>
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="32px" *ngIf="screen.additionalButtons">
-                    <button mat-raised-button color="primary" *ngFor="let button of screen.additionalButtons" (click)="onMakeOptionSelection(button)">
-                        <span class="text-md" style="line-height: 64px; padding: 32px;">{{button.displayValue}}</span>
-                        <mat-icon *ngIf="button.icon" class="material-icons">{{button.icon}}</mat-icon>
-                    </button>
-                </div>
+            </div>
+            <div fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="32px" *ngIf="screen.additionalButtons"
+                class="options-buttons">
+                <button mat-raised-button color="primary" *ngFor="let button of screen.additionalButtons" (click)="onMakeOptionSelection(button)">
+                    <span class="text-md" style="line-height: 64px; padding: 32px;">{{button.displayValue}}</span>
+                    <app-icon *ngIf="button.icon" iconName="{{button.icon}}" iconClass="material-icons"></app-icon>
+                </button>
             </div>
             <mat-nav-list fxFlex="0 0 auto" *ngIf="optionItems.length > 0">
                 <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
@@ -31,8 +30,8 @@
         </ng-template>
 
         <ng-template ngSwitchCase="OptionForm">
-            <mat-card fxFlex="0 0 250px" class="options-form">
-                <app-dynamic-form-control fxFlexFill [submitButton]="{action: selectedOption.value, title:'Enter'}" [screenForm]="selectedOption.form"></app-dynamic-form-control>
+            <mat-card fxFlex="0 0 200px" class="options-form">
+                <app-dynamic-form-control fxFlexFill [screenForm]="selectedOption.form" [submitButton]="{title: 'Next', action: selectedOption.value, icon: 'keyboard_arrow_right'}"></app-dynamic-form-control>
             </mat-card>
         </ng-template>
     </div>

@@ -9,12 +9,12 @@
     <mat-card-actions fxFlex="0 0 auto" mat-dialog-actions >
         <button fxFlex="0 0 auto" mat-raised-button type="button" color="primary-inverse" *ngFor="let button of buttons" (click)="onButtonClick(button)">
             <span>{{button.label}}</span>
-            <mat-icon *ngIf="button.icon" class="material-icons">{{button.icon}}</mat-icon>
+            <app-icon *ngIf="button.icon" [iconClass]="material-icons" [iconName]="button.icon"></app-icon>
         </button>
         <div fxFlex="1 1 auto"></div>
         <button fxFlex="0 0 auto" type="submit" mat-raised-button color=primary *ngIf="submitButton">
             <span>{{submitButton.title}}</span>
-            <mat-icon *ngIf="submitButton.icon" class="material-icons">{{submitButton.icon}}</mat-icon>
+            <app-icon *ngIf="submitButton.icon" [iconClass]="material-icons" [iconName]="submitButton.icon"></app-icon>
         </button>
     </mat-card-actions>
 </form>

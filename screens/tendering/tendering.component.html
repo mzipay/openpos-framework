@@ -66,7 +66,7 @@
             <mat-card-actions align="end">
                 <button *ngIf="actionButton" mat-raised-button type="submit" color=primary [disabled]="! actionButton.enabled">
                     <span>{{actionButton.title}}</span>
-                    <mat-icon *ngIf="actionButton.icon" class="material-icons">{{actionButton.icon}}</mat-icon>
+                    <app-icon *ngIf="actionButton.icon" [iconClass]="material-icons" [iconName]="actionButton.icon"></app-icon>
                 </button>
             </mat-card-actions>
         </mat-card>
