@@ -1,6 +1,6 @@
 <div fxFlexFill *ngIf="screen.screenType==='PromptWithOptions'" fxLayout="column" fxLayoutAlign="center center">
     <mat-card ngStyle.xl="width:30%" ngStyle.lg="width:40%" ngStyle.md="width:60%" ngStyle.sm="width:70%" ngStyle.xs="width:80%">
-        <form [formGroup]="promptFormGroup" (ngSubmit)="onFormSubmit()">
+        <form fxFlex="1 1 100%" fxLayout="column" [formGroup]="promptFormGroup" (ngSubmit)="onFormSubmit()">
             <mat-card-content>
                 <app-prompt-input #promptInput [placeholderText]="screen.placeholderText" [responseType]="screen.responseType"
                     [responseText]="screen.responseText" [promptIcon]="screen.promptIcon" [hintText]="promptText"
@@ -11,25 +11,26 @@
                     <mat-error>
                         <app-show-errors [control]="box"></app-show-errors>
                     </mat-error>
-
                 </mat-form-field>
             </mat-card-content>
-        <mat-card-actions>
-            <mat-nav-list>
-                <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
-                <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onAction(o.value)" style="border-color: black">
-                    <span [ngClass]="{'muted-color' : !o.enabled}">{{o.displayValue}}</span>
-                    <mat-icon class="material-icons pull-right line-item-caret" [ngClass]="{'muted-color' : !o.enabled}" style="top: 10px;">keyboard_arrow_right</mat-icon>
-                </mat-list-item>
-            </mat-nav-list>
-        </mat-card-actions>
-        <mat-card-actions align="end">
-            <button *ngIf="actionButton" mat-raised-button type="submit" color=primary>
-                <span>{{actionButton.title}}</span>
-                <app-icon *ngIf="actionButton.icon" [iconClass]="material-icons" [iconName]="actionButton.icon"></app-icon>
-            </button>
 
-        </mat-card-actions>
-    </form>
-</mat-card>
+            <div fxFlex="1 1 auto" style="overflow: auto;">
+                <mat-nav-list>
+                    <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
+                    <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onAction(o.value)" style="border-color: black">
+                        <span [ngClass]="{'muted-color' : !o.enabled}">{{o.displayValue}}</span>
+                        <mat-icon class="material-icons pull-right line-item-caret" [ngClass]="{'muted-color' : !o.enabled}"
+                            style="top: 10px;">keyboard_arrow_right</mat-icon>
+                    </mat-list-item>
+                </mat-nav-list>
+            </div>
+
+            <mat-card-actions align="end">
+                <button *ngIf="actionButton" mat-raised-button type="submit" color=primary>
+                    <span>{{actionButton.title}}</span>
+                    <app-icon *ngIf="actionButton.icon" [iconClass]="material-icons" [iconName]="actionButton.icon"></app-icon>
+                </button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
 </div>
