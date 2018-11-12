@@ -6,6 +6,7 @@ import { StatusBarData, NavListComponent } from '../../../../shared';
 import { SellScreenUtils, ISellScreen } from './sell-screen.interface';
 import { ISellTemplate } from './sell-template.interface';
 import { SellStatusSectionData } from '../sell-status-section/sell-status-section.data';
+import { Configuration } from '../../../../configuration/configuration';
 import { MatDialog } from '@angular/material';
 
 @Component({
@@ -94,5 +95,9 @@ export class SellComponent extends AbstractTemplate<any> {
 
     this.drawerOpen = this.mediaService.mediaObservableFromMap(openMap);
     this.drawerMode = this.mediaService.mediaObservableFromMap(modeMap);
+  }
+
+  public enableMenuClose(): boolean {
+    return Configuration.enableMenuClose;
   }
 }
