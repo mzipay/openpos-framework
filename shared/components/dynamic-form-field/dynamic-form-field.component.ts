@@ -10,7 +10,7 @@ import { Subscription, Observable, of  } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ITextMask, TextMask } from '../../textmask';
 import { DynamicDateFormFieldComponent } from '../dynamic-date-form-field/dynamic-date-form-field.component';
-import { SessionService, ScreenService, PluginService, IFormElement, Scan, BarcodeScannerPlugin } from '../../../core';
+import { SessionService, ScreenService, PluginService, IFormElement, Scan, BarcodeScannerPlugin, IDynamicListField } from '../../../core';
 import { PopTartComponent } from '../pop-tart/pop-tart.component';
 
 @Component({
@@ -73,10 +73,24 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
 
     if (this.formField.inputType === 'ComboBox' || this.formField.inputType === 'SubmitOptionList' ||
       this.formField.inputType === 'ToggleButton' || this.formField.inputType === 'PopTart') {
-      this.valuesSubscription = this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
-        this.values = data;
-        this.log.info('asynchronously received ' + this.values.length + ' items for ' + this.formField.id);
-      });
+      let getValuesFromServer = true;
+      if ('dynamicListEnabled' in this.formField) {
+          // if dynamicListEnabled property is provided, we will observe its value
+          const dynFormFld = <any>this.formField;
+          getValuesFromServer = dynFormFld.dynamicListEnabled;
+      }
+
+      if (getValuesFromServer) {
+        this.valuesSubscription = this.screenService.getFieldValues(this.formField.id).subscribe((data) => {
+            this.values = data;
+            this.log.info('asynchronously received ' + this.values.length + ' items for ' + this.formField.id);
+        });
+      } else {
+        this.values = this.formField.values;
+        this.log.info(`Using ${this.values.length} values received on the screen for ${this.formField.id}`);
+      }
+
+
     }
 
     if (this.formField.inputType === 'NumericText' ||
