@@ -53,7 +53,8 @@ import {
     TrainingDialogComponent,
     TrainingWrapperComponent,
     MessageDialogComponent,
-    TimeChooserComponent
+    TimeChooserComponent,
+    MenuComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe } from './pipes';
@@ -89,7 +90,8 @@ const components = [
     TrainingDialogComponent,
     TrainingWrapperComponent,
     MessageDialogComponent,
-    TimeChooserComponent
+    TimeChooserComponent,
+    MenuComponent
 ];
 
 const directives = [
