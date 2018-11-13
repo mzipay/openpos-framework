@@ -30,4 +30,5 @@ export * from './training-dialog/training-overlay-ref';
 export * from './training-dialog/training-token';
 export * from './training-dialog/training-element';
 export * from './time-chooser/time-chooser.component';
+export * from './pager/pager.component';
 export * from './menu/menu.component';

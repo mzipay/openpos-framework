@@ -9,11 +9,15 @@ To use this library add to following to your dependencies in `package.json`
 ```
 
 ## Development Setup
-For development on the library you'll want to link your client application to openpos-client-core-lib by the following steps.
+If you are making changes to the core library you'll want to link your client application to openpos-client-core-lib by the following steps in order to make the development life cycle quicker.
 
-Run `npm link` to create a link to openpos-client-core-lib in your local npm cache under the name `@jumpmind/openpos-client-core-lib`
+Run the grunt command from the openpos-client-core-lib directory.  If grunt is not installed, install it by running:
 
-Then from your client application run `npm link @jumpmind/openpos-client-core-lib` to add a link to openpos-client-core-lib in your client node_modules.
+`npm install grunt --save-dev`
+
+The grunt task will copy core lib changes out to a common location and then it will link that location to npm.
+
+Lastly, from your client application run `npm link @jumpmind/openpos-client-core-lib` to add a link to openpos-client-core-lib in your client node_modules.
 
 ## Debugging the core library
 In your launch.json file configuration section the following to change the mapping from the client node modules to the core source code
@@ -22,3 +26,7 @@ In your launch.json file configuration section the following to change the mappi
       "webpack:/<path-to-client>/node_modules/openpos-core/*": "<path-to-open-pos.git>/openpos-client-core-lib/src/app/openpos-core/*"    
   }
 ```
+
+## Contributing changes
+
+If you want to contribute changes you can fork this project.  When you want to contribute code back make a push request back to the original project.

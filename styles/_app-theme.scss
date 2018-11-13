@@ -1,6 +1,7 @@
 @import '~@angular/material/theming';
 @import './themes/component-theme-mixins';
 @import '../shared/layout-components/layout-component-themes';
+@import '../shared/components/component-theme-mixins';
 
 @include mat-core();
 
@@ -8,6 +9,7 @@
 
     @include component-theme-mixins($theme);
     @include layout-component-themes($theme);
+    @include openpos-component-theme-mixins($theme);
 
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));

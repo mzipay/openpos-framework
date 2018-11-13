@@ -48,7 +48,7 @@ export class LoaderComponent implements OnInit, OnDestroy, IMessageHandler<ILoad
             stateChanging = this.loading;
             this.loading = false;
             this.show = false;
-        } else if (this.loading || force) {
+        } else if ((this.loading && !this.show) || force) {
             stateChanging = !this.show;
             this.log.info(`showing the loading dialog NOW with a title of: ${message.title} `);
             this.loading = true;
