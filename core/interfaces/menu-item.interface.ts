@@ -9,4 +9,5 @@ export interface IMenuItem {
     confirmationMessage: string;
     buttonSize: string;
     fontSize: string;
+    keybind: string;
 }
