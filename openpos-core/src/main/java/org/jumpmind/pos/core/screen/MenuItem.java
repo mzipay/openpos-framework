@@ -37,6 +37,7 @@ public class MenuItem implements IUIAction, Serializable {
     private String buttonSize;
     private String fontSize;
     private boolean active = false;
+    private String keybind;
 
     public final static String FONT_SIZE_XS = "text-xs";
     public final static String FONT_SIZE_SM = "text-sm";
@@ -49,6 +50,19 @@ public class MenuItem implements IUIAction, Serializable {
     public final static String BUTTON_SIZE_MD = "menuItem-md";
     public final static String BUTTON_SIZE_LG = "menuItem-lg";
     public final static String BUTTON_SIZE_XL = "menuItem-xl";
+    
+    public final static String KEY_F1 = "F1";
+    public final static String KEY_F2 = "F2";
+    public final static String KEY_F3 = "F3";
+    public final static String KEY_F4 = "F4";
+    public final static String KEY_F5 = "F5";
+    public final static String KEY_F6 = "F6";
+    public final static String KEY_F7 = "F7";
+    public final static String KEY_F8 = "F8";
+    public final static String KEY_F9 = "F9";
+    public final static String KEY_F10 = "F10";
+    public final static String KEY_F11 = "F11";
+    public final static String KEY_F12 = "F12";
     
     public MenuItem() {
     }
@@ -250,5 +264,20 @@ public class MenuItem implements IUIAction, Serializable {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+
+
+    public String getKeybind() {
+        return keybind;
+    }
+
+
+    public void setKeybind(String keybind) {
+        this.keybind = keybind;
+    }
+    
+    public MenuItem keybind(String keybind) {
+        this.setKeybind(keybind);
+        return this;
+    }
     
 }
