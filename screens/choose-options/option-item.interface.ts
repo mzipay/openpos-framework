@@ -7,4 +7,5 @@ export interface IOptionItem {
     selected: boolean;
     icon: String;
     form: IForm;
+    keybind: String;
 }

@@ -1,5 +1,5 @@
 
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, HostListener } from '@angular/core';
 import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../core';
 import { IOptionItem } from './option-item.interface';
 import { IChooseOptionsScreen } from './choose-options-screen.interface';
@@ -42,6 +42,24 @@ export class ChooseOptionsComponent extends PosScreen<IChooseOptionsScreen> impl
   onBackButtonPressed(): void {
     this.currentView = this.screen.displayStyle;
     this.session.unregisterActionIntercepter(ChooseOptionsComponent.UNDO);
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  public onKeydown(event: KeyboardEvent) {
+    // Map F1 -> F12 to local menu buttons
+    const regex = /^F(\d+)$/;
+    let bound = false;
+    if (regex.test(event.key)) {
+      for (const option of this.optionItems) {
+        if (option.keybind === event.key) {
+          bound = true;
+          this.onMakeOptionSelection(option);
+        }
+      }
+    }
+    if (bound) {
+      event.preventDefault();
+    }
   }
 
 }
