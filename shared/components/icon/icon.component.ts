@@ -11,7 +11,7 @@ export class IconComponent {
     @Input()
     set iconName(iconName: string) {
         this.iconDef = this.iconService.resolveIcon(iconName);
-        this.isLocalIcon = (iconName.startsWith('openpos_')) || (this.iconDef && this.iconDef.iconType === 'svg');
+        this.isLocalIcon = (iconName && (iconName.startsWith('openpos_')) || (this.iconDef && this.iconDef.iconType === 'svg'));
 
         if (this.iconDef && this.iconDef.iconType !== 'svg') {
             this._iconName = this.iconDef.iconName;
