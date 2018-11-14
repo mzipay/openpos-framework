@@ -7,4 +7,5 @@ public interface ILegacyButtonSpec {
     public String getLabel();
     public String getLabelTag();
     public Boolean getEnabledFlag();
+    public String getKeyName();
 }

@@ -13,6 +13,7 @@ public class OptionItem implements IUIAction, Serializable {
     private boolean enabled = true;
     private boolean selected = false;
     private String icon;
+    private String keybind;
 
     private Form form = new Form();
 
@@ -120,6 +121,21 @@ public class OptionItem implements IUIAction, Serializable {
 
     public Form getForm() {
         return form;
+    }
+
+    @Override
+    public String getKeybind() {
+        return keybind;
+    }
+
+    @Override
+    public void setKeybind(String keybind) {
+        this.keybind = keybind;
+    }
+
+    public OptionItem keybind(String keybind) {
+        this.setKeybind(keybind);
+        return this;
     }
 
 }

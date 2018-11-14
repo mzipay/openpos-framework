@@ -558,6 +558,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                     String labelTag = buttonSpec.getLabelTag();
                     String label = labelTag;
                     String action = buttonSpec.getActionName();
+                    String keyName = buttonSpec.getKeyName();
                     try {
                         label = legacyPOSBeanService.getLegacyUtilityManager(legacyScreen).retrieveText(panelSpec.getBeanSpecName(),
                                 getResourceBundleFilename(), labelTag, labelTag);
@@ -608,6 +609,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                         actionItem.setIcon(iconRegistry.get(labelTag));
                         actionItem.setEnabled(enabled);
                         actionItem.setAction(action);
+                        actionItem.setKeybind(keyName);
                         if (actionOverrider != null) {
                             actionOverrider.hideOrOverride(legacyScreen, labelTag, actionItem);
                         }
