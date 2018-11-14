@@ -53,7 +53,9 @@ import {
     TrainingDialogComponent,
     TrainingWrapperComponent,
     MessageDialogComponent,
+    MenuComponent,
     TimeChooserComponent,
+    PagerComponent,
     StatusBarStatusControlComponent,
     STATUS_BAR_STATUS_CONTROL_COMPONENT
 } from './components';
@@ -91,7 +93,9 @@ const components = [
     TrainingDialogComponent,
     TrainingWrapperComponent,
     MessageDialogComponent,
+    MenuComponent,
     TimeChooserComponent,
+    PagerComponent,
     StatusBarStatusControlComponent
 ];
 
