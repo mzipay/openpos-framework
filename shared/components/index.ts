@@ -21,6 +21,7 @@ export * from './date-part-chooser/date-part-chooser.component';
 export * from './date-part-chooser/date-part-chooser-field/date-part-chooser-field.component';
 export * from './date-part-chooser/date-part-chooser-dialog/date-part-chooser-dialog.component';
 export * from './message-dialog/message-dialog.component';
+export * from './status-bar-status-control/status-bar-status-control.component';
 
 export * from './primary-button/primary-button.component';
 export * from './secondary-button/secondary-button.component';

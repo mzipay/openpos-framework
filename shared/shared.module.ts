@@ -53,7 +53,9 @@ import {
     TrainingDialogComponent,
     TrainingWrapperComponent,
     MessageDialogComponent,
-    TimeChooserComponent
+    TimeChooserComponent,
+    StatusBarStatusControlComponent,
+    STATUS_BAR_STATUS_CONTROL_COMPONENT
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe } from './pipes';
@@ -89,7 +91,8 @@ const components = [
     TrainingDialogComponent,
     TrainingWrapperComponent,
     MessageDialogComponent,
-    TimeChooserComponent
+    TimeChooserComponent,
+    StatusBarStatusControlComponent
 ];
 
 const directives = [
@@ -157,6 +160,7 @@ const pipes = [
         ...pipes
     ],
     providers: [
+        { provide: STATUS_BAR_STATUS_CONTROL_COMPONENT, useValue: StatusBarStatusControlComponent }
     ]
 })
 export class SharedModule {}

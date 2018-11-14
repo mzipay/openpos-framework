@@ -21,3 +21,4 @@ export * from './ping-params.interface';
 export * from './ping-result.interface';
 export * from './date-part-chooser-field.interface';
 export * from './message-dialog-properties.interface';
+export * from './status-bar-control.interface';
