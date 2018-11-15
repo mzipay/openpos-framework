@@ -1,9 +1,11 @@
 import { IStatusBarControl } from './../../../core/interfaces';
 import { MatSnackBar } from '@angular/material';
-import { Component, Input, ViewChild, ViewContainerRef, Inject, ComponentFactoryResolver, AfterViewInit, InjectionToken } from '@angular/core';
+import { Component, Input, ViewChild, ViewContainerRef, Inject, ComponentFactoryResolver, AfterViewInit, InjectionToken, HostListener } from '@angular/core';
 import { StatusBarData } from './status-bar-data';
 import { SessionService, PluginService, FileUploadService, TrainingOverlayService } from '../../../core';
 import { ComponentType } from '@angular/cdk/overlay/index';
+import { Configuration } from '../../../configuration/configuration';
+
 
 export const STATUS_BAR_STATUS_CONTROL_COMPONENT = new InjectionToken<ComponentType<IStatusBarControl>>('StatusBarStatusControlComponent');
 @Component({
@@ -35,6 +37,19 @@ export class StatusBarComponent implements IStatusBarControl, AfterViewInit {
 
   public onTraining() {
     this.trainingService.open();
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  public onEscape() {
+    if (Configuration.enableKeybinds) {
+      if (this.data && this.data.backButton && this.data.backButton.enabled) {
+        this.session.onAction(this.data.backButton);
+        event.preventDefault();
+      } else if (this.data && this.data.logoutButton && this.data.logoutButton.enabled) {
+        this.session.onAction(this.data.logoutButton);
+        event.preventDefault();
+      }
+    }
   }
 
 }
