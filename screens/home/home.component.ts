@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { ObservableMedia} from '@angular/flex-layout';
 import { IMenuItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
+import { Configuration } from '../../configuration/configuration';
 
 @Component({
   selector: 'app-home',
@@ -53,18 +54,25 @@ export class HomeComponent extends PosScreen<any> implements OnInit {
   @HostListener('document:keydown', ['$event'])
   public onKeydown(event: KeyboardEvent) {
     // Map F1 -> F12 to local menu buttons
-    const regex = /^F(\d+)$/;
-    let bound = false;
-    if (regex.test(event.key)) {
-      for (const menuItem of this.menuItems) {
-        if (menuItem.keybind === event.key) {
-          bound = true;
-          this.session.onAction(menuItem);
+    if (Configuration.enableKeybinds) {
+      const regex = /^F(\d+)$/;
+      let bound = false;
+      if (regex.test(event.key)) {
+        for (const menuItem of this.menuItems) {
+          if (menuItem.keybind === event.key) {
+            bound = true;
+            this.session.onAction(menuItem);
+          }
         }
       }
-    }
-    if (bound) {
-      event.preventDefault();
+      if (bound) {
+        event.preventDefault();
+      }
     }
   }
+
+  public keybindsEnabled() {
+    return Configuration.enableKeybinds;
+  }
+
 }

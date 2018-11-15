@@ -13,4 +13,5 @@ export const Configuration = {
     maxResponseSizeBytes: 79500,
     enableAutocomplete: false,
     enableMenuClose: true,
+    enableKeybinds: false,
 };
