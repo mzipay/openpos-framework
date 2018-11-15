@@ -140,6 +140,9 @@ export class DialogService {
             if (!this.dialogRef || !this.dialogRef.componentInstance) {
                 this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
                 this.dialogRef = this.dialog.open(DialogContentComponent, dialogProperties);
+                this.dialogRef.afterClosed().subscribe(result => {
+                    this.dialogRef = null;
+                });
             } else {
                 this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' refreshing content...');
                 this.dialogRef.updateSize('' + dialogProperties.minWidth, '' + dialogProperties.minHeight);
