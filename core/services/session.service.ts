@@ -170,7 +170,7 @@ export class SessionService implements IMessageHandler<any> {
                     if (!this.onServerConnect.value) {
                         this.onServerConnect.next(true);
                     }
-                    this.sendMessage(new CancelLoadingMessage());
+                    this.cancelLoading();
                 } else if (stompState === 'DISCONNECTING') {
                     this.log.info('STOMP disconnecting');
                 } else if (stompState === 'CLOSED') {
