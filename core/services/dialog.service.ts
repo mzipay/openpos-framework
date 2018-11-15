@@ -34,7 +34,7 @@ export class DialogService {
         // once dialog service has started. Handles case where server is 'showing' a dialog
         // but client is starting up. If we wait to subscribe until start() method, we can
         // miss the dialog.
-        this.session.getMessages('Dialog').subscribe(s => { if (s) { this.$dialogMessages.next(s); } } );
+        this.session.getMessages('Dialog').subscribe(s => { if (s) { this.$dialogMessages.next(s); } });
     }
 
     public start() {
@@ -70,13 +70,28 @@ export class DialogService {
         }
     }
 
+    private isDialogRefOpen(): boolean {
+        const dialogs = this.dialog.openDialogs;
+        for (let index = 0; index < dialogs.length; index++) {
+            if (dialogs[index] === this.dialogRef) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public closeDialog(cancelLoading: boolean) {
         if (this.dialogRef) {
             this.log.info('[DialogService] closing dialog ref');
             if (cancelLoading) {
-              this.dialogRef.afterClosed().subscribe(result => {
-                  this.session.cancelLoading();
-              });
+                if (this.isDialogRefOpen()) {
+                    this.dialogRef.afterClosed().subscribe(result => {
+                        this.session.cancelLoading();
+                    });
+                } else {
+                    this.log.info('dialogRef was not null, but the dialog also was not open');
+                    this.session.cancelLoading();
+                }
             }
             this.dialogRef.close();
             this.dialogRef = null;
@@ -140,9 +155,6 @@ export class DialogService {
             if (!this.dialogRef || !this.dialogRef.componentInstance) {
                 this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
                 this.dialogRef = this.dialog.open(DialogContentComponent, dialogProperties);
-                this.dialogRef.afterClosed().subscribe(result => {
-                    this.dialogRef = null;
-                });
             } else {
                 this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' refreshing content...');
                 this.dialogRef.updateSize('' + dialogProperties.minWidth, '' + dialogProperties.minHeight);
