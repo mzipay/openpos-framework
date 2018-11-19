@@ -24,7 +24,8 @@ import {
     PhoneUSValidatorDirective,
     OpenposScreenOutletDirective,
     ScreenDirective,
-    AutocompleteDirective
+    AutocompleteDirective,
+    DefaultImageDirective
 } from './directives';
 import {
     PromptInputComponent,
@@ -56,6 +57,7 @@ import {
     MenuComponent,
     TimeChooserComponent,
     PagerComponent,
+    CatalogBrowserItemComponent,
     StatusBarStatusControlComponent,
     STATUS_BAR_STATUS_CONTROL_COMPONENT
 } from './components';
@@ -96,7 +98,8 @@ const components = [
     MenuComponent,
     TimeChooserComponent,
     PagerComponent,
-    StatusBarStatusControlComponent
+    StatusBarStatusControlComponent,
+    CatalogBrowserItemComponent
 ];
 
 const directives = [
@@ -113,7 +116,8 @@ const directives = [
     PhoneUSValidatorDirective,
     OpenposScreenOutletDirective,
     ScreenDirective,
-    AutocompleteDirective
+    AutocompleteDirective,
+    DefaultImageDirective
 ];
 
 const pipes = [

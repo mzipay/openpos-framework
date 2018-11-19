@@ -28,11 +28,9 @@
                         <mat-grid-list cols="5" rowHeight="9:10">
                             <mat-grid-tile *ngFor="let item of items">
                                 <mat-card class="item-card">
-                                    <mat-card-content fxLayoutAlign="center center" fxLayout="column">
-                                        <button mat-button (click)="onItemSelected(item)" class="line-spacing-sm" >
-                                            <div class="text-xs" style="overflow-wrap: break-word">{{item.posItemId}}</div>
-                                            <img *ngIf="item.menuItems[0] && item.menuItems[0].title==='url'" class="item-img" src="{{item.menuItems[0].url}}"  alt="{{item.posItemId}}" >
-                                            <div class="text-xs" style="overflow-wrap: break-word">{{item.description}}</div>
+                                    <mat-card-content fxFlex="auto">
+                                        <button fxFlexFill (click)="onItemSelected(item)" class="catalog-browser-item-button">
+                                            <app-catalog-browser-item fxFlexFill [item]="item"></app-catalog-browser-item>
                                         </button>
                                     </mat-card-content>
                                 </mat-card>
