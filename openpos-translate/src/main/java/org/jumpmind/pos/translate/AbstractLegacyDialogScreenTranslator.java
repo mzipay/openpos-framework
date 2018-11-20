@@ -1,6 +1,6 @@
 package org.jumpmind.pos.translate;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.util.Optional;
 import java.util.Properties;
