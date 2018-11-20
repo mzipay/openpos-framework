@@ -12,3 +12,4 @@ export * from './phone.directive';
 export * from './screen-outlet.directive';
 export * from './screen.directive';
 export * from './autocomplete.directive';
+export * from './default-image.directive';

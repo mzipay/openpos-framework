@@ -26,9 +26,9 @@
 
 }
 
-.item-img {
-    max-width:100%;
-    max-height:100%;
+.catalog-browser-item-button {
+    -webkit-appearance: none;  // turn off gradient and rounding of buttons on iOS
+    border: none;
 }
 
 .line-spacing-sm {
@@ -49,6 +49,8 @@
 .item-card {
     padding: 4px;
     margin: 5px;
+    width: 200px;
+    height: 200px;
 }
 
 .browser-card {

@@ -22,7 +22,7 @@ export class MoneyFormatter implements IFormatter {
                 case 2:
                     return `$${value}`;
                 default:
-                    return `$${value.toString().slice(0, i + 2)}`;
+                    return `$${value.toString().slice(0, i + 3)}`;
             }
 
         } else {

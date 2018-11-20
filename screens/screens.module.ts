@@ -39,6 +39,7 @@ import { SelectionListComponent } from './selection-list/selection-list.componen
 import { PrintPreviewComponent } from './print-preview/print-preview.component';
 import { ItemSearchResultsComponent } from './item-search-results/item-search-results.component';
 import { ItemOptionsComponent } from './item-options/item-options.component';
+import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
 
 // Templates
 import { BlankComponent } from './templates/blank/blank.component';
@@ -54,7 +55,6 @@ import { LoginDialogComponent } from './login/login-dialog.component';
 import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { VersionComponent } from './version/version.component';
 import { ScreenConstants } from './screen.constants';
-import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
 import { SellStatusSectionComponent } from './templates/sell-template/sell-status-section/sell-status-section.component';
 import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { SystemStatusDialogComponent } from './system-status/system-status-dialog.component';
