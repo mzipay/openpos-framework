@@ -72,9 +72,6 @@ public class StateManager implements IStateManager {
     @Autowired
     private UIManager uiManager;
     
-    @Autowired
-    private TestManager testManager;
-    
     @Value("${org.jumpmind.pos.core.flow.StateManager.autoSaveState:false}")
     private boolean autoSaveState = false;    
 
@@ -102,7 +99,6 @@ public class StateManager implements IStateManager {
         this.applicationState.setAppId(appId);
         this.applicationState.setNodeId(nodeId);
         this.uiManager.init(this);
-        this.testManager.init(this);
         
         boolean resumeState = false;
         

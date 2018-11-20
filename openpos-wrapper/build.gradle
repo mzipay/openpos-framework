@@ -2,7 +2,8 @@ apply from: '../openpos-core/common.gradle'
 
 
 dependencies {
- 	compile (group:"org.jumpmind.symmetric", name:"symmetric-wrapper", version:"$symmetricVersion") {
+    System.out.println("********* ${symmetricVersion}")
+ 	compile (group:"org.jumpmind.symmetric", name:"symmetric-wrapper", version:"${symmetricVersion}") {
        exclude group:"bouncycastle"
        exclude group:"log4j"
        exclude group:"org.slf4j"

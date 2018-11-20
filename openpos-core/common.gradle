@@ -15,7 +15,6 @@ ext {
    springBootVersion = '1.5.9.RELEASE'
    springVersion = '4.3.13.RELEASE'
    jnaVersion = '4.1.0'
-   symmetricVersion='3.9.15'
    springfoxSwaggerVersion='2.9.2'   
    javaposVersion='1.14.2'
    slf4jVersion='1.7.25'
