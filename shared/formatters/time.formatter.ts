@@ -8,8 +8,8 @@ export enum TimeFormat {
 
 export class TimeFormatter implements IFormatter {
 
-    private hourRegex = /^[1-9]$|^0[1-9]$|^1[0-2]$/;
-    private minSecRegex = /^[0-9]$|^[1-5][0-9]$/;
+    private hourRegex = /^[1-9]$|^1[0-2]$/;
+    private minSecRegex = /^[0-9]$|^[0-5][0-9]$/;
 
     constructor(public format: TimeFormat) {
     }
