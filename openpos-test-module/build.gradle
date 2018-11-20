@@ -1,0 +1,7 @@
+apply from: "${openposDir}/openpos-core/common.gradle"
+apply from: "${openposDir}/openpos-service/common.gradle"
+
+dependencies {
+    compile project(":openpos-service")
+
+}

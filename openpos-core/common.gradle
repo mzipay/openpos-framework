@@ -10,6 +10,19 @@ apply plugin: 'java'
 sourceCompatibility=1.8
 targetCompatibility=1.8
 
+ext {
+   symmetricMavenUrl='http://maven.jumpmind.com/repo'
+   springBootVersion = '1.5.9.RELEASE'
+   springVersion = '4.3.13.RELEASE'
+   jnaVersion = '4.1.0'
+   symmetricVersion='3.9.15'
+   springfoxSwaggerVersion='2.9.2'   
+   javaposVersion='1.14.2'
+   slf4jVersion='1.7.25'
+   log4jVersion='1.2.17'
+}
+
+
 repositories {
     maven { url symmetricMavenUrl }
 }
@@ -21,12 +34,6 @@ eclipse {
     }
 }
 
-ext {
-   springBootVersion = '1.5.9.RELEASE'
-   springVersion = '4.3.13.RELEASE'
-   jnaVersion = '4.1.0'
-}
-
 task develop {
     description 'Generates Eclipse artifacts and sets up your development environment'
     dependsOn tasks.cleanEclipse, tasks.eclipse
@@ -34,6 +41,19 @@ task develop {
 }
 
 dependencies {
+
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
+    compile "org.springframework:spring-context:$springVersion"
+    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.13.10.RELEASE'  
+    compile group: 'org.joda', name: 'joda-money', version: '1.0.1'    
+
+
+    compile group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
+    compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: "${slf4jVersion}"
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: "${slf4jVersion}"
+    compile(group: 'log4j', name: 'log4j', version: "${log4jVersion}")   
+    
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'      
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile "org.springframework:spring-test:$springVersion"    

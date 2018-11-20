@@ -1,4 +1,4 @@
-package org.jumpmind.pos.core.startup;
+package org.jumpmind.pos.util.startup;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

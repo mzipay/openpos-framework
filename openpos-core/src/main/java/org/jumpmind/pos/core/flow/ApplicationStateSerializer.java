@@ -26,7 +26,7 @@ public class ApplicationStateSerializer {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    @Autowired
+    @Autowired(required=false)
     private IFlowConfigProvider flowConfigProvider;
 
     @PostConstruct

@@ -1,0 +1,7 @@
+apply from: "../openpos-core/common.gradle"
+apply from: "./common.gradle"
+
+dependencies {
+	compile project(":openpos-persist")
+	compile project(":openpos-util")
+}

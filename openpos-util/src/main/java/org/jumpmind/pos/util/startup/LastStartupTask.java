@@ -1,4 +1,4 @@
-package org.jumpmind.pos.core.startup;
+package org.jumpmind.pos.util.startup;
 
 import static java.lang.Integer.MAX_VALUE;
 

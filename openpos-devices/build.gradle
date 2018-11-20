@@ -1,0 +1,7 @@
+apply from: "../openpos-core/common.gradle"
+apply from: "../openpos-service/common.gradle"
+
+dependencies {
+    compile project(":openpos-service")
+    compile("org.javapos:javapos:${javaposVersion}")
+}
