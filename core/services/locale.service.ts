@@ -6,16 +6,14 @@ export const DEFAULT_LOCALE = 'en-US';
 @Injectable({
     providedIn: 'root',
   })
-export class LocaleService implements IMessageHandler<any>, OnInit {
+export class LocaleService implements IMessageHandler<any> {
 
     private locale = DEFAULT_LOCALE;
 
     constructor(public sessionService: SessionService) {
-    }
-
-    ngOnInit(): void {
         this.sessionService.registerMessageHandler(this);
     }
+
     handle(message: any) {
         if (message.locale) {
             this.locale = message.locale;
