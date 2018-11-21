@@ -4,8 +4,8 @@ import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Table;
 
-@Table(name="device_props")
-public class DevicePropsModel extends AbstractModel {
+@Table(name="device_prop")
+public class DevicePropModel extends AbstractModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -20,6 +20,9 @@ public class DevicePropsModel extends AbstractModel {
     
     @Column
     String propertyValue;
+    
+    @Column
+    String propertyType;
 
     public String getProfile() {
         return profile;
@@ -52,6 +55,13 @@ public class DevicePropsModel extends AbstractModel {
     public void setPropertyValue(String propertyValue) {
         this.propertyValue = propertyValue;
     }
+
+    public void setPropertyType(String propertyType) {
+        this.propertyType = propertyType;
+    }
     
+    public String getPropertyType() {
+        return propertyType;
+    }
     
 }

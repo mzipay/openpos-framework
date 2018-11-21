@@ -23,17 +23,17 @@ public class DeviceRepository {
 
     Query<DeviceModel> deviceQuery = new Query<DeviceModel>().named("deviceLookupByProfile").result(DeviceModel.class);
 
-    Query<DevicePropsModel> devicePropsQuery = new Query<DevicePropsModel>().named("deviceLookupByProfile").result(DevicePropsModel.class);
+    Query<DevicePropModel> devicePropsQuery = new Query<DevicePropModel>().named("devicePropsLookupByProfile").result(DevicePropModel.class);
 
     public Map<String, DeviceModel> getDevices(String profile) {
         Map<String, DeviceModel> byDeviceId = new HashMap<>();
         List<DeviceModel> devices = dbSession.query(deviceQuery, profile);
-        List<DevicePropsModel> properties = dbSession.query(devicePropsQuery, profile);
+        List<DevicePropModel> properties = dbSession.query(devicePropsQuery, profile);
         for (DeviceModel deviceModel : devices) {
             byDeviceId.put(deviceModel.getDeviceName(), deviceModel);
         }
 
-        for (DevicePropsModel devicePropsModel : properties) {
+        for (DevicePropModel devicePropsModel : properties) {
             DeviceModel deviceModel = byDeviceId.get(devicePropsModel.getDeviceName());
             if (deviceModel != null) {
                 deviceModel.add(devicePropsModel);

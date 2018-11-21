@@ -27,7 +27,7 @@ public class DeviceModel extends AbstractModel {
     @Column
     String factoryClass;
 
-    List<DevicePropsModel> properties = new ArrayList<>();
+    List<DevicePropModel> properties = new ArrayList<>();
 
     public String getProfile() {
         return profile;
@@ -69,15 +69,15 @@ public class DeviceModel extends AbstractModel {
         this.factoryClass = factoryClass;
     }
 
-    public void setProperties(List<DevicePropsModel> properties) {
+    public void setProperties(List<DevicePropModel> properties) {
         this.properties = properties;
     }
 
-    public List<DevicePropsModel> getProperties() {
+    public List<DevicePropModel> getProperties() {
         return properties;
     }
 
-    public void add(DevicePropsModel prop) {
+    public void add(DevicePropModel prop) {
         this.properties.add(prop);
     }
 
