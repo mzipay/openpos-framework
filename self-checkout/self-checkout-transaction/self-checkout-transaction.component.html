@@ -36,7 +36,7 @@
 				<div fxFlex="2 1 auto"></div>
 
 				<div style="width: 100%;">
-					<button mat-button *ngIf="!screen.customer && screen.loyaltyButton" (click)="doMenuItemAction(screen.loyaltyButton)" class="loyalty-button text-md">
+					<button mat-button *ngIf="!screen.readOnly && !screen.customer && screen.loyaltyButton" (click)="doMenuItemAction(screen.loyaltyButton)" class="loyalty-button text-md">
 						<span style="padding-right: 8px;">{{screen.loyaltyButton.title}}</span>
 						<app-icon [iconClass]="top" [iconName]="screen.loyaltyButton.icon"></app-icon>
 						<span style="padding-left: 8px;">ID</span>
