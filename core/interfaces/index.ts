@@ -20,3 +20,4 @@ export * from './message-handler.interface';
 export * from './ping-params.interface';
 export * from './ping-result.interface';
 export * from './message-dialog-properties.interface';
+export * from './barcode-scan-interceptor.interface';
