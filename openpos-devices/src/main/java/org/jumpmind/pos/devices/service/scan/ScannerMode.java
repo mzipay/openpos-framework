@@ -1,4 +1,4 @@
-package org.jumpmind.pos.devices.model;
+package org.jumpmind.pos.devices.service.scan;
 
 public enum ScannerMode {
 

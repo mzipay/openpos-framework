@@ -1,8 +1,8 @@
-package org.jumpmind.pos.devices.service;
+package org.jumpmind.pos.devices.service.scan;
 
-import java.io.Serializable;
+import org.jumpmind.pos.devices.service.DeviceRequest;
 
-public class ScannerRegistrationRequest implements Serializable {
+public class ScannerRegistrationRequest extends DeviceRequest {
 
     private static final long serialVersionUID = 1L;
 

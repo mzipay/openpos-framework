@@ -1,0 +1,6 @@
+---
+queries:
+-
+  name: deviceLookupByProfile
+  where: profile = ${profile}
+-  

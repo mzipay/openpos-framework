@@ -1,5 +1,8 @@
 package org.jumpmind.pos.devices.service;
 
+import org.jumpmind.pos.devices.service.print.PrintRequest;
+import org.jumpmind.pos.devices.service.scan.ScannerRegistrationRequest;
+import org.jumpmind.pos.devices.service.scan.ScannerStatusResult;
 import org.jumpmind.pos.service.IService;
 import org.jumpmind.pos.service.ServiceResult;
 import org.springframework.web.bind.annotation.RequestBody;

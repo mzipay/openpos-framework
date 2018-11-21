@@ -1,6 +1,5 @@
-package org.jumpmind.pos.devices.service;
+package org.jumpmind.pos.devices.service.scan;
 
-import org.jumpmind.pos.devices.model.ScannerMode;
 import org.jumpmind.pos.service.ServiceResult;
 
 public class ScannerStatusResult extends ServiceResult {
