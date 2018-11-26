@@ -2,11 +2,11 @@ package org.jumpmind.pos.translate;
 
 import java.util.Optional;
 
-import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.Signature;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SignatureCaptureScreen;
+import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
 
 public abstract class AbstractPOSSignatureCaptureScreen extends AbstractLegacyScreenTranslator<SignatureCaptureScreen> implements ILegacyBeanAccessor {

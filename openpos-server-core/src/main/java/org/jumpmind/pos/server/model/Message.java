@@ -1,4 +1,4 @@
-package org.jumpmind.pos.core.model;
+package org.jumpmind.pos.server.model;
 
 import java.io.Serializable;
 import java.util.HashMap;

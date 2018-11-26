@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormDisplayField;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.SellItem;
 import org.jumpmind.pos.core.screen.SellItemDetailScreen;
 import org.jumpmind.pos.core.template.SellTemplate;
+import org.jumpmind.pos.server.model.Action;
 
 public class SellItemDetailsScreenTranslator extends AbstractLegacyScreenTranslator<SellItemDetailScreen> {
 

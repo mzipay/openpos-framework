@@ -7,10 +7,10 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.core.screen.IPromptScreen;
 import org.jumpmind.pos.core.screen.IconType;
 

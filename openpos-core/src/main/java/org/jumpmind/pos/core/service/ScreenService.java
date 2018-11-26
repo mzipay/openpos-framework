@@ -19,7 +19,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.flow.ApplicationState;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IScreenInterceptor;
@@ -38,6 +37,9 @@ import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.ScreenType;
 import org.jumpmind.pos.core.screen.Toast;
 import org.jumpmind.pos.core.util.LogFormatter;
+import org.jumpmind.pos.server.model.Action;
+import org.jumpmind.pos.server.service.IActionListener;
+import org.jumpmind.pos.server.service.IMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

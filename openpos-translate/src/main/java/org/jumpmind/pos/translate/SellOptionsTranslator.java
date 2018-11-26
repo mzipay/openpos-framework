@@ -4,12 +4,12 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.ScreenType;
 import org.jumpmind.pos.core.template.SellTemplate;
+import org.jumpmind.pos.server.model.Action;
 
 public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Screen> {
 

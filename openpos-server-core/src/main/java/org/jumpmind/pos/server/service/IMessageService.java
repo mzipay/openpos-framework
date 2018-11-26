@@ -1,6 +1,6 @@
-package org.jumpmind.pos.core.service;
+package org.jumpmind.pos.server.service;
 
-import org.jumpmind.pos.core.model.Message;
+import org.jumpmind.pos.server.model.Message;
 
 public interface IMessageService {
 

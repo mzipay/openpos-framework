@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.ChooseOptionsScreen;
 import org.jumpmind.pos.core.screen.OptionItem;
 import org.jumpmind.pos.core.screen.ScreenType;
+import org.jumpmind.pos.server.model.Action;
 
 public class ChooseOptionsScreenTranslator<T extends ChooseOptionsScreen> extends AbstractLegacyScreenTranslator<T> { 
     

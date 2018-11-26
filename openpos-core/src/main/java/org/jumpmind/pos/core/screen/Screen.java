@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jumpmind.pos.core.flow.Action;
-import org.jumpmind.pos.core.model.Message;
 import org.jumpmind.pos.core.model.MessageType;
 import org.jumpmind.pos.core.template.AbstractTemplate;
 import org.jumpmind.pos.core.template.BlankWithBarTemplate;
+import org.jumpmind.pos.server.model.Action;
+import org.jumpmind.pos.server.model.Message;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;

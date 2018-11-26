@@ -32,6 +32,7 @@ import org.jumpmind.pos.core.flow.config.SubTransition;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.Toast;
 import org.jumpmind.pos.core.service.IScreenService;
+import org.jumpmind.pos.server.model.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

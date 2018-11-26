@@ -1,8 +1,8 @@
-package org.jumpmind.pos.core.service;
+package org.jumpmind.pos.server.service;
 
 import java.util.Collection;
 
-import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.server.model.Action;
 
 public interface IActionListener {
 

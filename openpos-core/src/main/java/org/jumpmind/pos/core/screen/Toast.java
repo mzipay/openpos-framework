@@ -1,7 +1,7 @@
 package org.jumpmind.pos.core.screen;
 
-import org.jumpmind.pos.core.model.Message;
 import org.jumpmind.pos.core.model.MessageType;
+import org.jumpmind.pos.server.model.Message;
 
 public class Toast extends Message {
 

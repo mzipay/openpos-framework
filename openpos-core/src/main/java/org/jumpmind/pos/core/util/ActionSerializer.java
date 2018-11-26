@@ -3,11 +3,11 @@ package org.jumpmind.pos.core.util;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
 import org.jumpmind.pos.core.model.IFormElement;
+import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.util.ObjectUtils;
 
 import com.fasterxml.jackson.core.JsonGenerator;

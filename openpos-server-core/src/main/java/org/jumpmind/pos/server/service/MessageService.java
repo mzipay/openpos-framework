@@ -1,11 +1,10 @@
-package org.jumpmind.pos.core.service;
+package org.jumpmind.pos.server.service;
 
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.jumpmind.pos.core.flow.Action;
-import org.jumpmind.pos.core.flow.FlowException;
+import org.jumpmind.pos.server.model.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class MessageService implements IMessageService {
     @Value("${org.jumpmind.pos.core.service.ScreenService.jsonIncludeNulls:true}")
     boolean jsonIncludeNulls = true;
     
-    @Autowired
+    @Autowired(required=false)
     List<IActionListener> actionListeners;
 
 
@@ -70,14 +69,16 @@ public class MessageService implements IMessageService {
     }
 
     @Override
-    public void sendMessage(String appId, String nodeId, org.jumpmind.pos.core.model.Message message) {
+    public void sendMessage(String appId, String nodeId, org.jumpmind.pos.server.model.Message message) {
         try {
             StringBuilder topic = new StringBuilder(128);
             topic.append("/topic/app/").append(appId).append("/node/").append(nodeId);
             byte[] json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message).getBytes("UTF-8");
             this.template.send(topic.toString(), MessageBuilder.withPayload(json).build());
+        } catch (RuntimeException ex) {
+            throw ex;
         } catch (Exception ex) {
-            throw new FlowException("Failed to serialize message for node: " + nodeId + " " + message, ex);
+            throw new RuntimeException("Failed to publish message for node: " + nodeId + " " + message, ex);
         }
     }
 

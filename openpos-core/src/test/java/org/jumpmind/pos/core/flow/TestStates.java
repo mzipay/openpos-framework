@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import org.jumpmind.pos.server.model.Action;
+
 public class TestStates {
     
     public static class HomeState implements IState {

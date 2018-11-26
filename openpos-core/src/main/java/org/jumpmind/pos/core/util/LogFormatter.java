@@ -3,7 +3,7 @@ package org.jumpmind.pos.core.util;
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
-import org.jumpmind.pos.core.flow.Action;
+import org.jumpmind.pos.server.model.Action;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

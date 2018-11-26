@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jumpmind.pos.core.flow.config.FlowConfig;
+import org.jumpmind.pos.server.model.Action;
 
 public class StateContext {
 

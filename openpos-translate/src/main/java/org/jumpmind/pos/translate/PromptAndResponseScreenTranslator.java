@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DialogProperties;
@@ -12,6 +11,7 @@ import org.jumpmind.pos.core.screen.IconType;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
 import org.jumpmind.pos.core.template.SellTemplate;
+import org.jumpmind.pos.server.model.Action;
 
 public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends AbstractPromptScreenTranslator<T> {
 

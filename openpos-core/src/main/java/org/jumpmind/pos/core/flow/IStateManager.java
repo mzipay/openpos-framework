@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.Toast;
+import org.jumpmind.pos.server.model.Action;
 
 
 public interface IStateManager {
