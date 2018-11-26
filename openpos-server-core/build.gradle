@@ -1,0 +1,45 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+
+apply from: '../openpos-core/common.gradle'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
+    }
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": project.name,
+                   "Implementation-Version": project.hasProperty('appVersion') ? appVersion : '0.0',
+                   "Project-Artifact": project.name,                       
+                   "Build-Version": project.hasProperty('appVersion') ? appVersion : '0.0',
+                   "Build-Time": new SimpleDateFormat("yyyyMMdd-HHmm").format(new Date()))
+    }    
+}  
+
+dependencies {
+	compile project(":openpos-util")
+    compile "net.java.dev.jna:jna:$jnaVersion"
+    compile "net.java.dev.jna:jna-platform:$jnaVersion"
+    compile "io.springfox:springfox-swagger2:$springfoxSwaggerVersion"
+    compile "io.springfox:springfox-swagger-ui:$springfoxSwaggerVersion"
+    
+    compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion") {
+        exclude module: "spring-boot-starter-tomcat"
+        exclude module: "spring-boot-starter-logging"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty:$springBootVersion"){
+        exclude module: "spring-boot-starter-logging"
+    }
+    compile("org.springframework.boot:spring-boot-starter-websocket:$springBootVersion"){
+        exclude module: "spring-boot-starter-tomcat"
+        exclude module: "spring-boot-starter-logging"
+    }
+    
+}
+
