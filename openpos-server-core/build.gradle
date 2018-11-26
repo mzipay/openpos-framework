@@ -24,8 +24,6 @@ jar {
 
 dependencies {
 	compile project(":openpos-util")
-    compile "net.java.dev.jna:jna:$jnaVersion"
-    compile "net.java.dev.jna:jna-platform:$jnaVersion"
     compile "io.springfox:springfox-swagger2:$springfoxSwaggerVersion"
     compile "io.springfox:springfox-swagger-ui:$springfoxSwaggerVersion"
     

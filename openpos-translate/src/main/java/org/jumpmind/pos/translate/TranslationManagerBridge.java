@@ -6,7 +6,7 @@ import org.jumpmind.pos.core.device.IDeviceRequest;
 import org.jumpmind.pos.core.device.IDeviceResponse;
 import org.jumpmind.pos.core.flow.Action;
 import org.jumpmind.pos.core.model.Form;
-import org.jumpmind.pos.util.RMICallbackProxyManager;
+import org.jumpmind.pos.core.util.RMICallbackProxyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

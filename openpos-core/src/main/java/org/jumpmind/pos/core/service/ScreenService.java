@@ -37,7 +37,7 @@ import org.jumpmind.pos.core.screen.IHasForm;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.ScreenType;
 import org.jumpmind.pos.core.screen.Toast;
-import org.jumpmind.pos.util.LogFormatter;
+import org.jumpmind.pos.core.util.LogFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

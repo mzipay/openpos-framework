@@ -1,4 +1,4 @@
-package org.jumpmind.pos.core.config;
+package org.jumpmind.pos.server.config;
 
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;

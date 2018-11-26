@@ -2,13 +2,13 @@ package org.jumpmind.pos.core.service;
 
 import java.util.Arrays;
 
-import org.jumpmind.pos.core.config.MessageUtils;
-import org.jumpmind.pos.core.config.SessionSubscribedEvent;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.IconType;
+import org.jumpmind.pos.server.config.MessageUtils;
+import org.jumpmind.pos.server.config.SessionSubscribedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

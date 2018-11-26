@@ -1,4 +1,4 @@
-package org.jumpmind.pos.util;
+package org.jumpmind.pos.core.util;
 
 import java.io.Serializable;
 import java.rmi.NoSuchObjectException;
