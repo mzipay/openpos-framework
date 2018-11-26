@@ -2,27 +2,24 @@ package org.jumpmind.pos.service;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.StringUtils;
-
 public class ServiceResult implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
-    public static final String RESULT_SUCCESS = "SUCCESS";
-    public static final String RESULT_NOT_FOUND = "NOT_FOUND";
+    public enum Result  { SUCCESS, FAILURE, UNKNOWN };
     
-    private String resultStatus = "";
+    private Result resultStatus = Result.UNKNOWN;
     private String resultMessage = "";
     private Object extension;
     
     public boolean isSuccess() {
-        return StringUtils.equals(resultStatus, RESULT_SUCCESS);
+        return resultStatus == Result.SUCCESS;
     }
     
-    public String getResultStatus() {
+    public Result getResultStatus() {
         return resultStatus;
     }
-    public void setResultStatus(String resultStatus) {
+    public void setResultStatus(Result resultStatus) {
         this.resultStatus = resultStatus;
     }
     public String getResultMessage() {

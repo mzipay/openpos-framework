@@ -1,4 +1,4 @@
-package org.jumpmind.pos.core.service;
+package org.jumpmind.pos.server.service;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 
-@Component
+@Component("serverCoreSessionConnectListener")
 public class SessionConnectListener implements ApplicationListener<SessionConnectEvent>, MessageUtils {
 
     Logger logger = LoggerFactory.getLogger(getClass());
@@ -36,15 +36,15 @@ public class SessionConnectListener implements ApplicationListener<SessionConnec
         sessionCompatible.put(sessionId, serverCompatibilityVersion == null || serverCompatibilityVersion.equals(compatibilityVersion));
     }
     
-    protected boolean isSessionAuthenticated(String sessionId) {        
+    public boolean isSessionAuthenticated(String sessionId) {        
         return this.sessionAuthenticated.get(sessionId) != null && this.sessionAuthenticated.get(sessionId);
     }
     
-    protected boolean isSessionCompatible(String sessionId) {        
+    public boolean isSessionCompatible(String sessionId) {        
         return this.sessionCompatible.get(sessionId) != null && this.sessionCompatible.get(sessionId);
     }
     
-    protected void removeSession(String sessionId) {
+    public void removeSession(String sessionId) {
         this.sessionAuthenticated.remove(sessionId);
         this.sessionCompatible.remove(sessionId);
     }

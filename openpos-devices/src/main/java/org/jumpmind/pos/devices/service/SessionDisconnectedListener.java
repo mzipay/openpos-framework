@@ -1,28 +1,22 @@
-package org.jumpmind.pos.core.service;
+package org.jumpmind.pos.devices.service;
 
-import org.jumpmind.pos.core.flow.IStateManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-@Component
+@Component("deviceClientDisconnectedListener")
 public class SessionDisconnectedListener implements ApplicationListener<SessionDisconnectEvent> {
 
     Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Autowired
-    IStateManagerFactory stateManagerFactory;
 
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {        
         Message<?> msg = event.getMessage();
         String sessionId = (String) msg.getHeaders().get("simpSessionId");
         logger.info("session disconnected: {}", sessionId);
-        stateManagerFactory.removeSessionIdVariables(sessionId);
     }
 
 
