@@ -16,7 +16,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@Configuration("DevicseModule")
+@Configuration("DevicesModule")
 @EnableTransactionManagement()
 @Conditional(ModuleEnabledCondition.class)
 @DependsOn("endpointDispatcher")
