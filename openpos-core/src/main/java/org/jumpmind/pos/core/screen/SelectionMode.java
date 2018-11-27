@@ -4,4 +4,5 @@ public enum SelectionMode {
     None,
     Single,
     Multiple,
+    SingleCheckbox
 }
