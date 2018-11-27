@@ -16,6 +16,7 @@ export class ProductListComponent {
     @Output() itemSelected = new EventEmitter<ItemClickAction>();
     @Output() menuItemClick = new EventEmitter<MenuClickAction>();
     @Input() selectionMode: SelectionMode = SelectionMode.Single;
+
     selectedItems: number[] = [];
 
     onItemClick(item: IItem, event: any): void {
@@ -28,6 +29,10 @@ export class ProductListComponent {
 
     onItemSelected(item: IItem, event: any): void {
         item.selected = this.selectedItems.find(n => n === item.index) >= 0;
+        if (this.selectionMode === SelectionMode.SingleCheckbox) {
+            this.selectedItems = item.selected ? [item.index] : [];
+        }
+
         this.itemSelected.emit({item, event});
     }
 
@@ -36,8 +41,9 @@ export class ProductListComponent {
     }
 
     isMultipleSelectionMode(): boolean {
-        return this.selectionMode === SelectionMode.Multiple;
+        return this.selectionMode === SelectionMode.Multiple || this.selectionMode === SelectionMode.SingleCheckbox;
     }
+
 }
 
 export interface ItemClickAction {
