@@ -19,7 +19,7 @@ abstract public class AbstractDeviceWrapper<T, R extends ServiceResult> {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
+    @Autowired(required=false)
     protected IMessageService messageService;
 
     @Value("${device.aquire.timeout.ms:10000}")

@@ -1,6 +1,6 @@
 package org.jumpmind.pos.devices.javapos;
 
-import org.jumpmind.pos.devices.DeviceModule;
+import org.jumpmind.pos.devices.DevicesModule;
 import org.jumpmind.pos.devices.TestDevicesConfig;
 import org.jumpmind.pos.devices.service.DeviceCache;
 import org.junit.Before;
@@ -20,7 +20,7 @@ public class AlternateRegPopulatorTest {
     DeviceCache cache;
     
     @Autowired
-    DeviceModule module;
+    DevicesModule module;
     
     @Before
     public void init() {

@@ -32,14 +32,31 @@ eclipse {
     }
 }
 
+test {
+    ignoreFailures = true
+}
+
+task testJar(type: Jar) {
+    classifier "test"
+    from sourceSets.test.output
+}
+
 task develop {
     description 'Generates Eclipse artifacts and sets up your development environment'
     dependsOn tasks.cleanEclipse, tasks.eclipse
     delete '.settings'
 }
 
-dependencies {
+configurations {
+    testArtifacts
+}
 
+artifacts { 
+    testArtifacts testJar 
+}
+
+
+dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
     compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
     compile "org.springframework:spring-context:$springVersion"

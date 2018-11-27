@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.jumpmind.pos.devices.DeviceModule;
+import org.jumpmind.pos.devices.DevicesModule;
 import org.jumpmind.pos.devices.TestDevicesConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class DeviceRepositoryTest {
     DataSource dataSource;
     
     @Autowired
-    DeviceModule module;
+    DevicesModule module;
     
     @Before
     public void init() {

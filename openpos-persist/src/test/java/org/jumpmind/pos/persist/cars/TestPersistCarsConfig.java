@@ -18,7 +18,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 @ComponentScan(
-        basePackages = { "org.jumpmind.pos.persist" })
+        basePackages = { "org.jumpmind.pos" })
 @PropertySource(value = { "classpath:persist-test.properties"})
 public class TestPersistCarsConfig {
 
