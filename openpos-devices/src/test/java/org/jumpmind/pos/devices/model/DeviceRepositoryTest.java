@@ -7,17 +7,15 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.jumpmind.pos.devices.DevicesModule;
-import org.jumpmind.pos.devices.TestDevicesConfig;
-import org.junit.Before;
+import org.jumpmind.pos.devices.TestDevicesApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {TestDevicesConfig.class})
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = TestDevicesApplication.class)
 public class DeviceRepositoryTest {
 
     @Autowired
@@ -25,14 +23,6 @@ public class DeviceRepositoryTest {
     
     @Autowired
     DataSource dataSource;
-    
-    @Autowired
-    DevicesModule module;
-    
-    @Before
-    public void init() {
-        module.start();
-    }
     
     @Test
     public void testGetDevices() {

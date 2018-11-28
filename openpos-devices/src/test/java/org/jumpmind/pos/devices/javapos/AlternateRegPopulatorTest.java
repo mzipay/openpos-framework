@@ -1,19 +1,19 @@
 package org.jumpmind.pos.devices.javapos;
 
 import org.jumpmind.pos.devices.DevicesModule;
-import org.jumpmind.pos.devices.TestDevicesConfig;
+import org.jumpmind.pos.devices.TestDevicesApplication;
 import org.jumpmind.pos.devices.service.DeviceCache;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import jpos.Scanner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {TestDevicesConfig.class})
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = TestDevicesApplication.class)
 public class AlternateRegPopulatorTest {
 
     @Autowired
