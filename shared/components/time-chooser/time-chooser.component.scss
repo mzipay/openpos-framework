@@ -1,3 +1,7 @@
 .time-form-field {
-    margin-top: -16px;
+    margin-top: -16px;    
+}
+
+::ng-deep .mat-form-field-infix {
+    width: unset;
 }
