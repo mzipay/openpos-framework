@@ -22,9 +22,6 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
         Message<?> msg = event.getMessage();
         String sessionId = (String) msg.getHeaders().get("simpSessionId");
         String topicName = (String) msg.getHeaders().get("simpDestination");
-        String compatibilityVersion = this.getHeader(msg, MessageUtils.COMPATIBILITY_VERSION_HEADER);
-        String nodeId = topicName.substring(topicName.indexOf("/node/") + "/node/".length());
-        String appId = topicName.substring(topicName.indexOf("/app/") + "/app/".length(), topicName.indexOf("/node/"));
         try {
             logger.info("session {} subscribed to {}", sessionId, topicName);
         } catch (Exception ex) {

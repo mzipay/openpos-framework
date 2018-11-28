@@ -1,6 +1,5 @@
 package org.jumpmind.pos.devices.service.scan;
 
-import org.jumpmind.pos.devices.model.ScanMessage;
 import org.jumpmind.pos.devices.service.AbstractDeviceWrapper;
 import org.jumpmind.pos.devices.service.DeviceCache;
 import org.jumpmind.pos.devices.service.DeviceRequest;

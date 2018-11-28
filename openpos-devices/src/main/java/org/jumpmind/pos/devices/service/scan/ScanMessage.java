@@ -1,4 +1,4 @@
-package org.jumpmind.pos.devices.model;
+package org.jumpmind.pos.devices.service.scan;
 
 import org.jumpmind.pos.server.model.Message;
 

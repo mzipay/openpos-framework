@@ -1,6 +1,6 @@
 package org.jumpmind.pos.devices.javapos.proxy;
 
-import org.jumpmind.pos.devices.model.ScanMessage;
+import org.jumpmind.pos.devices.service.scan.ScanMessage;
 import org.jumpmind.pos.devices.service.scan.ScannerConfigRequest;
 import org.jumpmind.pos.service.ServiceResult;
 import org.jumpmind.pos.service.ServiceResult.Result;

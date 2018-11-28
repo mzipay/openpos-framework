@@ -11,6 +11,27 @@ public class Barcode extends DocumentElement implements Serializable {
     int width;
     int alignment;
     int textPosition;
+    String data;
+
+    public Barcode() {
+    }
+    
+    public Barcode(String data, int symbology, int height, int width, int alignment, int textPosition) {
+        this.data = data;
+        this.symbology = symbology;
+        this.height = height;
+        this.width = width;
+        this.alignment = alignment;
+        this.textPosition = textPosition;
+    }
+    
+    public void setData(String data) {
+        this.data = data;
+    }
+    
+    public String getData() {
+        return data;
+    }
 
     public int getSymbology() {
         return symbology;
