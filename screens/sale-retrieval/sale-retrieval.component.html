@@ -3,14 +3,51 @@
 		<mat-card-content fxFlex="1 1 auto">
 			<div class="scrollable">
 				<mat-nav-list>
+					<mat-list-item class="sale-line-item">
+						<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
+							<div fxFlex="20%">
+								Transaction ID
+							</div>
+							<div fxFlex="10%" style="text-align:center;">
+								Register #
+							</div>
+							<div fxFlex="10%" style="text-align:center;">
+								Till #
+							</div>
+							<div fxFlex="25%">
+								Reward Card #
+							</div>
+							<div fxFlex="20%">
+								Customer Name
+							</div>
+							<div fxFlex="15%">
+								Amount
+							</div>
+						</div>
+					</mat-list-item>
 					<mat-list-item *ngFor="let i of screen.transactions" class="sale-line-item" (click)="selected(i.transactionId)">
 						<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
-							<div fxFlex="80">
+							<div fxFlex="20%">
 								<strong mat-line>{{i.transactionId}}</strong>
-								<div mat-line class="muted-color">{{i.description}}</div>
 							</div>
 
-							<div fxFlex>
+							<div fxFlex="10%" style="text-align:center;">
+								<div mat-line>{{i.workstationId}}</div>
+							</div>
+
+							<div fxFlex="10%" style="text-align:center;">
+								<div mat-line>{{i.tillId}}</div>
+							</div>
+
+							<div fxFlex="25%">
+								<div mat-line>{{i.rewardsId}}</div>
+							</div>
+
+							<div fxFlex="20%">
+								<div mat-line>{{i.customerName}}</div>
+							</div>
+
+							<div fxFlex="15%">
 								<h5 class="middle-align text-md primary">
 									<span class="super-currency-symbol">$</span>{{i.grandTotal}}</h5>
 								<mat-icon class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
