@@ -11,6 +11,7 @@ public class ServiceResult implements Serializable {
     private Result resultStatus = Result.UNKNOWN;
     private String resultMessage = "";
     private Object extension;
+    private Throwable throwable;
     
     public boolean isSuccess() {
         return resultStatus == Result.SUCCESS;
@@ -44,6 +45,14 @@ public class ServiceResult implements Serializable {
     
     public void setExtension(Object extension) {
         this.extension = extension;
+    }
+    
+    public void setThrowable(Throwable exception) {
+        this.throwable = exception;
+    }
+    
+    public Throwable getThrowable() {
+        return throwable;
     }
 
 }

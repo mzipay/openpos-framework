@@ -2,8 +2,11 @@ package org.jumpmind.pos.devices.service.scan;
 
 import org.jumpmind.pos.devices.model.ScanMessage;
 import org.jumpmind.pos.devices.service.AbstractDeviceWrapper;
+import org.jumpmind.pos.devices.service.DeviceCache;
 import org.jumpmind.pos.devices.service.DeviceRequest;
+import org.jumpmind.pos.service.ServiceResult;
 import org.jumpmind.pos.service.ServiceResult.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import jpos.JposConst;
@@ -13,36 +16,30 @@ import jpos.events.DataEvent;
 import jpos.events.DataListener;
 
 @Component
-public class ScannerDeviceWrapper extends AbstractDeviceWrapper<Scanner, ScannerStatusResult> {
+public class ScannerDeviceWrapper extends AbstractDeviceWrapper<Scanner, ServiceResult> {
 
-    public ScannerStatusResult activate(ScannerActivateRequest req) {
-        ScannerStatusResult result = doSynchronized((r) -> {
+    @Autowired
+    DeviceCache cache;
+    
+    public ServiceResult configure(ScannerConfigRequest req) {
+        ServiceResult result = doSynchronized((r) -> {
             Scanner scanner = getDevice(req);
-            setMode(req, scanner);
+            configure(req, scanner);
             r.setResultStatus(Result.SUCCESS);
-            r.setMode(scanner.getAutoDisable() ? ScannerMode.SINGLE_SCAN : ScannerMode.MULTI_SCAN);
-        }, req, ScannerStatusResult.class);
-        return result;
-    }
-    public ScannerStatusResult deactivate(DeviceRequest req) {
-        ScannerStatusResult result = doSynchronized((r) -> {
-            Scanner scanner = getDevice(req);
-            scanner.setDeviceEnabled(false); 
-            r.setResultStatus(Result.SUCCESS);
-            r.setMode(scanner.getAutoDisable() ? ScannerMode.SINGLE_SCAN : ScannerMode.MULTI_SCAN);
-        }, req, ScannerStatusResult.class);
+        }, req, ServiceResult.class);
         return result;
     }
 
     @Override
     protected Scanner create(DeviceRequest req) throws JposException {
+        cache.populate(req.getProfile());
         Scanner scanner = new Scanner();
-        scanner.addDataListener(new ScannerDataListener(req.getDeviceName()));
-        setMode((ScannerActivateRequest) req, scanner);
+        scanner.addDataListener(new ScannerDataListener(scanner, req.getDeviceName()));
+        configure((ScannerConfigRequest) req, scanner);
         return scanner;
     }
 
-    protected void setMode(ScannerActivateRequest req, Scanner scanner) throws JposException {
+    protected void configure(ScannerConfigRequest req, Scanner scanner) throws JposException {
         if (scanner.getState() == JposConst.JPOS_S_CLOSED) {
             scanner.open(req.getDeviceName());
         }
@@ -55,32 +52,29 @@ public class ScannerDeviceWrapper extends AbstractDeviceWrapper<Scanner, Scanner
             scanner.setDeviceEnabled(true);
         }
 
-        if (!scanner.getDecodeData()) {
-            scanner.setDecodeData(true);
-        }
+        scanner.setDecodeData(req.isDecodeData());
+        scanner.setAutoDisable(req.isAutoDisable());
+        scanner.setDataEventEnabled(req.isDataEventEnabled());
 
-        scanner.setAutoDisable(req.getMode() == ScannerMode.SINGLE_SCAN);
-        scanner.getDataCount();
-        scanner.setDataEventEnabled(true);
-
-        scanner.setDeviceEnabled(true);
     }
 
     class ScannerDataListener implements DataListener {
-        
+
         String logicalName;
-        
-        public ScannerDataListener(String logicalName) {
+        Scanner scanner;
+
+        public ScannerDataListener(Scanner scanner, String logicalName) {
             this.logicalName = logicalName;
+            this.scanner = scanner;
         }
-        
-        
+
         @Override
         public void dataOccurred(DataEvent e) {
             try {
-                Scanner scanner = (Scanner) e.getSource();
-                String scanData = new String(scanner.getScanData());
-                String scanDataLabel = new String(scanner.getScanDataLabel());
+                byte[] bytes = scanner.getScanData();
+                String scanData = bytes != null ? new String(bytes) : null;
+                bytes = scanner.getScanDataLabel();
+                String scanDataLabel = bytes != null ? new String(bytes) : null;;
                 int scanDataType = scanner.getScanDataType();
                 boolean autoDisable = scanner.getAutoDisable();
                 boolean dataEventEnabled = scanner.getDataEventEnabled();
@@ -90,8 +84,8 @@ public class ScannerDeviceWrapper extends AbstractDeviceWrapper<Scanner, Scanner
                 int scanDataCount = scanner.getDataCount();
                 scanner.clearInput();
                 scanner.clearInputProperties();
-                scanner.getState();
-                messageService.sendMessage("Devices", logicalName, new ScanMessage(scanData, scanDataLabel, scanDataType, autoDisable, dataEventEnabled, deviceEnabled, freezeEvents, decodeData, scanDataCount));
+                messageService.sendMessage("Devices", logicalName, new ScanMessage(scanData, scanDataLabel, scanDataType, autoDisable,
+                        dataEventEnabled, deviceEnabled, freezeEvents, decodeData, scanDataCount));
             } catch (JposException e1) {
                 logger.error("", e1);
             }

@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@DependsOn(value = { "DeviceModule" })
+@DependsOn(value = { "DevicesModule" })
 public class DeviceRepository {
 
     @Autowired

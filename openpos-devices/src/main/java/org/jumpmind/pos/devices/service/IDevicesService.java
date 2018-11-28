@@ -1,8 +1,7 @@
 package org.jumpmind.pos.devices.service;
 
 import org.jumpmind.pos.devices.service.print.PrintRequest;
-import org.jumpmind.pos.devices.service.scan.ScannerActivateRequest;
-import org.jumpmind.pos.devices.service.scan.ScannerStatusResult;
+import org.jumpmind.pos.devices.service.scan.ScannerConfigRequest;
 import org.jumpmind.pos.service.IService;
 import org.jumpmind.pos.service.ServiceResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,13 +17,9 @@ import io.swagger.annotations.Api;
 @RequestMapping("/devices")
 public interface IDevicesService extends IService {
 
-    @RequestMapping(value = "/scan/activate", method = RequestMethod.PUT)
+    @RequestMapping(value = "/scan/config", method = RequestMethod.PUT)
     @ResponseBody
-    public ScannerStatusResult activate(@RequestBody ScannerActivateRequest req);
-
-    @RequestMapping(value = "/scan/deactivate", method = RequestMethod.PUT)
-    @ResponseBody
-    public ScannerStatusResult deactivate(@RequestBody DeviceRequest req);
+    public ServiceResult configureScanner(@RequestBody ScannerConfigRequest req);
 
     @RequestMapping(value = "/print", method = RequestMethod.PUT)
     @ResponseBody

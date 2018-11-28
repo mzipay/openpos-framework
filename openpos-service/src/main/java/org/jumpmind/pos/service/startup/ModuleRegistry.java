@@ -1,4 +1,4 @@
-package org.jumpmind.pos.core.startup;
+package org.jumpmind.pos.service.startup;
 
 import java.io.BufferedWriter;
 import java.io.File;

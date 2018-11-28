@@ -13,6 +13,8 @@ public class SimulatedScannerService extends AbstractSimulatedService implements
     private boolean decodeData;
     private String healthCheckText;
     private byte[] scanData;
+    private byte[] scanDataLabel;
+    private int scanDateType = 103;
     
     public static SimulatedScannerService instance;
     
@@ -120,12 +122,16 @@ public class SimulatedScannerService extends AbstractSimulatedService implements
         scanData = null;
         return data;
     }
-
+    
     public byte[] getScanDataLabel() throws JposException {
         checkIfOpen();
-        byte[] data = scanData;
-        scanData = null;
+        byte[] data = scanDataLabel;
+        scanDataLabel = null;
         return data;
+    }
+    
+    public void setScanDataLabel(byte[] scanDataLabel) {
+        this.scanDataLabel = scanDataLabel;
     }
 
     /**
@@ -133,7 +139,11 @@ public class SimulatedScannerService extends AbstractSimulatedService implements
      */
     public int getScanDataType() throws JposException {
         checkIfOpen();
-        return 103;
+        return scanDateType;
+    }
+    
+    public void setScanDateType(int scanDateType) {
+        this.scanDateType = scanDateType;
     }
 
     public void setAutoDisable(boolean autoDisable) throws JposException {
