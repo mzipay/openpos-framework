@@ -29,7 +29,7 @@
 					</mat-card>
 					<button mat-button *ngIf="screen.promoButton" (click)="doMenuItemAction(screen.promoButton)" class="promo-button text-sm">
 						<span fxFlex="1 1 auto">{{screen.promoButton.title}}</span>
-						<app-icon color="primary" [iconClass]="top" [iconName]="screen.promoButton.icon"></app-icon>
+						<app-icon color="primary" [iconName]="screen.promoButton.icon"></app-icon>
 					</button>
 				</div>
 
@@ -38,11 +38,11 @@
 				<div style="width: 100%;">
 					<button mat-button *ngIf="!screen.readOnly && !screen.customer && screen.loyaltyButton" (click)="doMenuItemAction(screen.loyaltyButton)" class="loyalty-button text-md">
 						<span style="padding-right: 8px;">{{screen.loyaltyButton.title}}</span>
-						<app-icon [iconClass]="top" [iconName]="screen.loyaltyButton.icon"></app-icon>
+						<app-icon [iconName]="screen.loyaltyButton.icon" class="loyalty-button-icon"></app-icon>
 						<span style="padding-left: 8px;">ID</span>
 					</button>
 					<div *ngIf="screen.customer && screen.loyaltyButton" class="text-sm text-center" style="padding-top: 16px;">
-						<mat-icon [svgIcon]="screen.loyaltyButton.icon" class="top" style="height: 50%; width: 65%;"></mat-icon>
+						<app-icon [iconName]="screen.loyaltyButton.icon" class="loyalty-icon"></app-icon>
 						<div class="muted-color" style="padding-top: 8px;">{{screen.customer.name}}</div>
 						<div class="muted-color" style="padding-top: 8px;">Rewards ID: {{screen.customer.loyaltyId}}</div>
 					</div>
@@ -51,7 +51,7 @@
 					</button>
 					<button mat-button *ngIf="!screen.readOnly" (click)="doMenuItemAction(screen.logoutButton)" class="border-button text-lg">
 						<span>
-							<app-icon *ngIf="screen.logoutButton.icon" [iconName]="screen.logoutButton.icon" class="top"></app-icon>
+							<app-icon *ngIf="screen.logoutButton.icon" [iconName]="screen.logoutButton.icon"></app-icon>
 							{{screen.logoutButton.title}}
 						</span>
 					</button>

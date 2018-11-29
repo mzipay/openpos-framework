@@ -173,11 +173,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
                     }
                     break;
                 case 'selfcheckout':
-                    if (screen.screenType === 'SelfCheckoutHome') {
-                        this.classes = 'self-checkout-home selfcheckout';
-                    } else {
-                        this.classes = 'selfcheckout';
-                    }
+                    this.classes = 'selfcheckout';
                     break;
                 case 'customerdisplay':
                     this.classes = 'selfcheckout';

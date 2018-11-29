@@ -27,9 +27,20 @@
     height: 70px;
     padding: 16px;
     margin-top: 16px;
+}
 
+::ng-deep .loyalty-icon {
     mat-icon {
-        height: 50px; width: 120px; margin-top: -12px
+        height: 50%;
+        width: 65%;
+    }
+}
+
+::ng-deep .loyalty-button-icon {
+    mat-icon {
+        height: 40px;
+        width: 120px;
+        margin-top: -22px;
     }
 }
 
@@ -41,10 +52,6 @@
     letter-spacing: 1px;
     text-align: left;
     padding: 0px;
-}
-
-.top {
-    top: 0;
 }
 
 .subtotal {

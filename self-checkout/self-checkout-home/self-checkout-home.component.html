@@ -1,4 +1,4 @@
-<div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+<div fxFlexFill fxLayout="column" fxLayoutAlign="center center" class="self-checkout-home">
     <ng-container *ngIf="!screen.hideMenuItems">
         <button mat-raised-button fxFlex="0 0 auto" *ngFor="let menuItem of menuItems" color="primary-inverse" class="text-md home-button"
             (click)="onMenuItemClick(menuItem)">
