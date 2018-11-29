@@ -65,6 +65,16 @@ public class PrinterDeviceWrapper extends AbstractDeviceWrapper<POSPrinter, Serv
                 } else if (documentElement instanceof CutPaper) {
                     CutPaper item = (CutPaper) documentElement;
                     printer.cutPaper(item.getPercentage());
+                } else if (documentElement instanceof BeginInsert) {
+                    BeginInsert item = (BeginInsert) documentElement;
+                    printer.beginInsertion(item.getTimeout());
+                } else if (documentElement instanceof EndInsert) {
+                    printer.endInsertion();
+                } else if (documentElement instanceof BeginRemoval) {
+                    BeginRemoval item = (BeginRemoval) documentElement;
+                    printer.beginRemoval(item.getTimeout());
+                } else if (documentElement instanceof EndRemoval) {
+                    printer.endRemoval();
                 }
             }
 

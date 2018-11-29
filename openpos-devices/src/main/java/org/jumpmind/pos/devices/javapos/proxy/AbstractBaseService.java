@@ -159,10 +159,15 @@ abstract public class AbstractBaseService implements BaseService, JposServiceIns
         freezeEvents = false;
         claimed = false;
         reset();
+        
+        if (stompClient != null) {
+            stompClient.stop();
+        }
+        
         logger.info("The device was closed");
     }
 
-    public void claim(int arg0) throws JposException {
+    public void claim(int timeout) throws JposException {
         checkIfOpen();
         claimed = true;
         logger.info("The device was claimed");

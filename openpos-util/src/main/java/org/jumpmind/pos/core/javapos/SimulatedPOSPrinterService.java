@@ -292,10 +292,12 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
 
     public void beginInsertion(int i) throws JposException {
         appendText(i, "\n\n-------------- begin insertion --------------\n\n");
+        flush();
     }
 
     public void beginRemoval(int i) throws JposException {
         appendText(i, "\n\n-------------- begin removal --------------\n\n");
+        flush();
     }
 
     public void clearOutput() throws JposException {
@@ -304,10 +306,12 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
 
     public void endInsertion() throws JposException {
         appendText(POSPrinterConst.PTR_S_RECEIPT, "\n\n-------------- end insertion --------------\n\n");
+        flush();
     }
 
     public void endRemoval() throws JposException {
         appendText(POSPrinterConst.PTR_S_RECEIPT, "\n\n-------------- end removal --------------\n\n");
+        flush();
     }
 
     public boolean getAsyncMode() throws JposException {

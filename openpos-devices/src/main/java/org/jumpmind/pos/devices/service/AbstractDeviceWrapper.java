@@ -46,6 +46,8 @@ abstract public class AbstractDeviceWrapper<T, R extends ServiceResult> {
             } catch (Exception e) {
                 logger.error("", e);
                 result.setResultMessage(e.getMessage());
+            } finally {
+                semaphore.release();
             }
 
             return result;
