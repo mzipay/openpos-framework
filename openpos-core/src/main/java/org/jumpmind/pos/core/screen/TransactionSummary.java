@@ -16,11 +16,17 @@ public class TransactionSummary implements Serializable {
     
     String storeNumber;
     
+    String tillId;
+    
     String location;
     
     String transactionDate;
     
     int numberUnitsSold;
+    
+    String rewardsId;
+    
+    String customerName;
 
     public TransactionSummary() {
     }
@@ -32,12 +38,29 @@ public class TransactionSummary implements Serializable {
         this.workstationId = workstationId;
     }
 
+    public TransactionSummary(String transactionId, String grandTotal, String workstationId, String tillId, String rewardsId, String customerName) {
+        this.transactionId = transactionId;
+        this.grandTotal = grandTotal;
+        this.workstationId = workstationId;
+        this.tillId = tillId;
+        this.rewardsId = rewardsId;
+        this.customerName = customerName;
+    }
+
     public void setWorkstationId(String workstationId) {
         this.workstationId = workstationId;
     }
 
     public String getWorkstationId() {
         return workstationId;
+    }
+
+    public void setTillId(String tillId) {
+        this.tillId = tillId;
+    }
+
+    public String getTillId() {
+        return tillId;
     }
 
     public String getTransactionId() {
@@ -96,4 +119,19 @@ public class TransactionSummary implements Serializable {
         this.numberUnitsSold = numberUnitsSold;
     }
 
+    public void setRewardsId(String rewardsId) {
+        this.rewardsId = rewardsId;
+    }
+
+    public String getRewardsId() {
+        return rewardsId;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
 }
