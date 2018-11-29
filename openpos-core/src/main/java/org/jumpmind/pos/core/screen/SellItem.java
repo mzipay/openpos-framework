@@ -9,11 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 
 public class SellItem extends DefaultItem {
-    
     private static final long serialVersionUID = 1L;
     
     private String posItemId;
@@ -159,5 +160,28 @@ public class SellItem extends DefaultItem {
 
     public void setQuantityChangeable(boolean isQuantityChangeable) {
         this.isQuantityChangeable = isQuantityChangeable;
+    }
+    
+    /**
+    **  Determine if the given item has a quantity value that indicates
+    **  it is being returned.
+    **
+    **  @return   If the quantity is negative, the item is being returned.
+    **            Otherwise, if we have a quantity of zero or more or if
+    **            the quantity is unknown, return false.
+    */
+    public boolean hasReturnQuantity()  {
+    	boolean hasReturnQuantity = false;
+    	
+    	if (!StringUtils.isEmpty(quantity))  {
+    		try  {
+    			int num = Integer.parseInt(quantity);
+    			hasReturnQuantity = (num < 0);
+    		}  catch (Throwable err)  {
+    			//  Invalid number format. Can't tell.
+    		}
+    	}
+    	
+    	return hasReturnQuantity;
     }
 }
