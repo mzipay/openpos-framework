@@ -4,6 +4,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jpos.JposConst;
 import jpos.JposException;
 import jpos.config.JposEntry;
@@ -14,6 +17,8 @@ public class SimulatedJposServiceInstanceFactory implements JposServiceInstanceF
 
     final String[] PROPS_TO_IGNORE = { "productURL", "serviceClass", "vendorName", "productDescription", "deviceCategory", "productName", "vendorURL", "logicalName", "jposVersion", "serviceInstanceFactoryClass" };
 
+    final Logger logger = LoggerFactory.getLogger(getClass());
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public JposServiceInstance createInstance(String s, JposEntry jposentry) throws JposException {
         if (!jposentry.hasPropertyWithName("serviceClass")) {
@@ -37,9 +42,9 @@ public class SimulatedJposServiceInstanceFactory implements JposServiceInstanceF
                         }
                         field.set(instance, value);
                     } catch (NoSuchFieldException e) {
-                        System.err.println("No such property: " + prop.getName() + " exists on " + class1.getSimpleName());
+                        logger.warn("No such property: " + prop.getName() + " exists on " + class1.getSimpleName());
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("", e);
                     }
                 }
             }
