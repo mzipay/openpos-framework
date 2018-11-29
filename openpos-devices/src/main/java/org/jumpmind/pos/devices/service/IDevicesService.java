@@ -1,6 +1,8 @@
 package org.jumpmind.pos.devices.service;
 
 import org.jumpmind.pos.devices.service.print.PrintRequest;
+import org.jumpmind.pos.devices.service.print.PrinterSettingsRequest;
+import org.jumpmind.pos.devices.service.print.PrinterSettingsResult;
 import org.jumpmind.pos.devices.service.scan.ScannerConfigRequest;
 import org.jumpmind.pos.service.IService;
 import org.jumpmind.pos.service.ServiceResult;
@@ -24,5 +26,9 @@ public interface IDevicesService extends IService {
     @RequestMapping(value = "/print", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult print(@RequestBody PrintRequest req);
+    
+    @RequestMapping(value = "/print/settings", method = RequestMethod.PUT)
+    @ResponseBody
+    public PrinterSettingsResult printerSettings(@RequestBody PrinterSettingsRequest req);
 
 }

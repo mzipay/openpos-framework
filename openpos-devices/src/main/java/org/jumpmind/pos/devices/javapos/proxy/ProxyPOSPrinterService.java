@@ -15,8 +15,11 @@ import org.jumpmind.pos.devices.service.print.EndRemoval;
 import org.jumpmind.pos.devices.service.print.FileImage;
 import org.jumpmind.pos.devices.service.print.Line;
 import org.jumpmind.pos.devices.service.print.MemoryImage;
+import org.jumpmind.pos.devices.service.print.POSPrinterSettings;
 import org.jumpmind.pos.devices.service.print.PrintRequest;
 import org.jumpmind.pos.devices.service.print.PrintableDocument;
+import org.jumpmind.pos.devices.service.print.PrinterSettingsRequest;
+import org.jumpmind.pos.devices.service.print.PrinterSettingsResult;
 import org.jumpmind.pos.devices.service.print.RuleLine;
 import org.jumpmind.pos.service.ServiceResult;
 import org.springframework.http.HttpEntity;
@@ -28,26 +31,12 @@ import jpos.POSPrinterConst;
 import jpos.services.POSPrinterService114;
 
 public class ProxyPOSPrinterService extends AbstractBaseService implements POSPrinterService114 {
+
     static final Log logger = LogFactory.getLog(ProxyPOSPrinterService.class);
+
     protected Logger printerLogger = Logger.getLogger(ProxyPOSPrinterService.class);
 
-    protected boolean asyncMode = true;
-    protected int slpLineChars;
-    protected int slpLineHeight;
-    protected int slpLineSpacing;
-    protected int characterSet;
-    protected boolean flagWhenIdle;
-    protected boolean jrnLetterQuality;
-    protected int jrnLineChars;
-    protected int jrnLineHeight;
-    protected int jrnLineSpacing;
-    protected int mapMode;
-    protected boolean recLetterQuality;
-    protected int recLineChars;
-    protected int recLineHeight;
-    protected int recLineSpacing;
-    protected int rotateSpecial;
-    protected boolean slpLetterQuality;
+    protected POSPrinterSettings settings = null;
 
     protected Map<Integer, PrintableDocument> workingDocuments = new HashMap<>();
 
@@ -67,6 +56,29 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
             workingDocuments.put(station, doc);
         }
         return doc;
+    }
+
+    protected void refreshSettings() throws JposException {
+        if (settings == null || settings.getSettingsCapturedTime().getTime() - System.currentTimeMillis() > 10000) {
+           this.settings = sendSettings(null);
+        }
+    }
+
+    protected void sendSettings() throws JposException {
+        this.settings = sendSettings(settings);
+    }
+    
+    protected POSPrinterSettings sendSettings(POSPrinterSettings settings) throws JposException {
+        RestTemplate restTemplate = getRestTemplate();
+
+        PrinterSettingsRequest req = new PrinterSettingsRequest(profile, deviceName, settings);
+        HttpEntity<PrinterSettingsRequest> requestEntity = new HttpEntity<PrinterSettingsRequest>(req);
+        HttpEntity<PrinterSettingsResult> response = restTemplate.exchange(getBaseHttpUrl() + "/print", HttpMethod.PUT, requestEntity,
+                PrinterSettingsResult.class);
+
+        PrinterSettingsResult result = response.getBody();
+        processServiceResult(result);
+        return result.getSettings();
     }
 
     public void printBarCode(int station, String data, int symbology, int height, int width, int alignment, int textPosition)
@@ -362,7 +374,8 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     }
 
     public boolean getAsyncMode() throws JposException {
-        return this.asyncMode;
+        refreshSettings();
+        return this.settings.isAsyncMode();
     }
 
     public int getCapCharacterSet() throws JposException {
@@ -589,13 +602,13 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     }
 
     public int getCharacterSet() throws JposException {
-
-        return 0;
+        refreshSettings();
+        return this.settings.getCharacterSet();
     }
 
     public boolean getCoverOpen() throws JposException {
-
-        return false;
+        refreshSettings();
+        return this.settings.isCoverOpen();
     }
 
     public int getErrorLevel() throws JposException {
@@ -614,7 +627,8 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     }
 
     public boolean getFlagWhenIdle() throws JposException {
-        return this.flagWhenIdle;
+        refreshSettings();
+        return settings.isFlagWhenIdle();
     }
 
     public String getFontTypefaceList() throws JposException {
@@ -748,24 +762,27 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     }
 
     public boolean getSlpLetterQuality() throws JposException {
-        return this.slpLetterQuality;
+        refreshSettings();
+        return settings.isSlpLetterQuality();
     }
 
     public int getSlpLineChars() throws JposException {
-        return this.slpLineChars;
+        refreshSettings();
+        return settings.getSlpLineChars();
     }
 
     public String getSlpLineCharsList() throws JposException {
-
         return null;
     }
 
     public int getSlpLineHeight() throws JposException {
-        return this.slpLineHeight;
+        refreshSettings();
+        return settings.getSlpLineHeight();
     }
 
     public int getSlpLineSpacing() throws JposException {
-        return this.slpLineSpacing;
+        refreshSettings();
+        return settings.getSlpLineSpacing();
     }
 
     public int getSlpLineWidth() throws JposException {
@@ -803,74 +820,91 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     }
 
     public void setAsyncMode(boolean flag) throws JposException {
-        this.asyncMode = flag;
+        this.settings.setAsyncMode(flag);
+        sendSettings();
     }
 
     public void setBitmap(int i, int j, String s, int k, int l) throws JposException {
     }
 
     public void setCharacterSet(int i) throws JposException {
-        this.characterSet = i;
+        this.settings.setCharacterSet(i);
+        sendSettings();
     }
 
     public void setFlagWhenIdle(boolean flag) throws JposException {
-        this.flagWhenIdle = flag;
+        this.settings.setFlagWhenIdle(flag);
+        sendSettings();
     }
 
     public void setJrnLetterQuality(boolean flag) throws JposException {
-        this.jrnLetterQuality = flag;
+        this.settings.setJrnLetterQuality(flag);
+        sendSettings();
     }
 
     public void setJrnLineChars(int i) throws JposException {
-        this.jrnLineChars = i;
+        this.settings.setJrnLineChars(i);
+        sendSettings();
     }
 
     public void setJrnLineHeight(int i) throws JposException {
-        this.jrnLineHeight = i;
+        this.settings.setJrnLineHeight(i);
+        sendSettings();
     }
 
     public void setJrnLineSpacing(int i) throws JposException {
-        this.jrnLineSpacing = i;
+        this.settings.setJrnLineSpacing(i);
+        sendSettings();
     }
 
     public void setMapMode(int i) throws JposException {
-        this.mapMode = i;
+        this.settings.setMapMode(i);
+        sendSettings();
     }
 
     public void setRecLetterQuality(boolean flag) throws JposException {
-        this.recLetterQuality = flag;
+        this.settings.setRecLetterQuality(flag);
+        sendSettings();
     }
 
     public void setRecLineChars(int i) throws JposException {
-        this.recLineChars = i;
+        this.settings.setRecLineChars(i);
+        sendSettings();
     }
 
     public void setRecLineHeight(int i) throws JposException {
-        this.recLineHeight = i;
+        this.settings.setRecLineHeight(i);
+        sendSettings();
     }
 
     public void setRecLineSpacing(int i) throws JposException {
-        this.recLineSpacing = i;
+        this.settings.setRecLineSpacing(i);
+        sendSettings();
     }
 
     public void setRotateSpecial(int i) throws JposException {
-        this.rotateSpecial = i;
+        this.settings.setRotateSpecial(i);
+        sendSettings();
     }
 
     public void setSlpLetterQuality(boolean flag) throws JposException {
-        this.slpLetterQuality = flag;
+        this.settings.setSlpLetterQuality(flag);
+        sendSettings();
     }
 
     public void setSlpLineChars(int i) throws JposException {
-        this.slpLineChars = i;
+        this.settings.setSlpLineChars(i);
+        sendSettings();
     }
 
     public void setSlpLineHeight(int i) throws JposException {
-        this.slpLineHeight = i;
+        this.settings.setSlpLineHeight(i);
+        sendSettings();
     }
 
     public void setSlpLineSpacing(int i) throws JposException {
-        this.slpLineSpacing = i;
+        this.settings.setSlpLineSpacing(i);
+        sendSettings();
     }
 
     public void validateData(int i, String s) throws JposException {

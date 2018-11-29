@@ -32,7 +32,7 @@ abstract public class AbstractDeviceWrapper<T, R extends ServiceResult> {
 
     protected Map<String, Semaphore> semaphoresByLogicalName = new HashMap<>();
 
-    protected R doSynchronized(IDoSynchronized<R> function, DeviceRequest req, Class<R> resultClazz) {
+    protected R doSynchronized(IDoSynchronized<R> function, DeviceRequest req, Class<? extends R> resultClazz) {
         try {
             R result = (R)resultClazz.newInstance();
             result.setResultStatus(Result.FAILURE);
