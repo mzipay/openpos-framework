@@ -109,7 +109,7 @@ export class SellComponent extends AbstractTemplate<any> {
       let bound = false;
       if (regex.test(event.key)) {
         for (const menuItem of this.template.localMenuItems) {
-          if (menuItem.keybind === event.key) {
+          if (menuItem.keybind === event.key && menuItem.enabled) {
             bound = true;
             this.session.onAction(menuItem);
           }

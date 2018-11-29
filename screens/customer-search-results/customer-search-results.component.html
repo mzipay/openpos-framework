@@ -2,7 +2,7 @@
     <mat-card fxFlex="1 1 auto" class="page-content-card lighter scrollable-content-card mat-elevation-z8" fxLayout="column"
         style="padding: 16px;">
         <mat-card-content fxFlex="1 1 auto">
-            <mat-selection-list exclusiveSelect [(ngModel)]="selectedOptions">
+            <mat-selection-list #list exclusiveSelect [(ngModel)]="selectedOptions" (selectionChange)="selectionChange($event)">
                 <mat-list-option *ngFor="let customer of customers" class="customer-list-option" [value]="customer">
                     <div class="customer-div">
                         <div class="text-sm customer-name"> {{customer.firstName}} {{customer.lastName}} </div>
