@@ -47,7 +47,7 @@ public interface IconType {
     public static final String CreditCard = "CreditCard"; //credit_card
     public static final String GiftCard = "GiftCard"; //card_giftcard
     public static final String StoreCard = "StoreCard"; //card_membership
-    public static final String PurchaseOrder = "PurchaseOrder"; //local_atm
+    public static final String PurchaseOrder = "PurchaseOrder"; //account_balance_wallet
     public static final String Lease = "Lease"; // account_balance
     public static final String Tax = "Tax"; //account_balance
     public static final String Account = "Account"; //account_balance
