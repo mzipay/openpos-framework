@@ -7,7 +7,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.jumpmind.pos.devices.service.print.Barcode;
+import org.jumpmind.pos.devices.service.print.BeginInsert;
+import org.jumpmind.pos.devices.service.print.BeginRemoval;
 import org.jumpmind.pos.devices.service.print.CutPaper;
+import org.jumpmind.pos.devices.service.print.EndInsert;
+import org.jumpmind.pos.devices.service.print.EndRemoval;
 import org.jumpmind.pos.devices.service.print.FileImage;
 import org.jumpmind.pos.devices.service.print.Line;
 import org.jumpmind.pos.devices.service.print.MemoryImage;
@@ -20,6 +24,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import jpos.JposException;
+import jpos.POSPrinterConst;
 import jpos.services.POSPrinterService114;
 
 public class ProxyPOSPrinterService extends AbstractBaseService implements POSPrinterService114 {
@@ -97,17 +102,9 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     }
 
     public void cutPaper(int percentage) throws JposException {
-        for (int station : workingDocuments.keySet()) {
-            PrintableDocument doc = getPrintableDocument(station);
-            doc.addElement(new CutPaper());
-            print(station);
-        }
-    }
-
-    protected void printAll() throws JposException {
-        for (int station : workingDocuments.keySet()) {
-            print(station);
-        }
+        PrintableDocument doc = getPrintableDocument(POSPrinterConst.PTR_S_RECEIPT);
+        doc.addElement(new CutPaper());
+        print(POSPrinterConst.PTR_S_RECEIPT);
     }
 
     protected void print(int station) throws JposException {
@@ -130,14 +127,13 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     }
 
     public void beginInsertion(int timeout) throws JposException {
-        printAll();
-        // TODO call begin insert
-
+        getPrintableDocument(POSPrinterConst.PTR_S_SLIP).addElement(new BeginInsert(timeout));
+        print(POSPrinterConst.PTR_S_SLIP);
     }
 
     public void beginRemoval(int timeout) throws JposException {
-        printAll();
-        // TODO call begin removal
+        getPrintableDocument(POSPrinterConst.PTR_S_SLIP).addElement(new BeginRemoval(timeout));
+        print(POSPrinterConst.PTR_S_SLIP);
     }
 
     public void clearOutput() throws JposException {
@@ -145,13 +141,13 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     }
 
     public void endInsertion() throws JposException {
-        printAll();
-        // TODO call endInsertion
+        getPrintableDocument(POSPrinterConst.PTR_S_SLIP).addElement(new EndInsert());
+        print(POSPrinterConst.PTR_S_SLIP);
     }
 
     public void endRemoval() throws JposException {
-        printAll();
-        // TODO call endRemoval
+        getPrintableDocument(POSPrinterConst.PTR_S_SLIP).addElement(new EndRemoval());
+        print(POSPrinterConst.PTR_S_SLIP);
     }
 
     public String getCharacterSetList() throws JposException {
@@ -618,8 +614,7 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     }
 
     public boolean getFlagWhenIdle() throws JposException {
-
-        return false;
+        return this.flagWhenIdle;
     }
 
     public String getFontTypefaceList() throws JposException {
