@@ -5,6 +5,8 @@ import java.lang.reflect.Type;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jumpmind.pos.server.model.Message;
+import org.jumpmind.pos.service.ServiceResult;
+import org.jumpmind.pos.service.ServiceResult.Result;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -85,6 +87,21 @@ abstract public class AbstractBaseService implements BaseService, JposServiceIns
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
+            }
+        }
+    }
+    
+    protected void processServiceResult(ServiceResult result) throws JposException {
+        if (result.getResultStatus() != Result.SUCCESS) {
+            Throwable ex = result.getThrowable();
+            if (ex instanceof JposException) {
+                throw (JposException) ex;
+            } else if (ex instanceof RuntimeException) {
+                throw (RuntimeException) ex;
+            } else if (ex instanceof Exception) {
+                throw new JposException(JposConst.JPOS_E_FAILURE, result.getResultMessage(), (Exception) ex);
+            } else {
+                throw new JposException(JposConst.JPOS_E_FAILURE, result.getResultMessage());
             }
         }
     }

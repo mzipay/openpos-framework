@@ -3,7 +3,6 @@ package org.jumpmind.pos.devices.javapos.proxy;
 import org.jumpmind.pos.devices.service.scan.ScanMessage;
 import org.jumpmind.pos.devices.service.scan.ScannerConfigRequest;
 import org.jumpmind.pos.service.ServiceResult;
-import org.jumpmind.pos.service.ServiceResult.Result;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
@@ -62,18 +61,7 @@ public class ProxyScannerService extends AbstractBaseService implements ScannerS
                 ServiceResult.class);
 
         ServiceResult result = response.getBody();
-        if (result.getResultStatus() != Result.SUCCESS) {
-            Throwable ex = result.getThrowable();
-            if (ex instanceof JposException) {
-                throw (JposException) ex;
-            } else if (ex instanceof RuntimeException) {
-                throw (RuntimeException) ex;
-            } else if (ex instanceof Exception) {
-                throw new JposException(JposConst.JPOS_E_FAILURE, result.getResultMessage(), (Exception) ex);
-            } else {
-                throw new JposException(JposConst.JPOS_E_FAILURE, result.getResultMessage());
-            }
-        }
+        processServiceResult(result);
     }
 
     @Override

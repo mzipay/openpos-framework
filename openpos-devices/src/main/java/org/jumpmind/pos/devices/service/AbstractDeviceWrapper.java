@@ -24,6 +24,9 @@ abstract public class AbstractDeviceWrapper<T, R extends ServiceResult> {
 
     @Value("${device.aquire.timeout.ms:10000}")
     long acquireTimeoutInMs;
+    
+    @Autowired
+    DeviceCache cache;
 
     protected Map<String, T> devicesByLogicalName = new HashMap<>();
 
@@ -67,6 +70,7 @@ abstract public class AbstractDeviceWrapper<T, R extends ServiceResult> {
         String logicalName = req.getDeviceName();
         T device = devicesByLogicalName.get(logicalName);
         if (device == null) {
+            cache.populate(req.getProfile());
             device = create(req);
             devicesByLogicalName.put(logicalName, device);
         }

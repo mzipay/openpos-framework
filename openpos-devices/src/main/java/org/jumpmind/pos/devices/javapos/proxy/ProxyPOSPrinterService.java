@@ -11,8 +11,13 @@ import org.jumpmind.pos.devices.service.print.CutPaper;
 import org.jumpmind.pos.devices.service.print.FileImage;
 import org.jumpmind.pos.devices.service.print.Line;
 import org.jumpmind.pos.devices.service.print.MemoryImage;
+import org.jumpmind.pos.devices.service.print.PrintRequest;
 import org.jumpmind.pos.devices.service.print.PrintableDocument;
 import org.jumpmind.pos.devices.service.print.RuleLine;
+import org.jumpmind.pos.service.ServiceResult;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.client.RestTemplate;
 
 import jpos.JposException;
 import jpos.services.POSPrinterService114;
@@ -70,6 +75,7 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
 
     public void printImmediate(int station, String data) throws JposException {
         getPrintableDocument(station).addElement(new Line(data));
+        print(station);
     }
 
     public void printNormal(int station, String data) throws JposException {
@@ -79,38 +85,59 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     public void printMemoryBitmap(int station, byte[] data, int type, int width, int alignment) throws JposException {
         getPrintableDocument(station).addElement(new MemoryImage(data, type, width, alignment));
     }
-    
 
     @Override
     public void drawRuledLine(int station, String positionList, int lineDirection, int lineWidth, int lineStyle, int lineColor)
             throws JposException {
         getPrintableDocument(station).addElement(new RuleLine(positionList, lineDirection, lineWidth, lineStyle, lineColor));
     }
-    
-    public void transactionPrint(int i, int j) throws JposException {
 
-    }
-    
-    public void setLogo(int i, String s) throws JposException {
-
+    public void transactionPrint(int station, int control) throws JposException {
+        // used with async print
     }
 
-    public void cutPaper(int station) throws JposException {
-        getPrintableDocument(station).addElement(new CutPaper());
-        
-        // TODO call service
+    public void cutPaper(int percentage) throws JposException {
+        for (int station : workingDocuments.keySet()) {
+            PrintableDocument doc = getPrintableDocument(station);
+            doc.addElement(new CutPaper());
+            print(station);
+        }
+    }
+
+    protected void printAll() throws JposException {
+        for (int station : workingDocuments.keySet()) {
+            print(station);
+        }
+    }
+
+    protected void print(int station) throws JposException {
+        PrintableDocument doc = workingDocuments.remove(station);
+        if (doc != null) {
+            RestTemplate restTemplate = getRestTemplate();
+
+            PrintRequest req = new PrintRequest(profile, deviceName, doc);
+            HttpEntity<PrintRequest> requestEntity = new HttpEntity<PrintRequest>(req);
+            HttpEntity<ServiceResult> response = restTemplate.exchange(getBaseHttpUrl() + "/print", HttpMethod.PUT, requestEntity,
+                    ServiceResult.class);
+
+            ServiceResult result = response.getBody();
+            processServiceResult(result);
+        }
     }
 
     public void clearPrintArea() throws JposException {
         this.reset();
     }
-    
-    public void beginInsertion(int i) throws JposException {
-        // TODO
+
+    public void beginInsertion(int timeout) throws JposException {
+        printAll();
+        // TODO call begin insert
+
     }
 
-    public void beginRemoval(int i) throws JposException {
-        // TODO
+    public void beginRemoval(int timeout) throws JposException {
+        printAll();
+        // TODO call begin removal
     }
 
     public void clearOutput() throws JposException {
@@ -118,11 +145,25 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     }
 
     public void endInsertion() throws JposException {
-        // TODO
+        printAll();
+        // TODO call endInsertion
     }
 
     public void endRemoval() throws JposException {
-        // TODO
+        printAll();
+        // TODO call endRemoval
+    }
+
+    public String getCharacterSetList() throws JposException {
+        // TODO call get printer status and the return character set list
+        return "";
+    }
+
+    public void printTwoNormal(int stations, String data1, String data2) throws JposException {
+    }
+
+    public void setLogo(int i, String s) throws JposException {
+
     }
 
     public void compareFirmwareVersion(String s, int[] ai) throws JposException {
@@ -556,11 +597,6 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
         return 0;
     }
 
-    public String getCharacterSetList() throws JposException {
-
-        return "";
-    }
-
     public boolean getCoverOpen() throws JposException {
 
         return false;
@@ -765,9 +801,6 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     public int getSlpSidewaysMaxLines() throws JposException {
 
         return 0;
-    }
-
-    public void printTwoNormal(int i, String s, String s1) throws JposException {
     }
 
     public void rotatePrint(int i, int j) throws JposException {

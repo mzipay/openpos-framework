@@ -36,12 +36,21 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
 
     protected StringBuilder receipt = new StringBuilder();
 
+    protected String lastReceipt;
+
+    public static SimulatedPOSPrinterService instance;
+
     public SimulatedPOSPrinterService() {
         logger.trace(String.format("%s created", this.getClass()));
+        instance = this;
     }
 
     @Override
     public void reset() {
+        if (receipt.length() > 0) {
+            lastReceipt = receipt.toString();
+        }
+        receipt.setLength(0);
     }
 
     public void appendText(final int type, final String newText) {
@@ -75,8 +84,8 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
     protected void flush() {
         if (receipt.length() > 0) {
             printerLogger.info("\n" + receipt);
-            receipt.setLength(0);
         }
+        reset();
     }
 
     public void clearPrintArea() throws JposException {
@@ -290,7 +299,7 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
     }
 
     public void clearOutput() throws JposException {
-        flush();
+        reset();
     }
 
     public void endInsertion() throws JposException {
@@ -870,7 +879,11 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
         return inMemoryBitmaps;
     }
 
-    public void printNormalWithEscapeSequences(int station, String data) throws JposException {        
+    public String getLastReceipt() {
+        return lastReceipt;
+    }
+
+    public void printNormalWithEscapeSequences(int station, String data) throws JposException {
         if (recLineChars > 0 && data.length() > recLineChars) {
             String lineSeparator = System.getProperty("line.separator");
             StringBuilder text = new StringBuilder();
@@ -878,8 +891,8 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
             for (String string : lines) {
                 do {
                     if (string.length() > recLineChars) {
-                        text.append(string.substring(0, recLineChars-1)).append(lineSeparator);
-                        string = string.substring(recLineChars-1);
+                        text.append(string.substring(0, recLineChars - 1)).append(lineSeparator);
+                        string = string.substring(recLineChars - 1);
                     } else {
                         text.append(string).append(lineSeparator);
                         string = null;

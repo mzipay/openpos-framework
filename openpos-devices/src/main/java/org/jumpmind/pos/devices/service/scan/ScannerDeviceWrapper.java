@@ -1,11 +1,9 @@
 package org.jumpmind.pos.devices.service.scan;
 
 import org.jumpmind.pos.devices.service.AbstractDeviceWrapper;
-import org.jumpmind.pos.devices.service.DeviceCache;
 import org.jumpmind.pos.devices.service.DeviceRequest;
 import org.jumpmind.pos.service.ServiceResult;
 import org.jumpmind.pos.service.ServiceResult.Result;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import jpos.JposConst;
@@ -16,9 +14,6 @@ import jpos.events.DataListener;
 
 @Component
 public class ScannerDeviceWrapper extends AbstractDeviceWrapper<Scanner, ServiceResult> {
-
-    @Autowired
-    DeviceCache cache;
     
     public ServiceResult configure(ScannerConfigRequest req) {
         ServiceResult result = doSynchronized((r) -> {
@@ -31,10 +26,8 @@ public class ScannerDeviceWrapper extends AbstractDeviceWrapper<Scanner, Service
 
     @Override
     protected Scanner create(DeviceRequest req) throws JposException {
-        cache.populate(req.getProfile());
         Scanner scanner = new Scanner();
         scanner.addDataListener(new ScannerDataListener(scanner, req.getDeviceName()));
-        configure((ScannerConfigRequest) req, scanner);
         return scanner;
     }
 
