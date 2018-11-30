@@ -25,12 +25,40 @@ export class TimeChooserComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    // if time value is passed in, interpret string of format HH:MM:SS to correctly formatted time
+    if (this.value) {
+      const time = this.value.split(':');
+      const hourValue = time[0];
+      const minValue = time[1];
+      const secValue = time[2];
+
+      let hourAsNum = Number.parseInt(hourValue, 10);
+      if (hourAsNum === 12) {
+        this.amPm = 'pm';
+        this.hours = hourValue;
+      } else if (hourAsNum === 24) {
+        this.amPm = 'am';
+        hourAsNum -= 12;
+        this.hours = hourAsNum.toString();
+      } else if (hourAsNum > 12) {
+        this.amPm = 'pm';
+        hourAsNum -= 12;
+        this.hours = hourAsNum.toString();
+      } else {
+        this.amPm = 'am';
+        this.hours = hourValue;
+      }
+      this.minutes = minValue;
+      this.seconds = secValue;
+
+      this.value = this.formatTime();
+    }
   }
 
   onTimeChange() {
     this.value = this.formatTime();
+    this.formGroup.get(this.controlName).setValue(this.value);
     this.change.emit(this.value);
-    this.formGroup.controls[this.controlName].setValue(this.value);
   }
 
   private formatTime(): string {
