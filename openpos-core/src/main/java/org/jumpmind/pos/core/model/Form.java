@@ -3,6 +3,7 @@ package org.jumpmind.pos.core.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class Form implements Serializable {
@@ -51,6 +52,13 @@ public class Form implements Serializable {
     
     public CheckboxField addCheckbox(String id, String label, boolean checked) {
         CheckboxField field = new CheckboxField(id, label, checked);
+        formElements.add(field);
+        return field;
+    }
+    
+    public CheckboxField addCheckbox(String id, String label, boolean checked, boolean required) {
+        CheckboxField field = new CheckboxField(id, label, checked);
+        field.setRequired(required);
         formElements.add(field);
         return field;
     }
@@ -140,21 +148,25 @@ public class Form implements Serializable {
         return field;
     }
     
-    public static FormField createDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
-        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.Date, required);
-        formField.setPattern(FieldPattern.DATE);
+    public static DateField createDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar, Date minDate, Date maxDate) {
+        DateField formField = new DateField(fieldId, label, required, hideCalendar, minDate, maxDate);
         formField.setValue(value);
-        formField.put("hideCalendar", hideCalendar);
         return formField;
     }
+
+    public DateField addDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar, Date minDate) {
+        DateField dateField = createDateField(fieldId, label, value, required, hideCalendar, minDate, null);
+        formElements.add(dateField);
+        return dateField;
+    }
     
-    public FormField addDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
-        FormField formField = createDateField(fieldId, label, value, required, hideCalendar);
+    public DateField addDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
+        DateField formField = createDateField(fieldId, label, value, required, hideCalendar, null, null);
         formElements.add(formField);
         return formField;
     }
 
-    public FormField addDateField(String fieldId, String label, String value, boolean required) {
+    public DateField addDateField(String fieldId, String label, String value, boolean required) {
         return this.addDateField(fieldId, label, value, required, false);
     }
     
