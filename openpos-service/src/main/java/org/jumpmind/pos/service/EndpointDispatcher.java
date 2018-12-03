@@ -14,8 +14,10 @@ public class EndpointDispatcher {
 
     @Autowired
     private EndpointRegistry endpointRegistry;
+    
     @Autowired
     private EndpointInjector endpointInjector;
+    
     @Autowired
     ApplicationContext applicationContext;
 

@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.jumpmind.pos.core.javapos.SimulatedPOSPrinterService;
-import org.jumpmind.pos.devices.TestDevicesApplication;
 import org.jumpmind.pos.devices.javapos.EventCallbacksAdapter;
+import org.jumpmind.test.TestDevicesApplication;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

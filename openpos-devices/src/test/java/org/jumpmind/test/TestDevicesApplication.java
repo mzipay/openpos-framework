@@ -1,4 +1,4 @@
-package org.jumpmind.pos.devices;
+package org.jumpmind.test;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;

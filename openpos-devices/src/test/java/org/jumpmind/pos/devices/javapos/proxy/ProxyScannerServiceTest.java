@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.jumpmind.pos.core.javapos.SimulatedScannerService;
-import org.jumpmind.pos.devices.TestDevicesApplication;
 import org.jumpmind.pos.devices.javapos.EventCallbacksAdapter;
+import org.jumpmind.test.TestDevicesApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

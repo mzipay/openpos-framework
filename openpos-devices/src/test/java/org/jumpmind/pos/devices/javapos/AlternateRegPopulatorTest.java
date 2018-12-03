@@ -1,8 +1,8 @@
 package org.jumpmind.pos.devices.javapos;
 
 import org.jumpmind.pos.devices.DevicesModule;
-import org.jumpmind.pos.devices.TestDevicesApplication;
 import org.jumpmind.pos.devices.service.DeviceCache;
+import org.jumpmind.test.TestDevicesApplication;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

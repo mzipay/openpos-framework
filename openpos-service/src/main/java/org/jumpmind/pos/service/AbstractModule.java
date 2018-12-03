@@ -18,7 +18,6 @@ import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_USER
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_VALIDATION_QUERY;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.h2.tools.Server;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
 import org.jumpmind.db.sql.SqlTemplateSettings;
@@ -56,24 +54,15 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
-abstract public class AbstractModule implements Module {
+abstract public class AbstractModule extends AbstractServiceFactory implements Module {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     protected Environment env;
-    
-    @Autowired
-    protected EndpointDispatcher endpointDispatcher;
 
     @Value("${installation.id:undefined}")
     protected String installationId;
-
-    /**
-     * This is to make the modules dependent on the h2 server being created
-     */
-    @Autowired(required = false)
-    protected Server h2Server;
 
     @Autowired(required = false)
     protected TagConfig tagConfig;
@@ -248,9 +237,4 @@ abstract public class AbstractModule implements Module {
     }
 
 
-    @SuppressWarnings("unchecked")
-    protected <T> T buildService(Class<T> serviceInterface) {
-            return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { serviceInterface },
-                    new ServiceEndpointBridgeInvocationHandler(this.endpointDispatcher));
-    }
 }
