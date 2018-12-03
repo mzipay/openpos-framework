@@ -7,7 +7,7 @@
     </mat-dialog-content>
 
     <mat-dialog-actions *ngIf="screen.otherActions || screen.actionButton" fxLayoutAlign="space-between">
-        <button type="button" *ngFor="let menuItem of screen.otherActions" mat-raised-button (click)="session.onAction(menuItem)">
+        <button type="button" *ngFor="let menuItem of screen.otherActions" mat-raised-button color=primary-inverse (click)="session.onAction(menuItem)">
             <span>{{menuItem.title}}</span>
             <app-icon *ngIf="menuItem.icon" [iconClass]="material-icons" [iconName]="menuItem.icon"></app-icon>
         </button>
