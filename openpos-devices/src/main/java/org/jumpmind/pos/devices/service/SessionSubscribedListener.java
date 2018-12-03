@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("deviceSessionSubscribedListener")
 public class SessionSubscribedListener implements ApplicationListener<SessionSubscribedEvent>, MessageUtils {
 
     Logger logger = LoggerFactory.getLogger(getClass());
