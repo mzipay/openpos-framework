@@ -148,6 +148,10 @@ public class Form implements Serializable {
         return field;
     }
     
+    public static DateField createDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar) {
+        return createDateField(fieldId, label, value, required, hideCalendar, null, null);
+    }
+    
     public static DateField createDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar, Date minDate, Date maxDate) {
         DateField formField = new DateField(fieldId, label, required, hideCalendar, minDate, maxDate);
         formField.setValue(value);
