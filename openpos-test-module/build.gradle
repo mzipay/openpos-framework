@@ -3,5 +3,6 @@ apply from: "${openposDir}/openpos-service/common.gradle"
 
 dependencies {
     compile project(":openpos-service")
+    testCompile project(path: ':openpos-util', configuration: 'testArtifacts') 
 
 }

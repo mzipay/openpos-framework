@@ -4,4 +4,5 @@ apply from: "./common.gradle"
 dependencies {
 	compile project(":openpos-persist")
 	compile project(":openpos-util")
+	testCompile project(path: ':openpos-util', configuration: 'testArtifacts') 
 }

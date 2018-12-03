@@ -24,5 +24,6 @@ jar {
 
 dependencies {	
 	compile project(":openpos-server-core")
+	testCompile project(path: ':openpos-util', configuration: 'testArtifacts') 
 }
 

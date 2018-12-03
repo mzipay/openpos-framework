@@ -5,4 +5,5 @@ dependencies {
     compile project(":openpos-service")
     compile project(":openpos-server-core")
     compile("org.javapos:javapos:${javaposVersion}")
+    testCompile project(path: ':openpos-util', configuration: 'testArtifacts') 
 }

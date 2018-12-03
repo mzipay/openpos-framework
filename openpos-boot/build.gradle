@@ -9,6 +9,7 @@ dependencies {
     compile "net.java.dev.jna:jna-platform:$jnaVersion"
     compile 'org.json:json:20180813'
     testCompile 'com.github.tomakehurst:wiremock:2.19.0'
+    testCompile project(path: ':openpos-util', configuration: 'testArtifacts') 
 }
 
 jar {

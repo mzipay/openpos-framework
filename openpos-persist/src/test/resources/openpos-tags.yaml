@@ -1,0 +1,28 @@
+---
+tags:
+-
+  name: REGION
+  group: LOCATION
+  level: 1
+-
+  name: COUNTRY
+  group: LOCATION
+  level: 2
+-
+  name: STATE
+  group: LOCATION
+  level: 3
+-
+  name: STORE_NUMBER
+  group: LOCATION
+  level: 4
+-
+  name: STORE_TYPE
+-
+  name: DEVICE_TYPE
+  size: 20
+-
+  name: BRAND_ID
+  size: 20
+-
+  name: APP_PROFILE
