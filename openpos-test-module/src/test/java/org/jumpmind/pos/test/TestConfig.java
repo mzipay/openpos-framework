@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ComponentScan(
-        basePackages = { "org.jumpmind.pos.test" })
+        basePackages = { "org.jumpmind.pos" })
 @PropertySource(value = { "classpath:test.properties" })
 public class TestConfig {
 
