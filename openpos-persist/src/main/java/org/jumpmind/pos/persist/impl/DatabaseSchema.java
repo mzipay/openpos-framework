@@ -211,7 +211,7 @@ public class DatabaseSchema {
         List<EntityMetaData> list = new ArrayList<>();
 
         Class<?> entityClass = clazz;
-
+        log.info("create metadata for " + clazz.getSimpleName());
         while (entityClass != null && entityClass != Object.class) {
             org.jumpmind.pos.persist.Table tblAnnotation = entityClass.getAnnotation(org.jumpmind.pos.persist.Table.class);
             if (tblAnnotation != null) {
@@ -220,7 +220,7 @@ public class DatabaseSchema {
                 Table dbTable = new Table();
                 dbTable.setName(tblAnnotation.name());
                 dbTable.setDescription(tblAnnotation.description());
-
+                log.info("found @Table name=" + tblAnnotation.name());
                 Class<?> currentClass = entityClass;
                 boolean includeAllFields = true;
                 while (currentClass != null && currentClass != Object.class) {

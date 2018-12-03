@@ -4,14 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.PersistException;
-import org.jumpmind.pos.persist.TagConfigFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,13 +25,7 @@ public class DBSessionNaturalIdTest {
     private DBSessionFactory sessionFactory;
 
     @Before
-    public void setup() {
-        sessionFactory.init(
-                PersistTestUtil.testDbPlatform(), 
-                PersistTestUtil.getSessionContext(), 
-                Arrays.asList(CarModel.class, ServiceInvoice.class),
-                DBSessionFactory.getQueryTemplates("persist-test"),
-                DBSessionFactory.getDmlTemplates("persist-test"), new TagConfigFactory().getTagConfig());        
+    public void setup() {    
         {            
             DBSession db = sessionFactory.createDbSession();
             db.executeSql("TRUNCATE TABLE CAR_CAR");

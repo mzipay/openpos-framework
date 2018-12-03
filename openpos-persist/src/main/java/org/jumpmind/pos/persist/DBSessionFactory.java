@@ -50,6 +50,9 @@ public class DBSessionFactory {
             QueryTemplates queryTemplatesObject,
             DmlTemplates dmlTemplates, 
             TagConfig tagConfig) {
+        
+        
+        log.info("init " + entities.size(), new Exception());
 
         this.queryTemplates = buildQueryTemplatesMap(queryTemplatesObject);
         this.dmlTemplates = buildDmlTemplatesMap(dmlTemplates);
