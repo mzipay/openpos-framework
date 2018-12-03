@@ -74,7 +74,7 @@ public class DevicesModule extends AbstractModule {
     }   
     
     @Bean
-    protected IDevicesService deviceService() {
+    protected IDevicesService devicesService() {
         return this.buildService(IDevicesService.class);
     }
         
