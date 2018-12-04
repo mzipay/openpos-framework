@@ -11,7 +11,7 @@ public class ScannerConfigEndpoint {
     @Autowired
     ScannerDeviceWrapper wrapper;
 
-    @Endpoint("/scan/config")
+    @Endpoint("/devices/scan/config")
     public ServiceResult configureScanner(ScannerConfigRequest req) {
         return wrapper.configure(req);
     }

@@ -25,7 +25,7 @@ public class ProxyPOSPrinterServiceTest {
     public void setup() throws Exception {
         clientProxyService = new ProxyPOSPrinterService();
         clientProxyService.profile = "dev";
-        clientProxyService.port = 1973;
+        clientProxyService.port = 1975;
         EventCallbacksAdapter adapter = new EventCallbacksAdapter();
         clientProxyService.open("Printer", adapter);
         clientProxyService.claim(1000);
