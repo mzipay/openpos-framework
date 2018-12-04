@@ -1,0 +1,5 @@
+@import './pager/pager-theme';
+
+@mixin openpos-component-theme-mixins($theme) {
+    @include pager-theme($theme);
+}

@@ -4,6 +4,8 @@ import { ISellItem, IMenuItem, IForm, IFormElement, ICatalogBrowserForm } from '
 // import { SessionService, FormBuilder, ValidatorsService } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface';
+import { FormGroup } from '@angular/forms';
+import { FormBuilder } from '../../core/services';
 // import { ValidatorFn, FormGroup } from '@angular/forms';
 
 @Component({
@@ -21,12 +23,12 @@ import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface'
     totalItems: number;
     selectedItemQuantity: IItemQuantityFormElement;
     form: IForm;
-//    formGroup: FormGroup;
-/*
-    constructor(private formBuilder: FormBuilder, private validatorsService: ValidatorsService) {
+    formGroup: FormGroup;
+
+    constructor(private formBuilder: FormBuilder) {
         super();
     }
-*/
+
     buildScreen() {
         this.items = this.screen.items;
         this.categories = this.screen.categories;
@@ -34,18 +36,22 @@ import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface'
         this.totalItems = this.screen.itemTotalCount;
         this.form = this.screen.form;
         this.selectedItemQuantity = <IItemQuantityFormElement> this.form.formElements.find(e => e.id === 'selectedItemQuantity');
-        // this.formGroup = this.formBuilder.group(this.form);
+        this.formGroup = this.formBuilder.group(this.form);
     }
 
     public onItemSelected(item: ISellItem) {
-        // TODO: replace with proper form validation.  Addresses issue with empty quantity not handled on server side
-        if (!this.selectedItemQuantity.value) {
-            this.selectedItemQuantity.value = '0';
+        if (this.formGroup.valid) {
+            const returnForm: ICatalogBrowserForm = {selectedItems: [item], form: this.form};
+            this.session.onAction('ItemSelected', returnForm);
+        } else {
+            this.showErrors();
         }
-        const returnForm: ICatalogBrowserForm = {selectedItems: [item], form: this.form};
-        this.session.onAction('ItemSelected', returnForm);
     }
 
+    private showErrors() {
+        // Forces redisplay of error
+        this.formGroup.controls[this.selectedItemQuantity.id].markAsDirty();
+    }
     public onCategorySelected(category: IMenuItem, event?: any) {
         const returnForm: ICatalogBrowserForm = {selectedCategory: category, form: this.form};
         this.session.onAction(category.action, returnForm);
@@ -54,5 +60,10 @@ import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface'
     public onPageEvent(event?: PageEvent) {
         const returnForm: ICatalogBrowserForm = {pageEvent: event, form: this.form};
         this.session.onAction('PageEvent', returnForm);
+    }
+
+    onItemQuantityChange(value: string) {
+        const newValue = this.formGroup.controls[this.selectedItemQuantity.id].value;
+        this.selectedItemQuantity.value = newValue;
     }
   }

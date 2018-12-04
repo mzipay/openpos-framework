@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { IconDefinition, IconService } from '../../../core';
 
 @Component({
     selector: 'app-icon',
@@ -6,10 +7,30 @@ import { Component, Input } from '@angular/core';
 })
 
 export class IconComponent {
-    @Input() iconName: string;
+
+    @Input()
+    set iconName(iconName: string) {
+        this.iconDef = this.iconService.resolveIcon(iconName);
+        this.isLocalIcon = (iconName && (iconName.startsWith('openpos_')) || (this.iconDef && this.iconDef.iconType === 'svg'));
+
+        if (this.iconDef && this.iconDef.iconType !== 'svg') {
+            this._iconName = this.iconDef.iconName;
+        } else {
+            this._iconName = iconName;
+        }
+    }
+
     @Input() iconClass: string;
 
-    isLocalIcon(): boolean {
-        return this.iconName && this.iconName.startsWith('openpos_');
+    private _iconName: string;
+
+    isLocalIcon: boolean;
+
+    iconDef: IconDefinition;
+
+    constructor(private iconService: IconService) {}
+
+    get iconName(): string {
+        return this._iconName;
     }
 }

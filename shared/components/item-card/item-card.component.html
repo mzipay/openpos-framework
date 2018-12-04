@@ -21,7 +21,7 @@
                     <button mat-button color="warn" *ngFor="let m of item.menuItems" class="item-card-button" (click)="doMenuItemAction(m, item.index)"
                         [disabled]="!isMenuItemEnabled(m)">
                         <span [ngClass]="{'muted-color': ! m.enabled}">{{m.title}}</span>
-                        <mat-icon *ngIf="m.icon" [svgIcon]="m.icon"></mat-icon>
+                        <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
                     </button>
                 </div>
             </div>

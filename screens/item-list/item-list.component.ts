@@ -57,7 +57,7 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, OnDestr
     }
 
     onItemSelected(itemInfo: ItemClickAction): void {
-        if (this.getSelectionModeAsEnum() === SelectionMode.Multiple) {
+        if (this.getSelectionModeAsEnum() === SelectionMode.Multiple || this.getSelectionModeAsEnum() === SelectionMode.SingleCheckbox) {
             if (this.localMenuItems) {
                 this.localMenuItems.forEach(element => {
                     this.session.registerActionPayload(element.action, () => this.productList.selectedItems);
@@ -75,10 +75,13 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, OnDestr
     }
 
     isItemSelectedDisabled(): boolean {
-        return this.getSelectionModeAsEnum() !== SelectionMode.Multiple;
+        return this.getSelectionModeAsEnum() !== SelectionMode.Multiple
+        && this.getSelectionModeAsEnum() !== SelectionMode.SingleCheckbox;
     }
 
     isItemClickDisabled(): boolean {
-        return this.itemActionName === null || this.getSelectionModeAsEnum() === SelectionMode.Multiple;
+        return this.itemActionName === null
+        || this.getSelectionModeAsEnum() === SelectionMode.Multiple
+        || this.getSelectionModeAsEnum() === SelectionMode.SingleCheckbox;
     }
 }

@@ -1,5 +1,6 @@
 export enum SelectionMode {
     None,
     Multiple,
-    Single
+    Single,
+    SingleCheckbox,
 }

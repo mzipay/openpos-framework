@@ -21,6 +21,7 @@ export interface ISellScreen {
     selectedItems: ISellItem[];
     multiSelectedMenuItems: IMenuItem[];
     transaction: any;
+    trainingInstructions: {[key: string]: string};
 }
 
 
@@ -39,6 +40,11 @@ export class SellScreenUtils {
             statusBar.workstationId = screen.template.workstation.workstationId;
             statusBar.storeId = screen.template.workstation.storeId;
             statusBar.tillThresholdStatus = screen.template.workstation.tillThresholdStatus;
+        }
+        if (screen.trainingInstructions && Object.keys(screen.trainingInstructions).length > 0) {
+            statusBar.trainingEnabled = true;
+        } else {
+            statusBar.trainingEnabled = false;
         }
 
         return statusBar;

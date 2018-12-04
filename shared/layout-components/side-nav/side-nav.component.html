@@ -3,9 +3,7 @@
         <ng-content select="[nav]"></ng-content>
     </mat-sidenav>
     <mat-sidenav-content fxFlex="0 1 100%" fxLayout="column">
-        <div fxShow fxHide.xs class="desktop-header">
-            <ng-content select="[header]"></ng-content>
-        </div>
+        <div fxShow fxHide.xs class="desktop-header"></div>
         <mat-toolbar fxHide fxShow.xs fxFlex="0 0 auto" fxLayout="row">
             <button mat-icon-button (click)="sidenav.toggle()">
                 <app-icon iconName="menu"></app-icon>
@@ -14,10 +12,13 @@
                 <ng-content select="[header]"></ng-content>
             </div>
         </mat-toolbar>
+        <div>
+            <ng-content select="[subtitle]"></ng-content>
+        </div>
         <div class="side-nav-content" style="flex:1 1 50%; min-height: 50%; overflow: auto">
             <ng-content select="[content]"></ng-content>
         </div>
-        <div fxFlex="0 0 auto">
+        <div fxFlex="0 0 auto" class="side-nav-footer">
             <ng-content select="[footer]"></ng-content>
         </div>
     </mat-sidenav-content>

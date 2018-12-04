@@ -7,11 +7,11 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 })
 export class PrimaryButtonComponent implements OnInit {
 
-  @Input() disable: boolean;
+  @Input() disabled: boolean;
   @Input() inputType: string;
   @Output() buttonClick = new EventEmitter();
   constructor() {
-    this.disable = false;
+    this.disabled = false;
   }
 
   ngOnInit() {

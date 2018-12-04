@@ -1,16 +1,17 @@
 import { IMessageHandler } from './../../../core/interfaces/message-handler.interface';
 import { Logger } from './../../../core/services/logger.service';
-import { Component, Input, Optional, Inject, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, Optional, Inject, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
 import { DeviceService, SessionService } from '../../../core';
 import { IScan } from '../../../screens';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-scan-something',
   templateUrl: './scan-something.component.html',
   styleUrls: ['./scan-something.component.scss']
 })
-export class ScanSomethingComponent implements AfterViewInit, IMessageHandler {
+export class ScanSomethingComponent implements AfterViewInit, IMessageHandler<any>, OnDestroy {
 
   @ViewChild(MatInput)
   input: MatInput;
@@ -20,11 +21,13 @@ export class ScanSomethingComponent implements AfterViewInit, IMessageHandler {
 
   public barcode: string;
 
+  private subscription: Subscription;
+
   constructor(private log: Logger, private session: SessionService, public devices: DeviceService,
     @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: IScan) {
 
-    this.session.registerMessageHandler(this, 'Screen');
+    this.subscription = this.session.registerMessageHandler(this, 'Screen');
 
     if (data) {
       this.scanSomethingData = data;
@@ -36,6 +39,11 @@ export class ScanSomethingComponent implements AfterViewInit, IMessageHandler {
         this.focusFirst();
     }
   }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    this.subscription = null;
+}
 
   public onEnter(): void {
     if (this.barcode && this.barcode.trim().length >= this.scanSomethingData.scanMinLength) {

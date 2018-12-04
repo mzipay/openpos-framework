@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {
+  MatBadgeModule,
   MatDialog,
   MatDialogRef,
   MatAutocompleteModule,
@@ -42,6 +44,7 @@ import {
   declarations: [
   ],
   imports: [
+    MatBadgeModule,
     MatButtonModule,
     MatCheckboxModule,
     MatCardModule,
@@ -79,6 +82,7 @@ import {
   ],
   exports: [
     MatAutocompleteModule,
+    MatBadgeModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,

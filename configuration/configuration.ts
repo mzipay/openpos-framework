@@ -12,4 +12,6 @@ export const Configuration = {
     maxSignaturePoints: -1,
     maxResponseSizeBytes: 79500,
     enableAutocomplete: false,
+    enableMenuClose: true,
+    enableKeybinds: false,
 };

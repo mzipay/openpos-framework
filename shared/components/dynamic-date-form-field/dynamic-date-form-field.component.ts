@@ -36,6 +36,8 @@ import { DateUtils, DatePartPositions } from '../../utils/date.utils';
     @Input() controlName: string;
     @Input() hiddenControl: string;
     @Input() form: FormGroup;
+    @Input() minDate: Date;
+    @Input() maxDate: Date;
 
     @Output() valueChange = new EventEmitter<any>();
 
@@ -44,6 +46,8 @@ import { DateUtils, DatePartPositions } from '../../utils/date.utils';
     format = DynamicDateFormFieldComponent.dateMasks.get('date').format;
     dateValue: Date;
     private datePartPos: DatePartPositions;
+    minimumDate: Date;
+    maximumDate: Date;
 
     constructor(@Optional() private datePipe: DatePipe) {
     }
@@ -55,8 +59,16 @@ import { DateUtils, DatePartPositions } from '../../utils/date.utils';
             this.autoCorrectedDatePipe = DynamicDateFormFieldComponent.dateMasks.get(lowerType).datePipe;
             this.format = DynamicDateFormFieldComponent.dateMasks.get(lowerType).format;
             this.datePartPos = DateUtils.datePartPositions(this.format);
-
         }
+
+        if (this.minDate) {
+          this.minimumDate = new Date(this.minDate);
+        }
+
+        if (this.maxDate) {
+          this.maximumDate = new Date(this.maxDate);
+        }
+
     }
 
     public focus(): void {

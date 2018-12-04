@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, HostListener } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AbstractTemplate, IMenuItem, OpenposMediaService } from '../../../../core';
@@ -6,12 +6,13 @@ import { StatusBarData, NavListComponent } from '../../../../shared';
 import { SellScreenUtils, ISellScreen } from './sell-screen.interface';
 import { ISellTemplate } from './sell-template.interface';
 import { SellStatusSectionData } from '../sell-status-section/sell-status-section.data';
+import { Configuration } from '../../../../configuration/configuration';
 import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-sell',
   templateUrl: './sell.component.html',
-  styleUrls: ['./sell.component.scss']
+  styleUrls: ['./sell.component.scss'],
 })
 export class SellComponent extends AbstractTemplate<any> {
 
@@ -95,4 +96,33 @@ export class SellComponent extends AbstractTemplate<any> {
     this.drawerOpen = this.mediaService.mediaObservableFromMap(openMap);
     this.drawerMode = this.mediaService.mediaObservableFromMap(modeMap);
   }
+
+  public enableMenuClose(): boolean {
+    return Configuration.enableMenuClose;
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  public onKeydown(event: KeyboardEvent) {
+    // Map F1 -> F12 to local menu buttons
+    if (Configuration.enableKeybinds) {
+      const regex = /^F(\d+)$/;
+      let bound = false;
+      if (regex.test(event.key)) {
+        for (const menuItem of this.template.localMenuItems) {
+          if (menuItem.keybind === event.key && menuItem.enabled) {
+            bound = true;
+            this.session.onAction(menuItem);
+          }
+        }
+      }
+      if (bound) {
+        event.preventDefault();
+      }
+    }
+  }
+
+  public keybindsEnabled() {
+    return Configuration.enableKeybinds;
+  }
+
 }

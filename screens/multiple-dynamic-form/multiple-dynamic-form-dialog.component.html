@@ -6,7 +6,7 @@
         <mat-tab *ngFor="let formOption of screen.forms; let i=index" fxLayout="column">
             <ng-template mat-tab-label>
                 <div fxLayoutAlign="start center">
-                    <mat-icon>{{formOption.icon}}</mat-icon><span>{{formOption.name}}</span>
+                    <app-icon [iconName]="formOption.icon"></app-icon><span>{{formOption.name}}</span>
                 </div>
             </ng-template>
             <ng-template matTabContent>

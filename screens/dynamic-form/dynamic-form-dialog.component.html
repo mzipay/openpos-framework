@@ -1,6 +1,9 @@
 <h1 mat-dialog-title  *ngIf="screen.prompt" class="text-md text-left" [ngClass]="{'warn':screen.customerFacing}" >
     {{screen.prompt}}
 </h1>
+<div *ngIf="screen.instructions">
+    <p>{{screen.instructions}}</p>
+</div>
 <app-dynamic-form-control fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px;padding-bottom:6px"
 [screenForm]="screen.form" [submitButton]="screen.submitButton" [alternateSubmitActions]="screen.alternateSubmitActions">
 </app-dynamic-form-control>

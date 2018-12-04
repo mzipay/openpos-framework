@@ -21,7 +21,7 @@ import { CordovaService } from './cordova.service';
 @Injectable({
     providedIn: 'root',
 })
-export class DeviceService implements IMessageHandler {
+export class DeviceService implements IMessageHandler<any> {
 
     public onDeviceReady: Subject<string> = new BehaviorSubject<string>(null);
     public onAppEnteringBackground: Subject<boolean> = new BehaviorSubject<boolean>(null);

@@ -1,3 +1,3 @@
-export interface IMessageHandler {
-    handle(message: any);
+export interface IMessageHandler<T> {
+    handle(message: T);
 }

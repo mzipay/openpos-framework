@@ -24,7 +24,8 @@ import {
     PhoneUSValidatorDirective,
     OpenposScreenOutletDirective,
     ScreenDirective,
-    AutocompleteDirective
+    AutocompleteDirective,
+    DefaultImageDirective
 } from './directives';
 import {
     PromptInputComponent,
@@ -43,7 +44,6 @@ import {
     PopTartComponent,
     NavListComponent,
     FileViewerComponent,
-    NumberSpinnerComponent,
     StatusBarComponent,
     CounterComponent,
     DatePartChooserComponent,
@@ -51,9 +51,18 @@ import {
     DatePartChooserDialogComponent,
     PrimaryButtonComponent,
     SecondaryButtonComponent,
+    TrainingDialogComponent,
+    TrainingWrapperComponent,
+    MessageDialogComponent,
+    MenuComponent,
+    TimeChooserComponent,
+    PagerComponent,
+    CatalogBrowserItemComponent,
+    StatusBarStatusControlComponent,
+    STATUS_BAR_STATUS_CONTROL_COMPONENT
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
-import { PhonePipe, HourMinSecPipe, LocalizedDatePipe } from './pipes';
+import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
 import { SideNavComponent } from './layout-components';
 
@@ -75,7 +84,6 @@ const components = [
     PopTartComponent,
     NavListComponent,
     FileViewerComponent,
-    NumberSpinnerComponent,
     StatusBarComponent,
     CounterComponent,
     DatePartChooserComponent,
@@ -83,7 +91,15 @@ const components = [
     DatePartChooserDialogComponent,
     PrimaryButtonComponent,
     SecondaryButtonComponent,
-    SideNavComponent
+    SideNavComponent,
+    TrainingDialogComponent,
+    TrainingWrapperComponent,
+    MessageDialogComponent,
+    MenuComponent,
+    TimeChooserComponent,
+    PagerComponent,
+    StatusBarStatusControlComponent,
+    CatalogBrowserItemComponent
 ];
 
 const directives = [
@@ -100,14 +116,16 @@ const directives = [
     PhoneUSValidatorDirective,
     OpenposScreenOutletDirective,
     ScreenDirective,
-    AutocompleteDirective
+    AutocompleteDirective,
+    DefaultImageDirective
 ];
 
 const pipes = [
     SafePipe,
     PhonePipe,
     HourMinSecPipe,
-    LocalizedDatePipe
+    LocalizedDatePipe,
+    ValueFormatterPipe
 ];
 
 @NgModule({
@@ -150,6 +168,7 @@ const pipes = [
         ...pipes
     ],
     providers: [
+        { provide: STATUS_BAR_STATUS_CONTROL_COMPONENT, useValue: StatusBarStatusControlComponent }
     ]
 })
 export class SharedModule {}

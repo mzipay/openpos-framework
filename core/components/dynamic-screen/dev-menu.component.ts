@@ -28,7 +28,7 @@ import { PersonalizationComponent } from '../personalization/personalization.com
     templateUrl: './dev-menu.component.html',
     styleUrls: ['./dev-menu.component.scss'],
 })
-export class DevMenuComponent implements OnInit, IMessageHandler {
+export class DevMenuComponent implements OnInit, IMessageHandler<any> {
 
     static MSG_TYPE = 'DevTools';
 

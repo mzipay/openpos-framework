@@ -3,7 +3,11 @@ import {
     Directive,
     ViewContainerRef,
     OnInit,
-    OnDestroy} from '@angular/core';
+    OnDestroy,
+    Output,
+    EventEmitter,
+    Input
+} from '@angular/core';
 import { Renderer2 } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import {
@@ -21,6 +25,8 @@ import {
 export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     private _componentRef: ComponentRef<any>|null = null;
+    @Output() componentEmitter = new EventEmitter<{componentRef: ComponentRef<any>, screen: any}>();
+    @Input() unsubscribe = true;
 
     public templateTypeName: string;
     public screenTypeName: string;
@@ -29,7 +35,6 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     public classes = '';
 
     public currentTheme: string;
-
 
     private installedScreen: IScreen;
     private installedTemplate: AbstractTemplate<any>;
@@ -46,28 +51,28 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.session.registerMessageHandler(this, 'Screen');
+        this.updateTemplateAndScreen();
+        this.session.getMessages('Screen').subscribe( (message) => this.handle(message) );
     }
 
     ngOnDestroy(): void {
-        this.session.unsubscribe();
-        if ( this._componentRef ) {
+        if (this.unsubscribe === true) {
+            this.session.unsubscribe();
+        }
+        if (this._componentRef) {
             this._componentRef.destroy();
         }
     }
 
     handle(message: any) {
-        if ( (!message.template || !message.template.dialog) &&
-            message.screenType !== 'NoOp' &&
-            message.screenType !== 'Loading' &&
-            message.screenType !== 'Toast') {
+        if (message.screenType !== 'NoOp') {
             this.updateTemplateAndScreen(message);
         }
     }
 
     protected updateTemplateAndScreen(screen?: any): void {
         if (!screen) {
-            screen = { screenType: 'Blank', template: { type: 'Blank', dialog: false } };
+            screen = { screenType: 'Blank', template: { type: 'Blank' } };
         }
 
         if (screen &&
@@ -120,8 +125,12 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             this.installedScreen.show( screen, this.installedTemplate);
         }
 
+
         this.updateClasses(screen);
         this.dialogService.closeDialog(true);
+
+        // Output the componentRef and screen to the training-wrapper
+        this.componentEmitter.emit({componentRef: this._componentRef, screen: screen});
     }
 
     protected logSwitchScreens(screen: any) {
@@ -164,11 +173,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
                     }
                     break;
                 case 'selfcheckout':
-                    if (screen.screenType === 'SelfCheckoutHome') {
-                        this.classes = 'self-checkout-home selfcheckout';
-                    } else {
-                        this.classes = 'selfcheckout';
-                    }
+                    this.classes = 'selfcheckout';
                     break;
                 case 'customerdisplay':
                     this.classes = 'selfcheckout';

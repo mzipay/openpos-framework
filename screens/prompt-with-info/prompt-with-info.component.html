@@ -22,12 +22,20 @@
                     [minLength]="screen.minLength" [maxLength]="screen.maxLength"
                     [promptFormGroup]="promptFormGroup" [keyboardPreference]="screen.keyboardPreference"></app-prompt-input>
             </mat-card-content>
-            <mat-card-actions *ngIf="screen.actionButton" align="end">
-                <button mat-raised-button type="submit" color=primary>
-                    <span>{{screen.actionButton.title ? screen.actionButton.title : 'Next'}}</span>
-                    <mat-icon *ngIf="screen.actionButton.icon" class="material-icons">{{screen.actionButton.icon}}</mat-icon>
-                </button>
-            </mat-card-actions>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <mat-card-actions *ngIf="screen.backButton">
+                    <button mat-raised-button type="submit" color="primary-inverse" (click)="session.onAction(screen.backButton.action)">
+                        <span>{{screen.backButton.title ? screen.backButton.title : 'Back'}}</span>
+                        <app-icon *ngIf="screen.backButton.icon" [iconClass]="material-icons" [iconName]="screen.backButton.icon"></app-icon>
+                    </button>
+                </mat-card-actions>
+                <mat-card-actions *ngIf="screen.actionButton">
+                    <button mat-raised-button type="submit" color="primary">
+                        <span>{{screen.actionButton.title ? screen.actionButton.title : 'Next'}}</span>
+                        <app-icon *ngIf="screen.actionButton.icon" [iconClass]="material-icons" [iconName]="screen.actionButton.icon"></app-icon>
+                    </button>
+                </mat-card-actions>
+            </div>
         </form>
     </mat-card>
 </ng-template>

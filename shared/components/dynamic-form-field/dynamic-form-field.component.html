@@ -46,9 +46,13 @@
 
     <ng-container *ngIf="isDateInput() && formField.elementType!='Display'">
         <app-dynamic-date-form-field *ngIf="formField.hideCalendar" [type]="formField.inputType" [(value)]="formField.value" [placeholder]="getPlaceholderText(formField)" 
-        [hideCalendar]="formField.hideCalendar" [controlName]="formField.id" [hiddenControl]="formField.id+'Hidden'"[form]="formGroup"></app-dynamic-date-form-field>
+        [hideCalendar]="formField.hideCalendar" [controlName]="formField.id" [hiddenControl]="formField.id+'Hidden'"[form]="formGroup" 
+        [minDate]="formField.minDate" [maxDate]="formField.maxDate"
+        (valueChange)="onFormElementChanged(formField)"></app-dynamic-date-form-field>
         <app-dynamic-date-form-field *ngIf="!formField.hideCalendar" [type]="formField.inputType" [(value)]="formField.value" [placeholder]="getPlaceholderText(formField)" 
-        [controlName]="formField.id" [hiddenControl]="formField.id+'Hidden'"[form]="formGroup"></app-dynamic-date-form-field>
+        [controlName]="formField.id" [hiddenControl]="formField.id+'Hidden'"[form]="formGroup"
+        [minDate]="formField.minDate" [maxDate]="formField.maxDate"
+        (valueChange)="onFormElementChanged(formField)"></app-dynamic-date-form-field>
         <mat-error>
             <app-show-errors [control]="formGroup.controls[formField.id]"></app-show-errors>
         </mat-error>
@@ -59,22 +63,30 @@
 
     <ng-container *ngIf="formField.inputType==='Checkbox'">
         <mat-checkbox [formControlName]="formField.id" [required]="formField.required" [value]="formField.value" [labelPosition]="formField.labelPosition"
-            [attr.disabled]="formField.disabled" [checked]="formField.checked" (change)="onFormElementChanged(formField)">{{formField.label}}</mat-checkbox>
+            [disabled]="formField.disabled" [checked]="formField.checked" (change)="onFormElementChanged(formField)">{{formField.label}}</mat-checkbox>
     </ng-container>
 
     <ng-container *ngIf="formField.inputType==='Counter'">
         <app-counter [formGroup]="formGroup" [controlName]="formField.id" [label]="formField.label" 
         [(value)]="formField.value" [minVal]="formField.minValue" [maxVal]="formField.maxValue" 
         [required]="formField.required" [readOnly]="formField.disabled" [keyboardLayout]="keyboardLayout" 
-        [iconName]="formField.iconName"
+        [iconName]="formField.iconName" 
         [attrType]="isNumericField() ? 'tel' : 'text'" (valueChange)="onFormElementChanged(formField)"></app-counter>
     </ng-container>
 
     <ng-container *ngIf="formField.inputType==='DatePartChooser'">
-        <app-date-part-chooser-field [formGroup]="formGroup" [controlName]="formField.id" [label]="formField.label" 
-            [(model)]="formField" [required]="formField.required" [iconName]="formField.iconName" [formatterName]="formField.formatter || formField.inputType"
+        <app-date-part-chooser-field [formGroup]="formGroup" [controlName]="formField.id"
+            [placeholder]="getPlaceholderText(formField)" 
+            [(model)]="formField" [required]="formField.required" [iconName]="formField.iconName" 
+            [formatterName]="formField.formatter || formField.mode || formField.inputType"
+            [modifyAllowed]="!formField.disabled" [deleteAllowed]="!formField.disabled"
             (change)="onFormElementChanged(formField)">
         </app-date-part-chooser-field>
+    </ng-container>
+
+    <ng-container *ngIf="formField.inputType==='Time'">
+        <app-time-chooser [value]="formField.value" [formGroup]="formGroup" [controlName]="formField.id" [label]="formField.label"
+            [required]="formField.required" [keyboardLayout]="keyboardLayout" [iconName]="formField.iconName" (change)="onFormElementChanged(formField)"></app-time-chooser>
     </ng-container>
     
     <ng-container *ngIf="formField.elementType==='Display'">

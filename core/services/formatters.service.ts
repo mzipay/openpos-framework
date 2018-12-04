@@ -20,7 +20,9 @@ import {
     DoNothingFormatter,
     DateTimeFormatter,
     DateTimeCAFormatter,
-    PostalCodeCAFormatter
+    PostalCodeCAFormatter,
+    TimeFormatter,
+    TimeFormat
 } from '../../shared/formatters';
 
 
@@ -68,6 +70,9 @@ export class FormattersService {
         NOLOCALEFormatters.set('decimal', new DecimalFormatter());
         NOLOCALEFormatters.set('wordtext', new WordTextFormatter());
         NOLOCALEFormatters.set('datetime', new DateTimeFormatter());
+        NOLOCALEFormatters.set('hour', new TimeFormatter(TimeFormat.HOUR));
+        NOLOCALEFormatters.set('minsec', new TimeFormatter(TimeFormat.MIN_SEC));
+        NOLOCALEFormatters.set('monthdate', new DateTimeFormatter('MM/dd'));
     }
 
     getFormatter(name: string): IFormatter {

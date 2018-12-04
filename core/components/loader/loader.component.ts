@@ -1,49 +1,69 @@
+import { Logger } from './../../services/logger.service';
+import { IMessageHandler } from './../../interfaces/message-handler.interface';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { LoaderState } from './loader-state';
 import { SessionService } from '../../services/session.service';
 import { PersonalizationService } from '../../services/personalization.service';
+import { ILoading } from '../../interfaces/loading.interface';
 
 @Component({
     selector: 'app-loader',
     templateUrl: 'loader.component.html',
     styleUrls: ['loader.component.scss']
 })
-export class LoaderComponent implements OnInit, OnDestroy {
-
+export class LoaderComponent implements OnInit, OnDestroy, IMessageHandler<ILoading> {
     show = false;
     title: string = LoaderState.LOADING_TITLE;
     message: string = null;
 
-    connected = true;
     loading = false;
 
-    private subscription: any;
-
     constructor(
+        private log: Logger,
         private personalization: PersonalizationService,
         private session: SessionService,
         private changeRef: ChangeDetectorRef
     ) { }
 
     ngOnInit() {
-        this.subscription = this.session.loaderState.observable
-            .subscribe((state: LoaderState) => {
-                const stateChanging = this.show !== state.show;
-                this.title = state.title ? state.title : LoaderState.LOADING_TITLE;
-                this.message = state.message;
-                this.show = state.show;
-                this.connected = !state.show;
-                this.loading = state.show;
-                // For iOS when returning from the background, angular doesn't
-                // always run a change detection.
-                if (stateChanging) {
-                    this.changeRef.detectChanges();
-                }
-            });
+        this.session.registerMessageHandler(this, 'Loading');
+    }
+
+    handle(message: ILoading) {
+        this.log.info(`received loading message.  queue: ${message.queue}, cancel: ${message.cancel}, title: ${message.title}`);
+        if (message.queue) {
+            this.loading = true;
+            setTimeout(() => {
+                this.updateLoading(message, false);
+            }, 1000);
+        } else {
+            this.updateLoading(message, true);
+        }
+    }
+
+    private updateLoading(message: ILoading, force: boolean) {
+        let stateChanging = false;
+        if (message.cancel) {
+            this.log.info(`cancelling loading`);
+            stateChanging = this.loading;
+            this.loading = false;
+            this.show = false;
+        } else if ((this.loading && !this.show) || force) {
+            stateChanging = !this.show;
+            this.log.info(`showing the loading dialog NOW with a title of: ${message.title} `);
+            this.loading = true;
+            this.title = message.title;
+            this.message = message.message;
+            this.show = true;
+        }
+
+        if (stateChanging) {
+            this.log.info('loading state changed');
+            this.changeRef.detectChanges();
+        }
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
     }
 
     public getHiddenClass(): string {
