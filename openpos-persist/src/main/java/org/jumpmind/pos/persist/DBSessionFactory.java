@@ -48,9 +48,9 @@ public class DBSessionFactory {
             Map<String, String> sessionContext,
             List<Class<?>> entities,
             QueryTemplates queryTemplatesObject,
-            DmlTemplates dmlTemplates, 
+            DmlTemplates dmlTemplates,
             TagConfig tagConfig) {
-                
+
         this.queryTemplates = buildQueryTemplatesMap(queryTemplatesObject);
         this.dmlTemplates = buildDmlTemplatesMap(dmlTemplates);
         this.sessionContext = sessionContext;
@@ -65,7 +65,8 @@ public class DBSessionFactory {
     protected void initSchema() {
         this.databaseSchema = new DatabaseSchema();
         databaseSchema.init(sessionContext.get("module.tablePrefix"), databasePlatform,
-                this.modelClazzes.stream().filter(e -> e.getAnnotation(org.jumpmind.pos.persist.Table.class) != null).collect(Collectors.toList()),
+                this.modelClazzes.stream().filter(e -> e.getAnnotation(org.jumpmind.pos.persist.Table.class) != null)
+                        .collect(Collectors.toList()),
                 this.modelClazzes.stream().filter(e -> e.getAnnotation(Extends.class) != null).collect(Collectors.toList()));
     }
 
@@ -82,7 +83,7 @@ public class DBSessionFactory {
         List<org.jumpmind.db.model.Table> tables = this.databaseSchema.getTables(entityClazz);
         return tables != null && tables.size() > 0 ? tables.get(0) : null;
     }
-    
+
     public static QueryTemplates getQueryTemplates(String tablePrefix) {
         try {
             URL url = Thread.currentThread().getContextClassLoader().getResource(tablePrefix + "-query.yaml");
@@ -132,16 +133,18 @@ public class DBSessionFactory {
         }
         return dmlTemplatesMap;
     }
-    
+
     protected void enhanceTaggedModels() {
-        List<TagModel> tags = tagConfig.getTags();
-        
-        for (Class<?> clazz : modelClazzes) {
-            Tagged[] annotations = clazz.getAnnotationsByType(Tagged.class);
-            if (annotations.length > 0) {
-                Tagged tagged = annotations[0];
-                enchanceTaggedTable(clazz, tags, tagged.includeTagsInPrimaryKey());
-            }                  
+        if (tagConfig != null) {
+            List<TagModel> tags = tagConfig.getTags();
+
+            for (Class<?> clazz : modelClazzes) {
+                Tagged[] annotations = clazz.getAnnotationsByType(Tagged.class);
+                if (annotations.length > 0) {
+                    Tagged tagged = annotations[0];
+                    enchanceTaggedTable(clazz, tags, tagged.includeTagsInPrimaryKey());
+                }
+            }
         }
 
     }
@@ -212,7 +215,6 @@ public class DBSessionFactory {
 
     protected String getColumnName(TagModel tag) {
         return TagModel.TAG_PREFIX + tag.getName().toUpperCase();
-    }    
-
+    }
 
 }
