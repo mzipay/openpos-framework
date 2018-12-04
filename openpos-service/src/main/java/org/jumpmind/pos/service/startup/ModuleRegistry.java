@@ -47,7 +47,7 @@ public class ModuleRegistry {
                         try {
                             out.write(pos + "=" + StringUtils.capitalize(module.getName()) + "|");
                             out.write(module.getDriver() + "|");
-                            out.write(module.getURL() + "|\n");
+                            out.write(module.getURL().replace("jdbc:openpos:", "jdbc:") + "|\n");
                             pos++;
                         } catch (IOException e) {
                             logger.warn("Unable to configure " + module.getName() + " in \".h2.server.properties\"");
