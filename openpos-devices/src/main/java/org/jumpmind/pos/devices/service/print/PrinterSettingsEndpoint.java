@@ -13,7 +13,7 @@ public class PrinterSettingsEndpoint {
     PrinterDeviceWrapper wrapper;
 
 
-    @Endpoint("/print/settings")
+    @Endpoint("/devices/print/settings")
     @ResponseBody
     public PrinterSettingsResult printerSettings(@RequestBody PrinterSettingsRequest req) {
         return wrapper.settings(req);

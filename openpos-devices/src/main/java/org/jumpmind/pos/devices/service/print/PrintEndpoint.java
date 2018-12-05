@@ -12,7 +12,7 @@ public class PrintEndpoint {
     @Autowired
     PrinterDeviceWrapper wrapper;
 
-    @Endpoint("/print")
+    @Endpoint("/devices/print")
     public ServiceResult print(@RequestBody PrintRequest req) {
         return wrapper.print(req);
     }

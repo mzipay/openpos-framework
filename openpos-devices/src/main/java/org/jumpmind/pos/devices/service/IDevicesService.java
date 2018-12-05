@@ -4,7 +4,6 @@ import org.jumpmind.pos.devices.service.print.PrintRequest;
 import org.jumpmind.pos.devices.service.print.PrinterSettingsRequest;
 import org.jumpmind.pos.devices.service.print.PrinterSettingsResult;
 import org.jumpmind.pos.devices.service.scan.ScannerConfigRequest;
-import org.jumpmind.pos.service.IService;
 import org.jumpmind.pos.service.ServiceResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,7 @@ import io.swagger.annotations.Api;
 @Api(tags = "Devices Service", description = "This service exposes device functionality for sharing devices across multiple clients")
 @RestController
 @RequestMapping("/devices")
-public interface IDevicesService extends IService {
+public interface IDevicesService {
 
     @RequestMapping(value = "/scan/config", method = RequestMethod.PUT)
     @ResponseBody

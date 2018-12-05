@@ -22,7 +22,7 @@ public class ProxyScannerServiceTest {
     public void testScan() throws Exception {
         ProxyScannerService clientProxyService = new ProxyScannerService();
         clientProxyService.profile = "dev";
-        clientProxyService.port = 1973;
+        clientProxyService.port = 1975;
         EventCallbacksAdapter adapter = new EventCallbacksAdapter();
         clientProxyService.open("Scanner", adapter);
         clientProxyService.claim(1000);
