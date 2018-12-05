@@ -4,7 +4,10 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EndpointRegistry {
+    final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private ConfigurableApplicationContext applicationContext;
@@ -23,24 +27,28 @@ public class EndpointRegistry {
     @EventListener(ContextRefreshedEvent.class)
     public void initEndpoints() {
         for (String beanName : applicationContext.getBeanDefinitionNames()) {
-            Object bean = applicationContext.getBean(beanName);
-            if (bean != null) {
-                checkAndRegisterEndpoint(bean);
-            }
+            checkAndRegisterEndpoint(beanName);
         }
     }
-    
-    protected void checkAndRegisterEndpoint(Object bean) {
-        Class<?> beanClass = bean.getClass();
+
+    protected void checkAndRegisterEndpoint(String beanName) {
+        ConfigurableListableBeanFactory beanFactory = applicationContext.getBeanFactory();
+        Class<?> beanClass = beanFactory.getType(beanName);
         
         for (Method method : beanClass.getDeclaredMethods()) {
             Endpoint baseEndpoint = AnnotationUtils.findAnnotation(method, Endpoint.class);
             EndpointOverride overrideEndpoint = AnnotationUtils.findAnnotation(method, EndpointOverride.class);
             
             if (baseEndpoint != null) {
-                baseEndpoints.put(baseEndpoint.value(), buildEndpointDefinition(baseEndpoint.value(), method, bean));
+                Object bean = applicationContext.getBean(beanName);
+                if (bean != null) {
+                    baseEndpoints.put(baseEndpoint.value(), buildEndpointDefinition(baseEndpoint.value(), method, bean));
+                }
             } else if (overrideEndpoint != null) {
-                overrideEndpoints.put(overrideEndpoint.value(), buildEndpointDefinition(overrideEndpoint.value(), method, bean));
+                Object bean = applicationContext.getBean(beanName);
+                if (bean != null) {
+                    overrideEndpoints.put(overrideEndpoint.value(), buildEndpointDefinition(overrideEndpoint.value(), method, bean));
+                }
             }
         }
     }
