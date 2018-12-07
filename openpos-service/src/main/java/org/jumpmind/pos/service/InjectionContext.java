@@ -1,32 +1,20 @@
 package org.jumpmind.pos.service;
 
-import java.util.List;
-
 public class InjectionContext {
 
-    private EndpointDefinition endpointDefinition;
-    private List<Object> arguments;
-    
-    public InjectionContext(EndpointDefinition endpointDefinition, List<Object> arguments) {
+    private Object[] arguments;
+
+    public InjectionContext(Object[] arguments) {
         super();
-        this.endpointDefinition = endpointDefinition;
         this.arguments = arguments;
     }
-    
-    public EndpointDefinition getEndpointDefinition() {
-        return endpointDefinition;
-    }
-    public void setEndpointDefinition(EndpointDefinition endpointDefinition) {
-        this.endpointDefinition = endpointDefinition;
-    }
-    public List<Object> getArguments() {
+
+    public Object[] getArguments() {
         return arguments;
     }
-    public void setArguments(List<Object> arguments) {
+
+    public void setArguments(Object[] arguments) {
         this.arguments = arguments;
     }
-    
 
-
-    
 }

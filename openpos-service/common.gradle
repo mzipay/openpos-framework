@@ -6,7 +6,7 @@ ext {
 
 
 dependencies {
- 
+    compile group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.6.2'
     compile "io.springfox:springfox-swagger2:${springfoxSwaggerVersion}"
     compile "io.springfox:springfox-swagger-ui:${springfoxSwaggerVersion}"
 
@@ -21,9 +21,17 @@ dependencies {
         exclude module: "spring-boot-starter-tomcat"
         exclude module: "spring-boot-starter-logging"
     }
+    
+    compile("org.springframework.boot:spring-boot-starter-cache:${springBootVersion}"){
+        exclude module: "spring-boot-starter-tomcat"
+        exclude module: "spring-boot-starter-logging"
+    }
+    
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}"){
         exclude module: "spring-boot-starter-tomcat"
         exclude module: "spring-boot-starter-logging"
     }
+    
+    
 
 }
