@@ -6,7 +6,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { TextMaskModule } from 'angular2-text-mask';
-import { SearchSelectModule } from '@oasisdigital/angular-material-search-select';
 import { MaterialModule } from './material.module';
 import { MatKeyboardModule } from '../keyboard';
 
@@ -148,7 +147,6 @@ const pipes = [
         MaterialModule,
         MatKeyboardModule,
         TextMaskModule,
-        SearchSelectModule
     ],
     exports: [
         BrowserModule,
@@ -161,7 +159,6 @@ const pipes = [
         MaterialModule,
         MatKeyboardModule,
         TextMaskModule,
-        SearchSelectModule,
 
         ...directives,
         ...components,

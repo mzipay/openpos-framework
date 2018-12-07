@@ -58,9 +58,6 @@
         </mat-error>
     </ng-container>
 
-    <search-select *ngIf="formField.inputType==='AutoComplete'" width='100%' [formControlName]="formField.id" [placeholder]="getPlaceholderText(formField)"
-        (change)="onFormElementChanged(formField)" [dataSource]="autoCompleteDataSource"></search-select>
-
     <ng-container *ngIf="formField.inputType==='Checkbox'">
         <mat-checkbox [formControlName]="formField.id" [required]="formField.required" [value]="formField.value" [labelPosition]="formField.labelPosition"
             [disabled]="formField.disabled" [checked]="formField.checked" (change)="onFormElementChanged(formField)">{{formField.label}}</mat-checkbox>

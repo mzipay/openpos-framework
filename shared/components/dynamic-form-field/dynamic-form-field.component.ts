@@ -5,7 +5,6 @@ import {
 } from '@angular/core';
 import { MatInput, MatDialog } from '@angular/material';
 import { FormGroup } from '@angular/forms';
-import { OptionEntry, DataSource } from '@oasisdigital/angular-material-search-select';
 import { Subscription, Observable, of  } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ITextMask, TextMask } from '../../textmask';
@@ -33,16 +32,6 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
 
   valuesSubscription: Subscription;
   private barcodeEventSubscription: Subscription;
-
-  autoCompleteDataSource: DataSource = {
-    displayValue(value: any): Observable<OptionEntry | null> {
-      return of(null);
-    },
-
-    search(term: string): Observable<OptionEntry[]> {
-      return of(null);
-    }
-  };
 
   // tslint:disable-next-line:no-output-on-prefix
   @Output() onFieldChanged = new EventEmitter<IFormElement>();
@@ -103,10 +92,6 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
       this.keyboardLayout = 'Email';
     }
 
-    if (this.formField.inputType === 'AutoComplete') {
-      this.updateAutoCompleteDataSource();
-    }
-
     if (this.formField.scanEnabled) {
         this.pluginService.getPluginWithOptions('barcodeScannerPlugin', true, {waitForCordovaInit: true}).then(plugin => {
             // the onBarcodeScanned will only emit an event when client code passes a scan
@@ -156,40 +141,6 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
       // setSelectionRange is necessary in order to work correctly in UIWebView on iPad
       event.target.setSelectionRange(0, 9999);
     }
-  }
-
-  updateAutoCompleteDataSource() {
-    const fld: IFormElement = this.formField;
-    const scrnSvc: ScreenService = this.screenService;
-    this.autoCompleteDataSource = {
-      displayValue(value: any): Observable<OptionEntry | null> {
-        this.log.info(`being asked to display value for: ${value}`);
-        const display = <string>value;
-        return of({
-          value,
-          display,
-          details: {}
-        });
-      },
-
-      search(term: string): Observable<OptionEntry[]> {
-        const lowerTerm = term ? term.toLowerCase() : '';
-        if (lowerTerm) {
-          this.log.info(`autocomplete searching for '${lowerTerm}' on field '${fld.id}'`);
-          return (<Observable<Array<string>>>scrnSvc.getFieldValues(fld.id, lowerTerm))
-            .pipe(
-              map(searchResults => searchResults.map(v => ({
-                value: v,
-                display: v,
-                details: {}
-              })))
-            );
-        } else {
-          return of(<OptionEntry[]>[]);
-        }
-      }
-    };
-
   }
 
   onFormElementChanged(formElement: IFormElement): void {
