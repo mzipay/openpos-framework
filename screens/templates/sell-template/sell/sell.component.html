@@ -32,21 +32,23 @@
 
             <mat-card-content fxFlex="0 1 100%">
                 <mat-drawer-container fxFlex="0 1 100%">
-                    <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async"
-                        fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="4px" fxLayoutGap.lg="20px" style="overflow-x:hidden">
-                        <button mat-button color="primary" *ngFor="let m of template.localMenuItems" (click)="doMenuItemAction(m)"
-                            [disabled]="!isMenuItemEnabled(m)" class="sell-template-menu-button">
-                            <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
-                            <span [ngClass]="{'muted-color': ! m.enabled}">&nbsp;{{m.title}}</span>
-                            <span *ngIf="m.keybind && keybindsEnabled()" fxFlex="1 1 auto" style="padding-right: 8px;"></span>
-                            <span *ngIf="m.keybind && keybindsEnabled()" class="muted-color">{{m.keybind}}</span>
-                        </button>
-                        <div fxFlex="1 1 auto"></div>
-                        <ng-container *ngIf="!screen.hideCustomer">
-                            <app-sell-linked-customer [screenType]="screen.screenType" [customerName]="screen.customerName"
-                                [noCustomerText]="screen.noCustomerText" [loyaltyButton]="screen.loyaltyButton"></app-sell-linked-customer>
-                        </ng-container>
-                        <div *ngIf="screen.screenType === 'Transaction'" fxFlex="0 1 auto" class="sell-screen-logo"></div>
+                    <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async" class="sell-template-drawer">
+                        <div fxFlexFill fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="4px"
+                            fxLayoutGap.lg="20px">
+                            <button mat-button color="primary" *ngFor="let m of template.localMenuItems" (click)="doMenuItemAction(m)"
+                                [disabled]="!isMenuItemEnabled(m)" class="sell-template-menu-button">
+                                <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
+                                <span [ngClass]="{'muted-color': ! m.enabled}">&nbsp;{{m.title}}</span>
+                                <span *ngIf="m.keybind && keybindsEnabled()" fxFlex="1 1 auto" style="padding-right: 8px;"></span>
+                                <span *ngIf="m.keybind && keybindsEnabled()" class="muted-color">{{m.keybind}}</span>
+                            </button>
+                            <div fxFlex="1 1 auto"></div>
+                            <ng-container *ngIf="!screen.hideCustomer">
+                                <app-sell-linked-customer [screenType]="screen.screenType" [customerName]="screen.customerName"
+                                    [noCustomerText]="screen.noCustomerText" [loyaltyButton]="screen.loyaltyButton"></app-sell-linked-customer>
+                            </ng-container>
+                            <div *ngIf="screen.screenType === 'Transaction'" fxFlex="0 1 auto" class="sell-screen-logo"></div>
+                        </div>
                     </mat-drawer>
 
                     <mat-drawer-content fxFlex="0 1 100%" fxLayout="column">

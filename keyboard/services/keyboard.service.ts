@@ -1,4 +1,3 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ComponentRef, Inject, Injectable, LOCALE_ID, Optional, SkipSelf } from '@angular/core';
@@ -50,7 +49,6 @@ export class MatKeyboardService {
   }
 
   constructor(private _overlay: Overlay,
-              private _live: LiveAnnouncer,
               @Inject(LOCALE_ID) private _defaultLocale: string,
               @Inject(MAT_KEYBOARD_LAYOUTS) private _layouts: IKeyboardLayouts,
               @Optional() @SkipSelf() private _parentKeyboard: MatKeyboardService) {
@@ -113,10 +111,6 @@ export class MatKeyboardService {
     //     setTimeout(() => keyboardRef.dismiss(), configs.duration);
     //   });
     // }
-
-    if (config.announcementMessage) {
-      this._live.announce(config.announcementMessage, config.politeness);
-    }
 
     this._openedKeyboardRef = keyboardRef;
     return this._openedKeyboardRef;
