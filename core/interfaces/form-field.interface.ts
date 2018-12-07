@@ -30,6 +30,7 @@ export interface IFormElement {
     scanEnabled: boolean;
     validators?: string[];
     additionalValidators?: ValidatorFn[];
+    validationMessages: Map<string, string>;
 }
 
 export interface IDynamicListField {

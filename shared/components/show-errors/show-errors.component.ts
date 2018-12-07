@@ -1,5 +1,5 @@
 import {Component, Input } from '@angular/core';
-import { AbstractControlDirective, AbstractControl } from '@angular/forms';
+import { AbstractControlDirective, AbstractControl, ControlContainer } from '@angular/forms';
 
 @Component({
     selector: 'app-show-errors',
@@ -29,6 +29,9 @@ export class ShowErrorsComponent {
     @Input()
     private control: AbstractControlDirective | AbstractControl;
 
+    @Input()
+    private additionalValidationMessages: Map<string, string>;
+
     /**
      * Provides a means to add or override errors provided by the ShowErrorsComponents.
      * @param errorName Name of the error to add or override
@@ -50,7 +53,9 @@ export class ShowErrorsComponent {
     }
 
     private getMessage(type: string, params: any) {
-        if ( Object.keys(ShowErrorsComponent.errorMessages).includes(type)) {
+        if ( this.additionalValidationMessages && Object.keys(this.additionalValidationMessages).includes(type)) {
+            return this.additionalValidationMessages[type];
+        } else if ( Object.keys(ShowErrorsComponent.errorMessages).includes(type)) {
             return ShowErrorsComponent.errorMessages[type](params);
         } else {
             return 'Invalid input';

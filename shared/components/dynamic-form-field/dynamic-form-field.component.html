@@ -39,7 +39,7 @@
                 matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled" [required]="formField.required" (change)="onFormElementChanged(formField)"></textarea>       
 
             <mat-error>
-                <app-show-errors [control]="formGroup.controls[formField.id]"></app-show-errors>
+                <app-show-errors [control]="formGroup.controls[formField.id]" [additionalValidationMessages]="formField.validationMessages"></app-show-errors>
             </mat-error>
         </mat-form-field>
     </ng-container>
@@ -54,7 +54,7 @@
         [minDate]="formField.minDate" [maxDate]="formField.maxDate"
         (valueChange)="onFormElementChanged(formField)"></app-dynamic-date-form-field>
         <mat-error>
-            <app-show-errors [control]="formGroup.controls[formField.id]"></app-show-errors>
+            <app-show-errors [control]="formGroup.controls[formField.id]" [additionalValidationMessages]="formField.validationMessages"></app-show-errors>
         </mat-error>
     </ng-container>
 
@@ -69,6 +69,9 @@
         [required]="formField.required" [readOnly]="formField.disabled" [keyboardLayout]="keyboardLayout" 
         [iconName]="formField.iconName" 
         [attrType]="isNumericField() ? 'tel' : 'text'" (valueChange)="onFormElementChanged(formField)"></app-counter>
+        <mat-error>
+            <app-show-errors class="error" [control]="formGroup.controls[controlName]" [additionalValidationMessages]="formField.validationMessages"></app-show-errors>
+        </mat-error>
     </ng-container>
 
     <ng-container *ngIf="formField.inputType==='DatePartChooser'">
