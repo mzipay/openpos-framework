@@ -291,5 +291,23 @@ public class FormField implements IFormElement, IField, Serializable {
 	public void setHintText(String hintText) {
 		this.put("hintText", hintText);
 	}
-    
+	
+	public void setValidationMessage( Map<String,String> messages) {
+		this.put("validationMessages", messages);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, String> getValidationMessages() {
+		if(any().containsKey("validationMessages")) {
+			return (Map<String, String>) any().get("validationMessages");
+		}
+		return null;
+	}
+	
+    public void addValidationMessage( String validatorName, String message) {
+    	if( getValidationMessages() == null) {
+    		setValidationMessage(new HashMap<String, String>());
+    	}
+    	getValidationMessages().put(validatorName, message);
+    }
 }
