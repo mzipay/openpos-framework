@@ -19,28 +19,21 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class DeviceRepositoryTest {
 
     @Autowired
-    DeviceRepository repository;
+    DevicesRepository repository;
     
     @Autowired
     DataSource dataSource;
     
     @Test
     public void testGetDevices() {
-        Map<String, DeviceModel> map = repository.getDevices("dev");
+        Map<String, DeviceModel> map = repository.getDevices();
         assertNotNull(map);
-        assertEquals(2, map.size());
-        DeviceModel scanner = map.get("Scanner");
+        assertEquals(3, map.size());
+        DeviceModel scanner = map.get("dev-Scanner");
         assertNotNull(scanner);
         assertNotNull(scanner.getProperties());
         assertEquals(2, scanner.getProperties().size());
     }
     
-    @Test
-    public void testGetDevicesNothingFound() {
-        Map<String, DeviceModel> map = repository.getDevices("nothing");
-        assertNotNull(map);
-        assertEquals(0, map.size());
-    }
-
     
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import org.jumpmind.pos.devices.DevicesUtils;
 import org.jumpmind.pos.server.service.IMessageService;
 import org.jumpmind.pos.service.ServiceResult;
 import org.jumpmind.pos.service.ServiceResult.Result;
@@ -69,10 +70,10 @@ abstract public class AbstractDeviceWrapper<T, R extends ServiceResult> {
     }
 
     protected T getDevice(DeviceRequest req) throws JposException {
-        String logicalName = req.getDeviceName();
+        String logicalName = DevicesUtils.getLogicalName(req);
         T device = devicesByLogicalName.get(logicalName);
         if (device == null) {
-            cache.populate(req.getProfile());
+            cache.populate();
             device = create(req);
             devicesByLogicalName.put(logicalName, device);
         }

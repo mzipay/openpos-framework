@@ -9,6 +9,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.jumpmind.pos.devices.DevicesUtils;
 import org.jumpmind.pos.devices.model.DeviceModel;
 import org.jumpmind.pos.devices.model.DevicePropModel;
 import org.jumpmind.pos.devices.service.DeviceCache;
@@ -52,7 +53,7 @@ public class AlternateRegPopulator extends AbstractRegPopulator {
                 Collection<DeviceModel> values = devices.values();
                 for (DeviceModel deviceModel : values) {
                     JposEntry entry = new SimpleEntry();
-                    entry.addProperty(JposEntry.LOGICAL_NAME_PROP_NAME, deviceModel.getDeviceName());
+                    entry.addProperty(JposEntry.LOGICAL_NAME_PROP_NAME, DevicesUtils.getLogicalName(deviceModel));
                     entry.addProperty(JposEntry.SERVICE_CLASS_PROP_NAME, deviceModel.getServiceClass());
                     entry.addProperty(JposEntry.SI_FACTORY_CLASS_PROP_NAME, deviceModel.getFactoryClass());
                     List<DevicePropModel> properties = deviceModel.getProperties();

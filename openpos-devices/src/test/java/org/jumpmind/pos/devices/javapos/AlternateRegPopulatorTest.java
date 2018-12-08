@@ -25,13 +25,13 @@ public class AlternateRegPopulatorTest {
     @Before
     public void init() {
         module.start();
-        cache.populate("dev");
+        cache.populate();
     }
     
     @Test
     public void testInitializeScanner() throws Exception {
         Scanner scanner = new Scanner();
-        scanner.open("Scanner");
+        scanner.open("dev-Scanner");
     }
     
 

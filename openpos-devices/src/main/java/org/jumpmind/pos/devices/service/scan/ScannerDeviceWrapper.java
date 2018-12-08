@@ -1,5 +1,6 @@
 package org.jumpmind.pos.devices.service.scan;
 
+import org.jumpmind.pos.devices.DevicesUtils;
 import org.jumpmind.pos.devices.service.AbstractDeviceWrapper;
 import org.jumpmind.pos.devices.service.DeviceRequest;
 import org.jumpmind.pos.service.ServiceResult;
@@ -33,7 +34,7 @@ public class ScannerDeviceWrapper extends AbstractDeviceWrapper<Scanner, Service
 
     protected void configure(ScannerConfigRequest req, Scanner scanner) throws JposException {
         if (scanner.getState() == JposConst.JPOS_S_CLOSED) {
-            scanner.open(req.getDeviceName());
+            scanner.open(DevicesUtils.getLogicalName(req));
         }
 
         if (!scanner.getClaimed()) {

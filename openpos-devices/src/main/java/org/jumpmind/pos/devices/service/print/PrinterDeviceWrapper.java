@@ -2,6 +2,7 @@ package org.jumpmind.pos.devices.service.print;
 
 import java.util.List;
 
+import org.jumpmind.pos.devices.DevicesUtils;
 import org.jumpmind.pos.devices.service.AbstractDeviceWrapper;
 import org.jumpmind.pos.devices.service.DeviceRequest;
 import org.jumpmind.pos.service.ServiceResult;
@@ -82,7 +83,7 @@ public class PrinterDeviceWrapper extends AbstractDeviceWrapper<POSPrinter, Serv
 
     protected void enable(POSPrinter printer, DeviceRequest req) throws JposException {
         if (printer.getState() == JposConst.JPOS_S_CLOSED) {
-            printer.open(req.getDeviceName());
+            printer.open(DevicesUtils.getLogicalName(req));
         }
 
         if (!printer.getClaimed()) {

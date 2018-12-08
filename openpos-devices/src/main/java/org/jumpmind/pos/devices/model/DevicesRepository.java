@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jumpmind.pos.devices.DevicesUtils;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,27 +15,25 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @DependsOn(value = { "DevicesModule" })
-public class DeviceRepository {
+public class DevicesRepository {
 
     @Autowired
     @Qualifier("devSession")
     @Lazy
     DBSession dbSession;
 
-    Query<DeviceModel> deviceQuery = new Query<DeviceModel>().named("deviceLookupByProfile").result(DeviceModel.class);
-
     Query<DevicePropModel> devicePropsQuery = new Query<DevicePropModel>().named("devicePropsLookupByProfile").result(DevicePropModel.class);
 
-    public Map<String, DeviceModel> getDevices(String profile) {
+    public Map<String, DeviceModel> getDevices() {
         Map<String, DeviceModel> byDeviceId = new HashMap<>();
-        List<DeviceModel> devices = dbSession.query(deviceQuery, profile);
-        List<DevicePropModel> properties = dbSession.query(devicePropsQuery, profile);
+        List<DeviceModel> devices = dbSession.findAll(DeviceModel.class);
+        List<DevicePropModel> properties = dbSession.findAll(DevicePropModel.class);
         for (DeviceModel deviceModel : devices) {
-            byDeviceId.put(deviceModel.getDeviceName(), deviceModel);
+            byDeviceId.put(DevicesUtils.getLogicalName(deviceModel), deviceModel);
         }
 
         for (DevicePropModel devicePropsModel : properties) {
-            DeviceModel deviceModel = byDeviceId.get(devicePropsModel.getDeviceName());
+            DeviceModel deviceModel = byDeviceId.get(DevicesUtils.getLogicalName(devicePropsModel));
             if (deviceModel != null) {
                 deviceModel.add(devicePropsModel);
             }

@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.jumpmind.pos.devices.model.DeviceModel;
-import org.jumpmind.pos.devices.model.DeviceRepository;
+import org.jumpmind.pos.devices.model.DevicesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 public class DeviceCache {
 
     @Autowired
-    DeviceRepository deviceRepository;
+    DevicesRepository deviceRepository;
 
     static Map<String, DeviceModel> deviceModels;
 
-    public void populate(String profile) {
+    public void populate() {
         if (deviceModels == null) {
-            deviceModels = new ConcurrentHashMap<>(deviceRepository.getDevices(profile));
+            deviceModels = new ConcurrentHashMap<>(deviceRepository.getDevices());
         }
     }
 
