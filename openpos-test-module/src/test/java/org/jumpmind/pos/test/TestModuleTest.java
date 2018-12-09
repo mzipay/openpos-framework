@@ -29,7 +29,7 @@ public class TestModuleTest {
     @Autowired
     DBSession testSession;
     
-    @Value("${installation.id}")
+    @Value("${openpos.installationId:undefined}")
     String installationId;
     
     @Before

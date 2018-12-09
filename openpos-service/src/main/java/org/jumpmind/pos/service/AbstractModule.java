@@ -48,6 +48,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -55,6 +56,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
+@DependsOn("tagConfig")
 abstract public class AbstractModule extends AbstractServiceFactory implements Module {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -62,18 +64,18 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
     @Autowired
     protected Environment env;
 
-    @Value("${installation.id:undefined}")
+    @Value("${openpos.installationId:undefined}")
     protected String installationId;
 
-    @Autowired(required = false)
+    @Autowired
     protected TagConfig tagConfig;
 
     protected IDatabasePlatform databasePlatform;
 
-    @Value("${openpos.module.datasource.bean.name:#{null}}")
+    @Value("${openpos.modules.datasourceBeanName:#{null}}")
     protected String dataSourceBeanName;
 
-    @Value("${openpos.module.sql.script.profile:test}")
+    @Value("${openpos.modules.sqlScriptProfile:test}")
     protected String sqlScriptProfile;
 
     protected BasicDataSource dataSource;

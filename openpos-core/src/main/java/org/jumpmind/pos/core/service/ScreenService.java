@@ -69,7 +69,7 @@ public class ScreenService implements IScreenService, IActionListener {
     @Autowired
     IStateManagerFactory stateManagerFactory;
 
-    @Value("${org.jumpmind.pos.core.service.ScreenService.jsonIncludeNulls:true}")
+    @Value("${openpos.ScreenService.jsonIncludeNulls:true}")
     boolean jsonIncludeNulls = true;
 
     @Autowired

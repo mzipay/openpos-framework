@@ -8,9 +8,9 @@ import java.util.Map;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.DatabaseScriptContainer;
-import org.jumpmind.pos.persist.TagConfigFactory;
 import org.jumpmind.pos.persist.driver.Driver;
 import org.jumpmind.pos.persist.impl.QueryTemplates;
+import org.jumpmind.pos.persist.model.TagConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
@@ -42,7 +42,7 @@ public class TestPersistCarsConfig {
                     PersistTestUtil.getSessionContext(), 
                     Arrays.asList(CarModel.class, CarStats.class, ServiceInvoice.class, RaceCarModel.class), 
                     queryTemplates,
-                    DBSessionFactory.getDmlTemplates("persist-test"), new TagConfigFactory().getTagConfig());
+                    DBSessionFactory.getDmlTemplates("persist-test"), new TagConfig());
             
 
             DBSession session = sessionFactory.createDbSession();

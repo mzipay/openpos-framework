@@ -17,7 +17,7 @@ public class ModuleEnabledCondition implements Condition {
         boolean include = true;
         Environment env = context.getEnvironment();
         if (env != null) {
-            String includedModules = env.getProperty("include.modules");
+            String includedModules = env.getProperty("openpos.modules.include");
             if (isNotBlank(includedModules)) {
                 Map<String, Object> attrs = metadata.getAnnotationAttributes(Configuration.class.getName());
                 include = includedModules.contains((String) attrs.get("value"));
