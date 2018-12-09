@@ -72,7 +72,10 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
 
     @Value("${openpos.module.datasource.bean.name:#{null}}")
     protected String dataSourceBeanName;
-    
+
+    @Value("${openpos.module.sql.script.profile:test}")
+    protected String sqlScriptProfile;
+
     protected BasicDataSource dataSource;
 
     protected ISecurityService securityService;
@@ -80,7 +83,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
     protected PlatformTransactionManager txManager;
 
     protected DBSessionFactory sessionFactory;
-    
+
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -143,18 +146,18 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
 
     protected BasicDataSource dataSource() {
         if (dataSource == null) {
-            
+
             if (this.dataSourceBeanName != null) {
                 try {
                     dataSource = this.applicationContext.getBean(this.dataSourceBeanName, BasicDataSource.class);
                     logger.info("Using dataSource bean '{}' for {} module dataSource", this.dataSourceBeanName, getName());
                 } catch (Exception ex) {
-                    logger.warn("Failed to load dataSource with name '{}', will load default dataSource instead. Reason: {}", 
+                    logger.warn("Failed to load dataSource with name '{}', will load default dataSource instead. Reason: {}",
                             this.dataSourceBeanName, ex.getMessage());
                 }
             }
-            
-            if (dataSource == null ) {
+
+            if (dataSource == null) {
                 Driver.class.getName(); // Load openpos driver wrapper.
                 TypedProperties properties = new TypedProperties();
                 properties.put(DB_POOL_DRIVER, getDriver());
@@ -177,7 +180,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
                         "About to initialize the '%s' module datasource using the following driver:"
                                 + " '%s' and the following url: '%s' and the following user: '%s'",
                         getName(), properties.get(DB_POOL_DRIVER), properties.get(DB_POOL_URL), properties.get(DB_POOL_USER)));
-    
+
                 dataSource = BasicDataSourceFactory.create(properties, securityService());
             }
         }
@@ -216,7 +219,6 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
         String fromVersion = null;
 
         try {
-
             ModuleModel info = session.findByNaturalId(ModuleModel.class, installationId);
             if (info != null) {
                 fromVersion = info.getCurrentVersion();
@@ -227,7 +229,8 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
 
         logger.info("The previous version of {} was {} and the current version is {}", getName(), fromVersion, getVersion());
 
-        DatabaseScriptContainer scripts = new DatabaseScriptContainer(getName() + "/sql", databasePlatform());
+        DatabaseScriptContainer scripts = new DatabaseScriptContainer(String.format("%s/sql/%s", getName(), sqlScriptProfile),
+                databasePlatform());
 
         IDBSchemaListener schemaListener = getDbSchemaListener();
 
@@ -265,6 +268,5 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
             }
         };
     }
-
 
 }
