@@ -34,7 +34,7 @@
         </div>
         <div>
             <span *ngIf="item.amount" class="text-md primary">
-                <span class="super-currency-symbol">$</span>{{item.amount}}
+                <app-currency-text [amountText]="item.amount"></app-currency-text>
             </span>
             <mat-icon *ngIf="showItemIcon" class="material-icons line-item-caret" style="position:initial">keyboard_arrow_right</mat-icon>
             <ng-container *ngIf="showItemMenu">

@@ -49,7 +49,8 @@
 
 							<div fxFlex="15%">
 								<h5 class="middle-align text-md primary">
-									<span class="super-currency-symbol">$</span>{{i.grandTotal}}</h5>
+                                    <app-currency-text [amountText]="i.grandTotal"></app-currency-text>
+                                </h5>
 								<mat-icon class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
 							</div>
 						</div>

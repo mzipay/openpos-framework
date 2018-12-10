@@ -9,7 +9,8 @@
        </mat-card-title>
        <mat-card-content>
            <p class="muted-color text-lg">
-               <span class="super-currency-symbol">$</span>{{total.amount}}</p>
+               <app-currency-text [amountText]="total.amount"></app-currency-text>
+           </p>
        </mat-card-content>
    </mat-card>
    <button *ngIf="showOverflowList()" mat-icon-button color="accent" [matMenuTriggerFor]="totalsMenu">
@@ -23,7 +24,8 @@
                </mat-card-title>
                <mat-card-content>
                    <p class="muted-color text-lg">
-                       <span class="super-currency-symbol">$</span>{{total.amount}}</p>
+                       <app-currency-text [amountText]="total.amount"></app-currency-text>
+                   </p>
                </mat-card-content>
            </mat-card>				
        </div>

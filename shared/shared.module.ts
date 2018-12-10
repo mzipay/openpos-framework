@@ -58,10 +58,11 @@ import {
     PagerComponent,
     CatalogBrowserItemComponent,
     StatusBarStatusControlComponent,
-    STATUS_BAR_STATUS_CONTROL_COMPONENT
+    STATUS_BAR_STATUS_CONTROL_COMPONENT,
+    CurrencyTextComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
-import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe } from './pipes';
+import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
 import { SideNavComponent } from './layout-components';
 
@@ -98,7 +99,8 @@ const components = [
     TimeChooserComponent,
     PagerComponent,
     StatusBarStatusControlComponent,
-    CatalogBrowserItemComponent
+    CatalogBrowserItemComponent,
+    CurrencyTextComponent
 ];
 
 const directives = [
@@ -124,7 +126,8 @@ const pipes = [
     PhonePipe,
     HourMinSecPipe,
     LocalizedDatePipe,
-    ValueFormatterPipe
+    ValueFormatterPipe,
+    POSCurrencyPipe
 ];
 
 @NgModule({

@@ -5,8 +5,9 @@
       Total
     </mat-card-title>
     <mat-card-content>
-      <p ngClass="muted-color text-lg" ngClass.xs="text-md">
-        <span class="super-currency-symbol"></span>{{screen.total|currency:session.getCurrencyDenomination():'symbol':'1.2'}}</p>
+        <p ngClass="muted-color text-lg" ngClass.xs="text-md">
+            <app-currency-text [amountText]="screen.total"></app-currency-text>
+        </p>
     </mat-card-content>
   </mat-card>
   <ng-container *ngIf="nextAction">

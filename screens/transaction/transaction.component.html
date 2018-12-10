@@ -37,14 +37,15 @@
 						</div>				
 						<div fxAlign="right">
 							<span class="primary text-md">
-								<span class="super-currency-symbol">$</span>{{item.amount}}
+                                <app-currency-text [amountText]="item.amount"></app-currency-text>
 								<br>
 								<span>
 									<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">
-										<span class="super-currency-symbol">$</span>{{item.originalAmount}}</p>
-									<p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">-
-										<span class="super-currency-symbol">$</span>{{item.discountAmount}}</p>
-								</span>
+                                    <app-currency-text [amountText]="item.originalAmount"></app-currency-text></p>
+                                    
+                                    <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">
+                                    <app-currency-text [amountText]="item.discountAmount"></app-currency-text></p>
+                                </span>
 							</span>
 						</div>	
 						<div *ngIf="selectedItems.length < 1" fxAlign="right" >
@@ -72,7 +73,8 @@
 			<span fxFlex="1 1 auto"></span>
 			<span fxFlex class="text-right">Total</span>
 			<span fxFlex [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
-				<span class="super-currency-symbol">$</span>{{screen.grandTotal}}</span>
+                <app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
+            </span>
 			<button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!screen.transaction.active || items.length == 0"
 			 (click)="session.onAction('Checkout')">
 				<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
