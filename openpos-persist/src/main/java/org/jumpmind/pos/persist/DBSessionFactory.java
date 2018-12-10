@@ -86,35 +86,35 @@ public class DBSessionFactory {
 
     public static QueryTemplates getQueryTemplates(String tablePrefix) {
         try {
-            URL url = Thread.currentThread().getContextClassLoader().getResource(tablePrefix + "-query.yaml");
+            URL url = Thread.currentThread().getContextClassLoader().getResource(tablePrefix + "-query.yml");
             if (url != null) {
                 log.info(String.format("Loading %s...", url.toString()));
                 InputStream queryYamlStream = url.openStream();
                 QueryTemplates queryTemplates = new Yaml(new Constructor(QueryTemplates.class)).load(queryYamlStream);
                 return queryTemplates;
             } else {
-                log.info("Could not locate " + tablePrefix + "-query.yaml on the classpath.");
+                log.info("Could not locate " + tablePrefix + "-query.yml on the classpath.");
                 return new QueryTemplates();
             }
         } catch (Exception ex) {
-            throw new PersistException("Failed to load " + tablePrefix + "-query.yaml", ex);
+            throw new PersistException("Failed to load " + tablePrefix + "-query.yml", ex);
         }
     }
 
     public static DmlTemplates getDmlTemplates(String tablePrefix) {
         try {
-            URL url = Thread.currentThread().getContextClassLoader().getResource(tablePrefix + "-dml.yaml");
+            URL url = Thread.currentThread().getContextClassLoader().getResource(tablePrefix + "-dml.yml");
             if (url != null) {
                 log.info(String.format("Loading %s...", url.toString()));
                 InputStream queryYamlStream = url.openStream();
                 DmlTemplates queryTemplates = new Yaml(new Constructor(DmlTemplates.class)).load(queryYamlStream);
                 return queryTemplates;
             } else {
-                log.info("Could not locate " + tablePrefix + "-query.yaml on the classpath.");
+                log.info("Could not locate " + tablePrefix + "-query.yml on the classpath.");
                 return new DmlTemplates();
             }
         } catch (Exception ex) {
-            throw new PersistException("Failed to load " + tablePrefix + "-query.yaml", ex);
+            throw new PersistException("Failed to load " + tablePrefix + "-query.yml", ex);
         }
     }
 

@@ -23,7 +23,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 public class TestPersistCarsConfig {
 
     protected DBSessionFactory sessionFactory;
-    InputStream queryYamlStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("persist-test-query.yaml");
+    InputStream queryYamlStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("persist-test-query.yml");
     QueryTemplates queryTemplates = new Yaml(new Constructor(QueryTemplates.class)).load(queryYamlStream);    
 
     @Bean
