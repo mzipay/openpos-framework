@@ -1,10 +1,10 @@
 package org.jumpmind.pos.devices.service;
 
-import org.jumpmind.pos.devices.service.print.PrintRequest;
-import org.jumpmind.pos.devices.service.print.PrinterSettingsRequest;
-import org.jumpmind.pos.devices.service.print.PrinterSettingsResult;
-import org.jumpmind.pos.devices.service.scan.ScannerConfigRequest;
-import org.jumpmind.pos.service.ServiceResult;
+import org.jumpmind.pos.devices.model.PrintRequest;
+import org.jumpmind.pos.devices.model.PrinterSettingsRequest;
+import org.jumpmind.pos.devices.model.PrinterSettingsResult;
+import org.jumpmind.pos.devices.model.ScannerConfigRequest;
+import org.jumpmind.pos.util.model.ServiceResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

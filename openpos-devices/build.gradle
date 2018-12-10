@@ -2,6 +2,7 @@ apply from: "../openpos-core/common.gradle"
 apply from: "../openpos-service/common.gradle"
 
 dependencies {
+    compile project(":openpos-devices-client")
     compile project(":openpos-service")
     compile project(":openpos-server-core")
     compile("org.javapos:javapos:${javaposVersion}")

@@ -1,7 +1,8 @@
 package org.jumpmind.pos.devices.service.print;
 
+import org.jumpmind.pos.devices.model.PrintRequest;
 import org.jumpmind.pos.service.Endpoint;
-import org.jumpmind.pos.service.ServiceResult;
+import org.jumpmind.pos.util.model.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 

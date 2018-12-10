@@ -1,0 +1,10 @@
+apply from: "../openpos-core/common.gradle"
+
+dependencies {
+    compile project(':openpos-util')    
+    compile("org.javapos:javapos:${javaposVersion}")
+    compile("org.springframework:spring-web:${springVersion}")
+    compile("org.springframework:spring-websocket:${springVersion}")
+    compile("org.springframework:spring-messaging:${springVersion}")
+    compile("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
+}

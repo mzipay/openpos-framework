@@ -18,6 +18,7 @@ ext {
    javaposVersion='1.14.2'
    slf4jVersion='1.7.25'
    log4jVersion='1.2.17'
+   jacksonVersion='2.8.10'
 }
 
 

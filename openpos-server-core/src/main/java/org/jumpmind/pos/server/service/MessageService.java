@@ -69,7 +69,7 @@ public class MessageService implements IMessageService {
     }
 
     @Override
-    public void sendMessage(String appId, String nodeId, org.jumpmind.pos.server.model.Message message) {
+    public void sendMessage(String appId, String nodeId, org.jumpmind.pos.util.model.Message message) {
         try {
             StringBuilder topic = new StringBuilder(128);
             topic.append("/topic/app/").append(appId).append("/node/").append(nodeId);

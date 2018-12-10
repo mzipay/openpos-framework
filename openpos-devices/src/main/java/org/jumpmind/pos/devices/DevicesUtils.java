@@ -2,7 +2,7 @@ package org.jumpmind.pos.devices;
 
 import org.jumpmind.pos.devices.model.DeviceModel;
 import org.jumpmind.pos.devices.model.DevicePropModel;
-import org.jumpmind.pos.devices.service.DeviceRequest;
+import org.jumpmind.pos.devices.model.DeviceRequest;
 
 public final class DevicesUtils {
 

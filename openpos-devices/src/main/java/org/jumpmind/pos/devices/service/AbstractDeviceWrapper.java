@@ -6,9 +6,10 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import org.jumpmind.pos.devices.DevicesUtils;
+import org.jumpmind.pos.devices.model.DeviceRequest;
 import org.jumpmind.pos.server.service.IMessageService;
-import org.jumpmind.pos.service.ServiceResult;
-import org.jumpmind.pos.service.ServiceResult.Result;
+import org.jumpmind.pos.util.model.ServiceResult;
+import org.jumpmind.pos.util.model.ServiceResult.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

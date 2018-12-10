@@ -1,10 +1,12 @@
 package org.jumpmind.pos.devices.service.scan;
 
 import org.jumpmind.pos.devices.DevicesUtils;
+import org.jumpmind.pos.devices.model.DeviceRequest;
+import org.jumpmind.pos.devices.model.ScanMessage;
+import org.jumpmind.pos.devices.model.ScannerConfigRequest;
 import org.jumpmind.pos.devices.service.AbstractDeviceWrapper;
-import org.jumpmind.pos.devices.service.DeviceRequest;
-import org.jumpmind.pos.service.ServiceResult;
-import org.jumpmind.pos.service.ServiceResult.Result;
+import org.jumpmind.pos.util.model.ServiceResult;
+import org.jumpmind.pos.util.model.ServiceResult.Result;
 import org.springframework.stereotype.Component;
 
 import jpos.JposConst;
