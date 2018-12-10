@@ -1,11 +1,11 @@
 import {Component, Input } from '@angular/core';
-import { AbstractControlDirective, AbstractControl, ControlContainer } from '@angular/forms';
+import { AbstractControlDirective, AbstractControl } from '@angular/forms';
 
 @Component({
     selector: 'app-show-errors',
     template: `
     <div *ngIf="shouldShowErrors()">
-        <span>{{listOfErrors()[0]}}<br/></span>
+        <span>{{listOfErrors()[0]}}</span>
     </div>
     `,
 })
