@@ -92,7 +92,9 @@ export class FormattersService {
             }
         }
 
-        this.log.info(`No formatter found for locale '${locale}' formatter name '${name}'. Using a 'Do Nothing' formatter`);
+        if ( name ) {
+            this.log.info(`No formatter found for locale '${locale}' formatter name '${name}'. Using a 'Do Nothing' formatter`);
+        }
         return new DoNothingFormatter();
     }
 
