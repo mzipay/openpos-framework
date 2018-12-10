@@ -21,9 +21,9 @@ export class CurrencyTextComponent implements OnInit {
     @Input()
     symbol: string;
 
-    protected textBeforeSymbol: string;
-    protected textAfterSymbol: string;
-    protected symbolText: string;
+    textBeforeSymbol: string;
+    textAfterSymbol: string;
+    symbolText: string;
 
     constructor(private localeService: LocaleService) {}
 
