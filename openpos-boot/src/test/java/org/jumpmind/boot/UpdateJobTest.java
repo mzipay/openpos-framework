@@ -31,6 +31,7 @@ public class UpdateJobTest {
     @Before
     public void setup() throws Exception {
         Path path = Paths.get("work/app");
+        path.toFile().mkdirs();
         Files.walk(path).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
         Files.createDirectories(path);
     }
