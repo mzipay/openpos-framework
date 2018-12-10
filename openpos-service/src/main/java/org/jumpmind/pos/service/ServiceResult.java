@@ -47,8 +47,8 @@ public class ServiceResult implements Serializable {
         this.extension = extension;
     }
     
-    public void setThrowable(Throwable exception) {
-        this.throwable = exception;
+    public void setThrowable(Throwable ex) {
+        this.throwable = ex;
     }
     
     public Throwable getThrowable() {

@@ -4,18 +4,21 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-public class ServiceEndpointBridgeInvocationHandler implements InvocationHandler {
+@Component
+public class EndpointDispatchInvocationHandler implements InvocationHandler {
 
+    @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
     private EndpointInjector endpointInjector;
 
-    public ServiceEndpointBridgeInvocationHandler(ApplicationContext applicationContext, EndpointInjector endpointInjector) {
-        this.applicationContext = applicationContext;
-        this.endpointInjector = endpointInjector;
+    public EndpointDispatchInvocationHandler() {
     }
 
     @Override
