@@ -353,7 +353,7 @@ public class DatabaseSchema {
     }
 
     private int getDefaultType(Field field) {
-        if (field.getType().isAssignableFrom(String.class)) {
+        if (field.getType().isAssignableFrom(String.class) || field.getType().isEnum()) {
             return Types.VARCHAR;
         } else if (field.getType().isAssignableFrom(long.class) || field.getType().isAssignableFrom(Long.class)) {
             return Types.BIGINT;
