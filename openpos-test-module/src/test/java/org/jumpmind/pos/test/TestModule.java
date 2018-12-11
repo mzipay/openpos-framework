@@ -1,6 +1,7 @@
 package org.jumpmind.pos.test;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import javax.sql.DataSource;
+
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.service.AbstractModule;
@@ -57,7 +58,7 @@ public class TestModule extends AbstractModule {
 
     @Override
     @Bean(name = NAME + "DataSource")
-    protected BasicDataSource dataSource() {
+    protected DataSource dataSource() {
         return super.dataSource();
     }
 

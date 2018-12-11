@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
@@ -78,7 +80,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
     @Value("${openpos.modules.sqlScriptProfile:test}")
     protected String sqlScriptProfile;
 
-    protected BasicDataSource dataSource;
+    protected DataSource dataSource;
 
     protected ISecurityService securityService;
 
@@ -128,25 +130,15 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
 
     @Override
     public String getDriver() {
-        if (this.dataSourceBeanName != null) {
-            BasicDataSource ds = this.dataSource();
-            return ds.getDriverClassName();
-        } else {
             return env.getProperty(DB_POOL_DRIVER, "org.h2.Driver");
-        }
     }
 
     @Override
     public String getURL() {
-        if (this.dataSourceBeanName != null) {
-            BasicDataSource ds = this.dataSource();
-            return ds.getUrl();
-        } else {
             return env.getProperty(DB_POOL_URL, "jdbc:openpos:h2:mem:" + getName());
-        }
     }
 
-    protected BasicDataSource dataSource() {
+    protected DataSource dataSource() {
         if (dataSource == null) {
 
             if (this.dataSourceBeanName != null) {

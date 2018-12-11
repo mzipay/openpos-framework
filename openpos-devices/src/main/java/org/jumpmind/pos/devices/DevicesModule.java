@@ -1,6 +1,7 @@
 package org.jumpmind.pos.devices;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import javax.sql.DataSource;
+
 import org.jumpmind.pos.devices.service.IDevicesService;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
@@ -16,7 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration("DevicesModule")
-@EnableTransactionManagement()
+@EnableTransactionManagement
 @Conditional(ModuleEnabledCondition.class)
 public class DevicesModule extends AbstractModule {
     
@@ -55,7 +56,7 @@ public class DevicesModule extends AbstractModule {
 
     @Override
     @Bean(name = NAME + "DataSource")
-    protected BasicDataSource dataSource() {
+    protected DataSource dataSource() {
         return super.dataSource();
     }
 
