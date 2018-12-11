@@ -204,6 +204,7 @@ public class DBSessionFactory {
         column.setName(getColumnName(tag));
         column.setPrimaryKey(includeInPk);
         column.setRequired(true);
+        column.setDefaultValue(TagModel.TAG_ALL);
         column.setTypeCode(Types.VARCHAR);
         if (tag.getSize() > 0) {
             column.setSize(String.valueOf(tag.getSize()));
