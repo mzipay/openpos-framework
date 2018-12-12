@@ -32,7 +32,9 @@ public class ServiceResult implements Serializable {
     }
 
     public void setResultMessage(String resultMessage, Object... args) {
-        this.resultMessage = String.format(resultMessage, args);
+        if (this.resultMessage != null) {
+           this.resultMessage = String.format(resultMessage, args);
+        }
     }
 
     @SuppressWarnings("unchecked")

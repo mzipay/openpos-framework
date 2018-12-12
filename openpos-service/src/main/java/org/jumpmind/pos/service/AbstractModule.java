@@ -26,7 +26,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
 import org.jumpmind.db.sql.SqlTemplateSettings;
@@ -143,7 +142,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
 
             if (this.dataSourceBeanName != null) {
                 try {
-                    dataSource = this.applicationContext.getBean(this.dataSourceBeanName, BasicDataSource.class);
+                    dataSource = this.applicationContext.getBean(this.dataSourceBeanName, DataSource.class);
                     logger.info("Using dataSource bean '{}' for {} module dataSource", this.dataSourceBeanName, getName());
                 } catch (Exception ex) {
                     logger.warn("Failed to load dataSource with name '{}', will load default dataSource instead. Reason: {}",

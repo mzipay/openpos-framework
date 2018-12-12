@@ -73,7 +73,7 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
 
         PrinterSettingsRequest req = new PrinterSettingsRequest(profile, deviceName, settings);
         HttpEntity<PrinterSettingsRequest> requestEntity = new HttpEntity<PrinterSettingsRequest>(req);
-        HttpEntity<PrinterSettingsResult> response = restTemplate.exchange(getBaseHttpUrl() + "/print", HttpMethod.PUT, requestEntity,
+        HttpEntity<PrinterSettingsResult> response = restTemplate.exchange(getBaseHttpUrl() + "/print/settings", HttpMethod.PUT, requestEntity,
                 PrinterSettingsResult.class);
 
         PrinterSettingsResult result = response.getBody();

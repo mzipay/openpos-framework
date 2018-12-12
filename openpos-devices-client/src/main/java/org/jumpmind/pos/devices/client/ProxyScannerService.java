@@ -55,7 +55,7 @@ public class ProxyScannerService extends AbstractBaseService implements ScannerS
     public void setDataEventEnabled(boolean dataEventEnabled) throws JposException {
         this.dataEventEnabled = dataEventEnabled;
         RestTemplate restTemplate = getRestTemplate();
-        ScannerConfigRequest req = new ScannerConfigRequest("dev", "Scanner", autoDisable, dataEventEnabled, decodeData);
+        ScannerConfigRequest req = new ScannerConfigRequest(profile, deviceName, autoDisable, dataEventEnabled, decodeData);
         HttpEntity<ScannerConfigRequest> requestEntity = new HttpEntity<ScannerConfigRequest>(req);
         HttpEntity<ServiceResult> response = restTemplate.exchange(getBaseHttpUrl() + "/scan/config", HttpMethod.PUT, requestEntity,
                 ServiceResult.class);

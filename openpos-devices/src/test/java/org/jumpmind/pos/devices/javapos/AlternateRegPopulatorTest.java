@@ -31,7 +31,7 @@ public class AlternateRegPopulatorTest {
     @Test
     public void testInitializeScanner() throws Exception {
         Scanner scanner = new Scanner();
-        scanner.open("dev-Scanner");
+        scanner.open("dev_Scanner");
     }
     
 

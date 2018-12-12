@@ -22,6 +22,6 @@ public final class DevicesUtils {
     }
 
     public static String getLogicalName(String profile, String deviceName) {
-        return String.format("%s-%s", profile, deviceName);
+        return String.format("%s_%s", profile, deviceName);
     }
 }

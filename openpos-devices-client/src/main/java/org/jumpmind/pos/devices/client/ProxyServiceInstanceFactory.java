@@ -34,18 +34,27 @@ public class ProxyServiceInstanceFactory implements JposServiceInstanceFactory {
             while (i.hasNext()) {
                 JposEntry.Prop prop = (JposEntry.Prop) i.next();
                 if (!ignoreProperty(prop.getName())) {
-                    try {
-                        Field field = class1.getDeclaredField(prop.getName());
-                        Class<?> type = field.getType();
-                        Object value = prop.getValue();
-                        if (type == int.class) {
-                            value = new Integer(prop.getValueAsString());
+                    Class<?> clazz = class1;
+                    boolean setField = false;
+                    while (clazz != null && clazz != Object.class && !setField) {
+                        try {
+                            Field field = clazz.getDeclaredField(prop.getName());
+                            Class<?> type = field.getType();
+                            Object value = prop.getValue();
+                            if (type == int.class) {
+                                value = new Integer(prop.getValueAsString());
+                            }
+                            field.set(instance, value);
+                            setField = true;                            
+                        } catch (NoSuchFieldException e) {
+                            clazz = clazz.getSuperclass();
+                        } catch (Exception e) {
+                            logger.error("", e);
+                            break;
                         }
-                        field.set(instance, value);
-                    } catch (NoSuchFieldException e) {
-                        logger.warn("No such property: " + prop.getName() + " exists on " + class1.getSimpleName());
-                    } catch (Exception e) {
-                        logger.error("", e);
+                    }
+                    if (!setField) {
+                        logger.debug("No such property: " + prop.getName() + " exists on " + class1.getSimpleName());
                     }
                 }
             }

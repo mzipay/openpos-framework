@@ -40,6 +40,7 @@ abstract public class AbstractBaseService implements BaseService, JposServiceIns
     protected boolean freezeEvents;
     protected int powerNotify;
     protected String deviceName;
+    protected String logicalDeviceName;
     protected int port = -1;
     protected boolean sslEnabled = false;
     protected String profile = "default";
@@ -141,8 +142,8 @@ abstract public class AbstractBaseService implements BaseService, JposServiceIns
         if (open) {
             throw new JposException(JposConst.JPOS_E_ILLEGAL, "Service is already open.");
         }
-        this.deviceName = deviceName;
         this.open = true;
+        this.logicalDeviceName = deviceName;
         this.state = JposConst.JPOS_S_IDLE;
         this.callbacks = eventcallbacks;
         logger.info("The device was opened");
