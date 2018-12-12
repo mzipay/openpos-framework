@@ -13,8 +13,8 @@ public class PosServerException extends RuntimeException {
         super(message, cause);
     }
 
-    public PosServerException(String message) {
-        super(message);
+    public PosServerException(String message, Object... args) {
+        super(String.format(message, args));
     }
 
     public PosServerException(Throwable cause) {

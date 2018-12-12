@@ -1,13 +1,13 @@
 package org.jumpmind.pos.devices.client;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.lang.reflect.Type;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jumpmind.pos.util.model.Message;
-import org.jumpmind.pos.util.model.ServiceResult;
-import org.jumpmind.pos.util.model.ServiceResult.Result;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.jumpmind.pos.util.web.ConfiguredRestTemplate;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -50,7 +50,7 @@ abstract public class AbstractBaseService implements BaseService, JposServiceIns
     private boolean subscribed = false;
 
     public abstract void reset();
-
+    
     public int getDeviceServiceVersion() throws JposException {
         return DEVICE_VERSION;
     }
@@ -91,21 +91,6 @@ abstract public class AbstractBaseService implements BaseService, JposServiceIns
             }
         }
     }
-    
-    protected void processServiceResult(ServiceResult result) throws JposException {
-        if (result.getResultStatus() != Result.SUCCESS) {
-            Throwable ex = result.getThrowable();
-            if (ex instanceof JposException) {
-                throw (JposException) ex;
-            } else if (ex instanceof RuntimeException) {
-                throw (RuntimeException) ex;
-            } else if (ex instanceof Exception) {
-                throw new JposException(JposConst.JPOS_E_FAILURE, result.getResultMessage(), (Exception) ex);
-            } else {
-                throw new JposException(JposConst.JPOS_E_FAILURE, result.getResultMessage());
-            }
-        }
-    }
 
     protected String getWsUrl() {
         return (sslEnabled ? "wss://" : "ws://") + serverName + (port > 0 ? ":" + port : "") + "/api/websocket";
@@ -118,8 +103,7 @@ abstract public class AbstractBaseService implements BaseService, JposServiceIns
 
     protected RestTemplate getRestTemplate() {
         if (restTemplate == null) {
-            restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            restTemplate = new ConfiguredRestTemplate();
         }
         return restTemplate;
     }
@@ -144,6 +128,9 @@ abstract public class AbstractBaseService implements BaseService, JposServiceIns
         }
         this.open = true;
         this.logicalDeviceName = deviceName;
+        if (isBlank(this.deviceName)) {
+            this.deviceName = deviceName;
+        }
         this.state = JposConst.JPOS_S_IDLE;
         this.callbacks = eventcallbacks;
         logger.info("The device was opened");

@@ -6,7 +6,6 @@ import org.jumpmind.pos.devices.model.ScanMessage;
 import org.jumpmind.pos.devices.model.ScannerConfigRequest;
 import org.jumpmind.pos.devices.service.AbstractDeviceWrapper;
 import org.jumpmind.pos.util.model.ServiceResult;
-import org.jumpmind.pos.util.model.ServiceResult.Result;
 import org.springframework.stereotype.Component;
 
 import jpos.JposConst;
@@ -22,7 +21,6 @@ public class ScannerDeviceWrapper extends AbstractDeviceWrapper<Scanner, Service
         ServiceResult result = doSynchronized((r) -> {
             Scanner scanner = getDevice(req);
             configure(req, scanner);
-            r.setResultStatus(Result.SUCCESS);
         }, req, ServiceResult.class);
         return result;
     }

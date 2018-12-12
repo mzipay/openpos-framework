@@ -1,5 +1,7 @@
 package org.jumpmind.pos.service;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -55,7 +57,11 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
         }
         RequestMapping methodMapping = method.getAnnotation(RequestMapping.class);
         if (methodMapping != null) {
-            path.append(methodMapping.value()[0]);
+            if (methodMapping.path() != null && methodMapping.path().length > 0) {
+                path.append(methodMapping.path()[0]);
+            } else if (methodMapping.value() != null && methodMapping.value().length > 0) {
+                path.append(methodMapping.value()[0]);
+            }
         }
         return path.toString();
     }

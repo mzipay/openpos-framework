@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 import org.jumpmind.pos.devices.DevicesUtils;
 import org.jumpmind.pos.devices.model.DeviceRequest;
 import org.jumpmind.pos.server.service.IMessageService;
+import org.jumpmind.pos.service.PosServerException;
 import org.jumpmind.pos.util.model.ServiceResult;
-import org.jumpmind.pos.util.model.ServiceResult.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,17 +37,16 @@ abstract public class AbstractDeviceWrapper<T, R extends ServiceResult> {
     protected R doSynchronized(IDoSynchronized<R> function, DeviceRequest req, Class<? extends R> resultClazz) {
         try {
             R result = (R)resultClazz.newInstance();
-            result.setResultStatus(Result.FAILURE);
             Semaphore semaphore = getSemaphore(req);
             try {
                 if (semaphore.tryAcquire(acquireTimeoutInMs, TimeUnit.MILLISECONDS)) {
                     function.doSynchronized(result);
                 } else {
-                    result.setResultMessage(String.format("Timed out after %dms", acquireTimeoutInMs));
+                    throw new PosServerException("Timed out after %dms", acquireTimeoutInMs);
                 }
             } catch (Exception e) {
                 logger.error("", e);
-                result.setResultMessage(e.getMessage());
+                throw new PosServerException(e.getMessage(), e);
             } finally {
                 semaphore.release();
             }

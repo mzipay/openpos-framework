@@ -57,11 +57,8 @@ public class ProxyScannerService extends AbstractBaseService implements ScannerS
         RestTemplate restTemplate = getRestTemplate();
         ScannerConfigRequest req = new ScannerConfigRequest(profile, deviceName, autoDisable, dataEventEnabled, decodeData);
         HttpEntity<ScannerConfigRequest> requestEntity = new HttpEntity<ScannerConfigRequest>(req);
-        HttpEntity<ServiceResult> response = restTemplate.exchange(getBaseHttpUrl() + "/scan/config", HttpMethod.PUT, requestEntity,
+        restTemplate.exchange(getBaseHttpUrl() + "/scan/config", HttpMethod.PUT, requestEntity,
                 ServiceResult.class);
-
-        ServiceResult result = response.getBody();
-        processServiceResult(result);
     }
 
     @Override

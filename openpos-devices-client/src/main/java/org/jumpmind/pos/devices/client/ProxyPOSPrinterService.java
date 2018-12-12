@@ -69,7 +69,7 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
     }
     
     protected POSPrinterSettings sendSettings(POSPrinterSettings settings) throws JposException {
-        RestTemplate restTemplate = getRestTemplate();
+        RestTemplate restTemplate = getRestTemplate();        
 
         PrinterSettingsRequest req = new PrinterSettingsRequest(profile, deviceName, settings);
         HttpEntity<PrinterSettingsRequest> requestEntity = new HttpEntity<PrinterSettingsRequest>(req);
@@ -77,7 +77,6 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
                 PrinterSettingsResult.class);
 
         PrinterSettingsResult result = response.getBody();
-        processServiceResult(result);
         return result.getSettings();
     }
 
@@ -126,11 +125,8 @@ public class ProxyPOSPrinterService extends AbstractBaseService implements POSPr
 
             PrintRequest req = new PrintRequest(profile, deviceName, doc);
             HttpEntity<PrintRequest> requestEntity = new HttpEntity<PrintRequest>(req);
-            HttpEntity<ServiceResult> response = restTemplate.exchange(getBaseHttpUrl() + "/print", HttpMethod.PUT, requestEntity,
+            restTemplate.exchange(getBaseHttpUrl() + "/print", HttpMethod.PUT, requestEntity,
                     ServiceResult.class);
-
-            ServiceResult result = response.getBody();
-            processServiceResult(result);
         }
     }
 

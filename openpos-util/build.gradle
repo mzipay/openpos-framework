@@ -2,8 +2,9 @@ apply from: '../openpos-core/common.gradle'
 
 dependencies {
     compile("org.javapos:javapos:${javaposVersion}")
-    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
-        exclude module: "spring-boot-starter-tomcat"
+    compile("org.springframework:spring-web:${springVersion}")
+    compile("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
+    compile("org.springframework.boot:spring-boot:${springBootVersion}") {
         exclude module: "spring-boot-starter-logging"
     }    
 }

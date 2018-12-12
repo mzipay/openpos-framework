@@ -22,7 +22,6 @@ import org.jumpmind.pos.devices.model.PrinterSettingsResult;
 import org.jumpmind.pos.devices.model.RuleLine;
 import org.jumpmind.pos.devices.service.AbstractDeviceWrapper;
 import org.jumpmind.pos.util.model.ServiceResult;
-import org.jumpmind.pos.util.model.ServiceResult.Result;
 import org.springframework.stereotype.Component;
 
 import jpos.JposConst;
@@ -36,7 +35,6 @@ public class PrinterDeviceWrapper extends AbstractDeviceWrapper<POSPrinter, Serv
         ServiceResult result = doSynchronized((r) -> {
             POSPrinter printer = getDevice(req);
             print(printer, req);
-            r.setResultStatus(Result.SUCCESS);
         }, req, ServiceResult.class);
         return result;
     }
@@ -45,7 +43,6 @@ public class PrinterDeviceWrapper extends AbstractDeviceWrapper<POSPrinter, Serv
         ServiceResult result = doSynchronized((r) -> {
             POSPrinter printer = getDevice(req);
             settings(printer, req, (PrinterSettingsResult) r);
-            r.setResultStatus(Result.SUCCESS);
         }, req, PrinterSettingsResult.class);
         return (PrinterSettingsResult) result;
     }
