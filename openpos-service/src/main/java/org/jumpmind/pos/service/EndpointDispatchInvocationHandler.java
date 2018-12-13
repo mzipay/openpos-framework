@@ -1,7 +1,5 @@
 package org.jumpmind.pos.service;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Collection;
