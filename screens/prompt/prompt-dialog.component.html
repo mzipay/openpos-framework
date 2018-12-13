@@ -3,7 +3,7 @@
     <mat-dialog-content>
         <app-prompt-input #promptInput [placeholderText]="screen.placeholderText" [responseType]="screen.responseType" [promptIcon]="screen.promptIcon"
             [responseText]="screen.responseText" [hintText]="screen.text" [maskSpec]="screen.promptMask" [minLength]="screen.minLength"
-            [maxLength]="screen.maxLength" [promptFormGroup]="promptFormGroup" [keyboardPreference]="screen.keyboardPreference" [scanEnabled]="screen.scanEnabled"></app-prompt-input>
+            [maxLength]="screen.maxLength" [promptFormGroup]="promptFormGroup" [keyboardPreference]="screen.keyboardPreference" [scanEnabled]="screen.scanEnabled" [readOnly]="!screen.editable"></app-prompt-input>
     </mat-dialog-content>
 
     <mat-dialog-actions *ngIf="screen.otherActions || screen.actionButton" fxLayoutAlign="space-between">
