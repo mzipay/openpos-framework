@@ -4,7 +4,8 @@ import { ValidatorsService } from '../../core';
 
 @Component({
   selector: 'app-prompt-with-info',
-  templateUrl: './prompt-with-info.component.html'
+  templateUrl: './prompt-with-info.component.html',
+  styleUrls: ['./prompt-with-info.component.scss']
 })
 export class PromptWithInfoComponent extends PromptComponent {
 
