@@ -3,13 +3,19 @@ import { IPlugin } from './plugin.interface';
 import { IDeviceRequest } from './device-request.interface';
 import { CordovaDevicePlugin } from './cordova-device-plugin';
 import { Scan } from './scan';
+import { IBarcodeScanInterceptor } from '../interfaces';
 
+/**
+ * Wrapper around the Cordova barcode scanner plugin to allow for intercepting the barcodes
+ * returned from the barcode scanner plugin and configuring the plugin itself.
+ */
 export class BarcodeScannerPlugin extends CordovaDevicePlugin {
 
     pluginId = 'barcodeScannerPlugin';
     pluginName = this.pluginId;
     onBarcodeScanned: EventEmitter<Scan> = new EventEmitter<Scan>();
     private pluginImpl: IPlugin;
+    private _barcodeScanInterceptor: IBarcodeScanInterceptor;
 
     constructor() {
         super('barcodeScanner');
@@ -19,15 +25,25 @@ export class BarcodeScannerPlugin extends CordovaDevicePlugin {
         successCallback();
     }
 
+    set barcodeScanInterceptor(interceptor: IBarcodeScanInterceptor) {
+        this._barcodeScanInterceptor = interceptor;
+    }
+
+    get barcodeScanInterceptor(): IBarcodeScanInterceptor {
+        return this._barcodeScanInterceptor;
+    }
+
     processRequest(deviceRequest: IDeviceRequest, successCallback: (response: any) => void, errorCallback: (error: string) => void) {
         this.log.info(`Attempting to invoke camera scanner via plugin '${this.pluginId}'`);
         this.impl.scan( (result) => {
             if (! result.cancelled) {
-                successCallback(new Scan(result.text, result.format));
+                let scan = new Scan(result.text, result.format);
+                scan = this.optionallyInterceptScan(scan);
+                successCallback(scan);
                 this.log.info('We got a barcode\n' +
-                'Result: ' + result.text + '\n' +
-                'Format: ' + result.format + '\n' +
-                'Cancelled: ' + result.cancelled);
+                'Result: ' + scan.value + '\n' +
+                'Format: ' + scan.format + '\n' +
+                'Cancelled: ' + scan.cancelled);
               } else {
                 successCallback(new Scan(null, null, true));
                 this.log.info('Barcode scan cancelled');
@@ -54,8 +70,20 @@ export class BarcodeScannerPlugin extends CordovaDevicePlugin {
         );
     }
 
+    protected optionallyInterceptScan(scan: Scan): Scan {
+        let lScan = scan;
+        if (this.barcodeScanInterceptor) {
+            this.log.info(`Scan intercepted by ` +
+                `'${this.barcodeScanInterceptor.constructor ? this.barcodeScanInterceptor.constructor.name : 'IBarcodeScanInterceptor object'}'`);
+            lScan = this.barcodeScanInterceptor.interceptScan(scan);
+        }
+
+        return lScan;
+    }
+
     emitBarcode(scan: Scan) {
-        this.log.info(`Emitting barcode from BarcodeScannerPlugin: ${JSON.stringify(scan)}`);
-        this.onBarcodeScanned.emit(scan);
+        const s = this.optionallyInterceptScan(scan);
+        this.log.info(`Emitting barcode from BarcodeScannerPlugin: ${JSON.stringify(s)}`);
+        this.onBarcodeScanned.emit(s);
     }
 }
