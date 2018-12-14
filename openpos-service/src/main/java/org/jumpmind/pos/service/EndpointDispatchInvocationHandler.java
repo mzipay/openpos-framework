@@ -23,6 +23,10 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        if (method.getName().equals("equals")) {
+            return false;
+        }
+            
         String path = buildPath(method);
         Object obj = applicationContext.getBean(path);
         Collection<Object> beans = applicationContext.getBeansWithAnnotation(EndpointOverride.class).values();
