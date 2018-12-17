@@ -7,7 +7,7 @@ This is a description of service 1
 
 | Name | Path | HTTP | Request Body | Response Body | Description |
 |------|------|-------------|-------|--------------|---------------|
-| *calculate* | /example1/calculate | POST | [CalculateRequest](#CalculateRequest) | [CalculateResponse](#CalculateResponse) | The quick brown fox jumps over the lazy dog |
+| *calculate* | `/example1/calculate` | POST | [CalculateRequest](#CalculateRequest) | [CalculateResponse](#CalculateResponse) | The quick brown fox jumps over the lazy dog |
 
 ### Request Example
 ```
