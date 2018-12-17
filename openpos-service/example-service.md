@@ -7,18 +7,55 @@ This is a description of service 1
 
 | Name | Path | HTTP | Request Body | Response Body | Description |
 |------|------|-------------|-------|--------------|---------------|
-| calculate | /example/calculate | POST | [CalculateRequest](#CalculateRequest) | [CalculateResponse](#CalculateResponse) | The quick brown fox jumps over the lazy dog |
-| find | /example/find | GET | [CalculateRequest](#CalculateRequest) | [CalculateResponse](#CalculateResponse) | The quick brown fox jumps over the lazy dog| 
+| calculate | /example1/calculate | POST | [CalculateRequest](#CalculateRequest) | [CalculateResponse](#CalculateResponse) | The quick brown fox jumps over the lazy dog |
+| find | /example1/find | GET | [CalculateRequest](#CalculateRequest) | [CalculateResponse](#CalculateResponse) | The quick brown fox jumps over the lazy dog| 
 
+### Request Example
+```
+{"menu": {
+  "id": "file",
+  "value": "File",
+  "popup": {
+    "menuitem": [
+      {"value": "New", "onclick": "CreateNewDoc()"},
+      {"value": "Open", "onclick": "OpenDoc()"},
+      {"value": "Close", "onclick": "CloseDoc()"}
+    ]
+  }
+}}
+```
 
+### Response Example
+```
+{"menu": {
+  "id": "file",
+  "value": "File",
+  "popup": {
+    "menuitem": [
+      {"value": "New", "onclick": "CreateNewDoc()"},
+      {"value": "Open", "onclick": "OpenDoc()"},
+      {"value": "Close", "onclick": "CloseDoc()"}
+    ]
+  }
+}}
+```
 ## Example 2 Service
 
 This is a description of service 2
 
 | Name | Path | HTTP | Request Body | Response Body | Description |
 |------|------|-------------|-------|--------------|---------------|
-| calculate | /example/calculate | POST | [CalculateRequest](#CalculateRequest) | [CalculateResponse](#CalculateResponse) | The quick brown fox jumps over the lazy dog |
-| save | /example/save | PUT | [CalculateRequest](#CalculateRequest) | [CalculateResponse](#CalculateResponse) | The quick brown fox jumps over the lazy dog| 
+| calculate | /example2/calculate | POST | [CalculateRequest](#CalculateRequest) | [CalculateResponse](#CalculateResponse) | The quick brown fox jumps over the lazy dog |
+| save | /example2/save | PUT | [CalculateRequest](#CalculateRequest) | [CalculateResponse](#CalculateResponse) | The quick brown fox jumps over the lazy dog| 
+
+
+## Example 3 Service
+
+This is a description of service 3
+
+| Name | Path | HTTP | Request Body | Response Body | Description |
+|------|------|-------------|-------|--------------|---------------|
+| ping | /example3/ping | POST | NONE | NONE | The quick brown fox jumps over the lazy dog |
 
 # Models
 
