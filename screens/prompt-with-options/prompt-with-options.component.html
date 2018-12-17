@@ -14,7 +14,7 @@
                 </mat-form-field>
             </mat-card-content>
 
-            <div fxFlex="1 1 auto" style="overflow: auto;">
+            <div fxFlex="1 1 auto" style="overflow-x: hidden; overflow-y: auto;">
                 <mat-nav-list>
                     <!-- material doesn't yet support enable/disable of mat-list-item, workaround ... -->
                     <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onAction(o.value)" style="border-color: black">

@@ -86,7 +86,8 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
       this.formField.inputType === 'Phone' ||
       this.formField.inputType === 'PostalCode' ||
       this.formField.inputType === 'Counter' ||
-      this.formField.inputType === 'Time') {
+      this.formField.inputType === 'Time' ||
+      this.formField.inputType === 'Money') {
       this.keyboardLayout = 'Numeric';
     } else if (this.formField.label === 'Email') {
       this.keyboardLayout = 'Email';
