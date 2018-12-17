@@ -27,7 +27,7 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
         if (method.getName().equals("equals")) {
             return false;
         }
-            
+
         String path = buildPath(method);
         Object obj = applicationContext.getBean(path);
         Collection<Object> beans = applicationContext.getBeansWithAnnotation(EndpointOverride.class).values();
@@ -45,11 +45,7 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
                 try {
                     return targetMethod.invoke(obj, args);
                 } catch (InvocationTargetException e) {
-                    if (e.getTargetException() != null) {
-                        throw e.getTargetException();
-                    } else {
-                        throw e;
-                    }
+                    throw e.getTargetException();
                 }
             }
         }
