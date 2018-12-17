@@ -3,11 +3,13 @@ package org.jumpmind.pos.persist.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueryTemplate {
+import org.jumpmind.pos.persist.PersistException;
+
+public class QueryTemplate implements Cloneable {
 
     private String name;
-    private List<String> selects = new ArrayList<>();
-    private List<String> optionalWhereClauses = new ArrayList<>();
+    private List<String> selects;
+    private List<String> optionalWhereClauses;
     private String groupBy;
     private String where;
     private String orderBy;
@@ -20,28 +22,30 @@ public class QueryTemplate {
         this.name = name;
     }
     
-    public void setSelect(String select) {
-        this.selects.add(select);
-    }
-    
-    public List<String> getSelects() {
-        return selects;
-    }
-
-    public void setSelects(List<String> select) {
-        this.selects = select;
-    }
-
-    public List<String> getOptionalWhereClauses() {
-        return optionalWhereClauses;
-    }
-
     public void setOptionalWhereClauses(List<String> optionalWhereClauses) {
         this.optionalWhereClauses = optionalWhereClauses;
     }
+    
+    public void setSelects(List<String> selects) {
+        this.selects = selects;
+    }
+    
+    public List<String> getSelects() {
+        if (selects == null) {
+            selects = new ArrayList<>();
+        }
+        return selects;
+    }
+
+    public List<String> getOptionalWhereClauses() {
+        if (optionalWhereClauses == null) {
+            optionalWhereClauses = new ArrayList<>();
+        }
+        return optionalWhereClauses;
+    }
 
     public QueryTemplate optionalWhere(String optionalWhere) {
-        this.optionalWhereClauses.add(optionalWhere);
+        this.getOptionalWhereClauses().add(optionalWhere);
         return this;
     }
 
@@ -67,6 +71,14 @@ public class QueryTemplate {
 
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
+    }
+
+    public QueryTemplate copy() {
+        try {
+            return (QueryTemplate)this.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new PersistException(e);
+        }
     }
 
 }

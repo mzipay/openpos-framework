@@ -224,12 +224,12 @@ public class DBSession {
     protected <T> void populdateDefaultSelect(Query<T> query) {
         boolean isEntityResult = AbstractModel.class.isAssignableFrom(query.getResultClass());
         if (queryTemplates.containsKey(query.getName())) {
-            query.setQueryTemplate(queryTemplates.get(query.getName()));
+            query.setQueryTemplate(queryTemplates.get(query.getName()).copy());
         }
 
         if (isEntityResult && (query.getQueryTemplate().getSelects() == null || query.getQueryTemplate().getSelects().size() == 0)) {
             Class<? extends AbstractModel> entityClass = (Class<? extends AbstractModel>) query.getResultClass();
-            query.getQueryTemplate().setSelects(getSelectSql(entityClass));
+            query.getQueryTemplate().getSelects().addAll(getSelectSql(entityClass));
         }
     }
 
