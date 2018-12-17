@@ -1,6 +1,7 @@
 package org.jumpmind.pos.service;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
@@ -41,7 +42,15 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
             endpointInjector.performInjections(obj, new InjectionContext(args));
             Method targetMethod = obj.getClass().getMethod(method.getName(), method.getParameterTypes());
             if (targetMethod != null) {
-                return targetMethod.invoke(obj, args);
+                try {
+                    return targetMethod.invoke(obj, args);
+                } catch (InvocationTargetException e) {
+                    if (e.getTargetException() != null) {
+                        throw e.getTargetException();
+                    } else {
+                        throw e;
+                    }
+                }
             }
         }
 
