@@ -461,11 +461,11 @@ public class StateManager implements IStateManager {
         
         screenService.showScreen(appId, nodeId, screen);
         
-        if (autoSaveState) {            
-            if (this.getApplicationState().getCurrentTransition() == null) {
-                applicationStateSerializer.serialize(this, applicationState, "./openpos-state.json");
-            }
-        }
+//        if (autoSaveState) {            
+//            if (this.getApplicationState().getCurrentTransition() == null) {
+//                applicationStateSerializer.serialize(this, applicationState, "./openpos-state.json");
+//            }
+//        }
     }
 
     @Override
