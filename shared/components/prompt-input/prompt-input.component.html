@@ -13,7 +13,8 @@
                     <app-icon matPrefix iconClass="material-icons primary" [iconName]="promptIcon"></app-icon>
                 </ng-template>
                 <input matInput [errorStateMatcher]="errorMatcher" [formControlName]="'promptInputControl'" [formatterName]="formatter" [appFocus]="!readOnly" 
-                       [attr.minlength]="minLength" [attr.maxlength]="maxLength" [readonly]="readOnly" [attr.type]="isNumericField() ? 'tel' : 'text'" autoSelectOnFocus>
+                       [attr.minlength]="minLength" [attr.maxlength]="maxLength" [readonly]="readOnly" [attr.type]="isNumericField() ? 'tel' : 'text'"
+                       [keyboardLayout]="keyboardLayout" autoSelectOnFocus>
                 <mat-placeholder>{{placeholderText}}</mat-placeholder>
                 <mat-hint class="text-sm" align="start">{{hintText}}</mat-hint>
                 <mat-error class="text-sm">
@@ -50,7 +51,7 @@
            
         </ng-container>
     
-        <ng-template  #dateField>
+        <ng-template #dateField>
             <ng-container>
                 <app-dynamic-date-form-field [controlName]="'promptInputControl'" [hiddenControl]="'promptInputHiddenDateControl'" [form]="promptFormGroup"
                 [type]="responseType" [(value)]="responseText" [placeholder]="placeholderText" [isPrompt]=true [hintText]="hintText"></app-dynamic-date-form-field>

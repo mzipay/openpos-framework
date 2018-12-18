@@ -31,6 +31,7 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     inputType: string;
     checked = true;
     errorMatcher = new MyErrorStateMatcher();
+    keyboardLayout = 'en-US';
 
     formatter: string;
     _textMask: ITextMask; // Mask object built for text-mask
@@ -90,6 +91,9 @@ export class PromptInputComponent implements OnInit, OnDestroy {
 
             }).catch(error => this.log.info(`Failed to get barcodeScannerPlugin.  Reason: ${error}`));
         }
+
+        this.setKeyboardLayout();
+
     }
 
     ngOnDestroy(): void {
@@ -128,6 +132,15 @@ export class PromptInputComponent implements OnInit, OnDestroy {
         const patchGroup = {};
         patchGroup['promptInputControl'] = value;
         this.promptFormGroup.patchValue(patchGroup);
+    }
+
+    private setKeyboardLayout() {
+        if (['numerictext', 'money', 'phone', 'postalCode', 'percent', 'percentint', 'income', 'decimal']
+        .indexOf(this.responseType.toLowerCase()) >= 0) {
+            this.keyboardLayout = 'Numeric';
+        } else if (this.responseType.toLowerCase() === 'email') {
+            this.keyboardLayout = 'Email';
+        }
     }
 
 }
