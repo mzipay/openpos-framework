@@ -57,7 +57,7 @@ export class ScanSomethingComponent implements AfterViewInit, IMessageHandler<an
 
 
   ngAfterViewInit(): void {
-    this.focusFirst();
+    setTimeout(() => this.focusFirst());
   }
 
   private focusFirst(): void {
