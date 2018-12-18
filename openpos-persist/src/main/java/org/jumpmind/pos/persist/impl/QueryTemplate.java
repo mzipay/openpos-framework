@@ -26,6 +26,10 @@ public class QueryTemplate implements Cloneable {
         this.optionalWhereClauses = optionalWhereClauses;
     }
     
+    public void setSelect(String select) {
+        this.getSelects().add(select);
+    }
+    
     public void setSelects(List<String> selects) {
         this.selects = selects;
     }
