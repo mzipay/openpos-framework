@@ -60,6 +60,10 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   ngOnInit() {
     this.controlName = this.formField.id;
 
+    if (this.formField.disabled) {
+        this.formGroup.controls[this.controlName].disable();
+    }
+
     if (this.formField.inputType === 'ComboBox' || this.formField.inputType === 'SubmitOptionList' ||
       this.formField.inputType === 'ToggleButton' || this.formField.inputType === 'PopTart') {
       let getValuesFromServer = true;

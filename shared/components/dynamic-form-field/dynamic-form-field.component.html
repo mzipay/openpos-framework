@@ -36,7 +36,7 @@
             </mat-select>
 
             <textarea *ngSwitchCase="'TextArea'" [value]="formField.value" [formControlName]="formField.id" [readonly]="formField.disabled" [name]="formField.id" [placeholder]="getPlaceholderText(formField)"
-                matInput matTextareaAutosize matAutosizeMinRows="2" [disabled]="formField.disabled" [required]="formField.required" (change)="onFormElementChanged(formField)"></textarea>       
+                matInput matTextareaAutosize matAutosizeMinRows="2" [required]="formField.required" (change)="onFormElementChanged(formField)"></textarea>       
 
             <mat-error>
                 <app-show-errors [control]="formGroup.controls[formField.id]" [additionalValidationMessages]="formField.validationMessages"></app-show-errors>
@@ -60,7 +60,7 @@
 
     <ng-container *ngIf="formField.inputType==='Checkbox'">
         <mat-checkbox [formControlName]="formField.id" [required]="formField.required" [value]="formField.value" [labelPosition]="formField.labelPosition"
-            [disabled]="formField.disabled" [checked]="formField.checked" (change)="onFormElementChanged(formField)">{{formField.label}}</mat-checkbox>
+            [checked]="formField.checked" (change)="onFormElementChanged(formField)">{{formField.label}}</mat-checkbox>
     </ng-container>
 
     <ng-container *ngIf="formField.inputType==='Counter'">
