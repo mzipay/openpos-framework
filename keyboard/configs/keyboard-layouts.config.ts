@@ -134,19 +134,19 @@ const keyboardLayouts: IKeyboardLayouts = {
     'name': 'Numeric',
     'keys': [
       [
-        [KeyboardClassKey.Bksp]
+        [KeyboardClassKey.Bksp, KeyboardClassKey.Bksp, KeyboardClassKey.Bksp]
       ],
       [
-        ['7'], ['8'], ['9']
+        ['7', '7', '7'], ['8', '8', '8'], ['9', '9', '9']
       ],
       [
-        ['4'], ['5'], ['6']
+        ['4', '4', '4'], ['5', '5', '5'], ['6', '6', '6']
       ],
       [
-        ['1'], ['2'], ['3']
+        ['1', '1', '1'], ['2', '2', '2'], ['3', '3', '3']
       ],
       [
-        ['0'], ['.'], [KeyboardClassKey.Enter]
+        ['0', '0', '0'], ['.', '.', '.'], [KeyboardClassKey.Enter, KeyboardClassKey.Enter, KeyboardClassKey.Enter]
       ]
     ],
     'lang': ['numeric']
