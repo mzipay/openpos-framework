@@ -8,7 +8,6 @@
     padding: 7px 10px;
 }
 
-
 :host ::ng-deep .mat-form-field .mat-input-underline {
     display: none;
 }
@@ -16,4 +15,7 @@
 :host ::ng-deep .mat-form-field .mat-form-field-infix {
     width: auto;
 }
-  
+
+.sale-line-item {
+    height: unset !important;
+}
