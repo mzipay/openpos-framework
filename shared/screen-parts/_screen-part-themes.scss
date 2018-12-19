@@ -1,0 +1,5 @@
+@import './header-bar/header-bar-theme';
+
+@mixin screen-part-themes($theme){
+    @include header-bar-theme($theme);
+}

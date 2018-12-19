@@ -65,6 +65,7 @@ import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
 import { SideNavComponent } from './layout-components';
+import { HeaderBarComponent } from './screen-parts';
 
 const components = [
     PromptInputComponent,
@@ -100,7 +101,8 @@ const components = [
     PagerComponent,
     StatusBarStatusControlComponent,
     CatalogBrowserItemComponent,
-    CurrencyTextComponent
+    CurrencyTextComponent,
+    HeaderBarComponent
 ];
 
 const directives = [

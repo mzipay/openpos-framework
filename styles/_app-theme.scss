@@ -2,6 +2,7 @@
 @import './themes/component-theme-mixins';
 @import '../shared/layout-components/layout-component-themes';
 @import '../shared/components/component-theme-mixins';
+@import '../shared/screen-parts/screen-part-themes';
 
 @include mat-core();
 
@@ -10,6 +11,7 @@
     @include component-theme-mixins($theme);
     @include layout-component-themes($theme);
     @include openpos-component-theme-mixins($theme);
+    @include screen-part-themes($theme);
 
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));
