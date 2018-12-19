@@ -6,9 +6,11 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.ui.PromptConfig;
+import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
+import org.jumpmind.pos.core.screen.ToastType;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,13 +23,18 @@ public class UIManager implements IUI {
     protected void init(IStateManager stateManager) {
         this.stateManager = stateManager;
     }
-
+    
     @Override
-    public void prompt(String message) {
+    public void notify(String message, ToastType type, int duration) {
+        DialogScreen screen = new DialogScreen();
+        screen.asDialog(new DialogProperties(true));
+        screen.setTitle(message);
+        screen.setRefreshAlways(true);
+        stateManager.showScreen(screen);  
     }
     
     @Override
-    public void notify(String message, String action) {
+    public void prompt(String message, String action) {
         DialogScreen screen = new DialogScreen();
         screen.setTitle(message);
         screen.setRefreshAlways(true);
