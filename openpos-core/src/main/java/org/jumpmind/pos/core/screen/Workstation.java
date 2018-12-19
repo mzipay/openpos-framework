@@ -11,6 +11,14 @@ public class Workstation implements Serializable {
     String workstationId;
     
     int tillThresholdStatus;
+    
+    public Workstation() {
+    }
+
+    public Workstation(String storeId, String workstationId) {
+        this.storeId = storeId;
+        this.workstationId = workstationId;
+    }
 
     public String getStoreId() {
         return storeId;

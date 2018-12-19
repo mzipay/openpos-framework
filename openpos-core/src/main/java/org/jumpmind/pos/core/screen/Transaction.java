@@ -7,7 +7,14 @@ public class Transaction implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private String transactionNumber;
-    private Boolean active;    
+    private Boolean active = true;    
+    
+    public Transaction() {
+    }
+
+    public Transaction(String transactionNumber) {
+        this.transactionNumber = transactionNumber;
+    }
 
     public void setTransactionNumber(String transactionNumber) {
         this.transactionNumber = transactionNumber;
