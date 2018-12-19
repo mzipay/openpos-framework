@@ -23,7 +23,9 @@ export abstract class ScreenPart<T> implements OnDestroy {
     }
 
     onMenuItemClick( menuItem: IMenuItem) {
-        this.sessionService.onAction( menuItem );
+        if (menuItem.enabled) {
+            this.sessionService.onAction( menuItem );
+        }
     }
 
     isActionDisabled( action: string): Observable<boolean>{
