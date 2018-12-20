@@ -7,5 +7,5 @@ export * from './textmask';
 export * from './events';
 export * from './utils';
 export * from './layout-components';
-
+export * from './screen-parts';
 export * from './shared.module';
