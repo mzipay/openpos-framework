@@ -4,6 +4,6 @@ import java.util.Map;
 
 public interface IDeviceModelPostProcessor {
 
-    public void postProcess(Map<String, DeviceModel> configuration);
+    public void postProcess(Map<String, DeviceConfigModel> configuration);
     
 }

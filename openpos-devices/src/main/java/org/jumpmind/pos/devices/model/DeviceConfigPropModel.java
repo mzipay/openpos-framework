@@ -4,8 +4,8 @@ import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Table;
 
-@Table(name="device_prop")
-public class DevicePropModel extends AbstractModel {
+@Table(name="config_prop")
+public class DeviceConfigPropModel extends AbstractModel {
 
     private static final long serialVersionUID = 1L;
 
