@@ -26,10 +26,10 @@ public class DeviceRepositoryTest {
     
     @Test
     public void testGetDevices() {
-        Map<String, DeviceModel> map = repository.getDevices();
+        Map<String, DeviceConfigModel> map = repository.getDevices();
         assertNotNull(map);
         assertEquals(3, map.size());
-        DeviceModel scanner = map.get("dev_Scanner");
+        DeviceConfigModel scanner = map.get("dev_Scanner");
         assertNotNull(scanner);
         assertNotNull(scanner.getProperties());
         assertEquals(2, scanner.getProperties().size());

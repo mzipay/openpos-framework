@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.jumpmind.pos.devices.DevicesUtils;
-import org.jumpmind.pos.devices.model.DeviceModel;
-import org.jumpmind.pos.devices.model.DevicePropModel;
+import org.jumpmind.pos.devices.model.DeviceConfigModel;
+import org.jumpmind.pos.devices.model.DeviceConfigPropModel;
 import org.jumpmind.pos.devices.service.DeviceCache;
 
 import jpos.config.JposConfigException;
@@ -46,18 +46,18 @@ public class AlternateRegPopulator extends AbstractRegPopulator {
     @Override
     public void load() {
         try {
-            Map<String, DeviceModel> devices = DeviceCache.getDeviceModels();
+            Map<String, DeviceConfigModel> devices = DeviceCache.getDeviceModels();
             if (devices != null) {
                 @SuppressWarnings("unchecked")
                 Hashtable<String, JposEntry> entries = this.getJposEntries();
-                Collection<DeviceModel> values = devices.values();
-                for (DeviceModel deviceModel : values) {
+                Collection<DeviceConfigModel> values = devices.values();
+                for (DeviceConfigModel deviceModel : values) {
                     JposEntry entry = new SimpleEntry();
                     entry.addProperty(JposEntry.LOGICAL_NAME_PROP_NAME, DevicesUtils.getLogicalName(deviceModel));
                     entry.addProperty(JposEntry.SERVICE_CLASS_PROP_NAME, deviceModel.getServiceClass());
                     entry.addProperty(JposEntry.SI_FACTORY_CLASS_PROP_NAME, deviceModel.getFactoryClass());
-                    List<DevicePropModel> properties = deviceModel.getProperties();
-                    for (DevicePropModel prop : properties) {
+                    List<DeviceConfigPropModel> properties = deviceModel.getProperties();
+                    for (DeviceConfigPropModel prop : properties) {
                         extractPropAttr(entry, prop);
                     }
                     entries.put(entry.getLogicalName(), entry);
@@ -70,7 +70,7 @@ public class AlternateRegPopulator extends AbstractRegPopulator {
         }
     }
 
-    protected void extractPropAttr(JposEntry jposEntry, DevicePropModel prop) throws JposConfigException {
+    protected void extractPropAttr(JposEntry jposEntry, DeviceConfigPropModel prop) throws JposConfigException {
         String propName = prop.getPropertyName();
         String propValueString = prop.getPropertyValue();
         String propTypeString = prop.getPropertyType();

@@ -25,18 +25,18 @@ public class DevicesRepository {
     @Autowired(required=false)
     List<IDeviceModelPostProcessor> postProcessors;
 
-    Query<DevicePropModel> devicePropsQuery = new Query<DevicePropModel>().named("devicePropsLookupByProfile").result(DevicePropModel.class);
+    Query<DeviceConfigPropModel> devicePropsQuery = new Query<DeviceConfigPropModel>().named("devicePropsLookupByProfile").result(DeviceConfigPropModel.class);
 
-    public Map<String, DeviceModel> getDevices() {
-        Map<String, DeviceModel> byLogicalName = new HashMap<>();
-        List<DeviceModel> devices = dbSession.findAll(DeviceModel.class);
-        List<DevicePropModel> properties = dbSession.findAll(DevicePropModel.class);
-        for (DeviceModel deviceModel : devices) {
+    public Map<String, DeviceConfigModel> getDevices() {
+        Map<String, DeviceConfigModel> byLogicalName = new HashMap<>();
+        List<DeviceConfigModel> devices = dbSession.findAll(DeviceConfigModel.class);
+        List<DeviceConfigPropModel> properties = dbSession.findAll(DeviceConfigPropModel.class);
+        for (DeviceConfigModel deviceModel : devices) {
             byLogicalName.put(DevicesUtils.getLogicalName(deviceModel), deviceModel);
         }
 
-        for (DevicePropModel devicePropsModel : properties) {
-            DeviceModel deviceModel = byLogicalName.get(DevicesUtils.getLogicalName(devicePropsModel));
+        for (DeviceConfigPropModel devicePropsModel : properties) {
+            DeviceConfigModel deviceModel = byLogicalName.get(DevicesUtils.getLogicalName(devicePropsModel));
             if (deviceModel != null) {
                 deviceModel.add(devicePropsModel);
             }

@@ -1,7 +1,7 @@
 package org.jumpmind.pos.devices;
 
-import org.jumpmind.pos.devices.model.DeviceModel;
-import org.jumpmind.pos.devices.model.DevicePropModel;
+import org.jumpmind.pos.devices.model.DeviceConfigModel;
+import org.jumpmind.pos.devices.model.DeviceConfigPropModel;
 import org.jumpmind.pos.devices.model.DeviceRequest;
 
 public final class DevicesUtils {
@@ -9,11 +9,11 @@ public final class DevicesUtils {
     private DevicesUtils() {
     }
 
-    public static String getLogicalName(DeviceModel deviceModel) {
+    public static String getLogicalName(DeviceConfigModel deviceModel) {
         return DevicesUtils.getLogicalName(deviceModel.getProfile(), deviceModel.getDeviceName());        
     }
 
-    public static String getLogicalName(DevicePropModel deviceModel) {
+    public static String getLogicalName(DeviceConfigPropModel deviceModel) {
         return DevicesUtils.getLogicalName(deviceModel.getProfile(), deviceModel.getDeviceName());        
     }
 

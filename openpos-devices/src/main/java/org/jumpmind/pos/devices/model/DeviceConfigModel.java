@@ -7,8 +7,8 @@ import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.Column;
 import org.jumpmind.pos.persist.Table;
 
-@Table(name = "device")
-public class DeviceModel extends AbstractModel {
+@Table(name = "config")
+public class DeviceConfigModel extends AbstractModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,7 +27,7 @@ public class DeviceModel extends AbstractModel {
     @Column
     String factoryClass;
 
-    List<DevicePropModel> properties = new ArrayList<>();
+    List<DeviceConfigPropModel> properties = new ArrayList<>();
 
     public String getProfile() {
         return profile;
@@ -69,15 +69,15 @@ public class DeviceModel extends AbstractModel {
         this.factoryClass = factoryClass;
     }
 
-    public void setProperties(List<DevicePropModel> properties) {
+    public void setProperties(List<DeviceConfigPropModel> properties) {
         this.properties = properties;
     }
 
-    public List<DevicePropModel> getProperties() {
+    public List<DeviceConfigPropModel> getProperties() {
         return properties;
     }
 
-    public void add(DevicePropModel prop) {
+    public void add(DeviceConfigPropModel prop) {
         this.properties.add(prop);
     }
 
