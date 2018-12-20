@@ -29,10 +29,12 @@ public class Toast extends Message {
     }
 
     public Toast(String message) {
+        this();
         setMessage(message);
     }
 
     public Toast(String message, ToastType toastType, int duration) {
+        this();
         this.message = message;
         this.toastType = toastType;
         this.duration = duration;
