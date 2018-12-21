@@ -5,10 +5,10 @@ import { Configuration } from './../../configuration/configuration';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { PersonalizationService } from './personalization.service';
 
-import { Observable, Subscription, BehaviorSubject, Subject, merge, combineLatest, of } from 'rxjs';
+import { Observable, Subscription, BehaviorSubject, Subject, merge } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
-import { Injectable, NgZone, forwardRef, Inject } from '@angular/core';
+import { Injectable, NgZone, } from '@angular/core';
 import { StompState, StompRService } from '@stomp/ng2-stompjs';
 import { MatDialog } from '@angular/material';
 import { ActionIntercepter } from '../action-intercepter';
@@ -16,18 +16,16 @@ import { ActionIntercepter } from '../action-intercepter';
 // so we will import those files directly
 import { LoaderState } from '../components/loader/loader-state';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
-import { IDeviceResponse, InAppBrowserPlugin } from '../plugins';
-import {
-    IMenuItem,
-    IUrlMenuItem
-} from '../interfaces';
+import { IDeviceResponse } from '../plugins/device-response.interface';
+import { InAppBrowserPlugin } from '../plugins/in-app-browser.plugin';
+import { IMenuItem } from '../interfaces/menu-item.interface';
+import { IUrlMenuItem } from '../interfaces/url-menu-item.interface';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
 import { PluginService } from './plugin.service';
 import { AppInjector } from '../app-injector';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { PingParams } from '../interfaces/ping-params.interface';
 import { PingResult } from '../interfaces/ping-result.interface';
-import { queue } from 'rxjs/internal/scheduler/queue';
 
 @Injectable({
     providedIn: 'root',
