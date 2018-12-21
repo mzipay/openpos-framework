@@ -3,7 +3,8 @@ import { SessionService } from './session.service';
 import { MatSnackBar } from '@angular/material';
 import { ToastService } from './toast.service';
 import { of } from 'rxjs';
-import { IToastScreen, ToastType } from '..';
+import { IToastScreen, ToastType, AppInjector } from '../../core';
+import { Injector } from '@angular/core';
 
 
 describe('ToastService', () => {
@@ -22,7 +23,7 @@ describe('ToastService', () => {
     };
 
     beforeEach(() => {
-        const sessionSpy = jasmine.createSpyObj('SessionService', ['getMessages']);
+        const sessionSpy = jasmine.createSpyObj('SessionService', ['getMessages', 'cancelLoading']);
         const matSnackSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
         TestBed.configureTestingModule({
@@ -34,6 +35,7 @@ describe('ToastService', () => {
             ]
         });
 
+        AppInjector.Instance = TestBed.get(Injector);
         sessionServiceSpy = TestBed.get(SessionService);
         sessionServiceSpy.getMessages.and.returnValue(of(testToast));
 

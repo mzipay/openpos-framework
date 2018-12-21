@@ -6,7 +6,7 @@ import { StompRService } from '@stomp/ng2-stompjs';
 import { DeviceService } from './device.service';
 import { AppInjector } from '../app-injector';
 import { Injector } from '@angular/core';
-
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 describe('SessionService', () => {
 
@@ -21,6 +21,9 @@ describe('SessionService', () => {
         const deviceSpy = jasmine.createSpyObj('DeviceService', ['isRunningInCordova']);
 
         TestBed.configureTestingModule({
+            imports: [
+                HttpClientModule
+              ],
             providers: [
                 { provide: PersonalizationService, useValue: personalizationSpy },
                 SessionService,
@@ -29,9 +32,8 @@ describe('SessionService', () => {
                 { provide: DeviceService, useValue: deviceSpy}
             ]
         });
+
         AppInjector.Instance = TestBed.get(Injector);
-
-
         deviceServiceSpy = TestBed.get(DeviceService);
         deviceServiceSpy.isRunningInCordova.and.returnValue(false);
 

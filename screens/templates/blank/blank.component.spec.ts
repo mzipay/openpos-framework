@@ -1,16 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BlankComponent } from './blank.component';
+import { AppInjector } from '../../../core/app-injector';
+import { Injector } from '@angular/core';
+import { SessionService } from '../../../core/services/session.service';
 
 describe('BlankComponent', () => {
   let component: BlankComponent;
   let fixture: ComponentFixture<BlankComponent>;
 
-  beforeEach(async(() => {
+  beforeEach((() => {
+
+    const sessionServiceSpy = jasmine.createSpyObj('SessionService', ['getMessages']);
     TestBed.configureTestingModule({
-      declarations: [ BlankComponent ]
-    })
-    .compileComponents();
+      declarations: [ BlankComponent ],
+      providers: [
+        { provide: SessionService, useValue: sessionServiceSpy },
+    ]
+    });
+
+    AppInjector.Instance = TestBed.get(Injector);
   }));
 
   beforeEach(() => {
