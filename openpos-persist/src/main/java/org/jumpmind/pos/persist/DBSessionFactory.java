@@ -215,7 +215,7 @@ public class DBSessionFactory {
     }
 
     protected String getColumnName(TagModel tag) {
-        return TagModel.TAG_PREFIX + tag.getName().toUpperCase();
+        return databasePlatform.alterCaseToMatchDatabaseDefaultCase(TagModel.TAG_PREFIX + tag.getName().toUpperCase());
     }
 
 }
