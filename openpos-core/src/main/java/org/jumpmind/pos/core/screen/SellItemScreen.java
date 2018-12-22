@@ -39,6 +39,10 @@ public class SellItemScreen extends PromptScreen {
         return items;
     }
 
+    public void addItem(SellItem item) {
+        this.items.add(item);
+    }
+    
     public void setItems(List<SellItem> items) {
         this.items = items;
     }

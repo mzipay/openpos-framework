@@ -22,6 +22,7 @@ public interface ScreenType {
     public static final String LoadingDialog = "LoadingDialog";
     public static final String Login = "Login";
     public static final String MultipleDynamicForm = "MultipleDynamicForm";
+    public static final String MultiselectItemList = "MultiselectItemListScreen";
     public static final String NoOp = "NoOp";
     public static final String Options = "Options";
     public static final String PaymentStatus = "PaymentStatus";
@@ -29,6 +30,7 @@ public interface ScreenType {
     public static final String Prompt = "Prompt";
     public static final String PromptWithInfo = "PromptWithInfo";
     public static final String PromptWithOptions = "PromptWithOptions";
+    public static final String ReturnItem = "ReturnItem";
     public static final String SaleRetrieval = "SaleRetrieval";
     public static final String SelfCheckoutHome = "SelfCheckoutHome";
     public static final String SelfCheckoutOptions = "SelfCheckoutOptions";
