@@ -17,7 +17,11 @@ import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_URL;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_USER;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_VALIDATION_QUERY;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,6 +31,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.io.IOUtils;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
@@ -214,16 +219,19 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
     }
 
     public void exportData(String format, String dir) {
+        OutputStream os = null;
         try {
+            os = new BufferedOutputStream(new FileOutputStream(new File(dir, String.format("%s_post_01_%s.sql", getVersion(), getName().toLowerCase()))));            
             List<Table> tables = this.sessionFactory.getTables();
             DbExport dbExport = new DbExport(this.databasePlatform);
             dbExport.setNoData(false);
             dbExport.setFormat(Format.valueOf(format));
             dbExport.setNoCreateInfo(true);
-            dbExport.setDir(dir);
-            dbExport.exportTables(tables.toArray(new Table[tables.size()]));
+            dbExport.exportTables(os, tables.toArray(new Table[tables.size()]));
         } catch (IOException e) {
             throw new IoException(e);
+        } finally {
+            IOUtils.closeQuietly(os);
         }
     }
 
