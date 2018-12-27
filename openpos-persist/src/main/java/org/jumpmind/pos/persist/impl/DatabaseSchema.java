@@ -212,7 +212,7 @@ public class DatabaseSchema {
 
         Class<?> entityClass = clazz;
         while (entityClass != null && entityClass != Object.class) {
-            org.jumpmind.pos.persist.Table tblAnnotation = entityClass.getAnnotation(org.jumpmind.pos.persist.Table.class);
+            org.jumpmind.pos.persist.TableDef tblAnnotation = entityClass.getAnnotation(org.jumpmind.pos.persist.TableDef.class);
             if (tblAnnotation != null) {
 
                 EntityMetaData meta = new EntityMetaData();
@@ -234,7 +234,7 @@ public class DatabaseSchema {
                         }
                     }
                     currentClass = currentClass.getSuperclass();
-                    includeAllFields = currentClass != null && currentClass.getAnnotation(org.jumpmind.pos.persist.Table.class) == null;
+                    includeAllFields = currentClass != null && currentClass.getAnnotation(org.jumpmind.pos.persist.TableDef.class) == null;
                 }
 
                 meta.setTable(dbTable);
@@ -250,7 +250,7 @@ public class DatabaseSchema {
 
     private boolean isPrimaryKey(Field field) {
         if (field != null) {
-            org.jumpmind.pos.persist.Column colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.Column.class);
+            org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
             if (colAnnotation != null) {
                 return colAnnotation.primaryKey();
             }
@@ -261,7 +261,7 @@ public class DatabaseSchema {
 
     protected Column createColumn(Field field) {
         Column dbCol = null;
-        org.jumpmind.pos.persist.Column colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.Column.class);
+        org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
         if (colAnnotation != null) {
             dbCol = new Column();
 
@@ -298,7 +298,7 @@ public class DatabaseSchema {
         Map<String, String> entityIdColumnsToFields = new LinkedHashMap<>();
         List<Field> fields = gettEntityIdFields(entityClass);
         for (Field field : fields) {
-            org.jumpmind.pos.persist.Column colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.Column.class);
+            org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
             if (colAnnotation != null) {
                 String columnName = null;
                 if (!StringUtils.isEmpty(colAnnotation.name())) {
@@ -317,7 +317,7 @@ public class DatabaseSchema {
         Map<String, String> entityFieldsToColumns = new LinkedHashMap<>();
         List<Field> fields = getEntityFields(entityClass);
         for (Field field : fields) {
-            org.jumpmind.pos.persist.Column colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.Column.class);
+            org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
             if (colAnnotation != null) {
                 String columnName = null;
                 if (!StringUtils.isEmpty(colAnnotation.name())) {

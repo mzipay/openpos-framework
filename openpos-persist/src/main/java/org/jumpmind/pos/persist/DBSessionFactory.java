@@ -3,6 +3,7 @@ package org.jumpmind.pos.persist;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class DBSessionFactory {
     protected void initSchema() {
         this.databaseSchema = new DatabaseSchema();
         databaseSchema.init(sessionContext.get("module.tablePrefix"), databasePlatform,
-                this.modelClazzes.stream().filter(e -> e.getAnnotation(org.jumpmind.pos.persist.Table.class) != null)
+                this.modelClazzes.stream().filter(e -> e.getAnnotation(org.jumpmind.pos.persist.TableDef.class) != null)
                         .collect(Collectors.toList()),
                 this.modelClazzes.stream().filter(e -> e.getAnnotation(Extends.class) != null).collect(Collectors.toList()));
     }
@@ -73,6 +74,15 @@ public class DBSessionFactory {
     public void createAndUpgrade() {
         enhanceTaggedModels();
         databaseSchema.createAndUpgrade();
+    }
+
+    public List<Table> getTables() {
+        List<Table> list = new ArrayList<>();
+        for (Class<?> modelClazz : this.modelClazzes) {
+            List<Table> tables = this.databaseSchema.getTables(modelClazz);
+            list.addAll(tables);
+        }
+        return list;
     }
 
     public DBSession createDbSession() {

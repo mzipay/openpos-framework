@@ -26,6 +26,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
 import org.jumpmind.db.sql.SqlTemplateSettings;
@@ -35,7 +36,7 @@ import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.DatabaseScriptContainer;
 import org.jumpmind.pos.persist.PersistException;
-import org.jumpmind.pos.persist.Table;
+import org.jumpmind.pos.persist.TableDef;
 import org.jumpmind.pos.persist.driver.Driver;
 import org.jumpmind.pos.persist.model.TagConfig;
 import org.jumpmind.pos.service.model.ModuleModel;
@@ -188,7 +189,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
 
             String packageName = this.getClass().getPackage().getName();
 
-            List<Class<?>> tableClasses = getClassesForPackageAndAnnotation(packageName, Table.class);
+            List<Class<?>> tableClasses = getClassesForPackageAndAnnotation(packageName, TableDef.class);
 
             Map<String, String> sessionContext = new HashMap<>();
 
@@ -206,6 +207,11 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
     @Override
     public void start() {
         updateDataModel(session());
+    }
+    
+    public void export() {
+        List<Table> tables = this.sessionFactory.getTables();
+        
     }
 
     public void updateDataModel(DBSession session) {
