@@ -17,6 +17,7 @@ import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_URL;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_USER;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_VALIDATION_QUERY;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
 import org.jumpmind.db.sql.SqlTemplateSettings;
 import org.jumpmind.db.util.BasicDataSourceFactory;
 import org.jumpmind.db.util.ConfigDatabaseUpgrader;
+import org.jumpmind.exception.IoException;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.DatabaseScriptContainer;
@@ -43,6 +45,8 @@ import org.jumpmind.pos.service.model.ModuleModel;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.ISecurityService;
 import org.jumpmind.security.SecurityServiceFactory;
+import org.jumpmind.symmetric.io.data.DbExport;
+import org.jumpmind.symmetric.io.data.DbExport.Format;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +63,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @DependsOn("tagConfig")
-abstract public class AbstractModule extends AbstractServiceFactory implements Module {
+abstract public class AbstractModule extends AbstractServiceFactory implements IModule {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -130,12 +134,12 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
 
     @Override
     public String getDriver() {
-            return env.getProperty(DB_POOL_DRIVER, "org.h2.Driver");
+        return env.getProperty(DB_POOL_DRIVER, "org.h2.Driver");
     }
 
     @Override
     public String getURL() {
-            return env.getProperty(DB_POOL_URL, "jdbc:openpos:h2:mem:" + getName());
+        return env.getProperty(DB_POOL_URL, "jdbc:openpos:h2:mem:" + getName());
     }
 
     protected DataSource dataSource() {
@@ -208,10 +212,19 @@ abstract public class AbstractModule extends AbstractServiceFactory implements M
     public void start() {
         updateDataModel(session());
     }
-    
-    public void export() {
-        List<Table> tables = this.sessionFactory.getTables();
-        
+
+    public void exportData(String format, String dir) {
+        try {
+            List<Table> tables = this.sessionFactory.getTables();
+            DbExport dbExport = new DbExport(this.databasePlatform);
+            dbExport.setNoData(false);
+            dbExport.setFormat(Format.valueOf(format));
+            dbExport.setNoCreateInfo(true);
+            dbExport.setDir(dir);
+            dbExport.exportTables(tables.toArray(new Table[tables.size()]));
+        } catch (IOException e) {
+            throw new IoException(e);
+        }
     }
 
     public void updateDataModel(DBSession session) {
