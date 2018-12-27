@@ -9,7 +9,7 @@ public interface IModule {
     public default void start() {
     }
     
-    public void exportData(String format, String dir);
+    public void exportData(String format, String dir, boolean includeModuleTables);
     
     public String getTablePrefix();
 

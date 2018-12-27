@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,11 +78,14 @@ public class DBSessionFactory {
         databaseSchema.createAndUpgrade();
     }
 
-    public List<Table> getTables() {
+    public List<Table> getTables(Class<?>... exclude) {
         List<Table> list = new ArrayList<>();
+        List<Class<?>> toExclude = exclude != null ? Arrays.asList(exclude) : Collections.emptyList();
         for (Class<?> modelClazz : this.modelClazzes) {
-            List<Table> tables = this.databaseSchema.getTables(modelClazz);
-            list.addAll(tables);
+            if (!toExclude.contains(modelClazz)) {
+                List<Table> tables = this.databaseSchema.getTables(modelClazz);
+                list.addAll(tables);
+            }
         }
         return list;
     }

@@ -51,6 +51,7 @@ import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.ISecurityService;
 import org.jumpmind.security.SecurityServiceFactory;
 import org.jumpmind.symmetric.io.data.DbExport;
+import org.jumpmind.symmetric.io.data.DbExport.Compatible;
 import org.jumpmind.symmetric.io.data.DbExport.Format;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -218,12 +219,14 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
         updateDataModel(session());
     }
 
-    public void exportData(String format, String dir) {
+    public void exportData(String format, String dir, boolean includeModuleTables) {
         OutputStream os = null;
         try {
-            os = new BufferedOutputStream(new FileOutputStream(new File(dir, String.format("%s_post_01_%s.sql", getVersion(), getName().toLowerCase()))));            
-            List<Table> tables = this.sessionFactory.getTables();
+            os = new BufferedOutputStream(new FileOutputStream(new File(dir, String.format("%s_post_01_%s.sql", getVersion(), getName().toLowerCase()))));  
+            List<Table> tables = this.sessionFactory.getTables(includeModuleTables ? new Class<?>[0] : new Class[] { ModuleModel.class } );
             DbExport dbExport = new DbExport(this.databasePlatform);
+            dbExport.setCompatible(Compatible.H2);
+            dbExport.setUseQuotedIdentifiers(false);
             dbExport.setNoData(false);
             dbExport.setFormat(Format.valueOf(format));
             dbExport.setNoCreateInfo(true);
