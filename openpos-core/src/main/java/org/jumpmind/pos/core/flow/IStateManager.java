@@ -31,7 +31,9 @@ public interface IStateManager {
 
     public void keepAlive();
     public void init(String appId, String nodeId);
+    @Deprecated
     public String getNodeId();
+    public String getDeviceId();
     public String getAppId();
     public void doAction(String action);
     public void doAction(String action, Map<String, String> params);

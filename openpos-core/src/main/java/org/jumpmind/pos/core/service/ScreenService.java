@@ -62,6 +62,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import springfox.documentation.annotations.ApiIgnore;
+
+@ApiIgnore
 @SuppressWarnings("deprecation")
 @CrossOrigin
 @Controller
