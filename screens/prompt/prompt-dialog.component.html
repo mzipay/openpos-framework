@@ -8,12 +8,19 @@
         <div style="height:50px"></div>
     </mat-dialog-content>
 
-    <mat-dialog-actions *ngIf="screen.otherActions || screen.actionButton" align="end">
+    <mat-dialog-actions *ngIf="screen.otherActions" fxLayoutAlign="space-between">
         <button type="button" *ngFor="let menuItem of screen.otherActions" mat-raised-button color=primary-inverse
             (click)="session.onAction(menuItem)">
             <span>{{menuItem.title}}</span>
             <app-icon *ngIf="menuItem.icon" [iconClass]="material-icons" [iconName]="menuItem.icon"></app-icon>
         </button>
+        <button type="submit" mat-raised-button color="primary">
+            <span>{{screen.actionButton.title}}</span>
+            <app-icon *ngIf="screen.actionButton.icon" [iconClass]="material-icons" [iconName]="screen.actionButton.icon"></app-icon>
+        </button>
+    </mat-dialog-actions>
+
+    <mat-dialog-actions *ngIf="!screen.otherActions && screen.actionButton" align="end">
         <button type="submit" mat-raised-button color="primary">
             <span>{{screen.actionButton.title}}</span>
             <app-icon *ngIf="screen.actionButton.icon" [iconClass]="material-icons" [iconName]="screen.actionButton.icon"></app-icon>
