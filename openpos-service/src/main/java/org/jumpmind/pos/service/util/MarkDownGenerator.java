@@ -88,6 +88,11 @@ public class MarkDownGenerator {
                 RequestMapping mapping = method.getAnnotation(RequestMapping.class);
                 markdown.append(MarkDownGeneratorConstants.OPERATION_HEADING + getOperationName(method));
                 markdown.append(LINE_SKIP);
+                
+                ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
+                markdown.append(apiOperation != null ? apiOperation.value() : "");
+                markdown.append(LINE_SKIP);
+                
                 markdown.append(MarkDownGeneratorConstants.OPERATION_TABLE_HEADING + "\n");
                 markdown.append(MarkDownGeneratorConstants.OPERATION_TABLE_DIVIDER + "\n");
                 markdown.append(TABLE_DIVISION);
@@ -127,8 +132,6 @@ public class MarkDownGenerator {
                     Class<?> returnType = method.getReturnType();
                     if (canComplexExampleBeCreated(returnType)) {
                         models.add(returnType);
-                    }
-                    if (!returnType.isPrimitive()) {
                         markdown.append(createModelLink(returnType.getSimpleName()));
                     } else {
                         markdown.append(returnType.getSimpleName());
@@ -138,9 +141,7 @@ public class MarkDownGenerator {
                     markdown.append(MarkDownGeneratorConstants.NO_VALUE);
                     markdown.append(TABLE_DIVISION);
                 }
-                ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
-                markdown.append(apiOperation != null ? apiOperation.value() : "");
-                markdown.append(TABLE_DIVISION);
+
                 markdown.append(LINE_SKIP);
 
                 // print examples
