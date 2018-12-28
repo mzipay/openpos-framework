@@ -68,7 +68,7 @@ public class ModelMarkDownGenerator {
     }
 
     public void document(String prefix, Table table) {
-        markdown.append(MODEL_HEADING_START + (prefix + "_" + table.getName()).toUpperCase());
+        markdown.append(MODEL_HEADING_START + (prefix + "_" + table.getName()).toUpperCase()).append(LINE_SKIP);
         markdown.append(table.getDescription()).append(LINE_SKIP);
         markdown.append(COLUMN_TABLE_HEADING + "\n");
         markdown.append(COLUMN_TABLE_DIVIDER + "\n");
@@ -77,11 +77,11 @@ public class ModelMarkDownGenerator {
             markdown.append(TABLE_DIVISION);
             markdown.append(column.getName().toUpperCase());
             markdown.append(TABLE_DIVISION);
-            markdown.append(column.isPrimaryKey() ? "[x]" : "");
+            markdown.append(column.isPrimaryKey() ? "<ul><li> [x] </li></ul>" : "<ul><li> [ ] </li></ul>");
             markdown.append(TABLE_DIVISION);
             markdown.append(column.getJdbcTypeName());
             markdown.append(TABLE_DIVISION);
-            markdown.append(column.getSize());
+            markdown.append(column.getSize() == null ? "" : column.getSize());
             markdown.append(TABLE_DIVISION);
 
             markdown.append(column.getDescription());

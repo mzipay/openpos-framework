@@ -277,6 +277,8 @@ public class DatabaseSchema {
             } else {
                 dbCol.setTypeCode(colAnnotation.type());
             }
+            
+            dbCol.setJdbcTypeName(getType(dbCol.getJdbcTypeCode()));
 
             if (colAnnotation.size() != null & !colAnnotation.size().equalsIgnoreCase("")) {
                 dbCol.setSize(colAnnotation.size());
@@ -350,6 +352,25 @@ public class DatabaseSchema {
             return "12,3";
         }
         return null;
+    }
+    
+    private static String getType(int type) {
+        switch (type) {
+            case Types.VARCHAR:                
+                return "VARCHAR";
+            case Types.BIGINT:                
+                return "BIGINT";
+            case Types.INTEGER:                
+                return "INTEGER";
+            case Types.BOOLEAN:                
+                return "BOOLEAN";
+            case Types.TIMESTAMP:                
+                return "TIMESTAMP";
+            case Types.DECIMAL:                
+                return "DECIMAL";
+            default:
+                return "OTHER";
+        }
     }
 
     private static int getDefaultType(Field field) {
