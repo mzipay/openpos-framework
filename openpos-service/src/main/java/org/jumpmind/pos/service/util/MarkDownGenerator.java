@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.commons.io.IOUtils;
 import org.jumpmind.pos.persist.ColumnDef;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,12 +51,19 @@ public class MarkDownGenerator {
     boolean autoGenerateExamples = true;
     String outputDir = "";
 
+    StringBuilder header = new StringBuilder();
     StringBuilder markdown = new StringBuilder();
 
     Set<Class<?>> models = new HashSet<>();
 
     public MarkDownGenerator() {
-        markdown.append(MarkDownGeneratorConstants.SERVICES_HEADING + "\n");
+        header.append(MarkDownGeneratorConstants.SERVICES_HEADING + "\n");
+        header.append(LINE_SKIP);
+        try {
+            header.append(IOUtils.toString(getClass().getResource("/services_intro.md")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setAutoGenerateExamples(boolean autoGenerateExamples) {
@@ -66,13 +74,15 @@ public class MarkDownGenerator {
         this.outputDir = outputDir;
     }
 
-    public void document(Class<?> serviceInterface) {
+    public void document(Class<?> serviceInterface)  {
 
         boolean requestFound;
         Parameter requestParameter = null;
         Api api = serviceInterface.getAnnotation(io.swagger.annotations.Api.class);
         String tags[] = api != null ? api.tags() : new String[] { serviceInterface.getSimpleName() };
+        header.append("* ").append(createLink(tags[0], tags[0], "")).append("\n");        
         markdown.append(MarkDownGeneratorConstants.SERVICE_NAME_HEADING_START + tags[0] + "\n");
+
         if (api != null && !api.description().equals("")) {
             markdown.append("*" + api.description() + "*");
         }
@@ -174,15 +184,15 @@ public class MarkDownGenerator {
     }
 
     private String createModelLink(String modelName) {
-        return createModelLink(modelName, modelName, "");
+        return createLink(modelName, modelName, "");
     }
 
     private String createModelLink(String modelName, String format) {
-        return createModelLink(modelName, modelName, format);
+        return createLink(modelName, modelName, format);
     }
 
-    private String createModelLink(String modelName, String header, String format) {
-        return "[" + format + modelName + format + "](#" + header.toLowerCase() + ")";
+    private String createLink(String name, String headerRef, String format) {
+        return "[" + format + name + format + "](#" + headerRef.toLowerCase().replaceAll(" ", "-") + ")";
     }
 
     private String scanAndGenerateExample(Class<?> clazz) {
@@ -300,7 +310,7 @@ public class MarkDownGenerator {
                     string.append(createModelLink(formatTypeName(field.getGenericType().getTypeName()), "`"));
                     string.append(TABLE_DIVISION);
                 } else if (getModelNameFromParameterizedType(field) != null) {
-                    string.append(createModelLink(formatTypeName(field.getGenericType().getTypeName()),
+                    string.append(createLink(formatTypeName(field.getGenericType().getTypeName()),
                             formatTypeName(getModelNameFromParameterizedType(field)), "`"));
                     string.append(TABLE_DIVISION);
                 } else {
@@ -373,6 +383,10 @@ public class MarkDownGenerator {
     }
 
     public void finish(String filename) throws IOException {
+
+        header.append(LINE_SKIP);
+        markdown.insert(0, header.toString());
+        
         BufferedWriter writer = null;
 
         // print models
