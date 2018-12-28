@@ -9,6 +9,7 @@ import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,14 +18,18 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.io.IOUtils;
 import org.jumpmind.pos.core.flow.ApplicationState;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IScreenInterceptor;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
 import org.jumpmind.pos.core.flow.SessionTimer;
+import org.jumpmind.pos.core.model.ClientConfiguration;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
 import org.jumpmind.pos.core.model.IDynamicListField;
@@ -44,6 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,6 +85,12 @@ public class ScreenService implements IScreenService, IActionListener {
     IMessageService messageService;
 
     Queue<IScreenInterceptor> screenInterceptors = new ConcurrentLinkedQueue<>();
+    
+    @Autowired
+    private ServletContext servletContext;
+    
+    @Autowired
+    private Environment environment;
 
     @PostConstruct
     public void init() {
@@ -92,6 +104,28 @@ public class ScreenService implements IScreenService, IActionListener {
         for (IScreenInterceptor screenInterceptor : screenInterceptors) {
             this.screenInterceptors.add(screenInterceptor);
         }
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "api/brand/{brandCode}/devicetype/{deviceType}/config")
+    @ResponseBody
+    public ClientConfiguration getClientConfiguration(
+            @PathVariable String brandCode,
+            @PathVariable String deviceType) {
+        logger.info("Received a request client configuration {} {}", brandCode, deviceType);
+        ClientConfiguration config = new ClientConfiguration();
+        return config;
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "api/brand/{brandCode}/devicetype/{deviceType}/asset/{assetName}")
+    public void getImageAsByteArray(HttpServletResponse response,
+            @PathVariable String brandCode,
+            @PathVariable String deviceType,
+            @PathVariable String assetName) throws IOException {
+        logger.info("Received a request for client asset: {} {} {}", brandCode, deviceType, assetName);
+        // InputStream in = servletContext.getResourceAsStream("/public/assets/symmetric.png");
+        InputStream in = getClass().getResourceAsStream("/public/assets/symmetric.png");
+        // response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        IOUtils.copy(in, response.getOutputStream());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{deviceId}/control/{controlId}")
