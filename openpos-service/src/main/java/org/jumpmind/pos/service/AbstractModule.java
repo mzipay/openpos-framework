@@ -16,15 +16,14 @@ import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_TEST
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_URL;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_USER;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.DB_POOL_VALIDATION_QUERY;
+import static org.jumpmind.pos.service.util.ClassUtils.getClassesForPackageAndAnnotation;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.annotation.Annotation;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,12 +56,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -100,22 +96,6 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
 
     @Autowired
     private ApplicationContext applicationContext;
-
-    protected List<Class<?>> getClassesForPackageAndAnnotation(String packageName, Class<? extends Annotation> annotation) {
-        List<Class<?>> classes = new ArrayList<Class<?>>();
-        classes.add(ModuleModel.class);
-        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(true);
-        scanner.addIncludeFilter(new AnnotationTypeFilter(annotation));
-        for (BeanDefinition bd : scanner.findCandidateComponents(packageName)) {
-            try {
-                final Class<?> clazz = Class.forName(bd.getBeanClassName());
-                classes.add(clazz);
-            } catch (ClassNotFoundException ex) {
-                logger.error(ex.getMessage());
-            }
-        }
-        return classes;
-    }
 
     protected PlatformTransactionManager txManager() {
         if (txManager == null) {

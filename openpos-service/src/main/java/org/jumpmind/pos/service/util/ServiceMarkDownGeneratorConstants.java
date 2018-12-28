@@ -1,6 +1,6 @@
 package org.jumpmind.pos.service.util;
 
-public class MarkDownGeneratorConstants {
+public class ServiceMarkDownGeneratorConstants {
 
 	public static final String SERVICES_HEADING = "# Services";
 	public static final String OPERATION_HEADING = "### ";

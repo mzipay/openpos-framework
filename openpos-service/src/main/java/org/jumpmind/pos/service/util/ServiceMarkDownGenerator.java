@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +40,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 
 @SuppressWarnings("deprecation")
-public class MarkDownGenerator {
+public class ServiceMarkDownGenerator {
 
     private final static String LINE_SKIP = "\n\n";
     private final static String CODE_BLOCK = "```";
@@ -56,8 +55,8 @@ public class MarkDownGenerator {
 
     Set<Class<?>> models = new HashSet<>();
 
-    public MarkDownGenerator() {
-        header.append(MarkDownGeneratorConstants.SERVICES_HEADING + "\n");
+    public ServiceMarkDownGenerator() {
+        header.append(ServiceMarkDownGeneratorConstants.SERVICES_HEADING + "\n");
         header.append(LINE_SKIP);
         try {
             header.append(IOUtils.toString(getClass().getResource("/services_intro.md")));
@@ -81,7 +80,7 @@ public class MarkDownGenerator {
         Api api = serviceInterface.getAnnotation(io.swagger.annotations.Api.class);
         String tags[] = api != null ? api.tags() : new String[] { serviceInterface.getSimpleName() };
         header.append("* ").append(createLink(tags[0], tags[0], "")).append("\n");        
-        markdown.append(MarkDownGeneratorConstants.SERVICE_NAME_HEADING_START + tags[0] + "\n");
+        markdown.append(ServiceMarkDownGeneratorConstants.SERVICE_NAME_HEADING_START + tags[0] + "\n");
 
         if (api != null && !api.description().equals("")) {
             markdown.append("*" + api.description() + "*");
@@ -96,15 +95,15 @@ public class MarkDownGenerator {
 
                 // print new op table
                 RequestMapping mapping = method.getAnnotation(RequestMapping.class);
-                markdown.append(MarkDownGeneratorConstants.OPERATION_HEADING + getOperationName(method));
+                markdown.append(ServiceMarkDownGeneratorConstants.OPERATION_HEADING + getOperationName(method));
                 markdown.append(LINE_SKIP);
                 
                 ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
                 markdown.append(apiOperation != null ? apiOperation.value() : "");
                 markdown.append(LINE_SKIP);
                 
-                markdown.append(MarkDownGeneratorConstants.OPERATION_TABLE_HEADING + "\n");
-                markdown.append(MarkDownGeneratorConstants.OPERATION_TABLE_DIVIDER + "\n");
+                markdown.append(ServiceMarkDownGeneratorConstants.OPERATION_TABLE_HEADING + "\n");
+                markdown.append(ServiceMarkDownGeneratorConstants.OPERATION_TABLE_DIVIDER + "\n");
                 markdown.append(TABLE_DIVISION);
                 if (mapping.path().length > 0) {
                     markdown.append("`" + mapping.path()[0] + "`");
@@ -133,7 +132,7 @@ public class MarkDownGenerator {
                     markdown.append(createModelLink(requestParameter.getType().getSimpleName()));
                     markdown.append(TABLE_DIVISION);
                 } else {
-                    markdown.append(MarkDownGeneratorConstants.NO_VALUE);
+                    markdown.append(ServiceMarkDownGeneratorConstants.NO_VALUE);
                     markdown.append(TABLE_DIVISION);
                 }
 
@@ -148,7 +147,7 @@ public class MarkDownGenerator {
                     }
                     markdown.append(TABLE_DIVISION);
                 } else {
-                    markdown.append(MarkDownGeneratorConstants.NO_VALUE);
+                    markdown.append(ServiceMarkDownGeneratorConstants.NO_VALUE);
                     markdown.append(TABLE_DIVISION);
                 }
 
@@ -156,14 +155,14 @@ public class MarkDownGenerator {
 
                 // print examples
                 if (requestFound) {
-                    markdown.append(MarkDownGeneratorConstants.REQUEST_EXAMPLE_HEADING + "\n");
+                    markdown.append(ServiceMarkDownGeneratorConstants.REQUEST_EXAMPLE_HEADING + "\n");
                     markdown.append(CODE_BLOCK + "\n");
                     markdown.append(scanAndGenerateExample(requestParameter.getType()));
                     markdown.append("\n").append(CODE_BLOCK).append("\n");
                 }
 
                 if (method.isAnnotationPresent(ResponseBody.class)) {
-                    markdown.append(MarkDownGeneratorConstants.RESPONSE_EXAMPLE_HEADING + "\n");
+                    markdown.append(ServiceMarkDownGeneratorConstants.RESPONSE_EXAMPLE_HEADING + "\n");
                     markdown.append(CODE_BLOCK + "\n");
                     markdown.append(scanAndGenerateExample(method.getReturnType()));
                     markdown.append("\n").append(CODE_BLOCK).append("\n");
@@ -291,14 +290,14 @@ public class MarkDownGenerator {
     private String buildModelMarkdown(Class<?> model) {
         StringBuilder string = new StringBuilder();
         Field fields[] = model.getDeclaredFields();
-        string.append(MarkDownGeneratorConstants.MODEL_HEADING_START + model.getSimpleName() + "\n");
+        string.append(ServiceMarkDownGeneratorConstants.MODEL_HEADING_START + model.getSimpleName() + "\n");
         ApiModel apiModel = model.getAnnotation(ApiModel.class);
         if (apiModel != null) {
             string.append("*" + apiModel.description() + "*");
         }
         string.append(LINE_SKIP);
-        string.append(MarkDownGeneratorConstants.MODEL_TABLE_HEADING + "\n");
-        string.append(MarkDownGeneratorConstants.MODEL_TABLE_DIVIDER + "\n");
+        string.append(ServiceMarkDownGeneratorConstants.MODEL_TABLE_HEADING + "\n");
+        string.append(ServiceMarkDownGeneratorConstants.MODEL_TABLE_DIVIDER + "\n");
         for (Field field : fields) {
             if (!Modifier.isFinal(field.getModifiers()) && !field.isAnnotationPresent(JsonIgnore.class)) {
                 string.append(TABLE_DIVISION);
@@ -391,7 +390,7 @@ public class MarkDownGenerator {
 
         // print models
         if (!models.isEmpty()) {
-            markdown.append(MarkDownGeneratorConstants.MODELS_HEADING + "\n");
+            markdown.append(ServiceMarkDownGeneratorConstants.MODELS_HEADING + "\n");
 
             List<Class<?>> sorted = new ArrayList<>(models);
             for (Class<?> model : models) {
@@ -415,11 +414,7 @@ public class MarkDownGenerator {
                 }
             }
 
-            Collections.sort(sorted, new Comparator<Class<?>>() {
-                public int compare(Class<?> o1, Class<?> o2) {
-                    return o1.getSimpleName().compareTo(o2.getSimpleName());
-                };
-            });
+            Collections.sort(sorted, new ClassNameSorter());
 
             for (Class<?> model : sorted) {
                 markdown.append(buildModelMarkdown(model));
