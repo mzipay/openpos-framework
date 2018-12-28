@@ -21,7 +21,7 @@ export class PagerComponent implements AfterContentInit, OnDestroy {
         this._resetPageState();
         if (this.sections) {
             this.subscription = this.sections.changes.subscribe( () => {
-                if (!this.refreshOnContentChange) {
+                if (this.refreshOnContentChange) {
                     this._resetPageState();
                 }
             });
