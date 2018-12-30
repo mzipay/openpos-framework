@@ -4,7 +4,7 @@ import org.jumpmind.pos.persist.ColumnDef;
 import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.TableDef;
 
-@TableDef(name="module")
+@TableDef(name="module", description="This table is used to track runtime information about the module.")
 public class ModuleModel extends AbstractModel {
 
     private static final long serialVersionUID = 1L;
