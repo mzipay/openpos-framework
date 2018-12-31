@@ -77,7 +77,7 @@ public class ModelMarkDownGenerator {
             markdown.append(TABLE_DIVISION);
             markdown.append(column.getName().toUpperCase());
             markdown.append(TABLE_DIVISION);
-            markdown.append(column.isPrimaryKey() ? "<ul><li> [x] </li></ul>" : "<ul><li> [ ] </li></ul>");
+            markdown.append(column.isPrimaryKey() ? ":ballot_box_with_check:" : "");
             markdown.append(TABLE_DIVISION);
             markdown.append(column.getJdbcTypeName());
             markdown.append(TABLE_DIVISION);
