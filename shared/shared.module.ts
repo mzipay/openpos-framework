@@ -24,7 +24,8 @@ import {
     OpenposScreenOutletDirective,
     ScreenDirective,
     AutocompleteDirective,
-    DefaultImageDirective
+    DefaultImageDirective,
+    KlassDirective
 } from './directives';
 import {
     PromptInputComponent,
@@ -120,7 +121,8 @@ const directives = [
     OpenposScreenOutletDirective,
     ScreenDirective,
     AutocompleteDirective,
-    DefaultImageDirective
+    DefaultImageDirective,
+    KlassDirective
 ];
 
 const pipes = [

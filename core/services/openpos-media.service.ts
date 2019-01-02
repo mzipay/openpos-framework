@@ -24,7 +24,7 @@ export class OpenposMediaService {
           });
 
          return this.observableMedia.asObservable().pipe(
-                map(change => mappedValues.get(change.mqAlias)),
+                map(change => mappedValues.has(change.mqAlias) ? mappedValues.get(change.mqAlias) : mappedValues.get('')),
                 startWith(startValue)
             );
     }
