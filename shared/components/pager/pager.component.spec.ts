@@ -24,8 +24,8 @@ describe('PagerComponent', () => {
             expect(pagerComponent.pageSize).toBe(5);
             expect(pagerComponent.currentPage).toBe(1);
             expect(pagerComponent.currentIndex).toBe(0);
-            expect(pagerComponent.totalPages).toBe(undefined);
-            expect(pagerComponent.refreshOnContentChange).toBe(undefined);
+            expect(pagerComponent.totalPages).toBeUndefined();
+            expect(pagerComponent.refreshOnContentChange).toBeUndefined();
         });
     });
 
