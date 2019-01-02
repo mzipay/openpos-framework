@@ -1,6 +1,5 @@
 import { Directive, HostListener, Input, HostBinding, Inject, forwardRef } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { PersonalizationService } from '../..';
+import { PersonalizationService } from '../../core/services';
 
 @Directive({
     // tslint:disable-next-line:directive-selector

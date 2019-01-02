@@ -1,5 +1,5 @@
 import { Directive, ElementRef } from '@angular/core';
-import { Configuration } from '../..';
+import { Configuration } from '../../configuration/configuration';
 
 @Directive({
     // tslint:disable-next-line:directive-selector

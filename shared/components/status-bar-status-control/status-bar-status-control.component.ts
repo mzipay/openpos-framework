@@ -1,7 +1,7 @@
 import { IStatusBarControl } from './../../../core/interfaces';
 import { Component, forwardRef, Inject } from '@angular/core';
-import { StatusBarData } from '..';
-import { SessionService, IMenuItem } from '../../..';
+import { StatusBarData } from '../status-bar/status-bar-data';
+import { SessionService, IMenuItem } from '../../../core';
 
 /**
  * A swappable component that is placed on the right side of the status bar.

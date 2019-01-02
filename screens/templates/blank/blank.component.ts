@@ -1,6 +1,6 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
-import { AbstractTemplate } from '../../../core';
+import { AbstractTemplate } from '../../../core/components/abstract-template';
 
 @Component({
   selector: 'app-blank',

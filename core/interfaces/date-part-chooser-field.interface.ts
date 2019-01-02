@@ -1,4 +1,4 @@
-import { IFormElement } from '.';
+import { IFormElement } from './form-field.interface';
 
 export enum DatePartChooserMode {
     MonthDate = 'MonthDate',

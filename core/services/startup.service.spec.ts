@@ -6,6 +6,8 @@ import { scan } from 'rxjs/operators';
 import { StartupComponent } from '../components/startup/startup.component';
 import { StartupFailedComponent } from '../components/startup/startup-failed.component';
 import { cold, getTestScheduler } from 'jasmine-marbles';
+import { AppInjector } from '../app-injector';
+import { Injector } from '@angular/core';
 
 describe('StartupService', () => {
 
@@ -36,6 +38,7 @@ describe('StartupService', () => {
             ]
         });
 
+        AppInjector.Instance = TestBed.get(Injector);
         startupService = TestBed.get(StartupService);
         matDialog = TestBed.get(MatDialog);
         matDialog.open.and.returnValue(matDialogRefSpy);
@@ -103,12 +106,16 @@ describe('StartupService', () => {
             expect(matDialog.open).toHaveBeenCalledWith(StartupComponent, jasmine.anything());
             expect(matDialogRef.close).toHaveBeenCalledTimes(1);
             expect(matDialog.open).toHaveBeenCalledWith(StartupFailedComponent, {
+                width: jasmine.anything(),
+                height: jasmine.anything(),
                 disableClose: jasmine.anything(),
                 hasBackdrop: jasmine.anything(),
                 data: {
                     error: 'TestTask3: Error: Test3Failed',
                     messages: ['TestTask2: Test2', 'FailureTask']
-                }});
+                },
+                panelClass: jasmine.anything()
+            });
         });
     });
 
