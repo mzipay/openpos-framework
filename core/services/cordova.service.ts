@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { Logger } from './logger.service';
+import { SessionService } from './session.service';
 
 declare var cordova: any;
 
@@ -12,7 +13,7 @@ export class CordovaService {
     private _isRunningInCordova: boolean = null;
     public plugins: any;
 
-    constructor(private log: Logger) {
+    constructor(private log: Logger, public session: SessionService) {
         document.addEventListener('deviceready', () => {
                 this.log.info('Cordova devices are ready');
                 this._isRunningInCordova = true;
@@ -25,7 +26,7 @@ export class CordovaService {
 
     public isRunningInCordova(): boolean {
         if (this._isRunningInCordova == null) {
-            this._isRunningInCordova = typeof cordova !== 'undefined'; //&& !this.session.isRunningInBrowser();
+            this._isRunningInCordova = typeof cordova !== 'undefined' && !this.session.isRunningInBrowser();
         }
 
         return this._isRunningInCordova;
