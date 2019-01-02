@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestServiceConfig.class })
-public class ServiceEndpointBridgeInvocationHandlerTest {
+public class EndpointDispatchInvocationHandlerTest {
 
     @Autowired
     EndpointDispatchInvocationHandler dispatcher;

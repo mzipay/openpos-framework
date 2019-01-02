@@ -19,6 +19,9 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
     @Autowired
     private EndpointInjector endpointInjector;
 
+    @Autowired
+    private ServiceConfig serviceConfig;
+
     public EndpointDispatchInvocationHandler() {
     }
 
@@ -28,6 +31,11 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
             return false;
         }
 
+        return invokeLocal(proxy, method, args);
+
+    }
+
+    private Object invokeLocal(Object proxy, Method method, Object[] args) throws Throwable {
         String path = buildPath(method);
         Object obj = applicationContext.getBean(path);
         Collection<Object> beans = applicationContext.getBeansWithAnnotation(EndpointOverride.class).values();
@@ -52,7 +60,6 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
 
         throw new PosServerException(String.format("No endpoint found for path '%s' Please define a Spring-discoverable @Componant class, "
                 + "with a method annotated like  @Endpoint(\"%s\")", path, path));
-
     }
 
     private String buildPath(Method method) {
