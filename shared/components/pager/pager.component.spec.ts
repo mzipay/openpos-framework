@@ -25,7 +25,6 @@ describe('PagerComponent', () => {
             expect(pagerComponent.currentPage).toBe(1);
             expect(pagerComponent.currentIndex).toBe(0);
             expect(pagerComponent.totalPages).toBeUndefined();
-            expect(pagerComponent.refreshOnContentChange).toBeUndefined();
         });
     });
 
@@ -101,9 +100,8 @@ describe('PagerComponent', () => {
             expect(pagerComponent.currentPage).toBe(1);
         });
 
-        it('should reset state after sections change when refreshOnContentChange is true', fakeAsync(() => {
+        it('should reset state after sections change', fakeAsync(() => {
             fixture.detectChanges();
-            pagerComponent.refreshOnContentChange = true;
             pagerComponent.ngAfterContentInit();
             pagerComponent.currentIndex = 10;
             pagerComponent.currentPage = 2;
@@ -111,18 +109,6 @@ describe('PagerComponent', () => {
             tick();
             expect(pagerComponent.currentIndex).toBe(0);
             expect(pagerComponent.currentPage).toBe(1);
-        }));
-
-        it('should not reset state after sections change when refreshOnContentChange is false', fakeAsync(() => {
-            fixture.detectChanges();
-            pagerComponent.refreshOnContentChange = false;
-            pagerComponent.ngAfterContentInit();
-            pagerComponent.currentIndex = 10;
-            pagerComponent.currentPage = 2;
-            pagerComponent.sections.notifyOnChanges();
-            tick();
-            expect(pagerComponent.currentIndex).toBe(10);
-            expect(pagerComponent.currentPage).toBe(2);
         }));
     });
 });

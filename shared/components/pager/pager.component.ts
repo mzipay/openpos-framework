@@ -11,7 +11,6 @@ export class PagerComponent implements AfterContentInit, OnDestroy {
     @ContentChildren("pagerItem") sections: QueryList<TemplateRef<any>>;
 
     @Input() pageSize: number = 5;
-    @Input() refreshOnContentChange: boolean;
     currentPage: number = 1;
     totalPages: number;
     currentIndex: number = 0;
@@ -21,9 +20,7 @@ export class PagerComponent implements AfterContentInit, OnDestroy {
         this._resetPageState();
         if (this.sections) {
             this.subscription = this.sections.changes.subscribe( () => {
-                if (this.refreshOnContentChange) {
                     this._resetPageState();
-                }
             });
         }
     }
