@@ -12,6 +12,10 @@ public class ServiceSpecificConfig extends ServiceCommonConfig implements Clonea
     public void setProfile(String profile) {
         this.profile = profile;
     }
+    
+    public boolean isLocal() {
+        return ServiceConfig.LOCAL_PROFILE.equals(profile);
+    }
 
     public InvocationiStrategy getStrategy() {
         return strategy;

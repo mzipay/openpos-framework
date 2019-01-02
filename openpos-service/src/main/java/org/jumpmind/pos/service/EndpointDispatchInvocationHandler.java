@@ -1,14 +1,19 @@
 package org.jumpmind.pos.service;
 
+import static org.apache.commons.lang.StringUtils.isNotBlank;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Component
 public class EndpointDispatchInvocationHandler implements InvocationHandler {
@@ -22,6 +27,9 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
     @Autowired
     private ServiceConfig serviceConfig;
 
+    @Value("${openpos.installationId}")
+    String installationId;
+
     public EndpointDispatchInvocationHandler() {
     }
 
@@ -31,8 +39,24 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
             return false;
         }
 
-        return invokeLocal(proxy, method, args);
+        ServiceSpecificConfig config = getSpecificConfig(method);
+        if (config.isLocal()) {
+            return invokeLocal(proxy, method, args);
+        } else {
+            throw new NotImplementedException();
+        }
 
+    }
+
+    private ServiceSpecificConfig getSpecificConfig(Method method) {
+        Class<?> methodClazz = method.getDeclaringClass();
+        RestController restController = methodClazz.getAnnotation(RestController.class);
+        if (restController != null && isNotBlank(restController.value())) {
+            return serviceConfig.getServiceConfig(installationId, restController.value());
+        } else {
+            throw new IllegalStateException(methodClazz.getSimpleName() + " must declare @" + RestController.class.getSimpleName()
+                    + " and it must have the value() attribute set");
+        }
     }
 
     private Object invokeLocal(Object proxy, Method method, Object[] args) throws Throwable {
