@@ -4,7 +4,7 @@
     </ng-container>
 </ng-container>
 
-<div fxLayoutAlign="center center">
+<div fxLayoutAlign="center center" *ngIf="totalPages > 1">
     <button mat-icon-button color="primary" (click)="decrementPage()">
         <app-icon [iconName]="'keyboard_arrow_left'"></app-icon>
     </button>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, DoCheck } from '@angular/core';
 import { LocaleService } from '../../../core/services/locale.service';
 import { CurrencyPipe } from '@angular/common';
 
@@ -13,7 +13,7 @@ import { CurrencyPipe } from '@angular/common';
     templateUrl: './currency-text.component.html',
     styleUrls: ['./currency-text.component.scss']
 })
-export class CurrencyTextComponent implements OnInit {
+export class CurrencyTextComponent implements DoCheck {
 
     @Input()
     amountText: string | number;
@@ -27,7 +27,7 @@ export class CurrencyTextComponent implements OnInit {
 
     constructor(private localeService: LocaleService) {}
 
-    ngOnInit(): void {
+    ngDoCheck(): void {
         const locale = this.localeService.getLocale();
         const targetSymbol = this.symbol || this.localeService.getConstant('currencySymbol');
 
