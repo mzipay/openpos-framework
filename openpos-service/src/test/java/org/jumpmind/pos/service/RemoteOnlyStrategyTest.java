@@ -20,7 +20,6 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,32 +34,15 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestServiceConfig.class })
-public class RemoteOnlyTest {
+public class RemoteOnlyStrategyTest {
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(options().notifier(new ConsoleNotifier(true)));
-
-    @Autowired
-    EndpointDispatchInvocationHandler dispatcher;
-
-    @Autowired
-    TestEndpoint endpoint;
-
-    @Autowired
-    TestEndpointOverride override;
 
     ObjectMapper mapper = new ConfiguredRestTemplate().getMapper();
     
     RemoteOnlyStrategy handler = new RemoteOnlyStrategy();
 
-    @Test
-    public void testThatOverrideIsCalled() throws Throwable {
-        assertEquals(0, endpoint.invokeCount);
-        assertEquals(0, override.invokeCount);
-        dispatcher.invoke(null, ITest.class.getMethod("test"), null);
-        assertEquals(0, endpoint.invokeCount);
-        assertEquals(1, override.invokeCount);
-    }
 
     @Test
     public void testInvokeRemotePostWithResponseNoRequest() throws Throwable {
@@ -205,12 +187,6 @@ public class RemoteOnlyTest {
         
         @RequestMapping(path = "/getmesomeofthat", method = RequestMethod.GET)
         public TestResponse testGet();
-    }
-
-    @RestController("test")
-    @RequestMapping("/this/is/a/test")
-    interface ITest {
-        public void test();
     }
 
 }
