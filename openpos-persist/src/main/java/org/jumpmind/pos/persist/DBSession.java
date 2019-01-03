@@ -36,7 +36,8 @@ import org.jumpmind.pos.persist.impl.DmlTemplate;
 import org.jumpmind.pos.persist.impl.EntitySystemInfo;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.ReflectUtils;
-import org.jumpmind.pos.persist.impl.Transaction;
+import org.jumpmind.pos.persist.model.ITaggedModel;
+import org.jumpmind.pos.persist.model.TagConfig;
 import org.jumpmind.util.LinkedCaseInsensitiveMap;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,8 +45,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class DBSession {
 
     private static final Logger log = Logger.getLogger(DBSession.class);
-
-    private Transaction currentTransaction;
 
     private DatabaseSchema databaseSchema;
     private IDatabasePlatform databasePlatform;
@@ -55,7 +54,8 @@ public class DBSession {
     private Map<String, DmlTemplate> dmlTemplates;
 
     public DBSession(String catalogName, String schemaName, DatabaseSchema databaseSchema, IDatabasePlatform databasePlatform,
-            Map<String, String> sessionContext, Map<String, QueryTemplate> queryTemplates, Map<String, DmlTemplate> dmlTemplates) {
+            Map<String, String> sessionContext, Map<String, QueryTemplate> queryTemplates, Map<String, DmlTemplate> dmlTemplates,
+            TagConfig tagConfig) {
         super();
         this.dmlTemplates = dmlTemplates;
         this.databaseSchema = databaseSchema;
@@ -243,6 +243,15 @@ public class DBSession {
                 columnNames.put(propName, column);
             }
         }
+
+        if (ITaggedModel.class.isAssignableFrom(resultClass)) {
+            Column[] columns = table.getColumns();
+            for (Column column : columns) {
+                if (column.getName().toLowerCase().startsWith("tag_")) {
+                    columnNames.put(column.getName(), column);
+                }
+            }
+        }
         return columnNames;
     }
 
@@ -336,8 +345,12 @@ public class DBSession {
             LinkedHashMap<String, Object> objectValuesByColumnName = new LinkedHashMap<String, Object>();
             Set<String> propertyNames = objectToTableMapping.keySet();
             for (String propertyName : propertyNames) {
-                objectValuesByColumnName.put(objectToTableMapping.get(propertyName).getName(),
-                        PropertyUtils.getProperty(object, propertyName));
+                if (propertyName.toLowerCase().startsWith("tag_")) {
+                    objectValuesByColumnName.put(propertyName, ((ITaggedModel) object).getTagValue(propertyName.substring("tag_".length())));
+                } else {
+                    objectValuesByColumnName.put(objectToTableMapping.get(propertyName).getName(),
+                            PropertyUtils.getProperty(object, propertyName));
+                }
             }
             return objectValuesByColumnName;
         } catch (Exception ex) {
@@ -362,17 +375,11 @@ public class DBSession {
         return tables;
     }
 
-    protected void checkTransactionStarted() {
-        if (currentTransaction == null) {
-            throw new PersistException("No transaction was started - call startTransaction() before using this.");
-        }
-    }
-
     protected <T extends AbstractModel> List<T> queryInternal(Class<T> resultClass, List<SqlStatement> statements)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
         List<T> objects = new ArrayList<T>();
-        for(SqlStatement statement : statements) {
+        for (SqlStatement statement : statements) {
             List<Row> rows = jdbcTemplate.query(statement.getSql(), new DefaultMapper(), statement.getValues().toArray());
             for (int j = 0; j < rows.size(); j++) {
                 Row row = rows.get(j);
@@ -403,11 +410,11 @@ public class DBSession {
                     addUnmatchedColumns(row, matchedColumns, (AbstractModel) object);
                     decorateRetrievedEntity((AbstractModel) object);
                 }
-              
+
             }
 
         }
-        
+
         return objects;
 
     }

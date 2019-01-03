@@ -74,11 +74,7 @@ public class StateManager implements IStateManager {
     private UIManager uiManager;
     
     @Value("${org.jumpmind.pos.core.flow.StateManager.autoSaveState:false}")
-    private boolean autoSaveState = false;    
-
-    private String appId;
-    
-    private String deviceId;
+    private boolean autoSaveState = false;
     
     private FlowConfig initialFlowConfig;
     
@@ -95,10 +91,8 @@ public class StateManager implements IStateManager {
     private IErrorHandler errorHandler;
 
     public void init(String appId, String nodeId) {
-        this.appId = appId;
-        this.deviceId = nodeId;
         this.applicationState.setAppId(appId);
-        this.applicationState.setNodeId(nodeId);
+        this.applicationState.setDeviceId(nodeId);
         this.uiManager.init(this);
         
         boolean resumeState = false;
@@ -278,8 +272,8 @@ public class StateManager implements IStateManager {
     @Override
     public void refreshScreen() {
         /* Hang onto the dialog since showing the last screen first will clear the last dialog from the screen service */
-        Screen lastDialog = screenService.getLastDialog(appId, deviceId);
-        showScreen(screenService.getLastScreen(appId, deviceId));
+        Screen lastDialog = screenService.getLastDialog(applicationState.getAppId(), applicationState.getDeviceId());
+        showScreen(screenService.getLastScreen(applicationState.getAppId(), applicationState.getDeviceId()));
         showScreen(lastDialog);
     }
 
@@ -437,7 +431,7 @@ public class StateManager implements IStateManager {
             throw new FlowException("There is no applicationState.getCurrentContext() on this StateManager.  HINT: States should use @In(scope=ScopeType.Node) to get the StateManager, not @Autowired.");
         }               
         
-        screenService.showToast(appId, deviceId, toast);
+        screenService.showToast(applicationState.getAppId(), applicationState.getDeviceId(), toast);
     }
 
     @Override
@@ -448,7 +442,7 @@ public class StateManager implements IStateManager {
             throw new FlowException("There is no applicationState.getCurrentContext() on this StateManager.  HINT: States should use @In(scope=ScopeType.Node) to get the StateManager, not @Autowired.");
         }
         if (applicationState.getCurrentContext().getState() != null && applicationState.getCurrentContext().getState() instanceof IScreenInterceptor) {
-            screen = ((IScreenInterceptor)applicationState.getCurrentContext().getState()).intercept(appId, deviceId, screen);            
+            screen = ((IScreenInterceptor)applicationState.getCurrentContext().getState()).intercept(applicationState.getAppId(), applicationState.getDeviceId(), screen);            
         }
                 
         if (screen != null) {
@@ -459,23 +453,23 @@ public class StateManager implements IStateManager {
             sessionTimeoutAction = null;
         }
         
-        screenService.showScreen(appId, deviceId, screen);
+        screenService.showScreen(applicationState.getAppId(), applicationState.getDeviceId(), screen);
         
     }
     
     @Override
     public String getNodeId() {        
-        return deviceId;
+        return applicationState.getDeviceId();
     }
 
     @Override
     public String getDeviceId() {
-        return deviceId;
+        return applicationState.getDeviceId();
     }
     
     @Override
     public String getAppId() {
-        return appId;
+        return applicationState.getAppId();
     }
     
 
@@ -496,7 +490,7 @@ public class StateManager implements IStateManager {
 
     protected void sessionTimeout() {
         try {
-            logger.info(String.format("Node %s session timed out.", deviceId));
+            logger.info(String.format("Node %s session timed out.", applicationState.getDeviceId()));
             if (!CollectionUtils.isEmpty(sessionTimeoutListeners)) {
                 Action localSessionTimeoutAction = sessionTimeoutAction != null 
                         ? sessionTimeoutAction : new Action("Timeout");

@@ -207,7 +207,7 @@ public class DatabaseSchema {
         }
     }
 
-    protected List<EntityMetaData> createMetaDatas(Class<?> clazz) {
+    public static List<EntityMetaData> createMetaDatas(Class<?> clazz) {
         List<EntityMetaData> list = new ArrayList<>();
 
         Class<?> entityClass = clazz;
@@ -248,7 +248,7 @@ public class DatabaseSchema {
         return list;
     }
 
-    private boolean isPrimaryKey(Field field) {
+    private static boolean isPrimaryKey(Field field) {
         if (field != null) {
             org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
             if (colAnnotation != null) {
@@ -259,7 +259,7 @@ public class DatabaseSchema {
         return false;
     }
 
-    protected Column createColumn(Field field) {
+    protected static Column createColumn(Field field) {
         Column dbCol = null;
         org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
         if (colAnnotation != null) {
@@ -277,6 +277,8 @@ public class DatabaseSchema {
             } else {
                 dbCol.setTypeCode(colAnnotation.type());
             }
+            
+            dbCol.setJdbcTypeName(getType(dbCol.getJdbcTypeCode()));
 
             if (colAnnotation.size() != null & !colAnnotation.size().equalsIgnoreCase("")) {
                 dbCol.setSize(colAnnotation.size());
@@ -343,7 +345,7 @@ public class DatabaseSchema {
         return meta != null ? meta.getEntityFields() : Collections.emptyList();
     }
 
-    protected String getDefaultSize(Field field, Column column) {
+    protected static String getDefaultSize(Field field, Column column) {
         if (column.getMappedTypeCode() == Types.VARCHAR) {
             return "128";
         } else if (column.getJdbcTypeCode() == Types.DECIMAL) {
@@ -351,8 +353,27 @@ public class DatabaseSchema {
         }
         return null;
     }
+    
+    private static String getType(int type) {
+        switch (type) {
+            case Types.VARCHAR:                
+                return "VARCHAR";
+            case Types.BIGINT:                
+                return "BIGINT";
+            case Types.INTEGER:                
+                return "INTEGER";
+            case Types.BOOLEAN:                
+                return "BOOLEAN";
+            case Types.TIMESTAMP:                
+                return "TIMESTAMP";
+            case Types.DECIMAL:                
+                return "DECIMAL";
+            default:
+                return "OTHER";
+        }
+    }
 
-    private int getDefaultType(Field field) {
+    private static int getDefaultType(Field field) {
         if (field.getType().isAssignableFrom(String.class) || field.getType().isEnum()) {
             return Types.VARCHAR;
         } else if (field.getType().isAssignableFrom(long.class) || field.getType().isAssignableFrom(Long.class)) {
