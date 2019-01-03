@@ -13,6 +13,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.math.BigDecimal;
 
+import org.jumpmind.pos.service.strategy.RemoteOnlyStrategy;
 import org.jumpmind.pos.util.model.ErrorResult;
 import org.jumpmind.pos.util.web.ConfiguredRestTemplate;
 import org.junit.Ignore;
@@ -34,7 +35,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestServiceConfig.class })
-public class EndpointDispatchInvocationHandlerTest {
+public class RemoteOnlyTest {
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(options().notifier(new ConsoleNotifier(true)));
@@ -50,7 +51,7 @@ public class EndpointDispatchInvocationHandlerTest {
 
     ObjectMapper mapper = new ConfiguredRestTemplate().getMapper();
     
-    EndpointDispatchInvocationHandler handler = new EndpointDispatchInvocationHandler();
+    RemoteOnlyStrategy handler = new RemoteOnlyStrategy();
 
     @Test
     public void testThatOverrideIsCalled() throws Throwable {
@@ -66,7 +67,7 @@ public class EndpointDispatchInvocationHandlerTest {
         stubFor(post(urlEqualTo("/check/deviceid/test001/version")).willReturn(status(200).withHeader("Content-Type", "application/json")
                 .withBody(mapper.writeValueAsString(new TestResponse(new BigDecimal("1.11"), "abcd")))));
 
-        TestResponse response = (TestResponse) handler.invokeRemote(config(), ITestService.class.getMethod("testPost", String.class),
+        TestResponse response = (TestResponse) handler.invoke(config(), null, ITestService.class.getMethod("testPost", String.class),
                 new Object[] { "test001" });
 
         assertNotNull(response);
@@ -79,7 +80,7 @@ public class EndpointDispatchInvocationHandlerTest {
         stubFor(put(urlEqualTo("/check/deviceid/test001/yada")).willReturn(status(200).withHeader("Content-Type", "application/json")
                 .withBody(mapper.writeValueAsString(new TestResponse(new BigDecimal("3.14"), "xyz")))));
 
-        TestResponse response = (TestResponse) handler.invokeRemote(config(), ITestService.class.getMethod("testPut", String.class, TestRequest.class),
+        TestResponse response = (TestResponse) handler.invoke(config(), null, ITestService.class.getMethod("testPut", String.class, TestRequest.class),
                 new Object[] { "test001", new TestRequest("one", 1) });
 
         assertNotNull(response);
@@ -91,7 +92,7 @@ public class EndpointDispatchInvocationHandlerTest {
     public void testInvokeRemotePutWithNoResponse() throws Throwable {
         stubFor(put(urlEqualTo("/check/deviceid/test001/nuttin")).willReturn(status(200)));
 
-        handler.invokeRemote(config(), ITestService.class.getMethod("testPutNuttin", String.class, TestRequest.class),
+        handler.invoke(config(), null, ITestService.class.getMethod("testPutNuttin", String.class, TestRequest.class),
                 new Object[] { "test001", new TestRequest("one", 1) });
 
     }
@@ -103,7 +104,7 @@ public class EndpointDispatchInvocationHandlerTest {
         stubFor(put(urlEqualTo("/check/deviceid/test001/nuttin")).willReturn(aResponse().withHeader("Content-Type", "application/json")
                 .withBody(mapper.writeValueAsString(result)).withStatus(501)));
         
-        handler.invokeRemote(config(), ITestService.class.getMethod("testPutNuttin", String.class, TestRequest.class),
+        handler.invoke(config(), null, ITestService.class.getMethod("testPutNuttin", String.class, TestRequest.class),
                 new Object[] { "test001", new TestRequest("one", 1) });
 
     }
@@ -113,7 +114,7 @@ public class EndpointDispatchInvocationHandlerTest {
         stubFor(get(urlEqualTo("/check/getmesomeofthat")).willReturn(status(200).withHeader("Content-Type", "application/json")
                 .withBody(mapper.writeValueAsString(new TestResponse(new BigDecimal("3.14"), "xyz")))));
 
-        TestResponse response = (TestResponse) handler.invokeRemote(config(), ITestService.class.getMethod("testGet"), null);
+        TestResponse response = (TestResponse) handler.invoke(config(), null, ITestService.class.getMethod("testGet"), null);
 
         assertNotNull(response);
         assertEquals(new BigDecimal("3.14"), response.total);
