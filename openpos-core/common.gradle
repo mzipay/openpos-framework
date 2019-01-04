@@ -34,7 +34,7 @@ eclipse {
 }
 
 test {
-    ignoreFailures = true
+    // ignoreFailures = true
 }
 
 task testJar(type: Jar) {
