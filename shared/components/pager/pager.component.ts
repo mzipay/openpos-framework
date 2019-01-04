@@ -1,5 +1,5 @@
-import { Component, TemplateRef, QueryList, ContentChildren, Input, AfterContentInit, OnDestroy } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Component, TemplateRef, QueryList, ContentChildren, Input, AfterContentInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-pager',
@@ -8,12 +8,12 @@ import { Subscription } from "rxjs";
 })
 
 export class PagerComponent implements AfterContentInit, OnDestroy {
-    @ContentChildren("pagerItem") sections: QueryList<TemplateRef<any>>;
+    @ContentChildren('pagerItem') sections: QueryList<TemplateRef<any>>;
 
-    @Input() pageSize: number = 5;
-    currentPage: number = 1;
+    @Input() pageSize = 5;
+    currentPage = 1;
     totalPages: number;
-    currentIndex: number = 0;
+    currentIndex = 0;
     private subscription: Subscription;
 
     ngAfterContentInit(): void {
@@ -37,15 +37,15 @@ export class PagerComponent implements AfterContentInit, OnDestroy {
         this.totalPages = Math.ceil(this.sections.length / this.pageSize);
     }
 
-    incrementPage(){
-        if(this.currentPage != this.totalPages){
+    incrementPage() {
+        if (this.currentPage !== this.totalPages) {
             this.currentIndex += this.pageSize;
             this.currentPage++;
         }
     }
 
-    decrementPage(){
-        if(this.currentPage != 1){
+    decrementPage() {
+        if (this.currentPage !== 1) {
             this.currentIndex -= this.pageSize;
             this.currentPage--;
         }
