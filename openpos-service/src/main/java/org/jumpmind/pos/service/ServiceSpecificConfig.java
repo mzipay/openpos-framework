@@ -1,9 +1,11 @@
 package org.jumpmind.pos.service;
 
+import org.jumpmind.pos.service.strategy.InvocationiStrategy;
+
 public class ServiceSpecificConfig extends ServiceCommonConfig implements Cloneable {
 
     protected String profile = ServiceConfig.LOCAL_PROFILE;
-    protected InvocationiStrategy strategy;
+    protected InvocationiStrategy strategy = InvocationiStrategy.LOCAL_ONLY;
 
     public String getProfile() {
         return profile;
