@@ -35,3 +35,4 @@ export * from './time-chooser/time-chooser.component';
 export * from './pager/pager.component';
 export * from './menu/menu.component';
 export * from './currency-text/currency-text.component';
+export * from './searchable-pop-tart/searchable-pop-tart.component';

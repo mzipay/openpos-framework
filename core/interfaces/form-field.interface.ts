@@ -43,3 +43,7 @@ export interface ICheckboxField extends IFormElement {
     checked: boolean;
 }
 
+export interface ISearchablePopTartField extends IFormElement {
+    instructions: string;
+}
+

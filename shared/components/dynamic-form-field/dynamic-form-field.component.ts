@@ -9,8 +9,9 @@ import { Subscription, Observable, of  } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ITextMask, TextMask } from '../../textmask';
 import { DynamicDateFormFieldComponent } from '../dynamic-date-form-field/dynamic-date-form-field.component';
-import { SessionService, ScreenService, PluginService, IFormElement, Scan, BarcodeScannerPlugin, IDynamicListField } from '../../../core';
+import { SessionService, ScreenService, PluginService, IFormElement, Scan, BarcodeScannerPlugin, IDynamicListField, ISearchablePopTartField } from '../../../core';
 import { PopTartComponent } from '../pop-tart/pop-tart.component';
+import { SearchablePopTartComponent } from '../searchable-pop-tart/searchable-pop-tart.component';
 
 @Component({
   selector: 'app-dynamic-form-field',
@@ -65,7 +66,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     if (this.formField.inputType === 'ComboBox' || this.formField.inputType === 'SubmitOptionList' ||
-      this.formField.inputType === 'ToggleButton' || this.formField.inputType === 'PopTart') {
+      this.formField.inputType === 'ToggleButton' || this.formField.inputType === 'PopTart' || this.formField.inputType === 'SearchablePopTart') {
       let getValuesFromServer = true;
       if ('dynamicListEnabled' in this.formField) {
           // if dynamicListEnabled property is provided, we will observe its value
@@ -165,6 +166,26 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
       width: '70%',
       data: {
         optionItems: this.values,
+        disableClose: false,
+        autoFocus: false
+     }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.log.info('pop tart closed with value of: ' + result);
+      this.formGroup.get(this.formField.id).setValue(result);
+      this.onFormElementChanged(this.formField);
+    });
+  }
+
+
+  openSearchablePopTart() {
+    const dialogRef = this.dialog.open(SearchablePopTartComponent, {
+      width: '85%',
+      height: '85%',
+      data: {
+        optionItems: this.values,
+        instructions: (this.formField as ISearchablePopTartField).instructions,
         disableClose: false,
         autoFocus: false
      }

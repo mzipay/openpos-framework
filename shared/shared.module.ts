@@ -60,10 +60,11 @@ import {
     CatalogBrowserItemComponent,
     StatusBarStatusControlComponent,
     STATUS_BAR_STATUS_CONTROL_COMPONENT,
-    CurrencyTextComponent
+    CurrencyTextComponent,
+    SearchablePopTartComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
-import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe } from './pipes';
+import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
 import { SideNavComponent } from './layout-components';
 import { HeaderBarComponent } from './screen-parts';
@@ -84,6 +85,7 @@ const components = [
     FabToggleButtonComponent,
     FabToggleGroupComponent,
     PopTartComponent,
+    SearchablePopTartComponent,
     NavListComponent,
     FileViewerComponent,
     StatusBarComponent,
@@ -131,7 +133,9 @@ const pipes = [
     HourMinSecPipe,
     LocalizedDatePipe,
     ValueFormatterPipe,
-    POSCurrencyPipe
+    POSCurrencyPipe,
+    StringListFilterPipe,
+    ListLimitPipe
 ];
 
 @NgModule({

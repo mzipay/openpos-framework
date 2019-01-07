@@ -1,5 +1,7 @@
 @import './pager/pager-theme';
+@import './searchable-pop-tart/searchable-pop-tart-theme';
 
 @mixin openpos-component-theme-mixins($theme) {
     @include pager-theme($theme);
+    @include searchable-pop-tart-theme($theme);
 }
