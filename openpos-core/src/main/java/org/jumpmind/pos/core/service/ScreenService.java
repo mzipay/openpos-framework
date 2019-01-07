@@ -85,9 +85,6 @@ public class ScreenService implements IScreenService, IActionListener {
     
     @Autowired
     private ServletContext servletContext;
-    
-    @Autowired
-    private Environment environment;
 
     @PostConstruct
     public void init() {
@@ -101,16 +98,6 @@ public class ScreenService implements IScreenService, IActionListener {
         for (IScreenInterceptor screenInterceptor : screenInterceptors) {
             this.screenInterceptors.add(screenInterceptor);
         }
-    }
-    
-    @RequestMapping(method = RequestMethod.GET, value = "api/brand/{brandCode}/devicetype/{deviceType}/config")
-    @ResponseBody
-    public ClientConfiguration getClientConfiguration(
-            @PathVariable String brandCode,
-            @PathVariable String deviceType) {
-        logger.info("Received a request client configuration {} {}", brandCode, deviceType);
-        ClientConfiguration config = new ClientConfiguration();
-        return config;
     }
     
     @RequestMapping(method = RequestMethod.GET, value = "api/brand/{brandCode}/devicetype/{deviceType}/asset/{assetName}")
