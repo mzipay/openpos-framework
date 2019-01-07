@@ -8,7 +8,7 @@
 		<span class="text-sm">&nbsp;{{data.screenName}}</span>
 	</span>
 	
-	<div *ngIf="data.screenType==='Home'" class="home-screen-logo" (click)="session.onAction('Home')"></div>
+	<div *ngIf="data.screenType==='Home'" class="home-screen-logo" (click)="onHome()"></div>
 
 	<span fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
 		<mat-icon *ngIf="data && data.operatorText"  class="material-icons">lock_open</mat-icon>

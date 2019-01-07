@@ -12,4 +12,5 @@ export class StatusBarData {
     storeId: String;
     tillThresholdStatus: number;
     trainingEnabled: boolean;
+    enableHomeAction = true;
 }

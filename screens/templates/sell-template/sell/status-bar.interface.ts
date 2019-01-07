@@ -8,4 +8,5 @@ export interface IStatusBar {
     showScan: boolean;
     showAdmin: boolean;
     showSkip: boolean;
+    enableHomeAction: boolean;
 }

@@ -39,6 +39,12 @@ export class StatusBarComponent implements IStatusBarControl, AfterViewInit {
     this.trainingService.open();
   }
 
+  public onHome() {
+    if (this.data.enableHomeAction === true) {
+      this.session.onAction('Home');
+    }
+  }
+
   @HostListener('document:keydown.escape', ['$event'])
   public onEscape() {
     if (Configuration.enableKeybinds) {
