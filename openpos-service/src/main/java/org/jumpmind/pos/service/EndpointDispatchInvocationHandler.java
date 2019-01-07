@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Component
 public class EndpointDispatchInvocationHandler implements InvocationHandler {
 
-
     @Autowired
     Map<String, IInvocationStrategy> strategies;
 
