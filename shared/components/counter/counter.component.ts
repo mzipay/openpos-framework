@@ -57,10 +57,11 @@ import { FormGroup } from '@angular/forms';
         }
     }
 
-    onValueChange(value: string) {
+    onValueChange() {
         this.plusDisabled = this.checkPlusDisable();
         this.minusDisabled = this.checkMinusDisable();
-        this.valueChange.emit(value);
+        this.value = this.formGroup.value[this.controlName];
+        this.valueChange.emit(this.value);
     }
 
     checkMinusDisable(): boolean {

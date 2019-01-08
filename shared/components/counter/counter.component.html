@@ -10,9 +10,10 @@
     </button>
     <mat-form-field>
         <input matInput [formControlName]="controlName" [placeholder]="placeholder"
+        [formControl]="formGroup.controls[controlName]"
         [formatterName]="'numeric'" [required]="required" 
         [readonly]="readOnly" [keyboardLayout]="keyboardLayout" [attr.type]="attrType"
-        autoSelectOnFocus (change)="onValueChange(value)">
+        autoSelectOnFocus (change)="onValueChange()">
     </mat-form-field>
     <button mat-icon-button type="button" class="primary-background" [disabled]="plusDisabled" (click)="incrementQty()">
         <mat-icon>add</mat-icon>
