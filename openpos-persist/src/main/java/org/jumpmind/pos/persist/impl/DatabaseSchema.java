@@ -8,12 +8,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Database;
@@ -57,6 +57,18 @@ public class DatabaseSchema {
             }
         }
         return db;
+    }
+    
+    public Table getTable(Class<?> entityClass, Class<?> superClass) {
+        List<EntityMetaData> metas = classMetadata.get(entityClass);
+        if (metas != null) {
+            for (EntityMetaData entityMetaData : metas) {
+                if (entityMetaData.getClazz().equals(superClass)) {
+                    return entityMetaData.getTable();
+                }
+            }
+        }
+        return null;
     }
 
     public List<Table> getTables(Class<?> entityClass) {
@@ -216,6 +228,7 @@ public class DatabaseSchema {
             if (tblAnnotation != null) {
 
                 EntityMetaData meta = new EntityMetaData();
+                meta.setClazz(entityClass);
                 Table dbTable = new Table();
                 dbTable.setName(tblAnnotation.name());
                 dbTable.setDescription(tblAnnotation.description());
@@ -297,7 +310,8 @@ public class DatabaseSchema {
     }
 
     public Map<String, String> getEntityIdColumnsToFields(Class<?> entityClass) {
-        Map<String, String> entityIdColumnsToFields = new LinkedHashMap<>();
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        Map<String, String> entityIdColumnsToFields = new CaseInsensitiveMap();
         List<Field> fields = gettEntityIdFields(entityClass);
         for (Field field : fields) {
             org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
@@ -314,9 +328,30 @@ public class DatabaseSchema {
 
         return entityIdColumnsToFields;
     }
+    
+    public Map<String, String> getColumnsToEntityFields(Class<?> entityClass) {
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        Map<String, String> entityIdColumnsToFields = new CaseInsensitiveMap();
+        List<Field> fields = getEntityFields(entityClass);
+        for (Field field : fields) {
+            org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
+            if (colAnnotation != null) {
+                String columnName = null;
+                if (!StringUtils.isEmpty(colAnnotation.name())) {
+                    columnName = colAnnotation.name();
+                } else {
+                    columnName = camelToSnakeCase(field.getName());
+                }
+                entityIdColumnsToFields.put(columnName, field.getName());
+            }
+        }
+
+        return entityIdColumnsToFields;
+    }    
 
     public Map<String, String> getEntityFieldsToColumns(Class<?> entityClass) {
-        Map<String, String> entityFieldsToColumns = new LinkedHashMap<>();
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        Map<String, String> entityFieldsToColumns = new CaseInsensitiveMap();
         List<Field> fields = getEntityFields(entityClass);
         for (Field field : fields) {
             org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
