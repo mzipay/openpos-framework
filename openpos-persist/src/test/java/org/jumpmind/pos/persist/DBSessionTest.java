@@ -1,10 +1,17 @@
-package org.jumpmind.pos.persist.cars;
+package org.jumpmind.pos.persist;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
+import org.jumpmind.pos.persist.cars.CarModel;
+import org.jumpmind.pos.persist.cars.RaceCarModel;
+import org.jumpmind.pos.persist.cars.TestPersistCarsConfig;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +28,33 @@ public class DBSessionTest {
 
     @Before
     public void setup() {
+        // force reread of metadata
+        sessionFactory.createAndUpgrade();
+    }
+    
+    @After
+    public void tearDown() {  
+    }
+
+    @Test
+    public void testGetSelectSqlForEntityWithSuperTableDef() {
+        DBSession db = sessionFactory.createDbSession();
+        Map<String, Object> params = new HashMap<>();
+        params.put("turboCharged", true);
+        params.put("model", "Toyota");
+        String sql = db.getSelectSql(RaceCarModel.class, params);
+        assertEquals(
+                "select c0.vin, c0.model_year, c0.make, c0.model, c0.create_time, c0.create_by, c0.last_update_time, c0.last_update_by, c0.color, c1.turbo_charged from CAR_CAR c0 join CAR_RACE_CAR c1 on c0.vin=c1.vin where c0.model=${model} and c1.turbo_charged=${turboCharged}",
+                sql);
+    }
+    
+    @Test
+    public void testGetSelectSqlForEntityNoParams() {
+        DBSession db = sessionFactory.createDbSession();
+        String sql = db.getSelectSql(CarModel.class, null);
+        assertEquals(
+                "select c0.vin, c0.model_year, c0.make, c0.model, c0.create_time, c0.create_by, c0.last_update_time, c0.last_update_by, c0.color from CAR_CAR c0",
+                sql);
     }
 
     @Test
