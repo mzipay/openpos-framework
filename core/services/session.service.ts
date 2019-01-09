@@ -127,7 +127,9 @@ export class SessionService implements IMessageHandler<any> {
                 authToken: this.authToken,
                 compatibilityVersion: Configuration.compatibilityVersion,
                 appId: appId,
-                nodeId: this.personalization.getNodeId()
+                nodeId: this.personalization.getNodeId(),
+                deviceType: this.personalization.getDeviceType(),
+                brandId: this.personalization.getBrandId()
             },
             heartbeat_in: 0, // Typical value 0 - disabled
             heartbeat_out: 20000, // Typical value 20000 - every 20 seconds

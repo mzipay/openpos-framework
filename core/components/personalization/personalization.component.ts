@@ -27,7 +27,9 @@ export class PersonalizationComponent implements IScreen, OnInit {
         }, { asyncValidator: this.serverValidator });
         this.secondFormGroup = this.formBuilder.group({
             storeNumber: ['', [Validators.required, , Validators.pattern('\\d{5}')]],
-            deviceNumber: ['', [Validators.required, , Validators.pattern('\\d{3}')]]
+            deviceNumber: ['', [Validators.required, , Validators.pattern('\\d{3}')]],
+            deviceType: ['', [Validators.required, , Validators.pattern('[a-zA-Z0-9]+')]],
+            brandId: ['', [Validators.required, , Validators.pattern('[a-zA-Z]+')]]
         });
     }
 
@@ -37,6 +39,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
     public personalize() {
         this.personalization.personalize(this.firstFormGroup.get('serverName').value, this.firstFormGroup.get('serverPort').value,
             {storeId: this.secondFormGroup.get('storeNumber').value, deviceId: this.secondFormGroup.get('deviceNumber').value},
+            this.secondFormGroup.get('deviceType').value, this.secondFormGroup.get('brandId').value,
             this.firstFormGroup.get('sslEnabled').value);
     }
 

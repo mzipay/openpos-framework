@@ -19,7 +19,7 @@ export class PersonalizationService {
     }
 
     public personalize(serverName: string, serverPort: string, node: string | {storeId: string, deviceId: string},
-        sslEnabled?: boolean ) {
+        deviceType: string, brandId: string, sslEnabled?: boolean) {
 
         let nodeId = '';
         if (typeof node === 'string') {
@@ -31,6 +31,8 @@ export class PersonalizationService {
         localStorage.setItem('serverName', serverName);
         localStorage.setItem('serverPort', serverPort);
         localStorage.setItem('nodeId', nodeId);
+        localStorage.setItem('deviceType', deviceType);
+        localStorage.setItem('brandId', brandId);
         if (sslEnabled) {
             localStorage.setItem('sslEnabled', '' + sslEnabled);
         } else {
@@ -45,6 +47,8 @@ export class PersonalizationService {
         localStorage.removeItem('serverPort');
         localStorage.removeItem('nodeId');
         localStorage.removeItem('theme');
+        localStorage.removeItem('deviceType');
+        localStorage.removeItem('brandId');
         localStorage.removeItem('sslEnabled');
         this.setTheme(theme,  true);
     }
@@ -123,6 +127,22 @@ export class PersonalizationService {
 
     public setNodeId(id: string) {
         localStorage.setItem('nodeId', id);
+    }
+
+    public getDeviceType(): string {
+        return localStorage.getItem('deviceType');
+    }
+
+    public setDeviceType(deviceType: string) {
+        localStorage.setItem('deviceType', deviceType);
+    }
+
+    public getBrandId(): string {
+        return localStorage.getItem('brandId');
+    }
+
+    public setBrandId(brandId: string) {
+        localStorage.setItem('brandId', brandId);
     }
 
     public refreshApp() {

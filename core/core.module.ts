@@ -21,6 +21,7 @@ import {
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { StartupComponent } from './components/startup/startup.component';
 import { PersonalizationService } from './services/personalization.service';
+import { ConfigurationService } from './services/configuration.service';
 import { DialogService } from './services/dialog.service';
 import { StompRService } from '@stomp/ng2-stompjs';
 import { SubscribeToSessionTask } from './components/startup/subscribe-to-session-task';
@@ -75,7 +76,8 @@ import { ToastService } from './services';
         { provide: STARTUP_TASKS, useClass: FinalStartupTask, multi: true, deps: [SessionService]},
         { provide: STARTUP_COMPONENT, useValue: StartupComponent },
         { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent},
-        TrainingOverlayService
+        TrainingOverlayService,
+        ConfigurationService
     ]
 })
 export class CoreModule {
