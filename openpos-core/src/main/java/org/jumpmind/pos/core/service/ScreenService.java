@@ -18,7 +18,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +28,6 @@ import org.jumpmind.pos.core.flow.IScreenInterceptor;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
 import org.jumpmind.pos.core.flow.SessionTimer;
-import org.jumpmind.pos.core.model.ClientConfiguration;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.IDynamicListField;
 import org.jumpmind.pos.core.model.IFormElement;
@@ -44,7 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,8 +80,8 @@ public class ScreenService implements IScreenService, IActionListener {
 
     Queue<IScreenInterceptor> screenInterceptors = new ConcurrentLinkedQueue<>();
     
-    @Autowired
-    private ServletContext servletContext;
+    // @Autowired
+    // private ServletContext servletContext;
 
     @PostConstruct
     public void init() {
