@@ -1,5 +1,6 @@
 import { Directive, Input, ElementRef, forwardRef, Renderer2, OnInit, HostListener } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Platform } from '@angular/cdk/platform'
 import { IFormatter } from '../formatters';
 import { FormattersService } from '../../core';
 
@@ -24,7 +25,7 @@ export class InputFormatterDirective implements ControlValueAccessor, OnInit {
     onChange = (value: string) => { };
     onTouched = () => { };
 
-    constructor(private renderer: Renderer2, private elRef: ElementRef, private formatterService: FormattersService) {
+    constructor(private renderer: Renderer2, private elRef: ElementRef, private formatterService: FormattersService, private platform: Platform) {
     }
 
     ngOnInit(): void {
@@ -49,6 +50,12 @@ export class InputFormatterDirective implements ControlValueAccessor, OnInit {
     @HostListener('blur', ['$event'])
     handleBlur(event) {
         this.onTouched();
+
+        // The input formatter is not triggering the change event in webkit,
+        // Manually dispatching the change event on blur.
+        if (this.platform.WEBKIT) {
+            this.elRef.nativeElement.dispatchEvent(new Event('change'));
+        }
     }
 
     @HostListener('input', ['$event'])
