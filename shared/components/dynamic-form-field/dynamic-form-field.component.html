@@ -68,7 +68,7 @@
 
     <ng-container *ngIf="formField.inputType==='Checkbox'">
         <mat-checkbox [formControlName]="formField.id" [required]="formField.required" [value]="formField.value" [labelPosition]="formField.labelPosition"
-            [checked]="formField.checked" (change)="onFormElementChanged(formField)">{{formField.label}}</mat-checkbox>
+            (change)="onFormElementChanged(formField)">{{formField.label}}</mat-checkbox>
     </ng-container>
 
     <ng-container *ngIf="formField.inputType==='Counter'">
