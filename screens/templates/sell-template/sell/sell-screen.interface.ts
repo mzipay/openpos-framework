@@ -47,7 +47,7 @@ export class SellScreenUtils {
             statusBar.trainingEnabled = false;
         }
 
-        if (typeof screen.template.statusBar.enableHomeAction !== 'undefined') {
+        if (screen.template.statusBar && typeof screen.template.statusBar.enableHomeAction !== 'undefined') {
             statusBar.enableHomeAction = screen.template.statusBar.enableHomeAction;
         }
 
