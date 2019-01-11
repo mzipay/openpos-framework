@@ -35,6 +35,7 @@ import { DateUtils, DatePartPositions } from '../../utils/date.utils';
     @Input() hintText = '';
     @Input() controlName: string;
     @Input() hiddenControl: string;
+    @Input() keyboardLayout: string;
     @Input() form: FormGroup;
     @Input() minDate: Date;
     @Input() maxDate: Date;
@@ -106,6 +107,11 @@ import { DateUtils, DatePartPositions } from '../../utils/date.utils';
 
         if (this.hiddenControl) {
             this.form.get(this.hiddenControl).setValue(dateValue);
+        }
+
+        // if it is a valid time emit the value
+        if (dateValue && !isNaN(dateValue.getTime())) {
+          this.onDateEntered();
         }
       }
     }
