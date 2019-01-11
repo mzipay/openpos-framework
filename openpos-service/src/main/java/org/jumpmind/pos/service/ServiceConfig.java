@@ -19,7 +19,7 @@ public class ServiceConfig {
     protected Map<String, ServiceSpecificConfig> specificConfig;
 
     @Autowired(required = false)
-    IAdditionalConfigSource additionalConfigSource;
+    IConfigApplicator additionalConfigSource;
 
     public Map<String, ServiceCommonConfig> getCommonConfig() {
         if (commonConfig == null) {

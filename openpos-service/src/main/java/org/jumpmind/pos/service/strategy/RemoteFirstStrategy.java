@@ -12,17 +12,17 @@ import org.springframework.stereotype.Component;
 public class RemoteFirstStrategy implements IInvocationStrategy {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
-    
+
     @Autowired
     LocalOnlyStrategy localStrategy;
-    
+
     @Autowired
     RemoteOnlyStrategy remoteStrategy;
-    
+
     @Override
     public Object invoke(ServiceSpecificConfig config, Object proxy, Method method, Object[] args) throws Throwable {
         try {
-        return remoteStrategy.invoke(config, proxy, method, args);
+            return remoteStrategy.invoke(config, proxy, method, args);
         } catch (Exception ex) {
             logger.warn("Remote call failed.  Trying local", ex);
             return localStrategy.invoke(config, proxy, method, args);
