@@ -2,10 +2,11 @@ import { SessionService, AppInjector, IMenuItem } from '../../core';
 import { OnDestroy } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { deepAssign } from '../../utilites/';
 export abstract class ScreenPart<T> implements OnDestroy {
 
     sessionService: SessionService;
-    screenData: T;
+    screenData = {} as T;
 
     private subscription: Subscription;
 
@@ -13,7 +14,7 @@ export abstract class ScreenPart<T> implements OnDestroy {
         this.sessionService = AppInjector.Instance.get(SessionService);
         this.subscription = this.sessionService.getMessages('Screen')
             .pipe(filter( s => s.screenType !== 'Loading')).subscribe( s => {
-            this.screenData = s;
+            this.screenData = deepAssign( this.screenData, s );
             this.screenDataUpdated();
         });
     }
@@ -28,7 +29,7 @@ export abstract class ScreenPart<T> implements OnDestroy {
         }
     }
 
-    isActionDisabled( action: string): Observable<boolean>{
+    isActionDisabled( action: string): Observable<boolean> {
         return this.sessionService.actionIsDisabled(action);
     }
 
