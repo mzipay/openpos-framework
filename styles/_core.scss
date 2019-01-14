@@ -50,6 +50,11 @@ $mat-card-default-margin: 24px !default;
       padding: $mat-card-default-margin;
   }
 
+  //Fix for modal elements disappearing on ios devices.
+  .mat-dialog-container * {
+    -webkit-transform: translate3d(0, 0, 0);
+  }
+
   ///This is a hack to get vertical dividers to work
   mat-divider.mat-divider.mat-divider-vertical{
     position:unset;
