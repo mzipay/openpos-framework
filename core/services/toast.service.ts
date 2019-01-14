@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { SessionService } from './session.service';
 import { IToastScreen, ToastType } from '..';
 import { filter } from 'rxjs/operators';
@@ -16,7 +16,8 @@ export class ToastService {
         const toast = message as IToastScreen;
         this.snackBar.open(toast.message, toast.duration === 0 ? 'X' : null, {
             duration: toast.duration,
-            panelClass: this.getToastClass(toast.toastType)
+            panelClass: this.getToastClass(toast.toastType),
+            verticalPosition: toast.verticalPosition === 'top' ? 'top' : 'bottom'
         });
         this.sessionService.cancelLoading();
     }
