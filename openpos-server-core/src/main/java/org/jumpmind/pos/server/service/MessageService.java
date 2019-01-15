@@ -39,7 +39,7 @@ public class MessageService implements IMessageService {
     @Autowired
     SimpMessagingTemplate template;
 
-    @Value("${org.jumpmind.pos.core.service.ScreenService.jsonIncludeNulls:true}")
+    @Value("${openpos.screenService.jsonIncludeNulls:true}")
     boolean jsonIncludeNulls = true;
     
     @Autowired(required=false)

@@ -21,6 +21,7 @@ import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.IDdlBuilder;
 import org.jumpmind.db.sql.SqlScript;
+import org.jumpmind.pos.persist.ColumnDef;
 import org.jumpmind.pos.persist.Extends;
 import org.jumpmind.pos.persist.PersistException;
 import org.slf4j.Logger;
@@ -263,7 +264,7 @@ public class DatabaseSchema {
 
     private static boolean isPrimaryKey(Field field) {
         if (field != null) {
-            org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
+            ColumnDef colAnnotation = field.getAnnotation(ColumnDef.class);
             if (colAnnotation != null) {
                 return colAnnotation.primaryKey();
             }
@@ -274,7 +275,7 @@ public class DatabaseSchema {
 
     protected static Column createColumn(Field field) {
         Column dbCol = null;
-        org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
+        ColumnDef colAnnotation = field.getAnnotation(ColumnDef.class);
         if (colAnnotation != null) {
             dbCol = new Column();
 
@@ -314,7 +315,7 @@ public class DatabaseSchema {
         Map<String, String> entityIdColumnsToFields = new CaseInsensitiveMap();
         List<Field> fields = gettEntityIdFields(entityClass);
         for (Field field : fields) {
-            org.jumpmind.pos.persist.ColumnDef colAnnotation = field.getAnnotation(org.jumpmind.pos.persist.ColumnDef.class);
+            ColumnDef colAnnotation = field.getAnnotation(ColumnDef.class);
             if (colAnnotation != null) {
                 String columnName = null;
                 if (!StringUtils.isEmpty(colAnnotation.name())) {
