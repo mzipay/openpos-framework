@@ -135,14 +135,15 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     }
 
     private setKeyboardLayout() {
-        if (['numerictext', 'money', 'phone', 'postalCode', 'percent', 'percentint', 'income', 'decimal']
-        .indexOf(this.responseType.toLowerCase()) >= 0) {
-            this.keyboardLayout = 'Numeric';
-        } else if (this.responseType.toLowerCase() === 'email') {
-            this.keyboardLayout = 'Email';
+        if (this.responseType)  {
+            if (['numerictext', 'money', 'phone', 'postalCode', 'percent', 'percentint', 'income', 'decimal']
+            .indexOf(this.responseType.toLowerCase()) >= 0) {
+                this.keyboardLayout = 'Numeric';
+            } else if (this.responseType.toLowerCase() === 'email') {
+                this.keyboardLayout = 'Email';
+            }
         }
     }
-
 }
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
