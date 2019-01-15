@@ -25,6 +25,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.h2.tools.RunScript;
+import org.joda.money.Money;
 import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
@@ -34,10 +35,10 @@ import org.jumpmind.db.sql.Row;
 import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.jumpmind.pos.persist.impl.DefaultMapper;
 import org.jumpmind.pos.persist.impl.DmlTemplate;
-import org.jumpmind.pos.persist.impl.EntitySystemInfo;
+import org.jumpmind.pos.persist.impl.ModelMetaData;
+import org.jumpmind.pos.persist.impl.ModelWrapper;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.ReflectUtils;
-import org.jumpmind.pos.persist.model.ITaggedModel;
 import org.jumpmind.pos.persist.model.TagConfig;
 import org.jumpmind.util.LinkedCaseInsensitiveMap;
 import org.springframework.dao.DuplicateKeyException;
@@ -308,118 +309,60 @@ public class DBSession {
 
     }
 
-    protected LinkedHashMap<String, Column> mapObjectToTable(Class<?> resultClass, Table table) {
-        LinkedHashMap<String, Column> columnNames = new LinkedHashMap<String, Column>();
-        PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(resultClass);
-        for (int i = 0; i < propertyDescriptors.length; i++) {
-            String propName = propertyDescriptors[i].getName();
-            Column column = table.getColumnWithName(DatabaseSchema.camelToSnakeCase(propName));
-            if (column != null) {
-                columnNames.put(propName, column);
-            }
-        }
 
-        if (ITaggedModel.class.isAssignableFrom(resultClass)) {
-            Column[] columns = table.getColumns();
-            for (Column column : columns) {
-                if (column.getName().toLowerCase().startsWith("tag_")) {
-                    columnNames.put(column.getName(), column);
-                }
-            }
-        }
-        return columnNames;
-    }
 
-    public void save(AbstractModel entity) {
-        List<Table> tables = getValidatedTables(entity);
+    public void save(AbstractModel argModel) {
+        List<Table> tables = getValidatedTables(argModel);
         for (Table table : tables) {
-            EntitySystemInfo entitySystemInfo = new EntitySystemInfo(entity);
-
-            if (entitySystemInfo.isNew()) {
+            ModelWrapper model = 
+                    new ModelWrapper(argModel, table, databaseSchema.getModelMetaData(argModel.getClass(), table));
+            if (StringUtils.isEmpty(model.getCreateBy())) {
+                model.setCreateBy(sessionContext.get("CREATE_BY"));
+            }
+            if (StringUtils.isEmpty(model.getLastUpdateBy())) {
+                model.setLastUpdateBy(sessionContext.get("LAST_UPDATE_BY"));
+            }            
+            model.load();
+            
+            if (model.isNew()) {
                 try {
-                    insert(entity, table);
+                    insert(model);
                 } catch (DuplicateKeyException ex) {
-                    log.debug("Insert of entity failed, failing over to an update. " + entity, ex);
-                    int updateCount = update(entity, table);
+                    log.debug("Insert of entity failed, failing over to an update. " + argModel, ex);
+                    int updateCount = update(model);
                     if (updateCount < 1) {
                         throw new PersistException("Failed to perform an insert or update on entity. Do the DB primary key and unique fields "
-                                + "match what's understood by the code?  " + entity, ex);
+                                + "match what's understood by the code?  " + argModel, ex);
                     }
                 }
             } else {
-                if (update(entity, table) == 0) {
-                    insert(entity, table);
+                if (update(model) == 0) {
+                    insert(model);
                 }
             }
         }
     }
 
-    protected void insert(AbstractModel entity, Table table) {
-        if (StringUtils.isEmpty(entity.getCreateBy())) {
-            entity.setCreateBy(sessionContext.get("CREATE_BY"));
-        }
-        if (StringUtils.isEmpty(entity.getLastUpdateBy())) {
-            entity.setLastUpdateBy(sessionContext.get("LAST_UPDATE_BY"));
-        }
-        excecuteDml(DmlType.INSERT, entity, table);
+    protected void insert(ModelWrapper model) {
+        excecuteDml(DmlType.INSERT, model);
     }
 
-    protected int update(AbstractModel entity, Table table) {
-        if (StringUtils.isEmpty(entity.getCreateBy())) {
-            entity.setCreateBy(sessionContext.get("CREATE_BY"));
-        }
-        if (StringUtils.isEmpty(entity.getLastUpdateBy())) {
-            entity.setCreateBy(sessionContext.get("LAST_UPDATE_BY"));
-        }
-
-        return excecuteDml(DmlType.UPDATE, entity, table);
+    protected int update(ModelWrapper model) {
+        return excecuteDml(DmlType.UPDATE, model);
     }
 
-    protected int excecuteDml(DmlType type, Object object, org.jumpmind.db.model.Table table) {
-        LinkedHashMap<String, Column> objectToTableMapping = mapObjectToTable(object.getClass(), table);
-        LinkedHashMap<String, Object> objectValuesByColumnName = getObjectValuesByColumnName(object, objectToTableMapping);
-
-        Column[] columns = objectToTableMapping.values().toArray(new Column[objectToTableMapping.size()]);
-        List<Column> keys = new ArrayList<Column>(1);
-        for (Column column : columns) {
-            if (column.isPrimaryKey()) {
-                keys.add(column);
-            }
-        }
-
-        boolean[] nullKeyValues = new boolean[keys.size()];
-        int i = 0;
-        for (Column column : keys) {
-            nullKeyValues[i++] = objectValuesByColumnName.get(column.getName()) == null;
-        }
-
+    protected int excecuteDml(DmlType type, ModelWrapper model) {
+        Table table = model.getTable();
+        boolean[] nullKeyValues = model.getNullKeys();
+        List<Column> primaryKeyColumns = model.getPrimaryKeyColumns();
+        
         DmlStatement statement = databasePlatform.createDmlStatement(type, table.getCatalog(), table.getSchema(), table.getName(),
-                keys.toArray(new Column[keys.size()]), columns, nullKeyValues, null);
+                primaryKeyColumns.toArray(new Column[primaryKeyColumns.size()]), model.getColumns(), nullKeyValues, null);
         String sql = statement.getSql();
-        Object[] values = statement.getValueArray(objectValuesByColumnName);
+        Object[] values = statement.getValueArray(model.getColumnNamesToValues());
         int[] types = statement.getTypes();
 
         return jdbcTemplate.update(sql, values, types);
-
-    }
-
-    protected LinkedHashMap<String, Object> getObjectValuesByColumnName(Object object, LinkedHashMap<String, Column> objectToTableMapping) {
-        try {
-            LinkedHashMap<String, Object> objectValuesByColumnName = new LinkedHashMap<String, Object>();
-            Set<String> propertyNames = objectToTableMapping.keySet();
-            for (String propertyName : propertyNames) {
-                if (propertyName.toLowerCase().startsWith("tag_")) {
-                    objectValuesByColumnName.put(propertyName, ((ITaggedModel) object).getTagValue(propertyName.substring("tag_".length())));
-                } else {
-                    objectValuesByColumnName.put(objectToTableMapping.get(propertyName).getName(),
-                            PropertyUtils.getProperty(object, propertyName));
-                }
-            }
-            return objectValuesByColumnName;
-        } catch (Exception ex) {
-            throw new PersistException(
-                    "Failed to getObjectValuesByColumnName on object " + object + " objectToTableMapping: " + objectToTableMapping, ex);
-        }
     }
 
     protected List<Table> getValidatedTables(AbstractModel entity) {
@@ -439,39 +382,100 @@ public class DBSession {
     }
 
     protected <T extends AbstractModel> List<T> queryInternal(Class<T> resultClass, SqlStatement statement)
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+            throws Exception {
         List<T> objects = new ArrayList<T>();
         List<Row> rows = jdbcTemplate.query(statement.getSql(), new DefaultMapper(), statement.getValues().toArray());
-
+        
+        LinkedHashMap<String, Object> defferredValues = new LinkedHashMap<>();
+        
+ 
         for (int j = 0; j < rows.size(); j++) {
             Row row = rows.get(j);
-            T object = resultClass.newInstance();
+            T object = null;
+            
+            ModelWrapper model = null;
+            if (AbstractModel.class.isAssignableFrom(resultClass)) {
+                object = mapModel(resultClass, row);
+            } else {
+                object = mapNonModel(resultClass, row);
+            }
             objects.add(object);
 
-            PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(object);
 
-            LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<String>();
 
-            for (int i = 0; i < propertyDescriptors.length; i++) {
-                String propertyName = propertyDescriptors[i].getName();
-                String columnName = DatabaseSchema.camelToSnakeCase(propertyName);
+            if (model != null) {
 
-                if (row.containsKey(columnName)) {
-                    Object value = row.get(columnName);
-                    ReflectUtils.setProperty(object, propertyName, value);
-                    matchedColumns.put(columnName, null);
-                }
-            }
-
-            if (object instanceof AbstractModel) {
-                addUnmatchedColumns(row, matchedColumns, (AbstractModel) object);
-                decorateRetrievedEntity((AbstractModel) object);
             }
 
         }
 
         return objects;
 
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T mapModel(Class<T> resultClass, Row row) throws Exception {
+        Table table = databaseSchema.getTable(resultClass, resultClass);
+        ModelMetaData modelMetaData = databaseSchema.getModelMetaData(resultClass, table);
+        
+        T object = resultClass.newInstance();
+        ModelWrapper model = new ModelWrapper((AbstractModel) object, table, modelMetaData);
+        model.load();
+        
+        PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(object);
+
+        LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<String>();
+        LinkedHashMap<String, Object> defferedLoadValues = new LinkedHashMap<>();
+
+        for (int i = 0; i < propertyDescriptors.length; i++) {
+            String propertyName = propertyDescriptors[i].getName();
+            String columnName = DatabaseSchema.camelToSnakeCase(propertyName);
+
+            if (row.containsKey(columnName)) {
+                Object value = row.get(columnName);
+                if (isDefferedLoadField(model.getField(propertyName))) {
+                    defferedLoadValues.put(propertyName, value);
+                } else {                    
+                    model.setValue(propertyName, value);
+                    matchedColumns.put(columnName, null);
+                }
+            }
+        }
+        
+        for (String propertyName : defferedLoadValues.keySet()) {
+            Object value = defferedLoadValues.get(propertyName);
+            model.setValue(propertyName, value);
+            String columnName = DatabaseSchema.camelToSnakeCase(propertyName);
+            matchedColumns.put(columnName, null);
+        }
+        
+        addUnmatchedColumns(row, matchedColumns, (AbstractModel) object);
+        decorateRetrievedModel(model);
+        
+        return (T) model.getModel();
+    }
+
+    private boolean isDefferedLoadField(Field field) {
+        return field.getType().isAssignableFrom(Money.class);
+    }
+
+    private <T> T mapNonModel(Class<T> resultClass, Row row) throws Exception {
+        T object = resultClass.newInstance();
+        PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(object);
+
+        LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<String>();
+
+        for (int i = 0; i < propertyDescriptors.length; i++) {
+            String propertyName = propertyDescriptors[i].getName();
+            String columnName = DatabaseSchema.camelToSnakeCase(propertyName);
+
+            if (row.containsKey(columnName)) {
+                Object value = row.get(columnName);
+                ReflectUtils.setProperty(object, propertyName, value);
+                matchedColumns.put(columnName, null);
+            }
+        }
+        return object;
     }
 
     private void addUnmatchedColumns(Row row, Map<String, String> matchedColumns, AbstractModel entity) {
@@ -482,9 +486,8 @@ public class DBSession {
         }
     }
 
-    protected void decorateRetrievedEntity(AbstractModel entity) {
-        EntitySystemInfo entitySystemInfo = new EntitySystemInfo(entity);
-        entitySystemInfo.setRetrievalTime(new Date());
+    protected void decorateRetrievedModel(ModelWrapper model) {
+        model.setRetrievalTime(new Date());
     }
 
     public void saveAll(List<? extends AbstractModel> entities) {

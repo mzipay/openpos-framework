@@ -6,14 +6,14 @@ import java.util.List;
 
 import org.jumpmind.db.model.Table;
 
-public class EntityMetaData {
+public class ModelMetaData {
 
     private Table table;
     private Class<?> clazz;
     private List<Field> entityIdFields = new ArrayList<Field>();
     private List<Field> entityFields = new ArrayList<Field>();
     
-    public EntityMetaData() {
+    public ModelMetaData() {
     }
 
     public Table getTable() {
@@ -26,6 +26,16 @@ public class EntityMetaData {
 
     public List<Field> getEntityIdFields() {
         return entityIdFields;
+    }
+    
+    public Field getField(String name) {
+        for (Field field : entityFields) {
+            if (field.getName().equals(name)) {
+                return field;
+            }
+        }
+        
+        return null;
     }
 
     public void setEntityIdFields(List<Field> entityIdFields) {
