@@ -60,7 +60,6 @@ public class MessageService implements IMessageService {
         return "{ \"pong\": \"true\" }";
     }
 
-
     @MessageMapping("action/app/{appId}/node/{nodeId}")
     public void action(@DestinationVariable String appId, @DestinationVariable String nodeId, @Payload Action action, Message<?> message) {
         for (IActionListener actionListener : actionListeners) {
