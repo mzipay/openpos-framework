@@ -386,31 +386,19 @@ public class DBSession {
         List<T> objects = new ArrayList<T>();
         List<Row> rows = jdbcTemplate.query(statement.getSql(), new DefaultMapper(), statement.getValues().toArray());
         
-        LinkedHashMap<String, Object> defferredValues = new LinkedHashMap<>();
-        
- 
         for (int j = 0; j < rows.size(); j++) {
             Row row = rows.get(j);
             T object = null;
             
-            ModelWrapper model = null;
             if (isModel(resultClass)) {
                 object = mapModel(resultClass, row);
             } else {
                 object = mapNonModel(resultClass, row);
             }
             objects.add(object);
-
-
-
-            if (model != null) {
-
-            }
-
         }
 
         return objects;
-
     }
 
     protected boolean isModel(Class<?> resultClass) {
