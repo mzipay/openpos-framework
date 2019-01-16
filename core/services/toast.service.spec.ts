@@ -19,6 +19,7 @@ describe('ToastService', () => {
         screenType: 'Toast',
         message: 'Hi',
         duration: 2500,
+        verticalPosition: 'top',
         toastType: ToastType.Success
     };
 
@@ -53,8 +54,9 @@ describe('ToastService', () => {
                     null,
                     {
                         duration: 2500,
-                        panelClass: 'toast-success'
-                    }
+                        panelClass: 'toast-success',
+                        verticalPosition: 'top'
+                    },
                 );
         });
     });
