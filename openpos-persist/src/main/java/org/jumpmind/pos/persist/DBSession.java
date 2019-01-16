@@ -382,35 +382,49 @@ public class DBSession {
     }
 
     protected <T extends AbstractModel> List<T> queryInternal(Class<T> resultClass, SqlStatement statement)
-            throws Exception {
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
         List<T> objects = new ArrayList<T>();
         List<Row> rows = jdbcTemplate.query(statement.getSql(), new DefaultMapper(), statement.getValues().toArray());
-        
-        LinkedHashMap<String, Object> defferredValues = new LinkedHashMap<>();
-        
- 
+
         for (int j = 0; j < rows.size(); j++) {
             Row row = rows.get(j);
-            T object = null;
-            
-            ModelWrapper model = null;
-            if (AbstractModel.class.isAssignableFrom(resultClass)) {
-                object = mapModel(resultClass, row);
-            } else {
-                object = mapNonModel(resultClass, row);
-            }
+            T object = resultClass.newInstance();
             objects.add(object);
 
+            PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(object);
 
+            LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<String>();
 
-            if (model != null) {
+            for (int i = 0; i < propertyDescriptors.length; i++) {
+                String propertyName = propertyDescriptors[i].getName();
+                String columnName = DatabaseSchema.camelToSnakeCase(propertyName);
 
+                if (row.containsKey(columnName)) {
+                    Object value = row.get(columnName);
+                    ReflectUtils.setProperty(object, propertyName, value);
+                    matchedColumns.put(columnName, null);
+                }
+            }
+
+            if (object instanceof AbstractModel) {
+                addUnmatchedColumns(row, matchedColumns, (AbstractModel) object);
             }
 
         }
 
         return objects;
 
+    }
+    
+    private Field getField(Class<?> resultClass, String propertyName) {
+        while (!resultClass.equals(Object.class)) {
+            try {
+                return resultClass.getDeclaredField(propertyName);
+            } catch (NoSuchFieldException e) {
+            }
+            resultClass = resultClass.getSuperclass();            
+        }
+        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -456,7 +470,11 @@ public class DBSession {
     }
 
     private boolean isDefferedLoadField(Field field) {
-        return field.getType().isAssignableFrom(Money.class);
+        if (field != null) {
+            return field.getType().isAssignableFrom(Money.class);            
+        } else {
+            return false;
+        }
     }
 
     private <T> T mapNonModel(Class<T> resultClass, Row row) throws Exception {
