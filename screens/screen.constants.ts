@@ -46,6 +46,7 @@ import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
 import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
+import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 
 export const ScreenConstants = {
     screens : [
@@ -110,7 +111,7 @@ export const ScreenConstants = {
         { name: 'ItemList', component: ItemListComponent },
         { name: 'MultiselectItemList', component: MultiselectItemListComponent },
         { name: 'PaymentStatus', component: PaymentStatusComponent },
-        { name: 'PromptWithOptions', component: PromptWithOptionsComponent },
+        { name: 'PromptWithOptions', component: PromptWithOptionsDialogComponent },
         { name: 'PromptWithInfo', component: PromptWithInfoComponent },
         { name: 'Transaction', component: TransactionComponent },
         { name: 'SellItemDetail', component: SellItemDetailComponent },
