@@ -1,11 +1,27 @@
-<div class="mat-elevation-z1 serrated-edge receipt-card">
-    <mat-card-content>
-        <b>Transaction #1234</b>
-        <div>
-            <mat-icon class="material-icons muted-color mat-48" style="margin-left: -5px;">format_align_left</mat-icon>
+<div class="serrated-edge receipt-div" [ngClass]="{'mat-elevation-z4':hover, 'mat-elevation-z1':!hover}">
+    <div fxLayout="row" fxLayoutAlign="stretch" fxLayoutGap="4px">
+        <div fxFlex>
+            <div class="transaction-header">Transaction:</div>
+            <div>Date:</div>
         </div>
-        <div>Date: 2018-12-10</div>
-        <div>Item(s): 10</div>
-        <div>Total: $120.99</div>
-    </mat-card-content>
+        <div fxFlex style="text-align: end;">
+            <div *ngIf="receipt" class="transaction-header">#{{receipt.transactionNumber}}</div>
+            <div *ngIf="receipt">{{receipt.businessDate}}</div>
+        </div>
+    </div>
+
+    <div>
+        <mat-icon class="material-icons muted-color mat-48">format_align_left</mat-icon>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="stretch" fxLayoutGap="4px">
+        <div fxFlex>
+            <div>Item(s):</div>
+            <div>Total:</div>
+        </div>
+        <div fxFlex style="text-align: end;">
+            <div *ngIf="receipt">{{receipt.items}}</div>
+            <div *ngIf="receipt">${{receipt.total}}</div>
+        </div>
+    </div>
 </div>

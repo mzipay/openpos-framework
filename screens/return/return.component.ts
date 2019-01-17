@@ -29,6 +29,7 @@ export class ReturnComponent extends PosScreen<any> implements AfterViewInit, Af
   public items: ISellItem[];
   public amountTotals: ITotal[];
   public itemTotal: number;
+  public receipts: any[];
 
   constructor(
     private observableMedia: ObservableMedia, protected dialog: MatDialog) {
@@ -45,6 +46,9 @@ export class ReturnComponent extends PosScreen<any> implements AfterViewInit, Af
     this.amountTotals = this.screen.totals ? (<ITotal[]>this.screen.totals).filter(t => t.type === TotalType.Amount) : null;
     const screenItemTotal = this.screen.totals ? (<ITotal[]>this.screen.totals).find(t => t.type === TotalType.Quantity && t.name === 'itemTotal') : null;
     this.itemTotal = screenItemTotal ? Number(screenItemTotal.amount) : this.items.length;
+    this.receipts = this.screen.receipts;
+    console.log('RECEIPTS: ');
+    console.log(this.receipts);
     this.dialog.closeAll();
   }
 
