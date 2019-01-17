@@ -61,7 +61,8 @@ import {
     StatusBarStatusControlComponent,
     STATUS_BAR_STATUS_CONTROL_COMPONENT,
     CurrencyTextComponent,
-    SearchablePopTartComponent
+    SearchablePopTartComponent,
+    ReceiptCardComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe } from './pipes';
@@ -105,7 +106,8 @@ const components = [
     StatusBarStatusControlComponent,
     CatalogBrowserItemComponent,
     CurrencyTextComponent,
-    HeaderBarComponent
+    HeaderBarComponent,
+    ReceiptCardComponent
 ];
 
 const directives = [

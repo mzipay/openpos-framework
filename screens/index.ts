@@ -37,6 +37,7 @@ export * from './wait/wait.component';
 export * from './catalog-browser/catalog-browser.component';
 export * from './multiselect-item-list/multiselect-item-list.component';
 export * from './item-options/item-options.component';
+export * from './return/return.component';
 
 export * from './pos-screen/pos-screen.component';
 

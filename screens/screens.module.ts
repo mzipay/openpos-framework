@@ -60,6 +60,7 @@ import { DetailTextScreenComponent } from './detail-text/detail-text-screen.comp
 import { SystemStatusDialogComponent } from './system-status/system-status-dialog.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 import { IconConstants } from './icon.constants';
+import { ReturnComponent } from './return/return.component';
 
 const screens = [
     BasicItemSearchComponent,
@@ -99,6 +100,7 @@ const screens = [
     ItemSearchResultsComponent,
     ItemOptionsComponent,
     DetailTextScreenComponent,
+    ReturnComponent
 ];
 
 const dialogs = [

@@ -36,3 +36,4 @@ export * from './pager/pager.component';
 export * from './menu/menu.component';
 export * from './currency-text/currency-text.component';
 export * from './searchable-pop-tart/searchable-pop-tart.component';
+export * from './receipt-card/receipt-card.component';
