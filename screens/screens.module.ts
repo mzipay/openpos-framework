@@ -61,6 +61,7 @@ import { SystemStatusDialogComponent } from './system-status/system-status-dialo
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 import { IconConstants } from './icon.constants';
 import { ReturnComponent } from './return/return.component';
+import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 
 const screens = [
     BasicItemSearchComponent,
@@ -112,7 +113,8 @@ const dialogs = [
     MultipleDynamicFormDialogComponent,
     VersionComponent,
     SystemStatusDialogComponent,
-    PromptDialogComponent
+    PromptDialogComponent,
+    PromptWithOptionsDialogComponent
 ];
 
 const templates = [

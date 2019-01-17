@@ -23,6 +23,7 @@ export * from './print-preview/print-preview.component';
 export * from './prompt/prompt.component';
 export * from './prompt-with-info/prompt-with-info.component';
 export * from './prompt-with-options/prompt-with-options.component';
+export * from './prompt-with-options/prompt-with-options-dialog.component';
 export * from './sale-retrieval/sale-retrieval.component';
 export * from './selection-list/selection-list.component';
 export * from './sell-item-detail/sell-item-detail.component';

@@ -64,7 +64,9 @@ export class PromptWithOptionsComponent extends ChooseOptionsComponent implement
   }
 
   onFormSubmit(): void {
-    this.onAction(this.actionButton.action);
+    if (this.actionButton) {
+      this.onAction(this.actionButton.action);
+    }
   }
 
 }
