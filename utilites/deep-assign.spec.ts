@@ -68,8 +68,8 @@ describe( 'deepAssign', () => {
     });
 
     it( 'Should copy src values into the target and return the target for deep objects and remove extra props from target', () => {
-        const src = { prop1: 'blah', prop2: { subProp1: 'a'} };
-        let target = { prop3: 'blah', prop2: { subProp2: 'b'}};
+        const src: any= { prop1: 'blah', prop2: { subProp1: 'a'} };
+        let target: any = { prop3: 'blah', prop2: { subProp2: 'b'}};
         target = deepAssign( target, src );
         expect(target).toEqual(src);
         expect(target).not.toBe(src);
@@ -100,8 +100,8 @@ describe( 'deepAssign', () => {
     });
 
     it( 'Should copy src values into the target and return the target for lists with objects adn remove extra entries', () => {
-        const src = [{prop1: 'a'}, {prop1: 'b'}];
-        let target = [{prop1: 'a', prop2: 'a'}];
+        const src:any = [{prop1: 'a'}, {prop1: 'b'}];
+        let target:any = [{prop1: 'a', prop2: 'a'}];
         target = deepAssign( target, src );
         expect(target).toEqual(src);
         expect(target).not.toBe(src);
