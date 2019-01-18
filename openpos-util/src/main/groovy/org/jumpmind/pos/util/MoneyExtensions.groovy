@@ -31,26 +31,3 @@ class MoneyExtentions {
     } 
     
 }
-
-class MoneySerializer extends StdSerializer<Money> {
-    MoneySerializer() {
-        super(Money.class);
-    }
-
-    @Override
-    public void serialize(Money value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-        jgen.writeString(value.toString());
-    }
-}
-
-class MoneyDeserializer extends StdDeserializer<Money> {
-    MoneyDeserializer() {
-        super(Money.class);
-    }
-
-    @Override
-    public Money deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-        String value = jp.readValueAs(String.class);
-        return Money.parse(value);
-    }
-}
