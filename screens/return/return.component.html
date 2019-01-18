@@ -1,7 +1,7 @@
 <div fxFlexFill fxLayout="row" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top: 6px;">
 
 	<div style="overflow-y: auto;">
-		<app-receipt-card *ngFor="let receipt of receipts" [receipt]="receipt"></app-receipt-card>
+		<app-receipt-card *ngFor="let receipt of receipts" [receipt]="receipt" (click)="onReceiptClick(receipt)"></app-receipt-card>
 	</div>
 
 	<div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
@@ -70,7 +70,7 @@
 					<app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
 				</span>
 				<button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;"
-				 [disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')">
+				 [disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Return')">
 					<span class="text-md">Next</span>
 					<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 				</button>

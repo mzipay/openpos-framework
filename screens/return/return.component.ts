@@ -47,8 +47,7 @@ export class ReturnComponent extends PosScreen<any> implements AfterViewInit, Af
     const screenItemTotal = this.screen.totals ? (<ITotal[]>this.screen.totals).find(t => t.type === TotalType.Quantity && t.name === 'itemTotal') : null;
     this.itemTotal = screenItemTotal ? Number(screenItemTotal.amount) : this.items.length;
     this.receipts = this.screen.receipts;
-    console.log('RECEIPTS: ');
-    console.log(this.receipts);
+
     this.dialog.closeAll();
   }
 
@@ -109,6 +108,13 @@ export class ReturnComponent extends PosScreen<any> implements AfterViewInit, Af
     const indexes = [];
     items.forEach(item => indexes.push(item.index));
     return indexes;
+  }
+
+  public onReceiptClick(event: any) {
+    if (this.receipts) {
+      const index = this.receipts.indexOf(event);
+      this.session.onAction('TransactionDetails', index);
+    }
   }
 
   public onItemListChange(event: ISellItem[]): void {
