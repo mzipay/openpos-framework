@@ -35,6 +35,11 @@ public class MoneyCalculator {
         return money(currencyId, BigDecimal.ZERO);
     }
     
+
+    public static Money money(String currencyId, double d) {
+        return money(currencyId, new BigDecimal(d), RoundingMode.HALF_UP);
+    }
+    
     public static Money money(String currencyId, BigDecimal value) {
         return Money.of(CurrencyUnit.of(currencyId), value);
     }
@@ -62,5 +67,6 @@ public class MoneyCalculator {
     public BigDecimal subtract(BigDecimal amount1, BigDecimal amount2) {
         return MoneyUtils.subtract(money(amount1), money(amount2)).getAmount();
     }
+
     
 }
