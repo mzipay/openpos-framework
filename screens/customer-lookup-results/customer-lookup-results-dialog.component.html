@@ -1,0 +1,43 @@
+<div class="text-md" style="margin-bottom:15px">
+    Results
+</div>
+<div mat-dialog-content class="lighter" style="padding:15px; margin:0px">
+    <ng-container *ngIf="screen.customers.length > 0;else no_results">
+        <div class="text-sm" style="margin-bottom:10px">
+            Choose a customer and select an option
+        </div>
+        <app-selectable-item-list [configuration]="listConfig" [(selectedItem)]="selectedResult" [defaultSelect]=true>
+            <ng-template let-item>
+                <div fxLayoutAlign="space-between">
+                    <div fxFlex="0 0 33%">
+                        {{item.firstName}}&nbsp;{{item.lastName}}                        
+                    </div>
+                    <div fxFlex="0 0 33%">
+                        {{item.address}}<br>
+                        {{item.city}},&nbsp;{{item.state}}&nbsp;{{item.zip}}
+                    </div>
+                    <div fxFlex="0 0 33%" class="text-right">
+                        {{item.phone1}}<br>
+                        {{item.phone2}}
+                    </div>
+                </div>
+            </ng-template>
+        </app-selectable-item-list>
+    </ng-container>
+    <ng-template #no_results>
+        <div class="text-sm" style="margin-bottom:10px">
+            Select back and try again.
+        </div>
+    </ng-template>
+</div>
+<div mat-dialog-actions fxLayoutAlign="space-between">
+    <button mat-raised-button color="primary-inverse" (click)="onBack()">Back</button>
+    <div>
+        <button mat-raised-button color="primary-inverse" *ngIf="screen.customers.length>0" (click)="onEdit()" [disabled]="!selectedResult">Edit Customer</button>
+        <button mat-raised-button color="primary" *ngIf="screen.customers.length<=0 && screen.hasLoyaltyCustomerLinked"(click)="onAdd()">Add Customer</button>
+        <button mat-raised-button color="primary" autofocus (click)="onNext()" [disabled]="!selectedResult">
+            <span>{{screen.continueText}}</span>            
+            <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
+        </button>
+    </div>
+</div>

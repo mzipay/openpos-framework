@@ -48,6 +48,7 @@ import { DetailTextScreenComponent } from './detail-text/detail-text-screen.comp
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 import { ReturnComponent } from './return/return.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
+import { CustomerLookupResultsDialogComponent } from './customer-lookup-results/customer-lookup-results-dialog.component';
 
 export const ScreenConstants = {
     screens : [
@@ -136,6 +137,7 @@ export const ScreenConstants = {
         { name: 'ItemSearchResults', component: ItemSearchResultsComponent },
         { name: 'ItemOptions', component: ItemOptionsComponent },
         { name: 'Blank', component: BlankComponent },
+        { name: 'CustomerLookupResults', component: CustomerLookupResultsDialogComponent }
     ],
 
     templates: [

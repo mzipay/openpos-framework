@@ -62,6 +62,7 @@ import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 import { IconConstants } from './icon.constants';
 import { ReturnComponent } from './return/return.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
+import { CustomerLookupResultsDialogComponent } from './customer-lookup-results/customer-lookup-results-dialog.component';
 
 const screens = [
     BasicItemSearchComponent,
@@ -114,7 +115,8 @@ const dialogs = [
     VersionComponent,
     SystemStatusDialogComponent,
     PromptDialogComponent,
-    PromptWithOptionsDialogComponent
+    PromptWithOptionsDialogComponent,
+    CustomerLookupResultsDialogComponent
 ];
 
 const templates = [
