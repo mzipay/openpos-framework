@@ -53,7 +53,8 @@ export class TillCountOtherTenderComponent extends PosScreen<any> {
         description: '',
         subtitle: '',
         fields: null,
-        selected: false
+        selected: false,
+        enabled: true
       });
 
       this.totalAmount += Number(this.amountValue);
