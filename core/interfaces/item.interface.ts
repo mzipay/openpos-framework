@@ -7,4 +7,5 @@ export interface IItem {
     amount: string;
     fields: IField[];
     selected: boolean;
+    enabled: boolean;
 }
