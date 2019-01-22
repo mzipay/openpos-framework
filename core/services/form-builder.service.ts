@@ -32,9 +32,6 @@ export class FormBuilder {
             // FormGroup.value object will only contain the form controls that are ENABLED
             // See docs for FormGroup.
 
-            if (element.hasOwnProperty('value')) {
-              element.value = formGroup.value[element.id];
-            }
             if (element.hasOwnProperty('checked')) {
               // Disabled checkboxes don't have a value in formGroup, so check for that
               // and use the control value instead if necessary.  Should probably work
@@ -45,6 +42,8 @@ export class FormBuilder {
               } else if (formGroup.controls[element.id]) {
                 element.checked = formGroup.controls[element.id].value === true || formGroup.controls[element.id].value === 'checked';
               }
+            } else {
+              element.value = formGroup.value[element.id];
             }
           });
 
