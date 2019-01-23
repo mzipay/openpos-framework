@@ -64,7 +64,11 @@ export class TenderingComponent extends PosScreen<any> implements OnInit, AfterV
             });
         }
 
-        group['tenderAmtFld'] = new FormControl(this.tenderAmount.value, validators);
+        let disabled = false;
+        if (this.tenderAmount.disabled) {
+            disabled = this.tenderAmount.disabled;
+        }
+        group['tenderAmtFld'] = new FormControl({value: this.tenderAmount.value, disabled: disabled}, validators);
         this.tenderFormGroup = new FormGroup(group);
 
 
@@ -85,7 +89,7 @@ export class TenderingComponent extends PosScreen<any> implements OnInit, AfterV
                     },
                         // Will only block if the formGroup is inValid
                         new ActionIntercepterBehavior(ActionIntercepterBehaviorType.block,
-                            tenderAmtValue => this.tenderFormGroup.valid
+                            tenderAmtValue => this.isTenderValid()
                         )
                     )
                 );
@@ -100,8 +104,12 @@ export class TenderingComponent extends PosScreen<any> implements OnInit, AfterV
         this.onAction();
     }
 
+    isTenderValid(): boolean {
+        return this.tenderFormGroup.valid || this.tenderFormGroup.get('tenderAmtFld').disabled === true;
+    }
+
     onAction(): void {
-        if (this.tenderFormGroup.valid) {
+        if (this.isTenderValid()) {
             this.tenderAmount.value = this.tenderFormGroup.get('tenderAmtFld').value;
             this.session.onAction(this.actionButton.action, this.tenderAmount.value);
         }
