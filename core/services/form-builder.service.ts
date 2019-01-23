@@ -42,7 +42,7 @@ export class FormBuilder {
               } else if (formGroup.controls[element.id]) {
                 element.checked = formGroup.controls[element.id].value === true || formGroup.controls[element.id].value === 'checked';
               }
-            } else {
+            } else if ( element.elementType === 'Input') {
               element.value = formGroup.value[element.id];
             }
           });
