@@ -6,8 +6,6 @@ export { IChooseOptionsScreen } from './choose-options/choose-options-screen.int
 export * from './choose-options/option-item.interface';
 export * from './choose-options/choose-options-dialog.component';
 export * from './customer-search-results/customer-search-results.component';
-export * from './customer-lookup-results/customer-lookup-results-dialog.component';
-export * from './customer-lookup-results/customer-lookup-results-screen.interface';
 export * from './dialog/dialog.component';
 export * from './dynamic-form/dynamic-form.component';
 export * from './dynamic-form/dynamic-form-dialog.component';
@@ -28,6 +26,7 @@ export * from './prompt-with-options/prompt-with-options.component';
 export * from './prompt-with-options/prompt-with-options-dialog.component';
 export * from './sale-retrieval/sale-retrieval.component';
 export * from './selection-list/selection-list.component';
+export * from './selection-list/selection-list-dialog.component';
 export * from './sell-item-detail/sell-item-detail.component';
 export * from './signature-capture/signature-capture.component';
 export * from './static-table/static-table.component';
