@@ -12,6 +12,8 @@ public class SelectionListScreen extends Screen {
     private List<MenuItem> buttons = new ArrayList<>();
 
     private boolean multiSelect = false;
+    
+    private String instructions;
 
     public SelectionListScreen() {
         this.setScreenType(ScreenType.SelectionList);
@@ -19,6 +21,18 @@ public class SelectionListScreen extends Screen {
 
     public List<SelectionListItem> getSelectionList() {
         return selectionList;
+    }
+    
+    @Override
+    public Screen asDialog() {
+        this.setScreenType(ScreenType.SelectionListDialog);
+        return super.asDialog();
+    }
+    
+    @Override
+    public Screen asDialog(DialogProperties dialogProperties) {
+        this.setScreenType(ScreenType.SelectionListDialog);
+        return super.asDialog(dialogProperties);
     }
 
     public void setSelectionList(List<SelectionListItem> selectionList) {
@@ -29,8 +43,8 @@ public class SelectionListScreen extends Screen {
         selectionList.add(selection);
     }
 
-    public void addSelection(String title, String body) {
-        SelectionListItem selection = new SelectionListItem(title, body);
+    public void addSelection(String title, SelectionListItemDisplayProperty column) {
+        SelectionListItem selection = new SelectionListItem(title, column);
         selectionList.add(selection);
     }
 
@@ -52,6 +66,14 @@ public class SelectionListScreen extends Screen {
 
     public void setMultiSelect(boolean multiSelect) {
         this.multiSelect = multiSelect;
+    }
+    
+    public String getInstructions() {
+        return instructions;
+    }
+    
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
     }
 
 }
