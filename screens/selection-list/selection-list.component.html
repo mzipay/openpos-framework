@@ -14,7 +14,8 @@
 				</div>
 			</app-selectable-item-list>
 		</mat-card-content>
-		<mat-card-actions *ngIf="screen.buttons" fxFlex="0 0 auto" fxLayoutAlign="end">
+		<mat-card-actions fxFlex="0 0 auto" fxLayoutAlign="end">
+			<button *ngFor="let m of screen.nonSelectionButtons" mat-raised-button color="primary" (click)="doMenuItemAction(m)"> {{m.title}} </button>
 			<button *ngFor="let m of screen.buttons" mat-raised-button color="primary" [disabled]="index<0" (click)="doMenuItemAction(m)">{{m.title}}</button>
 		</mat-card-actions>
 	</mat-card>

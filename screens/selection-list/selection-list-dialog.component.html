@@ -20,12 +20,13 @@
         </div>
     </mat-dialog-content>
 
-    <mat-dialog-actions fxLayoutAlign="space-between" style="overflow:autoå">
+    <mat-dialog-actions fxLayoutAlign="space-between" style="overflow:auto">
         <button *ngIf="screen.backButton" mat-raised-button type="submit" color="primary-inverse" (click)="session.onAction(screen.backButton.action)">
             <span>{{screen.backButton.title ? screen.backButton.title : 'Back'}}</span>
             <app-icon *ngIf="screen.backButton.icon" [iconClass]="material-icons" [iconName]="screen.backButton.icon"></app-icon>
         </button>
-        <div *ngIf="screen.buttons">
+        <div>
+            <button *ngFor="let m of screen.nonSelectionButtons" mat-raised-button color="primary" (click)="doMenuItemAction(m)"> {{m.title}} </button>
             <button *ngFor="let m of screen.buttons" mat-raised-button color="primary" [disabled]="index<0" (click)="doMenuItemAction(m)">{{m.title}}</button>
         </div>
     </mat-dialog-actions>
