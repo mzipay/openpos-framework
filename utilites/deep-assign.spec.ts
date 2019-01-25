@@ -106,4 +106,42 @@ describe( 'deepAssign', () => {
         expect(target).toEqual(src);
         expect(target).not.toBe(src);
     });
+
+    it( 'Should create new array instances when missing on target', () => {
+        const src:any = {prop1: ['a', 'b' , 'c']};
+        let target:any = {prop2: {'foo': 'bar'}};
+        target = deepAssign(target, src);
+        expect(target.prop1).toEqual(src.prop1);
+        expect(target.prop1).not.toBe(src.prop1);
+        expect(target.prop2).toBeUndefined();
+    });
+
+    it( 'Should create new object instances when missing on target', () => {
+        const src:any = {prop1: {'cat': 'dog'}};
+        let target:any = {prop2: {'foo': 'bar'}};
+        target = deepAssign(target, src);
+        expect(target.prop1).toEqual(src.prop1);
+        expect(target.prop1).not.toBe(src.prop1);
+        expect(target.prop2).toBeUndefined();
+    });
+
+    it( 'Should create new object with array instances when missing on target', () => {
+        const src:any = {prop1: {'cat': ['a', 'b']}};
+        let target:any = {prop2: {'foo': 'bar'}};
+        target = deepAssign(target, src);
+        expect(target.prop1).toEqual(src.prop1);
+        expect(target.prop1).not.toBe(src.prop1);
+        expect(target.prop1.cat).toEqual(src.prop1.cat);
+        expect(target.prop1.cat).not.toBe(src.prop1.cat);
+        expect(target.prop2).toBeUndefined();
+    });
+
+    it( 'Should not copy functions to target', () => {
+        const src:any = {prop1: {'foo': 'bar'}, fun: () => { return true }};
+        let target: any = {prop1: {'bar': 'foo'}};
+        target = deepAssign(target, src);
+        expect(target.prop1).toEqual(src.prop1);
+        expect(target.prop1).not.toBe(src.prop1);
+        expect(target.prop2).toBeUndefined();
+    });
 });
