@@ -120,13 +120,13 @@ public class Screen extends Message {
     public void setBackButton(MenuItem backButton) {
         put("backButton", backButton);
     }
-    
-    public void setLogoutButton(MenuItem logoutButton) {
-        put("logoutButton", logoutButton);
-    }
 
     public void setTemplate(AbstractTemplate template) {
         this.template = template;
+    }
+    
+    public void setLogoutButton(MenuItem logoutButton) {
+        put("logoutButton", logoutButton);
     }
 
     @SuppressWarnings("unchecked")
