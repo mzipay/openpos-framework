@@ -26,6 +26,7 @@ public class ProrationCalculatorTest {
         assertEquals(moneyCalculator.amount(new BigDecimal(12.77)),proratedAmounts.get(2));        		
     }
     
+    @Test
     public void testProrateWithRemainder() {
         BigDecimal amountToBeProrated = new BigDecimal(1);
         List<BigDecimal>existingAmounts = new ArrayList<BigDecimal>();
