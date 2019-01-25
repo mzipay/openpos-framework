@@ -18,7 +18,7 @@
     $openpos-addons: (
         foreground: map-merge($mat-foreground, $openpos-foreground-addons)
     );
-    @return map-merge($openpos-mat-theme, $openpos-addons);
+    @return map-merge(map-merge($openpos-mat-theme, $openpos-addons), $addons);
 }
 
 @mixin app-theme($theme) {
