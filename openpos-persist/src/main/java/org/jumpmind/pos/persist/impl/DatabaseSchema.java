@@ -25,6 +25,7 @@ import org.jumpmind.db.sql.SqlScript;
 import org.jumpmind.pos.persist.ColumnDef;
 import org.jumpmind.pos.persist.Extends;
 import org.jumpmind.pos.persist.PersistException;
+import org.jumpmind.pos.persist.TableDef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -229,12 +230,14 @@ public class DatabaseSchema {
 
         Class<?> entityClass = clazz;
         while (entityClass != null && entityClass != Object.class) {
-            org.jumpmind.pos.persist.TableDef tblAnnotation = entityClass.getAnnotation(org.jumpmind.pos.persist.TableDef.class);
+            org.jumpmind.pos.persist.TableDef tblAnnotation = entityClass.getAnnotation(TableDef.class);
             if (tblAnnotation != null) {
 
                 ModelClassMetaData meta = new ModelClassMetaData();
                 meta.setClazz(entityClass);
                 Table dbTable = new Table();
+                List<Column> columns = new ArrayList<>();
+                List<Column> pkColumns = new ArrayList<>();
                 dbTable.setName(tblAnnotation.name());
                 dbTable.setDescription(tblAnnotation.description());
                 Class<?> currentClass = entityClass;
@@ -244,16 +247,27 @@ public class DatabaseSchema {
                     for (Field field : fields) {
                         Column column = createColumn(field);
                         if (column != null && (includeAllFields || column.isPrimaryKey())) {
-                            dbTable.addColumn(column);
                             if (isPrimaryKey(field)) {
                                 meta.getEntityIdFields().add(field);
+                                pkColumns.add(0, column);
+                            } else {
+                                columns.add(column);
                             }
                             meta.getEntityFields().add(field);
                         }
                     }
                     currentClass = currentClass.getSuperclass();
-                    includeAllFields = currentClass != null && currentClass.getAnnotation(org.jumpmind.pos.persist.TableDef.class) == null;
+                    includeAllFields = currentClass != null && currentClass.getAnnotation(TableDef.class) == null;
                 }
+                
+                for (Column column : pkColumns) {
+                    dbTable.addColumn(column);
+                }
+                
+                for (Column column : columns) {
+                    dbTable.addColumn(column);
+                }
+
 
                 meta.setTable(dbTable);
                 modelClassValidator.validate(meta);
