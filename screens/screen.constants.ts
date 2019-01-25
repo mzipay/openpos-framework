@@ -46,6 +46,7 @@ import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
 import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
+import { SaleComponent } from './sale/sale.component';
 import { ReturnComponent } from './return/return.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { SelectionListDialogComponent } from './selection-list/selection-list-dialog.component';
@@ -89,6 +90,8 @@ export const ScreenConstants = {
         { name: 'ItemSearchResults', component: ItemSearchResultsComponent },
         { name: 'ItemOptions', component: ItemOptionsComponent },
         { name: 'DetailText', component: DetailTextScreenComponent },
+
+        { name: 'Sale', component: SaleComponent},
 
         // Default Dialog
         { name: 'Dialog', component: DialogComponent },

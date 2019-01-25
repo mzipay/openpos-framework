@@ -3,8 +3,23 @@
 @import '../shared/layout-components/layout-component-themes';
 @import '../shared/components/component-theme-mixins';
 @import '../shared/screen-parts/screen-part-themes';
+@import '../screens/screen-themes';
 
 @include mat-core();
+
+@function openpos-theme-light($primary, $accent, $warn, $addons: ()){
+
+    $openpos-mat-theme: mat-light-theme($primary, $accent, $warn);
+
+    $mat-foreground: map-get($openpos-mat-theme, foreground);
+    $openpos-foreground-addons: (
+        inverse-text: whitesmoke
+    );
+    $openpos-addons: (
+        foreground: map-merge($mat-foreground, $openpos-foreground-addons)
+    );
+    @return map-merge($openpos-mat-theme, $openpos-addons);
+}
 
 @mixin app-theme($theme) {
 
@@ -12,6 +27,7 @@
     @include layout-component-themes($theme);
     @include openpos-component-theme-mixins($theme);
     @include screen-part-themes($theme);
+    @include screen-themes($theme);
 
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));

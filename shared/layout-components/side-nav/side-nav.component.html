@@ -1,10 +1,10 @@
 <mat-sidenav-container fxFlexFill fxLayout="column">
-    <mat-sidenav #sidenav class="side-nav" position="start" [mode]="drawerMode | async" [opened]="drawerOpen | async">
+    <mat-sidenav #sidenav class="side-nav" position="start" [mode]="drawerMode$ | async" [opened]="drawerOpen$ | async">
         <ng-content select="[nav]"></ng-content>
     </mat-sidenav>
     <mat-sidenav-content fxFlex="0 1 100%" fxLayout="column">
-        <div fxShow fxHide.xs class="desktop-header"></div>
-        <mat-toolbar fxHide fxShow.xs fxFlex="0 0 auto" fxLayout="row">
+        <div *ngIf="!(isMobile$ | async)" class="desktop-header"></div>
+        <mat-toolbar *ngIf="isMobile$ | async" fxFlex="0 0 auto" fxLayout="row">
             <button mat-icon-button (click)="sidenav.toggle()">
                 <app-icon iconName="menu"></app-icon>
             </button>

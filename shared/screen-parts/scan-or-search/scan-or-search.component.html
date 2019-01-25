@@ -1,0 +1,20 @@
+
+<app-icon-square-button 
+    fxFlex="0 0 auto"
+    class="scan-button"
+    [iconName]="screenData.scanIcon" 
+    [color]="'primary-inverse'"
+    (buttonClick)="devices.scan()"
+    ></app-icon-square-button>
+<input #input matInput
+    fxFlex="1 1 100%"
+    class="scan-input"
+    [keyboardLayout]="'Numeric'"
+    (keyup.enter)="onEnter()"
+    [(ngModel)]="barcode"
+    (paste)="onBarcodePaste($event)"
+    [placeholder]="screenData.scanSomethingText"
+    [attr.minlength]="screenData.scanMinLength"
+    [attr.maxlength]="screenData.scanMaxLength"
+    [formatterName]="screenData.inputType"
+    barcodeScanPublisher>

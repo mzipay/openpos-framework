@@ -60,6 +60,7 @@ import { DetailTextScreenComponent } from './detail-text/detail-text-screen.comp
 import { SystemStatusDialogComponent } from './system-status/system-status-dialog.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 import { IconConstants } from './icon.constants';
+import { SaleComponent } from './sale/sale.component';
 import { ReturnComponent } from './return/return.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { SelectionListDialogComponent } from './selection-list/selection-list-dialog.component';
@@ -102,6 +103,7 @@ const screens = [
     ItemSearchResultsComponent,
     ItemOptionsComponent,
     DetailTextScreenComponent,
+    SaleComponent,
     ReturnComponent
 ];
 

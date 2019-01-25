@@ -62,14 +62,18 @@ import {
     STATUS_BAR_STATUS_CONTROL_COMPONENT,
     CurrencyTextComponent,
     SearchablePopTartComponent,
-    ReceiptCardComponent
+    IconButtonComponent,
+    IconFabButtonComponent,
+    ReceiptCardComponent,
+    KebabButtonComponent,
+    KebabMenuComponent,
+    IconSquareButtonComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
-import { SideNavComponent } from './layout-components';
-import { HeaderBarComponent } from './screen-parts';
-
+import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent } from './screen-parts';
+import { SideNavComponent, WaffleComponent } from './layout-components';
 const components = [
     PromptInputComponent,
     IconComponent,
@@ -106,8 +110,16 @@ const components = [
     StatusBarStatusControlComponent,
     CatalogBrowserItemComponent,
     CurrencyTextComponent,
-    HeaderBarComponent,
-    ReceiptCardComponent
+    BaconStripComponent,
+    WaffleComponent,
+    IconButtonComponent,
+    ScanOrSearchComponent,
+    IconFabButtonComponent,
+    ReceiptCardComponent,
+    KebabButtonComponent,
+    KebabMenuComponent,
+    IconSquareButtonComponent,
+    StatusStripComponent
 ];
 
 const directives = [

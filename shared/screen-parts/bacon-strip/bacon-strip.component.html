@@ -1,0 +1,15 @@
+<mat-toolbar fxLayoutGap="10px" class="mat-elevation-z10">
+    <app-icon-button 
+        *ngIf="screenData.backButton" 
+        [iconName]="screenData.backButton.icon" 
+        (buttonClick)="onMenuItemClick(screenData.backButton)"
+    ></app-icon-button>
+    <div fxLayoutAlign="center center" fxLayoutGap="10px">
+        <app-icon class="screen-icon" [iconName]="screenData.headerIcon"></app-icon>
+        <span>{{screenData.headerText}}</span>
+    </div>
+    <div fxFlex="1 1 100%"></div>
+    <div>
+        {{screenData.operatorText}} on {{screenData.deviceId}}
+    </div>
+</mat-toolbar>

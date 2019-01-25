@@ -1,0 +1,31 @@
+<ng-content select="[header]"></ng-content>
+<mat-sidenav-container class="outer-side-content-container">
+    <mat-sidenav #outersidecontent class="outer-side-content" position="end" [mode]="drawerMode | async">
+        <ng-content select="[outer-side-content]"></ng-content>
+    </mat-sidenav>
+    <mat-sidenav-content class="main-content">
+        <div class="top-content">
+            <ng-content select="[top-content]"></ng-content>
+        </div>
+        <div class="screen mat-elevation-z3">
+            <div class="content-title">
+                <ng-content select="[content-title]"></ng-content>
+                <app-icon-button class="drawer-button" [iconName]="'HamburgerMenu'" (buttonClick)="drawer.toggle()"></app-icon-button>
+            </div>
+            <mat-drawer-container class="content-container">
+                <mat-drawer #drawer class="content-drawer" position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async">
+                    <ng-content select="[content-drawer]"></ng-content>
+                </mat-drawer>
+                <mat-drawer-content class="drawer-content">
+                    <div class="content">
+                        <ng-content select="[content]"></ng-content>
+                    </div>
+                </mat-drawer-content>
+            </mat-drawer-container>
+            <div class="footer">
+                <ng-content select="[footer]"></ng-content>
+            </div>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+

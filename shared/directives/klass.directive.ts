@@ -56,7 +56,7 @@ const selectors = `
             this.prevClass = c;
         }));
       }
-    
+
       ngOnDestroy(): void {
         if (!!this.subscriptions) {
             this.subscriptions.unsubscribe();

@@ -1,0 +1,5 @@
+@import './sale/sale-theme';
+
+@mixin screen-themes($theme){
+    @include sale-theme($theme);
+}

@@ -23,9 +23,11 @@ export class BasicItemSearchComponent extends PosScreen<any> implements AfterVie
   }
 
   buildScreen() {
-    this.session.registerActionPayload(this.screen.template.localMenuItems[0].action, () => {
-      return this.getSearchPayload();
-    });
+    if (this.screen.template && this.screen.template.localMenuItems && this.screen.template.localMenuItems[0]) {
+        this.session.registerActionPayload(this.screen.template.localMenuItems[0].action, () => {
+            return this.getSearchPayload();
+          });
+    }
 
     this.searchCategories = this.screen.searchCategories;
     this.searchCategoryStructure = this.screen.searchCategoryStructure;

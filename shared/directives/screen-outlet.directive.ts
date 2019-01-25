@@ -101,6 +101,8 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
                 this._componentRef.destroy();
             }
             this._componentRef = null;
+            this.installedScreen = null;
+            this.installedTemplate = null;
 
             // Create our screen component
             const componentFactory = this.screenService.resolveScreen(screenToCreate, this.theme);

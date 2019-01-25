@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PromptWithOptionsComponent } from '..';
+import { PromptWithOptionsComponent } from '../prompt-with-options/prompt-with-options.component';
 
 
 @Component({
