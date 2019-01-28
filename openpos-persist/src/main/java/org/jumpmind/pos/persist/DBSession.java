@@ -38,6 +38,7 @@ import org.jumpmind.pos.persist.impl.ModelClassMetaData;
 import org.jumpmind.pos.persist.impl.ModelWrapper;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.ReflectUtils;
+import org.jumpmind.pos.persist.model.SearchCriteria;
 import org.jumpmind.pos.persist.model.TagConfig;
 import org.jumpmind.util.LinkedCaseInsensitiveMap;
 import org.springframework.dao.DuplicateKeyException;
@@ -127,10 +128,15 @@ public class DBSession {
      * null out any fields that might be set by default.
      */
     @SuppressWarnings("unchecked")
-    public <T extends AbstractModel> List<T> findByCriteria(T entity) {
+    public <T extends AbstractModel> List<T> findByObjectDef(T entity) {
         Map<String, Object> fieldValues = toParamMap(entity, false);
         List<T> list = (List<T>) findByFields(entity.getClass(), fieldValues);
         return list;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <T extends AbstractModel> List<T> findByCriteria(SearchCriteria searchCriteria) {
+        return (List<T>) findByFields(searchCriteria.getEntityClass(), searchCriteria.getCriteria());
     }
 
     public Map<String, Object> toParamMap(AbstractModel entity, boolean includeNullValues) {
