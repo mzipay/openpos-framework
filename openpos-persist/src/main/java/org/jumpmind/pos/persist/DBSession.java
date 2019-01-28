@@ -38,7 +38,10 @@ import org.jumpmind.pos.persist.impl.ModelClassMetaData;
 import org.jumpmind.pos.persist.impl.ModelWrapper;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.ReflectUtils;
+import org.jumpmind.pos.persist.model.ITaggedModel;
+import org.jumpmind.pos.persist.model.SearchCriteria;
 import org.jumpmind.pos.persist.model.TagConfig;
+import org.jumpmind.pos.persist.model.TagModel;
 import org.jumpmind.util.LinkedCaseInsensitiveMap;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -53,6 +56,7 @@ public class DBSession {
     private Map<String, String> sessionContext;
     private Map<String, QueryTemplate> queryTemplates;
     private Map<String, DmlTemplate> dmlTemplates;
+    private TagConfig tagConfig;
 
     public DBSession(String catalogName, String schemaName, DatabaseSchema databaseSchema, IDatabasePlatform databasePlatform,
             Map<String, String> sessionContext, Map<String, QueryTemplate> queryTemplates, Map<String, DmlTemplate> dmlTemplates,
@@ -64,6 +68,7 @@ public class DBSession {
         this.sessionContext = sessionContext;
         this.jdbcTemplate = new JdbcTemplate(databasePlatform.getDataSource());
         this.queryTemplates = queryTemplates;
+        this.tagConfig = tagConfig;
     }
 
     public <T extends AbstractModel> List<T> findAll(Class<T> clazz) {
@@ -127,10 +132,15 @@ public class DBSession {
      * null out any fields that might be set by default.
      */
     @SuppressWarnings("unchecked")
-    public <T extends AbstractModel> List<T> findByCriteria(T entity) {
+    public <T extends AbstractModel> List<T> findByObjectDef(T entity) {
         Map<String, Object> fieldValues = toParamMap(entity, false);
         List<T> list = (List<T>) findByFields(entity.getClass(), fieldValues);
         return list;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends AbstractModel> List<T> findByCriteria(SearchCriteria searchCriteria) {
+        return (List<T>) findByFields(searchCriteria.getEntityClass(), searchCriteria.getCriteria());
     }
 
     public Map<String, Object> toParamMap(AbstractModel entity, boolean includeNullValues) {
@@ -216,7 +226,7 @@ public class DBSession {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends AbstractModel> List<T> query(Query<T> query, Map<String, Object> params) {
+    public <T> List<T> query(Query<T> query, Map<String, Object> params) {
         populdateDefaultSelect(query);
         try {
             SqlStatement sqlStatement = query.generateSQL(params);
@@ -271,8 +281,8 @@ public class DBSession {
                 Column[] pks = table.getPrimaryKeyColumns();
                 joins.append(" on ");
                 for (Column pk : pks) {
-                    joins.append(previousTableAlias).append(".").append(pk.getName().toLowerCase()).append("=").append(tableAlias)
-                            .append(".").append(pk.getName().toLowerCase()).append(AND);
+                    joins.append(previousTableAlias).append(".").append(pk.getName().toLowerCase()).append("=").append(tableAlias).append(".")
+                            .append(pk.getName().toLowerCase()).append(AND);
                 }
                 joins.replace(joins.length() - AND.length(), joins.length(), "");
             }
@@ -280,7 +290,7 @@ public class DBSession {
 
             Map<String, String> columnToFieldMapping = databaseSchema.getColumnsToEntityFields(processing);
             for (Column column : table.getColumns()) {
-                if (!columnsProcessed.contains(column.getName())) {                   
+                if (!columnsProcessed.contains(column.getName())) {
                     columns.append(tableAlias).append(".").append(column.getName().toLowerCase()).append(COMMA);
 
                     String fieldName = columnToFieldMapping.get(column.getName());
@@ -308,22 +318,17 @@ public class DBSession {
 
     }
 
-
-
     public void save(AbstractModel argModel) {
         List<Table> tables = getValidatedTables(argModel);
+
         ModelWrapper model = 
                 new ModelWrapper(argModel, databaseSchema.getModelMetaData(argModel.getClass()));
         
-        if (StringUtils.isEmpty(model.getCreateBy())) {
-            model.setCreateBy(sessionContext.get("CREATE_BY"));
-        }
-        if (StringUtils.isEmpty(model.getLastUpdateBy())) {
-            model.setLastUpdateBy(sessionContext.get("LAST_UPDATE_BY"));
-        }
+        setMaintenanceValues(model);
+        setTagValues(model);
         
         model.load();
-        
+
         for (Table table : tables) {
             if (model.isNew()) {
                 try {
@@ -355,7 +360,7 @@ public class DBSession {
     protected int excecuteDml(DmlType type, ModelWrapper model, Table table) {
         boolean[] nullKeyValues = model.getNullKeys();
         List<Column> primaryKeyColumns = model.getPrimaryKeyColumns();
-        
+
         DmlStatement statement = databasePlatform.createDmlStatement(type, table.getCatalog(), table.getSchema(), table.getName(),
                 primaryKeyColumns.toArray(new Column[primaryKeyColumns.size()]), model.getColumns(table), nullKeyValues, null);
         String sql = statement.getSql();
@@ -381,16 +386,18 @@ public class DBSession {
         return tables;
     }
 
-    protected <T extends AbstractModel> List<T> queryInternal(Class<T> resultClass, SqlStatement statement)
-            throws Exception {
+    @SuppressWarnings("unchecked")
+    protected <T> List<T> queryInternal(Class<T> resultClass, SqlStatement statement) throws Exception {
         List<T> objects = new ArrayList<T>();
         List<Row> rows = jdbcTemplate.query(statement.getSql(), new DefaultMapper(), statement.getValues().toArray());
-        
+
         for (int j = 0; j < rows.size(); j++) {
             Row row = rows.get(j);
             T object = null;
-            
-            if (isModel(resultClass)) {
+
+            if (resultClass.equals(String.class)) {
+                object = (T) row.stringValue();
+            } else if (isModel(resultClass)) {
                 object = mapModel(resultClass, row);
             } else {
                 object = mapNonModel(resultClass, row);
@@ -402,18 +409,17 @@ public class DBSession {
     }
 
     protected boolean isModel(Class<?> resultClass) {
-        return AbstractModel.class.isAssignableFrom(resultClass)
-                && resultClass.getDeclaredAnnotation(TableDef.class) != null;
+        return AbstractModel.class.isAssignableFrom(resultClass) && resultClass.getDeclaredAnnotation(TableDef.class) != null;
     }
 
     @SuppressWarnings("unchecked")
     protected <T> T mapModel(Class<T> resultClass, Row row) throws Exception {
         List<ModelClassMetaData> modelMetaData = databaseSchema.getModelMetaData(resultClass);
-        
+
         T object = resultClass.newInstance();
         ModelWrapper model = new ModelWrapper((AbstractModel) object, modelMetaData);
         model.load();
-        
+
         PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(object);
 
         LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<String>();
@@ -427,27 +433,27 @@ public class DBSession {
                 Object value = row.get(columnName);
                 if (isDefferedLoadField(model.getField(propertyName))) {
                     defferedLoadValues.put(propertyName, value);
-                } else {                    
+                } else {
                     model.setValue(propertyName, value);
                     matchedColumns.put(columnName, null);
                 }
             }
         }
-        
+
         for (String propertyName : defferedLoadValues.keySet()) {
             Object value = defferedLoadValues.get(propertyName);
             model.setValue(propertyName, value);
             String columnName = DatabaseSchema.camelToSnakeCase(propertyName);
             matchedColumns.put(columnName, null);
         }
-        
+
         addUnmatchedColumns(row, matchedColumns, (AbstractModel) object);
         decorateRetrievedModel(model);
-        
+
         return (T) model.getModel();
     }
 
-    protected  boolean isDefferedLoadField(Field field) {
+    protected boolean isDefferedLoadField(Field field) {
         return field.getType().isAssignableFrom(Money.class);
     }
 
@@ -495,4 +501,25 @@ public class DBSession {
             log.debug("Failed to close connection", ex);
         }
     }
+    
+    protected void setTagValues(ModelWrapper model) {
+        if (model.getModel() instanceof ITaggedModel) {
+            ITaggedModel taggedModel = (ITaggedModel) model.getModel();
+            for (TagModel tag : tagConfig.getTags()) {
+                String name = tag.getName();
+                if (StringUtils.isEmpty(taggedModel.getTagValue(name))) {
+                    taggedModel.setTagValue(name, "*");
+                }
+            }
+        }
+    }
+
+    protected void setMaintenanceValues(ModelWrapper model) {
+        if (StringUtils.isEmpty(model.getCreateBy())) {
+            model.setCreateBy(sessionContext.get("CREATE_BY"));
+        }
+        if (StringUtils.isEmpty(model.getLastUpdateBy())) {
+            model.setLastUpdateBy(sessionContext.get("LAST_UPDATE_BY"));
+        }
+    }    
 }
