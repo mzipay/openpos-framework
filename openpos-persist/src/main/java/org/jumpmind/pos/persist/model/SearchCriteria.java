@@ -8,6 +8,7 @@ import org.jumpmind.pos.persist.AbstractModel;
 public class SearchCriteria {
     
     Map<String, Object> criteria;
+    
     Class<? extends AbstractModel> entityClass;
     
     public SearchCriteria() {
