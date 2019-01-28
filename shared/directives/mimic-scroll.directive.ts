@@ -1,4 +1,4 @@
-import { Directive, HostListener, Renderer2, ElementRef } from '@angular/core';
+import { Directive, HostListener, Renderer2, ElementRef, OnDestroy } from '@angular/core';
 import 'hammerjs';
 import 'hammer-timejs';
 import { Subscription } from 'rxjs';
@@ -9,17 +9,23 @@ import { Configuration } from '../../configuration/configuration';
     // tslint:disable-next-line:directive-selector
     selector: 'mat-card-content'
 })
-export class MimicScrollDirective {
+export class MimicScrollDirective implements OnDestroy {
 
     private screenSubscription: Subscription;
     private screen: any;
+    private unlistenMethod = () => { };
 
     constructor(private elRef: ElementRef, public session: SessionService, public renderer: Renderer2) {
         if (Configuration.mimicScroll) {
-            this.renderer.listen(elRef.nativeElement, 'panmove', (event) => {
+            this.unlistenMethod = this.renderer.listen(elRef.nativeElement, 'panmove', (event) => {
                 this.elRef.nativeElement.scrollTop += event.deltaY / 10;
             });
         }
 
     }
+
+    ngOnDestroy(): void {
+        this.unlistenMethod();
+    }
+
 }

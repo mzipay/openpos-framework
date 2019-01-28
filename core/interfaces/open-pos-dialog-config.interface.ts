@@ -6,5 +6,6 @@ export interface OpenPOSDialogConfig extends MatDialogConfig {
      * This is needed in order to allow for interception of the action and to support
      * modification/addition of a payload back to the server. */
     executeActionBeforeClose?: boolean;
+    closeable?: boolean;
 
 }

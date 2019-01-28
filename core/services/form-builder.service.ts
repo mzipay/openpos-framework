@@ -29,11 +29,21 @@ export class FormBuilder {
 
     buildFormPayload( formGroup: FormGroup, form: IForm ): IForm {
        form.formElements.forEach(element => {
-            if (element.hasOwnProperty('value')) {
-              element.value = formGroup.value[element.id];
-            }
+            // FormGroup.value object will only contain the form controls that are ENABLED
+            // See docs for FormGroup.
+
             if (element.hasOwnProperty('checked')) {
-              element.checked = (formGroup.value[element.id] === true || formGroup.value[element.id] === 'checked');
+              // Disabled checkboxes don't have a value in formGroup, so check for that
+              // and use the control value instead if necessary.  Should probably work
+              // this way for all controls or we should only be sending back controls that are
+              // enabled.  TBD
+              if (formGroup.value[element.id]) {
+                element.checked = (formGroup.value[element.id] === true || formGroup.value[element.id] === 'checked');
+              } else if (formGroup.controls[element.id]) {
+                element.checked = formGroup.controls[element.id].value === true || formGroup.controls[element.id].value === 'checked';
+              }
+            } else if ( element.elementType === 'Input') {
+              element.value = formGroup.value[element.id];
             }
           });
 

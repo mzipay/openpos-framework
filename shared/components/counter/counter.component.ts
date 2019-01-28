@@ -35,7 +35,7 @@ import { FormGroup } from '@angular/forms';
 
     decrementQty() {
         if (!this.minusDisabled) {
-            let val = parseInt(this.formGroup.value[this.controlName], 10);
+            let val = this._parseFormValue();
             val--;
             this.value = val.toString();
             this.formGroup.controls[this.controlName].setValue(this.value);
@@ -47,7 +47,7 @@ import { FormGroup } from '@angular/forms';
 
     incrementQty() {
         if (!this.plusDisabled) {
-            let val = parseInt(this.formGroup.value[this.controlName], 10);
+            let val = this._parseFormValue();
             val++;
             this.value = val.toString();
             this.formGroup.controls[this.controlName].setValue(this.value);
@@ -65,16 +65,22 @@ import { FormGroup } from '@angular/forms';
     }
 
     checkMinusDisable(): boolean {
-        if (this.minVal != null && parseInt(this.formGroup.value[this.controlName], 10) <= this.minVal) {
+        const formValue = this._parseFormValue();
+        if (isNaN(formValue) || (this.minVal != null && formValue <= this.minVal)) {
             return true;
         }
         return false;
     }
 
     checkPlusDisable(): boolean {
-        if (this.maxVal != null && parseInt(this.formGroup.value[this.controlName], 10) >= this.maxVal) {
+        const formValue = this._parseFormValue();
+        if (isNaN(formValue) || (this.maxVal != null && formValue >= this.maxVal)) {
             return true;
         }
         return false;
+    }
+
+    private _parseFormValue(): number {
+        return parseInt(this.formGroup.value[this.controlName], 10);
     }
 }

@@ -19,6 +19,7 @@ import {
     AbstractTemplate,
     IScreen
 } from '../../core';
+import { Subscription } from 'rxjs';
 
 // tslint:disable-next-line:directive-selector
 @Directive({selector: '[openposScreenOutlet]'})
@@ -38,6 +39,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     private installedScreen: IScreen;
     private installedTemplate: AbstractTemplate<any>;
+    private subscriptions = new Subscription();
 
     constructor(
         private log: Logger,
@@ -52,7 +54,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.updateTemplateAndScreen();
-        this.session.getMessages('Screen').subscribe( (message) => this.handle(message) );
+        this.subscriptions.add(this.session.getMessages('Screen').subscribe( (message) => this.handle(message) ));
     }
 
     ngOnDestroy(): void {
@@ -61,6 +63,10 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         }
         if (this._componentRef) {
             this._componentRef.destroy();
+        }
+
+        if (!!this.subscriptions) {
+            this.subscriptions.unsubscribe();
         }
     }
 
@@ -91,7 +97,12 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             }
 
             this._viewContainerRef.clear();
+            if ( !!this._componentRef ) {
+                this._componentRef.destroy();
+            }
             this._componentRef = null;
+            this.installedScreen = null;
+            this.installedTemplate = null;
 
             // Create our screen component
             const componentFactory = this.screenService.resolveScreen(screenToCreate, this.theme);

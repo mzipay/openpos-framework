@@ -102,10 +102,6 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
         this.session.onAction(this.screen.actionButton.action, this.selectedItems);
     }
 
-    onMenuItemClick(itemInfo: MenuClickAction): void {
-        this.session.onAction(itemInfo.menuItem, itemInfo.item);
-    }
-
     isItemSelected(item: IItem): boolean {
         switch (this.listConfig.selectionMode) {
             case SelectionMode.Multiple:

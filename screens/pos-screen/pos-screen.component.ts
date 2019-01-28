@@ -1,6 +1,7 @@
 import { Logger } from './../../core/services/logger.service';
 import { AppInjector } from '../../core/app-injector';
-import { SessionService, IScreen, IAbstractScreen } from '../../core';
+import { SessionService, IScreen, IAbstractScreen, IMenuItem } from '../../core';
+import { deepAssign } from '../../utilites';
 
 export abstract class PosScreen<T extends IAbstractScreen> implements IScreen {
 
@@ -14,8 +15,14 @@ export abstract class PosScreen<T extends IAbstractScreen> implements IScreen {
     }
 
     show(screen: any) {
-        this.screen = screen;
+        this.screen = deepAssign(this.screen, screen);
         this.buildScreen();
+    }
+
+    onMenuItemClick( menuItem: IMenuItem, payload: any) {
+        if (menuItem.enabled) {
+            this.session.onAction( menuItem, payload );
+        }
     }
 
     abstract buildScreen();

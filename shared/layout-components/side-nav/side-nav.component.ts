@@ -9,8 +9,9 @@ import { Observable } from 'rxjs';
   })
   export class SideNavComponent {
 
-    public drawerOpen: Observable<boolean>;
-    public drawerMode: Observable<string>;
+    drawerOpen$: Observable<boolean>;
+    drawerMode$: Observable<string>;
+    isMobile$: Observable<boolean>;
 
     constructor( private mediaService: OpenposMediaService ) {
         const openMap = new Map([
@@ -28,8 +29,15 @@ import { Observable } from 'rxjs';
             ['lg', 'side'],
             ['xl', 'side']
           ]);
-
-        this.drawerOpen = this.mediaService.mediaObservableFromMap(openMap);
-        this.drawerMode = this.mediaService.mediaObservableFromMap(modeMap);
+          const isMobile = new Map([
+            ['xs', true],
+            ['sm', false],
+            ['md', false],
+            ['lg', false],
+            ['xl', false]
+        ]);
+        this.isMobile$ = mediaService.mediaObservableFromMap(isMobile);
+        this.drawerOpen$ = mediaService.mediaObservableFromMap(openMap);
+        this.drawerMode$ = mediaService.mediaObservableFromMap(modeMap);
     }
 }

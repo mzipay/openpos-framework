@@ -3,7 +3,8 @@ import { IconDefinition, IconService } from '../../../core';
 
 @Component({
     selector: 'app-icon',
-    templateUrl: './icon.component.html'
+    templateUrl: './icon.component.html',
+    styleUrls: ['./icon.component.scss']
 })
 
 export class IconComponent {
@@ -20,7 +21,7 @@ export class IconComponent {
         }
     }
 
-    @Input() iconClass: string;
+    @Input() iconClass = 'material-icons mat-24';
 
     private _iconName: string;
 

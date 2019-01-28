@@ -1,5 +1,8 @@
-@import './header-bar/header-bar-theme';
+@import './bacon-strip/bacon-strip-theme';
+@import './scan-or-search/scan-or-search-theme';
+@import './status-strip/status-strip-theme';
 
 @mixin screen-part-themes($theme){
-    @include header-bar-theme($theme);
+    @include bacon-strip-theme($theme);
+    @include scan-or-search-theme($theme);
 }

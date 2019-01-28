@@ -52,5 +52,15 @@
                 </ng-template>
             </app-selectable-item-list> 
         </mat-card-content>
+
+        <div *ngIf="screen.actionButton" fxFlex="1 1 auto"></div>
+        <mat-card-actions *ngIf="screen.actionButton" fxLayoutAlign="end">
+			<button mat-raised-button (click)="onActionButtonClick()" color="primary">
+                <span *ngIf="screen.actionButton.name" class="text-md">{{screen.actionButton.name}}</span>
+                <span *ngIf="!screen.actionButton.name" class="text-md">Next</span>
+                <mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
+			</button>
+        </mat-card-actions>
+
     </mat-card>
 </div>

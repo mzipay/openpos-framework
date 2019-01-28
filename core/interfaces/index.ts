@@ -23,3 +23,4 @@ export * from './date-part-chooser-field.interface';
 export * from './message-dialog-properties.interface';
 export * from './status-bar-control.interface';
 export * from './barcode-scan-interceptor.interface';
+export * from './field-input-type.enum';

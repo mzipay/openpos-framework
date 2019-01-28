@@ -46,6 +46,10 @@ import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
 import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
+import { SaleComponent } from './sale/sale.component';
+import { ReturnComponent } from './return/return.component';
+import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
+import { SelectionListDialogComponent } from './selection-list/selection-list-dialog.component';
 
 export const ScreenConstants = {
     screens : [
@@ -64,6 +68,7 @@ export const ScreenConstants = {
         { name: 'PromptWithOptions', component: PromptWithOptionsComponent },
         { name: 'PromptWithInfo', component: PromptWithInfoComponent },
         { name: 'Transaction', component: TransactionComponent },
+        { name: 'Return', component: ReturnComponent },
         { name: 'SellItemDetail', component: SellItemDetailComponent },
         { name: 'SignatureCapture', component: SignatureCaptureComponent },
         { name: 'Table', component: StaticTableComponent },
@@ -85,6 +90,8 @@ export const ScreenConstants = {
         { name: 'ItemSearchResults', component: ItemSearchResultsComponent },
         { name: 'ItemOptions', component: ItemOptionsComponent },
         { name: 'DetailText', component: DetailTextScreenComponent },
+
+        { name: 'Sale', component: SaleComponent},
 
         // Default Dialog
         { name: 'Dialog', component: DialogComponent },
@@ -110,7 +117,7 @@ export const ScreenConstants = {
         { name: 'ItemList', component: ItemListComponent },
         { name: 'MultiselectItemList', component: MultiselectItemListComponent },
         { name: 'PaymentStatus', component: PaymentStatusComponent },
-        { name: 'PromptWithOptions', component: PromptWithOptionsComponent },
+        { name: 'PromptWithOptions', component: PromptWithOptionsDialogComponent },
         { name: 'PromptWithInfo', component: PromptWithInfoComponent },
         { name: 'Transaction', component: TransactionComponent },
         { name: 'SellItemDetail', component: SellItemDetailComponent },
@@ -129,7 +136,7 @@ export const ScreenConstants = {
         { name: 'FullPageImage', component: FullPageImageComponent },
         { name: 'CallForAuthorization', component: CallForAuthorizationComponent },
         { name: 'Version', component: VersionComponent },
-        { name: 'SelectionList', component: SelectionListComponent },
+        { name: 'SelectionListDialog', component: SelectionListDialogComponent },
         { name: 'ItemSearchResults', component: ItemSearchResultsComponent },
         { name: 'ItemOptions', component: ItemOptionsComponent },
         { name: 'Blank', component: BlankComponent },

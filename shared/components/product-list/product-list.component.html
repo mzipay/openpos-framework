@@ -2,7 +2,7 @@
     <!-- Angular outputs  "NullInjectorError: No provider for MatSelectionList!", if I don't wrap the mat-list-option here (instead of in parent component) -->
     <mat-selection-list [ngModel]="selectedItems" (ngModelChange)="onSelectedOptionsChange($event)">
         <mat-list-option *ngFor="let item of items" [ngClass]="(itemClass ? itemClass : 'sale-line-item' )" ngClass.xs="sale-line-item-xs"
-            (click)="onItemSelected(item, $event)" [value]="item.index" [selected]="item.selected">
+            (click)="onItemSelected(item, $event)" [value]="item.index" [selected]="item.selected" [disabled]="!item.enabled">
             <ng-container *ngTemplateOutlet="productListItemDetail; context:{item: item, selectionMode: selectionMode}"></ng-container>
         </mat-list-option>
     </mat-selection-list>

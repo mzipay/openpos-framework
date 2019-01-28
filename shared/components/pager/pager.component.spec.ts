@@ -1,22 +1,24 @@
 import { TestBed, ComponentFixture, tick, fakeAsync } from '@angular/core/testing';
 import { PagerComponent } from './pager.component';
-import { Component, Input, QueryList } from '@angular/core';
+import { Component, Input, QueryList, ViewChild } from '@angular/core';
 
 describe('PagerComponent', () => {
 
     let pagerComponent: PagerComponent;
     let fixture: ComponentFixture<PagerComponent>;
-
+    
     beforeEach( () => {
         TestBed.configureTestingModule({
             declarations: [
                 PagerComponent,
                 MockIconComponent,
+                TestPagerWrapperComponent,
             ]
         }).compileComponents();
 
         fixture = TestBed.createComponent(PagerComponent);
         pagerComponent = fixture.componentInstance;
+        
     });
 
     describe('constructor', () => {
@@ -85,21 +87,7 @@ describe('PagerComponent', () => {
             expect(pagerComponent.currentPage).toBe(1);
         });
     });
-
     describe('ngAfterContentInit', () => {
-
-        beforeEach( () => {
-            pagerComponent.sections = new QueryList();
-        });
-
-        it('should reset the page state', () => {
-            pagerComponent.currentIndex = 10;
-            pagerComponent.currentPage = 2;
-            pagerComponent.ngAfterContentInit();
-            expect(pagerComponent.currentIndex).toBe(0);
-            expect(pagerComponent.currentPage).toBe(1);
-        });
-
         it('should reset state after sections change', fakeAsync(() => {
             fixture.detectChanges();
             pagerComponent.ngAfterContentInit();
@@ -111,6 +99,50 @@ describe('PagerComponent', () => {
             expect(pagerComponent.currentPage).toBe(1);
         }));
     });
+    
+
+});
+
+describe("PagerComponent - Wrapped", () => {
+    describe('ngAfterContentInit', () => {
+        let wrapperFixture: ComponentFixture<TestPagerWrapperComponent>;
+        let wrappedPagerComponent: PagerComponent;
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                declarations: [
+                    PagerComponent,
+                    MockIconComponent,
+                    TestPagerWrapperComponent,
+                ]
+            }).compileComponents();
+            wrapperFixture = TestBed.createComponent(TestPagerWrapperComponent);
+             wrappedPagerComponent = wrapperFixture.componentInstance.myPager;
+        });
+        
+        it('should setup the page state', () => {
+            wrapperFixture.detectChanges();
+            wrappedPagerComponent.ngAfterContentInit()
+            expect(wrappedPagerComponent.currentIndex).toBe(5);
+            expect(wrappedPagerComponent.currentPage).toBe(2);
+            expect(wrappedPagerComponent.totalPages).toBe(4);
+            wrappedPagerComponent.currentPage = 4;
+            wrappedPagerComponent.ngAfterContentInit();
+            expect(wrappedPagerComponent.currentIndex).toBe(15);
+            expect(wrappedPagerComponent.currentPage).toBe(4);
+            expect(wrappedPagerComponent.totalPages).toBe(4);
+            
+            
+        });
+    
+        it('should ignore out of bounds pages', () => {
+            wrapperFixture.detectChanges();
+            wrappedPagerComponent.currentPage = 5;
+            wrappedPagerComponent.ngAfterContentInit();
+            expect(wrappedPagerComponent.currentIndex).toBe(0);
+            expect(wrappedPagerComponent.currentPage).toBe(1);
+            expect(wrappedPagerComponent.totalPages).toBe(4);
+        });
+    });
 });
 
 @Component({
@@ -119,4 +151,19 @@ describe('PagerComponent', () => {
 })
 class MockIconComponent {
     @Input() iconName: string;
+}
+
+@Component({
+    selector: 'test-page',
+    template: `
+    <app-pager [pageSize]="5" [currentPage]="index">
+        <ng-template *ngFor="let number of numbers" #pagerItem>
+            <h1>{{number}}</h1>
+        </ng-template>
+    </app-pager>`
+})
+class TestPagerWrapperComponent {
+    @ViewChild(PagerComponent) myPager;
+    numbers = Array(17).fill(0).map((x,i) => i);
+    public index = 2;
 }

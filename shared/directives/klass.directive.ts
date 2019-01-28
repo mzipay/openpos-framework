@@ -1,14 +1,16 @@
-import { Directive, Renderer2, ElementRef, Input, OnInit } from '@angular/core';
+import { Directive, Renderer2, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
 import { OpenposMediaService } from '../../core/services';
+import { Subscription } from 'rxjs';
 
 const selectors = `
 [klass], [klass.xs], [klass.sm], [klass.md], [klass.lg], [klass.xl]
 `;
 
   @Directive({selector: selectors})
-  export class KlassDirective implements OnInit  {
+  export class KlassDirective implements OnInit, OnDestroy  {
     private prevClass: string;
     private inputMap: Map<string, string> = new Map;
+    private subscriptions = new Subscription();
 
     @Input('klass')
     set klass(val: string) {
@@ -38,7 +40,7 @@ const selectors = `
     }
 
     ngOnInit(): void {
-        this.mediaService.mediaObservableFromMap(this.inputMap).subscribe( c => {
+        this.subscriptions.add(this.mediaService.mediaObservableFromMap(this.inputMap).subscribe( c => {
 
             // Remove old class first incase there is overlap
             if ( this.prevClass ) {
@@ -52,6 +54,12 @@ const selectors = `
                 });
             }
             this.prevClass = c;
-        });
+        }));
+      }
+
+      ngOnDestroy(): void {
+        if (!!this.subscriptions) {
+            this.subscriptions.unsubscribe();
+        }
       }
   }
