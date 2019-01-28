@@ -506,7 +506,7 @@ public class DBSession {
         if (model.getModel() instanceof ITaggedModel) {
             ITaggedModel taggedModel = (ITaggedModel) model.getModel();
             for (TagModel tag : tagConfig.getTags()) {
-                String name = tag.getName();
+                String name = tag.getName().toUpperCase();
                 if (StringUtils.isEmpty(taggedModel.getTagValue(name))) {
                     taggedModel.setTagValue(name, "*");
                 }

@@ -21,6 +21,7 @@ import org.jumpmind.pos.persist.impl.DmlTemplate;
 import org.jumpmind.pos.persist.impl.DmlTemplates;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.QueryTemplates;
+import org.jumpmind.pos.persist.model.ITaggedModel;
 import org.jumpmind.pos.persist.model.TagConfig;
 import org.jumpmind.pos.persist.model.TagModel;
 import org.yaml.snakeyaml.Yaml;
@@ -155,13 +156,15 @@ public class DBSessionFactory {
 
             for (Class<?> clazz : modelClazzes) {
                 Tagged[] annotations = clazz.getAnnotationsByType(Tagged.class);
-                if (annotations.length > 0) {
-                    Tagged tagged = annotations[0];
-                    enchanceTaggedTable(clazz, tags, tagged.includeTagsInPrimaryKey());
+                if (annotations.length > 0 || ITaggedModel.class.isAssignableFrom(clazz)) {
+                    boolean includeTagsInPrimaryKey = true;
+                    if (annotations.length > 0) {
+                        includeTagsInPrimaryKey = annotations[0].includeTagsInPrimaryKey();
+                    }
+                    enchanceTaggedTable(clazz, tags, includeTagsInPrimaryKey);
                 }
             }
         }
-
     }
 
     protected void enchanceTaggedTable(Class<?> entityClass, List<TagModel> tags, boolean includeInPk) {

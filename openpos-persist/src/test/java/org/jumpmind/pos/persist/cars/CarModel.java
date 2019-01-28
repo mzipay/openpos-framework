@@ -4,10 +4,12 @@ import org.jumpmind.pos.persist.ColumnDef;
 import org.joda.money.Money;
 import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.TableDef;
+import org.jumpmind.pos.persist.model.AbstractTaggedModel;
+import org.jumpmind.pos.persist.model.ITaggedModel;
 
 @TableDef(name="car",
         description = "A basic concept of an automobile fit to drive down the road.")
-public class CarModel extends AbstractModel {
+public class CarModel extends AbstractTaggedModel implements ITaggedModel {
 
     private static final long serialVersionUID = 1L;
     

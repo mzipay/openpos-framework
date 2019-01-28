@@ -1,6 +1,7 @@
 package org.jumpmind.pos.persist.impl;
 
 import java.beans.PropertyDescriptor;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.ColumnDef;
 import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.model.ITaggedModel;
+import org.jumpmind.pos.persist.model.TagModel;
 
 public class ModelWrapper {
     private static Logger log = Logger.getLogger(ModelWrapper.class);
@@ -147,7 +149,7 @@ public class ModelWrapper {
             if (ITaggedModel.class.isAssignableFrom(resultClass)) {
                 Column[] columns = table.getColumns();
                 for (Column column : columns) {
-                    if (column.getName().toLowerCase().startsWith("tag_")) {
+                    if (column.getName().toUpperCase().startsWith(TagModel.TAG_PREFIX)) {
                         fieldsToColumns.put(column.getName(), column);
                     }
                 }
@@ -192,8 +194,12 @@ public class ModelWrapper {
             Set<String> fieldNames = fieldsToColumns.keySet();
             for (String fieldName : fieldNames) {
 
-                if (fieldName.toLowerCase().startsWith("tag_")) {
-                    columnNamesToObjectValues.put(fieldName, ((ITaggedModel) model).getTagValue(fieldName.substring("tag_".length())));
+                if (fieldName.toUpperCase().startsWith(TagModel.TAG_PREFIX)) {
+                    String tagValue = ((ITaggedModel) model).getTagValue(fieldName.substring(TagModel.TAG_PREFIX.length()));
+//                    if (StringUtils.isEmpty(tagValue)) {
+//                        throw new PersistException("Tag value for tag \"" + fieldName + "\" cannot be empty. Available tags were: "+ ((ITaggedModel) model).getTags() + " on model " + model); 
+//                    }
+                    columnNamesToObjectValues.put(fieldName, tagValue);
                 } else {
                     Column column = fieldsToColumns.get(fieldName);
                     Object value = PropertyUtils.getProperty(model, fieldName);
