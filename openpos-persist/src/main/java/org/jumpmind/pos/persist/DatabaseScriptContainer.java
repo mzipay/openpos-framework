@@ -130,7 +130,11 @@ public class DatabaseScriptContainer {
                 sqlscript.setFailOnSequenceCreate(true);
                 sqlscript.setFailOnDrop(false);
                 sqlscript.setFailOnError(true);
-                sqlscript.execute();
+                try {                    
+                    sqlscript.execute();
+                } catch (Exception ex) {
+                    throw new PersistException("Failed to execute script: " + script, ex);
+                }
                 return null;
             }
         });
