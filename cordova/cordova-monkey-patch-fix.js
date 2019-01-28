@@ -1,3 +1,5 @@
+// https://weblogs.thinktecture.com/thomas/2017/02/cordova-vs-zonejs-or-why-is-angulars-document-event-listener-not-in-a-zone.html
+
 (function () {
     'use strict';
 
