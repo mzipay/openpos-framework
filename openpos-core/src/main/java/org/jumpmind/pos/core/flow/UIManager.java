@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.ui.PromptConfig;
+import org.jumpmind.pos.core.screen.DialogBuilder;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
@@ -94,6 +95,11 @@ public class UIManager implements IUI {
             stateManager.showScreen(screen);
         }
 
+    }
+    
+    @Override
+    public void prompt(DialogBuilder dialogBuilder) {
+        stateManager.showScreen(dialogBuilder.build());
     }
 
 }
