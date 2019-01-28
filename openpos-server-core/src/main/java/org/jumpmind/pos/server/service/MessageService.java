@@ -53,7 +53,7 @@ public class MessageService implements IMessageService {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "ping")
+    @RequestMapping(method = RequestMethod.GET, value = "ping", produces="application/json")
     @ResponseBody
     public String ping() {
         logger.info("Received a ping request");
