@@ -107,7 +107,7 @@ public class ApplicationState {
     public Object getScopeValue(ScopeType scopeType, String name) {
         ScopeValue scopeValue = null;
         switch (scopeType) {
-            case Node:
+            case Device:
             case Session:
             case Conversation:
                 scopeValue = getScope().getScopeValue(scopeType, name);

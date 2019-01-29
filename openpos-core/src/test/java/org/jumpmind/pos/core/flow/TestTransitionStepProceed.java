@@ -5,7 +5,7 @@ import org.junit.Assert;
 
 public class TestTransitionStepProceed implements ITransitionStep {
     
-    @In(scope = ScopeType.Node)
+    @In(scope = ScopeType.Device)
     protected IStateManager stateManager;    
 
     @Override

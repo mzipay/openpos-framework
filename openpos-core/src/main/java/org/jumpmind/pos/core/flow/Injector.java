@@ -90,7 +90,7 @@ public class Injector {
                     value = new ScopeValue(configScopeValue);
                 } 
                 break;
-            case Node:
+            case Device:
                 value = scope.getNodeScope().get(name);
                 break;
             case Session:

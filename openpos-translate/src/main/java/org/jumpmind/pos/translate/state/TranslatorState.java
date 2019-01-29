@@ -35,15 +35,15 @@ public class TranslatorState implements IState {
 
     final protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    @In(scope=ScopeType.Node)
+    @In(scope=ScopeType.Device)
     protected IStateManager stateManager;
 
-    @In(scope=ScopeType.Node, required=false)
-    @Out(scope=ScopeType.Node)
+    @In(scope=ScopeType.Device, required=false)
+    @Out(scope=ScopeType.Device)
     protected ITranslationManager translationManager;
 
-    @In(scope=ScopeType.Node, required=false)
-    @Out(scope=ScopeType.Node)
+    @In(scope=ScopeType.Device, required=false)
+    @Out(scope=ScopeType.Device)
     protected ITranslationManagerSubscriber subscriber;
 
     @Autowired

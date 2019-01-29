@@ -50,7 +50,7 @@ public class Outjector {
             }
 
             switch (scopeType) {
-                case Node:
+                case Device:
                     scope.setNodeScope(name, value);
                     break;
                 case Session:

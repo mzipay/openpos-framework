@@ -88,7 +88,7 @@ public class Scope {
 
     public void setScopeValue(ScopeType scopeType, String name, Object value) {
         switch (scopeType) {
-            case Node:
+            case Device:
                 setNodeScope(name, value);
                 break;
             case Session:
@@ -104,7 +104,7 @@ public class Scope {
     
     public ScopeValue getScopeValue(ScopeType scopeType, String name) {
         switch (scopeType) {
-            case Node:
+            case Device:
                 return getNodeScope().get(name);
             case Session:
                 return getSessionScope().get(name);

@@ -17,7 +17,7 @@ public class TestStates {
             
         }
         
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;
 
         @Override
@@ -28,7 +28,7 @@ public class TestStates {
     
     public static class HelpState implements IState {
         
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;
 
         @Override
@@ -39,7 +39,7 @@ public class TestStates {
     
     public static class AboutState implements IState {
         
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;
         
         @Override
@@ -50,7 +50,7 @@ public class TestStates {
     
     public static class SellState implements IState {
         
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;
 
         @Override
@@ -69,7 +69,7 @@ public class TestStates {
         @In(scope=ScopeType.Config)
         private String customerFlowType;
         
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;
         @Out(scope=ScopeType.Flow)
         private String selectedCustomer;
@@ -91,7 +91,7 @@ public class TestStates {
     
     public static class CustomerSearchState implements IState {
         
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;
         
         @Override
@@ -102,7 +102,7 @@ public class TestStates {
     
     public static class CustomerSignupState implements IState {
         
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;
         
         @Override
@@ -112,7 +112,7 @@ public class TestStates {
     }
     
     public static abstract class AbstractRepostActionState implements IState {
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;        
         @ActionHandler
         public void onAnyAction(Action action) {
@@ -122,7 +122,7 @@ public class TestStates {
     
     public static class RepostActionState extends AbstractRepostActionState {
         
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;
         
         @Override
@@ -134,7 +134,7 @@ public class TestStates {
     
     public static class InjectionFailedState implements IState {
         
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private String failedInjection;
         
         @Override
@@ -159,7 +159,7 @@ public class TestStates {
     
     public static class ActionTestingState implements IState {
         
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;
         
         @Out(scope=ScopeType.Conversation)
@@ -191,7 +191,7 @@ public class TestStates {
         private String conversationScopeValue = "conversationScopeValue";
         @Out(scope=ScopeType.Session)
         private String sessionScopeValue = "sessionScopeValue";
-        @Out(scope=ScopeType.Node)
+        @Out(scope=ScopeType.Device)
         private String nodeScopeValue = "nodeScopeValue";
 
         @Override
@@ -202,7 +202,7 @@ public class TestStates {
     }
     
     public static class TransitionInterceptionState implements IState {
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;
         
         @Out(scope=ScopeType.Conversation)
@@ -228,7 +228,7 @@ public class TestStates {
     
     public static abstract class AbstractStackOverflowState implements IState {
         
-        @In(scope=ScopeType.Node)
+        @In(scope=ScopeType.Device)
         private IStateManager stateManager;        
         
         @Override
