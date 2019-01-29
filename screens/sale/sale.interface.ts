@@ -1,5 +1,6 @@
 import { IAbstractScreen, IMenuItem, ISellItem } from '../../core';
 import { ITotal } from '../../core/interfaces/total.interface';
+import { Transaction } from './transaction.interface';
 
 export interface SaleInterface extends IAbstractScreen {
     transactionMenuItems: IMenuItem[];
@@ -8,4 +9,7 @@ export interface SaleInterface extends IAbstractScreen {
     items: ISellItem[];
     selectedItemIndexes: number[];
     totals: ITotal[];
+    prompt: string;
+    hideCustomer: boolean;
+    transaction: Transaction;
 }

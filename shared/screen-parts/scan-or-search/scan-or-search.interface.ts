@@ -9,4 +9,5 @@ export interface ScanOrSearchInterface {
     autoFocusOnScan: boolean;
     inputType: FieldInputType;
     scanType: ScanType;
+    scanIcon: string;
 }

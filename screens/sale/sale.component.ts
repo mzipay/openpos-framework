@@ -23,6 +23,7 @@ export class SaleComponent extends PosScreen<SaleInterface> implements OnInit {
     items: ISellItem[];
     itemTotal: number;
     individualMenuClicked = false;
+    trainingDrawerOpen = false;
     size = -1;
 
     constructor( private mediaService: OpenposMediaService, protected dialog: MatDialog) {
