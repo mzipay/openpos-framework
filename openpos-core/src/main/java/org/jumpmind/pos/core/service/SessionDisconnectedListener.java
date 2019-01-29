@@ -21,7 +21,7 @@ public class SessionDisconnectedListener implements ApplicationListener<SessionD
     public void onApplicationEvent(SessionDisconnectEvent event) {        
         Message<?> msg = event.getMessage();
         String sessionId = (String) msg.getHeaders().get("simpSessionId");
-        logger.info("session disconnected: {}", sessionId);
+        logger.info("session disconnected: {}", sessionId); 
         stateManagerFactory.removeSessionIdVariables(sessionId);
     }
 

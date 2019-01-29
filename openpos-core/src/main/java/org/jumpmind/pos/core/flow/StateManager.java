@@ -68,6 +68,9 @@ public class StateManager implements IStateManager {
 
     @Autowired(required = false)
     private List<? extends ISessionTimeoutListener> sessionTimeoutListeners;
+    
+    @Autowired(required = false)
+    private List<? extends ISessionListener> sessionListeners;
 
     private ApplicationState applicationState = new ApplicationState();
 
@@ -128,9 +131,19 @@ public class StateManager implements IStateManager {
     @Override
     public void setSessionAuthenticated(String sessionId, boolean authenticated) {
         this.sessionAuthenticated.put(sessionId, authenticated);
+        if (this.sessionListeners != null && authenticated) {
+            for (ISessionListener sessionListener : sessionListeners) {
+                sessionListener.connected(sessionId, this);
+            }
+        }
     }
 
-    public void removeSessionAuthentication(String sessionId) {
+    public void removeSessionAuthentication(String sessionId) {        
+        if (this.sessionListeners != null && sessionAuthenticated.containsKey(sessionId)) {
+            for (ISessionListener sessionListener : sessionListeners) {
+                sessionListener.disconnected(sessionId, this);
+            }
+        }
         this.sessionAuthenticated.remove(sessionId);
     }
 
