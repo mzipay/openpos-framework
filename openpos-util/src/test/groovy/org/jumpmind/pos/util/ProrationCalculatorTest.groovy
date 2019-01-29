@@ -2,10 +2,6 @@ package org.jumpmind.pos.util;
 
 import static org.junit.Assert.assertEquals;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 
 public class ProrationCalculatorTest {
@@ -34,8 +30,8 @@ public class ProrationCalculatorTest {
         existingAmounts.add(new BigDecimal(1));
         existingAmounts.add(new BigDecimal(1));                
         List<BigDecimal> proratedAmounts = prorationCalculator.prorate(amountToBeProrated, existingAmounts);
-        assertEquals(moneyCalculator.amount(new BigDecimal(.33)),proratedAmounts.get(0));        		
-        assertEquals(moneyCalculator.amount(new BigDecimal(.33)),proratedAmounts.get(1));        		
-        assertEquals(moneyCalculator.amount(new BigDecimal(.34)),proratedAmounts.get(2));        		
+        assertEquals(moneyCalculator.amount(new BigDecimal(0.33)),proratedAmounts.get(0));        		
+        assertEquals(moneyCalculator.amount(new BigDecimal(0.33)),proratedAmounts.get(1));        		
+        assertEquals(moneyCalculator.amount(new BigDecimal(0.34)),proratedAmounts.get(2));        		
     }
 }
