@@ -19,7 +19,7 @@ export abstract class PosScreen<T extends IAbstractScreen> implements IScreen {
         this.buildScreen();
     }
 
-    onMenuItemClick( menuItem: IMenuItem, payload: any) {
+    onMenuItemClick( menuItem: IMenuItem, payload?: any) {
         if (menuItem.enabled) {
             this.session.onAction( menuItem, payload );
         }

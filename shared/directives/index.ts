@@ -14,3 +14,4 @@ export * from './screen.directive';
 export * from './autocomplete.directive';
 export * from './default-image.directive';
 export * from './klass.directive';
+export * from './hide-form-accessory-bar.directive';

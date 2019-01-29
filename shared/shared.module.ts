@@ -25,7 +25,8 @@ import {
     ScreenDirective,
     AutocompleteDirective,
     DefaultImageDirective,
-    KlassDirective
+    KlassDirective,
+    HideFormAccessoryBarDirective,
 } from './directives';
 import {
     PromptInputComponent,
@@ -138,7 +139,8 @@ const directives = [
     ScreenDirective,
     AutocompleteDirective,
     DefaultImageDirective,
-    KlassDirective
+    KlassDirective,
+    HideFormAccessoryBarDirective,
 ];
 
 const pipes = [
