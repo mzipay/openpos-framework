@@ -11,6 +11,7 @@ import org.jumpmind.pos.persist.DatabaseScriptContainer;
 import org.jumpmind.pos.persist.driver.Driver;
 import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.jumpmind.pos.persist.model.TagConfig;
+import org.jumpmind.pos.persist.model.TagHelper;
 import org.jumpmind.pos.persist.model.TagModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -40,10 +41,13 @@ public class TestPersistCarsConfig {
             
             TagConfig tagConfig = new TagConfig();
             TagModel tagModel = new TagModel();
-            tagModel.setGroup("location");
+            tagModel.setGroup("LOCATION");
             tagModel.setLevel(1);
-            tagModel.setName("dealership_number");
+            tagModel.setName("DEALERSHIP_NUMBER");
             tagConfig.getTags().add(tagModel);
+            
+            TagHelper tagHelper = new TagHelper();
+            tagHelper.setTagConfig(tagConfig);
             
             
             sessionFactory.init(
@@ -51,7 +55,7 @@ public class TestPersistCarsConfig {
                     PersistTestUtil.getSessionContext(), 
                     Arrays.asList(CarModel.class, CarStats.class, ServiceInvoice.class, RaceCarModel.class), 
                     queryTemplates,
-                    DBSessionFactory.getDmlTemplates("persist-test"), tagConfig);
+                    DBSessionFactory.getDmlTemplates("persist-test"), tagHelper);
             
 
             DBSession session = sessionFactory.createDbSession();

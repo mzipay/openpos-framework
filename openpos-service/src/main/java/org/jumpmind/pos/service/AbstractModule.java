@@ -45,6 +45,7 @@ import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.TableDef;
 import org.jumpmind.pos.persist.driver.Driver;
 import org.jumpmind.pos.persist.model.TagConfig;
+import org.jumpmind.pos.persist.model.TagHelper;
 import org.jumpmind.pos.service.model.ModuleModel;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.ISecurityService;
@@ -76,7 +77,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
     protected String installationId;
 
     @Autowired
-    protected TagConfig tagConfig;
+    protected TagHelper tagHelper;
 
     protected IDatabasePlatform databasePlatform;
 
@@ -187,7 +188,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
             sessionContext.put("CREATE_BY", "openpos-" + getName());
             sessionContext.put("LAST_UPDATE_BY", "openpos-" + getName());
 
-            sessionFactory.init(databasePlatform(), sessionContext, tableClasses, tagConfig);
+            sessionFactory.init(databasePlatform(), sessionContext, tableClasses, tagHelper);
 
         }
 

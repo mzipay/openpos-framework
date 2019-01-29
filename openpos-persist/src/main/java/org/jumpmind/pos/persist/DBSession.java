@@ -40,7 +40,7 @@ import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.ReflectUtils;
 import org.jumpmind.pos.persist.model.ITaggedModel;
 import org.jumpmind.pos.persist.model.SearchCriteria;
-import org.jumpmind.pos.persist.model.TagConfig;
+import org.jumpmind.pos.persist.model.TagHelper;
 import org.jumpmind.pos.persist.model.TagModel;
 import org.jumpmind.util.LinkedCaseInsensitiveMap;
 import org.springframework.dao.DuplicateKeyException;
@@ -56,11 +56,11 @@ public class DBSession {
     private Map<String, String> sessionContext;
     private Map<String, QueryTemplate> queryTemplates;
     private Map<String, DmlTemplate> dmlTemplates;
-    private TagConfig tagConfig;
+    private TagHelper tagHelper;
 
     public DBSession(String catalogName, String schemaName, DatabaseSchema databaseSchema, IDatabasePlatform databasePlatform,
             Map<String, String> sessionContext, Map<String, QueryTemplate> queryTemplates, Map<String, DmlTemplate> dmlTemplates,
-            TagConfig tagConfig) {
+            TagHelper tagHelper) {
         super();
         this.dmlTemplates = dmlTemplates;
         this.databaseSchema = databaseSchema;
@@ -68,7 +68,7 @@ public class DBSession {
         this.sessionContext = sessionContext;
         this.jdbcTemplate = new JdbcTemplate(databasePlatform.getDataSource());
         this.queryTemplates = queryTemplates;
-        this.tagConfig = tagConfig;
+        this.tagHelper = tagHelper;
     }
 
     public <T extends AbstractModel> List<T> findAll(Class<T> clazz) {
@@ -447,10 +447,22 @@ public class DBSession {
             matchedColumns.put(columnName, null);
         }
 
+        addTags(row, matchedColumns, (AbstractModel) object);
         addUnmatchedColumns(row, matchedColumns, (AbstractModel) object);
         decorateRetrievedModel(model);
 
         return (T) model.getModel();
+    }
+
+    protected void addTags(Row row, LinkedCaseInsensitiveMap<String> matchedColumns, AbstractModel model) {
+        if (model instanceof ITaggedModel) {
+            for (String columnName : row.keySet()) {
+                if (columnName.startsWith(TagModel.TAG_PREFIX)) {
+                    ((ITaggedModel) model).setTagValue(columnName, row.getString(columnName));
+                    matchedColumns.put(columnName, null);
+                }
+            }
+        }
     }
 
     protected boolean isDefferedLoadField(Field field) {
@@ -505,7 +517,7 @@ public class DBSession {
     protected void setTagValues(ModelWrapper model) {
         if (model.getModel() instanceof ITaggedModel) {
             ITaggedModel taggedModel = (ITaggedModel) model.getModel();
-            for (TagModel tag : tagConfig.getTags()) {
+            for (TagModel tag : tagHelper.getTagConfig().getTags()) {
                 String name = tag.getName().toUpperCase();
                 if (StringUtils.isEmpty(taggedModel.getTagValue(name))) {
                     taggedModel.setTagValue(name, "*");

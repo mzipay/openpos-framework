@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,8 +16,11 @@ public class TagHelper {
 
     protected static final int DISQUALIFIED = Integer.MIN_VALUE;
     
+    @Autowired
+    private TagConfig tagConfig;
+    
     @SuppressWarnings("unchecked")
-    public <T extends ITaggedModel> T getMostSpecific(List<? extends ITaggedModel> taggedElements, Map<String, String> specifiedTags, TagConfig tagConfig) {
+    public <T extends ITaggedModel> T getMostSpecific(List<? extends ITaggedModel> taggedElements, Map<String, String> specifiedTags) {
         
         List<TagValue> tagValues = buildTagValues(specifiedTags, tagConfig);
         
@@ -110,6 +114,14 @@ public class TagHelper {
          
          return tags;
      }
+
+    public TagConfig getTagConfig() {
+        return tagConfig;
+    }
+
+    public void setTagConfig(TagConfig tagConfig) {
+        this.tagConfig = tagConfig;
+    }
      
 
     

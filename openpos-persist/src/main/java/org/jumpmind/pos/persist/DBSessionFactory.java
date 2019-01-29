@@ -22,7 +22,7 @@ import org.jumpmind.pos.persist.impl.DmlTemplates;
 import org.jumpmind.pos.persist.impl.QueryTemplate;
 import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.jumpmind.pos.persist.model.ITaggedModel;
-import org.jumpmind.pos.persist.model.TagConfig;
+import org.jumpmind.pos.persist.model.TagHelper;
 import org.jumpmind.pos.persist.model.TagModel;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -37,14 +37,14 @@ public class DBSessionFactory {
     IDatabasePlatform databasePlatform;
     Map<String, String> sessionContext;
     List<Class<?>> modelClazzes;
-    TagConfig tagConfig;
+    TagHelper tagHelper;
 
-    public void init(IDatabasePlatform databasePlatform, Map<String, String> sessionContext, List<Class<?>> entities, TagConfig tagConfig) {
+    public void init(IDatabasePlatform databasePlatform, Map<String, String> sessionContext, List<Class<?>> entities, TagHelper tagHelper) {
 
         QueryTemplates queryTemplates = getQueryTemplates(sessionContext.get("module.tablePrefix"));
         DmlTemplates dmlTemplates = getDmlTemplates(sessionContext.get("module.tablePrefix"));
 
-        init(databasePlatform, sessionContext, entities, queryTemplates, dmlTemplates, tagConfig);
+        init(databasePlatform, sessionContext, entities, queryTemplates, dmlTemplates, tagHelper);
     }
 
     public void init(
@@ -53,7 +53,7 @@ public class DBSessionFactory {
             List<Class<?>> entities,
             QueryTemplates queryTemplatesObject,
             DmlTemplates dmlTemplates,
-            TagConfig tagConfig) {
+            TagHelper tagHelper) {
 
         this.queryTemplates = buildQueryTemplatesMap(queryTemplatesObject);
         this.dmlTemplates = buildDmlTemplatesMap(dmlTemplates);
@@ -61,7 +61,7 @@ public class DBSessionFactory {
 
         this.databasePlatform = databasePlatform;
         this.modelClazzes = entities;
-        this.tagConfig = tagConfig;
+        this.tagHelper = tagHelper;
 
         this.initSchema();
     }
@@ -92,7 +92,7 @@ public class DBSessionFactory {
     }
 
     public DBSession createDbSession() {
-        return new DBSession(null, null, databaseSchema, databasePlatform, sessionContext, queryTemplates, dmlTemplates, tagConfig);
+        return new DBSession(null, null, databaseSchema, databasePlatform, sessionContext, queryTemplates, dmlTemplates, tagHelper);
     }
 
     public org.jumpmind.db.model.Table getTableForEnhancement(Class<?> entityClazz) {
@@ -151,8 +151,8 @@ public class DBSessionFactory {
     }
 
     protected void enhanceTaggedModels() {
-        if (tagConfig != null) {
-            List<TagModel> tags = tagConfig.getTags();
+        if (tagHelper != null) {
+            List<TagModel> tags = tagHelper.getTagConfig().getTags();
 
             for (Class<?> clazz : modelClazzes) {
                 Tagged[] annotations = clazz.getAnnotationsByType(Tagged.class);
