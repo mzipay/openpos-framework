@@ -20,6 +20,9 @@
 					<ng-template let-item>
 						<div fxLayoutAlign="space-between" fxLayout.xs="column" [ngClass]="item.type" style="margin: -15px; padding: 15px;">
 							<div fxFlex="90" fxAlign="left">
+								<span [ngClass]="item.prop65Item ? 'warn' : ''">
+									{{item.description}}
+								</span>
 								<span class="muted-color">
 									<mat-chip-list>
 										{{item.subtitle}}&nbsp;
