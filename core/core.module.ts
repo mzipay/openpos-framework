@@ -1,7 +1,7 @@
 import { DevMenuComponent } from './components/dynamic-screen/dev-menu.component';
 import { SessionService } from './services/session.service';
 import { PersonalizationStartupTask } from './components/startup/personalization-startup-task';
-import { STARTUP_TASKS, STARTUP_COMPONENT, StartupService, STARTUP_FAILED_COMPONENT } from './services/startup.service';
+import { STARTUP_TASKS, STARTUP_COMPONENT, STARTUP_FAILED_COMPONENT } from './services/startup.service';
 
 // Angular Includes
 import { NgModule, Injector, Optional, SkipSelf } from '@angular/core';
