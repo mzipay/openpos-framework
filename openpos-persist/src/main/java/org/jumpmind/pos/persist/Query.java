@@ -16,6 +16,7 @@ public class Query<T> {
 
     private Class<? extends T> resultClass;
     private QueryTemplate queryTemplate = new QueryTemplate();
+    private boolean useAnd = true;
 
     public Query<T> result(Class<? extends T> resultClass) {
         this.resultClass = resultClass;
@@ -95,7 +96,11 @@ public class Query<T> {
                     buff.append(" WHERE 1=1 ");
                     hasWhereKeyword = true;
                 }
-                buff.append(" AND (");
+                if (useAnd) {
+                    buff.append(" AND (");
+                } else {
+                    buff.append(" OR (");
+                }
                 buff.append(preppedOptionalWhereClause);
                 buff.append(")");
                 keys.addAll(optionalWhereClauseKeys);
@@ -155,6 +160,11 @@ public class Query<T> {
 
     public Query<T> named(String name) {
         this.queryTemplate.setName(name);
+        return this;
+    }
+
+    public Query<T> useAnd(boolean useAnd) {
+        this.useAnd = useAnd;
         return this;
     }
 
