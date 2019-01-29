@@ -40,7 +40,7 @@ public class DBSessionTest {
     public void tearDown() {  
     }
 
-//    @Test
+    @Test
     public void testGetSelectSqlForEntityWithSuperTableDef() {
         DBSession db = sessionFactory.createDbSession();
         Map<String, Object> params = new HashMap<>();
@@ -52,7 +52,7 @@ public class DBSessionTest {
                 sql.toLowerCase());
     }
     
-//    @Test
+    @Test
     public void testGetSelectSqlForEntityNoParams() {
         DBSession db = sessionFactory.createDbSession();
         String sql = db.getSelectSql(CarModel.class, null);
@@ -61,7 +61,7 @@ public class DBSessionTest {
                 sql.toLowerCase());
     }
 
-//    @Test
+    @Test
     public void testBasicCrud() {
         final String VIN1 = "KMHCN46C58U242743";
         final String VIN2 = "KMHCN46C58U2427432342";
@@ -111,7 +111,7 @@ public class DBSessionTest {
         }
     }
     
-//    @Test
+    @Test
     public void testMoney() {
         final String VIN1 = "KMHCN46C58U242743";
         final String VIN2 = "KMHCN46C58U2427432342";
@@ -162,7 +162,7 @@ public class DBSessionTest {
         }        
     }
     
-//    @Test(expected=PersistException.class)
+    @Test(expected=PersistException.class)
     public void testMoneyMismatchCurrency() {
         final String VIN1 = "KMHCN46C58U242743";
         {
@@ -179,7 +179,7 @@ public class DBSessionTest {
         }        
     }
     
-//    @Test
+    @Test
     public void testModelInheritance() {
         final String VIN1 = "KMHCN46C58U242743";
         {
@@ -208,7 +208,7 @@ public class DBSessionTest {
     }
     
     @Test
-    public void testSaveTaggedWitihPrefix() {
+    public void testSaveTagged() {
         final String VIN1 = "KMHCN46C58U242743_TAGGED";
         {
             DBSession db = sessionFactory.createDbSession();

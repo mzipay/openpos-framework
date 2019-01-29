@@ -455,14 +455,16 @@ public class DBSession {
     }
 
     protected void addTags(Row row, LinkedCaseInsensitiveMap<String> matchedColumns, AbstractModel model) {
+        Map<String, Object> tagValues = new HashMap<>();
         if (model instanceof ITaggedModel) {
             for (String columnName : row.keySet()) {
                 if (columnName.startsWith(TagModel.TAG_PREFIX)) {
-                    ((ITaggedModel) model).setTagValue(columnName, row.getString(columnName));
                     matchedColumns.put(columnName, null);
+                    tagValues.put(columnName, row.getString(columnName));
                 }
             }
         }
+        tagHelper.addTags((ITaggedModel)model, tagValues);
     }
 
     protected boolean isDefferedLoadField(Field field) {
