@@ -43,7 +43,6 @@ import org.springframework.stereotype.Component;
 @org.springframework.context.annotation.Scope("prototype")
 public class StateManager implements IStateManager {
 
-    protected static final String ACTION_END_CONVERSATION = "EndConversation";
     final Logger logger = LoggerFactory.getLogger(getClass());
     final Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
     private final StateManagerLogger stateManagerLogger = new StateManagerLogger(loggerGraphical);
@@ -447,13 +446,6 @@ public class StateManager implements IStateManager {
     @Override
     public void endConversation() {
         applicationState.getScope().clearConversationScope();
-        FlowConfig flowConfig = applicationState.getCurrentContext().getFlowConfig();
-        if (!applicationState.getStateStack().isEmpty()) {
-            StateContext suspendedState = applicationState.getStateStack().pop();
-            transitionTo(new Action(ACTION_END_CONVERSATION), suspendedState.getState(), null, suspendedState);
-        } else {
-            transitionTo(new Action(ACTION_END_CONVERSATION), flowConfig.getInitialState());
-        }
     }
 
     @Override
