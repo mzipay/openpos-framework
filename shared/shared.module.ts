@@ -26,7 +26,7 @@ import {
     AutocompleteDirective,
     DefaultImageDirective,
     HideFormAccessoryBarDirective,
-    FindFloatingElementDirective
+    FindFloatingElementDirective,
     FixediOsScrollDirective,
     KlassDirective,
 } from './directives';
@@ -143,7 +143,7 @@ const directives = [
     DefaultImageDirective,
     KlassDirective,
     HideFormAccessoryBarDirective,
-    FindFloatingElementDirective
+    FindFloatingElementDirective,
     FixediOsScrollDirective,
 ];
 
