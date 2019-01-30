@@ -17,3 +17,4 @@ export * from './cordova.service';
 export * from './openpos-media.service';
 export * from './training-overlay.service';
 export * from './configuration.service';
+export * from './floater.service';

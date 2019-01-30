@@ -15,3 +15,5 @@ export * from './autocomplete.directive';
 export * from './default-image.directive';
 export * from './klass.directive';
 export * from './hide-form-accessory-bar.directive';
+export * from './fixed-ios-scroll.directive';
+export * from './find-floating-element.directive';
