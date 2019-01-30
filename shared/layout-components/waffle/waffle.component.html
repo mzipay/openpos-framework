@@ -5,7 +5,7 @@
     <app-icon-button class="drawer-button" [iconName]="'HamburgerMenu'" (buttonClick)="waffledrawer.toggle()"></app-icon-button>
 </div>
 <mat-sidenav-container class="waffle-content-container">
-    <mat-sidenav #waffledrawer class="waffle-drawer-content" position="end" [mode]="drawerMode | async">
+    <mat-sidenav #waffledrawer class="waffle-drawer-content" position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async">
         <ng-content select="[waffle-drawer-content]"></ng-content>
     </mat-sidenav>
     <mat-sidenav-content class="waffle-content">

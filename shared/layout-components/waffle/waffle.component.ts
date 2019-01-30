@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, OnInit } from '@angular/core';
 import { OpenposMediaService } from '../../../core';
 import { Observable } from 'rxjs';
 import { MatSidenav } from '@angular/material';
@@ -10,17 +10,6 @@ import { MatSidenav } from '@angular/material';
   })
   export class WaffleComponent {
 
-    @ViewChild('outersidecontent')
-    outersidecontent: MatSidenav;
-
-    @Input()
-    set drawerIsOpen( open: boolean ) {
-        if ( open ) {
-            this.outersidecontent.open();
-        } else {
-            this.outersidecontent.close();
-        }
-    }
     public drawerOpen: Observable<boolean>;
     public drawerMode: Observable<string>;
 
@@ -44,4 +33,5 @@ import { MatSidenav } from '@angular/material';
         this.drawerOpen = this.mediaService.mediaObservableFromMap(openMap);
         this.drawerMode = this.mediaService.mediaObservableFromMap(modeMap);
     }
+
 }
