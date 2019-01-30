@@ -75,7 +75,7 @@ import {
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
-import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent } from './screen-parts';
+import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent } from './screen-parts';
 import { SideNavComponent, WaffleComponent } from './layout-components';
 const components = [
     PromptInputComponent,
@@ -122,7 +122,8 @@ const components = [
     KebabButtonComponent,
     KebabMenuComponent,
     IconSquareButtonComponent,
-    StatusStripComponent
+    StatusStripComponent,
+    SausageLinksComponent
 ];
 
 const directives = [
