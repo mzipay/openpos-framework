@@ -32,6 +32,8 @@ public class Form implements Serializable {
     private boolean requiresAtLeastOneValue = false;
     
     private String name;
+    
+    private String iconType;
 
     public List<IFormElement> getFormElements() {
         return formElements;
@@ -478,5 +480,13 @@ public class Form implements Serializable {
 	public void addFormError(String error) {
 		formErrors.add(error);
 	}
+	
+	public void setIconType(String icon) {
+        this.iconType = icon;
+    }
+	
+	public String getIconType() {
+        return iconType;
+    }
 
 }
