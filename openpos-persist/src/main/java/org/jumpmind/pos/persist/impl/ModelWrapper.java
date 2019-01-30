@@ -146,7 +146,7 @@ public class ModelWrapper {
                 }
             }
             
-            if (ITaggedModel.class.isAssignableFrom(resultClass)) {
+            if (resultClass.isAssignableFrom(ITaggedModel.class)) {
                 Column[] columns = table.getColumns();
                 for (Column column : columns) {
                     if (column.getName().toUpperCase().startsWith(TagModel.TAG_PREFIX)) {
