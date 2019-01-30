@@ -5,7 +5,7 @@
         (buttonClick)="onMenuItemClick(screenData.backButton)"
     ></app-icon-button>
     <div fxLayoutAlign="center center" fxLayoutGap="10px">
-        <app-icon class="screen-icon" [iconName]="screenData.headerIcon"></app-icon>
+        <app-icon *ngIf="screenData.headerIcon" class="screen-icon" [iconName]="screenData.headerIcon"></app-icon>
         <span>{{screenData.headerText}}</span>
     </div>
     <div fxFlex="1 1 100%"></div>

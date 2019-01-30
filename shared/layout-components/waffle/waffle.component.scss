@@ -18,13 +18,15 @@
     min-width: 100%;
     flex-direction: column;
     display: flex; 
+    padding: 0px;
 }
 
 .main-content{
     flex: 0 1 100%;
     box-sizing: border-box;
     flex-direction: column;
-    display: flex;   
+    display: flex;
+    padding:0px;
 }
 
 .screen{
@@ -34,7 +36,7 @@
     max-width: 100%;
     flex-direction: column;
     display: flex;
-    margin: 8px 24px;
+    margin: 8px;
     border-radius: 4px;
 }
 
@@ -54,9 +56,10 @@
     display: flex;
 }
 
-.content{
+.waffle-content{
     flex:1 1 50%;
     min-height: 50%; 
+    display: flex;
 }
 
 .content-title{
