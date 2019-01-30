@@ -21,7 +21,7 @@ public class SaleScreen extends Screen {
     
     private List<SellItem> items = new ArrayList<>();
     private List<Integer> selectedItemIndexes = new ArrayList<>();
-    private List<MenuItem> localMenuItems = new ArrayList<>();
+    private List<MenuItem> sausageLinks = new ArrayList<>();
     private List<MenuItem> transactionMenuItems = new ArrayList<>();
     
     private String balanceDue;
@@ -178,24 +178,24 @@ public class SaleScreen extends Screen {
         this.multiSelectedMenuItems = multiSelectedMenuItems;
     }
     
-    public MenuItem getLocalMenuItemByAction(String action) {
-        return this. localMenuItems.stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
+    public MenuItem getLocalSausageLinkByAction(String action) {
+        return this. sausageLinks.stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
     }
     
-    public MenuItem getLocalMenuItemByTitle(String title) {
-        return this.localMenuItems.stream().filter( mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
+    public MenuItem getSausageLinkByTitle(String title) {
+        return this.sausageLinks.stream().filter( mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
     }
 
-    public void addLocalMenuItem(MenuItem menuItem) {
-        this.localMenuItems.add(menuItem);
+    public void addSausageLink(MenuItem menuItem) {
+        this.sausageLinks.add(menuItem);
     }
     
-    public void setLocalMenuItems(List<MenuItem> localMenuItems) {
-        this.localMenuItems = localMenuItems;
+    public void setSausageLinks(List<MenuItem> localMenuItems) {
+        this.sausageLinks = localMenuItems;
     }
     
-    public List<MenuItem> getLocalMenuItems() {
-        return localMenuItems;
+    public List<MenuItem> getSausageLinks() {
+        return sausageLinks;
     }
     
     public void addTransactionMenuItem(MenuItem menuItem) {
