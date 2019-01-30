@@ -1,28 +1,18 @@
 @mixin waffle-theme($theme){
-
+    $app-primary: mat-color(map-get($theme, primary));
+    $app-accent: mat-color(map-get($theme, accent));
+    $app-warn: mat-color(map-get($theme, warn));
     $background: map-get($theme, background );
+    $foreground: map-get($theme, foreground );
 
     app-waffle{
-        .outer-side-content-container{
-            background-color: map-get($background, background);
+        .waffle-header{
+            background-color: $app-primary;
+            color: map-get($foreground, inverse-text);
+        }
+        .waffle-drawer-content{
+            background-color: map-get($background, app-bar);
         }
 
-        .outer-side-content{
-            background-color: map-get($background, background);
-        }
-
-        .main-content{
-            background-color: map-get($background, background);
-        }
-
-        .content-drawer{
-            background-color: mat-color($background, app-bar);
-        }
-        .waffle-content{ 
-            background-color: mat-color($background, app-bar);
-        }
-        .content-title{
-            background-color: mat-color($background, app-bar);
-        }
     }
 }

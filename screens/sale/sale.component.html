@@ -1,120 +1,104 @@
-<app-waffle content [drawerIsOpen]="trainingDrawerOpen">
-        <div outer-side-content>
-            The quick brown fox jumped over the lazy dog
-        </div>
-        <div header class="header" fxLayout="row" fxLayoutAlign="center center">
-            <app-bacon-strip fxFlex="100%"></app-bacon-strip>
-            <app-icon-button [iconName]="'help_outline'" (buttonClick)="trainingDrawerOpen = !trainingDrawerOpen"></app-icon-button>
-        </div>
-        <app-scan-or-search top-content class="scan-or-search mat-elevation-z3"></app-scan-or-search>
-        <div content-title class="sale-prompt">
-            <span>{{screen.prompt}}</span>
-            <app-kebab-button [menuItems]="screen.transactionMenuItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
-        </div>
-        <div content-drawer fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="4px"
-        fxLayoutGap.lg="20px">
-                <button mat-button 
-                    class="sell-template-menu-button"
-                    color="primary" 
-                    *ngFor="let m of screen.localMenuItems" (click)="onMenuItemClick(m)"
-                    [disabled]="!m.enabled">
-                    <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
-                    <span [ngClass]="{'muted-color': ! m.enabled}">&nbsp;{{m.title}}</span>
-                    <span *ngIf="m.keybind && keybindsEnabled()" fxFlex="1 1 auto" style="padding-right: 8px;"></span>
-                    <span *ngIf="m.keybind && keybindsEnabled()" class="muted-color">{{m.keybind}}</span>
-                </button>
-                <div fxFlex="1 1 auto"></div>
-                <ng-container *ngIf="!screen.hideCustomer">
-                    <app-sell-linked-customer [screenType]="screen.screenType" [customerName]="screen.customerName"
-                        [noCustomerText]="screen.noCustomerText" [loyaltyButton]="screen.loyaltyButton"></app-sell-linked-customer>
-                </ng-container>
-                <div fxFlex="0 1 auto" class="sell-screen-logo"></div>
-        </div>
-    
-            <div content fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px;">
-                <mat-card fxFlex="0 1 100%" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
-                    <mat-card-content fxFlex="100%" #scrollList ngClass.xs="xs">
-                        <mat-toolbar *ngIf="selectedItems && selectedItems.length > 0" class="page-content-card" color="primary" >
-                            <span>{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</span>
-                            <span fxFlex="1 1 auto"></span>
+<app-waffle>
+    <app-bacon-strip waffle-header fxFlex="100%"></app-bacon-strip>
+    <div waffle-drawer-content class="drawer-content" fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="4px"
+    fxLayoutGap.lg="20px">
+            <app-sausage-links waffle-drawer-content></app-sausage-links>
+            <div fxFlex="1 1 auto"></div>
+            <ng-container *ngIf="!screen.hideCustomer">
+                <app-sell-linked-customer [screenType]="screen.screenType" [customerName]="screen.customerName"
+                    [noCustomerText]="screen.noCustomerText" [loyaltyButton]="screen.loyaltyButton"></app-sell-linked-customer>
+            </ng-container>
+            <div fxFlex="0 1 auto" class="sell-screen-logo"></div>
+    </div>
+    <app-scan-or-search waffle-top-content class="scan-or-search mat-elevation-z3"></app-scan-or-search>
+    <div waffle-title class="sale-prompt">
+        <span>{{screen.prompt}}</span>
+        <app-kebab-button [menuItems]="screen.transactionMenuItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
+    </div>
+    <div waffle-body class="sale-content" fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
+        <mat-card fxFlex="0 1 100%" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
+            <mat-card-content fxFlex="100%" #scrollList ngClass.xs="xs">
+                <mat-toolbar *ngIf="selectedItems && selectedItems.length > 0" class="page-content-card" color="primary" >
+                    <span>{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</span>
+                    <span fxFlex="1 1 auto"></span>
+                    <app-kebab-button 
+                        *ngIf="!screen.readOnly && selectedItems.length > 0"
+                        [menuItems]="screen.multiSelectedMenuItems"
+                        (menuItemClick)="onMenuItemClick($event, screen.selectedItemIndexes)"
+                    ></app-kebab-button>
+                </mat-toolbar>
+                <app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems" (selectedItemListChange)="onItemListChange($event)">
+                    <ng-template let-item>
+                        <div fxLayoutAlign="space-between" fxLayout.xs="column" [ngClass]="item.type" style="margin:-15px;padding:15px">
+                            <div fxFlex="90" fxAlign="left">
+                                <span [ngClass]="item.prop65Item ? 'warn' : ''">
+                                    {{item.description}}
+                                </span>
+                                <span class="muted-color">
+                                    <mat-chip-list>
+                                        {{item.subtitle}}&nbsp;
+                                        <mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
+                                    </mat-chip-list>
+                                </span>
+                                <span *ngIf="item.prop65Item" class="muted-color">
+                                    <table>
+                                        <tr>
+                                            <td style="text-align:left;vertical-align:top;padding-right:4px"><div class="prop65Image"></div></td>
+                                            <td style="text-align:left;vertical-align:middle;">{{item.prop65WarningText}}</td>
+                                        </tr>
+                                    </table>
+                                </span>
+                            </div>
+                            <div *ngIf="item.isGiftReceipt" fxAlign="right center">
+                                <mat-icon color="muted-color">redeem</mat-icon>&nbsp;&nbsp;
+                            </div>
+                            <div fxAlign="right">
+                                <span class="primary text-md">
+                                    <app-currency-text [amountText]="item.amount"></app-currency-text>
+                                    <br>
+                                    <span>
+                                        <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">
+                                        <app-currency-text [amountText]="item.originalAmount"></app-currency-text></p>
+                                        
+                                        <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">
+                                        <app-currency-text [amountText]="item.discountAmount"></app-currency-text></p>
+                                    </span>
+                                </span>
+                            </div>
                             <app-kebab-button 
-                                *ngIf="!screen.readOnly && selectedItems.length > 0"
-                                [menuItems]="screen.multiSelectedMenuItems"
-                                (menuItemClick)="onMenuItemClick($event, screen.selectedItemIndexes)"
+                                *ngIf="selectedItems.length < 1 && !screen.readOnly"
+                                fxAlign="right"
+                                [menuItems]="item.menuItems"
+                                (menuItemClick)="onMenuItemClick($event, item.index)"
                             ></app-kebab-button>
-                        </mat-toolbar>
-                        <app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems" (selectedItemListChange)="onItemListChange($event)">
-                            <ng-template let-item>
-                                <div fxLayoutAlign="space-between" fxLayout.xs="column" [ngClass]="item.type" style="margin:-15px;padding:15px">
-                                    <div fxFlex="90" fxAlign="left">
-                                        <span [ngClass]="item.prop65Item ? 'warn' : ''">
-                                            {{item.description}}
-                                        </span>
-                                        <span class="muted-color">
-                                            <mat-chip-list>
-                                                {{item.subtitle}}&nbsp;
-                                                <mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
-                                            </mat-chip-list>
-                                        </span>
-                                        <span *ngIf="item.prop65Item" class="muted-color">
-                                            <table>
-                                                <tr>
-                                                    <td style="text-align:left;vertical-align:top;padding-right:4px"><div class="prop65Image"></div></td>
-                                                    <td style="text-align:left;vertical-align:middle;">{{item.prop65WarningText}}</td>
-                                                </tr>
-                                            </table>
-                                        </span>
-                                    </div>
-                                    <div *ngIf="item.isGiftReceipt" fxAlign="right center">
-                                        <mat-icon color="muted-color">redeem</mat-icon>&nbsp;&nbsp;
-                                    </div>
-                                    <div fxAlign="right">
-                                        <span class="primary text-md">
-                                            <app-currency-text [amountText]="item.amount"></app-currency-text>
-                                            <br>
-                                            <span>
-                                                <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">
-                                                <app-currency-text [amountText]="item.originalAmount"></app-currency-text></p>
-                                                
-                                                <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">
-                                                <app-currency-text [amountText]="item.discountAmount"></app-currency-text></p>
-                                            </span>
-                                        </span>
-                                    </div>
-                                    <app-kebab-button 
-                                        *ngIf="selectedItems.length < 1 && !screen.readOnly"
-                                        fxAlign="right"
-                                        [menuItems]="item.menuItems"
-                                        (menuItemClick)="onMenuItemClick($event, item.index)"
-                                    ></app-kebab-button>
-                                </div>
-                            </ng-template>
-                        </app-selectable-item-list> 
-                        <div *ngIf="!items || items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
-                            <mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
-                            <span class="text-md">Scan/Key something to get started</span>
                         </div>
-                    </mat-card-content>
-                </mat-card>
-            
-                <app-overflow-list fxFlex="0 0 auto" *ngIf="screen.transaction" [numberItemsToShow]="overFlowListSize | async"
-                 [items]="amountTotals"></app-overflow-list>
-            
-                <mat-card *ngIf="screen.transaction" fxFlex="0 0 auto" class="page-content-card dark">
-                    <mat-card-content fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" class="text-lg">
-                        <div *ngIf="itemTotal === 1"><span fxFlex class="text-md">{{itemTotal}} Item</span></div>
-                        <div *ngIf="itemTotal !== 1"><span fxFlex class="text-md">{{itemTotal}} Items</span></div>
-                        <span fxFlex="1 1 auto"></span>
-                        <span fxFlex class="text-right">Total</span>
-                        <span fxFlex [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
-                            <app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
-                        </span>
-                        <button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!screen.transaction.active || items.length == 0"
-                         (click)="session.onAction('Checkout')">
-                            <mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
-                        </button>
-                    </mat-card-content>
-                </mat-card>
-                <app-status-strip></app-status-strip>
-            </div>
-    </app-waffle>
+                    </ng-template>
+                </app-selectable-item-list> 
+                <div *ngIf="!items || items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
+                    <mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
+                    <span class="text-md">Scan/Key something to get started</span>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    
+        <app-overflow-list fxFlex="0 0 auto" *ngIf="screen.transaction" [numberItemsToShow]="overFlowListSize | async"
+            [items]="amountTotals"></app-overflow-list>
+    
+        <mat-card *ngIf="screen.transaction" fxFlex="0 0 auto" class="page-content-card dark">
+            <mat-card-content fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" class="text-lg">
+                <div *ngIf="itemTotal === 1"><span fxFlex class="text-md">{{itemTotal}} Item</span></div>
+                <div *ngIf="itemTotal !== 1"><span fxFlex class="text-md">{{itemTotal}} Items</span></div>
+                <span fxFlex="1 1 auto"></span>
+                <span fxFlex class="text-right">Total</span>
+                <span fxFlex [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
+                    <app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
+                </span>
+                <button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!screen.transaction.active || items.length == 0"
+                    (click)="session.onAction('Checkout')">
+                    <mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
+                </button>
+            </mat-card-content>
+        </mat-card>
+        <app-status-strip></app-status-strip>
+    </div>
+</app-waffle>

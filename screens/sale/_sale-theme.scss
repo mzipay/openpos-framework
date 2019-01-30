@@ -5,13 +5,4 @@
 
     $foreground: map-get($theme, foreground );
     $background: map-get($theme, background );
-
-    .sale-prompt{
-        background-color: map-get($background, app-bar);
-    }
-
-    .header{
-        background-color: $app-primary;
-        color: map-get($foreground, inverse-text);
-    }
 }

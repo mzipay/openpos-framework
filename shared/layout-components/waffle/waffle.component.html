@@ -1,30 +1,25 @@
-<ng-content select="[header]"></ng-content>
-<mat-sidenav-container class="outer-side-content-container">
-    <mat-sidenav #outersidecontent class="outer-side-content" position="end" [mode]="drawerMode | async">
-        <ng-content select="[outer-side-content]"></ng-content>
+<div class="waffle-header">
+    <div fxFlex="1 1 100%">
+        <ng-content select="[waffle-header]"></ng-content>
+    </div>
+    <app-icon-button class="drawer-button" [iconName]="'HamburgerMenu'" (buttonClick)="waffledrawer.toggle()"></app-icon-button>
+</div>
+<mat-sidenav-container class="waffle-content-container">
+    <mat-sidenav #waffledrawer class="waffle-drawer-content" position="end" [mode]="drawerMode | async">
+        <ng-content select="[waffle-drawer-content]"></ng-content>
     </mat-sidenav>
-    <mat-sidenav-content class="main-content">
-        <div class="top-content">
-            <ng-content select="[top-content]"></ng-content>
+    <mat-sidenav-content class="waffle-content">
+        <div class="waffle-top-content">
+            <ng-content select="[waffle-top-content]"></ng-content>
         </div>
-        <div class="screen mat-elevation-z3">
-            <div class="content-title">
-                <ng-content select="[content-title]"></ng-content>
-                <app-icon-button class="drawer-button" [iconName]="'HamburgerMenu'" (buttonClick)="drawer.toggle()"></app-icon-button>
-            </div>
-            <mat-drawer-container class="content-container">
-                <mat-drawer #drawer class="content-drawer" position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async">
-                    <ng-content select="[content-drawer]"></ng-content>
-                </mat-drawer>
-                <mat-drawer-content class="drawer-content">
-                    <div class="waffle-content">
-                        <ng-content select="[content]"></ng-content>
-                    </div>
-                </mat-drawer-content>
-            </mat-drawer-container>
-            <div class="footer">
-                <ng-content select="[footer]"></ng-content>
-            </div>
+        <div class="waffle-title">
+            <ng-content select="[waffle-title]"></ng-content>
+        </div>
+        <div class="waffle-body">
+            <ng-content select="[waffle-body]"></ng-content>
+        </div>
+        <div class="waffle-footer">
+            <ng-content select="[waffle-footer]"></ng-content>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

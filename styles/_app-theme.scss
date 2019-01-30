@@ -81,18 +81,6 @@
         background-color: mat-color($background, app-bar);
     }
 
-    .mat-drawer-container{
-        background-color: mat-color($background, app-bar);
-    }
-
-    .mat-drawer-content{
-        background-color: mat-color($background, app-bar);
-    }
-
-    .mat-drawer{
-        background-color: mat-color($background, app-bar);
-    }
-
     input.bordered{
         border-color: mat-color($foreground, divider);
         border-style: solid;
@@ -173,5 +161,25 @@
 
     app-prompt-input app-icon {
         padding: 5px;
+    }
+
+    app-sell{
+        .mat-drawer-container{
+            padding-bottom:6px;
+            background-color: mat-color($background, app-bar);
+        }
+    
+        .mat-drawer-content{
+            background-color: mat-color($background, app-bar);
+            padding-right:6px;
+            padding-left:6px;
+            padding-bottom:6px;
+        }
+    
+        .mat-drawer{
+            background-color: mat-color($background, app-bar);
+            padding-right:6px;
+            padding-bottom:10px;
+        }
     }
 }
