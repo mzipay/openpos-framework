@@ -31,6 +31,42 @@ public class Injector {
         performInjectionsImpl(target, scope, currentContext);
         performPostContruct(target);
     }
+    
+    public void injectNulls(Object target, ScopeType scopeType) {
+        Class<?> targetClass = target.getClass();
+        Field[] fields = targetClass.getDeclaredFields();
+
+        for (Field field : fields) {
+            field.setAccessible(true);
+            boolean nullField = false;
+            In in = field.getAnnotation(In.class);
+            if (in == null) {
+                in = field.getDeclaredAnnotation(In.class);
+            }
+
+            if (in != null && in.scope() == scopeType) {
+                nullField = true;
+            }
+
+            InOut inOut = field.getAnnotation(InOut.class);
+            if (inOut == null) {
+                inOut = field.getDeclaredAnnotation(InOut.class);
+            }
+
+            if (inOut != null && inOut.scope() == scopeType) {
+                nullField = true;
+            }
+            
+            if (nullField && !field.getType().isPrimitive()) {
+                try {
+                field.set(target, null);
+                } catch (Exception ex) {
+                    throw new FlowException("Failed to set target field " + field + " to null ", ex);
+                }
+            }
+
+        }
+    }
 
     protected void performInjectionsImpl(Object target, Scope scope, StateContext currentContext) {
         Class<?> targetClass = target.getClass();
@@ -71,7 +107,7 @@ public class Injector {
             }
 
         }
-    }
+    }    
 
     protected void injectField(Class<?> targetClass, Object target, Scope scope, StateContext currentContext, String name,
             ScopeType scopeType, boolean required, boolean autoCreate, Field field) {

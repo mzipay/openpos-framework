@@ -67,7 +67,7 @@ public class StateManager implements IStateManager {
 
     @Autowired(required = false)
     private List<? extends ISessionTimeoutListener> sessionTimeoutListeners;
-    
+
     @Autowired(required = false)
     private List<? extends ISessionListener> sessionListeners;
 
@@ -133,7 +133,7 @@ public class StateManager implements IStateManager {
         }
     }
 
-    public void removeSessionAuthentication(String sessionId) {        
+    public void removeSessionAuthentication(String sessionId) {
         if (this.sessionListeners != null && sessionAuthenticated.containsKey(sessionId)) {
             for (ISessionListener sessionListener : sessionListeners) {
                 sessionListener.disconnected(sessionId, this);
@@ -426,7 +426,7 @@ public class StateManager implements IStateManager {
                     + "\" This state needs to be mapped in a IFlowConfigProvider implementation. ");
         }
     }
-    
+
     @Override
     public void timeout() {
         FlowConfig flowConfig = applicationState.getCurrentContext().getFlowConfig();
@@ -436,17 +436,30 @@ public class StateManager implements IStateManager {
         } else {
             transitionTo(Action.ACTION_TIMEOUT, flowConfig.getInitialState());
         }
-        
+
     }
 
     @Override
     public void endConversation() {
         applicationState.getScope().clearConversationScope();
+        clearScopeOnStates(ScopeType.Conversation);
+    }
+
+    private void clearScopeOnStates(ScopeType scopeType) {
+        List<StateContext> stack = applicationState.getStateStack();
+        for (StateContext stateContext : stack) {
+            IState state = stateContext.getState();
+            injector.injectNulls(state, scopeType);
+        }
+        
+        injector.injectNulls(applicationState.getCurrentContext().getState(), scopeType);
+        
     }
 
     @Override
     public void endSession() {
         applicationState.getScope().clearSessionScope();
+        clearScopeOnStates(ScopeType.Session);
     }
 
     public void setInitialFlowConfig(FlowConfig initialFlowConfig) {
