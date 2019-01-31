@@ -12,11 +12,13 @@
                 <ng-content select="[header]"></ng-content>
             </div>
         </mat-toolbar>
-        <div>
-            <ng-content select="[subtitle]"></ng-content>
-        </div>
-        <div fiOs class="side-nav-content">
-            <ng-content select="[content]"></ng-content>
+        <div class="side-nav-body">
+            <div fxFlex="0 0 auto">
+                <ng-content select="[subtitle]"></ng-content>
+            </div>
+            <div fiOs class="side-nav-content">
+                <ng-content select="[content]"></ng-content>
+            </div>
         </div>
         <div fxFlex="0 0 auto" class="side-nav-footer">
             <ng-content select="[footer]"></ng-content>

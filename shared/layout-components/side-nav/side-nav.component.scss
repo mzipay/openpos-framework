@@ -26,6 +26,14 @@
     border-right-style: solid;
 }
 
+.side-nav-body{
+    overflow-y: auto; 
+    min-height: 50%; 
+    flex: 1 1 50%; 
+    display:flex; 
+    flex-direction: column;
+}
+
 .side-nav-footer{
     border-top-width: 1px;
     border-top-style: solid;
