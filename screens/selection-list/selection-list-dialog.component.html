@@ -12,6 +12,7 @@
                     <div fxHide fxHide.xs="false" fxHide.lg="true" *ngIf="sel.title" class="text-md">{{sel.title}}</div>
                     <div *ngIf="sel.properties" fxLayout="row wrap" fxLayoutAlign="space-between">
                         <div *ngFor="let property of sel.properties">
+                            <div *ngIf="property.label" class="item-property-label">{{property.label}}</div>
                             <p class="item-property-line" *ngFor="let line of property.lines">{{line}}</p>
                         </div>
                     </div>

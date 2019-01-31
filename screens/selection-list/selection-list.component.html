@@ -5,9 +5,10 @@
 			<app-selectable-item-list fxFlex="0 1 100%" [configuration]="listConfig" (selectedItemChange)="onItemChange($event)"
 			 (selectedItemListChange)="onItemListChange($event)">
 				<div *ngFor="let sel of screen.selectionList">
-					<span *ngIf="sel.title" class="text-sm">{{sel.title}}</span>
+					<span *ngIf="sel.title" class="text-sm item-title">{{sel.title}}</span>
 					<div *ngIf="sel.properties" fxLayout="row wrap" fxLayoutAlign="space-between">
 						<div *ngFor="let property of sel.properties">
+							<div *ngIf="property.label" class="item-property-label">{{property.label}}</div>
 							<p class="item-property-line" *ngFor="let line of property.lines">{{line}}</p>
 						</div>
 					</div>
@@ -15,7 +16,8 @@
 			</app-selectable-item-list>
 		</mat-card-content>
 		<mat-card-actions fxFlex="0 0 auto" fxLayoutAlign="end">
-			<button *ngFor="let m of screen.nonSelectionButtons" mat-raised-button color="primary" (click)="doMenuItemAction(m)"> {{m.title}} </button>
+			<button *ngFor="let m of screen.nonSelectionButtons" mat-raised-button color="primary" (click)="doMenuItemAction(m)">
+				{{m.title}} </button>
 			<button *ngFor="let m of screen.buttons" mat-raised-button color="primary" [disabled]="index<0" (click)="doMenuItemAction(m)">{{m.title}}</button>
 		</mat-card-actions>
 	</mat-card>
