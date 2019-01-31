@@ -128,7 +128,7 @@ public class ConnectionWrapper implements Connection {
         if (postResult.isIntercepted()) {
             return (Statement) postResult.getInterceptResult();
         }
-        return value;
+        return new StatementWrapper(value);
     }
 
     public Statement createStatement(int arg1, int arg2) throws SQLException {
@@ -143,7 +143,7 @@ public class ConnectionWrapper implements Connection {
         if (postResult.isIntercepted()) {
             return (Statement) postResult.getInterceptResult();
         }
-        return value;
+        return new StatementWrapper(value);
     }
 
     public Statement createStatement(int arg1, int arg2, int arg3) throws SQLException {
@@ -158,7 +158,7 @@ public class ConnectionWrapper implements Connection {
         if (postResult.isIntercepted()) {
             return (Statement) postResult.getInterceptResult();
         }
-        return value;
+        return new StatementWrapper(value);
     }
 
     public PreparedStatement prepareStatement(String arg1, int arg2) throws SQLException {

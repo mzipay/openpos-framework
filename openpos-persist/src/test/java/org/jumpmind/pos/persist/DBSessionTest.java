@@ -208,8 +208,54 @@ public class DBSessionTest {
     }
     
     @Test
+    public void testSaveTaggedDefault() {
+        final String VIN1 = "KMHCN46C58U242743_TAGGED_DEFAULT";
+        {
+            DBSession db = sessionFactory.createDbSession();
+            CarModel hyundai = new CarModel();
+            hyundai.setVin(VIN1);
+            hyundai.setMake("Hyundai");
+            hyundai.setModel("Accent");
+            hyundai.setModelYear("2005");
+            hyundai.setEstimatedValue(Money.of(CurrencyUnit.USD, new BigDecimal("988.34")));
+            db.save(hyundai);
+            db.close();
+        }
+        {
+            DBSession db = sessionFactory.createDbSession();
+            CarModel hyundaiLookupedUp = db.findByNaturalId(CarModel.class, VIN1);
+            assertNotNull(hyundaiLookupedUp);
+            assertEquals(VIN1, hyundaiLookupedUp.getVin());
+            assertEquals("*", hyundaiLookupedUp.getTagValue("DEALERSHIP_NUMBER"));
+        }
+    }
+    @Test
     public void testSaveTagged() {
         final String VIN1 = "KMHCN46C58U242743_TAGGED";
+        {
+            DBSession db = sessionFactory.createDbSession();
+            CarModel hyundai = new CarModel();
+            hyundai.setVin(VIN1);
+            hyundai.setMake("Hyundai");
+            hyundai.setModel("Accent");
+            hyundai.setModelYear("2005");
+            hyundai.setEstimatedValue(Money.of(CurrencyUnit.USD, new BigDecimal("988.34")));
+            hyundai.setTagValue("DEALERSHIP_NUMBER", "DLRSHIP1234");
+            db.save(hyundai);
+            db.close();
+        }
+        {
+            DBSession db = sessionFactory.createDbSession();
+            CarModel hyundaiLookupedUp = db.findByNaturalId(CarModel.class, VIN1);
+            assertNotNull(hyundaiLookupedUp);
+            assertEquals(VIN1, hyundaiLookupedUp.getVin());
+            assertEquals("DLRSHIP1234", hyundaiLookupedUp.getTagValue("DEALERSHIP_NUMBER"));
+        }
+    }
+    
+    @Test
+    public void testSaveTaggedSubclass() {
+        final String VIN1 = "KMHCN46C58U242743_TAGGED_SUBCLASS";
         {
             DBSession db = sessionFactory.createDbSession();
             RaceCarModel hyundai = new RaceCarModel();
@@ -230,6 +276,5 @@ public class DBSessionTest {
             assertEquals(VIN1, hyundaiLookupedUp.getVin());
             assertEquals("DLRSHIP1234", hyundaiLookupedUp.getTagValue("DEALERSHIP_NUMBER"));
         }
-        
     }
 }
