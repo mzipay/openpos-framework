@@ -73,9 +73,6 @@ public class StateManager implements IStateManager {
 
     private ApplicationState applicationState = new ApplicationState();
 
-    @Autowired
-    private UIManager uiManager;
-
     @Value("${org.jumpmind.pos.core.flow.StateManager.autoSaveState:false}")
     private boolean autoSaveState = false;
 
@@ -96,7 +93,6 @@ public class StateManager implements IStateManager {
     public void init(String appId, String nodeId) {
         this.applicationState.setAppId(appId);
         this.applicationState.setDeviceId(nodeId);
-        this.uiManager.init(this);
 
         boolean resumeState = false;
 
@@ -508,11 +504,6 @@ public class StateManager implements IStateManager {
     @Override
     public String getAppId() {
         return applicationState.getAppId();
-    }
-
-    @Override
-    public IUI getUI() {
-        return uiManager;
     }
 
     // called from a Timer thread.

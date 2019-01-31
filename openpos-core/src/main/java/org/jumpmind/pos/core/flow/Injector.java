@@ -106,7 +106,7 @@ public class Injector {
                 break;
         }
         
-        if (value == null && autoCreate) {
+        if ((value == null || value.getValue() == null) && autoCreate) {
             value = autoCreate(name, scopeType, scope, currentContext);
         }
         
@@ -132,7 +132,7 @@ public class Injector {
         Object bean = applicationContext.getBean(name);
         performInjections(bean, scope, currentContext);
         scope.setScopeValue(scopeType, name, bean);
-        return scope.getScopeValue(scopeType, name);
+        return new ScopeValue(bean);
     }
 
     protected ScopeValue resolveThroughValueProviders(String name, ScopeType scopeType, Object target, Field field) {

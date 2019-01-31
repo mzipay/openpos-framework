@@ -33,78 +33,60 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StateManagerTest {
-    
+
     @InjectMocks
     StateManager stateManager;
-    
-    @InjectMocks 
+
+    @InjectMocks
     Injector injector;
-    
+
     @Mock
     private ScreenService screenService;
-    
-    @Mock
-    private UIManager uiManager;
-    
-    
+
     @Before
     public void setup() throws Exception {
-        
+
         FlowConfig customerSignupFlow = new FlowConfig();
-        customerSignupFlow.setInitialState(FlowBuilder.addState(CustomerSignupState.class)
-                .withTransition("CustomerSignedup", CompleteState.class)
-                .build());        
-        
-//        FlowConfig itemLookupFlow = new FlowConfig();
-//        FlowConfig vendorFlow = new FlowConfig();
-//        
-//        itemLookupFlow.setInitialState(FlowBuilder.addState(ItemLookupState.class).build());
-//        itemLookupFlow.addGlobalSubTransition("ItemLookupState", itemLookupFlow);
-//        itemLookupFlow.addGlobalSubTransition("VendorList", vendorFlow);
-//        itemLookupFlow.addGlobalTransition("SwitchFlows", CompleteState.class);
-//        
-//        vendorFlow.setInitialState(FlowBuilder.addState(VendorState.class).build());
-//        vendorFlow.addGlobalSubTransition("ItemLookupState", itemLookupFlow);
-//        vendorFlow.addGlobalSubTransition("VendorList", vendorFlow);
-//        vendorFlow.addGlobalTransition("SwitchFlows", CompleteState.class);
-        
+        customerSignupFlow.setInitialState(
+                FlowBuilder.addState(CustomerSignupState.class).withTransition("CustomerSignedup", CompleteState.class).build());
+
+        // FlowConfig itemLookupFlow = new FlowConfig();
+        // FlowConfig vendorFlow = new FlowConfig();
+        //
+        // itemLookupFlow.setInitialState(FlowBuilder.addState(ItemLookupState.class).build());
+        // itemLookupFlow.addGlobalSubTransition("ItemLookupState",
+        // itemLookupFlow);
+        // itemLookupFlow.addGlobalSubTransition("VendorList", vendorFlow);
+        // itemLookupFlow.addGlobalTransition("SwitchFlows",
+        // CompleteState.class);
+        //
+        // vendorFlow.setInitialState(FlowBuilder.addState(VendorState.class).build());
+        // vendorFlow.addGlobalSubTransition("ItemLookupState", itemLookupFlow);
+        // vendorFlow.addGlobalSubTransition("VendorList", vendorFlow);
+        // vendorFlow.addGlobalTransition("SwitchFlows", CompleteState.class);
+
         FlowConfig customerFlow = new FlowConfig();
         customerFlow.getConfigScope().put("customerFlowType", "LOYALTY");
-        customerFlow.setInitialState(FlowBuilder.addState(CustomerState.class)
-                .withTransition("CustomerSearch", CustomerSearchState.class)
+        customerFlow.setInitialState(FlowBuilder.addState(CustomerState.class).withTransition("CustomerSearch", CustomerSearchState.class)
                 .withTransition("CustomerSelected", CompleteState.class)
-                .withSubTransition("CustomerSignup", customerSignupFlow, "CustomerSignupComplete")
-                .build());
-        customerFlow.add(FlowBuilder.addState(CustomerSearchState.class)
-                .withTransition("CustomerSelected", CompleteState.class).build());
+                .withSubTransition("CustomerSignup", customerSignupFlow, "CustomerSignupComplete").build());
+        customerFlow.add(FlowBuilder.addState(CustomerSearchState.class).withTransition("CustomerSelected", CompleteState.class).build());
         customerFlow.addGlobalTransition("Help", HelpState.class);
         customerFlow.addGlobalSubTransition("CustomerSignup", customerSignupFlow);
-        customerFlow.add(FlowBuilder.addState(HelpState.class)
-                .withTransition("Back", CustomerState.class).build());        
-        
+        customerFlow.add(FlowBuilder.addState(HelpState.class).withTransition("Back", CustomerState.class).build());
+
         FlowConfig config = new FlowConfig();
-        config.setInitialState(FlowBuilder.addState(HomeState.class)
-                .withTransition("Sell", SellState.class)
-                .withTransition("TestActions", ActionTestingState.class)
-                .withTransition("TestScopes", TestScopesState.class)
+        config.setInitialState(FlowBuilder.addState(HomeState.class).withTransition("Sell", SellState.class)
+                .withTransition("TestActions", ActionTestingState.class).withTransition("TestScopes", TestScopesState.class)
                 .withTransition("TestTransitionInterception", TransitionInterceptionState.class)
                 .withTransition("TestFailedInjections", InjectionFailedState.class)
                 .withTransition("TestOptionalInjections", OptionalInjectionState.class)
-                .withTransition("StackOverflow", StackOverflowState.class)
-                .build());
-        config.add(FlowBuilder.addState(TestScopesState.class)
-                .withTransition("Done", HomeState.class)
-                .build());
-        config.add(FlowBuilder.addState(SellState.class)
-                .withSubTransition("Customer", customerFlow, "CustomerLookupComplete")
-                .build());
-        config.add(FlowBuilder.addState(ActionTestingState.class).
-                withTransition("Done", HomeState.class)
-                .build());
-        config.add(FlowBuilder.addState(TransitionInterceptionState.class).
-                withTransition("Sell", SellState.class)
-                .build());
-        
+                .withTransition("StackOverflow", StackOverflowState.class).build());
+        config.add(FlowBuilder.addState(TestScopesState.class).withTransition("Done", HomeState.class).build());
+        config.add(FlowBuilder.addState(SellState.class).withSubTransition("Customer", customerFlow, "CustomerLookupComplete").build());
+        config.add(FlowBuilder.addState(ActionTestingState.class).withTransition("Done", HomeState.class).build());
+        config.add(FlowBuilder.addState(TransitionInterceptionState.class).withTransition("Sell", SellState.class).build());
+
         config.addGlobalTransition("Help", HelpState.class);
         config.addGlobalTransition("About", AboutState.class);
         config.addGlobalTransition("Home", HomeState.class);
@@ -113,23 +95,22 @@ public class StateManagerTest {
         config.addGlobalTransition("TestTransitionProceed", HomeState.class);
         config.addGlobalTransition("TestTransitionCancel", HomeState.class);
         config.addGlobalSubTransition("CustomerLookupGlobal", customerFlow);
-        //config.addGlobalSubTransition("VendorList", vendorFlow);
-        
+        // config.addGlobalSubTransition("VendorList", vendorFlow);
+
         stateManager.setInitialFlowConfig(config);
         TestUtil.setField(stateManager, "actionHandler", new ActionHandlerImpl());
         TestUtil.setField(stateManager, "injector", injector);
         TestUtil.setField(stateManager, "outjector", new Outjector());
         TestUtil.setField(stateManager, "transitionSteps", Arrays.asList(new TestTransitionStepCancel(), new TestTransitionStepProceed()));
-        
-        
+
     }
-    
+
     @Test
     public void testInitialState() {
         stateManager.init("pos", "100-1");
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
     }
-    
+
     @Test
     public void testSimpleTransition() {
         stateManager.init("pos", "100-1");
@@ -137,7 +118,7 @@ public class StateManagerTest {
         stateManager.doAction("Sell");
         assertEquals(SellState.class, stateManager.getCurrentState().getClass());
     }
-    
+
     @Test
     public void testSpecificVsAnyActionHandler() {
         stateManager.init("pos", "100-1");
@@ -147,21 +128,17 @@ public class StateManagerTest {
         stateManager.doAction("SpecificAction");
         stateManager.doAction("Done");
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
-        assertTrue("stateManager.getScopeValue(\"specificActionMethodCalled\")", 
-                stateManager.getScopeValue("specificActionMethodCalled"));
-        assertFalse("stateManager.getScopeValue(\"anyActionMethodCalled\")", 
-                stateManager.getScopeValue("anyActionMethodCalled"));
-        
+        assertTrue("stateManager.getScopeValue(\"specificActionMethodCalled\")", stateManager.getScopeValue("specificActionMethodCalled"));
+        assertFalse("stateManager.getScopeValue(\"anyActionMethodCalled\")", stateManager.getScopeValue("anyActionMethodCalled"));
+
         stateManager.doAction("TestActions");
         assertEquals(ActionTestingState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("ActionHandledByAction");
         stateManager.doAction("Done");
-        assertFalse("stateManager.getScopeValue(\"specificActionMethodCalled\")", 
-                stateManager.getScopeValue("specificActionMethodCalled"));
-        assertTrue("stateManager.getScopeValue(\"anyActionMethodCalled\")", 
-                stateManager.getScopeValue("anyActionMethodCalled"));        
+        assertFalse("stateManager.getScopeValue(\"specificActionMethodCalled\")", stateManager.getScopeValue("specificActionMethodCalled"));
+        assertTrue("stateManager.getScopeValue(\"anyActionMethodCalled\")", stateManager.getScopeValue("anyActionMethodCalled"));
     }
-    
+
     @Test
     public void testActionInterception() {
         stateManager.init("pos", "100-1");
@@ -169,13 +146,11 @@ public class StateManagerTest {
         stateManager.doAction("TestTransitionInterception");
         assertEquals(TransitionInterceptionState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("Sell");
-        assertTrue("stateManager.getScopeValue(\"onSellCalled\")", 
-                stateManager.getScopeValue("onSellCalled"));
-        assertFalse("stateManager.getScopeValue(\"anyActionMethodCalled\")", 
-                stateManager.getScopeValue("anyActionMethodCalled"));
+        assertTrue("stateManager.getScopeValue(\"onSellCalled\")", stateManager.getScopeValue("onSellCalled"));
+        assertFalse("stateManager.getScopeValue(\"anyActionMethodCalled\")", stateManager.getScopeValue("anyActionMethodCalled"));
         assertEquals(SellState.class, stateManager.getCurrentState().getClass());
     }
-    
+
     @Test
     public void testSubState() {
         stateManager.init("pos", "100-1");
@@ -187,6 +162,7 @@ public class StateManagerTest {
         stateManager.doAction("CustomerSelected");
         assertEquals(SellState.class, stateManager.getCurrentState().getClass());
     }
+
     @Test
     public void testSubSubState() {
         stateManager.init("pos", "100-1");
@@ -200,9 +176,9 @@ public class StateManagerTest {
         stateManager.doAction("CustomerSignedup");
         assertEquals(CustomerState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("CustomerSelected");
-        assertEquals(SellState.class, stateManager.getCurrentState().getClass());        
+        assertEquals(SellState.class, stateManager.getCurrentState().getClass());
     }
-    
+
     @Test
     public void testFlowScope() {
         stateManager.init("pos", "100-1");
@@ -216,9 +192,9 @@ public class StateManagerTest {
         assertEquals("customer1234", stateManager.getScopeValue("selectedCustomer"));
         stateManager.doAction("CustomerSelected");
         assertNull("stateManager.getScopeValue(\"selectedCustomer\")", stateManager.getScopeValue("selectedCustomer"));
-        assertEquals(SellState.class, stateManager.getCurrentState().getClass());        
+        assertEquals(SellState.class, stateManager.getCurrentState().getClass());
     }
-    
+
     @Test
     public void testScopes() {
         stateManager.init("pos", "100-1");
@@ -227,22 +203,22 @@ public class StateManagerTest {
         assertEquals(TestScopesState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("Done");
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
-        
+
         assertEquals("conversationScopeValue", stateManager.getScopeValue("conversationScopeValue"));
         assertEquals("sessionScopeValue", stateManager.getScopeValue("sessionScopeValue"));
         assertEquals("nodeScopeValue", stateManager.getScopeValue("nodeScopeValue"));
-        
+
         stateManager.endConversation();
         assertNull(stateManager.getScopeValue("conversationScopeValue"), stateManager.getScopeValue("conversationScopeValue"));
         assertEquals("sessionScopeValue", stateManager.getScopeValue("sessionScopeValue"));
         assertEquals("nodeScopeValue", stateManager.getScopeValue("nodeScopeValue"));
-        
+
         stateManager.endSession();
         assertNull(stateManager.getScopeValue("conversationScopeValue"), stateManager.getScopeValue("conversationScopeValue"));
         assertNull("stateManager.getScopeValue(\"sessionScopeValue\")", stateManager.getScopeValue("sessionScopeValue"));
-        assertEquals("nodeScopeValue", stateManager.getScopeValue("nodeScopeValue"));        
+        assertEquals("nodeScopeValue", stateManager.getScopeValue("nodeScopeValue"));
     }
-    
+
     @Test
     public void testInjectConfigState() {
         stateManager.init("pos", "100-1");
@@ -255,21 +231,21 @@ public class StateManagerTest {
         assertEquals(SellState.class, stateManager.getCurrentState().getClass());
         assertEquals("customerFlowTypeWorked", stateManager.getScopeValue("customerFlowTypeWorked"));
     }
-    
-    @Test(expected=FlowException.class)
+
+    @Test(expected = FlowException.class)
     public void testUnhandledAction() {
         stateManager.init("pos", "100-1");
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("UnhandledAction");
     }
-    
-    @Test(expected=FlowException.class)
+
+    @Test(expected = FlowException.class)
     public void testInjectionFailure() {
         stateManager.init("pos", "100-1");
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("TestFailedInjections");
     }
-    
+
     @Test
     public void testOptionalInjections() {
         stateManager.init("pos", "100-1");
@@ -277,7 +253,7 @@ public class StateManagerTest {
         stateManager.doAction("TestOptionalInjections");
         assertEquals(OptionalInjectionState.class, stateManager.getCurrentState().getClass());
     }
-    
+
     @Test
     public void testGlobalTransitionFromIntialState() {
         stateManager.init("pos", "100-1");
@@ -285,7 +261,7 @@ public class StateManagerTest {
         stateManager.doAction("Help");
         assertEquals(HelpState.class, stateManager.getCurrentState().getClass());
     }
-    
+
     @Test
     public void testGlobalTransitionFromSubsquentState() {
         stateManager.init("pos", "100-1");
@@ -295,9 +271,9 @@ public class StateManagerTest {
         stateManager.doAction("About");
         assertEquals(AboutState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("Home");
-        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());        
-    }   
-    
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+    }
+
     @Test
     public void testGlobalTransitionFromSubState() {
         stateManager.init("pos", "100-1");
@@ -311,9 +287,9 @@ public class StateManagerTest {
         stateManager.doAction("Back");
         assertEquals(CustomerState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("CustomerSelected");
-        assertEquals(SellState.class, stateManager.getCurrentState().getClass());        
-    }    
-    
+        assertEquals(SellState.class, stateManager.getCurrentState().getClass());
+    }
+
     @Test
     public void testGlobalSubTransitionFromIntialState() {
         stateManager.init("pos", "100-1");
@@ -327,7 +303,7 @@ public class StateManagerTest {
         stateManager.doAction("CustomerSelected");
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
     }
-    
+
     @Test
     public void testGlobalSubTransitionFromSubState() {
         stateManager.init("pos", "100-1");
@@ -345,7 +321,7 @@ public class StateManagerTest {
         stateManager.doAction("Home");
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
     }
-    
+
     @Test
     public void testTransitionProceed() {
         stateManager.init("pos", "100-1");
@@ -355,7 +331,7 @@ public class StateManagerTest {
         stateManager.doAction("TestTransitionProceed");
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
     }
-    
+
     @Test
     public void testTransitionCancel() {
         stateManager.init("pos", "100-1");
@@ -363,14 +339,14 @@ public class StateManagerTest {
         stateManager.doAction("Sell");
         assertEquals(SellState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("TestTransitionCancel");
-        assertEquals(SellState.class, stateManager.getCurrentState().getClass());        
+        assertEquals(SellState.class, stateManager.getCurrentState().getClass());
     }
-    
-    @Test(expected=FlowException.class)
+
+    @Test(expected = FlowException.class)
     public void testStackOverflow() {
         stateManager.init("pos", "100-1");
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("StackOverflow");
     }
-    
+
 }
