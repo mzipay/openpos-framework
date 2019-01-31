@@ -35,36 +35,40 @@ public class Injector {
     public void injectNulls(Object target, ScopeType scopeType) {
         Class<?> targetClass = target.getClass();
         Field[] fields = targetClass.getDeclaredFields();
+        while (targetClass != null) {
+            for (Field field : fields) {
+                field.setAccessible(true);
+                boolean nullField = false;
+                In in = field.getAnnotation(In.class);
+                if (in == null) {
+                    in = field.getDeclaredAnnotation(In.class);
+                }
 
-        for (Field field : fields) {
-            field.setAccessible(true);
-            boolean nullField = false;
-            In in = field.getAnnotation(In.class);
-            if (in == null) {
-                in = field.getDeclaredAnnotation(In.class);
-            }
+                if (in != null && in.scope() == scopeType) {
+                    nullField = true;
+                }
 
-            if (in != null && in.scope() == scopeType) {
-                nullField = true;
-            }
+                InOut inOut = field.getAnnotation(InOut.class);
+                if (inOut == null) {
+                    inOut = field.getDeclaredAnnotation(InOut.class);
+                }
 
-            InOut inOut = field.getAnnotation(InOut.class);
-            if (inOut == null) {
-                inOut = field.getDeclaredAnnotation(InOut.class);
-            }
+                if (inOut != null && inOut.scope() == scopeType) {
+                    nullField = true;
+                }
 
-            if (inOut != null && inOut.scope() == scopeType) {
-                nullField = true;
-            }
-            
-            if (nullField && !field.getType().isPrimitive()) {
-                try {
-                field.set(target, null);
-                } catch (Exception ex) {
-                    throw new FlowException("Failed to set target field " + field + " to null ", ex);
+                if (nullField && !field.getType().isPrimitive()) {
+                    try {
+                        field.set(target, null);
+                    } catch (Exception ex) {
+                        throw new FlowException("Failed to set target field " + field + " to null ", ex);
+                    }
                 }
             }
-
+            targetClass = targetClass.getSuperclass();
+            if (targetClass == Object.class) {
+                targetClass = null;
+            }
         }
     }
 
