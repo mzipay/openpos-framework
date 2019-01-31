@@ -34,8 +34,8 @@ public class Injector {
     
     public void injectNulls(Object target, ScopeType scopeType) {
         Class<?> targetClass = target.getClass();
-        Field[] fields = targetClass.getDeclaredFields();
         while (targetClass != null) {
+            Field[] fields = targetClass.getDeclaredFields();
             for (Field field : fields) {
                 field.setAccessible(true);
                 boolean nullField = false;
