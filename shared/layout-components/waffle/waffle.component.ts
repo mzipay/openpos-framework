@@ -1,7 +1,6 @@
-import { Component, Input, ViewChild, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { OpenposMediaService } from '../../../core';
 import { Observable } from 'rxjs';
-import { MatSidenav } from '@angular/material';
 
 @Component({
     selector: 'app-waffle',

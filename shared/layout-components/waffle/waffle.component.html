@@ -1,8 +1,10 @@
-<div class="waffle-header">
-    <div fxFlex="1 1 100%">
+<div class="waffle-header mat-elevation-z10">
+    <div class="waffle-header-content">
         <ng-content select="[waffle-header]"></ng-content>
     </div>
-    <app-icon-button class="drawer-button" [iconName]="'HamburgerMenu'" (buttonClick)="waffledrawer.toggle()"></app-icon-button>
+    <div class="hamburger-button-container">
+        <app-icon-button class="drawer-button" [iconName]="'HamburgerMenu'" (buttonClick)="waffledrawer.toggle()"></app-icon-button>
+    </div>
 </div>
 <mat-sidenav-container class="waffle-content-container">
     <mat-sidenav #waffledrawer class="waffle-drawer-content" position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async">
