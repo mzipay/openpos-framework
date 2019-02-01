@@ -70,7 +70,8 @@ import {
     ReceiptCardComponent,
     KebabButtonComponent,
     KebabMenuComponent,
-    IconSquareButtonComponent
+    IconSquareButtonComponent,
+    DisplayPropertyComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe } from './pipes';
@@ -123,7 +124,8 @@ const components = [
     KebabMenuComponent,
     IconSquareButtonComponent,
     StatusStripComponent,
-    SausageLinksComponent
+    SausageLinksComponent,
+    DisplayPropertyComponent
 ];
 
 const directives = [

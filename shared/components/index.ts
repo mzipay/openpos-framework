@@ -42,3 +42,6 @@ export * from './receipt-card/receipt-card.component';
 export * from './kebab-button/kebab-button.component';
 export * from './kebab-menu/kebab-menu.component';
 export * from './icon-square-button/icon-square-button.component';
+export * from './display-property/display-property.component';
+export * from './display-property/display-property.interface';
+export * from './display-property/display-property-alignment.enum';
