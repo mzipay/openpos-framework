@@ -2,12 +2,12 @@
     <div class="waffle-header-content">
         <ng-content select="[waffle-header]"></ng-content>
     </div>
-    <div class="hamburger-button-container">
+    <div *ngIf="showDrawer" class="hamburger-button-container">
         <app-icon-button class="drawer-button" [iconName]="'HamburgerMenu'" (buttonClick)="waffledrawer.toggle()"></app-icon-button>
     </div>
 </div>
 <mat-sidenav-container class="waffle-content-container">
-    <mat-sidenav #waffledrawer class="waffle-drawer-content" position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async">
+    <mat-sidenav *ngIf="showDrawer" #waffledrawer class="waffle-drawer-content" position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async">
         <ng-content select="[waffle-drawer-content]"></ng-content>
     </mat-sidenav>
     <mat-sidenav-content class="waffle-content">

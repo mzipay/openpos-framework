@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { OpenposMediaService } from '../../../core';
 import { Observable } from 'rxjs';
 
@@ -8,6 +8,9 @@ import { Observable } from 'rxjs';
     styleUrls: ['./waffle.component.scss']
   })
   export class WaffleComponent {
+
+    @Input()
+    showDrawer = true;
 
     public drawerOpen: Observable<boolean>;
     public drawerMode: Observable<string>;
