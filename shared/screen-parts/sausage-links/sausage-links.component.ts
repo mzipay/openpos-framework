@@ -10,6 +10,11 @@ import { IMenuItem } from '../../../core/interfaces/menu-item.interface';
 })
 export class SausageLinksComponent extends ScreenPart<IMenuItem[]> {
 
+    links: IMenuItem[];
+
     screenDataUpdated() {
+        if ( Array.isArray(this.screenData)) {
+            this.links = this.screenData;
+        }
     }
 }
