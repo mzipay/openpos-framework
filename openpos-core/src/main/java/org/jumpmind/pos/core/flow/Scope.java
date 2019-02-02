@@ -97,6 +97,8 @@ public class Scope {
             case Conversation:
                 setConversationScope(name, value);
                 break;
+            case State:
+                break;                
             default:
                 throw new FlowException("Invalid scope " + scopeType);
         }
@@ -110,6 +112,8 @@ public class Scope {
                 return getSessionScope().get(name);
             case Conversation:
                 return getConversationScope().get(name);
+            case State:
+                return null;                          
             default:
                 throw new FlowException("Invalid scope " + scopeType);
         }

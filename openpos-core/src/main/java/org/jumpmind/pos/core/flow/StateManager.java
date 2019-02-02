@@ -67,14 +67,11 @@ public class StateManager implements IStateManager {
 
     @Autowired(required = false)
     private List<? extends ISessionTimeoutListener> sessionTimeoutListeners;
-    
+
     @Autowired(required = false)
     private List<? extends ISessionListener> sessionListeners;
 
     private ApplicationState applicationState = new ApplicationState();
-
-    @Autowired
-    private UIManager uiManager;
 
     @Value("${org.jumpmind.pos.core.flow.StateManager.autoSaveState:false}")
     private boolean autoSaveState = false;
@@ -96,7 +93,6 @@ public class StateManager implements IStateManager {
     public void init(String appId, String nodeId) {
         this.applicationState.setAppId(appId);
         this.applicationState.setDeviceId(nodeId);
-        this.uiManager.init(this);
 
         boolean resumeState = false;
 
@@ -137,7 +133,7 @@ public class StateManager implements IStateManager {
         }
     }
 
-    public void removeSessionAuthentication(String sessionId) {        
+    public void removeSessionAuthentication(String sessionId) {
         if (this.sessionListeners != null && sessionAuthenticated.containsKey(sessionId)) {
             for (ISessionListener sessionListener : sessionListeners) {
                 sessionListener.disconnected(sessionId, this);
@@ -430,7 +426,7 @@ public class StateManager implements IStateManager {
                     + "\" This state needs to be mapped in a IFlowConfigProvider implementation. ");
         }
     }
-    
+
     @Override
     public void timeout() {
         FlowConfig flowConfig = applicationState.getCurrentContext().getFlowConfig();
@@ -440,17 +436,30 @@ public class StateManager implements IStateManager {
         } else {
             transitionTo(Action.ACTION_TIMEOUT, flowConfig.getInitialState());
         }
-        
+
     }
 
     @Override
     public void endConversation() {
         applicationState.getScope().clearConversationScope();
+        clearScopeOnStates(ScopeType.Conversation);
+    }
+
+    private void clearScopeOnStates(ScopeType scopeType) {
+        List<StateContext> stack = applicationState.getStateStack();
+        for (StateContext stateContext : stack) {
+            IState state = stateContext.getState();
+            injector.injectNulls(state, scopeType);
+        }
+        
+        injector.injectNulls(applicationState.getCurrentContext().getState(), scopeType);
+        
     }
 
     @Override
     public void endSession() {
         applicationState.getScope().clearSessionScope();
+        clearScopeOnStates(ScopeType.Session);
     }
 
     public void setInitialFlowConfig(FlowConfig initialFlowConfig) {
@@ -508,11 +517,6 @@ public class StateManager implements IStateManager {
     @Override
     public String getAppId() {
         return applicationState.getAppId();
-    }
-
-    @Override
-    public IUI getUI() {
-        return uiManager;
     }
 
     // called from a Timer thread.

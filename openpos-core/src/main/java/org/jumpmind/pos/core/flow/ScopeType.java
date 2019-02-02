@@ -3,6 +3,7 @@ package org.jumpmind.pos.core.flow;
 
 public enum ScopeType {
 
+    State, // Created before arriving at a state
     Config, // Static, configuration time scope.
     Device, // Value that lives for the entire lifetime of a given node.
     Session, // Values that have the same lifecycle as the logged in user session. 

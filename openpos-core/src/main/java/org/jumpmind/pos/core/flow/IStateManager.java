@@ -46,7 +46,6 @@ public interface IStateManager {
     public void showToast(Toast toast);
     public void refreshScreen();
     public IState getCurrentState();
-    public IUI getUI();
     public ApplicationState getApplicationState();
 	public void performOutjections(Object object);
 	public void setApplicationState(ApplicationState applicationState);

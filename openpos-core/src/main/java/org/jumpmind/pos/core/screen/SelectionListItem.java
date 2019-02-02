@@ -11,10 +11,15 @@ public class SelectionListItem implements Serializable {
     private String title;
 
     private List<SelectionListItemDisplayProperty> properties;
-    
+
     private boolean isSelected;
 
     public SelectionListItem() {
+        this.properties = new ArrayList<SelectionListItemDisplayProperty>();
+    }
+
+    public SelectionListItem(String title) {
+        this.title = title;
         this.properties = new ArrayList<SelectionListItemDisplayProperty>();
     }
 
@@ -39,7 +44,7 @@ public class SelectionListItem implements Serializable {
     public void setProperties(List<SelectionListItemDisplayProperty> properties) {
         this.properties = properties;
     }
-    
+
     public void addProperty(SelectionListItemDisplayProperty property) {
         this.properties.add(property);
     }
