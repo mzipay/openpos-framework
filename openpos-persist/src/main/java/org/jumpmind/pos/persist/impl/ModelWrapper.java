@@ -26,6 +26,7 @@ import org.jumpmind.pos.persist.ColumnDef;
 import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.model.ITaggedModel;
 import org.jumpmind.pos.persist.model.TagModel;
+import org.jumpmind.pos.util.model.ITypeCode;
 
 public class ModelWrapper {
     private static Logger log = Logger.getLogger(ModelWrapper.class);
@@ -206,6 +207,8 @@ public class ModelWrapper {
                     Object value = PropertyUtils.getProperty(model, fieldName);
                     if (value instanceof Money) {
                         handleMoneyField(columnNamesToObjectValues, fieldName, column, (Money)value);    
+                    } else if (value instanceof ITypeCode) {
+                        columnNamesToObjectValues.put(column.getName(), value.toString());
                     } else {                        
                         columnNamesToObjectValues.put(column.getName(), value);
                     }
@@ -218,6 +221,7 @@ public class ModelWrapper {
         }
     }    
     
+    @SuppressWarnings("unchecked")
     public void setValue(String fieldName, Object value) {
         Field field = getField(fieldName);
         
@@ -234,13 +238,15 @@ public class ModelWrapper {
                 BigDecimal decimalValue = (BigDecimal)value;
                 decimalValue = decimalValue.setScale(currency.getDecimalPlaces());
                 value = Money.of(currency, decimalValue);
-            }             
+            } else if (ITypeCode.class.isAssignableFrom(field.getType())) {
+                value = ITypeCode.make((Class<ITypeCode>)field.getType(), value != null ? value.toString() : null);
+            }
             ReflectUtils.setProperty(model, fieldName, value);
         } catch (Exception ex) {
             if (ex instanceof PersistException) {
                 throw (PersistException)ex;
             } else {                
-                throw new PersistException("Failed to " + fieldName + " to " + value + " on " + model, ex);
+                throw new PersistException("Failed to set " + fieldName + " to " + value + " on " + model, ex);
             }
         }
     }

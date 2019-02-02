@@ -26,6 +26,7 @@ import org.jumpmind.pos.persist.ColumnDef;
 import org.jumpmind.pos.persist.Extends;
 import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.TableDef;
+import org.jumpmind.pos.util.model.ITypeCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -443,7 +444,7 @@ public class DatabaseSchema {
 //    }
 
     private static int getDefaultType(Field field) {
-        if (field.getType().isAssignableFrom(String.class) || field.getType().isEnum()) {
+        if (field.getType().isAssignableFrom(String.class) || field.getType().isEnum() || ITypeCode.class.isAssignableFrom(field.getType())) {
             return Types.VARCHAR;
         } else if (field.getType().isAssignableFrom(long.class) || field.getType().isAssignableFrom(Long.class)) {
             return Types.BIGINT;

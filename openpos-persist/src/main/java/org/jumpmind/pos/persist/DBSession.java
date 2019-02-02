@@ -42,6 +42,7 @@ import org.jumpmind.pos.persist.model.ITaggedModel;
 import org.jumpmind.pos.persist.model.SearchCriteria;
 import org.jumpmind.pos.persist.model.TagHelper;
 import org.jumpmind.pos.persist.model.TagModel;
+import org.jumpmind.pos.util.model.ITypeCode;
 import org.jumpmind.util.LinkedCaseInsensitiveMap;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -468,7 +469,7 @@ public class DBSession {
     }
 
     protected boolean isDefferedLoadField(Field field) {
-        return field.getType().isAssignableFrom(Money.class);
+        return field.getType().isAssignableFrom(Money.class) || ITypeCode.class.isAssignableFrom(field.getClass());
     }
 
     protected <T> T mapNonModel(Class<T> resultClass, Row row) throws Exception {

@@ -2,7 +2,6 @@ package org.jumpmind.pos.persist.cars;
 
 import org.jumpmind.pos.persist.ColumnDef;
 import org.joda.money.Money;
-import org.jumpmind.pos.persist.AbstractModel;
 import org.jumpmind.pos.persist.TableDef;
 import org.jumpmind.pos.persist.model.AbstractTaggedModel;
 import org.jumpmind.pos.persist.model.ITaggedModel;
@@ -24,7 +23,11 @@ public class CarModel extends AbstractTaggedModel implements ITaggedModel {
     @ColumnDef(crossReference="isoCurrencyCode")
     private Money estimatedValue;
     @ColumnDef
-    private String isoCurrencyCode;    
+    private String isoCurrencyCode;
+    @ColumnDef
+    private CarTrimTypeCode carTrimTypeCode;
+    
+    
     
     public String getModelYear() {
         return modelYear;
@@ -61,6 +64,12 @@ public class CarModel extends AbstractTaggedModel implements ITaggedModel {
     }
     public void setIsoCurrencyCode(String isoCurrencyCode) {
         this.isoCurrencyCode = isoCurrencyCode;
+    }
+    public CarTrimTypeCode getCarTrimTypeCode() {
+        return carTrimTypeCode;
+    }
+    public void setCarTrimTypeCode(CarTrimTypeCode carTrimTypeCode) {
+        this.carTrimTypeCode = carTrimTypeCode;
     }
     
     
