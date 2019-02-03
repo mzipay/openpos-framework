@@ -9,7 +9,7 @@ export class SaleRetrievalComponent extends PosScreen<any> {
 
   buildScreen() {}
 
-  selected(value: string) {
+  selected(value: object) {
     this.session.onAction('Next', value);
   }
 }
