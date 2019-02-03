@@ -5,45 +5,66 @@
 				<mat-nav-list>
 					<mat-list-item class="sale-line-item">
 						<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
-							<div fxFlex="20%">
-								Transaction ID
+							<div *ngIf="screen.columnsToInclude.includes('transactionId')" fxFlex="20%">
+								{{screen.columnHeaders['transactionId']}}
+                            </div>
+                            <div *ngIf="screen.columnsToInclude.includes('sequenceNumber')" fxFlex="20%" style="text-align:center;">
+								{{screen.columnHeaders['sequenceNumber']}}
+                            </div>    
+							<div *ngIf="screen.columnsToInclude.includes('deviceId')" fxFlex="20%" style="text-align:center;">
+								{{screen.columnHeaders['deviceId']}}
+                            </div>      
+							<div *ngIf="screen.columnsToInclude.includes('itemCount')" fxFlex="10%" style="text-align:center;">
+								{{screen.columnHeaders['itemCount']}}
+							</div>                                                  
+							<div *ngIf="screen.columnsToInclude.includes('workstationId')" fxFlex="10%" style="text-align:center;">
+								{{screen.columnHeaders['workstationId']}}
 							</div>
-							<div fxFlex="10%" style="text-align:center;">
-								Register #
+							<div *ngIf="screen.columnsToInclude.includes('tillId')" fxFlex="10%" style="text-align:center;">
+								{{screen.columnHeaders['tillId']}}
 							</div>
-							<div fxFlex="10%" style="text-align:center;">
-								Till #
+							<div *ngIf="screen.columnsToInclude.includes('loyaltyNumber')" fxFlex="25%">
+								{{screen.columnHeaders['loyaltyNumber']}}
 							</div>
-							<div fxFlex="25%">
-								Reward Card #
-							</div>
-							<div fxFlex="20%">
-								Customer Name
+							<div *ngIf="screen.columnsToInclude.includes('customerName')" fxFlex="25%">
+								{{screen.columnHeaders['customerName']}}
 							</div>
 							<div fxFlex="15%">
-								Amount
+								{{screen.columnHeaders['grandTotal']}}
 							</div>
 						</div>
 					</mat-list-item>
-					<mat-list-item *ngFor="let i of screen.transactions" class="sale-line-item" (click)="selected(i.transactionId)">
+					<mat-list-item *ngFor="let i of screen.sales" class="sale-line-item" (click)="selected(i)">
 						<div fxLayout="row" fxLayoutAlign="center center" style="width:100%;">
-							<div fxFlex="20%">
+							<div *ngIf="screen.columnsToInclude.includes('transactionId')" fxFlex="20%">
 								<strong mat-line>{{i.transactionId}}</strong>
+                            </div>
+                            
+                            <div *ngIf="screen.columnsToInclude.includes('sequenceNumber')" fxFlex="20%" style="text-align:center;">
+								<div mat-line>{{i.sequenceNumber}}</div>
 							</div>
 
-							<div fxFlex="10%" style="text-align:center;">
+                            <div *ngIf="screen.columnsToInclude.includes('deviceId')" fxFlex="20%" style="text-align:center;">
+								<div mat-line>{{i.deviceId}}</div>
+							</div>
+
+                            <div *ngIf="screen.columnsToInclude.includes('itemCount')" fxFlex="10%" style="text-align:center;">
+								<div mat-line>{{i.itemCount}}</div>
+                            </div>
+                            
+							<div *ngIf="screen.columnsToInclude.includes('workstationId')" fxFlex="10%" style="text-align:center;">
 								<div mat-line>{{i.workstationId}}</div>
 							</div>
 
-							<div fxFlex="10%" style="text-align:center;">
+							<div *ngIf="screen.columnsToInclude.includes('tillId')" fxFlex="10%" style="text-align:center;">
 								<div mat-line>{{i.tillId}}</div>
 							</div>
 
-							<div fxFlex="25%">
-								<div mat-line>{{i.rewardsId}}</div>
+							<div *ngIf="screen.columnsToInclude.includes('loyaltyNumber')" fxFlex="25%">
+								<div mat-line>{{i.loyaltyNumber}}</div>
 							</div>
 
-							<div fxFlex="20%">
+							<div *ngIf="screen.columnsToInclude.includes('customerName')" fxFlex="25%">
 								<div mat-line>{{i.customerName}}</div>
 							</div>
 
