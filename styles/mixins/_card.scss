@@ -16,9 +16,10 @@
   }
 
   mat-card.scrollable-content-card{
+    min-height: 50%;
       .mat-card-content{
           margin-bottom:0px;
-          overflow-y:auto
+          overflow-y:auto;
       }
   }
   
