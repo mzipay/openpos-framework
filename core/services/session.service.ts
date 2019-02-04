@@ -373,7 +373,9 @@ export class SessionService implements IMessageHandler<any> {
             if (processAction && !this.waitingForResponse) {
                 const sendToServer: Function = () => {
                     this.log.info(`>>> Post action "${actionString}"`);
-                    this.queueLoading();
+                    if (!isValueChangedAction) {
+                        this.queueLoading();
+                    }
                     if (!this.publish(actionString, 'Screen', response)) {
                         this.cancelLoading();
                     }
@@ -385,7 +387,9 @@ export class SessionService implements IMessageHandler<any> {
                     const interceptor = this.actionIntercepters.get(actionString);
                     interceptor.intercept(response, sendToServer);
                     if (interceptor.options && interceptor.options.showLoadingAfterIntercept) {
-                        this.queueLoading();
+                        if (!isValueChangedAction) {
+                           this.queueLoading();
+                        }
                     }
                 } else {
                     sendToServer();
