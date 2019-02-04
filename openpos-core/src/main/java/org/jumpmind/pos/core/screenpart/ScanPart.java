@@ -3,6 +3,7 @@ package org.jumpmind.pos.core.screenpart;
 import java.io.Serializable;
 
 import org.jumpmind.pos.core.model.FieldInputType;
+import org.jumpmind.pos.core.screen.IconType;
 
 public class ScanPart implements Serializable{
     private static final long serialVersionUID = 1L;
@@ -14,7 +15,7 @@ public class ScanPart implements Serializable{
     private Integer scanMinLength = 1;
     private Integer scanMaxLength = 22;
     private ScanType scanType;
-    private String scanIcon;
+    private String scanIcon = IconType.Barcode;
     private String scanActionName = "Scan";
     private String scanSomethingText = "Scan/Key Something";
     private boolean autoFocusOnScan = false;

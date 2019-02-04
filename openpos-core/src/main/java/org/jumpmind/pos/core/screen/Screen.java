@@ -1,14 +1,10 @@
 package org.jumpmind.pos.core.screen;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
-import org.joda.money.Money;
 import org.jumpmind.pos.core.model.MessageType;
 import org.jumpmind.pos.core.template.AbstractTemplate;
 import org.jumpmind.pos.core.template.BlankWithBarTemplate;
@@ -17,10 +13,6 @@ import org.jumpmind.pos.util.DefaultObjectMapper;
 import org.jumpmind.pos.util.model.Message;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class Screen extends Message {
 
@@ -30,7 +22,10 @@ public class Screen extends Message {
     private String name;
     private String screenType;
     private String icon;
+    
+    @Deprecated
     private AbstractTemplate template = new BlankWithBarTemplate();
+    
     private String locale;
     private int sessionTimeoutMillis;
     private Action sessionTimeoutAction;

@@ -15,9 +15,9 @@ public class SaleScreen extends Screen {
     private static final long serialVersionUID = 1L;
     public static final String ITEM_TOTAL_NAME = "itemTotal";
     
-    private BaconStripPart baconStrip;
-    private ScanPart scan;
-    private StatusStripPart statusStrip;
+    private BaconStripPart baconStrip = new BaconStripPart();
+    private ScanPart scan = new ScanPart();
+    private StatusStripPart statusStrip = new StatusStripPart();
     
     private List<SellItem> items = new ArrayList<>();
     private List<Integer> selectedItemIndexes = new ArrayList<>();
@@ -40,6 +40,8 @@ public class SaleScreen extends Screen {
 
     public SaleScreen() {
         this.setScreenType(ScreenType.Sale);
+        this.setId("sale");
+        this.setTemplate(null);
     }
 
     public List<SellItem> getItems() {
