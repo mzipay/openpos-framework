@@ -54,6 +54,6 @@ module.exports = function(grunt) {
       grunt.loadNpmTasks('grunt-contrib-clean');
 
       grunt.registerTask('default', ['sync', 'exec:link', 'clean:node_modules', 'watch']);
-      grunt.registerTask('sync-files', ['sync']);
+      grunt.registerTask('sync-files', ['sync', 'clean:node_modules']);
   
   };
