@@ -3,7 +3,7 @@
 [class.selected]="isItemSelected(item)"
 [class.mat-elevation-z0]="!isItemSelected(item)" 
 [class.mat-elevation-z15]="isItemSelected(item)"
-(click)="onItemClick(item)">
+(click)="onItemClick(item, $event)">
     <ng-template ngFor let-item [ngForOf]="[item]" [ngForTemplate]="itemTemplate"></ng-template>
 </div>
 <div fxLayoutAlign="center center" *ngIf="numberOfPages > 1">

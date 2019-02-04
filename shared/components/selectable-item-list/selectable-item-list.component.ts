@@ -84,7 +84,11 @@ export class SelectableItemListComponent<ItemType> {
         this.updateResultsToShow();
     }
 
-    onItemClick(item: ItemType) {
+    onItemClick(item: ItemType, event: any) {
+        // look for block-selection attribute and don't do the selection if we find it in our path
+        if ( event.path.find(element => element.attributes && element.attributes.getNamedItem('block-selection'))) {
+            return;
+        }
         switch (this._config.selectionMode) {
             case SelectionMode.Multiple:
                 const i = this.selectedItemList.indexOf(item);

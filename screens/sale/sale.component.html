@@ -66,6 +66,7 @@
                                 </span>
                             </div>
                             <app-kebab-button 
+                                block-selection
                                 *ngIf="selectedItems.length < 1 && !screen.readOnly"
                                 fxAlign="right"
                                 [menuItems]="item.menuItems"
