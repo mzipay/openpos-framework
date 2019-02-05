@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TextMaskModule } from 'angular2-text-mask';
 import { MaterialModule } from './material.module';
 import { MatKeyboardModule } from '../keyboard';
+import { MarkdownModule } from 'ngx-markdown';
 
 import {
     MarkDirtyOnSubmitDirective,
@@ -74,10 +75,11 @@ import {
     DisplayPropertyComponent
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
-import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe } from './pipes';
+import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe, MarkdownFormatterPipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
 import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent } from './screen-parts';
 import { SideNavComponent, WaffleComponent } from './layout-components';
+
 const components = [
     PromptInputComponent,
     IconComponent,
@@ -158,7 +160,9 @@ const pipes = [
     ValueFormatterPipe,
     POSCurrencyPipe,
     StringListFilterPipe,
-    ListLimitPipe
+    ListLimitPipe,
+    MarkdownFormatterPipe,
+
 ];
 
 @NgModule({
@@ -181,6 +185,7 @@ const pipes = [
         MaterialModule,
         MatKeyboardModule,
         TextMaskModule,
+        MarkdownModule.forRoot(),
     ],
     exports: [
         BrowserModule,
