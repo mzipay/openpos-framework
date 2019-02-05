@@ -165,6 +165,40 @@ public class SaleRetrievalScreen extends Screen {
             return lineItemCount;
         }
 
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((businessDate == null) ? 0 : businessDate.hashCode());
+            result = prime * result + ((deviceId == null) ? 0 : deviceId.hashCode());
+            result = prime * result + (int) (sequenceNumber ^ (sequenceNumber >>> 32));
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            Sale other = (Sale) obj;
+            if (businessDate == null) {
+                if (other.businessDate != null)
+                    return false;
+            } else if (!businessDate.equals(other.businessDate))
+                return false;
+            if (deviceId == null) {
+                if (other.deviceId != null)
+                    return false;
+            } else if (!deviceId.equals(other.deviceId))
+                return false;
+            if (sequenceNumber != other.sequenceNumber)
+                return false;
+            return true;
+        }
+
     }
 
 }
