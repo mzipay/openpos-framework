@@ -1,10 +1,22 @@
 package org.jumpmind.pos.service.strategy;
 
 import java.lang.reflect.Method;
+import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
+import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.service.EndpointInjector;
+import org.jumpmind.pos.service.ServiceSpecificConfig;
+import org.jumpmind.pos.service.instrumentation.ServiceSample;
+import org.jumpmind.pos.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 abstract public class AbstractInvocationStrategy {
@@ -32,4 +44,21 @@ abstract public class AbstractInvocationStrategy {
         }
         return path.toString();
     }
+    
+//    public Object invoke(ServiceSpecificConfig config, Object proxy, Method method, Object[] args) throws Throwable {
+//        ServiceSample sample = startSample(config, proxy, method, args);
+//        Object result = null;
+//        try {            
+//            result = invokeImpl(config, proxy, method, args);
+//            endSampleSuccess(sample, config, proxy, method, args, result);
+//        } catch (Throwable ex) {
+//            endSampleError(sample, config, proxy, method, args, result, ex);
+//            throw ex;
+//        }
+//        
+//        return result;
+//        
+//    }
+//    
+//    protected abstract Object invokeImpl(ServiceSpecificConfig config, Object proxy, Method method, Object[] args) throws Throwable;
 }
