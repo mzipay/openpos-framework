@@ -68,6 +68,13 @@ public class PromptConfig {
         this.actionMenuItem = actionMenuItem;
         return this;
     }
+    
+    public PromptConfig asDialog() {
+        DialogProperties props = new DialogProperties();
+        props.setMinWidth("50%");
+        props.setForceReopen(false);
+        return dialogProperties(props);
+    }
 
     public PromptConfig addOtherAction(MenuItem option) {
         otherActions.add(option);
