@@ -1,9 +1,8 @@
 <mat-toolbar fxLayoutGap="10px">
-    <app-icon-button 
-        *ngIf="screenData.backButton" 
-        [iconName]="screenData.backButton.icon" 
-        (buttonClick)="onMenuItemClick(screenData.backButton)"
-    ></app-icon-button>
+    <button *ngIf="screenData.backButton" 
+        mat-button style="margin-left:-20px; z-index:10;" (click)="onMenuItemClick(screenData.backButton)">
+        <mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
+    </button>    
     <div fxLayoutAlign="center center" fxLayoutGap="10px">
         <app-icon *ngIf="screenData.headerIcon" class="screen-icon" [iconName]="screenData.headerIcon"></app-icon>
         <span>{{screenData.headerText}}</span>
