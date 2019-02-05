@@ -34,12 +34,13 @@
                                 <span [ngClass]="item.prop65Item ? 'warn' : ''">
                                     {{item.description}}
                                 </span>
-                                <span class="muted-color">
-                                    <mat-chip-list>
+                                <div class="muted-color">
                                         {{item.subtitle}}&nbsp;
+
+                                    <mat-chip-list>
                                         <mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
                                     </mat-chip-list>
-                                </span>
+                                </div>
                                 <span *ngIf="item.prop65Item" class="muted-color">
                                     <table>
                                         <tr>
@@ -70,7 +71,7 @@
                                 *ngIf="selectedItems.length < 1 && !screen.readOnly"
                                 fxAlign="right"
                                 [menuItems]="item.menuItems"
-                                (menuItemClick)="onMenuItemClick($event, item.index)"
+                                (menuItemClick)="onMenuItemClick($event, [item.index])"
                             ></app-kebab-button>
                         </div>
                     </ng-template>

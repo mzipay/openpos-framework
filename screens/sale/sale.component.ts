@@ -65,7 +65,8 @@ export class SaleComponent extends PosScreen<SaleInterface> implements OnInit {
       this.individualMenuClicked = false;
       return;
     }
-    this.session.onValueChange('SelectedItemsChanged', this.selectedItems.map(item => item.index));
+    this.screen.selectedItemIndexes = this.selectedItems.map(item => item.index);
+    this.session.onValueChange('SelectedItemsChanged', this.screen.selectedItemIndexes);
   }
 
   /*ngAfterViewChecked() {
