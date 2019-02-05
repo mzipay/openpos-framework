@@ -1,8 +1,8 @@
-<div fxFlexFill fxLayout="column" fxLayoutGap="16px">
-	<mat-card fxFlex class="lighter" fxLayoutAlign="start" fxLayout="column">
+<div fxLayout="column" class="outer">
+	<mat-card fxFlex="0 1 auto" fxLayout="column" class="lighter scrollable-content-card">
 		<mat-card-title *ngIf="screen.instructions" class="text-sm">{{screen.instructions}}</mat-card-title>
-		<mat-card-content class="scrollable">
-			<app-selectable-item-list fxFlex="0 1 100%" [configuration]="listConfig" (selectedItemChange)="onItemChange($event)"
+		<mat-card-content fxFlex="100%">
+			<app-selectable-item-list [configuration]="listConfig" (selectedItemChange)="onItemChange($event)"
 			 (selectedItemListChange)="onItemListChange($event)">
 				<div *ngFor="let sel of screen.selectionList">
 					<span *ngIf="sel.title" class="text-sm item-title">{{sel.title}}</span>
@@ -15,7 +15,7 @@
 				</div>
 			</app-selectable-item-list>
 		</mat-card-content>
-		<mat-card-actions fxFlex="0 0 auto" fxLayoutAlign="end">
+		<mat-card-actions fxLayoutAlign="end">
 			<button *ngFor="let m of screen.nonSelectionButtons" mat-raised-button color="primary" (click)="doMenuItemAction(m)">
 				{{m.title}} </button>
 			<button *ngFor="let m of screen.buttons" mat-raised-button color="primary" [disabled]="index<0" (click)="doMenuItemAction(m)">{{m.title}}</button>
