@@ -23,6 +23,7 @@ export * from './date-part-chooser/date-part-chooser-dialog/date-part-chooser-di
 export * from './message-dialog/message-dialog.component';
 export * from './status-bar-status-control/status-bar-status-control.component';
 export * from './catalog-browser-item/catalog-browser-item.component';
+export * from './transaction-item-list/transaction-item-list.component';
 
 export * from './primary-button/primary-button.component';
 export * from './secondary-button/secondary-button.component';
