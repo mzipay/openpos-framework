@@ -30,7 +30,7 @@ export class KebabButtonComponent {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            if( result ) {
+            if ( result ) {
                 this.menuItemClick.emit(result);
             }
         });

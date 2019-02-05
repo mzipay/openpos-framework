@@ -15,7 +15,7 @@
         <span>{{screen.prompt}}</span>
         <app-kebab-button [menuItems]="screen.transactionMenuItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
     </div>
-    <div waffle-body class="sale-content" fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
+    <div waffle-body class="sale-content">
         <mat-card fxFlex="0 1 100%" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column" fxLayoutAlign="start">
             <mat-card-content fxFlex="100%" #scrollList ngClass.xs="xs">
                 <mat-toolbar *ngIf="selectedItems && selectedItems.length > 0" class="page-content-card" color="primary" >
@@ -66,6 +66,7 @@
                                 </span>
                             </div>
                             <app-kebab-button 
+                                block-selection
                                 *ngIf="selectedItems.length < 1 && !screen.readOnly"
                                 fxAlign="right"
                                 [menuItems]="item.menuItems"
