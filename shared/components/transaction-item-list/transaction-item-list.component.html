@@ -17,12 +17,12 @@
                         <span [ngClass]="item.prop65Item ? 'warn' : ''">
                             {{item.description}}
                         </span>
-                        <div class="muted-color">
-                            {{item.subtitle}}&nbsp;
+                        <span class="muted-color">                            
                             <mat-chip-list>
+                                <mat-basic-chip>{{item.subtitle}}&nbsp;</mat-basic-chip>
                                 <mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
                             </mat-chip-list>
-                        </div>
+                        </span>
                         <span *ngIf="item.prop65Item" class="muted-color">
                             <table>
                                 <tr>
