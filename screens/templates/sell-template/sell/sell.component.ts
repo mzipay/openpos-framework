@@ -23,6 +23,7 @@ export class SellComponent extends AbstractTemplate<any> {
 
   @ViewChild('drawer') drawer;
   public drawerOpen: Observable<boolean>;
+  public showDrawer = true;
 
   public drawerMode: Observable<string>;
 
@@ -43,6 +44,7 @@ export class SellComponent extends AbstractTemplate<any> {
         this.initializeDrawerMediaSizeHandling();
       } else {
         this.drawerOpen = of(false);
+        this.showDrawer = false;
       }
   }
 

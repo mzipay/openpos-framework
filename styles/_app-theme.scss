@@ -166,18 +166,15 @@
     app-sell{
         .mat-drawer-container{
             padding-bottom:6px;
-            background-color: mat-color($background, app-bar);
         }
     
         .mat-drawer-content{
-            background-color: mat-color($background, app-bar);
             padding-right:6px;
             padding-left:6px;
             padding-bottom:6px;
         }
     
         .mat-drawer{
-            background-color: mat-color($background, app-bar);
             padding-right:6px;
             padding-bottom:10px;
         }

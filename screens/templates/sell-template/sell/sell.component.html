@@ -1,65 +1,46 @@
-<div fxFlexFill fxLayout="column">
-    <app-statusbar fxFlex="0 0 auto" [data]="statusBar"></app-statusbar>
-    <div fxFlex="0 1 100%" style="padding: 16px; overflow-y: auto;" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="16px">
-        <app-scan-something fxFlex="0 0 auto" class="mat-elevation-z3" *ngIf="template.scan" [scanSomethingData]="template.scan"></app-scan-something>
+<app-waffle [showDrawer]="showDrawer">
+    <app-statusbar waffle-header fxFlex="100%" [data]="statusBar"></app-statusbar>
 
-        <mat-card fxFlex="0 1 100%" class="page-content-card min-height lighter" fxLayout="column" fxLayoutAlign="start">
-            <mat-card-title fxFlex="0 0 auto" class="text-md">
-                <ng-container *ngIf="template.transactionMenuItems?.length > 0; else prompt">
-                    <button mat-button class="text-md" style="padding-left:0px;" (click)="openTransactionSubmenu()">
-                        <span>{{screen.prompt}}</span>
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
-                </ng-container>
-                <ng-template #prompt>
-                    <span fxFlexAlign="center" [ngClass]="{'warn bold-text':screen.customerFacing}">{{screen.prompt}}</span>
-                </ng-template>
-                <span fxFlex="1 1 auto"></span>
-                <span *ngIf="template && template.localMenuItems && template.localMenuItems.length && enableMenuClose()">
-                    <button mat-icon-button (click)="drawer.toggle()">
-                        <mat-icon>menu</mat-icon>
-                    </button>
-                </span>
-            </mat-card-title>
-            <ng-container *ngIf="screen.subtitle">
-                <mat-card-subtitle *ngIf="screen.subtitle?.length == 1" fxFlex="0 0 auto" class="text-md">{{screen.subtitle}}</mat-card-subtitle>
-                <div *ngIf="screen.subtitle?.length > 1">
-                    <div *ngFor="let line of screen.subtitle">
-                        <mat-card-subtitle *ngIf="screen.subtitle?.length > 1" fxFlex="0 0 auto" class="text-md">{{line}}</mat-card-subtitle>
-                    </div>
-                </div>
-            </ng-container>
-
-            <mat-card-content fxFlex="0 1 100%">
-                <mat-drawer-container fxFlex="0 1 100%">
-                    <mat-drawer #drawer position="end" [mode]="drawerMode | async" [opened]="drawerOpen | async" class="sell-template-drawer">
-                        <div fxFlexFill fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="4px"
-                            fxLayoutGap.lg="20px">
-                            <button mat-button color="primary" *ngFor="let m of template.localMenuItems" (click)="doMenuItemAction(m)"
-                                [disabled]="!isMenuItemEnabled(m)" class="sell-template-menu-button">
-                                <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
-                                <span [ngClass]="{'muted-color': ! m.enabled}">&nbsp;{{m.title}}</span>
-                                <span *ngIf="m.keybind && keybindsEnabled()" fxFlex="1 1 auto" style="padding-right: 8px;"></span>
-                                <span *ngIf="m.keybind && keybindsEnabled()" class="muted-color">{{m.keybind}}</span>
-                            </button>
-                            <div fxFlex="1 1 auto"></div>
-                            <ng-container *ngIf="!screen.hideCustomer">
-                                <app-sell-linked-customer [screenType]="screen.screenType" [customerName]="screen.customerName"
-                                    [noCustomerText]="screen.noCustomerText" [loyaltyButton]="screen.loyaltyButton"></app-sell-linked-customer>
-                            </ng-container>
-                            <div *ngIf="screen.screenType === 'Transaction'" fxFlex="0 1 auto" class="sell-screen-logo"></div>
-                        </div>
-                    </mat-drawer>
-
-                    <mat-drawer-content fxFlex="0 1 100%" fxLayout="column">
-                        <div style="flex:1 1 50%; min-height: 50%">
-                            <ng-template appScreen></ng-template>
-                        </div>
-                        <app-sell-status-section fxFlex="0 1 auto" [data]="statusSection"></app-sell-status-section>
-                    </mat-drawer-content>
-
-                </mat-drawer-container>
-            </mat-card-content>
-        </mat-card>
+    <div waffle-drawer-content class="drawer-content" fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start stretch"
+        fxLayoutGap="4px" fxLayoutGap.lg="20px">
+        <button mat-button color="primary" *ngFor="let m of template.localMenuItems" (click)="doMenuItemAction(m)"
+            [disabled]="!isMenuItemEnabled(m)" class="sell-template-menu-button">
+            <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
+            <span [ngClass]="{'muted-color': ! m.enabled}">&nbsp;{{m.title}}</span>
+            <span *ngIf="m.keybind && keybindsEnabled()" fxFlex="1 1 auto" style="padding-right: 8px;"></span>
+            <span *ngIf="m.keybind && keybindsEnabled()" class="muted-color">{{m.keybind}}</span>
+        </button>
+        <div fxFlex="1 1 auto"></div>
+        <ng-container *ngIf="!screen.hideCustomer">
+            <app-sell-linked-customer [screenType]="screen.screenType" [customerName]="screen.customerName"
+                [noCustomerText]="screen.noCustomerText" [loyaltyButton]="screen.loyaltyButton"></app-sell-linked-customer>
+        </ng-container>
+        <div *ngIf="screen.screenType === 'Transaction'" fxFlex="0 1 auto" class="sell-screen-logo"></div>
     </div>
-</div>
+
+    <app-scan-something waffle-top-content class="scan-or-search mat-elevation-z3" *ngIf="template.scan"
+        [scanSomethingData]="template.scan"></app-scan-something>
+
+    <div waffle-title class="sale-prompt">
+        <span>{{screen.prompt}}</span>
+        <app-kebab-button [menuItems]="screen.transactionMenuItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
+    </div>
+
+    <div waffle-body class="sale-content">
+
+        <ng-container *ngIf="screen.subtitle">
+            <mat-card-subtitle *ngIf="screen.subtitle?.length == 1" fxFlex="0 0 auto" class="text-md">{{screen.subtitle}}</mat-card-subtitle>
+            <div *ngIf="screen.subtitle?.length > 1">
+                <div *ngFor="let line of screen.subtitle">
+                    <mat-card-subtitle *ngIf="screen.subtitle?.length > 1" fxFlex="0 0 auto" class="text-md">{{line}}</mat-card-subtitle>
+                </div>
+            </div>
+        </ng-container>
+
+        <div style="flex:1 1 50%; min-height: 50%">
+            <ng-template appScreen></ng-template>
+        </div>
+        <app-sell-status-section fxFlex="0 1 auto" [data]="statusSection"></app-sell-status-section>
+
+    </div>
+</app-waffle>
