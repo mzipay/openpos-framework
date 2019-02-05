@@ -8,14 +8,17 @@
 							<div *ngIf="screen.columnsToInclude.includes('transactionId')" fxFlex="20%">
 								{{screen.columnHeaders['transactionId']}}
                             </div>
-                            <div *ngIf="screen.columnsToInclude.includes('sequenceNumber')" fxFlex="20%" style="text-align:center;">
+                            <div *ngIf="screen.columnsToInclude.includes('businessDate')" fxFlex="15%" style="text-align:center;">
+                                    {{screen.columnHeaders['businessDate']}}
+                                </div>                              
+                            <div *ngIf="screen.columnsToInclude.includes('sequenceNumber')" fxFlex="15%" style="text-align:center;">
 								{{screen.columnHeaders['sequenceNumber']}}
                             </div>    
-							<div *ngIf="screen.columnsToInclude.includes('deviceId')" fxFlex="20%" style="text-align:center;">
+							<div *ngIf="screen.columnsToInclude.includes('deviceId')" fxFlex="15%" style="text-align:center;">
 								{{screen.columnHeaders['deviceId']}}
                             </div>      
-							<div *ngIf="screen.columnsToInclude.includes('itemCount')" fxFlex="10%" style="text-align:center;">
-								{{screen.columnHeaders['itemCount']}}
+							<div *ngIf="screen.columnsToInclude.includes('lineItemCount')" fxFlex="fill" style="text-align:center;">
+								{{screen.columnHeaders['lineItemCount']}}
 							</div>                                                  
 							<div *ngIf="screen.columnsToInclude.includes('workstationId')" fxFlex="10%" style="text-align:center;">
 								{{screen.columnHeaders['workstationId']}}
@@ -39,17 +42,19 @@
 							<div *ngIf="screen.columnsToInclude.includes('transactionId')" fxFlex="20%">
 								<strong mat-line>{{i.transactionId}}</strong>
                             </div>
-                            
-                            <div *ngIf="screen.columnsToInclude.includes('sequenceNumber')" fxFlex="20%" style="text-align:center;">
+                            <div *ngIf="screen.columnsToInclude.includes('businessDate')" fxFlex="15%" style="text-align:center;">
+                                    <div mat-line>{{i.businessDate}}</div>
+                                </div>
+                            <div *ngIf="screen.columnsToInclude.includes('sequenceNumber')" fxFlex="15%" style="text-align:center;">
 								<div mat-line>{{i.sequenceNumber}}</div>
 							</div>
 
-                            <div *ngIf="screen.columnsToInclude.includes('deviceId')" fxFlex="20%" style="text-align:center;">
+                            <div *ngIf="screen.columnsToInclude.includes('deviceId')" fxFlex="15%" style="text-align:center;">
 								<div mat-line>{{i.deviceId}}</div>
 							</div>
 
-                            <div *ngIf="screen.columnsToInclude.includes('itemCount')" fxFlex="10%" style="text-align:center;">
-								<div mat-line>{{i.itemCount}}</div>
+                            <div *ngIf="screen.columnsToInclude.includes('lineItemCount')" fxFlex="fill" style="text-align:center;">
+								<div mat-line>{{i.lineItemCount}}</div>
                             </div>
                             
 							<div *ngIf="screen.columnsToInclude.includes('workstationId')" fxFlex="10%" style="text-align:center;">
