@@ -20,7 +20,7 @@ public class SaleScreen extends Screen {
     private StatusStripPart statusStrip = new StatusStripPart();
     
     private List<SellItem> items = new ArrayList<>();
-    private List<Integer> selectedItemIndexes = new ArrayList<>();
+    private int[] selectedItemIndexes = new int[0];
     private List<MenuItem> sausageLinks = new ArrayList<>();
     private List<MenuItem> transactionMenuItems = new ArrayList<>();
     
@@ -228,11 +228,11 @@ public class SaleScreen extends Screen {
         this.baconStrip = baconStrip;
     }
 
-    public List<Integer> getSelectedItemIndexes() {
+    public int[] getSelectedItemIndexes() {
         return selectedItemIndexes;
     }
 
-    public void setSelectedItemIndexes(List<Integer> selectedItemIndexes) {
+    public void setSelectedItemIndexes(int[] selectedItemIndexes) {
         this.selectedItemIndexes = selectedItemIndexes;
     }
 
