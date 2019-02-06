@@ -1,23 +1,28 @@
+<div class="sale-prompt">
+    <div *ngIf="selectedItems && selectedItems.length > 0; else transactionMenu" class="page-content-card" >
+        <mat-label class="primary">{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</mat-label>
+        <app-kebab-button *ngIf="!readOnly && selectedItems.length > 0" [menuItems]="multiSelectedMenuItems" [color]="'primary'"
+            (menuItemClick)="onMenuItemClick($event, selectedItemIndexes)"></app-kebab-button>
+    </div>
+    <ng-template #transactionMenu>
+        <span>{{prompt}}</span>
+        <app-kebab-button [menuItems]="transactionMenuItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
+    </ng-template>
+</div>
+
 <mat-card fxFlex="0 1 100%" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column"
     fxLayoutAlign="start">
     <mat-card-content fxFlex="100%" #scrollList ngClass.xs="xs">
 
-        <mat-toolbar *ngIf="selectedItems && selectedItems.length > 0" class="page-content-card" color="primary">
-            <span>{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</span>
-            <span fxFlex="1 1 auto"></span>
-            <app-kebab-button *ngIf="!readOnly && selectedItems.length > 0" [menuItems]="multiSelectedMenuItems"
-                (menuItemClick)="onMenuItemClick($event, selectedItemIndexes)"></app-kebab-button>
-        </mat-toolbar>
-
         <app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems"
             (selectedItemListChange)="onItemListChange($event)">
             <ng-template let-item>
-                <div fxLayoutAlign="space-between" fxLayout.xs="column" [ngClass]="item.type" style="margin:-15px;padding:15px">
+                <div fxLayoutAlign="space-between" fxLayout.xs="column" [ngClass]="item.type" style="margin: -15px; padding: 15px;">
                     <div fxFlex="90" fxAlign="left">
                         <span [ngClass]="item.prop65Item ? 'warn' : ''">
                             {{item.description}}
                         </span>
-                        <span class="muted-color">                            
+                        <span class="muted-color">
                             <mat-chip-list>
                                 <mat-basic-chip>{{item.subtitle}}&nbsp;</mat-basic-chip>
                                 <mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
@@ -26,10 +31,10 @@
                         <span *ngIf="item.prop65Item" class="muted-color">
                             <table>
                                 <tr>
-                                    <td style="text-align:left;vertical-align:top;padding-right:4px">
+                                    <td style="text-align: left; vertical-align: top; padding-right: 4px;">
                                         <div class="prop65Image"></div>
                                     </td>
-                                    <td style="text-align:left;vertical-align:middle;">{{item.prop65WarningText}}</td>
+                                    <td style="text-align: left; vertical-align: middle;">{{item.prop65WarningText}}</td>
                                 </tr>
                             </table>
                         </span>
@@ -42,11 +47,11 @@
                             <app-currency-text [amountText]="item.amount"></app-currency-text>
                             <br>
                             <span>
-                                <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px; text-decoration:line-through">
+                                <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin: 0px; text-decoration: line-through;">
                                     <app-currency-text [amountText]="item.originalAmount"></app-currency-text>
                                 </p>
 
-                                <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin:0px">
+                                <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin: 0px;">
                                     <app-currency-text [amountText]="item.discountAmount"></app-currency-text>
                                 </p>
                             </span>
@@ -58,7 +63,8 @@
             </ng-template>
         </app-selectable-item-list>
 
-        <div *ngIf="!listConfig.items || listConfig.items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
+        <div *ngIf="!listConfig.items || listConfig.items.length == 0" fxLayout="column" fxLayoutAlign="center center"
+            class="muted-color">
             <mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
             <span class="text-md">Scan/Key something to get started</span>
         </div>

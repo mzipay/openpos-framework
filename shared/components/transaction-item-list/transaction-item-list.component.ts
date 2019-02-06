@@ -20,34 +20,33 @@ export class TransactionItemListComponent {
 
   @Input() multiSelectedMenuItems: IMenuItem[];
 
+  @Input() transactionMenuItems: IMenuItem[];
+
+  @Input() prompt: string;
+
   @Input() readOnly: boolean;
 
   @Output() selectedItemListChange = new EventEmitter<ISellItem[]>();
 
-  @Output() itemAction = new EventEmitter<any>();
+  @Output() menuAction = new EventEmitter<any>();
 
   individualMenuClicked = false;
   size = -1;
 
   public onItemListChange(items: ISellItem[]): void {
-
-    console.log('ITEMS CHANGED FROM:');
-    console.log(this.selectedItems);
     this.selectedItems = items;
-
     if (this.individualMenuClicked) {
       this.individualMenuClicked = false;
       return;
     }
-
-    console.log('ITEMS CHANGED TO:');
-    console.log(items);
     this.selectedItemListChange.emit(items);
   }
 
-  public onMenuItemClick(menuItem: IMenuItem, payload: number[]) {
-    if (menuItem.enabled) {
-      this.itemAction.emit({ menuItem: menuItem, payload: payload });
+  public onMenuItemClick(menuItem: IMenuItem, payload?: number[]) {
+    if (menuItem.enabled && payload) {
+      this.menuAction.emit({ menuItem: menuItem, payload: payload });
+    } else if (menuItem.enabled) {
+      this.menuAction.emit(menuItem);
     }
   }
 

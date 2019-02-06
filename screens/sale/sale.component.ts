@@ -61,9 +61,11 @@ export class SaleComponent extends PosScreen<SaleInterface> implements OnInit {
     this.session.onValueChange('SelectedItemsChanged', this.screen.selectedItemIndexes);
   }
 
-  public onItemAction(event: any) {
+  public onMenuAction(event: any) {
     if (event.menuItem && event.payload) {
       this.onMenuItemClick(event.menuItem, event.payload);
+    } else {
+      this.onMenuItemClick(event);
     }
   }
 

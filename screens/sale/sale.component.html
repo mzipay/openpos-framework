@@ -1,25 +1,24 @@
 <app-waffle>
     <app-bacon-strip waffle-header fxFlex="100%"></app-bacon-strip>
-    <div waffle-drawer-content class="drawer-content" fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="4px"
-    fxLayoutGap.lg="20px">
-            <app-sausage-links waffle-drawer-content></app-sausage-links>
-            <div fxFlex="1 1 auto"></div>
-            <ng-container *ngIf="!screen.hideCustomer">
-                <app-sell-linked-customer [screenType]="screen.screenType" [customerName]="screen.customerName"
-                    [noCustomerText]="screen.noCustomerText" [loyaltyButton]="screen.loyaltyButton"></app-sell-linked-customer>
-            </ng-container>
-            <div fxFlex="0 1 auto" class="sell-screen-logo"></div>
+    <div waffle-drawer-content class="drawer-content" fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start stretch"
+        fxLayoutGap="4px" fxLayoutGap.lg="20px">
+        <app-sausage-links waffle-drawer-content></app-sausage-links>
+        <div fxFlex="1 1 auto"></div>
+        <ng-container *ngIf="!screen.hideCustomer">
+            <app-sell-linked-customer [screenType]="screen.screenType" [customerName]="screen.customerName"
+                [noCustomerText]="screen.noCustomerText" [loyaltyButton]="screen.loyaltyButton"></app-sell-linked-customer>
+        </ng-container>
+        <div fxFlex="0 1 auto" class="sell-screen-logo"></div>
     </div>
     <app-scan-or-search waffle-top-content class="scan-or-search mat-elevation-z3"></app-scan-or-search>
-    <div waffle-title class="sale-prompt">
-        <span>{{screen.prompt}}</span>
-        <app-kebab-button [menuItems]="screen.transactionMenuItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
-    </div>
+
     <div waffle-body class="sale-content">
 
         <app-transaction-item-list [listConfig]="listConfig" [selectedItems]="selectedItems" [selectedItemIndexes]="screen.selectedItemIndexes"
-            [multiSelectedMenuItems]="screen.multiSelectedMenuItems" [readOnly]="screen.readOnly"
-            (selectedItemListChange)="onItemListChange($event)" (itemAction)="onItemAction($event)"></app-transaction-item-list>
+            [multiSelectedMenuItems]="screen.multiSelectedMenuItems" [transactionMenuItems]="screen.transactionMenuItems"
+            [prompt]="screen.transactionMenuPrompt" [readOnly]="screen.readOnly" (selectedItemListChange)="onItemListChange($event)"
+            (menuAction)="onMenuAction($event)">
+        </app-transaction-item-list>
 
         <app-overflow-list fxFlex="0 0 auto" *ngIf="screen.transaction" [numberItemsToShow]="overFlowListSize | async"
             [items]="amountTotals"></app-overflow-list>
@@ -33,8 +32,8 @@
                 <span fxFlex [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
                     <app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
                 </span>
-                <button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;" [disabled]="!screen.transaction.active || items.length == 0"
-                    (click)="session.onAction('Checkout')">
+                <button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;"
+                    [disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')">
                     <mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
                 </button>
             </mat-card-content>
