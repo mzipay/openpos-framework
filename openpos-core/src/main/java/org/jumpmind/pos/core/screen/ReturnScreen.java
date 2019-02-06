@@ -18,6 +18,8 @@ public class ReturnScreen extends Screen {
     private List<SellItem> selectedItems = new ArrayList<>();
     private List<TransactionReceipt> receipts = new ArrayList<>();
 
+    private String transactionMenuPrompt;
+
     private String itemActionName = "Item";
     private Transaction transaction = null;
     private List<Total> totals = new ArrayList<>();
@@ -55,6 +57,14 @@ public class ReturnScreen extends Screen {
 
     public void addReceipt(TransactionReceipt receipt) {
         this.receipts.add(receipt);
+    }
+
+    public String getTransactionMenuPrompt() {
+        return transactionMenuPrompt;
+    }
+
+    public void setTransactionMenuPrompt(String transactionMenuPrompt) {
+        this.transactionMenuPrompt = transactionMenuPrompt;
     }
 
     public Transaction getTransaction() {

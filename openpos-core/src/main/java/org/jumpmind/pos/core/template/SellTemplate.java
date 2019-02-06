@@ -15,6 +15,7 @@ public class SellTemplate extends AbstractTemplate {
     
     protected List<MenuItem> localMenuItems = new ArrayList<>();
     
+    private String transactionMenuPrompt;
     protected List<MenuItem> transactionMenuItems = new ArrayList<>();
     
     Scan scan;
@@ -71,6 +72,14 @@ public class SellTemplate extends AbstractTemplate {
         return localMenuItems;
     }
     
+    public String getTransactionMenuPrompt() {
+        return transactionMenuPrompt;
+    }
+
+    public void setTransactionMenuPrompt(String transactionMenuPrompt) {
+        this.transactionMenuPrompt = transactionMenuPrompt;
+    }
+
     public void addTransactionMenuItem(MenuItem menuItem) {
         this.transactionMenuItems.add(menuItem);
     }

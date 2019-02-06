@@ -14,16 +14,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class SaleScreen extends Screen {
     private static final long serialVersionUID = 1L;
     public static final String ITEM_TOTAL_NAME = "itemTotal";
-    
+
     private BaconStripPart baconStrip = new BaconStripPart();
     private ScanPart scan = new ScanPart();
     private StatusStripPart statusStrip = new StatusStripPart();
-    
+
     private List<SellItem> items = new ArrayList<>();
     private int[] selectedItemIndexes = new int[0];
     private List<MenuItem> sausageLinks = new ArrayList<>();
+
+    private String transactionMenuPrompt;
     private List<MenuItem> transactionMenuItems = new ArrayList<>();
-    
+
     private String balanceDue;
     private String discountTotal;
     private String grandTotal;
@@ -51,7 +53,7 @@ public class SaleScreen extends Screen {
     public void setItems(List<SellItem> items) {
         this.items = items;
     }
-    
+
     public String getBalanceDue() {
         return balanceDue;
     }
@@ -92,7 +94,6 @@ public class SaleScreen extends Screen {
         this.taxTotal = taxTotal;
     }
 
-    
     public Transaction getTransaction() {
         return transaction;
     }
@@ -100,11 +101,11 @@ public class SaleScreen extends Screen {
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
     }
-    
+
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
-    
+
     public String getCustomerName() {
         return customerName;
     }
@@ -115,54 +116,54 @@ public class SaleScreen extends Screen {
 
     public void setItemActionName(String itemActionName) {
         this.itemActionName = itemActionName;
-    }    
+    }
 
-	public List<Total> getTotals() {
-		return totals;
-	}
+    public List<Total> getTotals() {
+        return totals;
+    }
 
-	public void setTotals(List<Total> totals) {
-		this.totals = totals;
-	}
-	
-	public void addTotal(String name, String amount) {
-		this.totals.add(new Total(name, amount ));
-	}
+    public void setTotals(List<Total> totals) {
+        this.totals = totals;
+    }
+
+    public void addTotal(String name, String amount) {
+        this.totals.add(new Total(name, amount));
+    }
 
     public void addTotal(Total total) {
         this.totals.add(total);
     }
-    
-	public void setItemTotal(String total) {
-	    Total itemTotal = this.getItemTotal();
-	    if (itemTotal == null) {
-	        this.totals.add(new Total(ITEM_TOTAL_NAME, total, TotalType.Quantity));
-	    } else {
-	        itemTotal.setAmount(total);
-	    }
-	}
 
-	@JsonIgnore
-    public Total getItemTotal() {
-        return this.totals.stream().filter(
-            t -> t.getType() == TotalType.Quantity && ITEM_TOTAL_NAME.equalsIgnoreCase(t.getName())).findFirst().orElse(null);
+    public void setItemTotal(String total) {
+        Total itemTotal = this.getItemTotal();
+        if (itemTotal == null) {
+            this.totals.add(new Total(ITEM_TOTAL_NAME, total, TotalType.Quantity));
+        } else {
+            itemTotal.setAmount(total);
+        }
     }
-    
-	public String getNoCustomerText() {
-		return noCustomerText;
-	}
 
-	public void setNoCustomerText(String noCustomerText) {
-		this.noCustomerText = noCustomerText;
-	}
+    @JsonIgnore
+    public Total getItemTotal() {
+        return this.totals.stream().filter(t -> t.getType() == TotalType.Quantity && ITEM_TOTAL_NAME.equalsIgnoreCase(t.getName()))
+                .findFirst().orElse(null);
+    }
 
-	public MenuItem getLoyaltyButton() {
-		return loyaltyButton;
-	}
+    public String getNoCustomerText() {
+        return noCustomerText;
+    }
 
-	public void setLoyaltyButton(MenuItem loyaltyButton) {
-		this.loyaltyButton = loyaltyButton;
-	}
+    public void setNoCustomerText(String noCustomerText) {
+        this.noCustomerText = noCustomerText;
+    }
+
+    public MenuItem getLoyaltyButton() {
+        return loyaltyButton;
+    }
+
+    public void setLoyaltyButton(MenuItem loyaltyButton) {
+        this.loyaltyButton = loyaltyButton;
+    }
 
     public MenuItem getPromoButton() {
         return promoButton;
@@ -179,35 +180,43 @@ public class SaleScreen extends Screen {
     public void setMultiSelectedMenuItems(List<MenuItem> multiSelectedMenuItems) {
         this.multiSelectedMenuItems = multiSelectedMenuItems;
     }
-    
+
     public MenuItem getLocalSausageLinkByAction(String action) {
-        return this. sausageLinks.stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
+        return this.sausageLinks.stream().filter(mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
     }
-    
+
     public MenuItem getSausageLinkByTitle(String title) {
-        return this.sausageLinks.stream().filter( mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
+        return this.sausageLinks.stream().filter(mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
     }
 
     public void addSausageLink(MenuItem menuItem) {
         this.sausageLinks.add(menuItem);
     }
-    
+
     public void setSausageLinks(List<MenuItem> localMenuItems) {
         this.sausageLinks = localMenuItems;
     }
-    
+
     public List<MenuItem> getSausageLinks() {
         return sausageLinks;
     }
-    
+
+    public String getTransactionMenuPrompt() {
+        return transactionMenuPrompt;
+    }
+
+    public void setTransactionMenuPrompt(String transactionMenuPrompt) {
+        this.transactionMenuPrompt = transactionMenuPrompt;
+    }
+
     public void addTransactionMenuItem(MenuItem menuItem) {
         this.transactionMenuItems.add(menuItem);
     }
-    
+
     public void setTransactionMenuItems(List<MenuItem> transactionMenuItems) {
         this.transactionMenuItems = transactionMenuItems;
     }
-    
+
     public List<MenuItem> getTransactionMenuItems() {
         return transactionMenuItems;
     }
@@ -236,12 +245,12 @@ public class SaleScreen extends Screen {
         this.selectedItemIndexes = selectedItemIndexes;
     }
 
-	public StatusStripPart getStatusStrip() {
-		return statusStrip;
-	}
+    public StatusStripPart getStatusStrip() {
+        return statusStrip;
+    }
 
-	public void setStatusStrip(StatusStripPart statusStrip) {
-		this.statusStrip = statusStrip;
-	}
-    
+    public void setStatusStrip(StatusStripPart statusStrip) {
+        this.statusStrip = statusStrip;
+    }
+
 }
