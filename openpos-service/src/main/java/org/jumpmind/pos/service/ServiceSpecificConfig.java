@@ -1,11 +1,11 @@
 package org.jumpmind.pos.service;
 
-import org.jumpmind.pos.service.strategy.InvocationiStrategy;
+import org.jumpmind.pos.service.strategy.InvocationStrategy;
 
 public class ServiceSpecificConfig extends ServiceCommonConfig implements Cloneable {
 
     protected String profile = ServiceConfig.LOCAL_PROFILE;
-    protected InvocationiStrategy strategy = InvocationiStrategy.LOCAL_ONLY;
+    protected InvocationStrategy strategy = InvocationStrategy.LOCAL_ONLY;
 
     public String getProfile() {
         return profile;
@@ -19,11 +19,11 @@ public class ServiceSpecificConfig extends ServiceCommonConfig implements Clonea
         return ServiceConfig.LOCAL_PROFILE.equals(profile);
     }
 
-    public InvocationiStrategy getStrategy() {
+    public InvocationStrategy getStrategy() {
         return strategy;
     }
 
-    public void setStrategy(InvocationiStrategy strategy) {
+    public void setStrategy(InvocationStrategy strategy) {
         this.strategy = strategy;
     }
     
