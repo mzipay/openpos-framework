@@ -6,3 +6,4 @@ export * from './value-formatter.pipe';
 export * from './pos-currency.pipe';
 export * from './string-list-filter.pipe';
 export * from './list-limit.pipe';
+export * from './markdown-formatter.pipe';
