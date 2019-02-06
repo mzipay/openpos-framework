@@ -10,7 +10,7 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 })
 export class ItemSearchResultsComponent extends PosScreen<any> {
 
-  @ViewChild('scrollList') private scrollList: ElementRef;
+  @ViewChild('scrollList', { read: ElementRef }) private scrollList: ElementRef;
 
   listConfig = new SelectableItemListComponentConfiguration<any>();
   index = -1;
