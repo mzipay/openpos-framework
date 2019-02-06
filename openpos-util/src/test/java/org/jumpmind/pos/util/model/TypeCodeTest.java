@@ -2,11 +2,15 @@ package org.jumpmind.pos.util.model;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TypeCodeTest {
 
@@ -33,6 +37,18 @@ public class TypeCodeTest {
         
     }
 
+    public static final class MyTypeCodeContainer {
+        MyTypeCode myTypeCodeValue;
+
+        public MyTypeCode getMyTypeCodeValue() {
+            return myTypeCodeValue;
+        }
+
+        public void setMyTypeCodeValue(MyTypeCode myTypeCodeValue) {
+            this.myTypeCodeValue = myTypeCodeValue;
+        }
+        
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -210,5 +226,24 @@ public class TypeCodeTest {
         assertEquals(1, values.size());
     }
     
+    public static final String EXPECTED_MyTypeCode_CODE1_JSON = 
+        "{\"value\":\"CODE1\",\"class\":\"org.jumpmind.pos.util.model.TypeCodeTest$MyTypeCode\"}";
+        
+    @Test 
+    public void testJsonSerialize() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        MyTypeCodeContainer container = new MyTypeCodeContainer();
+        container.setMyTypeCodeValue(MyTypeCode.CODE1);
+        
+        String json = mapper.writeValueAsString(container);
+        assertEquals("{\"myTypeCodeValue\":" + EXPECTED_MyTypeCode_CODE1_JSON + "}" , json);
+    }
+
+    @Test 
+    public void testJsonDeserialize() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        MyTypeCode myTypeCodeReadFromJson = mapper.readValue(EXPECTED_MyTypeCode_CODE1_JSON, MyTypeCode.class);
+        assertEquals(MyTypeCode.CODE1, myTypeCodeReadFromJson);
+    }
     
 }
