@@ -10,6 +10,19 @@ public class DisplayProperty implements Serializable {
 	private String value;
 	private String valueFormatter;
 	
+	public DisplayProperty() {
+	}
+
+	public DisplayProperty(String label, String value, String valueFormatter) {
+	    this.label = label;
+	    this.value = value;
+	    this.valueFormatter = valueFormatter;
+	}
+
+	public DisplayProperty(String label, String value) {
+	    this(label, value, null);
+	}
+
 	public String getLabel() {
 		return label;
 	}

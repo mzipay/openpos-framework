@@ -7,6 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.LogFactory;
+import org.jumpmind.pos.util.ITypeCodeDeserializer;
+import org.jumpmind.pos.util.ITypeCodeSerializer;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 
 /**
  * Provides a base for implementing "TypeCodes" which are like extensible enums.
@@ -93,6 +99,8 @@ import org.apache.commons.logging.LogFactory;
  * will returned if they exist.  Otherwise a new 
  * 
  */
+@JsonDeserialize(using = ITypeCodeDeserializer.class)
+@JsonSerialize(using = ITypeCodeSerializer.class)
 public interface ITypeCode extends Serializable, Comparable<ITypeCode>  {
     
     public String value();
