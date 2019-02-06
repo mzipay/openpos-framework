@@ -5,63 +5,15 @@
 	</div>
 
 	<div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
-		<mat-card fxFlex="0 1 100%" class="page-content-card scrollable-content-card" fxLayout="column" fxLayoutAlign="start">
-			<mat-card-content fxFlex="100%" #scrollList ngClass.xs="xs">
-				<mat-toolbar *ngIf="selectedItems.length > 0" class="page-content-card" color="primary">
-					<span>{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</span>
-					<span fxFlex="1 1 auto"></span>
-					<span>
-						<button *ngIf="!screen.readOnly && selectedItems.length > 0" mat-icon-button color="primary-inverse" (click)="openItemsDialog(selectedItems)">
-							<mat-icon>more_vert</mat-icon>
-						</button>
-					</span>
-				</mat-toolbar>
-				<app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems" (selectedItemListChange)="onItemListChange($event)">
-					<ng-template let-item>
-						<div fxLayoutAlign="space-between" fxLayout.xs="column" [ngClass]="item.type" style="margin: -15px; padding: 15px;">
-							<div fxFlex="90" fxAlign="left">
-								<span [ngClass]="item.prop65Item ? 'warn' : ''">
-									{{item.description}}
-								</span>
-								<span class="muted-color">
-									<mat-chip-list>
-										{{item.subtitle}}&nbsp;
-										<mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
-									</mat-chip-list>
-								</span>
-							</div>
 
-							<div fxAlign="right">
-								<span class="primary text-md">
-									<app-currency-text [amountText]="item.amount"></app-currency-text>
-									<br>
-									<span>
-										<p [hidden]="!item.discountAmount" class="muted-color text-xs original-amount">
-											<app-currency-text [amountText]="item.originalAmount"></app-currency-text>
-										</p>
-										<p [hidden]="!item.discountAmount" class="muted-color text-xs discount-amount">
-											<app-currency-text [amountText]="item.discountAmount"></app-currency-text>
-										</p>
-									</span>
-								</span>
-							</div>
-							<div *ngIf="selectedItems.length < 1" fxAlign="right">
-								<button *ngIf="!screen.readOnly" mat-icon-button color="primary" (click)="openItemDialog(item)">
-									<mat-icon>more_vert</mat-icon>
-								</button>
-							</div>
-						</div>
-					</ng-template>
-				</app-selectable-item-list>
-				<div *ngIf="!items || items.length == 0" fxLayout="column" fxLayoutAlign="center center" class="muted-color">
-					<mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
-					<span class="text-md">Scan/Key something to get started</span>
-				</div>
-			</mat-card-content>
-		</mat-card>
+		<app-transaction-item-list [listConfig]="listConfig" [selectedItems]="selectedItems" [selectedItemIndexes]="screen.selectedItemIndexes"
+		 	[multiSelectedMenuItems]="screen.multiSelectedMenuItems" [transactionMenuItems]="screen.transactionMenuItems"
+		 	[prompt]="screen.transactionMenuPrompt" [readOnly]="screen.readOnly" (selectedItemListChange)="onItemListChange($event)"
+		 	(menuAction)="onMenuAction($event)">
+		</app-transaction-item-list>
 
 		<app-overflow-list fxFlex="0 0 auto" *ngIf="screen.transaction" [numberItemsToShow]="overFlowListSize | async"
-		 [items]="amountTotals"></app-overflow-list>
+		 	[items]="amountTotals"></app-overflow-list>
 
 		<mat-card *ngIf="screen.transaction" fxFlex="0 0 auto" class="page-content-card dark">
 			<mat-card-content fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" class="text-lg">
@@ -73,7 +25,7 @@
 					<app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
 				</span>
 				<button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;"
-				 [disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Return')">
+				 	[disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Return')">
 					<span class="text-md">Next</span>
 					<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 				</button>
