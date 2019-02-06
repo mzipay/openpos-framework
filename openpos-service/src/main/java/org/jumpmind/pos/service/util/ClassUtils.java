@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jumpmind.pos.service.instrumentation.ServiceSample;
 import org.jumpmind.pos.service.model.ModuleModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ public final class ClassUtils {
     public static List<Class<?>> getClassesForPackageAndAnnotation(String packageName, Class<? extends Annotation> annotation) {
         List<Class<?>> classes = new ArrayList<Class<?>>();
         classes.add(ModuleModel.class);
+        classes.add(ServiceSample.class);
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
         scanner.addIncludeFilter(new AnnotationTypeFilter(annotation));
         for (BeanDefinition bd : scanner.findCandidateComponents(packageName)) {

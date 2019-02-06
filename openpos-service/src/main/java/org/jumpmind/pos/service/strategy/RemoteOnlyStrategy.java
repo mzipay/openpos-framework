@@ -15,20 +15,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Component("REMOTE_ONLY")
+@Component(RemoteOnlyStrategy.REMOTE_ONLY_STRATEGY)
 public class RemoteOnlyStrategy extends AbstractInvocationStrategy implements IInvocationStrategy {
+    
+    static final String REMOTE_ONLY_STRATEGY = "REMOTE_ONLY";
+    
+    public String getStrategyName() {
+        return REMOTE_ONLY_STRATEGY;
+    }
 
     @Override
     public Object invoke(ServiceSpecificConfig config, Object proxy, Method method, Object[] args) throws Throwable {
-        String url = config.getUrl();
         int httpTimeoutInSecond = config.getHttpTimeout();
         ConfiguredRestTemplate template = new ConfiguredRestTemplate(httpTimeoutInSecond);
-        String path = buildPath(method);
         RequestMapping mapping = method.getAnnotation(RequestMapping.class);
         RequestMethod[] requestMethods = mapping.method();
         if (requestMethods != null && requestMethods.length > 0) {
             HttpMethod requestMethod = translate(requestMethods[0]);
-            url = String.format("%s%s", url, path);
+            String url = buildUrl(config, proxy, method, args);
             Object requestBody = findRequestBody(method, args);
             Object[] newArgs = findArgs(method, args);
             if (method.getReturnType().equals(Void.TYPE)) {
@@ -42,7 +46,14 @@ public class RemoteOnlyStrategy extends AbstractInvocationStrategy implements II
         return null;
     }
     
-    private Object[] findArgs(Method method, Object[] args) {
+    protected String buildUrl(ServiceSpecificConfig config, Object proxy, Method method, Object[] args) {
+        String url = config.getUrl();
+        String path = buildPath(method);
+        url = String.format("%s%s", url, path);
+        return url;
+    }
+    
+    protected Object[] findArgs(Method method, Object[] args) {
         List<Object> newArgs = new ArrayList<>();
         Annotation[][] types = method.getParameterAnnotations();
         for (int i = 0; i < types.length; i++) {
@@ -57,7 +68,7 @@ public class RemoteOnlyStrategy extends AbstractInvocationStrategy implements II
         return newArgs.toArray();
     }
     
-    private Object findRequestBody(Method method, Object[] args) {
+    protected  Object findRequestBody(Method method, Object[] args) {
         Annotation[][] types = method.getParameterAnnotations();
         for (int i = 0; i < types.length; i++) {
             Annotation[] argAnnotations = types[i];
@@ -72,7 +83,7 @@ public class RemoteOnlyStrategy extends AbstractInvocationStrategy implements II
         return null;
     }
     
-    private HttpMethod translate(RequestMethod method) {
+    protected HttpMethod translate(RequestMethod method) {
         return HttpMethod.valueOf(method.name());
     }
 

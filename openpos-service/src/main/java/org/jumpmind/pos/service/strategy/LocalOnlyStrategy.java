@@ -10,8 +10,14 @@ import org.jumpmind.pos.service.PosServerException;
 import org.jumpmind.pos.service.ServiceSpecificConfig;
 import org.springframework.stereotype.Component;
 
-@Component("LOCAL_ONLY")
+@Component(LocalOnlyStrategy.LOCAL_ONLY_STRATEGY)
 public class LocalOnlyStrategy extends AbstractInvocationStrategy implements IInvocationStrategy {
+    
+    static final String LOCAL_ONLY_STRATEGY = "LOCAL_ONLY";
+    
+    public String getStrategyName() {
+        return LOCAL_ONLY_STRATEGY;
+    }
 
     @Override
     public Object invoke(ServiceSpecificConfig config, Object proxy, Method method, Object[] args) throws Throwable {

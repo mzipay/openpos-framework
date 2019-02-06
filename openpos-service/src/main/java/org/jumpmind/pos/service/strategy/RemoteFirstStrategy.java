@@ -8,10 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("REMOTE_FIRST")
+@Component(RemoteFirstStrategy.REMOTE_FIRST_STRATEGY)
 public class RemoteFirstStrategy implements IInvocationStrategy {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
+    
+    static final String REMOTE_FIRST_STRATEGY = "REMOTE_FIRST";
 
     @Autowired
     LocalOnlyStrategy localStrategy;
@@ -27,6 +29,11 @@ public class RemoteFirstStrategy implements IInvocationStrategy {
             logger.warn("Remote call failed.  Trying local", ex);
             return localStrategy.invoke(config, proxy, method, args);
         }
+    }
+
+    @Override
+    public String getStrategyName() {
+        return REMOTE_FIRST_STRATEGY;
     }
 
 }

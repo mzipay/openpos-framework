@@ -8,4 +8,6 @@ public interface IInvocationStrategy {
 
     public Object invoke(ServiceSpecificConfig config, Object proxy, Method method, Object[] args) throws Throwable;
     
+    public String getStrategyName();
+    
 }

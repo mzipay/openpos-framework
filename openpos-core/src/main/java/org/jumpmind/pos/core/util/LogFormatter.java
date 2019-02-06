@@ -4,6 +4,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.jumpmind.pos.server.model.Action;
+import org.jumpmind.pos.util.AppUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
