@@ -11,6 +11,10 @@ public class ItemSearchResultsScreen extends PromptScreen {
 
     private List<SellItem> items = new ArrayList<>();
 
+    private MenuItem nextButton;
+
+    private MenuItem previousButton;
+
     public ItemSearchResultsScreen() {
         this.setScreenType(ScreenType.ItemSearchResults);
         this.setTemplate(new SellTemplate());
@@ -22,6 +26,22 @@ public class ItemSearchResultsScreen extends PromptScreen {
 
     public void setItems(List<SellItem> items) {
         this.items = items;
+    }
+
+    public MenuItem getNextButton() {
+        return nextButton;
+    }
+
+    public void setNextButton(MenuItem nextButton) {
+        this.nextButton = nextButton;
+    }
+
+    public MenuItem getPreviousButton() {
+        return previousButton;
+    }
+
+    public void setPreviousButton(MenuItem previousButton) {
+        this.previousButton = previousButton;
     }
 
 }
