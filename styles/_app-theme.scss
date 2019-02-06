@@ -123,6 +123,8 @@
         color: mat-color(map-get($theme, primary));
     }
 
+    .mat-basic-chip:focus {outline:0;}
+
     .mat-button-toggle{
         text-align: center;
     }
