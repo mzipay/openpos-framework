@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div fxFlex="0 0 auto" fxLayout="column">
-                <span fxFlex="1 1 auto" class="item-card-price">{{item.amount|currency:'USD':true:'1.2'}}</span>
+                <app-currency-text class="item-card-price" [amountText]="item.amount"></app-currency-text>
                 <div *ngIf="!isReadOnly">
                     <button mat-button color="warn" *ngFor="let m of item.menuItems" class="item-card-button" (click)="doMenuItemAction(m, item.index)"
                         [disabled]="!isMenuItemEnabled(m)">
