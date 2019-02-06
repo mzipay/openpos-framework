@@ -74,7 +74,7 @@ public interface IconType {
     public static final String Security = "Security"; //security
     public static final String Reports = "Reports"; //assessment
     public static final String HamburgerMenu = "HamburgerMenu"; //menu
-    public static final String KabobMenu = "KabobMenu"; //more_vert
+    public static final String KebabMenu = "KebabMenu"; //more_vert
     public static final String OrderHistory = "OrderHistory";
             
 }
