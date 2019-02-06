@@ -1,5 +1,5 @@
-<div class="sale-prompt">
-    <div *ngIf="selectedItems && selectedItems.length > 0; else transactionMenu" class="page-content-card" >
+<div class="transaction-prompt" fxLayoutAlign="start center">
+    <div fxLayoutAlign="start center" *ngIf="selectedItems && selectedItems.length > 0; else transactionMenu" class="page-content-card">
         <mat-label class="primary">{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</mat-label>
         <app-kebab-button *ngIf="!readOnly && selectedItems.length > 0" [menuItems]="multiSelectedMenuItems" [color]="'primary'"
             (menuItemClick)="onMenuItemClick($event, selectedItemIndexes)"></app-kebab-button>
@@ -17,7 +17,7 @@
         <app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems"
             (selectedItemListChange)="onItemListChange($event)">
             <ng-template let-item>
-                <div fxLayoutAlign="space-between" fxLayout.xs="column" [ngClass]="item.type" style="margin: -15px; padding: 15px;">
+                <div fxLayoutAlign="space-between center" fxLayout.xs="column" [ngClass]="item.type" style="margin: -15px; padding: 15px;">
                     <div fxFlex="90" fxAlign="left">
                         <span [ngClass]="item.prop65Item ? 'warn' : ''">
                             {{item.description}}

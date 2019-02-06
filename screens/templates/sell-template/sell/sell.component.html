@@ -21,7 +21,7 @@
     <app-scan-something waffle-top-content class="scan-or-search mat-elevation-z3" *ngIf="template.scan"
         [scanSomethingData]="template.scan"></app-scan-something>
 
-    <div waffle-title class="sale-prompt">
+    <div waffle-title *ngIf="screen.prompt" class="sale-prompt">
         <span>{{screen.prompt}}</span>
     </div>
 
