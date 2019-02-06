@@ -57,8 +57,11 @@
                             </span>
                         </span>
                     </div>
-                    <app-kebab-button block-selection *ngIf="selectedItems.length < 1 && !readOnly" fxAlign="right"
+                    <app-kebab-button block-selection *ngIf="selectedItems.length < 1 && !readOnly; else hideButton" fxAlign="right"
                         [menuItems]="item.menuItems" (menuItemClick)="onMenuItemClick($event, [item.index])"></app-kebab-button>
+                    <ng-template #hideButton>
+                        <div style="height: 40px; width: 40px;"></div>
+                    </ng-template>
                 </div>
             </ng-template>
         </app-selectable-item-list>
