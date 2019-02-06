@@ -9,7 +9,7 @@ import { DisplayPropertyAligment } from './display-property-alignment.enum';
 })
 export class DisplayPropertyComponent {
 
-    DisplayPropertyAlignment: DisplayPropertyAligment;
+    DisplayPropertyAlignment = DisplayPropertyAligment;
 
     @Input() alignmentType: DisplayPropertyAligment;
     @Input() set label( label: string) {
