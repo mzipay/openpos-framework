@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, ElementRef, Input, Output, EventEmitter, AfterViewChecked } from '@angular/core';
 import { ISellItem } from '../../../core/interfaces/sell-item.interface';
 import { IMenuItem } from '../../../core';
 import { SelectableItemListComponentConfiguration } from '../selectable-item-list/selectable-item-list.component';
@@ -8,29 +8,23 @@ import { SelectableItemListComponentConfiguration } from '../selectable-item-lis
   templateUrl: './transaction-item-list.component.html',
   styleUrls: ['./transaction-item-list.component.scss']
 })
-export class TransactionItemListComponent {
+export class TransactionItemListComponent implements AfterViewChecked {
 
-  @ViewChild('scrollList') private scrollList: ElementRef;
+  @ViewChild('scrollList', { read: ElementRef }) private scrollList: ElementRef;
 
   @Input() listConfig: SelectableItemListComponentConfiguration<ISellItem>;
-
   @Input() selectedItems: ISellItem[];
-
   @Input() selectedItemIndexes: number[];
-
   @Input() multiSelectedMenuItems: IMenuItem[];
-
   @Input() transactionMenuItems: IMenuItem[];
-
   @Input() prompt: string;
-
   @Input() readOnly: boolean;
 
   @Output() selectedItemListChange = new EventEmitter<ISellItem[]>();
-
   @Output() menuAction = new EventEmitter<any>();
 
   individualMenuClicked = false;
+
   size = -1;
 
   public onItemListChange(items: ISellItem[]): void {
@@ -50,10 +44,10 @@ export class TransactionItemListComponent {
     }
   }
 
-  /*ngAfterViewChecked() {
-    if (this.items && this.size !== this.items.length) {
+  ngAfterViewChecked() {
+    if (this.listConfig && this.listConfig.items && this.size !== this.listConfig.items.length) {
       this.scrollToBottom();
-      this.size = this.items.length;
+      this.size = this.listConfig.items.length;
     }
   }
 
@@ -61,6 +55,6 @@ export class TransactionItemListComponent {
     try {
       this.scrollList.nativeElement.scrollTop = this.scrollList.nativeElement.scrollHeight;
     } catch (err) { }
-  }*/
+  }
 
 }
