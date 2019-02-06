@@ -23,7 +23,7 @@
                             {{item.description}}
                         </span>
                         <span class="muted-color">
-                            <mat-chip-list>
+                            <mat-chip-list [selectable]="false">
                                 <mat-basic-chip>{{item.subtitle}}&nbsp;</mat-basic-chip>
                                 <mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
                             </mat-chip-list>
