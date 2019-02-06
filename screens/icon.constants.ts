@@ -75,7 +75,7 @@ export const IconConstants = {
         {name: 'Security', iconDef: new IconDefinition('security', 'fontface')},
         {name: 'Reports', iconDef: new IconDefinition('assessment', 'fontface')},
         {name: 'HamburgerMenu', iconDef: new IconDefinition('menu', 'fontface')},
-        {name: 'KabobMenu', iconDef: new IconDefinition('more_vert', 'fontface')}
+        {name: 'KebabMenu', iconDef: new IconDefinition('more_vert', 'fontface')}
     ]
 };
 
