@@ -33,7 +33,7 @@
                 <span fxFlex [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
                     <app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
                 </span>
-                <button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;"
+                <button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-raised-button color="primary" class="checkout-button mat-elevation-z0"
                     [disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')">
                     <span *ngIf="showDetails | async" class="text-md">{{screen.checkoutButtonText}}</span>
                     <mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
