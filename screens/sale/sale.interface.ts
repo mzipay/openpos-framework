@@ -12,4 +12,5 @@ export interface SaleInterface extends IAbstractScreen {
     prompt: string;
     hideCustomer: boolean;
     transaction: Transaction;
+    checkoutButtonText: string;
 }

@@ -35,6 +35,7 @@
                 </span>
                 <button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;"
                     [disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')">
+                    <span *ngIf="showDetails | async" class="text-md">{{screen.checkoutButtonText}}</span>
                     <mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
                 </button>
             </mat-card-content>

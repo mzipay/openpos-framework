@@ -23,9 +23,18 @@ export class SaleComponent extends PosScreen<SaleInterface> implements OnInit {
   amountTotals: ITotal[];
   itemTotal: number;
   trainingDrawerOpen = false;
+  showDetails: Observable<boolean>;
 
   constructor(private mediaService: OpenposMediaService, protected dialog: MatDialog) {
     super();
+    this.overFlowListSize = this.mediaService.mediaObservableFromMap(new Map([
+        ['xs', 3],
+        ['sm', 3],
+        ['md', 4],
+        ['lg', 5],
+        ['xl', 5]
+      ]));
+
   }
 
   buildScreen() {
@@ -43,13 +52,14 @@ export class SaleComponent extends PosScreen<SaleInterface> implements OnInit {
   }
 
   ngOnInit(): void {
-    this.overFlowListSize = this.mediaService.mediaObservableFromMap(new Map([
-      ['xs', 3],
-      ['sm', 3],
-      ['md', 4],
-      ['lg', 5],
-      ['xl', 5]
-    ]));
+    const showDetailsnMap = new Map([
+        ['xs', false],
+        ['sm', false],
+        ['md', true],
+        ['lg', true],
+        ['xl', true]
+    ]);
+    this.showDetails = this.mediaService.mediaObservableFromMap(showDetailsnMap);
   }
 
   onEnter(value: string) {
