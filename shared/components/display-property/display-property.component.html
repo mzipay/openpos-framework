@@ -1,14 +1,14 @@
 <ng-container [ngSwitch]="alignmentType">
     <div *ngSwitchCase="DisplayPropertyAlignment.column" class="display-property column">
-        <span class="display-property-label">{{property.label}}</span>
-        <span *ngIf="property.value" class="display-property-value">{{property.value | valueFormatter: property.valueFormatter}}</span>
+        <span class="display-property-label column">{{property.label}}</span>
+        <span *ngIf="property.value" class="display-property-value column">{{property.value | valueFormatter: property.valueFormatter}}</span>
     </div>
     <div *ngSwitchCase="DisplayPropertyAlignment.vertical" class="display-property vertical">
         <span class="display-property-label vertical">{{property.label}}</span>
         <span *ngIf="property.value"  class="display-property-value vertical">{{property.value | valueFormatter: property.valueFormatter}}</span>
     </div>
     <div *ngSwitchCase="DisplayPropertyAlignment.colon" class="display-property colon">
-        <strong class="display-property-label colon">{{property.label}}</strong>:
+        <span class="display-property-label colon">{{property.label}}</span>:&nbsp;
         <span *ngIf="property.value"  class="display-property-value colon">{{property.value | valueFormatter: property.valueFormatter}}</span>
     </div>
 </ng-container>

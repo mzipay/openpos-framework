@@ -1,7 +1,7 @@
 .display-property-value{
     &.column{
         overflow-wrap: break-word;
-        flex: 1 1 100%;
+        flex: 1 1 50%;
         box-sizing: border-box;
         max-width: 50%;
     }
@@ -18,9 +18,9 @@
 
 .display-property-label{
     &.column{
-        flex: 1 1 100%;
+        flex: 1 1 50%;
         box-sizing: border-box;
-        max-width: 100%;
+        max-width: 50%;
     }
 
     &.colon{
