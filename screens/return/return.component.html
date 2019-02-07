@@ -1,6 +1,6 @@
 <div fxFlexFill fxLayout="row" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top: 6px;">
 
-	<div style="overflow-y: auto;">
+	<div *ngIf="receipts && receipts.length > 0" style="overflow-y: auto;">
 		<app-receipt-card *ngFor="let receipt of receipts" [receipt]="receipt" (click)="onReceiptClick(receipt)"></app-receipt-card>
 	</div>
 
