@@ -18,6 +18,7 @@ public class DialogProperties implements Serializable {
     private boolean executeActionBeforeClose = false;
     private boolean closeable = false;
     private boolean autoFocus = false;
+    private boolean restoreFocus = false;
 
     public DialogProperties() {
     }
@@ -102,6 +103,14 @@ public class DialogProperties implements Serializable {
     public DialogProperties minHeight(String minHeight) {
         this.setMinHeight(minHeight);
         return this;
+    }
+    
+    public void setRestoreFocus(boolean restoreFocus) {
+        this.restoreFocus = restoreFocus;
+    }
+    
+    public boolean isRestoreFocus() {
+        return restoreFocus;
     }
     
 }
