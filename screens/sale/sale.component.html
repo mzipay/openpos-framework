@@ -13,7 +13,7 @@
 
     <app-scan-or-search waffle-top-content class="scan-or-search mat-elevation-z3"></app-scan-or-search>
 
-    <div waffle-body class="sale-content">
+    <div waffle-body class="sale-content" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
 
         <app-transaction-item-list [listConfig]="listConfig" [selectedItems]="selectedItems" [selectedItemIndexes]="screen.selectedItemIndexes"
             [multiSelectedMenuItems]="screen.multiSelectedMenuItems" [transactionMenuItems]="screen.transactionMenuItems"
