@@ -55,6 +55,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.updateTemplateAndScreen();
         this.subscriptions.add(this.session.getMessages('Screen').subscribe( (message) => this.handle(message) ));
+        this.subscriptions.add(this.session.getMessages('Connected').subscribe( (message) => this.handle(new BlankScreen()) ));
     }
 
     ngOnDestroy(): void {
@@ -78,7 +79,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     protected updateTemplateAndScreen(screen?: any): void {
         if (!screen) {
-            screen = { screenType: 'Blank', template: { type: 'Blank' } };
+            screen = new BlankScreen();
         }
 
         if (screen &&
@@ -201,4 +202,10 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     public get theme() {
         return this.personalization.getTheme();
     }
+}
+
+export class BlankScreen {
+    type = 'Screen';
+    screenType = 'Blank';
+    template: { type: 'Blank' } ;
 }

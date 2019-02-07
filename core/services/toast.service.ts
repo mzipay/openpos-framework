@@ -11,7 +11,7 @@ export class ToastService {
 
     constructor( private snackBar: MatSnackBar, private sessionService: SessionService ) {
         sessionService.getMessages('Toast').subscribe(m => this.showToast(m));
-        sessionService.getMessages('ClearToast').subscribe(m => this.snackBar.dismiss());
+        sessionService.getMessages('Connected').subscribe(m => this.snackBar.dismiss());
     }
 
     private showToast( message: any) {

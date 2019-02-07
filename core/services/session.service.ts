@@ -170,7 +170,7 @@ export class SessionService implements IMessageHandler<any> {
                     if (!this.onServerConnect.value) {
                         this.onServerConnect.next(true);
                     }
-                    this.sendMessage(new ClearToastMessage());
+                    this.sendMessage(new ConnectedMessage());
                     this.cancelLoading();
                 } else if (stompState === 'DISCONNECTING') {
                     this.log.info('STOMP disconnecting');
@@ -531,6 +531,6 @@ export class CancelLoadingMessage implements ILoading {
     queue = false;
 }
 
-export class ClearToastMessage {
-    type = 'ClearToast';
+export class ConnectedMessage {
+    type = 'Connected';
 }
