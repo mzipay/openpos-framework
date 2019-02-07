@@ -1,7 +1,11 @@
 <div fxLayout="column" fxFlexFill>
-    <div class="text-md" style="margin-bottom:10px">
-        {{screen.name}}
-    </div>   
+    <mat-card-title fxLayout="row" style="margin-bottom:10px">
+        <span *ngIf="screen.name" class="text-md">{{screen.name}}</span>
+        <div fxFlex="1 1 auto"></div>
+        <button *ngIf="screen.backButton" mat-icon-button style="margin:-15px" (click)="session.onAction(screen.backButton.action)">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-card-title>
     <mat-tab-group [@.disabled]="true" (selectChange)="current=$event.index" #tabGroup>
         <mat-tab *ngFor="let formOption of screen.forms; let i=index" fxLayout="column">
             <ng-template mat-tab-label>
@@ -14,7 +18,7 @@
                     {{formOption.instructions}}
                     <app-dynamic-form-control #frm [screenForm]="formOption.form" [submitButton]="formOption.submitButton"></app-dynamic-form-control>
                 </div>
-              </ng-template>
+            </ng-template>
         </mat-tab>
     </mat-tab-group>
 </div>
