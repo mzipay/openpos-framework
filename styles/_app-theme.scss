@@ -109,6 +109,21 @@
         background-color: white;
     }
 
+    .mat-button.mat-accent-inverse{
+        color:white;
+        background-color: $app-accent;
+    }
+    
+    .mat-raised-button.mat-accent-inverse{
+        color:$app-accent;
+        background-color: white;
+    }
+
+    .mat-mini-fab.mat-accent-inverse{
+        color:$app-accent;
+        background-color: white;
+    }    
+
     .mat-fab .mat-button-wrapper {
         padding: 0;
     }
