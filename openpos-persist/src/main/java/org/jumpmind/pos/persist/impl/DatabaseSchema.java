@@ -18,12 +18,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.money.Money;
 import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Database;
+import org.jumpmind.db.model.IIndex;
+import org.jumpmind.db.model.IndexColumn;
+import org.jumpmind.db.model.NonUniqueIndex;
 import org.jumpmind.db.model.Table;
+import org.jumpmind.db.model.UniqueIndex;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.IDdlBuilder;
 import org.jumpmind.db.sql.SqlScript;
 import org.jumpmind.pos.persist.ColumnDef;
 import org.jumpmind.pos.persist.Extends;
+import org.jumpmind.pos.persist.IndexDef;
 import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.TableDef;
 import org.jumpmind.pos.util.model.ITypeCode;
@@ -63,7 +68,7 @@ public class DatabaseSchema {
         }
         return db;
     }
-    
+
     public Table getTable(Class<?> entityClass, Class<?> superClass) {
         List<ModelClassMetaData> metas = classMetadata.get(entityClass);
         if (metas != null) {
@@ -169,8 +174,6 @@ public class DatabaseSchema {
         return tables;
     }
 
-
-
     protected void loadExtensions() {
         for (Class<?> extensionClass : entityExtensionClasses) {
             Extends extendsAnnotation = extensionClass.getAnnotation(Extends.class);
@@ -231,7 +234,7 @@ public class DatabaseSchema {
 
         Class<?> entityClass = clazz;
         while (entityClass != null && entityClass != Object.class) {
-            org.jumpmind.pos.persist.TableDef tblAnnotation = entityClass.getAnnotation(TableDef.class);
+            TableDef tblAnnotation = entityClass.getAnnotation(TableDef.class);
             if (tblAnnotation != null) {
 
                 ModelClassMetaData meta = new ModelClassMetaData();
@@ -239,6 +242,7 @@ public class DatabaseSchema {
                 Table dbTable = new Table();
                 List<Column> columns = new ArrayList<>();
                 List<Column> pkColumns = new ArrayList<>();
+                Map<String, IIndex> indices = new HashMap<>();
                 dbTable.setName(tblAnnotation.name());
                 dbTable.setDescription(tblAnnotation.description());
                 Class<?> currentClass = entityClass;
@@ -247,6 +251,7 @@ public class DatabaseSchema {
                     Field[] fields = currentClass.getDeclaredFields();
                     for (Field field : fields) {
                         Column column = createColumn(field);
+                        createIndex(field, column, indices);
                         if (column != null && (includeAllFields || column.isPrimaryKey())) {
                             if (isPrimaryKey(field)) {
                                 meta.getEntityIdFields().add(field);
@@ -260,15 +265,18 @@ public class DatabaseSchema {
                     currentClass = currentClass.getSuperclass();
                     includeAllFields = currentClass != null && currentClass.getAnnotation(TableDef.class) == null;
                 }
-                
+
                 for (Column column : pkColumns) {
                     dbTable.addColumn(column);
                 }
-                
+
                 for (Column column : columns) {
                     dbTable.addColumn(column);
                 }
 
+                for (IIndex index : indices.values()) {
+                    dbTable.addIndex(index);
+                }
 
                 meta.setTable(dbTable);
                 modelClassValidator.validate(meta);
@@ -279,6 +287,22 @@ public class DatabaseSchema {
         }
 
         return list;
+    }
+
+    private static void createIndex(Field field, Column column, Map<String, IIndex> indices) {
+        IndexDef colAnnotation = field.getAnnotation(IndexDef.class);
+        if (colAnnotation != null) {
+            String indexName = colAnnotation.name();
+            boolean unique = colAnnotation.unique();
+            indexName += (unique ? "_unq" : "");
+            IIndex index = indices.get(indexName);
+            if (index == null) {
+                index = unique ? new UniqueIndex() : new NonUniqueIndex();
+                index.setName(indexName);
+                indices.put(indexName, index);
+            }
+            index.addColumn(new IndexColumn(column));
+        }
     }
 
     private static boolean isPrimaryKey(Field field) {
@@ -310,7 +334,7 @@ public class DatabaseSchema {
             } else {
                 dbCol.setTypeCode(colAnnotation.type());
             }
-            
+
             dbCol.setJdbcTypeName(getType(dbCol.getJdbcTypeCode()));
 
             if (colAnnotation.size() != null & !colAnnotation.size().equalsIgnoreCase("")) {
@@ -348,7 +372,7 @@ public class DatabaseSchema {
 
         return entityIdColumnsToFields;
     }
-    
+
     public Map<String, String> getColumnsToEntityFields(Class<?> entityClass) {
         @SuppressWarnings({ "rawtypes", "unchecked" })
         Map<String, String> entityIdColumnsToFields = new CaseInsensitiveMap();
@@ -367,7 +391,7 @@ public class DatabaseSchema {
         }
 
         return entityIdColumnsToFields;
-    }    
+    }
 
     public Map<String, String> getEntityFieldsToColumns(Class<?> entityClass) {
         @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -408,40 +432,41 @@ public class DatabaseSchema {
         }
         return null;
     }
-    
+
     private static String getType(int type) {
         switch (type) {
-            case Types.VARCHAR:                
+            case Types.VARCHAR:
                 return "VARCHAR";
-            case Types.BIGINT:                
+            case Types.BIGINT:
                 return "BIGINT";
-            case Types.INTEGER:                
+            case Types.INTEGER:
                 return "INTEGER";
-            case Types.BOOLEAN:                
+            case Types.BOOLEAN:
                 return "BOOLEAN";
-            case Types.TIMESTAMP:                
+            case Types.TIMESTAMP:
                 return "TIMESTAMP";
-            case Types.DECIMAL:                
+            case Types.DECIMAL:
                 return "DECIMAL";
             default:
                 return "OTHER";
         }
     }
-    
+
     public List<ModelClassMetaData> getModelMetaData(Class<?> modelClass) {
         return this.classMetadata.get(modelClass);
     }
-    
-//    public ModelClassMetaData getModelMetaData(Class<?> entityClass, Table table) {
-//        List<ModelClassMetaData> metas = 
-//        for (ModelClassMetaData meta : metas) {
-//            if (meta.getTable().equals(table)) {
-//                return meta;
-//            }
-//        }
-//        
-//        return null;
-//    }
+
+    // public ModelClassMetaData getModelMetaData(Class<?> entityClass, Table
+    // table) {
+    // List<ModelClassMetaData> metas =
+    // for (ModelClassMetaData meta : metas) {
+    // if (meta.getTable().equals(table)) {
+    // return meta;
+    // }
+    // }
+    //
+    // return null;
+    // }
 
     private static int getDefaultType(Field field) {
         if (field.getType().isAssignableFrom(String.class) || field.getType().isEnum() || ITypeCode.class.isAssignableFrom(field.getType())) {
@@ -454,8 +479,7 @@ public class DatabaseSchema {
             return Types.BOOLEAN;
         } else if (field.getType().isAssignableFrom(Date.class)) {
             return Types.TIMESTAMP;
-        } else if (field.getType().isAssignableFrom(BigDecimal.class)
-                || field.getType().isAssignableFrom(Money.class)) {
+        } else if (field.getType().isAssignableFrom(BigDecimal.class) || field.getType().isAssignableFrom(Money.class)) {
             return Types.DECIMAL;
         } else {
             return Types.OTHER;
