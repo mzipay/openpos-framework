@@ -35,6 +35,7 @@ public class SaleScreen extends Screen {
     private Transaction transaction = new Transaction();
     private String customerName;
     private String noCustomerText;
+    private String checkoutButtonText = "";
     private List<Total> totals = new ArrayList<>();
     private MenuItem loyaltyButton;
     private MenuItem promoButton;
@@ -251,6 +252,14 @@ public class SaleScreen extends Screen {
 
     public void setStatusStrip(StatusStripPart statusStrip) {
         this.statusStrip = statusStrip;
+    }
+    
+    public String getCheckoutButtonText() {
+        return checkoutButtonText;
+    }
+    
+    public void setCheckoutButtonText(String checkoutButtonText) {
+        this.checkoutButtonText = checkoutButtonText;
     }
 
 }
