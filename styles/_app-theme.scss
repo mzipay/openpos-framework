@@ -7,7 +7,7 @@
 
 @include mat-core();
 
-@function openpos-theme-light($primary, $accent, $warn, $selected: (), $addons: ()){
+@function openpos-theme-light($primary, $accent, $warn, $selected, $addons: ()){
 
     $openpos-mat-theme: mat-light-theme($primary, $accent, $warn);
 
