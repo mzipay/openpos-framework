@@ -3,6 +3,7 @@ import { ITotal } from '../../core/interfaces/total.interface';
 import { Transaction } from './transaction.interface';
 
 export interface SaleInterface extends IAbstractScreen {
+    transactionMenuPrompt: string;
     transactionMenuItems: IMenuItem[];
     multiSelectedMenuItems: IMenuItem[];
     localMenuItems: IMenuItem[];
