@@ -1,51 +1,11 @@
 :host{
-    box-sizing: border-box;
     height: 100%;
-    flex-direction: column;
-    display: flex;
+}
+
+.waffle{
+    height: 100%;
 }
 
 .waffle-header{
-    flex-direction: row;
-    box-sizing: border-box;
-    display: flex;
-    max-height: 100%;
-    place-content: center;
-    align-items: stretch;
     z-index: 100;
-    flex: 0 0 auto;
-}
-
-.waffle-header-content{
-    flex: 1 1 auto;
-    box-sizing: border-box;
-}
-
-.hamburger-button-container{
-    flex: 0 0 auto;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-}
-
-.waffle-drawer-content {
-    min-width: 200px;
-}
-
-.waffle-content-container{
-    flex: 0 1 100%;
-    box-sizing: border-box;
-    flex-direction: column;
-    display: flex;
-}
-
-.waffle-content{
-    display: flex;
-    flex-direction: column;
-}
-
-.waffle-body{
-    flex: 1 1 100%;
-    display: flex;
-    min-height: 0%;
 }

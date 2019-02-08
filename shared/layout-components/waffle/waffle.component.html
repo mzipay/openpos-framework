@@ -1,28 +1,35 @@
-<div class="waffle-header mat-elevation-z10">
-    <div class="waffle-header-content">
-        <ng-content select="[waffle-header]"></ng-content>
+<div class="waffle" gdAreas="waffle-header | waffle-content-container"
+    gdRows="auto 1fr">
+    <div class="waffle-header mat-elevation-z10"
+    gdArea="waffle-header"
+    gdAreas="header button"
+    gdColumns="1fr auto">
+        <ng-content gdArea="header" select="[waffle-header]"></ng-content>
+        <div *ngIf="showDrawer" gdArea="button" gdGridAlign="center center">
+            <app-icon-button class="drawer-button" [iconName]="'HamburgerMenu'" (buttonClick)="waffledrawer.toggle()"></app-icon-button>
+        </div>
     </div>
-    <div *ngIf="showDrawer" class="hamburger-button-container">
-        <app-icon-button class="drawer-button" [iconName]="'HamburgerMenu'" (buttonClick)="waffledrawer.toggle()"></app-icon-button>
-    </div>
+    <mat-sidenav-container  gdArea="waffle-content-container">
+        <mat-sidenav #waffledrawer class="waffle-drawer-content" position="end" [mode]="drawerMode | async" [opened]="(drawerOpen | async) && showDrawer">
+            <ng-content select="[waffle-drawer-content]"></ng-content>
+        </mat-sidenav>
+        <mat-sidenav-content gdAreas="top-content | title | body | footer"
+        gdRows="auto auto minmax(50%, 100%) auto">
+            <div>
+                <ng-content gdArea="top-content" select="[waffle-top-content]"></ng-content>
+            </div>
+            <div>
+                <ng-content gdArea="title" select="[waffle-title]"></ng-content>
+            </div>
+            <div gdArea="body" gdAreas="body-content" gdRows="minmax(100%, 100%)">
+                <ng-content gdArea="body-content" select="[waffle-body]"></ng-content>
+            </div>
+            <div>
+                <ng-content gdArea="footer" select="[waffle-footer]"></ng-content>
+            </div>
+
+        </mat-sidenav-content>
+    </mat-sidenav-container>
 </div>
-<mat-sidenav-container class="waffle-content-container">
-    <mat-sidenav #waffledrawer class="waffle-drawer-content" position="end" [mode]="drawerMode | async" [opened]="(drawerOpen | async) && showDrawer">
-        <ng-content select="[waffle-drawer-content]"></ng-content>
-    </mat-sidenav>
-    <mat-sidenav-content class="waffle-content">
-        <div class="waffle-top-content">
-            <ng-content select="[waffle-top-content]"></ng-content>
-        </div>
-        <div class="waffle-title">
-            <ng-content select="[waffle-title]"></ng-content>
-        </div>
-        <div class="waffle-body">
-            <ng-content select="[waffle-body]"></ng-content>
-        </div>
-        <div class="waffle-footer">
-            <ng-content select="[waffle-footer]"></ng-content>
-        </div>
-    </mat-sidenav-content>
-</mat-sidenav-container>
+
 
