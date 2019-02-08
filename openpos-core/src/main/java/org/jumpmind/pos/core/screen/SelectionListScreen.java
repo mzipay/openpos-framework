@@ -15,6 +15,8 @@ public class SelectionListScreen extends Screen {
 
     private boolean multiSelect = false;
     
+    private boolean defaultSelect = false;
+    
     private String instructions;
 
     public SelectionListScreen() {
@@ -80,6 +82,14 @@ public class SelectionListScreen extends Screen {
 
     public void setMultiSelect(boolean multiSelect) {
         this.multiSelect = multiSelect;
+    }
+    
+    public boolean isDefaultSelect() {
+        return defaultSelect;
+    }
+    
+    public void setDefaultSelect(boolean defaultSelect) {
+        this.defaultSelect = defaultSelect;
     }
     
     public String getInstructions() {
