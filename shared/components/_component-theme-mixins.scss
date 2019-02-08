@@ -6,6 +6,7 @@
 @import './kebab-menu/kebab-menu-theme';
 @import './icon-square-button/icon-square-button-theme';
 @import './display-property/display-property-theme';
+@import './transaction-item-list/transaction-item-list-theme';
 
 @mixin openpos-component-theme-mixins($theme) {
     @include pager-theme($theme);
@@ -16,4 +17,5 @@
     @include kebab-menu-theme($theme);
     @include icon-square-button-theme($theme);
     @include display-property-theme($theme);
+    @include transaction-item-list-theme($theme);
 }
