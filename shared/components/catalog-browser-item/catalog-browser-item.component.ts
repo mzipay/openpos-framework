@@ -1,6 +1,6 @@
-import { Component, Input, ChangeDetectorRef, ViewContainerRef, DoCheck, OnInit } from '@angular/core';
-import { ISellItem, Logger, IUrlMenuItem } from '../../../core';
-import { Observable, Subject } from 'rxjs';
+import { Component, Input, OnInit, Inject, forwardRef } from '@angular/core';
+import { ISellItem, Logger, IUrlMenuItem, PersonalizationService } from '../../../core';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-catalog-browser-item',
@@ -9,61 +9,59 @@ import { Observable, Subject } from 'rxjs';
 })
 export class CatalogBrowserItemComponent implements OnInit {
     @Input() item: ISellItem;
+    @Input() loadFailImgSrc: string;
+
     loadingError = false;
     private imageLoaded$ = new Subject<boolean>();
     private imageError$ = new Subject<boolean>();
 
-    private showImage$: Promise<boolean>;
+    imageSrc: string;
+    imageLoaded = true;
+    private _loadFailImgSrcUrl: string;
 
-    constructor(private log: Logger, private cdRef: ChangeDetectorRef) {
+    // @ViewChild('itemImg') itemImage: Element;
+
+    constructor(private log: Logger,
+        @Inject(forwardRef(() => PersonalizationService))private personalization: PersonalizationService) {
     }
 
     ngOnInit(): void {
         let imageTimer: any = null;
 
-        const timeoutPromise = new Promise<boolean>((resolve, reject) => {
+        if (this.loadFailImgSrc) {
+            this._loadFailImgSrcUrl = this.loadFailImgSrc;
+            if (! this.loadFailImgSrc.startsWith('http')) {
+                this._loadFailImgSrcUrl = `${this.personalization.getServerBaseURL()}/${this.loadFailImgSrc}`;
+            }
+        }
+
+        if (this.showImage()) {
+            this.imageSrc = (<IUrlMenuItem>this.item.menuItems[0]).url;
             imageTimer = setTimeout( () => {
-                resolve(this.item.description === null);
-            },
-            2000);
-        });
+                this.imageSrc = this._loadFailImgSrcUrl;
+                this.imageLoaded = false;
+                },
+                2000
+            );
 
-
-        const imagePromise = new Promise<boolean>((resolve, reject) => {
-            // For both cases below, there will be a default image shown if the image does not
-            // successfully load
-
-            // If no url, then only attempt to show an image if there is no item description
-            if ((this.item.menuItems[0] && this.item.menuItems[0].hasOwnProperty('url') &&
-                ! (<IUrlMenuItem>this.item.menuItems[0]).url )) {
+            this.imageLoaded$.subscribe(loaded => {
+                this.imageLoaded = loaded;
                 if (imageTimer) {
                     clearTimeout(imageTimer);
                 }
-                this.log.debug(`No image URL for item '${this.item.subtitle}', item desc: '${this.item.description}'`);
-                resolve(this.item.description === null);
-            } else {
-                // show the image either if it successfully loaded OR
-                // it didn't successfully load && we have don't have an item description
-                this.imageLoaded$.subscribe(loaded => {
-                    if (imageTimer) {
-                        clearTimeout(imageTimer);
-                    }
-                    const result =
-                        (this.item.menuItems[0] && this.item.menuItems[0].hasOwnProperty('url') &&
-                        (<IUrlMenuItem>this.item.menuItems[0]).url && loaded)
-                        ||
-                        (! loaded && this.item.description === null);
-                    resolve(result);
-                });
-            }
-        });
-
-        this.showImage$ = Promise.race([imagePromise, timeoutPromise]);
-
+            });
+        }
     }
 
-    showImage(): Promise<boolean> {
-        return this.showImage$;
+    showImage(): boolean {
+        if (this.item.menuItems[0] && ! this.item.menuItems[0].hasOwnProperty('url')) {
+            return false;
+        }
+
+        if (! (<IUrlMenuItem>this.item.menuItems[0]).url ) {
+            return this.item.description === null;
+        }
+        return true;
     }
 
     onImageLoaded(): void {
@@ -71,7 +69,8 @@ export class CatalogBrowserItemComponent implements OnInit {
     }
 
     onImageLoadError(): void {
-        this.imageError$.next(true);
+        this.imageSrc = this._loadFailImgSrcUrl;
         this.imageLoaded$.next(false);
+        this.imageError$.next(true);
     }
 }
