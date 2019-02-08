@@ -31,6 +31,7 @@ public class Action implements Serializable, Cloneable {
     private String name;
     private Object data;
     private String type;
+    private String requiredPermissionId;
     private transient Action causedBy; // Used when renaming an action during a substate return.
 
     public Action() {
@@ -42,8 +43,13 @@ public class Action implements Serializable, Cloneable {
     }
     
     public Action(String actionName, Object data) {
+        this(actionName, data, null);
+    }
+    
+    public Action(String actionName, Object data, String requiredPermissionId) {
         this.name = actionName;
         this.data = data;
+        this.requiredPermissionId = requiredPermissionId;
     }
     
     public String getName() {
@@ -81,6 +87,14 @@ public class Action implements Serializable, Cloneable {
     
     public String getType() {
         return type;
+    }
+    
+    public String getRequiredPermissionId() {
+        return requiredPermissionId;
+    }
+    
+    public void setRequiredPermissionId(String requiredPermissionId) {
+        this.requiredPermissionId = requiredPermissionId;
     }
 
     @Override
