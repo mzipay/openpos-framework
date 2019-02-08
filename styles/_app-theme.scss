@@ -33,6 +33,7 @@
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));
     $app-warn: mat-color(map-get($theme, warn));
+    $app-selected: mat-color(map-get($theme, selected));
 
     $foreground: map-get($theme, foreground);
     $background: map-get($theme, background);
@@ -55,6 +56,10 @@
 
     .primary{
         color:$app-primary;
+    }
+
+    .selected-color {
+        color: $app-selected;
     }
 
     .success{
@@ -123,7 +128,15 @@
     .mat-mini-fab.mat-accent-inverse{
         color:$app-accent;
         background-color: white;
-    }    
+    }
+
+    .mat-button.mat-selected-color {
+        color: $app-selected;
+    }
+
+    .mat-icon-button.mat-selected-color {
+        color: $app-selected;
+    }
 
     .mat-fab .mat-button-wrapper {
         padding: 0;
