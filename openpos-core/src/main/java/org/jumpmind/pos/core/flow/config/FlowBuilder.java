@@ -20,6 +20,7 @@
  */
 package org.jumpmind.pos.core.flow.config;
 
+import org.jumpmind.pos.core.flow.CompleteState;
 import org.jumpmind.pos.core.flow.IState;
 
 public class FlowBuilder implements IFlowBuilder {
@@ -48,6 +49,15 @@ public class FlowBuilder implements IFlowBuilder {
     @Override
     public StateConfig build() {
         return stateConfig;
+    }
+    
+    @Override
+    public IFlowBuilder withSubTransition(String actionName, Class<? extends IState> destination, String returnAction) {
+        FlowConfig flowConfig = new FlowConfig(destination.getSimpleName());
+        flowConfig.setInitialState(FlowBuilder.addState(destination).withTransition(returnAction, CompleteState.class).build());
+        SubTransition subTransition = new SubTransition(returnAction, flowConfig);
+        stateConfig.getActionToSubStateMapping().put(actionName, subTransition);
+        return this;
     }
 
     @Override

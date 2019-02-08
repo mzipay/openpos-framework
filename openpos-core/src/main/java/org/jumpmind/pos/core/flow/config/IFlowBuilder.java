@@ -28,6 +28,8 @@ public interface IFlowBuilder {
         
     public IFlowBuilder withSubTransition(String actionName, FlowConfig flowConfig, String returnAction);
     
+    public IFlowBuilder withSubTransition(String actionName, Class<? extends IState> destination, String returnAction);
+    
     public StateConfig build();
 
 }
