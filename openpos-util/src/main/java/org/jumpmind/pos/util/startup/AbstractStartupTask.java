@@ -9,17 +9,28 @@ abstract public class AbstractStartupTask implements ApplicationListener<Applica
 
     final protected Logger logger = LoggerFactory.getLogger(getClass());
 
+    private Exception taskException = null;
+    
     @Override
     final public void onApplicationEvent(ApplicationReadyEvent event) {
         logger.info("{} is executing ...", getClass().getSimpleName());
         try {
             doTask();
         } catch (Exception e) {
+            this.taskException = e;
             logger.error("Failed to execute " + getClass().getName(), e);
         } finally {
             logger.info("{} is complete", getClass().getSimpleName());
         }
     }
 
+    public boolean hasException() {
+        return this.taskException != null;
+    }
+    
+    public Exception getTaskException() {
+        return taskException;
+    }
+    
     protected abstract void doTask() throws Exception;
 }
