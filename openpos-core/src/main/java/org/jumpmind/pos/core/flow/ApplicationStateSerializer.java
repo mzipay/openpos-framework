@@ -26,7 +26,7 @@ public class ApplicationStateSerializer {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    @Autowired(required=false)
+    @Autowired(required = false)
     private IFlowConfigProvider flowConfigProvider;
 
     @PostConstruct
@@ -96,7 +96,7 @@ public class ApplicationStateSerializer {
         for (String key : keys) {
             Object value = appStateForSerialization.getScope().getNodeScope().get(key).getValue();
             if (value != null && (cacheInteface != null && cacheInteface.isAssignableFrom(value.getClass())
-                    || value.getClass().toString().contains("ContextServiceClient"))) {
+                    || value.getClass().toString().contains("ContextClient"))) {
                 appStateForSerialization.getScope().getNodeScope().remove(key);
             }
         }
@@ -130,15 +130,12 @@ public class ApplicationStateSerializer {
 
     protected void refreshFlowConfig(IStateManager stateManager, StateContext stateContext) {
         if (stateContext.getFlowConfig() != null) {
-            String flowConfigName = stateContext.getFlowConfig().getName(); // Only
-                                                                            // the
-                                                                            // name
-                                                                            // will
-                                                                            // be
-                                                                            // available
-                                                                            // after
-                                                                            // deserialize
-            stateContext.setFlowConfig(flowConfigProvider.getConfigByName(stateManager.getAppId(), stateManager.getDeviceId(), flowConfigName));
+            String flowConfigName = stateContext.getFlowConfig().getName();
+            /*
+             * Only the name will be available after deserialize
+             */
+            stateContext
+                    .setFlowConfig(flowConfigProvider.getConfigByName(stateManager.getAppId(), stateManager.getDeviceId(), flowConfigName));
         }
     }
 
