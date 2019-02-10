@@ -341,7 +341,7 @@ public class StateManager implements IStateManager {
             transitionToState(action, transitionStateClass);
         } else if (subStateConfig != null) {
             transitionToSubState(action, subStateConfig);
-        } else if (actionHandler.canHandleAnyAction(applicationState.getCurrentContext().getState())) {
+        } else if (actionHandler.canHandleAnyAction(applicationState.getCurrentContext().getState(), action)) {
             actionHandler.handleAnyAction(this, applicationState.getCurrentContext().getState(), action);
         } else if (globalTransitionStateClass != null) {
             transitionToState(action, globalTransitionStateClass);

@@ -1,11 +1,14 @@
 package org.jumpmind.pos.core.flow;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.jumpmind.pos.server.model.Action;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,26 +16,26 @@ import org.springframework.stereotype.Component;
 @Component
 @org.springframework.context.annotation.Scope("prototype")
 public class ActionHandlerImpl {
-    
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
     private static final String METHOD_ON_ANY = "onAnyAction";
-    
-    @Autowired(required=false)
+
+    @Autowired(required = false)
     private IErrorHandler errorHandler;
 
-    
     public boolean canHandleAction(Object state, Action action) {
         // if there is an action handler
         // AND it's not the current state firing this action.
         Method actionMethod = getActionMethod(state, action);
-        if  (actionMethod != null
-                && !isCalledFromState(state)) {
+        if (actionMethod != null && !isCalledFromState(state, action)) {
             return true;
         } else {
             return false;
         }
     }
 
-    public boolean handleAction(IStateManager stateManager, Object state, Action action) {        
+    public boolean handleAction(IStateManager stateManager, Object state, Action action) {
         Method actionMethod = getActionMethod(state, action);
         if (actionMethod != null) {
             invokeActionMethod(stateManager, state, action, actionMethod);
@@ -42,11 +45,10 @@ public class ActionHandlerImpl {
         }
     }
 
-    public boolean canHandleAnyAction(Object state) {
-        return getAnyActionMethod(state) != null
-                && !isCalledFromState(state);
+    public boolean canHandleAnyAction(Object state, Action action) {
+        return getAnyActionMethod(state) != null && !isCalledFromState(state, action);
     }
-    
+
     public boolean handleAnyAction(IStateManager stateManager, Object state, Action action) {
         Method anyActionMethod = getAnyActionMethod(state);
         if (anyActionMethod != null) {
@@ -55,29 +57,29 @@ public class ActionHandlerImpl {
         } else {
             return false;
         }
-    }    
-    
+    }
+
     protected Method getAnyActionMethod(Object state) {
         Class<?> clazz = state.getClass();
-        
+
         List<Method> methods = MethodUtils.getMethodsListWithAnnotation(clazz, ActionHandler.class, true, true);
-        
+
         for (Method method : methods) {
             if (METHOD_ON_ANY.equals(method.getName())) {
                 return method;
             }
         }
-        
+
         return null;
     }
-    
+
     protected Method getActionMethod(Object state, Action action) {
         Class<?> clazz = state.getClass();
-        
+
         List<Method> methods = MethodUtils.getMethodsListWithAnnotation(clazz, ActionHandler.class, true, true);
 
-        String actionName = action.getName();                
-        
+        String actionName = action.getName();
+
         for (Method method : methods) {
             String matchingMethodName = "on" + actionName;
             method.setAccessible(true);
@@ -85,7 +87,7 @@ public class ActionHandlerImpl {
                 return method;
             }
         }
-        
+
         return null;
     }
 
@@ -112,33 +114,54 @@ public class ActionHandlerImpl {
             }
         }
     }
-    
-    protected boolean isCalledFromState(Object state) {
+
+    protected boolean isCalledFromState(Object state, Action action) {
         StackTraceElement[] currentStack = Thread.currentThread().getStackTrace();
-        
+
         if (currentStack.length > 150) {
             checkStackOverflow(currentStack);
         }
-        
+
         for (StackTraceElement stackFrame : currentStack) {
-            if (stackFrame.getClassName().equals(state.getClass().getName())) {                
+            Class<?> currentClass = getClassFrom(stackFrame);
+            if (currentClass != null && !Modifier.isAbstract(currentClass.getModifiers()) && IState.class.isAssignableFrom(currentClass)
+                    && currentClass != state.getClass()) {
+                return false;
+            } else if (stackFrame.getClassName().equals(state.getClass().getName())) {
                 return true;
             }
+
         }
+
         return false;
+    }
+    
+    /**
+     * TODO probably should pull from a cache of string,class map
+     */
+    protected Class<?> getClassFrom(StackTraceElement stackFrame) {
+        Class<?> currentClass = null;
+        try {
+            if (!stackFrame.getClassName().startsWith("sun")) {
+                currentClass = Class.forName(stackFrame.getClassName());
+            }
+        } catch (Exception e) {
+            logger.warn("", e);
+        }
+        return currentClass;
     }
 
     public void checkStackOverflow(StackTraceElement[] currentStack) {
         int stateManagerCount = 0;
-        
+
         for (StackTraceElement stackFrame : currentStack) {
             // TODO count org.jumpmind.pos.core.flow.StateManager classes
             if (StateManager.class.getName().equals(stackFrame.getClassName())) {
-                if (stateManagerCount++ > 75) {                    
+                if (stateManagerCount++ > 75) {
                     throw new FlowException("Action cycle detected.  You may need to adjust your "
                             + "use of onAnyMethod() and/or the use of super classes for your State. A super/abstract class cannot forward an Action that it could handle.");
                 }
             }
         }
-    }    
+    }
 }

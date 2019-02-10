@@ -30,7 +30,7 @@
         </layout>
     </appender>
     
-    <appender name="TEST" class="org.jumpmind.util.SymRollingFileAppender">
+    <appender name="TEST" class="org.apache.log4j.RollingFileAppender">
         <param name="File" value="build/junit.log" />
         <param name="MaxFileSize" value="100MB" />
         <param name="Append" value="true" />
