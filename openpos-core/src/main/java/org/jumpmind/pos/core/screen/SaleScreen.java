@@ -32,7 +32,7 @@ public class SaleScreen extends Screen {
     private String subTotal;
     private String taxTotal;
     private String itemActionName = "Item";
-    private Transaction transaction = new Transaction();
+    private boolean transactionActive = false;
     private String customerName;
     private String noCustomerText;
     private String checkoutButtonText = "";
@@ -93,14 +93,6 @@ public class SaleScreen extends Screen {
 
     public void setTaxTotal(String taxTotal) {
         this.taxTotal = taxTotal;
-    }
-
-    public Transaction getTransaction() {
-        return transaction;
-    }
-
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
     }
 
     public void setCustomerName(String customerName) {
@@ -260,6 +252,14 @@ public class SaleScreen extends Screen {
     
     public void setCheckoutButtonText(String checkoutButtonText) {
         this.checkoutButtonText = checkoutButtonText;
+    }
+    
+    public void setTransactionActive(boolean isTransactionActive) {
+        this.transactionActive = isTransactionActive;
+    }
+    
+    public boolean isTransactionActive() {
+        return transactionActive;
     }
 
 }

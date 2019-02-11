@@ -2,6 +2,7 @@ package org.jumpmind.pos.core.screen;
 
 import java.io.Serializable;
 
+@Deprecated
 public class Transaction implements Serializable {
     
     private static final long serialVersionUID = 1L;
