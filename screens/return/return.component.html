@@ -7,25 +7,26 @@
 	<div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
 
 		<app-transaction-item-list [listConfig]="listConfig" [selectedItems]="selectedItems" [selectedItemIndexes]="screen.selectedItemIndexes"
-		 	[multiSelectedMenuItems]="screen.multiSelectedMenuItems" [transactionMenuItems]="screen.transactionMenuItems"
-		 	[prompt]="screen.transactionMenuPrompt" [readOnly]="screen.readOnly" (selectedItemListChange)="onItemListChange($event)"
-		 	(menuAction)="onMenuAction($event)">
+		 [multiSelectedMenuItems]="screen.multiSelectedMenuItems" [transactionMenuItems]="screen.transactionMenuItems"
+		 [prompt]="screen.transactionMenuPrompt" [readOnly]="screen.readOnly" (selectedItemListChange)="onItemListChange($event)"
+		 (menuAction)="onMenuAction($event)">
 		</app-transaction-item-list>
 
 		<app-overflow-list fxFlex="0 0 auto" *ngIf="screen.transaction" [numberItemsToShow]="overFlowListSize | async"
-		 	[items]="amountTotals"></app-overflow-list>
+		 [items]="amountTotals"></app-overflow-list>
 
 		<mat-card *ngIf="screen.transaction" fxFlex="0 0 auto" class="page-content-card dark">
-			<mat-card-content fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" class="text-lg">
-				<div *ngIf="itemTotal === 1"><span fxFlex class="text-md">{{itemTotal}} Item</span></div>
-				<div *ngIf="itemTotal !== 1"><span fxFlex class="text-md">{{itemTotal}} Items</span></div>
-				<span fxFlex="1 1 auto"></span>
-				<span fxFlex class="text-right">Total</span>
-				<span fxFlex [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
-					<app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
-				</span>
-				<button fxFlex="0 1 auto" *ngIf="!screen.readOnly" mat-button color="primary-inverse" style="height:100%; margin:-4px;"
-				 	[disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Return')">
+			<mat-card-content gdAreas="items total button" gdColumns="auto 1fr auto" class="text-lg">
+				<div gdArea="items" gdGridAlign="center center" class="text-md">{{itemTotal}} Item{{itemTotal !== 1 ?
+					's' : ''}}</div>
+				<div gdArea="total" gdGridAlign="center center">
+					<span class="text-right">Total&nbsp;</span>
+					<span [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
+						<app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
+					</span>
+				</div>
+				<button gdArea="button" *ngIf="!screen.readOnly" mat-button color="primary-inverse" [disabled]="!screen.transaction.active || items.length == 0"
+				 (click)="session.onAction('Return')">
 					<span class="text-md">Next</span>
 					<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
 				</button>
