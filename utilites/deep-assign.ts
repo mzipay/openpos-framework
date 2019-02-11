@@ -2,7 +2,7 @@
 // This method assumes you do not have any cyclic references. For the case we plan on using it
 // there should be no issues with that since it currently is only being used to copy the JSON
 // screen objects into their local versions with out triggering a reference change
-export function deepAssign( target : any, src : any) : any {
+export function deepAssign( target: any, src: any): any {
 
     // if target is undefined or null we'll break out and return src
     if ( target === null || typeof target === 'undefined' ) {
@@ -19,11 +19,16 @@ export function deepAssign( target : any, src : any) : any {
         if ( Array.isArray(src) ) {
             if ( Array.isArray(target) ) {
                 (target as Array<any>).length = 0;
-            }
-            else {
+            } else {
                 target = [];
             }
         }
+
+        // if the target is an array and the new src isn't. we'll just copy over it
+        if ( Array.isArray(target) && !Array.isArray(src) ) {
+            return _doCopy(src);
+        }
+
         Object.getOwnPropertyNames(src).forEach( prop => {
             target[prop] = deepAssign( target[prop], src[prop]);
         });
@@ -37,8 +42,8 @@ export function deepAssign( target : any, src : any) : any {
     }
 }
 
-//Returns the value if primitive, or will create a array or object and copy all of the values. 
-function _doCopy( src:any ) : any {
+// Returns the value if primitive, or will create a array or object and copy all of the values.
+function _doCopy( src: any ): any {
     if ( _isPrimitive(src) ) {
         return src;
     }
@@ -49,19 +54,18 @@ function _doCopy( src:any ) : any {
         });
         return arr;
     }
-    if ( typeof src == 'object' ) {
+    if ( typeof src === 'object' ) {
         const obj = {};
         Object.getOwnPropertyNames(src).forEach( prop => {
             obj[prop] = _doCopy(src[prop]);
         });
         return obj;
-    }
-    else {
+    } else {
         return undefined;
     }
 }
 
-//Returns true if src is null, undefiend, string, number or boolean.
-function _isPrimitive( src:any ) : boolean {
+// Returns true if src is null, undefiend, string, number or boolean.
+function _isPrimitive( src: any ): boolean {
     return src === null || typeof src === 'undefined' || typeof src === 'string' || typeof src === 'number' || typeof src === 'boolean';
 }

@@ -68,7 +68,9 @@ describe('ScreenPart', () => {
                 }
             };
             sessionService.getMessages.and.returnValue(cold('---x|', {x: testScreen}));
-            sut = TestBed.createComponent(TestPartComponent).componentInstance;
+            const fixture = TestBed.createComponent(TestPartComponent);
+            sut = fixture.componentInstance;
+            fixture.detectChanges();
             getTestScheduler().flush();
             expect(sut.screenData.testProperty).toBe('Yay');
         });
@@ -81,7 +83,9 @@ describe('ScreenPart', () => {
             };
 
             sessionService.getMessages.and.returnValue(cold('---x|', {x: testScreen}));
-            sut = TestBed.createComponent(TestPartComponent).componentInstance;
+            const fixture = TestBed.createComponent(TestPartComponent);
+            sut = fixture.componentInstance;
+            fixture.detectChanges();
             getTestScheduler().flush();
             expect(sut.screenData.testProperty).toBe('boo');
         });
