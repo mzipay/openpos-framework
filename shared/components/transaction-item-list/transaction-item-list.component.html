@@ -17,7 +17,7 @@
         <app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems"
             (selectedItemListChange)="onItemListChange($event)">
             <ng-template let-item>
-                <div fxLayoutAlign="space-between center" fxLayout.xs="column" [ngClass]="item.type" style="margin: -15px; padding: 15px;">
+                <div fxLayoutAlign="space-between center" fxLayout.xs="row wrap" [ngClass]="item.type" >
                     <div fxFlex="90" fxAlign="left">
                         <span [ngClass]="item.prop65Item ? 'warn' : ''">
                             {{item.description}}
