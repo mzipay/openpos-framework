@@ -10,6 +10,8 @@ export const IconConstants = {
         {name: 'NoReceipt', iconDef: new IconDefinition('block', 'fontface')},
         {name: 'Error', iconDef: new IconDefinition('error', 'fontface')},
         {name: 'Login', iconDef: new IconDefinition('lock', 'fontface')},
+        {name: 'User', iconDef: new IconDefinition('person', 'fontface')},
+        {name: 'Password', iconDef: new IconDefinition('lock', 'fontface')},
         {name: 'Logout', iconDef: new IconDefinition('exit_to_app', 'fontface')},
         {name: 'Home', iconDef: new IconDefinition('home', 'fontface')},
         {name: 'DayStart', iconDef: new IconDefinition('brightness_5', 'fontface')},
