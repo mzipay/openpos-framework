@@ -26,7 +26,7 @@
             <app-overflow-list gdArea="totals" *ngIf="screen.transaction" [numberItemsToShow]="overFlowListSize | async"
             [items]="amountTotals"></app-overflow-list>
 
-            <mat-card gdArea="nextbar" *ngIf="screen.transaction" class="page-content-card dark">
+            <mat-card gdArea="nextbar" class="page-content-card dark">
                 <mat-card-content class="text-lg" 
                         gdAreas="items total button"
                         gdColumns="auto 1fr auto">
@@ -38,7 +38,7 @@
                         </span>
                     </div>
                     <button gdArea="button" *ngIf="!screen.readOnly" mat-raised-button color="primary" class="checkout-button mat-elevation-z0"
-                        [disabled]="!screen.transaction.active || items.length == 0" (click)="session.onAction('Checkout')">
+                        [disabled]="!screen.transactionActive || items.length == 0" (click)="session.onAction('Checkout')">
                         <span *ngIf="showDetails | async" class="text-md">{{screen.checkoutButtonText}}</span>
                         <mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
                     </button>

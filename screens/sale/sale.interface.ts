@@ -1,6 +1,5 @@
 import { IAbstractScreen, IMenuItem, ISellItem } from '../../core';
 import { ITotal } from '../../core/interfaces/total.interface';
-import { Transaction } from './transaction.interface';
 
 export interface SaleInterface extends IAbstractScreen {
     transactionMenuPrompt: string;
@@ -12,6 +11,6 @@ export interface SaleInterface extends IAbstractScreen {
     totals: ITotal[];
     prompt: string;
     hideCustomer: boolean;
-    transaction: Transaction;
+    transactionActive: boolean;
     checkoutButtonText: string;
 }
