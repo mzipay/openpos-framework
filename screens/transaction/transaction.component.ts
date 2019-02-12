@@ -1,5 +1,5 @@
 import { MatDialog } from '@angular/material';
-import { Component, ViewChild, AfterViewInit, OnInit, AfterViewChecked, ElementRef} from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
 import { Observable } from 'rxjs';
 import { map, startWith, filter } from 'rxjs/operators';
@@ -8,6 +8,7 @@ import { SelectableItemListComponentConfiguration } from '../../shared/component
 import { NavListComponent } from '../../shared/components/nav-list/nav-list.component';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ITotal } from '../../core/interfaces/total.interface';
+import { IMenuItem } from '../../core/interfaces/menu-item.interface';
 import { TotalType } from '../../core/interfaces/total-type.enum';
 
 @Component({
@@ -15,15 +16,17 @@ import { TotalType } from '../../core/interfaces/total-type.enum';
   templateUrl: './transaction.component.html',
   styleUrls: ['./transaction.component.scss']
 })
-export class TransactionComponent extends PosScreen<any> implements AfterViewInit, AfterViewChecked, OnInit {
+export class TransactionComponent extends PosScreen<any> implements AfterViewInit, OnInit {
 
   @ViewChild('box') vc;
-  @ViewChild('scrollList') private scrollList: ElementRef;
-  public size = -1;
   initialized = false;
-  listConfig =  new SelectableItemListComponentConfiguration<ISellItem>();
+  listConfig = new SelectableItemListComponentConfiguration<ISellItem>();
   selectedItems: ISellItem[] = new Array<ISellItem>();
+  selectedItemIndexes: number[] = new Array<number>();
   individualMenuClicked = false;
+
+  transactionMenuPrompt: string;
+  transactionMenuItems: IMenuItem[];
 
   public overFlowListSize: Observable<number>;
 
@@ -33,12 +36,13 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
 
   constructor(devices: DeviceService,
     private observableMedia: ObservableMedia, protected dialog: MatDialog) {
-        super();
-    }
+    super();
+  }
 
   buildScreen() {
     this.selectedItems = this.screen.items.filter(item => this.screen.selectedItems.find(selectedItem => item.index === selectedItem.index));
-    this.listConfig =  new SelectableItemListComponentConfiguration<ISellItem>();
+    this.selectedItemIndexes = this.screen.selectedItems.map(item => item.index);
+    this.listConfig = new SelectableItemListComponentConfiguration<ISellItem>();
     this.listConfig.selectionMode = SelectionMode.Multiple;
     this.listConfig.numResultsPerPage = Number.MAX_VALUE;
     this.listConfig.items = this.screen.items;
@@ -46,6 +50,10 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
     this.amountTotals = this.screen.totals ? (<ITotal[]>this.screen.totals).filter(t => t.type === TotalType.Amount) : null;
     const screenItemTotal = this.screen.totals ? (<ITotal[]>this.screen.totals).find(t => t.type === TotalType.Quantity && t.name === 'itemTotal') : null;
     this.itemTotal = screenItemTotal ? Number(screenItemTotal.amount) : this.items.length;
+    if (this.screen.template) {
+      this.transactionMenuPrompt = this.screen.template.transactionMenuPrompt;
+      this.transactionMenuItems = this.screen.template.transactionMenuItems;
+    }
     this.dialog.closeAll();
   }
 
@@ -60,7 +68,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
 
     let startSize = 3;
     sizeMap.forEach((size, mqAlias) => {
-      if ( this.observableMedia.isActive(mqAlias)) {
+      if (this.observableMedia.isActive(mqAlias)) {
         startSize = size;
       }
     });
@@ -98,7 +106,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
         payload: this.getIndexes(items),
         disableClose: false,
         autoFocus: false
-     }
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -112,27 +120,17 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
     return indexes;
   }
 
-  public onItemListChange(event: ISellItem[]): void {
-    if (this.individualMenuClicked) {
-      this.individualMenuClicked = false;
-      this.selectedItems = event;
-      return;
-    }
-    this.selectedItems = event;
-    this.session.onAction('SelectedItemsChanged', this.selectedItems);
+  public onItemListChange(items: ISellItem[]): void {
+    this.selectedItemIndexes = items.map(item => item.index);
+    this.session.onValueChange('SelectedItemsChanged', items);
   }
 
-  ngAfterViewChecked() {
-    if (this.items && this.size !== this.items.length) {
-      this.scrollToBottom();
-      this.size = this.items.length;
+  public onMenuAction(event: any) {
+    if (event.menuItem && event.payload) {
+      this.onMenuItemClick(event.menuItem, event.payload);
+    } else {
+      this.onMenuItemClick(event);
     }
-  }
-
-  scrollToBottom(): void {
-    try {
-      this.scrollList.nativeElement.scrollTop = this.scrollList.nativeElement.scrollHeight;
-    } catch (err) { }
   }
 
 }

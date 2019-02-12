@@ -41,6 +41,10 @@ export class CustomerSearchResultsComponent extends PosScreen<any> {
     if (event.option.selected) {
       const customer: ICustomer = event.option.value;
       this.enableOptions(customer);
+    } else if (this.isSelectedOptionsEmpty()) {
+      this.localMenuItems.forEach(element => {
+        this.enableEditForUnselect(element);
+      });
     }
   }
 
@@ -62,6 +66,12 @@ export class CustomerSearchResultsComponent extends PosScreen<any> {
       if (element.action === 'Enroll') {
         element.enabled = true;
       }
+    }
+  }
+
+  private enableEditForUnselect(element: any) {
+    if (element.action === 'Edit') {
+      element.enabled = false;
     }
   }
 

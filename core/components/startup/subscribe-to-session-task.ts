@@ -36,7 +36,7 @@ export class SubscribeToSessionTask implements IStartupTask {
 
                 message.next(`[StartupService] Subscribing to server using appId '${appId}'...`);
                 this.session.unsubscribe();
-                this.session.subscribe(appId);
+                this.session.subscribe(appId, data.route.queryParams);
                 message.complete();
             }
         });
