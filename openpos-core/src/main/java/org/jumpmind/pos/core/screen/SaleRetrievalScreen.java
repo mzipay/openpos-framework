@@ -83,6 +83,7 @@ public class SaleRetrievalScreen extends Screen {
         String deviceId;
         String grandTotal;
         int lineItemCount;
+        int availableToReturnCount;
         long sequenceNumber;
         
         public void setBusinessDate(String businessDate) {
@@ -163,6 +164,14 @@ public class SaleRetrievalScreen extends Screen {
 
         public long getLineItemCount() {
             return lineItemCount;
+        }
+        
+        public void setAvailableToReturnCount(int availableToReturnCount) {
+            this.availableToReturnCount = availableToReturnCount;
+        }
+        
+        public int getAvailableToReturnCount() {
+            return availableToReturnCount;
         }
 
         @Override
