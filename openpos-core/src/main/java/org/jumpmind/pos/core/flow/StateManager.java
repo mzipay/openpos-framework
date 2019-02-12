@@ -387,7 +387,7 @@ public class StateManager implements IStateManager {
                 StateConfig suspendedStateConfig = suspendedState.getFlowConfig().getStateConfig(suspendedState.getState());
 
                 Class<? extends IState> autoTransitionStateClass = suspendedStateConfig.getActionToStateMapping().get(action.getName());
-                if (autoTransitionStateClass != null) {
+                if (autoTransitionStateClass != null && autoTransitionStateClass != CompleteState.class) {
                     transitionTo(action, createNewState(autoTransitionStateClass), null, null);
                 } else {
                     SubTransition autoSubTransition = suspendedStateConfig.getActionToSubStateMapping().get(action.getName());
