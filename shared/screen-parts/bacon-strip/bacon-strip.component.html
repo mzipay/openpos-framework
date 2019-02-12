@@ -1,14 +1,12 @@
-<mat-toolbar fxLayoutGap="10px">
-    <button *ngIf="screenData.backButton" 
-        mat-button style="margin-left:-20px; z-index:10;" (click)="onMenuItemClick(screenData.backButton)">
+<mat-toolbar gdAreas="backbutton header . operator" gdColumns="auto auto 1fr auto">
+    <button gdArea="backbutton" class="back-button" *ngIf="screenData.backButton" mat-button (click)="onMenuItemClick(screenData.backButton)">
         <mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
     </button>    
-    <div fxLayoutAlign="center center" fxLayoutGap="10px">
-        <app-icon *ngIf="screenData.headerIcon" class="screen-icon" [iconName]="screenData.headerIcon"></app-icon>
+    <div gdArea="header">
+        <app-icon *ngIf="!(isMobile$ | async) && screenData.headerIcon" class="screen-icon" [iconName]="screenData.headerIcon"></app-icon>
         <span>{{screenData.headerText}}</span>
     </div>
-    <div fxFlex="1 1 100%"></div>
-    <div>
+    <div gdArea="operator" *ngIf="!(isMobile$ | async)">
         {{screenData.operatorText}} on {{screenData.deviceId}}
     </div>
 </mat-toolbar>
