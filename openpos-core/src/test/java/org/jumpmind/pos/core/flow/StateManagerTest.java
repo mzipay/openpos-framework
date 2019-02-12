@@ -19,6 +19,7 @@ import org.jumpmind.pos.core.flow.TestStates.OptionalInjectionState;
 import org.jumpmind.pos.core.flow.TestStates.RepostActionState;
 import org.jumpmind.pos.core.flow.TestStates.SellState;
 import org.jumpmind.pos.core.flow.TestStates.StackOverflowState;
+import org.jumpmind.pos.core.flow.TestStates.SubStateReturnsWithTransitionState;
 import org.jumpmind.pos.core.flow.TestStates.TestScopesState;
 import org.jumpmind.pos.core.flow.TestStates.TransitionInterceptionState;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
@@ -77,6 +78,10 @@ public class StateManagerTest {
 
         FlowConfig config = new FlowConfig();
         config.setInitialState(FlowBuilder.addState(HomeState.class).withTransition("Sell", SellState.class)
+                .withSubTransition("ToSubState1", SubStateReturnsWithTransitionState.class, "FromSubStateToAnotherState")
+                .withSubTransition("ToSubState2", SubStateReturnsWithTransitionState.class, "FromSubStateToAnotherSubState")
+                .withTransition("FromSubStateToAnotherState", ActionTestingState.class)
+                .withSubTransition("FromSubStateToAnotherSubState", customerFlow, "Return")
                 .withTransition("TestActions", ActionTestingState.class).withTransition("TestScopes", TestScopesState.class)
                 .withTransition("TestTransitionInterception", TransitionInterceptionState.class)
                 .withTransition("TestFailedInjections", InjectionFailedState.class)
@@ -104,6 +109,23 @@ public class StateManagerTest {
         TestUtil.setField(stateManager, "transitionSteps", Arrays.asList(new TestTransitionStepCancel(), new TestTransitionStepProceed()));
 
     }
+    
+    @Test
+    public void testSubStateTransitionBackToAnotherState() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("ToSubState1");
+        assertEquals(ActionTestingState.class, stateManager.getCurrentState().getClass());
+    }
+    
+    @Test
+    public void testSubStateTransitionBackToAnotherSubState() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("ToSubState2");
+        assertEquals(CustomerState.class, stateManager.getCurrentState().getClass());
+    }
+
 
     @Test
     public void testInitialState() {
