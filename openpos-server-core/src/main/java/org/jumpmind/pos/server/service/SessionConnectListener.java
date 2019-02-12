@@ -1,6 +1,5 @@
 package org.jumpmind.pos.server.service;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,9 +13,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Component("serverCoreSessionConnectListener")
 public class SessionConnectListener implements ApplicationListener<SessionConnectEvent>, MessageUtils {
