@@ -269,14 +269,7 @@ public class StateManager implements IStateManager {
     }
 
     protected IState buildState(StateConfig stateConfig) {
-        IState state;
-        try {
-            state = stateConfig.getStateClass().newInstance();
-        } catch (Exception ex) {
-            throw new FlowException("Failed to instantiate state " + stateConfig.getStateName() + " class " + stateConfig.getStateClass(),
-                    ex);
-        }
-        return state;
+        return createNewState(stateConfig.getStateClass());
     }
 
     @Override
@@ -391,7 +384,19 @@ public class StateManager implements IStateManager {
         if (CompleteState.class == targetStateClass) {
             if (!applicationState.getStateStack().isEmpty()) {
                 StateContext suspendedState = applicationState.getStateStack().pop();
-                transitionTo(action, suspendedState.getState(), null, suspendedState);
+                StateConfig suspendedStateConfig = suspendedState.getFlowConfig().getStateConfig(suspendedState.getState());
+
+                Class<? extends IState> autoTransitionStateClass = suspendedStateConfig.getActionToStateMapping().get(action.getName());
+                if (autoTransitionStateClass != null && autoTransitionStateClass != CompleteState.class) {
+                    transitionTo(action, createNewState(autoTransitionStateClass), null, null);
+                } else {
+                    SubTransition autoSubTransition = suspendedStateConfig.getActionToSubStateMapping().get(action.getName());
+                    if (autoSubTransition != null) {
+                        transitionToSubState(action, autoSubTransition);
+                    } else {
+                        transitionTo(action, suspendedState.getState(), null, suspendedState);
+                    }
+                }
             } else {
                 throw new FlowException("No suspended state to return to for terminating action " + action + " from state "
                         + applicationState.getCurrentContext().getState());
@@ -404,10 +409,14 @@ public class StateManager implements IStateManager {
 
     protected void transitionToSubState(Action action, SubTransition subStateConfig) {
         Class<? extends IState> subState = subStateConfig.getSubFlowConfig().getInitialState().getStateClass();
+        transitionTo(action, createNewState(subState), subStateConfig, null);
+    }
+
+    protected IState createNewState(Class<? extends IState> clazz) {
         try {
-            transitionTo(action, subState.newInstance(), subStateConfig, null);
+            return clazz.newInstance();
         } catch (Exception ex) {
-            throw new FlowException("Failed to create and transition to initial subState " + subState, ex);
+            throw new FlowException("Failed to create and transition to state " + clazz.getName(), ex);
         }
     }
 
@@ -451,9 +460,9 @@ public class StateManager implements IStateManager {
             IState state = stateContext.getState();
             injector.injectNulls(state, scopeType);
         }
-        
+
         injector.injectNulls(applicationState.getCurrentContext().getState(), scopeType);
-        
+
     }
 
     @Override
@@ -550,5 +559,10 @@ public class StateManager implements IStateManager {
 
     public void setApplicationState(ApplicationState applicationState) {
         this.applicationState = applicationState;
+    }
+
+    @Override
+    public void registerQueryParams(Map<String, Object> queryParams) {
+        applicationState.getScope().setScopeValue(ScopeType.Device, "queryParams", queryParams);
     }
 }
