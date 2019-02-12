@@ -7,6 +7,6 @@
         <span>{{screenData.headerText}}</span>
     </div>
     <div gdArea="operator" *ngIf="!(isMobile$ | async)">
-        {{screenData.operatorText}} on {{screenData.deviceId}}
+        {{operatorInfo}}
     </div>
 </mat-toolbar>

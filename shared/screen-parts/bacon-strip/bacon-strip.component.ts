@@ -13,6 +13,7 @@ import { Observable } from 'rxjs';
 export class BaconStripComponent extends ScreenPart<BaconStripInterface> {
 
     isMobile$: Observable<boolean>;
+    operatorInfo: string;
 
     constructor( mediaService: OpenposMediaService) {
         super();
@@ -27,5 +28,10 @@ export class BaconStripComponent extends ScreenPart<BaconStripInterface> {
     }
 
     screenDataUpdated() {
+        if(this.screenData.operatorText && this.screenData.deviceId ){
+            this.operatorInfo = this.screenData.operatorText + " on " + this.screenData.deviceId;
+        } else {
+            this.operatorInfo = this.screenData.operatorText != null ? this.screenData.operatorText : this.screenData.deviceId;
+        }
     }
 }
