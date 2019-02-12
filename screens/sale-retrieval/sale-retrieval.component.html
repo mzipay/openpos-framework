@@ -17,6 +17,9 @@
 							<div *ngIf="screen.columnsToInclude.includes('deviceId')" fxFlex="15%" style="text-align:center;">
 								{{screen.columnHeaders['deviceId']}}
                             </div>      
+							<div *ngIf="screen.columnsToInclude.includes('availableToReturnCount')" fxFlex="15%" style="text-align:center;">
+								{{screen.columnHeaders['availableToReturnCount']}}
+							</div>                                                  
 							<div *ngIf="screen.columnsToInclude.includes('lineItemCount')" fxFlex="fill" style="text-align:center;">
 								{{screen.columnHeaders['lineItemCount']}}
 							</div>                                                  
@@ -51,8 +54,12 @@
 
                             <div *ngIf="screen.columnsToInclude.includes('deviceId')" fxFlex="15%" style="text-align:center;">
 								<div mat-line>{{i.deviceId}}</div>
-							</div>
-
+                            </div>
+                            
+                            <div *ngIf="screen.columnsToInclude.includes('availableToReturnCount')" fxFlex="15%" style="text-align:center;">
+								<div mat-line>{{i.availableToReturnCount}}</div>
+                            </div>
+                            
                             <div *ngIf="screen.columnsToInclude.includes('lineItemCount')" fxFlex="fill" style="text-align:center;">
 								<div mat-line>{{i.lineItemCount}}</div>
                             </div>
