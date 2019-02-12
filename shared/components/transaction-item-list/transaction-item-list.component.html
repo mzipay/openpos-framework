@@ -24,8 +24,8 @@
                         </span>
                         <span class="muted-color">
                             <mat-chip-list [selectable]="false">
-                                <mat-basic-chip>{{item.subtitle}}&nbsp;</mat-basic-chip>
-                                <mat-chip *ngFor="let label of item.labels">{{label}} </mat-chip>
+                                <mat-basic-chip style="z-index: -1;">{{item.subtitle}}&nbsp;</mat-basic-chip>
+                                <mat-chip *ngFor="let label of item.labels" style="z-index: -1;">{{label}} </mat-chip>
                             </mat-chip-list>
                         </span>
                         <span *ngIf="item.prop65Item" class="muted-color">
