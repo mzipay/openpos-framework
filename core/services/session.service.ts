@@ -26,6 +26,7 @@ import { AppInjector } from '../app-injector';
 import { HttpClient } from '@angular/common/http';
 import { PingParams } from '../interfaces/ping-params.interface';
 import { PingResult } from '../interfaces/ping-result.interface';
+import { Params } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
@@ -114,7 +115,7 @@ export class SessionService implements IMessageHandler<any> {
         return this.stompService && this.stompService.connected();
     }
 
-    public subscribe(appId: String) {
+    public subscribe(appId: String, queryParams: Params) {
         if (this.subscription) {
             return;
         }
@@ -129,7 +130,8 @@ export class SessionService implements IMessageHandler<any> {
                 appId: appId,
                 nodeId: this.personalization.getNodeId(),
                 deviceType: this.personalization.getDeviceType(),
-                brandId: this.personalization.getBrandId()
+                brandId: this.personalization.getBrandId(),
+                queryParams: JSON.stringify(queryParams)
             },
             heartbeat_in: 0, // Typical value 0 - disabled
             heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
