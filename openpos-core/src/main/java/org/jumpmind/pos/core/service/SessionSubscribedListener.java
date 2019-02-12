@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.service;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerFactory;
@@ -46,6 +47,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
     public void onApplicationEvent(SessionSubscribedEvent event) {
         Message<?> msg = event.getMessage();
         String sessionId = (String) msg.getHeaders().get("simpSessionId");
+        Map<String, Object> queryParams = sessionAuthTracker.getQueryParams(sessionId);
         String topicName = (String) msg.getHeaders().get("simpDestination");
         String compatibilityVersion = this.getHeader(msg, MessageUtils.COMPATIBILITY_VERSION_HEADER);
         String nodeId = topicName.substring(topicName.indexOf("/node/") + "/node/".length());
@@ -54,7 +56,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             logger.info("session {} subscribed to {}", sessionId, topicName);
             IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
             if (stateManager == null) {
-                stateManager = stateManagerFactory.create(appId, nodeId);
+                stateManager = stateManagerFactory.create(appId, nodeId, queryParams);
             }
 
             stateManager.setSessionAuthenticated(sessionId, sessionAuthTracker.isSessionAuthenticated(sessionId));

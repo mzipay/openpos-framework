@@ -9,6 +9,7 @@ public interface MessageUtils {
     public final static String COMPATIBILITY_VERSION_HEADER = "compatibilityVersion";
     public final static String DEVICE_TYPE_HEADER = "deviceType";
     public final static String BRAND_ID_HEADER = "brandId";
+    public final static String QUERY_PARAMS_HEADER = "queryParams";
     
     /**
      * Get message header value with value in name from the given message

@@ -66,14 +66,15 @@ public class StateManagerFactory implements IStateManagerFactory {
     public IStateManager retrieve(String appId, String nodeId) {
         Map<String, StateManager> stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
         if (stateManagersByNodeId != null) {
-            return stateManagersByNodeId.get(nodeId);
+            IStateManager stateManager = stateManagersByNodeId.get(nodeId);
+            return stateManager;
         } else {
             return null;
         }
     }
 
     @Override
-    public IStateManager create(String appId, String nodeId) {
+    public IStateManager create(String appId, String nodeId, Map<String, Object> queryParams) {
         Map<String, StateManager> stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
         if (stateManagersByNodeId == null) {
             synchronized (this) {
@@ -89,6 +90,7 @@ public class StateManagerFactory implements IStateManagerFactory {
             synchronized (this) {
                 if (stateManager == null) {
                     stateManager = applicationContext.getBean(StateManager.class);
+                    stateManager.registerQueryParams(queryParams);
                     stateManager.setErrorHandler(errorHandler);
                     stateManager.setInitialFlowConfig(flowConfigProvider.getConfig(appId, nodeId));
                     stateManagersByNodeId.put(nodeId, stateManager);

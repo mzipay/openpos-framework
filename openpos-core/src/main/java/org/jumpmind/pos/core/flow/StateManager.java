@@ -560,4 +560,9 @@ public class StateManager implements IStateManager {
     public void setApplicationState(ApplicationState applicationState) {
         this.applicationState = applicationState;
     }
+
+    @Override
+    public void registerQueryParams(Map<String, Object> queryParams) {
+        applicationState.getScope().setScopeValue(ScopeType.Device, "queryParams", queryParams);
+    }
 }

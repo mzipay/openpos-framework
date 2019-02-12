@@ -56,6 +56,7 @@ public interface IStateManager {
     public void setSessionCompatible(String sessionId, boolean compatible);
     public boolean isSessionCompatible(String sessionId);
     public boolean areAllSessionsCompatible();
+    public void registerQueryParams(Map<String,Object> queryParams);
 	
 	
     
