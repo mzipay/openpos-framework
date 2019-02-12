@@ -1,7 +1,6 @@
 package org.jumpmind.pos.persist.cars;
 
 import org.jumpmind.pos.util.model.AbstractTypeCode;
-import org.jumpmind.pos.util.model.ITypeCode;
 
 public class CarTrimTypeCode extends AbstractTypeCode {
     private static final long serialVersionUID = 1L;
@@ -11,7 +10,7 @@ public class CarTrimTypeCode extends AbstractTypeCode {
     public static final CarTrimTypeCode SR = new CarTrimTypeCode("SR");
     
     public static CarTrimTypeCode of(String value) {
-        return ITypeCode.make(CarTrimTypeCode.class, value);
+        return AbstractTypeCode.of(CarTrimTypeCode.class, value);
     }
     
     private CarTrimTypeCode(String value) {

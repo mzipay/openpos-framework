@@ -41,6 +41,26 @@ public abstract class AbstractTypeCode implements ITypeCode {
         ITypeCodeRegistry.register(this);
     }
 
+    /**
+     * This should only be used by subclasses for creating type code instances
+     * at runtime whose values should already be expected to exist through
+     * a static declaration of the type code value. A type code value will
+     * only be returned if it can be found to already exist in the ITypeCodeRegistry.
+     * If you need to ensure the type code is created whether or not it already
+     * exists in the registry, use the ITypeCode.make() method instead.
+     * @param clazz
+     * @param value
+     * @return
+     */
+    protected static <T extends ITypeCode> T of(Class<T> clazz, String value) {
+        T returnCode = null;
+        if (ITypeCodeRegistry.exists(clazz, value)) {
+            returnCode = ITypeCode.make(clazz, value);
+        }
+        return returnCode;
+    }
+
+    
     @Override
     public String value() {
         return this.toString();

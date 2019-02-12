@@ -19,6 +19,10 @@ public final class ITypeCodeRegistry {
     public static Set<ITypeCode> values(Class<? extends ITypeCode> clazz) {
         return Collections.unmodifiableSet(registry.get(clazz));
     }
+
+    public static boolean exists(Class<? extends ITypeCode> clazz, String value) {
+        return values(clazz).stream().anyMatch(i -> i.value().equals(value));
+    }
     
     static boolean isRegistered(ITypeCode c) {
         return registry.containsKey(c.getClass()) && registry.get(c.getClass()).contains(c);

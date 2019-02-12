@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,7 +23,7 @@ public class TypeCodeTest {
         public static final MyTypeCode CODE3 = new MyTypeCode("CODE3");
         
         public static MyTypeCode of(String value) {
-            return ITypeCode.make(MyTypeCode.class, value);
+            return AbstractTypeCode.of(MyTypeCode.class, value);
         }
 
         private MyTypeCode(String value) {
@@ -31,9 +32,16 @@ public class TypeCodeTest {
         
     }
     
+    /**
+     * Note: If codes are added dynamically by declaring them in this way,
+     * the declaring class (MyAddedTypeCode in this case), must be loaded before
+     * any attempts to dynamically reference a type code value using MyTypeCode.of(stringValue);
+     * the 'of' method will return null if the type code has not been created yet.
+     *
+     */
     public static final class MyAddedTypeCodes {
-        public static final MyTypeCode EXTRA_TYPE_CODE_1 = MyTypeCode.of("EXTRA_TYPE_CODE_1");
-        public static final MyTypeCode EXTRA_TYPE_CODE_2 = MyTypeCode.of("EXTRA_TYPE_CODE_2");
+        public static final MyTypeCode EXTRA_TYPE_CODE_1 = new MyTypeCode("EXTRA_TYPE_CODE_1");
+        public static final MyTypeCode EXTRA_TYPE_CODE_2 = new MyTypeCode("EXTRA_TYPE_CODE_2");
         
     }
 
@@ -48,6 +56,19 @@ public class TypeCodeTest {
             this.myTypeCodeValue = myTypeCodeValue;
         }
         
+    }
+    
+    @BeforeClass
+    public static void setUpOnTestStart() {
+        // Forces MyAddedTypeCodes to load at startup of test.  If this isn't
+        // done, then testStaticAddedCodes test will fail when it tests for
+        // a dynamically created type code whose value matches one of the type
+        // code values defined in MyAddedTypeCodes
+        // 
+        // Users of the openpos framework may need to ensure the class that contains
+        // their type code declarations is loaded early in application startup.
+        @SuppressWarnings("unused")
+        MyTypeCode extraTypeCode1 = MyAddedTypeCodes.EXTRA_TYPE_CODE_1;
     }
 
     @Before
@@ -75,14 +96,22 @@ public class TypeCodeTest {
     }
 
     @Test
-    public void testRuntimeCodes() {
-        MyTypeCode runtimeTypeCode = MyTypeCode.of("NEW_VALUE");
+    public void testRuntimeCodesViaMake() {
+        MyTypeCode runtimeTypeCode = ITypeCode.make(MyTypeCode.class, "NEW_VALUE");
         assertEquals("NEW_VALUE", runtimeTypeCode.value());
         assertEquals("NEW_VALUE", runtimeTypeCode.toString());
         
         assertNotEquals(MyTypeCode.CODE1, runtimeTypeCode);
-        
+    }
 
+    @Test
+    public void testRuntimeCodeUsingOf() {
+        MyTypeCode runtimeTypeCode = MyTypeCode.of("OF_VALUE");
+        
+        // Since this is a new MyTypeCode value that is not declared as a static
+        // member of the MyTypeCode class, of() returns null.  The ITypeCode.make()
+        // method must be used to force creation of a new value.
+        assertNull(runtimeTypeCode);
     }
     
     @Test
@@ -97,8 +126,8 @@ public class TypeCodeTest {
         assertEquals(MyAddedTypeCodes.EXTRA_TYPE_CODE_1.value(), runtimeTypeCode.value());
         assertEquals(MyAddedTypeCodes.EXTRA_TYPE_CODE_1.toString(), runtimeTypeCode.value());
         
-        // Not the same object, however, since one is created static and the other is
-        // created at runtime.
+        // Not the same object, because MyAddedTypeCodes.EXTRA_TYPE_CODE_1 is
+        // not declared in the MyTypeCode class.
         assertNotSame(MyAddedTypeCodes.EXTRA_TYPE_CODE_1, runtimeTypeCode);
         
         // Hashcodes will be the same
@@ -115,7 +144,7 @@ public class TypeCodeTest {
         public static final ExTypeCode CODE3 = new ExTypeCode("CODE3");
         
         public static ExTypeCode of(String value) {
-            return ITypeCode.make(ExTypeCode.class, value);
+            return AbstractTypeCode.of(ExTypeCode.class, value);
         }
         
         private ExTypeCode(String value) {
@@ -124,7 +153,8 @@ public class TypeCodeTest {
 
     }
 
-    static final ExTypeCode EXTRA_TYPE_CODE = ExTypeCode.of("EXTRA_TYPE_CODE_1");
+    static final ExTypeCode EXTRA_TYPE_CODE_1 = ExTypeCode.of("EXTRA_TYPE_CODE_1");
+    static final ExTypeCode EXTRA_TYPE_CODE_2 = ITypeCode.make(ExTypeCode.class, "EXTRA_TYPE_CODE_2");
 
     @Test
     public void testRegistry() {
@@ -134,17 +164,33 @@ public class TypeCodeTest {
         assertTrue(values.contains(ExTypeCode.CODE1));
         assertTrue(values.contains(ExTypeCode.CODE2));
         assertTrue(values.contains(ExTypeCode.CODE3));
-        assertTrue(values.contains(EXTRA_TYPE_CODE));
+        assertTrue(values.contains(EXTRA_TYPE_CODE_2));
+        assertNull(EXTRA_TYPE_CODE_1);
         
     }
 
     @Test
+    public void testStaticTypeCodeExistsInRegistry() {
+        assertTrue(ITypeCodeRegistry.exists(MyTypeCode.class, "CODE1"));
+    }
+
+    @Test
+    public void testTypeCodeDoesNotExistInRegistry() {
+        assertFalse(ITypeCodeRegistry.exists(ExTypeCode.class, "CODE"));
+    }
+    
+    @Test
+    public void testDynamicTypeCodeExistsInRegistry() {
+        assertTrue(ITypeCodeRegistry.exists(ExTypeCode.class, "EXTRA_TYPE_CODE_2"));
+    }
+    
+    @Test
     public void testDuplicateTypeCode() {
-        final ExTypeCode DUPLICATE = ExTypeCode.of("EXTRA_TYPE_CODE_1");
+        final ExTypeCode DUPLICATE = ExTypeCode.of("CODE1");
 
         Set<ITypeCode> values = ITypeCodeRegistry.values(ExTypeCode.class);
         assertEquals(4, values.size());
-        assertEquals(EXTRA_TYPE_CODE, DUPLICATE);
+        assertSame(ExTypeCode.CODE1, DUPLICATE);
         
     }
 
@@ -158,7 +204,12 @@ public class TypeCodeTest {
     public void testMakeTypeCodeWithNullValue() {
         assertNull(ITypeCode.make(ExTypeCode.class, null));
     }
-    
+
+    @Test
+    public void testOfMethodWithNullValue() {
+        assertNull(ExTypeCode.of(null));
+    }
+
     @Test(expected = NullPointerException.class)
     public void testMakeTypeCodeWithNullClass() {
         ITypeCode.make(null, "VALUE1");
@@ -178,9 +229,9 @@ public class TypeCodeTest {
         assertTrue(0 < ExTypeCode.CODE3.compareTo(ExTypeCode.CODE2));
         assertTrue(0 == ExTypeCode.CODE3.compareTo(ExTypeCode.CODE3));
         
-        assertTrue(0 < EXTRA_TYPE_CODE.compareTo(ExTypeCode.CODE1));
-        assertTrue(0 < EXTRA_TYPE_CODE.compareTo(ExTypeCode.CODE2));
-        assertTrue(0 < EXTRA_TYPE_CODE.compareTo(ExTypeCode.CODE3));
+        assertTrue(0 < EXTRA_TYPE_CODE_2.compareTo(ExTypeCode.CODE1));
+        assertTrue(0 < EXTRA_TYPE_CODE_2.compareTo(ExTypeCode.CODE2));
+        assertTrue(0 < EXTRA_TYPE_CODE_2.compareTo(ExTypeCode.CODE3));
         
     }
     
@@ -193,7 +244,7 @@ public class TypeCodeTest {
         
         
         public static TypeCodeWithDups of(String value) {
-            return ITypeCode.make(TypeCodeWithDups.class, value);
+            return AbstractTypeCode.of(TypeCodeWithDups.class, value);
         }
 
         private TypeCodeWithDups(String value) {
