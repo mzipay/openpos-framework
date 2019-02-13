@@ -141,6 +141,9 @@ public class DBSession {
 
     @SuppressWarnings("unchecked")
     public <T extends AbstractModel> List<T> findByCriteria(SearchCriteria searchCriteria) {
+        if(searchCriteria.getEntityClass() == null) {
+            throw new PersistException();
+        }
         return (List<T>) findByFields(searchCriteria.getEntityClass(), searchCriteria.getCriteria());
     }
 
