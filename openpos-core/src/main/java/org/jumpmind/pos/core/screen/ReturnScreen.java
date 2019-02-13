@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.jumpmind.pos.core.model.Total;
 import org.jumpmind.pos.core.model.Total.TotalType;
-import org.jumpmind.pos.core.template.SellTemplate;
+import org.jumpmind.pos.core.screenpart.BaconStripPart;
+import org.jumpmind.pos.core.screenpart.ScanPart;
+import org.jumpmind.pos.core.screenpart.StatusStripPart;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -14,21 +16,61 @@ public class ReturnScreen extends Screen {
     private static final long serialVersionUID = 1L;
     public static final String ITEM_TOTAL_NAME = "itemTotal";
 
+    private BaconStripPart baconStrip = new BaconStripPart();
+    private ScanPart scan = new ScanPart();
+    private List<MenuItem> sausageLinks = new ArrayList<>();
+    private StatusStripPart statusStrip = new StatusStripPart();
+
     private List<SellItem> items = new ArrayList<>();
     private List<SellItem> selectedItems = new ArrayList<>();
+    private int[] selectedItemIndexes = new int[0];
+
     private List<TransactionReceipt> receipts = new ArrayList<>();
 
     private String transactionMenuPrompt;
+    private List<MenuItem> transactionMenuItems = new ArrayList<>();
+
+    private List<MenuItem> multiSelectedMenuItems;
 
     private String itemActionName = "Item";
-    private Transaction transaction = null;
     private List<Total> totals = new ArrayList<>();
     private String grandTotal;
-    private List<MenuItem> multiSelectedMenuItems;
 
     public ReturnScreen() {
         this.setScreenType(ScreenType.Return);
-        this.setTemplate(new SellTemplate().enableScan(false));
+        this.setTemplate(null);
+    }
+
+    public BaconStripPart getBaconStrip() {
+        return baconStrip;
+    }
+
+    public void setBaconStrip(BaconStripPart baconStrip) {
+        this.baconStrip = baconStrip;
+    }
+
+    public ScanPart getScan() {
+        return scan;
+    }
+
+    public void setScan(ScanPart scan) {
+        this.scan = scan;
+    }
+
+    public List<MenuItem> getSausageLinks() {
+        return sausageLinks;
+    }
+
+    public void setSausageLinks(List<MenuItem> sausageLinks) {
+        this.sausageLinks = sausageLinks;
+    }
+
+    public StatusStripPart getStatusStrip() {
+        return statusStrip;
+    }
+
+    public void setStatusStrip(StatusStripPart statusStrip) {
+        this.statusStrip = statusStrip;
     }
 
     public List<SellItem> getItems() {
@@ -45,6 +87,14 @@ public class ReturnScreen extends Screen {
 
     public void setSelectedItems(List<SellItem> selectedItems) {
         this.selectedItems = selectedItems;
+    }
+
+    public int[] getSelectedItemIndexes() {
+        return selectedItemIndexes;
+    }
+
+    public void setSelectedItemIndexes(int[] selectedItemIndexes) {
+        this.selectedItemIndexes = selectedItemIndexes;
     }
 
     public List<TransactionReceipt> getReceipts() {
@@ -67,12 +117,12 @@ public class ReturnScreen extends Screen {
         this.transactionMenuPrompt = transactionMenuPrompt;
     }
 
-    public Transaction getTransaction() {
-        return transaction;
+    public List<MenuItem> getTransactionMenuItems() {
+        return transactionMenuItems;
     }
 
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
+    public void setTransactionMenuItems(List<MenuItem> transactionMenuItems) {
+        this.transactionMenuItems = transactionMenuItems;
     }
 
     public String getItemActionName() {
