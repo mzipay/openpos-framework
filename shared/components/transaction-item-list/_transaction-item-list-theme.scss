@@ -14,4 +14,10 @@
         color: $app-accent;
     }
 
+    .item-label{
+        background-origin: solid 1px map-get($mat-grey, 200);
+        background-color: map-get($mat-grey, 200);
+    }
+    
+
 }

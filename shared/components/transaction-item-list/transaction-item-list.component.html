@@ -17,51 +17,52 @@
         <app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems"
             (selectedItemListChange)="onItemListChange($event)">
             <ng-template let-item>
-                <div fxLayoutAlign="space-between center" fxLayout.xs="row wrap" [ngClass]="item.type" >
-                    <div fxFlex="90" fxAlign="left">
-                        <span [ngClass]="item.prop65Item ? 'warn' : ''">
-                            {{item.description}}
-                        </span>
-                        <span class="muted-color">
-                            <mat-chip-list [selectable]="false">
-                                <mat-basic-chip style="z-index: -1;">{{item.subtitle}}&nbsp;</mat-basic-chip>
-                                <mat-chip *ngFor="let label of item.labels" style="z-index: -1;">{{label}} </mat-chip>
-                            </mat-chip-list>
-                        </span>
-                        <span *ngIf="item.prop65Item" class="muted-color">
-                            <table>
-                                <tr>
-                                    <td style="text-align: left; vertical-align: top; padding-right: 4px;">
-                                        <div class="prop65Image"></div>
-                                    </td>
-                                    <td style="text-align: left; vertical-align: middle;">{{item.prop65WarningText}}</td>
-                                </tr>
-                            </table>
-                        </span>
+                <div gdAreas="  description description giftReceipt cost kebab |
+                                subtitle labels giftReceipt cost kebab |
+                                prop65Item prop65Item prop65Item prop65Item prop65Item"
+                     gdColumns="1fr 1fr auto auto auto"
+                    [ngClass]="item.type" >
+                    <div gdArea="description" [ngClass]="item.prop65Item ? 'warn' : ''">
+                        {{item.description}}
                     </div>
-                    <div *ngIf="item.isGiftReceipt" fxAlign="right center">
+                    <div gdArea="subtitle" class="muted-color">
+                        {{item.subtitle}}
+                    </div>
+                    <div gdArea="labels">
+                        <span class="item-label" *ngFor="let label of item.labels">{{label}}</span>
+                    </div>
+                    <div gdArea="prop65Item" *ngIf="item.prop65Item" class="muted-color">
+                        <table>
+                            <tr>
+                                <td style="text-align: left; vertical-align: top; padding-right: 4px;">
+                                    <div class="prop65Image"></div>
+                                </td>
+                                <td style="text-align: left; vertical-align: middle;">{{item.prop65WarningText}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div gdArea="giftReceipt" *ngIf="item.isGiftReceipt" fxAlign="right center">
                         <mat-icon color="muted-color">redeem</mat-icon>&nbsp;&nbsp;
                     </div>
-                    <div fxAlign="right">
-                        <span class="primary text-md">
-                            <app-currency-text [amountText]="item.amount"></app-currency-text>
-                            <br>
-                            <span>
-                                <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin: 0px; text-decoration: line-through;">
-                                    <app-currency-text [amountText]="item.originalAmount"></app-currency-text>
-                                </p>
+                    <div gdArea="cost" gdGridAlign="center center" class="primary text-md">
+                        <app-currency-text [amountText]="item.amount"></app-currency-text>
+                        <div>
+                            <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin: 0px; text-decoration: line-through;">
+                                <app-currency-text [amountText]="item.originalAmount"></app-currency-text>
+                            </p>
 
-                                <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin: 0px;">
-                                    <app-currency-text [amountText]="item.discountAmount"></app-currency-text>
-                                </p>
-                            </span>
-                        </span>
+                            <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin: 0px;">
+                                <app-currency-text [amountText]="item.discountAmount"></app-currency-text>
+                            </p>
+                        </div>
                     </div>
-                    <app-kebab-button block-selection *ngIf="selectedItems.length < 1 && !readOnly; else hideButton" fxAlign="right"
-                        [menuItems]="item.menuItems" (menuItemClick)="onMenuItemClick($event, [item.index])"></app-kebab-button>
-                    <ng-template #hideButton>
-                        <div style="height: 40px; width: 40px;"></div>
-                    </ng-template>
+                    <div gdArea="kebab">
+                        <app-kebab-button block-selection *ngIf="selectedItems.length < 1 && !readOnly; else hideButton" fxAlign="right"
+                            [menuItems]="item.menuItems" (menuItemClick)="onMenuItemClick($event, [item.index])"></app-kebab-button>
+                        <ng-template #hideButton>
+                            <div style="height: 40px; width: 40px;"></div>
+                        </ng-template>
+                    </div>
                 </div>
             </ng-template>
         </app-selectable-item-list>
