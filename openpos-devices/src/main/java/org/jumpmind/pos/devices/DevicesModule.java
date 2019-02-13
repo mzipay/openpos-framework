@@ -13,12 +13,14 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.annotation.Order;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration("DevicesModule")
 @EnableTransactionManagement
 @Conditional(ModuleEnabledCondition.class)
+@Order(10)
 public class DevicesModule extends AbstractModule {
     
     protected final static String NAME = "dev";
