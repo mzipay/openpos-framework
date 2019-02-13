@@ -57,6 +57,8 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
             if (stateManager == null) {
                 stateManager = stateManagerFactory.create(appId, nodeId, queryParams);
+            } else {
+                stateManager.registerQueryParams(queryParams);
             }
 
             stateManager.setSessionAuthenticated(sessionId, sessionAuthTracker.isSessionAuthenticated(sessionId));
