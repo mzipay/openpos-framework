@@ -21,7 +21,7 @@
             (selectedItemListChange)="onItemListChange($event)" (menuAction)="onMenuAction($event)">
         </app-transaction-item-list>
 
-        <app-overflow-list gdArea="totals" *ngIf="screen.transaction" [numberItemsToShow]="overFlowListSize | async"
+        <app-overflow-list gdArea="totals" *ngIf="screen.transactionActive" [numberItemsToShow]="overFlowListSize | async"
             [items]="amountTotals"></app-overflow-list>
 
         <mat-card gdArea="nextbar" class="page-content-card dark">

@@ -9,6 +9,8 @@ export interface SaleInterface extends IAbstractScreen {
     items: ISellItem[];
     selectedItemIndexes: number[];
     totals: ITotal[];
+    readOnly: boolean;
+    grandTotal: string;
     prompt: string;
     hideCustomer: boolean;
     transactionActive: boolean;
