@@ -37,6 +37,7 @@ export class CurrencyTextComponent implements DoCheck {
             const hasParens = localAmtText.indexOf('(') >= 0;
             // CurrencyPipe does not like text starting with open paren
             localAmtText = this.normalizeNegativeAmount(localAmtText);
+            localAmtText = this.removeCommas(localAmtText);
             let existingSymbolIdx = localAmtText.indexOf(targetSymbol);
             if (existingSymbolIdx < 0) {
                 // No symbol in given text, use currency pipe to insert one
@@ -68,6 +69,10 @@ export class CurrencyTextComponent implements DoCheck {
             this.textAfterSymbol = '';
             this.textBeforeSymbol = '';
         }
+    }
+    
+    protected removeCommas(text: string): string {
+        return text.replace(/,/g, '');
     }
 
     protected normalizeNegativeAmount(text: string): string {
