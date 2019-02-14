@@ -1,7 +1,7 @@
 package org.jumpmind.pos.translate.service;
 
 import org.jumpmind.pos.core.flow.IStateManager;
-import org.jumpmind.pos.core.flow.IStateManagerFactory;
+import org.jumpmind.pos.core.flow.IStateManagerContainer;
 import org.jumpmind.pos.translate.ILegacyStartupService;
 import org.jumpmind.pos.translate.ITranslationManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class RegisterService {
     protected ILegacyStartupService startupService;
     
     @Autowired
-    protected IStateManagerFactory stateManagerFactory;
+    protected IStateManagerContainer stateManagerFactory;
     
     @Autowired
     protected ITranslationManager translationManager;

@@ -14,7 +14,7 @@ import org.jumpmind.pos.core.flow.ApplicationStateSerializer;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IState;
 import org.jumpmind.pos.core.flow.IStateManager;
-import org.jumpmind.pos.core.flow.IStateManagerFactory;
+import org.jumpmind.pos.core.flow.IStateManagerContainer;
 import org.jumpmind.pos.core.flow.ScopeValue;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
@@ -43,7 +43,7 @@ public class DevToolsActionListener implements IActionListener {
     final Logger logger = LoggerFactory.getLogger(getClass());
     
     @Autowired
-    IStateManagerFactory stateManagerFactory;
+    IStateManagerContainer stateManagerFactory;
     
     @Autowired
     IMessageService messageService;

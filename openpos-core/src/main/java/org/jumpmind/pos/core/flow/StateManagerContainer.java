@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("singleton")
-public class StateManagerFactory implements IStateManagerFactory {
+public class StateManagerContainer implements IStateManagerContainer {
 
     @Autowired
     IFlowConfigProvider flowConfigProvider;
@@ -63,10 +63,10 @@ public class StateManagerFactory implements IStateManagerFactory {
     }
 
     @Override
-    public IStateManager retrieve(String appId, String nodeId) {
+    public IStateManager retrieve(String appId, String deviceId) {
         Map<String, StateManager> stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
         if (stateManagersByNodeId != null) {
-            IStateManager stateManager = stateManagersByNodeId.get(nodeId);
+            IStateManager stateManager = stateManagersByNodeId.get(deviceId);
             return stateManager;
         } else {
             return null;
@@ -74,7 +74,7 @@ public class StateManagerFactory implements IStateManagerFactory {
     }
 
     @Override
-    public IStateManager create(String appId, String nodeId, Map<String, Object> queryParams) {
+    public IStateManager create(String appId, String deviceId, Map<String, Object> queryParams) {
         Map<String, StateManager> stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
         if (stateManagersByNodeId == null) {
             synchronized (this) {
@@ -85,20 +85,28 @@ public class StateManagerFactory implements IStateManagerFactory {
             }
         }
 
-        StateManager stateManager = stateManagersByNodeId.get(nodeId);
+        StateManager stateManager = stateManagersByNodeId.get(deviceId);
         if (stateManager == null) {
             synchronized (this) {
                 if (stateManager == null) {
                     stateManager = applicationContext.getBean(StateManager.class);
                     stateManager.registerQueryParams(queryParams);
                     stateManager.setErrorHandler(errorHandler);
-                    stateManager.setInitialFlowConfig(flowConfigProvider.getConfig(appId, nodeId));
-                    stateManagersByNodeId.put(nodeId, stateManager);
-                    stateManager.init(appId, nodeId);
+                    stateManager.setInitialFlowConfig(flowConfigProvider.getConfig(appId, deviceId));
+                    stateManagersByNodeId.put(deviceId, stateManager);
+                    stateManager.init(appId, deviceId);
                 }
             }
         }
         return stateManager;
+    }
+    
+    @Override
+    public void remove(String appId, String deviceId) {
+        Map<String, StateManager> stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
+        if (stateManagersByNodeId != null) {
+            stateManagersByNodeId.remove(deviceId);
+        }
     }
 
     public List<StateManager> getAllStateManagers() {

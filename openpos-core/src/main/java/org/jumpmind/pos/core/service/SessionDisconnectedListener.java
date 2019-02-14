@@ -1,6 +1,6 @@
 package org.jumpmind.pos.core.service;
 
-import org.jumpmind.pos.core.flow.IStateManagerFactory;
+import org.jumpmind.pos.core.flow.IStateManagerContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public class SessionDisconnectedListener implements ApplicationListener<SessionD
     Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    IStateManagerFactory stateManagerFactory;
+    IStateManagerContainer stateManagerFactory;
 
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {        

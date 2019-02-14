@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.jumpmind.pos.core.flow.IStateManager;
-import org.jumpmind.pos.core.flow.IStateManagerFactory;
+import org.jumpmind.pos.core.flow.IStateManagerContainer;
 import org.jumpmind.pos.core.model.ClientConfiguration;
 import org.jumpmind.pos.core.model.ConfigChangedMessage;
 import org.jumpmind.pos.core.model.IConfigSelector;
@@ -29,7 +29,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
     Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    IStateManagerFactory stateManagerFactory;
+    IStateManagerContainer stateManagerFactory;
 
     @Autowired
     IMessageService messageService;

@@ -26,7 +26,7 @@ import org.jumpmind.pos.core.flow.ApplicationState;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IScreenInterceptor;
 import org.jumpmind.pos.core.flow.IStateManager;
-import org.jumpmind.pos.core.flow.IStateManagerFactory;
+import org.jumpmind.pos.core.flow.IStateManagerContainer;
 import org.jumpmind.pos.core.flow.SessionTimer;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.IDynamicListField;
@@ -67,7 +67,7 @@ public class ScreenService implements IScreenService, IActionListener {
     ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    IStateManagerFactory stateManagerFactory;
+    IStateManagerContainer stateManagerFactory;
 
     @Value("${openpos.screenService.jsonIncludeNulls:true}")
     boolean jsonIncludeNulls = true;

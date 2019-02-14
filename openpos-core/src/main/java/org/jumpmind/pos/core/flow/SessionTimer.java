@@ -18,7 +18,7 @@ public class SessionTimer {
     private static final Logger log = Logger.getLogger(SessionTimer.class);
     
     @Autowired
-    private StateManagerFactory stateManagerFactory;
+    private StateManagerContainer stateManagerFactory;
     
     private static long TIMEOUT_CHECK_INTERVAL = 1000;
         
