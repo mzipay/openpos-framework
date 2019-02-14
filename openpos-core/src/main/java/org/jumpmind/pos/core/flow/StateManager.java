@@ -386,11 +386,12 @@ public class StateManager implements IStateManager {
                 StateContext suspendedState = applicationState.getStateStack().pop();
                 StateConfig suspendedStateConfig = suspendedState.getFlowConfig().getStateConfig(suspendedState.getState());
 
-                Class<? extends IState> autoTransitionStateClass = suspendedStateConfig.getActionToStateMapping().get(action.getName());
+                String returnAction = applicationState.getCurrentContext().getReturnActionName();
+                Class<? extends IState> autoTransitionStateClass = suspendedStateConfig.getActionToStateMapping().get(returnAction);
                 if (autoTransitionStateClass != null && autoTransitionStateClass != CompleteState.class) {
                     transitionTo(action, createNewState(autoTransitionStateClass), null, null);
                 } else {
-                    SubTransition autoSubTransition = suspendedStateConfig.getActionToSubStateMapping().get(action.getName());
+                    SubTransition autoSubTransition = suspendedStateConfig.getActionToSubStateMapping().get(returnAction);
                     if (autoSubTransition != null) {
                         transitionToSubState(action, autoSubTransition);
                     } else {

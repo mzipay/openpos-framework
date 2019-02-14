@@ -51,21 +51,6 @@ public class StateManagerTest {
         customerSignupFlow.setInitialState(
                 FlowBuilder.addState(CustomerSignupState.class).withTransition("CustomerSignedup", CompleteState.class).build());
 
-        // FlowConfig itemLookupFlow = new FlowConfig();
-        // FlowConfig vendorFlow = new FlowConfig();
-        //
-        // itemLookupFlow.setInitialState(FlowBuilder.addState(ItemLookupState.class).build());
-        // itemLookupFlow.addGlobalSubTransition("ItemLookupState",
-        // itemLookupFlow);
-        // itemLookupFlow.addGlobalSubTransition("VendorList", vendorFlow);
-        // itemLookupFlow.addGlobalTransition("SwitchFlows",
-        // CompleteState.class);
-        //
-        // vendorFlow.setInitialState(FlowBuilder.addState(VendorState.class).build());
-        // vendorFlow.addGlobalSubTransition("ItemLookupState", itemLookupFlow);
-        // vendorFlow.addGlobalSubTransition("VendorList", vendorFlow);
-        // vendorFlow.addGlobalTransition("SwitchFlows", CompleteState.class);
-
         FlowConfig customerFlow = new FlowConfig();
         customerFlow.getConfigScope().put("customerFlowType", "LOYALTY");
         customerFlow.setInitialState(FlowBuilder.addState(CustomerState.class).withTransition("CustomerSearch", CustomerSearchState.class)
