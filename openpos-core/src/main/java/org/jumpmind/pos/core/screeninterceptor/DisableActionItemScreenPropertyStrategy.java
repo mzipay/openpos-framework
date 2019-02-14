@@ -3,12 +3,10 @@ package org.jumpmind.pos.core.screeninterceptor;
 import org.jumpmind.pos.core.screen.MenuItem;
 import org.jumpmind.pos.core.service.IDisableActionItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class DisableActionItemScreenPropertyStrategy implements IScreenPropertyStrategy {
 
-	@Autowired
+	@Autowired( required = false )
 	IDisableActionItemService disableActionItemService;
 	
 	@Override
