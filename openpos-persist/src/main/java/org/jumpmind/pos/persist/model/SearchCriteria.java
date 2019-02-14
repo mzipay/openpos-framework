@@ -34,12 +34,13 @@ public class SearchCriteria {
         this.criteria = criteria;
     }
 
-    public void addCriteria(String field, Object value) {
+    public SearchCriteria addCriteria(String field, Object value) {
         if (this.criteria == null) {
             this.criteria = new HashMap<String, Object>();
         }
 
         this.criteria.put(field, value);
+        return this;
     }
 
     public Class<? extends AbstractModel> getEntityClass() {
