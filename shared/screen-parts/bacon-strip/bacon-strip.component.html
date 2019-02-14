@@ -2,7 +2,7 @@
     <button gdArea="backbutton" class="back-button" *ngIf="screenData.backButton" mat-button (click)="onMenuItemClick(screenData.backButton)">
         <mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
     </button>    
-    <div gdArea="header" gdAreas="headerIcon headerText">
+    <div gdArea="header" gdAreas="headerIcon headerText" gdGap="4px">
         <app-icon gdArea="headerIcon" gdGridAlign="center center" *ngIf="!(isMobile$ | async) && screenData.headerIcon" class="screen-icon" [iconName]="screenData.headerIcon"></app-icon>
         <span gdArea="headerText">{{screenData.headerText}}</span>
     </div>
