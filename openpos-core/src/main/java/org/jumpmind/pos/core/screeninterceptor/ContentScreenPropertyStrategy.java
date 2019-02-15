@@ -2,7 +2,13 @@ package org.jumpmind.pos.core.screeninterceptor;
 
 import org.jumpmind.pos.core.content.IContentProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
+@Component
+@Order(110)
+@Scope("prototype")
 public class ContentScreenPropertyStrategy implements IScreenPropertyStrategy {
 
     @Autowired(required = false)
@@ -29,7 +35,7 @@ public class ContentScreenPropertyStrategy implements IScreenPropertyStrategy {
             }
         }
 
-        return null;
+        return property;
     }
 
 }

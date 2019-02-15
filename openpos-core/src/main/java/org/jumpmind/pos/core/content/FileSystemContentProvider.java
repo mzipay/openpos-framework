@@ -33,6 +33,7 @@ public class FileSystemContentProvider implements IContentProvider {
         if (dir != null) {
             File[] files = dir.listFiles();
             if (files != null && files.length > 0) {
+                // TODO: Store state based on device ID for multiple images
                 resourceBuilder.append("/").append(files[0].getName());
                 StringBuilder restBuilder = new StringBuilder(serverUrl);
                 restBuilder.append(resourceBuilder.toString());
