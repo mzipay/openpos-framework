@@ -117,14 +117,16 @@ export class ReturnComponent extends PosScreen<any> implements AfterViewInit, Af
     }
   }
 
-  public onItemListChange(event: ISellItem[]): void {
-    if (this.individualMenuClicked) {
-      this.individualMenuClicked = false;
-      this.selectedItems = event;
-      return;
+  public onItemListChange(items: ISellItem[]): void {
+    this.session.onValueChange('SelectedItemsChanged', items);
+  }
+
+  public onMenuAction(event: any) {
+    if (event.menuItem && event.payload) {
+      this.onMenuItemClick(event.menuItem, event.payload);
+    } else {
+      this.onMenuItemClick(event);
     }
-    this.selectedItems = event;
-    this.session.onAction('SelectedItemsChanged', this.selectedItems);
   }
 
   ngAfterViewChecked() {

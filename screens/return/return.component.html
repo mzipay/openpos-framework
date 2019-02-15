@@ -1,36 +1,62 @@
-<div fxFlexFill fxLayout="row" fxLayoutAlign="start" fxLayoutGap="6px">
+<app-waffle>
+	<app-bacon-strip waffle-header fxFlex="100%"></app-bacon-strip>
 
-	<div *ngIf="receipts && receipts.length > 0" style="overflow-y: auto;">
-		<app-receipt-card *ngFor="let receipt of receipts" [receipt]="receipt" (click)="onReceiptClick(receipt)"></app-receipt-card>
+	<div waffle-drawer-content class="drawer-content" fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start stretch"
+		fxLayoutGap="4px" fxLayoutGap.lg="20px">
+		<app-sausage-links waffle-drawer-content></app-sausage-links>
+		<div fxFlex="1 1 auto"></div>
+		<ng-container *ngIf="!screen.hideCustomer">
+			<app-sell-linked-customer [screenType]="screen.screenType" [customerName]="screen.customerName"
+				[noCustomerText]="screen.noCustomerText" [loyaltyButton]="screen.loyaltyButton">
+			</app-sell-linked-customer>
+		</ng-container>
+		<div fxFlex="0 1 auto" class="sell-screen-logo"></div>
 	</div>
 
-	<div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px">
+	<app-scan-or-search waffle-top-content class="scan-or-search mat-elevation-z3"></app-scan-or-search>
 
-		<app-transaction-item-list [listConfig]="listConfig" [selectedItems]="selectedItems" [selectedItemIndexes]="screen.selectedItemIndexes"
-		 [multiSelectedMenuItems]="screen.multiSelectedMenuItems" [transactionMenuItems]="screen.transactionMenuItems"
-		 [prompt]="screen.transactionMenuPrompt" [readOnly]="screen.readOnly" (selectedItemListChange)="onItemListChange($event)"
-		 (menuAction)="onMenuAction($event)">
-		</app-transaction-item-list>
+	<div waffle-body class="return-content" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="6px">
 
-		<app-overflow-list *ngIf="items && items.length > 0" fxFlex="0 0 auto" [numberItemsToShow]="overFlowListSize | async"
-		 [items]="amountTotals"></app-overflow-list>
+		<div *ngIf="receipts && receipts.length > 0" style="overflow-y: auto;">
+			<app-receipt-card *ngFor="let receipt of receipts" [receipt]="receipt" (click)="onReceiptClick(receipt)">
+			</app-receipt-card>
+		</div>
 
-		<mat-card *ngIf="screen.transaction" fxFlex="0 0 auto" class="page-content-card dark">
-			<mat-card-content gdAreas="items total button" gdColumns="auto 1fr auto" class="text-lg">
-				<div gdArea="items" gdGridAlign="center center" class="text-md">{{itemTotal}} Item{{itemTotal !== 1 ?
-					's' : ''}}</div>
-				<div gdArea="total" gdGridAlign="center center">
-					<span class="text-right">Total&nbsp;</span>
-					<span [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
-						<app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
-					</span>
-				</div>
-				<button gdArea="button" *ngIf="!screen.readOnly" mat-button color="primary-inverse" [disabled]="!screen.transaction.active || items.length == 0"
-				 (click)="session.onAction('Return')">
-					<span class="text-md">Next</span>
-					<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
-				</button>
-			</mat-card-content>
-		</mat-card>
+		<div fxFlex="1 1 auto" class="sale-content" gdAreas="items | totals | nextbar | status"
+			gdRows="minmax(200px, 100%) auto auto" gdGap="6px">
+
+			<app-transaction-item-list gdArea="items" [listConfig]="listConfig" [selectedItems]="selectedItems"
+				[selectedItemIndexes]="screen.selectedItemIndexes"
+				[multiSelectedMenuItems]="screen.multiSelectedMenuItems"
+				[transactionMenuItems]="screen.transactionMenuItems" [prompt]="screen.transactionMenuPrompt"
+				[readOnly]="screen.readOnly" (selectedItemListChange)="onItemListChange($event)"
+				(menuAction)="onMenuAction($event)">
+			</app-transaction-item-list>
+
+			<app-overflow-list gdArea="totals" *ngIf="items && items.length > 0"
+				[numberItemsToShow]="overFlowListSize | async" [items]="amountTotals"></app-overflow-list>
+
+			<mat-card gdArea="nextbar" class="page-content-card dark">
+				<mat-card-content gdAreas="items total button" gdColumns="auto 1fr auto" class="text-lg">
+					<div gdArea="items" gdGridAlign="center center" class="text-md">{{itemTotal}} Item{{itemTotal !== 1 ?
+							's' : ''}}</div>
+					<div gdArea="total" gdGridAlign="center center">
+						<span class="text-right">Total&nbsp;</span>
+						<span [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
+							<app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
+						</span>
+					</div>
+					<button gdArea="button" *ngIf="!screen.readOnly" mat-raised-button color="primary"
+						class="next-button mat-elevation-z0" [disabled]="!items || items.length === 0"
+						(click)="session.onAction('Return')">
+						<span class="text-md">Next</span>
+						<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>
+					</button>
+				</mat-card-content>
+			</mat-card>
+
+			<app-status-strip gdArea="status" waffle-footer></app-status-strip>
+		</div>
 	</div>
-</div>
+
+</app-waffle>

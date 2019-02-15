@@ -76,7 +76,7 @@ import {
     TransactionItemListComponent,
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
-import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe, MarkdownFormatterPipe } from './pipes';
+import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe, MarkdownFormatterPipe, ImageUrlPipe, BackgroundImageUrlPipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
 import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent } from './screen-parts';
 import { SideNavComponent, WaffleComponent } from './layout-components';
@@ -164,7 +164,8 @@ const pipes = [
     StringListFilterPipe,
     ListLimitPipe,
     MarkdownFormatterPipe,
-
+    ImageUrlPipe,
+    BackgroundImageUrlPipe,
 ];
 
 @NgModule({

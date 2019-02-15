@@ -16,27 +16,34 @@ export class SubscribeToSessionTask implements IStartupTask {
         protected session: SessionService,
         protected router: Router,
         protected log: Logger
-    ) {    }
+    ) { }
 
-    execute( data: StartupTaskData ): Observable<string> {
-        return Observable.create( (message: Subject<string>) => {
+    execute(data: StartupTaskData): Observable<string> {
+        return Observable.create((message: Subject<string>) => {
             if (!this.session.connected()) {
 
-                let appId = data.state.url.substring(1);
-                this.log.info('calculating app id from ' + appId);
-                if (appId.indexOf('?') > 0) {
-                    appId = appId.substring(0, appId.indexOf('?'));
-                }
-                if (appId.indexOf('#') > 0) {
-                    appId = appId.substring(0, appId.indexOf('#'));
-                }
-                if (appId.indexOf('/') > 0) {
-                    appId = appId.substring(0, appId.indexOf('/'));
+                if (!this.session.getAppId()) {
+                    let appId = data.state.url.substring(1);
+                    this.log.info('calculating app id from ' + appId);
+                    if (appId.indexOf('?') > 0) {
+                        appId = appId.substring(0, appId.indexOf('?'));
+                    }
+                    if (appId.indexOf('#') > 0) {
+                        appId = appId.substring(0, appId.indexOf('#'));
+                    }
+                    if (appId.indexOf('/') > 0) {
+                        appId = appId.substring(0, appId.indexOf('/'));
+                    }
+                    this.session.setAppId(appId);
                 }
 
-                message.next(`[StartupService] Subscribing to server using appId '${appId}'...`);
+                data.route.queryParamMap.keys.forEach(key => {
+                    this.session.addQueryParam(key, data.route.queryParamMap.get(key));
+                });
+
+                message.next(`[StartupService] Subscribing to server using appId '${this.session.getAppId()}'...`);
                 this.session.unsubscribe();
-                this.session.subscribe(appId, data.route.queryParams);
+                this.session.subscribe();
                 message.complete();
             }
         });
