@@ -21,8 +21,8 @@ import org.springframework.stereotype.Component;
 public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
 
     Logger logger = LoggerFactory.getLogger(getClass());
-    
-    @Autowired
+
+    @Autowired(required = false)
     List<IScreenPropertyStrategy> screenProprtyStrategies;
 
     private static final Set<Class<?>> WRAPPER_TYPES = getWrapperTypes();
@@ -47,8 +47,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
 
     @Override
     public Screen intercept(String appId, String deviceId, Screen screen) {
-    	
-        if (screen != null) {
+        if (screen != null && screenProprtyStrategies != null && screenProprtyStrategies.size() > 0) {
             processFields(appId, deviceId, screen);
             processOptionals(appId, deviceId, screen.any());
         }
@@ -60,7 +59,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
             Set<String> keys = optionals.keySet();
             for (String key : keys) {
                 Object value = optionals.get(key);
-                if( value != null) {
+                if (value != null) {
                     doStrategies(appId, deviceId, value, value.getClass());
                 }
             }
@@ -75,20 +74,20 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
             for (Field field : fields) {
                 field.setAccessible(true);
                 Class<?> type = field.getType();
-                
+
                 try {
-                	if(!Modifier.isFinal(field.getModifiers())) {
-                		field.set(obj, doStrategies(appId, deviceId, field, obj));
-    				}
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					logger.error("Failed to set property value", e);
-				}
-                
+                    if (!Modifier.isFinal(field.getModifiers())) {
+                        field.set(obj, doStrategies(appId, deviceId, field, obj));
+                    }
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    logger.error("Failed to set property value", e);
+                }
+
                 if (List.class.isAssignableFrom(type)) {
                     try {
                         List<Object> list = (List<Object>) field.get(obj);
                         if (list != null) {
-                            for ( int i = 0; i < list.size(); i++) {
+                            for (int i = 0; i < list.size(); i++) {
                                 Object fieldObj = list.get(i);
                                 if (fieldObj != null) {
                                     list.set(i, doStrategies(appId, deviceId, fieldObj, fieldObj.getClass()));
@@ -101,7 +100,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
                     } catch (Exception e) {
                         logger.warn("", e);
                     }
-                    
+
                 } else if (Collection.class.isAssignableFrom(type)) {
                     try {
                         Collection<?> collection = (Collection<?>) field.get(obj);
@@ -121,10 +120,10 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
                     try {
                         Map<?, ?> map = (Map<?, ?>) field.get(obj);
                         if (map != null) {
-                            for (Entry entry: map.entrySet()) {
+                            for (Entry entry : map.entrySet()) {
                                 Object entryValue = entry.getValue();
                                 if (entryValue != null) {
-                                	entry.setValue(doStrategies(appId, deviceId, entryValue, entryValue.getClass()));
+                                    entry.setValue(doStrategies(appId, deviceId, entryValue, entryValue.getClass()));
                                     if (shouldProcessFields(field, entryValue.getClass())) {
                                         processFields(appId, deviceId, entryValue);
                                     }
@@ -148,36 +147,30 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
             clazz = clazz.getSuperclass();
         }
     }
-    
-    private Object doStrategies(String appId, String deviceId, Field field, Object obj ) {
-    	try {
-    		Object property = field.get(obj);
-    		Class<?> clazz = ( property != null ? property.getClass() : field.getType());
-    		return doStrategies(appId, deviceId, property, clazz);
-    	} catch (IllegalArgumentException | IllegalAccessException e) {
+
+    private Object doStrategies(String appId, String deviceId, Field field, Object obj) {
+        try {
+            Object property = field.get(obj);
+            Class<?> clazz = (property != null ? property.getClass() : field.getType());
+            return doStrategies(appId, deviceId, property, clazz);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
             logger.error("Failed to crawl screen property", e);
         }
         return obj;
     }
-    
+
     private Object doStrategies(String appId, String deviceId, Object property, Class<?> clazz) {
-    	
-    	for( IScreenPropertyStrategy s : screenProprtyStrategies){
-    		property = s.doStrategy(appId, deviceId, property, clazz);
-    	}
-    	
-    	return property;
+
+        for (IScreenPropertyStrategy s : screenProprtyStrategies) {
+            property = s.doStrategy(appId, deviceId, property, clazz);
+        }
+
+        return property;
     }
 
     private boolean shouldProcessFields(Field field, Class<?> clazz) {
-        return clazz != null &&
-                !isWrapperType(clazz) &&
-                !Modifier.isStatic(field.getModifiers()) &&
-                !clazz.isPrimitive() && 
-                !clazz.isEnum() && 
-                !clazz.equals(Logger.class)
-                && clazz.getPackage() != null && 
-                !clazz.getPackage().getName().startsWith("sun");
+        return clazz != null && !isWrapperType(clazz) && !Modifier.isStatic(field.getModifiers()) && !clazz.isPrimitive() && !clazz.isEnum()
+                && !clazz.equals(Logger.class) && clazz.getPackage() != null && !clazz.getPackage().getName().startsWith("sun");
     }
 
 }
