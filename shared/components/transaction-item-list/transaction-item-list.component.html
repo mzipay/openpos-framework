@@ -20,7 +20,8 @@
                 <div gdAreas="  description description giftReceipt cost kebab |
                                 subtitle labels giftReceipt cost kebab |
                                 prop65Item prop65Item prop65Item prop65Item prop65Item"
-                     gdColumns="1fr 1fr auto auto auto"
+                     gdColumns="auto 1fr auto auto auto"
+                     gdGap="4px"
                     [ngClass]="item.type" >
                     <div gdArea="description" [ngClass]="item.prop65Item ? 'warn' : ''">
                         {{item.description}}
