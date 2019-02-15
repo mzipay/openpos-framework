@@ -62,6 +62,8 @@ export class SessionService implements IMessageHandler<any> {
 
     private disconnectedMessage = LoaderState.DISCONNECTED_TITLE;
 
+    private queryParams = new Map();
+
     constructor(
         private log: Logger,
         private stompService: StompRService,
@@ -107,6 +109,14 @@ export class SessionService implements IMessageHandler<any> {
         this.authToken = token;
     }
 
+    public addQueryParam(key: string, value: string) {
+        this.queryParams[key] = value;
+    }
+
+    public setAppId(value: string) {
+        this.appId = value;
+    }
+
     public getAppId(): String {
         return this.appId;
     }
@@ -115,7 +125,7 @@ export class SessionService implements IMessageHandler<any> {
         return this.stompService && this.stompService.connected();
     }
 
-    public subscribe(appId: String, queryParams: Params) {
+    public subscribe() {
         if (this.subscription) {
             return;
         }
@@ -127,11 +137,11 @@ export class SessionService implements IMessageHandler<any> {
             headers: {
                 authToken: this.authToken,
                 compatibilityVersion: Configuration.compatibilityVersion,
-                appId: appId,
+                appId: this.appId,
                 nodeId: this.personalization.getNodeId(),
                 deviceType: this.personalization.getDeviceType(),
                 brandId: this.personalization.getBrandId(),
-                queryParams: JSON.stringify(queryParams)
+                queryParams: JSON.stringify(this.queryParams)
             },
             heartbeat_in: 0, // Typical value 0 - disabled
             heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
@@ -140,7 +150,6 @@ export class SessionService implements IMessageHandler<any> {
         };
         this.stompService.initAndConnect();
 
-        this.appId = appId;
         const currentTopic = this.buildTopicName();
 
         this.log.info('subscribing to server at: ' + currentTopic);
@@ -390,7 +399,7 @@ export class SessionService implements IMessageHandler<any> {
                     interceptor.intercept(response, sendToServer);
                     if (interceptor.options && interceptor.options.showLoadingAfterIntercept) {
                         if (!isValueChangedAction) {
-                           this.queueLoading();
+                            this.queueLoading();
                         }
                     }
                 } else {
@@ -480,11 +489,11 @@ export class SessionService implements IMessageHandler<any> {
 
 
     public registerActionDisabler(action: string, disabler: Observable<boolean>): Subscription {
-        if ( !this.actionDisablers.has(action)) {
+        if (!this.actionDisablers.has(action)) {
             this.actionDisablers.set(action, new BehaviorSubject<boolean>(false));
         }
 
-        return disabler.subscribe( value => this.actionDisablers.get(action).next(value));
+        return disabler.subscribe(value => this.actionDisablers.get(action).next(value));
     }
 
     public actionIsDisabled(action: string): Observable<boolean> {
