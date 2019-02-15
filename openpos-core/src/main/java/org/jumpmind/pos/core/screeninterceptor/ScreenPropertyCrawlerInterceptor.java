@@ -46,12 +46,11 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
     }
 
     @Override
-    public Screen intercept(String appId, String deviceId, Screen screen) {
+    public void intercept(String appId, String deviceId, Screen screen) {
         if (screen != null && screenProprtyStrategies != null && screenProprtyStrategies.size() > 0) {
             processFields(appId, deviceId, screen);
             processOptionals(appId, deviceId, screen.any());
         }
-        return screen;
     }
 
     private void processOptionals(String appId, String deviceId, Map<String, Object> optionals) {
