@@ -54,6 +54,7 @@ public class StateManagerTest {
         FlowConfig customerFlow = new FlowConfig();
         customerFlow.getConfigScope().put("customerFlowType", "LOYALTY");
         customerFlow.setInitialState(FlowBuilder.addState(CustomerState.class).withTransition("CustomerSearch", CustomerSearchState.class)
+                .withTransition("Back", CompleteState.class)
                 .withTransition("CustomerSelected", CompleteState.class)
                 .withSubTransition("CustomerSignup", customerSignupFlow, "CustomerSignupComplete").build());
         customerFlow.add(FlowBuilder.addState(CustomerSearchState.class).withTransition("CustomerSelected", CompleteState.class).build());
@@ -109,6 +110,8 @@ public class StateManagerTest {
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("ToSubState2");
         assertEquals(CustomerState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("Back");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
     }
 
 

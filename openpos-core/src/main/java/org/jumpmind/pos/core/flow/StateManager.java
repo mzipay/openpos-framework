@@ -393,6 +393,7 @@ public class StateManager implements IStateManager {
                 } else {
                     SubTransition autoSubTransition = suspendedStateConfig.getActionToSubStateMapping().get(returnAction);
                     if (autoSubTransition != null) {
+                        applicationState.setCurrentContext(suspendedState);
                         transitionToSubState(action, autoSubTransition);
                     } else {
                         transitionTo(action, suspendedState.getState(), null, suspendedState);

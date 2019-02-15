@@ -24,6 +24,11 @@ public class TestStates {
         public void arrive(Action action) {
 
         }
+        
+        @ActionHandler
+        protected void onReturn() {
+            
+        }
     }
 
     public static class HelpState implements IState {
