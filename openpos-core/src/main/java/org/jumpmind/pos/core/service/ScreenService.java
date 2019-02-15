@@ -11,11 +11,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,10 +78,7 @@ public class ScreenService implements IScreenService, IActionListener {
     @Autowired
     IMessageService messageService;
 
-    Queue<IScreenInterceptor> screenInterceptors = new ConcurrentLinkedQueue<>();
-    
-    // @Autowired
-    // private ServletContext servletContext;
+    List<IScreenInterceptor> screenInterceptors = new ArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -97,16 +94,18 @@ public class ScreenService implements IScreenService, IActionListener {
         }
     }
     
-    @RequestMapping(method = RequestMethod.GET, value = "api/brand/{brandCode}/devicetype/{deviceType}/asset/{assetName}")
-    public void getImageAsByteArray(HttpServletResponse response,
-            @PathVariable String brandCode,
-            @PathVariable String deviceType,
-            @PathVariable String assetName) throws IOException {
-        logger.info("Received a request for client asset: {} {} {}", brandCode, deviceType, assetName);
-        // InputStream in = servletContext.getResourceAsStream("/public/assets/symmetric.png");
-        InputStream in = getClass().getResourceAsStream("/public/assets/symmetric.png");
-        // response.setContentType(MediaType.IMAGE_PNG_VALUE);
-        IOUtils.copy(in, response.getOutputStream());
+    @RequestMapping(method = RequestMethod.GET, value = "api/content")
+    public void getImageAsByteArray(HttpServletResponse response, @RequestParam(name = "contentPath", required = false) String contentPath)
+            throws IOException {
+        logger.info("Received a request for asset: {}", contentPath);
+
+        InputStream in = new ClassPathResource(contentPath).getInputStream();
+        if (in != null) {
+            IOUtils.copy(in, response.getOutputStream());
+            in.close();
+        } else {
+            logger.warn("Resource not found for asset: {}", contentPath);
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{deviceId}/control/{controlId}")
@@ -235,7 +234,7 @@ public class ScreenService implements IScreenService, IActionListener {
             ApplicationState applicationState = stateManager.getApplicationState();
             screen.setSequenceNumber(applicationState.incrementAndScreenSequenceNumber());
             try {
-                screen = interceptScreen(appId, deviceId, screen);
+                interceptScreen(appId, deviceId, screen);
                 logScreenTransition(deviceId, screen);
             } catch (Exception ex) {
                 if (ex.toString().contains("org.jumpmind.pos.core.screen.ChangeScreen")) {
@@ -263,13 +262,12 @@ public class ScreenService implements IScreenService, IActionListener {
         }
     }
 
-    protected Screen interceptScreen(String appId, String deviceId, Screen screen) {
+    protected void interceptScreen(String appId, String deviceId, Screen screen) {
         if (this.screenInterceptors != null) {
             for (IScreenInterceptor screenInterceptor : screenInterceptors) {
-                return screenInterceptor.intercept(appId, deviceId, screen);
+                screenInterceptor.intercept(appId, deviceId, screen);
             }
         }
-        return screen;
     }
 
     protected void deserializeForm(ApplicationState applicationState, Action action) {

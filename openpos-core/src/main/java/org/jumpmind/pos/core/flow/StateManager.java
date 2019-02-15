@@ -499,7 +499,7 @@ public class StateManager implements IStateManager {
         }
         if (applicationState.getCurrentContext().getState() != null
                 && applicationState.getCurrentContext().getState() instanceof IScreenInterceptor) {
-            screen = ((IScreenInterceptor) applicationState.getCurrentContext().getState()).intercept(applicationState.getAppId(),
+            ((IScreenInterceptor) applicationState.getCurrentContext().getState()).intercept(applicationState.getAppId(),
                     applicationState.getDeviceId(), screen);
         }
 
