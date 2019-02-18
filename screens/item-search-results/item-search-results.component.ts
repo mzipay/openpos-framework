@@ -48,4 +48,8 @@ export class ItemSearchResultsComponent extends PosScreen<any> {
     } catch (err) { }
   }
 
+  public selectDisabled(): boolean {
+    return !this.screen.actionButton.enabled || this.index < 0;
+  }
+
 }

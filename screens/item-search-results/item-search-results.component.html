@@ -18,7 +18,7 @@
 			<app-icon *ngIf="screen.nextButton.icon" [iconName]="screen.nextButton.icon" [iconClass]="'material-icons'"></app-icon>
 		</button>
 		<div fxFlex="1 1 auto"></div>
-		<button *ngIf="screen.actionButton" mat-raised-button color="primary" [disabled]="!screen.nextButton.enabled || index < 0"
+		<button *ngIf="screen.actionButton" mat-raised-button color="primary" [disabled]="selectDisabled()"
 		 (click)="doMenuItemAction(screen.actionButton)">
 			<span>{{screen.actionButton.title ? screen.actionButton.title : 'Next'}}</span>
 			<app-icon *ngIf="screen.actionButton.icon" [iconName]="screen.actionButton.icon" [iconClass]="'material-icons'"></app-icon>
