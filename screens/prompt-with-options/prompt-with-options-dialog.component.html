@@ -7,7 +7,7 @@
             </button>
         </div>
         <mat-dialog-content>
-            <app-prompt-input #promptInput [placeholderText]="screen.placeholderText" [responseType]="screen.responseType"
+            <app-prompt-input #promptInput cdkFocusInitial="true" [placeholderText]="screen.placeholderText" [responseType]="screen.responseType"
                 [responseText]="screen.responseText" [promptIcon]="screen.promptIcon" [hintText]="screen.prompt"
                 [maskSpec]="screen.promptMask" [minLength]="screen.minLength" [maxLength]="screen.maxLength"
                 [promptFormGroup]="promptFormGroup" [readOnly]="screen.readOnly">
