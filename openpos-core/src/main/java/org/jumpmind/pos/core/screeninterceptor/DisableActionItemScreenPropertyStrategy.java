@@ -14,7 +14,11 @@ public class DisableActionItemScreenPropertyStrategy implements IScreenPropertyS
 	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, Screen screen) {
 		if(property != null && ActionItem.class.equals(clazz)) {
 			ActionItem item = (ActionItem)property;
-			item.setEnabled(!disableActionItemService.isActionDisabled(appId, deviceId, item.getAction()));
+			// Only try to disable if it is currently disabled. This way we don't enable buttons that were
+			// explicitly disabled.
+			if( item.isEnabled() ) {
+				item.setEnabled(!disableActionItemService.isActionDisabled(appId, deviceId, item.getAction()));
+			}
 			return item;
 		}
 		
