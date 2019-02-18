@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SessionSubscribedListener implements ApplicationListener<SessionSubscribedEvent>, MessageUtils {
 
-    Logger logger = LoggerFactory.getLogger(getClass());
+    final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     IStateManagerContainer stateManagerFactory;
@@ -105,8 +105,8 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
         if (configSelector != null) {
             String deviceType = sessionAuthTracker.getDeviceType(sessionId);
             String brandId = sessionAuthTracker.getBrandId(sessionId);
-            logger.info("Getting client configuration for brandId '{}' and deviceType '{}'", brandId, deviceType);
             String theme = configSelector.getTheme(brandId);
+            logger.info("Chose theme: {}", theme);
             ClientConfiguration config = configSelector.getClientConfig(brandId, deviceType);
             ConfigChangedMessage configMessage = new ConfigChangedMessage(theme, config);
             messageService.sendMessage(appId, nodeId, configMessage);
