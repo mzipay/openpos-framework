@@ -48,25 +48,25 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
     @Override
     public void intercept(String appId, String deviceId, Screen screen) {
         if (screen != null && screenProprtyStrategies != null && screenProprtyStrategies.size() > 0) {
-            processFields(appId, deviceId, screen);
-            processOptionals(appId, deviceId, screen.any());
+            processFields(appId, deviceId, screen, screen);
+            processOptionals(appId, deviceId, screen.any(), screen);
         }
     }
 
-    private void processOptionals(String appId, String deviceId, Map<String, Object> optionals) {
+    private void processOptionals(String appId, String deviceId, Map<String, Object> optionals, Screen screen) {
         if (optionals.size() > 0) {
             Set<String> keys = optionals.keySet();
             for (String key : keys) {
                 Object value = optionals.get(key);
                 if (value != null) {
-                    doStrategies(appId, deviceId, value, value.getClass());
+                    doStrategies(appId, deviceId, value, value.getClass(), screen);
                 }
             }
         }
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private final void processFields(String appId, String deviceId, Object obj) {
+    private final void processFields(String appId, String deviceId, Object obj, Screen screen) {
         Class<?> clazz = obj.getClass();
         while (clazz != null && obj != null) {
             Field[] fields = clazz.getDeclaredFields();
@@ -76,7 +76,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
 
                 try {
                     if (!Modifier.isFinal(field.getModifiers())) {
-                        field.set(obj, doStrategies(appId, deviceId, field, obj));
+                        field.set(obj, doStrategies(appId, deviceId, field, obj, screen));
                     }
                 } catch (IllegalArgumentException | IllegalAccessException e) {
                     logger.error("Failed to set property value", e);
@@ -89,9 +89,9 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
                             for (int i = 0; i < list.size(); i++) {
                                 Object fieldObj = list.get(i);
                                 if (fieldObj != null) {
-                                    list.set(i, doStrategies(appId, deviceId, fieldObj, fieldObj.getClass()));
+                                    list.set(i, doStrategies(appId, deviceId, fieldObj, fieldObj.getClass(), screen));
                                     if (shouldProcessFields(field, fieldObj.getClass())) {
-                                        processFields(appId, deviceId, fieldObj);
+                                        processFields(appId, deviceId, fieldObj, screen);
                                     }
                                 }
                             }
@@ -108,7 +108,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
                             while (i.hasNext()) {
                                 Object fieldObj = i.next();
                                 if (fieldObj != null && shouldProcessFields(field, fieldObj.getClass())) {
-                                    processFields(appId, deviceId, fieldObj);
+                                    processFields(appId, deviceId, fieldObj, screen);
                                 }
                             }
                         }
@@ -122,9 +122,9 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
                             for (Entry entry : map.entrySet()) {
                                 Object entryValue = entry.getValue();
                                 if (entryValue != null) {
-                                    entry.setValue(doStrategies(appId, deviceId, entryValue, entryValue.getClass()));
+                                    entry.setValue(doStrategies(appId, deviceId, entryValue, entryValue.getClass(), screen));
                                     if (shouldProcessFields(field, entryValue.getClass())) {
-                                        processFields(appId, deviceId, entryValue);
+                                        processFields(appId, deviceId, entryValue, screen);
                                     }
                                 }
                             }
@@ -136,7 +136,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
                     try {
                         Object fieldObj = field.get(obj);
                         if (fieldObj != null) {
-                            processFields(appId, deviceId, fieldObj);
+                            processFields(appId, deviceId, fieldObj, screen);
                         }
                     } catch (Exception e) {
                         logger.warn("", e);
@@ -147,21 +147,21 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
         }
     }
 
-    private Object doStrategies(String appId, String deviceId, Field field, Object obj) {
+    private Object doStrategies(String appId, String deviceId, Field field, Object obj, Screen screen) {
         try {
             Object property = field.get(obj);
             Class<?> clazz = (property != null ? property.getClass() : field.getType());
-            return doStrategies(appId, deviceId, property, clazz);
+            return doStrategies(appId, deviceId, property, clazz, screen);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             logger.error("Failed to crawl screen property", e);
         }
         return obj;
     }
 
-    private Object doStrategies(String appId, String deviceId, Object property, Class<?> clazz) {
+    private Object doStrategies(String appId, String deviceId, Object property, Class<?> clazz, Screen screen) {
 
         for (IScreenPropertyStrategy s : screenProprtyStrategies) {
-            property = s.doStrategy(appId, deviceId, property, clazz);
+            property = s.doStrategy(appId, deviceId, property, clazz, screen);
         }
 
         return property;

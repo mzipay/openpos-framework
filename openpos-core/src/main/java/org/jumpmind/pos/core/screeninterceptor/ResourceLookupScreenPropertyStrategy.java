@@ -2,6 +2,7 @@ package org.jumpmind.pos.core.screeninterceptor;
 
 import java.util.MissingResourceException;
 
+import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IResourceLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,7 +12,7 @@ public class ResourceLookupScreenPropertyStrategy implements IScreenPropertyStra
 	IResourceLookupService lookupService;
 	
 	@Override
-	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz) {
+	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, Screen screen) {
 		if( String.class.equals(clazz)) {
 			String value = (String)property;
 			if(value != null && value.startsWith("{")) {
