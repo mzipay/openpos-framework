@@ -2,7 +2,7 @@ import { SessionService } from './../../core/services/session.service';
 
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import { IMenuItem } from '../../core';
+import { IActionItem } from '../../core';
 import { ILine } from './line.interface';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
@@ -13,8 +13,8 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 })
 export class DialogComponent extends PosScreen<any> {
 
-  primaryButton: IMenuItem;
-  otherButtons: IMenuItem[];
+  primaryButton: IActionItem;
+  otherButtons: IActionItem[];
   messages: string[];
   lines: ILine[];
 

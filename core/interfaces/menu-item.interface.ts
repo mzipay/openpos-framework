@@ -1,6 +1,6 @@
 import { IConfirmationDialog } from './confirmation-dialog.interface';
 
-export interface IMenuItem {
+export interface IActionItem {
     enabled: boolean;
     action: string;
     title: string;

@@ -1,4 +1,4 @@
-import { IMenuItem, ISellItem } from '../../../../core';
+import { IActionItem, ISellItem } from '../../../../core';
 import { StatusBarData } from '../../../../shared';
 import { SelfCheckoutStatusBarData } from '../../../../self-checkout/self-checkout-statusbar/self-checkout-status-bar-data';
 import { ISellTemplate } from './sell-template.interface';
@@ -7,8 +7,8 @@ import { SellStatusSectionData } from '../sell-status-section/sell-status-sectio
 export interface ISellScreen {
     name: string;
     screenType: string;
-    backButton: IMenuItem;
-    logoutButton: IMenuItem;
+    backButton: IActionItem;
+    logoutButton: IActionItem;
     template: ISellTemplate;
     locale: string;
     prompt: string;
@@ -19,7 +19,7 @@ export interface ISellScreen {
     subtitle: string[];
     items: ISellItem[];
     selectedItems: ISellItem[];
-    multiSelectedMenuItems: IMenuItem[];
+    multiSelectedMenuItems: IActionItem[];
     transaction: any;
     trainingInstructions: {[key: string]: string};
 }

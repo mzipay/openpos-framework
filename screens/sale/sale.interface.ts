@@ -1,11 +1,11 @@
-import { IAbstractScreen, IMenuItem, ISellItem } from '../../core';
+import { IAbstractScreen, IActionItem, ISellItem } from '../../core';
 import { ITotal } from '../../core/interfaces/total.interface';
 
 export interface SaleInterface extends IAbstractScreen {
     transactionMenuPrompt: string;
-    transactionMenuItems: IMenuItem[];
-    multiSelectedMenuItems: IMenuItem[];
-    localMenuItems: IMenuItem[];
+    transactionMenuItems: IActionItem[];
+    multiSelectedMenuItems: IActionItem[];
+    localMenuItems: IActionItem[];
     items: ISellItem[];
     selectedItemIndexes: number[];
     totals: ITotal[];

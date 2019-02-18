@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { ObservableMedia} from '@angular/flex-layout';
-import { IMenuItem } from '../../core';
+import { IActionItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { Configuration } from '../../configuration/configuration';
 
@@ -12,7 +12,7 @@ import { Configuration } from '../../configuration/configuration';
 export class HomeComponent extends PosScreen<any> implements OnInit {
 
   screen: any;
-  public menuItems: IMenuItem[];
+  public menuItems: IActionItem[];
   gutterSize = 40;
   gridColumns = 3;
 
@@ -47,7 +47,7 @@ export class HomeComponent extends PosScreen<any> implements OnInit {
     return 'foo';
   }
 
-  onMenuItemClick(menuItem: IMenuItem) {
+  onMenuItemClick(menuItem: IActionItem) {
       this.session.onAction( menuItem );
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SessionService, IScreen, ActionIntercepter, ActionIntercepterBehaviorType, IMenuItem } from '../../core';
+import { SessionService, IScreen, ActionIntercepter, ActionIntercepterBehaviorType, IActionItem } from '../../core';
 import { IOptionItem } from '../../screens/choose-options/option-item.interface';
 import { PosScreen } from '../../screens/pos-screen/pos-screen.component';
 

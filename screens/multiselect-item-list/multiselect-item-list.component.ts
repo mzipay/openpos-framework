@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ItemClickAction, MenuClickAction, SelectableItemListComponentConfiguration } from '../../shared/';
-import { SelectionMode, IItem, IMenuItem } from '../../core';
+import { SelectionMode, IItem, IActionItem } from '../../core';
 import { NavListComponent } from '../../shared/components/nav-list/nav-list.component';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
@@ -14,7 +14,7 @@ export class MultiselectItemListComponent extends PosScreen<any> implements OnIn
     items: IItem[];
     itemActionName: string;
     text: string;
-    itemActions: IMenuItem[] = [];
+    itemActions: IActionItem[] = [];
     condensedListDisplay: false;
     selectionMode: string;
 

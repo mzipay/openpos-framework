@@ -1,7 +1,7 @@
 
 import { Component } from '@angular/core';
 
-import { IMenuItem } from './../../core';
+import { IActionItem } from './../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
@@ -11,7 +11,7 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 })
 export class TillSummaryComponent extends PosScreen<any> {
 
-    nextAction: IMenuItem;
+    nextAction: IActionItem;
 
     buildScreen() {
         this.nextAction = this.screen.nextAction;

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ScreenPart, ScreenPartData } from '../screen-part';
-import { IMenuItem } from '../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/menu-item.interface';
 
 @ScreenPartData({name: 'sausageLinks'})
 @Component({
@@ -8,9 +8,9 @@ import { IMenuItem } from '../../../core/interfaces/menu-item.interface';
     templateUrl: './sausage-links.component.html',
     styleUrls: ['./sausage-links.component.scss']
 })
-export class SausageLinksComponent extends ScreenPart<IMenuItem[]> {
+export class SausageLinksComponent extends ScreenPart<IActionItem[]> {
 
-    links: IMenuItem[];
+    links: IActionItem[];
 
     screenDataUpdated() {
         if ( Array.isArray(this.screenData)) {

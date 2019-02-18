@@ -18,7 +18,7 @@ import { LoaderState } from '../components/loader/loader-state';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
 import { IDeviceResponse } from '../plugins/device-response.interface';
 import { InAppBrowserPlugin } from '../plugins/in-app-browser.plugin';
-import { IMenuItem } from '../interfaces/menu-item.interface';
+import { IActionItem } from '../interfaces/menu-item.interface';
 import { IUrlMenuItem } from '../interfaces/url-menu-item.interface';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
 import { PluginService } from './plugin.service';
@@ -313,13 +313,13 @@ export class SessionService implements IMessageHandler<any> {
         this.onAction(action, payload, null, true);
     }
 
-    public async onAction(action: string | IMenuItem, payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
+    public async onAction(action: string | IActionItem, payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
         if (action) {
             let response: any = null;
             let actionString = '';
             // we need to figure out if we are a menuItem or just a string
             if (action.hasOwnProperty('action')) {
-                const menuItem = <IMenuItem>(action);
+                const menuItem = <IActionItem>(action);
                 confirm = menuItem.confirmationDialog;
                 actionString = menuItem.action;
                 // check to see if we are an IURLMenuItem

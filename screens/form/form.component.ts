@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { IFormElement, IMenuItem, IForm } from '../../core';
+import { IFormElement, IActionItem, IForm } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
@@ -32,7 +32,7 @@ export class FormComponent extends PosScreen<any> {
     }
   }
 
-  onItemAction(menuItem: IMenuItem, $event): void {
+  onItemAction(menuItem: IActionItem, $event): void {
     this.session.onAction(menuItem, this.form);
   }
 

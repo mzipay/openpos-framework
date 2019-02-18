@@ -1,5 +1,5 @@
 import {Component } from '@angular/core';
-import { IMenuItem } from '../../core';
+import { IActionItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
@@ -19,7 +19,7 @@ export class PaymentStatusComponent extends PosScreen<any> {
     this.pinPadStatus = this.screen.pinPadStatus;
   }
 
-  public doMenuItemAction(menuItem: IMenuItem) {
+  public doMenuItemAction(menuItem: IActionItem) {
     this.session.onAction(menuItem);
   }
 

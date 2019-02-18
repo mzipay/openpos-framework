@@ -1,7 +1,7 @@
 import { IStatusBarControl } from './../../../core/interfaces';
 import { Component, forwardRef, Inject } from '@angular/core';
 import { StatusBarData } from '../status-bar/status-bar-data';
-import { SessionService, IMenuItem } from '../../../core';
+import { SessionService, IActionItem } from '../../../core';
 
 /**
  * A swappable component that is placed on the right side of the status bar.
@@ -17,11 +17,11 @@ export class StatusBarStatusControlComponent implements IStatusBarControl {
     constructor(@Inject(forwardRef(() => SessionService)) private session: SessionService) {
     }
 
-    public doMenuItemAction(menuItem: IMenuItem) {
+    public doMenuItemAction(menuItem: IActionItem) {
         this.session.onAction(menuItem);
     }
 
-    public isMenuItemEnabled(m: IMenuItem): boolean {
+    public isMenuItemEnabled(m: IActionItem): boolean {
         let enabled = m.enabled;
         if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
             enabled = false;

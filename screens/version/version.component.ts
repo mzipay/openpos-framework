@@ -1,6 +1,6 @@
 import { SessionService } from './../../core/services/session.service';
 import { Component, OnInit } from '@angular/core';
-import { PluginService, AppVersion, IMenuItem } from '../../core';
+import { PluginService, AppVersion, IActionItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 declare var version: any; // read in from core at assets/version.js
@@ -13,8 +13,8 @@ declare var version: any; // read in from core at assets/version.js
 export class VersionComponent extends PosScreen<any> {
 
     versions: { id: string, name: string, version: string }[];
-    primaryAction: IMenuItem;
-    otherActions: IMenuItem[];
+    primaryAction: IActionItem;
+    otherActions: IActionItem[];
 
     constructor(public session: SessionService, private pluginService: PluginService, public appVersion: AppVersion) {
         super();

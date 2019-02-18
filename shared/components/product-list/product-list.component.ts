@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { IItem, IMenuItem, SelectionMode } from '../../../core';
+import { IItem, IActionItem, SelectionMode } from '../../../core';
 
 @Component({
     selector: 'app-product-list',
@@ -8,7 +8,7 @@ import { IItem, IMenuItem, SelectionMode } from '../../../core';
 })
 export class ProductListComponent {
     @Input() items: IItem[];
-    @Input() menuItemActions: IMenuItem[] = [];
+    @Input() menuItemActions: IActionItem[] = [];
     @Input() showItemIcon = true;
     @Input() showItemMenu = false;
     @Input() itemClass: string;
@@ -36,7 +36,7 @@ export class ProductListComponent {
         this.itemSelected.emit({item, event});
     }
 
-    onMenuItemClick(item: IItem, menuItem: IMenuItem, event: any): void {
+    onMenuItemClick(item: IItem, menuItem: IActionItem, event: any): void {
         this.menuItemClick.emit({item, menuItem, event});
     }
 
@@ -53,6 +53,6 @@ export interface ItemClickAction {
 
 export interface MenuClickAction {
     item: IItem;
-    menuItem: IMenuItem;
+    menuItem: IActionItem;
     event: any;
 }

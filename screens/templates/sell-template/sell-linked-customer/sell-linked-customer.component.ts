@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IMenuItem, SessionService } from '../../../../core';
+import { IActionItem, SessionService } from '../../../../core';
 
 @Component({
     selector: 'app-sell-linked-customer',
@@ -11,7 +11,7 @@ export class SellLinkedCustomerComponent {
     @Input() screenType: string;
     @Input() customerName: string;
     @Input() noCustomerText: string;
-    @Input() loyaltyButton?: IMenuItem;
+    @Input() loyaltyButton?: IActionItem;
 
     constructor(public session: SessionService) { }
 

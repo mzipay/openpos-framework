@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IMenuItem, SelectionMode } from '../../core';
+import { IActionItem, SelectionMode } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
@@ -21,7 +21,7 @@ export class ItemOptionsComponent extends PosScreen<any> {
     }
   }
 
-  public doMenuItemAction(menuItem: IMenuItem) {
+  public doMenuItemAction(menuItem: IActionItem) {
     this.session.onAction(menuItem);
   }
 

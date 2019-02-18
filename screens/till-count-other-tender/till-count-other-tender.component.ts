@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { PosScreen } from '../pos-screen/pos-screen.component';
-import { IMenuItem, IItem } from './../../core';
+import { IActionItem, IItem } from './../../core';
 
 @Component({
   selector: 'app-till-count-other-tender',
@@ -14,7 +14,7 @@ export class TillCountOtherTenderComponent extends PosScreen<any> {
 
   amountValue = undefined;
   totalAmount: number;
-  nextAction: IMenuItem;
+  nextAction: IActionItem;
   screen: any;
 
   items: IItem[];
@@ -36,7 +36,7 @@ export class TillCountOtherTenderComponent extends PosScreen<any> {
     }
   }
 
-  public doMenuItemAction(menuItem: IMenuItem, payLoad: any) {
+  public doMenuItemAction(menuItem: IActionItem, payLoad: any) {
     if (menuItem.action === 'Remove') {
       this.totalAmount -= Number(this.items[payLoad].amount);
       this.items.splice(payLoad, 1);

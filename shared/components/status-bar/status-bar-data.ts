@@ -1,13 +1,13 @@
-import { IMenuItem } from '../../../core';
+import { IActionItem } from '../../../core';
 
 
 export class StatusBarData {
-    backButton: IMenuItem;
+    backButton: IActionItem;
     screenType: String;
     screenName: String;
     screenIcon: String;
     operatorText: String;
-    logoutButton: IMenuItem;
+    logoutButton: IActionItem;
     workstationId: String;
     storeId: String;
     tillThresholdStatus: number;

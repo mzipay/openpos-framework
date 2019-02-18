@@ -1,6 +1,6 @@
 import { Component, ViewChild, AfterViewInit, AfterViewChecked, ElementRef, OnInit } from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
-import { DeviceService, SessionService, IScreen, ISellItem, IMenuItem } from '../../core';
+import { DeviceService, SessionService, IScreen, ISellItem, IActionItem } from '../../core';
 
 @Component({
   selector: 'app-self-checkout-transaction',
@@ -41,7 +41,7 @@ export class SelfCheckoutTransactionComponent implements AfterViewInit, AfterVie
     this.initialized = true;
   }
 
-  public doMenuItemAction(menuItem: IMenuItem) {
+  public doMenuItemAction(menuItem: IActionItem) {
     this.session.onAction(menuItem);
   }
 

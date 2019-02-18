@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IMenuItem, IFormElement, IForm } from '../../core';
+import { IActionItem, IFormElement, IForm } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 @Component({
     selector: 'app-login',
@@ -13,8 +13,8 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
     loginIdField: IFormElement;
     passwordField: IFormElement;
     submitAction: string;
-    changePasswordAction: IMenuItem;
-    forgotPasswordAction: IMenuItem;
+    changePasswordAction: IActionItem;
+    forgotPasswordAction: IActionItem;
     okButton: IFormElement;
     cancelButton: IFormElement;
     title: string;

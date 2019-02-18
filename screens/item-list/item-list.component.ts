@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ProductListComponent, ItemClickAction, MenuClickAction } from '../../shared/';
-import { SelectionMode, IItem, IMenuItem  } from '../../core';
+import { SelectionMode, IItem, IActionItem  } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
@@ -12,10 +12,10 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, OnDestr
     items: IItem[];
     itemActionName: string;
     text: string;
-    itemActions: IMenuItem[] = [];
+    itemActions: IActionItem[] = [];
     condensedListDisplay: false;
     selectionMode: string;
-    localMenuItems: IMenuItem[];
+    localMenuItems: IActionItem[];
     @ViewChild('productList') productList: ProductListComponent;
 
     constructor() {

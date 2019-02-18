@@ -8,7 +8,7 @@ import { SelectableItemListComponentConfiguration } from '../../shared/component
 import { NavListComponent } from '../../shared/components/nav-list/nav-list.component';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ITotal } from '../../core/interfaces/total.interface';
-import { IMenuItem } from '../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { TotalType } from '../../core/interfaces/total-type.enum';
 
 @Component({
@@ -26,7 +26,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
   individualMenuClicked = false;
 
   transactionMenuPrompt: string;
-  transactionMenuItems: IMenuItem[];
+  transactionMenuItems: IActionItem[];
 
   public overFlowListSize: Observable<number>;
 

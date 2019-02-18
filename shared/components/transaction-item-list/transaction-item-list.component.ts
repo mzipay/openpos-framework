@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, Input, Output, EventEmitter, AfterViewChecked } from '@angular/core';
 import { ISellItem } from '../../../core/interfaces/sell-item.interface';
-import { IMenuItem } from '../../../core';
+import { IActionItem } from '../../../core';
 import { SelectableItemListComponentConfiguration } from '../selectable-item-list/selectable-item-list.component';
 
 @Component({
@@ -15,8 +15,8 @@ export class TransactionItemListComponent implements AfterViewChecked {
   @Input() listConfig: SelectableItemListComponentConfiguration<ISellItem>;
   @Input() selectedItems: ISellItem[];
   @Input() selectedItemIndexes: number[];
-  @Input() multiSelectedMenuItems: IMenuItem[];
-  @Input() transactionMenuItems: IMenuItem[];
+  @Input() multiSelectedMenuItems: IActionItem[];
+  @Input() transactionMenuItems: IActionItem[];
   @Input() prompt: string;
   @Input() readOnly: boolean;
 
@@ -36,7 +36,7 @@ export class TransactionItemListComponent implements AfterViewChecked {
     this.selectedItemListChange.emit(items);
   }
 
-  public onMenuItemClick(menuItem: IMenuItem, payload?: number[]) {
+  public onMenuItemClick(menuItem: IActionItem, payload?: number[]) {
     if (menuItem.enabled && payload) {
       this.menuAction.emit({ menuItem: menuItem, payload: payload });
     } else if (menuItem.enabled) {

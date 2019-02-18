@@ -3,7 +3,7 @@ import { IFormElement } from '../../..';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { listener } from '@angular/core/src/render3/instructions';
 import { IListComponent } from '../../../core/interfaces/list-component.interface';
-import { IMenuItem, ScreenService, SessionService, FormBuilder, IForm } from '../../../core';
+import { IActionItem, ScreenService, SessionService, FormBuilder, IForm } from '../../../core';
 import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
@@ -17,7 +17,7 @@ export class DynamicListControlComponent implements OnInit {
     @Input() formGroup: FormGroup;
     @Input() controlName: string;
     @Input() list: IListComponent;  // @ViewChild('list') 
-    @Input() submitButton: IMenuItem;
+    @Input() submitButton: IActionItem;
     @Input() keyboardLayout: string;
 
     @Output() valueChange = new EventEmitter<any>();
@@ -283,7 +283,7 @@ export class DynamicListControlComponent implements OnInit {
         this.valueChange.emit(formElement);
     }
 
-    public onButtonClick(button: IMenuItem) {
+    public onButtonClick(button: IActionItem) {
         if (button.action) {
             if (button.action === this.submitButton.action) {
                 this.onSubmit(this.submitButton.action);

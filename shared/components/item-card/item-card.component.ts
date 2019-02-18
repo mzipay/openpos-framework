@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SessionService, IMenuItem, ISellItem } from '../../../core';
+import { SessionService, IActionItem, ISellItem } from '../../../core';
 
 
 @Component({
@@ -13,11 +13,11 @@ export class ItemCardComponent {
   @Input() session: SessionService;
   @Input() isReadOnly = false;
 
-  public doMenuItemAction(menuItem: IMenuItem, payLoad: any) {
+  public doMenuItemAction(menuItem: IActionItem, payLoad: any) {
     this.session.onAction(menuItem, payLoad );
   }
 
-  public isMenuItemEnabled(m: IMenuItem): boolean {
+  public isMenuItemEnabled(m: IActionItem): boolean {
     let enabled = m.enabled;
     if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
       enabled = false;

@@ -1,6 +1,6 @@
 import { Component, ViewChildren, AfterViewInit, Input, QueryList, ViewChild } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
-import { SessionService, ScreenService, IFormElement, IForm, FormBuilder, IMenuItem } from '../../../core';
+import { SessionService, ScreenService, IFormElement, IForm, FormBuilder, IActionItem } from '../../../core';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
 import { ShowErrorsComponent } from '../show-errors/show-errors.component';
 
@@ -19,7 +19,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
 
   private _screenForm: IForm;
   private _alternateSubmitActions: string[];
-  @Input() submitButton: IMenuItem;
+  @Input() submitButton: IActionItem;
 
   constructor(public session: SessionService, public screenService: ScreenService, private formBuilder: FormBuilder) {}
 

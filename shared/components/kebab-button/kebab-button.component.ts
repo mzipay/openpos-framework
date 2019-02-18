@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { IMenuItem, Logger } from '../../../core';
+import { IActionItem, Logger } from '../../../core';
 import { MatDialog } from '@angular/material';
 import { KebabMenuComponent } from '../kebab-menu/kebab-menu.component';
 
@@ -11,13 +11,13 @@ import { KebabMenuComponent } from '../kebab-menu/kebab-menu.component';
 export class KebabButtonComponent {
 
     @Input()
-    menuItems: IMenuItem[];
+    menuItems: IActionItem[];
 
     @Input()
     color?: string;
 
     @Output()
-    menuItemClick = new EventEmitter<IMenuItem>();
+    menuItemClick = new EventEmitter<IActionItem>();
 
     constructor(private dialog: MatDialog, private log: Logger) {
     }

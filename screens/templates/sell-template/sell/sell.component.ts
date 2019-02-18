@@ -1,7 +1,7 @@
 import { Component, ViewChild, HostListener } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { AbstractTemplate, IMenuItem, OpenposMediaService } from '../../../../core';
+import { AbstractTemplate, IActionItem, OpenposMediaService } from '../../../../core';
 import { StatusBarData, NavListComponent } from '../../../../shared';
 import { SellScreenUtils, ISellScreen } from './sell-screen.interface';
 import { ISellTemplate } from './sell-template.interface';
@@ -48,11 +48,11 @@ export class SellComponent extends AbstractTemplate<any> {
       }
   }
 
-  public doMenuItemAction(menuItem: IMenuItem) {
+  public doMenuItemAction(menuItem: IActionItem) {
     this.session.onAction(menuItem);
   }
 
-  public isMenuItemEnabled(m: IMenuItem): boolean {
+  public isMenuItemEnabled(m: IActionItem): boolean {
     let enabled = m.enabled;
     if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
       enabled = false;

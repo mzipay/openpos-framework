@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import {  MatPaginator, PageEvent } from '@angular/material';
-import { ISellItem, IMenuItem, IForm, IFormElement, ICatalogBrowserForm } from '../../core/interfaces';
+import { ISellItem, IActionItem, IForm, IFormElement, ICatalogBrowserForm } from '../../core/interfaces';
 // import { SessionService, FormBuilder, ValidatorsService } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface';
@@ -18,7 +18,7 @@ import { FormBuilder } from '../../core/services';
     @ViewChild(MatPaginator) paginator;
 
     items: ISellItem[];
-    categories: IMenuItem[];
+    categories: IActionItem[];
     maxItemsPerPage: number;
     totalItems: number;
     selectedItemQuantity: IItemQuantityFormElement;
@@ -52,7 +52,7 @@ import { FormBuilder } from '../../core/services';
         // Forces redisplay of error
         this.formGroup.controls[this.selectedItemQuantity.id].markAsDirty();
     }
-    public onCategorySelected(category: IMenuItem, event?: any) {
+    public onCategorySelected(category: IActionItem, event?: any) {
         const returnForm: ICatalogBrowserForm = {selectedCategory: category, form: this.form};
         this.session.onAction(category.action, returnForm);
     }

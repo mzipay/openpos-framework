@@ -1,5 +1,5 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { IMenuItem } from '../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/menu-item.interface';
 
 @Component({
     selector: 'app-menu',
@@ -8,6 +8,6 @@ import { IMenuItem } from '../../../core/interfaces/menu-item.interface';
 })
 export class MenuComponent {
 
-    @Input() menuItems: IMenuItem[];
-    @Output() menuItemClicked = new EventEmitter<IMenuItem>();
+    @Input() menuItems: IActionItem[];
+    @Output() menuItemClicked = new EventEmitter<IActionItem>();
 }

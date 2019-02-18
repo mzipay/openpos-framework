@@ -1,5 +1,5 @@
 import { IOptionItem } from './option-item.interface';
-import { IMenuItem, IAbstractScreen } from '../../core';
+import { IActionItem, IAbstractScreen } from '../../core';
 
 
 export interface IChooseOptionsScreen extends IAbstractScreen {
@@ -11,7 +11,7 @@ export interface IChooseOptionsScreen extends IAbstractScreen {
     responseText: string;
     showComments: string;
     comments: string;
-    actionButton: IMenuItem;
+    actionButton: IActionItem;
 }
 
 export enum SelectionMode {

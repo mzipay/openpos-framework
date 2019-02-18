@@ -18,7 +18,7 @@ import {
     FileUploadService
 } from '../../services';
 import { IScreen } from './screen.interface';
-import { Element, OpenPOSDialogConfig, ActionMap, IMenuItem, IMessageHandler } from '../../interfaces';
+import { Element, OpenPOSDialogConfig, ActionMap, IActionItem, IMessageHandler } from '../../interfaces';
 import { FileViewerComponent } from '../../../shared';
 import { PersonalizationService } from '../../services/personalization.service';
 import { PersonalizationComponent } from '../personalization/personalization.component';

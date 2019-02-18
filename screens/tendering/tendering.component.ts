@@ -1,7 +1,7 @@
 import { Component, ViewChild, OnDestroy, AfterViewInit, OnInit } from '@angular/core';
 import { MatInput } from '@angular/material';
 import {
-    IItem, IFormElement, IMenuItem, ValidatorsService, ActionIntercepter,
+    IItem, IFormElement, IActionItem, ValidatorsService, ActionIntercepter,
     ActionIntercepterBehavior, ActionIntercepterBehaviorType
 } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
@@ -21,8 +21,8 @@ export class TenderingComponent extends PosScreen<any> implements OnInit, AfterV
     balanceDueAmount: IFormElement;
     balanceDue: string;
     totalAmount: IFormElement;
-    itemActions: IMenuItem[] = [];
-    actionButton: IMenuItem;
+    itemActions: IActionItem[] = [];
+    actionButton: IActionItem;
 
     tenderFormGroup: FormGroup;
 

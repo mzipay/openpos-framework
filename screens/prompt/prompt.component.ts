@@ -1,4 +1,4 @@
-import { IMenuItem } from './../../core/interfaces/menu-item.interface';
+import { IActionItem } from './../../core/interfaces/menu-item.interface';
 import { FormGroup, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { ValidatorsService } from '../../core';
@@ -57,7 +57,7 @@ export class PromptComponent extends PosScreen<any> implements AfterViewInit, On
         this.initialized = true;
     }
 
-    onAction(menuItm: IMenuItem) {
+    onAction(menuItm: IActionItem) {
         this.session.onAction(menuItm);
     }
 

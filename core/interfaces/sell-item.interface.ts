@@ -1,4 +1,4 @@
-import { IMenuItem } from './menu-item.interface';
+import { IActionItem } from './menu-item.interface';
 import { IItem } from './item.interface';
 
 export interface ISellItem extends IItem {
@@ -6,7 +6,7 @@ export interface ISellItem extends IItem {
     quantity: number;
     imageUrl: string;
     productDescription: string;
-    menuItems: IMenuItem[];
+    menuItems: IActionItem[];
     sellingPrice: string;
     color: string;
     size: string;

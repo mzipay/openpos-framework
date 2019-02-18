@@ -1,4 +1,4 @@
-import { SessionService, AppInjector, IMenuItem, Logger } from '../../core';
+import { SessionService, AppInjector, IActionItem, Logger } from '../../core';
 import { OnDestroy, OnInit } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -48,7 +48,7 @@ export abstract class ScreenPart<T> implements OnDestroy, OnInit {
         this.subscription.unsubscribe();
     }
 
-    onMenuItemClick( menuItem: IMenuItem) {
+    onMenuItemClick( menuItem: IActionItem) {
         if (menuItem.enabled) {
             this.sessionService.onAction( menuItem );
         }

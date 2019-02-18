@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { SessionService, IScreen, IMenuItem } from '../../core';
+import { SessionService, IScreen, IActionItem } from '../../core';
 import { ObservableMedia } from '@angular/flex-layout';
 
 @Component({
@@ -11,7 +11,7 @@ import { ObservableMedia } from '@angular/flex-layout';
 export class SelfCheckoutHomeComponent implements IScreen {
 
   screen: any;
-  public menuItems: IMenuItem[];
+  public menuItems: IActionItem[];
   private actionSent = false;
 
   constructor(public session: SessionService, public media: ObservableMedia) {
@@ -40,7 +40,7 @@ export class SelfCheckoutHomeComponent implements IScreen {
     return 'foo';
   }
 
-  onMenuItemClick(menuItem: IMenuItem) {
+  onMenuItemClick(menuItem: IActionItem) {
     if (!this.actionSent) {
       this.session.onAction(menuItem);
       this.actionSent = true;

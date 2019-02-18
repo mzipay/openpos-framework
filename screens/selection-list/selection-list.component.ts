@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
-import { IMenuItem, SelectionMode } from '../../core';
+import { IActionItem, SelectionMode } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
@@ -46,7 +46,7 @@ export class SelectionListComponent extends PosScreen<any> {
     this.index = this.screen.selectionList.indexOf(event);
   }
 
-  public doMenuItemAction(menuItem: IMenuItem) {
+  public doMenuItemAction(menuItem: IActionItem) {
     this.session.onAction(menuItem, this.index);
   }
 

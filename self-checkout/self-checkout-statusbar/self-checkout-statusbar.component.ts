@@ -1,6 +1,6 @@
 import { MatDialog, MatDialogConfig, MatSnackBar } from '@angular/material';
 import { Component, Input } from '@angular/core';
-import { SessionService, IMenuItem } from '../../core';
+import { SessionService, IActionItem } from '../../core';
 import { SelfCheckoutStatusBarData } from './self-checkout-status-bar-data';
 import { ScanSomethingComponent } from '../../shared';
 
@@ -18,11 +18,11 @@ export class SelfCheckoutStatusBarComponent {
   constructor(private session: SessionService, public snackBar: MatSnackBar, public dialogService: MatDialog) {
   }
 
-  public doMenuItemAction(menuItem: IMenuItem) {
+  public doMenuItemAction(menuItem: IActionItem) {
     this.session.onAction(menuItem);
   }
 
-  public isMenuItemEnabled(m: IMenuItem): boolean {
+  public isMenuItemEnabled(m: IActionItem): boolean {
     let enabled = m.enabled;
     if (m.action.startsWith('<') && this.session.isRunningInBrowser()) {
       enabled = false;

@@ -1,9 +1,9 @@
-import { IMenuItem } from '../../../../core';
+import { IActionItem } from '../../../../core';
 
 export interface IStatusBar {
-    backButton: IMenuItem;
+    backButton: IActionItem;
     operatorText: String;
-    logoutButton: IMenuItem;
+    logoutButton: IActionItem;
     workstationId: String;
     showScan: boolean;
     showAdmin: boolean;
