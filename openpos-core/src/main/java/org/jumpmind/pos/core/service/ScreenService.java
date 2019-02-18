@@ -8,6 +8,8 @@ import static org.jumpmind.pos.util.BoxLogging.UPPER_RIGHT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -41,7 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -99,10 +100,14 @@ public class ScreenService implements IScreenService, IActionListener {
             throws IOException {
         logger.info("Received a request for asset: {}", contentPath);
 
-        InputStream in = new ClassPathResource(contentPath).getInputStream();
-        if (in != null) {
-            IOUtils.copy(in, response.getOutputStream());
-            in.close();
+        File file = new File(contentPath);
+        if (file.exists()) {
+
+            InputStream in = new FileInputStream(file);
+            if (in != null) {
+                IOUtils.copy(in, response.getOutputStream());
+                in.close();
+            }
         } else {
             logger.warn("Resource not found for asset: {}", contentPath);
         }
