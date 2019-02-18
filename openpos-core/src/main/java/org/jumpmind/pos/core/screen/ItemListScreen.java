@@ -14,10 +14,10 @@ public class ItemListScreen extends Screen {
     private List<Integer> selectedIndexes = new ArrayList<>();
     private String itemActionName = "Item";
     private String text;
-    private List<MenuItem> itemActions = new ArrayList<>();
+    private List<ActionItem> itemActions = new ArrayList<>();
     private boolean condensedListDisplay = false;
     private String action = "Next";
-    private MenuItem actionButton = null;
+    private ActionItem actionButton = null;
     private String customerName;
     private String noCustomerText;
 
@@ -90,16 +90,16 @@ public class ItemListScreen extends Screen {
         this.itemActionName = itemActionName;
     }
 
-    public List<MenuItem> getItemActions() {
+    public List<ActionItem> getItemActions() {
         return itemActions;
     }
 
 
-    public void setItemActions(List<MenuItem> itemActions) {
+    public void setItemActions(List<ActionItem> itemActions) {
         this.itemActions = itemActions;
     }
 
-    public void addItemAction(MenuItem itemAction) {
+    public void addItemAction(ActionItem itemAction) {
         this.getItemActions().add(itemAction);
     }
     
@@ -111,11 +111,11 @@ public class ItemListScreen extends Screen {
         this.action = action;
     }
 
-    public MenuItem getActionButton() {
+    public ActionItem getActionButton() {
         return actionButton;
     }
 
-    public void setActionButton(MenuItem actionButton) {
+    public void setActionButton(ActionItem actionButton) {
         this.actionButton = actionButton;
     }
     

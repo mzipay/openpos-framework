@@ -24,7 +24,7 @@ public class ItemCount implements Serializable {
     private FormField field = new FormField();
     private ComboField reasonCode = new ComboField();
     private Map<String, String> reasonCodeMap = new HashMap<>();
-    private List<MenuItem> menuItems = new ArrayList<>();
+    private List<ActionItem> menuItems = new ArrayList<>();
 
     public Integer getIndex() {
         return index;
@@ -98,11 +98,11 @@ public class ItemCount implements Serializable {
         this.reasonCode = reasonCode;
     }
 
-    public List<MenuItem> getMenuItems() {
+    public List<ActionItem> getMenuItems() {
         return menuItems;
     }
 
-    public void setMenuItems(List<MenuItem> menuItems) {
+    public void setMenuItems(List<ActionItem> menuItems) {
         this.menuItems = menuItems;
     }
 

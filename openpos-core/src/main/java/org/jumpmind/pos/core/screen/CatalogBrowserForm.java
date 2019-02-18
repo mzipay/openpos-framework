@@ -12,7 +12,7 @@ public class CatalogBrowserForm implements Serializable {
     
     private PageEvent pageEvent;
     private Form form;
-    private MenuItem selectedCategory;
+    private ActionItem selectedCategory;
     private List<SellItem> selectedItems;
     
     public PageEvent getPageEvent() {
@@ -33,10 +33,10 @@ public class CatalogBrowserForm implements Serializable {
     public void setSelectedItems(List<SellItem> selectedItems) {
         this.selectedItems = selectedItems;
     }
-    public MenuItem getSelectedCategory() {
+    public ActionItem getSelectedCategory() {
         return selectedCategory;
     }
-    public void setSelectedCategory(MenuItem selectedCategory) {
+    public void setSelectedCategory(ActionItem selectedCategory) {
         this.selectedCategory = selectedCategory;
     }
     

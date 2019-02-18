@@ -14,14 +14,14 @@ public class DynamicFormScreen extends Screen implements IHasForm {
 
     private Form form = new Form();
     
-    private MenuItem submitButton;
+    private ActionItem submitButton;
     
     private List<String> alternateSubmitActions = new ArrayList<String>();
 
     public DynamicFormScreen() {
         setScreenType(ScreenType.DynamicForm);
         setTemplate(new SellTemplate());
-        submitButton = new MenuItem("Next", "Next", IconType.Forward);
+        submitButton = new ActionItem("Next", "Next", IconType.Forward);
     }
 
     public void setForm(Form form) {
@@ -39,7 +39,7 @@ public class DynamicFormScreen extends Screen implements IHasForm {
     @Deprecated
     public void setSubmitAction(String submitAction) {
         if(submitButton == null) {
-            submitButton = new MenuItem();
+            submitButton = new ActionItem();
         }
         submitButton.setAction(submitAction);
     }
@@ -72,7 +72,7 @@ public class DynamicFormScreen extends Screen implements IHasForm {
     @Deprecated
 	public void setSubmitButtonText(String submitButtonText) {
         if(submitButton == null) {
-            submitButton = new MenuItem();
+            submitButton = new ActionItem();
         }
 		submitButton.setTitle(submitButtonText);
 	}
@@ -85,16 +85,16 @@ public class DynamicFormScreen extends Screen implements IHasForm {
     @Deprecated
 	public void setSubmitIcon(String submitIcon) {
         if(submitButton == null) {
-            submitButton = new MenuItem();
+            submitButton = new ActionItem();
         }
 		this.submitButton.setIcon(submitIcon);
 	}
 
-	public MenuItem getSubmitButton() {
+	public ActionItem getSubmitButton() {
 		return submitButton;
 	}
 
-	public void setSubmitButton(MenuItem submitButton) {
+	public void setSubmitButton(ActionItem submitButton) {
 		this.submitButton = submitButton;
 	}
     

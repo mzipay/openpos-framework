@@ -21,10 +21,10 @@ public class SaleScreen extends Screen {
 
     private List<SellItem> items = new ArrayList<>();
     private int[] selectedItemIndexes = new int[0];
-    private List<MenuItem> sausageLinks = new ArrayList<>();
+    private List<ActionItem> sausageLinks = new ArrayList<>();
 
     private String transactionMenuPrompt;
-    private List<MenuItem> transactionMenuItems = new ArrayList<>();
+    private List<ActionItem> transactionMenuItems = new ArrayList<>();
 
     private String balanceDue;
     private String discountTotal;
@@ -37,9 +37,9 @@ public class SaleScreen extends Screen {
     private String noCustomerText;
     private String checkoutButtonText = "";
     private List<Total> totals = new ArrayList<>();
-    private MenuItem loyaltyButton;
-    private MenuItem promoButton;
-    private List<MenuItem> multiSelectedMenuItems;
+    private ActionItem loyaltyButton;
+    private ActionItem promoButton;
+    private List<ActionItem> multiSelectedMenuItems;
 
     public SaleScreen() {
         this.setScreenType(ScreenType.Sale);
@@ -150,47 +150,47 @@ public class SaleScreen extends Screen {
         this.noCustomerText = noCustomerText;
     }
 
-    public MenuItem getLoyaltyButton() {
+    public ActionItem getLoyaltyButton() {
         return loyaltyButton;
     }
 
-    public void setLoyaltyButton(MenuItem loyaltyButton) {
+    public void setLoyaltyButton(ActionItem loyaltyButton) {
         this.loyaltyButton = loyaltyButton;
     }
 
-    public MenuItem getPromoButton() {
+    public ActionItem getPromoButton() {
         return promoButton;
     }
 
-    public void setPromoButton(MenuItem promoButton) {
+    public void setPromoButton(ActionItem promoButton) {
         this.promoButton = promoButton;
     }
 
-    public List<MenuItem> getMultiSelectedMenuItems() {
+    public List<ActionItem> getMultiSelectedMenuItems() {
         return multiSelectedMenuItems;
     }
 
-    public void setMultiSelectedMenuItems(List<MenuItem> multiSelectedMenuItems) {
+    public void setMultiSelectedMenuItems(List<ActionItem> multiSelectedMenuItems) {
         this.multiSelectedMenuItems = multiSelectedMenuItems;
     }
 
-    public MenuItem getLocalSausageLinkByAction(String action) {
+    public ActionItem getLocalSausageLinkByAction(String action) {
         return this.sausageLinks.stream().filter(mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
     }
 
-    public MenuItem getSausageLinkByTitle(String title) {
+    public ActionItem getSausageLinkByTitle(String title) {
         return this.sausageLinks.stream().filter(mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
     }
 
-    public void addSausageLink(MenuItem menuItem) {
+    public void addSausageLink(ActionItem menuItem) {
         this.sausageLinks.add(menuItem);
     }
 
-    public void setSausageLinks(List<MenuItem> localMenuItems) {
+    public void setSausageLinks(List<ActionItem> localMenuItems) {
         this.sausageLinks = localMenuItems;
     }
 
-    public List<MenuItem> getSausageLinks() {
+    public List<ActionItem> getSausageLinks() {
         return sausageLinks;
     }
 
@@ -202,15 +202,15 @@ public class SaleScreen extends Screen {
         this.transactionMenuPrompt = transactionMenuPrompt;
     }
 
-    public void addTransactionMenuItem(MenuItem menuItem) {
+    public void addTransactionMenuItem(ActionItem menuItem) {
         this.transactionMenuItems.add(menuItem);
     }
 
-    public void setTransactionMenuItems(List<MenuItem> transactionMenuItems) {
+    public void setTransactionMenuItems(List<ActionItem> transactionMenuItems) {
         this.transactionMenuItems = transactionMenuItems;
     }
 
-    public List<MenuItem> getTransactionMenuItems() {
+    public List<ActionItem> getTransactionMenuItems() {
         return transactionMenuItems;
     }
 

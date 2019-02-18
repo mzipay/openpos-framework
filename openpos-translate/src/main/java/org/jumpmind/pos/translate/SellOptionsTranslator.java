@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.Screen;
-import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.screen.ScreenType;
 import org.jumpmind.pos.core.template.SellTemplate;
 import org.jumpmind.pos.server.model.Action;
@@ -43,7 +43,7 @@ public class SellOptionsTranslator extends AbstractLegacyScreenTranslator<Screen
     protected void buildMainContent() {
         super.buildMainContent();
         SellTemplate template = screen.getTemplate();
-        template.setLocalMenuItems(generateUIActionsForLocalNavButtons(MenuItem.class, true, excludeLabelTags.toArray(new String[] {})));
+        template.setLocalMenuItems(generateUIActionsForLocalNavButtons(ActionItem.class, true, excludeLabelTags.toArray(new String[] {})));
         if (template.getLocalMenuItems().size() > 0) {
             screen.setPrompt("Choose Option");
             screen.setInstructions("Please select an option from the menu to the right");

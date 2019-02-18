@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
-import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.server.model.Action;
 import org.slf4j.Logger;
@@ -124,7 +124,7 @@ abstract public class AbstractScreenTranslator<T extends Screen> implements ITra
     } 
     
     public void setBackButton(String action) {
-    		this.screen.setBackButton(new MenuItem("Back", action, true));
+    		this.screen.setBackButton(new ActionItem("Back", action, true));
     }
 
     public void setAppId(String appId) {

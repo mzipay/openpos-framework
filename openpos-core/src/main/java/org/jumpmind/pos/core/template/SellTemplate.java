@@ -3,7 +3,7 @@ package org.jumpmind.pos.core.template;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.screen.Workstation;
 import org.jumpmind.pos.core.template.Scan.ScanType;
 
@@ -13,10 +13,10 @@ public class SellTemplate extends AbstractTemplate {
 
     protected StatusBar statusBar = new StatusBar();
     
-    protected List<MenuItem> localMenuItems = new ArrayList<>();
+    protected List<ActionItem> localMenuItems = new ArrayList<>();
     
     private String transactionMenuPrompt;
-    protected List<MenuItem> transactionMenuItems = new ArrayList<>();
+    protected List<ActionItem> transactionMenuItems = new ArrayList<>();
     
     Scan scan;
     
@@ -52,23 +52,23 @@ public class SellTemplate extends AbstractTemplate {
         return this;
     }
     
-    public MenuItem getLocalMenuItemByAction(String action) {
+    public ActionItem getLocalMenuItemByAction(String action) {
         return this. localMenuItems.stream().filter( mi -> action.equalsIgnoreCase(mi.getAction())).findFirst().orElse(null);
     }
     
-    public MenuItem getLocalMenuItemByTitle(String title) {
+    public ActionItem getLocalMenuItemByTitle(String title) {
         return this.localMenuItems.stream().filter( mi -> title.equalsIgnoreCase(mi.getTitle())).findFirst().orElse(null);
     }
 
-    public void addLocalMenuItem(MenuItem menuItem) {
+    public void addLocalMenuItem(ActionItem menuItem) {
         this.localMenuItems.add(menuItem);
     }
     
-    public void setLocalMenuItems(List<MenuItem> localMenuItems) {
+    public void setLocalMenuItems(List<ActionItem> localMenuItems) {
         this.localMenuItems = localMenuItems;
     }
     
-    public List<MenuItem> getLocalMenuItems() {
+    public List<ActionItem> getLocalMenuItems() {
         return localMenuItems;
     }
     
@@ -80,15 +80,15 @@ public class SellTemplate extends AbstractTemplate {
         this.transactionMenuPrompt = transactionMenuPrompt;
     }
 
-    public void addTransactionMenuItem(MenuItem menuItem) {
+    public void addTransactionMenuItem(ActionItem menuItem) {
         this.transactionMenuItems.add(menuItem);
     }
     
-    public void setTransactionMenuItems(List<MenuItem> transactionMenuItems) {
+    public void setTransactionMenuItems(List<ActionItem> transactionMenuItems) {
         this.transactionMenuItems = transactionMenuItems;
     }
     
-    public List<MenuItem> getTransactionMenuItems() {
+    public List<ActionItem> getTransactionMenuItems() {
         return transactionMenuItems;
     }
     

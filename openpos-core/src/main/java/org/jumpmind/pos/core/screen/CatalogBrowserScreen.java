@@ -11,7 +11,7 @@ public class CatalogBrowserScreen extends DynamicFormScreen {
     
     private List<SellItem> items =  new ArrayList<>();
     private Integer maxItemsPerPage = DEFAULT_MAX_ITEMS_PER_PAGE;
-    private List<IUIAction> categories = new ArrayList<>();
+    private List<ActionItem> categories = new ArrayList<>();
     private Integer selectedItemQuantity;
     private Integer itemStartIndex = 0;
     private Integer itemEndIndex = DEFAULT_MAX_ITEMS_PER_PAGE-1;
@@ -55,24 +55,24 @@ public class CatalogBrowserScreen extends DynamicFormScreen {
         return this;
     }
     
-    public void addCategory(IUIAction... categories) {
+    public void addCategory(ActionItem... categories) {
         this.getCategories().addAll(Arrays.asList(categories));
     }
     
-    public void addCategory(IUIAction category) {
+    public void addCategory(ActionItem category) {
         this.getCategories().add(category);
     }
     
-    public CatalogBrowserScreen categories(List<IUIAction> categories) {
+    public CatalogBrowserScreen categories(List<ActionItem> categories) {
         this.setCategories(categories);
         return this;
     }
     
-    public List<IUIAction> getCategories() {
+    public List<ActionItem> getCategories() {
         return categories;
     }
     
-    public void setCategories(List<IUIAction> categories) {
+    public void setCategories(List<ActionItem> categories) {
         this.categories = categories;
     }
     

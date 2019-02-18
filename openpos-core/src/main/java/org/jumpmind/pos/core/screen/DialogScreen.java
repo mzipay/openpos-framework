@@ -10,7 +10,7 @@ public class DialogScreen extends Screen {
 
     private static final long serialVersionUID = 1L;
     
-    private List<MenuItem> buttons = new ArrayList<>();
+    private List<ActionItem> buttons = new ArrayList<>();
     
     private String title;
     
@@ -25,21 +25,21 @@ public class DialogScreen extends Screen {
         setScreenType(ScreenType.Dialog);
     }
     
-    public DialogScreen(String title, MenuItem button) {
+    public DialogScreen(String title, ActionItem button) {
         this();
         this.title = title;
         this.addButton(button);
     }
     
-    public List<MenuItem> getButtons() {
+    public List<ActionItem> getButtons() {
         return buttons;
     }
 
-    public void setButtons(List<MenuItem> buttons) {
+    public void setButtons(List<ActionItem> buttons) {
         this.buttons = buttons;
     }
     
-    public void addButton(MenuItem button) {
+    public void addButton(ActionItem button) {
         this.buttons.add(button);
     }
     

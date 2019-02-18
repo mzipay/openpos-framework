@@ -23,7 +23,7 @@ package org.jumpmind.pos.core.screen;
 import java.io.Serializable;
 import java.util.List;
 
-public class MenuItem implements IUIAction, Serializable {
+public class ActionItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -32,7 +32,7 @@ public class MenuItem implements IUIAction, Serializable {
     private String icon;
     private boolean enabled = true;
     private ConfirmationDialog confirmationDialog;
-    private List<MenuItem> children;
+    private List<ActionItem> children;
     private boolean sensitive;
     private String buttonSize;
     private String fontSize;
@@ -51,36 +51,36 @@ public class MenuItem implements IUIAction, Serializable {
     public final static String BUTTON_SIZE_LG = "menuItem-lg";
     public final static String BUTTON_SIZE_XL = "menuItem-xl";
     
-    public MenuItem() {
+    public ActionItem() {
     }
     
     
-    public MenuItem(String action) {
+    public ActionItem(String action) {
         this.action = action;    
     }
 
-    public MenuItem(String action, String title) {
+    public ActionItem(String action, String title) {
         this.action = action;
         this.title = title;
     }
 
-    public MenuItem(String action, String title, String icon) {
+    public ActionItem(String action, String title, String icon) {
         this(action, title);
         this.icon = icon;
     }
     
-    public MenuItem(String action, String title, String icon, boolean active) {
+    public ActionItem(String action, String title, String icon, boolean active) {
         this(action, title);
         this.icon = icon;
         this.active = active;
     }
     
     
-    public MenuItem(String action, String title, IIcon icon) {
+    public ActionItem(String action, String title, IIcon icon) {
         this(action, title, icon.getName());
     }
     
-    public MenuItem(String action, String title, String icon, String confirmationMessage) {
+    public ActionItem(String action, String title, String icon, String confirmationMessage) {
         this(action, title, icon);
         if (confirmationMessage != null) {
             this.confirmationDialog = new ConfirmationDialog();
@@ -88,19 +88,19 @@ public class MenuItem implements IUIAction, Serializable {
         }
     }
     
-    public MenuItem(String action, String title, String icon, ConfirmationDialog confirmationDialog) {
+    public ActionItem(String action, String title, String icon, ConfirmationDialog confirmationDialog) {
     	this(action, title, icon );
     	this.confirmationDialog = confirmationDialog;
     }
     
-    public MenuItem(String title, String action, boolean enabled) {
+    public ActionItem(String title, String action, boolean enabled) {
         super();
         this.action = action;
         this.title = title;
         this.enabled = enabled;
     }
     
-    public MenuItem(String title, String action, boolean enabled, boolean sensitive) {
+    public ActionItem(String title, String action, boolean enabled, boolean sensitive) {
         super();
         this.action = action;
         this.title = title;
@@ -108,75 +108,75 @@ public class MenuItem implements IUIAction, Serializable {
         this.sensitive = sensitive;
     }
 
-    @Override
+    
     public String getAction() {
         return action;
     }
 
-    @Override
+    
     public void setAction(String action) {
         this.action = action;
     }
 
-    public MenuItem action(String action) {
+    public ActionItem action(String action) {
         this.setAction(action);
         return this;
     }
     
-    @Override
+    
     public String getTitle() {
         return title;
     }
 
-    @Override
+    
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public MenuItem title(String title) {
+    public ActionItem title(String title) {
         this.setTitle(title);
         return this;
     }
     
-    @Override
+    
     public String getIcon() {
         return icon;
     }
 
-    @Override
+    
     public void setIcon(String icon) {
         this.icon = icon;
     }
 
-    public MenuItem icon(String icon) {
+    public ActionItem icon(String icon) {
         this.setIcon(icon);
         return this;
     }
     
-    @Override
+    
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    @Override
+    
     public boolean isEnabled() {
         return enabled;
     }
     
-    public MenuItem enabled(boolean enabled) {
+    public ActionItem enabled(boolean enabled) {
         this.setEnabled(enabled);
         return this;
     }
     
-    public void setChildren(List<MenuItem> children) {
+    public void setChildren(List<ActionItem> children) {
         this.children = children;
     }
     
-    public List<MenuItem> getChildren() {
+    public List<ActionItem> getChildren() {
         return children;
     }
     
-    public MenuItem children(List<MenuItem> children) {
+    public ActionItem children(List<ActionItem> children) {
         this.setChildren(children);
         return this;
     }
@@ -198,7 +198,7 @@ public class MenuItem implements IUIAction, Serializable {
         this.confirmationDialog.setMessage(confirmationMessage);
     }
 
-    public MenuItem confirmationMessage(String confirmationMessage) {
+    public ActionItem confirmationMessage(String confirmationMessage) {
         this.setConfirmationMessage(confirmationMessage);
         return this;
     }
@@ -211,7 +211,7 @@ public class MenuItem implements IUIAction, Serializable {
         this.sensitive = sensitive;
     }
 
-    public MenuItem sensitive(boolean sensitive) {
+    public ActionItem sensitive(boolean sensitive) {
         this.setSensitive(sensitive);
         return this;
     }
@@ -262,7 +262,7 @@ public class MenuItem implements IUIAction, Serializable {
         this.keybind = keybind;
     }
     
-    public MenuItem keybind(String keybind) {
+    public ActionItem keybind(String keybind) {
         this.setKeybind(keybind);
         return this;
     }

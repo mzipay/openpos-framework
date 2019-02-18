@@ -8,7 +8,7 @@ import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.IconType;
-import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.screen.PromptScreen;
 import org.jumpmind.pos.core.template.SellTemplate;
 import org.jumpmind.pos.server.model.Action;
@@ -58,13 +58,13 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
             props.setMinWidth("50%");
             props.setForceReopen(false);
             screen.asDialog(props);
-            MenuItem back = (MenuItem)screen.get("backButton");
+            ActionItem back = (ActionItem)screen.get("backButton");
             if( back != null ) { 
-                screen.addOtherAction( new MenuItem( back.getAction(), "Back"));
+                screen.addOtherAction( new ActionItem( back.getAction(), "Back"));
             }
         }
         if (addLocalMenuItems) {
-            List<MenuItem> localNavButtons = generateUIActionsForLocalNavButtons(MenuItem.class, true);
+            List<ActionItem> localNavButtons = generateUIActionsForLocalNavButtons(ActionItem.class, true);
             localNavButtons = localNavButtons.stream().filter(p -> !(p.getTitle().equals("Next"))).collect(Collectors.toList());
             if( showAsDialog ) {
                 localNavButtons.forEach(b -> {
@@ -79,7 +79,7 @@ public class PromptAndResponseScreenTranslator<T extends PromptScreen> extends A
     }
     
     protected void addActionButton() {
-        screen.setActionButton(new MenuItem("Next", "Next", IconType.Forward));
+        screen.setActionButton(new ActionItem("Next", "Next", IconType.Forward));
     }
     
     public void setUndoMacro(InteractionMacro undoMacro) {

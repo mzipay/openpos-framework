@@ -26,9 +26,9 @@ public class SellItemScreen extends PromptScreen {
     private String customerName;
     private String noCustomerText;
     private List<Total> totals = new ArrayList<>();
-    private MenuItem loyaltyButton;
-    private MenuItem promoButton;
-    private List<MenuItem> multiSelectedMenuItems;
+    private ActionItem loyaltyButton;
+    private ActionItem promoButton;
+    private List<ActionItem> multiSelectedMenuItems;
 
     public SellItemScreen() {
         this.setId("sell");
@@ -156,27 +156,27 @@ public class SellItemScreen extends PromptScreen {
 		this.noCustomerText = noCustomerText;
 	}
 
-	public MenuItem getLoyaltyButton() {
+	public ActionItem getLoyaltyButton() {
 		return loyaltyButton;
 	}
 
-	public void setLoyaltyButton(MenuItem loyaltyButton) {
+	public void setLoyaltyButton(ActionItem loyaltyButton) {
 		this.loyaltyButton = loyaltyButton;
 	}
 
-    public MenuItem getPromoButton() {
+    public ActionItem getPromoButton() {
         return promoButton;
     }
 
-    public void setPromoButton(MenuItem promoButton) {
+    public void setPromoButton(ActionItem promoButton) {
         this.promoButton = promoButton;
     }
 
-    public List<MenuItem> getMultiSelectedMenuItems() {
+    public List<ActionItem> getMultiSelectedMenuItems() {
         return multiSelectedMenuItems;
     }
 
-    public void setMultiSelectedMenuItems(List<MenuItem> multiSelectedMenuItems) {
+    public void setMultiSelectedMenuItems(List<ActionItem> multiSelectedMenuItems) {
         this.multiSelectedMenuItems = multiSelectedMenuItems;
     }
 }

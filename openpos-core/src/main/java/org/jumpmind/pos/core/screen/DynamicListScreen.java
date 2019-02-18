@@ -13,14 +13,14 @@ public class DynamicListScreen extends Screen {
 
     private DynamicList list = new DynamicList();
     
-    private MenuItem submitButton;
+    private ActionItem submitButton;
     
     private List<String> alternateSubmitActions = new ArrayList<String>();
 
     public DynamicListScreen() {
         setScreenType(ScreenType.DynamicList);
         setTemplate(new SellTemplate());
-        submitButton = new MenuItem("Next", "Next", IconType.Forward);
+        submitButton = new ActionItem("Next", "Next", IconType.Forward);
     }
 
     public void setList(DynamicList list) {
@@ -43,11 +43,11 @@ public class DynamicListScreen extends Screen {
         this.alternateSubmitActions = alternateActions;
     }
 
-	public MenuItem getSubmitButton() {
+	public ActionItem getSubmitButton() {
 		return submitButton;
 	}
 
-	public void setSubmitButton(MenuItem submitButton) {
+	public void setSubmitButton(ActionItem submitButton) {
 		this.submitButton = submitButton;
 	}
 }

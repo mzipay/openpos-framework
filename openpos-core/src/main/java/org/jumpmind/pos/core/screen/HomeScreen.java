@@ -7,21 +7,21 @@ public class HomeScreen extends Screen {
 
     private static final long serialVersionUID = 1L;
 
-    List<MenuItem> menuItems = new ArrayList<>();
+    List<ActionItem> menuItems = new ArrayList<>();
 
     public HomeScreen() {
         this.setScreenType(ScreenType.Home);
     }
 
-    public void setMenuItems(List<MenuItem> menuItems) {
+    public void setMenuItems(List<ActionItem> menuItems) {
         this.menuItems = menuItems;
     }
 
-    public List<MenuItem> getMenuItems() {
+    public List<ActionItem> getMenuItems() {
         return menuItems;
     }
 
-    public void addMenuItem(MenuItem menuItem) {
+    public void addMenuItem(ActionItem menuItem) {
         this.menuItems.add(menuItem);
     }
 

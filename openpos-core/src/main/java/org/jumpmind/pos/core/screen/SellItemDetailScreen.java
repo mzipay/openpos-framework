@@ -8,7 +8,7 @@ public class SellItemDetailScreen extends Screen {
     private static final long serialVersionUID = 1L;
     
     private SellItem item = new SellItem();
-    private List<MenuItem> itemActions = new ArrayList<>();
+    private List<ActionItem> itemActions = new ArrayList<>();
     private Transaction transaction = new Transaction();
     private List<PromoItem> promos = new ArrayList<>();
 
@@ -16,11 +16,11 @@ public class SellItemDetailScreen extends Screen {
         setScreenType(ScreenType.SellItemDetail);
     }
 
-    public List<MenuItem> getItemActions() {
+    public List<ActionItem> getItemActions() {
         return itemActions;
     }
 
-    public void setItemActions(List<MenuItem> itemActions) {
+    public void setItemActions(List<ActionItem> itemActions) {
         this.itemActions = itemActions;
     }
 

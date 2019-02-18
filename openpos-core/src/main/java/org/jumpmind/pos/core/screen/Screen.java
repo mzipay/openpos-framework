@@ -112,7 +112,7 @@ public class Screen extends Message {
         return this.screenType == type;
     }
 
-    public void setBackButton(MenuItem backButton) {
+    public void setBackButton(ActionItem backButton) {
         put("backButton", backButton);
     }
 
@@ -120,7 +120,7 @@ public class Screen extends Message {
         this.template = template;
     }
     
-    public void setLogoutButton(MenuItem logoutButton) {
+    public void setLogoutButton(ActionItem logoutButton) {
         put("logoutButton", logoutButton);
     }
 

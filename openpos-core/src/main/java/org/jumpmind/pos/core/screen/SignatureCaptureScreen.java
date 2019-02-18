@@ -8,7 +8,7 @@ public class SignatureCaptureScreen extends Screen {
     private String textIcon;
     private String signatureData;
     private String signatureMediaType;
-    private MenuItem saveAction;
+    private ActionItem saveAction;
     
 
     public SignatureCaptureScreen() {
@@ -55,11 +55,11 @@ public class SignatureCaptureScreen extends Screen {
         this.title = title;
     }
 
-    public MenuItem getSaveAction() {
+    public ActionItem getSaveAction() {
         return saveAction;
     }
 
-    public void setSaveAction(MenuItem saveAction) {
+    public void setSaveAction(ActionItem saveAction) {
         this.saveAction = saveAction;
     }
     

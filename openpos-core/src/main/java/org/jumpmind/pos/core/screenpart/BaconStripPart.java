@@ -2,7 +2,7 @@ package org.jumpmind.pos.core.screenpart;
 
 import java.io.Serializable;
 
-import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.ActionItem;
 
 public class BaconStripPart implements Serializable{
 
@@ -12,7 +12,7 @@ public class BaconStripPart implements Serializable{
     private String operatorText;
     private String headerText;
     private String headerIcon;
-    private MenuItem backButton;
+    private ActionItem backButton;
     
     public String getDeviceId() {
         return deviceId;
@@ -38,10 +38,10 @@ public class BaconStripPart implements Serializable{
     public void setHeaderIcon(String headerIcon) {
         this.headerIcon = headerIcon;
     }
-    public MenuItem getBackButton() {
+    public ActionItem getBackButton() {
         return backButton;
     }
-    public void setBackButton(MenuItem backButton) {
+    public void setBackButton(ActionItem backButton) {
         this.backButton = backButton;
     }
 }

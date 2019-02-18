@@ -24,7 +24,7 @@ public class SellItem extends DefaultItem {
     private String quantity;
     private String discountAmount;
     private String salesAssociate;
-    private List<MenuItem> menuItems = new ArrayList<>();
+    private List<ActionItem> menuItems = new ArrayList<>();
     private boolean isGiftReceipt = false;
     private boolean isQuantityChangeable;
     
@@ -92,15 +92,15 @@ public class SellItem extends DefaultItem {
     public boolean getIsGiftReceipt() {
         return this.isGiftReceipt;
     }
-    public void addMenuItem(MenuItem menuItem) {
+    public void addMenuItem(ActionItem menuItem) {
         this.menuItems.add(menuItem);
     }
     
-    public void setMenuItems(List<MenuItem> transactionMenuItems) {
+    public void setMenuItems(List<ActionItem> transactionMenuItems) {
         this.menuItems = transactionMenuItems;
     }
     
-    public void addMenuItems(MenuItem... transactionMenuItems) {
+    public void addMenuItems(ActionItem... transactionMenuItems) {
         if (this.menuItems == null) {
             this.setMenuItems(Arrays.asList(transactionMenuItems));
         } else {
@@ -108,7 +108,7 @@ public class SellItem extends DefaultItem {
         }
     }
     
-    public List<MenuItem> getMenuItems() {
+    public List<ActionItem> getMenuItems() {
         return menuItems;
     }
 

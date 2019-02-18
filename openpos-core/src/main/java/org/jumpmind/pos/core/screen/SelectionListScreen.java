@@ -9,9 +9,9 @@ public class SelectionListScreen extends Screen {
 
     private List<SelectionListItem> selectionList = new ArrayList<SelectionListItem>();
 
-    private List<MenuItem> buttons = new ArrayList<>();
+    private List<ActionItem> buttons = new ArrayList<>();
     
-    private List<MenuItem> nonSelectionButtons = new ArrayList<>();
+    private List<ActionItem> nonSelectionButtons = new ArrayList<>();
 
     private boolean multiSelect = false;
     
@@ -52,27 +52,27 @@ public class SelectionListScreen extends Screen {
         selectionList.add(selection);
     }
 
-    public List<MenuItem> getButtons() {
+    public List<ActionItem> getButtons() {
         return buttons;
     }
 
-    public void setButtons(List<MenuItem> buttons) {
+    public void setButtons(List<ActionItem> buttons) {
         this.buttons = buttons;
     }
 
-    public void addButton(MenuItem button) {
+    public void addButton(ActionItem button) {
         this.buttons.add(button);
     }
 
-    public List<MenuItem> getNonSelectionButtons() {
+    public List<ActionItem> getNonSelectionButtons() {
         return nonSelectionButtons;
     }
 
-    public void setNonSelectionButtons(List<MenuItem> nonSelectionButtons) {
+    public void setNonSelectionButtons(List<ActionItem> nonSelectionButtons) {
         this.nonSelectionButtons = nonSelectionButtons;
     }
 
-    public void addNonSelectionButton(MenuItem button) {
+    public void addNonSelectionButton(ActionItem button) {
         this.nonSelectionButtons.add(button);
     }
     

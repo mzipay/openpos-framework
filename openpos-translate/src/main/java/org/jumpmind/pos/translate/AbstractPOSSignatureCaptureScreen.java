@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.Signature;
-import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.screen.SignatureCaptureScreen;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
@@ -26,9 +26,9 @@ public abstract class AbstractPOSSignatureCaptureScreen extends AbstractLegacySc
         // Need to specify jpeg or png since other formats such as tiff are not widely supported in the various browser implementations of
         // the HTML5 canvas 
         getScreen().setSignatureMediaType("image/png");
-        getScreen().setSaveAction(new MenuItem("Continue", "SaveSignature", true));
+        getScreen().setSaveAction(new ActionItem("Continue", "SaveSignature", true));
 
-        getScreen().setBackButton(new MenuItem("Back", "Cancel", true));
+        getScreen().setBackButton(new ActionItem("Back", "Cancel", true));
     }
 
     abstract protected void handleSignatureCancelAction(ITranslationManagerSubscriber subscriber, TranslationManagerServer tmServer, Action action,

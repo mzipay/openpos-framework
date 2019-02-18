@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.jumpmind.pos.core.screen.DialogScreen;
-import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.ActionItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,7 +105,7 @@ public abstract class AbstractLegacyDialogScreenTranslator extends AbstractLegac
                 letter = dialogModel.getLetters()[0];
             }*/
         }
-        this.screen.getButtons().add(new MenuItem(translateButtonTitle(name, action), letter, true));
+        this.screen.getButtons().add(new ActionItem(translateButtonTitle(name, action), letter, true));
         return letter;
     }
     

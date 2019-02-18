@@ -24,10 +24,10 @@ public class PromptScreen extends Screen implements IPromptScreen {
     private Integer minLength;
     private Integer maxLength;
     private String action = "Next";
-    private MenuItem actionButton = null;
+    private ActionItem actionButton = null;
     private String comments = "";
     private boolean showComments = false;
-    private List<MenuItem> otherActions;
+    private List<ActionItem> otherActions;
     private String pattern;
     private Boolean scanEnabled;
     
@@ -128,11 +128,11 @@ public class PromptScreen extends Screen implements IPromptScreen {
         this.action = action;
     }
 
-    public MenuItem getActionButton() {
+    public ActionItem getActionButton() {
         return actionButton;
     }
 
-    public void setActionButton(MenuItem actionButton) {
+    public void setActionButton(ActionItem actionButton) {
         this.actionButton = actionButton;
     }
 
@@ -152,15 +152,15 @@ public class PromptScreen extends Screen implements IPromptScreen {
 		this.showComments = showComments;
 	}
 	
-	public List<MenuItem> getOtherActions() {
+	public List<ActionItem> getOtherActions() {
         return otherActions;
     }
 	
-	public void setOtherActions(List<MenuItem> otherActions) {
+	public void setOtherActions(List<ActionItem> otherActions) {
         this.otherActions = otherActions;
     }
 	
-	public void addOtherAction(MenuItem action) {
+	public void addOtherAction(ActionItem action) {
 	    if (this.otherActions == null) {
 	        this.otherActions = new ArrayList<>();
 	    }

@@ -19,8 +19,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.jumpmind.pos.core.ModeConstants;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.DynamicFormScreen;
-import org.jumpmind.pos.core.screen.IUIAction;
-import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.Workstation;
 import org.jumpmind.pos.core.template.BlankWithBarTemplate;
@@ -235,8 +234,8 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         screen.setBackButton(getBackButton());
     }
     
-    protected MenuItem getBackButton() {
-        MenuItem backButton = null;
+    protected ActionItem getBackButton() {
+        ActionItem backButton = null;
         ILegacyAssignmentSpec assignmentPanelSpec = getLegacyAssignmentSpec(GLOBAL_NAV_PANEL_KEY);
         if (null != assignmentPanelSpec) {
             ILegacyBeanSpec globalNavSpec = this.legacyPOSBeanService.getLegacyBeanSpec(this.legacyScreen,
@@ -271,7 +270,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                     .filter(enabledButtonSpec -> ("Undo".equals(enabledButtonSpec.getLabelTag()) || (cancelAsBack && "Cancel".equals(enabledButtonSpec.getLabelTag())))).findFirst().orElse(null);
 
             if(backButtonSpec != null) {
-                backButton = new MenuItem("Back", backButtonSpec.getActionName(), true);
+                backButton = new ActionItem("Back", backButtonSpec.getActionName(), true);
             }
         }
         return backButton;
@@ -284,14 +283,14 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         }
     }
 
-    protected void addTransactionMenuItem(MenuItem menuItem) {
+    protected void addTransactionMenuItem(ActionItem menuItem) {
         if (screen.getTemplate() instanceof SellTemplate) {
             SellTemplate sellTemplate = screen.getTemplate();
             sellTemplate.addTransactionMenuItem(menuItem);
         }
     }
 
-    protected void addLocalMenuItem(MenuItem menuItem) {
+    protected void addLocalMenuItem(ActionItem menuItem) {
         if (screen.getTemplate() instanceof SellTemplate) {
             SellTemplate sellTemplate = screen.getTemplate();
             sellTemplate.addLocalMenuItem(menuItem);
@@ -515,7 +514,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         return states;
     }
 
-    protected <A extends IUIAction> List<A> generateUIActionsForLocalNavButtons(Class<A> actionClass, boolean filterDisabled,
+    protected <A extends ActionItem> List<A> generateUIActionsForLocalNavButtons(Class<A> actionClass, boolean filterDisabled,
             String... excludedLabelTags) {
         Set<String> toExclude = new HashSet<>();
         if (excludedLabelTags != null) {
@@ -669,11 +668,11 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
     }
 
     public interface IUIActionOverrider {
-        public boolean hideOrOverride(ILegacyScreen legacyScreen, String labelTag, IUIAction action);
+        public boolean hideOrOverride(ILegacyScreen legacyScreen, String labelTag, ActionItem action);
     }
 
     protected void addLocalMenuButtons() {
-        List<MenuItem> localNavButtons = generateUIActionsForLocalNavButtons(MenuItem.class, true);
+        List<ActionItem> localNavButtons = generateUIActionsForLocalNavButtons(ActionItem.class, true);
         if (screen.getTemplate() instanceof SellTemplate) {
             SellTemplate template = screen.getTemplate();
             template.setLocalMenuItems(localNavButtons);

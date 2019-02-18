@@ -32,7 +32,7 @@ public class PromptWithOptionsScreen extends PromptScreen {
         this.options = options;
     }
 
-    public <T extends IUIAction> void setUIOptions(List<T> options) {
+    public <T extends ActionItem> void setUIOptions(List<T> options) {
         this.setOptions(options != null ? 
             options.stream().map(mi -> new OptionItem(mi.getAction(), mi.getTitle(), mi.isEnabled(), mi.getIcon()))
             .collect(Collectors.toList()) : null);

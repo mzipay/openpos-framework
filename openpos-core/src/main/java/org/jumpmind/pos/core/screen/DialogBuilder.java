@@ -15,16 +15,16 @@ public class DialogBuilder {
     public final static String OK_BUTTON_KEY = "Ok";
     public final static String CANCEL_BUTTON_KEY = "Cancel";
     
-    protected static final Map<String, MenuItem> DEFAULT_BUTTON_ACTIONS = new HashMap<>(); 
+    protected static final Map<String, ActionItem> DEFAULT_BUTTON_ACTIONS = new HashMap<>(); 
     static {
-        DEFAULT_BUTTON_ACTIONS.put(OK_BUTTON_KEY, new MenuItem(OK_BUTTON_KEY, OK_BUTTON_KEY));
-        DEFAULT_BUTTON_ACTIONS.put(CANCEL_BUTTON_KEY, new MenuItem(CANCEL_BUTTON_KEY, CANCEL_BUTTON_KEY));
+        DEFAULT_BUTTON_ACTIONS.put(OK_BUTTON_KEY, new ActionItem(OK_BUTTON_KEY, OK_BUTTON_KEY));
+        DEFAULT_BUTTON_ACTIONS.put(CANCEL_BUTTON_KEY, new ActionItem(CANCEL_BUTTON_KEY, CANCEL_BUTTON_KEY));
         // Add new buttons here
     }
     
     private DialogProperties dialogProperties;
     private String dialogType = OK_TYPE;
-    private Map<String, MenuItem> buttonActions = new HashMap<>();
+    private Map<String, ActionItem> buttonActions = new HashMap<>();
     
     private String[] messages = {};
     private String title;
@@ -80,15 +80,15 @@ public class DialogBuilder {
     }
     
     public DialogBuilder putAction(String btnKey, String buttonTitle, String action) {
-        return this.putAction(btnKey, new MenuItem(action, buttonTitle));
+        return this.putAction(btnKey, new ActionItem(action, buttonTitle));
     }
 
-    public DialogBuilder putAction(String btnKey, MenuItem action) {
+    public DialogBuilder putAction(String btnKey, ActionItem action) {
         this.buttonActions.put(btnKey, action);
         return this;
     }
     
-    public MenuItem getAction(String btnKey) {
+    public ActionItem getAction(String btnKey) {
         return this.buttonActions.containsKey(btnKey) ? this.buttonActions.get(btnKey) 
                 : DEFAULT_BUTTON_ACTIONS.get(btnKey);
     }
@@ -101,7 +101,7 @@ public class DialogBuilder {
         this.title = title;
     }
     
-    protected Map<String, MenuItem> getButtonActions() {
+    protected Map<String, ActionItem> getButtonActions() {
         return this.buttonActions;
     }
 

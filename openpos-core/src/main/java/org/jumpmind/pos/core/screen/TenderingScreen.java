@@ -17,8 +17,8 @@ public class TenderingScreen extends Screen {
     private IFormElement balanceDueAmount;
     @Deprecated private String balanceDue;
     private IFormElement totalAmount;
-    private List<MenuItem> itemActions = new ArrayList<>();
-    private MenuItem actionButton;
+    private List<ActionItem> itemActions = new ArrayList<>();
+    private ActionItem actionButton;
     
     public TenderingScreen() {
         setScreenType(ScreenType.Tendering);
@@ -77,21 +77,21 @@ public class TenderingScreen extends Screen {
     public void setBalanceDue(String balanceDue) {
         this.balanceDue = balanceDue;
     }
-    public List<MenuItem> getItemActions() {
+    public List<ActionItem> getItemActions() {
         return itemActions;
     }
-    public void setItemActions(List<MenuItem> itemActions) {
+    public void setItemActions(List<ActionItem> itemActions) {
         this.itemActions = itemActions;
     }
-    public void addItemAction(MenuItem itemAction) {
+    public void addItemAction(ActionItem itemAction) {
         this.itemActions.add(itemAction);
     }
     
-    public MenuItem getActionButton() {
+    public ActionItem getActionButton() {
         return actionButton;
     }
 
-    public void setActionButton(MenuItem actionButton) {
+    public void setActionButton(ActionItem actionButton) {
         this.actionButton = actionButton;
     }
     

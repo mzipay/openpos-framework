@@ -8,8 +8,8 @@ public class LoginScreen extends DynamicFormScreen {
 
     private static final long serialVersionUID = 1L;
 
-    private MenuItem changePasswordAction;
-    private MenuItem forgotPasswordAction;
+    private ActionItem changePasswordAction;
+    private ActionItem forgotPasswordAction;
 
     public LoginScreen() {
         setScreenType(ScreenType.Login);
@@ -27,30 +27,30 @@ public class LoginScreen extends DynamicFormScreen {
     @Override
     public Screen asDialog() {
         super.asDialog();
-        setSubmitButton(new MenuItem("Login"));
+        setSubmitButton(new ActionItem("Login"));
         return this;
     }
     
     @Override
     public Screen asDialog(DialogProperties dialogProperties) {
         super.asDialog(dialogProperties);
-        setSubmitButton(new MenuItem("Login"));
+        setSubmitButton(new ActionItem("Login"));
         return this;
     }
 
-    public MenuItem getChangePasswordAction() {
+    public ActionItem getChangePasswordAction() {
         return changePasswordAction;
     }
 
-    public void setChangePasswordAction(MenuItem changePasswordAction) {
+    public void setChangePasswordAction(ActionItem changePasswordAction) {
         this.changePasswordAction = changePasswordAction;
     }
 
-    public MenuItem getForgotPasswordAction() {
+    public ActionItem getForgotPasswordAction() {
         return forgotPasswordAction;
     }
 
-    public void setForgotPasswordAction(MenuItem forgotPasswordAction) {
+    public void setForgotPasswordAction(ActionItem forgotPasswordAction) {
         this.forgotPasswordAction = forgotPasswordAction;
     }
 

@@ -4,7 +4,7 @@ package org.jumpmind.pos.core.screen;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public class URLMenuItem extends MenuItem {
+public class URLMenuItem extends ActionItem {
 
     private static final long serialVersionUID = 1L;
 

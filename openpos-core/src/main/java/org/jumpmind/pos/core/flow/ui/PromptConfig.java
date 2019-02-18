@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.IPromptScreen;
-import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.ActionItem;
 
 public class PromptConfig {
 
@@ -16,8 +16,8 @@ public class PromptConfig {
     private String icon;
     private String placeholder;
     private DialogProperties dialogProperties;
-    private MenuItem actionMenuItem = new MenuItem("Next", "Next", true);
-    private List<MenuItem> otherActions = new ArrayList<>();
+    private ActionItem actionMenuItem = new ActionItem("Next", "Next", true);
+    private List<ActionItem> otherActions = new ArrayList<>();
 
     public PromptConfig named(String name) {
         this.name = name;
@@ -55,16 +55,16 @@ public class PromptConfig {
     }
 
     public PromptConfig action(String title, String actionName) {
-        this.actionMenuItem = new MenuItem(title, actionName, true);
+        this.actionMenuItem = new ActionItem(title, actionName, true);
         return this;
     }
 
     public PromptConfig action(String title, String actionName, boolean sensitive) {
-        this.actionMenuItem = new MenuItem(title, actionName, true, sensitive);
+        this.actionMenuItem = new ActionItem(title, actionName, true, sensitive);
         return this;
     }
 
-    public PromptConfig actionMenuItem(MenuItem actionMenuItem) {
+    public PromptConfig actionMenuItem(ActionItem actionMenuItem) {
         this.actionMenuItem = actionMenuItem;
         return this;
     }
@@ -76,7 +76,7 @@ public class PromptConfig {
         return dialogProperties(props);
     }
 
-    public PromptConfig addOtherAction(MenuItem option) {
+    public PromptConfig addOtherAction(ActionItem option) {
         otherActions.add(option);
         return this;
     }
@@ -109,11 +109,11 @@ public class PromptConfig {
         return dialogProperties;
     }
 
-    public MenuItem getActionMenuItem() {
+    public ActionItem getActionMenuItem() {
         return actionMenuItem;
     }
 
-    public List<MenuItem> getOtherActions() {
+    public List<ActionItem> getOtherActions() {
         return otherActions;
     }
 

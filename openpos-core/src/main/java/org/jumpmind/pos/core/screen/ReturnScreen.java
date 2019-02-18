@@ -18,7 +18,7 @@ public class ReturnScreen extends Screen {
 
     private BaconStripPart baconStrip = new BaconStripPart();
     private ScanPart scan = new ScanPart();
-    private List<MenuItem> sausageLinks = new ArrayList<>();
+    private List<ActionItem> sausageLinks = new ArrayList<>();
     private StatusStripPart statusStrip = new StatusStripPart();
 
     private List<SellItem> items = new ArrayList<>();
@@ -28,9 +28,9 @@ public class ReturnScreen extends Screen {
     private List<TransactionReceipt> receipts = new ArrayList<>();
 
     private String transactionMenuPrompt;
-    private List<MenuItem> transactionMenuItems = new ArrayList<>();
+    private List<ActionItem> transactionMenuItems = new ArrayList<>();
 
-    private List<MenuItem> multiSelectedMenuItems;
+    private List<ActionItem> multiSelectedMenuItems;
 
     private String itemActionName = "Item";
     private List<Total> totals = new ArrayList<>();
@@ -57,11 +57,11 @@ public class ReturnScreen extends Screen {
         this.scan = scan;
     }
 
-    public List<MenuItem> getSausageLinks() {
+    public List<ActionItem> getSausageLinks() {
         return sausageLinks;
     }
 
-    public void setSausageLinks(List<MenuItem> sausageLinks) {
+    public void setSausageLinks(List<ActionItem> sausageLinks) {
         this.sausageLinks = sausageLinks;
     }
 
@@ -117,11 +117,11 @@ public class ReturnScreen extends Screen {
         this.transactionMenuPrompt = transactionMenuPrompt;
     }
 
-    public List<MenuItem> getTransactionMenuItems() {
+    public List<ActionItem> getTransactionMenuItems() {
         return transactionMenuItems;
     }
 
-    public void setTransactionMenuItems(List<MenuItem> transactionMenuItems) {
+    public void setTransactionMenuItems(List<ActionItem> transactionMenuItems) {
         this.transactionMenuItems = transactionMenuItems;
     }
 
@@ -172,11 +172,11 @@ public class ReturnScreen extends Screen {
                 .findFirst().orElse(null);
     }
 
-    public List<MenuItem> getMultiSelectedMenuItems() {
+    public List<ActionItem> getMultiSelectedMenuItems() {
         return multiSelectedMenuItems;
     }
 
-    public void setMultiSelectedMenuItems(List<MenuItem> multiSelectedMenuItems) {
+    public void setMultiSelectedMenuItems(List<ActionItem> multiSelectedMenuItems) {
         this.multiSelectedMenuItems = multiSelectedMenuItems;
     }
 }

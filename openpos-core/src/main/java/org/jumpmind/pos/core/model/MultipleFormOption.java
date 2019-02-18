@@ -2,7 +2,7 @@ package org.jumpmind.pos.core.model;
 
 import java.io.Serializable;
 
-import org.jumpmind.pos.core.screen.MenuItem;
+import org.jumpmind.pos.core.screen.ActionItem;
 
 public class MultipleFormOption implements Serializable{
 
@@ -10,7 +10,7 @@ public class MultipleFormOption implements Serializable{
 	private Form form = new Form();
 	private String icon;
 	private String name;
-	private MenuItem submitButton;
+	private ActionItem submitButton;
 	private String instructions;
 	
 	public Form getForm() {
@@ -37,10 +37,10 @@ public class MultipleFormOption implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-    public MenuItem getSubmitButton() {
+    public ActionItem getSubmitButton() {
         return submitButton;
     }
-    public void setSubmitButton(MenuItem menuItem) {
+    public void setSubmitButton(ActionItem menuItem) {
         this.submitButton = menuItem;
     }
 }

@@ -11,9 +11,9 @@ public class ItemSearchResultsScreen extends PromptScreen {
 
     private List<SellItem> items = new ArrayList<>();
 
-    private MenuItem nextButton;
+    private ActionItem nextButton;
 
-    private MenuItem previousButton;
+    private ActionItem previousButton;
 
     public ItemSearchResultsScreen() {
         this.setScreenType(ScreenType.ItemSearchResults);
@@ -28,19 +28,19 @@ public class ItemSearchResultsScreen extends PromptScreen {
         this.items = items;
     }
 
-    public MenuItem getNextButton() {
+    public ActionItem getNextButton() {
         return nextButton;
     }
 
-    public void setNextButton(MenuItem nextButton) {
+    public void setNextButton(ActionItem nextButton) {
         this.nextButton = nextButton;
     }
 
-    public MenuItem getPreviousButton() {
+    public ActionItem getPreviousButton() {
         return previousButton;
     }
 
-    public void setPreviousButton(MenuItem previousButton) {
+    public void setPreviousButton(ActionItem previousButton) {
         this.previousButton = previousButton;
     }
 
