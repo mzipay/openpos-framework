@@ -3,9 +3,9 @@ import { IActionItem, SessionService } from '../../core';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
-    selector: '[keyMapping]'
+    selector: '[actionItem]'
 })
-export class KeyMappingDirective {
+export class ActionItemKeyMappingDirective {
     @Input()
     actionItem: IActionItem;
 
@@ -18,8 +18,7 @@ export class KeyMappingDirective {
         let bound = false;
         if (this.actionItem.keybind === event.key ) {
             bound = true;
-            this.renderer.addClass(this.el.nativeElement, 'mat-elevation-z24');
-            this.renderer.addClass(this.el.nativeElement, 'active');
+            this.renderer.addClass(this.el.nativeElement, 'key-mapping-active');
         }
         if (bound) {
           event.preventDefault();
@@ -31,8 +30,7 @@ export class KeyMappingDirective {
         let bound = false;
         if (this.actionItem.keybind === event.key ) {
             bound = true;
-            this.renderer.removeClass(this.el.nativeElement, 'mat-elevation-z24');
-            this.renderer.removeClass(this.el.nativeElement, 'active');
+            this.renderer.removeClass(this.el.nativeElement, 'key-mapping-active');
             this.session.onAction(this.actionItem);
         }
         if (bound) {

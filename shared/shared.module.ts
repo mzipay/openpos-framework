@@ -30,6 +30,7 @@ import {
     FindFloatingElementDirective,
     FixediOsScrollDirective,
     KlassDirective,
+    ActionItemKeyMappingDirective
 } from './directives';
 import {
     PromptInputComponent,
@@ -80,7 +81,6 @@ import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCu
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
 import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent } from './screen-parts';
 import { SideNavComponent, WaffleComponent } from './layout-components';
-import { KeyMappingDirective } from './directives/key-mapping.directive';
 
 const components = [
     PromptInputComponent,
@@ -153,7 +153,7 @@ const directives = [
     HideFormAccessoryBarDirective,
     FindFloatingElementDirective,
     FixediOsScrollDirective,
-    KeyMappingDirective
+    ActionItemKeyMappingDirective
 ];
 
 const pipes = [
