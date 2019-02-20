@@ -50,6 +50,8 @@ import { SaleComponent } from './sale/sale.component';
 import { ReturnComponent } from './return/return.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { SelectionListDialogComponent } from './selection-list/selection-list-dialog.component';
+import { DataTableComponent } from './data-table/data-table.component';
+
 
 export const ScreenConstants = {
     screens : [
@@ -91,7 +93,8 @@ export const ScreenConstants = {
         { name: 'ItemOptions', component: ItemOptionsComponent },
         { name: 'DetailText', component: DetailTextScreenComponent },
 
-        { name: 'Sale', component: SaleComponent},
+        { name: 'Sale', component: SaleComponent },
+        { name: 'DataTable', component: DataTableComponent },
 
         // Default Dialog
         { name: 'Dialog', component: DialogComponent },
@@ -140,6 +143,7 @@ export const ScreenConstants = {
         { name: 'ItemSearchResults', component: ItemSearchResultsComponent },
         { name: 'ItemOptions', component: ItemOptionsComponent },
         { name: 'Blank', component: BlankComponent },
+        { name: 'DataTable', component: DataTableComponent },
     ],
 
     templates: [
