@@ -86,7 +86,8 @@ const screenParts = [
         DynamicFormPartComponent,
         StatusStripComponent,
         SausageLinksComponent,
-        ScanOrSearchComponent
+        ScanOrSearchComponent,
+        BaconStripComponent
     ];
 
 const components = [
@@ -125,7 +126,6 @@ const components = [
     StatusBarStatusControlComponent,
     CatalogBrowserItemComponent,
     CurrencyTextComponent,
-    BaconStripComponent,
     WaffleComponent,
     IconButtonComponent,
     IconFabButtonComponent,
