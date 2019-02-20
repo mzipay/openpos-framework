@@ -24,16 +24,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.io.IOUtils;
+import org.h2.tools.Server;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.JdbcDatabasePlatformFactory;
+import org.jumpmind.db.sql.SqlException;
 import org.jumpmind.db.sql.SqlTemplateSettings;
 import org.jumpmind.db.util.BasicDataSourceFactory;
 import org.jumpmind.db.util.ConfigDatabaseUpgrader;
@@ -44,7 +46,6 @@ import org.jumpmind.pos.persist.DatabaseScriptContainer;
 import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.TableDef;
 import org.jumpmind.pos.persist.driver.Driver;
-import org.jumpmind.pos.persist.model.TagConfig;
 import org.jumpmind.pos.persist.model.TagHelper;
 import org.jumpmind.pos.service.model.ModuleModel;
 import org.jumpmind.properties.TypedProperties;
@@ -65,7 +66,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
-@DependsOn("tagConfig")
+@DependsOn({"tagConfig"})
 abstract public class AbstractModule extends AbstractServiceFactory implements IModule {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -78,6 +79,9 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
 
     @Autowired
     protected TagHelper tagHelper;
+    
+    @Autowired
+    private ApplicationContext applicationContext;
 
     protected IDatabasePlatform databasePlatform;
 
@@ -94,9 +98,22 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
     protected PlatformTransactionManager txManager;
 
     protected DBSessionFactory sessionFactory;
+    
+    static Server h2Server;
 
-    @Autowired
-    private ApplicationContext applicationContext;
+    protected void setupH2Server() {
+        if ("true".equals(env.getProperty("db.h2.startServer"))) {
+            String configDbUrl = env.getProperty(DB_POOL_URL, "jdbc:h2:mem:config");
+            if (h2Server == null && configDbUrl.contains("h2:tcp")) {
+                try {
+                    h2Server = Server.createTcpServer("-tcpPort", env.getProperty("db.h2.port", "1973"));
+                    ((Server)h2Server).start();
+                } catch (SQLException e) {
+                    throw new SqlException(e);
+                }
+            }
+        }
+    }
 
     protected PlatformTransactionManager txManager() {
         if (txManager == null) {
@@ -131,7 +148,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
 
     protected DataSource dataSource() {
         if (dataSource == null) {
-
+            setupH2Server();
             if (this.dataSourceBeanName != null) {
                 try {
                     dataSource = this.applicationContext.getBean(this.dataSourceBeanName, DataSource.class);
@@ -201,10 +218,9 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
     }
 
     public void exportData(String format, String dir, boolean includeModuleTables) {
-        OutputStream os = null;
-        try {
-            os = new BufferedOutputStream(new FileOutputStream(new File(dir, String.format("%s_post_01_%s.sql", getVersion(), getName().toLowerCase()))));  
-            List<Table> tables = this.sessionFactory.getTables(includeModuleTables ? new Class<?>[0] : new Class[] { ModuleModel.class } );
+        try (OutputStream os = new BufferedOutputStream(
+                new FileOutputStream(new File(dir, String.format("%s_post_01_%s.sql", getVersion(), getName().toLowerCase()))))) {
+            List<Table> tables = this.sessionFactory.getTables(includeModuleTables ? new Class<?>[0] : new Class[] { ModuleModel.class });
             DbExport dbExport = new DbExport(this.databasePlatform);
             dbExport.setCompatible(Compatible.H2);
             dbExport.setUseQuotedIdentifiers(false);
@@ -214,8 +230,6 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
             dbExport.exportTables(os, tables.toArray(new Table[tables.size()]));
         } catch (IOException e) {
             throw new IoException(e);
-        } finally {
-            IOUtils.closeQuietly(os);
         }
     }
 
