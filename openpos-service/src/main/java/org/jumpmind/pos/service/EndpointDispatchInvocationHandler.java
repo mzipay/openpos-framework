@@ -12,7 +12,6 @@ import java.util.concurrent.Executors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.jumpmind.pos.persist.DBSession;
-import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.service.instrumentation.ServiceSample;
 import org.jumpmind.pos.service.strategy.IInvocationStrategy;
 import org.jumpmind.pos.util.AppUtils;
@@ -108,8 +107,6 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
     }
     
     protected void endSample(ServiceSample sample, ServiceSpecificConfig config, Object proxy, Method method, Object[] args) {
-        System.out.println("Execute method with configured executor - "
-                + Thread.currentThread().getName());
         sample.setEndTime(new Date());
         sample.setDurationMs(sample.getEndTime().getTime()-sample.getStartTime().getTime());
         instrumentationExecutor.execute(new Runnable() {
