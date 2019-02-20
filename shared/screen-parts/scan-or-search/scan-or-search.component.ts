@@ -1,16 +1,16 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { ScreenPart, ScreenPartData } from '../screen-part';
+import { Component, ViewChild, AfterViewInit, forwardRef } from '@angular/core';
+import { ScreenPartComponent, ScreenPart } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
 import { MatInput } from '@angular/material';
 import { DeviceService } from '../../../core';
 
-@ScreenPartData({name: 'scan'})
-@Component({
+@ScreenPart({
     selector: 'app-scan-or-search',
     templateUrl: './scan-or-search.component.html',
-    styleUrls: ['./scan-or-search.component.scss']
+    styleUrls: ['./scan-or-search.component.scss'],
+    name: 'scan'
 })
-export class ScanOrSearchComponent extends ScreenPart<ScanOrSearchInterface> implements AfterViewInit {
+export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> implements AfterViewInit {
 
     @ViewChild(MatInput)
     input: MatInput;

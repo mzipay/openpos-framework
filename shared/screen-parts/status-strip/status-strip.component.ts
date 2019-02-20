@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ScreenPart, ScreenPartData } from '../screen-part';
+import { ScreenPartComponent, ScreenPart } from '../screen-part';
 import { StatusStripInterface } from './status-strip.interface';
 import { MatDialog } from '@angular/material';
 import { timer } from 'rxjs';
@@ -7,13 +6,13 @@ import { Configuration } from '../../../configuration/configuration';
 import { SystemStatusType } from '../../../core/interfaces/system-status-type.enum';
 import { SystemStatusDialogComponent } from '../../../screens/system-status/system-status-dialog.component';
 
-@ScreenPartData({name: 'statusStrip'})
-@Component({
+@ScreenPart({
     selector: 'app-status-strip',
     templateUrl: './status-strip.component.html',
-    styleUrls: ['./status-strip.component.scss']
+    styleUrls: ['./status-strip.component.scss'],
+    name: 'statusStrip'
 })
-export class StatusStripComponent extends ScreenPart<StatusStripInterface> implements OnInit {
+export class StatusStripComponent extends ScreenPartComponent<StatusStripInterface> {
 
     date = Date.now();
     timer: number;

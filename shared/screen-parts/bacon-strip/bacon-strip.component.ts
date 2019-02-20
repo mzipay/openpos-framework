@@ -1,16 +1,15 @@
-import { Component } from '@angular/core';
 import { BaconStripInterface } from './bacon-strip.interface';
-import { ScreenPart, ScreenPartData } from '../screen-part';
+import { ScreenPartComponent, ScreenPart } from '../screen-part';
 import { OpenposMediaService } from '../../../core';
 import { Observable } from 'rxjs';
 
-@ScreenPartData({name: 'baconStrip'})
-@Component({
+@ScreenPart({
     selector: 'app-bacon-strip',
     templateUrl: './bacon-strip.component.html',
-    styleUrls: ['./bacon-strip.component.scss']
+    styleUrls: ['./bacon-strip.component.scss'],
+    name: 'baconStrip'
 })
-export class BaconStripComponent extends ScreenPart<BaconStripInterface> {
+export class BaconStripComponent extends ScreenPartComponent<BaconStripInterface> {
 
     isMobile$: Observable<boolean>;
     operatorInfo: string;

@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { cold, getTestScheduler } from 'jasmine-marbles';
 import { SessionService, IAbstractScreen, AppInjector } from '../../core';
-import { ScreenPart, ScreenPartData } from './screen-part';
-import { Component, Injector } from '@angular/core';
+import { ScreenPartComponent, ScreenPart } from './screen-part';
+import { Injector } from '@angular/core';
 
 interface TestPartInterface extends IAbstractScreen {
     testProperty: string;
 }
 
-@ScreenPartData({name: 'TestPart'})
-@Component({
-    template: 'hi'
+@ScreenPart({
+    template: 'hi',
+    name: 'TestPart'
 })
-class TestPartComponent extends ScreenPart<TestPartInterface> {
+class TestPartComponent extends ScreenPartComponent<TestPartInterface> {
 
     ctorWasCalled: boolean;
     constructor() {

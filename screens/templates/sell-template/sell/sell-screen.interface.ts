@@ -1,10 +1,10 @@
-import { IActionItem, ISellItem } from '../../../../core';
+import { IActionItem, ISellItem, IAbstractScreen } from '../../../../core';
 import { StatusBarData } from '../../../../shared';
 import { SelfCheckoutStatusBarData } from '../../../../self-checkout/self-checkout-statusbar/self-checkout-status-bar-data';
 import { ISellTemplate } from './sell-template.interface';
 import { SellStatusSectionData } from '../sell-status-section/sell-status-section.data';
 
-export interface ISellScreen {
+export interface ISellScreen extends IAbstractScreen {
     name: string;
     screenType: string;
     backButton: IActionItem;

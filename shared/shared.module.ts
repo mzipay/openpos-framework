@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, forwardRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -79,8 +79,15 @@ import {
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe, MarkdownFormatterPipe, ImageUrlPipe, BackgroundImageUrlPipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
-import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent } from './screen-parts';
+import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent, DynamicFormPartComponent, ScreenPartComponent } from './screen-parts';
 import { SideNavComponent, WaffleComponent } from './layout-components';
+
+const screenParts = [
+        DynamicFormPartComponent,
+        StatusStripComponent,
+        SausageLinksComponent,
+        ScanOrSearchComponent
+    ];
 
 const components = [
     PromptInputComponent,
@@ -121,14 +128,11 @@ const components = [
     BaconStripComponent,
     WaffleComponent,
     IconButtonComponent,
-    ScanOrSearchComponent,
     IconFabButtonComponent,
     ReceiptCardComponent,
     KebabButtonComponent,
     KebabMenuComponent,
     IconSquareButtonComponent,
-    StatusStripComponent,
-    SausageLinksComponent,
     DisplayPropertyComponent,
     TransactionItemListComponent
 ];
@@ -177,6 +181,7 @@ const pipes = [
     declarations: [
         ...directives,
         ...components,
+        ...screenParts,
         ...pipes
     ],
     imports: [
@@ -206,10 +211,12 @@ const pipes = [
 
         ...directives,
         ...components,
+        ...screenParts,
         ...pipes
     ],
     providers: [
-        { provide: STATUS_BAR_STATUS_CONTROL_COMPONENT, useValue: StatusBarStatusControlComponent }
+        { provide: STATUS_BAR_STATUS_CONTROL_COMPONENT, useValue: StatusBarStatusControlComponent },
+
     ]
 })
 export class SharedModule {}
