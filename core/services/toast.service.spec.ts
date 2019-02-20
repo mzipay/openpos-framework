@@ -16,6 +16,7 @@ describe('ToastService', () => {
     const testToast: IToastScreen = {
         locale: 'en-us',
         name: 'Toast',
+        type: 'Toast',
         screenType: 'Toast',
         message: 'Hi',
         duration: 2500,

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { SessionService } from './session.service';
-import { IToastScreen, ToastType } from '..';
-import { filter } from 'rxjs/operators';
+import { IToastScreen, ToastType } from '../';
 
 @Injectable({
     providedIn: 'root',
