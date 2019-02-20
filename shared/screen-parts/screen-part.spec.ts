@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { cold, getTestScheduler } from 'jasmine-marbles';
 import { SessionService, IAbstractScreen, AppInjector } from '../../core';
-import { ScreenPart, ScreenPartData } from './screen-part';
-import { Component, Injector } from '@angular/core';
+import { ScreenPartComponent, ScreenPart } from './screen-part';
+import { Injector } from '@angular/core';
 
 interface TestPartInterface extends IAbstractScreen {
     testProperty: string;
 }
 
-@ScreenPartData({name: 'TestPart'})
-@Component({
-    template: 'hi'
+@ScreenPart({
+    template: 'hi',
+    name: 'TestPart'
 })
-class TestPartComponent extends ScreenPart<TestPartInterface> {
+class TestPartComponent extends ScreenPartComponent<TestPartInterface> {
 
     ctorWasCalled: boolean;
     constructor() {
@@ -70,6 +70,7 @@ describe('ScreenPart', () => {
             sessionService.getMessages.and.returnValue(cold('---x|', {x: testScreen}));
             const fixture = TestBed.createComponent(TestPartComponent);
             sut = fixture.componentInstance;
+            sut.setMessageType('Screen');
             fixture.detectChanges();
             getTestScheduler().flush();
             expect(sut.screenData.testProperty).toBe('Yay');
@@ -85,6 +86,7 @@ describe('ScreenPart', () => {
             sessionService.getMessages.and.returnValue(cold('---x|', {x: testScreen}));
             const fixture = TestBed.createComponent(TestPartComponent);
             sut = fixture.componentInstance;
+            sut.setMessageType('Screen');
             fixture.detectChanges();
             getTestScheduler().flush();
             expect(sut.screenData.testProperty).toBe('boo');

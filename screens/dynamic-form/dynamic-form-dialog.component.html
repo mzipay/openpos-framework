@@ -8,6 +8,6 @@
 <div *ngIf="screen.instructions" class="text-sm" style="margin-bottom: 16px;">
     {{screen.instructions}}
 </div>
-<app-dynamic-form-control fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px;padding-bottom:6px"
-    [screenForm]="screen.form" [submitButton]="screen.submitButton" [alternateSubmitActions]="screen.alternateSubmitActions">
-</app-dynamic-form-control>
+<app-dynamic-form-part fxFlexFill fxLayout="column" fxLayoutAlign="start" fxLayoutGap="6px" style="padding-top:6px;padding-bottom:6px"
+    [formName]="'form'" [submitButton]="screen.submitButton" [alternateSubmitActions]="screen.alternateSubmitActions">
+</app-dynamic-form-part>

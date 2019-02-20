@@ -1,14 +1,13 @@
-import { Component } from '@angular/core';
-import { ScreenPart, ScreenPartData } from '../screen-part';
+import { ScreenPartComponent, ScreenPart } from '../screen-part';
 import { IActionItem } from '../../../core/interfaces/menu-item.interface';
 
-@ScreenPartData({name: 'sausageLinks'})
-@Component({
+@ScreenPart({
     selector: 'app-sausage-links',
     templateUrl: './sausage-links.component.html',
-    styleUrls: ['./sausage-links.component.scss']
+    styleUrls: ['./sausage-links.component.scss'],
+    name: 'sausageLinks'
 })
-export class SausageLinksComponent extends ScreenPart<IActionItem[]> {
+export class SausageLinksComponent extends ScreenPartComponent<IActionItem[]> {
 
     links: IActionItem[];
 

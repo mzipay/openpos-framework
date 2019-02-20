@@ -1,9 +1,6 @@
-import { DynamicScreenComponent } from './../dynamic-screen/dynamic-screen.component';
 import { ScreenDirective } from './../../../shared/directives/screen.directive';
 import { IScreen } from './../dynamic-screen/screen.interface';
-import { OverlayContainer } from '@angular/cdk/overlay';
-import { Component, OnInit, OnDestroy, ViewChild, ComponentRef, ComponentFactory } from '@angular/core';
-import { AbstractTemplate } from '../../../core';
+import { Component, OnDestroy, ViewChild, ComponentRef, ComponentFactory } from '@angular/core';
 
 @Component({
   selector: 'app-dialog-content',
@@ -19,6 +16,7 @@ export class DialogContentComponent implements OnDestroy, IScreen {
     private content: IScreen;
 
     constructor() {
+
     }
 
     public installScreen(screenComponentFactory: ComponentFactory<IScreen>): void {
