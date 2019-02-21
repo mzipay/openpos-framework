@@ -46,3 +46,4 @@ export * from './icon-square-button/icon-square-button.component';
 export * from './display-property/display-property.component';
 export * from './display-property/display-property.interface';
 export * from './display-property/display-property-alignment.enum';
+export * from './grid-table/grid-table.component';

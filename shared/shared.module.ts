@@ -75,6 +75,7 @@ import {
     IconSquareButtonComponent,
     DisplayPropertyComponent,
     TransactionItemListComponent,
+    GridTableComponent,
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe, MarkdownFormatterPipe, ImageUrlPipe, BackgroundImageUrlPipe } from './pipes';
@@ -134,7 +135,8 @@ const components = [
     KebabMenuComponent,
     IconSquareButtonComponent,
     DisplayPropertyComponent,
-    TransactionItemListComponent
+    TransactionItemListComponent,
+    GridTableComponent,
 ];
 
 const directives = [

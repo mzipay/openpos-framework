@@ -64,6 +64,8 @@ import { SaleComponent } from './sale/sale.component';
 import { ReturnComponent } from './return/return.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { SelectionListDialogComponent } from './selection-list/selection-list-dialog.component';
+import { DataTableComponent } from './data-table/data-table.component';
+
 
 const screens = [
     BasicItemSearchComponent,
@@ -104,7 +106,8 @@ const screens = [
     ItemOptionsComponent,
     DetailTextScreenComponent,
     SaleComponent,
-    ReturnComponent
+    ReturnComponent,
+    DataTableComponent,
 ];
 
 const dialogs = [
