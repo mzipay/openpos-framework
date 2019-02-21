@@ -3,7 +3,7 @@ import { IActionItem } from '../../../core/interfaces/menu-item.interface';
 import { Component, forwardRef } from '@angular/core';
 
 @ScreenPart({
-    name: 'SausageLinks'
+    name: 'sausageLinks'
 })
 @Component({
     selector: 'app-sausage-links',
