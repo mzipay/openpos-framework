@@ -13,9 +13,6 @@ export class GridTableComponent implements OnInit {
     @Input()
     rows = [];
 
-    minHeight = '40px';
-    minWidth = '40px';
-
     outerStyle: object;
 
     constructor() {
@@ -27,9 +24,9 @@ export class GridTableComponent implements OnInit {
 
         this.outerStyle = {
             'grid-template-rows':
-                `repeat(${numberRows}, minmax(${this.minHeight}, auto))`,
+                `repeat(${numberRows}, min-content)`,
             'grid-template-columns':
-                `repeat(${numberCols}, minmax(${this.minWidth}, auto))`,
+                `repeat(${numberCols}, minmax(min-content, auto))`,
         };
     }
 
