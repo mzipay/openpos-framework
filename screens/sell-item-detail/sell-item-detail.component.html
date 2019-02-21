@@ -29,9 +29,9 @@
                         </div>
                     </mat-list-item>
                     
-                    <mat-list-item>
+                    <mat-list-item *ngIf="screen.promos">
                         <p matLine>Promotions</p>
-                        <p matLine *ngIf="promosDataSource.filteredData.length === 0"class="text-md">N/A</p> 
+                        <p matLine *ngIf="promosDataSource.filteredData.length === 0" class="text-md">N/A</p> 
                     </mat-list-item>
                 </mat-list>
     
