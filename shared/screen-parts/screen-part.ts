@@ -4,8 +4,8 @@ import { Subscription, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { deepAssign } from '../../utilites/';
 
-export interface ScreenPartProps extends Component {
-    name?: string;
+export interface ScreenPartProps {
+    name: string;
 }
 
 export function ScreenPart( config: ScreenPartProps ) {
@@ -14,15 +14,6 @@ export function ScreenPart( config: ScreenPartProps ) {
         const newClazz = class extends target {
             screenPartName = config.name;
             };
-        const provider = {provide: ScreenPartComponent, useExisting: forwardRef(() => newClazz) };
-        if ( !config.providers ) {
-            config.providers = [provider];
-        } else {
-            config.providers.push(provider);
-        }
-        const ngCompDecorator = Component(config);
-        ngCompDecorator(target);
-
         return newClazz;
     };
 }

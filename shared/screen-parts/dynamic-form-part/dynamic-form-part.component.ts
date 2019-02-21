@@ -1,13 +1,14 @@
-import { ViewChildren, AfterViewInit, Input, QueryList, ViewChild } from '@angular/core';
+import { ViewChildren, AfterViewInit, Input, QueryList, ViewChild, Component, forwardRef } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { IFormElement, IForm, FormBuilder, IActionItem } from '../../../core';
 import { DynamicFormFieldComponent, ShowErrorsComponent } from '../../components';
 import { ScreenPartComponent, ScreenPart } from '../screen-part';
 
-@ScreenPart({
+@Component({
   selector: 'app-dynamic-form-part',
   templateUrl: './dynamic-form-part.component.html',
   styleUrls: ['./dynamic-form-part.component.scss'],
+  providers: [{provide: ScreenPartComponent, useExisting: forwardRef( () => DynamicFormPartComponent )}]
 })
 export class DynamicFormPartComponent extends ScreenPartComponent<IForm> implements AfterViewInit {
 

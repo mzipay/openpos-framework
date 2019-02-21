@@ -5,12 +5,17 @@ import { timer } from 'rxjs';
 import { Configuration } from '../../../configuration/configuration';
 import { SystemStatusType } from '../../../core/interfaces/system-status-type.enum';
 import { SystemStatusDialogComponent } from '../../../screens/system-status/system-status-dialog.component';
+import { Component, forwardRef } from '@angular/core';
 
 @ScreenPart({
+    name: 'statusStrip'
+})
+@Component({
     selector: 'app-status-strip',
     templateUrl: './status-strip.component.html',
     styleUrls: ['./status-strip.component.scss'],
-    name: 'statusStrip'
+    providers: [{provide: ScreenPartComponent, useExisting: forwardRef( () => StatusStripComponent )}]
+
 })
 export class StatusStripComponent extends ScreenPartComponent<StatusStripInterface> {
 

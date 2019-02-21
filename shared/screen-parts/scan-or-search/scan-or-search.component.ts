@@ -5,10 +5,14 @@ import { MatInput } from '@angular/material';
 import { DeviceService } from '../../../core';
 
 @ScreenPart({
+    name: 'scan'
+})
+@Component({
     selector: 'app-scan-or-search',
     templateUrl: './scan-or-search.component.html',
     styleUrls: ['./scan-or-search.component.scss'],
-    name: 'scan'
+    providers: [{provide: ScreenPartComponent, useExisting: forwardRef( () => ScanOrSearchComponent )}]
+
 })
 export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> implements AfterViewInit {
 

@@ -1,11 +1,15 @@
 import { ScreenPartComponent, ScreenPart } from '../screen-part';
 import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { Component, forwardRef } from '@angular/core';
 
 @ScreenPart({
+    name: 'SausageLinks'
+})
+@Component({
     selector: 'app-sausage-links',
     templateUrl: './sausage-links.component.html',
     styleUrls: ['./sausage-links.component.scss'],
-    name: 'sausageLinks'
+    providers: [{provide: ScreenPartComponent, useExisting: forwardRef( () => SausageLinksComponent )}]
 })
 export class SausageLinksComponent extends ScreenPartComponent<IActionItem[]> {
 
