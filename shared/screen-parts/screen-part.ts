@@ -1,5 +1,5 @@
 import { SessionService, AppInjector, IActionItem, Logger } from '../../core';
-import { OnDestroy, OnInit, AfterViewInit, Component, forwardRef } from '@angular/core';
+import { OnDestroy, Component, forwardRef } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { deepAssign } from '../../utilites/';

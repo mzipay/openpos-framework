@@ -1,4 +1,4 @@
-import { Component, ViewChildren, AfterViewInit, Input, QueryList, ViewChild, forwardRef } from '@angular/core';
+import { ViewChildren, AfterViewInit, Input, QueryList, ViewChild } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { IFormElement, IForm, FormBuilder, IActionItem } from '../../../core';
 import { DynamicFormFieldComponent, ShowErrorsComponent } from '../../components';
