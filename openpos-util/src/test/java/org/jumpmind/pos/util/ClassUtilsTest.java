@@ -2,8 +2,6 @@ package org.jumpmind.pos.util;
 
 import static org.junit.Assert.assertNotNull;
 
-import javax.annotation.Resource;
-
 import org.jumpmind.pos.UtilTestConfig;
 import org.jumpmind.pos.test.JavaBeanWithAnnotation;
 import org.jumpmind.pos.test.SpringBeanIfc;
@@ -32,7 +30,7 @@ public class ClassUtilsTest {
     public void testResolveAnnotationOnPojo() {
         JavaBeanWithAnnotation javaBean = new JavaBeanWithAnnotation();
         
-        Resource supWarnAnnot = ClassUtils.resolveAnnotation(Resource.class, javaBean);
+        Deprecated supWarnAnnot = ClassUtils.resolveAnnotation(Deprecated.class, javaBean);
         assertNotNull(supWarnAnnot);
     }
     

@@ -1,8 +1,7 @@
 package org.jumpmind.pos.test;
 
-import javax.annotation.Resource;
 
-@Resource
+@Deprecated  // Just using Deprecated annotation for testing purposes, not really deprecated
 public class JavaBeanWithAnnotation {
 
     @SuppressWarnings("unused")
