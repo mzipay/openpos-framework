@@ -8,6 +8,7 @@ import org.jumpmind.pos.service.EndpointOverride;
 import org.jumpmind.pos.service.InjectionContext;
 import org.jumpmind.pos.service.PosServerException;
 import org.jumpmind.pos.service.ServiceSpecificConfig;
+import org.jumpmind.pos.util.ClassUtils;
 import org.springframework.stereotype.Component;
 
 @Component(LocalOnlyStrategy.LOCAL_ONLY_STRATEGY)
@@ -25,9 +26,11 @@ public class LocalOnlyStrategy extends AbstractInvocationStrategy implements IIn
         Object obj = applicationContext.getBean(path);
         Collection<Object> beans = applicationContext.getBeansWithAnnotation(EndpointOverride.class).values();
         for (Object testObj : beans) {
-            EndpointOverride override = testObj.getClass().getAnnotation(EndpointOverride.class);
-            if (override.path().equals(path)) {
-                obj = testObj;
+            EndpointOverride override = ClassUtils.resolveAnnotation(EndpointOverride.class, testObj);
+            if (override != null) {
+                if (override.path().equals(path)) {
+                    obj = testObj;
+                }
             }
         }
 
@@ -43,7 +46,7 @@ public class LocalOnlyStrategy extends AbstractInvocationStrategy implements IIn
             }
         }
 
-        throw new PosServerException(String.format("No endpoint found for path '%s' Please define a Spring-discoverable @Componant class, "
+        throw new PosServerException(String.format("No endpoint found for path '%s' Please define a Spring-discoverable @Component class, "
                 + "with a method annotated like  @Endpoint(\"%s\")", path, path));
     }
 
