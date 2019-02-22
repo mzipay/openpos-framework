@@ -1,23 +1,23 @@
 import { BaconStripInterface } from './bacon-strip.interface';
 import { ScreenPartComponent, ScreenPart } from '../screen-part';
-import { OpenposMediaService } from '../../../core';
+import { OpenposMediaService } from '../../../core/services/openpos-media.service';
 import { Observable } from 'rxjs';
-import { Component, forwardRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { MessageProvider } from '../../providers/message.provider';
 
 @ScreenPart({
     name: 'baconStrip'})
 @Component({
     selector: 'app-bacon-strip',
     templateUrl: './bacon-strip.component.html',
-    styleUrls: ['./bacon-strip.component.scss'],
-    providers: [{provide: ScreenPartComponent, useExisting: forwardRef( () => BaconStripComponent )}]})
+    styleUrls: ['./bacon-strip.component.scss']})
 export class BaconStripComponent extends ScreenPartComponent<BaconStripInterface> {
 
     isMobile$: Observable<boolean>;
     operatorInfo: string;
 
-    constructor( mediaService: OpenposMediaService) {
-        super();
+    constructor( mediaService: OpenposMediaService, messageProvider: MessageProvider) {
+        super(messageProvider);
         const mobileMap = new Map([
             ['xs', true],
             ['sm', false],

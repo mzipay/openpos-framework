@@ -1,14 +1,15 @@
-import { ViewChildren, AfterViewInit, Input, QueryList, ViewChild, Component, forwardRef } from '@angular/core';
+import { ViewChildren, AfterViewInit, Input, QueryList, ViewChild, Component } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
-import { IFormElement, IForm, FormBuilder, IActionItem } from '../../../core';
+import { IFormElement, IForm, IActionItem } from '../../../core/interfaces';
 import { DynamicFormFieldComponent, ShowErrorsComponent } from '../../components';
-import { ScreenPartComponent, ScreenPart } from '../screen-part';
+import { ScreenPartComponent } from '../screen-part';
+import { MessageProvider } from '../../providers/message.provider';
+import { FormBuilder } from '../../../core/services/form-builder.service';
 
 @Component({
   selector: 'app-dynamic-form-part',
   templateUrl: './dynamic-form-part.component.html',
-  styleUrls: ['./dynamic-form-part.component.scss'],
-  providers: [{provide: ScreenPartComponent, useExisting: forwardRef( () => DynamicFormPartComponent )}]
+  styleUrls: ['./dynamic-form-part.component.scss']
 })
 export class DynamicFormPartComponent extends ScreenPartComponent<IForm> implements AfterViewInit {
 
@@ -26,8 +27,8 @@ export class DynamicFormPartComponent extends ScreenPartComponent<IForm> impleme
 
   @Input() submitButton: IActionItem;
 
-  constructor( private formBuilder: FormBuilder) {
-      super();
+  constructor( private formBuilder: FormBuilder, messageProvider: MessageProvider) {
+      super(messageProvider);
   }
 
   screenDataUpdated() {

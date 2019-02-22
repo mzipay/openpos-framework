@@ -1,6 +1,7 @@
 import { ScreenPartComponent, ScreenPart } from '../screen-part';
 import { IActionItem } from '../../../core/interfaces/menu-item.interface';
-import { Component, forwardRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { MessageProvider } from '../../providers/message.provider';
 
 @ScreenPart({
     name: 'sausageLinks'
@@ -8,12 +9,15 @@ import { Component, forwardRef } from '@angular/core';
 @Component({
     selector: 'app-sausage-links',
     templateUrl: './sausage-links.component.html',
-    styleUrls: ['./sausage-links.component.scss'],
-    providers: [{provide: ScreenPartComponent, useExisting: forwardRef( () => SausageLinksComponent )}]
+    styleUrls: ['./sausage-links.component.scss']
 })
 export class SausageLinksComponent extends ScreenPartComponent<IActionItem[]> {
 
     links: IActionItem[];
+
+    constructor( messageProvider: MessageProvider ) {
+        super(messageProvider);
+    }
 
     screenDataUpdated() {
         if ( Array.isArray(this.screenData)) {

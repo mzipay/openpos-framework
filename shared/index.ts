@@ -9,3 +9,4 @@ export * from './utils';
 export * from './layout-components';
 export * from './screen-parts';
 export * from './shared.module';
+export * from './providers';

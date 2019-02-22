@@ -1,8 +1,9 @@
-import { Component, ViewChild, AfterViewInit, forwardRef } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ScreenPartComponent, ScreenPart } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
 import { MatInput } from '@angular/material';
-import { DeviceService } from '../../../core';
+import { DeviceService } from '../../../core/services/device.service';
+import { MessageProvider } from '../../providers/message.provider';
 
 @ScreenPart({
     name: 'scan'
@@ -10,9 +11,7 @@ import { DeviceService } from '../../../core';
 @Component({
     selector: 'app-scan-or-search',
     templateUrl: './scan-or-search.component.html',
-    styleUrls: ['./scan-or-search.component.scss'],
-    providers: [{provide: ScreenPartComponent, useExisting: forwardRef( () => ScanOrSearchComponent )}]
-
+    styleUrls: ['./scan-or-search.component.scss']
 })
 export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> implements AfterViewInit {
 
@@ -21,8 +20,8 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     public barcode: string;
 
-    constructor( public devices: DeviceService ) {
-        super();
+    constructor( public devices: DeviceService, messageProvider: MessageProvider ) {
+        super(messageProvider);
     }
 
     screenDataUpdated() {

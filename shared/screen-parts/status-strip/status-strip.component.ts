@@ -5,7 +5,8 @@ import { timer } from 'rxjs';
 import { Configuration } from '../../../configuration/configuration';
 import { SystemStatusType } from '../../../core/interfaces/system-status-type.enum';
 import { SystemStatusDialogComponent } from '../../../screens/system-status/system-status-dialog.component';
-import { Component, forwardRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { MessageProvider } from '../../providers/message.provider';
 
 @ScreenPart({
     name: 'statusStrip'
@@ -14,16 +15,14 @@ import { Component, forwardRef } from '@angular/core';
     selector: 'app-status-strip',
     templateUrl: './status-strip.component.html',
     styleUrls: ['./status-strip.component.scss'],
-    providers: [{provide: ScreenPartComponent, useExisting: forwardRef( () => StatusStripComponent )}]
-
 })
 export class StatusStripComponent extends ScreenPartComponent<StatusStripInterface> {
 
     date = Date.now();
     timer: number;
 
-    constructor(protected dialog: MatDialog) {
-        super();
+    constructor(protected dialog: MatDialog, messageProvider: MessageProvider) {
+        super(messageProvider);
     }
 
     screenDataUpdated() {

@@ -1,6 +1,5 @@
 
-<app-icon-square-button 
-    *ngIf="screenData"
+<app-icon-square-button
     fxFlex="0 0 auto"
     class="scan-button"
     [iconName]="screenData.scanIcon" 
@@ -8,7 +7,6 @@
     (buttonClick)="devices.scan()"
     ></app-icon-square-button>
 <input #input matInput
-    *ngIf="screenData"
     fxFlex="1 1 100%"
     class="scan-input"
     [keyboardLayout]="'Numeric'"

@@ -1,15 +1,15 @@
 import { SessionService, AppInjector, IActionItem, Logger } from '../../core';
-import { OnDestroy, Component, forwardRef } from '@angular/core';
+import { OnDestroy, OnInit } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { deepAssign } from '../../utilites/';
+import { MessageProvider } from '../providers/message.provider';
 
 export interface ScreenPartProps {
     name: string;
 }
 
 export function ScreenPart( config: ScreenPartProps ) {
-
     return function<T extends {new(...args: any[]): {}}>(target: T) {
         const newClazz = class extends target {
             screenPartName = config.name;
@@ -18,23 +18,25 @@ export function ScreenPart( config: ScreenPartProps ) {
     };
 }
 
-export abstract class ScreenPartComponent<T> implements OnDestroy {
+export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
+
 
     sessionService: SessionService;
     log: Logger;
     screenPartName: string;
     screenData: T;
+    messageProvider: MessageProvider;
     private subscription: Subscription;
 
-
-    constructor() {
+    constructor( messageProvider: MessageProvider ) {
         this.sessionService = AppInjector.Instance.get(SessionService);
         this.log = AppInjector.Instance.get(Logger);
+        this.messageProvider = messageProvider;
 
     }
 
-    setMessageType( type: string) {
-        this.subscription = this.sessionService.getMessages( type )
+    ngOnInit(): void {
+        this.subscription = this.messageProvider.getMessages$()
             .pipe(filter( s => s.screenType !== 'Loading' )).subscribe( s => {
             if ( s.hasOwnProperty(this.screenPartName)) {
                 this.screenData = deepAssign( this.screenData, s[this.screenPartName]);
@@ -44,7 +46,6 @@ export abstract class ScreenPartComponent<T> implements OnDestroy {
             this.screenDataUpdated();
         });
     }
-
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
     }
