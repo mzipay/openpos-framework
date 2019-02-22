@@ -1,13 +1,16 @@
 package org.jumpmind.pos.persist;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.jumpmind.pos.persist.DBSession;
@@ -112,6 +115,32 @@ public class DBSessionTest {
         }
     }
     
+    @Test
+    public void testBlob() throws IOException {
+        final String VIN1 = "KMHCN46C58U242743";
+        final byte[] imageBytes = IOUtils.resourceToByteArray("/elantra.jpg");
+        assertNotNull(imageBytes);
+        assertEquals(33340, imageBytes.length);
+        {
+            DBSession db = sessionFactory.createDbSession();
+            CarModel someHyundai = new CarModel();
+            someHyundai.setVin(VIN1);
+            someHyundai.setMake("Hyundai");
+            someHyundai.setModel("Elantra");
+            someHyundai.setModelYear("2012");
+            someHyundai.setImage(imageBytes);
+            db.save(someHyundai);
+            db.close();
+        }
+        {
+            DBSession db = sessionFactory.createDbSession();
+            CarModel hyundaiLookedUp = db.findByNaturalId(CarModel.class, VIN1);
+            assertNotNull(hyundaiLookedUp);
+            assertArrayEquals(imageBytes, hyundaiLookedUp.getImage());
+        }
+        
+        
+    }
     
     @Test
     public void testMoney() {
@@ -339,8 +368,7 @@ public class DBSessionTest {
             
             db.close();
         }
-        
-        
     }
+    
     
 }

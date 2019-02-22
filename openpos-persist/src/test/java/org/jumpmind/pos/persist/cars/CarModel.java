@@ -10,6 +10,7 @@ import org.jumpmind.pos.persist.model.ITaggedModel;
         description = "A basic concept of an automobile fit to drive down the road.")
 public class CarModel extends AbstractTaggedModel implements ITaggedModel {
 
+    @SuppressWarnings("unused")
     private static final long serialVersionUID = 1L;
     
     @ColumnDef(primaryKey=true)
@@ -26,6 +27,8 @@ public class CarModel extends AbstractTaggedModel implements ITaggedModel {
     private String isoCurrencyCode;
     @ColumnDef
     private CarTrimTypeCode carTrimTypeCode;
+    @ColumnDef
+    private byte[] image;
     
     
     
@@ -70,6 +73,12 @@ public class CarModel extends AbstractTaggedModel implements ITaggedModel {
     }
     public void setCarTrimTypeCode(CarTrimTypeCode carTrimTypeCode) {
         this.carTrimTypeCode = carTrimTypeCode;
+    }
+    public byte[] getImage() {
+        return image;
+    }
+    public void setImage(byte[] image) {
+        this.image = image;
     }
     
     

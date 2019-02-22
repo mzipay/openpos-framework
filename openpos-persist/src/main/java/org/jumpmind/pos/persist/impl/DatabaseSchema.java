@@ -447,6 +447,8 @@ public class DatabaseSchema {
                 return "TIMESTAMP";
             case Types.DECIMAL:
                 return "DECIMAL";
+            case Types.BLOB:
+                return "BLOB";
             default:
                 return "OTHER";
         }
@@ -481,6 +483,8 @@ public class DatabaseSchema {
             return Types.TIMESTAMP;
         } else if (field.getType().isAssignableFrom(BigDecimal.class) || field.getType().isAssignableFrom(Money.class)) {
             return Types.DECIMAL;
+        } else if (field.getType().isAssignableFrom(byte[].class) || field.getType().isAssignableFrom(Byte[].class)) {
+            return Types.BLOB;
         } else {
             return Types.OTHER;
         }
