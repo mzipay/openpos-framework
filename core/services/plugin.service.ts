@@ -45,7 +45,7 @@ export class PluginService {
     }
 
     public addPlugin(pluginId: string, plugin: IPlugin) {
-        this.plugins[pluginId] = {plugin: plugin, initialized: false};
+        this.plugins.set(pluginId, {plugin: plugin, initialized: false});
         this.log.info(`plugin '${pluginId}' added to the PluginService`);
     }
 
@@ -123,7 +123,7 @@ export class PluginService {
     public getPlugin(pluginId: string, doInitWhenNeeded: boolean = true): Promise<IPlugin> {
         return new Promise( (resolve, reject) => {
             this.log.debug(`Getting plugin '${pluginId}'...`);
-            let pluginEntry: PluginMapEntry = this.plugins[pluginId];
+            let pluginEntry: PluginMapEntry = this.plugins.get(pluginId);
             let initRequired = false;
             let targetPlugin: IPlugin;
             if (pluginEntry) {
@@ -140,7 +140,7 @@ export class PluginService {
                     }
 
                     pluginEntry = {plugin: targetPlugin, initialized: false};
-                    this.plugins[pluginId] = pluginEntry;
+                    this.plugins.set(pluginId, pluginEntry);
                     this.log.info(`Added plugin '${pluginId}' to map.`);
                     if (doInitWhenNeeded) {
                         initRequired = true;
