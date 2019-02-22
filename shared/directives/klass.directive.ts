@@ -3,7 +3,9 @@ import { OpenposMediaService } from '../../core/services';
 import { Subscription } from 'rxjs';
 
 const selectors = `
-[klass], [klass.xs], [klass.sm], [klass.md], [klass.lg], [klass.xl]
+[klass], [klass.xs], [klass.sm], [klass.md], [klass.lg], [klass.xl],
+[klass.lt-sm], [klass.lt-md], [klass.lt-lg], [klass.lt-xl],
+[klass.gt-xs], [klass.gt-sm], [klass.gt-md], [klass.gt-lg]
 `;
 
   @Directive({selector: selectors})
@@ -36,6 +38,51 @@ const selectors = `
     set klassXl(val: string) {
         this.inputMap.set('xl', val);
     }
+    @Input('klass.lt-sm')
+    set klassLtSm(val: string) {
+        this.inputMap.set('xs', val);
+    }
+    @Input('klass.lt-md')
+    set klassLtMd(val: string) {
+        this.inputMap.set('xs', val);
+        this.inputMap.set('sm', val);
+    }
+    @Input('klass.lt-lg')
+    set klassLtLg(val: string) {
+        this.inputMap.set('xs', val);
+        this.inputMap.set('sm', val);
+        this.inputMap.set('md', val);
+    }
+    @Input('klass.lt-xl')
+    set klassLtXl(val: string) {
+        this.inputMap.set('xs', val);
+        this.inputMap.set('sm', val);
+        this.inputMap.set('md', val);
+        this.inputMap.set('lg', val);
+    }
+    @Input('klass.gt-xs')
+    set klassGtXs(val: string) {
+        this.inputMap.set('sm', val);
+        this.inputMap.set('md', val);
+        this.inputMap.set('lg', val);
+        this.inputMap.set('xl', val);
+    }
+    @Input('klass.gt-sm')
+    set klassGtSm(val: string) {
+        this.inputMap.set('md', val);
+        this.inputMap.set('lg', val);
+        this.inputMap.set('xl', val);
+    }
+    @Input('klass.gt-md')
+    set klassGtMd(val: string) {
+        this.inputMap.set('lg', val);
+        this.inputMap.set('xl', val);
+    }
+    @Input('klass.gt-lg')
+    set klassGtLg(val: string) {
+        this.inputMap.set('xl', val);
+    }
+
     constructor(private mediaService: OpenposMediaService, private renderer: Renderer2, private el: ElementRef) {
     }
 
