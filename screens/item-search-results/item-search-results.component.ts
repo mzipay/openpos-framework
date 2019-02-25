@@ -28,6 +28,7 @@ export class ItemSearchResultsComponent extends PosScreen<any> {
     }
     this.listConfig.numResultsPerPage = Number.MAX_VALUE;
     this.listConfig.items = this.screen.items;
+    this.listConfig.defaultSelectItemIndex = 0;
     this.scrollToTop();
   }
 
