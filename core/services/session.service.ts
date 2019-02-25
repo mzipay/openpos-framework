@@ -310,7 +310,7 @@ export class SessionService implements IMessageHandler<any> {
     }
 
     public async onValueChange(action: string, payload?: any) {
-        this.onAction(action, payload, null, true);
+        this.onAction(action, payload, null, false);
     }
 
     public async onAction(action: string | IActionItem, payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
