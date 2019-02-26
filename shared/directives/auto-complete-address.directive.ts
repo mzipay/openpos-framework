@@ -21,31 +21,35 @@ export class AutoCompleteAddressDirective implements OnInit {
 
     getFormattedAddress(place: any) {
         const location = {};
-        for (const item of place.address_components) {
+        if (place) {
             // Formatted Address
             location['formatted_address'] = place.formatted_address;
-            if (item.types) {
-                if (item.types.indexOf('locality') > -1) {
-                    // City / Locality
-                    location['locality'] = item['long_name'];
-                } else if (item.types.indexOf('administrative_area_level_1') > -1) {
-                    // State
-                    location['state'] = item['long_name'];
-                } else if (item.types.indexOf('street_number') > -1) {
-                    // Street Number
-                    location['street_number'] = item['short_name'];
-                } else if (item.types.indexOf('route') > -1) {
-                    // Street Name / Route
-                    location['street_name'] = item['short_name'];
-                } else if (item.types.indexOf('country') > -1) {
-                    // Country
-                    location['country'] = item['long_name'];
-                } else if (item.types.indexOf('postal_code') > -1) {
-                    // Postal Code
-                    location['postal_code'] = item['short_name'];
+
+            if (place.address_components) {
+                for (const item of place.address_components) {
+                    if (item.types) {
+                        if (item.types.indexOf('locality') > -1) {
+                            // City / Locality
+                            location['locality'] = item['long_name'];
+                        } else if (item.types.indexOf('administrative_area_level_1') > -1) {
+                            // State
+                            location['state'] = item['long_name'];
+                        } else if (item.types.indexOf('street_number') > -1) {
+                            // Street Number
+                            location['street_number'] = item['short_name'];
+                        } else if (item.types.indexOf('route') > -1) {
+                            // Street Name / Route
+                            location['street_name'] = item['short_name'];
+                        } else if (item.types.indexOf('country') > -1) {
+                            // Country
+                            location['country'] = item['long_name'];
+                        } else if (item.types.indexOf('postal_code') > -1) {
+                            // Postal Code
+                            location['postal_code'] = item['short_name'];
+                        }
+                    }
                 }
             }
-
         }
         return location;
     }
@@ -54,7 +58,7 @@ export class AutoCompleteAddressDirective implements OnInit {
         this.mapsAPILoader
             .load()
             .then(() => {
-                // Restrict search predictions to geographical locations
+                // Restrict search predictions to adresses
                 const autocomplete = new google.maps.places.Autocomplete(this.element, { types: ['address'] });
 
                 // Restrict set of place fields returned
