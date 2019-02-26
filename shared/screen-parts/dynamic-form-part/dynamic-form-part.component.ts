@@ -120,7 +120,7 @@ export class DynamicFormPartComponent extends ScreenPartComponent<IForm> impleme
   onFieldChanged(formElement: IFormElement) {
     if (formElement.valueChangedAction) {
         this.formBuilder.buildFormPayload(this.form, this.screenData);
-      this.sessionService.onValueChange(formElement.valueChangedAction, this.screenData );
+      this.sessionService.onAction(formElement.valueChangedAction, this.screenData );
     }
   }
 
