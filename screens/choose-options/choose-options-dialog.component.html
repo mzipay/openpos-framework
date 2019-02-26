@@ -3,7 +3,7 @@
     <ng-template ngSwitchCase="ButtonList">
             <mat-card-title fxLayoutAlign="space-between">
                 <span>{{promptText}}</span>
-                <button *ngIf="screen.backButton" mat-icon-button style="margin:-15px" (click)="session.onAction(screen.backButton.action)">
+                <button *ngIf="screen.backButton" mat-icon-button style="margin:-15px" (click)="session.onAction(screen.backButton.action)" [actionItem]="screen.backButton">
                     <mat-icon>close</mat-icon>
                 </button>
             </mat-card-title>
@@ -14,6 +14,7 @@
                         <app-icon style="margin-right:15px" color="primary" [iconName]="o.icon"></app-icon>
                         <span [ngClass]="{'muted-color' : !o.enabled}">{{o.displayValue}}</span>
                         <span fxFlex="1 1 auto"></span>
+                        <span *ngIf="o.keybind && keybindsEnabled()" class="muted-color">{{o.keybind}}</span>
                         <mat-icon color="primary" class="material-icons">keyboard_arrow_right</mat-icon>
                     </mat-list-item>
                 </mat-nav-list>
@@ -27,6 +28,7 @@
                     <div fxLayoutAlign="center center" fxLayout="column">
                         <app-icon fxFlex="1 0 auto" [iconName]="o.icon" iconClass="material-icons mat-64"></app-icon>
                         <span fxFlex="1 0 auto" class="text-sm">{{o.displayValue}}</span>
+                        <span *ngIf="o.keybind && keybindsEnabled()" class="muted-color">{{o.keybind}}</span>
                     </div>
                 </button>
             </mat-card-content>
