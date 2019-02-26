@@ -35,13 +35,14 @@
 
 			<app-overflow-list gdArea="totals" *ngIf="items && items.length > 0"
 				[numberItemsToShow]="overFlowListSize | async" [items]="amountTotals"></app-overflow-list>
-
+        
 			<mat-card gdArea="nextbar" class="page-content-card dark">
-				<mat-card-content gdAreas="items total button" gdColumns="auto 1fr auto" class="text-lg">
+                <mat-card-content class="text-lg" gdAreas="items span total button" gdColumns="auto 1fr auto auto" gdGap="10px">
 					<div gdArea="items" gdGridAlign="center center" class="text-md">{{itemTotal}} Item{{itemTotal !== 1 ?
-							's' : ''}}</div>
+                            's' : ''}}</div>
+                    <div gdArea="span"></div>                            
 					<div gdArea="total" gdGridAlign="center center">
-						<span class="text-right">Total&nbsp;</span>
+						<span *ngIf="screen.grandTotal" class="text-right">Total&nbsp;</span>
 						<span [ngClass]="{'text-center': !screen.readOnly, 'text-right': screen.readOnly}">
 							<app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
 						</span>
