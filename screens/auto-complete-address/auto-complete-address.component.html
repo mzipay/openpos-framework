@@ -1,0 +1,25 @@
+<app-waffle>
+	<app-bacon-strip waffle-header fxFlex="100%"></app-bacon-strip>
+
+	<div waffle-drawer-content class="drawer-content" fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start stretch"
+		fxLayoutGap="4px" fxLayoutGap.lg="20px">
+		<app-sausage-links waffle-drawer-content></app-sausage-links>
+		<div fxFlex="1 1 auto"></div>
+	</div>
+
+	<div waffle-body class="body-content" gdAreas="form | status" gdRows="minmax(200px, 100%) auto" gdGap="6px">
+
+		<mat-card gdArea="form" class="page-content-card">
+			<mat-card-content>
+
+				<mat-form-field style="width: 100%;">
+					<input matInput autoCompleteAddress (onSelect)="setAddress($event)">
+				</mat-form-field>
+
+			</mat-card-content>
+		</mat-card>
+
+		<app-status-strip gdArea="status" waffle-footer></app-status-strip>
+	</div>
+
+</app-waffle>

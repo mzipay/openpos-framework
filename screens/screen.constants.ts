@@ -51,6 +51,7 @@ import { ReturnComponent } from './return/return.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { SelectionListDialogComponent } from './selection-list/selection-list-dialog.component';
 import { DataTableComponent } from './data-table/data-table.component';
+import { AutoCompleteAddressComponent } from './auto-complete-address/auto-complete-address.component';
 
 
 export const ScreenConstants = {
@@ -95,6 +96,7 @@ export const ScreenConstants = {
 
         { name: 'Sale', component: SaleComponent },
         { name: 'DataTable', component: DataTableComponent },
+        { name: 'AutoCompleteAddress', component: AutoCompleteAddressComponent},
 
         // Default Dialog
         { name: 'Dialog', component: DialogComponent },
@@ -144,6 +146,7 @@ export const ScreenConstants = {
         { name: 'ItemOptions', component: ItemOptionsComponent },
         { name: 'Blank', component: BlankComponent },
         { name: 'DataTable', component: DataTableComponent },
+        { name: 'AutoCompleteAddress', component: AutoCompleteAddressComponent},
     ],
 
     templates: [

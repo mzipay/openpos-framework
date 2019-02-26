@@ -40,6 +40,7 @@ export * from './catalog-browser/catalog-browser.component';
 export * from './multiselect-item-list/multiselect-item-list.component';
 export * from './item-options/item-options.component';
 export * from './return/return.component';
+export * from './auto-complete-address/auto-complete-address.component';
 
 export * from './pos-screen/pos-screen.component';
 

@@ -65,7 +65,7 @@ import { ReturnComponent } from './return/return.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { SelectionListDialogComponent } from './selection-list/selection-list-dialog.component';
 import { DataTableComponent } from './data-table/data-table.component';
-
+import { AutoCompleteAddressComponent } from './auto-complete-address/auto-complete-address.component';
 
 const screens = [
     BasicItemSearchComponent,
@@ -108,6 +108,7 @@ const screens = [
     SaleComponent,
     ReturnComponent,
     DataTableComponent,
+    AutoCompleteAddressComponent,
 ];
 
 const dialogs = [
