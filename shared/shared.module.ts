@@ -9,6 +9,8 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { MaterialModule } from './material.module';
 import { MatKeyboardModule } from '../keyboard';
 import { MarkdownModule } from 'ngx-markdown';
+import { AgmCoreModule } from '@agm/core';
+
 
 import {
     MarkDirtyOnSubmitDirective,
@@ -30,7 +32,8 @@ import {
     FindFloatingElementDirective,
     FixediOsScrollDirective,
     KlassDirective,
-    ActionItemKeyMappingDirective
+    ActionItemKeyMappingDirective,
+    AutoCompleteAddressDirective,
 } from './directives';
 import {
     PromptInputComponent,
@@ -82,6 +85,7 @@ import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCu
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
 import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent, DynamicFormPartComponent } from './screen-parts';
 import { SideNavComponent, WaffleComponent } from './layout-components';
+import { Configuration } from '../configuration/configuration';
 
 const screenParts = [
         DynamicFormPartComponent,
@@ -159,7 +163,8 @@ const directives = [
     HideFormAccessoryBarDirective,
     FindFloatingElementDirective,
     FixediOsScrollDirective,
-    ActionItemKeyMappingDirective
+    ActionItemKeyMappingDirective,
+    AutoCompleteAddressDirective
 ];
 
 const pipes = [
@@ -198,6 +203,10 @@ const pipes = [
         MatKeyboardModule,
         TextMaskModule,
         MarkdownModule.forRoot(),
+        AgmCoreModule.forRoot({
+            apiKey: Configuration.googleApiKey,
+            libraries: ['places']
+        }),
     ],
     exports: [
         BrowserModule,
@@ -210,6 +219,7 @@ const pipes = [
         MaterialModule,
         MatKeyboardModule,
         TextMaskModule,
+        AgmCoreModule,
 
         ...directives,
         ...components,

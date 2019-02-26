@@ -12,6 +12,7 @@ export const Configuration = {
     enableAutocomplete: false,
     enableMenuClose: true,
     enableKeybinds: false,
+    googleApiKey: 'no_key',
 
     // These properties are static on the client and not overriden by configuration.service.ts
     compatibilityVersion: 'v1',

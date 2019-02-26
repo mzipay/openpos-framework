@@ -18,3 +18,4 @@ export * from './hide-form-accessory-bar.directive';
 export * from './fixed-ios-scroll.directive';
 export * from './find-floating-element.directive';
 export * from './action-item-key-mapping.directive';
+export * from './auto-complete-address.directive';
