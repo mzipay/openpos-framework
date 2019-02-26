@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ProductListComponent, ItemClickAction, MenuClickAction } from '../../shared/';
-import { SelectionMode, IItem, IActionItem  } from '../../core';
+import { SelectionMode, IItem, IActionItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({
@@ -66,18 +66,22 @@ export class ItemListComponent extends PosScreen<any> implements OnInit, OnDestr
         }
     }
 
+    isActionEnabled(): boolean {
+        return this.productList && this.productList.selectedItems && this.productList.selectedItems.length > 0;
+    }
+
     onActionButtonClick(): void {
         this.session.onAction(this.screen.actionButton.action, this.productList.selectedItems);
     }
 
     isItemSelectedDisabled(): boolean {
         return this.getSelectionModeAsEnum() !== SelectionMode.Multiple
-        && this.getSelectionModeAsEnum() !== SelectionMode.SingleCheckbox;
+            && this.getSelectionModeAsEnum() !== SelectionMode.SingleCheckbox;
     }
 
     isItemClickDisabled(): boolean {
         return this.itemActionName === null
-        || this.getSelectionModeAsEnum() === SelectionMode.Multiple
-        || this.getSelectionModeAsEnum() === SelectionMode.SingleCheckbox;
+            || this.getSelectionModeAsEnum() === SelectionMode.Multiple
+            || this.getSelectionModeAsEnum() === SelectionMode.SingleCheckbox;
     }
 }
