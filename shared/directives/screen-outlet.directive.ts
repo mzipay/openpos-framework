@@ -22,11 +22,11 @@ import {
 import { Subscription } from 'rxjs';
 
 // tslint:disable-next-line:directive-selector
-@Directive({selector: '[openposScreenOutlet]'})
+@Directive({ selector: '[openposScreenOutlet]' })
 export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
-    private _componentRef: ComponentRef<any>|null = null;
-    @Output() componentEmitter = new EventEmitter<{componentRef: ComponentRef<any>, screen: any}>();
+    private _componentRef: ComponentRef<any> | null = null;
+    @Output() componentEmitter = new EventEmitter<{ componentRef: ComponentRef<any>, screen: any }>();
     @Input() unsubscribe = true;
 
     public templateTypeName: string;
@@ -54,8 +54,9 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.updateTemplateAndScreen();
-        this.subscriptions.add(this.session.getMessages('Screen').subscribe( (message) => this.handle(message) ));
-        this.subscriptions.add(this.session.getMessages('Connected').subscribe( (message) => this.handle(new BlankScreen()) ));
+        this.subscriptions.add(this.session.getMessages('Screen').subscribe((message) => this.handle(message)));
+        this.subscriptions.add(this.session.getMessages('Connected').subscribe((message) => this.handle(new BlankScreen())));
+        this.subscriptions.add(this.session.getMessages('ConfigChanged').subscribe(message => this.updateTheme(message.theme)));
     }
 
     ngOnDestroy(): void {
@@ -93,12 +94,12 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             let screenToCreate = this.screenTypeName = screen.screenType;
             // If we have a template we'll create that instead of the screen and
             // later we'll install the screen in the temlate
-            if ( screen.template ) {
+            if (screen.template) {
                 screenToCreate = this.templateTypeName = screen.template.type;
             }
 
             this._viewContainerRef.clear();
-            if ( !!this._componentRef ) {
+            if (!!this._componentRef) {
                 this._componentRef.destroy();
             }
             this._componentRef = null;
@@ -110,31 +111,23 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             this._componentRef = this._viewContainerRef.createComponent(componentFactory, this._viewContainerRef.length, this._viewContainerRef.parentInjector);
 
             // If we accept an inner screen meaning we are a template, install the screen
-            if ( this._componentRef.instance.installScreen ) {
+            if (this._componentRef.instance.installScreen) {
                 this.installedTemplate = this._componentRef.instance as AbstractTemplate<any>;
                 this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(this.screenTypeName, this.theme)) as IScreen;
             }
 
-            const parent = this.renderer.parentNode( this._componentRef.location.nativeElement );
-            this.renderer.removeClass(parent, this.currentTheme );
-
             if (this.personalization.getTheme() !== this.currentTheme) {
-
-                this.overlayContainer.getContainerElement().classList.remove(this.currentTheme);
-                this.overlayContainer.getContainerElement().classList.add(this.personalization.getTheme());
-                this.currentTheme = this.personalization.getTheme();
+                this.updateTheme(this.personalization.getTheme());
             }
 
-            // Add the new theme
-            this.renderer.addClass(parent, this.currentTheme );
         }
 
-        if ( this._componentRef.instance.show ) {
-            this._componentRef.instance.show( screen );
+        if (this._componentRef.instance.show) {
+            this._componentRef.instance.show(screen);
         }
 
-        if ( this.installedScreen ) {
-            this.installedScreen.show( screen, this.installedTemplate);
+        if (this.installedScreen) {
+            this.installedScreen.show(screen, this.installedTemplate);
         }
 
 
@@ -142,7 +135,16 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         this.dialogService.closeDialog(true);
 
         // Output the componentRef and screen to the training-wrapper
-        this.componentEmitter.emit({componentRef: this._componentRef, screen: screen});
+        this.componentEmitter.emit({ componentRef: this._componentRef, screen: screen });
+    }
+
+    protected updateTheme(theme: string) {
+        this.overlayContainer.getContainerElement().classList.remove(this.currentTheme);
+        this.overlayContainer.getContainerElement().classList.add(theme);
+        const parent = this.renderer.parentNode(this._componentRef.location.nativeElement);
+        this.renderer.removeClass(parent, this.currentTheme);
+        this.renderer.addClass(parent, theme);
+        this.currentTheme = theme;
     }
 
     protected logSwitchScreens(screen: any) {
@@ -172,8 +174,8 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     protected updateClasses(screen: any) {
         if (screen) {
             // remove old classes
-            if ( this.classes ) {
-                this.classes.split(' ').forEach( c => this.renderer.removeClass(this._componentRef.location.nativeElement, c));
+            if (this.classes) {
+                this.classes.split(' ').forEach(c => this.renderer.removeClass(this._componentRef.location.nativeElement, c));
             }
             this.classes = '';
             switch (this.session.getAppId()) {
@@ -193,8 +195,8 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             }
 
             // Add new classes
-            if ( this.classes ) {
-                this.classes.split(' ').forEach( c => this.renderer.addClass(this._componentRef.location.nativeElement, c));
+            if (this.classes) {
+                this.classes.split(' ').forEach(c => this.renderer.addClass(this._componentRef.location.nativeElement, c));
             }
         }
     }
@@ -207,5 +209,5 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 export class BlankScreen {
     type = 'Screen';
     screenType = 'Blank';
-    template: { type: 'Blank' } ;
+    template: { type: 'Blank' };
 }
