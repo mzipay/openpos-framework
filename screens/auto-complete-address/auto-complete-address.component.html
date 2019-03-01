@@ -40,10 +40,10 @@
 				</form>
 			</mat-card-content>
 			<mat-card-actions align="end">
-				<button mat-raised-button type="submit" color=primary (click)="onSubmit()"
+				<button *ngIf="screen.submitButton" mat-raised-button type="submit" color=primary (click)="onSubmit()"
 					[disabled]="!formGroup.valid">
-					<span>Next</span>
-					<app-icon [iconName]="'keyboard_arrow_right'" [iconClass]="'material-icons'"></app-icon>
+					<span>{{screen.submitButton.title}}</span>
+					<app-icon [iconName]="screen.submitButton.icon" [iconClass]="'material-icons'"></app-icon>
 				</button>
 			</mat-card-actions>
 		</mat-card>
