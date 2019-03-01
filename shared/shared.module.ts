@@ -9,7 +9,6 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { MaterialModule } from './material.module';
 import { MatKeyboardModule } from '../keyboard';
 import { MarkdownModule } from 'ngx-markdown';
-import { AgmCoreModule } from '@agm/core';
 
 
 import {
@@ -203,10 +202,6 @@ const pipes = [
         MatKeyboardModule,
         TextMaskModule,
         MarkdownModule.forRoot(),
-        AgmCoreModule.forRoot({
-            apiKey: Configuration.googleApiKey,
-            libraries: ['places']
-        }),
     ],
     exports: [
         BrowserModule,
@@ -219,7 +214,6 @@ const pipes = [
         MaterialModule,
         MatKeyboardModule,
         TextMaskModule,
-        AgmCoreModule,
 
         ...directives,
         ...components,
