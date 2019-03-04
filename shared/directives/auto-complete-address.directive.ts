@@ -1,7 +1,6 @@
-import { Directive, ElementRef, OnInit, Output, EventEmitter, ViewChild, ContentChild, AfterContentInit, AfterViewInit, ContentChildren, QueryList, ViewChildren } from '@angular/core';
+import { Directive, ElementRef, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { Configuration } from '../../configuration/configuration';
-import { MatInput } from '@angular/material';
-import { DynamicFormFieldComponent } from '../components/dynamic-form-field/dynamic-form-field.component';
+
 
 declare var google: any;
 
