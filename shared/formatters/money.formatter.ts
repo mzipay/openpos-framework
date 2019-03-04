@@ -7,7 +7,7 @@ export class MoneyFormatter implements IFormatter {
     private keyFilter = /[0-9\ | \.]/;
 
     formatValue(value: string): string {
-        if (!value) {
+        if (!value && value != '0') {
             return '';
         }
 
