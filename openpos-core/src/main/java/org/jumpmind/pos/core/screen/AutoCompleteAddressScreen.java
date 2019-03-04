@@ -18,11 +18,9 @@ public class AutoCompleteAddressScreen extends DynamicFormScreen {
         setScreenType(ScreenType.AutoCompleteAddress);
         setTemplate(null);
         setSubmitButton(new ActionItem("Next", "Next", IconType.Forward));
-
-        createForm();
     }
 
-    private void createForm() {
+    public void addDefaultAddressFields() {
         this.getForm().addTextField("streetAddress", "Street Address", "", true);
         this.getForm().addTextField("addressLine2", "Address Line 2", "", false);
         this.getForm().addTextField("locality", "City", "", true);
