@@ -17,7 +17,6 @@ export class AutoCompleteAddressComponent extends PosScreen<any> implements OnIn
   formGroup: FormGroup;
   screenForm: IForm;
   streetAddress: IFormElement;
-  addressParts: IFormElement[];
 
   constructor(private formBuilder: FormBuilder) {
     super();
@@ -27,12 +26,9 @@ export class AutoCompleteAddressComponent extends PosScreen<any> implements OnIn
     this.screenForm = this.screen.form;
     this.formGroup = this.formBuilder.group(this.screenForm);
 
-    this.addressParts = [];
     for (const element of this.screenForm.formElements) {
       if (element.id === 'streetAddress') {
         this.streetAddress = element;
-      } else {
-        this.addressParts.push(element);
       }
     }
   }

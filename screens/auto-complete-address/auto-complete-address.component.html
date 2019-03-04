@@ -9,16 +9,17 @@
 
 	<div waffle-body class="body-content" gdAreas="form | status" gdRows="minmax(200px, 100%) auto" gdGap="6px">
 
-		<mat-card gdArea="form" class="page-content-card">
-			<mat-card-content>
+		<mat-card gdArea="form" fxLayout="column" class="page-content-card scrollable-content-card">
+			<mat-card-content fxFlex="1 1 100%">
 				<form [formGroup]="formGroup">
+					<ng-container *ngFor="let field of screenForm.formElements">
+						<app-dynamic-form-field *ngIf="field === streetAddress" autoCompleteAddress
+							[formGroup]="formGroup" [formField]="field" (onFieldChanged)="onFieldChanged($event)"
+							(onSelect)="setAddress($event)"></app-dynamic-form-field>
 
-					<app-dynamic-form-field *ngIf="streetAddress" autoCompleteAddress [formGroup]="formGroup"
-						[formField]="streetAddress" (onFieldChanged)="onFieldChanged($event)"
-						(onSelect)="setAddress($event)"></app-dynamic-form-field>
-
-					<app-dynamic-form-field *ngFor="let field of addressParts" [formGroup]="formGroup"
-						[formField]="field" (onFieldChanged)="onFieldChanged($event)"></app-dynamic-form-field>
+						<app-dynamic-form-field *ngIf="field !== streetAddress" [formGroup]="formGroup"
+							[formField]="field" (onFieldChanged)="onFieldChanged($event)"></app-dynamic-form-field>
+					</ng-container>
 
 					<mat-error>
 						<div id="formErrorsWrapper">
