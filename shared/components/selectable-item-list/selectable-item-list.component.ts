@@ -1,4 +1,4 @@
-import { Component, Input, ContentChild, TemplateRef, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ContentChild, TemplateRef, ElementRef, Output, EventEmitter, HostListener } from '@angular/core';
 import { SelectionMode } from '../../../core';
 
 export class SelectableItemListComponentConfiguration<ItemType> {
@@ -18,6 +18,7 @@ export class SelectableItemListComponent<ItemType> {
     @ContentChild(TemplateRef) itemTemplate: TemplateRef<ElementRef>;
 
     @Input() defaultSelect = false;
+    @Input() keyboardControl = true;
     @Input()
     set configuration(config: SelectableItemListComponentConfiguration<ItemType>) {
         this._config = config;
@@ -114,4 +115,87 @@ export class SelectableItemListComponent<ItemType> {
                 return this.selectedItem === item;
         }
     }
+
+    handleEscape(event: KeyboardEvent) {
+        switch (this._config.selectionMode) {
+            case SelectionMode.Single:
+                this.selectedItem = null;
+                this.selectedItemChange.emit(this.selectedItem);
+                break;
+            case SelectionMode.Multiple:
+                this.selectedItemList.length = 0;
+                this.selectedItemListChange.emit(this.selectedItemList);
+                break;
+        }    
+    }
+
+    handleArrowKey(event: KeyboardEvent) {
+        let bound = false;
+  
+        var direction:number = 1;
+        if (event.key === 'ArrowDown') {
+          direction = 1;
+        } else if (event.key === 'ArrowUp') {
+          direction = -1;
+        } else {
+          return;
+        }
+  
+        // debugger;
+    
+        var itemIndexToSelect:number = -1;
+
+        switch (this._config.selectionMode) {
+            case SelectionMode.Single:
+                let currentListIndex = this.itemsToShow.findIndex(item => item === this.selectedItem);
+                let newIndex = currentListIndex+direction;
+                if (this.itemsToShow.length > newIndex) {
+                    this.selectedItem = this.itemsToShow[newIndex];
+                    this.selectedItemChange.emit(this.selectedItem);
+                }
+                
+                break;
+            case SelectionMode.Multiple:
+                if (this.selectedItemList && this.selectedItemList.length === 1) {
+                    let currentListIndex = this.itemsToShow.findIndex(item => item === this.selectedItemList[0]);
+                    let newIndex = currentListIndex+direction;
+                    if (this.itemsToShow.length > newIndex && newIndex > -1) {
+                        this.selectedItemList = [this.itemsToShow[newIndex]];
+                        this.selectedItemListChange.emit(this.selectedItemList);
+                    }        
+                } else if (this.itemsToShow.length > 0) {
+                    this.selectedItemList = [this.itemsToShow[0]];
+                    this.selectedItemListChange.emit(this.selectedItemList);
+                }
+                break;
+        }    
+    
+        if (itemIndexToSelect > -1) {
+          bound = true;
+          this.selectedItem = this.itemsToShow[itemIndexToSelect];
+          this.selectedItemList = [this.itemsToShow[itemIndexToSelect]];
+        }
+  
+        if (bound) {
+          event.preventDefault();
+        }
+    }
+
+    @HostListener('document:keyup', ['$event'])
+    public onKeyup(event: KeyboardEvent) {
+        if (!this.keyboardControl) {
+            return;
+        }        
+        let bound = false;
+
+        var direction:number = 1;
+        if (event.key === 'ArrowDown'
+        || event.key === 'ArrowUp' ) {
+            this.handleArrowKey(event);
+        }  else if (event.key === 'Escape') {
+            this.handleEscape(event);
+        } else {
+          return;
+        }
+    }      
 }
