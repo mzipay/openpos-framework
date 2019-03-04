@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { ScreenPartComponent, ScreenPart } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
 import { MatInput } from '@angular/material';
@@ -20,6 +20,8 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     public barcode: string;
 
+    @Input() defaultAction : string;
+
     constructor( public devices: DeviceService, messageProvider: MessageProvider ) {
         super(messageProvider);
     }
@@ -34,8 +36,10 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     public onEnter(): void {
         if (this.barcode && this.barcode.trim().length >= this.screenData.scanMinLength) {
-        this.sessionService.onAction(this.screenData.scanActionName, this.barcode);
-        this.barcode = '';
+            this.sessionService.onAction(this.screenData.scanActionName, this.barcode);
+            this.barcode = '';
+        } else if (this.defaultAction) {
+            this.sessionService.onAction(this.defaultAction); 
         }
     }
 
