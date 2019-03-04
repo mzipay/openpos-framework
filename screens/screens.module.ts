@@ -65,6 +65,7 @@ import { ReturnComponent } from './return/return.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { SelectionListDialogComponent } from './selection-list/selection-list-dialog.component';
 import { DataTableComponent } from './data-table/data-table.component';
+import { SaleFooterComponent } from './sale/sale-footer/sale-footer.component';
 import { AutoCompleteAddressComponent } from './auto-complete-address/auto-complete-address.component';
 
 const screens = [
@@ -133,6 +134,10 @@ const templates = [
     SellStatusSectionComponent
 ];
 
+const screenParts = [
+    SaleFooterComponent
+];
+
 const components = [
 
 ];
@@ -147,15 +152,16 @@ const components = [
         ...screens,
         ...dialogs,
         ...templates,
-        ...components
+        ...components,
+        ...screenParts
     ],
     imports: [
         SharedModule
     ],
     exports: [
-
         ...templates,
-        ...components
+        ...components,
+        ...screenParts
     ],
     providers: [
     ]
