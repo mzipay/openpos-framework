@@ -13,30 +13,19 @@
 			<mat-card-content>
 				<form [formGroup]="formGroup">
 
-					<mat-form-field class="address-field">
-						<input matInput autoCompleteAddress (onSelect)="setAddress($event)"
-							formControlName="streetAddress" placeholder="Street Address">
-					</mat-form-field>
+					<app-dynamic-form-field *ngIf="streetAddress" autoCompleteAddress [formGroup]="formGroup"
+						[formField]="streetAddress" (onFieldChanged)="onFieldChanged($event)"
+						(onSelect)="setAddress($event)"></app-dynamic-form-field>
 
-					<mat-form-field class="address-field">
-						<input matInput formControlName="addressLine2" placeholder="Address Line 2">
-					</mat-form-field>
+					<app-dynamic-form-field *ngFor="let field of addressParts" [formGroup]="formGroup"
+						[formField]="field" (onFieldChanged)="onFieldChanged($event)"></app-dynamic-form-field>
 
-					<mat-form-field class="address-field">
-						<input matInput formControlName="locality" placeholder="City">
-					</mat-form-field>
-
-					<mat-form-field class="address-field">
-						<input matInput formControlName="state" placeholder="State">
-					</mat-form-field>
-
-					<mat-form-field class="address-field">
-						<input matInput formControlName="postalCode" placeholder="Postal Code">
-					</mat-form-field>
-
-					<mat-form-field class="address-field">
-						<input matInput formControlName="country" placeholder="Country">
-					</mat-form-field>
+					<mat-error>
+						<div id="formErrorsWrapper">
+							<app-show-errors #formErrors [control]="form"></app-show-errors>
+						</div>
+						<div *ngFor="let error of screenForm.formErrors">{{error}}</div>
+					</mat-error>
 				</form>
 			</mat-card-content>
 			<mat-card-actions align="end">

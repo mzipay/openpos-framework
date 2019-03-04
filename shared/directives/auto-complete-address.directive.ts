@@ -1,13 +1,16 @@
-import { Directive, ElementRef, OnInit, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, OnInit, Output, EventEmitter, ViewChild, ContentChild, AfterContentInit, AfterViewInit, ContentChildren, QueryList, ViewChildren } from '@angular/core';
 import { Configuration } from '../../configuration/configuration';
+import { MatInput } from '@angular/material';
+import { DynamicFormFieldComponent } from '../components/dynamic-form-field/dynamic-form-field.component';
 
 declare var google: any;
+
 
 @Directive({
     // tslint:disable-next-line:directive-selector
     selector: '[autoCompleteAddress]'
 })
-export class AutoCompleteAddressDirective implements OnInit {
+export class AutoCompleteAddressDirective implements AfterViewInit {
 
     @Output() onSelect: EventEmitter<any> = new EventEmitter();
 
@@ -16,9 +19,22 @@ export class AutoCompleteAddressDirective implements OnInit {
     protected readonly SCRIPT_ID: string = 'googleMapsApiScript';
     protected readonly CALLBACK_NAME: string = 'initAutoComplete';
 
-    constructor(elRef: ElementRef) {
+    constructor(protected elRef?: ElementRef) {
         // elRef will get a reference to the element where the directive is placed
-        this.element = elRef.nativeElement;
+        if (elRef.nativeElement instanceof HTMLInputElement) {
+            this.element = elRef.nativeElement;
+        }
+    }
+
+    ngAfterViewInit() {
+        if (!this.element) {
+            const input = this.elRef.nativeElement.querySelector('input');
+            if (input && input instanceof HTMLInputElement) {
+                this.element = input;
+            }
+        }
+
+        this.loadApi();
     }
 
     getFormattedAddress(place: any) {
@@ -56,7 +72,7 @@ export class AutoCompleteAddressDirective implements OnInit {
         return address;
     }
 
-    ngOnInit() {
+    loadApi() {
         const loadAPI = this.attachScript();
         loadAPI.then(() => {
             this.initAutoComplete();
