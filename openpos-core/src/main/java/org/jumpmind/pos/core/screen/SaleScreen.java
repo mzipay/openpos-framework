@@ -74,7 +74,7 @@ public class SaleScreen extends Screen {
         this.totals = totals;
     }
 
-    public void setTotal(String name, String amount) {
+    public void addTotal(String name, String amount) {
     	if( totals == null ) {
     		totals = new ArrayList<>();
     	}
