@@ -64,6 +64,7 @@ eclipse {
 
 test {
     // ignoreFailures = true
+    testLogging.showStandardStreams = true
 }
 
 task testJar(type: Jar) {
