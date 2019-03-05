@@ -2,14 +2,18 @@
     <mat-card-content class="text-lg" gdAreas="items total  button" gdColumns="auto 1fr auto" gdGap="10px">
         <div gdArea="items" gdGridAlign="center center" class="text-md">{{screenData.itemCount}}</div>
         <div gdArea="total" gdGridAlign="center center" gdGap="8px" gdAreas="label value">
-            <span>{{screenData.grandTotal.label}}</span>
-            <span>{{screenData.grandTotal.value | valueFormatter:screenData.grandTotal.valueFormatter}}</span>
+            <span *ngIf="screenData.grandTotal">{{screenData.grandTotal.label}}</span>
+            <span *ngIf="screenData.grandTotal">{{screenData.grandTotal.value | valueFormatter:screenData.grandTotal.valueFormatter}}</span>
         </div>
         <button gdArea="button" mat-raised-button color="primary"
             class="checkout-button mat-elevation-z0"
-            (click)="onMenuItemClick(screenData.checkoutButton)">
-            <span class="text-md">{{screenData.checkoutButton.title}}</span>
-            <app-icon [iconClass]="'mat-48'" [iconName]="screenData.checkoutButton.icon"></app-icon>
+            [disabled]="!screenData.checkoutButton.enabled"
+            (click)="onMenuItemClick(screenData.checkoutButton)"
+            >
+            <div gdAreas="label icon">
+                <span gdArea="label" gdGridAlign="center center" class="text-md">{{screenData.checkoutButton.title}}</span>
+                <app-icon gdArea="icon" [iconClass]="'mat-48'" [iconName]="screenData.checkoutButton.icon"></app-icon>
+            </div>
         </button>
     </mat-card-content>
 </mat-card>
