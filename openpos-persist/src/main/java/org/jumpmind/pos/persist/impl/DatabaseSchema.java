@@ -1,5 +1,7 @@
 package org.jumpmind.pos.persist.impl;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.Types;
@@ -190,9 +192,17 @@ public class DatabaseSchema {
             }
         }
     }
+    
+    protected String getTableName(String tablePrefix, String tableName) {
+        if (isNotBlank(tablePrefix)) {
+            return  tablePrefix + "_" + tableName;
+        } else {
+            return tableName;
+        }
+    }
 
     protected void validateTable(String tablePrefix, Table table) {
-        String tableName = tablePrefix + "_" + table.getName();
+        String tableName = getTableName(tablePrefix, table.getName());
         validateName(tableName, "table", tableName);
         boolean hasPk = false;
         for (Column column : table.getColumns()) {
@@ -334,7 +344,8 @@ public class DatabaseSchema {
             } else {
                 dbCol.setTypeCode(colAnnotation.type());
             }
-
+                       
+            dbCol.setAutoIncrement(colAnnotation.autoIncrement());
             dbCol.setJdbcTypeName(getType(dbCol.getJdbcTypeCode()));
 
             if (colAnnotation.size() != null & !colAnnotation.size().equalsIgnoreCase("")) {
