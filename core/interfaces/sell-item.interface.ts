@@ -14,4 +14,5 @@ export interface ISellItem extends IItem {
     type: string;
     prop65Item: boolean;
     prop65WarningText: string;
+    styleNumber: string;
 }

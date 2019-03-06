@@ -28,8 +28,8 @@ export class PersonalizationComponent implements IScreen, OnInit {
         this.secondFormGroup = this.formBuilder.group({
             storeNumber: ['', [Validators.required, , Validators.pattern('\\d{5}')]],
             deviceNumber: ['', [Validators.required, , Validators.pattern('\\d{3}')]],
-            deviceType: ['', [Validators.required, , Validators.pattern('[a-zA-Z0-9]+')]],
-            brandId: ['', [Validators.required, , Validators.pattern('[a-zA-Z]+')]]
+            deviceType: ['desktop', [Validators.required, , Validators.pattern('[a-zA-Z0-9]+')]],
+            brandId: ['default', [Validators.required, , Validators.pattern('[a-zA-Z]+')]]
         });
     }
 

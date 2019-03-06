@@ -23,7 +23,7 @@
 
 					<mat-error>
 						<div id="formErrorsWrapper">
-							<app-show-errors #formErrors [control]="form"></app-show-errors>
+							<app-show-errors #formErrors [control]="formGroup"></app-show-errors>
 						</div>
 						<div *ngFor="let error of screenForm.formErrors">{{error}}</div>
 					</mat-error>
