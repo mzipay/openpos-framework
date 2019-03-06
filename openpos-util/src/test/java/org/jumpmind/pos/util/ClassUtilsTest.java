@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+@SuppressWarnings("deprecation")
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes= {UtilTestConfig.class})
 public class ClassUtilsTest {
