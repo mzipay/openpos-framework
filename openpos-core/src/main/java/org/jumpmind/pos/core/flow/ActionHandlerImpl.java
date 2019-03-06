@@ -144,7 +144,7 @@ public class ActionHandlerImpl {
         try {
             String name = stackFrame.getClassName(); 
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            if (!name.startsWith("sun") && !name.startsWith("org.gradle")) {
+            if (!name.startsWith("sun") && !name.startsWith("org.gradle") && !name.startsWith("com.sun")) {
                 currentClass = classLoader.loadClass(name);
             }
         } catch (Exception e) {
