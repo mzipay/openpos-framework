@@ -32,7 +32,7 @@ import {
     FixediOsScrollDirective,
     KlassDirective,
     ActionItemKeyMappingDirective,
-    AutoCompleteAddressDirective,
+    AutoCompleteAddressDirective
 } from './directives';
 import {
     PromptInputComponent,
@@ -85,6 +85,7 @@ import { DynamicListControlComponent } from './components/dynamic-list-control/d
 import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent, DynamicFormPartComponent } from './screen-parts';
 import { SideNavComponent, WaffleComponent } from './layout-components';
 import { Configuration } from '../configuration/configuration';
+import { KeyPressSourceDirective } from './directives/keypress-source.directive';
 
 const screenParts = [
         DynamicFormPartComponent,
@@ -163,7 +164,8 @@ const directives = [
     FindFloatingElementDirective,
     FixediOsScrollDirective,
     ActionItemKeyMappingDirective,
-    AutoCompleteAddressDirective
+    AutoCompleteAddressDirective,
+    KeyPressSourceDirective
 ];
 
 const pipes = [

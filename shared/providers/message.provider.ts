@@ -14,7 +14,7 @@ export class MessageProvider {
 
     setMessageType( messageType: string ) {
         this.messages$ = this.sessionService.getMessages( messageType );
-        this.messageType=messageType;
+        this.messageType = messageType;
     }
 
     getMessages$(): Observable<any> {

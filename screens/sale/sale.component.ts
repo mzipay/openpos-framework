@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { SaleInterface } from './sale.interface';
 import { ISellItem } from '../../core/interfaces/sell-item.interface';

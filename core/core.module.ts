@@ -4,7 +4,7 @@ import { PersonalizationStartupTask } from './components/startup/personalization
 import { STARTUP_TASKS, STARTUP_COMPONENT, STARTUP_FAILED_COMPONENT } from './services/startup.service';
 
 // Angular Includes
-import { NgModule, Injector, Optional, SkipSelf } from '@angular/core';
+import { NgModule, Injector, Optional, SkipSelf, Renderer2 } from '@angular/core';
 import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
@@ -34,6 +34,8 @@ import { DialogContentComponent } from './components/dialog-content/dialog-conte
 import { DialogServiceStartupTask } from './components/startup/dialog-service-startup-task';
 import { TrainingOverlayService } from './services/training-overlay.service';
 import { ToastService } from './services';
+import { KeyPressProvider } from '../shared/providers/keypress.provider';
+import { fromEvent, Observable } from 'rxjs';
 
 @NgModule({
     entryComponents: [
@@ -77,13 +79,19 @@ import { ToastService } from './services';
         { provide: STARTUP_COMPONENT, useValue: StartupComponent },
         { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent},
         TrainingOverlayService,
-        ConfigurationService
+        ConfigurationService,
+        KeyPressProvider
     ]
 })
 export class CoreModule {
 
-    constructor(@Optional() @SkipSelf() parentModule: CoreModule, private injector: Injector, toastService: ToastService) {
+    constructor(@Optional() @SkipSelf() parentModule: CoreModule,
+    private injector: Injector,
+    toastService: ToastService,
+    keyProvider: KeyPressProvider) {
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
         AppInjector.Instance = this.injector;
+        keyProvider.registerKeyPressSource(fromEvent(document, 'keydown') as Observable<KeyboardEvent>);
+        keyProvider.registerKeyPressSource(fromEvent(document, 'keyup') as Observable<KeyboardEvent>);
     }
 }
