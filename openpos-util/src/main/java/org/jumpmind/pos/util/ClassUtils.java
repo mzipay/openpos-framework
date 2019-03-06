@@ -1,10 +1,19 @@
 package org.jumpmind.pos.util;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
+
 
 public class ClassUtils {
+    protected static final Logger logger = LoggerFactory.getLogger(ClassUtils.class);
 
     /**
      * This method first attempts to check the given targetObject's class for an 
@@ -29,4 +38,44 @@ public class ClassUtils {
 
         return annotation;
     }
+    
+    /**
+     * Retrieves all of the classes at or below the given package which have the
+     * given annotation.
+     * @param packageName The root package to begin searching
+     * @param annotation The annotation to search for.
+     * @return A list of Class objects.
+     */
+    public static List<Class<?>> getClassesForPackageAndAnnotation(String packageName, Class<? extends Annotation> annotation) {
+        return getClassesForPackageAndAnnotation(packageName, annotation, null);
+    }
+    
+    /**
+     * Retrieves all of the classes at or below the given package which have the
+     * given annotation.
+     * @param packageName The root package to begin searching
+     * @param annotation The annotation to search for.
+     * @param alwaysIncludeClasses An optional list of classes to always return 
+     * in the list of returned classes.
+     * @return A list of Class objects.
+     */
+    protected static List<Class<?>> getClassesForPackageAndAnnotation(String packageName, Class<? extends Annotation> annotation, List<Class<?>> alwaysIncludeClasses) {
+        List<Class<?>> classes = new ArrayList<Class<?>>();
+        if (alwaysIncludeClasses != null) {
+            classes.addAll(alwaysIncludeClasses);
+        }
+        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
+        scanner.addIncludeFilter(new AnnotationTypeFilter(annotation));
+        for (BeanDefinition bd : scanner.findCandidateComponents(packageName)) {
+            try {
+                final Class<?> clazz = Class.forName(bd.getBeanClassName());
+                classes.add(clazz);
+            } catch (ClassNotFoundException ex) {
+                logger.error(ex.getMessage());
+            }
+        }
+        return classes;
+    }
+    
+    
 }
