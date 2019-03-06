@@ -1,5 +1,7 @@
 package org.jumpmind.pos.core.screeninterceptor;
 
+import java.util.Map;
+
 import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IDisableActionItemService;
@@ -11,7 +13,7 @@ public class DisableActionItemScreenPropertyStrategy implements IScreenPropertyS
 	IDisableActionItemService disableActionItemService;
 	
 	@Override
-	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, Screen screen) {
+	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, Screen screen, Map<String, Object> screenContext) {
 		if(property != null && ActionItem.class.equals(clazz)) {
 			ActionItem item = (ActionItem)property;
 			// Only try to disable if it is currently disabled. This way we don't enable buttons that were

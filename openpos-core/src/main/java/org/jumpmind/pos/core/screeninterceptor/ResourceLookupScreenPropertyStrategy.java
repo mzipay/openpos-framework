@@ -1,5 +1,6 @@
 package org.jumpmind.pos.core.screeninterceptor;
 
+import java.util.Map;
 import java.util.MissingResourceException;
 
 import org.jumpmind.pos.core.screen.Screen;
@@ -12,7 +13,7 @@ public class ResourceLookupScreenPropertyStrategy implements IScreenPropertyStra
 	IResourceLookupService lookupService;
 	
 	@Override
-	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, Screen screen) {
+	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, Screen screen, Map<String, Object> screenContext) {
 		if( String.class.equals(clazz)) {
 			String value = (String)property;
 			if(value != null && value.startsWith("{")) {

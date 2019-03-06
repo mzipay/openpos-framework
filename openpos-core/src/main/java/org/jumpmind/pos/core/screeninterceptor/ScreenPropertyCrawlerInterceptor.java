@@ -3,6 +3,7 @@ package org.jumpmind.pos.core.screeninterceptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -48,25 +49,26 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
     @Override
     public void intercept(String appId, String deviceId, Screen screen) {
         if (screen != null && screenProprtyStrategies != null && screenProprtyStrategies.size() > 0) {
-            processFields(appId, deviceId, screen, screen);
-            processOptionals(appId, deviceId, screen.any(), screen);
+            Map<String, Object> screenContext = new HashMap<>();
+            processFields(appId, deviceId, screen, screen, screenContext);
+            processOptionals(appId, deviceId, screen.any(), screen, screenContext);
         }
     }
 
-    private void processOptionals(String appId, String deviceId, Map<String, Object> optionals, Screen screen) {
+    private void processOptionals(String appId, String deviceId, Map<String, Object> optionals, Screen screen, Map<String, Object> screenContext) {
         if (optionals.size() > 0) {
             Set<String> keys = optionals.keySet();
             for (String key : keys) {
                 Object value = optionals.get(key);
                 if (value != null) {
-                    doStrategies(appId, deviceId, value, value.getClass(), screen);
+                    doStrategies(appId, deviceId, value, value.getClass(), screen, screenContext);
                 }
             }
         }
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private final void processFields(String appId, String deviceId, Object obj, Screen screen) {
+    private final void processFields(String appId, String deviceId, Object obj, Screen screen, Map<String, Object> screenContext) {
         Class<?> clazz = obj.getClass();
         while (clazz != null && obj != null) {
             Field[] fields = clazz.getDeclaredFields();
@@ -76,7 +78,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
 
                 try {
                     if (!Modifier.isFinal(field.getModifiers())) {
-                        field.set(obj, doStrategies(appId, deviceId, field, obj, screen));
+                        field.set(obj, doStrategies(appId, deviceId, field, obj, screen, screenContext));
                     }
                 } catch (IllegalArgumentException | IllegalAccessException e) {
                     logger.error("Failed to set property value", e);
@@ -89,9 +91,9 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
                             for (int i = 0; i < list.size(); i++) {
                                 Object fieldObj = list.get(i);
                                 if (fieldObj != null) {
-                                    list.set(i, doStrategies(appId, deviceId, fieldObj, fieldObj.getClass(), screen));
+                                    list.set(i, doStrategies(appId, deviceId, fieldObj, fieldObj.getClass(), screen, screenContext));
                                     if (shouldProcessFields(field, fieldObj.getClass())) {
-                                        processFields(appId, deviceId, fieldObj, screen);
+                                        processFields(appId, deviceId, fieldObj, screen, screenContext);
                                     }
                                 }
                             }
@@ -108,7 +110,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
                             while (i.hasNext()) {
                                 Object fieldObj = i.next();
                                 if (fieldObj != null && shouldProcessFields(field, fieldObj.getClass())) {
-                                    processFields(appId, deviceId, fieldObj, screen);
+                                    processFields(appId, deviceId, fieldObj, screen, screenContext);
                                 }
                             }
                         }
@@ -122,9 +124,9 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
                             for (Entry entry : map.entrySet()) {
                                 Object entryValue = entry.getValue();
                                 if (entryValue != null) {
-                                    entry.setValue(doStrategies(appId, deviceId, entryValue, entryValue.getClass(), screen));
+                                    entry.setValue(doStrategies(appId, deviceId, entryValue, entryValue.getClass(), screen, screenContext));
                                     if (shouldProcessFields(field, entryValue.getClass())) {
-                                        processFields(appId, deviceId, entryValue, screen);
+                                        processFields(appId, deviceId, entryValue, screen, screenContext);
                                     }
                                 }
                             }
@@ -136,7 +138,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
                     try {
                         Object fieldObj = field.get(obj);
                         if (fieldObj != null) {
-                            processFields(appId, deviceId, fieldObj, screen);
+                            processFields(appId, deviceId, fieldObj, screen, screenContext);
                         }
                     } catch (Exception e) {
                         logger.warn("", e);
@@ -147,21 +149,21 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
         }
     }
 
-    private Object doStrategies(String appId, String deviceId, Field field, Object obj, Screen screen) {
+    private Object doStrategies(String appId, String deviceId, Field field, Object obj, Screen screen, Map<String, Object> screenContext) {
         try {
             Object property = field.get(obj);
             Class<?> clazz = (property != null ? property.getClass() : field.getType());
-            return doStrategies(appId, deviceId, property, clazz, screen);
+            return doStrategies(appId, deviceId, property, clazz, screen, screenContext);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             logger.error("Failed to crawl screen property", e);
         }
         return obj;
     }
 
-    private Object doStrategies(String appId, String deviceId, Object property, Class<?> clazz, Screen screen) {
+    private Object doStrategies(String appId, String deviceId, Object property, Class<?> clazz, Screen screen, Map<String, Object> screenContext) {
 
         for (IScreenPropertyStrategy s : screenProprtyStrategies) {
-            property = s.doStrategy(appId, deviceId, property, clazz, screen);
+            property = s.doStrategy(appId, deviceId, property, clazz, screen, screenContext);
         }
 
         return property;

@@ -1,5 +1,7 @@
 package org.jumpmind.pos.core.screeninterceptor;
 
+import java.util.Map;
+
 import org.jumpmind.pos.core.content.IContentProvider;
 import org.jumpmind.pos.core.screen.Screen;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,7 @@ public class ContentScreenPropertyStrategy implements IScreenPropertyStrategy {
     IContentProvider contentProvider;
 
     @Override
-    public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, Screen screen) {
+    public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, Screen screen, Map<String, Object> screenContext) {
         if (String.class.equals(clazz) && contentProvider != null) {
             String value = (String) property;
             if (value != null && value.startsWith("content:")) {
