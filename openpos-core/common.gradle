@@ -37,6 +37,19 @@ repositories {
     maven { url symmetricMavenUrl }
 }
 
+idea {
+    
+      //if you want parts of paths in resulting files (*.iml, etc.) to be replaced by variables (Files)
+      pathVariables GRADLE_HOME: file('~/cool-software/gradle')
+    
+      module {
+        resourceDirs += file('src/test/resources')
+        
+        downloadJavadoc = true        
+        downloadSources = true
+     }
+}
+
 eclipse {
     classpath {
         downloadSources = true

@@ -269,7 +269,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
         String path = "/" + getName() + "-schema.xml";
         URL resource = getClass().getResource(path);
         if (resource != null) {
-            ConfigDatabaseUpgrader databaseUpgrade = new ConfigDatabaseUpgrader(path, databasePlatform(), true, "");
+            ConfigDatabaseUpgrader databaseUpgrade = new ConfigDatabaseUpgrader(path, databasePlatform(), false, "");
             databaseUpgrade.upgrade();
         }
     }

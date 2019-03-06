@@ -68,5 +68,11 @@ public class MoneyCalculator {
         return MoneyUtils.subtract(money(amount1), money(amount2)).getAmount();
     }
 
+    public Money subtract(Money amount1, Money amount2) {
+    		return MoneyUtils.subtract(amount1, amount2);
+    }
     
+    public Money add(Money amount1, Money amount2) {
+    		return MoneyUtils.add(amount1,  amount2);
+    }
 }
