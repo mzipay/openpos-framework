@@ -17,8 +17,10 @@
   </div>
   <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end">
     <button *ngFor="let m of otherButtons; let i = index" [id]="'button-' + i" mat-raised-button (click)="session.onAction(m)"
-      color="primary-inverse" [disabled]="!m.enabled" [ngClass]="{'customer-button': isCustomerFacing()}" [actionItem]="m">{{m.title}}</button>
+      color="primary-inverse" [disabled]="!m.enabled" [ngClass]="{'customer-button': isCustomerFacing()}" [actionItem]="m">{{m.title}}
+      <span *ngIf="m.keybind && m.keybind !== 'Escape' && m.keybind !== 'Enter'" class="muted-color">({{m.keybind}})</span></button>
     <button *ngIf="primaryButton" mat-raised-button (click)="session.onAction(primaryButton)" color="primary" id="primaryButton"
-      autofocus appFocus [ngClass]="{'customer-button': isCustomerFacing()}" [actionItem]="primaryButton">{{primaryButton.title}}</button>
+      autofocus appFocus [ngClass]="{'customer-button': isCustomerFacing()}" [actionItem]="primaryButton">{{primaryButton.title}}
+    </button>
   </div>
 </ng-container>
