@@ -37,7 +37,7 @@ public class ModuleRegistry {
             Date date = new Date();
 
             try {
-                File file = new File(".h2.server.properties");
+                File file = new File("work", ".h2.server.properties");
                 out = new BufferedWriter(new FileWriter(file));
                 out.write("#H2 Server Properties\n#" + DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(date) + "\n");
 
