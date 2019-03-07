@@ -181,7 +181,7 @@ export class SelectableItemListComponent<ItemType> {
         }
     }
 
-    @HostListener('document:keyup', ['$event'])
+    // @HostListener('document:keyup', ['$event'])
     public onKeyup(event: KeyboardEvent) {
         if (!this.keyboardControl) {
             return;
@@ -193,7 +193,7 @@ export class SelectableItemListComponent<ItemType> {
         || event.key === 'ArrowUp' ) {
             this.handleArrowKey(event);
         }  else if (event.key === 'Escape') {
-            this.handleEscape(event);
+          //  this.handleEscape(event);
         } else {
           return;
         }
