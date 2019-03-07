@@ -216,7 +216,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
     }
 
     @Override
-    public void start() {
+    public void initialize() {
         updateDataModel(session());
     }
 

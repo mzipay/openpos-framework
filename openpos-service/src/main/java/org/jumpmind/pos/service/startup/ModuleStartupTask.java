@@ -22,9 +22,14 @@ public class ModuleStartupTask extends AbstractStartupTask {
         if (moduleRegistry.getModules() != null && moduleRegistry.getModules().size() > 0) {
             List<IModule> modules = moduleRegistry.getModules();
             for (IModule module : modules) {
+                logger.info(BoxLogging.box("Initializing Module: " + StringUtils.leftPad(module.getName(), 15).toUpperCase()));
+                module.initialize();
+            }
+            for (IModule module : modules) {
                 logger.info(BoxLogging.box("Starting Module: " + StringUtils.leftPad(module.getName(), 15).toUpperCase()));
                 module.start();
             }
+
         } else {
             logger.info(BoxLogging.box("No modules detected to start ..."));
         }

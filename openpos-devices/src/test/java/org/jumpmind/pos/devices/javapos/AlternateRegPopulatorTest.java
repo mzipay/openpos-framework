@@ -24,7 +24,7 @@ public class AlternateRegPopulatorTest {
     
     @Before
     public void init() {
-        module.start();
+        module.initialize();
         cache.populate();
     }
     

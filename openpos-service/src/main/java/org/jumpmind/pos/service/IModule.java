@@ -6,7 +6,11 @@ public interface IModule {
     
     public String getVersion();
     
+    public default void initialize() {
+    }
+    
     public default void start() {
+        
     }
     
     public void exportData(String format, String dir, boolean includeModuleTables);

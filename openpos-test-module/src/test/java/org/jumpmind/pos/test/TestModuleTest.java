@@ -34,7 +34,7 @@ public class TestModuleTest {
     
     @Before
     public void initModule() {
-        module.start();
+        module.initialize();
     }
     
     
