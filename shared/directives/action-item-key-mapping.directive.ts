@@ -2,6 +2,7 @@ import { Directive, Input, Renderer2, ElementRef, OnInit, OnDestroy } from '@ang
 import { IActionItem, SessionService } from '../../core';
 import { KeyPressProvider } from '../providers/keypress.provider';
 import { Subscription } from 'rxjs';
+import { Configuration } from '../../configuration/configuration';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
@@ -25,7 +26,7 @@ export class ActionItemKeyMappingDirective implements OnDestroy, OnInit {
     ngOnInit(): void {
         this.subscription = this.keyPresses.getKeyPresses().subscribe( event => {
             // ignore repeats
-            if ( event.repeat ) {
+            if ( event.repeat || !Configuration.enableKeybinds ) {
                 return;
             }
             if ( event.type === 'keydown') {
