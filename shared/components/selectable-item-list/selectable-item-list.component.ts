@@ -148,7 +148,6 @@ export class SelectableItemListComponent<ItemType> {
                     this.selectedItem = null;
                     this.selectedItemChange.emit(this.selectedItem);
                     event.preventDefault();
-                    event.stopPropagation();
                 }
                 break;
             case SelectionMode.Multiple:
@@ -156,8 +155,6 @@ export class SelectableItemListComponent<ItemType> {
                     this.selectedItemList.length = 0;
                     this.selectedItemListChange.emit(this.selectedItemList);
                     event.preventDefault();
-                    event.stopPropagation();
-                    return false;
                 }
                 break;
         }    
@@ -182,6 +179,9 @@ export class SelectableItemListComponent<ItemType> {
         switch (this._config.selectionMode) {
             case SelectionMode.Single:
                 let currentListIndex = this.itemsToShow.findIndex(item => item === this.selectedItem);
+                if (currentListIndex == -1  && direction === -1) {
+                    return; // only allow key down to start selecting on the list.
+                }
                 let newIndex = currentListIndex+direction;
                 if (this.itemsToShow.length > newIndex) {
                     this.selectedItem = this.itemsToShow[newIndex];
@@ -203,7 +203,8 @@ export class SelectableItemListComponent<ItemType> {
                         this.selectedItemList.length = 0;
                         this.selectedItemListChange.emit(this.selectedItemList);
                     }
-                } else if (this.itemsToShow.length > 0) {
+                } else if (this.itemsToShow.length > 0
+                    && direction === 1) { // only allow key down to start selecting on the list.
                     this.selectedItemList = [this.itemsToShow[0]];
                     this.selectedItemListChange.emit(this.selectedItemList);
                 }
