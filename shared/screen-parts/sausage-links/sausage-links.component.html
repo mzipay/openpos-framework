@@ -3,6 +3,7 @@
         class="sausage-link"
         color="primary"
         *ngFor="let m of links" (click)="onMenuItemClick(m)"
+        [actionItem]="m"
         [disabled]="!m.enabled">
         <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
         <span [ngClass]="{'muted-color': ! m.enabled}">&nbsp;{{m.title}}</span>
