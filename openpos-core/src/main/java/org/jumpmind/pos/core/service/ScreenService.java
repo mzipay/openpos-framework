@@ -195,7 +195,7 @@ public class ScreenService implements IScreenService, IActionListener {
 
     protected Screen removeLastDialog(String appId, String deviceId) {
         IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
-        ApplicationState applicationState = stateManager.getApplicationState();
+        ApplicationState applicationState = stateManager != null ? stateManager.getApplicationState() : null;
         if (applicationState != null && applicationState.getLastDialog() != null) {
             Screen lastDialog = applicationState.getLastDialog();
             applicationState.setLastDialog(null);
@@ -208,7 +208,7 @@ public class ScreenService implements IScreenService, IActionListener {
     @Override
     public Screen getLastDialog(String appId, String deviceId) {
         IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
-        ApplicationState applicationState = stateManager.getApplicationState();
+        ApplicationState applicationState = stateManager != null ? stateManager.getApplicationState() : null;
         if (applicationState != null) {
             return applicationState.getLastDialog();
         } else {
@@ -219,7 +219,7 @@ public class ScreenService implements IScreenService, IActionListener {
     @Override
     public Screen getLastScreen(String appId, String deviceId) {
         IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
-        ApplicationState applicationState = stateManager.getApplicationState();
+        ApplicationState applicationState = stateManager != null ? stateManager.getApplicationState() : null;
         if (applicationState != null) {
             return applicationState.getLastScreen();
         } else {
