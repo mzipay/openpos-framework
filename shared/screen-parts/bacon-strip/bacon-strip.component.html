@@ -1,5 +1,10 @@
 <mat-toolbar gdAreas="backbutton header . operator" gdColumns="auto auto 1fr auto">
-    <button gdArea="backbutton" class="back-button" *ngIf="screenData.backButton" mat-button (click)="onMenuItemClick(screenData.backButton)">
+    <button gdArea="backbutton" 
+            class="back-button"
+            [actionItem]="screenData.backButton"
+            *ngIf="screenData.backButton" 
+            mat-button 
+            (click)="onMenuItemClick(screenData.backButton)">
         <mat-icon class="material-icons mat-48">keyboard_arrow_left</mat-icon>
     </button>    
     <div gdArea="header" gdAreas="headerIcon headerText" gdGap="4px">
