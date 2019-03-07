@@ -13,12 +13,7 @@
 
     <div waffle-body class="sale-content" gdAreas="items | totals | nextbar | status" gdRows="minmax(200px, 100%) auto auto auto"
         gdGap="6px">
-        <app-transaction-item-list gdArea="items" [listConfig]="listConfig" [selectedItems]="selectedItems"
-            [selectedItemIndexes]="screen.selectedItemIndexes" [multiSelectedMenuItems]="screen.multiSelectedMenuItems"
-            [transactionMenuItems]="screen.transactionMenuItems" [prompt]="screen.transactionMenuPrompt"
-            (selectedItemListChange)="onItemListChange($event)" (menuAction)="onMenuAction($event)">
-        </app-transaction-item-list>
-
+        <app-sale-item-list gdArea="items"></app-sale-item-list>
         <app-overflow-list gdArea="totals" *ngIf="screen.transactionActive" [numberItemsToShow]="overFlowListSize | async"
             [items]="screen.totals"></app-overflow-list>
         <app-sale-footer gdArea="nextbar" ></app-sale-footer>

@@ -41,6 +41,9 @@ export * from './multiselect-item-list/multiselect-item-list.component';
 export * from './item-options/item-options.component';
 export * from './return/return.component';
 export * from './auto-complete-address/auto-complete-address.component';
+export * from './sale/sale.component';
+export * from './sale/sale-footer/sale-footer.component';
+export * from './sale/sale-item-list/sale-item-list.component';
 
 export * from './pos-screen/pos-screen.component';
 

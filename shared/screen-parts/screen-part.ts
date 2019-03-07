@@ -50,9 +50,9 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
         this.subscription.unsubscribe();
     }
 
-    onMenuItemClick( menuItem: IActionItem) {
+    onMenuItemClick( menuItem: IActionItem, payload?: any ) {
         if (menuItem.enabled) {
-            this.sessionService.onAction( menuItem );
+            this.sessionService.onAction( menuItem, payload );
         }
     }
 
