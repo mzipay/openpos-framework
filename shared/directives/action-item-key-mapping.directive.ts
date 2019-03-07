@@ -21,6 +21,10 @@ export class ActionItemKeyMappingDirective implements OnInit {
 
     ngOnInit(): void {
         this.keyPresses.getKeyPresses().subscribe( event => {
+            // ignore repeats
+            if ( event.repeat ) {
+                return;
+            }
             if ( event.type === 'keydown') {
                 this.onKeydown(event);
             } else if ( event.type === 'keyup') {
@@ -30,25 +34,17 @@ export class ActionItemKeyMappingDirective implements OnInit {
     }
 
     public onKeydown(event: KeyboardEvent) {
-        let bound = false;
         if (this.actionItem.keybind === event.key ) {
-            bound = true;
             this.renderer.addClass(this.el.nativeElement, 'key-mapping-active');
-        }
-        if (bound) {
-          event.preventDefault();
+            event.preventDefault();
         }
     }
 
     public onKeyup(event: KeyboardEvent) {
-        let bound = false;
         if (this.actionItem.keybind === event.key ) {
-            bound = true;
             this.renderer.removeClass(this.el.nativeElement, 'key-mapping-active');
             this.session.onAction(this.actionItem);
-        }
-        if (bound) {
-          event.preventDefault();
+            event.preventDefault();
         }
     }
 }
