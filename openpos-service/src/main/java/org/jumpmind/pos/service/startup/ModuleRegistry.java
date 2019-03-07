@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jumpmind.pos.service.IModule;
 import org.slf4j.Logger;
@@ -33,12 +32,9 @@ public class ModuleRegistry {
     @PostConstruct
     public void loadModuleDatabaseDefaults() {
         if (this.modules != null) {
-            BufferedWriter out = null;
             Date date = new Date();
-
-            try {
-                File file = new File("work", ".h2.server.properties");
-                out = new BufferedWriter(new FileWriter(file));
+            File file = new File("work", ".h2.server.properties");
+            try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
                 out.write("#H2 Server Properties\n#" + DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(date) + "\n");
 
                 int pos = 0;
@@ -56,8 +52,6 @@ public class ModuleRegistry {
                 }
             } catch (IOException e) {
                 logger.warn("Unable to configure \".h2.server.properties\" file");
-            } finally {
-                IOUtils.closeQuietly(out);
             }
         }
     }
