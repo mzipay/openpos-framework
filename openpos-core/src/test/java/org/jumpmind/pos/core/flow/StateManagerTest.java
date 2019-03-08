@@ -19,6 +19,8 @@ import org.jumpmind.pos.core.flow.TestStates.OptionalInjectionState;
 import org.jumpmind.pos.core.flow.TestStates.RepostActionState;
 import org.jumpmind.pos.core.flow.TestStates.SellState;
 import org.jumpmind.pos.core.flow.TestStates.StackOverflowState;
+import org.jumpmind.pos.core.flow.TestStates.SubStateFlowScopePropogation1;
+import org.jumpmind.pos.core.flow.TestStates.SubStateFlowScopePropogation2;
 import org.jumpmind.pos.core.flow.TestStates.SubStateReturnsWithTransitionState;
 import org.jumpmind.pos.core.flow.TestStates.TestScopesState;
 import org.jumpmind.pos.core.flow.TestStates.TransitionInterceptionState;
@@ -49,7 +51,20 @@ public class StateManagerTest {
 
         FlowConfig customerSignupFlow = new FlowConfig();
         customerSignupFlow.setInitialState(
-                FlowBuilder.addState(CustomerSignupState.class).withTransition("CustomerSignedup", CompleteState.class).build());
+                FlowBuilder.addState(CustomerSignupState.class).withTransition("CustomerSignedup", CompleteState.class)
+                .withTransition("Back", CompleteState.class)
+                .build());
+        
+        FlowConfig testFlowScopeFlow2 = new FlowConfig();
+        testFlowScopeFlow2.setInitialState(FlowBuilder.addState(SubStateFlowScopePropogation2.class)
+                .withTransition("Back", CompleteState.class)
+                .build());
+        
+        FlowConfig testFlowScopeFlow = new FlowConfig();
+        testFlowScopeFlow.setInitialState(FlowBuilder.addState(SubStateFlowScopePropogation1.class)
+                .withTransition("Back", CompleteState.class)
+                .withSubTransition("SubStateFlowScopePropogation2Action", testFlowScopeFlow2, "SubStateFlowScopePropogation2DONE")
+                .build());
 
         FlowConfig customerFlow = new FlowConfig();
         customerFlow.getConfigScope().put("customerFlowType", "LOYALTY");
@@ -66,6 +81,7 @@ public class StateManagerTest {
         config.setInitialState(FlowBuilder.addState(HomeState.class).withTransition("Sell", SellState.class)
                 .withSubTransition("ToSubState1", SubStateReturnsWithTransitionState.class, "FromSubStateToAnotherState")
                 .withSubTransition("ToSubState2", SubStateReturnsWithTransitionState.class, "FromSubStateToAnotherSubState")
+                .withSubTransition("TestFlowScope", testFlowScopeFlow, "Return")
                 .withTransition("FromSubStateToAnotherState", ActionTestingState.class)
                 .withSubTransition("FromSubStateToAnotherSubState", customerFlow, "Return")
                 .withTransition("TestActions", ActionTestingState.class).withTransition("TestScopes", TestScopesState.class)
@@ -77,6 +93,8 @@ public class StateManagerTest {
         config.add(FlowBuilder.addState(SellState.class).withSubTransition("Customer", customerFlow, "CustomerLookupComplete").build());
         config.add(FlowBuilder.addState(ActionTestingState.class).withTransition("Done", HomeState.class).build());
         config.add(FlowBuilder.addState(TransitionInterceptionState.class).withTransition("Sell", SellState.class).build());
+        
+
 
         config.addGlobalTransition("Help", HelpState.class);
         config.addGlobalTransition("About", AboutState.class);
@@ -203,6 +221,24 @@ public class StateManagerTest {
         stateManager.doAction("CustomerSelected");
         assertNull("stateManager.getScopeValue(\"selectedCustomer\")", stateManager.getScopeValue("selectedCustomer"));
         assertEquals(SellState.class, stateManager.getCurrentState().getClass());
+    }
+    
+    @Test
+    public void testFlowScopePropogation() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        assertNull("flowScopeValue1", stateManager.getScopeValue("flowScopeValue1"));
+        stateManager.doAction("TestFlowScope");
+        assertEquals(SubStateFlowScopePropogation1.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("SubStateFlowScopePropogation2Action");
+        assertEquals(SubStateFlowScopePropogation2.class, stateManager.getCurrentState().getClass());
+        assertEquals("flowScopeValue1", stateManager.getScopeValue("flowScopeValue1"));        
+        stateManager.doAction("Back");
+        assertEquals(SubStateFlowScopePropogation1.class, stateManager.getCurrentState().getClass());
+        assertEquals("flowScopeValue1", stateManager.getScopeValue("flowScopeValue1"));
+        stateManager.doAction("Back");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        assertNull("flowScopeValue1", stateManager.getScopeValue("flowScopeValue1"));
     }
 
     @Test

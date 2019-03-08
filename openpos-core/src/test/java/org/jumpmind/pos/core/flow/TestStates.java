@@ -138,6 +138,43 @@ public class TestStates {
         }
     }
 
+    public static class SubStateFlowScopePropogation1 implements IState {
+        @In(scope = ScopeType.Device)
+        private IStateManager stateManager;
+        
+        @Out(scope = ScopeType.Flow)
+        private String flowScopeValue1;
+        
+        @Override
+        public void arrive(Action action) {
+            flowScopeValue1 = "flowScopeValue1";
+            //stateManager.doAction("SubStateFlowScopePropogation2Action");
+        }
+        
+        @ActionHandler
+        public void onSubStateFlowScopePropogation2DONE(Action action) {
+            
+        }
+    }
+    
+    public static class SubStateFlowScopePropogation2 implements IState {
+        @In(scope = ScopeType.Device)
+        private IStateManager stateManager;
+        
+        @In(scope = ScopeType.Flow)
+        private String flowScopeValue1; // should be inherited.
+        
+        @Out(scope = ScopeType.Flow)
+        private String flowScopeValue2;
+        
+        @Override
+        public void arrive(Action action) {
+            flowScopeValue2 = "flowScopeValue2";
+            assertNotNull(flowScopeValue1);
+            //stateManager.doAction("SubStateFlowScopePropogation2DONE");
+        }
+    }
+    
     public static class SubStateReturnsWithTransitionState implements IState {
         @In(scope = ScopeType.Device)
         private IStateManager stateManager;

@@ -208,7 +208,7 @@ public class StateManager implements IStateManager {
 
             if (enterSubState) {
                 applicationState.getStateStack().push(applicationState.getCurrentContext());
-                applicationState.setCurrentContext(new StateContext(enterSubStateConfig.getSubFlowConfig(), action));
+                applicationState.setCurrentContext(buildSubStateContext(enterSubStateConfig, action));
                 applicationState.getCurrentContext().setReturnActionName(enterSubStateConfig.getReturnActionName());
             } else if (exitSubState) {
                 applicationState.setCurrentContext(resumeSuspendedState);
@@ -244,6 +244,12 @@ public class StateManager implements IStateManager {
             applicationState.getCurrentContext().getState().arrive(action);
         }
 
+    }
+
+    protected StateContext buildSubStateContext(SubTransition enterSubStateConfig, Action action) {
+        StateContext stateContext = new StateContext(enterSubStateConfig.getSubFlowConfig(), action);
+        stateContext.getFlowScope().putAll(applicationState.getCurrentContext().getFlowScope());
+        return stateContext;
     }
 
     public void performInjections(Object stateOrStep) {
