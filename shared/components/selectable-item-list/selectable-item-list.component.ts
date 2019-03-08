@@ -76,7 +76,7 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
     private updateKeySubscriptions() {
         if ( (this.selectedItemList.length || this.selectedItem) && !this.subscription) {
             this.buildKeySubscriptions();
-        } else if ( !(this.selectedItemList.length || this.selectedItem) ) {
+        } else if ( !(this.selectedItemList.length || this.selectedItem) && this.subscription ) {
             this.subscription.unsubscribe();
             this.subscription = null;
         }
