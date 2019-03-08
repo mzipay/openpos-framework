@@ -1,9 +1,9 @@
 package org.jumpmind.pos.persist.model;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
 import org.jumpmind.pos.persist.AbstractModel;
 
 abstract public class AbstractTaggedModel extends AbstractModel implements ITaggedModel {
@@ -11,7 +11,7 @@ abstract public class AbstractTaggedModel extends AbstractModel implements ITagg
     @SuppressWarnings("unused")
     private static final long serialVersionUID = 1L;
 
-    Map<String, String> tags = new HashMap<String, String>();
+    Map<String, String> tags = new CaseInsensitiveMap<String, String>();
 
     @Override
     public Map<String, String> getTags() {
