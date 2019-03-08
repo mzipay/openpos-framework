@@ -489,7 +489,7 @@ public class DatabaseSchema {
         } else if (field.getType().isAssignableFrom(int.class) || field.getType().isAssignableFrom(Integer.class)) {
             return Types.INTEGER;
         } else if (field.getType().isAssignableFrom(boolean.class) || field.getType().isAssignableFrom(Boolean.class)) {
-            return Types.BOOLEAN;
+            return Types.SMALLINT;
         } else if (field.getType().isAssignableFrom(Date.class)) {
             return Types.TIMESTAMP;
         } else if (field.getType().isAssignableFrom(BigDecimal.class) || field.getType().isAssignableFrom(Money.class)) {
