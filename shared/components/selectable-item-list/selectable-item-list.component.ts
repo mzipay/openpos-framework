@@ -60,6 +60,7 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
     private _config: SelectableItemListComponentConfiguration<ItemType>;
 
     private subscription: Subscription;
+    private selectedItemSubscription: Subscription;
 
     constructor(private keyPresses: KeyPressProvider) {
         // we only want to be subscribed for keypresses when we have selected items
@@ -71,18 +72,7 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
         this.selectedItemListChange.subscribe( list => {
             this.updateKeySubscriptions();
         });
-    }
 
-    private updateKeySubscriptions() {
-        if ( (this.selectedItemList.length || this.selectedItem) && !this.subscription) {
-            this.buildKeySubscriptions();
-        } else if ( !(this.selectedItemList.length || this.selectedItem) && this.subscription ) {
-            this.subscription.unsubscribe();
-            this.subscription = null;
-        }
-    }
-
-    private buildKeySubscriptions() {
         this.subscription = this.keyPresses.subscribe( 'ArrowDown', 1, event => {
             // ignore repeats and check configuration
             if ( event.repeat || !Configuration.enableKeybinds || !this.keyboardControl ) {
@@ -104,8 +94,19 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
                 }
             })
         );
+    }
 
-        this.subscription.add(
+    private updateKeySubscriptions() {
+        if ( (this.selectedItemList.length || this.selectedItem) && !this.selectedItemSubscription) {
+            this.buildKeySubscriptions();
+        } else if ( !(this.selectedItemList.length || this.selectedItem) && this.selectedItemSubscription ) {
+            this.selectedItemSubscription.unsubscribe();
+            this.selectedItemSubscription = null;
+        }
+    }
+
+    private buildKeySubscriptions() {
+        this.selectedItemSubscription =
             this.keyPresses.subscribe( 'Escape', 1, event => {
                 // ignore repeats and check configuration
                 if ( event.repeat || !Configuration.enableKeybinds || !this.keyboardControl ) {
@@ -114,13 +115,15 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
                 if ( event.type === 'keydown') {
                     this.handleEscape(event);
                 }
-            })
-        );
+            });
     }
 
     ngOnDestroy(): void {
         if (this.subscription) {
             this.subscription.unsubscribe();
+        }
+        if (this.selectedItemSubscription) {
+            this.selectedItemSubscription.unsubscribe();
         }
     }
 
