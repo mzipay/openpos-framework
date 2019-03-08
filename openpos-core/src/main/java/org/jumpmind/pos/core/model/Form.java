@@ -64,7 +64,17 @@ public class Form implements Serializable {
         formElements.add(field);
         return field;
     }
-    
+
+    public SliderToggleField addSliderToggle(String id, String label) {
+        return this.addSliderToggle(id, label, false);
+    }
+
+    public SliderToggleField addSliderToggle(String id, String label, boolean checked) {
+        SliderToggleField field = new SliderToggleField(id, label, checked);
+        formElements.add(field);
+        return field;
+    }
+
     public ComboField addComboBox(String fieldId, String label, String... values) {
         return addComboBox(fieldId, label, values != null && values.length > 0 ? Arrays.asList(values) : new ArrayList<>());
     }
@@ -194,6 +204,12 @@ public class Form implements Serializable {
         DateField formField = new DateField(fieldId, label, required, hideCalendar, minDate, maxDate);
         formField.setValue(value);
         return formField;
+    }
+
+    public RadioField addRadioField(String fieldId, String label) {
+        RadioField field = new RadioField(fieldId, label);
+        formElements.add(field);
+        return field;
     }
 
     public DateField addDateField(String fieldId, String label, String value, boolean required, boolean hideCalendar, Date minDate) {
