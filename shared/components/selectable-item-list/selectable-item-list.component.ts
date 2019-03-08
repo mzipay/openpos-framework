@@ -119,7 +119,9 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 
     updateResultsToShow(): void {
@@ -234,6 +236,9 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
                     return; // only allow key down to start selecting on the list.
                 }
                 let newIndex = currentListIndex + direction;
+                if (newIndex < 0) {
+                    newIndex = 0;
+                }
                 if (this.itemsToShow.length > newIndex) {
                     this.selectedItem = this.itemsToShow[newIndex];
                     this.selectedItemChange.emit(this.selectedItem);
