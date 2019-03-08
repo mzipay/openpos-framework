@@ -119,9 +119,7 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if ( this.subscription ) {
-            this.subscription.unsubscribe();
-        }
+        this.subscription.unsubscribe();
     }
 
     updateResultsToShow(): void {
@@ -239,11 +237,7 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
                 if (this.itemsToShow.length > newIndex) {
                     this.selectedItem = this.itemsToShow[newIndex];
                     this.selectedItemChange.emit(this.selectedItem);
-                } else if (this.selectedItem != null) {
-                    this.selectedItem = null;
-                    this.selectedItemChange.emit(this.selectedItem);
-                }
-
+                } 
                 break;
             case SelectionMode.Multiple:
                 if (this.selectedItemList && this.selectedItemList.length === 1) {
@@ -252,10 +246,7 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
                     if (this.itemsToShow.length > newIndex && newIndex > -1) {
                         this.selectedItemList = [this.itemsToShow[newIndex]];
                         this.selectedItemListChange.emit(this.selectedItemList);
-                    } else if (this.selectedItemList.length > 0) {
-                        this.selectedItemList.length = 0;
-                        this.selectedItemListChange.emit(this.selectedItemList);
-                    }
+                    } 
                 } else if (this.itemsToShow.length > 0) { // only allow key down to start selecting on the list.
                     let index = 0;
                     if (direction === -1) {
