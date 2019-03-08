@@ -44,9 +44,10 @@ export class KebabButtonComponent implements OnDestroy {
     constructor(private dialog: MatDialog, private keyPresses: KeyPressProvider) {
     }
 
-
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 
     public openKebabMenu() {
