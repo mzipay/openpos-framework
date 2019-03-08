@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef, Input, Output, EventEmitter, AfterVie
 import { ISellItem } from '../../../core/interfaces/sell-item.interface';
 import { IActionItem } from '../../../core';
 import { SelectableItemListComponentConfiguration } from '../selectable-item-list/selectable-item-list.component';
+import { Configuration } from '../../../configuration/configuration';
 
 @Component({
   selector: 'app-transaction-item-list',
@@ -56,5 +57,9 @@ export class TransactionItemListComponent implements AfterViewChecked {
       this.scrollList.nativeElement.scrollTop = this.scrollList.nativeElement.scrollHeight;
     } catch (err) { }
   }
+
+  public keybindsEnabled() {
+    return Configuration.enableKeybinds;
+  }  
 
 }

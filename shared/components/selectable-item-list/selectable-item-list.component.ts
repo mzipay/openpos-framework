@@ -58,9 +58,6 @@ export class SelectableItemListComponent<ItemType> {
             if ( event.type === 'keydown') {
                 this.onKeydown(event);
             } 
-            // else if ( event.type === 'keyup') {
-            //     this.onKeyup(event);
-            // }
         });
     }
 
@@ -203,9 +200,12 @@ export class SelectableItemListComponent<ItemType> {
                         this.selectedItemList.length = 0;
                         this.selectedItemListChange.emit(this.selectedItemList);
                     }
-                } else if (this.itemsToShow.length > 0
-                    && direction === 1) { // only allow key down to start selecting on the list.
-                    this.selectedItemList = [this.itemsToShow[0]];
+                } else if (this.itemsToShow.length > 0) { // only allow key down to start selecting on the list.
+                    let index = 0;
+                    if (direction === -1) {
+                        index = this.itemsToShow.length-1;
+                    }
+                    this.selectedItemList = [this.itemsToShow[index]];
                     this.selectedItemListChange.emit(this.selectedItemList);
                 }
                 break;
