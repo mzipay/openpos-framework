@@ -16,6 +16,9 @@ export class KebabButtonComponent {
     @Input()
     color?: string;
 
+    @Input()
+    keyBinding?: string;    
+
     @Output()
     menuItemClick = new EventEmitter<IActionItem>();
 

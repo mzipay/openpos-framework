@@ -1,5 +1,8 @@
 import { Component, Input, ContentChild, TemplateRef, ElementRef, Output, EventEmitter, HostListener } from '@angular/core';
 import { SelectionMode } from '../../../core';
+import { KeyPressProvider } from '../../providers/keypress.provider';
+import { Subscription } from 'rxjs';
+import { Configuration } from '../../../configuration/configuration';
 
 export class SelectableItemListComponentConfiguration<ItemType> {
     numResultsPerPage: number;
@@ -40,8 +43,27 @@ export class SelectableItemListComponent<ItemType> {
 
     private _config: SelectableItemListComponentConfiguration<ItemType>;
 
-    constructor() {
+    private subscription: Subscription;
+
+    constructor(private keyPresses: KeyPressProvider) {
+        
     }
+
+    ngOnInit(): void {
+        this.subscription = this.keyPresses.getKeyPresses().subscribe( event => {
+            // ignore repeats
+            if ( event.repeat || !Configuration.enableKeybinds ) {
+                return;
+            }
+            if ( event.type === 'keydown') {
+                this.onKeydown(event);
+            } 
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
+    }    
 
     updateResultsToShow(): void {
         if (this._config.items.length > 0) {
@@ -119,12 +141,18 @@ export class SelectableItemListComponent<ItemType> {
     handleEscape(event: KeyboardEvent) {
         switch (this._config.selectionMode) {
             case SelectionMode.Single:
-                this.selectedItem = null;
-                this.selectedItemChange.emit(this.selectedItem);
+                if (this.selectedItem != null) {
+                    this.selectedItem = null;
+                    this.selectedItemChange.emit(this.selectedItem);
+                    event.preventDefault();
+                }
                 break;
             case SelectionMode.Multiple:
-                this.selectedItemList.length = 0;
-                this.selectedItemListChange.emit(this.selectedItemList);
+                if (this.selectedItemList.length > 0) {
+                    this.selectedItemList.length = 0;
+                    this.selectedItemListChange.emit(this.selectedItemList);
+                    event.preventDefault();
+                }
                 break;
         }    
     }
@@ -148,9 +176,15 @@ export class SelectableItemListComponent<ItemType> {
         switch (this._config.selectionMode) {
             case SelectionMode.Single:
                 let currentListIndex = this.itemsToShow.findIndex(item => item === this.selectedItem);
+                if (currentListIndex == -1  && direction === -1) {
+                    return; // only allow key down to start selecting on the list.
+                }
                 let newIndex = currentListIndex+direction;
                 if (this.itemsToShow.length > newIndex) {
                     this.selectedItem = this.itemsToShow[newIndex];
+                    this.selectedItemChange.emit(this.selectedItem);
+                } else if (this.selectedItem != null) {
+                    this.selectedItem = null;
                     this.selectedItemChange.emit(this.selectedItem);
                 }
                 
@@ -162,9 +196,16 @@ export class SelectableItemListComponent<ItemType> {
                     if (this.itemsToShow.length > newIndex && newIndex > -1) {
                         this.selectedItemList = [this.itemsToShow[newIndex]];
                         this.selectedItemListChange.emit(this.selectedItemList);
-                    }        
-                } else if (this.itemsToShow.length > 0) {
-                    this.selectedItemList = [this.itemsToShow[0]];
+                    } else if (this.selectedItemList.length > 0) {
+                        this.selectedItemList.length = 0;
+                        this.selectedItemListChange.emit(this.selectedItemList);
+                    }
+                } else if (this.itemsToShow.length > 0) { // only allow key down to start selecting on the list.
+                    let index = 0;
+                    if (direction === -1) {
+                        index = this.itemsToShow.length-1;
+                    }
+                    this.selectedItemList = [this.itemsToShow[index]];
                     this.selectedItemListChange.emit(this.selectedItemList);
                 }
                 break;
@@ -181,8 +222,8 @@ export class SelectableItemListComponent<ItemType> {
         }
     }
 
-    // @HostListener('document:keyup', ['$event'])
-    public onKeyup(event: KeyboardEvent) {
+ //   @HostListener('document:keyup', ['$event'])
+    public onKeydown(event: KeyboardEvent) {
         if (!this.keyboardControl) {
             return;
         }        
@@ -192,9 +233,9 @@ export class SelectableItemListComponent<ItemType> {
         if (event.key === 'ArrowDown'
         || event.key === 'ArrowUp' ) {
             this.handleArrowKey(event);
-        }  else if (event.key === 'Escape') {
-          //  this.handleEscape(event);
-        } else {
+        // }  else if (event.key === 'Escape') {
+        //     this.handleEscape(event);
+        // } else {
           return;
         }
     }      

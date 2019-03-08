@@ -1,12 +1,14 @@
 <div class="transaction-prompt" fxLayoutAlign="start center">
     <div fxLayoutAlign="start center" *ngIf="selectedItems && selectedItems.length > 0; else transactionMenu" class="page-content-card">
         <mat-label class="selected-color">{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</mat-label>
-        <app-kebab-button *ngIf="!readOnly && selectedItems.length > 0" [menuItems]="multiSelectedMenuItems" [color]="'selected-color'"
+        <app-kebab-button [keyBinding]="'F2'" *ngIf="!readOnly && selectedItems.length > 0" [menuItems]="multiSelectedMenuItems" [color]="'selected-color'"
             (menuItemClick)="onMenuItemClick($event, selectedItemIndexes)"></app-kebab-button>
+        <span *ngIf="keybindsEnabled()" class="muted-color text-sm">F2</span>
     </div>
     <ng-template #transactionMenu>
         <span>{{prompt}}</span>
-        <app-kebab-button [menuItems]="transactionMenuItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
+        <app-kebab-button [keyBinding]="'F2'" [menuItems]="transactionMenuItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
+        <span *ngIf="keybindsEnabled()" class="muted-color text-sm">F2</span>
     </ng-template>
 </div>
 
