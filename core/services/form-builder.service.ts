@@ -42,8 +42,10 @@ export class FormBuilder {
               } else if (formGroup.controls[element.id]) {
                 element.checked = formGroup.controls[element.id].value === true || formGroup.controls[element.id].value === 'checked';
               }
-            } else if ( element.elementType === 'Input') {
+            } else if ( element.elementType === 'Input' && element.inputType !== 'Radio') {
               element.value = formGroup.value[element.id];
+            } else if ( element.elementType === 'Input' && element.inputType === 'Radio') {
+              element.value = element.selectedIndex.toString();
             }
           });
 

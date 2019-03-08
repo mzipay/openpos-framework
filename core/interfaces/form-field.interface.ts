@@ -12,6 +12,7 @@ export interface IFormElement {
     buttonAction: string;
     submitButton: boolean;
     required: boolean;
+    selectedIndex: number;
     selectedIndexes:  number[];
     valueChangedAction: string;
     mask: IMaskSpec;

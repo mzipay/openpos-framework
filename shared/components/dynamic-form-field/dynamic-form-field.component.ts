@@ -148,6 +148,11 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
     this.onFieldChanged.emit(formElement);
   }
 
+  onRadioElementChanged(event, formElement: IFormElement): void {
+    formElement.selectedIndex = formElement.values.indexOf(event.value);
+    this.onFieldChanged.emit(formElement);
+  }
+
   getFormFieldMask(): ITextMask {
     if (this.formField.mask) {
       return TextMask.instance(this.formField.mask);
@@ -211,7 +216,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   isSpecialCaseInput(): boolean {
-    return ['ToggleButton', 'Checkbox', 'AutoComplete', 'Counter', 'DatePartChooser', 'Time'].indexOf(this.formField.inputType) >= 0 ||
+    return ['ToggleButton', 'Checkbox', 'AutoComplete', 'Counter', 'DatePartChooser', 'Time', 'Radio', 'SliderToggle'].indexOf(this.formField.inputType) >= 0 ||
         this.isDateInput();
   }
 

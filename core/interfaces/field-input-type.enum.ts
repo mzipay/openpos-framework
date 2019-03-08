@@ -26,5 +26,7 @@ export enum FieldInputType {
     WordText,
     Counter,
     DatePartChooser,
-    Time
+    Time,
+    Radio,
+    SliderToggle,
 }

@@ -96,7 +96,24 @@
         <app-time-chooser [value]="formField.value" [formGroup]="formGroup" [controlName]="formField.id" [label]="formField.label"
             [required]="formField.required" [keyboardLayout]="keyboardLayout" [iconName]="formField.iconName" (change)="onFormElementChanged(formField)"></app-time-chooser>
     </ng-container>
-    
+
+    <ng-container *ngIf="formField.inputType==='Radio'">
+        <mat-radio-group class="form-radio-group" [formControlName]="formField.id"
+            (change)="onRadioElementChanged($event, formField)">
+            <mat-label *ngIf="formField.label">{{formField.label}}</mat-label>
+            <mat-radio-button *ngFor="let value of formField.values; let r = index" [value]="value"
+                [checked]="r === formField.selectedIndex">
+                <div *ngFor="let line of value; let i = index" [ngClass]="{'muted-color' : i !== 0}">{{line}}</div>
+            </mat-radio-button>
+        </mat-radio-group>
+    </ng-container>
+
+    <ng-container *ngIf="formField.inputType==='SliderToggle'">
+        <mat-slide-toggle class="form-slider-toggle" [formControlName]="formField.id" [checked]="formField.value"
+            [labelPosition]="formField.labelPosition" color="primary" (change)="onFormElementChanged(formField)">
+            {{formField.label}}</mat-slide-toggle>
+    </ng-container>
+
     <ng-container *ngIf="formField.elementType==='Display'">
         <mat-form-field style="width:100%" [ngSwitch]="formField.valueDisplayMode">
             <input *ngSwitchDefault [value]="formField.value" [name]="formField.id" [placeholder]="formField.label" matInput readonly=true>
