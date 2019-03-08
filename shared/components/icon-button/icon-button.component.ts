@@ -12,4 +12,8 @@ export class IconButtonComponent {
     @Input() color: string;
 
     @Output() buttonClick = new EventEmitter();
+
+    clickFn(): void {
+        this.buttonClick.emit();
+    }
 }
