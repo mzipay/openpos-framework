@@ -25,9 +25,9 @@ export class KeyPressProvider implements OnDestroy {
             this.subscribers.set( key, new Map<number, (KeyboardEvent) => void>());
         }
 
-        if ( this.subscribers.get(key).has(priority)) {
-            throw new Error( `Another subscriber already exists with key ${key} and priority ${priority}`);
-        }
+        // if ( this.subscribers.get(key).has(priority)) {
+        //     throw new Error( `Another subscriber already exists with key ${key} and priority ${priority}`);
+        // }
         this.subscribers.get(key).set(priority, next);
 
         return new Subscription( () => {
