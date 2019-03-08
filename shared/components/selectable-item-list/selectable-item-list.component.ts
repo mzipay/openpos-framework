@@ -119,7 +119,9 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        if ( this.subscription ) {
+            this.subscription.unsubscribe();
+        }
     }
 
     updateResultsToShow(): void {
