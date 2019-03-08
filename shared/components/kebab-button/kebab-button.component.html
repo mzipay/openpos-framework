@@ -1,1 +1,6 @@
-<app-icon-button *ngIf="menuItems && menuItems.length > 0" [iconName]="'KebabMenu'" [color]="color" [keyBinding]="keyBinding" (buttonClick)="openKebabMenu()"></app-icon-button>
+<app-icon-button
+     *ngIf="menuItems && menuItems.length > 0" 
+     [iconName]="'KebabMenu'" 
+     [color]="color" 
+     (buttonClick)="openKebabMenu()">
+</app-icon-button>

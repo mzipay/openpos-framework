@@ -1,14 +1,17 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { IActionItem, Logger } from '../../../core';
 import { MatDialog } from '@angular/material';
 import { KebabMenuComponent } from '../kebab-menu/kebab-menu.component';
+import { KeyPressProvider } from '../../providers/keypress.provider';
+import { Configuration } from '../../../configuration/configuration';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-kebab-button',
     templateUrl: './kebab-button.component.html',
     styleUrls: ['./kebab-button.component.scss']
 })
-export class KebabButtonComponent {
+export class KebabButtonComponent implements OnDestroy {
 
     @Input()
     menuItems: IActionItem[];
@@ -17,12 +20,33 @@ export class KebabButtonComponent {
     color?: string;
 
     @Input()
-    keyBinding?: string;    
+    set keyBinding( key: string) {
+        if ( this.subscription ) {
+            this.subscription.unsubscribe();
+        }
+
+        this.subscription = this.keyPresses.subscribe( key, 100, event => {
+            // ignore repeats
+            if ( event.repeat || !Configuration.enableKeybinds ) {
+                return;
+            }
+            if (event.type === 'keydown') {
+                this.openKebabMenu();
+            }
+        });
+    }
 
     @Output()
     menuItemClick = new EventEmitter<IActionItem>();
 
-    constructor(private dialog: MatDialog, private log: Logger) {
+    private subscription: Subscription;
+
+    constructor(private dialog: MatDialog, private keyPresses: KeyPressProvider) {
+    }
+
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     public openKebabMenu() {

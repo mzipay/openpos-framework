@@ -1,4 +1,4 @@
-import { Component, Input, ContentChild, TemplateRef, ElementRef, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Input, ContentChild, TemplateRef, ElementRef, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { SelectionMode } from '../../../core';
 import { KeyPressProvider } from '../../providers/keypress.provider';
 import { Subscription } from 'rxjs';
@@ -16,7 +16,7 @@ export class SelectableItemListComponentConfiguration<ItemType> {
     templateUrl: './selectable-item-list.component.html',
     styleUrls: ['./selectable-item-list.component.scss']
 })
-export class SelectableItemListComponent<ItemType> {
+export class SelectableItemListComponent<ItemType> implements OnDestroy {
 
     @ContentChild(TemplateRef) itemTemplate: TemplateRef<ElementRef>;
 
@@ -46,24 +46,64 @@ export class SelectableItemListComponent<ItemType> {
     private subscription: Subscription;
 
     constructor(private keyPresses: KeyPressProvider) {
-        
+        // we only want to be subscribed for keypresses when we have selected items
+        // so watch the selected item changes and add remove the key bindings.
+        this.selectedItemChange.subscribe( item => {
+            if ( item && !this.subscription) {
+                this.buildKeySubscriptions();
+            } else {
+                this.subscription.unsubscribe();
+            }
+        });
+
+        this.selectedItemListChange.subscribe( list => {
+            if ( list.length && !this.subscription) {
+                this.buildKeySubscriptions();
+            } else {
+                this.subscription.unsubscribe();
+            }
+        });
     }
 
-    ngOnInit(): void {
-        this.subscription = this.keyPresses.getKeyPresses().subscribe( event => {
-            // ignore repeats
-            if ( event.repeat || !Configuration.enableKeybinds ) {
+    private buildKeySubscriptions() {
+        this.subscription = this.keyPresses.subscribe( 'ArrowDown', 1, event => {
+            // ignore repeats and check configuration
+            if ( event.repeat || !Configuration.enableKeybinds || !this.keyboardControl ) {
                 return;
             }
             if ( event.type === 'keydown') {
-                this.onKeydown(event);
-            } 
+                this.handleArrowKey(event);
+            }
         });
+
+        this.subscription.add(
+            this.keyPresses.subscribe( 'ArrowUp', 1, event => {
+                // ignore repeats and check configuration
+                if ( event.repeat || !Configuration.enableKeybinds || !this.keyboardControl ) {
+                    return;
+                }
+                if ( event.type === 'keydown') {
+                    this.handleArrowKey(event);
+                }
+            })
+        );
+
+        this.subscription.add(
+            this.keyPresses.subscribe( 'Escape', 1, event => {
+                // ignore repeats and check configuration
+                if ( event.repeat || !Configuration.enableKeybinds || !this.keyboardControl ) {
+                    return;
+                }
+                if ( event.type === 'keydown') {
+                    this.handleEscape(event);
+                }
+            })
+        );
     }
 
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
-    }    
+    }
 
     updateResultsToShow(): void {
         if (this._config.items.length > 0) {
@@ -154,13 +194,12 @@ export class SelectableItemListComponent<ItemType> {
                     event.preventDefault();
                 }
                 break;
-        }    
+        }
     }
 
     handleArrowKey(event: KeyboardEvent) {
         let bound = false;
-  
-        var direction:number = 1;
+        let direction = 1;
         if (event.key === 'ArrowDown') {
           direction = 1;
         } else if (event.key === 'ArrowUp') {
@@ -168,18 +207,16 @@ export class SelectableItemListComponent<ItemType> {
         } else {
           return;
         }
-  
         // debugger;
-    
-        var itemIndexToSelect:number = -1;
+        const itemIndexToSelect = -1;
 
         switch (this._config.selectionMode) {
             case SelectionMode.Single:
                 let currentListIndex = this.itemsToShow.findIndex(item => item === this.selectedItem);
-                if (currentListIndex == -1  && direction === -1) {
+                if (currentListIndex === -1  && direction === -1) {
                     return; // only allow key down to start selecting on the list.
                 }
-                let newIndex = currentListIndex+direction;
+                let newIndex = currentListIndex + direction;
                 if (this.itemsToShow.length > newIndex) {
                     this.selectedItem = this.itemsToShow[newIndex];
                     this.selectedItemChange.emit(this.selectedItem);
@@ -187,12 +224,12 @@ export class SelectableItemListComponent<ItemType> {
                     this.selectedItem = null;
                     this.selectedItemChange.emit(this.selectedItem);
                 }
-                
+
                 break;
             case SelectionMode.Multiple:
                 if (this.selectedItemList && this.selectedItemList.length === 1) {
-                    let currentListIndex = this.itemsToShow.findIndex(item => item === this.selectedItemList[0]);
-                    let newIndex = currentListIndex+direction;
+                    currentListIndex = this.itemsToShow.findIndex(item => item === this.selectedItemList[0]);
+                    newIndex = currentListIndex + direction;
                     if (this.itemsToShow.length > newIndex && newIndex > -1) {
                         this.selectedItemList = [this.itemsToShow[newIndex]];
                         this.selectedItemListChange.emit(this.selectedItemList);
@@ -203,40 +240,22 @@ export class SelectableItemListComponent<ItemType> {
                 } else if (this.itemsToShow.length > 0) { // only allow key down to start selecting on the list.
                     let index = 0;
                     if (direction === -1) {
-                        index = this.itemsToShow.length-1;
+                        index = this.itemsToShow.length - 1;
                     }
                     this.selectedItemList = [this.itemsToShow[index]];
                     this.selectedItemListChange.emit(this.selectedItemList);
                 }
                 break;
-        }    
-    
+        }
+
         if (itemIndexToSelect > -1) {
           bound = true;
           this.selectedItem = this.itemsToShow[itemIndexToSelect];
           this.selectedItemList = [this.itemsToShow[itemIndexToSelect]];
         }
-  
+
         if (bound) {
           event.preventDefault();
         }
     }
-
- //   @HostListener('document:keyup', ['$event'])
-    public onKeydown(event: KeyboardEvent) {
-        if (!this.keyboardControl) {
-            return;
-        }        
-        let bound = false;
-
-        var direction:number = 1;
-        if (event.key === 'ArrowDown'
-        || event.key === 'ArrowUp' ) {
-            this.handleArrowKey(event);
-        // }  else if (event.key === 'Escape') {
-        //     this.handleEscape(event);
-        // } else {
-          return;
-        }
-    }      
 }
