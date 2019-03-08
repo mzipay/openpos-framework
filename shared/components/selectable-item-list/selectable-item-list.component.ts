@@ -31,16 +31,32 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
         return this._config;
     }
 
-    @Input() selectedItem: ItemType;
+    @Input()
+    set selectedItem( item: ItemType ) {
+        this._selectedItem = item;
+        this.updateKeySubscriptions();
+    }
+    get selectedItem(): ItemType {
+        return this._selectedItem;
+    }
     @Output() selectedItemChange = new EventEmitter<ItemType>();
 
-    @Input() selectedItemList: ItemType[] = new Array<ItemType>();
+    @Input()
+    set selectedItemList ( itemList: ItemType[] ) {
+        this._selectedItemList = itemList;
+        this.updateKeySubscriptions();
+    }
+    get selectedItemList (): ItemType[] {
+        return this._selectedItemList;
+    }
     @Output() selectedItemListChange = new EventEmitter<ItemType[]>();
 
     numberOfPages: number;
     itemsToShow: ItemType[];
     currentPage = 1;
 
+    private _selectedItem: ItemType;
+    private _selectedItemList = new Array<ItemType>();
     private _config: SelectableItemListComponentConfiguration<ItemType>;
 
     private subscription: Subscription;
@@ -49,20 +65,21 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
         // we only want to be subscribed for keypresses when we have selected items
         // so watch the selected item changes and add remove the key bindings.
         this.selectedItemChange.subscribe( item => {
-            if ( item && !this.subscription) {
-                this.buildKeySubscriptions();
-            } else {
-                this.subscription.unsubscribe();
-            }
+            this.updateKeySubscriptions();
         });
 
         this.selectedItemListChange.subscribe( list => {
-            if ( list.length && !this.subscription) {
-                this.buildKeySubscriptions();
-            } else {
-                this.subscription.unsubscribe();
-            }
+            this.updateKeySubscriptions();
         });
+    }
+
+    private updateKeySubscriptions() {
+        if ( (this.selectedItemList.length || this.selectedItem) && !this.subscription) {
+            this.buildKeySubscriptions();
+        } else if ( !(this.selectedItemList.length || this.selectedItem) ) {
+            this.subscription.unsubscribe();
+            this.subscription = null;
+        }
     }
 
     private buildKeySubscriptions() {
