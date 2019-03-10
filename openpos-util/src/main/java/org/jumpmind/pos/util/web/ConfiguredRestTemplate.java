@@ -1,11 +1,8 @@
 package org.jumpmind.pos.util.web;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
 
+import org.jumpmind.pos.util.DefaultObjectMapper;
 import org.jumpmind.pos.util.model.ErrorResult;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,9 +15,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class ConfiguredRestTemplate extends RestTemplate {
 
@@ -40,15 +35,8 @@ public class ConfiguredRestTemplate extends RestTemplate {
 
     public ConfiguredRestTemplate(int timeout) {        
         super(build(timeout));        
-        this.mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        dateFormat.setTimeZone(TimeZone.getDefault());
-        mapper.setDateFormat(dateFormat);
-
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(BigDecimal.class, new BigDecimalDeserializer());
-        mapper.registerModule(module);
-        getMessageConverters().add(new MappingJackson2HttpMessageConverter(mapper));
+        this.mapper = DefaultObjectMapper.build();
+        getMessageConverters().add(0, new MappingJackson2HttpMessageConverter(this.mapper));
         setErrorHandler(new DefaultResponseErrorHandler() {
             @Override
             public void handleError(ClientHttpResponse response) throws IOException {
