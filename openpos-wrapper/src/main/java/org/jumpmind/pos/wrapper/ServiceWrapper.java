@@ -18,7 +18,7 @@ public class ServiceWrapper {
     	} else {
     		configFileName = "../config/openpos_service.conf";
     	}
-        WrapperHelper.run(args, getHomeDir(), configFileName, "../lib/openpos-wrapper.jar");
+        WrapperHelper.run(args, getHomeDir(), configFileName,  getHomeDir() + "/lib/openpos-wrapper.jar");
     }
 
 
