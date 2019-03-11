@@ -72,7 +72,6 @@ public class PromptConfig {
     public PromptConfig asDialog() {
         DialogProperties props = new DialogProperties();
         props.setMinWidth("50%");
-        props.setForceReopen(false);
         return dialogProperties(props);
     }
 

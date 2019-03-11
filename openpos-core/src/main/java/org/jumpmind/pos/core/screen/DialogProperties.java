@@ -12,13 +12,12 @@ public class DialogProperties implements Serializable {
      * Use this to force a new dialog to be create if dialogs are being shown back to back.  The default behavior
      * is to reuse the previous dialog and just swap out the content.
      */
-    private boolean forceReopen = true;
     private String minWidth;
     private String minHeight;
     private boolean executeActionBeforeClose = false;
     private boolean closeable = false;
     private boolean autoFocus = false;
-    private boolean restoreFocus = false;
+    private boolean restoreFocus = true;
 
     public DialogProperties() {
     }
@@ -27,19 +26,6 @@ public class DialogProperties implements Serializable {
         this.closeable = closeable;
     }
     
-    public void setForceReopen(boolean forceReopen) {
-        this.forceReopen = forceReopen;
-    }
-    
-    public boolean isForceReopen() {
-        return forceReopen;
-    }
-    
-    public DialogProperties forceReopen(boolean forceReopen) {
-        this.setForceReopen(forceReopen);
-        return this;
-    }
-
     public boolean isExecuteActionBeforeClose() {
         return executeActionBeforeClose;
     }
