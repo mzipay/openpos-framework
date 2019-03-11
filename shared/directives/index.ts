@@ -19,3 +19,5 @@ export * from './fixed-ios-scroll.directive';
 export * from './find-floating-element.directive';
 export * from './action-item-key-mapping.directive';
 export * from './auto-complete-address.directive';
+export * from './arrow-tab.directive';
+export * from './arrow-tab-item.directive';

@@ -32,7 +32,9 @@ import {
     FixediOsScrollDirective,
     KlassDirective,
     ActionItemKeyMappingDirective,
-    AutoCompleteAddressDirective
+    AutoCompleteAddressDirective,
+    ArrowTabDirective,
+    ArrowTabItemDirective
 } from './directives';
 import {
     PromptInputComponent,
@@ -165,7 +167,9 @@ const directives = [
     FixediOsScrollDirective,
     ActionItemKeyMappingDirective,
     AutoCompleteAddressDirective,
-    KeyPressSourceDirective
+    KeyPressSourceDirective,
+    ArrowTabDirective,
+    ArrowTabItemDirective
 ];
 
 const pipes = [
