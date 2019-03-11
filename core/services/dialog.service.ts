@@ -80,7 +80,8 @@ export class DialogService {
         return false;
     }
 
-    public closeDialog(cancelLoading: boolean) {
+    // Make this async so we can await it
+    public async closeDialog(cancelLoading: boolean) {
         if (this.dialogRef) {
             this.log.info('[DialogService] closing dialog ref');
             if (cancelLoading) {
@@ -94,6 +95,8 @@ export class DialogService {
                 }
             }
             this.dialogRef.close();
+            // Wait for the dialog to fully close before moving on
+            await this.dialogRef.afterClosed().toPromise();
             this.dialogRef = null;
         } else if (cancelLoading) {
             this.session.cancelLoading();
@@ -122,7 +125,7 @@ export class DialogService {
         }
     }
 
-    private openDialog(dialog: any) {
+    private async openDialog(dialog: any) {
         const dialogComponentFactory: ComponentFactory<IScreen> = this.resolveDialog(dialog.screenType);
         let closeable = false;
         let forceReopen = false;
@@ -149,7 +152,9 @@ export class DialogService {
             || dialog.refreshAlways) {
 
             if (forceReopen) {
-                this.closeDialog(false);
+                // We need to make sure to block here before creating the new dialog to make sure the old one
+                // is fully closed.
+                await this.closeDialog(false);
             }
 
             if (!this.dialogRef || !this.dialogRef.componentInstance) {
