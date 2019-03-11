@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jumpmind.pos.core.model.MessageType;
+import org.jumpmind.pos.core.screenpart.BaconStripPart;
 import org.jumpmind.pos.core.template.AbstractTemplate;
 import org.jumpmind.pos.core.template.BlankWithBarTemplate;
 import org.jumpmind.pos.server.model.Action;
@@ -19,13 +20,23 @@ public class Screen extends Message {
     private static final long serialVersionUID = 1L;
 
     private String id;
+    /**
+     * This was originally meant to be the title of a screen, but moving forward
+     * we should use screen parts and set the title there (see {@link BaconStripPart}.
+     */
+    @Deprecated
     private String name;
     private String screenType;
+    /**
+     * This was originally meant to be an icon beside the title of a screen, but moving forward
+     * we should use screen parts and set the icon there.
+     */
+    @Deprecated
     private String icon;
-    
+
     @Deprecated
     private AbstractTemplate template = new BlankWithBarTemplate();
-    
+
     private String locale;
     private int sessionTimeoutMillis;
     private Action sessionTimeoutAction;
@@ -34,7 +45,7 @@ public class Screen extends Message {
     public Screen() {
         this.setType(MessageType.Screen);
     }
-    
+
     public Screen(String name, String screenType) {
         this(name, screenType, name);
     }
@@ -45,15 +56,15 @@ public class Screen extends Message {
         this.name = name;
         this.id = id;
     }
-    
+
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public String getId() {
         return id;
     }
-    
+
     public boolean isDialog() {
         String type = getType();
         return type != null && type.equals(MessageType.Dialog);
@@ -82,7 +93,7 @@ public class Screen extends Message {
         }
         return this;
     }
-    
+
     public void setDialogProperties(DialogProperties dialogProperties) {
         this.put("dialogProperties", dialogProperties);
     }
@@ -119,14 +130,14 @@ public class Screen extends Message {
     public void setTemplate(AbstractTemplate template) {
         this.template = template;
     }
-    
+
     public void setLogoutButton(ActionItem logoutButton) {
         put("logoutButton", logoutButton);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends AbstractTemplate> T getTemplate() {
-        return (T)template;
+        return (T) template;
     }
 
     public void setSequenceNumber(int sequenceNumber) {
@@ -165,37 +176,39 @@ public class Screen extends Message {
     public void setSessionTimeoutMillis(int sessionTimeoutMillis) {
         this.sessionTimeoutMillis = sessionTimeoutMillis;
     }
-    
+
     public void setIcon(String icon) {
         this.icon = icon;
     }
-    
+
     public String getIcon() {
         return icon;
     }
-    
+
     public void setPrompt(String prompt) {
         this.put("prompt", prompt);
     }
-    
-    public void setSubtitle(String ... list) {
+
+    public void setSubtitle(String... list) {
         this.put("subtitle", Arrays.asList(list));
     }
-    
+
     @JsonIgnore
     public void setSubtitle(List<String> list) {
-    	this.put("subtitle", list);
+        this.put("subtitle", list);
     }
-    
+
     /**
-     * Indicator for marking the screen as "Customer Facing", meaning that the screen is intended for the customer to 
-     * complete.
-     * @param customerFacing <code>true</code> if the customer should use the screen.
+     * Indicator for marking the screen as "Customer Facing", meaning that the
+     * screen is intended for the customer to complete.
+     * 
+     * @param customerFacing
+     *            <code>true</code> if the customer should use the screen.
      */
     public void setCustomerFacing(Boolean customerFacing) {
         put("customerFacing", customerFacing);
-    }        
-    
+    }
+
     public void setInstructions(String instructions) {
         this.put("instructions", instructions);
     }
@@ -215,12 +228,12 @@ public class Screen extends Message {
     public void setTrainingInstructions(Map<String, String> trainingInstructions) {
         this.trainingInstructions = trainingInstructions;
     }
-    
+
     public void addTrainingInstuctions(String key, String instructions) {
         if (this.trainingInstructions == null) {
             this.trainingInstructions = new HashMap<String, String>();
         }
         this.trainingInstructions.put(key, instructions);
     }
-    
+
 }
