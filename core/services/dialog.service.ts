@@ -151,11 +151,9 @@ export class DialogService {
         if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
             || dialog.refreshAlways) {
 
-            if (forceReopen) {
-                // We need to make sure to block here before creating the new dialog to make sure the old one
-                // is fully closed.
-                await this.closeDialog(false);
-            }
+            // We need to make sure to block here before creating the new dialog to make sure the old one
+            // is fully closed.
+            await this.closeDialog(false);
 
             if (!this.dialogRef || !this.dialogRef.componentInstance) {
                 this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
