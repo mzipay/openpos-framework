@@ -35,7 +35,9 @@ public enum FieldInputType {
     WordText,
     Counter,
     DatePartChooser,
-    Time
+    Time,
+    Radio,
+    SliderToggle,
     ;
     
     public static FieldInputType toDateInputType(String dateFormat) {

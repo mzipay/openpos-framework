@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 import org.joda.money.Money;
+import org.jumpmind.pos.util.web.MoneyDeserializer;
+import org.jumpmind.pos.util.web.MoneySerializer;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;

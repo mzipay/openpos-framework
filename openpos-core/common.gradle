@@ -1,8 +1,6 @@
 group = 'org.jumpmind.pos'
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 apply plugin: 'eclipse'
 apply plugin: 'java'
@@ -10,11 +8,11 @@ apply plugin: 'groovy'
 apply plugin: 'idea'
 
 sourceSets {
-    // In order to reference groovy from Java, the source sets need to be considered together during compilation (in 
+    // In order to reference groovy from Java, the source sets need to be considered together during compilation (in
     // the groovy plugin, which extends the java plugin and handles java sources).
     main {
-        java { srcDirs = [] }
-        groovy { srcDirs += ['src/main/java'] }
+        java { srcDirs = []}
+        groovy { srcDirs += ['src/main/java']}
     }
 }
 
@@ -22,32 +20,30 @@ sourceCompatibility=1.8
 targetCompatibility=1.8
 
 ext {
-   springBootVersion = '1.5.9.RELEASE'
-   springVersion = '4.3.13.RELEASE'
-   jnaVersion = '4.1.0'
-   springfoxSwaggerVersion='2.9.2'   
-   javaposVersion='1.14.2'
-   slf4jVersion='1.7.25'
-   log4jVersion='1.2.17'
-   jacksonVersion='2.8.10'
+    springBootVersion = '1.5.9.RELEASE'
+    springVersion = '4.3.13.RELEASE'
+    jnaVersion = '4.1.0'
+    springfoxSwaggerVersion='2.9.2'
+    javaposVersion='1.14.2'
+    slf4jVersion='1.7.25'
+    log4jVersion='1.2.17'
+    jacksonVersion='2.8.10'
 }
 
 
-repositories {
-    maven { url symmetricMavenUrl }
-}
+repositories { maven { url symmetricMavenUrl } }
 
 idea {
-    
-      //if you want parts of paths in resulting files (*.iml, etc.) to be replaced by variables (Files)
-      pathVariables GRADLE_HOME: file('~/cool-software/gradle')
-    
-      module {
+
+    //if you want parts of paths in resulting files (*.iml, etc.) to be replaced by variables (Files)
+    pathVariables GRADLE_HOME: file('~/cool-software/gradle')
+
+    module {
         resourceDirs += file('src/test/resources')
-        
-        downloadJavadoc = true        
+
+        downloadJavadoc = true
         downloadSources = true
-     }
+    }
 }
 
 eclipse {
@@ -55,29 +51,34 @@ eclipse {
         downloadSources = true
         downloadJavadoc = false
     }
-    
+
     project {
         resourceFilter {
-          appliesTo = 'FOLDERS'
-          type = 'EXCLUDE_ALL'
-          matcher {
-            id = 'org.eclipse.ui.ide.orFilterMatcher'
-//               matcher {
-//                 id = 'org.eclipse.ui.ide.multiFilter'
-//                 arguments = '1.0-projectRelativePath-matches-false-false-bin'
-//               }            
-               matcher {
-                 id = 'org.eclipse.ui.ide.multiFilter'
-                 arguments = '1.0-projectRelativePath-matches-false-false-build'
-               }
-          }            
-        }    
+            appliesTo = 'FOLDERS'
+            type = 'EXCLUDE_ALL'
+            matcher {
+                id = 'org.eclipse.ui.ide.orFilterMatcher'
+                //               matcher {
+                //                 id = 'org.eclipse.ui.ide.multiFilter'
+                //                 arguments = '1.0-projectRelativePath-matches-false-false-bin'
+                //               }
+                matcher {
+                    id = 'org.eclipse.ui.ide.multiFilter'
+                    arguments = '1.0-projectRelativePath-matches-false-false-build'
+                }
+            }
+        }
     }
 }
 
 test {
     // ignoreFailures = true
     testLogging.showStandardStreams = true
+
+    //Dynamic exclude through property defined in the build.gradle file
+    if (project.hasProperty('excludeTests')) {
+        exclude project.property('excludeTests')
+    }
 }
 
 task testJar(type: Jar) {
@@ -91,13 +92,9 @@ task develop {
     delete '.settings'
 }
 
-configurations {
-    testArtifacts
-}
+configurations { testArtifacts }
 
-artifacts { 
-    testArtifacts testJar 
-}
+artifacts {  testArtifacts testJar  }
 
 
 dependencies {
@@ -106,15 +103,15 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile "org.springframework:spring-context:$springVersion"
-    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.13.10.RELEASE'  
+    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.13.10.RELEASE'
     compile group: 'org.joda', name: 'joda-money', version: '1.0.1'
 
     compile group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
     compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: "${slf4jVersion}"
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: "${slf4jVersion}"
-    compile(group: 'log4j', name: 'log4j', version: "${log4jVersion}")   
-    
-    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'      
+    compile(group: 'log4j', name: 'log4j', version: "${log4jVersion}")
+
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile "org.springframework:spring-test:$springVersion"    
+    testCompile "org.springframework:spring-test:$springVersion"
 }
