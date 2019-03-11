@@ -5,7 +5,7 @@ import org.jumpmind.pos.service.Endpoint;
 import org.jumpmind.pos.util.model.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Endpoint("/devices/scan/config")
+@Endpoint(path="/devices/scan/config")
 public class ScannerConfigEndpoint {
 
     @Autowired

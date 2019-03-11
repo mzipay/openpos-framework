@@ -1,6 +1,6 @@
 package org.jumpmind.pos.service;
 
-@Endpoint("/this/is/a/test")
+@Endpoint(path="/this/is/a/test")
 public class TestEndpoint {
 
     public int invokeCount = 0;

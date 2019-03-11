@@ -6,7 +6,7 @@ import org.jumpmind.pos.util.model.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Endpoint("/devices/print")
+@Endpoint(path="/devices/print")
 public class PrintEndpoint {
     
     @Autowired
