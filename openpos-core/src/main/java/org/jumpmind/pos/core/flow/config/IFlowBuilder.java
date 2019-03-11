@@ -26,9 +26,9 @@ public interface IFlowBuilder {
     
     public IFlowBuilder withTransition(String actionName, Class<? extends IState> destination);
         
-    public IFlowBuilder withSubTransition(String actionName, FlowConfig flowConfig, String returnAction);
+    public IFlowBuilder withSubTransition(String actionName, FlowConfig flowConfig, String... returnAction);
     
-    public IFlowBuilder withSubTransition(String actionName, Class<? extends IState> destination, String returnAction);
+    public IFlowBuilder withSubTransition(String actionName, Class<? extends IState> destination, String... returnAction);
     
     public StateConfig build();
 

@@ -15,6 +15,10 @@ import org.jumpmind.pos.core.flow.TestStates.CustomerState;
 import org.jumpmind.pos.core.flow.TestStates.HelpState;
 import org.jumpmind.pos.core.flow.TestStates.HomeState;
 import org.jumpmind.pos.core.flow.TestStates.InjectionFailedState;
+import org.jumpmind.pos.core.flow.TestStates.MultiReturnAction1State;
+import org.jumpmind.pos.core.flow.TestStates.MultiReturnAction2State;
+import org.jumpmind.pos.core.flow.TestStates.MultiReturnActionInitialState;
+import org.jumpmind.pos.core.flow.TestStates.MultiReturnActionTestState;
 import org.jumpmind.pos.core.flow.TestStates.OptionalInjectionState;
 import org.jumpmind.pos.core.flow.TestStates.RepostActionState;
 import org.jumpmind.pos.core.flow.TestStates.SellState;
@@ -33,6 +37,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import net.bytebuddy.agent.builder.AgentBuilder.Listener.WithTransformationsOnly;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StateManagerTest {
@@ -76,6 +82,9 @@ public class StateManagerTest {
         customerFlow.addGlobalTransition("Help", HelpState.class);
         customerFlow.addGlobalSubTransition("CustomerSignup", customerSignupFlow);
         customerFlow.add(FlowBuilder.addState(HelpState.class).withTransition("Back", CustomerState.class).build());
+        
+        FlowConfig multiReturnActionSubFlow = new FlowConfig();
+        multiReturnActionSubFlow.setInitialState(FlowBuilder.addState(MultiReturnActionInitialState.class).build());
 
         FlowConfig config = new FlowConfig();
         config.setInitialState(FlowBuilder.addState(HomeState.class).withTransition("Sell", SellState.class)
@@ -83,6 +92,7 @@ public class StateManagerTest {
                 .withSubTransition("ToSubState2", SubStateReturnsWithTransitionState.class, "FromSubStateToAnotherSubState")
                 .withSubTransition("TestFlowScope", testFlowScopeFlow, "Return")
                 .withTransition("FromSubStateToAnotherState", ActionTestingState.class)
+                .withTransition("StartMultiReturnActionTest", MultiReturnActionTestState.class)
                 .withSubTransition("FromSubStateToAnotherSubState", customerFlow, "Return")
                 .withTransition("TestActions", ActionTestingState.class).withTransition("TestScopes", TestScopesState.class)
                 .withTransition("TestTransitionInterception", TransitionInterceptionState.class)
@@ -93,6 +103,12 @@ public class StateManagerTest {
         config.add(FlowBuilder.addState(SellState.class).withSubTransition("Customer", customerFlow, "CustomerLookupComplete").build());
         config.add(FlowBuilder.addState(ActionTestingState.class).withTransition("Done", HomeState.class).build());
         config.add(FlowBuilder.addState(TransitionInterceptionState.class).withTransition("Sell", SellState.class).build());
+        config.add(FlowBuilder.addState(MultiReturnActionTestState.class)
+                .withSubTransition("EnterSubstateInMultiReturnActionTest", multiReturnActionSubFlow, "MultiReturnAction1", "MultiReturnAction2")
+                .withSubTransition("EnterSubstateInMultiReturnActionTestNoFlowConfig", MultiReturnActionInitialState.class, "MultiReturnAction1", "MultiReturnAction2")
+                .withTransition("MultiReturnAction1", MultiReturnAction1State.class)
+                .withTransition("MultiReturnAction2", MultiReturnAction2State.class)
+                .build());
         
 
 
@@ -394,5 +410,54 @@ public class StateManagerTest {
         assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
         stateManager.doAction("StackOverflow");
     }
+    
+    @Test
+    public void testMultiSubFlowReturnActions1() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("StartMultiReturnActionTest");
+        assertEquals(MultiReturnActionTestState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("EnterSubstateInMultiReturnActionTest");
+        assertEquals(MultiReturnActionInitialState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("MultiReturnAction1");
+        assertEquals(MultiReturnAction1State.class, stateManager.getCurrentState().getClass());
+    }
+    
+    @Test
+    public void testMultiSubFlowReturnActions2() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("StartMultiReturnActionTest");
+        assertEquals(MultiReturnActionTestState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("EnterSubstateInMultiReturnActionTest");
+        assertEquals(MultiReturnActionInitialState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("MultiReturnAction2");
+        assertEquals(MultiReturnAction2State.class, stateManager.getCurrentState().getClass());
+    }
+    
+    @Test
+    public void testMultiSubFlowReturnActions1_NoFlowConfig() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("StartMultiReturnActionTest");
+        assertEquals(MultiReturnActionTestState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("EnterSubstateInMultiReturnActionTestNoFlowConfig");
+        assertEquals(MultiReturnActionInitialState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("MultiReturnAction1");
+        assertEquals(MultiReturnAction1State.class, stateManager.getCurrentState().getClass());
+    }
+    
+    @Test
+    public void testMultiSubFlowReturnActions2_NoFlowConfig() {
+        stateManager.init("pos", "100-1");
+        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("StartMultiReturnActionTest");
+        assertEquals(MultiReturnActionTestState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("EnterSubstateInMultiReturnActionTestNoFlowConfig");
+        assertEquals(MultiReturnActionInitialState.class, stateManager.getCurrentState().getClass());
+        stateManager.doAction("MultiReturnAction2");
+        assertEquals(MultiReturnAction2State.class, stateManager.getCurrentState().getClass());
+    }
+    
 
 }

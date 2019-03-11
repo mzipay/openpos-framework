@@ -9,6 +9,7 @@ import static org.jumpmind.pos.util.BoxLogging.UPPER_RIGHT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jumpmind.pos.core.flow.config.SubTransition;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.util.BoxLogging;
 import org.slf4j.Logger;

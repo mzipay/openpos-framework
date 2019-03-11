@@ -3,30 +3,33 @@ package org.jumpmind.pos.core.flow.config;
 
 public class SubTransition {
 
-    private String returnActionName;
+    private String[] returnActionNames;
     private FlowConfig subFlowConfig;
     
     public SubTransition() {
         
     }
     
-    public SubTransition(String returnActionName, FlowConfig subFlowConfig) {
+    public SubTransition(String[] returnActionNames, FlowConfig subFlowConfig) {
         super();
-        this.returnActionName = returnActionName;
+        this.returnActionNames = returnActionNames;
         this.subFlowConfig = subFlowConfig;
     }
     
-    public String getReturnActionName() {
-        return returnActionName;
-    }
-    public void setReturnActionName(String returnActionName) {
-        this.returnActionName = returnActionName;
-    }
+
     public FlowConfig getSubFlowConfig() {
         return subFlowConfig;
     }
     public void setSubFlowConfig(FlowConfig subFlowConfig) {
         this.subFlowConfig = subFlowConfig;
+    }
+
+    public String[] getReturnActionNames() {
+        return returnActionNames;
+    }
+
+    public void setReturnActionNames(String[] returnActionNames) {
+        this.returnActionNames = returnActionNames;
     }
     
 }

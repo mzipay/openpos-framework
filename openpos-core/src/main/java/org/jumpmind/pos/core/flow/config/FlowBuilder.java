@@ -52,17 +52,29 @@ public class FlowBuilder implements IFlowBuilder {
     }
     
     @Override
-    public IFlowBuilder withSubTransition(String actionName, Class<? extends IState> destination, String returnAction) {
+    public IFlowBuilder withSubTransition(String actionName, Class<? extends IState> destination, String... returnActions) {
         FlowConfig flowConfig = new FlowConfig(destination.getSimpleName());
-        flowConfig.setInitialState(FlowBuilder.addState(destination).withTransition(returnAction, CompleteState.class).build());
-        SubTransition subTransition = new SubTransition(returnAction, flowConfig);
+        FlowBuilder builder = FlowBuilder.addState(destination);
+        for (String returnAction : returnActions) {
+            builder.withTransition(returnAction, CompleteState.class);
+        }
+        flowConfig.setInitialState(builder.build());
+        SubTransition subTransition = new SubTransition(returnActions, flowConfig);
         stateConfig.getActionToSubStateMapping().put(actionName, subTransition);
         return this;
     }
 
     @Override
-    public IFlowBuilder withSubTransition(String actionName, FlowConfig flowConfig, String returnAction) {
-        SubTransition subTransition = new SubTransition(returnAction, flowConfig);
+    public IFlowBuilder withSubTransition(String actionName, FlowConfig flowConfig, String... returnActions) {
+        
+        for (String returnAction : returnActions) {
+            if (flowConfig.getActionToStateMapping().get(returnAction) == null
+                    && flowConfig.getActionToSubStateMapping().get(returnAction) == null) {
+                flowConfig.getActionToStateMapping().put(returnAction, CompleteState.class);
+            }
+        }
+        
+        SubTransition subTransition = new SubTransition(returnActions, flowConfig);
         stateConfig.getActionToSubStateMapping().put(actionName, subTransition);
         return this;
     }

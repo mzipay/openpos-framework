@@ -202,14 +202,17 @@ public class StateManager implements IStateManager {
         if (transitionResult == TransitionResult.PROCEED) {
             boolean enterSubState = enterSubStateConfig != null;
             boolean exitSubState = resumeSuspendedState != null;
-            String returnActionName = applicationState.getCurrentContext().getReturnActionName();
+//            SubTransition subTransition = applicationState.getCurrentContext().getSubTransition();
+            String returnActionName = (applicationState.getCurrentContext().getSubTransition() != null &&  
+                    applicationState.getCurrentContext().getSubTransition().getReturnActionNames() != null) 
+                    ? applicationState.getCurrentContext().getSubTransition().getReturnActionNames()[0] : null;
+            
             stateManagerLogger.logStateTransition(applicationState.getCurrentContext().getState(), newState, action, returnActionName,
                     enterSubState, exitSubState);
 
             if (enterSubState) {
                 applicationState.getStateStack().push(applicationState.getCurrentContext());
                 applicationState.setCurrentContext(buildSubStateContext(enterSubStateConfig, action));
-                applicationState.getCurrentContext().setReturnActionName(enterSubStateConfig.getReturnActionName());
             } else if (exitSubState) {
                 applicationState.setCurrentContext(resumeSuspendedState);
             }
@@ -249,6 +252,7 @@ public class StateManager implements IStateManager {
     protected StateContext buildSubStateContext(SubTransition enterSubStateConfig, Action action) {
         StateContext stateContext = new StateContext(enterSubStateConfig.getSubFlowConfig(), action);
         stateContext.getFlowScope().putAll(applicationState.getCurrentContext().getFlowScope());
+        stateContext.setSubTransition(enterSubStateConfig);
         return stateContext;
     }
 
@@ -392,7 +396,13 @@ public class StateManager implements IStateManager {
                 StateContext suspendedState = applicationState.getStateStack().pop();
                 StateConfig suspendedStateConfig = suspendedState.getFlowConfig().getStateConfig(suspendedState.getState());
 
-                String returnAction = applicationState.getCurrentContext().getReturnActionName();
+                String returnAction = null;
+                if (applicationState.getCurrentContext().isSubstateReturnAction(action.getName())) {
+                    returnAction = action.getName();
+                } else {
+                    returnAction = applicationState.getCurrentContext().getPrimarySubstateReturnAction();
+                }
+
                 Class<? extends IState> autoTransitionStateClass = suspendedStateConfig.getActionToStateMapping().get(returnAction);
                 if (autoTransitionStateClass != null && autoTransitionStateClass != CompleteState.class) {
                     transitionTo(action, createNewState(autoTransitionStateClass), null, null);

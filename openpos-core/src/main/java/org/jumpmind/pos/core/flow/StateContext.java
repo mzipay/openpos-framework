@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jumpmind.pos.core.flow.config.FlowConfig;
+import org.jumpmind.pos.core.flow.config.SubTransition;
 import org.jumpmind.pos.server.model.Action;
 
 public class StateContext {
@@ -12,7 +13,7 @@ public class StateContext {
     private Action action;
     private IState state;
     private Map<String, ScopeValue> flowScope = new HashMap<String, ScopeValue>(4);
-    private String returnActionName;
+    private SubTransition subTransition;
     
     public StateContext() {
         
@@ -29,6 +30,26 @@ public class StateContext {
         this.flowConfig = flowConfig;
         this.action = action;
         this.state = state;
+    }
+    
+    public boolean isSubstateReturnAction(String actionName) {
+        if (subTransition != null && subTransition.getReturnActionNames() != null) {
+            for (String returnActionName : subTransition.getReturnActionNames()) {
+                if (returnActionName.equals(actionName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public String getPrimarySubstateReturnAction() {
+        if (subTransition != null && subTransition.getReturnActionNames() != null
+                && subTransition.getReturnActionNames().length == 1) {
+            return subTransition.getReturnActionNames()[0];
+        } else {
+            return null;
+        }
     }
     
     public FlowConfig getFlowConfig() {
@@ -71,13 +92,13 @@ public class StateContext {
     public void removeFlowScope(String name) {
     	flowScope.remove(name);
     }
-    
-    public String getReturnActionName() {
-        return returnActionName;
+
+    public SubTransition getSubTransition() {
+        return subTransition;
     }
 
-    public void setReturnActionName(String returnActionName) {
-        this.returnActionName = returnActionName;
+    public void setSubTransition(SubTransition subTransition) {
+        this.subTransition = subTransition;
     }
 
     @Override

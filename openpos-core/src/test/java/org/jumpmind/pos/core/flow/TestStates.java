@@ -304,4 +304,37 @@ public class TestStates {
     public static class StackOverflowState extends AbstractStackOverflowState {
 
     }
+    
+    public static class MultiReturnActionTestState implements IState {
+        @In(scope = ScopeType.Device)
+        private IStateManager stateManager;
+        @Override
+        public void arrive(Action action) {
+
+        }
+    }    
+    public static class MultiReturnActionInitialState implements IState {
+        @In(scope = ScopeType.Device)
+        private IStateManager stateManager;
+        @Override
+        public void arrive(Action action) {
+            
+        }
+    }    
+    public static class MultiReturnAction1State implements IState {
+        @In(scope = ScopeType.Device)
+        private IStateManager stateManager;
+        @Override
+        public void arrive(Action action) {
+            
+        }
+    }    
+    public static class MultiReturnAction2State implements IState {
+        @In(scope = ScopeType.Device)
+        private IStateManager stateManager;
+        @Override
+        public void arrive(Action action) {
+            
+        }
+    }    
 }
