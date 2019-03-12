@@ -214,12 +214,12 @@ public class DBSession {
         return jdbcTemplate.update(sql, params);
     }
 
-    public <T extends AbstractModel> List<T> query(Query<T> query) {
+    public <T> List<T> query(Query<T> query) {
         return query(query, (Map<String, Object>) null);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends AbstractModel> List<T> query(Query<T> query, String singleParam) {
+    public <T> List<T> query(Query<T> query, String singleParam) {
         populdateDefaultSelect(query);
         try {
             SqlStatement sqlStatement = query.generateSQL(singleParam);

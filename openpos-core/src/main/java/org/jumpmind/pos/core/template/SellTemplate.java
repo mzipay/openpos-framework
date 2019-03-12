@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.core.screen.ActionItem;
+import org.jumpmind.pos.core.screen.ActionItemGroup;
 import org.jumpmind.pos.core.screen.Workstation;
 import org.jumpmind.pos.core.template.Scan.ScanType;
 
@@ -16,7 +17,7 @@ public class SellTemplate extends AbstractTemplate {
     protected List<ActionItem> localMenuItems = new ArrayList<>();
     
     private String transactionMenuPrompt;
-    protected List<ActionItem> transactionMenuItems = new ArrayList<>();
+    private ActionItemGroup transactionMenu = new ActionItemGroup();
     
     Scan scan;
     
@@ -81,17 +82,16 @@ public class SellTemplate extends AbstractTemplate {
     }
 
     public void addTransactionMenuItem(ActionItem menuItem) {
-        this.transactionMenuItems.add(menuItem);
+        this.transactionMenu.getActionItems().add(menuItem);
     }
     
-    public void setTransactionMenuItems(List<ActionItem> transactionMenuItems) {
-        this.transactionMenuItems = transactionMenuItems;
+    public void setTransactionMenu(ActionItemGroup transactionMenu) {
+        this.transactionMenu = transactionMenu;
     }
     
-    public List<ActionItem> getTransactionMenuItems() {
-        return transactionMenuItems;
-    }
-    
+    public ActionItemGroup getTransactionMenu() {
+        return transactionMenu;
+    }    
 
     public String getOperatorText() {
         return operatorText;

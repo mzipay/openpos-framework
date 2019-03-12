@@ -279,7 +279,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
     protected void clearTransactionMenuItems() {
         if (screen.getTemplate() instanceof SellTemplate) {
             SellTemplate sellTemplate = screen.getTemplate();
-            sellTemplate.getTransactionMenuItems().clear();
+            sellTemplate.getTransactionMenu().getActionItems().clear();
         }
     }
 
