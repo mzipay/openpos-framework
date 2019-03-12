@@ -3,7 +3,7 @@ import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
 import { Observable } from 'rxjs';
 import { map, startWith, filter } from 'rxjs/operators';
-import { DeviceService, ISellItem, SelectionMode } from '../../core';
+import { DeviceService, ISellItem, SelectionMode, IActionItemGroup } from '../../core';
 import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
 import { NavListComponent } from '../../shared/components/nav-list/nav-list.component';
 import { PosScreen } from '../pos-screen/pos-screen.component';
@@ -26,7 +26,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
   individualMenuClicked = false;
 
   transactionMenuPrompt: string;
-  transactionMenuItems: IActionItem[];
+  transactionMenu: IActionItemGroup;
 
   public overFlowListSize: Observable<number>;
 
@@ -52,7 +52,7 @@ export class TransactionComponent extends PosScreen<any> implements AfterViewIni
     this.itemTotal = screenItemTotal ? Number(screenItemTotal.amount) : this.items.length;
     if (this.screen.template) {
       this.transactionMenuPrompt = this.screen.template.transactionMenuPrompt;
-      this.transactionMenuItems = this.screen.template.transactionMenuItems;
+      this.transactionMenu = this.screen.template.transactionMenu;
     }
     this.dialog.closeAll();
   }
