@@ -16,7 +16,7 @@ public class BoxLogging {
 
 
     public static String box(String... text) {
-        StringBuilder buff = new StringBuilder("\n");
+        StringBuilder buff = new StringBuilder(System.getProperty("line.separator"));
         
         int longest = 0;
         for (String string : text) {
