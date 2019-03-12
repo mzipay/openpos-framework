@@ -16,9 +16,9 @@ public class ServiceWrapper {
     	if (args.length >= 2) {
     		configFileName = args[1];
     	} else {
-    		configFileName = "../config/openpos_service.conf";
+    		configFileName = getFullyResolvedPath("/conf/openpos_service.conf");
     	}
-        WrapperHelper.run(args, getHomeDir(), configFileName,  getHomeDir() + "/lib/openpos-wrapper.jar");
+        WrapperHelper.run(args, getHomeDir(), configFileName,  getFullyResolvedPath("/lib/openpos-wrapper.jar"));
     }
 
 
@@ -30,6 +30,15 @@ public class ServiceWrapper {
         scanner.close();
         is.close();
         return result;
+    }
+    
+    protected static String getFullyResolvedPath(String file) {
+        String homeDir = getHomeDir();
+        if (homeDir.endsWith("bin")) {
+            return homeDir + "/.." + file;
+        } else {
+            return homeDir + file;
+        }
     }
 
     protected static boolean isBlank(String value) {
