@@ -1,14 +1,14 @@
 <div class="transaction-prompt" fxLayoutAlign="start center">
-    <div fxLayoutAlign="start center" *ngIf="selectedItems && selectedItems.length > 0; else transactionMenu" class="page-content-card">
-        <mat-label class="selected-color">{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}} Selected</mat-label>
-        <app-kebab-button [keyBinding]="'F2'" *ngIf="!readOnly && selectedItems.length > 0" [menuItems]="multiSelectedMenuItems" [color]="'selected-color'"
-            (menuItemClick)="onMenuItemClick($event, selectedItemIndexes)"></app-kebab-button>
-        <span *ngIf="keybindsEnabled()" class="muted-color text-sm">F2</span>
+    <div fxLayoutAlign="start center" *ngIf="selectedItems && selectedItems.length > 0; else transactionMenuElse" class="page-content-card">
+        <mat-label class="selected-color">{{selectedItems.length}} Item{{selectedItems.length === 1 ? '' : 's'}}  Selected</mat-label>
+         <app-kebab-button [keyBinding]="transactionMenu.keybind" *ngIf="!readOnly && selectedItems.length > 0" [menuItems]="multiSelectedMenuItems" [color]="'selected-color'"
+            (menuItemClick)="onItemActionsMultiMenulick($event, selectedItemIndexes, selectedItems)"></app-kebab-button> 
+        <span *ngIf="keybindsEnabled() && transactionMenu.keybind && !readOnly && selectedItems.length > 0 && multiSelectedMenuItems && multiSelectedMenuItems.length > 0" class="muted-color text-sm">{{transactionMenu.keybind}}</span>
     </div>
-    <ng-template #transactionMenu>
+    <ng-template #transactionMenuElse>
         <span>{{prompt}}</span>
-        <app-kebab-button [keyBinding]="'F2'" [menuItems]="transactionMenuItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
-        <span *ngIf="keybindsEnabled()" class="muted-color text-sm">F2</span>
+        <app-kebab-button *ngIf="transactionMenu.actionItems.length > 0" [keyBinding]="transactionMenu.keybind" [menuItems]="transactionMenu.actionItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
+        <span *ngIf="keybindsEnabled() && transactionMenu.actionItems.length > 0 && transactionMenu.keybind" class="muted-color text-sm">{{transactionMenu.keybind}}</span>
     </ng-template>
 </div>
 

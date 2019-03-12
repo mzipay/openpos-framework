@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef, Input, Output, EventEmitter, AfterViewChecked } from '@angular/core';
 import { ISellItem } from '../../../core/interfaces/sell-item.interface';
-import { IActionItem } from '../../../core';
+import { IActionItem, IItem } from '../../../core';
+import { IActionItemGroup } from '../../../core';
 import { SelectableItemListComponentConfiguration } from '../selectable-item-list/selectable-item-list.component';
 import { Configuration } from '../../../configuration/configuration';
 
@@ -17,7 +18,7 @@ export class TransactionItemListComponent implements AfterViewChecked {
   @Input() selectedItems: ISellItem[];
   @Input() selectedItemIndexes: number[];
   @Input() multiSelectedMenuItems: IActionItem[];
-  @Input() transactionMenuItems: IActionItem[];
+  @Input() transactionMenu: IActionItemGroup;
   @Input() prompt: string;
   @Input() readOnly: boolean;
 
@@ -35,6 +36,14 @@ export class TransactionItemListComponent implements AfterViewChecked {
       return;
     }
     this.selectedItemListChange.emit(items);
+  }
+
+  public onItemActionsMultiMenulick(menuItem: IActionItem, selectedItemIndexes: number[],  selectedItems: IItem[]) {
+    if (menuItem.enabled  && selectedItems && selectedItems.length > 0) {
+      this.menuAction.emit({ menuItem: menuItem, payload: selectedItems.map(i => i.index) });
+    } else {
+      this.onMenuItemClick(menuItem, selectedItemIndexes);
+    }
   }
 
   public onMenuItemClick(menuItem: IActionItem, payload?: number[]) {
