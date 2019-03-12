@@ -41,7 +41,9 @@ export class ActionItemKeyMappingDirective implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        if ( this.subscription ) {
+            this.subscription.unsubscribe();
+        }
     }
 
 }
