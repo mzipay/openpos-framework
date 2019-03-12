@@ -47,15 +47,17 @@ public class DatabaseSchema {
     private Map<Class<?>, List<ModelClassMetaData>> classMetadata = new HashMap<>();
     private Database desiredModel;
     private static ModelValidator modelClassValidator = new ModelValidator();
+    private String tablePrefix;
 
     public void init(String tablePrefix, IDatabasePlatform platform, List<Class<?>> entityClasses, List<Class<?>> entityExtensionClasses) {
         this.platform = platform;
+        this.tablePrefix = tablePrefix;
         this.entityClasses = entityClasses;
         this.entityExtensionClasses = entityExtensionClasses;
-        desiredModel = buildDesiredModel(tablePrefix);
+        desiredModel = buildDesiredModel();
     }
 
-    protected Database buildDesiredModel(String tablePrefix) {
+    protected Database buildDesiredModel() {
         Collection<Table> tables = loadTables(tablePrefix);
         loadExtensions();
 
@@ -463,6 +465,10 @@ public class DatabaseSchema {
             default:
                 return "OTHER";
         }
+    }
+    
+    public String getTablePrefix() {
+        return tablePrefix;
     }
 
     public List<ModelClassMetaData> getModelMetaData(Class<?> modelClass) {
