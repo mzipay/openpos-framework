@@ -349,6 +349,10 @@ public class DatabaseSchema {
                        
             dbCol.setAutoIncrement(colAnnotation.autoIncrement());
             dbCol.setJdbcTypeName(getType(dbCol.getJdbcTypeCode()));
+            
+            if (isNotBlank(colAnnotation.defaultValue())) {
+                dbCol.setDefaultValue(colAnnotation.defaultValue());
+            }
 
             if (colAnnotation.size() != null & !colAnnotation.size().equalsIgnoreCase("")) {
                 dbCol.setSize(colAnnotation.size());

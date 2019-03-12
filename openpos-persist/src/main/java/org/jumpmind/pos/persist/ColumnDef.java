@@ -33,6 +33,7 @@ public @interface ColumnDef {
     int type() default Types.OTHER;
     String size() default "";
     boolean required() default false;
+    String defaultValue() default "";
     boolean primaryKey() default false;
     boolean autoIncrement() default false;
     String description() default "";
