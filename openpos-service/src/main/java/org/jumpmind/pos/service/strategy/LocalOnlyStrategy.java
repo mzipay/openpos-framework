@@ -27,47 +27,53 @@ public class LocalOnlyStrategy extends AbstractInvocationStrategy implements IIn
     @Autowired
     Environment env;
 
-    Map<String, Object> endPointsByPath = new HashMap<>();
+    Map<String, Object> endPointsByPath;
 
     @EventListener
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        Collection<Object> beans = applicationContext.getBeansWithAnnotation(RestController.class).values();
-        if (beans != null) {
-            Collection<Object> endpointOverrides = applicationContext.getBeansWithAnnotation(EndpointOverride.class).values();
-            Collection<Object> endpoints = applicationContext.getBeansWithAnnotation(Endpoint.class).values();
-            for (Object object : beans) {
-                Class<?>[] interfaces = object.getClass().getInterfaces();
-                for (Class<?> i : interfaces) {
-                    RestController controller = i.getAnnotation(RestController.class);
-                    if (controller != null) {
-                        String serviceName = controller.value();
-                        String implementation = env
-                                .getProperty(String.format("openpos.services.specificConfig.{}.implementation", serviceName), "default");
-                        log.info("Loading endpoints for the '{}' implementation of {}({})", implementation, i.getSimpleName(), serviceName);
-                        Method[] methods = i.getMethods();
-                        for (Method method : methods) {
-                            String path = buildPath(method);
-                            for (Object overridenBean : endpointOverrides) {
-                                EndpointOverride override = ClassUtils.resolveAnnotation(EndpointOverride.class, overridenBean);
-                                if (override.path().equals(path) && override.implementation().equals(implementation)) {
-                                    endPointsByPath.put(path, overridenBean);
-                                    break;
-                                }
-                            }
-                            
-                            if (!endPointsByPath.containsKey(path)) {
-                                for (Object endpointBean : endpoints) {
-                                    Endpoint endPoint = ClassUtils.resolveAnnotation(Endpoint.class, endpointBean);
-                                    if (endPoint.path().equals(path) && endPoint.implementation().equals(implementation)) {
-                                        endPointsByPath.put(path, endpointBean);
+        if (endPointsByPath == null) {
+            endPointsByPath = new HashMap<>();
+            Collection<Object> beans = applicationContext.getBeansWithAnnotation(RestController.class).values();
+            if (beans != null) {
+                Collection<Object> endpointOverrides = applicationContext.getBeansWithAnnotation(EndpointOverride.class).values();
+                Collection<Object> endpoints = applicationContext.getBeansWithAnnotation(Endpoint.class).values();
+                for (Object object : beans) {
+                    Class<?>[] interfaces = object.getClass().getInterfaces();
+                    for (Class<?> i : interfaces) {
+                        RestController controller = i.getAnnotation(RestController.class);
+                        if (controller != null) {
+                            String serviceName = controller.value();
+                            String implementation = env
+                                    .getProperty(String.format("openpos.services.specificConfig.{}.implementation", serviceName), "default");
+                            log.info("Loading endpoints for the '{}' implementation of {}({})", implementation, i.getSimpleName(),
+                                    serviceName);
+                            Method[] methods = i.getMethods();
+                            for (Method method : methods) {
+                                String path = buildPath(method);
+                                for (Object overridenBean : endpointOverrides) {
+                                    EndpointOverride override = ClassUtils.resolveAnnotation(EndpointOverride.class, overridenBean);
+                                    if (override.path().equals(path) && override.implementation().equals(implementation)) {
+                                        endPointsByPath.put(path, overridenBean);
                                         break;
                                     }
                                 }
-                            }
-                            
-                            if (!endPointsByPath.containsKey(path)) {
-                                log.error(String.format("No endpoint defined for path '%s' in '%s' in the service Please define a Spring-discoverable @Endpoint class, "
-                                        + "with a method annotated like  @Endpoint(\"%s\")", path, i.getSimpleName(), path));
+
+                                if (!endPointsByPath.containsKey(path)) {
+                                    for (Object endpointBean : endpoints) {
+                                        Endpoint endPoint = ClassUtils.resolveAnnotation(Endpoint.class, endpointBean);
+                                        if (endPoint.path().equals(path) && endPoint.implementation().equals(implementation)) {
+                                            endPointsByPath.put(path, endpointBean);
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (!endPointsByPath.containsKey(path)) {
+                                    log.warn(String.format(
+                                            "No endpoint defined for path '%s' in '%s' in the service Please define a Spring-discoverable @Endpoint class, "
+                                                    + "with a method annotated like  @Endpoint(\"%s\")",
+                                            path, i.getSimpleName(), path));
+                                }
                             }
                         }
                     }
