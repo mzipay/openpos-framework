@@ -16,6 +16,10 @@ public class PersistException extends RuntimeException {
     public PersistException(String message) {
         super(message);
     }
+    
+    public PersistException(String message, Object... args) {
+        super(String.format(message, args));
+    }
 
     public PersistException(Throwable cause) {
         super(cause);
