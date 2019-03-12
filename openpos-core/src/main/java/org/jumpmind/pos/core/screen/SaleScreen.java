@@ -19,7 +19,7 @@ public class SaleScreen extends Screen {
     private List<ActionItem> sausageLinks = new ArrayList<>();
 
     private String transactionMenuPrompt;
-    private List<ActionItem> transactionMenuItems = new ArrayList<>();
+    private ActionItemGroup transactionMenu = new ActionItemGroup();
     private List<ActionItem> multiSelectedMenuItems;
     private List<SellItem> items = new ArrayList<>();
     private int[] selectedItemIndexes = new int[0];
@@ -140,15 +140,15 @@ public class SaleScreen extends Screen {
     }
 
     public void addTransactionMenuItem(ActionItem menuItem) {
-        this.transactionMenuItems.add(menuItem);
+        this.transactionMenu.getActionItems().add(menuItem);
     }
 
-    public void setTransactionMenuItems(List<ActionItem> transactionMenuItems) {
-        this.transactionMenuItems = transactionMenuItems;
+    public void setTransactionMenu(ActionItemGroup transactionMenu) {
+        this.transactionMenu = transactionMenu;
     }
 
-    public List<ActionItem> getTransactionMenuItems() {
-        return transactionMenuItems;
+    public ActionItemGroup getTransactionMenu() {
+        return transactionMenu;
     }
 
     public ScanPart getScan() {

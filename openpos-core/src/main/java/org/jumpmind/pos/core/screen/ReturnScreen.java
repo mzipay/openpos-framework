@@ -28,9 +28,9 @@ public class ReturnScreen extends Screen {
     private List<TransactionReceipt> receipts = new ArrayList<>();
 
     private String transactionMenuPrompt;
-    private List<ActionItem> transactionMenuItems = new ArrayList<>();
+    private ActionItemGroup transactionMenu = new ActionItemGroup();
 
-    private List<ActionItem> multiSelectedMenuItems;
+    private List<ActionItem> multiSelectedMenuItems = new ArrayList<ActionItem>();
 
     private String itemActionName = "Item";
     private List<Total> totals = new ArrayList<>();
@@ -119,14 +119,6 @@ public class ReturnScreen extends Screen {
         this.transactionMenuPrompt = transactionMenuPrompt;
     }
 
-    public List<ActionItem> getTransactionMenuItems() {
-        return transactionMenuItems;
-    }
-
-    public void setTransactionMenuItems(List<ActionItem> transactionMenuItems) {
-        this.transactionMenuItems = transactionMenuItems;
-    }
-
     public String getItemActionName() {
         return itemActionName;
     }
@@ -196,5 +188,13 @@ public class ReturnScreen extends Screen {
 
     public void setNoCustomerText(String noCustomerText) {
         this.noCustomerText = noCustomerText;
+    }
+
+    public ActionItemGroup getTransactionMenu() {
+        return transactionMenu;
+    }
+
+    public void setTransactionMenu(ActionItemGroup transactionMenu) {
+        this.transactionMenu = transactionMenu;
     }
 }
