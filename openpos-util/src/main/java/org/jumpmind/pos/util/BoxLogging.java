@@ -28,12 +28,12 @@ public class BoxLogging {
         int boxWidth = Math.max(longest + 6, 30);
 
         buff.append(PLUS).append(StringUtils.repeat(HORIZONTAL_MIDDLE, boxWidth - 2)).append(PLUS);
-        buff.append("\r\n");
+        buff.append(System.getProperty("line.separator"));
         for (String string : text) {
             buff.append(VERITCAL_LINE).append(StringUtils.center(string, boxWidth - 2)).append(VERITCAL_LINE);    
         }
         
-        buff.append("\r\n");
+        buff.append(System.getProperty("line.separator"));
         buff.append(PLUS).append(StringUtils.repeat(HORIZONTAL_MIDDLE, boxWidth - 2)).append(PLUS);
         return buff.toString();
 
