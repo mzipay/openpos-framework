@@ -279,6 +279,9 @@ public class DBSession {
         for (Class<?> processing : toProcess) {
             String tableAlias = "c" + tableCount;
             Table table = databaseSchema.getTable(entity, processing);
+            if (table == null) {
+                throw new PersistException("Cound not find table for the %s entity in the %s module.  Are you using the correct session?", entity.getSimpleName(), databaseSchema.getTablePrefix());
+            }
             joins.append(table.getName()).append(" ").append(tableAlias);
             if (tableCount > 0) {
                 String previousTableAlias = "c" + (tableCount - 1);
