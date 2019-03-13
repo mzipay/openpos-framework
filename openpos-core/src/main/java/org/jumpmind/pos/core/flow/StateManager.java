@@ -182,8 +182,12 @@ public class StateManager implements IStateManager {
     public void transitionTo(Action action, IState newState) {
         transitionTo(action, newState, null, null);
     }
-
+    
     protected void transitionTo(Action action, IState newState, SubTransition enterSubStateConfig, StateContext resumeSuspendedState) {
+        transitionTo(action, newState, enterSubStateConfig, resumeSuspendedState, false);
+    }
+
+    protected void transitionTo(Action action, IState newState, SubTransition enterSubStateConfig, StateContext resumeSuspendedState, boolean autoTransition) {
         if (applicationState.getCurrentContext() == null) {
             throw new FlowException(
                     "There is no applicationState.getCurrentContext() on this StateManager.  HINT: States should use @In to get the StateManager, not @Autowired.");
@@ -223,7 +227,7 @@ public class StateManager implements IStateManager {
 
             performInjections(newState);
 
-            if (resumeSuspendedState == null || returnActionName == null) {
+            if (resumeSuspendedState == null || returnActionName == null || autoTransition) {
                 try {
                     applicationState.getCurrentContext().getState().arrive(action);
                 } catch (RuntimeException ex) {
@@ -257,7 +261,7 @@ public class StateManager implements IStateManager {
             
             for (String returnActionName : applicationState.getCurrentContext().getSubTransition().getReturnActionNames()) {
                 if (StringUtils.equals(returnActionName, action.getName())) {
-                    return null; // the action IS a return action, so don't modify.s
+                    return action.getName(); // the action IS a return action, so don't modify.
                 }
             }
             
@@ -429,7 +433,7 @@ public class StateManager implements IStateManager {
 
                 Class<? extends IState> autoTransitionStateClass = suspendedStateConfig.getActionToStateMapping().get(returnAction);
                 if (autoTransitionStateClass != null && autoTransitionStateClass != CompleteState.class) {
-                    transitionTo(action, createNewState(autoTransitionStateClass), null, suspendedState);
+                    transitionTo(action, createNewState(autoTransitionStateClass), null, suspendedState, true);
                 } else {
                     SubTransition autoSubTransition = suspendedStateConfig.getActionToSubStateMapping().get(returnAction);
                     if (autoSubTransition != null) {
@@ -458,7 +462,7 @@ public class StateManager implements IStateManager {
         try {
             return clazz.newInstance();
         } catch (Exception ex) {
-            throw new FlowException("Failed to create and transition to state " + clazz.getName(), ex);
+            throw new FlowException("Failed to create state " + clazz.getName(), ex);
         }
     }
 

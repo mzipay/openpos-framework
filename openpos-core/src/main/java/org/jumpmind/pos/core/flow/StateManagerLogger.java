@@ -47,8 +47,13 @@ public class StateManagerLogger {
                 primaryAction = action != null ? action.getName() : "";
                 secondaryAction = "";
             } else {
-                primaryAction = returnAction;
-                secondaryAction = "(caused by " + (action != null ? action.getName() : "") + ")";
+                if (!StringUtils.equals(primaryAction, secondaryAction)) {
+                    primaryAction = returnAction;
+                    secondaryAction = "(caused by " + (action != null ? action.getName() : "") + ")";                    
+                } else {
+                    primaryAction = action != null ? action.getName() : "";
+                    secondaryAction = "";                    
+                }
             }
 
             String enterSubStateTitle = null;
