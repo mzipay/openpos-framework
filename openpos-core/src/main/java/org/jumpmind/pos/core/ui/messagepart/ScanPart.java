@@ -1,11 +1,10 @@
-package org.jumpmind.pos.core.screenpart;
-
-import java.io.Serializable;
+package org.jumpmind.pos.core.ui.messagepart;
 
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.screen.IconType;
 
-@Deprecated
+import java.io.Serializable;
+
 public class ScanPart implements Serializable{
     private static final long serialVersionUID = 1L;
 

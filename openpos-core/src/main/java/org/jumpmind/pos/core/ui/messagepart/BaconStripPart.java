@@ -1,10 +1,9 @@
-package org.jumpmind.pos.core.screenpart;
-
-import java.io.Serializable;
+package org.jumpmind.pos.core.ui.messagepart;
 
 import org.jumpmind.pos.core.screen.ActionItem;
 
-@Deprecated
+import java.io.Serializable;
+
 public class BaconStripPart implements Serializable{
 
     private static final long serialVersionUID = 1L;
