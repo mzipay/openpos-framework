@@ -1,7 +1,7 @@
 
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
-import { ISellTemplate, SellScreenUtils } from '../../screens/';
+import { ISellTemplate, SellScreenUtils } from '../../screens-deprecated/';
 import { AbstractTemplate } from '../../core';
 import { SelfCheckoutStatusBarData } from '../self-checkout-statusbar/self-checkout-status-bar-data';
 

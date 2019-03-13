@@ -3,7 +3,9 @@
 @import '../shared/layout-components/layout-component-themes';
 @import '../shared/components/component-theme-mixins';
 @import '../shared/screen-parts/screen-part-themes';
-@import '../screens/screen-themes';
+@import '../screens-deprecated/screen-themes';
+@import '../screens-with-parts/screen-with-parts-themes';
+
 
 @include mat-core();
 
@@ -29,6 +31,7 @@
     @include openpos-component-theme-mixins($theme);
     @include screen-part-themes($theme);
     @include screen-themes($theme);
+    @include screen-with-parts-themes($theme);
 
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));

@@ -1,9 +1,10 @@
 import { Component, ViewChild, AfterViewInit, Input } from '@angular/core';
-import { ScreenPartComponent, ScreenPart } from '../screen-part';
+import { ScreenPartComponent } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
 import { MatInput } from '@angular/material';
 import { DeviceService } from '../../../core/services/device.service';
 import { MessageProvider } from '../../providers/message.provider';
+import { ScreenPart } from '../../decorators/screen-part.decorator';
 
 @ScreenPart({
     name: 'scan'

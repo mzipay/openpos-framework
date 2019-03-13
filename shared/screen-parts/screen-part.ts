@@ -5,21 +5,7 @@ import { filter } from 'rxjs/operators';
 import { deepAssign } from '../../utilites/';
 import { MessageProvider } from '../providers/message.provider';
 
-export interface ScreenPartProps {
-    name: string;
-}
-
-export function ScreenPart( config: ScreenPartProps ) {
-    return function<T extends {new(...args: any[]): {}}>(target: T) {
-        const newClazz = class extends target {
-            screenPartName = config.name;
-            };
-        return newClazz;
-    };
-}
-
 export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
-
 
     sessionService: SessionService;
     log: Logger;

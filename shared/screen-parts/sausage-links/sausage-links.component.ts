@@ -1,8 +1,9 @@
-import { ScreenPartComponent, ScreenPart } from '../screen-part';
+import { ScreenPartComponent } from '../screen-part';
 import { IActionItem } from '../../../core/interfaces/menu-item.interface';
 import { Component } from '@angular/core';
 import { MessageProvider } from '../../providers/message.provider';
 import { Configuration } from '../../../configuration/configuration';
+import { ScreenPart } from '../../decorators/screen-part.decorator';
 
 @ScreenPart({
     name: 'sausageLinks'
