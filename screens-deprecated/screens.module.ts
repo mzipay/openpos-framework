@@ -16,7 +16,7 @@ import { BasicItemSearchComponent } from './basic-item-search/basic-item-search.
 import { ChooseOptionsComponent } from './choose-options/choose-options.component';
 import { PromptWithOptionsComponent } from './prompt-with-options/prompt-with-options.component';
 import { PromptWithInfoComponent } from './prompt-with-info/prompt-with-info.component';
-import { DialogComponent } from './dialog/dialog.component';
+import { DefaultDialogComponent } from './dialog/default-dialog.component';
 import { FormComponent } from './form/form.component';
 import { HomeComponent } from './home/home.component';
 import { PaymentStatusComponent } from './payment-status/payment-status.component';
@@ -70,7 +70,7 @@ import { SaleItemListComponent } from '../screens-with-parts/sale/sale-item-list
 const screens = [
     BasicItemSearchComponent,
     ChooseOptionsComponent,
-    DialogComponent,
+    DefaultDialogComponent,
     EmbeddedWebPageComponent,
     FormComponent,
     HomeComponent,

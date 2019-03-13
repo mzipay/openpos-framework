@@ -6,7 +6,7 @@ export { IChooseOptionsScreen } from './choose-options/choose-options-screen.int
 export * from './choose-options/option-item.interface';
 export * from './choose-options/choose-options-dialog.component';
 export * from './customer-search-results/customer-search-results.component';
-export * from './dialog/dialog.component';
+export * from './dialog/default-dialog.component';
 export * from './dynamic-form/dynamic-form.component';
 export * from './dynamic-form/dynamic-form-dialog.component';
 export * from './embedded-web-page/embedded-web-page.component';

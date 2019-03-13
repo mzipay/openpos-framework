@@ -28,7 +28,7 @@ import { MultipleDynamicFormComponent } from './multiple-dynamic-form/multiple-d
 import { SelectionListComponent } from './selection-list/selection-list.component';
 import { ItemSearchResultsComponent } from './item-search-results/item-search-results.component';
 import { ItemOptionsComponent } from './item-options/item-options.component';
-import { DialogComponent } from './dialog/dialog.component';
+import { DefaultDialogComponent } from './dialog/default-dialog.component';
 import { BlankComponent } from './templates/blank/blank.component';
 import { BlankWithBarComponent } from './templates/blank-with-bar/blank-with-bar.component';
 import { SellComponent } from './templates/sell-template/sell/sell.component';
@@ -99,7 +99,7 @@ export const ScreenConstants = {
         { name: 'AutoCompleteAddress', component: AutoCompleteAddressComponent},
 
         // Default Dialog
-        { name: 'Dialog', component: DialogComponent },
+        { name: 'Dialog', component: DefaultDialogComponent },
     ],
 
     dialogs: [
@@ -108,7 +108,7 @@ export const ScreenConstants = {
         { name: 'DynamicForm', component: DynamicFormDialogComponent },
         { name: 'DynamicList', component: DynamicListDialogComponent },
         { name: 'MultipleDynamicForm', component: MultipleDynamicFormDialogComponent },
-        { name: 'Dialog', component: DialogComponent },
+        { name: 'Dialog', component: DefaultDialogComponent },
         { name: 'LoadingDialog', component: LoadingDialogComponent },
         { name: 'Prompt', component: PromptDialogComponent },
 

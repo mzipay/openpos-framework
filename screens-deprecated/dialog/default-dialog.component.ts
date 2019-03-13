@@ -5,20 +5,25 @@ import { MatDialogRef } from '@angular/material';
 import { IActionItem } from '../../core';
 import { ILine } from './line.interface';
 import { PosScreen } from '../pos-screen/pos-screen.component';
+import { DialogComponent } from '../../shared/decorators/dialog.decorator';
 
+@DialogComponent({
+    name: 'Dialog',
+    moduleName: 'Core'
+})
 @Component({
   selector: 'app-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrls: [ './dialog.component.scss']
+  templateUrl: './default-dialog.component.html',
+  styleUrls: [ './default-dialog.component.scss']
 })
-export class DialogComponent extends PosScreen<any> {
+export class DefaultDialogComponent extends PosScreen<any> {
 
   primaryButton: IActionItem;
   otherButtons: IActionItem[];
   messages: string[];
   lines: ILine[];
 
-  constructor(public session: SessionService, public dialogRef: MatDialogRef<DialogComponent> ) {
+  constructor(public session: SessionService, public dialogRef: MatDialogRef<DefaultDialogComponent> ) {
       super();
   }
 
