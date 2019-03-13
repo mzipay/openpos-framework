@@ -2,7 +2,12 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ProductListComponent, ItemClickAction, MenuClickAction } from '../../shared/';
 import { SelectionMode, IItem, IActionItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
+import { ScreenComponent } from '../../shared/decorators/screen.decorator';
 
+@ScreenComponent({
+    name: 'ItemList',
+    moduleName: 'Core'
+})
 @Component({
     selector: 'app-item-list',
     templateUrl: './item-list.component.html'
