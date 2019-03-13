@@ -7,7 +7,7 @@ import { Configuration } from '../../configuration/configuration';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
-    selector: 'mat-card-content'
+    selector: '[mat-card-content], [scrollable]'
 })
 export class MimicScrollDirective implements OnDestroy {
 

@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { cold, getTestScheduler } from 'jasmine-marbles';
-import { SessionService, IAbstractScreen, AppInjector } from '../../core';
+import { IAbstractScreen } from '../../core';
 import { ScreenPartComponent } from './screen-part';
-import { Injector, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { ScreenPart } from '../decorators/screen-part.decorator';
 import { MessageProvider } from '../providers';
 
