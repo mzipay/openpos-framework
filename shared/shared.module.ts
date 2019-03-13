@@ -88,6 +88,9 @@ import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, Sausa
 import { SideNavComponent, WaffleComponent } from './layout-components';
 import { Configuration } from '../configuration/configuration';
 import { KeyPressSourceDirective } from './directives/keypress-source.directive';
+import { SystemStatusDialogComponent } from './components/system-status/system-status-dialog.component';
+import { SellLinkedCustomerComponent } from '../screens-deprecated/templates/sell-template/sell-linked-customer/sell-linked-customer.component';
+import { SellStatusSectionComponent } from '../screens-deprecated/templates/sell-template/sell-status-section/sell-status-section.component';
 
 const screenParts = [
         DynamicFormPartComponent,
@@ -143,6 +146,9 @@ const components = [
     DisplayPropertyComponent,
     TransactionItemListComponent,
     GridTableComponent,
+    SystemStatusDialogComponent,
+    SellLinkedCustomerComponent,
+    SellStatusSectionComponent
 ];
 
 const directives = [

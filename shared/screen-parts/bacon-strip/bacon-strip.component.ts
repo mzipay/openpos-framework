@@ -1,9 +1,10 @@
 import { BaconStripInterface } from './bacon-strip.interface';
-import { ScreenPartComponent, ScreenPart } from '../screen-part';
+import { ScreenPartComponent } from '../screen-part';
 import { OpenposMediaService } from '../../../core/services/openpos-media.service';
 import { Observable } from 'rxjs';
 import { Component } from '@angular/core';
 import { MessageProvider } from '../../providers/message.provider';
+import { ScreenPart } from '../../decorators/screen-part.decorator';
 
 @ScreenPart({
     name: 'baconStrip'})

@@ -1,4 +1,4 @@
-import { IScan } from '../../screens';
+import { IScan } from '../../screens-deprecated';
 import { IActionItem } from '../../core';
 
 export class SelfCheckoutStatusBarData {

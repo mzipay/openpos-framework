@@ -3,7 +3,7 @@ import { Logger } from './../../../core/services/logger.service';
 import { Component, Input, Optional, Inject, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
 import { DeviceService, SessionService } from '../../../core';
-import { IScan } from '../../../screens';
+import { IScan } from '../../../screens-deprecated';
 import { Subscription } from 'rxjs';
 
 @Component({

@@ -7,8 +7,8 @@
     </div>
     <ng-template #transactionMenuElse>
         <span>{{prompt}}</span>
-        <app-kebab-button *ngIf="transactionMenu.actionItems.length > 0" [keyBinding]="transactionMenu.keybind" [menuItems]="transactionMenu.actionItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
-        <span *ngIf="keybindsEnabled() && transactionMenu.actionItems.length > 0 && transactionMenu.keybind" class="muted-color text-sm">{{transactionMenu.keybind}}</span>
+        <app-kebab-button *ngIf="transactionMenu?.actionItems?.length > 0" [keyBinding]="transactionMenu.keybind" [menuItems]="transactionMenu.actionItems" (menuItemClick)="onMenuItemClick($event)"></app-kebab-button>
+        <span *ngIf="keybindsEnabled() && transactionMenu?.actionItems?.length > 0 && transactionMenu.keybind" class="muted-color text-sm">{{transactionMenu.keybind}}</span>
     </ng-template>
 </div>
 

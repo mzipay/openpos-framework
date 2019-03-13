@@ -1,7 +1,0 @@
-@import './sale/sale-theme';
-@import './return/return-theme';
-
-@mixin screen-themes($theme){
-    @include sale-theme($theme);
-    @include return-theme($theme);
-}
