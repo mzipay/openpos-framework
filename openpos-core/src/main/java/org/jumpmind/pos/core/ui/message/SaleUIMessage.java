@@ -1,17 +1,20 @@
-package org.jumpmind.pos.core.screen;
+package org.jumpmind.pos.core.ui.message;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jumpmind.pos.core.model.DisplayProperty;
 import org.jumpmind.pos.core.model.Total;
+import org.jumpmind.pos.core.screen.ActionItem;
+import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.core.screen.ScreenType;
+import org.jumpmind.pos.core.screen.SellItem;
 import org.jumpmind.pos.core.screenpart.BaconStripPart;
 import org.jumpmind.pos.core.screenpart.ScanPart;
 import org.jumpmind.pos.core.screenpart.StatusStripPart;
 import org.jumpmind.pos.core.ui.UIMessage;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Deprecated
-public class SaleScreen extends Screen {
+public class SaleUIMessage extends Screen {
     private static final long serialVersionUID = 1L;
 
     private BaconStripPart baconStrip = new BaconStripPart();
@@ -21,7 +24,7 @@ public class SaleScreen extends Screen {
     private List<ActionItem> sausageLinks = new ArrayList<>();
 
     private String transactionMenuPrompt;
-    private ActionItemGroup transactionMenu = new ActionItemGroup();
+    private List<ActionItem> transactionMenuItems = new ArrayList<>();
     private List<ActionItem> multiSelectedMenuItems;
     private List<SellItem> items = new ArrayList<>();
     private int[] selectedItemIndexes = new int[0];
@@ -36,10 +39,9 @@ public class SaleScreen extends Screen {
     private ActionItem promoButton;
     private ActionItem checkoutButton;
 
-    public SaleScreen() {
-        this.setScreenType(ScreenType.Sale);
+    public SaleUIMessage() {
+        this.setScreenType(UIMessageType.SALE);
         this.setId("sale");
-        this.setTemplate(null);
     }
 
     public List<SellItem> getItems() {
@@ -142,15 +144,15 @@ public class SaleScreen extends Screen {
     }
 
     public void addTransactionMenuItem(ActionItem menuItem) {
-        this.transactionMenu.getActionItems().add(menuItem);
+        this.transactionMenuItems.add(menuItem);
     }
 
-    public void setTransactionMenu(ActionItemGroup transactionMenu) {
-        this.transactionMenu = transactionMenu;
+    public void setTransactionMenuItems(List<ActionItem> transactionMenuItems) {
+        this.transactionMenuItems = transactionMenuItems;
     }
 
-    public ActionItemGroup getTransactionMenu() {
-        return transactionMenu;
+    public List<ActionItem> getTransactionMenuItems() {
+        return transactionMenuItems;
     }
 
     public ScanPart getScan() {

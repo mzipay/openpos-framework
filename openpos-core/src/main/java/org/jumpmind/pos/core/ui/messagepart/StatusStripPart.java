@@ -1,11 +1,10 @@
-package org.jumpmind.pos.core.screenpart;
+package org.jumpmind.pos.core.ui.messagepart;
+
+import org.jumpmind.pos.core.model.SystemStatus;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import org.jumpmind.pos.core.model.SystemStatus;
-
-@Deprecated
 public class StatusStripPart implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
