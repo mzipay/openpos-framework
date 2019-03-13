@@ -19,3 +19,10 @@
 .sale-line-item {
     height: unset !important;
 }
+
+mat-list-item.disabled{
+    cursor: not-allowed !important;
+    opacity: 0.5;
+    text-decoration: none;
+    pointer-events: none;
+}

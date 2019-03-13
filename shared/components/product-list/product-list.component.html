@@ -9,7 +9,7 @@
 </ng-container>
 <ng-template #otherSelectionMode>
     <mat-list-item *ngFor="let item of items" [ngClass]="(itemClass ? itemClass : 'sale-line-item' )" ngClass.xs="sale-line-item-xs"
-        (click)="onItemClick(item, $event)">
+        (click)="onItemClick(item, $event)" [class.disabled]="!item.enabled">
         <ng-container *ngTemplateOutlet="productListItemDetail; context:{item: item, selectionMode: selectionMode}"></ng-container>
     </mat-list-item>
 </ng-template>
