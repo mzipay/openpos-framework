@@ -45,17 +45,4 @@ export class StatusBarComponent implements IStatusBarControl, AfterViewInit {
     }
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
-  public onEscape() {
-    if (Configuration.enableKeybinds) {
-      if (this.data && this.data.backButton && this.data.backButton.enabled) {
-        this.session.onAction(this.data.backButton);
-        event.preventDefault();
-      } else if (this.data && this.data.logoutButton && this.data.logoutButton.enabled) {
-        this.session.onAction(this.data.logoutButton);
-        event.preventDefault();
-      }
-    }
-  }
-
 }
