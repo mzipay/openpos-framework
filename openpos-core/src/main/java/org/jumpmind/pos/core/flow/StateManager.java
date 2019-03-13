@@ -19,6 +19,7 @@
  */
 package org.jumpmind.pos.core.flow;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.config.SubTransition;
@@ -202,13 +204,13 @@ public class StateManager implements IStateManager {
         if (transitionResult == TransitionResult.PROCEED) {
             boolean enterSubState = enterSubStateConfig != null;
             boolean exitSubState = resumeSuspendedState != null;
-//            SubTransition subTransition = applicationState.getCurrentContext().getSubTransition();
-            String returnActionName = (applicationState.getCurrentContext().getSubTransition() != null &&  
-                    applicationState.getCurrentContext().getSubTransition().getReturnActionNames() != null) 
-                    ? applicationState.getCurrentContext().getSubTransition().getReturnActionNames()[0] : null;
+            String returnActionName = null;
+            if (exitSubState) {
+                returnActionName = getReturnActionName(action);
+            }
             
             stateManagerLogger.logStateTransition(applicationState.getCurrentContext().getState(), newState, action, returnActionName,
-                    enterSubState, exitSubState);
+                    enterSubStateConfig, exitSubState ? applicationState.getCurrentContext() : null, getApplicationState(), resumeSuspendedState);
 
             if (enterSubState) {
                 applicationState.getStateStack().push(applicationState.getCurrentContext());
@@ -247,6 +249,28 @@ public class StateManager implements IStateManager {
             applicationState.getCurrentContext().getState().arrive(action);
         }
 
+    }
+
+    protected String getReturnActionName(Action action) {
+        if (applicationState.getCurrentContext().getSubTransition() != null &&  
+                applicationState.getCurrentContext().getSubTransition().getReturnActionNames() != null) {
+            
+            for (String returnActionName : applicationState.getCurrentContext().getSubTransition().getReturnActionNames()) {
+                if (StringUtils.equals(returnActionName, action.getName())) {
+                    return null; // the action IS a return action, so don't modify.s
+                }
+            }
+            
+            if (applicationState.getCurrentContext().getSubTransition().getReturnActionNames().length == 1) {
+                return applicationState.getCurrentContext().getSubTransition().getReturnActionNames()[0];
+            } else if (applicationState.getCurrentContext().getSubTransition().getReturnActionNames().length > 1) {
+                throw new FlowException("Unpected situation. Non-return action raised which completed a subflow: " + action.getName() + 
+                        " -- but there is more than 1 return action mapped to this subflow so we don't know which return action to pick: " + 
+                        Arrays.toString(applicationState.getCurrentContext().getSubTransition().getReturnActionNames()));
+            }
+         }
+        
+        return null;
     }
 
     protected StateContext buildSubStateContext(SubTransition enterSubStateConfig, Action action) {
@@ -405,7 +429,7 @@ public class StateManager implements IStateManager {
 
                 Class<? extends IState> autoTransitionStateClass = suspendedStateConfig.getActionToStateMapping().get(returnAction);
                 if (autoTransitionStateClass != null && autoTransitionStateClass != CompleteState.class) {
-                    transitionTo(action, createNewState(autoTransitionStateClass), null, null);
+                    transitionTo(action, createNewState(autoTransitionStateClass), null, suspendedState);
                 } else {
                     SubTransition autoSubTransition = suspendedStateConfig.getActionToSubStateMapping().get(returnAction);
                     if (autoSubTransition != null) {

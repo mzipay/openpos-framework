@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.IState;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -139,6 +140,15 @@ public class FlowConfig {
     }
 
     public String getName() {
+        if (StringUtils.isEmpty(name)) {
+            String className = this.getClass().getSimpleName();
+            final String CONFIG_SUFFIX = "Config";
+            if (className.endsWith("Config")) {
+                name = className.substring(0, className.length()-CONFIG_SUFFIX.length());
+            } else {
+                name = className;
+            }
+        }
         return name;
     }
 
