@@ -63,8 +63,6 @@ import { SelectionListDialogComponent } from './selection-list/selection-list-di
 import { DataTableComponent } from './data-table/data-table.component';
 import { AutoCompleteAddressComponent } from './auto-complete-address/auto-complete-address.component';
 import { SaleComponent } from '../screens-with-parts/sale/sale.component';
-import { SaleFooterComponent } from '../screens-with-parts/sale/sale-footer/sale-footer.component';
-import { SaleItemListComponent } from '../screens-with-parts/sale/sale-item-list/sale-item-list.component';
 const screens = [
     BasicItemSearchComponent,
     ChooseOptionsComponent,
