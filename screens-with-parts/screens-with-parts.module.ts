@@ -1,17 +1,9 @@
 import { NgModule, Type } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { ScreenService } from '../core/services/screen.service';
-import { SaleFooterComponent } from './sale/sale-footer/sale-footer.component';
-import { SaleItemListComponent } from './sale/sale-item-list/sale-item-list.component';
 import { Registry } from '../core/registry';
 import { DialogService, IconService } from '../core';
 import { IconConstants } from '../screens-deprecated/icon.constants';
-
-
-const screenParts = [
-    SaleFooterComponent,
-    SaleItemListComponent
-];
 
 
 @NgModule({
@@ -22,7 +14,6 @@ const screenParts = [
     declarations: [
         Registry.getComponents('Core', Registry.screens),
         Registry.getComponents('Core', Registry.dialogs),
-        ...screenParts
     ],
     imports: [
         SharedModule

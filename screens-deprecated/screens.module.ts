@@ -45,7 +45,6 @@ import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.compo
 import { BlankComponent } from './templates/blank/blank.component';
 import { BlankWithBarComponent } from './templates/blank-with-bar/blank-with-bar.component';
 import { SellComponent } from './templates/sell-template/sell/sell.component';
-import { SellLinkedCustomerComponent } from './templates/sell-template/sell-linked-customer/sell-linked-customer.component';
 import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';
 import { DynamicListDialogComponent } from './dynamic-list/dynamic-list-dialog.component';
@@ -55,7 +54,6 @@ import { LoginDialogComponent } from './login/login-dialog.component';
 import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { VersionComponent } from './version/version.component';
 import { ScreenConstants } from './screen.constants';
-import { SellStatusSectionComponent } from './templates/sell-template/sell-status-section/sell-status-section.component';
 import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 import { IconConstants } from './icon.constants';
@@ -130,10 +128,7 @@ const templates = [
     SellComponent,
 ];
 
-const screenParts = [
-    SaleFooterComponent,
-    SaleItemListComponent
-];
+
 
 
 @NgModule({
@@ -146,14 +141,12 @@ const screenParts = [
         ...screens,
         ...dialogs,
         ...templates,
-        ...screenParts
     ],
     imports: [
         SharedModule
     ],
     exports: [
         ...templates,
-        ...screenParts
     ],
     providers: [
     ]

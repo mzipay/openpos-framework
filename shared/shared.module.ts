@@ -86,18 +86,21 @@ import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCu
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
 import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent, DynamicFormPartComponent } from './screen-parts';
 import { SideNavComponent, WaffleComponent } from './layout-components';
-import { Configuration } from '../configuration/configuration';
 import { KeyPressSourceDirective } from './directives/keypress-source.directive';
 import { SystemStatusDialogComponent } from './components/system-status/system-status-dialog.component';
 import { SellLinkedCustomerComponent } from '../screens-deprecated/templates/sell-template/sell-linked-customer/sell-linked-customer.component';
 import { SellStatusSectionComponent } from '../screens-deprecated/templates/sell-template/sell-status-section/sell-status-section.component';
+import { SaleFooterComponent } from '../screens-with-parts/sale/sale-footer/sale-footer.component';
+import { SaleItemListComponent } from '../screens-with-parts/sale/sale-item-list/sale-item-list.component';
 
 const screenParts = [
         DynamicFormPartComponent,
         StatusStripComponent,
         SausageLinksComponent,
         ScanOrSearchComponent,
-        BaconStripComponent
+        BaconStripComponent,
+        SaleFooterComponent,
+        SaleItemListComponent
     ];
 
 const components = [
