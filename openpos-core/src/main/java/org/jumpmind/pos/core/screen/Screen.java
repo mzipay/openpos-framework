@@ -5,15 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jumpmind.pos.core.model.MessageType;
 import org.jumpmind.pos.core.screenpart.BaconStripPart;
 import org.jumpmind.pos.core.template.AbstractTemplate;
 import org.jumpmind.pos.core.template.BlankWithBarTemplate;
 import org.jumpmind.pos.core.ui.IHasBackButton;
 import org.jumpmind.pos.core.ui.UIMessage;
-import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.util.DefaultObjectMapper;
-import org.jumpmind.pos.util.model.Message;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -22,6 +22,10 @@ package org.jumpmind.pos.server.model;
 
 import java.io.Serializable;
 
+import org.jumpmind.pos.util.DefaultObjectMapper;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class Action implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
@@ -33,6 +37,8 @@ public class Action implements Serializable, Cloneable {
     private String type;
     private String requiredPermissionId;
     private transient Action causedBy; // Used when renaming an action during a substate return.
+    
+    static ObjectMapper mapper = DefaultObjectMapper.build();
 
     public Action() {
         this(null);
@@ -44,6 +50,10 @@ public class Action implements Serializable, Cloneable {
     
     public Action(String actionName, Object data) {
         this(actionName, data, null);
+    }
+    
+    public static <T> T convertActionData(Object actionData, Class<T> convertToInstanceOf) {
+        return mapper.convertValue(actionData, convertToInstanceOf);
     }
     
     public Action(String actionName, Object data, String requiredPermissionId) {

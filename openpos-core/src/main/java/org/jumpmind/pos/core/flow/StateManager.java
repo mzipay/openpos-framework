@@ -31,7 +31,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.config.SubTransition;
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.Toast;
 import org.jumpmind.pos.core.service.IScreenService;
 import org.jumpmind.pos.core.ui.UIMessage;
