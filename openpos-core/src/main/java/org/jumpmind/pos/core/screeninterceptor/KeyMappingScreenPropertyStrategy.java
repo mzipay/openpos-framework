@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IKeyMappingService;
+import org.jumpmind.pos.core.ui.UIMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class KeyMappingScreenPropertyStrategy implements IScreenPropertyStrategy {
@@ -14,7 +15,7 @@ public class KeyMappingScreenPropertyStrategy implements IScreenPropertyStrategy
 	IKeyMappingService keyMappingService;
 	
 	@Override
-	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, Screen screen, Map<String, Object> screenContext) {
+	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, UIMessage screen, Map<String, Object> screenContext) {
 		if (property != null 
 		        && ActionItem.class.isAssignableFrom(clazz)) {
 			ActionItem item = (ActionItem)property;

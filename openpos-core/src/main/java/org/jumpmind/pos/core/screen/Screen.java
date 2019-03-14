@@ -9,24 +9,25 @@ import org.jumpmind.pos.core.model.MessageType;
 import org.jumpmind.pos.core.screenpart.BaconStripPart;
 import org.jumpmind.pos.core.template.AbstractTemplate;
 import org.jumpmind.pos.core.template.BlankWithBarTemplate;
+import org.jumpmind.pos.core.ui.IHasBackButton;
+import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.util.DefaultObjectMapper;
 import org.jumpmind.pos.util.model.Message;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Screen extends Message {
+@Deprecated
+public class Screen extends UIMessage implements IHasBackButton {
 
     private static final long serialVersionUID = 1L;
 
-    private String id;
     /**
      * This was originally meant to be the title of a screen, but moving forward
      * we should use screen parts and set the title there (see {@link BaconStripPart}.
      */
     @Deprecated
     private String name;
-    private String screenType;
     /**
      * This was originally meant to be an icon beside the title of a screen, but moving forward
      * we should use screen parts and set the icon there.
@@ -37,65 +38,20 @@ public class Screen extends Message {
     @Deprecated
     private AbstractTemplate template = new BlankWithBarTemplate();
 
-    private String locale;
-    private int sessionTimeoutMillis;
-    private Action sessionTimeoutAction;
-    private Map<String, String> trainingInstructions;
 
-    public Screen() {
-        this.setType(MessageType.Screen);
-    }
+    private Map<String, String> trainingInstructions;
 
     public Screen(String name, String screenType) {
         this(name, screenType, name);
     }
 
     public Screen(String name, String screenType, String id) {
-        this();
-        this.screenType = screenType;
+        super( screenType, id );
         this.name = name;
-        this.id = id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public boolean isDialog() {
-        String type = getType();
-        return type != null && type.equals(MessageType.Dialog);
-    }
-
-    /**
-     * Allows this screen content to be displayed in a Dialog on the client
-     * side.
-     */
-    public Screen asDialog() {
-        return this.asDialog(null);
-    }
-
-    /**
-     * Allows this screen content to be displayed in a Dialog on the client
-     * side.
-     * 
-     * @param dialogProperties
-     *            Additional properties that can control dialog behavior and
-     *            rendering on the server side.
-     */
-    public Screen asDialog(DialogProperties dialogProperties) {
-        this.setType(MessageType.Dialog);
-        if (dialogProperties != null) {
-            this.setDialogProperties(dialogProperties);
-        }
-        return this;
-    }
-
-    public void setDialogProperties(DialogProperties dialogProperties) {
-        this.put("dialogProperties", dialogProperties);
+    public Screen(){
+        super();
     }
 
     // TODO i don't really like this method here
@@ -111,20 +67,16 @@ public class Screen extends Message {
         return name;
     }
 
-    public void setScreenType(String type) {
-        this.screenType = type;
-    }
-
-    public String getScreenType() {
-        return this.screenType;
-    }
-
-    public boolean isScreenOfType(String type) {
-        return this.screenType == type;
-    }
-
     public void setBackButton(ActionItem backButton) {
         put("backButton", backButton);
+    }
+
+    public ActionItem getBackButton() {
+        if( contains("backButton") ) {
+            return (ActionItem) get("backButton");
+        }
+
+        return null;
     }
 
     public void setTemplate(AbstractTemplate template) {
@@ -140,9 +92,6 @@ public class Screen extends Message {
         return (T) template;
     }
 
-    public void setSequenceNumber(int sequenceNumber) {
-        put("sequenceNumber", sequenceNumber);
-    }
 
     @Deprecated
     public void setTheme(String theme) {
@@ -157,24 +106,9 @@ public class Screen extends Message {
         this.put("useOnScreenKeyboard", useOnScreenKeyboard);
     }
 
-    public String getLocale() {
-        return locale;
-    }
-
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
 
     public void setRefreshAlways(boolean refreshAlways) {
         this.put("refreshAlways", refreshAlways);
-    }
-
-    public int getSessionTimeoutMillis() {
-        return sessionTimeoutMillis;
-    }
-
-    public void setSessionTimeoutMillis(int sessionTimeoutMillis) {
-        this.sessionTimeoutMillis = sessionTimeoutMillis;
     }
 
     public void setIcon(String icon) {
@@ -211,14 +145,6 @@ public class Screen extends Message {
 
     public void setInstructions(String instructions) {
         this.put("instructions", instructions);
-    }
-
-    public Action getSessionTimeoutAction() {
-        return sessionTimeoutAction;
-    }
-
-    public void setSessionTimeoutAction(Action sessionTimeoutAction) {
-        this.sessionTimeoutAction = sessionTimeoutAction;
     }
 
     public Map<String, String> getTrainingInstructions() {

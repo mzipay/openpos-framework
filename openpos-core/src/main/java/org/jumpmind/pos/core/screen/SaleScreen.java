@@ -39,7 +39,6 @@ public class SaleScreen extends Screen {
     public SaleScreen() {
         this.setScreenType(ScreenType.Sale);
         this.setId("sale");
-        this.setTemplate(null);
     }
 
     public List<SellItem> getItems() {

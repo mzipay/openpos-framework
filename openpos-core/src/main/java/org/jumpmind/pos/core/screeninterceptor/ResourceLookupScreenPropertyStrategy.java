@@ -5,6 +5,7 @@ import java.util.MissingResourceException;
 
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IResourceLookupService;
+import org.jumpmind.pos.core.ui.UIMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ResourceLookupScreenPropertyStrategy implements IScreenPropertyStrategy {
@@ -13,7 +14,7 @@ public class ResourceLookupScreenPropertyStrategy implements IScreenPropertyStra
 	IResourceLookupService lookupService;
 	
 	@Override
-	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, Screen screen, Map<String, Object> screenContext) {
+	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, UIMessage screen, Map<String, Object> screenContext) {
 		if( String.class.equals(clazz)) {
 			String value = (String)property;
 			if(value != null && value.startsWith("{")) {

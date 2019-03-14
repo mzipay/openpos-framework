@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.core.ui.UIMessage;
 
 /**
  * Responsible for housing all true state data for a node. That is, it should be
@@ -41,8 +42,8 @@ public class ApplicationState {
     private StateContext currentContext;
     private Transition currentTransition;
     private int screenSequenceNumber = 0;
-    private Screen lastScreen;
-    private Screen lastDialog;
+    private UIMessage lastScreen;
+    private UIMessage lastDialog;
 
     public Scope getScope() {
         return scope;
@@ -88,19 +89,19 @@ public class ApplicationState {
         return ++screenSequenceNumber;
     }
     
-    public void setLastDialog(Screen lastDialog) {
+    public void setLastDialog(UIMessage lastDialog) {
         this.lastDialog = lastDialog;
     }
     
-    public Screen getLastDialog() {
+    public UIMessage getLastDialog() {
         return lastDialog;
     }
     
-    public void setLastScreen(Screen lastScreen) {
+    public void setLastScreen(UIMessage lastScreen) {
         this.lastScreen = lastScreen;
     }
     
-    public Screen getLastScreen() {
+    public UIMessage getLastScreen() {
         return lastScreen;
     }
 

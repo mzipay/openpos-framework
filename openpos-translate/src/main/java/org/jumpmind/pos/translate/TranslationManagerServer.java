@@ -12,6 +12,7 @@ import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.NoOpScreen;
 import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.translate.InteractionMacro.AbortMacro;
 import org.jumpmind.pos.translate.InteractionMacro.DoOnActiveScreen;
@@ -238,6 +239,12 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
                         AbstractScreenTranslator<?> screenTranslator = (AbstractScreenTranslator<?>) newTranslator;
                         Screen screen = screenTranslator.build();
                         subscriber.showScreen(screen);
+                        screenShown = true;
+                    }
+                    if( newTranslator instanceof  AbstractUIMessageTranslator<?>) {
+                        AbstractUIMessageTranslator<?> messageTranslator = (AbstractUIMessageTranslator) newTranslator;
+                        UIMessage message =  messageTranslator.build();
+                        subscriber.showScreen(message);
                         screenShown = true;
                     }
                     

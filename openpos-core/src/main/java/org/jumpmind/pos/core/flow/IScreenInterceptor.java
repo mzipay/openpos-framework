@@ -1,8 +1,8 @@
 package org.jumpmind.pos.core.flow;
 
-import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.core.ui.UIMessage;
 
 public interface IScreenInterceptor {
 
-    public void intercept(String appId, String nodeId, Screen screen);
+    void intercept(String appId, String nodeId, UIMessage screen);
 }

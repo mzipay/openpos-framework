@@ -35,6 +35,7 @@ import org.jumpmind.pos.core.model.IFormElement;
 import org.jumpmind.pos.core.screen.IHasForm;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.Toast;
+import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.core.util.LogFormatter;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.server.service.IActionListener;
@@ -132,7 +133,7 @@ public class ScreenService implements IScreenService, IActionListener {
         return result;
     }
 
-    private String getComponentValues(String appId, String deviceId, String controlId, Screen screen, String searchTerm, Integer sizeLimit) {
+    private String getComponentValues(String appId, String deviceId, String controlId, UIMessage screen, String searchTerm, Integer sizeLimit) {
         String result = null;
         if (screen instanceof IHasForm) {
             IHasForm dynamicScreen = (IHasForm) screen;
@@ -172,7 +173,7 @@ public class ScreenService implements IScreenService, IActionListener {
             if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
                 stateManager.keepAlive();
             } else if( "Refresh".equals(action.getName())) {
-            	Screen lastDialog = getLastDialog(appId, deviceId);
+            	UIMessage lastDialog = getLastDialog(appId, deviceId);
             	logger.info("Received Refresh action from {}", deviceId);
             	showScreen(appId, deviceId, getLastScreen(appId, deviceId));
             	showScreen(appId, deviceId, lastDialog);
@@ -193,11 +194,11 @@ public class ScreenService implements IScreenService, IActionListener {
         }
     }
 
-    protected Screen removeLastDialog(String appId, String deviceId) {
+    protected UIMessage removeLastDialog(String appId, String deviceId) {
         IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
         ApplicationState applicationState = stateManager != null ? stateManager.getApplicationState() : null;
         if (applicationState != null && applicationState.getLastDialog() != null) {
-            Screen lastDialog = applicationState.getLastDialog();
+            UIMessage lastDialog = applicationState.getLastDialog();
             applicationState.setLastDialog(null);
             return lastDialog;
         } else {
@@ -206,7 +207,7 @@ public class ScreenService implements IScreenService, IActionListener {
     }
 
     @Override
-    public Screen getLastDialog(String appId, String deviceId) {
+    public UIMessage getLastDialog(String appId, String deviceId) {
         IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
         ApplicationState applicationState = stateManager != null ? stateManager.getApplicationState() : null;
         if (applicationState != null) {
@@ -217,7 +218,7 @@ public class ScreenService implements IScreenService, IActionListener {
     }
 
     @Override
-    public Screen getLastScreen(String appId, String deviceId) {
+    public UIMessage getLastScreen(String appId, String deviceId) {
         IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
         ApplicationState applicationState = stateManager != null ? stateManager.getApplicationState() : null;
         if (applicationState != null) {
@@ -233,7 +234,7 @@ public class ScreenService implements IScreenService, IActionListener {
     }
 
     @Override
-    public void showScreen(String appId, String deviceId, Screen screen) {
+    public void showScreen(String appId, String deviceId, UIMessage screen) {
         IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
         if (screen != null && stateManager != null) {
             ApplicationState applicationState = stateManager.getApplicationState();
@@ -267,7 +268,7 @@ public class ScreenService implements IScreenService, IActionListener {
         }
     }
 
-    protected void interceptScreen(String appId, String deviceId, Screen screen) {
+    protected void interceptScreen(String appId, String deviceId, UIMessage screen) {
         if (this.screenInterceptors != null) {
             for (IScreenInterceptor screenInterceptor : screenInterceptors) {
                 screenInterceptor.intercept(appId, deviceId, screen);
@@ -324,9 +325,9 @@ public class ScreenService implements IScreenService, IActionListener {
         }
     }
 
-    protected void logScreenTransition(String deviceId, Screen screen) throws JsonProcessingException {
+    protected void logScreenTransition(String deviceId, UIMessage screen) throws JsonProcessingException {
         if (loggerGraphical.isInfoEnabled()) {
-            logger.info("Show screen on node \"" + deviceId + "\" (" + screen.getClass().getName() + ")\n" + drawBox(screen.getName(), screen.getScreenType()));
+            logger.info("Show screen on node \"" + deviceId + "\" (" + screen.getClass().getName() + ")\n" + drawBox(screen.getId(), screen.getScreenType()));
         } else {
             logger.info("Show screen on node \"" + deviceId + "\"(\" + screen.getClass().getName() + \")\n");
         }

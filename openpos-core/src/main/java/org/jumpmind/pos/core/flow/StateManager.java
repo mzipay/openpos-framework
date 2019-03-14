@@ -32,6 +32,7 @@ import org.jumpmind.pos.core.flow.config.SubTransition;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.Toast;
 import org.jumpmind.pos.core.service.IScreenService;
+import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.server.model.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -293,7 +294,7 @@ public class StateManager implements IStateManager {
          * Hang onto the dialog since showing the last screen first will clear
          * the last dialog from the screen service
          */
-        Screen lastDialog = screenService.getLastDialog(applicationState.getAppId(), applicationState.getDeviceId());
+        UIMessage lastDialog = screenService.getLastDialog(applicationState.getAppId(), applicationState.getDeviceId());
         showScreen(screenService.getLastScreen(applicationState.getAppId(), applicationState.getDeviceId()));
         showScreen(lastDialog);
     }
@@ -506,7 +507,7 @@ public class StateManager implements IStateManager {
     }
 
     @Override
-    public void showScreen(Screen screen) {
+    public void showScreen(UIMessage screen) {
         keepAlive();
 
         if (applicationState.getCurrentContext() == null) {

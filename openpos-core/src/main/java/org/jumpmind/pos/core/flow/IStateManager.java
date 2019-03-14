@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.Toast;
+import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.server.model.Action;
 
 
@@ -42,7 +43,7 @@ public interface IStateManager {
     public void timeout();
     public void endConversation();
     public void endSession();
-    public void showScreen(Screen screen);
+    public void showScreen(UIMessage screen);
     public void showToast(Toast toast);
     public void refreshScreen();
     public IState getCurrentState();

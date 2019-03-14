@@ -1,33 +1,18 @@
 package org.jumpmind.pos.translate;
 
+import org.apache.commons.lang3.StringUtils;
+import org.jumpmind.pos.core.ModeConstants;
+import org.jumpmind.pos.core.model.Form;
+import org.jumpmind.pos.core.screen.ActionItem;
+import org.jumpmind.pos.core.screen.DynamicFormScreen;
+import org.jumpmind.pos.core.ui.UIMessage;
+
+import java.util.*;
+
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
-import org.jumpmind.pos.core.ModeConstants;
-import org.jumpmind.pos.core.model.Form;
-import org.jumpmind.pos.core.screen.DynamicFormScreen;
-import org.jumpmind.pos.core.screen.ActionItem;
-import org.jumpmind.pos.core.screen.Screen;
-import org.jumpmind.pos.core.screen.Workstation;
-import org.jumpmind.pos.core.template.BlankWithBarTemplate;
-import org.jumpmind.pos.core.template.SellTemplate;
-import org.jumpmind.pos.core.ui.message.SaleUIMessage;
-import org.jumpmind.pos.translate.ILegacyRegisterStatusService.Status;
-
-public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends AbstractScreenTranslator<T>
+public abstract class AbstractLegacyUIMessageTranslator<T extends UIMessage> extends AbstractUIMessageTranslator<T>
         implements ILegacyBeanAccessor {
     public final static String LOCAL_NAV_PANEL_KEY = "LocalNavigationPanel";
     public final static String GLOBAL_NAV_PANEL_KEY = "GlobalNavigationPanel";
@@ -35,7 +20,6 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
     public final static String WORK_PANEL_KEY = "WorkPanel";
     public final static String STATUS_PANEL_KEY = "StatusPanel";
 
-    public final static String USE_ON_SCREEN_KEYBOARD_PROP = "use.on.screen.keyboard";
     public final static String STATUS_BAR_USER_TEXT_PROP = "ui.statusbar.user";
     public final static String STATUS_BAR_USER_TEXT_FIRST_LAST_NAME = "firstLastName";
 
@@ -45,14 +29,14 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
     protected ILegacyStoreProperties legacyStoreProperties;
 
     protected IUIActionOverrider actionOverrider;
-    
+
     private boolean cancelAsBack;
 
-    public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
+    public AbstractLegacyUIMessageTranslator(ILegacyScreen legacyScreen, Class<T> screenClass) {
         super(legacyScreen, screenClass);
     }
 
-    public AbstractLegacyScreenTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, String appId, Properties properties) {
+    public AbstractLegacyUIMessageTranslator(ILegacyScreen legacyScreen, Class<T> screenClass, String appId, Properties properties) {
         super(legacyScreen, screenClass);
         this.appId = appId;
         this.properties = properties;
@@ -90,7 +74,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         return this.legacyStoreProperties;
     }
 
-    protected Form getForm(Screen screen) {
+    protected Form getForm(UIMessage screen) {
         if (screen instanceof DynamicFormScreen) {
             return ((DynamicFormScreen) screen).getForm();
         } else {
@@ -100,32 +84,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
 
     @Override
     protected void buildMainContent() {
-        buildBackButton();
         logAvailableLocalMenuItems();
-        buildStatusItems();
-        
-        ILegacyStatusBeanModel statusModel = legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);
-        int tillStatus = statusModel.checkThresholdStatus(posSessionInfo);
-        
-        if (legacyStoreProperties != null && screen.getTemplate() instanceof SellTemplate) {
-            SellTemplate template = screen.getTemplate();
-            Workstation workstation = new Workstation();
-            workstation.setStoreId(legacyStoreProperties.getStoreNumber());
-            workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
-            workstation.setTillThresholdStatus(tillStatus);
-            template.setWorkstation(workstation);
-        } 
-
-        if (legacyStoreProperties != null && screen.getTemplate() instanceof BlankWithBarTemplate) {
-            BlankWithBarTemplate template = screen.getTemplate();
-            Workstation workstation = new Workstation();
-            workstation.setStoreId(legacyStoreProperties.getStoreNumber());
-            workstation.setWorkstationId(legacyStoreProperties.getWorkstationNumber());
-            workstation.setTillThresholdStatus(tillStatus);
-            template.setWorkstation(workstation);
-        }
-                
-        setScreenProperties();
 
         if (getLegacyUIModel() != null) {
             Integer timeout = getLegacyUIModel().getTimeout();
@@ -133,52 +92,18 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                 screen.setSessionTimeoutMillis(timeout);
             }
         }
-
-        if (this.isSelfCheckout()) {
-            this.screen.getTemplate().disableDevMenu();
-        }
     }
-    
+
     protected String getDeviceId() {
         return legacyStoreProperties.getStoreNumber() + "-" + legacyStoreProperties.getWorkstationNumber();
     }
-    
+
     protected String getOperatorText() {
         if (properties != null && STATUS_BAR_USER_TEXT_FIRST_LAST_NAME.equals(properties.get(STATUS_BAR_USER_TEXT_PROP))) {
             return posSessionInfo.getOperatorName();
         } else {
             return posSessionInfo.getOperatorLoginId();
         }
-    }
-
-    protected void setScreenProperties() {
-        if (properties != null && screen != null) {
-            boolean useOnScreenKeyboard = Boolean.valueOf((String) properties.get(USE_ON_SCREEN_KEYBOARD_PROP));
-            if (useOnScreenKeyboard) {
-                screen.setUseOnScreenKeyboard(useOnScreenKeyboard);
-            }
-        }
-    }
-
-    protected void buildStatusItems() {
-        screen.setName(getScreenName());
-        
-        if (isBlank(screen.getIcon())) {
-            screen.setIcon(iconRegistry.get(legacyScreen.getSpecName()));
-        }
-        
-        if (screen.getTemplate() instanceof SellTemplate) {
-            SellTemplate template = screen.getTemplate();
-            template.setOperatorText(WordUtils.capitalizeFully(getOperatorText()));
-            
-            ILegacyStatusBeanModel statusModel = legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);
-            template.setSystemStatus(statusModel.getSystemStatus());
-        }
-        
-        if (screen.getTemplate() instanceof BlankWithBarTemplate) {
-            BlankWithBarTemplate template = screen.getTemplate();
-            template.setOperatorText(WordUtils.capitalizeFully(getOperatorText()));
-             }
     }
 
     protected String getScreenName() {
@@ -231,10 +156,6 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         return this.legacyPOSBeanService.getLegacyBus(legacyScreen);
     }
 
-    protected void buildBackButton() {
-        screen.setBackButton(getBackButton());
-    }
-    
     protected ActionItem getBackButton() {
         ActionItem backButton = null;
         ILegacyAssignmentSpec assignmentPanelSpec = getLegacyAssignmentSpec(GLOBAL_NAV_PANEL_KEY);
@@ -248,24 +169,24 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             if (model.getGlobalButtonBeanModel() != null) {
                 ILegacyButtonSpec[] modifyButtons = model.getGlobalButtonBeanModel().getModifyButtons();
                 if (modifyButtons != null) {
-                    Arrays.stream(modifyButtons).filter( modBtnSpec -> 
-                            ("Undo".equals(modBtnSpec.getActionName()) || "Undo".equals(modBtnSpec.getLabelTag())) || 
-                            (cancelAsBack && (("Cancel".equals(modBtnSpec.getActionName()) || "Cancel".equals(modBtnSpec.getLabelTag())))))
-                        .forEachOrdered( modBtnSpec -> {
-                            Boolean specButtonState = enabledState.get(modBtnSpec.getActionName());
-                            if (specButtonState != null) {
-                                if (! specButtonState.equals(modBtnSpec.getEnabled())) {
-                                    logger.info("Changing enabled state of '{}' button from '{}' to '{}' due to override in screen bean model", 
-                                            modBtnSpec.getActionName(), specButtonState, modBtnSpec.getEnabled());
+                    Arrays.stream(modifyButtons).filter( modBtnSpec ->
+                            ("Undo".equals(modBtnSpec.getActionName()) || "Undo".equals(modBtnSpec.getLabelTag())) ||
+                                    (cancelAsBack && (("Cancel".equals(modBtnSpec.getActionName()) || "Cancel".equals(modBtnSpec.getLabelTag())))))
+                            .forEachOrdered( modBtnSpec -> {
+                                Boolean specButtonState = enabledState.get(modBtnSpec.getActionName());
+                                if (specButtonState != null) {
+                                    if (! specButtonState.equals(modBtnSpec.getEnabled())) {
+                                        logger.info("Changing enabled state of '{}' button from '{}' to '{}' due to override in screen bean model",
+                                                modBtnSpec.getActionName(), specButtonState, modBtnSpec.getEnabled());
+                                        enabledState.put(modBtnSpec.getActionName(), modBtnSpec.getEnabled());
+                                    }
+                                } else {
                                     enabledState.put(modBtnSpec.getActionName(), modBtnSpec.getEnabled());
-                                }   
-                            } else {
-                                enabledState.put(modBtnSpec.getActionName(), modBtnSpec.getEnabled());   
-                            }
-                        });
+                                }
+                            });
                 }
             }
-            
+
             ILegacyButtonSpec backButtonSpec = Arrays.stream(globalNavSpec.getButtons())
                     .filter(buttonSpec -> Optional.ofNullable(enabledState.get(buttonSpec.getActionName())).orElse(buttonSpec.getEnabled()))
                     .filter(enabledButtonSpec -> ("Undo".equals(enabledButtonSpec.getLabelTag()) || (cancelAsBack && "Cancel".equals(enabledButtonSpec.getLabelTag())))).findFirst().orElse(null);
@@ -275,27 +196,6 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             }
         }
         return backButton;
-    }
-
-    protected void clearTransactionMenuItems() {
-        if (screen.getTemplate() instanceof SellTemplate) {
-            SellTemplate sellTemplate = screen.getTemplate();
-            sellTemplate.getTransactionMenu().getActionItems().clear();
-        }
-    }
-
-    protected void addTransactionMenuItem(ActionItem menuItem) {
-        if (screen.getTemplate() instanceof SellTemplate) {
-            SellTemplate sellTemplate = screen.getTemplate();
-            sellTemplate.addTransactionMenuItem(menuItem);
-        }
-    }
-
-    protected void addLocalMenuItem(ActionItem menuItem) {
-        if (screen.getTemplate() instanceof SellTemplate) {
-            SellTemplate sellTemplate = screen.getTemplate();
-            sellTemplate.addLocalMenuItem(menuItem);
-        }
     }
 
     protected String getPanelPropertyValue(String panelName, String propertyName) {
@@ -340,11 +240,11 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         if (legacyScreen != null) {
             ILegacyRegisterStatusService registerStatusService = this.legacyPOSBeanService.getLegacyRegisterStatusService(legacyScreen);
             if (registerStatusService.isStatusDeterminable()) {
-                posSessionInfo.setRegisterOpen(Optional.of(registerStatusService.getRegisterStatus() == Status.OPEN));
+                posSessionInfo.setRegisterOpen(Optional.of(registerStatusService.getRegisterStatus() == ILegacyRegisterStatusService.Status.OPEN));
 
-                Status storeStatus = registerStatusService.getStoreStatus();
-                if (storeStatus != Status.UNKNOWN) {
-                    posSessionInfo.setStoreOpen(Optional.of((storeStatus == Status.OPEN)));
+                ILegacyRegisterStatusService.Status storeStatus = registerStatusService.getStoreStatus();
+                if (storeStatus != ILegacyRegisterStatusService.Status.UNKNOWN) {
+                    posSessionInfo.setStoreOpen(Optional.of((storeStatus == ILegacyRegisterStatusService.Status.OPEN)));
                 }
             }
 
@@ -353,7 +253,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             if (cargo != null) {
                 posSessionInfo.setOperatorName(cargo.getOperatorFirstLastName());
                 if (cargo.getOperatorLoginId() != null) {
-                	posSessionInfo.setOperatorLoginId(cargo.getOperatorLoginId());
+                    posSessionInfo.setOperatorLoginId(cargo.getOperatorLoginId());
                 }
 
                 if (bus.getMainCargo() != null) {
@@ -380,12 +280,12 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         List<ILegacyButtonSpec> allPanelButtons = this.getPanelButtons(panelKey, Optional.of(false));
         return allPanelButtons.stream().anyMatch(buttonSpec -> actionName.equals(buttonSpec.getActionName()));
     }
-    
+
     protected boolean isPanelButtonEnabled(String panelKey, String actionName) {
         List<ILegacyButtonSpec> enabledPanelButtons = this.getPanelButtons(panelKey, Optional.of(true));
         return enabledPanelButtons.stream().anyMatch(buttonSpec -> actionName.equals(buttonSpec.getActionName()));
     }
-    
+
     protected List<ILegacyButtonSpec> getPanelButtons(String panelKey, Optional<Boolean> enabledButtonsOnlyOpt) {
         ILegacyAssignmentSpec assignmentPanelSpec = getLegacyAssignmentSpec(panelKey);
         List<ILegacyButtonSpec> buttons = new ArrayList<>();
@@ -434,17 +334,17 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
             if (text == null) {
                 ILegacyAssignmentSpec panelSpec = legacyPOSBeanService.getLegacyAssignmentSpec(legacyScreen, LOCAL_NAV_PANEL_KEY);
                 text = legacyPOSBeanService.getLegacyUtilityManager(legacyScreen).retrieveText(panelSpec.getBeanSpecName(),
-                        getResourceBundleFilename(), propName, null);                
+                        getResourceBundleFilename(), propName, null);
             }
         }
-        
+
         if (!StringUtils.isEmpty(text)) {
             return text;
         } else {
             return retrieveCommonText(propName, defaultValue);
         }
     }
-    
+
     protected String retrieveCommonText(String propName, Optional<String> defaultValue) {
         String commonText = defaultValue.isPresent()
                 ? this.legacyPOSBeanService.getLegacyUIUtilities().retrieveCommonText(propName, defaultValue.get())
@@ -473,30 +373,10 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         ILegacyAssignmentSpec spec = this.legacyPOSBeanService.getLegacyAssignmentSpec(this.legacyScreen, panelKey);
         return spec;
     }
-    
-    
 
     @Override
     protected void chooseLocale() {
         getScreen().setLocale(this.getLegacyPOSBeanService().getLegacyLocaleUtilities().getCurrentLocale().toLanguageTag());
-    }
-
-    @Override
-    protected void chooseScreenName() {
-        String screenName = null;
-        ILegacyStatusBeanModel statusModel = this.legacyPOSBeanService.getLegacyStatusBeanModel(legacyScreen);
-        if (statusModel != null && statusModel.getScreenName() != null) {
-            screenName = statusModel.getScreenName();
-        } else {
-            String labelTag = getSpecPropertyValue(getLegacyAssignmentSpec(STATUS_PANEL_KEY), "screenNameTag", null);
-            if (labelTag != null) {
-                screenName = this.getLegacyUtilityManager().retrieveText("StatusPanelSpec", getResourceBundleFilename(), labelTag, labelTag);
-            }
-        }
-
-        if (getScreen().getName() == null) {
-            getScreen().setName(screenName);
-        }
     }
 
     protected Map<String, Boolean> parseButtonStates(ILegacyAssignmentSpec spec) {
@@ -516,7 +396,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
     }
 
     protected <A extends ActionItem> List<A> generateUIActionsForLocalNavButtons(Class<A> actionClass, boolean filterDisabled,
-            String... excludedLabelTags) {
+                                                                                 String... excludedLabelTags) {
         Set<String> toExclude = new HashSet<>();
         if (excludedLabelTags != null) {
             for (String string : excludedLabelTags) {
@@ -530,7 +410,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         if (panelSpec != null) {
             ILegacyBeanSpec localNavSpec = legacyPOSBeanService.getLegacyBeanSpec(legacyScreen, panelSpec.getBeanSpecName());
             ILegacyPOSBaseBeanModel model = legacyPOSBeanService.getLegacyPOSBaseBeanModel(legacyScreen);
-            
+
             ILegacyNavigationButtonBeanModel buttonModel = model.getLegacyLocalButtonBeanModel();
             Map<String, Boolean> enabledState = parseButtonStates(panelSpec);
 
@@ -545,15 +425,15 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                     buttonSpecs = buttonModel.getNewButtons();
                 } else {
                     // Why was this adding in the new buttons?  That list is either null or empty here.
-                	// buttonSpecs = ((ILegacyButtonSpec[]) ArrayUtils.addAll(localNavSpec.getButtons(), buttonModel.getNewButtons()));
+                    // buttonSpecs = ((ILegacyButtonSpec[]) ArrayUtils.addAll(localNavSpec.getButtons(), buttonModel.getNewButtons()));
                     buttonSpecs = localNavSpec.getButtons();
                 }
             } else {
                 buttonSpecs = localNavSpec.getButtons();
             }
-        	
+
             for (ILegacyButtonSpec buttonSpec : buttonSpecs) {
-                if (buttonSpec != null && 
+                if (buttonSpec != null &&
                         !(toExclude.contains(buttonSpec.getLabelTag())
                                 || toExclude.contains(buttonSpec.getActionName()))) {
                     Boolean enabled = enabledState.get(buttonSpec.getActionName());
@@ -581,7 +461,7 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                                 if (modifiedSpec.getActionName().equals(action)) {
                                     if (modifiedSpec.getEnabledFlag() != null) {
                                         //  Discovered while implementing the GET_AMOUNT_FOR_GIFT_CARD
-                                    	//  screen that the enabledFlag may be null in the modified spec,
+                                        //  screen that the enabledFlag may be null in the modified spec,
                                         //  which causes getEnabled() to return false.  Hoping that if I
                                         //  only override the enabled value when the enabledFlag is
                                         //  non-null that it will yield better results.
@@ -591,14 +471,14 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
                                         label = modifiedSpec.getLabel();
                                     }
                                     if (enabled)  {
-                                    	//  Some of the buttons may appear more than once in the
-                                    	//  modified spec list.  This happens on Tender Options,
-                                    	//  for example, because we potentially have multiple
-                                    	//  scenarios like special order and lease in the same
-                                    	//  cart.  Once we find an active version of the given
-                                    	//  item, go on to the next button.  If we don't do this,
-                                    	//  then last one wins. -- JAB 09/20/2018
-                                    	break;
+                                        //  Some of the buttons may appear more than once in the
+                                        //  modified spec list.  This happens on Tender Options,
+                                        //  for example, because we potentially have multiple
+                                        //  scenarios like special order and lease in the same
+                                        //  cart.  Once we find an active version of the given
+                                        //  item, go on to the next button.  If we don't do this,
+                                        //  then last one wins. -- JAB 09/20/2018
+                                        break;
                                     }
                                 }
                             }
@@ -634,13 +514,13 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
 
         return generatedActions;
     }
-    
+
     protected String translate(String tag, String defaultValue, Object... params) {
         return null;
     }
 
     protected Optional<String> getPromptText(ILegacyUIModel uiModel, ILegacyAssignmentSpec promptResponsePanel,
-            String resourceBundleFilename) {
+                                             String resourceBundleFilename) {
         Optional<String> optPromptText = Optional.empty();
         try {
             ILegacyPromptAndResponseModel promptAndResponseModel = this.legacyPOSBeanService.getLegacyPromptAndResponseModel(legacyScreen);
@@ -672,12 +552,8 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         public boolean hideOrOverride(ILegacyScreen legacyScreen, String labelTag, ActionItem action);
     }
 
-    protected void addLocalMenuButtons() {
-        List<ActionItem> localNavButtons = generateUIActionsForLocalNavButtons(ActionItem.class, true);
-        if (screen.getTemplate() instanceof SellTemplate) {
-            SellTemplate template = screen.getTemplate();
-            template.setLocalMenuItems(localNavButtons);
-        }
+    protected List<ActionItem> getLocalMenuButtons() {
+        return generateUIActionsForLocalNavButtons(ActionItem.class, true);
     }
 
     protected String getPromptTextFromBeanSpec() {
@@ -700,3 +576,4 @@ public abstract class AbstractLegacyScreenTranslator<T extends Screen> extends A
         this.cancelAsBack = cancelAsBack;
     }
 }
+

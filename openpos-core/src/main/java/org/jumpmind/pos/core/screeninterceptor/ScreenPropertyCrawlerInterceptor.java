@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.jumpmind.pos.core.flow.IScreenInterceptor;
 import org.jumpmind.pos.core.screen.Screen;
+import org.jumpmind.pos.core.ui.UIMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
     }
 
     @Override
-    public void intercept(String appId, String deviceId, Screen screen) {
+    public void intercept(String appId, String deviceId, UIMessage screen) {
         if (screen != null && screenProprtyStrategies != null && screenProprtyStrategies.size() > 0) {
             Map<String, Object> screenContext = new HashMap<>();
             processFields(appId, deviceId, screen, screen, screenContext);
@@ -55,7 +56,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
         }
     }
 
-    private void processOptionals(String appId, String deviceId, Map<String, Object> optionals, Screen screen, Map<String, Object> screenContext) {
+    private void processOptionals(String appId, String deviceId, Map<String, Object> optionals, UIMessage screen, Map<String, Object> screenContext) {
         if (optionals.size() > 0) {
             Set<String> keys = optionals.keySet();
             for (String key : keys) {
@@ -68,7 +69,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private final void processFields(String appId, String deviceId, Object obj, Screen screen, Map<String, Object> screenContext) {
+    private final void processFields(String appId, String deviceId, Object obj, UIMessage screen, Map<String, Object> screenContext) {
         Class<?> clazz = obj.getClass();
         while (clazz != null && obj != null) {
             Field[] fields = clazz.getDeclaredFields();
@@ -149,7 +150,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
         }
     }
 
-    private Object doStrategies(String appId, String deviceId, Field field, Object obj, Screen screen, Map<String, Object> screenContext) {
+    private Object doStrategies(String appId, String deviceId, Field field, Object obj, UIMessage screen, Map<String, Object> screenContext) {
         try {
             Object property = field.get(obj);
             Class<?> clazz = (property != null ? property.getClass() : field.getType());
@@ -160,7 +161,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
         return obj;
     }
 
-    private Object doStrategies(String appId, String deviceId, Object property, Class<?> clazz, Screen screen, Map<String, Object> screenContext) {
+    private Object doStrategies(String appId, String deviceId, Object property, Class<?> clazz, UIMessage screen, Map<String, Object> screenContext) {
 
         for (IScreenPropertyStrategy s : screenProprtyStrategies) {
             property = s.doStrategy(appId, deviceId, property, clazz, screen, screenContext);

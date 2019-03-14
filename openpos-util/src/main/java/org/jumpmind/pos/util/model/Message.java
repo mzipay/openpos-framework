@@ -55,5 +55,10 @@ public class Message implements Serializable {
     public String getType() {
         return type;
     }
+
+
+    public void setSequenceNumber(int sequenceNumber) {
+        put("sequenceNumber", sequenceNumber);
+    }
     
 }

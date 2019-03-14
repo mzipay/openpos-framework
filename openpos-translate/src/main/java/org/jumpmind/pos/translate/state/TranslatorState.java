@@ -19,6 +19,7 @@ import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IDeviceService;
+import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.translate.ITranslationManager;
 import org.jumpmind.pos.translate.ITranslationManagerSubscriber;
@@ -84,7 +85,7 @@ public class TranslatorState implements IState {
                 Properties properties;
 
                 @Override
-                public void showScreen(Screen screen) {
+                public void showScreen(UIMessage screen) {
                     stateManager.showScreen(screen);
                 }
 

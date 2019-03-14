@@ -1,10 +1,11 @@
 package org.jumpmind.pos.core.ui.messagepart;
 
 import org.jumpmind.pos.core.screen.ActionItem;
+import org.jumpmind.pos.core.ui.IHasBackButton;
 
 import java.io.Serializable;
 
-public class BaconStripPart implements Serializable{
+public class BaconStripPart implements IHasBackButton, Serializable{
 
     private static final long serialVersionUID = 1L;
 

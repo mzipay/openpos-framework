@@ -30,13 +30,13 @@ public class SelectionListScreen extends Screen {
     @Override
     public Screen asDialog() {
         this.setScreenType(ScreenType.SelectionListDialog);
-        return super.asDialog();
+        return (Screen)super.asDialog();
     }
     
     @Override
     public Screen asDialog(DialogProperties dialogProperties) {
         this.setScreenType(ScreenType.SelectionListDialog);
-        return super.asDialog(dialogProperties);
+        return (Screen)super.asDialog(dialogProperties);
     }
 
     public void setSelectionList(List<SelectionListItem> selectionList) {

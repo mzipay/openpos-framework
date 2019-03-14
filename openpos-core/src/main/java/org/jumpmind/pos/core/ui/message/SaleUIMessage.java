@@ -6,15 +6,14 @@ import java.util.List;
 import org.jumpmind.pos.core.model.DisplayProperty;
 import org.jumpmind.pos.core.model.Total;
 import org.jumpmind.pos.core.screen.ActionItem;
-import org.jumpmind.pos.core.screen.Screen;
-import org.jumpmind.pos.core.screen.ScreenType;
+import org.jumpmind.pos.core.screen.ActionItemGroup;
 import org.jumpmind.pos.core.screen.SellItem;
-import org.jumpmind.pos.core.screenpart.BaconStripPart;
-import org.jumpmind.pos.core.screenpart.ScanPart;
-import org.jumpmind.pos.core.screenpart.StatusStripPart;
 import org.jumpmind.pos.core.ui.UIMessage;
+import org.jumpmind.pos.core.ui.messagepart.BaconStripPart;
+import org.jumpmind.pos.core.ui.messagepart.ScanPart;
+import org.jumpmind.pos.core.ui.messagepart.StatusStripPart;
 
-public class SaleUIMessage extends Screen {
+public class SaleUIMessage extends UIMessage {
     private static final long serialVersionUID = 1L;
 
     private BaconStripPart baconStrip = new BaconStripPart();
@@ -24,7 +23,7 @@ public class SaleUIMessage extends Screen {
     private List<ActionItem> sausageLinks = new ArrayList<>();
 
     private String transactionMenuPrompt;
-    private List<ActionItem> transactionMenuItems = new ArrayList<>();
+    private ActionItemGroup transactionMenu = new ActionItemGroup();
     private List<ActionItem> multiSelectedMenuItems;
     private List<SellItem> items = new ArrayList<>();
     private int[] selectedItemIndexes = new int[0];
@@ -143,18 +142,6 @@ public class SaleUIMessage extends Screen {
         this.transactionMenuPrompt = transactionMenuPrompt;
     }
 
-    public void addTransactionMenuItem(ActionItem menuItem) {
-        this.transactionMenuItems.add(menuItem);
-    }
-
-    public void setTransactionMenuItems(List<ActionItem> transactionMenuItems) {
-        this.transactionMenuItems = transactionMenuItems;
-    }
-
-    public List<ActionItem> getTransactionMenuItems() {
-        return transactionMenuItems;
-    }
-
     public ScanPart getScan() {
         return scan;
     }
@@ -211,4 +198,15 @@ public class SaleUIMessage extends Screen {
 		this.checkoutButton = checkoutButton;
 	}
 
+    public void addTransactionMenuItem(ActionItem menuItem) {
+        this.transactionMenu.getActionItems().add(menuItem);
+    }
+
+    public void setTransactionMenu(ActionItemGroup transactionMenu) {
+        this.transactionMenu = transactionMenu;
+    }
+
+    public ActionItemGroup getTransactionMenu() {
+        return transactionMenu;
+    }
 }
