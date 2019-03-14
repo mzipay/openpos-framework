@@ -26,7 +26,6 @@ import { AppInjector } from '../app-injector';
 import { HttpClient } from '@angular/common/http';
 import { PingParams } from '../interfaces/ping-params.interface';
 import { PingResult } from '../interfaces/ping-result.interface';
-import { Params } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
