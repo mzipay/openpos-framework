@@ -8,8 +8,8 @@ public class ConfirmationDialog implements Serializable {
 	
 	private String title;
 	private String message;
-	private String confirmButtonName = "Yes";
-	private String cancelButtonName = "No";
+	private ActionItem confirmAction = new ActionItem("Yes", "Yes");
+    private ActionItem cancelAction = new ActionItem("No", "No");
 	
 	public ConfirmationDialog() {
 	    
@@ -41,19 +41,35 @@ public class ConfirmationDialog implements Serializable {
 	}
 
 	public String getConfirmButtonName() {
-		return confirmButtonName;
+	    return this.confirmAction.getTitle();
 	}
 
 	public void setConfirmButtonName(String confirmButtonName) {
-		this.confirmButtonName = confirmButtonName;
+	    this.confirmAction.setTitle(confirmButtonName);
 	}
 
+	public ActionItem getConfirmAction() {
+	    return this.confirmAction;
+	}
+	
+	public void setConfirmAction(ActionItem confirmAction) {
+	    this.confirmAction = confirmAction;
+	}
+	
 	public String getCancelButtonName() {
-		return cancelButtonName;
+	    return this.cancelAction.getTitle();
 	}
 
 	public void setCancelButtonName(String cancelButtonName) {
-		this.cancelButtonName = cancelButtonName;
+		this.cancelAction.setTitle(cancelButtonName);
 	}
+	
+	public ActionItem getCancelAction() {
+	    return this.cancelAction;
+	}
+
+    public void setCancelAction(ActionItem cancelAction) {
+        this.cancelAction = cancelAction;
+    }
 	
 }

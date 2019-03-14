@@ -9,6 +9,7 @@ public interface ScreenType {
     public static final String CatalogBrowser = "CatalogBrowser";
     public static final String Change = "Change";
     public static final String ChooseOptions = "ChooseOptions";
+    public static final String ConfirmDialog = "ConfirmDialog";
     public static final String CustomerSearch = "CustomerSearch";
     public static final String DevTools = "DevTools";
     public static final String Dialog = "Dialog";
