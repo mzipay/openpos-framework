@@ -11,7 +11,7 @@ export const Configuration = {
     maxResponseSizeBytes: 79500,
     enableAutocomplete: false,
     enableMenuClose: true,
-    enableKeybinds: true,
+    enableKeybinds: false,
     googleApiKey: null,
 
     // These properties are static on the client and not overriden by configuration.service.ts
