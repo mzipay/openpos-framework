@@ -35,6 +35,10 @@ export class SelectionListComponent extends PosScreen<any> {
     }
     this.listConfig.numResultsPerPage = Number.MAX_VALUE;
     this.listConfig.items = this.screen.selectionList;
+
+    if (this.screen.defaultSelectItemIndex !== null && this.screen.defaultSelectItemIndex !== undefined) {
+      this.listConfig.defaultSelectItemIndex = this.screen.defaultSelectItemIndex;
+    }
   }
 
   public onItemListChange(event: any[]): void {

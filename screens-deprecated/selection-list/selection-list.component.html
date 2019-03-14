@@ -3,7 +3,7 @@
 		<mat-card-title *ngIf="screen.instructions" class="text-sm">{{screen.instructions}}</mat-card-title>
 		<mat-card-content fxFlex="100%">
 			<app-selectable-item-list [configuration]="listConfig" (selectedItemChange)="onItemChange($event)"
-			 (selectedItemListChange)="onItemListChange($event)">
+			 (selectedItemListChange)="onItemListChange($event)" [defaultSelect]="screen.defaultSelect">
 				<div *ngFor="let sel of screen.selectionList">
 					<span *ngIf="sel.title" class="text-sm item-title">{{sel.title}}</span>
 					<div *ngIf="sel.properties" fxLayout="row wrap" fxLayoutAlign="space-between">

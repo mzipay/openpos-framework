@@ -1,12 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { MarkdownService } from 'ngx-markdown';
+import { MarkdownService } from '../../core/services/markdown.service';
 
+/**
+ * See MarkdownService for details on supported custom markdown
+ */
 @Pipe({ name: 'markdownFormatter' })
 export class MarkdownFormatterPipe implements PipeTransform {
 
-    constructor( private markdownService: MarkdownService ) {}
+    constructor(private markdownService: MarkdownService) {
+    }
 
     transform(value: string): string {
-        return this.markdownService.compile(value);
+        return this.markdownService.transform(value);
     }
 }
