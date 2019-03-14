@@ -11,7 +11,9 @@
     </div>
     <mat-sidenav-container autosize  gdArea="waffle-content-container">
         <mat-sidenav #waffledrawer class="waffle-drawer-content" position="end" [mode]="drawerMode | async" [opened]="(drawerOpen | async) && showDrawer">
-            <ng-content select="[waffle-drawer-content]"></ng-content>
+            <div scrollable class="waffle-drawer-scroller">
+                <ng-content select="[waffle-drawer-content]"></ng-content>
+            </div>
         </mat-sidenav>
         <mat-sidenav-content gdAreas="top-content | title | body | footer"
         gdRows="auto auto minmax(50%, 100%) auto">
