@@ -8,8 +8,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { TextMaskModule } from 'angular2-text-mask';
 import { MaterialModule } from './material.module';
 import { MatKeyboardModule } from '../keyboard';
-import { MarkdownModule } from 'ngx-markdown';
-
 
 import {
     MarkDirtyOnSubmitDirective,
@@ -212,8 +210,7 @@ const pipes = [
         BrowserAnimationsModule,
         MaterialModule,
         MatKeyboardModule,
-        TextMaskModule,
-        MarkdownModule.forRoot(),
+        TextMaskModule
     ],
     exports: [
         BrowserModule,

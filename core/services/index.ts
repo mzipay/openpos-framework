@@ -19,3 +19,4 @@ export * from './training-overlay.service';
 export * from './configuration.service';
 export * from './floater.service';
 export * from './image.service';
+export * from './markdown.service';
