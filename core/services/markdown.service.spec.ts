@@ -12,7 +12,7 @@ describe('MarkdownService', () => {
     });
 
     it('test simple transform of text to bold', () => {
-        expect(markdownService.transform('*bold text*')).toBe('<p><em>bold text</em></p>');
+        expect(markdownService.transform('**bold text**')).toBe('<p><strong>bold text</strong></p>');
     });
 
     it('test centering of text', () => {
@@ -42,8 +42,8 @@ describe('MarkdownService', () => {
         expect(markdownService.transform('>>^^&&wlarge centered warn text&&^^<<')).toBe('<div class="text-center"><span class="text-lg"><span class="warn">large centered warn text</span></span></div>');
     });
 
-    it('test large bold text', () => {
-        expect(markdownService.transform('^^*large bold text*^^')).toBe('<p><span class="text-lg"><em>large bold text</em></span></p>');
+    it('test large italic text', () => {
+        expect(markdownService.transform('^^*large italic text*^^')).toBe('<p><span class="text-lg"><em>large italic text</em></span></p>');
     });
 
 });
