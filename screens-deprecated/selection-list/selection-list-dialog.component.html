@@ -10,7 +10,7 @@
         <div fxFlex="0 0 100%" class="lighter" fxLayout="column" fxLayoutAlign="start" style="padding:15px; margin:0px; overflow: auto">
             <div *ngIf="screen.instructions" class="text-sm"> {{screen.instructions}}</div>
             <app-selectable-item-list fxFlex="0 1 100%" [configuration]="listConfig" (selectedItemChange)="onItemChange($event)"
-                (selectedItemListChange)="onItemListChange($event)" [defaultSelect]=screen.defaultSelect>
+                (selectedItemListChange)="onItemListChange($event)" [defaultSelect]="screen.defaultSelect">
                 <div *ngFor="let sel of screen.selectionList">
                     <div fxShow fxHide.xs="true" fxHide.lg="false" *ngIf="sel.title" class="text-sm">{{sel.title}}</div>
                     <div fxHide fxHide.xs="false" fxHide.lg="true" *ngIf="sel.title" class="text-md">{{sel.title}}</div>
