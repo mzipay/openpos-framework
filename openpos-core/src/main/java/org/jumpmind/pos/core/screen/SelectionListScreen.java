@@ -17,6 +17,8 @@ public class SelectionListScreen extends Screen {
     
     private boolean defaultSelect = false;
     
+    private int defaultSelectItemIndex = 0;
+    
     private String instructions;
 
     public SelectionListScreen() {
@@ -92,6 +94,14 @@ public class SelectionListScreen extends Screen {
         this.defaultSelect = defaultSelect;
     }
     
+    public int getDefaultSelectItemIndex() {
+        return defaultSelectItemIndex;
+    }
+
+    public void setDefaultSelectItemIndex(int defaultSelectItemIndex) {
+        this.defaultSelectItemIndex = defaultSelectItemIndex;
+    }
+
     public String getInstructions() {
         return instructions;
     }
