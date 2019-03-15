@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Directive, ElementRef, Output, EventEmitter, AfterViewInit, OnDestroy } from '@angular/core';
 import { Configuration } from '../../configuration/configuration';
 
 
@@ -9,7 +9,7 @@ declare var google: any;
     // tslint:disable-next-line:directive-selector
     selector: '[autoCompleteAddress]'
 })
-export class AutoCompleteAddressDirective implements AfterViewInit {
+export class AutoCompleteAddressDirective implements AfterViewInit, OnDestroy {
 
     @Output() onSelect: EventEmitter<any> = new EventEmitter();
 
@@ -46,7 +46,10 @@ export class AutoCompleteAddressDirective implements AfterViewInit {
                 for (const item of place.address_components) {
                     if (item.types) {
                         if (item.types.indexOf('locality') > -1) {
-                            // City / Locality
+                            // City / US Locality
+                            address['locality'] = item['long_name'];
+                        } else if (item.types.indexOf('postal_town') > -1) {
+                            // City / Foreign Locality
                             address['locality'] = item['long_name'];
                         } else if (item.types.indexOf('administrative_area_level_1') > -1) {
                             // State
@@ -125,6 +128,11 @@ export class AutoCompleteAddressDirective implements AfterViewInit {
             const address = this.getFormattedAddress(place);
             this.onSelect.emit(address);
         });
+    }
+
+    ngOnDestroy(): void {
+        const element = document.getElementById(this.SCRIPT_ID);
+        document.body.removeChild(element);
     }
 
 }
