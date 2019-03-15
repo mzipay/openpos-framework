@@ -68,14 +68,6 @@ public class Screen extends UIMessage implements IHasBackButton {
         put("backButton", backButton);
     }
 
-    public ActionItem getBackButton() {
-        if( contains("backButton") ) {
-            return (ActionItem) get("backButton");
-        }
-
-        return null;
-    }
-
     public void setTemplate(AbstractTemplate template) {
         this.template = template;
     }
