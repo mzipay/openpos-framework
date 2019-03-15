@@ -1,7 +1,7 @@
 <div fxFlexFill fxLayout="row wrap" fxLayoutAlign="center" [ngStyle]="screen.backgroundImage | backgroundImageUrl">
     <mat-card *ngFor="let menuItem of menuItems" fxFlexAlign="center" fxHide.xs>
         <button mat-raised-button color=primary [ngClass]="menuItem.buttonSize || 'menuItem-md'" [disabled]="!menuItem.enabled"
-            (click)="onMenuItemClick(menuItem)">
+            (click)="onMenuItemClick(menuItem)" [actionItem]="menuItem">
             <div fxLayoutAlign="center center" fxLayout="column">
                 <app-icon fxFlex="1 0 auto" iconName="{{menuItem.icon}}" iconClass="material-icons mat-64"></app-icon>
                 <div>{{menuItem.title}}</div>
