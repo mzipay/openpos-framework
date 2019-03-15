@@ -12,6 +12,7 @@ export class SelectionListComponent extends PosScreen<any> {
 
   listConfig = new SelectableItemListComponentConfiguration<any>();
   index = -1;
+  lastSelection = -1;
 
   constructor() {
     super();
@@ -48,6 +49,10 @@ export class SelectionListComponent extends PosScreen<any> {
 
   public onItemChange(event: any): void {
     this.index = this.screen.selectionList.indexOf(event);
+    if (this.screen.selectionChangedAction && this.index !== this.lastSelection) {
+      this.lastSelection = this.index;
+      this.session.onAction(this.screen.selectionChangedAction, this.index);
+    }
   }
 
   public doMenuItemAction(menuItem: IActionItem) {
