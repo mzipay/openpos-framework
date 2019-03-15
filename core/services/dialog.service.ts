@@ -94,10 +94,11 @@ export class DialogService {
                     this.session.cancelLoading();
                 }
             }
-            this.dialogRef.close();
-            // Wait for the dialog to fully close before moving on
-            await this.dialogRef.afterClosed().toPromise();
+            const loacalDialogRef = this.dialogRef;
             this.dialogRef = null;
+            loacalDialogRef.close();
+            // Wait for the dialog to fully close before moving on
+            await loacalDialogRef.afterClosed().toPromise();
         } else if (cancelLoading) {
             this.session.cancelLoading();
         }
