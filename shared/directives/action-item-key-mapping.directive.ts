@@ -24,6 +24,7 @@ export class ActionItemKeyMappingDirective implements OnDestroy {
             if ( event.type === 'keydown') {
                 this.renderer.addClass(this.el.nativeElement, 'key-mapping-active');
                 this.session.onAction(item);
+                event.preventDefault();
             } else if ( event.type === 'keyup') {
                 this.renderer.removeClass(this.el.nativeElement, 'key-mapping-active');
             }
