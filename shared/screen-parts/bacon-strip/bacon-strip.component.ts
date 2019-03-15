@@ -30,6 +30,9 @@ export class BaconStripComponent extends ScreenPartComponent<BaconStripInterface
     }
 
     screenDataUpdated() {
+        if (this.screenData.backButton) {
+            this.screenData.backButton.keybind = 'Escape';
+        }
         if (this.screenData.operatorText && this.screenData.deviceId ) {
             this.operatorInfo = this.screenData.operatorText + ' on ' + this.screenData.deviceId;
         } else {
