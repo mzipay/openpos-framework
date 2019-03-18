@@ -13,7 +13,7 @@
 		<div fxFlex="0 1 auto" class="sell-screen-logo"></div>
 	</div>
 
-	<app-scan-or-search waffle-top-content class="scan-or-search mat-elevation-z3" [defaultAction]="'Return'"></app-scan-or-search>
+	<app-scan-or-search waffle-top-content class="scan-or-search mat-elevation-z3" [defaultAction]="{ action:'Return', enabled:!returnButtonDisabled()}"></app-scan-or-search>
 
 	<div waffle-body class="return-content" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="6px">
 
@@ -48,7 +48,7 @@
 						</span>
 					</div>
 					<button gdArea="button" *ngIf="!screen.readOnly" mat-raised-button color="primary"
-						class="next-button mat-elevation-z0" [disabled]="!items || items.length === 0"
+						class="next-button mat-elevation-z0" [disabled]="returnButtonDisabled()"
 						(click)="session.onAction('Return')">
 						<span class="text-md">Next</span>
 						<mat-icon class="material-icons mat-48">keyboard_arrow_right</mat-icon>

@@ -1,3 +1,4 @@
+import { IActionItem } from './../../../core/interfaces/menu-item.interface';
 import { Component, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { ScreenPartComponent } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
@@ -21,7 +22,7 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     public barcode: string;
 
-    @Input() defaultAction : string;
+    @Input() defaultAction: IActionItem;
 
     constructor( public devices: DeviceService, messageProvider: MessageProvider ) {
         super(messageProvider);
@@ -39,8 +40,8 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
         if (this.barcode && this.barcode.trim().length >= this.screenData.scanMinLength) {
             this.sessionService.onAction(this.screenData.scanActionName, this.barcode);
             this.barcode = '';
-        } else if (this.defaultAction) {
-            this.sessionService.onAction(this.defaultAction); 
+        } else if (this.defaultAction && this.defaultAction.enabled) {
+            this.sessionService.onAction(this.defaultAction);
         }
     }
 
