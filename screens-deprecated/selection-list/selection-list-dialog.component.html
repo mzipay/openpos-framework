@@ -11,16 +11,18 @@
             <div *ngIf="screen.instructions" class="text-sm"> {{screen.instructions}}</div>
             <app-selectable-item-list fxFlex="0 1 100%" [configuration]="listConfig" (selectedItemChange)="onItemChange($event)"
                 (selectedItemListChange)="onItemListChange($event)" [defaultSelect]="screen.defaultSelect">
-                <div *ngFor="let sel of screen.selectionList">
-                    <div fxShow fxHide.xs="true" fxHide.lg="false" *ngIf="sel.title" class="text-sm">{{sel.title}}</div>
-                    <div fxHide fxHide.xs="false" fxHide.lg="true" *ngIf="sel.title" class="text-md">{{sel.title}}</div>
-                    <div *ngIf="sel.properties" fxLayout="row wrap" fxLayoutAlign="space-between">
-                        <div *ngFor="let property of sel.properties">
-                            <div *ngIf="property.label" class="item-property-label">{{property.label}}</div>
-                            <p class="item-property-line" *ngFor="let line of property.lines">{{line}}</p>
+                <ng-template let-item>
+					<div [ngClass]="{'muted-color' : !item.enabled}">
+                        <div fxShow fxHide.xs="true" fxHide.lg="false" *ngIf="item.title" class="text-sm">{{item.title}}</div>
+                        <div fxHide fxHide.xs="false" fxHide.lg="true" *ngIf="item.title" class="text-md">{{item.title}}</div>
+                        <div *ngIf="item.properties" fxLayout="row wrap" fxLayoutAlign="space-between">
+                            <div *ngFor="let property of item.properties">
+                                <div *ngIf="property.label" class="item-property-label">{{property.label}}</div>
+                                <p class="item-property-line" *ngFor="let line of property.lines">{{line}}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </ng-template>
             </app-selectable-item-list>
         </div>
     </mat-dialog-content>

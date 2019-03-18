@@ -2,7 +2,13 @@ import { Component } from '@angular/core';
 import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
 import { IActionItem, SelectionMode } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
+import { ScreenComponent } from '../../shared/decorators/screen.decorator';
+import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
 
+@ScreenComponent({
+  name: 'SelectionList',
+  moduleName: 'Core'
+})
 @Component({
   selector: 'app-selection-list',
   templateUrl: './selection-list.component.html',
@@ -35,7 +41,9 @@ export class SelectionListComponent extends PosScreen<any> {
       this.listConfig.selectionMode = SelectionMode.Single;
     }
     this.listConfig.numResultsPerPage = Number.MAX_VALUE;
+
     this.listConfig.items = this.screen.selectionList;
+    this.listConfig.disabledItems = this.screen.selectionList.filter(e => !e.enabled);
 
     if (this.screen.defaultSelectItemIndex !== null && this.screen.defaultSelectItemIndex !== undefined) {
       this.listConfig.defaultSelectItemIndex = this.screen.defaultSelectItemIndex;
