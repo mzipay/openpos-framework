@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.screen.ActionItem;
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IKeyMappingService;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.springframework.beans.factory.annotation.Autowired;

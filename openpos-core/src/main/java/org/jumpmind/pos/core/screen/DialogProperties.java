@@ -16,7 +16,7 @@ public class DialogProperties implements Serializable {
     private String minHeight;
     private boolean executeActionBeforeClose = false;
     private boolean closeable = false;
-    private boolean autoFocus = false;
+    private boolean autoFocus = true;
     private boolean restoreFocus = true;
 
     public DialogProperties() {

@@ -12,7 +12,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jumpmind.pos.core.flow.IScreenInterceptor;
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,7 +161,6 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
     }
 
     private Object doStrategies(String appId, String deviceId, Object property, Class<?> clazz, UIMessage screen, Map<String, Object> screenContext) {
-
         for (IScreenPropertyStrategy s : screenProprtyStrategies) {
             property = s.doStrategy(appId, deviceId, property, clazz, screen, screenContext);
         }

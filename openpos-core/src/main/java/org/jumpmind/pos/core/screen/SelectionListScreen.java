@@ -10,15 +10,17 @@ public class SelectionListScreen extends Screen {
     private List<SelectionListItem> selectionList = new ArrayList<SelectionListItem>();
 
     private List<ActionItem> buttons = new ArrayList<>();
-    
+
     private List<ActionItem> nonSelectionButtons = new ArrayList<>();
 
     private boolean multiSelect = false;
-    
+
     private boolean defaultSelect = false;
-    
+
     private int defaultSelectItemIndex = 0;
-    
+
+    private String selectionChangedAction;
+
     private String instructions;
 
     public SelectionListScreen() {
@@ -28,17 +30,17 @@ public class SelectionListScreen extends Screen {
     public List<SelectionListItem> getSelectionList() {
         return selectionList;
     }
-    
+
     @Override
     public Screen asDialog() {
         this.setScreenType(ScreenType.SelectionListDialog);
-        return (Screen)super.asDialog();
+        return (Screen) super.asDialog();
     }
-    
+
     @Override
     public Screen asDialog(DialogProperties dialogProperties) {
         this.setScreenType(ScreenType.SelectionListDialog);
-        return (Screen)super.asDialog(dialogProperties);
+        return (Screen) super.asDialog(dialogProperties);
     }
 
     public void setSelectionList(List<SelectionListItem> selectionList) {
@@ -77,7 +79,7 @@ public class SelectionListScreen extends Screen {
     public void addNonSelectionButton(ActionItem button) {
         this.nonSelectionButtons.add(button);
     }
-    
+
     public boolean isMultiSelect() {
         return multiSelect;
     }
@@ -85,15 +87,15 @@ public class SelectionListScreen extends Screen {
     public void setMultiSelect(boolean multiSelect) {
         this.multiSelect = multiSelect;
     }
-    
+
     public boolean isDefaultSelect() {
         return defaultSelect;
     }
-    
+
     public void setDefaultSelect(boolean defaultSelect) {
         this.defaultSelect = defaultSelect;
     }
-    
+
     public int getDefaultSelectItemIndex() {
         return defaultSelectItemIndex;
     }
@@ -102,10 +104,18 @@ public class SelectionListScreen extends Screen {
         this.defaultSelectItemIndex = defaultSelectItemIndex;
     }
 
+    public String getSelectionChangedAction() {
+        return selectionChangedAction;
+    }
+
+    public void setSelectionChangedAction(String selectionChangedAction) {
+        this.selectionChangedAction = selectionChangedAction;
+    }
+
     public String getInstructions() {
         return instructions;
     }
-    
+
     public void setInstructions(String instructions) {
         this.instructions = instructions;
     }

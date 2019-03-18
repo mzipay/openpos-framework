@@ -6,12 +6,14 @@ import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.util.model.Message;
 
 public class UIMessage extends Message {
+    private static final long serialVersionUID = 1L;
     private String screenType;
     private String id;
     private int sessionTimeoutMillis;
     private Action sessionTimeoutAction;
     private String locale;
-    public UIMessage( String screenType, String id ) {
+
+    public UIMessage(String screenType, String id) {
         this();
         this.screenType = screenType;
         this.id = id;
