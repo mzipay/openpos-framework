@@ -3,7 +3,6 @@ package org.jumpmind.pos.core.screeninterceptor;
 import java.util.Map;
 
 import org.jumpmind.pos.core.content.IContentProvider;
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
