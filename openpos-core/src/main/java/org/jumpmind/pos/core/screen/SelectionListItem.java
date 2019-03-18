@@ -14,6 +14,8 @@ public class SelectionListItem implements Serializable {
 
     private boolean isSelected;
 
+    private boolean enabled=true;
+
     public SelectionListItem() {
         this.properties = new ArrayList<SelectionListItemDisplayProperty>();
     }
@@ -55,6 +57,14 @@ public class SelectionListItem implements Serializable {
 
     public void setSelected(boolean isSelected) {
         this.isSelected = isSelected;
+    }
+
+    public boolean isEnabled() {
+        return  enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
 }
