@@ -7,6 +7,7 @@ import { Configuration } from '../../../configuration/configuration';
 export class SelectableItemListComponentConfiguration<ItemType> {
     numResultsPerPage: number;
     items: ItemType[];
+    disabledItems: ItemType[] = [];
     defaultSelectItemIndex: number;
     selectionMode: SelectionMode;
 }
@@ -53,6 +54,7 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
 
     numberOfPages: number;
     itemsToShow: ItemType[];
+    disabledItems: ItemType[];
     currentPage = 1;
 
     private _selectedItem: ItemType;
@@ -134,6 +136,8 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
         this.itemsToShow = this._config.items.slice((this.currentPage - 1) *
             this._config.numResultsPerPage, this._config.numResultsPerPage * this.currentPage);
 
+        this.disabledItems = this._config.disabledItems;
+
         if (this.defaultSelect && this._config.defaultSelectItemIndex !== null && this._config.defaultSelectItemIndex !== undefined) {
             switch (this._config.selectionMode) {
                 case SelectionMode.Single:
@@ -171,7 +175,8 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
 
     onItemClick(item: ItemType, event: any) {
         // look for block-selection attribute and don't do the selection if we find it in our path
-        if ( event.path.find(element => element.attributes && element.attributes.getNamedItem('block-selection'))) {
+        if ( event.path.find(element => element.attributes && element.attributes.getNamedItem('block-selection')) ||
+            this.disabledItems.includes(item)) {
             return;
         }
         switch (this._config.selectionMode) {
@@ -239,26 +244,39 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
                     return; // only allow key down to start selecting on the list.
                 }
                 let newIndex = currentListIndex + direction;
+                while ( this.disabledItems.includes(this.itemsToShow[newIndex]) ) {
+                    newIndex = newIndex + direction;
+                }
+
                 if (newIndex < 0) {
                     newIndex = 0;
+                    while (this.disabledItems.includes(this.itemsToShow[newIndex])) {
+                        newIndex++;
+                    }
                 }
                 if (this.itemsToShow.length > newIndex) {
                     this.selectedItem = this.itemsToShow[newIndex];
                     this.selectedItemChange.emit(this.selectedItem);
-                } 
+                }
                 break;
             case SelectionMode.Multiple:
                 if (this.selectedItemList && this.selectedItemList.length === 1) {
                     currentListIndex = this.itemsToShow.findIndex(item => item === this.selectedItemList[0]);
                     newIndex = currentListIndex + direction;
+                    while ( this.disabledItems.includes(this.itemsToShow[newIndex]) ) {
+                        newIndex = newIndex + direction;
+                    }
                     if (this.itemsToShow.length > newIndex && newIndex > -1) {
                         this.selectedItemList = [this.itemsToShow[newIndex]];
                         this.selectedItemListChange.emit(this.selectedItemList);
-                    } 
+                    }
                 } else if (this.itemsToShow.length > 0) { // only allow key down to start selecting on the list.
                     let index = 0;
                     if (direction === -1) {
                         index = this.itemsToShow.length - 1;
+                    }
+                    while (this.disabledItems.includes(this.itemsToShow[index])) {
+                        index = index + direction;
                     }
                     this.selectedItemList = [this.itemsToShow[index]];
                     this.selectedItemListChange.emit(this.selectedItemList);
