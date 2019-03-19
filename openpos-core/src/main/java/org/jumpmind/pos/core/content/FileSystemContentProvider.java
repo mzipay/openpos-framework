@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component("fileSystemContentProvider")
-@ConfigurationProperties(prefix = "openpos.ui.content.fileSystem")
+@ConfigurationProperties(prefix = "openpos.ui.content.file-system")
 public class FileSystemContentProvider implements IContentProvider {
 
     Logger logger = LoggerFactory.getLogger(getClass());
