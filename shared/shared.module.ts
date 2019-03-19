@@ -82,7 +82,7 @@ import {
 import { SafePipe } from './pipes/safe.pipe';
 import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe, MarkdownFormatterPipe, ImageUrlPipe, BackgroundImageUrlPipe } from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
-import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent, DynamicFormPartComponent } from './screen-parts';
+import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent, DynamicFormPartComponent, DialogHeaderComponent } from './screen-parts';
 import { SideNavComponent, WaffleComponent } from './layout-components';
 import { KeyPressSourceDirective } from './directives/keypress-source.directive';
 import { SystemStatusDialogComponent } from './components/system-status/system-status-dialog.component';
@@ -97,6 +97,7 @@ const screenParts = [
         SausageLinksComponent,
         ScanOrSearchComponent,
         BaconStripComponent,
+        DialogHeaderComponent,
         SaleFooterComponent,
         SaleItemListComponent
     ];
