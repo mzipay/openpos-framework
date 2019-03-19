@@ -1,0 +1,61 @@
+import { Component } from '@angular/core';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
+import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
+import { PosScreen } from '../../screens-deprecated/pos-screen/pos-screen.component';
+import { ScreenComponent } from '../../shared/decorators/screen.decorator';
+import { SelectionListInterface } from './selection-list.interface';
+
+@ScreenComponent({
+  name: 'SelectionList',
+  moduleName: 'Core'
+})
+@Component({
+  selector: 'app-selection-list-screen',
+  templateUrl: './selection-list-screen.component.html',
+  styleUrls: ['./selection-list-screen.component.scss']
+})
+export class SelectionListScreenComponent extends PosScreen<SelectionListInterface> {
+    listConfig: SelectableItemListComponentConfiguration<any>;
+    index = -1;
+    lastSelection = -1;
+
+    constructor() {
+        super();
+    }
+
+    buildScreen() {
+        this.listConfig = new SelectableItemListComponentConfiguration<any>();
+        if (this.screen.multiSelect) {
+          this.listConfig.selectionMode = SelectionMode.Multiple;
+        } else {
+          this.listConfig.selectionMode = SelectionMode.Single;
+        }
+        this.listConfig.numResultsPerPage = Number.MAX_VALUE;
+
+        this.listConfig.items = this.screen.selectionList;
+        this.listConfig.disabledItems = this.screen.selectionList.filter(e => !e.enabled);
+
+        if (this.screen.defaultSelectItemIndex !== null && this.screen.defaultSelectItemIndex !== undefined) {
+          this.listConfig.defaultSelectItemIndex = this.screen.defaultSelectItemIndex;
+        }
+    }
+
+    public onItemListChange(event: any[]): void {
+        // this.selectedItems = event;
+        // this.session.onAction("SelectedItemsChanged", this.selectedItems);
+      }
+
+      public onItemChange(event: any): void {
+        this.index = this.screen.selectionList.indexOf(event);
+        if (this.screen.selectionChangedAction && this.index !== this.lastSelection) {
+          this.lastSelection = this.index;
+          this.session.onAction(this.screen.selectionChangedAction, this.index);
+        }
+      }
+
+      public doMenuItemAction(menuItem: IActionItem) {
+        this.session.onAction(menuItem, this.index);
+      }
+
+}
