@@ -4,16 +4,21 @@ import { ScreenService } from '../core/services/screen.service';
 import { Registry } from '../core/registry';
 import { DialogService, IconService } from '../core';
 import { IconConstants } from '../screens-deprecated/icon.constants';
-
+import { SelectionListScreenComponent } from './selection-list/selection-list-screen.component';
+import { SelectionListScreenDialogComponent } from './selection-list/selection-list-screen-dialog.component';
 
 @NgModule({
     entryComponents: [
         Registry.getComponents('Core', Registry.screens),
-        Registry.getComponents('Core', Registry.dialogs)
+        Registry.getComponents('Core', Registry.dialogs),
+        SelectionListScreenComponent,
+        SelectionListScreenDialogComponent
     ],
     declarations: [
         Registry.getComponents('Core', Registry.screens),
         Registry.getComponents('Core', Registry.dialogs),
+        SelectionListScreenComponent,
+        SelectionListScreenDialogComponent
     ],
     imports: [
         SharedModule
@@ -35,6 +40,6 @@ export class ScreensWithPartsModule {
 
         IconConstants.icons.forEach((icon) => {
             iconService.addIcon(icon.name, icon.iconDef);
-        })
+        });
     }
 }
