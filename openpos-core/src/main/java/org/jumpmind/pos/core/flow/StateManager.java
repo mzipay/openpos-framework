@@ -616,4 +616,8 @@ public class StateManager implements IStateManager {
         logger.info("Registering query params " + queryParams.toString());
         applicationState.getScope().setScopeValue(ScopeType.Device, "queryParams", queryParams);
     }
+    
+    public Injector getInjector() {
+        return injector;
+    }
 }

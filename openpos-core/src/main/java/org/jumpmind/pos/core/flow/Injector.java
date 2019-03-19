@@ -26,7 +26,7 @@ public class Injector {
 
     @Autowired(required = false)
     private List<IScopeValueProvider> scopeValueProviders;
-    
+
     private final static boolean AUTOWIRE = true;
     private final static boolean DONT_AUTOWIRE = false;
 
@@ -34,11 +34,11 @@ public class Injector {
         performInjectionsImpl(target, scope, currentContext, AUTOWIRE);
         performPostContruct(target);
     }
-    
+
     public void performInjectionsOnSpringBean(Object target, Scope scope, StateContext currentContext) {
         performInjectionsImpl(target, scope, currentContext, DONT_AUTOWIRE);
     }
-    
+
     public void injectNulls(Object target, ScopeType scopeType) {
         Class<?> targetClass = target.getClass();
         while (targetClass != null) {
@@ -116,7 +116,6 @@ public class Injector {
                 injectField(targetClass, target, scope, currentContext, inOut.name(), inOut.scope(), inOut.required(), inOut.autoCreate(),
                         field);
             }
-
         }
     }    
 
@@ -131,7 +130,7 @@ public class Injector {
         switch (scopeType) {
             case Config:
                 Object configScopeValue = currentContext.getFlowConfig().getConfigScope() != null
-                        ? currentContext.getFlowConfig().getConfigScope().get(name)
+                ? currentContext.getFlowConfig().getConfigScope().get(name)
                         : null;
                 if (configScopeValue != null) {
                     value = new ScopeValue(configScopeValue);
@@ -152,11 +151,11 @@ public class Injector {
             default:
                 break;
         }
-        
+
         if ((value == null || value.getValue() == null) && autoCreate) {
             value = autoCreate(name, scopeType, scope, currentContext);
         }
-        
+
         if (value == null) {
             value = resolveThroughValueProviders(name, scopeType, target, field);
             if (value != null) {
@@ -265,5 +264,38 @@ public class Injector {
         }
 
         return buff.toString();
+    }
+
+    public boolean hasInjections(Object bean) {
+        Class<?> targetClass = bean.getClass();
+        while (targetClass != null) {
+            Field[] fields = targetClass.getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                In in = field.getAnnotation(In.class);
+                if (in == null) {
+                    in = field.getDeclaredAnnotation(In.class);
+                }
+
+                if (in != null) {
+                    return true;
+                }
+
+                InOut inOut = field.getAnnotation(InOut.class);
+                if (inOut == null) {
+                    inOut = field.getDeclaredAnnotation(InOut.class);
+                }
+
+                if (inOut != null) {
+                    return true;
+                }
+            }
+            targetClass = targetClass.getSuperclass();
+            if (targetClass == Object.class) {
+                targetClass = null;
+            }
+        }
+        
+        return false;
     }
 }
