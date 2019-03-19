@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +34,6 @@ import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.IDynamicListField;
 import org.jumpmind.pos.core.model.IFormElement;
 import org.jumpmind.pos.core.screen.IHasForm;
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.Toast;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.core.util.LogFormatter;
@@ -44,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,7 +70,7 @@ public class ScreenService implements IScreenService, IActionListener {
     ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    IStateManagerContainer stateManagerFactory;
+    IStateManagerContainer stateManagerContainer;
 
     @Value("${openpos.screenService.jsonIncludeNulls:true}")
     boolean jsonIncludeNulls = true;
@@ -79,6 +80,9 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Autowired
     IMessageService messageService;
+    
+    @Autowired
+    ApplicationContext applicationContext;
 
     List<IScreenInterceptor> screenInterceptors = new ArrayList<>();
 
@@ -89,8 +93,8 @@ public class ScreenService implements IScreenService, IActionListener {
         }
     }
 
-    @Autowired(required = false)
     public void setScreenInterceptors(List<IScreenInterceptor> screenInterceptors) {
+        this.screenInterceptors.clear();
         for (IScreenInterceptor screenInterceptor : screenInterceptors) {
             this.screenInterceptors.add(screenInterceptor);
         }
@@ -168,34 +172,39 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Override
     public void actionOccured(String appId, String deviceId, Action action) {
-        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
+        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
         if (stateManager != null) {
-            if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
-                stateManager.keepAlive();
-            } else if( "Refresh".equals(action.getName())) {
-            	UIMessage lastDialog = getLastDialog(appId, deviceId);
-            	logger.info("Received Refresh action from {}", deviceId);
-            	showScreen(appId, deviceId, getLastScreen(appId, deviceId));
-            	showScreen(appId, deviceId, lastDialog);
-            } else {
-         
-                deserializeForm(stateManager.getApplicationState(), action);
-
-                logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
-
-                try {
-                    logger.debug("Posting action {}", action);
-                    stateManager.doAction(action);
-                } catch (Throwable ex) {
-                    logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
-                    messageService.sendMessage(appId, deviceId, Toast.createWarningToast("The application received an unexpected error. Please report to the appropriate technical personnel"));
+            try {                
+                stateManagerContainer.setCurrentStateManager(stateManager);
+                if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
+                    stateManager.keepAlive();
+                } else if( "Refresh".equals(action.getName())) {
+                    UIMessage lastDialog = getLastDialog(appId, deviceId);
+                    logger.info("Received Refresh action from {}", deviceId);
+                    showScreen(appId, deviceId, getLastScreen(appId, deviceId));
+                    showScreen(appId, deviceId, lastDialog);
+                } else {
+                    
+                    deserializeForm(stateManager.getApplicationState(), action);
+                    
+                    logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
+                    
+                    try {
+                        logger.debug("Posting action {}", action);
+                        stateManager.doAction(action);
+                    } catch (Throwable ex) {
+                        logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
+                        messageService.sendMessage(appId, deviceId, Toast.createWarningToast("The application received an unexpected error. Please report to the appropriate technical personnel"));
+                    }
                 }
+            } finally {
+                stateManagerContainer.setCurrentStateManager(null);
             }
         }
     }
 
     protected UIMessage removeLastDialog(String appId, String deviceId) {
-        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
+        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
         ApplicationState applicationState = stateManager != null ? stateManager.getApplicationState() : null;
         if (applicationState != null && applicationState.getLastDialog() != null) {
             UIMessage lastDialog = applicationState.getLastDialog();
@@ -208,7 +217,7 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Override
     public UIMessage getLastDialog(String appId, String deviceId) {
-        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
+        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
         ApplicationState applicationState = stateManager != null ? stateManager.getApplicationState() : null;
         if (applicationState != null) {
             return applicationState.getLastDialog();
@@ -219,7 +228,7 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Override
     public UIMessage getLastScreen(String appId, String deviceId) {
-        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
+        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
         ApplicationState applicationState = stateManager != null ? stateManager.getApplicationState() : null;
         if (applicationState != null) {
             return applicationState.getLastScreen();
@@ -235,7 +244,7 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Override
     public void showScreen(String appId, String deviceId, UIMessage screen) {
-        IStateManager stateManager = stateManagerFactory.retrieve(appId, deviceId);
+        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
         if (screen != null && stateManager != null) {
             ApplicationState applicationState = stateManager.getApplicationState();
             screen.setSequenceNumber(applicationState.incrementAndScreenSequenceNumber());
@@ -273,6 +282,15 @@ public class ScreenService implements IScreenService, IActionListener {
             for (IScreenInterceptor screenInterceptor : screenInterceptors) {
                 screenInterceptor.intercept(appId, deviceId, screen);
             }
+        }
+        
+        Map<String, IScreenInterceptor> screenInterceptorsSpring = 
+                applicationContext.getBeansOfType(IScreenInterceptor.class);
+        
+        if (screenInterceptorsSpring != null) {
+            for (IScreenInterceptor screenInterceptor : screenInterceptorsSpring.values()) {
+                screenInterceptor.intercept(appId, deviceId, screen);
+            }            
         }
     }
 

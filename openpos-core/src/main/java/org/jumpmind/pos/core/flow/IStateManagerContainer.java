@@ -12,4 +12,8 @@ public interface IStateManagerContainer {
     
     void removeSessionIdVariables(String sessionId);
     
+    void setCurrentStateManager(IStateManager stateManager);
+    
+    IStateManager getCurrentStateManager();
+    
 }

@@ -49,6 +49,8 @@ public class StateManagerContainer implements IStateManagerContainer {
     IErrorHandler errorHandler;
 
     private Map<String, Map<String, StateManager>> stateManagersByAppIdByNodeId = new HashMap<>();
+    
+    private ThreadLocal<IStateManager> currentStateManager = new InheritableThreadLocal<>();
 
     @Override
     public void removeSessionIdVariables(String sessionId) {
@@ -90,6 +92,7 @@ public class StateManagerContainer implements IStateManagerContainer {
             synchronized (this) {
                 if (stateManager == null) {
                     stateManager = applicationContext.getBean(StateManager.class);
+                    setCurrentStateManager(stateManager);
                     stateManager.registerQueryParams(queryParams);
                     stateManager.setErrorHandler(errorHandler);
                     stateManager.setInitialFlowConfig(flowConfigProvider.getConfig(appId, deviceId));
@@ -119,6 +122,14 @@ public class StateManagerContainer implements IStateManagerContainer {
         }
 
         return allStateManagers;
+    }
+    
+    public void setCurrentStateManager(IStateManager stateManager) {
+        currentStateManager.set(stateManager);
+    }
+    
+    public IStateManager getCurrentStateManager() {
+        return currentStateManager.get();        
     }
 
 }

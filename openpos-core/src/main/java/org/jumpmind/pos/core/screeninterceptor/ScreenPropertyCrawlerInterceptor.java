@@ -16,9 +16,11 @@ import org.jumpmind.pos.core.ui.UIMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope("prototype")
 public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
 
     Logger logger = LoggerFactory.getLogger(getClass());

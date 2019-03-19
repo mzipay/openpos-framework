@@ -22,7 +22,6 @@ package org.jumpmind.pos.core.flow;
 
 import java.util.Map;
 
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.screen.Toast;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.server.model.Action;
@@ -51,6 +50,7 @@ public interface IStateManager {
 	public void performOutjections(Object object);
 	public void setApplicationState(ApplicationState applicationState);
 	public void performInjections(Object object);
+	public void performInjectionsOnSpringBean(Object object);
 	public void setSessionAuthenticated(String sessionId, boolean authenticated);
 	public boolean isSessionAuthenticated(String sessionId);
 	public boolean areAllSessionsAuthenticated();

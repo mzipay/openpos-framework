@@ -15,15 +15,15 @@ public class SessionDisconnectedListener implements ApplicationListener<SessionD
     Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    IStateManagerContainer stateManagerFactory;
+    IStateManagerContainer stateManagerContainer;
 
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {        
         Message<?> msg = event.getMessage();
         String sessionId = (String) msg.getHeaders().get("simpSessionId");
         logger.info("session disconnected: {}", sessionId); 
-        stateManagerFactory.removeSessionIdVariables(sessionId);
+        stateManagerContainer.removeSessionIdVariables(sessionId);
+        stateManagerContainer.setCurrentStateManager(null);
     }
-
 
 }

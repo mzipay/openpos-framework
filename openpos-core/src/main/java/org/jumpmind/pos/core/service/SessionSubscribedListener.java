@@ -29,7 +29,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
     final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    IStateManagerContainer stateManagerFactory;
+    IStateManagerContainer stateManagerContainer;
 
     @Autowired
     IMessageService messageService;
@@ -54,15 +54,17 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
         String appId = topicName.substring(topicName.indexOf("/app/") + "/app/".length(), topicName.indexOf("/node/"));
         try {
             logger.info("session {} subscribed to {}", sessionId, topicName);
-            IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
+            IStateManager stateManager = stateManagerContainer.retrieve(appId, nodeId);
             boolean created = false;
             if (stateManager == null) {
-                stateManager = stateManagerFactory.create(appId, nodeId, queryParams);
+                stateManager = stateManagerContainer.create(appId, nodeId, queryParams);
                 created = true;
             } else {
                 stateManager.registerQueryParams(queryParams);
             }
-
+            
+            stateManagerContainer.setCurrentStateManager(stateManager);
+            
             stateManager.setSessionAuthenticated(sessionId, sessionAuthTracker.isSessionAuthenticated(sessionId));
             stateManager.setSessionCompatible(sessionId, sessionAuthTracker.isSessionCompatible(sessionId));
 
@@ -102,6 +104,8 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             errorDialog.setTitle("Failed To Subscribe");
             errorDialog.setMessage(Arrays.asList(ex.getMessage()));
             messageService.sendMessage(appId, nodeId, errorDialog);
+        } finally {
+            stateManagerContainer.setCurrentStateManager(null);
         }
     }
 

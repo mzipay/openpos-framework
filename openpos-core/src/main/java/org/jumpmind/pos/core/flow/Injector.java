@@ -26,10 +26,17 @@ public class Injector {
 
     @Autowired(required = false)
     private List<IScopeValueProvider> scopeValueProviders;
+    
+    private final static boolean AUTOWIRE = true;
+    private final static boolean DONT_AUTOWIRE = false;
 
     public void performInjections(Object target, Scope scope, StateContext currentContext) {
-        performInjectionsImpl(target, scope, currentContext);
+        performInjectionsImpl(target, scope, currentContext, AUTOWIRE);
         performPostContruct(target);
+    }
+    
+    public void performInjectionsOnSpringBean(Object target, Scope scope, StateContext currentContext) {
+        performInjectionsImpl(target, scope, currentContext, DONT_AUTOWIRE);
     }
     
     public void injectNulls(Object target, ScopeType scopeType) {
@@ -72,9 +79,9 @@ public class Injector {
         }
     }
 
-    protected void performInjectionsImpl(Object target, Scope scope, StateContext currentContext) {
+    protected void performInjectionsImpl(Object target, Scope scope, StateContext currentContext, boolean autowire) {
         Class<?> targetClass = target.getClass();
-        if (applicationContext != null) {
+        if (autowire && applicationContext != null) {
             applicationContext.autowireBean(target);
         }
         while (targetClass != null) {

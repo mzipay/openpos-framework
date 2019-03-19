@@ -284,6 +284,10 @@ public class StateManager implements IStateManager {
         return stateContext;
     }
 
+    public void performInjectionsOnSpringBean(Object springBean) {
+        injector.performInjectionsOnSpringBean(springBean, applicationState.getScope(), applicationState.getCurrentContext());
+    }
+    
     public void performInjections(Object stateOrStep) {
         injector.performInjections(stateOrStep, applicationState.getScope(), applicationState.getCurrentContext());
     }
