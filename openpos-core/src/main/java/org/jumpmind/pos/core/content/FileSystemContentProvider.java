@@ -6,16 +6,16 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("fileSystemContentProvider")
+@ConfigurationProperties(prefix = "openpos.ui.content.file-system")
 public class FileSystemContentProvider implements IContentProvider {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Value("${file.system.content.dir:content/}")
-    private String contentDir;
+    String contentDir;
 
     private Map<String, ContentIndex> deviceContent = new HashMap<>();
 
@@ -30,7 +30,7 @@ public class FileSystemContentProvider implements IContentProvider {
 
         String restUrl = null;
 
-        File dir = getContentDir(resourcePath);
+        File dir = getContent(resourcePath);
         if (dir != null) {
             File[] files = dir.listFiles();
             if (files != null && files.length > 0) {
@@ -47,7 +47,7 @@ public class FileSystemContentProvider implements IContentProvider {
         return restUrl;
     }
 
-    private File getContentDir(String resource) {
+    private File getContent(String resource) {
 
         File dir = new File(resource);
         if (dir.exists() && dir.isDirectory()) {
@@ -78,6 +78,14 @@ public class FileSystemContentProvider implements IContentProvider {
         }
 
         return index;
+    }
+
+    public void setContentDir(String contentDir) {
+        this.contentDir = contentDir;
+    }
+
+    public String getContentDir() {
+        return this.contentDir;
     }
 
     private class ContentIndex {
