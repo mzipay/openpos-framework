@@ -1,6 +1,9 @@
 package org.jumpmind.pos.util.spring;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,8 +64,11 @@ public class SpringBootEnvironmentPostProcessor implements EnvironmentPostProces
             for (String resourceLoc: c.getAnnotation(YamlPropertySource.class).value()) {
                 try {
                     Resource resource = resourceLoader.getResource(resourceLoc);
-                    PropertySource<?> propertySource = loadYaml(resource);
-                    environment.getPropertySources().addLast(propertySource);
+                    List<PropertySource<?>> propertySources = loadYaml(resource);
+                    for (PropertySource<?> propertySource : propertySources) {
+                        environment.getPropertySources().addLast(propertySource);    
+                    }
+                    
                 } catch (Exception ex) {
                     System.out.println(String.format("[%s] WARN: The YamlPropertySource at '%s' could not be loaded. Reason: %s", this.getClass().getSimpleName(), resourceLoc, ex.getMessage()));
                 }
@@ -70,12 +76,27 @@ public class SpringBootEnvironmentPostProcessor implements EnvironmentPostProces
         }
     }
     
-    private PropertySource<?> loadYaml(Resource res) throws IOException {
+    @SuppressWarnings("unchecked")
+    private List<PropertySource<?>> loadYaml(Resource res) throws IOException {
         if (!res.exists()) {
             throw new IllegalArgumentException("Resource '" + res + "' does not exist");
         }
         
-        return this.loader.load("custom-resource", res, null);
+        try {
+            // spring boot 2.x version
+            Method method = loader.getClass().getMethod("load", String.class, Resource.class);
+            return (List<PropertySource<?>>)method.invoke(loader, "custom-resource", res);
+        } catch (Exception ex) {
+            try {
+                // spring boot 1.5 version
+                Method method = loader.getClass().getMethod("load", String.class, Resource.class, String.class);
+                List<PropertySource<?>> list = new ArrayList<>();
+                list.add((PropertySource<?>)method.invoke(loader, "custom-resource", res, null));
+                return list;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 
