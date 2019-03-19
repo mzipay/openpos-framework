@@ -55,8 +55,10 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
         try {
             logger.info("session {} subscribed to {}", sessionId, topicName);
             IStateManager stateManager = stateManagerFactory.retrieve(appId, nodeId);
+            boolean created = false;
             if (stateManager == null) {
                 stateManager = stateManagerFactory.create(appId, nodeId, queryParams);
+                created = true;
             } else {
                 stateManager.registerQueryParams(queryParams);
             }
@@ -87,7 +89,9 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
                 messageService.sendMessage(appId, nodeId, errorDialog);
             } else {
                 sendClientConfiguration(appId, nodeId, sessionId);
-                stateManager.refreshScreen();
+                if (!created) {
+                   stateManager.refreshScreen();
+                }
             }
 
         } catch (Exception ex) {
