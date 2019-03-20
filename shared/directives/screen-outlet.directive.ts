@@ -14,6 +14,7 @@ import {
     ScreenService,
     DialogService,
     SessionService,
+    ConfigurationService,
     PersonalizationService,
     Logger,
     AbstractTemplate,
@@ -47,6 +48,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         public screenService: ScreenService,
         private _viewContainerRef: ViewContainerRef,
         public session: SessionService,
+        public configurationService: ConfigurationService,
         public overlayContainer: OverlayContainer,
         private dialogService: DialogService,
         public renderer: Renderer2) {
@@ -56,7 +58,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         this.updateTemplateAndScreen();
         this.subscriptions.add(this.session.getMessages('Screen').subscribe((message) => this.handle(message)));
         this.subscriptions.add(this.session.getMessages('Connected').subscribe((message) => this.handle(new BlankScreen())));
-        this.subscriptions.add(this.session.getMessages('ConfigChanged').subscribe(message => this.updateTheme(message.theme)));
+        this.subscriptions.add(this.session.getMessages('ConfigChanged').subscribe(message => this.configurationService.updateConfig(message)));
     }
 
     ngOnDestroy(): void {

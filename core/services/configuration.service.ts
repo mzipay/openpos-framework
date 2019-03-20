@@ -14,12 +14,13 @@ export class ConfigurationService {
         this.sessionService.getMessages('ConfigChanged').subscribe(m => this.updateConfig(m));
     }
 
-    updateConfig(message: any) {
+    public updateConfig(message: any) {
         this.log.info(message);
         if (message && message.configuration) {
             this.mapConfig(message.configuration);
         }
         if (message && message.theme) {
+            console.log('Config Changed Theme: ' + message.theme);
             this.personalization.setTheme(message.theme, true);
         }
     }
