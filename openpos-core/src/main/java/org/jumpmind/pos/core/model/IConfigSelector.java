@@ -2,8 +2,8 @@ package org.jumpmind.pos.core.model;
 
 public interface IConfigSelector {
 
-    public ClientConfiguration getClientConfig(String brandId, String deviceType);
+    public ClientConfiguration getClientConfig();
 
-    public String getTheme(String brandId);
+    public String getTheme();
 
 }

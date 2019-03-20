@@ -1,10 +1,12 @@
 package org.jumpmind.pos.core.service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerContainer;
+import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.model.ClientConfiguration;
 import org.jumpmind.pos.core.model.ConfigChangedMessage;
 import org.jumpmind.pos.core.model.IConfigSelector;
@@ -19,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
@@ -42,6 +45,9 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
 
     @Autowired(required = false)
     private IConfigSelector configSelector;
+    
+    @Autowired
+    ApplicationContext applicationContext;
 
     @Override
     public void onApplicationEvent(SessionSubscribedEvent event) {
@@ -64,6 +70,11 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             }
             
             stateManagerContainer.setCurrentStateManager(stateManager);
+            
+            Map<String, String> personizationProperties = new HashMap<>();
+            personizationProperties.put("brandId", sessionAuthTracker.getBrandId(sessionId));
+            personizationProperties.put("deviceType", sessionAuthTracker.getDeviceType(sessionId));
+            stateManager.getApplicationState().getScope().setScopeValue(ScopeType.Device, "personalizationProperties", personizationProperties);
             
             stateManager.setSessionAuthenticated(sessionId, sessionAuthTracker.isSessionAuthenticated(sessionId));
             stateManager.setSessionCompatible(sessionId, sessionAuthTracker.isSessionCompatible(sessionId));
@@ -110,12 +121,12 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
     }
 
     private void sendClientConfiguration(String appId, String nodeId, String sessionId) {
+        configSelector = applicationContext.getBean(IConfigSelector.class);
+
         if (configSelector != null) {
-            String deviceType = sessionAuthTracker.getDeviceType(sessionId);
-            String brandId = sessionAuthTracker.getBrandId(sessionId);
-            String theme = configSelector.getTheme(brandId);
-            logger.info("Chose theme: {}", theme);
-            ClientConfiguration config = configSelector.getClientConfig(brandId, deviceType);
+            String theme = configSelector.getTheme();
+            logger.info("Config Selector Chose theme: {}", theme);
+            ClientConfiguration config = configSelector.getClientConfig();
             ConfigChangedMessage configMessage = new ConfigChangedMessage(theme, config);
             messageService.sendMessage(appId, nodeId, configMessage);
         }
