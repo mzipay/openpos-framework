@@ -30,4 +30,8 @@ public class StateManagerBeanPostProcessor implements BeanPostProcessor {
         
         return bean;
     }
+    
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {        
+        return bean;
+    }
 }
