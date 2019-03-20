@@ -1,6 +1,7 @@
 /.project
 /.gradle/
 /.dist/
+**/dist/
 /node_modules/
 TESTS-HeadlessChrome_72.0.3626_(Mac_OS_X_10.14.3).xml
 TESTS-Chrome_72.0.3626_(Mac_OS_X_10.14.3).xml
