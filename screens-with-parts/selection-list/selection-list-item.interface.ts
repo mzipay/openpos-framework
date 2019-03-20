@@ -5,4 +5,5 @@ export interface SelectionListItem {
     properties: SelectionListItemDisplayProperty[];
     isSelected: boolean;
     enabled: boolean;
+    itemImageUrl: string;
 }

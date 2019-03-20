@@ -11,4 +11,5 @@ export interface SelectionListInterface extends IAbstractScreen {
     defaultSelectItemIndex: number;
     selectionChangedAction: string;
     instructions: string;
+    numberItemsPerPage: number;
 }
