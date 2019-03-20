@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChildren, QueryList, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
@@ -15,7 +15,9 @@ import { SelectionListInterface } from './selection-list.interface';
   templateUrl: './selection-list-screen.component.html',
   styleUrls: ['./selection-list-screen.component.scss']
 })
-export class SelectionListScreenComponent extends PosScreen<SelectionListInterface> {
+export class SelectionListScreenComponent extends PosScreen<SelectionListInterface> implements AfterViewInit {
+    @ViewChildren('items') private items: QueryList<ElementRef>;
+
     listConfig: SelectableItemListComponentConfiguration<any>;
     index = -1;
     lastSelection = -1;
@@ -39,6 +41,16 @@ export class SelectionListScreenComponent extends PosScreen<SelectionListInterfa
         if (this.screen.defaultSelectItemIndex !== null && this.screen.defaultSelectItemIndex !== undefined) {
           this.listConfig.defaultSelectItemIndex = this.screen.defaultSelectItemIndex;
         }
+
+        if (this.screen.numberItemsPerPage !== 0) {
+          this.listConfig.numResultsPerPage = this.screen.numberItemsPerPage;
+        }
+    }
+
+    ngAfterViewInit() {
+      this.items.changes.subscribe(() => {
+        console.log('changed');
+      });
     }
 
     public onItemListChange(event: any[]): void {
@@ -48,10 +60,19 @@ export class SelectionListScreenComponent extends PosScreen<SelectionListInterfa
 
       public onItemChange(event: any): void {
         this.index = this.screen.selectionList.indexOf(event);
+        this.scrollToItem();
         if (this.screen.selectionChangedAction && this.index !== this.lastSelection) {
           this.lastSelection = this.index;
           this.session.onAction(this.screen.selectionChangedAction, this.index);
         }
+      }
+
+      public scrollToItem() {
+        let indexToView = this.index;
+        if (this.screen.numberItemsPerPage !== 0) {
+          indexToView -= Math.trunc(this.index / this.screen.numberItemsPerPage) * this.screen.numberItemsPerPage;
+        }
+        this.items.toArray()[indexToView].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start'});
       }
 
       public doMenuItemAction(menuItem: IActionItem) {
