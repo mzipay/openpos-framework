@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
@@ -44,10 +43,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
     String incompatibleVersionMessage; 
 
     @Autowired(required = false)
-    private IConfigSelector configSelector;
-    
-    @Autowired
-    ApplicationContext applicationContext;
+    private IConfigSelector configSelector;    
 
     @Override
     public void onApplicationEvent(SessionSubscribedEvent event) {
@@ -121,8 +117,6 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
     }
 
     private void sendClientConfiguration(String appId, String nodeId, String sessionId) {
-        configSelector = applicationContext.getBean(IConfigSelector.class);
-
         if (configSelector != null) {
             String theme = configSelector.getTheme();
             logger.info("Config Selector Chose theme: {}", theme);
