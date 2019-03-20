@@ -16,6 +16,8 @@ public class SelectionListItem implements Serializable {
 
     private boolean enabled=true;
 
+    private String itemImageUrl;
+
     public SelectionListItem() {
         this.properties = new ArrayList<SelectionListItemDisplayProperty>();
     }
@@ -65,6 +67,14 @@ public class SelectionListItem implements Serializable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getItemImageUrl() {
+        return itemImageUrl;
+    }
+
+    public void setItemImageUrl(String itemImageUrl) {
+        this.itemImageUrl = itemImageUrl;
     }
 
 }
