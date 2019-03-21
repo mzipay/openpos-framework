@@ -1,11 +1,9 @@
 package org.jumpmind.pos.server.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.jumpmind.pos.server.config.PersonalizationParameter;
 import org.jumpmind.pos.server.config.PersonalizationParameters;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.util.web.ServerException;
@@ -71,7 +69,7 @@ public class MessageService implements IMessageService {
     @ResponseBody
     public String personalize() {
         logger.info("Received a personalization request");
-        String response = null;
+        String response = "[ ]";
         try {
             if (personalizationParameters != null) {
                 response = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(personalizationParameters.getParameters());
@@ -80,7 +78,6 @@ public class MessageService implements IMessageService {
             logger.error("Could not parse personalization properties");
         }
         
-        logger.info(response);
         return response;
     }
 
