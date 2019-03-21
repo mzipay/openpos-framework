@@ -72,6 +72,7 @@ test {
 
     //Dynamic exclude through property defined in the build.gradle file
     if (project.hasProperty('excludeTests')) {
+        println('Excluding tests: ' + project.property('excludeTests'));
         exclude project.property('excludeTests')
     }
 }
