@@ -2,6 +2,7 @@ package org.jumpmind.pos.server.service;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jumpmind.pos.server.config.MessageUtils;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 
@@ -24,9 +26,7 @@ public class SessionConnectListener implements ApplicationListener<SessionConnec
 
     Map<String, Boolean> sessionCompatible = Collections.synchronizedMap(new HashMap<>());
 
-    Map<String, String> sessionDeviceTypes = Collections.synchronizedMap(new HashMap<>());
-
-    Map<String, String> sessionBrandIds = Collections.synchronizedMap(new HashMap<>());
+    Map<String, List<String>> sessionPersonalizationResults = Collections.synchronizedMap(new HashMap<>());
     
     Map<String, Map<String, Object>> sessionQueryParamsMap = Collections.synchronizedMap(new HashMap<>());
 
@@ -41,14 +41,12 @@ public class SessionConnectListener implements ApplicationListener<SessionConnec
         logger.info("session connected: {}", sessionId);
         String authToken = getHeader(event.getMessage(), "authToken");
         String compatibilityVersion = getHeader(event.getMessage(), COMPATIBILITY_VERSION_HEADER);
-        String deviceType = getHeader(event.getMessage(), DEVICE_TYPE_HEADER);
-        String brandId = getHeader(event.getMessage(), BRAND_ID_HEADER);
+        List<String> personalizationResults = getHeaderList(event.getMessage(), PERSONALIZATION_RESULTS_HEADER);
         String queryParams = getHeader(event.getMessage(), QUERY_PARAMS_HEADER);
         sessionQueryParamsMap.put(sessionId, toQueryParams(queryParams));
         sessionAuthenticated.put(sessionId, serverAuthToken == null || serverAuthToken.equals(authToken));
         sessionCompatible.put(sessionId, serverCompatibilityVersion == null || serverCompatibilityVersion.equals(compatibilityVersion));
-        sessionDeviceTypes.put(sessionId, deviceType);
-        sessionBrandIds.put(sessionId, brandId);
+        sessionPersonalizationResults.put(sessionId, personalizationResults);
     }
     
     private Map<String,Object> toQueryParams(String json) {
@@ -61,6 +59,20 @@ public class SessionConnectListener implements ApplicationListener<SessionConnec
             return Collections.emptyMap();
         }
     }
+    
+    @SuppressWarnings("unchecked")
+    private List<String> getHeaderList(Message<?> message, String name) {
+        List<String> values = null;
+        String header = getHeader(message, name);
+        if (header != null) {
+            try {
+                values = DefaultObjectMapper.build().readValue(header, List.class);
+            } catch (Exception e) {
+                logger.error("Failed to parse personalization results", e);
+            }
+        }
+        return values;
+    }
 
     public boolean isSessionAuthenticated(String sessionId) {
         return this.sessionAuthenticated.get(sessionId) != null && this.sessionAuthenticated.get(sessionId);
@@ -70,14 +82,10 @@ public class SessionConnectListener implements ApplicationListener<SessionConnec
         return this.sessionCompatible.get(sessionId) != null && this.sessionCompatible.get(sessionId);
     }
 
-    public String getDeviceType(String sessionId) {
-        return sessionDeviceTypes.get(sessionId);
+    public List<String> getPersonalizationResults(String sessionId) {
+        return sessionPersonalizationResults.get(sessionId);
     }
 
-    public String getBrandId(String sessionId) {
-        return sessionBrandIds.get(sessionId);
-    }
-    
     public Map<String, Object> getQueryParams(String sessionId) {
         return sessionQueryParamsMap.get(sessionId);
     }

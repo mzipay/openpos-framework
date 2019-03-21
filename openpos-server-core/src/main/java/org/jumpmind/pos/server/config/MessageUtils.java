@@ -7,8 +7,7 @@ import org.springframework.messaging.Message;
 
 public interface MessageUtils {
     public final static String COMPATIBILITY_VERSION_HEADER = "compatibilityVersion";
-    public final static String DEVICE_TYPE_HEADER = "deviceType";
-    public final static String BRAND_ID_HEADER = "brandId";
+    public final static String PERSONALIZATION_RESULTS_HEADER = "personalizationResults";
     public final static String QUERY_PARAMS_HEADER = "queryParams";
     
     /**

@@ -2,6 +2,7 @@ package org.jumpmind.pos.core.service;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jumpmind.pos.core.flow.IStateManager;
@@ -14,6 +15,7 @@ import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.IconType;
 import org.jumpmind.pos.server.config.MessageUtils;
+import org.jumpmind.pos.server.config.PersonalizationParameters;
 import org.jumpmind.pos.server.config.SessionSubscribedEvent;
 import org.jumpmind.pos.server.service.IMessageService;
 import org.jumpmind.pos.server.service.SessionConnectListener;
@@ -42,6 +44,9 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
     
     @Value("${openpos.incompatible.version.message:The compatibility version of the client does not match the server}")
     String incompatibleVersionMessage; 
+    
+    @Autowired(required=false)
+    PersonalizationParameters personalizationParameters;
 
     @Autowired(required = false)
     private IConfigSelector configSelector;
@@ -71,11 +76,20 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             
             stateManagerContainer.setCurrentStateManager(stateManager);
             
+            List<String> personalizationResults = sessionAuthTracker.getPersonalizationResults(sessionId);
             Map<String, String> personizationProperties = new HashMap<>();
-            personizationProperties.put("brandId", sessionAuthTracker.getBrandId(sessionId));
-            personizationProperties.put("deviceType", sessionAuthTracker.getDeviceType(sessionId));
-            stateManager.getApplicationState().getScope().setScopeValue(ScopeType.Device, "personalizationProperties", personizationProperties);
-            
+            if (personalizationResults != null && personalizationParameters != null
+                    && personalizationParameters.getParameters() != null) {
+                for (int prop = 0; prop < personalizationResults.size()
+                        && prop < personalizationParameters.getParameters().size(); prop++) {
+                    String key = personalizationParameters.getParameters().get(prop).getProperty();
+                    String value = personalizationResults.get(prop);
+                    personizationProperties.put(key, value);
+                }
+            }
+            stateManager.getApplicationState().getScope().setScopeValue(ScopeType.Device, "personalizationProperties",
+                    personizationProperties);
+
             stateManager.setSessionAuthenticated(sessionId, sessionAuthTracker.isSessionAuthenticated(sessionId));
             stateManager.setSessionCompatible(sessionId, sessionAuthTracker.isSessionCompatible(sessionId));
 
