@@ -1,4 +1,7 @@
-import { Component} from '@angular/core';
+import { AfterViewInit } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { PersonalizationService } from '../../services';
 import { MessageProvider } from '../../../shared/providers/message.provider';
 @Component({
@@ -7,11 +10,17 @@ import { MessageProvider } from '../../../shared/providers/message.provider';
     styleUrls: ['./dynamic-screen.component.scss'],
     providers: [MessageProvider]
 })
-export class DynamicScreenComponent {
+export class DynamicScreenComponent implements AfterViewInit {
+
+    @ViewChild('focusArea') focusArea: ElementRef;
 
     constructor(private personalization: PersonalizationService, messageProvider: MessageProvider) {
         messageProvider.setMessageType('Screen');
     }
+
+    ngAfterViewInit() {
+        this.focusArea.nativeElement.focus();
+      }
 
     getTheme() {
         return this.personalization.getTheme();
