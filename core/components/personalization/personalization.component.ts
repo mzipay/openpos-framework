@@ -5,6 +5,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { SessionService } from '../../services';
 import { IScreen } from '../dynamic-screen/screen.interface';
 import { PersonalizationService } from '../../services/personalization.service';
+import { PersonalizationResponse } from '../../interfaces/personalization-response.interface';
 
 @Component({
     selector: 'app-personalization',
@@ -14,6 +15,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
 
     firstFormGroup: FormGroup;
     secondFormGroup: FormGroup;
+    response: PersonalizationResponse;
     checkTimeout: any;
 
     constructor(private log: Logger, private personalization: PersonalizationService, private session: SessionService, private formBuilder: FormBuilder, private http: HttpClient) {
@@ -25,22 +27,38 @@ export class PersonalizationComponent implements IScreen, OnInit {
             serverPort: ['', [Validators.required, , Validators.pattern('^[0-9]+$')]],
             sslEnabled: ['']
         }, { asyncValidator: this.serverValidator });
-        this.secondFormGroup = this.formBuilder.group({
+        this.updateSecondFormGroup();
+    }
+
+    updateSecondFormGroup() {
+        const formGroup = {
             storeNumber: ['', [Validators.required, , Validators.pattern('\\d{5}')]],
             deviceNumber: ['', [Validators.required, , Validators.pattern('\\d{3}')]],
-            deviceType: ['desktop', [Validators.required, , Validators.pattern('[a-zA-Z0-9]+')]],
-            brandId: ['default', [Validators.required, , Validators.pattern('[a-zA-Z]+')]]
-        });
+        };
+
+        if (this.response) {
+            const validator = [Validators.required, , Validators.pattern('[a-zA-Z0-9]+')];
+            for (const prop of this.response.properties) {
+                formGroup[prop.property] = [prop.defaultValue, validator];
+            }
+        }
+
+        this.secondFormGroup = this.formBuilder.group(formGroup);
     }
 
     show(screen: any): void {
     }
 
     public personalize() {
+        const personalizationProperties = [];
+        if (this.response) {
+            for (const prop of this.response.properties) {
+                personalizationProperties.push(this.secondFormGroup.get(prop.property).value);
+            }
+        }
         this.personalization.personalize(this.firstFormGroup.get('serverName').value, this.firstFormGroup.get('serverPort').value,
-            {storeId: this.secondFormGroup.get('storeNumber').value, deviceId: this.secondFormGroup.get('deviceNumber').value},
-            this.secondFormGroup.get('deviceType').value, this.secondFormGroup.get('brandId').value,
-            this.firstFormGroup.get('sslEnabled').value);
+            { storeId: this.secondFormGroup.get('storeNumber').value, deviceId: this.secondFormGroup.get('deviceNumber').value },
+            personalizationProperties, this.firstFormGroup.get('sslEnabled').value);
     }
 
     serverValidator = async (control: AbstractControl) => {
@@ -51,12 +69,13 @@ export class PersonalizationComponent implements IScreen, OnInit {
 
         return new Promise((resolve, reject) => {
             this.checkTimeout = setTimeout(async () => {
-                const result = await this.session.ping({serverName: serverName, serverPort: serverPort, useSsl: sslEnabled});
-                if (result.success) {
+                this.response = await this.session.requestPersonalization({ serverName: serverName, serverPort: serverPort, useSsl: sslEnabled });
+                if (this.response.success) {
+                    this.updateSecondFormGroup();
                     resolve(null);
                 } else {
-                    this.log.info(`Ping failed with error: ${result.message}`);
-                    resolve(result);
+                    this.log.info(`Personalization request failed with error: ${this.response.message}`);
+                    resolve(this.response);
                 }
             }, 1000);
         });

@@ -19,7 +19,7 @@ export class PersonalizationService {
     }
 
     public personalize(serverName: string, serverPort: string, node: string | {storeId: string, deviceId: string},
-        deviceType: string, brandId: string, sslEnabled?: boolean) {
+        personalizationResults?: string[], sslEnabled?: boolean) {
 
         let nodeId = '';
         if (typeof node === 'string') {
@@ -31,8 +31,9 @@ export class PersonalizationService {
         localStorage.setItem('serverName', serverName);
         localStorage.setItem('serverPort', serverPort);
         localStorage.setItem('nodeId', nodeId);
-        localStorage.setItem('deviceType', deviceType);
-        localStorage.setItem('brandId', brandId);
+        if (personalizationResults) {
+            localStorage.setItem('personalizationResults', JSON.stringify(personalizationResults));
+        }
         if (sslEnabled) {
             localStorage.setItem('sslEnabled', '' + sslEnabled);
         } else {
@@ -47,8 +48,7 @@ export class PersonalizationService {
         localStorage.removeItem('serverPort');
         localStorage.removeItem('nodeId');
         localStorage.removeItem('theme');
-        localStorage.removeItem('deviceType');
-        localStorage.removeItem('brandId');
+        localStorage.removeItem('personalizationResults');
         localStorage.removeItem('sslEnabled');
         this.setTheme(theme,  true);
     }
@@ -129,20 +129,12 @@ export class PersonalizationService {
         localStorage.setItem('nodeId', id);
     }
 
-    public getDeviceType(): string {
-        return localStorage.getItem('deviceType');
+    public getPersonalizationResults(): string {
+        return localStorage.getItem('personalizationResults');
     }
 
-    public setDeviceType(deviceType: string) {
-        localStorage.setItem('deviceType', deviceType);
-    }
-
-    public getBrandId(): string {
-        return localStorage.getItem('brandId');
-    }
-
-    public setBrandId(brandId: string) {
-        localStorage.setItem('brandId', brandId);
+    public setPersonalizationResults(personalizationResults: string) {
+        localStorage.setItem('personalizationResults', personalizationResults);
     }
 
     public refreshApp() {

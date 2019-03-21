@@ -26,6 +26,8 @@ import { AppInjector } from '../app-injector';
 import { HttpClient } from '@angular/common/http';
 import { PingParams } from '../interfaces/ping-params.interface';
 import { PingResult } from '../interfaces/ping-result.interface';
+import { PersonalizationResponse } from '../interfaces/personalization-response.interface';
+import { PersonalizationProperty } from '../interfaces/personalization-property.interface.';
 
 @Injectable({
     providedIn: 'root',
@@ -138,8 +140,7 @@ export class SessionService implements IMessageHandler<any> {
                 compatibilityVersion: Configuration.compatibilityVersion,
                 appId: this.appId,
                 nodeId: this.personalization.getNodeId(),
-                deviceType: this.personalization.getDeviceType(),
-                brandId: this.personalization.getBrandId(),
+                personalizationResults: this.personalization.getPersonalizationResults(),
                 queryParams: JSON.stringify(this.queryParams)
             },
             heartbeat_in: 0, // Typical value 0 - disabled
@@ -272,6 +273,44 @@ export class SessionService implements IMessageHandler<any> {
         if (pingError) {
             this.log.info('bad validation of ' + url + ' with an error message of :' + pingError.message);
             return { success: false, message: pingError.message };
+        }
+    }
+
+    public async requestPersonalization(pingParams?: PingParams): Promise<PersonalizationResponse> {
+        let url = '';
+        if (pingParams) {
+            let protocol = 'http://';
+            if (pingParams.useSsl) {
+                protocol = 'https://';
+            }
+            url = protocol + pingParams.serverName;
+            if (pingParams.serverPort) {
+                url = url + ':' + pingParams.serverPort;
+            }
+            url = url + '/personalize';
+
+        } else {
+            url = `${this.personalization.getServerBaseURL()}/personalize`;
+        }
+
+        this.log.info('Requesting Personalization with url: ' + url);
+
+        let personalizeError: any = null;
+        try {
+            const httpResult = await this.http.get<PersonalizationProperty[]>(url, {}).toPromise();
+            if (httpResult) {
+                this.log.info('Successful Personalization with url: ' + url);
+                return { success: true, properties: httpResult };
+            } else {
+                personalizeError = { message: '?' };
+            }
+        } catch (error) {
+            personalizeError = error;
+        }
+
+        if (personalizeError) {
+            this.log.info('bad validation of ' + url + ' with an error message of :' + personalizeError.message);
+            return { success: false, message: personalizeError.message };
         }
     }
 

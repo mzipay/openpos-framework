@@ -26,7 +26,7 @@
                 </form>
             </mat-step>
             <mat-step [stepControl]="secondFormGroup">
-                <form [formGroup]="secondFormGroup">
+                <form *ngIf="secondFormGroup" [formGroup]="secondFormGroup">
                     <ng-template matStepLabel>Enter device information</ng-template>
                     <mat-form-field>
                         <input matInput placeholder="Store Number" formControlName="storeNumber" required novalidate type="tel" pattern="[0-9]*">
@@ -34,24 +34,24 @@
                     <mat-form-field>
                         <input matInput placeholder="Device Number" formControlName="deviceNumber" required  novalidate type="tel" pattern="[0-9]*">
                     </mat-form-field>
-                    <mat-form-field>
-                        <input matInput placeholder="Device Type" formControlName="deviceType" required novalidate pattern="[a-zA-Z]*">
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input matInput placeholder="Brand ID" formControlName="brandId" required novalidate pattern="[a-zA-Z0-9]*">
-                    </mat-form-field>
+                    <ng-container *ngIf="response && response.properties">
+                        <mat-form-field *ngFor="let prop of response.properties">
+                            <input matInput placeholder="{{prop.label}}" formControlName="{{prop.property}}" required novalidate pattern="[a-zA-Z0-9]*">
+                        </mat-form-field>
+                    </ng-container>
                     <span class="warn" *ngIf="secondFormGroup.get('storeNumber').errors && secondFormGroup.get('storeNumber').errors.pattern ">
                         The store number must be a 5 digit number
                     </span>  
                     <span class="warn" *ngIf="secondFormGroup.get('deviceNumber').errors && secondFormGroup.get('deviceNumber').errors.pattern ">
                         The device number must be a 3 digit number
                     </span>
-                    <span class="warn" *ngIf="secondFormGroup.get('deviceType').errors && secondFormGroup.get('deviceType').errors.pattern ">
-                        The device type must contain only letters
-                    </span>
-                    <span class="warn" *ngIf="secondFormGroup.get('brandId').errors && secondFormGroup.get('brandId').errors.pattern ">
-                        The brand ID must contain only letters and digits
-                    </span>
+                    <ng-container *ngIf="response && response.properties">
+                        <ng-container *ngFor="let prop of response.properties">
+                            <span class="warn" *ngIf="secondFormGroup.get(prop.property).errors && secondFormGroup.get(prop.property).errors.pattern ">
+                                The device type must be alphanumeric
+                            </span>
+                        </ng-container>
+                    </ng-container>
                     <div>
                         <button mat-button matStepperPrevious>Back</button>
                         <button mat-button matStepperNext color='primary'>Next</button>
