@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -91,6 +93,8 @@ public class StateManager implements IStateManager {
     private Map<String, Boolean> sessionCompatible = new HashMap<>();
 
     private IErrorHandler errorHandler;
+    
+    private final AtomicInteger activeCalls = new AtomicInteger(0);
 
     public void init(String appId, String nodeId) {
         this.applicationState.setAppId(appId);
@@ -346,48 +350,58 @@ public class StateManager implements IStateManager {
     public void keepAlive() {
         lastInteractionTime.set(new Date());
     }
+    
+    public boolean isAtRest() {
+        return activeCalls.get() == 0;
+    }
 
     @Override
     public void doAction(Action action) {
         lastInteractionTime.set(new Date());
-
-        if (applicationState.getCurrentTransition() != null) {
-            applicationState.getCurrentTransition().handleAction(action);
-            return;
+        activeCalls.incrementAndGet();
+        
+        try {            
+            if (applicationState.getCurrentTransition() != null) {
+                applicationState.getCurrentTransition().handleAction(action);
+                return;
+            }
+            
+            FlowConfig flowConfig = applicationState.getCurrentContext().getFlowConfig();
+            
+            StateConfig stateConfig = applicationState.findStateConfig(flowConfig);
+            if (handleTerminatingState(action, stateConfig)) {
+                return;
+            }
+            
+            validateStateConfig(applicationState.getCurrentContext().getState(), stateConfig);
+            
+            Class<? extends IState> transitionStateClass = stateConfig.getActionToStateMapping().get(action.getName());
+            Class<? extends IState> globalTransitionStateClass = flowConfig.getActionToStateMapping().get(action.getName());
+            SubTransition subStateConfig = stateConfig.getActionToSubStateMapping().get(action.getName());
+            SubTransition globalSubStateConfig = flowConfig.getActionToSubStateMapping().get(action.getName());
+            
+            if (actionHandler.canHandleAction(applicationState.getCurrentContext().getState(), action)) {
+                handleAction(action);
+            } else if (transitionStateClass != null) {
+                transitionToState(action, transitionStateClass);
+            } else if (subStateConfig != null) {
+                transitionToSubState(action, subStateConfig);
+            } else if (actionHandler.canHandleAnyAction(applicationState.getCurrentContext().getState(), action)) {
+                actionHandler.handleAnyAction(this, applicationState.getCurrentContext().getState(), action);
+            } else if (globalTransitionStateClass != null) {
+                transitionToState(action, globalTransitionStateClass);
+            } else if (globalSubStateConfig != null) {
+                transitionToSubState(action, globalSubStateConfig);
+            } else {
+                throw new FlowException(String.format(
+                        "Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"...) defined in the flow config.",
+                        action.getName(), applicationState.getCurrentContext().getState().getClass().getName(), action.getName(),
+                        action.getName()));
+            }
+        } finally {
+            activeCalls.decrementAndGet();
         }
 
-        FlowConfig flowConfig = applicationState.getCurrentContext().getFlowConfig();
-
-        StateConfig stateConfig = applicationState.findStateConfig(flowConfig);
-        if (handleTerminatingState(action, stateConfig)) {
-            return;
-        }
-
-        validateStateConfig(applicationState.getCurrentContext().getState(), stateConfig);
-
-        Class<? extends IState> transitionStateClass = stateConfig.getActionToStateMapping().get(action.getName());
-        Class<? extends IState> globalTransitionStateClass = flowConfig.getActionToStateMapping().get(action.getName());
-        SubTransition subStateConfig = stateConfig.getActionToSubStateMapping().get(action.getName());
-        SubTransition globalSubStateConfig = flowConfig.getActionToSubStateMapping().get(action.getName());
-
-        if (actionHandler.canHandleAction(applicationState.getCurrentContext().getState(), action)) {
-            handleAction(action);
-        } else if (transitionStateClass != null) {
-            transitionToState(action, transitionStateClass);
-        } else if (subStateConfig != null) {
-            transitionToSubState(action, subStateConfig);
-        } else if (actionHandler.canHandleAnyAction(applicationState.getCurrentContext().getState(), action)) {
-            actionHandler.handleAnyAction(this, applicationState.getCurrentContext().getState(), action);
-        } else if (globalTransitionStateClass != null) {
-            transitionToState(action, globalTransitionStateClass);
-        } else if (globalSubStateConfig != null) {
-            transitionToSubState(action, globalSubStateConfig);
-        } else {
-            throw new FlowException(String.format(
-                    "Unexpected action \"%s\". Either no @ActionHandler %s.on%s() method found, or no withTransition(\"%s\"...) defined in the flow config.",
-                    action.getName(), applicationState.getCurrentContext().getState().getClass().getName(), action.getName(),
-                    action.getName()));
-        }
     }
 
     public void setScopeValue(ScopeType scopeType, String name, Object value) {

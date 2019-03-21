@@ -59,5 +59,6 @@ public interface IStateManager {
     public boolean areAllSessionsCompatible();
     public void registerQueryParams(Map<String,Object> queryParams);
     public Injector getInjector();
+    public boolean isAtRest();
     
 }
