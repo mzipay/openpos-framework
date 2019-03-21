@@ -95,6 +95,7 @@ public class StateManager implements IStateManager {
     private IErrorHandler errorHandler;
     
     private final AtomicInteger activeCalls = new AtomicInteger(0);
+    private final AtomicBoolean transitionRestFlag = new AtomicBoolean(false);
 
     public void init(String appId, String nodeId) {
         this.applicationState.setAppId(appId);
@@ -352,7 +353,7 @@ public class StateManager implements IStateManager {
     }
     
     public boolean isAtRest() {
-        return activeCalls.get() == 0;
+        return activeCalls.get() == 0 || transitionRestFlag.get();
     }
 
     @Override
@@ -401,7 +402,6 @@ public class StateManager implements IStateManager {
         } finally {
             activeCalls.decrementAndGet();
         }
-
     }
 
     public void setScopeValue(ScopeType scopeType, String name, Object value) {
@@ -633,5 +633,9 @@ public class StateManager implements IStateManager {
     
     public Injector getInjector() {
         return injector;
+    }
+    
+    public void setTransactionRestFlag(boolean transitionRestFlag) {
+        this.transitionRestFlag.set(transitionRestFlag);
     }
 }

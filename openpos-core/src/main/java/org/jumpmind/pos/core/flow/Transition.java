@@ -73,10 +73,13 @@ public class Transition {
 
     private void waitForEverybody() {
         try {
+            stateManager.setTransactionRestFlag(true);
             latch.await();
         } catch (InterruptedException ex) {
             throw new FlowException("Transition await interupted.", ex);
-        }    
+        } finally {
+            stateManager.setTransactionRestFlag(false);
+        }
     }
 
     protected boolean afterFirstStep() {
