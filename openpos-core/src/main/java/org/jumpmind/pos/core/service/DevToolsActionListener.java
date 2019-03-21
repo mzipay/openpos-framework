@@ -76,7 +76,7 @@ public class DevToolsActionListener implements IActionListener {
             Map<String, String> element = action.getData();
             String scopeId = element.get("ID");
             if (action.getName().contains("::Node")) {
-                stateManager.getApplicationState().getScope().removeNodeScope(scopeId);
+                stateManager.getApplicationState().getScope().removeDeviceScope(scopeId);
             } else if (action.getName().contains("::Session")) {
                 stateManager.getApplicationState().getScope().removeSessionScope(scopeId);
             } else if (action.getName().contains("::Conversation")) {
@@ -149,7 +149,7 @@ public class DevToolsActionListener implements IActionListener {
         try {
             Map<String, List<ScopeField>> scopes = new HashMap<>();
             scopes.put("ConversationScope", buildScope(sm.getApplicationState().getScope().getConversationScope()));
-            scopes.put("NodeScope", buildScope(sm.getApplicationState().getScope().getNodeScope()));
+            scopes.put("DeviceScope", buildScope(sm.getApplicationState().getScope().getDeviceScope()));
             scopes.put("SessionScope", buildScope(sm.getApplicationState().getScope().getSessionScope()));
             scopes.put("FlowScope", buildScope(sm.getApplicationState().getCurrentContext().getFlowScope()));
             scopes.put("ConfigScope", buildConfigScope(sm.getApplicationState().getCurrentContext().getFlowConfig().getConfigScope()));
@@ -199,7 +199,7 @@ public class DevToolsActionListener implements IActionListener {
             ApplicationState applicationState = applicationStateSerializer.deserialize(sm, filename);
             sm.setApplicationState(applicationState);
 //            screenService.setApplicationState(applicationState);
-            sm.getApplicationState().getScope().setNodeScope("stateManager", sm);
+            sm.getApplicationState().getScope().setDeviceScope("stateManager", sm);
             resumeState = true;
             logger.info("Loaded save state " + filename);
         } catch (FlowException ex) {

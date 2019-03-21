@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class Scope {
 
-    private Map<String, ScopeValue> nodeScope = new HashMap<String, ScopeValue>();
+    private Map<String, ScopeValue> deviceScope = new HashMap<String, ScopeValue>();
     private Map<String, ScopeValue> sessionScope = new HashMap<String, ScopeValue>();
     private Map<String, ScopeValue> conversationScope = new HashMap<String, ScopeValue>();
 
@@ -38,12 +38,12 @@ public class Scope {
         sessionScope.clear();
     }
     
-    public void clearNodeScope() {
-        nodeScope.clear();
+    public void clearDeviceScope() {
+        deviceScope.clear();
     }
 
-    public void removeNodeScope(String key) {
-    	nodeScope.remove(key);
+    public void removeDeviceScope(String key) {
+    	deviceScope.remove(key);
     }
     
     public void removeConversationScope(String key) {
@@ -58,14 +58,14 @@ public class Scope {
             return conversationScope.get(name);
         } else if (sessionScope.containsKey(name)) {
             return sessionScope.get(name);
-        } else if (nodeScope.containsKey(name)) {
-            return nodeScope.get(name);
+        } else if (deviceScope.containsKey(name)) {
+            return deviceScope.get(name);
         }
         return null;
     }
 
-    public void setNodeScope(String name, Object value) {
-        setScope(nodeScope, name, value);
+    public void setDeviceScope(String name, Object value) {
+        setScope(deviceScope, name, value);
     }
 
     public void setSessionScope(String name, Object value) {
@@ -89,7 +89,7 @@ public class Scope {
     public void setScopeValue(ScopeType scopeType, String name, Object value) {
         switch (scopeType) {
             case Device:
-                setNodeScope(name, value);
+                setDeviceScope(name, value);
                 break;
             case Session:
                 setSessionScope(name, value);
@@ -107,7 +107,7 @@ public class Scope {
     public ScopeValue getScopeValue(ScopeType scopeType, String name) {
         switch (scopeType) {
             case Device:
-                return getNodeScope().get(name);
+                return getDeviceScope().get(name);
             case Session:
                 return getSessionScope().get(name);
             case Conversation:
@@ -120,12 +120,12 @@ public class Scope {
         
     }
 
-    public Map<String, ScopeValue> getNodeScope() {
-        return nodeScope;
+    public Map<String, ScopeValue> getDeviceScope() {
+        return deviceScope;
     }
 
     public void setNodeScope(Map<String, ScopeValue> nodeScope) {
-        this.nodeScope = nodeScope;
+        this.deviceScope = nodeScope;
     }
 
     public Map<String, ScopeValue> getSessionScope() {

@@ -85,8 +85,8 @@ public class ApplicationStateSerializer {
     }
 
     public void filterApplicationStateForSerialization(ApplicationState appStateForSerialization) {
-        appStateForSerialization.getScope().getNodeScope().remove("stateManager");
-        Set<String> keys = new HashSet<>(appStateForSerialization.getScope().getNodeScope().keySet());
+        appStateForSerialization.getScope().getDeviceScope().remove("stateManager");
+        Set<String> keys = new HashSet<>(appStateForSerialization.getScope().getDeviceScope().keySet());
 
         /*
          * TODO didn't like the dependency on openpos-service just to get the
@@ -94,10 +94,10 @@ public class ApplicationStateSerializer {
          */
         Class<?> cacheInteface = getCacheInterface();
         for (String key : keys) {
-            Object value = appStateForSerialization.getScope().getNodeScope().get(key).getValue();
+            Object value = appStateForSerialization.getScope().getDeviceScope().get(key).getValue();
             if (value != null && (cacheInteface != null && cacheInteface.isAssignableFrom(value.getClass())
                     || value.getClass().toString().contains("ContextClient"))) {
-                appStateForSerialization.getScope().getNodeScope().remove(key);
+                appStateForSerialization.getScope().getDeviceScope().remove(key);
             }
         }
 
@@ -114,7 +114,7 @@ public class ApplicationStateSerializer {
     }
 
     public void rehydrateApplicationState(IStateManager stateManager, ApplicationState applicationState) {
-        applicationState.getScope().setNodeScope("stateManager", stateManager);
+        applicationState.getScope().setDeviceScope("stateManager", stateManager);
 
         stateManager.setApplicationState(applicationState);
         if (applicationState.getCurrentContext().getState() != null) {

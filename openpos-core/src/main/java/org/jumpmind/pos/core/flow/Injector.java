@@ -137,7 +137,7 @@ public class Injector {
                 } 
                 break;
             case Device:
-                value = scope.getNodeScope().get(name);
+                value = scope.getDeviceScope().get(name);
                 break;
             case Session:
                 value = scope.getSessionScope().get(name);
@@ -230,7 +230,7 @@ public class Injector {
         StringBuilder buff = new StringBuilder();
 
         try {
-            buff.append(reportScope("NODE SCOPE", scope.getNodeScope()));
+            buff.append(reportScope("DEVICE SCOPE", scope.getDeviceScope()));
             buff.append(reportScope("SESSION SCOPE", scope.getSessionScope()));
             buff.append(reportScope("CONVERSATION SCOPE", scope.getConversationScope()));
             buff.append(reportScope("FLOW SCOPE", currentContext.getFlowScope()));

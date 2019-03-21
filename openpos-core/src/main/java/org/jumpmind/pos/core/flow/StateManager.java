@@ -114,7 +114,7 @@ public class StateManager implements IStateManager {
             }
         }
 
-        applicationState.getScope().setNodeScope("stateManager", this);
+        applicationState.getScope().setDeviceScope("stateManager", this);
 
         if (resumeState) {
             refreshScreen();
