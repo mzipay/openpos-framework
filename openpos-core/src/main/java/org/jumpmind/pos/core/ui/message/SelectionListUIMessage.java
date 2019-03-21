@@ -20,6 +20,7 @@ public class SelectionListUIMessage extends UIMessage {
     private int defaultSelectItemIndex = 0;
     private String selectionChangedAction;
     private String instructions;
+    private int numberItemsPerPage;
     
     public SelectionListUIMessage() {
         this.setScreenType(UIMessageType.SELECTION_LIST);
@@ -101,5 +102,13 @@ public class SelectionListUIMessage extends UIMessage {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    public int getNumberItemsPerPage() {
+        return  numberItemsPerPage;
+    }
+
+    public void setNumberItemsPerPage(int numberItemsPerPage) {
+        this.numberItemsPerPage = numberItemsPerPage;
     }
 }

@@ -21,6 +21,7 @@ import org.jumpmind.pos.server.service.IMessageService;
 import org.jumpmind.pos.server.service.SessionConnectListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -31,26 +32,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class SessionSubscribedListener implements ApplicationListener<SessionSubscribedEvent>, MessageUtils {
 
-    final Logger logger = LoggerFactory.getLogger(getClass());
+    final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     IStateManagerContainer stateManagerContainer;
 
     @Autowired
     IMessageService messageService;
-    
+
     @Autowired
     SessionConnectListener sessionAuthTracker;
-    
+
     @Value("${openpos.incompatible.version.message:The compatibility version of the client does not match the server}")
     String incompatibleVersionMessage; 
     
     @Autowired(required=false)
     PersonalizationParameters personalizationParameters;
 
-    @Autowired(required = false)
-    private IConfigSelector configSelector;
-    
     @Autowired
     ApplicationContext applicationContext;
 
@@ -64,7 +62,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
         String nodeId = topicName.substring(topicName.indexOf("/node/") + "/node/".length());
         String appId = topicName.substring(topicName.indexOf("/app/") + "/app/".length(), topicName.indexOf("/node/"));
         try {
-            logger.info("session {} subscribed to {}", sessionId, topicName);
+            log.info("session {} subscribed to {}", sessionId, topicName);
             IStateManager stateManager = stateManagerContainer.retrieve(appId, nodeId);
             boolean created = false;
             if (stateManager == null) {
@@ -73,7 +71,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             } else {
                 stateManager.registerQueryParams(queryParams);
             }
-            
+
             stateManagerContainer.setCurrentStateManager(stateManager);
             
             List<String> personalizationResults = sessionAuthTracker.getPersonalizationResults(sessionId);
@@ -101,10 +99,13 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
                 errorDialog.setMessage(Arrays.asList("The client and server authentication tokens did not match"));
                 messageService.sendMessage(appId, nodeId, errorDialog);
             } else if (!stateManager.isSessionCompatible(sessionId)) {
-                logger.warn("Client compatiblity version of '{}' for nodeId '{}' is not compatible with the server", compatibilityVersion, nodeId);
+                log.warn("Client compatiblity version of '{}' for nodeId '{}' is not compatible with the server", compatibilityVersion,
+                        nodeId);
                 DialogScreen errorDialog = new DialogScreen();
-                // If there is no compatibility version, the client is an older client that used the type attribute
-                // instead of the screenType attribute for the screen type value. In that case need to set the type attribute or
+                // If there is no compatibility version, the client is an older
+                // client that used the type attribute
+                // instead of the screenType attribute for the screen type
+                // value. In that case need to set the type attribute or
                 // the dialog will not display on older clients
                 if (compatibilityVersion == null) {
                     errorDialog.setType(errorDialog.getScreenType());
@@ -117,12 +118,12 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             } else {
                 sendClientConfiguration(appId, nodeId, sessionId);
                 if (!created) {
-                   stateManager.refreshScreen();
+                    stateManager.refreshScreen();
                 }
             }
 
         } catch (Exception ex) {
-            logger.error("Failed to subscribe to " + topicName, ex);
+            log.error("Failed to subscribe to " + topicName, ex);
             DialogScreen errorDialog = new DialogScreen();
             errorDialog.asDialog(new DialogProperties(false));
             errorDialog.setIcon(IconType.Error);
@@ -135,14 +136,18 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
     }
 
     private void sendClientConfiguration(String appId, String nodeId, String sessionId) {
-        configSelector = applicationContext.getBean(IConfigSelector.class);
-
-        if (configSelector != null) {
-            String theme = configSelector.getTheme();
-            logger.info("Config Selector Chose theme: {}", theme);
-            ClientConfiguration config = configSelector.getClientConfig();
-            ConfigChangedMessage configMessage = new ConfigChangedMessage(theme, config);
-            messageService.sendMessage(appId, nodeId, configMessage);
+        try {
+            IConfigSelector configSelector = applicationContext.getBean(IConfigSelector.class);
+            if (configSelector != null) {
+                String theme = configSelector.getTheme();
+                log.info("Config Selector Chose theme: {}", theme);
+                ClientConfiguration config = configSelector.getClientConfig();
+                ConfigChangedMessage configMessage = new ConfigChangedMessage(theme, config);
+                messageService.sendMessage(appId, nodeId, configMessage);
+            }
+        } catch (BeansException e) {
+            log.info("An {} is not configured.  WIll not be sending client configuration to the client",
+                    IConfigSelector.class.getSimpleName());
         }
     }
 
