@@ -6,9 +6,9 @@
             <app-selectable-item-list fxFlex="0 1 100%" [configuration]="listConfig" (selectedItemChange)="onItemChange($event)"
                 (selectedItemListChange)="onItemListChange($event)" [defaultSelect]="screen.defaultSelect">
                 <ng-template let-item>
-                    <div #items gdAreas="img info" gdColumns="1fr 60%" [ngClass]="{'muted-color' : !item.enabled}">
-                        <div gdArea="img" *ngIf="item.itemImageUrl">
-                            <img src="{{item.itemImageUrl}}" alt="{{item.title}}" class="item-card-image">
+                    <div #items gdAreas="img info" gdColumns="auto 2fr" [ngClass]="{'muted-color' : !item.enabled}">
+                        <div gdArea="img">
+                            <img *ngIf="item.itemImageUrl" src="{{item.itemImageUrl}}" alt="{{item.title}}" class="item-card-image">
                         </div>
                         <div gdArea="info">
                             <div fxShow fxHide.xs="true" fxHide.lg="false" *ngIf="item.title" class="text-sm">{{item.title}}</div>

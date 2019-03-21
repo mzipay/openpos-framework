@@ -12,18 +12,18 @@
                     <app-selectable-item-list [configuration]="listConfig" (selectedItemChange)="onItemChange($event)"
                         (selectedItemListChange)="onItemListChange($event)" [defaultSelect]="screen.defaultSelect">
                         <ng-template let-item >
-                            <div #items gdAreas="img info" gdColumns="1fr 4fr" [ngClass]="{'muted-color' : !item.enabled}">
-                                <div gdArea="img" *ngIf="item.itemImageUrl">
-                                    <img src="{{item.itemImageUrl}}" alt="{{item.title}}" class="item-card-image">
+                            <div #items gdAreas="img info" gdColumns="auto 4fr" [ngClass]="{'muted-color' : !item.enabled}">
+                                <div gdArea="img">
+                                    <img  *ngIf="item.itemImageUrl" src="{{item.itemImageUrl}}" alt="{{item.title}}" class="item-card-image">
                                 </div>
                                 <div gdArea="info">
-                                        <span *ngIf="item.title" class="text-sm item-title">{{item.title}}</span>
-                                        <div *ngIf="item.properties" fxLayout="row wrap" fxLayoutAlign="space-between">
-                                            <div *ngFor="let property of item.properties">
-                                                <div *ngIf="property.label" class="item-property-label">{{property.label}}</div>
-                                                <p class="item-property-line" *ngFor="let line of property.lines">{{line}}</p>
-                                            </div>
+                                    <span *ngIf="item.title" class="text-sm item-title">{{item.title}}</span>
+                                    <div *ngIf="item.properties" fxLayout="row wrap" fxLayoutAlign="space-between">
+                                        <div *ngFor="let property of item.properties">
+                                            <div *ngIf="property.label" class="item-property-label">{{property.label}}</div>
+                                            <p class="item-property-line" *ngFor="let line of property.lines">{{line}}</p>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </ng-template>
