@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.jumpmind.pos.server.config.MessageUtils;
+import org.jumpmind.pos.server.config.PersonalizationParameter;
+import org.jumpmind.pos.server.config.PersonalizationParameters;
 import org.jumpmind.pos.util.DefaultObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.Message;
@@ -26,7 +29,7 @@ public class SessionConnectListener implements ApplicationListener<SessionConnec
 
     Map<String, Boolean> sessionCompatible = Collections.synchronizedMap(new HashMap<>());
 
-    Map<String, List<String>> sessionPersonalizationResults = Collections.synchronizedMap(new HashMap<>());
+    Map<String, Map<String, String>> sessionPersonalizationResults = Collections.synchronizedMap(new HashMap<>());
     
     Map<String, Map<String, Object>> sessionQueryParamsMap = Collections.synchronizedMap(new HashMap<>());
 
@@ -35,18 +38,34 @@ public class SessionConnectListener implements ApplicationListener<SessionConnec
 
     @Value("${openpos.compatibility.version:#{null}}")
     String serverCompatibilityVersion;
+    
+    @Autowired(required=false)
+    PersonalizationParameters personalizationParameters;
 
     public void onApplicationEvent(SessionConnectEvent event) {
         String sessionId = (String) event.getMessage().getHeaders().get("simpSessionId");
         logger.info("session connected: {}", sessionId);
         String authToken = getHeader(event.getMessage(), "authToken");
         String compatibilityVersion = getHeader(event.getMessage(), COMPATIBILITY_VERSION_HEADER);
-        List<String> personalizationResults = getHeaderList(event.getMessage(), PERSONALIZATION_RESULTS_HEADER);
+        
         String queryParams = getHeader(event.getMessage(), QUERY_PARAMS_HEADER);
         sessionQueryParamsMap.put(sessionId, toQueryParams(queryParams));
         sessionAuthenticated.put(sessionId, serverAuthToken == null || serverAuthToken.equals(authToken));
         sessionCompatible.put(sessionId, serverCompatibilityVersion == null || serverCompatibilityVersion.equals(compatibilityVersion));
-        sessionPersonalizationResults.put(sessionId, personalizationResults);
+        
+        setPersonalizationResults(sessionId, event);
+    }
+    
+    private void setPersonalizationResults(String sessionId, SessionConnectEvent event) {
+        if (personalizationParameters != null && personalizationParameters.getParameters() != null) {
+            Map<String, String> personalizationResults = new HashMap<>();
+            for (PersonalizationParameter param : personalizationParameters.getParameters()) {
+                String prop = param.getProperty();
+                String value = getHeader(event.getMessage(), prop);
+                personalizationResults.put(prop, value);
+            }
+            sessionPersonalizationResults.put(sessionId, personalizationResults);
+        }
     }
     
     private Map<String,Object> toQueryParams(String json) {
@@ -59,20 +78,6 @@ public class SessionConnectListener implements ApplicationListener<SessionConnec
             return Collections.emptyMap();
         }
     }
-    
-    @SuppressWarnings("unchecked")
-    private List<String> getHeaderList(Message<?> message, String name) {
-        List<String> values = null;
-        String header = getHeader(message, name);
-        if (header != null) {
-            try {
-                values = DefaultObjectMapper.build().readValue(header, List.class);
-            } catch (Exception e) {
-                logger.error("Failed to parse personalization results", e);
-            }
-        }
-        return values;
-    }
 
     public boolean isSessionAuthenticated(String sessionId) {
         return this.sessionAuthenticated.get(sessionId) != null && this.sessionAuthenticated.get(sessionId);
@@ -82,7 +87,7 @@ public class SessionConnectListener implements ApplicationListener<SessionConnec
         return this.sessionCompatible.get(sessionId) != null && this.sessionCompatible.get(sessionId);
     }
 
-    public List<String> getPersonalizationResults(String sessionId) {
+    public Map<String, String> getPersonalizationResults(String sessionId) {
         return sessionPersonalizationResults.get(sessionId);
     }
 

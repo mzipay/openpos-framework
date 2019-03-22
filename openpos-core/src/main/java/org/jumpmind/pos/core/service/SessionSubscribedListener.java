@@ -74,17 +74,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
 
             stateManagerContainer.setCurrentStateManager(stateManager);
             
-            List<String> personalizationResults = sessionAuthTracker.getPersonalizationResults(sessionId);
-            Map<String, String> personizationProperties = new HashMap<>();
-            if (personalizationResults != null && personalizationParameters != null
-                    && personalizationParameters.getParameters() != null) {
-                for (int prop = 0; prop < personalizationResults.size()
-                        && prop < personalizationParameters.getParameters().size(); prop++) {
-                    String key = personalizationParameters.getParameters().get(prop).getProperty();
-                    String value = personalizationResults.get(prop);
-                    personizationProperties.put(key, value);
-                }
-            }
+            Map<String, String> personizationProperties = sessionAuthTracker.getPersonalizationResults(sessionId);
             stateManager.getApplicationState().getScope().setScopeValue(ScopeType.Device, "personalizationProperties",
                     personizationProperties);
 
