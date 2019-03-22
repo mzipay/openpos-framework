@@ -3,7 +3,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         concurrent: {
             target: {
-                tasks: [['wait', 'link', 'watch-bundle'], 'watch-build'],
+                tasks: [['wait', 'watch-bundle'], 'watch-build'],
                 options: {
                     logConcurrentOutput: true
                 }
@@ -15,10 +15,6 @@ module.exports = function(grunt) {
             },
             bundle: {
                 cmd: 'npm run watch-scss'
-            },
-            link: {
-                cwd: 'dist/openpos-client-core-lib',
-                cmd: 'npm link'
             }
         }
     });
@@ -29,7 +25,6 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['concurrent:target']);
     grunt.registerTask('watch-build', ['exec:build']);
     grunt.registerTask('watch-bundle', ['exec:bundle']);
-    grunt.registerTask('link', ['exec:link']);
     grunt.registerTask('wait', 'wait:pause', function() {
         var done = this.async();
         setTimeout(function() {
