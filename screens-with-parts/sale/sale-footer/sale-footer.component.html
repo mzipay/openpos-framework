@@ -1,6 +1,7 @@
 <mat-card class="page-content-card dark">
-    <mat-card-content class="text-lg" gdAreas="items total  button" gdColumns="auto 1fr auto" gdGap="10px">
+    <mat-card-content class="text-lg" gdAreas="items span total button" gdColumns="auto 1fr auto auto" gdGap="10px">
         <div gdArea="items" gdGridAlign="center center" class="text-md">{{screenData.itemCount}}</div>
+        <div gdArea="span"></div>  
         <div gdArea="total" gdGridAlign="center center" gdGap="8px" gdAreas="label value">
             <span *ngIf="screenData.grandTotal">{{screenData.grandTotal.label}}</span>
             <span *ngIf="screenData.grandTotal">{{screenData.grandTotal.value | valueFormatter:screenData.grandTotal.valueFormatter}}</span>
