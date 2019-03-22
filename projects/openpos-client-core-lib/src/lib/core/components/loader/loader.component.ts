@@ -44,7 +44,6 @@ export class LoaderComponent implements OnInit, OnDestroy, IMessageHandler<ILoad
     private updateLoading(message: ILoading, force: boolean) {
         let stateChanging = false;
         if (message.cancel) {
-            this.log.info(`cancelling loading`);
             stateChanging = this.loading;
             this.loading = false;
             this.show = false;
@@ -58,7 +57,6 @@ export class LoaderComponent implements OnInit, OnDestroy, IMessageHandler<ILoad
         }
 
         if (stateChanging) {
-            this.log.info('loading state changed');
             this.changeRef.detectChanges();
         }
     }
