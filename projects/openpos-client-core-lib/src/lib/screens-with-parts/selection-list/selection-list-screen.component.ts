@@ -59,7 +59,9 @@ export class SelectionListScreenComponent extends PosScreen<SelectionListInterfa
 
       public onItemChange(event: any): void {
         this.index = this.screen.selectionList.indexOf(event);
-        this.scrollToItem();
+        if (this.items) {
+          this.scrollToItem();
+        }
         if (this.screen.selectionChangedAction && this.index !== this.lastSelection) {
           this.lastSelection = this.index;
           this.session.onAction(this.screen.selectionChangedAction, this.index);
