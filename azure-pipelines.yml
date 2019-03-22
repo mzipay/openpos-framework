@@ -14,9 +14,38 @@ steps:
   inputs:
     versionSpec: '8.x'
   displayName: 'Install Node.js'
+  
+- task: npmAuthenticate@0
+  inputs:
+    workingFile: '.npmrc'
+    customEndpoint: 'npm'  
 
 - script: |
     npm install -g @angular/cli
+    npm install scss-bundle -g
     npm install
     ng test openpos-client-core-lib
-  displayName: 'test'
+    ng build openpos-client-core-lib
+    scss-bundle -c projects/openpos-client-core-lib/scss-bundle.config.json
+  displayName: 'Test, Build, & Pack'
+  continueOnError: true
+  failOnStderr: false
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit' # Options: JUnit, NUnit, VSTest, xUnit, cTest
+    testResultsFiles: '**/TESTS.xml' 
+    #searchFolder: '$(System.DefaultWorkingDirectory)' # Optional
+    #mergeTestResults: false # Optional
+    failTaskOnFailedTests: true # Optional
+    #testRunTitle: # Optional
+    #buildPlatform: # Optional
+    #buildConfiguration: # Optional
+    #publishRunAttachments: true # Optional      
+
+- script: |
+    npm install -g publish-if-not-published
+    cp .npmrc dist/openpos-client-core-lib
+    cd dist/openpos-client-core-lib
+    publish-if-not-published
+  displayName: 'Publish if not already published'
