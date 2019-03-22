@@ -6,13 +6,15 @@ import { IconConstants } from '../screens-deprecated/icon.constants';
 import { SelectionListScreenComponent } from './selection-list/selection-list-screen.component';
 import { SelectionListScreenDialogComponent } from './selection-list/selection-list-screen-dialog.component';
 import { TemporarilySharedScreens } from '../screens-deprecated/temporarily-shared-screens.module';
+import { GenericDialogComponent } from './dialog/generic-dialog.component';
 
 const screens = [
-        SelectionListScreenComponent
+        SelectionListScreenComponent,
     ];
 
 const dialogs = [
-        SelectionListScreenDialogComponent
+        SelectionListScreenDialogComponent,
+        GenericDialogComponent
     ];
 
 @NgModule({
