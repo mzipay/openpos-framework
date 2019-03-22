@@ -10,7 +10,12 @@ import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.service.IKeyMappingService;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+@Component
+// ProxyMode so this becomes a DeviceScope bean when being @Autowired into a list of interfaces
+@Scope(proxyMode = org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS, value = "device")
 public class KeyMappingScreenPropertyStrategy implements IScreenPropertyStrategy {
 
 	@Autowired

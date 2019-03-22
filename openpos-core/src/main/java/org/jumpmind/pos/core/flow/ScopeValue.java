@@ -67,5 +67,10 @@ public class ScopeValue {
         }
         this.value = value;
     }
+    
+    @Override
+    public String toString() {
+        return (value == null ? "null" : value.toString()) + "(ScopeValue)";
+    }
 
 }

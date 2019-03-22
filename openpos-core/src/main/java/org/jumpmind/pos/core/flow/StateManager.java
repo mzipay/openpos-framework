@@ -35,12 +35,14 @@ import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.config.SubTransition;
 import org.jumpmind.pos.core.screen.Toast;
 import org.jumpmind.pos.core.service.IScreenService;
+import org.jumpmind.pos.core.service.spring.DeviceScope;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.server.model.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component()
@@ -50,6 +52,9 @@ public class StateManager implements IStateManager {
     final Logger logger = LoggerFactory.getLogger(getClass());
     final Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
     private final StateManagerLogger stateManagerLogger = new StateManagerLogger(loggerGraphical);
+    
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Autowired
     private IScreenService screenService;
@@ -295,6 +300,19 @@ public class StateManager implements IStateManager {
     
     public void performInjections(Object stateOrStep) {
         injector.performInjections(stateOrStep, applicationState.getScope(), applicationState.getCurrentContext());
+        refreshDeviceScope();
+    }
+
+    protected void refreshDeviceScope() {
+        for (String name : applicationState.getScope().getDeviceScope().keySet()) {
+            Object value = applicationState.getScopeValue(ScopeType.Device, name);
+            performOutjections(value);
+            if (DeviceScope.isDeviceScope(name)) {
+                performInjectionsOnSpringBean(value);
+            } else {
+                injector.performInjections(value, applicationState.getScope(), applicationState.getCurrentContext());
+            }
+        }
     }
 
     public void performOutjections(Object stateOrStep) {
@@ -516,23 +534,33 @@ public class StateManager implements IStateManager {
     public void endConversation() {
         applicationState.getScope().clearConversationScope();
         clearScopeOnStates(ScopeType.Conversation);
+        clearScopeOnDeviceScopeBeans(ScopeType.Conversation);
+        refreshDeviceScope();
     }
 
     private void clearScopeOnStates(ScopeType scopeType) {
         List<StateContext> stack = applicationState.getStateStack();
         for (StateContext stateContext : stack) {
             IState state = stateContext.getState();
-            injector.injectNulls(state, scopeType);
+            injector.resetInjections(state, scopeType);
         }
 
-        injector.injectNulls(applicationState.getCurrentContext().getState(), scopeType);
-
+        injector.resetInjections(applicationState.getCurrentContext().getState(), scopeType);
     }
+    
+    private void clearScopeOnDeviceScopeBeans(ScopeType scopeType) {
+        for (String name : applicationState.getScope().getDeviceScope().keySet()) {
+            Object value = applicationState.getScopeValue(ScopeType.Device, name);
+            injector.resetInjections(value, scopeType);
+        }        
+    }    
 
     @Override
     public void endSession() {
         applicationState.getScope().clearSessionScope();
         clearScopeOnStates(ScopeType.Session);
+        clearScopeOnDeviceScopeBeans(ScopeType.Session);
+        refreshDeviceScope();
     }
 
     public void setInitialFlowConfig(FlowConfig initialFlowConfig) {

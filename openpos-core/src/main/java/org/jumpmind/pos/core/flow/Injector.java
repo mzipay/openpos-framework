@@ -39,7 +39,7 @@ public class Injector {
         performInjectionsImpl(target, scope, currentContext, DONT_AUTOWIRE);
     }
 
-    public void injectNulls(Object target, ScopeType scopeType) {
+    public void resetInjections(Object target, ScopeType scopeType) {
         Class<?> targetClass = target.getClass();
         while (targetClass != null) {
             Field[] fields = targetClass.getDeclaredFields();
@@ -64,11 +64,19 @@ public class Injector {
                     nullField = true;
                 }
 
-                if (nullField && !field.getType().isPrimitive()) {
+                if (nullField) {
                     try {
-                        field.set(target, null);
+                        if (!field.getType().isPrimitive()) {                        
+                            field.set(target, null);
+                        } else if (field.getType().equals(int.class)){
+                            field.set(target, 0);
+                        } else if (field.getType().equals(boolean.class)){
+                            field.set(target, false);
+                        } else {
+                            throw new FlowException("Unhandled type: " + field.getType() + " on target " + target);
+                        }
                     } catch (Exception ex) {
-                        throw new FlowException("Failed to set target field " + field + " to null ", ex);
+                        throw new FlowException("Failed to reset target field " + field + " to null/0", ex);
                     }
                 }
             }

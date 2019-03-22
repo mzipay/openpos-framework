@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Component("fileSystemContentProvider")
 @ConfigurationProperties(prefix = "openpos.ui.content.file-system")
-@Scope("prototype")
+@Scope("device")
 public class FileSystemContentProvider implements IContentProvider {
 
     List<String> providerProperties = new ArrayList<>();

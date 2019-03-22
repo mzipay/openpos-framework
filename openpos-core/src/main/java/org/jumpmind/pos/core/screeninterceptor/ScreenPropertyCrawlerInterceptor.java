@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@Scope("prototype")
+@Scope("device")
 public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
 
     Logger logger = LoggerFactory.getLogger(getClass());

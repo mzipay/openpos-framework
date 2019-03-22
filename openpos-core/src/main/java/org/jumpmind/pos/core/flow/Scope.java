@@ -20,14 +20,15 @@
  */
 package org.jumpmind.pos.core.flow;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Scope {
 
-    private Map<String, ScopeValue> deviceScope = new HashMap<String, ScopeValue>();
-    private Map<String, ScopeValue> sessionScope = new HashMap<String, ScopeValue>();
-    private Map<String, ScopeValue> conversationScope = new HashMap<String, ScopeValue>();
+    private Map<String, ScopeValue> deviceScope = Collections.synchronizedMap(new HashMap<String, ScopeValue>());
+    private Map<String, ScopeValue> sessionScope = Collections.synchronizedMap(new HashMap<String, ScopeValue>());
+    private Map<String, ScopeValue> conversationScope = Collections.synchronizedMap(new HashMap<String, ScopeValue>());
 
     public void clearConversationScope() {
         conversationScope.clear();
