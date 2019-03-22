@@ -13,6 +13,9 @@ import { Converter, RegexReplaceExtension, FilterExtension, ConverterOptions } f
  * `&&asome text&&` or  `&&Asome text&&`: color text with accent color (uses `accent` css class)
  *
  * `&&psome text&&` or  `&&Psome text&&`: color text with primary color (uses `primary` css class)
+ *
+ * `&bsome text&` or  `&Bsome text&`: makes text bold and is compatible with centering of text
+ *
  */
 @Injectable({
     providedIn: 'root',
@@ -25,9 +28,10 @@ export class MarkdownService {
         const centerExt: FilterExtension = {
             type: 'lang',
             filter: (text: string, converter: Converter, options?: ConverterOptions) => {
-                    return text.replace(/>>(.*)<</g, '<div class="text-center">$1</div>');
+                    return text.replace(/>>(.*)<</g, '<p class="text-center">$1</p>');
             }
         };
+
         const largeTextExt: FilterExtension = {
             type: 'lang',
             filter: (text: string, converter: Converter, options?: ConverterOptions) => {
@@ -52,6 +56,15 @@ export class MarkdownService {
                     return text.replace(/&&[Aa](.*)&&/g, '<span class="accent">$1</span>');
             }
         };
+        // showdown does not like combining its inline markup with some of our custom markup
+        // such as centering.  This works around that issue and allows combining of bold with
+        // our custom markup
+        const boldWorkaroundExt: FilterExtension = {
+            type: 'lang',
+            filter: (text: string, converter: Converter, options?: ConverterOptions) => {
+                    return text.replace(/\&[bB](.*)&/g, '<strong>$1</strong>');
+            }
+        };
 
         this.converter = new Converter();
         this.converter.addExtension(centerExt, 'centerExt');
@@ -59,6 +72,7 @@ export class MarkdownService {
         this.converter.addExtension(largeTextExt, 'largeTextExt');
         this.converter.addExtension(primaryColorExt, 'primaryColorExt');
         this.converter.addExtension(accentColorExt, 'accentColorExt');
+        this.converter.addExtension(boldWorkaroundExt, 'boldWorkAroundExt');
     }
 
 

@@ -405,7 +405,8 @@ export class SessionService implements IMessageHandler<any> {
                 if (confirm.hasOwnProperty('message')) {
                     confirmD = <IConfirmationDialog>confirm;
                 } else {
-                    confirmD = { title: '', message: <string>confirm, cancelButtonName: 'No', confirmButtonName: 'Yes' };
+                    confirmD = { title: '', message: <string>confirm, cancelButtonName: 'No',
+                    confirmButtonName: 'Yes', cancelAction: null, confirmAction: null };
                 }
                 const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
                 dialogRef.componentInstance.confirmDialog = confirmD;
