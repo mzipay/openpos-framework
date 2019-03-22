@@ -125,6 +125,27 @@ export class SessionService implements IMessageHandler<any> {
     public connected(): boolean {
         return this.stompService && this.stompService.connected();
     }
+    private appendPersonalizationProperties(headers: any) {
+        const personalizationProperties = this.personalization.getPersonalizationProperties();
+        if (personalizationProperties && headers) {
+            const keys = Array.from(personalizationProperties.keys());
+            for (const key of keys) {
+                headers[key] = personalizationProperties.get(key);
+            }
+        }
+    }
+
+    private getHeaders(): any {
+        const headers = {
+            authToken: this.authToken,
+            compatibilityVersion: Configuration.compatibilityVersion,
+            appId: this.appId,
+            nodeId: this.personalization.getNodeId(),
+            queryParams: JSON.stringify(this.queryParams)
+        };
+        this.appendPersonalizationProperties(headers);
+        return headers;
+    }
 
     public subscribe() {
         if (this.subscription) {
@@ -133,21 +154,16 @@ export class SessionService implements IMessageHandler<any> {
 
         const url = this.personalization.getWebsocketUrl();
         this.log.info('creating new stomp service at: ' + url);
+
         this.stompService.config = {
             url: url,
-            headers: {
-                authToken: this.authToken,
-                compatibilityVersion: Configuration.compatibilityVersion,
-                appId: this.appId,
-                nodeId: this.personalization.getNodeId(),
-                personalizationResults: this.personalization.getPersonalizationResults(),
-                queryParams: JSON.stringify(this.queryParams)
-            },
+            headers: this.getHeaders(),
             heartbeat_in: 0, // Typical value 0 - disabled
             heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
             reconnect_delay: 250,  // Typical value is 5000, 0 disables.
             debug: this.stompDebug
         };
+
         this.stompService.initAndConnect();
 
         const currentTopic = this.buildTopicName();

@@ -52,10 +52,10 @@ export class PersonalizationComponent implements IScreen, OnInit {
     }
 
     public personalize() {
-        const personalizationProperties = [];
+        const personalizationProperties = new Map<string, string>();
         if (this.response) {
             for (const prop of this.response.properties) {
-                personalizationProperties.push(this.secondFormGroup.get(prop.property).value);
+                personalizationProperties.set(prop.property, this.secondFormGroup.get(prop.property).value);
             }
         }
         this.personalization.personalize(this.firstFormGroup.get('serverName').value, this.firstFormGroup.get('serverPort').value,
