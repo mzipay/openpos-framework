@@ -236,7 +236,7 @@ export class SessionService implements IMessageHandler<any> {
 
     private buildIncompatibleVersionScreen(): any {
         return {
-            type: 'Screen',
+            type: 'Dialog',
             screenType: 'Dialog',
             template: { dialog: true, type: 'BlankWithBar' },
             dialogProperties: { closeable: false },
