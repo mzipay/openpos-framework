@@ -1,32 +1,15 @@
 # OpenposClientCoreLib
 
-This is the core library for openpos and contains all of the common functionality and screen for open pos. 
+This is the parent project for OpenPos Client Core Lib that orchestrats the building and packaging of the core library as well as running the test suite.
+Code for the library can be found in `projects\openpos-client-core-lib\src\lib`.
 
-## Add Openpos-client-core-lib to package.json
-To use this library add to following to your dependencies in `package.json`
-```json
-"@jumpmind/openpos-client-core-lib": "github:JumpMind/openpos-client-core-lib"
-```
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.5.
 
-## Development Setup
-If you are making changes to the core library you'll want to link your client application to openpos-client-core-lib by the following steps in order to make the development life cycle quicker.
+## Develop
 
-Run the grunt command from the openpos-client-core-lib directory.  If grunt is not installed, install it by running:
+## Build
 
-`npm install grunt --save-dev`
+There are 2 components to building this library, building and minifying the angular files and bundling the SASS theme files into a single flat scss file. This normally will be done by the build server but can be done manually one time by running `npm run build-openpos-lib`. This will execute `ng build openpos-client-core-lib` followed by `scss-bundle -c projects/openpos-client-core-lib/scss-bundle.config.json`. This does a production build that places the build artifacts in `/dist/openpos-client-core-lib`
 
-The grunt task will copy core lib changes out to a common location and then it will link that location to npm.
+## Publishing
 
-Lastly, from your client application run `npm link @jumpmind/openpos-client-core-lib` to add a link to openpos-client-core-lib in your client node_modules.
-
-## Debugging the core library
-In your launch.json file configuration section the following to change the mapping from the client node modules to the core source code
-```json
-"sourceMapPathOverrides": {
-      "webpack:/<path-to-client>/node_modules/openpos-core/*": "<path-to-open-pos.git>/openpos-client-core-lib/src/app/openpos-core/*"    
-  }
-```
-
-## Contributing changes
-
-If you want to contribute changes you can fork this project.  When you want to contribute code back make a push request back to the original project.
