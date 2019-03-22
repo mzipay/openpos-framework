@@ -445,7 +445,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
     public onDevRestartNode(): Promise<{ success: boolean, message: string }> {
         const prom = new Promise<{ success: boolean, message: string }>((resolve, reject) => {
             const port = this.personalization.getServerPort();
-            const nodeId = this.personalization.getNodeId().toString();
+            const nodeId = this.personalization.getDeviceId().toString();
             const url = `${this.personalization.getServerBaseURL()}/register/restart/node/${nodeId}`;
             const httpClient = this.httpClient;
             httpClient.get(url).subscribe(response => {

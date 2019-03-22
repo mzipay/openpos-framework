@@ -18,19 +18,13 @@ export class PersonalizationService {
     constructor(private log: Logger ) {
     }
 
-    public personalize(serverName: string, serverPort: string, node: string | { storeId: string, deviceId: string },
+    public personalize(serverName: string, serverPort: string, deviceId: string,
                        personalizationProperties?: Map<string, string>, sslEnabled?: boolean) {
 
-        let nodeId = '';
-        if (typeof node === 'string') {
-            nodeId = node;
-        } else {
-            nodeId = node.storeId + '-' + node.deviceId;
-        }
-        this.log.info(`personalizing with server: ${serverName}, port: ${serverPort}, nodeid: ${nodeId}`);
+        this.log.info(`personalizing with server: ${serverName}, port: ${serverPort}, deviceId: ${deviceId}`);
         localStorage.setItem('serverName', serverName);
         localStorage.setItem('serverPort', serverPort);
-        localStorage.setItem('nodeId', nodeId);
+        localStorage.setItem('deviceId', deviceId);
         this.setPersonalizationProperties(personalizationProperties);
 
         if (sslEnabled) {
@@ -71,9 +65,9 @@ export class PersonalizationService {
         const theme = this.getTheme();
         localStorage.removeItem('serverName');
         localStorage.removeItem('serverPort');
-        localStorage.removeItem('nodeId');
+        localStorage.removeItem('deviceId');
         localStorage.removeItem('theme');
-        this.removePersonalizationProperties()
+        this.removePersonalizationProperties();
         localStorage.removeItem('sslEnabled');
         this.setTheme(theme, true);
     }
@@ -161,12 +155,12 @@ export class PersonalizationService {
         return localStorage.getItem('serverPort');
     }
 
-    public getNodeId(): string {
-        return localStorage.getItem('nodeId');
+    public getDeviceId(): string {
+        return localStorage.getItem('deviceId');
     }
 
-    public setNodeId(id: string) {
-        localStorage.setItem('nodeId', id);
+    public setDeviceId(id: string) {
+        localStorage.setItem('deviceId', id);
     }
 
     public getPersonalizationResults(): string {
@@ -182,7 +176,7 @@ export class PersonalizationService {
     }
 
     public isPersonalized(): boolean {
-        if (this.getServerName() && this.getNodeId() && this.getServerPort()) {
+        if (this.getServerName() && this.getDeviceId() && this.getServerPort()) {
             return true;
         } else {
             return false;

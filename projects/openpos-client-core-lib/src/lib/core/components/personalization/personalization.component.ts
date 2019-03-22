@@ -34,8 +34,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
 
     updateSecondFormGroup() {
         const formGroup = {
-            storeNumber: ['', [Validators.required, , Validators.pattern('\\d{5}')]],
-            deviceNumber: ['', [Validators.required, , Validators.pattern('\\d{3}')]],
+            deviceId: ['', [Validators.required, , Validators.pattern('[a-zA-Z0-9\-]+')]]
         };
 
         if (this.response) {
@@ -59,8 +58,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
             }
         }
         this.personalization.personalize(this.firstFormGroup.get('serverName').value, this.firstFormGroup.get('serverPort').value,
-            { storeId: this.secondFormGroup.get('storeNumber').value, deviceId: this.secondFormGroup.get('deviceNumber').value },
-            personalizationProperties, this.firstFormGroup.get('sslEnabled').value);
+            this.secondFormGroup.get('deviceId').value, personalizationProperties, this.firstFormGroup.get('sslEnabled').value);
     }
 
     serverValidator = async (control: AbstractControl) => {

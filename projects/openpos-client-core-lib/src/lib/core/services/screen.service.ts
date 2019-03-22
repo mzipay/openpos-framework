@@ -49,7 +49,7 @@ export class ScreenService {
     public getFieldValues(fieldId: string, searchTerm?: string): Observable<any> {
         const url: string = this.personalization.getApiServerBaseURL() + '/app/'
             + this.session.getAppId() + '/node/'
-            + this.personalization.getNodeId() + '/control/'
+            + this.personalization.getDeviceId() + '/control/'
             + fieldId;
 
         const httpParams = {};

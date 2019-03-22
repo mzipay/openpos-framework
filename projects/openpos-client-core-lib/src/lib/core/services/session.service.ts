@@ -103,7 +103,7 @@ export class SessionService implements IMessageHandler<any> {
     }
 
     private buildTopicName(): string {
-        return '/topic/app/' + this.appId + '/node/' + this.personalization.getNodeId();
+        return '/topic/app/' + this.appId + '/node/' + this.personalization.getDeviceId();
     }
 
     public setAuthToken(token: string) {
@@ -140,7 +140,7 @@ export class SessionService implements IMessageHandler<any> {
             authToken: this.authToken,
             compatibilityVersion: Configuration.compatibilityVersion,
             appId: this.appId,
-            nodeId: this.personalization.getNodeId(),
+            deviceId: this.personalization.getDeviceId(),
             queryParams: JSON.stringify(this.queryParams)
         };
         this.appendPersonalizationProperties(headers);
@@ -350,7 +350,7 @@ export class SessionService implements IMessageHandler<any> {
         const sendResponseBackToServer: Function = () => {
             // tslint:disable-next-line:max-line-length
             this.log.info(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
-            this.stompService.publish(`/app/device/app/${this.appId}/node/${this.personalization.getNodeId()}/device/${deviceResponse.deviceId}`,
+            this.stompService.publish(`/app/device/app/${this.appId}/node/${this.personalization.getDeviceId()}/device/${deviceResponse.deviceId}`,
                 JSON.stringify(deviceResponse));
         };
 
@@ -494,15 +494,15 @@ export class SessionService implements IMessageHandler<any> {
             this.log.info(`Blocked action '${actionString}' because app is in background.`);
             return false;
         }
-        const nodeId = this.personalization.getNodeId();
-        if (this.appId && nodeId) {
+        const deviceId = this.personalization.getDeviceId();
+        if (this.appId && deviceId) {
             this.log.info(`Publishing action '${actionString}' of type '${type}' to server...`);
-            this.stompService.publish('/app/action/app/' + this.appId + '/node/' + nodeId,
+            this.stompService.publish('/app/action/app/' + this.appId + '/node/' + deviceId,
                 JSON.stringify({ name: actionString, type: type, data: payload }));
             return true;
         } else {
             this.log.info(`Can't publish action '${actionString}' of type '${type}' ` +
-                `due to undefined App ID (${this.appId}) or Node Id (${nodeId})`);
+                `due to undefined App ID (${this.appId}) or Device ID (${deviceId})`);
             return false;
         }
     }

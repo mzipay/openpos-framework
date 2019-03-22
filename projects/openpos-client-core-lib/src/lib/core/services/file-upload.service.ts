@@ -28,7 +28,7 @@ export class FileUploadService {
             this.log.info(`File upload endpoint url: ${url}`);
 
             const formData = new FormData();
-            formData.append('nodeId', this.personalization.getNodeId().toString());
+            formData.append('nodeId', this.personalization.getDeviceId().toString());
             formData.append('targetContext', context);
             formData.append('filename', filename);
             try {

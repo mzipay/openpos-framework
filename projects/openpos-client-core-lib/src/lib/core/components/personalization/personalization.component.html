@@ -11,15 +11,15 @@
                         <input matInput placeholder="Server Port" formControlName="serverPort" required novalidate type="tel" pattern="[0-9]*">
                     </mat-form-field>
                     <mat-checkbox formControlName="sslEnabled">SSL?</mat-checkbox>
-                    <span *ngIf="firstFormGroup.status === 'PENDING'">
+                    <div *ngIf="firstFormGroup.status === 'PENDING'">
                         Trying to ping server ...
-                    </span>
-                    <span class="warn" *ngIf="firstFormGroup.errors && firstFormGroup.errors.message">
+                    </div>
+                    <div class="warn" *ngIf="firstFormGroup.errors && firstFormGroup.errors.message">
                         Could not ping the server: {{firstFormGroup.errors.message}}
-                    </span>
-                    <span class="warn" *ngIf="firstFormGroup.get('serverPort').errors && firstFormGroup.get('serverPort').errors.pattern ">
+                    </div>
+                    <div class="warn" *ngIf="firstFormGroup.get('serverPort').errors && firstFormGroup.get('serverPort').errors.pattern ">
                         The port should be numbers only
-                    </span>                        
+                    </div>                        
                     <div>
                         <button mat-button matStepperNext color='primary'>Next</button>
                     </div>
@@ -29,27 +29,24 @@
                 <form *ngIf="secondFormGroup" [formGroup]="secondFormGroup">
                     <ng-template matStepLabel>Enter device information</ng-template>
                     <mat-form-field>
-                        <input matInput placeholder="Store Number" formControlName="storeNumber" required novalidate type="tel" pattern="[0-9]*">
+                        <input matInput placeholder="Device ID" formControlName="deviceId" required novalidate type="tel" pattern="[a-zA-Z0-9\-]+">
                     </mat-form-field>
-                    <mat-form-field>
-                        <input matInput placeholder="Device Number" formControlName="deviceNumber" required  novalidate type="tel" pattern="[0-9]*">
-                    </mat-form-field>
+
                     <ng-container *ngIf="response && response.properties">
                         <mat-form-field *ngFor="let prop of response.properties">
                             <input matInput placeholder="{{prop.label}}" formControlName="{{prop.property}}" required novalidate pattern="[a-zA-Z0-9]*">
                         </mat-form-field>
                     </ng-container>
-                    <span class="warn" *ngIf="secondFormGroup.get('storeNumber').errors && secondFormGroup.get('storeNumber').errors.pattern ">
-                        The store number must be a 5 digit number
-                    </span>  
-                    <span class="warn" *ngIf="secondFormGroup.get('deviceNumber').errors && secondFormGroup.get('deviceNumber').errors.pattern ">
-                        The device number must be a 3 digit number
-                    </span>
+
+                    <div class="warn" *ngIf="secondFormGroup.get('deviceId').errors && secondFormGroup.get('deviceId').errors.pattern">
+                        The Device ID must be a alphanumeric
+                    </div>  
+
                     <ng-container *ngIf="response && response.properties">
                         <ng-container *ngFor="let prop of response.properties">
-                            <span class="warn" *ngIf="secondFormGroup.get(prop.property).errors && secondFormGroup.get(prop.property).errors.pattern ">
-                                The device type must be alphanumeric
-                            </span>
+                            <div class="warn" *ngIf="secondFormGroup.get(prop.property).errors && secondFormGroup.get(prop.property).errors.pattern">
+                                The personalization properties must be alphanumeric
+                            </div>
                         </ng-container>
                     </ng-container>
                     <div>
