@@ -18,8 +18,8 @@ export class PersonalizationService {
     constructor(private log: Logger ) {
     }
 
-    public personalize(serverName: string, serverPort: string, node: string | {storeId: string, deviceId: string},
-        personalizationResults?: string[], sslEnabled?: boolean) {
+    public personalize(serverName: string, serverPort: string, node: string | { storeId: string, deviceId: string },
+                       personalizationProperties?: Map<string, string>, sslEnabled?: boolean) {
 
         let nodeId = '';
         if (typeof node === 'string') {
@@ -31,9 +31,8 @@ export class PersonalizationService {
         localStorage.setItem('serverName', serverName);
         localStorage.setItem('serverPort', serverPort);
         localStorage.setItem('nodeId', nodeId);
-        if (personalizationResults) {
-            localStorage.setItem('personalizationResults', JSON.stringify(personalizationResults));
-        }
+        this.setPersonalizationProperties(personalizationProperties);
+
         if (sslEnabled) {
             localStorage.setItem('sslEnabled', '' + sslEnabled);
         } else {
@@ -42,15 +41,56 @@ export class PersonalizationService {
         this.serverBaseUrl = null; // will be regenerated on next fetch
     }
 
+    private setPersonalizationProperties(personalizationProperties?: Map<string, string>) {
+
+        const keys = Array.from(personalizationProperties.keys());
+
+        localStorage.setItem('personalizationProperties', JSON.stringify(keys));
+
+        if (personalizationProperties) {
+            for (const key of keys) {
+                localStorage.setItem(key, personalizationProperties.get(key));
+            }
+        }
+    }
+
+    private removePersonalizationProperties() {
+        const keyString = localStorage.getItem('personalizationProperties');
+        if (keyString) {
+            const keys: string[] = JSON.parse(keyString);
+            if (keys) {
+                for (const key of keys) {
+                    localStorage.removeItem(key);
+                }
+            }
+        }
+        localStorage.removeItem('personalizationProperties');
+    }
+
     public dePersonalize() {
         const theme = this.getTheme();
         localStorage.removeItem('serverName');
         localStorage.removeItem('serverPort');
         localStorage.removeItem('nodeId');
         localStorage.removeItem('theme');
-        localStorage.removeItem('personalizationResults');
+        this.removePersonalizationProperties()
         localStorage.removeItem('sslEnabled');
-        this.setTheme(theme,  true);
+        this.setTheme(theme, true);
+    }
+
+    public getPersonalizationProperties(): Map<string, string> {
+        const map = new Map<string, string>();
+        const keyString = localStorage.getItem('personalizationProperties');
+        if (keyString) {
+            const keys: string[] = JSON.parse(keyString);
+            if (keys) {
+                for (const key of keys) {
+                    const value = localStorage.getItem(key);
+                    map.set(key, value);
+                }
+            }
+        }
+        return map;
     }
 
     public getWebsocketUrl(): string {
