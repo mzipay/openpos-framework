@@ -6,6 +6,7 @@ import { SessionService } from '../../services';
 import { IScreen } from '../dynamic-screen/screen.interface';
 import { PersonalizationService } from '../../services/personalization.service';
 import { PersonalizationResponse } from '../../interfaces/personalization-response.interface';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
 @Component({
     selector: 'app-personalization',
@@ -18,7 +19,8 @@ export class PersonalizationComponent implements IScreen, OnInit {
     response: PersonalizationResponse;
     checkTimeout: any;
 
-    constructor(private log: Logger, private personalization: PersonalizationService, private session: SessionService, private formBuilder: FormBuilder, private http: HttpClient) {
+    constructor(private log: Logger, private personalization: PersonalizationService, private session: SessionService, private formBuilder: FormBuilder, private http: HttpClient, overlayContainer: OverlayContainer) {
+        overlayContainer.getContainerElement().classList.add('default-theme');
     }
 
     ngOnInit() {
