@@ -47,6 +47,7 @@ import { SelectionListDialogComponent } from './selection-list/selection-list-di
 import { DataTableComponent } from './data-table/data-table.component';
 import { AutoCompleteAddressComponent } from './auto-complete-address/auto-complete-address.component';
 import { TemporarilySharedScreens } from './temporarily-shared-screens.module';
+import { DefaultDialogComponent } from './dialog/default-dialog.component';
 const screens = [
     BasicItemSearchComponent,
     ChooseOptionsComponent,
@@ -87,7 +88,8 @@ const dialogs = [
     LoginDialogComponent,
     VersionComponent,
     PromptWithOptionsDialogComponent,
-    SelectionListDialogComponent
+    SelectionListDialogComponent,
+    DefaultDialogComponent
 ];
 
 const templates = [

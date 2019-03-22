@@ -5,11 +5,7 @@ import { MatDialogRef } from '@angular/material';
 import { IActionItem } from '../../core';
 import { ILine } from './line.interface';
 import { PosScreen } from '../pos-screen/pos-screen.component';
-import { DialogComponent } from '../../shared/decorators/dialog-component.decorator';
 
-@DialogComponent({
-    name: 'Dialog'
-})
 @Component({
   selector: 'app-dialog',
   templateUrl: './default-dialog.component.html',

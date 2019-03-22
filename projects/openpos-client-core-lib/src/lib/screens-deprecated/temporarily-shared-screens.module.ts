@@ -35,7 +35,6 @@ const screens = [
 
 const dialogs = [
         ChooseOptionsDialogComponent,
-        DefaultDialogComponent,
         DynamicFormDialogComponent,
         LoadingDialogComponent,
         MultipleDynamicFormDialogComponent,
