@@ -81,8 +81,8 @@ public class MessageService implements IMessageService {
         return response;
     }
 
-    @MessageMapping("action/app/{appId}/node/{nodeId}")
-    public void action(@DestinationVariable String appId, @DestinationVariable String nodeId, @Payload Action action, Message<?> message) {
+    @MessageMapping("action/app/{appId}/node/{deviceId}")
+    public void action(@DestinationVariable String appId, @DestinationVariable String deviceId, @Payload Action action, Message<?> message) {
         if (action.getType() == null) {
             throw new ServerException("Message/action must have a type. " + message);
         }        
@@ -91,7 +91,7 @@ public class MessageService implements IMessageService {
             if (action.getType() != null && actionListener.getRegisteredTypes() != null &&
                     actionListener.getRegisteredTypes().contains(action.getType())) {
                 handled = true;
-                actionListener.actionOccured(appId, nodeId, action);
+                actionListener.actionOccured(appId, deviceId, action);
             }
         }
         
@@ -102,16 +102,16 @@ public class MessageService implements IMessageService {
     }
 
     @Override
-    public void sendMessage(String appId, String nodeId, org.jumpmind.pos.util.model.Message message) {
+    public void sendMessage(String appId, String deviceId, org.jumpmind.pos.util.model.Message message) {
         try {
             StringBuilder topic = new StringBuilder(128);
-            topic.append("/topic/app/").append(appId).append("/node/").append(nodeId);
+            topic.append("/topic/app/").append(appId).append("/node/").append(deviceId);
             byte[] json = messageToJson(message).getBytes("UTF-8");
             this.template.send(topic.toString(), MessageBuilder.withPayload(json).build());
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new RuntimeException("Failed to publish message for node: " + nodeId + " " + message, ex);
+            throw new RuntimeException("Failed to publish message for deviceId: " + deviceId + " " + message, ex);
         }
     }
     
