@@ -1,6 +1,6 @@
 {
   "name": "@jumpmind/openpos-client-core-lib",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Core Library for openpos client",
   "author": "Jumpmind",
   "license": "GPLv3",
