@@ -1,3 +1,4 @@
+import { KebabMenuComponent } from './components/kebab-menu/kebab-menu.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -71,34 +72,43 @@ import {
     IconFabButtonComponent,
     ReceiptCardComponent,
     KebabButtonComponent,
-    KebabMenuComponent,
     IconSquareButtonComponent,
     DisplayPropertyComponent,
     TransactionItemListComponent,
     GridTableComponent,
 } from './components';
 import { SafePipe } from './pipes/safe.pipe';
-import { PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe, ListLimitPipe, MarkdownFormatterPipe, ImageUrlPipe, BackgroundImageUrlPipe } from './pipes';
+import {
+    PhonePipe, HourMinSecPipe, LocalizedDatePipe, ValueFormatterPipe, POSCurrencyPipe, StringListFilterPipe,
+    ListLimitPipe, MarkdownFormatterPipe, ImageUrlPipe, BackgroundImageUrlPipe
+} from './pipes';
 import { DynamicListControlComponent } from './components/dynamic-list-control/dynamic-list-control.component';
-import { BaconStripComponent, ScanOrSearchComponent, StatusStripComponent, SausageLinksComponent, DynamicFormPartComponent, DialogHeaderComponent } from './screen-parts';
+import {
+    BaconStripComponent, ScanOrSearchComponent, StatusStripComponent,
+    SausageLinksComponent, DynamicFormPartComponent, DialogHeaderComponent
+} from './screen-parts';
 import { SideNavComponent, WaffleComponent } from './layout-components';
 import { KeyPressSourceDirective } from './directives/keypress-source.directive';
 import { SystemStatusDialogComponent } from './components/system-status/system-status-dialog.component';
-import { SellLinkedCustomerComponent } from '../screens-deprecated/templates/sell-template/sell-linked-customer/sell-linked-customer.component';
-import { SellStatusSectionComponent } from '../screens-deprecated/templates/sell-template/sell-status-section/sell-status-section.component';
+// tslint:disable-next-line:import-spacing
+import { SellLinkedCustomerComponent }
+    from '../screens-deprecated/templates/sell-template/sell-linked-customer/sell-linked-customer.component';
+// tslint:disable-next-line:import-spacing
+import { SellStatusSectionComponent }
+    from '../screens-deprecated/templates/sell-template/sell-status-section/sell-status-section.component';
 import { SaleFooterComponent } from '../screens-with-parts/sale/sale-footer/sale-footer.component';
 import { SaleItemListComponent } from '../screens-with-parts/sale/sale-item-list/sale-item-list.component';
 
 const screenParts = [
-        DynamicFormPartComponent,
-        StatusStripComponent,
-        SausageLinksComponent,
-        ScanOrSearchComponent,
-        BaconStripComponent,
-        DialogHeaderComponent,
-        SaleFooterComponent,
-        SaleItemListComponent
-    ];
+    DynamicFormPartComponent,
+    StatusStripComponent,
+    SausageLinksComponent,
+    ScanOrSearchComponent,
+    BaconStripComponent,
+    DialogHeaderComponent,
+    SaleFooterComponent,
+    SaleItemListComponent
+];
 
 const components = [
     PromptInputComponent,
@@ -198,6 +208,9 @@ const pipes = [
         ...screenParts,
         ...pipes
     ],
+    entryComponents: [
+        KebabMenuComponent
+    ],
     imports: [
         BrowserModule,
         FormsModule,
@@ -228,4 +241,4 @@ const pipes = [
         ...pipes
     ]
 })
-export class SharedModule {}
+export class SharedModule { }
