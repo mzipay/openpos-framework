@@ -69,6 +69,7 @@ public class StateManagerContainer implements IStateManagerContainer {
         Map<String, StateManager> stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
         if (stateManagersByNodeId != null) {
             IStateManager stateManager = stateManagersByNodeId.get(deviceId);
+            setCurrentStateManager(stateManager);
             return stateManager;
         } else {
             return null;
