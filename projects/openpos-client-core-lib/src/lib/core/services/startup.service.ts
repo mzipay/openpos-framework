@@ -66,7 +66,7 @@ export class StartupService implements CanActivate {
         this.logTaskOrder(list);
 
         // Get an array of task observables and attach task name to messages and errors
-        const tasks = list.map( task => task.execute( { route: route, state: state }).pipe(
+        const tasks = list.map( task => task.execute( { route, state }).pipe(
             map( message => `${task.name}: ${message}`),
             catchError( error => throwError(`${task.name}: ${error}`))) );
 
