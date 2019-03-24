@@ -20,6 +20,7 @@ import org.jumpmind.pos.server.service.SessionConnectListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -133,8 +134,8 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
                 ConfigChangedMessage configMessage = new ConfigChangedMessage(theme, config);
                 messageService.sendMessage(appId, deviceId, configMessage);
             }
-        } catch (BeansException e) {
-            log.info("An {} is not configured.  WIll not be sending client configuration to the client",
+        } catch (NoSuchBeanDefinitionException e) {
+            log.info("An {} is not configured.  Will not be sending client configuration to the client",
                     IConfigSelector.class.getSimpleName());
         }
     }
