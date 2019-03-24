@@ -19,7 +19,8 @@ export class PersonalizationComponent implements IScreen, OnInit {
     response: PersonalizationResponse;
     checkTimeout: any;
 
-    constructor(private log: Logger, private personalization: PersonalizationService, private session: SessionService, private formBuilder: FormBuilder, private http: HttpClient, overlayContainer: OverlayContainer) {
+    constructor(private log: Logger, private personalization: PersonalizationService, private session: SessionService, 
+                private formBuilder: FormBuilder, private http: HttpClient, overlayContainer: OverlayContainer) {
         overlayContainer.getContainerElement().classList.add('default-theme');
     }
 

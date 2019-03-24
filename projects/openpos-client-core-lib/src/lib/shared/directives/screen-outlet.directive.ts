@@ -46,7 +46,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         private log: Logger,
         private personalization: PersonalizationService,
         public screenService: ScreenService,
-        private _viewContainerRef: ViewContainerRef,
+        private viewContainerRef: ViewContainerRef,
         public session: SessionService,
         public configurationService: ConfigurationService,
         public overlayContainer: OverlayContainer,
@@ -58,7 +58,8 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         this.updateTemplateAndScreen();
         this.subscriptions.add(this.session.getMessages('Screen').subscribe((message) => this.handle(message)));
         this.subscriptions.add(this.session.getMessages('Connected').subscribe((message) => this.handle(new BlankScreen())));
-        this.subscriptions.add(this.session.getMessages('ConfigChanged').subscribe(message => this.configurationService.updateConfig(message)));
+        this.subscriptions.add(this.session.getMessages('ConfigChanged').
+          subscribe(message => this.configurationService.updateConfig(message)));
     }
 
     ngOnDestroy(): void {
@@ -100,7 +101,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
                 screenToCreate = this.templateTypeName = screen.template.type;
             }
 
-            this._viewContainerRef.clear();
+            this.viewContainerRef.clear();
             if (!!this._componentRef) {
                 this._componentRef.destroy();
             }
@@ -110,12 +111,14 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
             // Create our screen component
             const componentFactory = this.screenService.resolveScreen(screenToCreate, this.theme);
-            this._componentRef = this._viewContainerRef.createComponent(componentFactory, this._viewContainerRef.length, this._viewContainerRef.parentInjector);
+            this._componentRef = this.viewContainerRef.createComponent(componentFactory, 
+                this.viewContainerRef.length, this.viewContainerRef.parentInjector);
 
             // If we accept an inner screen meaning we are a template, install the screen
             if (this._componentRef.instance.installScreen) {
                 this.installedTemplate = this._componentRef.instance as AbstractTemplate<any>;
-                this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(this.screenTypeName, this.theme)) as IScreen;
+                this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(
+                    this.screenTypeName, this.theme)) as IScreen;
             }
 
             if (this.personalization.getTheme() !== this.currentTheme) {
@@ -137,15 +140,17 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         this.dialogService.closeDialog(true);
 
         // Output the componentRef and screen to the training-wrapper
-        this.componentEmitter.emit({ componentRef: this._componentRef, screen: screen });
+        this.componentEmitter.emit({ componentRef: this._componentRef, screen });
     }
 
     protected updateTheme(theme: string) {
         this.log.info('updating theme to ' + theme);
         this.overlayContainer.getContainerElement().classList.remove(this.currentTheme);
+        this.overlayContainer.getContainerElement().classList.remove('default-theme');
         this.overlayContainer.getContainerElement().classList.add(theme);
         const parent = this.renderer.parentNode(this._componentRef.location.nativeElement);
         this.renderer.removeClass(parent, this.currentTheme);
+        this.renderer.removeClass(parent, 'default-theme');
         this.renderer.addClass(parent, theme);
         this.currentTheme = theme;
     }
