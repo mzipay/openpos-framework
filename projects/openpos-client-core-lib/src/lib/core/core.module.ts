@@ -37,8 +37,6 @@ import { DynamicScreenComponent } from './components/dynamic-screen/dynamic-scre
 import { LoaderComponent } from './components/loader/loader.component';
 import { StatusBarStatusControlComponent } from '../shared/components/status-bar-status-control/status-bar-status-control.component';
 import { STATUS_BAR_STATUS_CONTROL_COMPONENT } from '../shared/components/status-bar/status-bar.component';
-import { KebabMenuComponent } from './components/kebab-menu/kebab-menu.component';
-
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,
@@ -46,8 +44,7 @@ import { KebabMenuComponent } from './components/kebab-menu/kebab-menu.component
         StartupComponent,
         StartupFailedComponent,
         DialogContentComponent,
-        StatusBarStatusControlComponent,
-        KebabMenuComponent
+        StatusBarStatusControlComponent
     ],
     declarations: [
         OpenposAppComponent,
@@ -59,8 +56,7 @@ import { KebabMenuComponent } from './components/kebab-menu/kebab-menu.component
         PersonalizationComponent,
         StartupComponent,
         StartupFailedComponent,
-        StatusBarStatusControlComponent,
-        KebabMenuComponent
+        StatusBarStatusControlComponent
     ],
     imports: [
         SharedModule,

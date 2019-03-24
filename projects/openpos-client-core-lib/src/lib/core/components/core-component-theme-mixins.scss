@@ -1,7 +1,0 @@
-
-@import './kebab-menu/kebab-menu-theme';
-
-@mixin openpos-core-component-theme-mixins($theme) {
-    @include kebab-menu-theme($theme);
-
-}

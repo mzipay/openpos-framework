@@ -1,4 +1,3 @@
-import { KebabMenuComponent } from './components/kebab-menu/kebab-menu.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -98,6 +97,7 @@ import { SellStatusSectionComponent }
     from '../screens-deprecated/templates/sell-template/sell-status-section/sell-status-section.component';
 import { SaleFooterComponent } from '../screens-with-parts/sale/sale-footer/sale-footer.component';
 import { SaleItemListComponent } from '../screens-with-parts/sale/sale-item-list/sale-item-list.component';
+import { KebabMenuComponent } from './components/kebab-menu/kebab-menu.component';
 
 const screenParts = [
     DynamicFormPartComponent,
@@ -150,6 +150,7 @@ const components = [
     IconFabButtonComponent,
     ReceiptCardComponent,
     KebabButtonComponent,
+    KebabMenuComponent,
     IconSquareButtonComponent,
     DisplayPropertyComponent,
     TransactionItemListComponent,

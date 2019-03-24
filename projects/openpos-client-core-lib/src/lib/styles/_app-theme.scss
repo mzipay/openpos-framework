@@ -33,7 +33,6 @@
     @include screen-part-themes($theme);
     @include screen-themes($theme);
     @include screen-with-parts-themes($theme);
-    @include openpos-core-component-theme-mixins($theme);
 
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));
