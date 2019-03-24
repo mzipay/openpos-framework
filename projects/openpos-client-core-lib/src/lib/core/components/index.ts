@@ -10,3 +10,4 @@ export * from './startup/personalization-startup-task';
 export * from './startup/startup-task-data';
 export * from './startup/startup-task-names';
 export * from './openpos-app/openpos-app.component';
+export * from './kebab-menu/kebab-menu.component';
