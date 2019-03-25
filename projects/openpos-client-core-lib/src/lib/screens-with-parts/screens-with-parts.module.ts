@@ -7,14 +7,18 @@ import { SelectionListScreenComponent } from './selection-list/selection-list-sc
 import { SelectionListScreenDialogComponent } from './selection-list/selection-list-screen-dialog.component';
 import { TemporarilySharedScreens } from '../screens-deprecated/temporarily-shared-screens.module';
 import { GenericDialogComponent } from './dialog/generic-dialog.component';
+import { PromptScreenComponent } from './prompt/prompt-screen.component';
+import { PromptScreenDialogComponent } from './prompt/prompt-screen-dialog.component';
 
 const screens = [
         SelectionListScreenComponent,
+        PromptScreenComponent
     ];
 
 const dialogs = [
         SelectionListScreenDialogComponent,
-        GenericDialogComponent
+        GenericDialogComponent,
+        PromptScreenDialogComponent
     ];
 
 @NgModule({
