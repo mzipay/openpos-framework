@@ -49,7 +49,7 @@ export class DialogService {
     public addDialog(name: string, type: Type<IScreen>): void {
         if (DialogService.dialogs.get(name)) {
             // tslint:disable-next-line:max-line-length
-            this.log.info(`replacing registration of dialog for the key of ${name} of type ${type.name} in the screen service`);
+            this.log.info(`replacing registration of dialog for the key of ${name} in the screen service`);
             DialogService.dialogs.delete(name);
         }
         DialogService.dialogs.set(name, type);
