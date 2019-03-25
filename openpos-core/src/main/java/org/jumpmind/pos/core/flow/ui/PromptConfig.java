@@ -3,6 +3,7 @@ package org.jumpmind.pos.core.flow.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.IPromptScreen;
 import org.jumpmind.pos.core.screen.ActionItem;
@@ -12,7 +13,7 @@ public class PromptConfig {
     private String name;
     private String promptText;
     private String backAction = "Back";
-    private String promptType = IPromptScreen.TYPE_ALPHANUMERICTEXT;
+    private FieldInputType promptType = FieldInputType.AlphanumericText;
     private String icon;
     private String placeholder;
     private DialogProperties dialogProperties;
@@ -49,7 +50,7 @@ public class PromptConfig {
         return this;
     }
 
-    public PromptConfig promptType(String promptType) {
+    public PromptConfig promptType(FieldInputType promptType) {
         this.promptType = promptType;
         return this;
     }
@@ -92,7 +93,7 @@ public class PromptConfig {
         return backAction;
     }
 
-    public String getPromptType() {
+    public FieldInputType getPromptType() {
         return promptType;
     }
 
