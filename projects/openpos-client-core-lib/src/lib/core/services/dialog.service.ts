@@ -21,6 +21,8 @@ export class DialogService {
 
     private lastDialogType: string;
 
+    private lastDialogId: string;
+
     private $dialogMessages = new BehaviorSubject<any>(null);
 
     constructor(
@@ -149,7 +151,7 @@ export class DialogService {
         }
 
         if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
-            || dialog.refreshAlways) {
+            || dialog.refreshAlways || dialog.id !== this.lastDialogId) {
 
             // We need to make sure to block here before creating the new dialog to make sure the old one
             // is fully closed.
@@ -166,7 +168,8 @@ export class DialogService {
             this.dialogRef.componentInstance.installScreen(dialogComponentFactory);
             this.session.cancelLoading();
         } else {
-            this.log.info(`Using previously created dialogRef. current dialog type: ${dialog.screenType}, last dialog type: ${this.lastDialogType}`);
+            this.log.info(`Using previously created dialogRef. current dialog type: ${dialog.screenType},
+            last dialog type: ${this.lastDialogType}`);
             this.session.cancelLoading();
         }
 
@@ -176,6 +179,7 @@ export class DialogService {
         this.dialogOpening = false;
 
         this.lastDialogType = dialog.screenType;
+        this.lastDialogId = dialog.id;
     }
 
 }
