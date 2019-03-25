@@ -5,4 +5,5 @@ public interface UIMessageType {
     String SELECTION_LIST="SelectionList";
     String RETURN="Return";
     String DIALOG="Dialog";
+    String PROMPT="Prompt";
 }
