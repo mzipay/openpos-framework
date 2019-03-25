@@ -654,7 +654,13 @@ public class StateManager implements IStateManager {
         logger.info("Registering query params " + queryParams.toString());
         applicationState.getScope().setScopeValue(ScopeType.Device, "queryParams", queryParams);
     }
-    
+
+    @Override
+    public void registerPersonalizationProperties(Map<String, String> personalizationProperties) {
+        logger.info("Registering personalization properties " + personalizationProperties.toString());
+        applicationState.getScope().setScopeValue(ScopeType.Device, "personalizationProperties", personalizationProperties);
+    }
+
     public Injector getInjector() {
         return injector;
     }

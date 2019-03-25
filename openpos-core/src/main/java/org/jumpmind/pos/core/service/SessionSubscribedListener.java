@@ -59,22 +59,21 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
         String compatibilityVersion = this.getHeader(msg, MessageUtils.COMPATIBILITY_VERSION_HEADER);
         String deviceId = topicName.substring(topicName.indexOf("/node/") + "/node/".length());
         String appId = topicName.substring(topicName.indexOf("/app/") + "/app/".length(), topicName.indexOf("/node/"));
+        Map<String, String> personalizationProperties = sessionAuthTracker.getPersonalizationResults(sessionId);
+
         try {
             log.info("session {} subscribed to {}", sessionId, topicName);
             IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
             boolean created = false;
             if (stateManager == null) {
-                stateManager = stateManagerContainer.create(appId, deviceId, queryParams);
+                stateManager = stateManagerContainer.create(appId, deviceId, queryParams, personalizationProperties);
                 created = true;
             } else {
                 stateManager.registerQueryParams(queryParams);
+                stateManager.registerPersonalizationProperties(personalizationProperties);
             }
 
             stateManagerContainer.setCurrentStateManager(stateManager);
-            
-            Map<String, String> personizationProperties = sessionAuthTracker.getPersonalizationResults(sessionId);
-            stateManager.getApplicationState().getScope().setScopeValue(ScopeType.Device, "personalizationProperties",
-                    personizationProperties);
 
             stateManager.setSessionAuthenticated(sessionId, sessionAuthTracker.isSessionAuthenticated(sessionId));
             stateManager.setSessionCompatible(sessionId, sessionAuthTracker.isSessionCompatible(sessionId));

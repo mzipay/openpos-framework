@@ -77,7 +77,7 @@ public class StateManagerContainer implements IStateManagerContainer {
     }
 
     @Override
-    public IStateManager create(String appId, String deviceId, Map<String, Object> queryParams) {
+    public IStateManager create(String appId, String deviceId, Map<String, Object> queryParams, Map<String, String> personalizationProperties) {
         Map<String, StateManager> stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
         if (stateManagersByNodeId == null) {
             synchronized (this) {
@@ -95,6 +95,7 @@ public class StateManagerContainer implements IStateManagerContainer {
                     stateManager = applicationContext.getBean(StateManager.class);
                     setCurrentStateManager(stateManager);
                     stateManager.registerQueryParams(queryParams);
+                    stateManager.registerPersonalizationProperties(personalizationProperties);
                     stateManager.setErrorHandler(errorHandler);
                     stateManager.setInitialFlowConfig(flowConfigProvider.getConfig(appId, deviceId));
                     stateManagersByNodeId.put(deviceId, stateManager);

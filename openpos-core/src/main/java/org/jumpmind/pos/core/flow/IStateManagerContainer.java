@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface IStateManagerContainer {
 
-    IStateManager create(String appId, String deviceId, Map<String, Object> queryParams);
+    IStateManager create(String appId, String deviceId, Map<String, Object> queryParams, Map<String, String> personalizationProperties);
     
     IStateManager retrieve(String appId, String deviceId);
     

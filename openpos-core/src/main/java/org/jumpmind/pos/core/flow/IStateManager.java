@@ -58,6 +58,7 @@ public interface IStateManager {
     public boolean isSessionCompatible(String sessionId);
     public boolean areAllSessionsCompatible();
     public void registerQueryParams(Map<String,Object> queryParams);
+    public void registerPersonalizationProperties(Map<String, String> personalizationProperties);
     public Injector getInjector();
     public boolean isAtRest();
     
