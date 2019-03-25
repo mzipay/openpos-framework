@@ -25,3 +25,5 @@ export * from './status-bar-control.interface';
 export * from './barcode-scan-interceptor.interface';
 export * from './field-input-type.enum';
 export * from './action-item-group.interface';
+export * from './validator.enum';
+
