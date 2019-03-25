@@ -42,13 +42,13 @@ import { VersionComponent } from './version/version.component';
 import { ScreenConstants } from './screen.constants';
 import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { IconConstants } from './icon.constants';
-import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { SelectionListDialogComponent } from './selection-list/selection-list-dialog.component';
 import { DataTableComponent } from './data-table/data-table.component';
 import { AutoCompleteAddressComponent } from './auto-complete-address/auto-complete-address.component';
 import { TemporarilySharedScreens } from './temporarily-shared-screens.module';
 import { DefaultDialogComponent } from './dialog/default-dialog.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 const screens = [
     BasicItemSearchComponent,
     ChooseOptionsComponent,
@@ -88,10 +88,10 @@ const dialogs = [
     DynamicListDialogComponent,
     LoginDialogComponent,
     VersionComponent,
-    PromptWithOptionsDialogComponent,
     SelectionListDialogComponent,
     DefaultDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    PromptDialogComponent
 ];
 
 const templates = [

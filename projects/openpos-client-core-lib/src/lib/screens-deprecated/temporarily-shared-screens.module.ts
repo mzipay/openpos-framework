@@ -13,11 +13,11 @@ import { TenderingComponent } from './tendering/tendering.component';
 import { ReturnComponent } from './return/return.component';
 import { ItemSearchResultsComponent } from './item-search-results/item-search-results.component';
 import { ChooseOptionsDialogComponent } from './choose-options/choose-options-dialog.component';
-import { DefaultDialogComponent } from './dialog/default-dialog.component';
 import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';
 import { LoadingDialogComponent } from './loading-dialog/loading-dialog.component';
 import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
-import { PromptDialogComponent } from './prompt/prompt-dialog.component';
+import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
+
 
 const screens = [
         HomeComponent,
@@ -38,10 +38,8 @@ const dialogs = [
         DynamicFormDialogComponent,
         LoadingDialogComponent,
         MultipleDynamicFormDialogComponent,
-        PromptDialogComponent,
+        PromptWithOptionsDialogComponent
     ];
-
-
 
 @NgModule({
     entryComponents: [
