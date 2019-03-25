@@ -171,7 +171,7 @@ export class PersonalizationService {
     }
 
     public refreshApp() {
-        window.location.href = 'index.html';
+        window.location.reload();
     }
 
     public isPersonalized(): boolean {

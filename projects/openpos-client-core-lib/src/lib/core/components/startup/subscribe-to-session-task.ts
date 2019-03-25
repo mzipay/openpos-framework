@@ -45,6 +45,9 @@ export class SubscribeToSessionTask implements IStartupTask {
                 this.session.unsubscribe();
                 this.session.subscribe();
                 message.complete();
+            } else {
+                /* we shouldn't be coming there here if we are already subscribed.  lets do a refresh to get a clean start */
+                window.location.reload();
             }
         });
     }
