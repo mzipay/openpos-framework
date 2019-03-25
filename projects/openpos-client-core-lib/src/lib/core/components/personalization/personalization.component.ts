@@ -35,7 +35,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
 
     updateSecondFormGroup() {
         let devicePattern = '[a-zA-Z0-9\-]+';
-        if (this.response.devicePattern) {
+        if (this.response && this.response.devicePattern) {
             devicePattern = this.response.devicePattern;
         }
         const formGroup = {
