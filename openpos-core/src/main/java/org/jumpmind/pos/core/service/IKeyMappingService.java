@@ -2,7 +2,6 @@ package org.jumpmind.pos.core.service;
 
 import java.util.Map;
 
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.ui.UIMessage;
 
 public interface IKeyMappingService {

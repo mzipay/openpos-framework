@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Scope(proxyMode = org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS, value = "device")
 public class KeyMappingScreenPropertyStrategy implements IScreenPropertyStrategy {
 
-	@Autowired
+	@Autowired(required=false)
 	IKeyMappingService keyMappingService;
 	
 	@In(scope=ScopeType.Device) 
@@ -27,7 +27,7 @@ public class KeyMappingScreenPropertyStrategy implements IScreenPropertyStrategy
 	@Override
 	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, UIMessage screen, Map<String, Object> screenContext) {
 		if (property != null 
-		        && ActionItem.class.isAssignableFrom(clazz)) {
+		        && ActionItem.class.isAssignableFrom(clazz) && keyMappingService != null) {
 			ActionItem item = (ActionItem)property;
 			String keyMapping = keyMappingService.getKeyMapping(screen, item.getAction(), screenContext);
 			if (!StringUtils.isEmpty(keyMapping)) {			    
