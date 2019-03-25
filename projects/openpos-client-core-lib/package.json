@@ -1,7 +1,7 @@
 {
   "name": "@jumpmind/openpos-client-core-lib",
   "version": "0.0.12",
-  "description": "Core Library for openpos client",
+  "description": "This is an angular.io library for developing web-based point-of-sale functionality.  To be used in conjunction with openpos-server-core-lib.",
   "author": "Jumpmind",
   "license": "GPLv3",
   "peerDependencies": {
