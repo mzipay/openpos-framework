@@ -1,4 +1,4 @@
-import { ScreenService } from '../../core/services';
+import { ScreenService } from '../../core/services/screen.service';
 
 export interface ScreenProps {
     name: string;
