@@ -48,4 +48,18 @@ steps:
     cp .npmrc dist/openpos-client-core-lib
     cd dist/openpos-client-core-lib
     publish-if-not-published
+    npm pack
+    mv jumpmind-openpos-client-core-lib-*.tgz jumpmind-openpos-client-core-lib-snapshot.tgz
   displayName: 'Publish if not already published'
+  
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint: maven.jumpmind.com
+    #sourceFolder: # Optional
+    contents: '**/jumpmind-openpos-client-core-lib-snapshot.tgz' 
+    targetFolder: 'www/npm' # Optional
+    cleanTargetFolder: true # Optional
+    overwrite: true # Optional
+    failOnEmptySource: true # Optional
+    flattenFolders: true # Optional    
+    #publishRunAttachments: true # Optional   
