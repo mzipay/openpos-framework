@@ -1,5 +1,5 @@
 <div [formGroup]="promptFormGroup">
-        <ng-container  *ngIf="!isDateField(); else dateField" [ngSwitch]="responseType">   
+        <ng-container  *ngIf="!isDateField(); else dateField" [ngSwitch]="true">   
             <mat-form-field fxFlexFill *ngSwitchDefault ngClass="text-lg">
                 <!-- Was using this:
                     <mat-icon matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>
@@ -22,7 +22,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field fxFlexFill *ngSwitchCase="'TextArea'" ngClass="text-sm">
+            <mat-form-field fxFlexFill *ngSwitchCase="responseType==='TextArea'" ngClass="text-sm">
                 <textarea matInput [rows]="5" [cols]="40" [formControlName]="'promptInputControl'" [appFocus]="!readOnly" style="font-size:18px"
                     [attr.minlength]="minLength" [attr.maxlength]="maxLength" [readonly]="readOnly" [attr.type]="isNumericField() ? 'tel' : 'text'" autoSelectOnFocus>
                     </textarea>
@@ -34,11 +34,11 @@
                     </mat-error>
             </mat-form-field>
         
-            <mat-slide-toggle *ngSwitchCase="'ONOFF'" [formControlName]="'promptInputControl'"  (click)="onCheck()" color="primary" ngClass="text-lg">
+            <mat-slide-toggle *ngSwitchCase="responseType==='ONOFF'" [formControlName]="'promptInputControl'"  (click)="onCheck()" color="primary" ngClass="text-lg">
                 {{placeholderText}} {{responseText}} 
             </mat-slide-toggle>
         
-            <mat-form-field fxFlexFill *ngSwitchCase="'ALPHANUMERICPASSWORD'" ngClass="text-lg">
+            <mat-form-field fxFlexFill *ngSwitchCase="isPassword()" ngClass="text-lg">
                 <app-icon matPrefix iconClass="material-icons primary" [iconName]="promptIcon"></app-icon>
                 <input matInput [formControlName]="'promptInputControl'" [appFocus]="true" autoSelectOnFocus
                     type="password" [textMask]="_textMask" [attr.minlength]="minLength" [attr.maxlength]="maxLength">

@@ -57,6 +57,10 @@ export class PromptInputComponent implements OnInit, OnDestroy {
         }
     }
 
+    isPassword(): boolean {
+        return this.responseType.toLowerCase() === 'alphanumericpassword';
+    }
+
     onCheck() {
         if (this.responseText === 'ON') {
             this.responseText = 'OFF';
@@ -107,10 +111,10 @@ export class PromptInputComponent implements OnInit, OnDestroy {
             ['numerictext', 'alphanumerictext'].indexOf(this.responseType.toLowerCase()) >= 0;
     }
 
-    /**
-      * This method is invoked when the user presses the Scan button on the field.
-      * For device-based scan events, see the ngOnInit method.
-      */
+
+    // This method is invoked when the user presses the Scan button on the field.
+    // For device-based scan events, see the ngOnInit method.
+
     onScan(): void {
         this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin =>
             plugin.processRequest(
