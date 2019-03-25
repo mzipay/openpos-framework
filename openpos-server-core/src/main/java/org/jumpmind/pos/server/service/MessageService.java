@@ -72,7 +72,7 @@ public class MessageService implements IMessageService {
         String response = "[ ]";
         try {
             if (personalizationParameters != null) {
-                response = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(personalizationParameters.getParameters());
+                response = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(personalizationParameters);
             }
         } catch (JsonProcessingException e) {
             logger.error("Could not parse personalization properties");
