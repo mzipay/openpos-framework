@@ -4,7 +4,7 @@ import { IThemeChangingEvent } from '../../shared/events';
 
 @Injectable({
     providedIn: 'root',
-  })
+})
 export class PersonalizationService {
 
     private serverBaseUrl: string;
@@ -15,7 +15,7 @@ export class PersonalizationService {
 
     public onThemeChanging = new EventEmitter<IThemeChangingEvent>();
 
-    constructor(private log: Logger ) {
+    constructor(private log: Logger) {
     }
 
     public personalize(serverName: string, serverPort: string, deviceId: string,
@@ -36,12 +36,11 @@ export class PersonalizationService {
     }
 
     private setPersonalizationProperties(personalizationProperties?: Map<string, string>) {
-
-        const keys = Array.from(personalizationProperties.keys());
-
-        localStorage.setItem('personalizationProperties', JSON.stringify(keys));
-
         if (personalizationProperties) {
+            const keys = Array.from(personalizationProperties.keys());
+
+            localStorage.setItem('personalizationProperties', JSON.stringify(keys));
+
             for (const key of keys) {
                 localStorage.setItem(key, personalizationProperties.get(key));
             }
@@ -103,7 +102,7 @@ export class PersonalizationService {
     public getTheme(): string {
         const localTheme = localStorage.getItem('theme');
         if (this.theme) {
-            return  this.theme;
+            return this.theme;
         } else if (localTheme) {
             return localTheme;
         } else {
@@ -126,7 +125,7 @@ export class PersonalizationService {
         }
         if (this.previousTheme !== theme) {
             this.log.info(`Theme changing from '${this.previousTheme}' to '${theme}'`);
-            this.onThemeChanging.emit({currentTheme: this.previousTheme, newTheme: theme});
+            this.onThemeChanging.emit({ currentTheme: this.previousTheme, newTheme: theme });
             this.previousTheme = theme;
         }
     }
