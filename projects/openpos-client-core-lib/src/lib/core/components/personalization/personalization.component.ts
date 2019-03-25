@@ -34,13 +34,17 @@ export class PersonalizationComponent implements IScreen, OnInit {
     }
 
     updateSecondFormGroup() {
+        let devicePattern = '[a-zA-Z0-9\-]+';
+        if (this.response.devicePattern) {
+            devicePattern = this.response.devicePattern;
+        }
         const formGroup = {
-            deviceId: ['', [Validators.required, , Validators.pattern('[a-zA-Z0-9\-]+')]]
+            deviceId: ['', [Validators.required, , Validators.pattern(devicePattern)]]
         };
 
         if (this.response) {
             const validator = [Validators.required, , Validators.pattern('[a-zA-Z0-9]+')];
-            for (const prop of this.response.properties) {
+            for (const prop of this.response.parameters) {
                 formGroup[prop.property] = [prop.defaultValue, validator];
             }
         }
@@ -54,7 +58,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
     public personalize() {
         const personalizationProperties = new Map<string, string>();
         if (this.response) {
-            for (const prop of this.response.properties) {
+            for (const prop of this.response.parameters) {
                 personalizationProperties.set(prop.property, this.secondFormGroup.get(prop.property).value);
             }
         }

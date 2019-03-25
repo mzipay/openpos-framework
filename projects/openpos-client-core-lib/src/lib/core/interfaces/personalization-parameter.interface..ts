@@ -1,4 +1,4 @@
-export interface PersonalizationProperty {
+export interface PersonalizationParameter {
     property: string;
     label: string;
     defaultValue: string;

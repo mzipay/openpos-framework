@@ -1,7 +1,8 @@
-import { PersonalizationProperty } from './personalization-property.interface.';
+import { PersonalizationParameter } from './personalization-parameter.interface.';
 
 export interface PersonalizationResponse {
-    success: boolean;
+    success?: boolean;
     message?: string;
-    properties?: PersonalizationProperty[];
+    devicePattern?: string;
+    parameters?: PersonalizationParameter[];
 }

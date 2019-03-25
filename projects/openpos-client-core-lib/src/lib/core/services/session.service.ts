@@ -27,7 +27,6 @@ import { HttpClient } from '@angular/common/http';
 import { PingParams } from '../interfaces/ping-params.interface';
 import { PingResult } from '../interfaces/ping-result.interface';
 import { PersonalizationResponse } from '../interfaces/personalization-response.interface';
-import { PersonalizationProperty } from '../interfaces/personalization-property.interface.';
 
 @Injectable({
     providedIn: 'root',
@@ -313,10 +312,11 @@ export class SessionService implements IMessageHandler<any> {
 
         let personalizeError: any = null;
         try {
-            const httpResult = await this.http.get<PersonalizationProperty[]>(url, {}).toPromise();
+            const httpResult = await this.http.get<PersonalizationResponse>(url, {}).toPromise();
             if (httpResult) {
+                httpResult.success = true;
                 this.log.info('Successful Personalization with url: ' + url);
-                return { success: true, properties: httpResult };
+                return httpResult;
             } else {
                 personalizeError = { message: '?' };
             }
