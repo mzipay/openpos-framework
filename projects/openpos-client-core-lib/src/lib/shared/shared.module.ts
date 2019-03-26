@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
@@ -103,6 +102,7 @@ import { StatusStripComponent } from './screen-parts/status-strip/status-strip.c
 import { DynamicFormPartComponent } from './screen-parts/dynamic-form-part/dynamic-form-part.component';
 import { SideNavComponent } from './layout-components/side-nav/side-nav.component';
 import { WaffleComponent } from './layout-components/waffle/waffle.component';
+import { CommonModule } from '@angular/common';
 
 const screenParts = [
     DynamicFormPartComponent,
@@ -218,25 +218,23 @@ const pipes = [
         ScanSomethingComponent
     ],
     imports: [
-        BrowserModule,
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
         HttpClientModule,
         FlexLayoutModule,
-        BrowserAnimationsModule,
+        CommonModule,
         MaterialModule,
         MatKeyboardModule,
         TextMaskModule
     ],
     exports: [
-        BrowserModule,
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
         HttpClientModule,
         FlexLayoutModule,
-        BrowserAnimationsModule,
+        CommonModule,
         MaterialModule,
         MatKeyboardModule,
         TextMaskModule,

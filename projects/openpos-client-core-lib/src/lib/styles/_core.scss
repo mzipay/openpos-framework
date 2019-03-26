@@ -13,6 +13,7 @@
 @import './mixins/typography';
 @import './mixins/tabs';
 @import './mixins/multiple-dynamic-form-dialog';
+@import './openpos-default-theme';
 
 $mat-card-default-margin: 24px !default;
 
@@ -31,6 +32,8 @@ $mat-card-default-margin: 24px !default;
   @include openpos-typography();
   @include openpos-tabs();
   @include multiple-dynamic-form-dialog();
+
+  @include openpos-default-theme();
 
   html, body {
     font-family: Roboto, sans-serif;

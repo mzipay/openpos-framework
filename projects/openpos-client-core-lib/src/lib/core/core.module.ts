@@ -37,6 +37,8 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { StatusBarStatusControlComponent } from '../shared/components/status-bar-status-control/status-bar-status-control.component';
 import { STATUS_BAR_STATUS_CONTROL_COMPONENT } from '../shared/components/status-bar/status-bar.component';
 import { ToastService } from './services/toast.service';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,
@@ -60,11 +62,15 @@ import { ToastService } from './services/toast.service';
     ],
     imports: [
         SharedModule,
-        RouterModule
+        RouterModule,
+        BrowserModule,
+        BrowserAnimationsModule
     ],
     exports: [
         LoaderComponent,
-        OpenposAppComponent
+        OpenposAppComponent,
+        BrowserModule,
+        BrowserAnimationsModule
     ],
     providers: [
         HttpClient,
