@@ -26,13 +26,13 @@ steps:
     npm install        
   displayName: 'Install'
   continueOnError: false
-  failOnStderr: true
+  failOnStderr: false
   
 - script: |
     ng test openpos-client-core-lib
   displayName: 'Test'    
   continueOnError: true
-  failOnStderr: false
+  failOnStderr: true
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results'    
@@ -66,6 +66,7 @@ steps:
   displayName: 'Publish if not already published'
   
 - task: CopyFilesOverSSH@0
+  displayName: 'Upload tar dist to maven.jumpmind.com'  
   inputs:
     sshEndpoint: maven.jumpmind.com
     #sourceFolder: # Optional
