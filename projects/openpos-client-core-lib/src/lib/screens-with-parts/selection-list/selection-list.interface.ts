@@ -4,7 +4,7 @@ import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
 export interface SelectionListInterface extends IAbstractScreen {
     selectionList: SelectionListItem[];
-    buttons: IActionItem[];
+    selectButton: IActionItem;
     nonSelectionButtons: IActionItem[];
     multiSelect: boolean;
     defaultSelect: boolean;
