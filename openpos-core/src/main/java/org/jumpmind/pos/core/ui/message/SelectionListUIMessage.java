@@ -13,7 +13,7 @@ public class SelectionListUIMessage extends UIMessage {
     private static final long serialVersionUID = -4859870631964238380L;
 
     private List<SelectionListItem> selectionList = new ArrayList<SelectionListItem>();
-    private List<ActionItem> buttons = new ArrayList<>();
+    private ActionItem selectButton;
     private List<ActionItem> nonSelectionButtons = new ArrayList<>();
     private boolean multiSelect = false;
     private boolean defaultSelect = false;
@@ -34,19 +34,12 @@ public class SelectionListUIMessage extends UIMessage {
         this.selectionList = selectionList;
     }
 
-    public List<ActionItem> getButtons() {
-        return buttons;
+    public ActionItem getSelectButton() {
+        return selectButton;
     }
 
-    public void setButtons(List<ActionItem> buttons) {
-        this.buttons = buttons;
-    }
-    
-    public void addButton(ActionItem button) {
-        if(this.buttons == null) {
-            this.buttons = new ArrayList<ActionItem>();
-        }
-        this.buttons.add(button);
+    public void setSelectButton(ActionItem selectButton) {
+        this.selectButton = selectButton;
     }
 
     public List<ActionItem> getNonSelectionButtons() {
