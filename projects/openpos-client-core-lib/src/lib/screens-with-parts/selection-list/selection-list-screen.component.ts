@@ -5,6 +5,7 @@ import { SelectableItemListComponentConfiguration } from '../../shared/component
 import { PosScreen } from '../../screens-deprecated/pos-screen/pos-screen.component';
 import { SelectionListInterface } from './selection-list.interface';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
+import { Configuration } from '../../configuration/configuration';
 
 @ScreenComponent({
     name: 'SelectionList'
@@ -80,4 +81,7 @@ export class SelectionListScreenComponent extends PosScreen<SelectionListInterfa
         this.session.onAction(menuItem, this.index);
       }
 
+      public keybindsEnabled(): boolean {
+        return Configuration.enableKeybinds;
+      }
 }
