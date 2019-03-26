@@ -1,7 +1,12 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { IListComponent } from '../../../core/interfaces/list-component.interface';
-import { IActionItem, ScreenService, SessionService, FormBuilder, IForm, IFormElement } from '../../../core';
+import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { IFormElement } from '../../../core/interfaces/form-field.interface';
+import { IForm } from '../../../core/interfaces/form.interface';
+import { SessionService } from '../../../core/services/session.service';
+import { ScreenService } from '../../../core/services/screen.service';
+import { FormBuilder } from '../../../core/services/form-builder.service';
 
 @Component({
     selector: 'app-dynamic-list-control',

@@ -1,9 +1,10 @@
 
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
-import { ISellTemplate, SellScreenUtils } from '../../screens-deprecated/';
-import { AbstractTemplate } from '../../core';
 import { SelfCheckoutStatusBarData } from '../self-checkout-statusbar/self-checkout-status-bar-data';
+import { AbstractTemplate } from '../../core/components/abstract-template';
+import { ISellTemplate } from '../../screens-deprecated/templates/sell-template/sell/sell-template.interface';
+import { SellScreenUtils } from '../../screens-deprecated/templates/sell-template/sell/sell-screen.interface';
 
 @Component({
   selector: 'app-selfcheckout-with-bar',

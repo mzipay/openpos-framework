@@ -1,4 +1,5 @@
-import { DialogService } from '../../core/services';
+import { DialogService } from '../../core/services/dialog.service';
+
 
 export interface DialogProps {
     name: string;

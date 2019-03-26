@@ -2,7 +2,7 @@ import { SessionService } from './../../core/services/session.service';
 
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import { IActionItem } from '../../core';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { ILine } from './line.interface';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 

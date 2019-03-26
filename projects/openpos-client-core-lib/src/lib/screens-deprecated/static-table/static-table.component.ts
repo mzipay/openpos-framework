@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SelectionMode } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
+import { SelectionMode } from '../choose-options/choose-options-screen.interface';
 
 @Component({
     selector: 'app-static-table',

@@ -1,8 +1,7 @@
 
 import { Component } from '@angular/core';
-
-import { IActionItem } from './../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
 @Component({
   selector: 'app-till-summary',

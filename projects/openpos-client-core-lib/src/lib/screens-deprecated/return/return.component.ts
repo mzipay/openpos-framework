@@ -3,13 +3,14 @@ import { Component, ViewChild, AfterViewInit, OnInit, AfterViewChecked, ElementR
 import { ObservableMedia } from '@angular/flex-layout';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { ISellItem, SelectionMode } from '../../core';
 import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
 import { NavListComponent } from '../../shared/components/nav-list/nav-list.component';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ITotal } from '../../core/interfaces/total.interface';
 import { TotalType } from '../../core/interfaces/total-type.enum';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
+import { ISellItem } from '../../core/interfaces/sell-item.interface';
+import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 
 @ScreenComponent({
     name: 'Return'

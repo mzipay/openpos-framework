@@ -1,7 +1,9 @@
 import { SessionService } from './../../core/services/session.service';
 import { Component, OnInit } from '@angular/core';
-import { PluginService, AppVersion, IActionItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { PluginService } from '../../core/services/plugin.service';
+import { AppVersion } from '../../core/services/app-version';
 
 declare var version: any; // read in from core at assets/version.js
 

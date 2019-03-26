@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ScreenPartComponent } from '../../../shared/screen-parts/screen-part';
 import { SaleFooterInterface } from './sale-footer.interface';
-import { MessageProvider } from '../../../shared/providers';
+import { MessageProvider } from '../../../shared/providers/message.provider';
 
 @Component({
     selector: 'app-sale-footer',

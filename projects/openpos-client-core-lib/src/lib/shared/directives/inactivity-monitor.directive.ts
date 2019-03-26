@@ -1,6 +1,6 @@
 import { Directive, HostListener, Input, Renderer2, ElementRef, OnDestroy } from '@angular/core';
 import { Configuration } from '../../configuration/configuration';
-import { SessionService } from '../../core';
+import { SessionService } from '../../core/services/session.service';
 
 
 @Directive({

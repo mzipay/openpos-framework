@@ -1,8 +1,8 @@
 import { Component, Input, ContentChild, TemplateRef, ElementRef, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { SelectionMode } from '../../../core/interfaces';
 import { KeyPressProvider } from '../../providers/keypress.provider';
 import { Subscription } from 'rxjs';
 import { Configuration } from '../../../configuration/configuration';
+import { SelectionMode } from '../../../core/interfaces/selection-mode.enum';
 
 export class SelectableItemListComponentConfiguration<ItemType> {
     numResultsPerPage: number;

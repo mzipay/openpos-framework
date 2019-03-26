@@ -1,4 +1,4 @@
-import { FieldInputType } from '../../../core/interfaces';
+import { FieldInputType } from '../../../core/interfaces/field-input-type.enum';
 import { ScanType } from './scan-type.enum';
 
 export interface ScanOrSearchInterface {

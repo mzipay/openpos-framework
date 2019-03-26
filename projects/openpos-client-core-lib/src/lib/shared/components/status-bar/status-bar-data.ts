@@ -1,4 +1,5 @@
-import { IActionItem } from '../../../core';
+import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+
 
 
 export class StatusBarData {

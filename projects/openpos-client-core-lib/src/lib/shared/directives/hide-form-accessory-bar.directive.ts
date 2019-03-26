@@ -1,5 +1,5 @@
-import { Directive, OnDestroy } from "@angular/core";
-import { CordovaService } from "../../core";
+import { Directive, OnDestroy } from '@angular/core';
+import { CordovaService } from '../../core/services/cordova.service';
 
 // Directive used to hide the Form Accessory Bar on mobile devices.
 // Requires cordova-plugin-keyboard to be installed.

@@ -3,8 +3,9 @@ import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Ou
 import { MatKeyboardComponent } from '../components/keyboard/keyboard.component';
 import { MatKeyboardRef } from '../classes/keyboard-ref.class';
 import { MatKeyboardService } from '../services/keyboard.service';
-import { SessionService, IMessageHandler } from '../../core';
+import { SessionService } from '../../core/services/session.service';
 import { Configuration } from '../../configuration/configuration';
+import { IMessageHandler } from '../../core/interfaces/message-handler.interface';
 
 @Directive({
     // tslint:disable-next-line:directive-selector

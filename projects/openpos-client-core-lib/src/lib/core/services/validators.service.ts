@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
 // Since there are directives in shared that import validator service using the ../../shared
 // barrel here causes a circular reference
-import { OpenPosValidators } from '../../shared/validators';
 import { LocaleService } from './locale.service';
+import { OpenPosValidators } from '../../shared/validators/openpos-validators';
 
 @Injectable({
     providedIn: 'root',

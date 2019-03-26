@@ -1,8 +1,8 @@
 
 import { Component } from '@angular/core';
 import { ChooseOptionsComponent } from './choose-options.component';
-import { OpenPOSDialogConfig } from './../../core';
 import { DialogComponent } from '../../shared/decorators/dialog-component.decorator';
+import { OpenPOSDialogConfig } from '../../core/interfaces/open-pos-dialog-config.interface';
 
 @DialogComponent({
     name: 'ChooseOptions'

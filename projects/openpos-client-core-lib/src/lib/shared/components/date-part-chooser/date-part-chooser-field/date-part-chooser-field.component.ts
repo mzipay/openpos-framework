@@ -1,9 +1,9 @@
 import { Input, Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { IDatePartChooserField } from '../../../../core/index';
-import { FormattersService } from '../../../../core/services';
 import { MatDialog } from '@angular/material';
 import { DatePartChooserDialogComponent } from '../date-part-chooser-dialog/date-part-chooser-dialog.component';
+import { IDatePartChooserField } from '../../../../core/interfaces/date-part-chooser-field.interface';
+import { FormattersService } from '../../../../core/services/formatters.service';
 
 @Component({
     selector: 'app-date-part-chooser-field',

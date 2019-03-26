@@ -7,21 +7,21 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { AbstractTemplate } from '../../../core/components/abstract-template';
 import { Configuration } from '../../../configuration/configuration';
-import { IPlugin } from '../../../core/plugins';
-import {
-    ScreenService,
-    DialogService,
-    SessionService,
-    DeviceService,
-    IconService,
-    PluginService,
-    FileUploadService
-} from '../../../core/services';
 import { IScreen } from '../../../core/components/dynamic-screen/screen.interface';
-import { Element, ActionMap, IMessageHandler } from '../../../core/interfaces';
 import { PersonalizationService } from '../../../core/services/personalization.service';
 import { PersonalizationComponent } from '../../../core/components/personalization/personalization.component';
 import { FileViewerComponent } from '../../../shared/components/file-viewer/file-viewer.component';
+import { IMessageHandler } from '../../interfaces/message-handler.interface';
+import { IPlugin } from '../../plugins/plugin.interface';
+import { ActionMap } from '../../interfaces/action-map.interface';
+import { Element } from '../../interfaces/element.interface';
+import { ScreenService } from '../../services/screen.service';
+import { DialogService } from '../../services/dialog.service';
+import { SessionService } from '../../services/session.service';
+import { DeviceService } from '../../services/device.service';
+import { IconService } from '../../services/icon.service';
+import { PluginService } from '../../services/plugin.service';
+import { FileUploadService } from '../../services/file-upload.service';
 
 @Component({
     selector: 'app-dev-menu',

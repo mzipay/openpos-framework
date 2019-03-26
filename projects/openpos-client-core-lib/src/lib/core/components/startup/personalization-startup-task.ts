@@ -1,4 +1,4 @@
-import { IStartupTask } from '../../interfaces';
+import { IStartupTask } from '../../interfaces/startup-task.interface';
 import { PersonalizationService } from '../../services/personalization.service';
 import { Observable, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material';

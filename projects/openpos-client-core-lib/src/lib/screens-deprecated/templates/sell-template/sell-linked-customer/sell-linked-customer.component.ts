@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { IActionItem, SessionService } from '../../../../core';
+import { IActionItem } from '../../../../core/interfaces/menu-item.interface';
+import { SessionService } from '../../../../core/services/session.service';
 
 @Component({
     selector: 'app-sell-linked-customer',

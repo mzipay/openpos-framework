@@ -1,10 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import {  MatPaginator, PageEvent } from '@angular/material';
-import { ISellItem, IActionItem, IForm, ICatalogBrowserForm } from '../../core/interfaces';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface';
-import { FormGroup } from '@angular/forms';
-import { FormBuilder } from '../../core/services';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { ISellItem } from '../../core/interfaces/sell-item.interface';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { IForm } from '../../core/interfaces/form.interface';
+import { ICatalogBrowserForm } from '../../core/interfaces/catalog-browser-form.interface';
 
 @Component({
     selector: 'app-catalog-browser',

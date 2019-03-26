@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { ProductListComponent, ItemClickAction } from '../../shared/';
-import { SelectionMode, IItem, IActionItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
+import { IItem } from '../../core/interfaces/item.interface';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { ProductListComponent, ItemClickAction } from '../../shared/components/product-list/product-list.component';
+import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 
 @ScreenComponent({
     name: 'ItemList'

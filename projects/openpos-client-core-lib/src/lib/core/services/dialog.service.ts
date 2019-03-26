@@ -5,8 +5,8 @@ import { SessionService } from './session.service';
 import { IScreen } from '../components/dynamic-screen/screen.interface';
 import { DialogContentComponent } from '../components/dialog-content/dialog-content.component';
 import { MatDialogRef, MatDialog } from '@angular/material';
-import { OpenPOSDialogConfig } from '../interfaces';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { OpenPOSDialogConfig } from '../interfaces/open-pos-dialog-config.interface';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',

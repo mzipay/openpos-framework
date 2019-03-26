@@ -1,8 +1,9 @@
 import { Directive, Input, Renderer2, ElementRef, OnDestroy } from '@angular/core';
-import { IActionItem, SessionService } from '../../core';
 import { KeyPressProvider } from '../providers/keypress.provider';
 import { Subscription } from 'rxjs';
 import { Configuration } from '../../configuration/configuration';
+import { SessionService } from '../../core/services/session.service';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
 @Directive({
     // tslint:disable-next-line:directive-selector

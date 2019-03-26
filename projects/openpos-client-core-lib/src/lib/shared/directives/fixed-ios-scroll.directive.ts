@@ -1,7 +1,8 @@
-import { Directive, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
-import { FloaterService } from "../../core";
-import { Observable } from "rxjs";
+import { Directive, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { FloaterService } from '../../core/services/floater.service';
 
+// tslint:disable-next-line:directive-selector
 @Directive({ selector: '[fiOs]' })
 export class FixediOsScrollDirective implements AfterViewInit {
     private isFloater$: Observable<boolean>;

@@ -11,6 +11,7 @@ import { IKeyboardLayout } from '../interfaces/keyboard-layout.interface';
 import { IKeyboardLayouts } from '../interfaces/keyboard-layouts.interface';
 import { ILocaleMap } from '../interfaces/locale-map.interface';
 import { _applyAvailableLayouts, _applyConfigDefaults } from '../utils/keyboard.utils';
+import { LocaleService } from '../../core/services/locale.service';
 
 /**
  * Service to dispatch Material Design keyboard.
@@ -25,6 +26,8 @@ export class MatKeyboardService {
   private _keyboardRefAtThisLevel: MatKeyboardRef<MatKeyboardComponent> | null = null;
 
   private _availableLocales: ILocaleMap = {};
+
+  private _defaultLocale: string;
 
   /** Reference to the currently opened keyboard at *any* level. */
   private get _openedKeyboardRef(): MatKeyboardRef<MatKeyboardComponent> | null {
@@ -49,11 +52,12 @@ export class MatKeyboardService {
   }
 
   constructor(private _overlay: Overlay,
-              @Inject(LOCALE_ID) private _defaultLocale: string,
+              localeService: LocaleService,
               @Inject(MAT_KEYBOARD_LAYOUTS) private _layouts: IKeyboardLayouts,
               @Optional() @SkipSelf() private _parentKeyboard: MatKeyboardService) {
     // prepare available layouts mapping
     this._availableLocales = _applyAvailableLayouts(_layouts);
+    this._defaultLocale = localeService.getLocale();
   }
 
   /**
@@ -122,6 +126,7 @@ export class MatKeyboardService {
    * @param config Additional configuration options for the keyboard.
    */
   open(layoutOrLocale: string = this._defaultLocale, config: MatKeyboardConfig = {}): MatKeyboardRef<MatKeyboardComponent> {
+
     const _config = _applyConfigDefaults(config);
 
     return this.openFromComponent(layoutOrLocale, _config);
