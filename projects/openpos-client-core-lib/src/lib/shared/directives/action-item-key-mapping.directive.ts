@@ -1,4 +1,4 @@
-import { Directive, Input, Renderer2, ElementRef, OnDestroy } from '@angular/core';
+import { Directive, Input, Renderer2, ElementRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { IActionItem, SessionService } from '../../core';
 import { KeyPressProvider } from '../providers/keypress.provider';
 import { Subscription } from 'rxjs';
@@ -9,6 +9,7 @@ import { Configuration } from '../../configuration/configuration';
     selector: '[actionItem]'
 })
 export class ActionItemKeyMappingDirective implements OnDestroy {
+    @Output() actionClick = new EventEmitter();
 
     @Input()
     set actionItem(item: IActionItem) {
@@ -23,7 +24,11 @@ export class ActionItemKeyMappingDirective implements OnDestroy {
             }
             if ( event.type === 'keydown') {
                 this.renderer.addClass(this.el.nativeElement, 'key-mapping-active');
-                this.session.onAction(item);
+                if (this.actionClick.observers !== null && this.actionClick.observers.length > 0) {
+                    this.actionClick.emit();
+                } else {
+                    this.session.onAction(item);
+                }
                 event.preventDefault();
             } else if ( event.type === 'keyup') {
                 this.renderer.removeClass(this.el.nativeElement, 'key-mapping-active');
