@@ -23,15 +23,19 @@ steps:
 - script: |
     npm install -g @angular/cli
     npm install scss-bundle -g
-    npm install
-    ng test openpos-client-core-lib
-    ng build openpos-client-core-lib
-    scss-bundle -c projects/openpos-client-core-lib/scss-bundle.config.json
-  displayName: 'Test, Build, & Pack'
+    npm install        
+  displayName: 'Install'
   continueOnError: false
   failOnStderr: true
+  
+- script: |
+    ng test openpos-client-core-lib
+  displayName: 'Test'    
+  continueOnError: true
+  failOnStderr: false
 
 - task: PublishTestResults@2
+  displayName: 'Publish Test Results'    
   inputs:
     testResultsFormat: 'JUnit' # Options: JUnit, NUnit, VSTest, xUnit, cTest
     testResultsFiles: '**/TESTS.xml' 
@@ -42,6 +46,15 @@ steps:
     #buildPlatform: # Optional
     #buildConfiguration: # Optional
     #publishRunAttachments: true # Optional      
+
+    
+- script: |    
+    ng build openpos-client-core-lib
+    scss-bundle -c projects/openpos-client-core-lib/scss-bundle.config.json
+  displayName: 'Build'
+  continueOnError: false
+  failOnStderr: false
+
 
 - script: |
     npm install -g publish-if-not-published
