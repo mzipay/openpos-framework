@@ -96,6 +96,32 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
                 }
             })
         );
+
+        this.subscription.add(
+            this.keyPresses.subscribe('ArrowRight', 2, event => {
+                if (event.repeat || !Configuration.enableKeybinds || !this.keyboardControl) {
+                    return;
+                }
+                if (event.type === 'keydown') {
+                    if (this.currentPage < this.numberOfPages) {
+                        this.onNextPage();
+                    }
+                }
+            })
+        );
+
+        this.subscription.add(
+            this.keyPresses.subscribe('ArrowLeft', 2, event => {
+                if (event.repeat || !Configuration.enableKeybinds || !this.keyboardControl) {
+                    return;
+                }
+                if (event.type === 'keydown') {
+                    if (this.currentPage > 1) {
+                        this.onPrevPage();
+                    }
+                }
+            })
+        );
     }
 
     private updateKeySubscriptions() {
