@@ -10,17 +10,15 @@ import {
 } from '@angular/core';
 import { Renderer2 } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import {
-    ScreenService,
-    DialogService,
-    SessionService,
-    ConfigurationService,
-    PersonalizationService,
-    Logger,
-    AbstractTemplate,
-    IScreen
-} from '../../core';
 import { Subscription } from 'rxjs';
+import { IScreen } from '../../core/components/dynamic-screen/screen.interface';
+import { AbstractTemplate } from '../../core/components/abstract-template';
+import { Logger } from '../../core/services/logger.service';
+import { PersonalizationService } from '../../core/services/personalization.service';
+import { ScreenService } from '../../core/services/screen.service';
+import { SessionService } from '../../core/services/session.service';
+import { ConfigurationService } from '../../core/services/configuration.service';
+import { DialogService } from '../../core/services/dialog.service';
 
 // tslint:disable-next-line:directive-selector
 @Directive({ selector: '[openposScreenOutlet]' })

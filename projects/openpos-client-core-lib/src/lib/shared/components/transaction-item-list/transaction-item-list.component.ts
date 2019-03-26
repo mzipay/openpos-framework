@@ -1,9 +1,10 @@
 import { Component, ViewChild, ElementRef, Input, Output, EventEmitter, AfterViewChecked } from '@angular/core';
 import { ISellItem } from '../../../core/interfaces/sell-item.interface';
-import { IActionItem, IItem } from '../../../core';
-import { IActionItemGroup } from '../../../core';
 import { SelectableItemListComponentConfiguration } from '../selectable-item-list/selectable-item-list.component';
 import { Configuration } from '../../../configuration/configuration';
+import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { IActionItemGroup } from '../../../core/interfaces/action-item-group.interface';
+import { IItem } from '../../../core/interfaces/item.interface';
 
 @Component({
   selector: 'app-transaction-item-list',

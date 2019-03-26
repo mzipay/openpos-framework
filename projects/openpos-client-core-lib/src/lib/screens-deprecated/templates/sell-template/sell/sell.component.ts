@@ -1,13 +1,16 @@
 import { Component, ViewChild, HostListener } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { AbstractTemplate, IActionItem, OpenposMediaService } from '../../../../core';
-import { StatusBarData, NavListComponent } from '../../../../shared';
 import { SellScreenUtils, ISellScreen } from './sell-screen.interface';
 import { ISellTemplate } from './sell-template.interface';
 import { SellStatusSectionData } from '../sell-status-section/sell-status-section.data';
 import { Configuration } from '../../../../configuration/configuration';
 import { MatDialog } from '@angular/material';
 import { ScreenComponent } from '../../../../shared/decorators/screen-component.decorator';
+import { AbstractTemplate } from '../../../../core/components/abstract-template';
+import { StatusBarData } from '../../../../shared/components/status-bar/status-bar-data';
+import { OpenposMediaService } from '../../../../core/services/openpos-media.service';
+import { IActionItem } from '../../../../core/interfaces/menu-item.interface';
+import { NavListComponent } from '../../../../shared/components/nav-list/nav-list.component';
 
 @ScreenComponent({
     name: 'Sell'

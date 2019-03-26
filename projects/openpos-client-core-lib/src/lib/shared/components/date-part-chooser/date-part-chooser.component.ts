@@ -1,6 +1,6 @@
 import { Input, Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { DatePartChooserMode, IDateParts } from '../../../core/interfaces';
 import { FabToggleGroupComponent } from '../fab-toggle-group/fab-toggle-group.component';
+import { DatePartChooserMode, IDateParts } from '../../../core/interfaces/date-part-chooser-field.interface';
 
 @Component({
     selector: 'app-date-part-chooser',

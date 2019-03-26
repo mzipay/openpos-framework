@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SessionService, ActionIntercepter, ActionIntercepterBehaviorType } from '../../core';
 import { PosScreen } from '../../screens-deprecated/pos-screen/pos-screen.component';
-import { IOptionItem } from '../../screens-deprecated';
+import { IOptionItem } from '../../screens-deprecated/choose-options/option-item.interface';
+import { SessionService } from '../../core/services/session.service';
+import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../core/action-intercepter';
 
 
 @Component({

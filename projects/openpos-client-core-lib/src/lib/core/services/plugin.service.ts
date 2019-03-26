@@ -1,12 +1,10 @@
 import { Logger } from './logger.service';
 import { Injectable } from '@angular/core';
-import {
-    CordovaDevicePlugin,
-    CordovaPlugin,
-    IDevicePlugin,
-    IPlugin
-} from '../plugins';
 import { CordovaService } from './cordova.service';
+import { IPlugin } from '../plugins/plugin.interface';
+import { CordovaDevicePlugin } from '../plugins/cordova-device-plugin';
+import { CordovaPlugin } from '../plugins/cordova-plugin';
+import { IDevicePlugin } from '../plugins/device-plugin.interface';
 
 
 @Injectable({
@@ -44,7 +42,7 @@ export class PluginService {
     }
 
     public addPlugin(pluginId: string, plugin: IPlugin) {
-        this.plugins.set(pluginId, {plugin: plugin, initialized: false});
+        this.plugins.set(pluginId, {plugin, initialized: false});
         this.log.info(`plugin '${pluginId}' added to the PluginService`);
     }
 

@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { PosScreen } from '../pos-screen/pos-screen.component';
-import { IForm, IFormElement, FormBuilder } from '../../core';
-import { DynamicFormFieldComponent, ShowErrorsComponent } from '../../shared';
+import { DynamicFormFieldComponent } from '../../shared/components/dynamic-form-field/dynamic-form-field.component';
+import { ShowErrorsComponent } from '../../shared/components/show-errors/show-errors.component';
+import { IForm } from '../../core/interfaces/form.interface';
+import { IFormElement } from '../../core/interfaces/form-field.interface';
+import { FormBuilder } from '../../core/services/form-builder.service';
 
 @Component({
   selector: 'app-auto-complete-address',

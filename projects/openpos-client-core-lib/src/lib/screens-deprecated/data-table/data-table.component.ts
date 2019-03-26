@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @Component({

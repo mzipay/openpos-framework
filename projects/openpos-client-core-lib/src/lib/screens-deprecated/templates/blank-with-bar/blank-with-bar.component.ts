@@ -1,9 +1,9 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
-import { AbstractTemplate } from '../../../core';
-import { StatusBarData } from '../../../shared';
 import { SellScreenUtils } from '../sell-template/sell/sell-screen.interface';
 import { ScreenComponent } from '../../../shared/decorators/screen-component.decorator';
+import { AbstractTemplate } from '../../../core/components/abstract-template';
+import { StatusBarData } from '../../../shared/components/status-bar/status-bar-data';
 
 @ScreenComponent({
     name: 'BlankWithBar'

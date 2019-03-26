@@ -27,7 +27,6 @@ import { FinalStartupTask } from './components/startup/final-startup-task';
 import { DialogContentComponent } from './components/dialog-content/dialog-content.component';
 import { DialogServiceStartupTask } from './components/startup/dialog-service-startup-task';
 import { TrainingOverlayService } from './services/training-overlay.service';
-import { ToastService } from './services';
 import { KeyPressProvider } from '../shared/providers/keypress.provider';
 import { fromEvent, Observable } from 'rxjs';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
@@ -37,6 +36,7 @@ import { DynamicScreenComponent } from './components/dynamic-screen/dynamic-scre
 import { LoaderComponent } from './components/loader/loader.component';
 import { StatusBarStatusControlComponent } from '../shared/components/status-bar-status-control/status-bar-status-control.component';
 import { STATUS_BAR_STATUS_CONTROL_COMPONENT } from '../shared/components/status-bar/status-bar.component';
+import { ToastService } from './services/toast.service';
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,

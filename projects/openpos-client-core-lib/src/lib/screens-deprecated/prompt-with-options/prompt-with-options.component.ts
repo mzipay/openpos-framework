@@ -1,7 +1,8 @@
 import { FormGroup, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { ChooseOptionsComponent } from '../choose-options/choose-options.component';
-import { ValidatorsService, IActionItem } from '../../core';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { ValidatorsService } from '../../core/services/validators.service';
 
 @Component({
   selector: 'app-prompt-with-options',

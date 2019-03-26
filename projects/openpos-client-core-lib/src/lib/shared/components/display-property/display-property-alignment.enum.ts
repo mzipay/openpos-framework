@@ -1,5 +1,5 @@
 export enum DisplayPropertyAligment {
-    column='column',
-    colon='colon',
-    vertical='vertical'
+    column= 'column',
+    colon= 'colon',
+    vertical= 'vertical'
 }

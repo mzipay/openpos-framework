@@ -1,8 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
-import { IActionItem, SelectionMode } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 
 @ScreenComponent({
     name: 'ItemSearchResults'

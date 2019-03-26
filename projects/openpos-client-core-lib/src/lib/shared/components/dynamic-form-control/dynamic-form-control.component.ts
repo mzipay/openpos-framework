@@ -1,9 +1,13 @@
 import { Component, ViewChildren, AfterViewInit, Input, QueryList, ViewChild } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
-import { SessionService, ScreenService, FormBuilder } from '../../../core/services';
-import { IFormElement, IForm, IActionItem } from '../../../core/interfaces';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
 import { ShowErrorsComponent } from '../show-errors/show-errors.component';
+import { IFormElement } from '../../../core/interfaces/form-field.interface';
+import { IForm } from '../../../core/interfaces/form.interface';
+import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { SessionService } from '../../../core/services/session.service';
+import { ScreenService } from '../../../core/services/screen.service';
+import { FormBuilder } from '../../../core/services/form-builder.service';
 
 @Component({
   selector: 'app-dynamic-form-control',

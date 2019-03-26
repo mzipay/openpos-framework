@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ObservableMedia} from '@angular/flex-layout';
-import { IActionItem } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { Configuration } from '../../configuration/configuration';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
 @ScreenComponent({
     name: 'Home'

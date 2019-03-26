@@ -1,5 +1,7 @@
-import { IAbstractScreen, IActionItem } from '../../core';
+
 import { ITotal } from '../../core/interfaces/total.interface';
+import { IAbstractScreen } from '../../core/interfaces/abstract-screen.interface';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
 export interface SaleInterface extends IAbstractScreen {
     totals: ITotal[];

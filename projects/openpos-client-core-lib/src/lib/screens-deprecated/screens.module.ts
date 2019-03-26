@@ -2,7 +2,6 @@
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '../shared/shared.module';
-import { ScreenService, DialogService, IconService } from '../core';
 
 // Screens
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
@@ -48,6 +47,9 @@ import { AutoCompleteAddressComponent } from './auto-complete-address/auto-compl
 import { TemporarilySharedScreens } from './temporarily-shared-screens.module';
 import { DefaultDialogComponent } from './dialog/default-dialog.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { ScreenService } from '../core/services/screen.service';
+import { DialogService } from '../core/services/dialog.service';
+import { IconService } from '../core/services/icon.service';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 const screens = [
     BasicItemSearchComponent,

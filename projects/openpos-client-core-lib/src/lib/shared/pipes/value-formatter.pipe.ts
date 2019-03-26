@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FormattersService } from '../../core';
+import { FormattersService } from '../../core/services/formatters.service';
 
 @Pipe({ name: 'valueFormatter' })
 export class ValueFormatterPipe implements PipeTransform {

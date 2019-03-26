@@ -1,7 +1,6 @@
 // Angular Includes
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
-import { ScreenService, DialogService } from '../core';
 import { ScreenConstants } from './screen.constants';
 import { SelfCheckoutWithBarComponent } from './self-checkout-with-bar/self-checkout-with-bar.component';
 import { SelfCheckoutTransactionComponent } from './self-checkout-transaction/self-checkout-transaction.component';
@@ -9,6 +8,8 @@ import { SelfCheckoutStatusBarComponent } from './self-checkout-statusbar/self-c
 import { SelfCheckoutHomeComponent } from './self-checkout-home/self-checkout-home.component';
 import { SelfCheckoutPaymentStatusComponent } from './self-checkout-payment-status/self-checkout-payment-status.component';
 import { SelfCheckoutOptionsComponent } from './self-checkout-options/self-checkout-options.component';
+import { ScreenService } from '../core/services/screen.service';
+import { DialogService } from '../core/services/dialog.service';
 
 
 const screens = [

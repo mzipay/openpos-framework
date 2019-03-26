@@ -5,8 +5,9 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TextMask, IMaskSpec, ITextMask } from '../../textmask';
 import { ErrorStateMatcher } from '@angular/material';
-import { PluginService } from '../../../core/services';
-import { BarcodeScannerPlugin, Scan } from '../../../core/plugins';
+import { PluginService } from '../../../core/services/plugin.service';
+import { BarcodeScannerPlugin } from '../../../core/plugins/barcode-scanner.plugin';
+import { Scan } from '../../../core/plugins/scan';
 
 @Component({
     selector: 'app-prompt-input',

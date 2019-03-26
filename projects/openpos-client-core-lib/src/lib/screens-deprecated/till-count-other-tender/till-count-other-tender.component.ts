@@ -1,7 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { PosScreen } from '../pos-screen/pos-screen.component';
-import { IActionItem, IItem } from './../../core';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { IItem } from '../../core/interfaces/item.interface';
 
 @Component({
   selector: 'app-till-count-other-tender',

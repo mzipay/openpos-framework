@@ -1,6 +1,8 @@
 import { Component, HostListener } from '@angular/core';
-import { SessionService, IScreen, IActionItem } from '../../core';
 import { ObservableMedia } from '@angular/flex-layout';
+import { IScreen } from '../../core/components/dynamic-screen/screen.interface';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { SessionService } from '../../core/services/session.service';
 
 @Component({
   selector: 'app-self-checkout-home',

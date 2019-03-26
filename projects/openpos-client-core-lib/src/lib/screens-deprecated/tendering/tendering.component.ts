@@ -1,12 +1,13 @@
 import { Component, ViewChild, OnDestroy, AfterViewInit, OnInit } from '@angular/core';
 import { MatInput } from '@angular/material';
-import {
-    IItem, IFormElement, IActionItem, ValidatorsService, ActionIntercepter,
-    ActionIntercepterBehavior, ActionIntercepterBehaviorType
-} from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { FormGroup, ValidatorFn, FormControl } from '@angular/forms';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
+import { IItem } from '../../core/interfaces/item.interface';
+import { IFormElement } from '../../core/interfaces/form-field.interface';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { ValidatorsService } from '../../core/services/validators.service';
+import { ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType } from '../../core/action-intercepter';
 
 @ScreenComponent({
     name: 'Tendering'

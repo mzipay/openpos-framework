@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IconDefinition, IconService } from '../../../core/services';
+import { IconDefinition, IconService } from '../../../core/services/icon.service';
 
 @Component({
     selector: 'app-icon',

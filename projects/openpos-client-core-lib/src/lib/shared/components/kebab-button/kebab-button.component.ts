@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { IActionItem } from '../../../core/interfaces';
 import { MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { KeyPressProvider } from '../../providers/keypress.provider';
 import { Configuration } from '../../../configuration/configuration';
-import { Subscription } from 'rxjs';
 import { KebabMenuComponent } from '../kebab-menu/kebab-menu.component';
+import { IActionItem } from '../../../core/interfaces/menu-item.interface';
 
 @Component({
     selector: 'app-kebab-button',

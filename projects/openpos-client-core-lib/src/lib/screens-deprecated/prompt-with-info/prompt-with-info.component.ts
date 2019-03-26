@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PromptComponent } from '../prompt/prompt.component';
-import { ValidatorsService } from '../../core';
+import { ValidatorsService } from '../../core/services/validators.service';
 
 @Component({
   selector: 'app-prompt-with-info',
