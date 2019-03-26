@@ -1,9 +1,12 @@
-import { SessionService, AppInjector, IActionItem, Logger } from '../../core';
 import { OnDestroy, OnInit } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { deepAssign } from '../../utilites/';
 import { MessageProvider } from '../providers/message.provider';
+import { AppInjector } from '../../core/app-injector';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { SessionService } from '../../core/services/session.service';
+import { Logger } from '../../core/services/logger.service';
+import { deepAssign } from '../../utilites/deep-assign';
 
 export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
 

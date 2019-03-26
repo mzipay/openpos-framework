@@ -1,9 +1,10 @@
 import { SaleItemListInterface } from './sale-item-list.interface';
 import { Component } from '@angular/core';
-import { ISellItem, SelectionMode } from '../../../core/interfaces';
 import { ScreenPartComponent } from '../../../shared/screen-parts/screen-part';
 import { SelectableItemListComponentConfiguration } from '../../../shared/components/selectable-item-list/selectable-item-list.component';
 import { MessageProvider } from '../../../shared/providers/message.provider';
+import { ISellItem } from '../../../core/interfaces/sell-item.interface';
+import { SelectionMode } from '../../../core/interfaces/selection-mode.enum';
 
 @Component({
     selector: 'app-sale-item-list',

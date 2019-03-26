@@ -1,6 +1,5 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-searchable-pop-tart',

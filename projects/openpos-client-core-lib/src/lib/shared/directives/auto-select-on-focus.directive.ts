@@ -1,6 +1,6 @@
 import { Logger } from './../../core/services/logger.service';
 import { Directive, ElementRef, HostListener } from '@angular/core';
-import { DeviceService } from '../../core';
+import { DeviceService } from '../../core/services/device.service';
 
 @Directive({
     // tslint:disable-next-line:directive-selector

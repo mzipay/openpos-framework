@@ -1,6 +1,6 @@
-import { IDateParts, DatePartChooserMode } from '../../../../core/interfaces';
-import { Input, Component, OnInit, Inject } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { Input, Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { DatePartChooserMode, IDateParts } from '../../../../core/interfaces/date-part-chooser-field.interface';
 
 @Component({
     selector: 'app-date-part-chooser-dialog',

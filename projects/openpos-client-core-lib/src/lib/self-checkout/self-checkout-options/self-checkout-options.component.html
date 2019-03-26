@@ -8,7 +8,7 @@
                 <p>{{screen.title}}</p>
             </div>
             <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.optionsImage">
-                <div [ngClass]="screen.optionsImage"></div>
+                <div [ngStyle]="screen.optionsImage | backgroundImageUrl" class="self-checkout-options-image"></div>
             </div>
             <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.prompt" class="text-center options-prompt">
                 <p>{{screen.prompt}}</p>

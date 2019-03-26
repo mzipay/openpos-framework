@@ -1,7 +1,7 @@
-import { Directive, Host, Self, OnDestroy } from "@angular/core";
-import { MatMenuTrigger } from "@angular/material";
-import { BehaviorSubject } from "rxjs";
-import { FloaterService } from "../../core";
+import { Directive, Host, Self, OnDestroy } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material';
+import { BehaviorSubject } from 'rxjs';
+import { FloaterService } from '../../core/services/floater.service';
 
 @Directive({ selector: `[matMenuTriggerFor], [mat-menu-trigger-for]` })
 export class FindFloatingElementDirective implements OnDestroy {

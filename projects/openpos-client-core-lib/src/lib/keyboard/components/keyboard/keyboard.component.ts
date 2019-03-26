@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, HostListener, Inject, LOCALE_ID, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, HostListener, QueryList, ViewChildren } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -7,7 +7,7 @@ import { MatKeyboardRef } from '../../classes/keyboard-ref.class';
 import { KeyboardClassKey } from '../../enums/keyboard-class-key.enum';
 import { KeyboardModifier } from '../../enums/keyboard-modifier.enum';
 import { IKeyboardLayout } from '../../interfaces/keyboard-layout.interface';
-import { MatKeyboardService } from '../../services/keyboard.service';
+// import { MatKeyboardService } from '../../services/keyboard.service';
 import { MatKeyboardKeyComponent } from '../keyboard-key/keyboard-key.component';
 
 /**
@@ -22,7 +22,7 @@ import { MatKeyboardKeyComponent } from '../keyboard-key/keyboard-key.component'
   changeDetection: ChangeDetectionStrategy.OnPush,
   preserveWhitespaces: false
 })
-export class MatKeyboardComponent implements OnInit {
+export class MatKeyboardComponent {
 
   private _darkTheme: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -84,8 +84,7 @@ export class MatKeyboardComponent implements OnInit {
   }
 
   // inject dependencies
-  constructor(@Inject(LOCALE_ID) private _locale: string,
-              private _keyboardService: MatKeyboardService) {}
+  constructor() {}
 
   setInputInstance(inputInstance: ElementRef) {
     this._inputInstance$.next(inputInstance);
@@ -93,14 +92,6 @@ export class MatKeyboardComponent implements OnInit {
 
   attachControl(control: AbstractControl) {
     this.control = control;
-  }
-
-  ngOnInit() {
-    // set a fallback using the locale
-    if (!this.layout) {
-      this.locale = this._keyboardService.mapLocale(this._locale) ? this._locale : 'en-US';
-      this.layout = this._keyboardService.getLayoutForLocale(this.locale);
-    }
   }
 
   /**

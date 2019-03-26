@@ -1,9 +1,7 @@
 import { Logger } from './logger.service';
 import { concat, throwError, Observable, Subject, ReplaySubject, of } from 'rxjs';
 import { Injectable, InjectionToken, Inject, Optional } from '@angular/core';
-import {
-    IStartupTask
-} from '../interfaces';
+import { IStartupTask } from '../interfaces/startup-task.interface';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { map, catchError } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material';

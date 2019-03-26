@@ -1,8 +1,8 @@
 import { ScreenPart } from '../../decorators/screen-part.decorator';
 import { Component } from '@angular/core';
-import { ScreenPartComponent } from '../screen-part';
 import { DialogHeaderInterface } from './dialog-header.interface';
 import { MessageProvider } from '../../providers/message.provider';
+import { ScreenPartComponent } from '../screen-part';
 
 @ScreenPart({
     name: 'dialogHeader'})

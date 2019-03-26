@@ -5,6 +5,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
  * Custom components can inherit from this class in order to be able to use
  * ngModel binding.
  */
+
+ // TODO Doesn't look like anything uses this we can probably remove it.
 export abstract class AbstractValueAccessor implements ControlValueAccessor {
     _value: any = '';
     get value(): any { return this._value; }

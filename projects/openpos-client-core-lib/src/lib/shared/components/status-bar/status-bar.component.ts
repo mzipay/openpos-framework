@@ -1,9 +1,21 @@
-import { IStatusBarControl } from './../../../core/interfaces';
+
 import { MatSnackBar } from '@angular/material';
-import { Component, Input, ViewChild, ViewContainerRef, Inject, ComponentFactoryResolver, AfterViewInit, InjectionToken, OnInit } from '@angular/core';
+import {
+    Component,
+    Input,
+    ViewChild,
+    ViewContainerRef,
+    Inject,
+    ComponentFactoryResolver,
+    AfterViewInit,
+    InjectionToken,
+    OnInit
+} from '@angular/core';
 import { StatusBarData } from './status-bar-data';
-import { SessionService, TrainingOverlayService } from '../../../core/services';
-import { ComponentType } from '@angular/cdk/overlay/index';
+import { ComponentType } from '@angular/cdk/overlay/';
+import { IStatusBarControl } from '../../../core/interfaces/status-bar-control.interface';
+import { SessionService } from '../../../core/services/session.service';
+import { TrainingOverlayService } from '../../../core/services/training-overlay.service';
 
 
 export const STATUS_BAR_STATUS_CONTROL_COMPONENT = new InjectionToken<ComponentType<IStatusBarControl>>('StatusBarStatusControlComponent');

@@ -1,10 +1,10 @@
-import { Logger } from './../../services/logger.service';
-import { IMessageHandler } from './../../interfaces/message-handler.interface';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { LoaderState } from './loader-state';
 import { SessionService } from '../../services/session.service';
 import { PersonalizationService } from '../../services/personalization.service';
 import { ILoading } from '../../interfaces/loading.interface';
+import { Logger } from './../../services/logger.service';
+import { IMessageHandler } from './../../interfaces/message-handler.interface';
 
 @Component({
     selector: 'app-loader',

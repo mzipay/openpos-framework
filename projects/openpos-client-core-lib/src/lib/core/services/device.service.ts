@@ -1,22 +1,18 @@
 import { Logger } from './logger.service';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { Injectable } from '@angular/core';
-import { Subscription, BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { FileUploadService } from './file-upload.service';
-import {
-    LogfileDownloadPlugin,
-    InAppBrowserPlugin,
-    BarcodeScannerPlugin,
-    DEVICE_ERROR_RESPONSE_TYPE,
-    DEVICE_RESPONSE_TYPE,
-    DEVICE_DNE_RESPONSE_TYPE,
-    IDevicePlugin,
-    IDeviceRequest,
-    Scan
-} from '../plugins';
 import { PluginService } from './plugin.service';
 import { SessionService } from './session.service';
 import { CordovaService } from './cordova.service';
+import { InAppBrowserPlugin } from '../plugins/in-app-browser.plugin';
+import { BarcodeScannerPlugin } from '../plugins/barcode-scanner.plugin';
+import { LogfileDownloadPlugin } from '../plugins/logfile-download.plugin';
+import { Scan } from '../plugins/scan';
+import { IDeviceRequest } from '../plugins/device-request.interface';
+import { IDevicePlugin } from '../plugins/device-plugin.interface';
+import { DEVICE_RESPONSE_TYPE, DEVICE_ERROR_RESPONSE_TYPE, DEVICE_DNE_RESPONSE_TYPE } from '../plugins/device-response.interface';
 
 @Injectable({
     providedIn: 'root',

@@ -1,6 +1,6 @@
 import { Logger } from './logger.service';
 import { Injectable, EventEmitter } from '@angular/core';
-import { IThemeChangingEvent } from '../../shared/events';
+import { IThemeChangingEvent } from '../../shared/events/theme-changing-event.interface';
 
 @Injectable({
     providedIn: 'root',

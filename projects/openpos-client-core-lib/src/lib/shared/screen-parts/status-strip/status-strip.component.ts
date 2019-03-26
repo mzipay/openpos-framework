@@ -6,7 +6,7 @@ import { Configuration } from '../../../configuration/configuration';
 import { SystemStatusType } from '../../../core/interfaces/system-status-type.enum';
 import { Component } from '@angular/core';
 import { MessageProvider } from '../../providers/message.provider';
-import { ScreenPart } from '../../decorators';
+import { ScreenPart } from '../../decorators/screen-part.decorator';
 import { SystemStatusDialogComponent } from '../../components/system-status/system-status-dialog.component';
 @ScreenPart({
     name: 'statusStrip'

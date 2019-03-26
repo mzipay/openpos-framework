@@ -39,10 +39,6 @@ import {
 } from '@angular/material';
 
 @NgModule({
-  entryComponents: [
-  ],
-  declarations: [
-  ],
   imports: [
     MatBadgeModule,
     MatButtonModule,

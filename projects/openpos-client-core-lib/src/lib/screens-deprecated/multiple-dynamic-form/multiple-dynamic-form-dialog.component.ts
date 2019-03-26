@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { OpenposMediaService } from '../../core';
 import { Observable } from 'rxjs';
 import { IMultipleFormOption } from './multiple-dynamic-form-screen.interface';
 import { MultipleDynamicFormComponent } from './multiple-dynamic-form.component';
 import { DialogComponent } from '../../shared/decorators/dialog-component.decorator';
+import { OpenposMediaService } from '../../core/services/openpos-media.service';
 
 @DialogComponent({
     name: 'MultipleDynamicForm'

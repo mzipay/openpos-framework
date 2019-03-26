@@ -1,9 +1,11 @@
-import { IMessageHandler } from './../../../core/interfaces';
 import { Component, Input, Optional, Inject, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
-import { DeviceService, SessionService, Logger } from '../../../core/services';
-import { IScan } from '../../../screens-deprecated';
 import { Subscription } from 'rxjs';
+import { IMessageHandler } from '../../../core/interfaces/message-handler.interface';
+import { IScan } from '../../../screens-deprecated/templates/sell-template/sell/scan.interface';
+import { Logger } from '../../../core/services/logger.service';
+import { SessionService } from '../../../core/services/session.service';
+import { DeviceService } from '../../../core/services/device.service';
 
 @Component({
   selector: 'app-scan-something',

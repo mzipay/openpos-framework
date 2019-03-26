@@ -1,8 +1,9 @@
 import { IScreen } from './dynamic-screen/screen.interface';
-import { Logger, SessionService } from '../services';
 import { AppInjector } from '../app-injector';
 import { ViewChild, ComponentRef, ComponentFactory } from '@angular/core';
 import { ScreenDirective } from '../../shared/directives/screen.directive';
+import { SessionService } from '../services/session.service';
+import { Logger } from '../services/logger.service';
 
 export abstract class AbstractTemplate<T> implements IScreen {
 

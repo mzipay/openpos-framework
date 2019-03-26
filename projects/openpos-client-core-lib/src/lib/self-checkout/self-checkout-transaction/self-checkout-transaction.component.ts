@@ -1,6 +1,10 @@
 import { Component, ViewChild, AfterViewInit, AfterViewChecked, ElementRef, OnInit } from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
-import { DeviceService, SessionService, IScreen, ISellItem, IActionItem } from '../../core';
+import { IScreen } from '../../core/components/dynamic-screen/screen.interface';
+import { ISellItem } from '../../core/interfaces/sell-item.interface';
+import { SessionService } from '../../core/services/session.service';
+import { DeviceService } from '../../core/services/device.service';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
 @Component({
   selector: 'app-self-checkout-transaction',

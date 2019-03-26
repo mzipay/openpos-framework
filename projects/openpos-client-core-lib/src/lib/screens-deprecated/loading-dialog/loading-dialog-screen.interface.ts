@@ -1,4 +1,4 @@
-import { IAbstractScreen } from '../../core';
+import { IAbstractScreen } from '../../core/interfaces/abstract-screen.interface';
 
 export interface ILoadingDialogScreen extends IAbstractScreen {
     title: string;

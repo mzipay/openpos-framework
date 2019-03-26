@@ -1,11 +1,12 @@
-import { IForm } from '../../core';
+import { IForm } from '../../core/interfaces/form.interface';
+
 
 export interface IOptionItem {
-    displayValue: String;
+    displayValue: string;
     value: string;
     enabled: boolean;
     selected: boolean;
-    icon: String;
+    icon: string;
     form: IForm;
-    keybind: String;
+    keybind: string;
 }

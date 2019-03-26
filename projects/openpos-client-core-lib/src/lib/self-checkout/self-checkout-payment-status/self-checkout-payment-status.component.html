@@ -7,6 +7,6 @@
         <p>{{instructions}}</p>
     </div>
     <div fxFlex="1 1 auto">
-        <div class="payment-auth-icon"></div>
+        <div [ngStyle]="screen.backgroundImage | backgroundImageUrl" class="payment-auth-icon"></div>
     </div>
 </div>

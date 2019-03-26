@@ -1,7 +1,10 @@
 import { Logger } from './../../core/services/logger.service';
 import { AppInjector } from '../../core/app-injector';
-import { SessionService, IScreen, IAbstractScreen, IActionItem } from '../../core';
-import { deepAssign } from '../../utilites';
+import { IAbstractScreen } from '../../core/interfaces/abstract-screen.interface';
+import { IScreen } from '../../core/components/dynamic-screen/screen.interface';
+import { SessionService } from '../../core/services/session.service';
+import { deepAssign } from '../../utilites/deep-assign';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
 export abstract class PosScreen<T extends IAbstractScreen> implements IScreen {
 

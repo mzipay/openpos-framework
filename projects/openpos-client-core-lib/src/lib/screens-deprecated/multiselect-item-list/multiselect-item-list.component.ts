@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { ItemClickAction, MenuClickAction, SelectableItemListComponentConfiguration } from '../../shared/';
-import { SelectionMode, IItem, IActionItem } from '../../core';
 import { NavListComponent } from '../../shared/components/nav-list/nav-list.component';
 import { PosScreen } from '../pos-screen/pos-screen.component';
+import { IItem } from '../../core/interfaces/item.interface';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
+import { ItemClickAction } from '../../shared/components/product-list/product-list.component';
+import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 
 @Component({
     selector: 'app-multiselect-item-list',

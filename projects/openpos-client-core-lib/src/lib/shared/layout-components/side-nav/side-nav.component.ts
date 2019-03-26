@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { OpenposMediaService } from '../../../core';
 import { Observable } from 'rxjs';
+import { OpenposMediaService } from '../../../core/services/openpos-media.service';
 
 @Component({
     selector: 'app-side-nav',

@@ -1,4 +1,3 @@
-import { Logger } from './../../../core/services/logger.service';
 import {
   Component, ViewChild, AfterViewInit, OnInit, OnDestroy,
   Output, Input, EventEmitter
@@ -8,11 +7,15 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ITextMask, TextMask } from '../../textmask';
 import { DynamicDateFormFieldComponent } from '../dynamic-date-form-field/dynamic-date-form-field.component';
-import { SessionService, ScreenService, PluginService } from '../../../core/services';
-import { IFormElement, ISearchablePopTartField } from '../../../core/interfaces';
-import { Scan, BarcodeScannerPlugin } from '../../../core/plugins';
 import { PopTartComponent } from '../pop-tart/pop-tart.component';
 import { SearchablePopTartComponent } from '../searchable-pop-tart/searchable-pop-tart.component';
+import { IFormElement, ISearchablePopTartField } from '../../../core/interfaces/form-field.interface';
+import { Logger } from '../../../core/services/logger.service';
+import { SessionService } from '../../../core/services/session.service';
+import { ScreenService } from '../../../core/services/screen.service';
+import { PluginService } from '../../../core/services/plugin.service';
+import { BarcodeScannerPlugin } from '../../../core/plugins/barcode-scanner.plugin';
+import { Scan } from '../../../core/plugins/scan';
 
 @Component({
   selector: 'app-dynamic-form-field',

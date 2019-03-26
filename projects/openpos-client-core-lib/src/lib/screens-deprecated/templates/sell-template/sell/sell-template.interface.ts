@@ -1,7 +1,8 @@
 import { IWorkStation } from './workstation.interface';
-import { IActionItem, IAbstractScreenTemplate } from './../../../../core';
 import { IScan } from './scan.interface';
 import { IStatusBar } from './status-bar.interface';
+import { IAbstractScreenTemplate } from '../../../../core/interfaces/abstract-screen-template.interface';
+import { IActionItem } from '../../../../core/interfaces/menu-item.interface';
 
 export interface ISellTemplate extends IAbstractScreenTemplate {
     scan: IScan;

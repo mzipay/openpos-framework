@@ -1,9 +1,6 @@
-import { AfterViewInit } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { ViewChild } from '@angular/core';
-import { Component } from '@angular/core';
-import { PersonalizationService } from '../../services';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MessageProvider } from '../../../shared/providers/message.provider';
+import { PersonalizationService } from '../../services/personalization.service';
 @Component({
     selector: 'app-dynamic-screen',
     templateUrl: './dynamic-screen.component.html',

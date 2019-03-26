@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
-import { IForm, IFormElement } from '../interfaces';
+import { IFormElement } from '../interfaces/form-field.interface';
+import { IForm } from '../interfaces/form.interface';
+
 // cannot import the ../../shared barrel here because of a circular reference
-import { OpenPosValidators } from '../../shared/validators';
 import { ValidatorsService } from './validators.service';
+import { OpenPosValidators } from '../../shared/validators/openpos-validators';
 
 @Injectable({
     providedIn: 'root'

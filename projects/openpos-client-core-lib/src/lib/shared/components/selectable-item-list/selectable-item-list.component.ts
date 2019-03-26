@@ -1,8 +1,8 @@
 import { Component, Input, ContentChild, TemplateRef, ElementRef, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { SelectionMode } from '../../../core/interfaces';
 import { KeyPressProvider } from '../../providers/keypress.provider';
 import { Subscription } from 'rxjs';
 import { Configuration } from '../../../configuration/configuration';
+import { SelectionMode } from '../../../core/interfaces/selection-mode.enum';
 
 export class SelectableItemListComponentConfiguration<ItemType> {
     numResultsPerPage: number;
@@ -93,6 +93,32 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy {
                 }
                 if ( event.type === 'keydown') {
                     this.handleArrowKey(event);
+                }
+            })
+        );
+
+        this.subscription.add(
+            this.keyPresses.subscribe('ArrowRight', 2, event => {
+                if (event.repeat || !Configuration.enableKeybinds || !this.keyboardControl) {
+                    return;
+                }
+                if (event.type === 'keydown') {
+                    if (this.currentPage < this.numberOfPages) {
+                        this.onNextPage();
+                    }
+                }
+            })
+        );
+
+        this.subscription.add(
+            this.keyPresses.subscribe('ArrowLeft', 2, event => {
+                if (event.repeat || !Configuration.enableKeybinds || !this.keyboardControl) {
+                    return;
+                }
+                if (event.type === 'keydown') {
+                    if (this.currentPage > 1) {
+                        this.onPrevPage();
+                    }
                 }
             })
         );

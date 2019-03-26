@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IActionItem, IFormElement, IForm } from '../../core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
+import { IForm } from '../../core/interfaces/form.interface';
+import { IFormElement } from '../../core/interfaces/form-field.interface';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',

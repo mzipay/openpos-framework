@@ -1,7 +1,8 @@
-import { Logger, SessionService} from './../../../core/services';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { IActionItem } from '../../../core/interfaces';
+import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { Logger } from '../../../core/services/logger.service';
+import { SessionService } from '../../../core/services/session.service';
 
 @Component({
     selector: 'app-nav-list',

@@ -3,7 +3,7 @@ import { IPlugin } from './plugin.interface';
 import { IDeviceRequest } from './device-request.interface';
 import { CordovaDevicePlugin } from './cordova-device-plugin';
 import { Scan } from './scan';
-import { IBarcodeScanInterceptor } from '../interfaces';
+import { IBarcodeScanInterceptor } from '../interfaces/barcode-scan-interceptor.interface';
 
 /**
  * Wrapper around the Cordova barcode scanner plugin to allow for intercepting the barcodes

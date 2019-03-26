@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { SaleInterface } from './sale.interface';
 import { Observable } from 'rxjs/internal/Observable';
-import { OpenposMediaService } from '../../core/services';
 import { MatDialog } from '@angular/material';
 import { PosScreen } from '../../screens-deprecated/pos-screen/pos-screen.component';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
+import { OpenposMediaService } from '../../core/services/openpos-media.service';
 
 @ScreenComponent({
     name: 'Sale'

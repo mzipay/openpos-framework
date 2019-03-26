@@ -2,7 +2,7 @@ import { Directive, HostListener, Renderer2, ElementRef, OnDestroy } from '@angu
 import 'hammerjs';
 import 'hammer-timejs';
 import { Subscription } from 'rxjs';
-import { SessionService } from '../../core';
+import { SessionService } from '../../core/services/session.service';
 import { Configuration } from '../../configuration/configuration';
 
 @Directive({

@@ -1,10 +1,10 @@
 
 import { Component, OnDestroy, HostListener } from '@angular/core';
-import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../core';
 import { IOptionItem } from './option-item.interface';
 import { IChooseOptionsScreen } from './choose-options-screen.interface';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { Configuration } from '../../configuration/configuration';
+import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../core/action-intercepter';
 
 @Component({
   selector: 'app-choose-options',
