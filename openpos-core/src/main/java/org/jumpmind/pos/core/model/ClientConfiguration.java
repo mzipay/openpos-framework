@@ -9,7 +9,8 @@ public class ClientConfiguration implements Serializable {
     private boolean mimicScroll = false;
     private boolean useOnScreenKeyboard = false;
     private boolean useTouchListener = true;
-    private boolean useSavePoints = true;
+    private boolean useSavePoints = false;
+    private boolean useSimulatedScanner = false;
     private boolean showRegisterStatus = false;
     private boolean clickableRegisterStatus = false;
     private boolean offlineOnlyRegisterStatus = false;
@@ -125,6 +126,14 @@ public class ClientConfiguration implements Serializable {
 
     public void setEnableKeybinds(boolean enableKeybinds) {
         this.enableKeybinds = enableKeybinds;
+    }
+    
+    public void setUseSimulatedScanner(boolean useSimulatedScanner) {
+        this.useSimulatedScanner = useSimulatedScanner;
+    }
+    
+    public boolean isUseSimulatedScanner() {
+        return useSimulatedScanner;
     }
 
 }
