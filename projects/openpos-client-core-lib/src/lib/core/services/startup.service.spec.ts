@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { StartupService, STARTUP_TASKS, STARTUP_COMPONENT, STARTUP_FAILED_COMPONENT, STARTUP_FAILED_TASK } from './startup.service';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { IStartupTask } from '../interfaces';
+import { IStartupTask } from '../interfaces/startup-task.interface';
 import { scan } from 'rxjs/operators';
 import { StartupComponent } from '../components/startup/startup.component';
 import { StartupFailedComponent } from '../components/startup/startup-failed.component';

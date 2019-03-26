@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { cold, getTestScheduler } from 'jasmine-marbles';
-import { IAbstractScreen } from '../../core';
+import { IAbstractScreen } from '../../core/interfaces/abstract-screen.interface';
 import { ScreenPartComponent } from './screen-part';
 import { Component } from '@angular/core';
 import { ScreenPart } from '../decorators/screen-part.decorator';
-import { MessageProvider } from '../providers';
+import { MessageProvider } from '../providers/message.provider';
 
 interface TestPartInterface extends IAbstractScreen {
     testProperty: string;

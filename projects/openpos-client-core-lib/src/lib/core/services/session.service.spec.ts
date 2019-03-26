@@ -16,7 +16,7 @@ describe('SessionService', () => {
 
     beforeEach(() => {
         const stompSpy = jasmine.createSpyObj('StompRService', ['publish']);
-        const personalizationSpy = jasmine.createSpyObj('PersonalizationService', ['getNodeId']);
+        const personalizationSpy = jasmine.createSpyObj('PersonalizationService', ['getDeviceId']);
         const matDialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
         const deviceSpy = jasmine.createSpyObj('DeviceService', ['isRunningInCordova']);
 

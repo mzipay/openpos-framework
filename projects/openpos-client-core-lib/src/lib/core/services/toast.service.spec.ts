@@ -3,8 +3,9 @@ import { SessionService } from './session.service';
 import { MatSnackBar } from '@angular/material';
 import { ToastService } from './toast.service';
 import { of } from 'rxjs';
-import { IToastScreen, ToastType, AppInjector } from '../../core';
 import { Injector } from '@angular/core';
+import { IToastScreen, ToastType } from '../interfaces/toast-screen.interface';
+import { AppInjector } from '../app-injector';
 
 
 describe('ToastService', () => {
