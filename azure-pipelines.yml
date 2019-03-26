@@ -28,8 +28,8 @@ steps:
     ng build openpos-client-core-lib
     scss-bundle -c projects/openpos-client-core-lib/scss-bundle.config.json
   displayName: 'Test, Build, & Pack'
-  continueOnError: true
-  failOnStderr: false
+  continueOnError: false
+  failOnStderr: true
 
 - task: PublishTestResults@2
   inputs:
