@@ -35,7 +35,7 @@
                         <span>{{m.title}}</span>&nbsp;
                         <span *ngIf="m.keybind && keybindsEnabled()" class="muted-color">{{m.keybind}}</span>
                     </button>
-                    <button *ngIf="screen.selectButton"  mat-raised-button color="primary" [disabled]="index<0" [actionItem]="screen.selectButton"
+                    <button *ngIf="screen.selectButton" cdkFocusInitial mat-raised-button color="primary" [disabled]="index<0" [actionItem]="screen.selectButton"
                         (actionClick)="doMenuItemAction(screen.selectButton)" (click)="doMenuItemAction(screen.selectButton)">
                         {{screen.selectButton.title}}
                     </button>
