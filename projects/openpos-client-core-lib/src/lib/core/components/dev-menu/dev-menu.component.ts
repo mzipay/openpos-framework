@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { AbstractTemplate } from '../../../core/components/abstract-template';
 import { Configuration } from '../../../configuration/configuration';
 import { IScreen } from '../../../core/components/dynamic-screen/screen.interface';
-import { Element, ActionMap, IMessageHandler } from '../../../core/interfaces';
 import { PersonalizationService } from '../../../core/services/personalization.service';
 import { PersonalizationComponent } from '../../../core/components/personalization/personalization.component';
 import { FileViewerComponent } from '../../../shared/components/file-viewer/file-viewer.component';
