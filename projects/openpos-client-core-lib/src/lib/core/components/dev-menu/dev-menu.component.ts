@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { AbstractTemplate } from '../../../core/components/abstract-template';
 import { Configuration } from '../../../configuration/configuration';
 import { IScreen } from '../../../core/components/dynamic-screen/screen.interface';
-import { ElectronService } from 'ngx-electron';
 import { Element, ActionMap, IMessageHandler } from '../../../core/interfaces';
 import { PersonalizationService } from '../../../core/services/personalization.service';
 import { PersonalizationComponent } from '../../../core/components/personalization/personalization.component';
@@ -113,8 +112,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
             protected router: Router, private pluginService: PluginService,
             private fileUploadService: FileUploadService,
             private httpClient: HttpClient, private cd: ChangeDetectorRef,
-            private elRef: ElementRef, public renderer: Renderer2,
-            private electron: ElectronService) {
+            private elRef: ElementRef, public renderer: Renderer2) {
 
         if (Configuration.useTouchListener) {
             this.renderer.listen(elRef.nativeElement, 'touchstart', (event) => {
@@ -346,10 +344,6 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
 
     public useSavePoints(): boolean {
         return Configuration.useSavePoints;
-    }
-
-    public useSimulatedScanner(): boolean {
-        return Configuration.useSimulatedScanner;
     }
 
     public onDevMenuRefresh() {
@@ -592,22 +586,6 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
             this.log.info('Session Scope updated: ');
             this.log.info(this.NodeElements);
         }
-    }
-
-    public isElectronEnabled() {
-        return this.electron.isElectronApp;
-    }
-
-    public toggleChromiumDevTools() {
-        this.electron.remote.getCurrentWindow().webContents.toggleDevTools();
-    }
-
-    public exitElectronApp() {
-        this.electron.remote.getCurrentWindow().close();
-    }
-
-    public getLocalTheme() {
-        return this.personalization.getTheme();
     }
 
     protected removeConversationElement(element: Element) {

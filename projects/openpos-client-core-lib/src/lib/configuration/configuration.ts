@@ -3,7 +3,6 @@ export const Configuration = {
     useOnScreenKeyboard: false,
     useTouchListener: true,
     useSavePoints: true,
-    useSimulatedScanner: false,
     showRegisterStatus: false,
     clickableRegisterStatus: false,
     offlineOnlyRegisterStatus: false,

@@ -28,8 +28,6 @@
     "@angular/platform-browser-dynamic": "^7.2.10",
     "@angular/platform-server": "^7.2.10",
     "@angular/router": "^7.2.10",
-    "@types/electron": "^1.6.10",
-    "ngx-electron": "^2.1.1",
     "@stomp/ng2-stompjs": "^6.0.0",
     "@stomp/stompjs": "^4.0.6",
     "@types/showdown": "^1.9.2",

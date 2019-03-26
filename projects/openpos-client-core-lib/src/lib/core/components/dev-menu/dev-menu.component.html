@@ -1,4 +1,4 @@
-<div *ngIf="showDevMenu" [class]="getLocalTheme()">
+<div *ngIf="showDevMenu">
     <mat-expansion-panel #devMenuPanel class="devMenuPanel">
         <mat-expansion-panel-header (click)="onDevMenuRefresh()">
             <mat-panel-description fxLayout="row" fxFlex fxLayoutAlign="start center" fxLayoutGap="10px">
@@ -352,7 +352,7 @@
                     </ng-container>
                 </div>
             </mat-tab>
-            <mat-tab *ngIf="useSimulatedScanner()" label="Scanner">
+            <mat-tab label="Scanner">
                 <h1>Simulated Scanner</h1>
                 <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
                     <mat-form-field appearance="standard">
@@ -365,13 +365,6 @@
                     </mat-form-field>
                 </div>
             </mat-tab>
-            <mat-tab *ngIf="isElectronEnabled()" label="Electron">
-                <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
-                        <button mat-raised-button color="primary" (click)="toggleChromiumDevTools()">Toggle Dev Tools</button>
-                        <button mat-raised-button color="primary" (click)="exitElectronApp()">Exit App</button>
-                </div>
-            </mat-tab>
-
         </mat-tab-group>
 
     </mat-expansion-panel>
