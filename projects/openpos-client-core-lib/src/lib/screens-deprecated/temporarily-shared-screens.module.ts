@@ -37,8 +37,7 @@ const dialogs = [
         ChooseOptionsDialogComponent,
         DynamicFormDialogComponent,
         LoadingDialogComponent,
-        MultipleDynamicFormDialogComponent,
-        PromptWithOptionsDialogComponent
+        MultipleDynamicFormDialogComponent
     ];
 
 @NgModule({
