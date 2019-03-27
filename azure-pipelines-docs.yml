@@ -31,8 +31,8 @@ steps:
   displayName: 'Upload docs to maven.jumpmind.com'  
   inputs:
     sshEndpoint: maven.jumpmind.com
-    #sourceFolder: # Optional
-    contents: 'dist/documentation/**' 
+    sourceFolder: 'dist/documentation/' # Optional
+    contents: '**' 
     targetFolder: 'www/docs/openpos-client-core-lib' # Optional
     cleanTargetFolder: true # Optional
     overwrite: true # Optional
