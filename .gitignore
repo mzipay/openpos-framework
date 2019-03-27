@@ -43,3 +43,4 @@ openpos-client-core-lib/\.settings/org\.eclipse\.buildship\.core\.prefs
 
 openpos-client-core-lib/\.project
 /.metadata/
+.azure-pipelines.yml.swp

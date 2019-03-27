@@ -28,6 +28,21 @@ ext {
     jacksonVersion='2.8.10'
 }
 
+processResources {
+    eachFile { details ->
+        if (details.name.endsWith('version.properties')) {
+                filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+                    'version': appVersion,
+                    'buildTime': new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss').format(new java.util.Date()),
+                    'gitBranch' : gitBranch,
+                    'gitHash' : gitHash,
+                    'buildNumber' : buildNumber,
+                    'buildName' : buildName
+                ])
+        }
+    }
+}
+
 
 repositories { maven { url symmetricMavenUrl } }
 
