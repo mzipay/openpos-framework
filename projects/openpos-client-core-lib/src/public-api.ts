@@ -2,6 +2,7 @@
  * Public API Surface of openpos-client-core-lib
  */
 
+export * from './lib/version';
 export * from './lib/configuration/configuration';
 export * from './lib/cordova/cordova-monkey-patch-fix';
 
