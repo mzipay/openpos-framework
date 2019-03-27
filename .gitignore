@@ -46,3 +46,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+projects/openpos-client-core-lib/src/lib/version.ts

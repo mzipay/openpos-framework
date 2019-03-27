@@ -2,9 +2,12 @@
 # Build a Node.js project that uses Angular.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
+name: $(BuildDefinitionName)-$(BuildID)
 trigger:
 - master
+
+variables:
+  BUILD_NUMBER: $(Build.BuildNumber)
 
 pool:
   vmImage: 'Ubuntu-16.04'
