@@ -103,6 +103,7 @@ import { DynamicFormPartComponent } from './screen-parts/dynamic-form-part/dynam
 import { SideNavComponent } from './layout-components/side-nav/side-nav.component';
 import { WaffleComponent } from './layout-components/waffle/waffle.component';
 import { CommonModule } from '@angular/common';
+import { PromptFormPartComponent } from './screen-parts/prompt-form-part/prompt-form-part.component';
 
 const screenParts = [
     DynamicFormPartComponent,
@@ -112,7 +113,8 @@ const screenParts = [
     BaconStripComponent,
     DialogHeaderComponent,
     SaleFooterComponent,
-    SaleItemListComponent
+    SaleItemListComponent,
+    PromptFormPartComponent
 ];
 
 const components = [
