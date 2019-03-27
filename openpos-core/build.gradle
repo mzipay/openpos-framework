@@ -9,21 +9,6 @@ buildscript {
     }
 }
 
-processResources {
-    eachFile { details ->
-        if (details.name.endsWith('.properties')) {
-                filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-                    'version': appVersion,
-                    'buildTime': new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss').format(new java.util.Date()),
-                    'gitBranch' : gitBranch,
-                    'gitHash' : gitHash,
-                    'buildNumber' : buildNumber,
-                    'buildName' : buildNumber
-                ])
-        }
-    }
-}
-
 jar {
     manifest {
         attributes("Implementation-Title": project.name,
