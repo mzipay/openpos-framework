@@ -9,7 +9,8 @@ const revision = require('child_process')
 const branch = require('child_process')
 .execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 
-const versionInfo = { 'version': version, 'gitHash': revision, 'buildTime': new Date().toISOString(), 'branch': branch, 'buildNumber': process.env.BUILD_NUMBER };
+const versionInfo = { 'version': version, 'gitHash': revision, 'buildTime': new Date().toISOString(), 'gitBranch': branch, 
+  'buildNumber': process.env.BUILD_NUMBER, 'buildName': process.env.BUILD_NAME };
 
 const file = resolve(__dirname, 'src', 'lib', 'version.ts');
 writeFileSync(file,
