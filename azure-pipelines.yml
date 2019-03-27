@@ -33,7 +33,7 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish for downstream pipeline consumption'
   inputs:
-    pathtoPublish: 'build/src'
+    pathtoPublish: 'openpos-assemble/build/openpos-server-core-lib'
     #artifactName: 'drop'
     #publishLocation: 'Container' # Options: container, filePath
     #targetPath: # Required when publishLocation == FilePath

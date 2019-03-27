@@ -4,7 +4,7 @@ task generateSourceArtifact(type: Copy) {
         println "Rebuilding build/src"
         delete 'build/src'
     }
-    into('build/src')
+    into('build/openpos-server-core-lib')
     from('../') {
         exclude '**/target', '**/build', '**/bin', '**/src/test', 'openpos.code-workspace',
                 'openpos-client-seed','openpos-cordova', 'openpos-test-module', 'openpos-cordova-log-plugin',
