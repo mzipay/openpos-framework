@@ -22,7 +22,7 @@ steps:
   continueOnError: false
   failOnStderr: false
 
-  - script: |
+- script: |
     ng build       
   displayName: 'Demo App Build'
   continueOnError: false
