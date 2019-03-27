@@ -6,4 +6,5 @@ public interface UIMessageType {
     String RETURN="Return";
     String DIALOG="Dialog";
     String PROMPT="Prompt";
+    String PROMPT_WITH_OPTIONS="PromptWithOptions";
 }
