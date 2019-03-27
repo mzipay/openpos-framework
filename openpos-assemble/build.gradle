@@ -1,0 +1,22 @@
+
+task generateSourceArtifact(type: Copy) {
+    doFirst {
+        println "Rebuilding build/src"
+        delete 'build/src'
+    }
+    into('build/openpos-server-core-lib')
+    from('../') {
+        exclude '**/target', '**/build', '**/bin', '**/src/test', 'openpos.code-workspace',
+                'openpos-client-seed','openpos-cordova', 'openpos-test-module', 'openpos-cordova-log-plugin',
+                'node', 'azure-pipelines.yml', '**/*.iml', '**/.project', '**/.classpath', '**/.gitignore',
+                'openpos-assemble', '**/.idea', '**/.settings', '**/.gradle'
+                filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+                    'version': appVersion,
+                    'buildTime': new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss').format(new java.util.Date()),
+                    'gitBranch' : gitBranch,
+                    'gitHash' : gitHash,
+                    'buildNumber' : buildNumber,
+                    'buildName' : buildNumber
+                ])
+    }
+}
