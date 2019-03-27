@@ -22,6 +22,12 @@ steps:
   continueOnError: false
   failOnStderr: false
 
+  - script: |
+    ng build       
+  displayName: 'Install'
+  continueOnError: false
+  failOnStderr: false
+
 - script: npx compodoc -c .compodocrc.json
   displayName: 'Build Docs'
   continueOnError: false

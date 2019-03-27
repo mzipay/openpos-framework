@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'componentdemo', pathMatch: 'full' },
     {
         path: 'componentdemo',
         loadChildren: './component-demo/component-demo.module#ComponentDemoModule'
@@ -10,7 +9,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { enableTracing: true, useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
