@@ -6,7 +6,9 @@ import { ShowErrorsComponent } from '../../shared/components/show-errors/show-er
 import { IForm } from '../../core/interfaces/form.interface';
 import { IFormElement } from '../../core/interfaces/form-field.interface';
 import { FormBuilder } from '../../core/services/form-builder.service';
-
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-auto-complete-address',
   templateUrl: './auto-complete-address.component.html',

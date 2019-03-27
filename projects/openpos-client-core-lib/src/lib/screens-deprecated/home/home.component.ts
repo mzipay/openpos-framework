@@ -5,6 +5,9 @@ import { Configuration } from '../../configuration/configuration';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
+/**
+ * @ignore
+ */
 @ScreenComponent({
     name: 'Home'
 })

@@ -39,7 +39,9 @@ const dialogs = [
         LoadingDialogComponent,
         MultipleDynamicFormDialogComponent
     ];
-
+/**
+ * @ignore
+ */
 @NgModule({
     entryComponents: [
         ...screens,

@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-item-options',
   templateUrl: './item-options.component.html',

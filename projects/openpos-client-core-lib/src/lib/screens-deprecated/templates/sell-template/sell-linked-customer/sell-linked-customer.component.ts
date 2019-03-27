@@ -2,6 +2,9 @@ import { Component, Input } from '@angular/core';
 import { IActionItem } from '../../../../core/interfaces/menu-item.interface';
 import { SessionService } from '../../../../core/services/session.service';
 
+/**
+ * @ignore
+ */
 @Component({
     selector: 'app-sell-linked-customer',
     templateUrl: './sell-linked-customer.component.html',

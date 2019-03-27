@@ -12,6 +12,9 @@ import { OpenposMediaService } from '../../../../core/services/openpos-media.ser
 import { IActionItem } from '../../../../core/interfaces/menu-item.interface';
 import { NavListComponent } from '../../../../shared/components/nav-list/nav-list.component';
 
+/**
+ * @ignore
+ */
 @ScreenComponent({
     name: 'Sell'
 })

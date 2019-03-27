@@ -12,6 +12,9 @@ import { ScreenComponent } from '../../shared/decorators/screen-component.decora
 import { ISellItem } from '../../core/interfaces/sell-item.interface';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 
+/**
+ * @ignore
+ */
 @ScreenComponent({
     name: 'Return'
 })

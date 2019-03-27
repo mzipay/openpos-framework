@@ -4,6 +4,9 @@ import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ValidatorsService } from '../../core/services/validators.service';
 
+/**
+ * @ignore
+ */
 @Component({
     selector: 'app-prompt',
     templateUrl: './prompt.component.html'

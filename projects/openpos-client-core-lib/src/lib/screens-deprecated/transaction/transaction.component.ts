@@ -13,6 +13,9 @@ import { ISellItem } from '../../core/interfaces/sell-item.interface';
 import { DeviceService } from '../../core/services/device.service';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',

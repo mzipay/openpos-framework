@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractTemplate } from '../../../core/components/abstract-template';
 import { ScreenComponent } from '../../../shared/decorators/screen-component.decorator';
 
+/**
+ * @ignore
+ */
 @ScreenComponent({
     name: 'Blank'
 })

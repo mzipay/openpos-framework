@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-call-for-authorization-component',
   templateUrl: './call-for-authorization.component.html'

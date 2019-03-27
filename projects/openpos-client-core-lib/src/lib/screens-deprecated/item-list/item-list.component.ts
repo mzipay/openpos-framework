@@ -6,6 +6,9 @@ import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { ProductListComponent, ItemClickAction } from '../../shared/components/product-list/product-list.component';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 
+/**
+ * @ignore
+ */
 @ScreenComponent({
     name: 'ItemList'
 })

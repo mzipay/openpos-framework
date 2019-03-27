@@ -4,6 +4,9 @@ import { IForm } from '../../core/interfaces/form.interface';
 import { IFormElement } from '../../core/interfaces/form-field.interface';
 import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html'

@@ -6,6 +6,9 @@ import { SessionService } from '../../core/services/session.service';
 import { deepAssign } from '../../utilites/deep-assign';
 import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
+/**
+ * @ignore
+ */
 export abstract class PosScreen<T extends IAbstractScreen> implements IScreen {
 
     screen: T;

@@ -5,6 +5,9 @@ import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { IForm } from '../../core/interfaces/form.interface';
 import { IFormElement } from '../../core/interfaces/form-field.interface';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-till-count',
   templateUrl: './till-count.component.html',

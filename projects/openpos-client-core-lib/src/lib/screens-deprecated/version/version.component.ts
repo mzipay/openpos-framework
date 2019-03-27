@@ -6,7 +6,9 @@ import { PluginService } from '../../core/services/plugin.service';
 import { AppVersion } from '../../core/services/app-version';
 
 declare var version: any; // read in from core at assets/version.js
-
+/**
+ * @ignore
+ */
 @Component({
     selector: 'app-version',
     templateUrl: './version.component.html',

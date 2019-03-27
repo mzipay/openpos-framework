@@ -4,6 +4,9 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { IItem } from '../../core/interfaces/item.interface';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-till-count-other-tender',
   templateUrl: './till-count-other-tender.component.html',

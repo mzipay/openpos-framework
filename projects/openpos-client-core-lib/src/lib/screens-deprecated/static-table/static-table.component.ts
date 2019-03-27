@@ -4,6 +4,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { SelectionMode } from '../choose-options/choose-options-screen.interface';
 
+/**
+ * @ignore
+ */
 @Component({
     selector: 'app-static-table',
     templateUrl: './static-table.component.html'

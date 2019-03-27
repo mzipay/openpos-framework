@@ -1,6 +1,8 @@
 import { IForm } from '../../core/interfaces/form.interface';
 
-
+/**
+ * @ignore
+ */
 export interface IOptionItem {
     displayValue: string;
     value: string;

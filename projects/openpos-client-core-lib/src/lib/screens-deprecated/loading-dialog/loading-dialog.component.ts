@@ -4,6 +4,9 @@ import { ILoadingDialogScreen } from './loading-dialog-screen.interface';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { DialogComponent } from '../../shared/decorators/dialog-component.decorator';
 
+/**
+ * @ignore
+ */
 @DialogComponent({
     name: 'LoadingDialog'
 })
