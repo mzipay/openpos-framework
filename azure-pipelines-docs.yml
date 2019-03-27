@@ -24,7 +24,7 @@ steps:
 
   - script: |
     ng build       
-  displayName: 'Install'
+  displayName: 'Demo App Build'
   continueOnError: false
   failOnStderr: false
 
