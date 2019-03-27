@@ -20,7 +20,3 @@ task generateSourceArtifact(type: Copy) {
                 ])
     }
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '5.3'
-}

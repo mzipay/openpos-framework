@@ -24,7 +24,7 @@ steps:
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
-    tasks: 'test generateArtifact'
+    tasks: 'test generateSourceArtifact'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish for downstream pipeline consumption'
   inputs:
