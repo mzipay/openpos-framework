@@ -1,30 +1,4 @@
 <div fxLayout="column" fxFlexFill>
     <app-dialog-header fxFlex="100%"></app-dialog-header>
-    <form [formGroup]="promptFormGroup" (ngSubmit)="onFormSubmit()" novalidate [markDirtyOnSubmit]="promptFormGroup">
-        <mat-dialog-content>
-            <app-prompt-input #promptInput cdkFocusInitial="true" [placeholderText]="screen.placeholderText" [responseType]="screen.responseType.toString()"
-                [promptIcon]="screen.promptIcon" [responseText]="screen.responseText" [hintText]="screen.hintText"
-                [minLength]="screen.minLength" [maxLength]="screen.maxLength" [promptFormGroup]="promptFormGroup"
-                [keyboardPreference]="screen.keyboardPreference" [scanEnabled]="screen.scanEnabled" [readOnly]="!screen.editable"></app-prompt-input>
-            <p *ngIf="instructions"><span class="text-sm">{{instructions}}</span></p>
-            <div style="height:50px"></div>
-        </mat-dialog-content>
-        <mat-dialog-actions *ngIf="screen.otherActions && screen.otherActions.length > 0" fxLayoutAlign="space-between">
-            <button type="button" *ngFor="let menuItem of screen.otherActions" mat-raised-button color=primary-inverse
-                (click)="session.onAction(menuItem)">
-                <span>{{menuItem.title}}</span>
-                <app-icon *ngIf="menuItem.icon" [iconClass]="'material-icons'" [iconName]="menuItem.icon"></app-icon>
-            </button>
-            <button type="submit" mat-raised-button color="primary">
-                <span>{{screen.actionButton.title}}</span>
-                <app-icon *ngIf="screen.actionButton.icon" [iconClass]="'material-icons'" [iconName]="screen.actionButton.icon"></app-icon>
-            </button>
-        </mat-dialog-actions>
-        <mat-dialog-actions *ngIf="(!screen.otherActions || screen.otherActions && screen.otherActions.length == 0) && screen.actionButton" align="end">
-            <button type="submit" mat-raised-button color="primary">
-                <span>{{screen.actionButton.title}}</span>
-                <app-icon *ngIf="screen.actionButton.icon" [iconClass]="'material-icons'" [iconName]="screen.actionButton.icon"></app-icon>
-            </button>
-        </mat-dialog-actions>
-    </form>
+    <app-prompt-form-part></app-prompt-form-part>
 </div>

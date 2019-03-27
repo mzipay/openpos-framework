@@ -1,0 +1,14 @@
+<div fxLayout="column" fxFlexFill>
+    <app-dialog-header fxFlex="100%"></app-dialog-header>
+    <app-prompt-form-part>
+        <div optionsDialog fxFlex="1 1 auto" style="overflow-x: hidden; overflow-y: auto;">
+            <mat-nav-list>
+                <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onOptionSelected(o.value)" style="border-color: black">
+                    <span [ngClass]="{'muted-color' : !o.enabled}">{{o.displayValue}}</span>
+                    <mat-icon class="material-icons pull-right line-item-caret" [ngClass]="{'muted-color' : !o.enabled}"
+                    style="top: 10px;">keyboard_arrow_right</mat-icon>
+                </mat-list-item>
+            </mat-nav-list>
+        </div>
+    </app-prompt-form-part>
+</div>

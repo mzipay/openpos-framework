@@ -51,6 +51,7 @@ import { ScreenService } from '../core/services/screen.service';
 import { DialogService } from '../core/services/dialog.service';
 import { IconService } from '../core/services/icon.service';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
+import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 const screens = [
     BasicItemSearchComponent,
     ChooseOptionsComponent,
@@ -93,7 +94,8 @@ const dialogs = [
     SelectionListDialogComponent,
     DefaultDialogComponent,
     ConfirmDialogComponent,
-    PromptDialogComponent
+    PromptDialogComponent,
+    PromptWithOptionsDialogComponent
 ];
 
 const templates = [
