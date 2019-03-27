@@ -9,16 +9,20 @@ import { GenericDialogComponent } from './dialog/generic-dialog.component';
 import { IconService } from '../core/services/icon.service';
 import { PromptScreenComponent } from './prompt/prompt-screen.component';
 import { PromptScreenDialogComponent } from './prompt/prompt-screen-dialog.component';
+import { PromptWithOptionsScreenComponent } from './prompt-with-options/prompt-with-options-screen.component';
+import { PromptWithOptionsScreenDialogComponent } from './prompt-with-options/prompt-with-options-screen-dialog.component';
 
 const screens = [
         SelectionListScreenComponent,
-        PromptScreenComponent
+        PromptScreenComponent,
+        PromptWithOptionsScreenComponent
     ];
 
 const dialogs = [
         SelectionListScreenDialogComponent,
         GenericDialogComponent,
-        PromptScreenDialogComponent
+        PromptScreenDialogComponent,
+        PromptWithOptionsScreenDialogComponent
     ];
 
 @NgModule({
