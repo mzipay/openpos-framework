@@ -54,7 +54,9 @@ import { SelectionListDialogComponent } from './selection-list/selection-list-di
 import { DataTableComponent } from './data-table/data-table.component';
 import { AutoCompleteAddressComponent } from './auto-complete-address/auto-complete-address.component';
 
-
+/**
+ * @ignore
+ */
 export const ScreenConstants = {
     screens : [
         { name: 'BasicItemSearch', component: BasicItemSearchComponent },

@@ -4,6 +4,9 @@ import { ChooseOptionsComponent } from './choose-options.component';
 import { DialogComponent } from '../../shared/decorators/dialog-component.decorator';
 import { OpenPOSDialogConfig } from '../../core/interfaces/open-pos-dialog-config.interface';
 
+/**
+ * @ignore
+ */
 @DialogComponent({
     name: 'ChooseOptions'
 })

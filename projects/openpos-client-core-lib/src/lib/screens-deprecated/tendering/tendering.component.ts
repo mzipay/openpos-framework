@@ -9,6 +9,9 @@ import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { ValidatorsService } from '../../core/services/validators.service';
 import { ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType } from '../../core/action-intercepter';
 
+/**
+ * @ignore
+ */
 @ScreenComponent({
     name: 'Tendering'
 })

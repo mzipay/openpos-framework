@@ -3,6 +3,9 @@ import { MatInput } from '@angular/material';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IForm } from '../../core/interfaces/form.interface';
 
+/**
+ * @ignore
+ */
 
 @Component({
   selector: 'app-basic-item-search',

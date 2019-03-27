@@ -4,6 +4,9 @@ import { ChooseOptionsComponent } from '../choose-options/choose-options.compone
 import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { ValidatorsService } from '../../core/services/validators.service';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-prompt-with-options',
   templateUrl: './prompt-with-options.component.html'

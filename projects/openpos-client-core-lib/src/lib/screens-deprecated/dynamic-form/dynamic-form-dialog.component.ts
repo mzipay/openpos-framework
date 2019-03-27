@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { DynamicFormComponent } from './dynamic-form.component';
 import { DialogComponent } from '../../shared/decorators/dialog-component.decorator';
 
+/**
+ * @ignore
+ */
 @DialogComponent({
     name: 'DynamicForm'
 })

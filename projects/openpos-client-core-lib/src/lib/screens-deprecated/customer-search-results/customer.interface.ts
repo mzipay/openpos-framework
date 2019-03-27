@@ -1,3 +1,6 @@
+/**
+ * @ignore
+ */
 export interface ICustomer {
     fullName: string;
     firstName: string;

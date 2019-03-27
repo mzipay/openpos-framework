@@ -4,6 +4,9 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-selection-list',
   templateUrl: './selection-list.component.html',

@@ -3,7 +3,9 @@ import { ICustomer } from './customer.interface';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { MatSelectionListChange } from '@angular/material/list';
 
-
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-customer-search-results',
   templateUrl: './customer-search-results.component.html',

@@ -6,6 +6,9 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 import { Configuration } from '../../configuration/configuration';
 import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../core/action-intercepter';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-choose-options',
   templateUrl: './choose-options.component.html'

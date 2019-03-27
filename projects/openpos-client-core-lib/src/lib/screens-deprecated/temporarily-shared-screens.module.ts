@@ -40,7 +40,9 @@ const dialogs = [
         MultipleDynamicFormDialogComponent,
         PromptWithOptionsDialogComponent
     ];
-
+/**
+ * @ignore
+ */
 @NgModule({
     entryComponents: [
         ...screens,

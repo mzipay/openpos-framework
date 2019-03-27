@@ -6,6 +6,9 @@ import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { ILine } from './line.interface';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-dialog',
   templateUrl: './default-dialog.component.html',

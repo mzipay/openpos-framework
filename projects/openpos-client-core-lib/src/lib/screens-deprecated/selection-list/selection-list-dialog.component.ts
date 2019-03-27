@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { SelectionListComponent } from './selection-list.component';
 
+/**
+ * @ignore
+ */
 @Component({
     selector: 'app-selection-list-dialog',
     templateUrl: './selection-list-dialog.component.html',

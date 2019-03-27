@@ -4,6 +4,9 @@ import { IConfirmationDialog } from '../../core/interfaces/confirmation-dialog.i
 import { DialogComponent } from '../../shared/decorators/dialog-component.decorator';
 import { IScreen } from '../../core/components/dynamic-screen/screen.interface';
 
+/**
+ * @ignore
+ */
 @DialogComponent({
     name: 'ConfirmDialog'
 })

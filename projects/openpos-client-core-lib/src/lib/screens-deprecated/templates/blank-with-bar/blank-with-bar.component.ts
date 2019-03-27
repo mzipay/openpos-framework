@@ -5,6 +5,9 @@ import { ScreenComponent } from '../../../shared/decorators/screen-component.dec
 import { AbstractTemplate } from '../../../core/components/abstract-template';
 import { StatusBarData } from '../../../shared/components/status-bar/status-bar-data';
 
+/**
+ * @ignore
+ */
 @ScreenComponent({
     name: 'BlankWithBar'
 })

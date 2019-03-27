@@ -3,6 +3,9 @@ import { MatTableDataSource } from '@angular/material';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ITenderItem } from '../../core/interfaces/tender-item.interface';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-change',
   templateUrl: './change.component.html',

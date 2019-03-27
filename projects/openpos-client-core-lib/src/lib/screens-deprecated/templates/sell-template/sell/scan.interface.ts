@@ -1,3 +1,7 @@
+
+/**
+ * @ignore
+ */
 export interface IScan {
     scanMinLength: number;
     scanMaxLength: number;

@@ -1,5 +1,8 @@
 import { IActionItem } from '../../../../core/interfaces/menu-item.interface';
 
+/**
+ * @ignore
+ */
 export interface IStatusBar {
     backButton: IActionItem;
     operatorText: String;

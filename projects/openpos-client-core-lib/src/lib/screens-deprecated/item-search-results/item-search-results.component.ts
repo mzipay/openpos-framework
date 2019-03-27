@@ -5,6 +5,9 @@ import { ScreenComponent } from '../../shared/decorators/screen-component.decora
 import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 
+/**
+ * @ignore
+ */
 @ScreenComponent({
     name: 'ItemSearchResults'
 })

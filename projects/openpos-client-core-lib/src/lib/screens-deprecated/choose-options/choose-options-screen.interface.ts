@@ -3,6 +3,9 @@ import { IAbstractScreen } from '../../core/interfaces/abstract-screen.interface
 import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
 
+/**
+ * @ignore
+ */
 export interface IChooseOptionsScreen extends IAbstractScreen {
     options: IOptionItem[];
     selectionMode: SelectionMode;
@@ -23,12 +26,18 @@ export interface IChooseOptionsScreen extends IAbstractScreen {
     backButton: IActionItem;
 }
 
+/**
+ * @ignore
+ */
 export enum SelectionMode {
     None= 'None',
     Single= 'Single',
     Multiple= 'Multiple',
 }
 
+/**
+ * @ignore
+ */
 export enum DisplayStyle {
     ButtonList= 'ButtonList',
     ButtonGrid= 'ButonGrid'

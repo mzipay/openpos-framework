@@ -99,7 +99,9 @@ const dialogs = [
 const templates = [
 ];
 
-
+/**
+ * @ignore
+ */
 @NgModule({
     entryComponents: [
         ...screens,

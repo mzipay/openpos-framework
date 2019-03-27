@@ -8,6 +8,9 @@ import { SelectableItemListComponentConfiguration } from '../../shared/component
 import { ItemClickAction } from '../../shared/components/product-list/product-list.component';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 
+/**
+ * @ignore
+ */
 @Component({
     selector: 'app-multiselect-item-list',
     templateUrl: './multiselect-item-list.component.html'

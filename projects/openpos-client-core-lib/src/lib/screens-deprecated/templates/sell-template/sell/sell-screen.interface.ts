@@ -6,6 +6,9 @@ import { IActionItem } from '../../../../core/interfaces/menu-item.interface';
 import { ISellItem } from '../../../../core/interfaces/sell-item.interface';
 import { StatusBarData } from '../../../../shared/components/status-bar/status-bar-data';
 
+/**
+ * @ignore
+ */
 export interface ISellScreen extends IAbstractScreen {
     name: string;
     screenType: string;

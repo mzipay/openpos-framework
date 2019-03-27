@@ -4,6 +4,9 @@ import { IStatusBar } from './status-bar.interface';
 import { IAbstractScreenTemplate } from '../../../../core/interfaces/abstract-screen-template.interface';
 import { IActionItem } from '../../../../core/interfaces/menu-item.interface';
 
+/**
+ * @ignore
+ */
 export interface ISellTemplate extends IAbstractScreenTemplate {
     scan: IScan;
     statusBar: IStatusBar;

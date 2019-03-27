@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-embedded-web-page',
   templateUrl: './embedded-web-page.component.html'

@@ -8,6 +8,10 @@ import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { IForm } from '../../core/interfaces/form.interface';
 import { ICatalogBrowserForm } from '../../core/interfaces/catalog-browser-form.interface';
 
+
+/**
+ * @ignore
+ */
 @Component({
     selector: 'app-catalog-browser',
     templateUrl: './catalog-browser.component.html',

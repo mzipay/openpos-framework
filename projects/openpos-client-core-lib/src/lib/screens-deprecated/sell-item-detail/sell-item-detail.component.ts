@@ -5,6 +5,9 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 import { ISellItem } from '../../core/interfaces/sell-item.interface';
 
+/**
+ * @ignore
+ */
 @ScreenComponent({
     name: 'SellItemDetail'
 })

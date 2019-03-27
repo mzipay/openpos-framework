@@ -6,6 +6,9 @@ import { SystemStatusType } from '../../../../core/interfaces/system-status-type
 import { MatDialog } from '@angular/material';
 import { SystemStatusDialogComponent } from '../../../../shared/components/system-status/system-status-dialog.component';
 
+/**
+ * @ignore
+ */
 @Component({
     selector: 'app-sell-status-section',
     templateUrl: './sell-status-section.component.html'

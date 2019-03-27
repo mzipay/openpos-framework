@@ -4,6 +4,9 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 import { MatSnackBar } from '@angular/material';
 import { Configuration } from '../../configuration/configuration';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'app-signature-capture',
   templateUrl: './signature-capture.component.html',

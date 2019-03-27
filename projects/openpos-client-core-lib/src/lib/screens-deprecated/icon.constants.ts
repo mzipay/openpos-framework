@@ -1,5 +1,8 @@
 import { IconDefinition } from '../core/services/icon.service';
 
+/**
+ * @ignore
+ */
 export const IconConstants = {
     icons: [
         {name: 'Barcode', iconDef: new IconDefinition('barcode.svg', 'svg')},
