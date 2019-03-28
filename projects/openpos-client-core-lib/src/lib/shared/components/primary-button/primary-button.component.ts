@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
  /**
   * Example of usage:
-  * <example-url>/openpos-client/#/componentdemo/primarybutton</example-url>
+  * <example-url>/openpos-client-demo/#/componentdemo/primarybutton</example-url>
   */
 @Component({
   selector: 'app-primary-button',

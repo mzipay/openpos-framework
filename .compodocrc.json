@@ -4,6 +4,5 @@
      "hideGenerator": true,
      "disablePrivate": true,
      "disableProtected": true,
-     "assetsFolder": "dist/openpos-client",
      "theme": "Stripe"
 }

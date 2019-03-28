@@ -53,3 +53,15 @@ steps:
     overwrite: true # Optional
     failOnEmptySource: true # Optional
     #publishRunAttachments: true # Optional   
+
+- task: CopyFilesOverSSH@0
+  displayName: 'Upload demo app to maven.jumpmind.com'  
+  inputs:
+    sshEndpoint: maven.jumpmind.com
+    sourceFolder: 'dist/openpos-client-demo/' # Optional
+    contents: '**' 
+    targetFolder: 'www/openpos-client-demo/' # Optional
+    cleanTargetFolder: true # Optional
+    overwrite: true # Optional
+    failOnEmptySource: true # Optional
+    #publishRunAttachments: true # Optional   

@@ -3,21 +3,21 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "openpos-client": {
+    "openpos-client-demo": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "demo",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "sass"
+          "style": "scss"
         }
       },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/openpos-client",
+            "outputPath": "dist/openpos-client-demo",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -62,18 +62,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "openpos-client:build"
+            "browserTarget": "openpos-client-demo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "openpos-client:build:production"
+              "browserTarget": "openpos-client-demo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "openpos-client:build"
+            "browserTarget": "openpos-client-demo:build"
           }
         },
         "test": {
@@ -116,11 +116,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "openpos-client:serve"
+            "devServerTarget": "openpos-client-demo:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "openpos-client:serve:production"
+              "devServerTarget": "openpos-client-demo:serve:production"
             }
           }
         },
@@ -171,5 +171,5 @@
       }
     }
   },
-  "defaultProject": "openpos-client"
+  "defaultProject": "openpos-client-demo"
 }
