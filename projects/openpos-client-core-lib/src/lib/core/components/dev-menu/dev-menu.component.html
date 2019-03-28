@@ -97,7 +97,7 @@
                                     <mat-expansion-panel [disabled]="showUpdating">
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
-                                                Node Scope
+                                                Device Scope
                                             </mat-panel-title>
                                             <mat-panel-description *ngIf="showUpdating">
                                                 Updating...
@@ -112,7 +112,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr class="mat-row" *ngFor="let element of NodeElements">
+                                                <tr class="mat-row" *ngFor="let element of DeviceElements">
                                                     <td class="mat-cell"> {{element.ID}} </td>
                                                     <td class="mat-cell"> {{element.Time}} </td>
                                                     <td class="mat-cell" style="text-align:center">

@@ -35,7 +35,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
 
     static MSG_TYPE = 'DevTools';
 
-    NodeElements: Element[];
+    DeviceElements: Element[];
     SessElements: Element[];
     ConvElements: Element[];
     ConfElements: Element[];
@@ -178,12 +178,12 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
                 }
             });
         }
-        if (message.scopes.NodeScope) {
+        if (message.scopes.DeviceScope) {
             this.log.info('Pulling Node Scope Elements...');
-            this.NodeElements = [];
-            message.scopes.NodeScope.forEach(element => {
-                if (!this.NodeElements.includes(element, 0)) {
-                    this.NodeElements.push({
+            this.DeviceElements = [];
+            message.scopes.DeviceScope.forEach(element => {
+                if (!this.DeviceElements.includes(element, 0)) {
+                    this.DeviceElements.push({
                         ID: element.name,
                         Time: element.date,
                         StackTrace: element.stackTrace,
@@ -357,7 +357,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
         this.currentStateClass = 'Updating State...';
         this.showUpdating = true;
         this.currentStateActions = [];
-        this.NodeElements = [];
+        this.DeviceElements = [];
         this.ConvElements = [];
         this.SessElements = [];
         this.ConfElements = [];
@@ -572,14 +572,14 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
 
     protected removeNodeElement(element: Element) {
         this.log.info('Attempting to remove \'' + element.Value + '\'...');
-        const index = this.NodeElements.findIndex(item => {
+        const index = this.DeviceElements.findIndex(item => {
             return element.Value === item.Value;
         });
         if (index !== -1) {
             this.session.publish('DevTools::Remove::Node', DevMenuComponent.MSG_TYPE, element);
-            this.NodeElements.splice(index, 1);
+            this.DeviceElements.splice(index, 1);
             this.log.info('Node Scope updated: ');
-            this.log.info(this.NodeElements);
+            this.log.info(this.DeviceElements);
         }
     }
 
@@ -612,7 +612,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
             this.session.publish('DevTools::Remove::Session', DevMenuComponent.MSG_TYPE, element);
             this.SessElements.splice(index, 1);
             this.log.info('Session Scope updated: ');
-            this.log.info(this.NodeElements);
+            this.log.info(this.DeviceElements);
         }
     }
 
