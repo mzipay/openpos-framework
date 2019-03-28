@@ -1,3 +1,4 @@
+import { VERSION } from './../../version';
 import { ILoading } from './../interfaces/loading.interface';
 import { Logger } from './logger.service';
 
@@ -35,7 +36,7 @@ export class SessionService implements IMessageHandler<any> {
 
     public state: Observable<string>;
 
-    private appId: String;
+    private appId: string;
 
     private subscription: Subscription;
 
@@ -93,7 +94,8 @@ export class SessionService implements IMessageHandler<any> {
     public registerMessageHandler(handler: IMessageHandler<any>, ...types: string[]): Subscription {
         return merge(
             this.stompJsonMessages$,
-            this.sessionMessages$).pipe(filter(s => types && types.length > 0 ? types.includes(s.type) : true)).subscribe(s => this.zone.run(() => handler.handle(s)));
+            this.sessionMessages$).pipe(filter(s => types && types.length > 0 ? types.includes(s.type) : true)).
+               subscribe(s => this.zone.run(() => handler.handle(s)));
     }
 
     public isRunningInBrowser(): boolean {
@@ -117,7 +119,7 @@ export class SessionService implements IMessageHandler<any> {
         this.appId = value;
     }
 
-    public getAppId(): String {
+    public getAppId(): string {
         return this.appId;
     }
 
@@ -140,7 +142,8 @@ export class SessionService implements IMessageHandler<any> {
             compatibilityVersion: Configuration.compatibilityVersion,
             appId: this.appId,
             deviceId: this.personalization.getDeviceId(),
-            queryParams: JSON.stringify(this.queryParams)
+            queryParams: JSON.stringify(this.queryParams),
+            version: JSON.stringify(VERSION)
         };
         this.appendPersonalizationProperties(headers);
         return headers;
@@ -155,7 +158,7 @@ export class SessionService implements IMessageHandler<any> {
         this.log.info('creating new stomp service at: ' + url);
 
         this.stompService.config = {
-            url: url,
+            url,
             headers: this.getHeaders(),
             heartbeat_in: 0, // Typical value 0 - disabled
             heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
@@ -350,7 +353,8 @@ export class SessionService implements IMessageHandler<any> {
         const sendResponseBackToServer: Function = () => {
             // tslint:disable-next-line:max-line-length
             this.log.info(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
-            this.stompService.publish(`/app/device/app/${this.appId}/node/${this.personalization.getDeviceId()}/device/${deviceResponse.deviceId}`,
+            this.stompService.publish(
+                `/app/device/app/${this.appId}/node/${this.personalization.getDeviceId()}/device/${deviceResponse.deviceId}`,
                 JSON.stringify(deviceResponse));
         };
 
@@ -367,23 +371,25 @@ export class SessionService implements IMessageHandler<any> {
         this.onAction(action, payload, null, true);
     }
 
-    public async onAction(action: string | IActionItem, payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
+    public async onAction(action: string | IActionItem, 
+                          payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
         if (action) {
             let response: any = null;
             let actionString = '';
             // we need to figure out if we are a menuItem or just a string
             if (action.hasOwnProperty('action')) {
-                const menuItem = <IActionItem>(action);
+                const menuItem = action as IActionItem;
                 confirm = menuItem.confirmationDialog;
                 actionString = menuItem.action;
                 // check to see if we are an IURLMenuItem
                 if (menuItem.hasOwnProperty('url')) {
-                    const urlMenuItem = <IUrlMenuItem>menuItem;
+                    const urlMenuItem = menuItem as IUrlMenuItem;
+                    // tslint:disable-next-line:max-line-length
                     this.log.info(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode}, with options: ${urlMenuItem.options}`);
                     const pluginService = AppInjector.Instance.get(PluginService);
                     // Use inAppBrowserPlugin when available since it tracks whether or not the browser is active.
                     pluginService.getPlugin('InAppBrowser').then(plugin => {
-                        const inAppPlugin = <InAppBrowserPlugin>plugin;
+                        const inAppPlugin = plugin as InAppBrowserPlugin;
                         inAppPlugin.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
                     }).catch(error => {
                         this.log.info(`InAppBrowser not found, using window.open. Reason: ${error}`);
@@ -394,7 +400,7 @@ export class SessionService implements IMessageHandler<any> {
                     }
                 }
             } else {
-                actionString = <string>action;
+                actionString = action as string;
             }
 
             this.log.info(`action is: ${actionString}`);
@@ -403,9 +409,9 @@ export class SessionService implements IMessageHandler<any> {
                 this.log.info('Confirming action');
                 let confirmD: IConfirmationDialog;
                 if (confirm.hasOwnProperty('message')) {
-                    confirmD = <IConfirmationDialog>confirm;
+                    confirmD = confirm as IConfirmationDialog;
                 } else {
-                    confirmD = { title: '', message: <string>confirm, cancelButtonName: 'No',
+                    confirmD = { title: '', message: confirm as string, cancelButtonName: 'No',
                     confirmButtonName: 'Yes', cancelAction: null, confirmAction: null };
                 }
                 const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
@@ -461,7 +467,8 @@ export class SessionService implements IMessageHandler<any> {
                     sendToServer();
                 }
             } else {
-                this.log.info(`Not sending action: ${actionString}.  processAction: ${processAction}, waitingForResponse:${this.waitingForResponse}`);
+                this.log.info(
+                    `Not sending action: ${actionString}.  processAction: ${processAction}, waitingForResponse:${this.waitingForResponse}`);
             }
 
         } else {
@@ -499,7 +506,7 @@ export class SessionService implements IMessageHandler<any> {
         if (this.appId && deviceId) {
             this.log.info(`Publishing action '${actionString}' of type '${type}' to server...`);
             this.stompService.publish('/app/action/app/' + this.appId + '/node/' + deviceId,
-                JSON.stringify({ name: actionString, type: type, data: payload }));
+                JSON.stringify({ name: actionString, type, data: payload }));
             return true;
         } else {
             this.log.info(`Can't publish action '${actionString}' of type '${type}' ` +

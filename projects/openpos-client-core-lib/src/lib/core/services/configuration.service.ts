@@ -31,7 +31,7 @@ export class ConfigurationService {
         if (message.versions) {
             message.versions.forEach(element => {
                 this.versions.push(element);
-            }); 
+            });
         }
         this.versions.push(VERSION as IVersion);
 
