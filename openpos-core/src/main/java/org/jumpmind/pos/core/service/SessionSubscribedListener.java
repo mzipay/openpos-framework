@@ -3,9 +3,9 @@ package org.jumpmind.pos.core.service;
 import java.util.Arrays;
 import java.util.Map;
 
+import org.jumpmind.pos.core.Versions;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerContainer;
-import org.jumpmind.pos.core.flow.ScopeType;
 import org.jumpmind.pos.core.model.ClientConfiguration;
 import org.jumpmind.pos.core.model.ConfigChangedMessage;
 import org.jumpmind.pos.core.model.IConfigSelector;
@@ -49,6 +49,9 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
 
     @Autowired
     ApplicationContext applicationContext;
+    
+    @Autowired
+    Versions versions;
 
     @Override
     public void onApplicationEvent(SessionSubscribedEvent event) {
@@ -124,14 +127,18 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
 
     private void sendClientConfiguration(String appId, String deviceId, String sessionId) {
         try {
+            String theme = null;
+            ClientConfiguration config = null;
             IConfigSelector configSelector = applicationContext.getBean(IConfigSelector.class);
             if (configSelector != null) {
-                String theme = configSelector.getTheme();
+                theme = configSelector.getTheme();
                 log.info("Config Selector Chose theme: {}", theme);
-                ClientConfiguration config = configSelector.getClientConfig();
-                ConfigChangedMessage configMessage = new ConfigChangedMessage(theme, config);
-                messageService.sendMessage(appId, deviceId, configMessage);
-            }
+                config = configSelector.getClientConfig();
+            } 
+            
+            ConfigChangedMessage configMessage = new ConfigChangedMessage(theme, config, versions.getVersions());
+            messageService.sendMessage(appId, deviceId, configMessage);
+
         } catch (NoSuchBeanDefinitionException e) {
             log.info("An {} is not configured.  Will not be sending client configuration to the client",
                     IConfigSelector.class.getSimpleName());
