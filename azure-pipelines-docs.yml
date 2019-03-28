@@ -18,11 +18,19 @@ steps:
   
 - script: |
     npm install -g @angular/cli
+    npm install scss-bundle -g
     npm install        
   displayName: 'Install'
   continueOnError: false
   failOnStderr: false
 
+- script: |    
+    ng build openpos-client-core-lib
+    scss-bundle -c projects/openpos-client-core-lib/scss-bundle.config.json
+  displayName: 'Build'
+  continueOnError: false
+  failOnStderr: false
+  
 - script: |
     ng build       
   displayName: 'Demo App Build'
