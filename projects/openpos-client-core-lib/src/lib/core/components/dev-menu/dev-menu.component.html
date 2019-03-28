@@ -1,4 +1,4 @@
-<div *ngIf="showDevMenu">
+<div *ngIf="showDevMenu" [class]="getLocalTheme()">
     <mat-expansion-panel #devMenuPanel class="devMenuPanel">
         <mat-expansion-panel-header (click)="onDevMenuRefresh()">
             <mat-panel-description fxLayout="row" fxFlex fxLayoutAlign="start center" fxLayoutGap="10px">
@@ -16,7 +16,7 @@
 
             </mat-panel-description>
         </mat-expansion-panel-header>
-                    
+
         <mat-tab-group dynamicHeight>
             <mat-tab label="State">
                 <div class="stateTab">
@@ -81,7 +81,8 @@
                                                     <td class="mat-cell"> {{element.ID}} </td>
                                                     <td class="mat-cell"> {{element.Time}} </td>
                                                     <td class="mat-cell" style="text-align:center">
-                                                        <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                                        <button mat-button color="accent"
+                                                            (click)="onStackTrace(element)">View</button>
                                                     </td>
                                                     <td class="mat-cell-close">
                                                         <button mat-icon-button (click)="onConfRemove(element)">
@@ -115,7 +116,8 @@
                                                     <td class="mat-cell"> {{element.ID}} </td>
                                                     <td class="mat-cell"> {{element.Time}} </td>
                                                     <td class="mat-cell" style="text-align:center">
-                                                        <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                                        <button mat-button color="accent"
+                                                            (click)="onStackTrace(element)">View</button>
                                                     </td>
                                                     <td class="mat-cell-close">
                                                         <button mat-icon-button (click)="onNodeRemove(element)">
@@ -149,7 +151,8 @@
                                                     <td class="mat-cell"> {{element.ID}} </td>
                                                     <td class="mat-cell"> {{element.Time}} </td>
                                                     <td class="mat-cell" style="text-align:center">
-                                                        <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                                        <button mat-button color="accent"
+                                                            (click)="onStackTrace(element)">View</button>
                                                     </td>
                                                     <td class="mat-cell-close">
                                                         <button mat-icon-button (click)="onSessRemove(element)">
@@ -183,7 +186,8 @@
                                                     <td class="mat-cell"> {{element.ID}} </td>
                                                     <td class="mat-cell"> {{element.Time}} </td>
                                                     <td class="mat-cell" style="text-align:center">
-                                                        <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                                        <button mat-button color="accent"
+                                                            (click)="onStackTrace(element)">View</button>
                                                     </td>
                                                     <td class="mat-cell-close">
                                                         <button mat-icon-button (click)="onConvRemove(element)">
@@ -217,7 +221,8 @@
                                                     <td class="mat-cell"> {{element.ID}} </td>
                                                     <td class="mat-cell"> {{element.Time}} </td>
                                                     <td class="mat-cell" style="text-align:center">
-                                                        <button mat-button color="accent" (click)="onStackTrace(element)">View</button>
+                                                        <button mat-button color="accent"
+                                                            (click)="onStackTrace(element)">View</button>
                                                     </td>
                                                     <td class="mat-cell-close">
                                                         <button mat-icon-button (click)="onConfRemove(element)">
@@ -235,7 +240,8 @@
                         <div *ngIf="displayStackTrace" class="stacktrace">
                             <mat-card>
                                 <mat-card-title>
-                                    <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
+                                    <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center"
+                                        fxLayoutAlign.xs="left">
                                         Origin of: {{selected}}
                                     </div>
                                     <div fxFlex=""></div>
@@ -291,7 +297,8 @@
                                     <tr class="mat-row" *ngFor="let element of savePoints">
                                         <td class="mat-cell"> {{element}} </td>
                                         <td class="mat-cell" style="text-align:center">
-                                            <button mat-button color="accent" (click)="onLoadSavePoint(element)">Load</button>
+                                            <button mat-button color="accent"
+                                                (click)="onLoadSavePoint(element)">Load</button>
                                         </td>
                                         <td class="mat-cell-close">
                                             <button mat-icon-button (click)="onSavePointRemove(element)">
@@ -307,9 +314,12 @@
                 <mat-action-row>
                     <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
                         <mat-form-field appearance="standard">
-                            <input matInput #newSavePoint (keyup.enter)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''" placeholder="Create a Save Point">
+                            <input matInput #newSavePoint
+                                (keyup.enter)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''"
+                                placeholder="Create a Save Point">
                             <mat-icon matSuffix>
-                                <button mat-icon-button (click)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''">
+                                <button mat-icon-button
+                                    (click)="onCreateSavePoint(newSavePoint.value); newSavePoint.value=''">
                                     <mat-icon aria-label="save">save</mat-icon>
                                 </button>
                             </mat-icon>
@@ -336,9 +346,15 @@
                             <tbody>
                                 <tr *ngFor="let m of logFilenames">
                                     <td>{{m}}</td>
-                                    <td><button mat-icon-button (click)="onLogfileUpload(m)" aria-label="Upload"><mat-icon>publish</mat-icon></button></td>
-                                    <td><button mat-icon-button (click)="onLogfileView(m)" aria-label="View"><mat-icon>pageview</mat-icon></button></td>
-                                    <td><button mat-icon-button (click)="onLogfileShare(m)" aria-label="Share"><mat-icon>share</mat-icon></button></td>
+                                    <td><button mat-icon-button (click)="onLogfileUpload(m)" aria-label="Upload">
+                                            <mat-icon>publish</mat-icon>
+                                        </button></td>
+                                    <td><button mat-icon-button (click)="onLogfileView(m)" aria-label="View">
+                                            <mat-icon>pageview</mat-icon>
+                                        </button></td>
+                                    <td><button mat-icon-button (click)="onLogfileShare(m)" aria-label="Share">
+                                            <mat-icon>share</mat-icon>
+                                        </button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -352,7 +368,7 @@
                     </ng-container>
                 </div>
             </mat-tab>
-            <mat-tab label="Scanner">
+            <mat-tab *ngIf="useSimulatedScanner()" label="Scanner">
                 <h1>Simulated Scanner</h1>
                 <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
                     <mat-form-field appearance="standard">
@@ -364,6 +380,39 @@
                         </mat-icon>
                     </mat-form-field>
                 </div>
+            </mat-tab>
+            <mat-tab *ngIf="isElectronEnabled()" label="Electron">
+                <div fxFlex="none" fxLayout="row" fxLayoutAlign="left center" fxLayoutAlign.xs="left">
+                    <button mat-raised-button color="primary" (click)="toggleChromiumDevTools()">Toggle Dev
+                        Tools</button>
+                    <button mat-raised-button color="primary" (click)="exitElectronApp()">Exit App</button>
+                </div>
+            </mat-tab>
+            <mat-tab label="About">
+                <h1>About</h1>
+                <mat-card *ngFor="let v of versions()">
+                    <mat-card-title>{{v.componentName}}</mat-card-title>
+                    <mat-card-content>
+                        <div>
+                            <strong>Version: </strong>{{v.version}}
+                        </div>
+                        <div>
+                            <strong>Build Number: </strong>{{v.buildNumber}}
+                        </div>
+                        <div>
+                            <strong>Build Time: </strong>{{v.buildTime}}
+                        </div>
+                        <div>
+                            <strong>Branch: </strong>{{v.gitBranch}}
+                        </div>
+                        <div>
+                            <strong>Git Hash: </strong>{{v.gitHash}}
+                        </div>
+                        <div>
+                            <strong>Build Name: </strong>{{v.buildName}}
+                        </div>
+                    </mat-card-content>
+                </mat-card>
             </mat-tab>
         </mat-tab-group>
 
@@ -382,7 +431,7 @@
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="onDevRestartNode()">Restart Node</button>
     </mat-menu>
-<!--
+    <!--
     <mat-menu #logsMenu="matMenu">
         <button mat-menu-item (click)="onLogfileShare()">Share</button>
         <button mat-menu-item (click)="onLogfileUpload()">Upload</button>

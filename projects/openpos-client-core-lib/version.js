@@ -9,7 +9,7 @@ const revision = require('child_process')
 const branch = require('child_process')
 .execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 
-const versionInfo = { 'version': version, 'gitHash': revision, 'buildTime': new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') , 'gitBranch': branch, 
+const versionInfo = { 'componentName': 'openpos-client-core-lib', 'version': version, 'gitHash': revision, 'buildTime': new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') , 'gitBranch': branch, 
   'buildNumber': process.env.BUILD_NUMBER, 'buildName': process.env.BUILD_NAME };
 
 const file = resolve(__dirname, 'src', 'lib', 'version.ts');

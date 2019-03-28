@@ -1,3 +1,4 @@
+import { ConfigurationService } from './../../services/configuration.service';
 import { Logger } from '../../../core/services/logger.service';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
@@ -17,11 +18,13 @@ import { ActionMap } from '../../interfaces/action-map.interface';
 import { Element } from '../../interfaces/element.interface';
 import { ScreenService } from '../../services/screen.service';
 import { DialogService } from '../../services/dialog.service';
+import { ElectronService } from 'ngx-electron';
 import { SessionService } from '../../services/session.service';
 import { DeviceService } from '../../services/device.service';
 import { IconService } from '../../services/icon.service';
 import { PluginService } from '../../services/plugin.service';
 import { FileUploadService } from '../../services/file-upload.service';
+import { IVersion } from '../../../core/interfaces/version.interface';
 
 @Component({
     selector: 'app-dev-menu',
@@ -111,7 +114,9 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
             protected router: Router, private pluginService: PluginService,
             private fileUploadService: FileUploadService,
             private httpClient: HttpClient, private cd: ChangeDetectorRef,
-            private elRef: ElementRef, public renderer: Renderer2) {
+            private elRef: ElementRef, public renderer: Renderer2,
+            private electron: ElectronService,
+            private configurationService: ConfigurationService) {
 
         if (Configuration.useTouchListener) {
             this.renderer.listen(elRef.nativeElement, 'touchstart', (event) => {
@@ -538,13 +543,17 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
         }
     }
 
+    public versions(): IVersion[] {
+        return this.configurationService.versions;
+    }
+
     protected addSaveFile(newSavePoint: string) {
         if (newSavePoint) {
             if (!this.savePoints.includes(newSavePoint)) {
                 this.savePoints.push(newSavePoint);
             }
-          this.session.publish('DevTools::Save::' + newSavePoint, DevMenuComponent.MSG_TYPE);
-          this.log.info('Save Point Created: \'' + newSavePoint + '\'');
+            this.session.publish('DevTools::Save::' + newSavePoint, DevMenuComponent.MSG_TYPE);
+            this.log.info('Save Point Created: \'' + newSavePoint + '\'');
         }
     }
 
@@ -572,6 +581,26 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
             this.log.info('Node Scope updated: ');
             this.log.info(this.NodeElements);
         }
+    }
+
+    public useSimulatedScanner(): boolean {
+        return Configuration.useSimulatedScanner;
+    }
+
+    public isElectronEnabled() {
+        return this.electron.isElectronApp;
+    }
+
+    public toggleChromiumDevTools() {
+        this.electron.remote.getCurrentWindow().webContents.toggleDevTools();
+    }
+
+    public exitElectronApp() {
+        this.electron.remote.getCurrentWindow().close();
+    }
+
+    public getLocalTheme() {
+        return this.personalization.getTheme();
     }
 
     public removeSessionElement(element: Element) {
