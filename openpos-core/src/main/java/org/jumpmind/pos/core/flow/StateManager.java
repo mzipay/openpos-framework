@@ -94,7 +94,7 @@ public class StateManager implements IStateManager {
     private Map<String, Boolean> sessionCompatible = new HashMap<>();
 
     private IErrorHandler errorHandler;
-    
+
     private final AtomicInteger activeCalls = new AtomicInteger(0);
     private final AtomicBoolean transitionRestFlag = new AtomicBoolean(false);
 
@@ -188,12 +188,17 @@ public class StateManager implements IStateManager {
     public void transitionTo(Action action, IState newState) {
         transitionTo(action, newState, null, null);
     }
-    
+
     protected void transitionTo(Action action, IState newState, SubTransition enterSubStateConfig, StateContext resumeSuspendedState) {
         transitionTo(action, newState, enterSubStateConfig, resumeSuspendedState, false);
     }
 
-    protected void transitionTo(Action action, IState newState, SubTransition enterSubStateConfig, StateContext resumeSuspendedState, boolean autoTransition) {
+    protected void transitionTo(
+            Action action,
+            IState newState,
+            SubTransition enterSubStateConfig,
+            StateContext resumeSuspendedState,
+            boolean autoTransition) {
         if (applicationState.getCurrentContext() == null) {
             throw new FlowException(
                     "There is no applicationState.getCurrentContext() on this StateManager.  HINT: States should use @In to get the StateManager, not @Autowired.");
@@ -218,9 +223,10 @@ public class StateManager implements IStateManager {
             if (exitSubState) {
                 returnActionName = getReturnActionName(action);
             }
-            
+
             stateManagerLogger.logStateTransition(applicationState.getCurrentContext().getState(), newState, action, returnActionName,
-                    enterSubStateConfig, exitSubState ? applicationState.getCurrentContext() : null, getApplicationState(), resumeSuspendedState);
+                    enterSubStateConfig, exitSubState ? applicationState.getCurrentContext() : null, getApplicationState(),
+                    resumeSuspendedState);
 
             if (enterSubState) {
                 applicationState.getStateStack().push(applicationState.getCurrentContext());
@@ -262,24 +268,25 @@ public class StateManager implements IStateManager {
     }
 
     protected String getReturnActionName(Action action) {
-        if (applicationState.getCurrentContext().getSubTransition() != null &&  
-                applicationState.getCurrentContext().getSubTransition().getReturnActionNames() != null) {
-            
+        if (applicationState.getCurrentContext().getSubTransition() != null
+                && applicationState.getCurrentContext().getSubTransition().getReturnActionNames() != null) {
+
             for (String returnActionName : applicationState.getCurrentContext().getSubTransition().getReturnActionNames()) {
                 if (StringUtils.equals(returnActionName, action.getName())) {
-                    return action.getName(); // the action IS a return action, so don't modify.
+                    return action.getName(); // the action IS a return action,
+                                             // so don't modify.
                 }
             }
-            
+
             if (applicationState.getCurrentContext().getSubTransition().getReturnActionNames().length == 1) {
                 return applicationState.getCurrentContext().getSubTransition().getReturnActionNames()[0];
             } else if (applicationState.getCurrentContext().getSubTransition().getReturnActionNames().length > 1) {
-                throw new FlowException("Unpected situation. Non-return action raised which completed a subflow: " + action.getName() + 
-                        " -- but there is more than 1 return action mapped to this subflow so we don't know which return action to pick: " + 
-                        Arrays.toString(applicationState.getCurrentContext().getSubTransition().getReturnActionNames()));
+                throw new FlowException("Unpected situation. Non-return action raised which completed a subflow: " + action.getName()
+                        + " -- but there is more than 1 return action mapped to this subflow so we don't know which return action to pick: "
+                        + Arrays.toString(applicationState.getCurrentContext().getSubTransition().getReturnActionNames()));
             }
-         }
-        
+        }
+
         return null;
     }
 
@@ -293,7 +300,7 @@ public class StateManager implements IStateManager {
     public void performInjectionsOnSpringBean(Object springBean) {
         injector.performInjectionsOnSpringBean(springBean, applicationState.getScope(), applicationState.getCurrentContext());
     }
-    
+
     public void performInjections(Object stateOrStep) {
         injector.performInjections(stateOrStep, applicationState.getScope(), applicationState.getCurrentContext());
         refreshDeviceScope();
@@ -365,7 +372,7 @@ public class StateManager implements IStateManager {
     public void keepAlive() {
         lastInteractionTime.set(new Date());
     }
-    
+
     public boolean isAtRest() {
         return activeCalls.get() == 0 || transitionRestFlag.get();
     }
@@ -374,27 +381,27 @@ public class StateManager implements IStateManager {
     public void doAction(Action action) {
         lastInteractionTime.set(new Date());
         activeCalls.incrementAndGet();
-        
-        try {            
+
+        try {
             if (applicationState.getCurrentTransition() != null) {
                 applicationState.getCurrentTransition().handleAction(action);
                 return;
             }
-            
+
             FlowConfig flowConfig = applicationState.getCurrentContext().getFlowConfig();
-            
+
             StateConfig stateConfig = applicationState.findStateConfig(flowConfig);
             if (handleTerminatingState(action, stateConfig)) {
                 return;
             }
-            
+
             validateStateConfig(applicationState.getCurrentContext().getState(), stateConfig);
-            
+
             Class<? extends IState> transitionStateClass = stateConfig.getActionToStateMapping().get(action.getName());
             Class<? extends IState> globalTransitionStateClass = flowConfig.getActionToStateMapping().get(action.getName());
             SubTransition subStateConfig = stateConfig.getActionToSubStateMapping().get(action.getName());
             SubTransition globalSubStateConfig = flowConfig.getActionToSubStateMapping().get(action.getName());
-            
+
             if (actionHandler.canHandleAction(applicationState.getCurrentContext().getState(), action)) {
                 handleAction(action);
             } else if (transitionStateClass != null) {
@@ -543,13 +550,13 @@ public class StateManager implements IStateManager {
 
         injector.resetInjections(applicationState.getCurrentContext().getState(), scopeType);
     }
-    
+
     private void clearScopeOnDeviceScopeBeans(ScopeType scopeType) {
         for (String name : applicationState.getScope().getDeviceScope().keySet()) {
             Object value = applicationState.getScopeValue(ScopeType.Device, name);
             injector.resetInjections(value, scopeType);
-        }        
-    }    
+        }
+    }
 
     @Override
     public void endSession() {
@@ -651,8 +658,10 @@ public class StateManager implements IStateManager {
 
     @Override
     public void registerQueryParams(Map<String, Object> queryParams) {
-        logger.info("Registering query params " + queryParams.toString());
-        applicationState.getScope().setScopeValue(ScopeType.Device, "queryParams", queryParams);
+        if (queryParams != null) {
+            logger.info("Registering query params " + queryParams.toString());
+            applicationState.getScope().setScopeValue(ScopeType.Device, "queryParams", queryParams);
+        }
     }
 
     @Override
@@ -664,7 +673,7 @@ public class StateManager implements IStateManager {
     public Injector getInjector() {
         return injector;
     }
-    
+
     public void setTransactionRestFlag(boolean transitionRestFlag) {
         this.transitionRestFlag.set(transitionRestFlag);
     }

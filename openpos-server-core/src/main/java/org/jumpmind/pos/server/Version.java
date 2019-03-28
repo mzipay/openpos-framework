@@ -1,4 +1,4 @@
-package org.jumpmind.pos.core;
+package org.jumpmind.pos.server;
 
 public class Version {
 

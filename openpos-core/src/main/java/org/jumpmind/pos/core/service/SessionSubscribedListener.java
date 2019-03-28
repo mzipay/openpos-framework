@@ -3,7 +3,6 @@ package org.jumpmind.pos.core.service;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.jumpmind.pos.core.Versions;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerContainer;
 import org.jumpmind.pos.core.model.ClientConfiguration;
@@ -12,6 +11,7 @@ import org.jumpmind.pos.core.model.IConfigSelector;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.IconType;
+import org.jumpmind.pos.server.Versions;
 import org.jumpmind.pos.server.config.MessageUtils;
 import org.jumpmind.pos.server.config.PersonalizationParameters;
 import org.jumpmind.pos.server.config.SessionSubscribedEvent;

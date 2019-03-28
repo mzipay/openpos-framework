@@ -2,7 +2,7 @@ package org.jumpmind.pos.core.model;
 
 import java.util.List;
 
-import org.jumpmind.pos.core.Version;
+import org.jumpmind.pos.server.Version;
 import org.jumpmind.pos.util.model.Message;
 
 public class ConfigChangedMessage extends Message {
