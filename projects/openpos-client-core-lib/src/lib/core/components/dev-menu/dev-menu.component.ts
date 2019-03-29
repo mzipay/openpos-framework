@@ -179,7 +179,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
             });
         }
         if (message.scopes.DeviceScope) {
-            this.log.info('Pulling Node Scope Elements...');
+            this.log.info('Pulling Device Scope Elements...');
             this.DeviceElements = [];
             message.scopes.DeviceScope.forEach(element => {
                 if (!this.DeviceElements.includes(element, 0)) {
