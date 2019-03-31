@@ -39,6 +39,7 @@ import { STATUS_BAR_STATUS_CONTROL_COMPONENT } from '../shared/components/status
 import { ToastService } from './services/toast.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxElectronModule } from 'ngx-electron';
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,
@@ -64,7 +65,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         SharedModule,
         RouterModule,
         BrowserModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        NgxElectronModule
     ],
     exports: [
         LoaderComponent,
