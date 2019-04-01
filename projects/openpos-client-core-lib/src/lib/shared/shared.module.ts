@@ -217,7 +217,8 @@ const pipes = [
     ],
     entryComponents: [
         KebabMenuComponent,
-        ScanSomethingComponent
+        ScanSomethingComponent,
+        PopTartComponent
     ],
     imports: [
         FormsModule,

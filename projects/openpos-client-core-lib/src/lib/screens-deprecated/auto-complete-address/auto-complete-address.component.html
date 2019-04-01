@@ -31,7 +31,7 @@
 			</mat-card-content>
 			<mat-card-actions align="end">
 				<button *ngIf="screen.submitButton" mat-raised-button type="submit" color=primary (click)="onSubmit()"
-					[disabled]="!formGroup.valid">
+					[disabled]="!formGroup.valid" [actionItem]="screen.submitButton" (actionClick)="onSubmit()">
 					<span>{{screen.submitButton.title}}</span>
 					<app-icon [iconName]="screen.submitButton.icon" [iconClass]="'material-icons'"></app-icon>
 				</button>

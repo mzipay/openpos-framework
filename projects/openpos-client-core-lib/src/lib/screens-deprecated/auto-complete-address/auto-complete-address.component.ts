@@ -62,7 +62,7 @@ export class AutoCompleteAddressComponent extends PosScreen<any> implements OnIn
   }
 
   onSubmit() {
-    if (this.formGroup.valid) {
+    if (this.formGroup.valid && this.screen.submitButton && this.screen.submitButton.enabled === true) {
       this.formBuilder.buildFormPayload(this.formGroup, this.screenForm);
       this.onMenuItemClick(this.screen.submitButton, this.screenForm);
     } else {
