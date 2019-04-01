@@ -1,3 +1,4 @@
+import { Logger } from './logger.service';
 import { TestBed } from '@angular/core/testing';
 import { StartupService, STARTUP_TASKS, STARTUP_COMPONENT, STARTUP_FAILED_COMPONENT, STARTUP_FAILED_TASK } from './startup.service';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -19,20 +20,25 @@ describe('StartupService', () => {
     let startupTaskProviders: any[];
 
     function addTask(type: IStartupTask) {
-        startupTaskProviders.push( { provide: STARTUP_TASKS, useValue: type, multi: true });
+        startupTaskProviders.push({ provide: STARTUP_TASKS, useValue: type, multi: true });
     }
 
     function setup() {
         const matDialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
         const matDialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close', 'afterClosed']);
+        const loggerSpy = jasmine.createSpyObj('Logger', ['info', 'error']);
         matDialogRef = matDialogRefSpy;
 
         TestBed.configureTestingModule({
             providers: [
                 StartupService,
                 { provide: STARTUP_COMPONENT, useValue: StartupComponent },
-                { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent},
-                { provide: STARTUP_FAILED_TASK, useValue: {name: 'FailureTask', order: 100, execute: () => cold('--x|', {x: 'FailureTask'})}},
+                { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent },
+                { provide: Logger, useValue: loggerSpy },
+                {
+                    provide: STARTUP_FAILED_TASK, useValue:
+                        { name: 'FailureTask', order: 100, execute: () => cold('--x|', { x: 'FailureTask' }) }
+                },
                 { provide: MatDialog, useValue: matDialogSpy },
                 ...startupTaskProviders
             ]
@@ -44,7 +50,7 @@ describe('StartupService', () => {
         matDialog.open.and.returnValue(matDialogRefSpy);
 
         // never complete so we don't restart
-        matDialogRef.afterClosed.and.returnValue(cold('---', {x: null}));
+        matDialogRef.afterClosed.and.returnValue(cold('---', { x: null }));
 
         // collect all the messages
         startupService.startupTaskMessages$.pipe(
@@ -53,9 +59,9 @@ describe('StartupService', () => {
 
 
         // collect the result of the route activation
-        startupService.canActivate( null, null).subscribe( (r) => {
-                result = r;
-            });
+        startupService.canActivate(null, null).subscribe((r) => {
+            result = r;
+        });
     }
 
     beforeEach(() => {
@@ -76,9 +82,9 @@ describe('StartupService', () => {
 
         it('should run all deduped tasks in order and return true', () => {
             // add tasks
-            addTask({name: 'TestTask1', order: 100, execute: () => cold('--x|', {x: 'Test1'})});
-            addTask({name: 'TestTask2', order: 1, execute: () => cold('--x|', {x: 'Test2'})});
-            addTask({name: 'TestTask1', order: 11, execute: () => cold('--x|', {x: 'Test3'})});
+            addTask({ name: 'TestTask1', order: 100, execute: () => cold('--x|', { x: 'Test1' }) });
+            addTask({ name: 'TestTask2', order: 1, execute: () => cold('--x|', { x: 'Test2' }) });
+            addTask({ name: 'TestTask1', order: 11, execute: () => cold('--x|', { x: 'Test3' }) });
 
             // do the test module setup
             setup();
@@ -93,9 +99,9 @@ describe('StartupService', () => {
 
         it('should not run any tasks after one fails', () => {
             // add tasks
-            addTask({name: 'TestTask1', order: 100, execute: () => cold('--x|', {x: 'Test1'})} );
-            addTask({name: 'TestTask2', order: 1, execute: () => cold('--x|', {x: 'Test2'})} );
-            addTask({name: 'TestTask3', order: 11, execute: () => cold('--#|', null, new Error('Test3Failed')) });
+            addTask({ name: 'TestTask1', order: 100, execute: () => cold('--x|', { x: 'Test1' }) });
+            addTask({ name: 'TestTask2', order: 1, execute: () => cold('--x|', { x: 'Test2' }) });
+            addTask({ name: 'TestTask3', order: 11, execute: () => cold('--#|', null, new Error('Test3Failed')) });
 
             setup();
 

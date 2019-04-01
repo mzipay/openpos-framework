@@ -1,3 +1,4 @@
+import { Logger } from './../../../core/services/logger.service';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BlankComponent } from './blank.component';
@@ -12,10 +13,12 @@ describe('BlankComponent', () => {
   beforeEach((() => {
 
     const sessionServiceSpy = jasmine.createSpyObj('SessionService', ['getMessages']);
+    const loggerSpy = jasmine.createSpyObj('Logger', ['info']);
     TestBed.configureTestingModule({
       declarations: [ BlankComponent ],
       providers: [
         { provide: SessionService, useValue: sessionServiceSpy },
+        { provide: Logger, useValue: loggerSpy },
     ]
     });
 

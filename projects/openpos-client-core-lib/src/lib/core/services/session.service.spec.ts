@@ -1,3 +1,4 @@
+import { Logger } from './logger.service';
 import { TestBed } from '@angular/core/testing';
 import { SessionService } from './session.service';
 import { PersonalizationService } from './personalization.service';
@@ -8,17 +9,20 @@ import { AppInjector } from '../app-injector';
 import { Injector } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
+
 describe('SessionService', () => {
 
     let stompServiceSpy: jasmine.SpyObj<StompRService>;
     let sessionService: SessionService;
     let deviceServiceSpy: jasmine.SpyObj<DeviceService>;
+    let loggerServiceSpy: jasmine.SpyObj<Logger>;
 
     beforeEach(() => {
         const stompSpy = jasmine.createSpyObj('StompRService', ['publish']);
         const personalizationSpy = jasmine.createSpyObj('PersonalizationService', ['getDeviceId']);
         const matDialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
         const deviceSpy = jasmine.createSpyObj('DeviceService', ['isRunningInCordova']);
+        const loggerSpy = jasmine.createSpyObj('Logger', ['info']);
 
         TestBed.configureTestingModule({
             imports: [
@@ -29,6 +33,7 @@ describe('SessionService', () => {
                 SessionService,
                 { provide: MatDialog, useValue: matDialogSpy },
                 { provide: StompRService, useValue: stompSpy },
+                { provide: Logger, useValue: loggerSpy },
                 { provide: DeviceService, useValue: deviceSpy}
             ]
         });
@@ -36,6 +41,8 @@ describe('SessionService', () => {
         AppInjector.Instance = TestBed.get(Injector);
         deviceServiceSpy = TestBed.get(DeviceService);
         deviceServiceSpy.isRunningInCordova.and.returnValue(false);
+
+        loggerServiceSpy = TestBed.get(Logger);
 
         stompServiceSpy = TestBed.get(StompRService);
         sessionService = TestBed.get(SessionService);
