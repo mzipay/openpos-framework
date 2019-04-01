@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.core.model.FieldInputType;
-import org.jumpmind.pos.core.screen.DialogProperties;
-import org.jumpmind.pos.core.screen.IPromptScreen;
 import org.jumpmind.pos.core.screen.ActionItem;
+import org.jumpmind.pos.core.screen.DialogProperties;
 
 public class PromptConfig {
 
@@ -73,6 +72,7 @@ public class PromptConfig {
     public PromptConfig asDialog() {
         DialogProperties props = new DialogProperties();
         props.setMinWidth("50%");
+        props.setRestoreFocus(false);
         return dialogProperties(props);
     }
 
