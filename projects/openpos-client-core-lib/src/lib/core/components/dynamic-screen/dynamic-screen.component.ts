@@ -9,14 +9,11 @@ import { PersonalizationService } from '../../services/personalization.service';
 })
 export class DynamicScreenComponent implements AfterViewInit {
 
-    @ViewChild('focusArea') focusArea: ElementRef;
-
     constructor(private personalization: PersonalizationService, messageProvider: MessageProvider) {
         messageProvider.setMessageType('Screen');
     }
 
     ngAfterViewInit() {
-        this.focusArea.nativeElement.focus();
       }
 
     getTheme() {

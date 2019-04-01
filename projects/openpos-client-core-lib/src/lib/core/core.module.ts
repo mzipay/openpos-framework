@@ -4,7 +4,7 @@ import { PersonalizationStartupTask } from './components/startup/personalization
 import { STARTUP_TASKS, STARTUP_COMPONENT, STARTUP_FAILED_COMPONENT } from './services/startup.service';
 
 // Angular Includes
-import { NgModule, Injector, Optional, SkipSelf } from '@angular/core';
+import { NgModule, Injector, Optional, SkipSelf, ErrorHandler } from '@angular/core';
 import { Location, LocationStrategy, PathLocationStrategy, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
@@ -17,6 +17,7 @@ import { StartupComponent } from './components/startup/startup.component';
 import { PersonalizationService } from './services/personalization.service';
 import { ConfigurationService } from './services/configuration.service';
 import { DialogService } from './services/dialog.service';
+import { ErrorHandlerService } from './services/errorhandler.service';
 import { StompRService } from '@stomp/ng2-stompjs';
 import { SubscribeToSessionTask } from './components/startup/subscribe-to-session-task';
 import { Router, RouterModule } from '@angular/router';
@@ -78,6 +79,7 @@ import { NgxElectronModule } from 'ngx-electron';
         HttpClient,
         Location,
         { provide: LocationStrategy, useClass: PathLocationStrategy },
+        { provide: ErrorHandler, useClass: ErrorHandlerService },
         DatePipe,
         BreakpointObserver,
         MediaMatcher,

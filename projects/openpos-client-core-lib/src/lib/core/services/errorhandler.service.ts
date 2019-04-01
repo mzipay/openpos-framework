@@ -1,29 +1,20 @@
 import {ErrorHandler, Injectable} from '@angular/core';
+import { Logger } from './logger.service';
 
 @Injectable({
     providedIn: 'root',
   })
 export class ErrorHandlerService extends ErrorHandler {
-  constructor() {
+
+  constructor(private log: Logger) {
     super();
   }
 
   handleError(error) {
-    if (! this.isRunningInBrowser()) {
-        console.group('>>>>> [OpenPOS] Exception <<<<<');
-        console.error(error);
-        console.error(error.message);
-        console.error('-------------------- STACK TRACE (start) --------------------');
-        try { console.error(error.stack.replace(/(.*@|file:\/\/).*(\/www\/.*)/g, '$1$2')); } catch (error) {}
-        console.error('-------------------- STACK TRACE (end) ----------------------');
-        console.groupEnd();
-    }
-    super.handleError(error);
+        this.log.error(error.message);
+        try { this.log.error(error.stack.replace(/(.*@|file:\/\/).*(\/www\/.*)/g, '$1$2')); } catch (error) {}
+        super.handleError(error);
   }
 
-  public isRunningInBrowser(): boolean {
-    const app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-    return !app;
-  }
 
 }

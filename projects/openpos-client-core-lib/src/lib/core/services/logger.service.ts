@@ -50,11 +50,19 @@ export class Logger {
     }
 
     public warn(message: any, ...args: any[]): void {
-        this.log(LogLevel.WARN, message, args);
+        if (this.electron.isElectronApp) {
+            this.electronLogger.warn(message);
+        } else {
+            this.log(LogLevel.WARN, message, args);
+        }
     }
 
     public error(message: any, ...args: any[]): void {
-        this.log(LogLevel.ERROR, message, args);
+        if (this.electron.isElectronApp) {
+            this.electronLogger.error(message);
+        } else {
+            this.log(LogLevel.ERROR, message, args);
+        }
     }
 
     protected log(logLevel: number, message: any, args: any[]): void {

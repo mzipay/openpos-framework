@@ -1,5 +1,6 @@
+import { FocusService } from './../../../core/services/focus.service';
 import { IActionItem } from './../../../core/interfaces/menu-item.interface';
-import { Component, ViewChild, AfterViewInit, Input } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Input, ElementRef } from '@angular/core';
 import { ScreenPartComponent } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
 import { MatInput } from '@angular/material';
@@ -18,13 +19,13 @@ import { ScreenPart } from '../../decorators/screen-part.decorator';
 export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> implements AfterViewInit {
 
     @ViewChild(MatInput)
-    input: MatInput;
+    input: ElementRef;
 
     public barcode: string;
 
     @Input() defaultAction: IActionItem;
 
-    constructor( public devices: DeviceService, messageProvider: MessageProvider ) {
+    constructor( public devices: DeviceService, messageProvider: MessageProvider, private focusService: FocusService) {
         super(messageProvider);
     }
 
@@ -33,7 +34,7 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
     }
 
     ngAfterViewInit(): void {
-        setTimeout(() => this.focusFirst());
+        this.focusFirst();
     }
 
     public onEnter(): void {
@@ -47,7 +48,7 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     private focusFirst(): void {
         if (this.screenData && this.screenData.autoFocusOnScan) {
-        this.input.focus();
+            this.focusService.requestFocus('scan-or-search', this.input);
         }
     }
 
