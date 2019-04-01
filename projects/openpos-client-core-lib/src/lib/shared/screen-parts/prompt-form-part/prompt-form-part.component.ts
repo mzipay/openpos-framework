@@ -29,7 +29,9 @@ export class PromptFormPartComponent extends ScreenPartComponent<PromptFormPartI
         const group: any = {};
         const validators: ValidatorFn[] = [];
         validators.push(Validators.required);
-        validators.push(this.validatorsService.getValidator(this.screenData.responseType.toString()));
+        if (this.screenData.responseType) {
+            validators.push(this.validatorsService.getValidator(this.screenData.responseType.toString()));
+        }
 
         if (this.screenData.validators) {
             this.screenData.validators.forEach(v => validators.push(this.validatorsService.getValidator(v.toString())));

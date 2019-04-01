@@ -1,3 +1,4 @@
+import { DialogService } from './../../services/dialog.service';
 import { FocusService } from './../../services/focus.service';
 import { AfterViewInit, Component, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { MessageProvider } from '../../../shared/providers/message.provider';
@@ -12,7 +13,8 @@ export class DynamicScreenComponent implements AfterViewInit, AfterViewChecked {
 
     @ViewChild('focusArea') focusArea: ElementRef;
 
-    constructor(private personalization: PersonalizationService, 
+    constructor(private personalization: PersonalizationService,
+                private dialogService: DialogService,
                 messageProvider: MessageProvider, private focusService: FocusService) {
         messageProvider.setMessageType('Screen');
     }
@@ -21,7 +23,9 @@ export class DynamicScreenComponent implements AfterViewInit, AfterViewChecked {
     }
 
     ngAfterViewChecked(): void {
-        this.focusService.requestFocus('hidden-div', this.focusArea);
+        if (!this.dialogService.isDialogOpenOrOpening()) {
+            this.focusService.requestFocus('hidden-div', this.focusArea.nativeElement);
+        }
     }
 
 

@@ -7,6 +7,7 @@ import { DialogContentComponent } from '../components/dialog-content/dialog-cont
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { OpenPOSDialogConfig } from '../interfaces/open-pos-dialog-config.interface';
 import { BehaviorSubject } from 'rxjs';
+import { FocusService } from './focus.service';
 
 @Injectable({
     providedIn: 'root',
@@ -26,6 +27,7 @@ export class DialogService {
     private $dialogMessages = new BehaviorSubject<any>(null);
 
     constructor(
+        private focusService: FocusService,
         private log: Logger,
         private componentFactoryResolver: ComponentFactoryResolver,
         private session: SessionService,
@@ -55,6 +57,14 @@ export class DialogService {
             DialogService.dialogs.delete(name);
         }
         DialogService.dialogs.set(name, type);
+    }
+
+    public isDialogOpenOrOpening(): boolean {
+        if (!this.dialogOpening) {
+            return this.isDialogOpen();
+        } else {
+            return this.dialogOpening;
+        }
     }
 
     public hasDialog(name: string): boolean {
@@ -116,6 +126,7 @@ export class DialogService {
 
     private updateDialog(dialog?: any): void {
         if (dialog) {
+            this.focusService.reset();
             const dialogType = this.hasDialog(dialog.subType) ? dialog.subType : 'Dialog';
             if (!this.dialogOpening) {
                 this.log.info('opening dialog \'' + dialogType + '\'');

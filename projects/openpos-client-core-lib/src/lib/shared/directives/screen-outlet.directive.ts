@@ -79,17 +79,15 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     handle(message: any) {
         if (message.screenType !== 'NoOp') {
+            this.blurDefaultFocus();
             this.focusService.reset();
             this.updateTemplateAndScreen(message);
         }
     }
 
-    protected setDefaultFocus() {
+    private blurDefaultFocus() {
         const parent = this.elRef.nativeElement.parentNode;
-        const div = parent.getElementsByTagName('div')[0];
-        if (div) {
-            this.focusService.requestFocus('hidden div', div);
-        }
+        parent.getElementsByTagName('div')[0].blur();
     }
 
     protected updateTemplateAndScreen(screen?: any): void {

@@ -59,7 +59,7 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     }
 
     isPassword(): boolean {
-        return this.responseType.toLowerCase() === 'alphanumericpassword';
+        return this.responseType && this.responseType.toLowerCase() === 'alphanumericpassword';
     }
 
     onCheck() {

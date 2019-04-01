@@ -27,7 +27,7 @@
 <ng-template #dialogForm>
     <form [formGroup]="promptFormGroup" (ngSubmit)="onFormSubmit()" novalidate [markDirtyOnSubmit]="promptFormGroup">
         <mat-dialog-content>
-            <app-prompt-input #promptInput cdkFocusInitial="true" [placeholderText]="screenData.placeholderText" [responseType]="screenData.responseType.toString()"
+            <app-prompt-input #promptInput [placeholderText]="screenData.placeholderText" [responseType]="screenData.responseType ? screenData.responseType.toString() : null"
             [promptIcon]="screenData.promptIcon" [responseText]="screenData.responseText" [hintText]="screenData.hintText"
             [minLength]="screenData.minLength" [maxLength]="screenData.maxLength" [promptFormGroup]="promptFormGroup"
             [keyboardPreference]="screenData.keyboardPreference" [scanEnabled]="screenData.scanEnabled" [readOnly]="!screenData.editable"></app-prompt-input>
