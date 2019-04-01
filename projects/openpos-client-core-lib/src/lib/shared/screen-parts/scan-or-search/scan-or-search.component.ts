@@ -18,14 +18,12 @@ import { ScreenPart } from '../../decorators/screen-part.decorator';
 })
 export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> implements AfterViewInit {
 
-    @ViewChild(MatInput)
-    input: ElementRef;
-
     public barcode: string;
 
     @Input() defaultAction: IActionItem;
 
-    constructor( public devices: DeviceService, messageProvider: MessageProvider, private focusService: FocusService) {
+    constructor( public devices: DeviceService, messageProvider: MessageProvider,
+                 private focusService: FocusService, private elRef: ElementRef) {
         super(messageProvider);
     }
 
@@ -46,9 +44,17 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
         }
     }
 
+    protected setDefaultFocus() {
+
+    }
+
     private focusFirst(): void {
         if (this.screenData && this.screenData.autoFocusOnScan) {
-            this.focusService.requestFocus('scan-or-search', this.input);
+            const parent = this.elRef.nativeElement.parentNode;
+            const input = parent.getElementsByTagName('input')[0];
+            if (input) {
+                this.focusService.requestFocus('scan-or-search', input);
+            }
         }
     }
 
