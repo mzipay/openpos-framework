@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { FocusService } from './../../services/focus.service';
+import { AfterViewInit, Component, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { MessageProvider } from '../../../shared/providers/message.provider';
 import { PersonalizationService } from '../../services/personalization.service';
 @Component({
@@ -7,14 +8,22 @@ import { PersonalizationService } from '../../services/personalization.service';
     styleUrls: ['./dynamic-screen.component.scss'],
     providers: [MessageProvider]
 })
-export class DynamicScreenComponent implements AfterViewInit {
+export class DynamicScreenComponent implements AfterViewInit, AfterViewChecked {
 
-    constructor(private personalization: PersonalizationService, messageProvider: MessageProvider) {
+    @ViewChild('focusArea') focusArea: ElementRef;
+
+    constructor(private personalization: PersonalizationService, 
+                messageProvider: MessageProvider, private focusService: FocusService) {
         messageProvider.setMessageType('Screen');
     }
 
     ngAfterViewInit() {
-      }
+    }
+
+    ngAfterViewChecked(): void {
+        this.focusService.requestFocus('hidden-div', this.focusArea);
+    }
+
 
     getTheme() {
         return this.personalization.getTheme();

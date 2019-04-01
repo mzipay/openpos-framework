@@ -8,9 +8,7 @@ import {
     Output,
     EventEmitter,
     Input,
-    ViewChild,
     Renderer2,
-    Host,
     ElementRef
 } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
@@ -46,7 +44,6 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     constructor(
         private elRef: ElementRef,
-        private ngZone: NgZone,
         private focusService: FocusService,
         private log: Logger,
         private personalization: PersonalizationService,
@@ -82,7 +79,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     handle(message: any) {
         if (message.screenType !== 'NoOp') {
-            setTimeout(() => this.setDefaultFocus());
+            this.focusService.reset();
             this.updateTemplateAndScreen(message);
         }
     }
@@ -156,9 +153,6 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         // Output the componentRef and screen to the training-wrapper
         this.componentEmitter.emit({ componentRef: this.componentRef, screen });
 
-        this.ngZone.run(() =>
-            this.focusService.executeFocus()
-        );
     }
 
     protected updateTheme(theme: string) {

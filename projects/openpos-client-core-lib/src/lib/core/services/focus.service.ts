@@ -1,5 +1,4 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { Logger } from './logger.service';
 
 @Injectable({
@@ -7,25 +6,25 @@ import { Logger } from './logger.service';
 })
 export class FocusService {
 
-    focusKey: string;
-
-    focusElement: ElementRef;
+    focusGranted = false;
 
     constructor(private log: Logger) {
     }
 
-    public requestFocus(key: string, element: ElementRef) {
-        this.log.info('requested focus for ' + key);
-        this.focusKey = key;
-        this.focusElement = element;
+    public reset() {
+        this.focusGranted = false;
     }
 
-    public executeFocus() {
-        this.log.info('executing focus for ' + this.focusKey);
-        if (this.focusElement && this.focusElement.nativeElement) {
-            setTimeout(() => this.focusElement.nativeElement.focus());
-            this.focusElement = null;
-            this.focusKey = null;
+    public requestFocus(key: string, element: any) {
+        if (!this.focusGranted) {
+            this.log.info('requested focus for ' + key);
+            if (element.nativeElement) {
+                setTimeout(() => element.nativeElement.focus(), 100);
+            } else {
+                setTimeout(() => element.focus(), 100);
+            }
+            this.focusGranted = true;
         }
     }
+
 }
