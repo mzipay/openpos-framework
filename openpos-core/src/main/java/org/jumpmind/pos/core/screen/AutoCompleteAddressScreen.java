@@ -17,7 +17,9 @@ public class AutoCompleteAddressScreen extends DynamicFormScreen {
     public AutoCompleteAddressScreen() {
         setScreenType(ScreenType.AutoCompleteAddress);
         setTemplate(null);
-        setSubmitButton(new ActionItem("Next", "Next", IconType.Forward));
+        ActionItem submitButton = new ActionItem("Next", "Next", IconType.Forward);
+        submitButton.setKeybind(KeyConstants.KEY_ENTER);
+        setSubmitButton(submitButton);
     }
 
     public void addDefaultAddressFields() {
