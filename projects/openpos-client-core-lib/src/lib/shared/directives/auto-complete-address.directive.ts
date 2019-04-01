@@ -132,7 +132,9 @@ export class AutoCompleteAddressDirective implements AfterViewInit, OnDestroy {
 
     ngOnDestroy(): void {
         const element = document.getElementById(this.SCRIPT_ID);
-        document.body.removeChild(element);
+        if (element) {
+            document.body.removeChild(element);
+        }
     }
 
 }
