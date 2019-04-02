@@ -1,5 +1,6 @@
 package org.jumpmind.pos.util.model;
 
+import java.util.Set;
 
 /**
  * Convenience abstract implementation for the ITypeCode interface.  Makes it
@@ -60,6 +61,15 @@ public abstract class AbstractTypeCode implements ITypeCode {
         return returnCode;
     }
 
+    /**
+     * Retrieves the set of values for the given ITypeCode subclass
+     * @param <T> An ITypeCode subclass
+     * @param clazz The subclass
+     * @return The set of ITypeCode subclassed values
+     */
+    protected static <T extends ITypeCode> Set<T> values(Class<T> clazz) {
+        return (Set<T>) ITypeCodeRegistry.values(clazz);
+    }
     
     @Override
     public String value() {

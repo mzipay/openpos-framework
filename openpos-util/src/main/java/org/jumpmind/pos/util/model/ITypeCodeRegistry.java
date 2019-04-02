@@ -8,7 +8,7 @@ import java.util.Set;
 
 public final class ITypeCodeRegistry {
 
-    private static Map<Class<? extends ITypeCode>,Set<ITypeCode>> registry = new HashMap<>();
+    private static Map<Class<? extends ITypeCode>,Set<? extends ITypeCode>> registry = new HashMap<>();
     private static final Object registryLock = new Object();
 
 
@@ -16,8 +16,9 @@ public final class ITypeCodeRegistry {
         return Collections.unmodifiableSet(registry.keySet());
     }
     
-    public static Set<ITypeCode> values(Class<? extends ITypeCode> clazz) {
-        return Collections.unmodifiableSet(registry.get(clazz));
+    @SuppressWarnings("unchecked")
+    public static <T extends ITypeCode> Set<T> values(Class<T> clazz) {
+        return Collections.unmodifiableSet((Set<T>)registry.get(clazz));
     }
 
     public static boolean exists(Class<? extends ITypeCode> clazz, String value) {
@@ -32,10 +33,11 @@ public final class ITypeCodeRegistry {
         return ! isRegistered(c);
     }
     
-    static void register(ITypeCode c) {
-        Set<ITypeCode> s = null;
+    @SuppressWarnings("unchecked")
+    static <T extends ITypeCode> void register(T c) {
+        Set<T> s = null;
         synchronized(registryLock) {
-            s = registry.get(c.getClass());
+            s = (Set<T>) registry.get(c.getClass());
             if (s == null) {
                 s = new HashSet<>();
                 registry.put(c.getClass(), s);

@@ -159,7 +159,7 @@ public class TypeCodeTest {
     @Test
     public void testRegistry() {
 
-        Set<ITypeCode> values = ITypeCodeRegistry.values(ExTypeCode.class);
+        Set<ExTypeCode> values = ITypeCodeRegistry.values(ExTypeCode.class);
         assertEquals(4, values.size());
         assertTrue(values.contains(ExTypeCode.CODE1));
         assertTrue(values.contains(ExTypeCode.CODE2));
@@ -188,7 +188,7 @@ public class TypeCodeTest {
     public void testDuplicateTypeCode() {
         final ExTypeCode DUPLICATE = ExTypeCode.of("CODE1");
 
-        Set<ITypeCode> values = ITypeCodeRegistry.values(ExTypeCode.class);
+        Set<ExTypeCode> values = ITypeCodeRegistry.values(ExTypeCode.class);
         assertEquals(4, values.size());
         assertSame(ExTypeCode.CODE1, DUPLICATE);
         
@@ -273,7 +273,7 @@ public class TypeCodeTest {
         assertNotSame(TypeCodeWithDups.CODE1, TypeCodeWithDups.CODE1_DUP_2);
         assertNotSame(TypeCodeWithDups.CODE1_DUP, TypeCodeWithDups.CODE1_DUP_2);
         
-        Set<ITypeCode> values = ITypeCodeRegistry.values(TypeCodeWithDups.class);
+        Set<TypeCodeWithDups> values = ITypeCodeRegistry.values(TypeCodeWithDups.class);
         assertEquals(1, values.size());
     }
     
