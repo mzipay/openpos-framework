@@ -1,0 +1,16 @@
+---
+TestSelfCheckOutFlow:
+  - InitialState:
+      SimpleAction: SimpleState
+      GotoInlineState: 
+        InlineState:
+          Back: InitialState
+          Next: InitialState
+      GotoNestedInlineState:           
+        InlineState2:
+          GotoNestedState: 
+            NestedState:
+              Back: InitialState              
+      GotoSubstateClass: {subflow: SubstateClassTestState, ReturnAction: SubstateClassReturnAction, 
+                         ConfigScope: {testKey1: value1, testKey2: value2}}
+      GotoSubstateFlow: {subflow: SubstateFlow, ReturnAction: SubstateFlowReturnAction}

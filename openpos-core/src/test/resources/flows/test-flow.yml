@@ -1,0 +1,32 @@
+---
+TestFlow:
+  - InitialState:
+      SimpleAction: SimpleState
+      GotoInlineState: 
+        InlineState:
+          Back: InitialState
+          Next: InitialState
+      GotoNestedInlineState:           
+        InlineState2:
+          GotoNestedState: 
+            NestedState:
+              Back: InitialState              
+      GotoSubstateClass: {subflow: SubstateClassTestState, ReturnAction: SubstateClassReturnAction, 
+                         ConfigScope: {testKey1: value1, testKey2: value2}}
+      GotoSubstateFlow: {subflow: SubstateFlow, ReturnAction: SubstateFlowReturnAction}
+
+  - FirstLevelState: 
+      SimpleAction: SimpleState
+      GotoInlineState: InlineState
+      GotoNestedInlineState: InlineState2
+      GotoSubstateClass: {subflow: SubstateClassTestState, ReturnActions: SubstateClassReturnAction;SomeOtherAction,
+                         ConfigScope: {testKey3: value3, testKey4: value4}}
+      GotoSubstateFlow: {subflow: SubstateFlow, ReturnAction: SubstateFlowReturnAction}
+
+  - Global:
+      BackToMain: InitialState
+      GotoGlobalSubstate: {subflow: SubstateFlow, ReturnAction: SubstateFlowReturnAction}
+
+SubstateFlow: 
+  - InitialState2:
+      SimpleAction: SimpleState
