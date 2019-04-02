@@ -19,6 +19,6 @@ public final class ClassUtils extends org.jumpmind.pos.util.ClassUtils {
     public static List<Class<?>> getClassesForPackageAndAnnotation(String packageName, Class<? extends Annotation> annotation) {
         List<Class<?>> classes = Arrays.asList(new Class[] {ModuleModel.class, ServiceSample.class});
 
-        return org.jumpmind.pos.util.ClassUtils.getClassesForPackageAndAnnotation(packageName, annotation, classes);
+        return org.jumpmind.pos.util.ClassUtils.getClassesForPackageAndAnnotation(packageName, annotation, classes, null);
     }
 }

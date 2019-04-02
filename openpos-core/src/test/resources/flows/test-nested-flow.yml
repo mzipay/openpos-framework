@@ -1,0 +1,8 @@
+---
+TestNestedFlow:
+  - InitialState: # state
+      GotoNestedInlineState: # action
+        InlineState: # state
+          GotoNestedState: # action 
+            NestedState: # state
+              Back: InitialState #Action: State
