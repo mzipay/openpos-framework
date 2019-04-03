@@ -47,7 +47,7 @@ public class YamlFlowConfigFileLoader {
         List<YamlFlowConfig> yamlFlowConfigs = new ArrayList<>();
 
 
-        Map<String, Object> yamlDoc = yaml.load(inputStream);
+        Map<String, Object> yamlDoc = (Map<String, Object>) yaml.load(inputStream);
         
         for (String flowName : yamlDoc.keySet()) {
             YamlFlowConfig flowConfig = new YamlFlowConfig();
