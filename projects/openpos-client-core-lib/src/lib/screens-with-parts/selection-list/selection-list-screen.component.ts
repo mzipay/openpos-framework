@@ -11,9 +11,9 @@ import { Configuration } from '../../configuration/configuration';
     name: 'SelectionList'
 })
 @Component({
-  selector: 'app-selection-list-screen',
-  templateUrl: './selection-list-screen.component.html',
-  styleUrls: ['./selection-list-screen.component.scss']
+    selector: 'app-selection-list-screen',
+    templateUrl: './selection-list-screen.component.html',
+    styleUrls: ['./selection-list-screen.component.scss']
 })
 export class SelectionListScreenComponent extends PosScreen<SelectionListInterface> implements AfterViewInit {
     @ViewChildren('items') private items: QueryList<ElementRef>;
@@ -29,9 +29,9 @@ export class SelectionListScreenComponent extends PosScreen<SelectionListInterfa
     buildScreen() {
         this.listConfig = new SelectableItemListComponentConfiguration<any>();
         if (this.screen.multiSelect) {
-          this.listConfig.selectionMode = SelectionMode.Multiple;
+            this.listConfig.selectionMode = SelectionMode.Multiple;
         } else {
-          this.listConfig.selectionMode = SelectionMode.Single;
+            this.listConfig.selectionMode = SelectionMode.Single;
         }
         this.listConfig.numResultsPerPage = Number.MAX_VALUE;
 
@@ -39,49 +39,51 @@ export class SelectionListScreenComponent extends PosScreen<SelectionListInterfa
         this.listConfig.disabledItems = this.screen.selectionList.filter(e => !e.enabled);
 
         if (this.screen.defaultSelectItemIndex !== null && this.screen.defaultSelectItemIndex !== undefined) {
-          this.listConfig.defaultSelectItemIndex = this.screen.defaultSelectItemIndex;
+            this.listConfig.defaultSelectItemIndex = this.screen.defaultSelectItemIndex;
         }
 
         if (this.screen.numberItemsPerPage !== 0) {
-          this.listConfig.numResultsPerPage = this.screen.numberItemsPerPage;
+            this.listConfig.numResultsPerPage = this.screen.numberItemsPerPage;
         }
     }
 
     ngAfterViewInit() {
-      this.items.changes.subscribe(() => {
-        console.log('changed');
-      });
+        this.items.changes.subscribe(() => {
+            console.log('changed');
+        });
     }
 
     public onItemListChange(event: any[]): void {
         // this.selectedItems = event;
         // this.session.onAction("SelectedItemsChanged", this.selectedItems);
-      }
+    }
 
-      public onItemChange(event: any): void {
+    public onItemChange(event: any): void {
         this.index = this.screen.selectionList.indexOf(event);
         if (this.items) {
-          this.scrollToItem();
+            this.scrollToItem();
         }
         if (this.screen.selectionChangedAction && this.index !== this.lastSelection) {
-          this.lastSelection = this.index;
-          this.session.onAction(this.screen.selectionChangedAction, this.index);
+            this.lastSelection = this.index;
+            this.session.onAction(this.screen.selectionChangedAction, this.index);
         }
-      }
+    }
 
-      public scrollToItem() {
+    public scrollToItem() {
         let indexToView = this.index;
         if (this.screen.numberItemsPerPage !== 0) {
-          indexToView -= Math.trunc(this.index / this.screen.numberItemsPerPage) * this.screen.numberItemsPerPage;
+            indexToView -= Math.trunc(this.index / this.screen.numberItemsPerPage) * this.screen.numberItemsPerPage;
         }
-        this.items.toArray()[indexToView].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start'});
-      }
+        if (this.items.toArray()[indexToView]) {
+            this.items.toArray()[indexToView].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
 
-      public doMenuItemAction(menuItem: IActionItem) {
+    public doMenuItemAction(menuItem: IActionItem) {
         this.session.onAction(menuItem, this.index);
-      }
+    }
 
-      public keybindsEnabled(): boolean {
-        return Configuration.enableKeybinds;
-      }
+    public keybindsEnabled(menuItem: IActionItem): boolean {
+        return Configuration.enableKeybinds && menuItem.keybind && menuItem.keybind !== 'Enter';
+    }
 }

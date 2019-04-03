@@ -11,17 +11,21 @@
                 <mat-card-content fxFlex="1 1 100%">
                     <app-selectable-item-list [configuration]="listConfig" (selectedItemChange)="onItemChange($event)"
                         (selectedItemListChange)="onItemListChange($event)" [defaultSelect]="screen.defaultSelect">
-                        <ng-template let-item >
-                            <div #items gdAreas="img info" gdColumns="auto 4fr" [ngClass]="{'muted-color' : !item.enabled}">
+                        <ng-template let-item>
+                            <div #items gdAreas="img info" gdColumns="auto 4fr"
+                                [ngClass]="{'muted-color' : !item.enabled}">
                                 <div gdArea="img">
-                                    <img  *ngIf="item.itemImageUrl" src="{{item.itemImageUrl}}" alt="{{item.title}}" class="item-card-image">
+                                    <img *ngIf="item.itemImageUrl" src="{{item.itemImageUrl}}" alt="{{item.title}}"
+                                        class="item-card-image">
                                 </div>
                                 <div gdArea="info">
                                     <span *ngIf="item.title" class="text-sm item-title">{{item.title}}</span>
                                     <div *ngIf="item.properties" fxLayout="row wrap" fxLayoutAlign="space-between">
                                         <div *ngFor="let property of item.properties">
-                                            <div *ngIf="property.label" class="item-property-label">{{property.label}}</div>
-                                            <p class="item-property-line" *ngFor="let line of property.lines">{{line}}</p>
+                                            <div *ngIf="property.label" class="item-property-label">{{property.label}}
+                                            </div>
+                                            <p class="item-property-line" *ngFor="let line of property.lines">{{line}}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -30,14 +34,19 @@
                     </app-selectable-item-list>
                 </mat-card-content>
                 <mat-card-actions fxLayoutAlign="end">
-                    <button *ngFor="let m of screen.nonSelectionButtons" mat-raised-button color="primary-inverse" [actionItem]="m"
-                        (actionClick)="doMenuItemAction(m)" (click)="doMenuItemAction(m)">
+                    <button *ngFor="let m of screen.nonSelectionButtons" mat-raised-button color="primary-inverse"
+                        [actionItem]="m" (actionClick)="doMenuItemAction(m)" (click)="doMenuItemAction(m)"
+                        [disabled]="index >= 0">
                         <span>{{m.title}}</span>&nbsp;
-                        <span *ngIf="m.keybind && keybindsEnabled()" class="muted-color">{{m.keybind}}</span>
+                        <span *ngIf="keybindsEnabled(m)" class="muted-color">{{m.keybind}}</span>
                     </button>
-                    <button *ngIf="screen.selectButton" cdkFocusInitial mat-raised-button color="primary" [disabled]="index<0" [actionItem]="screen.selectButton"
-                        (actionClick)="doMenuItemAction(screen.selectButton)" (click)="doMenuItemAction(screen.selectButton)">
-                        {{screen.selectButton.title}}
+                    <button *ngFor="let m of screen.selectionButtons;  let i = index"
+                        [attr.cdkFocusInitial]="screen.selectionButtons.length-1 == i ? '' : null" mat-raised-button
+                        [color]="screen.selectionButtons.length-1 == i ? 'primary' : 'primary-inverse'"
+                        [disabled]="index<0" [actionItem]="m" (actionClick)="doMenuItemAction(m)"
+                        (click)="doMenuItemAction(m)">
+                        <span>{{m.title}}</span>&nbsp;
+                        <span *ngIf="keybindsEnabled(m)" class="muted-color">{{m.keybind}}</span>
                     </button>
                 </mat-card-actions>
             </mat-card>
