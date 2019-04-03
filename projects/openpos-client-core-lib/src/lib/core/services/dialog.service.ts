@@ -139,58 +139,61 @@ export class DialogService {
     }
 
     private async openDialog(dialog: any) {
-        const dialogComponentFactory: ComponentFactory<IScreen> = this.resolveDialog(dialog.screenType);
-        let closeable = false;
-        let forceReopen = false;
-        if (dialog.dialogProperties) {
-            closeable = dialog.dialogProperties.closeable;
-            forceReopen = dialog.dialogProperties.forceReopen;
-        }
-        // By default we want to not allow the user to close by clicking off
-        // By default we need the dialog to grab focus so you cannont execute actions on the screen
-        // behind by hitting enter
-        const dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: true };
-        // const dialogComponent = dialogComponentFactory.componentType;
-        if (dialog.dialogProperties) {
-            // Merge in any dialog properties provided on the screen
-            for (const key in dialog.dialogProperties) {
-                if (dialog.dialogProperties.hasOwnProperty(key)) {
-                    dialogProperties[key] = dialog.dialogProperties[key];
+        try {
+            const dialogComponentFactory: ComponentFactory<IScreen> = this.resolveDialog(dialog.screenType);
+            let closeable = false;
+            let forceReopen = false;
+            if (dialog.dialogProperties) {
+                closeable = dialog.dialogProperties.closeable;
+                forceReopen = dialog.dialogProperties.forceReopen;
+            }
+            // By default we want to not allow the user to close by clicking off
+            // By default we need the dialog to grab focus so you cannont execute actions on the screen
+            // behind by hitting enter
+            const dialogProperties: OpenPOSDialogConfig = { disableClose: !closeable, autoFocus: true };
+            // const dialogComponent = dialogComponentFactory.componentType;
+            if (dialog.dialogProperties) {
+                // Merge in any dialog properties provided on the screen
+                for (const key in dialog.dialogProperties) {
+                    if (dialog.dialogProperties.hasOwnProperty(key)) {
+                        dialogProperties[key] = dialog.dialogProperties[key];
+                    }
                 }
+                this.log.info(`Dialog options: ${JSON.stringify(dialogProperties)}`);
             }
-            this.log.info(`Dialog options: ${JSON.stringify(dialogProperties)}`);
-        }
 
-        if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
-            || dialog.refreshAlways || dialog.id !== this.lastDialogId) {
+            if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
+                || dialog.refreshAlways || dialog.id !== this.lastDialogId) {
 
-            // We need to make sure to block here before creating the new dialog to make sure the old one
-            // is fully closed.
-            await this.closeDialog(false);
+                // We need to make sure to block here before creating the new dialog to make sure the old one
+                // is fully closed.
+                await this.closeDialog(false);
 
-            if (!this.dialogRef || !this.dialogRef.componentInstance) {
-                this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
-                this.dialogRef = this.dialog.open(DialogContentComponent, dialogProperties);
+                if (!this.dialogRef || !this.dialogRef.componentInstance) {
+                    this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
+                    this.dialogRef = this.dialog.open(DialogContentComponent, dialogProperties);
+                } else {
+                    this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' refreshing content...');
+                    this.dialogRef.updateSize('' + dialogProperties.minWidth, '' + dialogProperties.minHeight);
+                    this.dialogRef.disableClose = dialogProperties.disableClose;
+                }
+                this.dialogRef.componentInstance.installScreen(dialogComponentFactory);
+                this.session.cancelLoading();
             } else {
-                this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' refreshing content...');
-                this.dialogRef.updateSize('' + dialogProperties.minWidth, '' + dialogProperties.minHeight);
-                this.dialogRef.disableClose = dialogProperties.disableClose;
-            }
-            this.dialogRef.componentInstance.installScreen(dialogComponentFactory);
-            this.session.cancelLoading();
-        } else {
-            this.log.info(`Using previously created dialogRef. current dialog type: ${dialog.screenType},
+                this.log.info(`Using previously created dialogRef. current dialog type: ${dialog.screenType},
             last dialog type: ${this.lastDialogType}`);
-            this.session.cancelLoading();
+                this.session.cancelLoading();
+            }
+
+            this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' showing...');
+            this.dialogRef.componentInstance.show(dialog);
+            this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opened/shown');
+
+            this.lastDialogType = dialog.screenType;
+            this.lastDialogId = dialog.id;
+        } finally {
+            this.dialogOpening = false;
         }
-
-        this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' showing...');
-        this.dialogRef.componentInstance.show(dialog);
-        this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opened/shown');
-        this.dialogOpening = false;
-
-        this.lastDialogType = dialog.screenType;
-        this.lastDialogId = dialog.id;
     }
 
 }
