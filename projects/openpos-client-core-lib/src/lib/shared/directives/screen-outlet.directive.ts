@@ -61,7 +61,10 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         this.subscriptions.add(this.session.getMessages('Screen').subscribe((message) => this.handle(message)));
         this.subscriptions.add(this.session.getMessages('Connected').subscribe((message) => this.handle(new BlankScreen())));
         this.subscriptions.add(this.session.getMessages('ConfigChanged').
-            subscribe(message => this.configurationService.updateConfig(message)));
+            subscribe(message => { 
+                this.configurationService.updateConfig(message);
+                this.updateTheme(message.theme);
+            }));
     }
 
     ngOnDestroy(): void {
