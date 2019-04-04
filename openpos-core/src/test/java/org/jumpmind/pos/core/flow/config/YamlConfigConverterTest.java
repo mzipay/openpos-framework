@@ -21,7 +21,7 @@ public class YamlConfigConverterTest {
     @Test
     public void testLoadNestedInlineState() {
         YamlFlowConfigFileLoader loader = new YamlFlowConfigFileLoader();
-        List<YamlFlowConfig> yamlFlowConfigs = loader.loadYamlFlowConfigs("flows/test-nested-flow.yml");
+        List<YamlFlowConfig> yamlFlowConfigs = loader.loadYamlFlowConfigs("testflows/test-nested-flow.yml");
         
         YamlFlowConfig yamlFlowConfig = yamlFlowConfigs.get(0);
 
@@ -46,7 +46,7 @@ public class YamlConfigConverterTest {
     
     public void testConvertStateYaml() {
         YamlFlowConfigFileLoader loader = new YamlFlowConfigFileLoader();
-        List<YamlFlowConfig> yamlFlowConfigs = loader.loadYamlFlowConfigs("flows/test-flow.yml");
+        List<YamlFlowConfig> yamlFlowConfigs = loader.loadYamlFlowConfigs("testflows/test-flow.yml");
         YamlConfigConverter converter = new YamlConfigConverter();
         List<FlowConfig> flowConfigs = converter.convertToFlowConfig(yamlFlowConfigs);
 

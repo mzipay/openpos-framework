@@ -7,10 +7,10 @@ public class YamlConfigProviderTest {
     @Test
     public void testLoadResources() {
         YamlConfigProvider provider = new YamlConfigProvider();
-        provider.load("pos", "flows");
+        provider.load("pos", "testflows");
         
-        provider.load("selfcheckout", "flows");
-        provider.load("selfcheckout", "flows/selfcheckout");
+        provider.load("selfcheckout", "testflows");
+        provider.load("selfcheckout", "testflows/selfcheckout");
         
     }
 }
