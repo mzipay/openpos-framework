@@ -19,6 +19,8 @@
  */
 package org.jumpmind.pos.core.flow;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.config.SubTransition;
@@ -38,6 +41,7 @@ import org.jumpmind.pos.core.service.IScreenService;
 import org.jumpmind.pos.core.service.spring.DeviceScope;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.server.model.Action;
+import org.jumpmind.pos.util.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -226,14 +230,16 @@ public class StateManager implements IStateManager {
 
             stateManagerLogger.logStateTransition(applicationState.getCurrentContext().getState(), newState, action, returnActionName,
                     enterSubStateConfig, exitSubState ? applicationState.getCurrentContext() : null, getApplicationState(),
-                    resumeSuspendedState);
+                            resumeSuspendedState);
+
+            executeDepart(applicationState.getCurrentContext().getState(), newState, enterSubState, action);
 
             if (enterSubState) {
                 applicationState.getStateStack().push(applicationState.getCurrentContext());
                 applicationState.setCurrentContext(buildSubStateContext(enterSubStateConfig, action));
             } else if (exitSubState) {
                 applicationState.setCurrentContext(resumeSuspendedState);
-            }
+            } 
 
             applicationState.getCurrentContext().setState(newState);
 
@@ -267,6 +273,37 @@ public class StateManager implements IStateManager {
 
     }
 
+    protected void executeDepart(IState oldState, IState newState, boolean enterSubState, Action action) {
+        if (oldState == null) {
+            return;
+        }
+
+        List<Method> methods = MethodUtils.getMethodsListWithAnnotation(oldState.getClass(), OnDepart.class, true, true);
+        if (methods != null && !methods.isEmpty()) {
+            for (Method method : methods) {
+                OnDepart onDepart = method.getAnnotation(OnDepart.class);
+                if (enterSubState && onDepart.toSubflow()) {
+                    invokeDepart(oldState, action, method);
+                }
+                if (!enterSubState && !onDepart.toSubflow() && oldState != newState) {                    
+                    invokeDepart(oldState, action, method);
+                }
+            }
+        }
+    }
+
+    protected void invokeDepart(IState oldState, Action action, Method method) {
+        try {            
+            if (method.getParameters() != null && method.getParameters().length == 1) {                        
+                method.invoke(oldState, action);
+            } else {
+                method.invoke(oldState);
+            }
+        } catch (Exception ex) {
+            throw new FlowException("Failed to execute depart method on state. Method: " + method + " state: " + oldState, ex);
+        }
+    }
+
     protected String getReturnActionName(Action action) {
         if (applicationState.getCurrentContext().getSubTransition() != null
                 && applicationState.getCurrentContext().getSubTransition().getReturnActionNames() != null) {
@@ -274,7 +311,7 @@ public class StateManager implements IStateManager {
             for (String returnActionName : applicationState.getCurrentContext().getSubTransition().getReturnActionNames()) {
                 if (StringUtils.equals(returnActionName, action.getName())) {
                     return action.getName(); // the action IS a return action,
-                                             // so don't modify.
+                    // so don't modify.
                 }
             }
 
@@ -282,8 +319,8 @@ public class StateManager implements IStateManager {
                 return applicationState.getCurrentContext().getSubTransition().getReturnActionNames()[0];
             } else if (applicationState.getCurrentContext().getSubTransition().getReturnActionNames().length > 1) {
                 throw new FlowException("Unpected situation. Non-return action raised which completed a subflow: " + action.getName()
-                        + " -- but there is more than 1 return action mapped to this subflow so we don't know which return action to pick: "
-                        + Arrays.toString(applicationState.getCurrentContext().getSubTransition().getReturnActionNames()));
+                + " -- but there is more than 1 return action mapped to this subflow so we don't know which return action to pick: "
+                + Arrays.toString(applicationState.getCurrentContext().getSubTransition().getReturnActionNames()));
             }
         }
 
@@ -330,8 +367,8 @@ public class StateManager implements IStateManager {
         applicationState.setCurrentTransition(new Transition(transitionSteps, sourceStateContext, newState));
 
         TransitionResult result = applicationState.getCurrentTransition().execute(this, action); // This
-                                                                                                 // will
-                                                                                                 // block.
+        // will
+        // block.
         applicationState.setCurrentTransition(null);
         return result;
     }
