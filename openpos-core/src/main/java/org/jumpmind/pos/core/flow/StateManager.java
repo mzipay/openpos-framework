@@ -19,7 +19,6 @@
  */
 package org.jumpmind.pos.core.flow;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
@@ -41,7 +40,6 @@ import org.jumpmind.pos.core.service.IScreenService;
 import org.jumpmind.pos.core.service.spring.DeviceScope;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.server.model.Action;
-import org.jumpmind.pos.util.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -284,8 +282,7 @@ public class StateManager implements IStateManager {
                 OnDepart onDepart = method.getAnnotation(OnDepart.class);
                 if (enterSubState && onDepart.toSubflow()) {
                     invokeDepart(oldState, action, method);
-                }
-                if (!enterSubState && !onDepart.toSubflow() && oldState != newState) {                    
+                } else if (!enterSubState && onDepart.toAnotherState() && oldState != newState) {                    
                     invokeDepart(oldState, action, method);
                 }
             }

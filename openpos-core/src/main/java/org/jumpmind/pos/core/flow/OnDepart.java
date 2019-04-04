@@ -28,5 +28,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface OnDepart {
-    public boolean toSubflow() default false;
+    public boolean toSubflow() default true;
+    public boolean toAnotherState() default true;
 }

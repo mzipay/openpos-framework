@@ -134,10 +134,17 @@ public class StateManagerTest {
     public void testSubStateTransitionBackToAnotherState() {
         stateManager.init("pos", "100-1");
         
+        
+        
         HomeState homeState = (HomeState) stateManager.getCurrentState();
+        homeState.departGeneralCalled = false;
+        homeState.departToSubflowCalled = false;
+        homeState.departStateCalled = false;
+        
         assertEquals(HomeState.class, homeState.getClass());
         stateManager.doAction("ToSubState1");
         
+        assertTrue(homeState.departGeneralCalled);
         assertTrue(homeState.departToSubflowCalled);
         assertFalse(homeState.departStateCalled);
         
@@ -165,11 +172,13 @@ public class StateManagerTest {
     public void testSimpleTransition() {
         stateManager.init("pos", "100-1");
         HomeState homeState = (HomeState) stateManager.getCurrentState();
+        homeState.departGeneralCalled = false;
         homeState.departToSubflowCalled = false;
         homeState.departStateCalled = false;
         
         assertEquals(HomeState.class, homeState.getClass());
         stateManager.doAction("Sell");
+        assertTrue(homeState.departGeneralCalled);
         assertFalse(homeState.departToSubflowCalled);
         assertTrue(homeState.departStateCalled);
         assertEquals("Sell", homeState.departAction.getName());

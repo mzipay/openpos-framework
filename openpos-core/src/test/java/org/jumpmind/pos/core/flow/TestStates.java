@@ -16,6 +16,7 @@ public class TestStates {
         
         boolean departToSubflowCalled = false;
         boolean departStateCalled = false;
+        boolean departGeneralCalled = false;
         Action departAction;
 
         public HomeState() {
@@ -30,17 +31,21 @@ public class TestStates {
 
         }
         
-        @OnDepart(toSubflow=true)
+        @OnDepart
+        public void depart(Action action) {
+            departGeneralCalled = true;
+        }          
+        
+        @OnDepart(toAnotherState=false)
         public void departToSubflow() {
             departToSubflowCalled = true;
         }
         
-        @OnDepart
+        @OnDepart(toSubflow=false)
         public void departState(Action action) {
             departStateCalled = true;
             departAction = action;
         }
-        
         
         @ActionHandler
         protected void onReturn() {
