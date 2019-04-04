@@ -19,7 +19,7 @@ steps:
 - script: |
     npm install -g @angular/cli
     npm install scss-bundle -g
-    npm install -g compodoc
+    npm install -g @compodoc/compodoc
     npm install        
   displayName: 'Install'
   continueOnError: false
