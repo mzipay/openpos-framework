@@ -37,7 +37,7 @@ steps:
   continueOnError: false
   failOnStderr: false
 
-- script: 
+- script: |
     cd projects/openpos-client-core-lib
     compodoc -c .compodocrc.json
   displayName: 'Build Docs'
