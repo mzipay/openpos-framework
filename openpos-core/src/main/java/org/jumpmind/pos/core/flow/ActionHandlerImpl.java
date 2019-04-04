@@ -159,7 +159,7 @@ public class ActionHandlerImpl {
         for (StackTraceElement stackFrame : currentStack) {
             // TODO count org.jumpmind.pos.core.flow.StateManager classes
             if (StateManager.class.getName().equals(stackFrame.getClassName())) {
-                if (stateManagerCount++ > 75) {
+                if (stateManagerCount++ > 300) {
                     throw new FlowException("Action cycle detected.  You may need to adjust your "
                             + "use of onAnyMethod() and/or the use of super classes for your State. A super/abstract class cannot forward an Action that it could handle.");
                 }
