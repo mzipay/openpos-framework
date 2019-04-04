@@ -19,6 +19,7 @@ steps:
 - script: |
     npm install -g @angular/cli
     npm install scss-bundle -g
+    npm install -g compodoc
     npm install        
   displayName: 'Install'
   continueOnError: false
@@ -26,18 +27,19 @@ steps:
 
 - script: |    
     ng build openpos-client-core-lib
-    npm run compodoc    
+    scss-bundle -c projects/openpos-client-core-lib/scss-bundle.config.json
   displayName: 'Build'
   continueOnError: false
   failOnStderr: false
   
-- script: |
-    ng build       
+- script: ng build
   displayName: 'Demo App Build'
   continueOnError: false
   failOnStderr: false
 
-- script: npx compodoc -c .compodocrc.json
+- script: 
+    cd projects/openpos-client-core-lib
+    compodoc -c .compodocrc.json
   displayName: 'Build Docs'
   continueOnError: false
   failOnStderr: false
