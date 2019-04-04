@@ -26,7 +26,7 @@ steps:
 
 - script: |    
     ng build openpos-client-core-lib
-    scss-bundle -c projects/openpos-client-core-lib/scss-bundle.config.json
+    cd projects/openpos-client-core-lib && npx compodoc -c .compodocrc.json
   displayName: 'Build'
   continueOnError: false
   failOnStderr: false
