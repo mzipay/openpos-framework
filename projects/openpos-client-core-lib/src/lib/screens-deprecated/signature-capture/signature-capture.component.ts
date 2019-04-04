@@ -3,10 +3,15 @@ import 'signature_pad';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { MatSnackBar } from '@angular/material';
 import { Configuration } from '../../configuration/configuration';
+import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
+
 
 /**
  * @ignore
  */
+@ScreenComponent({
+    name: 'SignatureCapture'
+})
 @Component({
   selector: 'app-signature-capture',
   templateUrl: './signature-capture.component.html',

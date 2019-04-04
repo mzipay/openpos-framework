@@ -17,7 +17,7 @@ import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.c
 import { LoadingDialogComponent } from './loading-dialog/loading-dialog.component';
 import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
-
+import { SignatureCaptureComponent } from './signature-capture/signature-capture.component';
 
 const screens = [
         HomeComponent,
@@ -30,7 +30,8 @@ const screens = [
         TenderingComponent,
         ReturnComponent,
         SaleComponent,
-        ItemSearchResultsComponent
+        ItemSearchResultsComponent,
+        SignatureCaptureComponent,
     ];
 
 const dialogs = [

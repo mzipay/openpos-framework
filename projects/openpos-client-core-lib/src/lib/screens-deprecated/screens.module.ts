@@ -15,7 +15,6 @@ import { PromptWithOptionsComponent } from './prompt-with-options/prompt-with-op
 import { PromptWithInfoComponent } from './prompt-with-info/prompt-with-info.component';
 import { FormComponent } from './form/form.component';
 import { PaymentStatusComponent } from './payment-status/payment-status.component';
-import { SignatureCaptureComponent } from './signature-capture/signature-capture.component';
 import { StaticTableComponent } from './static-table/static-table.component';
 import { MultiselectItemListComponent } from './multiselect-item-list/multiselect-item-list.component';
 import { LoginComponent } from './login/login.component';
@@ -64,7 +63,6 @@ const screens = [
     PromptWithOptionsComponent,
     PromptWithInfoComponent,
     TransactionComponent,
-    SignatureCaptureComponent,
     StaticTableComponent,
     OptionsComponent,
     TillSummaryComponent,
