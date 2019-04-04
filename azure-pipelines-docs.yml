@@ -26,8 +26,7 @@ steps:
 
 - script: |    
     ng build openpos-client-core-lib
-    cd projects/openpos-client-core-lib
-    npx compodoc -c .compodocrc.json
+    npm run compodoc    
   displayName: 'Build'
   continueOnError: false
   failOnStderr: false

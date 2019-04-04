@@ -12,7 +12,7 @@
     "build-openpos-lib": "ng build openpos-client-core-lib && npm run bundle-lib-scss",
     "watch-openpos-lib": "ng build --watch openpos-client-core-lib",
     "watch-scss": "scss-bundle -c projects/openpos-client-core-lib/scss-bundle.config.json --watch projects/openpos-client-core-lib/src",
-    "compodoc": "cd projects/openpos-client-core-lib && npx compodoc -c .compodocrc.json -s -w",
+    "compodoc": "cd projects/openpos-client-core-lib && npx compodoc -c .compodocrc.json",
     "postinstall": "node projects/openpos-client-core-lib/version.js"
   },
   "private": true,
