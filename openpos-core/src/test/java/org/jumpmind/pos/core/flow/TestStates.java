@@ -3,6 +3,7 @@ package org.jumpmind.pos.core.flow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import org.jumpmind.pos.server.model.Action;
 
@@ -12,6 +13,10 @@ public class TestStates {
 
         @Out(scope = ScopeType.Conversation, required = false)
         private String optionalInjectionFullfiled = "optionalInjectionFullfiled";
+        
+        boolean departToSubflowCalled = false;
+        boolean departStateCalled = false;
+        Action departAction;
 
         public HomeState() {
 
@@ -24,6 +29,18 @@ public class TestStates {
         public void arrive(Action action) {
 
         }
+        
+        @OnDepart(toSubflow=true)
+        public void departToSubflow() {
+            departToSubflowCalled = true;
+        }
+        
+        @OnDepart
+        public void departState(Action action) {
+            departStateCalled = true;
+            departAction = action;
+        }
+        
         
         @ActionHandler
         protected void onReturn() {

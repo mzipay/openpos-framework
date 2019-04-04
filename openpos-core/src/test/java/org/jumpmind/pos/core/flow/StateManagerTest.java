@@ -48,7 +48,7 @@ public class StateManagerTest {
 
     @InjectMocks
     Injector injector;
-
+ 
     @Mock
     private ScreenService screenService;
 
@@ -133,8 +133,14 @@ public class StateManagerTest {
     @Test
     public void testSubStateTransitionBackToAnotherState() {
         stateManager.init("pos", "100-1");
-        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        
+        HomeState homeState = (HomeState) stateManager.getCurrentState();
+        assertEquals(HomeState.class, homeState.getClass());
         stateManager.doAction("ToSubState1");
+        
+        assertTrue(homeState.departToSubflowCalled);
+        assertFalse(homeState.departStateCalled);
+        
         assertEquals(ActionTestingState.class, stateManager.getCurrentState().getClass());
     }
     
@@ -158,8 +164,15 @@ public class StateManagerTest {
     @Test
     public void testSimpleTransition() {
         stateManager.init("pos", "100-1");
-        assertEquals(HomeState.class, stateManager.getCurrentState().getClass());
+        HomeState homeState = (HomeState) stateManager.getCurrentState();
+        homeState.departToSubflowCalled = false;
+        homeState.departStateCalled = false;
+        
+        assertEquals(HomeState.class, homeState.getClass());
         stateManager.doAction("Sell");
+        assertFalse(homeState.departToSubflowCalled);
+        assertTrue(homeState.departStateCalled);
+        assertEquals("Sell", homeState.departAction.getName());
         assertEquals(SellState.class, stateManager.getCurrentState().getClass());
     }
 

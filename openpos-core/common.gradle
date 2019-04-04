@@ -78,6 +78,30 @@ eclipse {
                 }
             }
         }
+        
+        resourceFilter {
+            appliesTo = 'FOLDERS'
+            type = 'EXCLUDE_ALL'
+            matcher {
+                id = 'org.eclipse.ui.ide.multiFilte'
+                matcher {
+                    id = 'org.eclipse.ui.ide.multiFilter'
+                    arguments = '1.0-name-matches-false-false-*.class'
+                }
+            }
+        }        
+        
+        resourceFilter {
+            appliesTo = 'FOLDERS'
+            type = 'EXCLUDE_ALL'
+            matcher {
+                id = 'org.eclipse.ui.ide.multiFilte'
+                matcher {
+                    id = 'org.eclipse.ui.ide.multiFilter'
+                    arguments = '1.0-name-matches-false-false-node_modules'
+                }
+            }
+        }
     }
 }
 
