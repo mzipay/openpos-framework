@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeUIMessage extends UIMessage {
-    private BaconStripPart baconStripPart = new BaconStripPart();
+    private BaconStripPart baconStrip = new BaconStripPart();
     private List<ActionItem> menuItems = new ArrayList<>();
 
     public List<ActionItem> getMenuItems() {
@@ -27,11 +27,11 @@ public class HomeUIMessage extends UIMessage {
         this.menuItems.add(item);
     }
 
-    public BaconStripPart getBaconStripPart() {
-        return baconStripPart;
+    public BaconStripPart getBaconStrip() {
+        return baconStrip;
     }
 
-    public void setBaconStripPart(BaconStripPart baconStripPart) {
-        this.baconStripPart = baconStripPart;
+    public void setBaconStrip(BaconStripPart baconStrip) {
+        this.baconStrip = baconStrip;
     }
 }
