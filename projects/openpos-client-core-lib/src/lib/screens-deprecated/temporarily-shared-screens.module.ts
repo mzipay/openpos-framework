@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 
 import { SaleComponent } from '../screens-with-parts/sale/sale.component';
 import { SharedModule } from '../shared/shared.module';
-import { HomeComponent } from './home/home.component';
 import { ItemListComponent } from './item-list/item-list.component';
 import { SaleRetrievalComponent } from './sale-retrieval/sale-retrieval.component';
 import { SellItemDetailComponent } from './sell-item-detail/sell-item-detail.component';
@@ -16,11 +15,9 @@ import { ChooseOptionsDialogComponent } from './choose-options/choose-options-di
 import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';
 import { LoadingDialogComponent } from './loading-dialog/loading-dialog.component';
 import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
-import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { SignatureCaptureComponent } from './signature-capture/signature-capture.component';
 
 const screens = [
-        HomeComponent,
         ItemListComponent,
         SaleRetrievalComponent,
         SellItemDetailComponent,

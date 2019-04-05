@@ -11,19 +11,21 @@ import { PromptScreenComponent } from './prompt/prompt-screen.component';
 import { PromptScreenDialogComponent } from './prompt/prompt-screen-dialog.component';
 import { PromptWithOptionsScreenComponent } from './prompt-with-options/prompt-with-options-screen.component';
 import { PromptWithOptionsScreenDialogComponent } from './prompt-with-options/prompt-with-options-screen-dialog.component';
+import { HomeComponent } from './home/home.component';
 
 const screens = [
-        SelectionListScreenComponent,
-        PromptScreenComponent,
-        PromptWithOptionsScreenComponent
-    ];
+    SelectionListScreenComponent,
+    PromptScreenComponent,
+    PromptWithOptionsScreenComponent,
+    HomeComponent
+];
 
 const dialogs = [
-        SelectionListScreenDialogComponent,
-        GenericDialogComponent,
-        PromptScreenDialogComponent,
-        PromptWithOptionsScreenDialogComponent
-    ];
+    SelectionListScreenDialogComponent,
+    GenericDialogComponent,
+    PromptScreenDialogComponent,
+    PromptWithOptionsScreenDialogComponent
+];
 
 @NgModule({
     entryComponents: [

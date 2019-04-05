@@ -2,15 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ObservableMedia} from '@angular/flex-layout';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { Configuration } from '../../configuration/configuration';
-import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
 /**
  * @ignore
  */
-@ScreenComponent({
-    name: 'Home'
-})
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',

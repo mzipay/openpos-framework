@@ -1,5 +1,7 @@
 @import './sale/sale-theme';
+@import './home/home-theme';
 
 @mixin screen-with-parts-themes($theme){
     @include sale-theme($theme);
+    @include home-theme($theme);
 }

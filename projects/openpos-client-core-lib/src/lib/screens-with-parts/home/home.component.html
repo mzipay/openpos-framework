@@ -1,0 +1,25 @@
+<div [ngStyle]="screen.backgroundImage | backgroundImageUrl">
+    <div class="mat-elevation-z10">
+        <app-bacon-strip></app-bacon-strip>
+    </div>
+    <div *ngIf="!(isMobile | async)" 
+            class="button-grid">
+        <div class="menu-button-border" *ngFor="let menuItem of screen.menuItems">
+            <button class="menu-button" mat-raised-button gdAuto="column" color=primary [disabled]="!menuItem.enabled"
+                (click)="onMenuItemClick(menuItem)" [actionItem]="menuItem">
+                    <app-icon iconName="{{menuItem.icon}}" iconClass="material-icons mat-64"></app-icon>
+                    <div>{{menuItem.title}}</div>
+                    <div *ngIf="menuItem.keybind && keybindsEnabled()" style="padding-bottom: 8px;" class="text-xs">{{menuItem.keybind}}</div>
+            </button>
+        </div>
+    </div>
+    <mat-card *ngIf="isMobile | async">
+        <mat-nav-list>
+            <mat-list-item *ngFor="let menuItem of screen.menuItems" (click)="onMenuItemClick(menuItem)">
+                <app-icon class="primary text-lg" iconName="{{menuItem.icon}}" iconClass="material-icons"></app-icon>
+                <span class="primary text-lg">&nbsp;{{menuItem.title}}</span>
+                <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-card>
+</div>

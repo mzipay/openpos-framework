@@ -1,0 +1,22 @@
+@import '~@angular/material/theming';
+
+.menu-button-border{
+    @include mat-elevation(10);
+    margin: 20px;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.menu-button{
+    min-width: 160px;
+    min-height: 160px;
+}
+
+.button-grid{
+    height: 90%;
+    display: grid;
+    place-self: center;
+    place-content: center;
+    place-items: stretch;
+    grid-template-columns: repeat(auto-fit, 240px)
+}

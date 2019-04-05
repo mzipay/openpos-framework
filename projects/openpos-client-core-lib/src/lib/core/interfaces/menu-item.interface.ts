@@ -7,7 +7,9 @@ export interface IActionItem {
     icon: string;
     confirmationDialog: IConfirmationDialog;
     confirmationMessage: string;
+    // TODO Remove this. This should not come from the server
     buttonSize: string;
+    // TODO Remove this. This should not come from the server
     fontSize: string;
     keybind: string;
 }
