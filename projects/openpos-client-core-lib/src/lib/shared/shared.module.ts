@@ -104,6 +104,7 @@ import { SideNavComponent } from './layout-components/side-nav/side-nav.componen
 import { WaffleComponent } from './layout-components/waffle/waffle.component';
 import { CommonModule } from '@angular/common';
 import { PromptFormPartComponent } from './screen-parts/prompt-form-part/prompt-form-part.component';
+import { AutoCompleteAddressPartComponent } from './screen-parts/auto-complete-address-part/auto-complete-address-part.component';
 
 const screenParts = [
     DynamicFormPartComponent,
@@ -114,7 +115,8 @@ const screenParts = [
     DialogHeaderComponent,
     SaleFooterComponent,
     SaleItemListComponent,
-    PromptFormPartComponent
+    PromptFormPartComponent,
+    AutoCompleteAddressPartComponent
 ];
 
 const components = [

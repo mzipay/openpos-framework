@@ -1,0 +1,28 @@
+<mat-card fxLayout="column" class="page-content-card scrollable-content-card" style="height: 100%;">
+    <mat-card-content fxFlex="1 1 auto">
+        <form [formGroup]="form">
+            <ng-container *ngFor="let field of screenData.formElements">
+                <app-dynamic-form-field *ngIf="field === streetAddress" autoCompleteAddress [formGroup]="form"
+                    [formField]="field" (onFieldChanged)="onFieldChanged($event)" (onSelect)="setAddress($event)">
+                </app-dynamic-form-field>
+
+                <app-dynamic-form-field *ngIf="field !== streetAddress" [formGroup]="form" [formField]="field"
+                    (onFieldChanged)="onFieldChanged($event)"></app-dynamic-form-field>
+            </ng-container>
+
+            <mat-error>
+                <div id="formErrorsWrapper">
+                    <app-show-errors #formErrors [control]="form"></app-show-errors>
+                </div>
+                <div *ngFor="let error of screenData.formErrors">{{error}}</div>
+            </mat-error>
+        </form>
+    </mat-card-content>
+    <mat-card-actions fxFlex="0 0 auto" align="end">
+        <button *ngIf="submitButton" mat-raised-button type="submit" color=primary (click)="submitForm()"
+            [disabled]="!form.valid" [actionItem]="submitButton" (actionClick)="submitForm()">
+            <span>{{submitButton.title}}</span>
+            <app-icon [iconName]="submitButton.icon" [iconClass]="'material-icons'"></app-icon>
+        </button>
+    </mat-card-actions>
+</mat-card>
