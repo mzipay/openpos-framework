@@ -43,7 +43,7 @@ export class CurrencyTextComponent implements DoCheck {
                 // No symbol in given text, use currency pipe to insert one
                 const currencyCode = this.localeService.getConstant('currencyCode');
                 const currencyPipe = new CurrencyPipe(locale);
-                localAmtText = currencyPipe.transform(localAmtText, currencyCode, 'symbol', '1.2', locale);
+                localAmtText = currencyPipe.transform(localAmtText, currencyCode, 'symbol-narrow', '1.2', locale);
                 existingSymbolIdx = localAmtText.indexOf(targetSymbol);
             }
 
