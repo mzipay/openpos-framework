@@ -1,0 +1,11 @@
+<div class="self-checkout-form-outer" gdAreas="header | content" gdRows="auto 1fr">
+    <div gdArea="header" gdAreas="menu" gdColumns="1fr">
+        <app-self-checkout-menu gdArea="menu"></app-self-checkout-menu>
+    </div>
+
+    <div class="self-checkout-form-body" gdArea="content">
+        <app-auto-complete-address-part [formName]="'form'" [submitButton]="screen.submitButton"
+            [alternateSubmitActions]="screen.alternateSubmitActions">
+        </app-auto-complete-address-part>
+    </div>
+</div>

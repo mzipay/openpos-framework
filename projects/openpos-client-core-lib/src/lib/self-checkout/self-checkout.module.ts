@@ -10,13 +10,16 @@ import { SelfCheckoutPaymentStatusComponent } from './self-checkout-payment-stat
 import { SelfCheckoutOptionsComponent } from './self-checkout-options/self-checkout-options.component';
 import { ScreenService } from '../core/services/screen.service';
 import { DialogService } from '../core/services/dialog.service';
+import { SelfCheckoutFormComponent } from './self-checkout-form/self-checkout-form.component';
+import { SelfCheckoutMenuComponent } from './screen-parts/self-checkout-menu/self-checkout-menu.component';
 
 
 const screens = [
     SelfCheckoutTransactionComponent,
     SelfCheckoutHomeComponent,
     SelfCheckoutPaymentStatusComponent,
-    SelfCheckoutOptionsComponent
+    SelfCheckoutOptionsComponent,
+    SelfCheckoutFormComponent
 ];
 
 const dialogs = [
@@ -30,17 +33,22 @@ const components = [
     SelfCheckoutStatusBarComponent
 ];
 
+const screenParts = [
+    SelfCheckoutMenuComponent
+];
+
 @NgModule({
     entryComponents: [
         ...screens,
         ...dialogs,
-        ...templates
+        ...templates,
     ],
     declarations: [
         ...screens,
         ...dialogs,
         ...templates,
-        ...components
+        ...components,
+        ...screenParts,
     ],
     imports: [
         SharedModule
@@ -48,7 +56,8 @@ const components = [
     exports: [
 
         ...templates,
-        ...components
+        ...components,
+        ...screenParts,
     ],
     providers: [
     ]
