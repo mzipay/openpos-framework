@@ -1,7 +1,10 @@
 .self-checkout-form-outer {
     height: 100%;
+    background-color: inherit;
 }
 
 .self-checkout-form-body {
     padding: 24px 16px;
+    width: 60%;
+    justify-self: center;
 }
