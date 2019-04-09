@@ -5,7 +5,6 @@ import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.screen.IHasForm;
 import org.jumpmind.pos.core.screen.IconType;
 import org.jumpmind.pos.core.screen.KeyConstants;
-import org.jumpmind.pos.core.screen.ScreenType;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.core.ui.messagepart.SelfCheckoutMenuPart;
 
@@ -25,7 +24,7 @@ public class SelfCheckoutFormUIMessage extends UIMessage implements IHasForm {
     private List<String> alternateSubmitActions = new ArrayList<String>();
 
     public SelfCheckoutFormUIMessage() {
-        setScreenType(ScreenType.SelfCheckoutForm);
+        setScreenType(UIMessageType.SELF_CHECKOUT_FORM);
         ActionItem submitButton = new ActionItem("Next", "Next", IconType.Forward);
         submitButton.setKeybind(KeyConstants.KEY_ENTER);
         setSubmitButton(submitButton);

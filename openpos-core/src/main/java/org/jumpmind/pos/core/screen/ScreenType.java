@@ -33,7 +33,6 @@ public interface ScreenType {
     public static final String PromptWithOptions = "PromptWithOptions";
     public static final String Return = "Return";
     public static final String SaleRetrieval = "SaleRetrieval";
-    public static final String SelfCheckoutForm = "SelfCheckoutForm";
     public static final String SelfCheckoutHome = "SelfCheckoutHome";
     public static final String SelfCheckoutOptions = "SelfCheckoutOptions";
     public static final String SelfCheckoutPaymentStatus = "SelfCheckoutPaymentStatus";
