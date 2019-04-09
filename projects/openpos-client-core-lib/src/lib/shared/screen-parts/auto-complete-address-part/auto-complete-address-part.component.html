@@ -1,12 +1,35 @@
 <mat-card fxLayout="column" class="page-content-card scrollable-content-card" style="height: 100%;">
     <mat-card-content fxFlex="1 1 auto">
         <form [formGroup]="form">
-            <ng-container *ngFor="let field of screenData.formElements">
-                <app-dynamic-form-field *ngIf="field === streetAddress" autoCompleteAddress [formGroup]="form"
-                    [formField]="field" (onFieldChanged)="onFieldChanged($event)" (onSelect)="setAddress($event)">
-                </app-dynamic-form-field>
 
-                <app-dynamic-form-field *ngIf="field !== streetAddress" [formGroup]="form" [formField]="field"
+            <app-dynamic-form-field *ngIf="streetAddress" autoCompleteAddress [formGroup]="form"
+                [formField]="streetAddress" (onFieldChanged)="onFieldChanged($event)" (onSelect)="setAddress($event)">
+            </app-dynamic-form-field>
+
+            <app-dynamic-form-field *ngIf="addressLine2" [formGroup]="form" [formField]="addressLine2"
+                (onFieldChanged)="onFieldChanged($event)" (onSelect)="setAddress($event)">
+            </app-dynamic-form-field>
+
+            <div class="address-city-state">
+                <app-dynamic-form-field *ngIf="locality" [formGroup]="form" [formField]="locality"
+                    (onFieldChanged)="onFieldChanged($event)">
+                </app-dynamic-form-field>
+                <app-dynamic-form-field *ngIf="state" [formGroup]="form" [formField]="state"
+                    (onFieldChanged)="onFieldChanged($event)">
+                </app-dynamic-form-field>
+            </div>
+
+            <div class="address-zip-country">
+                <app-dynamic-form-field *ngIf="postalCode" [formGroup]="form" [formField]="postalCode"
+                    (onFieldChanged)="onFieldChanged($event)">
+                </app-dynamic-form-field>
+                <app-dynamic-form-field *ngIf="country" [formGroup]="form" [formField]="country"
+                    (onFieldChanged)="onFieldChanged($event)">
+                </app-dynamic-form-field>
+            </div>
+
+            <ng-container *ngFor="let field of nonAddressFields">
+                <app-dynamic-form-field [formGroup]="form" [formField]="field"
                     (onFieldChanged)="onFieldChanged($event)"></app-dynamic-form-field>
             </ng-container>
 

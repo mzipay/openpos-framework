@@ -11,6 +11,7 @@ import { SelfCheckoutOptionsComponent } from './self-checkout-options/self-check
 import { ScreenService } from '../core/services/screen.service';
 import { DialogService } from '../core/services/dialog.service';
 import { SelfCheckoutFormComponent } from './self-checkout-form/self-checkout-form.component';
+import { SelfCheckoutPromptComponent } from './self-checkout-prompt/self-checkout-prompt.component';
 import { SelfCheckoutMenuComponent } from './screen-parts/self-checkout-menu/self-checkout-menu.component';
 
 
@@ -19,7 +20,8 @@ const screens = [
     SelfCheckoutHomeComponent,
     SelfCheckoutPaymentStatusComponent,
     SelfCheckoutOptionsComponent,
-    SelfCheckoutFormComponent
+    SelfCheckoutFormComponent,
+    SelfCheckoutPromptComponent
 ];
 
 const dialogs = [
