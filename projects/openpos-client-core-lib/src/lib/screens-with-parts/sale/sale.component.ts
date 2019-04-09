@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material';
 import { PosScreen } from '../../screens-deprecated/pos-screen/pos-screen.component';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 import { OpenposMediaService } from '../../core/services/openpos-media.service';
+import { ITotal } from '../../core/interfaces/total.interface';
 
 @ScreenComponent({
     name: 'Sale'
@@ -18,6 +19,7 @@ export class SaleComponent extends PosScreen<SaleInterface> {
 
   overFlowListSize: Observable<number>;
   trainingDrawerOpen = false;
+  totals: ITotal[];
 
   constructor(private mediaService: OpenposMediaService, protected dialog: MatDialog) {
     super();
@@ -32,6 +34,8 @@ export class SaleComponent extends PosScreen<SaleInterface> {
   }
 
   buildScreen() {
+    // Reallocate totals array to force change detection in child app-overflow-list
+    this.totals = this.screen.totals ? this.screen.totals.slice() : [];
     this.dialog.closeAll();
   }
 

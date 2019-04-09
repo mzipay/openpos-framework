@@ -15,7 +15,7 @@
         gdGap="6px">
         <app-sale-item-list gdArea="items"></app-sale-item-list>
         <app-overflow-list gdArea="totals" *ngIf="screen.transactionActive" [numberItemsToShow]="overFlowListSize | async"
-            [items]="screen.totals"></app-overflow-list>
+            [items]="totals"></app-overflow-list>
         <app-sale-footer gdArea="nextbar" ></app-sale-footer>
         <app-status-strip gdArea="status"></app-status-strip>
     </div>
