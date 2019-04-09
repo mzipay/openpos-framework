@@ -27,6 +27,13 @@ export class AutoCompleteAddressPartComponent extends ScreenPartComponent<IForm>
     form: FormGroup;
 
     streetAddress: IFormElement;
+    addressLine2: IFormElement;
+    locality: IFormElement;
+    state: IFormElement;
+    postalCode: IFormElement;
+    country: IFormElement;
+
+    nonAddressFields: IFormElement[];
 
     buttons: IFormElement[];
 
@@ -56,6 +63,7 @@ export class AutoCompleteAddressPartComponent extends ScreenPartComponent<IForm>
 
     screenDataUpdated() {
         this.buttons = new Array<IFormElement>();
+        this.nonAddressFields = new Array<IFormElement>();
 
         this.form = this.formBuilder.group(this.screenData);
 
@@ -65,11 +73,36 @@ export class AutoCompleteAddressPartComponent extends ScreenPartComponent<IForm>
                     this.buttons.push(element);
                 }
 
-                if (element.id === 'streetAddress') {
-                    this.streetAddress = element;
+                const isAddressField = this.parseAddressField(element);
+                if (!isAddressField) {
+                    this.nonAddressFields.push(element);
                 }
             });
         }
+    }
+
+    private parseAddressField(element: IFormElement): boolean {
+        let isAddressField = false;
+        if (element.id === 'streetAddress') {
+            this.streetAddress = element;
+            isAddressField = true;
+        } else if (element.id === 'addressLine2') {
+            this.addressLine2 = element;
+            isAddressField = true;
+        } else if (element.id === 'locality') {
+            this.locality = element;
+            isAddressField = true;
+        } else if (element.id === 'state') {
+            this.state = element;
+            isAddressField = true;
+        } else if (element.id === 'postalCode') {
+            this.postalCode = element;
+            isAddressField = true;
+        } else if (element.id === 'country') {
+            this.country = element;
+            isAddressField = true;
+        }
+        return isAddressField;
     }
 
     @Input()

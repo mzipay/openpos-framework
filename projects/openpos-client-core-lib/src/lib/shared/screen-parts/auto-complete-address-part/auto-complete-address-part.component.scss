@@ -1,0 +1,11 @@
+.address-city-state {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-column-gap: 8px;
+}
+
+.address-zip-country {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-column-gap: 8px;
+}
