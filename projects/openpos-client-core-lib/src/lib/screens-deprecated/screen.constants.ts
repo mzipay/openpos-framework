@@ -48,7 +48,6 @@ import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.compo
 import { DetailTextScreenComponent } from './detail-text/detail-text-screen.component';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 import { SaleComponent } from '../screens-with-parts/sale/sale.component';
-import { ReturnComponent } from './return/return.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { SelectionListDialogComponent } from './selection-list/selection-list-dialog.component';
 import { DataTableComponent } from './data-table/data-table.component';
@@ -74,7 +73,6 @@ export const ScreenConstants = {
         { name: 'PromptWithOptions', component: PromptWithOptionsComponent },
         { name: 'PromptWithInfo', component: PromptWithInfoComponent },
         { name: 'Transaction', component: TransactionComponent },
-        { name: 'Return', component: ReturnComponent },
         { name: 'SellItemDetail', component: SellItemDetailComponent },
         { name: 'SignatureCapture', component: SignatureCaptureComponent },
         { name: 'Table', component: StaticTableComponent },

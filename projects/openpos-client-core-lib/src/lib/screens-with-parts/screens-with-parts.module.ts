@@ -12,12 +12,14 @@ import { PromptScreenDialogComponent } from './prompt/prompt-screen-dialog.compo
 import { PromptWithOptionsScreenComponent } from './prompt-with-options/prompt-with-options-screen.component';
 import { PromptWithOptionsScreenDialogComponent } from './prompt-with-options/prompt-with-options-screen-dialog.component';
 import { HomeComponent } from './home/home.component';
+import { ReturnComponent } from './return/return.component';
 
 const screens = [
     SelectionListScreenComponent,
     PromptScreenComponent,
     PromptWithOptionsScreenComponent,
-    HomeComponent
+    HomeComponent,
+    ReturnComponent
 ];
 
 const dialogs = [

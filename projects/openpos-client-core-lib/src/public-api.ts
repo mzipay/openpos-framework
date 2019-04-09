@@ -177,7 +177,6 @@ export * from './lib/screens-deprecated/prompt/prompt.component';
 export * from './lib/screens-deprecated/prompt-with-info/prompt-with-info.component';
 export * from './lib/screens-deprecated/prompt-with-options/prompt-with-options-dialog.component';
 export * from './lib/screens-deprecated/prompt-with-options/prompt-with-options.component';
-export * from './lib/screens-deprecated/return/return.component';
 export * from './lib/screens-deprecated/sale-retrieval/sale-retrieval.component';
 export * from './lib/screens-deprecated/selection-list/selection-list-dialog.component';
 export * from './lib/screens-deprecated/selection-list/selection-list.component';
@@ -219,6 +218,8 @@ export * from './lib/screens-with-parts/selection-list/selection-list-item.inter
 export * from './lib/screens-with-parts/selection-list/selection-list-screen-dialog.component';
 export * from './lib/screens-with-parts/selection-list/selection-list-screen.component';
 export * from './lib/screens-with-parts/selection-list/selection-list.interface';
+export * from './lib/screens-with-parts/return/return.component';
+
 export * from './lib/screens-with-parts/prompt/prompt-screen.component';
 export * from './lib/screens-with-parts/prompt/prompt-screen-dialog.component';
 
