@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeUIMessage extends UIMessage {
+    
+    private static final long serialVersionUID = 1L;
+    
     private BaconStripPart baconStrip = new BaconStripPart();
     private List<ActionItem> menuItems = new ArrayList<>();
 
