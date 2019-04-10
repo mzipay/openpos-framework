@@ -85,7 +85,6 @@ export class AutoCompleteAddressPartComponent extends ScreenPartComponent<IForm>
         let isAddressField = false;
         if (element.id === 'streetAddress') {
             this.streetAddress = element;
-            isAddressField = true;
         } else if (element.id === 'addressLine2') {
             this.addressLine2 = element;
             isAddressField = true;
