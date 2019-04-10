@@ -1,4 +1,4 @@
-<app-waffle>
+<app-waffle [showDrawer]="screen.sausageLinks && screen.sausageLinks.length > 0">
 	<app-bacon-strip waffle-header fxFlex="100%"></app-bacon-strip>
 
 	<div waffle-drawer-content class="drawer-content" fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start stretch"
@@ -9,34 +9,9 @@
 
 	<div waffle-body class="body-content" gdAreas="form | status" gdRows="minmax(200px, 100%) auto" gdGap="6px">
 
-		<mat-card gdArea="form" fxLayout="column" class="page-content-card scrollable-content-card">
-			<mat-card-content fxFlex="1 1 100%">
-				<form [formGroup]="formGroup">
-					<ng-container *ngFor="let field of screenForm.formElements">
-						<app-dynamic-form-field *ngIf="field === streetAddress" autoCompleteAddress
-							[formGroup]="formGroup" [formField]="field" (onFieldChanged)="onFieldChanged($event)"
-							(onSelect)="setAddress($event)"></app-dynamic-form-field>
-
-						<app-dynamic-form-field *ngIf="field !== streetAddress" [formGroup]="formGroup"
-							[formField]="field" (onFieldChanged)="onFieldChanged($event)"></app-dynamic-form-field>
-					</ng-container>
-
-					<mat-error>
-						<div id="formErrorsWrapper">
-							<app-show-errors #formErrors [control]="formGroup"></app-show-errors>
-						</div>
-						<div *ngFor="let error of screenForm.formErrors">{{error}}</div>
-					</mat-error>
-				</form>
-			</mat-card-content>
-			<mat-card-actions align="end">
-				<button *ngIf="screen.submitButton" mat-raised-button type="submit" color=primary (click)="onSubmit()"
-					[disabled]="!formGroup.valid" [actionItem]="screen.submitButton" (actionClick)="onSubmit()">
-					<span>{{screen.submitButton.title}}</span>
-					<app-icon [iconName]="screen.submitButton.icon" [iconClass]="'material-icons'"></app-icon>
-				</button>
-			</mat-card-actions>
-		</mat-card>
+		<app-auto-complete-address-part [formName]="'form'" [submitButton]="screen.submitButton"
+			[alternateSubmitActions]="screen.alternateSubmitActions">
+		</app-auto-complete-address-part>
 
 		<app-status-strip gdArea="status" waffle-footer></app-status-strip>
 	</div>
