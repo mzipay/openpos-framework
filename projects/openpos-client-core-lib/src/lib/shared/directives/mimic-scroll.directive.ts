@@ -18,10 +18,9 @@ export class MimicScrollDirective implements OnDestroy {
     constructor(private elRef: ElementRef, public session: SessionService, public renderer: Renderer2) {
         if (Configuration.mimicScroll) {
             this.unlistenMethod = this.renderer.listen(elRef.nativeElement, 'panmove', (event) => {
-                this.elRef.nativeElement.scrollTop += event.deltaY / 10;
+                this.elRef.nativeElement.scrollTop -= event.deltaY / 10;
             });
         }
-
     }
 
     ngOnDestroy(): void {
