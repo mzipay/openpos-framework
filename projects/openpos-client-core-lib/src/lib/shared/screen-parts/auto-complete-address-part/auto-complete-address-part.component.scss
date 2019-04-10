@@ -9,3 +9,12 @@
     grid-template-columns: 2fr 1fr;
     grid-column-gap: 8px;
 }
+
+.scrollable-form-card {
+    min-height: 10%;
+
+        .mat-card-content {
+            margin-bottom: 0px;
+            overflow-y: auto;
+        }
+  }
