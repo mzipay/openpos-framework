@@ -41,7 +41,7 @@ export class TransactionItemListComponent implements AfterViewChecked {
 
   public onItemActionsMultiMenulick(menuItem: IActionItem, selectedItemIndexes: number[],  selectedItems: IItem[]) {
     if (menuItem.enabled  && selectedItems && selectedItems.length > 0) {
-      this.menuAction.emit({ menuItem: menuItem, payload: selectedItems.map(i => i.index) });
+      this.menuAction.emit({ menuItem, payload: selectedItems.map(i => i.index) });
     } else {
       this.onMenuItemClick(menuItem, selectedItemIndexes);
     }
@@ -49,7 +49,7 @@ export class TransactionItemListComponent implements AfterViewChecked {
 
   public onMenuItemClick(menuItem: IActionItem, payload?: number[]) {
     if (menuItem.enabled && payload) {
-      this.menuAction.emit({ menuItem: menuItem, payload: payload });
+      this.menuAction.emit({ menuItem, payload });
     } else if (menuItem.enabled) {
       this.menuAction.emit(menuItem);
     }

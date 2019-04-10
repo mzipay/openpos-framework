@@ -45,14 +45,16 @@ export class ReturnComponent extends PosScreen<any> implements AfterViewInit, Af
     }
 
     buildScreen() {
-        this.selectedItems = this.screen.items.filter(item => this.screen.selectedItems.find(selectedItem => item.index === selectedItem.index));
+        this.selectedItems =
+          this.screen.items.filter(item => this.screen.selectedItems.find(selectedItem => item.index === selectedItem.index));
         this.listConfig = new SelectableItemListComponentConfiguration<ISellItem>();
         this.listConfig.selectionMode = SelectionMode.Multiple;
         this.listConfig.numResultsPerPage = Number.MAX_VALUE;
         this.listConfig.items = this.screen.items;
         this.items = this.screen.items;
-        this.amountTotals = this.screen.totals ? (<ITotal[]>this.screen.totals).filter(t => t.type === TotalType.Amount) : null;
-        const screenItemTotal = this.screen.totals ? (<ITotal[]>this.screen.totals).find(t => t.type === TotalType.Quantity && t.name === 'itemTotal') : null;
+        this.amountTotals = this.screen.totals ? (this.screen.totals as ITotal[]).filter(t => t.type === TotalType.Amount) : null;
+        const screenItemTotal =
+          this.screen.totals ? (this.screen.totals as ITotal[]).find(t => t.type === TotalType.Quantity && t.name === 'itemTotal') : null;
         this.itemTotal = screenItemTotal ? Number(screenItemTotal.amount) : this.items.length;
         this.receipts = this.screen.receipts;
 
@@ -104,7 +106,7 @@ export class ReturnComponent extends PosScreen<any> implements AfterViewInit, Af
         const dialogRef = this.dialog.open(NavListComponent, {
             width: '70%',
             data: {
-                optionItems: optionItems,
+                optionItems,
                 payload: this.getIndexes(items),
                 disableClose: false,
                 autoFocus: false

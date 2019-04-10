@@ -13,6 +13,7 @@ import { PromptWithOptionsScreenComponent } from './prompt-with-options/prompt-w
 import { PromptWithOptionsScreenDialogComponent } from './prompt-with-options/prompt-with-options-screen-dialog.component';
 import { HomeComponent } from './home/home.component';
 import { ReturnComponent } from './return/return.component';
+import { ReturnTransDetailsDialogComponent } from './return/return-trans-details/return-trans-details-dialog.component';
 
 const screens = [
     SelectionListScreenComponent,
@@ -26,7 +27,8 @@ const dialogs = [
     SelectionListScreenDialogComponent,
     GenericDialogComponent,
     PromptScreenDialogComponent,
-    PromptWithOptionsScreenDialogComponent
+    PromptWithOptionsScreenDialogComponent,
+    ReturnTransDetailsDialogComponent
 ];
 
 @NgModule({

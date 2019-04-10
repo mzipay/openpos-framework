@@ -1,0 +1,55 @@
+<div fxLayout="column" fxFlexFill>
+    <app-dialog-header fxFlex="100%"></app-dialog-header>
+    <mat-dialog-content>
+        <div fxFlex="0 0 100%" class="lighter dialog-content" fxLayout="column" fxLayoutAlign="start">
+            <div *ngIf="screen.instructions" class="text-sm"> {{screen.instructions}}</div>
+            <app-selectable-item-list [configuration]="listConfig" 
+            (selectedItemChange)="onItemChange($event)">
+                <ng-template let-item>
+                    <div gdAreas="  description description giftReceipt cost kebab |
+                                    subtitle labels giftReceipt cost kebab |
+                                    prop65Item prop65Item prop65Item prop65Item prop65Item"
+                         gdColumns="auto 1fr auto auto auto"
+                         gdGap="4px"
+                        [ngClass]="{'muted-color' : !item.enabled}" >
+                        <div gdArea="description" [ngClass]="item.prop65Item ? 'warn' : ''">
+                            {{item.description}}
+                        </div>
+                        <div gdArea="subtitle" class="muted-color">
+                            {{item.subtitle}}
+                        </div>
+                        <div gdArea="labels">
+                            <span class="item-label" *ngFor="let label of item.labels">{{label}}</span>
+                        </div>
+                        <div gdArea="giftReceipt" *ngIf="item.isGiftReceipt" fxAlign="right center">
+                            <mat-icon color="muted-color">redeem</mat-icon>&nbsp;&nbsp;
+                        </div>
+                        <div gdArea="cost" gdGridAlign="center center" [ngClass]="(!item.enabled) ? 'muted-color' : 'primary text-md'">
+                            <app-currency-text [amountText]="item.amount"></app-currency-text>
+                            <div>
+                                <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin: 0px; text-decoration: line-through;">
+                                    <app-currency-text [amountText]="item.originalAmount"></app-currency-text>
+                                </p>
+    
+                                <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin: 0px;">
+                                    <app-currency-text [amountText]="item.discountAmount"></app-currency-text>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+    
+            </app-selectable-item-list>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end">
+        <button
+            cdkFocusInitial  mat-raised-button
+            color="primary" [disabled]="index<0"
+            [actionItem]="selectionButton" (actionClick)="doMenuItemAction(selectionButton)" (click)="doMenuItemAction(selectionButton)">
+            <span>{{selectionButton.title}}</span>&nbsp;
+            <span *ngIf="keybindsEnabled(selectionButton)" class="muted-color">{{selectionButton.keybind}}</span>
+        </button>
+
+    </mat-dialog-actions>
+</div>
