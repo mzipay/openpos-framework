@@ -9,9 +9,9 @@
 
 ::ng-deep .options-icon {
     mat-icon {
-        width: 400px; 
-        height: 100px; 
-        padding-top: 0px;
+        width: 400px !important; 
+        height: 100px !important; 
+        padding-top: 0px !important;
     }
 }
 
@@ -35,9 +35,18 @@
 
 .options-buttons {
     padding-bottom: 64px;
+    
+    span {
+        line-height: 64px;
+        padding: 32px;
+    }
 }
 
 .options-form {
     padding-left: 30px; 
     padding-right: 30px;
+}
+
+.options-link-buttons {
+    margin: 32px 0px;
 }
