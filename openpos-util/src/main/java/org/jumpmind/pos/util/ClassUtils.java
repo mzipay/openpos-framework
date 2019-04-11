@@ -1,7 +1,6 @@
 package org.jumpmind.pos.util;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +58,7 @@ public class ClassUtils {
      * @param annotation The annotation to search for.
      * @return A list of Class objects.
      */
+    @SuppressWarnings("unchecked")
     public static <T> List<Class<T>> getClassesForPackageAndType(String packageName, Class<T> matchingType) {
         List<Class<T>> result = new ArrayList<>();
         List<Class<?>> classes = getClassesForPackageAndAnnotation(packageName, null, null, matchingType);
