@@ -89,7 +89,6 @@ public class ClassUtils {
         
         for (BeanDefinition bd : scanner.findCandidateComponents(packageName)) {
             try {
-                System.out.println("Try " + bd.getBeanClassName());
                 final Class<?> clazz = Class.forName(bd.getBeanClassName());
                 classes.add(clazz);
             } catch (ClassNotFoundException ex) {
