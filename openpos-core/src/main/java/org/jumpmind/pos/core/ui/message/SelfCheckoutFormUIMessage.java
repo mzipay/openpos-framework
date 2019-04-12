@@ -6,6 +6,7 @@ import org.jumpmind.pos.core.screen.IHasForm;
 import org.jumpmind.pos.core.screen.IconType;
 import org.jumpmind.pos.core.screen.KeyConstants;
 import org.jumpmind.pos.core.ui.UIMessage;
+import org.jumpmind.pos.core.ui.messagepart.ProgressBarPart;
 import org.jumpmind.pos.core.ui.messagepart.SelfCheckoutMenuPart;
 
 import java.util.ArrayList;
@@ -22,6 +23,10 @@ public class SelfCheckoutFormUIMessage extends UIMessage implements IHasForm {
     private ActionItem submitButton;
 
     private List<String> alternateSubmitActions = new ArrayList<String>();
+
+    private String imageUrl;
+    
+    private ProgressBarPart progressBar;
 
     public SelfCheckoutFormUIMessage() {
         setScreenType(UIMessageType.SELF_CHECKOUT_FORM);
@@ -60,6 +65,22 @@ public class SelfCheckoutFormUIMessage extends UIMessage implements IHasForm {
 
     public void setAlternateSubmitActions(List<String> alternateSubmitActions) {
         this.alternateSubmitActions = alternateSubmitActions;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public ProgressBarPart getProgressBar() {
+        return progressBar;
+    }
+
+    public void setProgressBar(ProgressBarPart progressBar) {
+        this.progressBar = progressBar;
     }
 
 }
