@@ -5,4 +5,5 @@ import { IActionItem } from '../../core/interfaces/menu-item.interface';
 export interface SelfCheckoutFormInterface extends IAbstractScreen {
     submitButton: IActionItem;
     alternateSubmitActions: IActionItem[];
+    imageUrl: string;
 }
