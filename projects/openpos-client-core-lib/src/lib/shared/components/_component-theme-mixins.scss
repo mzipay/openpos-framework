@@ -7,6 +7,7 @@
 @import './display-property/display-property-theme';
 @import './transaction-item-list/transaction-item-list-theme';
 @import './grid-table/grid-table-theme';
+@import './sell-item-line/sell-item-line-theme';
 
 @mixin openpos-component-theme-mixins($theme) {
     @include pager-theme($theme);
@@ -18,4 +19,5 @@
     @include display-property-theme($theme);
     @include transaction-item-list-theme($theme);
     @include grid-table-theme($theme);
+    @include sell-item-line-theme($theme);
 }

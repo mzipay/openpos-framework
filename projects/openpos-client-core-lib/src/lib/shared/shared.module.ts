@@ -105,6 +105,7 @@ import { WaffleComponent } from './layout-components/waffle/waffle.component';
 import { CommonModule } from '@angular/common';
 import { PromptFormPartComponent } from './screen-parts/prompt-form-part/prompt-form-part.component';
 import { AutoCompleteAddressPartComponent } from './screen-parts/auto-complete-address-part/auto-complete-address-part.component';
+import { SellItemLineComponent } from './components/sell-item-line/sell-item-line.component';
 
 const screenParts = [
     DynamicFormPartComponent,
@@ -163,6 +164,7 @@ const components = [
     IconSquareButtonComponent,
     DisplayPropertyComponent,
     TransactionItemListComponent,
+    SellItemLineComponent,
     GridTableComponent,
     SystemStatusDialogComponent,
     SellLinkedCustomerComponent,
