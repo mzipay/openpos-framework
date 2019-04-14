@@ -6,7 +6,7 @@ import { FileUploadResult } from './../interfaces/file-upload-result.interface';
 import { PersonalizationService } from './personalization.service';
 import { CordovaService } from './cordova.service';
 import { Subscription } from 'rxjs';
-
+import { FileChunkReader } from './../../shared/utils/filechunkreader';
 @Injectable({
     providedIn: 'root',
   })
@@ -26,18 +26,8 @@ export class FileUploadService {
 
             const url = this.getUploadServiceUrl();
             this.log.info(`File upload endpoint url: ${url}`);
-
-            const formData = new FormData();
-            formData.append('nodeId', this.personalization.getDeviceId().toString());
-            formData.append('targetContext', context);
-            formData.append('filename', filename);
             try {
-                const fileBlob = await this.readFile(localfilepath, contentType);
-                // For testing large file uploads
-                // const fileBlob = await this.readMockFile(localfilepath, contentType);
-                this.log.info(`File ${filename} read successfully.  Size is: ${fileBlob.size} bytes. Will now attempt to upload...`);
-                formData.append('file', fileBlob);
-                return this.uploadFile(url, filename, formData);
+                return this.uploadFileInChunks(url, context, localfilepath, filename, contentType);
             } catch (error) {
                 if ('success' in error && 'message' in error) {
                     return error;
@@ -48,18 +38,47 @@ export class FileUploadService {
         } else {
             const msg = `Not running in Cordova, cannot upload file ${filename}`;
             this.log.warn(msg);
-            return Promise.reject({success: false, message: msg});
-        }
+           return Promise.reject({success: false, message: msg});
+       }
 
     }
 
-    public uploadFile(url: string, filename: string, formData: FormData, timeoutMillis = 20000): Promise<FileUploadResult> {
+    public async uploadFileInChunks(url: string, context: string, localfilepath: string, filename: string,
+        contentType: string, timeoutMillis = 60000): Promise<FileUploadResult> {
+
         let fileUploadTimer: any = null;
         let uploadSub: Subscription = null;
+        // Callback function to handle each chunk read
+        const uploadFunc = (blob: Blob): Promise<boolean> => {
+            const prom = new Promise<boolean>((resolve, reject) => {
+                const f = new FormData();
+                f.append('nodeId', this.personalization.getNodeId().toString());
+                f.append('targetContext', context);
+                f.append('filename', filename);
+                f.append('file', blob);
+                f.append('chunkIndex', fileChunkReader.chunkIndex.toString());
+                uploadSub = this.httpClient.post(url, f, {observe: 'response'}).subscribe(response => {
+                        this.log.debug(`${filename} chunk uploaded.  bytes uploaded/total: ${fileChunkReader.bytesReadCount}/${fileChunkReader.fileSize}`);
+                        resolve(true);
+                    },
+                    err => {
+                        fileChunkReader.cancel();
+                        if (fileUploadTimer) {
+                            clearTimeout(fileUploadTimer);
+                        }
+                        throw err;
+                    }
+                );
+            });
+            return prom;
+        };
+
+        const fileChunkReader = new FileChunkReader(localfilepath, contentType, uploadFunc);
 
         const timeoutPromise = new Promise<FileUploadResult>((resolve, reject) => {
             fileUploadTimer = setTimeout( () => {
                 this.log.info(`upload timed out`);
+                fileChunkReader.cancel();
                 if (uploadSub) {
                     uploadSub.unsubscribe();
                 }
@@ -68,21 +87,27 @@ export class FileUploadService {
             timeoutMillis);
         });
 
-        const uploadPromise = new Promise<FileUploadResult>((resolve, reject) => {
-            uploadSub = this.httpClient.post(url, formData, {observe: 'response'}).subscribe( response => {
+
+        const readAndUploadPromise = new Promise<FileUploadResult>((resolve, reject) => {
+            fileChunkReader.readFileInChunks().then(result => {
                 if (fileUploadTimer) {
                     clearTimeout(fileUploadTimer);
                 }
-                const msg = `File ${filename} uploaded to server successfully.`;
-                this.log.info(msg);
-                this.log.info(`File upload response: ${JSON.stringify(response)}`);
-                resolve({success: true, message: msg});
-            },
-            err => {
+                if (result) {
+                    const msg = `File '${filename}' uploaded to server successfully.`;
+                    this.log.info(msg);
+                    // this.log.info(`File upload response: ${JSON.stringify(response)}`);
+                    resolve({success: true, message: msg});
+                } else {
+                    const msg = `Upload of file '${filename}' FAILED!`;
+                    this.log.error(msg);
+                    resolve({success: false, message: msg});
+                }
+            }).catch(err => {
                 if (fileUploadTimer) {
                     clearTimeout(fileUploadTimer);
                 }
-                const msg = `Upload Error occurred: ${JSON.stringify(err)}`;
+                const msg = `Upload Error occurred: ${err}`;
                 this.log.error(msg);
                 const statusCode = err.status || (err.error ? err.error.status : null);
                 let errMsg = '';
@@ -99,38 +124,8 @@ export class FileUploadService {
                 reject({success: false, message: returnMsg});
             });
         });
+        return Promise.race([timeoutPromise, readAndUploadPromise]);
 
-        return Promise.race([timeoutPromise, uploadPromise]);
-    }
-
-    private readMockFile(localfilepath: string, contentType: string): Promise<Blob> {
-        const giantArray = [];
-        const repeat = '0123457890012345789001234578900123457890012345789001234578900123457890012345789001234578900123457890';
-        for (let i = 0; i < 500000; i++) {
-            giantArray.push(repeat);
-        }
-        const blob = new Blob(giantArray, { type: contentType });
-        return Promise.resolve(blob);
-    }
-
-    protected readFile(localfilepath: string, contentType: string): Promise<Blob> {
-        const prom = new Promise<Blob>((resolve, reject) => {
-            (<any>window).requestFileSystem((<any>window).PERSISTENT, 0, (fs) => {
-                (<any>window).resolveLocalFileSystemURL(localfilepath, (fileEntry) => {
-                    fileEntry.file( (file) => {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                            // Create a blob based on the FileReader "result", which we asked to be retrieved as an ArrayBuffer
-                            const blob = new Blob([new Uint8Array(<ArrayBuffer>reader.result)], { type: contentType });
-                            resolve(blob);
-                        };
-                        reader.readAsArrayBuffer(file);
-                    }, (fileErr) => { this.handleError(`Error getting fileEntry for file: ${localfilepath}`, fileErr); });
-                }, (resolveErr) => { this.handleError(`Error resolving file: ${localfilepath}`, resolveErr); });
-            }, (fsErr) => { this.handleError('Error getting persistent filesystem!', fsErr); });
-        });
-
-        return prom;
     }
 
     protected getUploadServiceUrl(): string {
