@@ -109,6 +109,10 @@ task develop {
     description 'Generates Eclipse artifacts and sets up your development environment'
     dependsOn tasks.cleanEclipse, tasks.eclipse, tasks.cleanIdea, tasks.idea
     delete '.settings'
+    doFirst {
+        println "Removing bin directory"
+        delete "./bin"
+    }
 }
 
 configurations { testArtifacts }
