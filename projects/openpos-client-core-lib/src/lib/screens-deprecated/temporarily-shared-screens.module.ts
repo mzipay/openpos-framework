@@ -13,7 +13,6 @@ import { ItemSearchResultsComponent } from './item-search-results/item-search-re
 import { ChooseOptionsDialogComponent } from './choose-options/choose-options-dialog.component';
 import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';
 import { LoadingDialogComponent } from './loading-dialog/loading-dialog.component';
-import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 import { SignatureCaptureComponent } from './signature-capture/signature-capture.component';
 
 const screens = [
@@ -32,8 +31,7 @@ const screens = [
 const dialogs = [
         ChooseOptionsDialogComponent,
         DynamicFormDialogComponent,
-        LoadingDialogComponent,
-        MultipleDynamicFormDialogComponent
+        LoadingDialogComponent
     ];
 /**
  * @ignore

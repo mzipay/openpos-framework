@@ -1,4 +1,4 @@
-<form *ngIf="screenData" fxFlex="1 1 auto" (ngSubmit)="submitForm()" [formGroup]="form" novalidate [markDirtyOnSubmit]="form" id="dynamic-form" fxLayout="column">
+<app-form *ngIf="screenData" (submit)="submitForm()" [form]="form">
     <mat-card-content fxFlex="1 1 auto" mat-dialog-content fxLayout="column">
         <app-dynamic-form-field *ngFor="let field of screenData.formElements" [formGroup]="form" [formField]="field" (onFieldChanged)="onFieldChanged($event)"></app-dynamic-form-field>
         <mat-error>
@@ -17,5 +17,5 @@
             <app-icon *ngIf="submitButton.icon" [iconClass]="'material-icons'" [iconName]="submitButton.icon"></app-icon>
         </button>
     </mat-card-actions>
-</form>
+</app-form>
 

@@ -1,5 +1,5 @@
 import { ViewChildren, AfterViewInit, Input, QueryList, ViewChild, Component } from '@angular/core';
-import { FormGroup, AbstractControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ScreenPartComponent } from '../screen-part';
 import { MessageProvider } from '../../providers/message.provider';
 import { FormBuilder } from '../../../core/services/form-builder.service';
@@ -92,34 +92,8 @@ export class DynamicFormPartComponent extends ScreenPartComponent<IForm> impleme
     }
 
     submitForm() {
-        if (this.form.valid) {
             this.formBuilder.buildFormPayload(this.form, this.screenData);
             this.sessionService.onAction(this.submitButton, this.screenData);
-        } else {
-            // Set focus on the first invalid field found
-            const invalidFieldKey = Object.keys(this.form.controls).find(key => {
-                const ctrl: AbstractControl = this.form.get(key);
-                return ctrl.invalid && ctrl.dirty;
-            });
-            if (invalidFieldKey) {
-                const invalidField = this.children.find(f => f.controlName === invalidFieldKey).field;
-                if (invalidField) {
-                    const invalidElement = document.getElementById(invalidFieldKey);
-                    if (invalidElement) {
-                        invalidElement.scrollIntoView();
-                    } else {
-                        invalidField.focus();
-                    }
-                }
-            } else {
-                if (this.formErrors.shouldShowErrors()) {
-                    const formErrorList = this.formErrors.listOfErrors();
-                    if (formErrorList && formErrorList.length > 0) {
-                        document.getElementById('formErrorsWrapper').scrollIntoView();
-                    }
-                }
-            }
-        }
     }
 
     onFieldChanged(formElement: IFormElement) {
@@ -127,10 +101,6 @@ export class DynamicFormPartComponent extends ScreenPartComponent<IForm> impleme
             this.formBuilder.buildFormPayload(this.form, this.screenData);
             this.sessionService.onAction(formElement.valueChangedAction, this.screenData);
         }
-    }
-
-    onButtonClick(formElement: IFormElement) {
-        this.sessionService.onAction(formElement.buttonAction, null, formElement.confirmationDialog);
     }
 }
 
