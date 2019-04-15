@@ -52,6 +52,7 @@ import { IconService } from '../core/services/icon.service';
 import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { HomeComponent } from './home/home.component';
+import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
 const screens = [
     BasicItemSearchComponent,
     ChooseOptionsComponent,
@@ -95,7 +96,8 @@ const dialogs = [
     DefaultDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
-    PromptWithOptionsDialogComponent
+    PromptWithOptionsDialogComponent,
+    MultipleDynamicFormDialogComponent
 ];
 
 const templates = [
