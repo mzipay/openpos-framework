@@ -28,6 +28,9 @@ export class MultipleFormPartComponent extends ScreenPartComponent<IMultipleForm
      }
 
     screenDataUpdated() {
+        if ( !this.screenData ) {
+            return;
+        }
         this.forms = this.screenData;
         this.formGroups = [];
         this.forms.forEach( f => {
