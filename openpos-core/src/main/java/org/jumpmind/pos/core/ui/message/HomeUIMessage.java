@@ -3,18 +3,21 @@ package org.jumpmind.pos.core.ui.message;
 import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.ui.AssignKeyBindings;
 import org.jumpmind.pos.core.ui.UIMessage;
-import org.jumpmind.pos.core.ui.messagepart.BaconStripPart;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @AssignKeyBindings
 public class HomeUIMessage extends UIMessage {
-    
+
     private static final long serialVersionUID = 1L;
-    
-    private BaconStripPart baconStrip = new BaconStripPart();
+
     private List<ActionItem> menuItems = new ArrayList<>();
+
+    public HomeUIMessage(){
+        setId("home");
+        setScreenType(UIMessageType.HOME);
+    }
 
     public List<ActionItem> getMenuItems() {
         return menuItems;
@@ -30,13 +33,5 @@ public class HomeUIMessage extends UIMessage {
         }
 
         this.menuItems.add(item);
-    }
-
-    public BaconStripPart getBaconStrip() {
-        return baconStrip;
-    }
-
-    public void setBaconStrip(BaconStripPart baconStrip) {
-        this.baconStrip = baconStrip;
     }
 }
