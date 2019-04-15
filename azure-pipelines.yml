@@ -2,6 +2,7 @@ name: $(BuildID)
 
 trigger:
 - master
+- ironman
 
 variables:
   BUILD_NUMBER: $(Build.BuildNumber)
