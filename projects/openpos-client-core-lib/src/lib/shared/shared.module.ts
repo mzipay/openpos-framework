@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for material
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { TextMaskModule } from 'angular2-text-mask';
-import { MaterialModule } from './material.module';
+import { MaterialModule } from '../material/material.module';
 import { MatKeyboardModule } from '../keyboard/keyboard.module';
 
 import { SafePipe } from './pipes/safe.pipe';
@@ -104,12 +103,14 @@ import { SideNavComponent } from './layout-components/side-nav/side-nav.componen
 import { WaffleComponent } from './layout-components/waffle/waffle.component';
 import { CommonModule } from '@angular/common';
 import { PromptFormPartComponent } from './screen-parts/prompt-form-part/prompt-form-part.component';
+import { MultipleFormPartComponent } from './screen-parts/multiple-form-part/multiple-form-part.component';
+import { FormComponent } from './components/form/form.component';
 import { AutoCompleteAddressPartComponent } from './screen-parts/auto-complete-address-part/auto-complete-address-part.component';
 import { SellItemLineComponent } from './components/sell-item-line/sell-item-line.component';
 import { ProgressBarPartComponent } from './screen-parts/progress-bar-part/progress-bar-part.component';
 
 const screenParts = [
-    DynamicFormPartComponent,
+    MultipleFormPartComponent,
     StatusStripComponent,
     SausageLinksComponent,
     ScanOrSearchComponent,
@@ -118,6 +119,7 @@ const screenParts = [
     SaleFooterComponent,
     SaleItemListComponent,
     PromptFormPartComponent,
+    DynamicFormPartComponent,
     AutoCompleteAddressPartComponent,
     ProgressBarPartComponent
 ];
@@ -170,7 +172,8 @@ const components = [
     GridTableComponent,
     SystemStatusDialogComponent,
     SellLinkedCustomerComponent,
-    SellStatusSectionComponent
+    SellStatusSectionComponent,
+    FormComponent
 ];
 
 const directives = [

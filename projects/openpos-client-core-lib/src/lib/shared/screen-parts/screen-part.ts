@@ -7,6 +7,7 @@ import { IActionItem } from '../../core/interfaces/menu-item.interface';
 import { SessionService } from '../../core/services/session.service';
 import { Logger } from '../../core/services/logger.service';
 import { deepAssign } from '../../utilites/deep-assign';
+import { OpenposMediaService } from '../../core/services/openpos-media.service';
 
 export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
 
@@ -15,12 +16,24 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
     screenPartName: string;
     screenData: T;
     messageProvider: MessageProvider;
+    mediaService: OpenposMediaService;
+    isMobile$: Observable<boolean>;
     private subscription: Subscription;
 
     constructor( messageProvider: MessageProvider ) {
         this.sessionService = AppInjector.Instance.get(SessionService);
         this.log = AppInjector.Instance.get(Logger);
+        this.mediaService = AppInjector.Instance.get(OpenposMediaService);
+
         this.messageProvider = messageProvider;
+        const sizeMap = new Map([
+            ['xs', true],
+            ['sm', false],
+            ['md', false],
+            ['lg', false],
+            ['xl', false]
+        ]);
+        this.isMobile$ = this.mediaService.mediaObservableFromMap(sizeMap);
 
     }
 

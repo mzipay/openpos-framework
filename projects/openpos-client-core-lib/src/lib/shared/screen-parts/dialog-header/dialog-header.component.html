@@ -1,15 +1,14 @@
-<mat-card-title fxLayout="row" gdAreas="header backbutton">
-    <div gdArea="header" gdAreas="headerIcon headerText" gdColumns="auto 9fr">
+<mat-card-title gdAreas="header backbutton" gdColumns="1fr auto" gdAlignColumns="center center">
+    <div gdArea="header" gdAreas="headerIcon headerText" gdColumns="auto 1fr">
         <app-icon gdArea="headerIcon" gdGridAlign="center center" *ngIf="screenData.headerIcon" class="screen-icon" [iconName]="screenData.headerIcon"></app-icon>
         <span gdArea="headerText">{{screenData.headerText}}</span>
     </div>
-    <div gdArea="backbutton">
-        <div fxFlex="1 1 100%"></div>
-        <button  *ngIf="screenData.backButton"
-                mat-icon-button class="back-button" 
-                (click)="onMenuItemClick(screenData.backButton)"
-                [actionItem]="screenData.backButton">
-            <mat-icon>close</mat-icon>
-        </button>
-    </div>
+    <app-icon-button 
+        class="back-button" 
+        gdArea="backbutton" 
+        *ngIf="screenData.backButton"
+        (buttonClick)="onMenuItemClick(screenData.backButton)"
+        [actionItem]="screenData.backButton"
+        [iconName]="'close'"
+        ></app-icon-button>
 </mat-card-title>

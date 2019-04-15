@@ -36,7 +36,7 @@ export class MultipleDynamicFormDialogComponent extends MultipleDynamicFormCompo
           this.selectedOption = formOption;
           this.showOptions = false;
       }
-    
+
       onBackButtonPressed(): void {
        this.showOptions = true;
       }

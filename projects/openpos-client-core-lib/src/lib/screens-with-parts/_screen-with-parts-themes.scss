@@ -1,8 +1,10 @@
 @import './sale/sale-theme';
 @import './home/home-theme';
+@import './multiple-form-dialog/multiple-form-dialog-theme';
 @import './return/return-theme';
 
 @mixin screen-with-parts-themes($theme){
     @include sale-theme($theme);
     @include home-theme($theme);
+    @include multiple-form-dialog-theme($theme);
 }
