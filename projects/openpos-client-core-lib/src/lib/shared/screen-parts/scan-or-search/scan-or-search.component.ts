@@ -1,9 +1,7 @@
-import { FocusService } from './../../../core/services/focus.service';
 import { IActionItem } from './../../../core/interfaces/menu-item.interface';
-import { Component, ViewChild, AfterViewInit, Input, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, Input, ElementRef } from '@angular/core';
 import { ScreenPartComponent } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
-import { MatInput } from '@angular/material';
 import { DeviceService } from '../../../core/services/device.service';
 import { MessageProvider } from '../../providers/message.provider';
 import { ScreenPart } from '../../decorators/screen-part.decorator';
@@ -16,23 +14,18 @@ import { ScreenPart } from '../../decorators/screen-part.decorator';
     templateUrl: './scan-or-search.component.html',
     styleUrls: ['./scan-or-search.component.scss']
 })
-export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> implements AfterViewInit {
+export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> {
 
     public barcode: string;
 
     @Input() defaultAction: IActionItem;
 
     constructor( public devices: DeviceService, messageProvider: MessageProvider,
-                 private focusService: FocusService, private elRef: ElementRef) {
+                 private elRef: ElementRef) {
         super(messageProvider);
     }
 
     screenDataUpdated() {
-        this.focusFirst();
-    }
-
-    ngAfterViewInit(): void {
-        this.focusFirst();
     }
 
     public onEnter(): void {
@@ -41,20 +34,6 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
             this.barcode = '';
         } else if (this.defaultAction && this.defaultAction.enabled) {
             this.sessionService.onAction(this.defaultAction);
-        }
-    }
-
-    protected setDefaultFocus() {
-
-    }
-
-    private focusFirst(): void {
-        if (this.screenData && this.screenData.autoFocusOnScan) {
-            const parent = this.elRef.nativeElement.parentNode;
-            const input = parent.getElementsByTagName('input')[0];
-            if (input) {
-                this.focusService.requestFocus('scan-or-search', input);
-            }
         }
     }
 

@@ -14,7 +14,7 @@ import { IActionItem } from '../../../core/interfaces/menu-item.interface';
     templateUrl: './dynamic-form-part.component.html',
     styleUrls: ['./dynamic-form-part.component.scss']
 })
-export class DynamicFormPartComponent extends ScreenPartComponent<IForm> implements AfterViewInit {
+export class DynamicFormPartComponent extends ScreenPartComponent<IForm> {
 
     @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
     @ViewChild('formErrors') formErrors: ShowErrorsComponent;
@@ -72,22 +72,6 @@ export class DynamicFormPartComponent extends ScreenPartComponent<IForm> impleme
                     }
                 });
             });
-        }
-    }
-
-
-    ngAfterViewInit() {
-        // Delays less than 1 sec do not work correctly.
-        this.display(1000);
-    }
-
-    public display(delay: number) {
-        const nonReadonlyChildren = this.children.filter(child => {
-            return child.isReadOnly() === false;
-        });
-
-        if (nonReadonlyChildren.length > 0) {
-            setTimeout(() => nonReadonlyChildren[0].focus(), delay);
         }
     }
 

@@ -9,6 +9,7 @@
 <input #input matInput
     fxFlex="1 1 100%"
     class="scan-input"
+    cdkFocusInitial
     [keyboardLayout]="'Numeric'"
     (keyup.enter)="onEnter()"
     [(ngModel)]="barcode"

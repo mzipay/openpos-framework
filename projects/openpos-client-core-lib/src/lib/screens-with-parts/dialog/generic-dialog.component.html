@@ -19,7 +19,7 @@
             <span *ngIf="m.keybind && m.keybind !== 'Escape' && m.keybind !== 'Enter'" class="muted-color">({{m.keybind}})</span>
         </button>
         <button *ngIf="primaryButton" mat-raised-button (click)="session.onAction(primaryButton)" color="primary" id="primaryButton"
-            autofocus appFocus [actionItem]="primaryButton">
+            cdkFocusInitial [actionItem]="primaryButton">
             {{primaryButton.title}}
         </button>
     </mat-dialog-actions>

@@ -1,5 +1,4 @@
-import { Component, ViewChild, OnDestroy, AfterViewInit, OnInit } from '@angular/core';
-import { MatInput } from '@angular/material';
+import { Component, OnDestroy } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { FormGroup, ValidatorFn, FormControl } from '@angular/forms';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
@@ -19,9 +18,7 @@ import { ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehavior
     selector: 'app-tendering',
     templateUrl: './tendering.component.html'
 })
-export class TenderingComponent extends PosScreen<any> implements OnInit, AfterViewInit, OnDestroy {
-
-    @ViewChild('tenderAmountField') tenderAmountField: MatInput;
+export class TenderingComponent extends PosScreen<any> implements OnDestroy {
 
     text: string;
     tenderItems: IItem[];
@@ -36,14 +33,6 @@ export class TenderingComponent extends PosScreen<any> implements OnInit, AfterV
 
     constructor(private validatorsService: ValidatorsService) {
         super();
-    }
-
-    public ngOnInit(): void {
-
-    }
-
-    ngAfterViewInit(): void {
-        setTimeout(() => this.tenderAmountField.focus(), 0);
     }
 
     ngOnDestroy(): void {

@@ -12,7 +12,7 @@
                 <ng-template #iconBlock>
                     <app-icon matPrefix iconClass="material-icons primary" [iconName]="promptIcon"></app-icon>
                 </ng-template>
-                <input matInput [errorStateMatcher]="errorMatcher" [formControlName]="'promptInputControl'" [formatterName]="formatter" [appFocus]="!readOnly" cdkFocusInitial=true
+                <input matInput [errorStateMatcher]="errorMatcher" [formControlName]="'promptInputControl'" [formatterName]="formatter" cdkFocusInitial
                        [attr.minlength]="minLength" [attr.maxlength]="maxLength" [readonly]="readOnly" [attr.type]="isNumericField() ? 'tel' : 'text'"
                        [keyboardLayout]="keyboardLayout" autoSelectOnFocus>
                 <mat-placeholder>{{placeholderText}}</mat-placeholder>
@@ -23,7 +23,7 @@
             </mat-form-field>
 
             <mat-form-field fxFlexFill *ngSwitchCase="responseType==='TextArea'" ngClass="text-sm">
-                <textarea matInput [rows]="5" [cols]="40" [formControlName]="'promptInputControl'" [appFocus]="!readOnly" cdkFocusInitial=true style="font-size:18px"
+                <textarea matInput [rows]="5" [cols]="40" [formControlName]="'promptInputControl'" cdkFocusInitial style="font-size:18px"
                     [attr.minlength]="minLength" [attr.maxlength]="maxLength" [readonly]="readOnly" [attr.type]="isNumericField() ? 'tel' : 'text'" autoSelectOnFocus>
                     </textarea>
                     <mat-placeholder *ngIf="placeholderText" >{{placeholderText}}</mat-placeholder>
@@ -40,7 +40,7 @@
         
             <mat-form-field fxFlexFill *ngSwitchCase="isPassword()" ngClass="text-lg">
                 <app-icon matPrefix iconClass="material-icons primary" [iconName]="promptIcon"></app-icon>
-                <input matInput [formControlName]="'promptInputControl'" [appFocus]="true"  cdkFocusInitial=true autoSelectOnFocus
+                <input matInput [formControlName]="'promptInputControl'" cdkFocusInitial autoSelectOnFocus
                     type="password" [textMask]="_textMask" [attr.minlength]="minLength" [attr.maxlength]="maxLength">
                 <mat-placeholder>{{placeholderText}}</mat-placeholder>
                 <mat-hint class="text-sm" align="start">{{hintText}}</mat-hint>
