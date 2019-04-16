@@ -10,6 +10,11 @@
     align-self: center;
 }
 
+.self-checkout-form-image {
+    padding: 24px 0px;
+    justify-self: center;
+}
+
 :host::ng-deep .self-checkout-form-body {
     .mat-form-field {
         font-size: 24px !important;

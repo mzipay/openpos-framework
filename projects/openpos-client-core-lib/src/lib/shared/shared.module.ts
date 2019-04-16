@@ -107,6 +107,8 @@ import { FormComponent } from './components/form/form.component';
 import { AutoCompleteAddressPartComponent } from './screen-parts/auto-complete-address-part/auto-complete-address-part.component';
 import { SellItemLineComponent } from './components/sell-item-line/sell-item-line.component';
 import { ProgressBarPartComponent } from './screen-parts/progress-bar-part/progress-bar-part.component';
+import { ToggleGroupComponent } from './components/toggle-button-group/toggle-group.component';
+import { ToggleButtonComponent } from './components/toggle-button/toggle-button.component';
 
 const screenParts = [
     MultipleFormPartComponent,
@@ -172,7 +174,9 @@ const components = [
     SystemStatusDialogComponent,
     SellLinkedCustomerComponent,
     SellStatusSectionComponent,
-    FormComponent
+    FormComponent,
+    ToggleGroupComponent,
+    ToggleButtonComponent
 ];
 
 const directives = [

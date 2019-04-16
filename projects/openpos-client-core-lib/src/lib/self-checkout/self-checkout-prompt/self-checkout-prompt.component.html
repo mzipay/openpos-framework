@@ -3,8 +3,12 @@
         <app-self-checkout-menu gdArea="menu"></app-self-checkout-menu>
     </div>
 
-    <div class="self-checkout-prompt-body" gdArea="content">
-        <app-prompt-form-part>
+    <div class="self-checkout-prompt-body" gdArea="content" gdAreas="icon | prompt" gdRows="auto 1fr">
+
+        <img *ngIf="screen.imageUrl" gdArea="icon" [src]="screen.imageUrl | imageUrl"
+            class="self-checkout-prompt-image">
+
+        <app-prompt-form-part gdArea="prompt">
             <div optionsScreen fxFlex="1 1 auto" style="overflow-x: hidden; overflow-y: auto;">
                 <mat-nav-list>
                     <mat-list-item *ngFor="let o of optionItems" (click)="o.enabled && onOptionSelected(o.value)">
