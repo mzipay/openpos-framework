@@ -38,7 +38,7 @@ public enum FieldInputType {
     Time,
     Radio,
     SliderToggle,
-    ;
+    Email;
     
     public static FieldInputType toDateInputType(String dateFormat) {
         switch (dateFormat) {
