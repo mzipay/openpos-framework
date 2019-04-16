@@ -6,11 +6,13 @@ public class SelfCheckoutPromptUIMessage extends PromptWithOptionsUIMessage {
 
     private static final long serialVersionUID = 1L;
 
+    private SelfCheckoutMenuPart selfCheckoutMenu = new SelfCheckoutMenuPart();
+
+    private String imageUrl;
+
     public SelfCheckoutPromptUIMessage() {
         setScreenType(UIMessageType.SELF_CHECKOUT_PROMPT);
     }
-
-    private SelfCheckoutMenuPart selfCheckoutMenu = new SelfCheckoutMenuPart();
 
     public SelfCheckoutMenuPart getSelfCheckoutMenu() {
         return selfCheckoutMenu;
@@ -18,6 +20,14 @@ public class SelfCheckoutPromptUIMessage extends PromptWithOptionsUIMessage {
 
     public void setSelfCheckoutMenu(SelfCheckoutMenuPart selfCheckoutMenu) {
         this.selfCheckoutMenu = selfCheckoutMenu;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 }
