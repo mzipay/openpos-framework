@@ -30,7 +30,7 @@ export class ToggleButtonComponent {
 
     @HostListener('click')
     onClick() {
-        if (! this.allowUncheck && this.selected) {
+        if ((!this.allowUncheck && this.selected) || this.button.disabled) {
             return;
         }
 
