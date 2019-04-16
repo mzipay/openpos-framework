@@ -5,9 +5,17 @@
 
 .self-checkout-prompt-body {
     padding: 24px 16px;
+    width: 60%;
+    justify-self: center;
+    align-self: center;
 }
 
-:host::ng-deep .self-checkout-prompt-body {
+.self-checkout-prompt-image {
+    padding: 24px 0px;
+    justify-self: center;
+}
+
+::ng-deep .self-checkout-prompt-body {
     .mat-form-field {
         font-size: 36px !important;
 
