@@ -18,7 +18,7 @@
         <app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems"
             (selectedItemListChange)="onItemListChange($event)">
             <ng-template let-item>
-                <app-sell-item-line [item]="item" [readOnly]="readOnly" [hideButton]="selectedItems.length < 1 && !readOnly"></app-sell-item-line>
+                <app-sell-item-line [item]="item" [readOnly]="readOnly" [hideButton]="selectedItems.length >= 1"></app-sell-item-line>
             </ng-template>
         </app-selectable-item-list>
 

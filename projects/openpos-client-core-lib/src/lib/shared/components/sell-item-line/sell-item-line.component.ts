@@ -1,9 +1,7 @@
-import { AppInjector } from './../../../core/app-injector';
 import { SessionService } from './../../../core/services/session.service';
 import { IActionItem } from './../../../core/interfaces/menu-item.interface';
-import { Component, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ISellItem } from '../../../core/interfaces/sell-item.interface';
-import { Session } from 'electron';
 
 @Component({
     selector: 'app-sell-item-line',
@@ -17,6 +15,10 @@ export class SellItemLineComponent {
     @Input() hideButton: boolean;
 
     constructor(private session: SessionService) {
+    }
+
+    showMenu(): boolean {
+        return !this.readOnly && !this.hideButton;
     }
 
     onMenuItemClick(menuItem: IActionItem, payload?: any) {

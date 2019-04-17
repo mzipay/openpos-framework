@@ -38,7 +38,7 @@
         </div>
     </div>
     <div gdArea="kebab">
-        <app-kebab-button block-selection *ngIf="!readOnly && !hideButton" fxAlign="right"
+        <app-kebab-button block-selection *ngIf="showMenu()" fxAlign="right"
             [menuItems]="item.menuItems" (menuItemClick)="onMenuItemClick($event, [item.index])"></app-kebab-button>
         <ng-template #hideButton>
             <div style="height: 40px; width: 40px;"></div>
