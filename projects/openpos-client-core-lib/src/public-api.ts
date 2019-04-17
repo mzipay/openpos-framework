@@ -294,7 +294,6 @@ export * from './lib/shared/directives/barcode-scan-publisher.directive';
 export * from './lib/shared/directives/default-image.directive';
 export * from './lib/shared/directives/find-floating-element.directive';
 export * from './lib/shared/directives/fixed-ios-scroll.directive';
-export * from './lib/shared/directives/focus.directive';
 export * from './lib/shared/directives/hide-form-accessory-bar.directive';
 export * from './lib/shared/directives/inactivity-monitor.directive';
 export * from './lib/shared/directives/input-formatter.directive';

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ContentChildren, ViewChild, ContentChild, ViewChildren, QueryList } from '@angular/core';
 import { ScreenPart } from '../../decorators/screen-part.decorator';
 import { ScreenPartComponent } from '../screen-part';
 import { MessageProvider } from '../../providers/message.provider';
@@ -6,6 +6,7 @@ import { IMultipleFormOption } from './multiple-form-option.interface';
 import { FormGroup } from '@angular/forms';
 import { FormBuilder } from '../../../core/services/form-builder.service';
 import { IFormElement } from '../../../core/interfaces/form-field.interface';
+import { DynamicFormFieldComponent } from '../../components/dynamic-form-field/dynamic-form-field.component';
 
 @ScreenPart({
     name: 'forms'
@@ -15,10 +16,11 @@ import { IFormElement } from '../../../core/interfaces/form-field.interface';
   templateUrl: './multiple-form-part.component.html',
   styleUrls: ['./multiple-form-part.component.scss']
 })
-export class MultipleFormPartComponent extends ScreenPartComponent<IMultipleFormOption[]> {
-
+export class MultipleFormPartComponent extends ScreenPartComponent<IMultipleFormOption[]> implements AfterViewInit {
     forms: IMultipleFormOption[];
     formGroups: FormGroup[];
+
+    @ViewChildren(DynamicFormFieldComponent) fields: QueryList<DynamicFormFieldComponent>;
 
     public showOptions = true;
     public selectedOption: IMultipleFormOption;
@@ -38,6 +40,13 @@ export class MultipleFormPartComponent extends ScreenPartComponent<IMultipleForm
         });
     }
 
+    ngAfterViewInit(): void {
+        this.fields.changes.subscribe(() => {
+            this.fields.first.focus();
+        });
+    }
+
+
     onMakeOptionSelection( formOption: IMultipleFormOption, formGroup: FormGroup): void {
         this.selectedOption = formOption;
         this.selectedForm = formGroup;
@@ -45,7 +54,7 @@ export class MultipleFormPartComponent extends ScreenPartComponent<IMultipleForm
     }
 
     onBackButtonPressed(): void {
-     this.showOptions = true;
+        this.showOptions = true;
     }
 
     onFieldChanged(formElement: IFormElement, option: IMultipleFormOption, group: FormGroup) {

@@ -1,4 +1,3 @@
-import { FocusService } from './../../core/services/focus.service';
 import {
     ComponentRef,
     Directive,
@@ -21,6 +20,7 @@ import { ScreenService } from '../../core/services/screen.service';
 import { SessionService } from '../../core/services/session.service';
 import { ConfigurationService } from '../../core/services/configuration.service';
 import { DialogService } from '../../core/services/dialog.service';
+import { FocusTrapFactory, FocusTrap } from '@angular/cdk/a11y';
 
 // tslint:disable-next-line:directive-selector
 @Directive({ selector: '[openposScreenOutlet]' })
@@ -41,10 +41,10 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     private installedScreen: IScreen;
     private installedTemplate: AbstractTemplate<any>;
     private subscriptions = new Subscription();
+    private focusTrap: FocusTrap;
 
     constructor(
         private elRef: ElementRef,
-        private focusService: FocusService,
         private log: Logger,
         private personalization: PersonalizationService,
         public screenService: ScreenService,
@@ -53,6 +53,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         public configurationService: ConfigurationService,
         public overlayContainer: OverlayContainer,
         private dialogService: DialogService,
+        private focusTrapFactory: FocusTrapFactory,
         public renderer: Renderer2) {
     }
 
@@ -61,7 +62,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         this.subscriptions.add(this.session.getMessages('Screen').subscribe((message) => this.handle(message)));
         this.subscriptions.add(this.session.getMessages('Connected').subscribe((message) => this.handle(new BlankScreen())));
         this.subscriptions.add(this.session.getMessages('ConfigChanged').
-            subscribe(message => { 
+            subscribe(message => {
                 this.configurationService.updateConfig(message);
                 this.updateTheme(message.theme);
             }));
@@ -82,7 +83,6 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     handle(message: any) {
         if (message.screenType !== 'NoOp') {
-            this.focusService.reset();
             this.updateTemplateAndScreen(message);
         }
     }
@@ -111,6 +111,12 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             if (!!this.componentRef) {
                 this.componentRef.destroy();
             }
+
+            if (!!this.focusTrap) {
+                this.focusTrap.destroy();
+            }
+
+            this.focusTrap = null;
             this.componentRef = null;
             this.installedScreen = null;
             this.installedTemplate = null;
@@ -141,6 +147,8 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             this.installedScreen.show(screen, this.installedTemplate);
         }
 
+        this.focusTrap = this.focusTrapFactory.create(this.componentRef.location.nativeElement);
+        this.focusTrap.focusInitialElementWhenReady();
 
         this.updateClasses(screen);
         this.dialogService.closeDialog(true);

@@ -12,7 +12,7 @@
   </mat-card>
   <ng-container *ngIf="nextAction">
       <div fxLayoutAlign="end">
-          <button type="submit" mat-button color="primary-inverse" (click)="onNextAction()" [disabled]="!nextAction.enabled" [appFocus]="true">
+          <button type="submit" mat-button color="primary-inverse" (click)="onNextAction()" [disabled]="!nextAction.enabled">
               <span>Next</span>
               <app-icon [iconClass]="'material-icons'" [iconName]="nextAction.icon"></app-icon>
           </button>      

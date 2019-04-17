@@ -22,7 +22,6 @@ import { SaleItemListComponent } from '../screens-with-parts/sale/sale-item-list
 import { KebabMenuComponent } from './components/kebab-menu/kebab-menu.component';
 import { MarkDirtyOnSubmitDirective } from './directives/mark-dirty-on-submit.directive';
 import { InputFormatterDirective } from './directives/input-formatter.directive';
-import { FocusDirective } from './directives/focus.directive';
 import { ScreenOrientationDirective } from './directives/screen-orientation.directive';
 import { MimicScrollDirective } from './directives/mimic-scroll.directive';
 import { MatExclusiveSelectionListDirective } from './directives/mat-exclusive-selection-list.directive';
@@ -183,7 +182,6 @@ const components = [
 const directives = [
     MarkDirtyOnSubmitDirective,
     InputFormatterDirective,
-    FocusDirective,
     ScreenOrientationDirective,
     MimicScrollDirective,
     MatExclusiveSelectionListDirective,

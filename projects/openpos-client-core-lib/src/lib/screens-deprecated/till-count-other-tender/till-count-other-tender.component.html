@@ -40,7 +40,7 @@
 
   <ng-container *ngIf="nextAction">
     <div fxFlex="0 0 auto" fxLayoutAlign="end">
-      <button type="submit" mat-button color="primary-inverse" (click)="onNextAction()" [appFocus]="true">
+      <button type="submit" mat-button color="primary-inverse" (click)="onNextAction()">
         <span>Next</span>
         <app-icon [iconClass]="'material-icons'" [iconName]="nextAction.icon"></app-icon>
       </button>      

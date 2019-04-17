@@ -22,7 +22,7 @@
                         <app-counter [formGroup]="formGroup" [controlName]="selectedItemQuantity.id" 
                         [(value)]="selectedItemQuantity.value" [minVal]="selectedItemQuantity.minValue" [maxVal]="selectedItemQuantity.maxValue" 
                         [required]="selectedItemQuantity.required" [readOnly]="selectedItemQuantity.disabled" [iconName]="selectedItemQuantity.iconName"
-                        [attrType]="'tel'" (valueChange)="onItemQuantityChange($event)" autoSelectOnFocus appFocus></app-counter>
+                        [attrType]="'tel'" (valueChange)="onItemQuantityChange($event)" autoSelectOnFocus></app-counter>
                     </div> 
                     <div class="grid-wrapper">
                         <mat-grid-list cols="5" rowHeight="9:10">
