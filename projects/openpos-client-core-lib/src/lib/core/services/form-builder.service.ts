@@ -17,8 +17,7 @@ export class FormBuilder {
     group(form: IForm, extraValidators: ValidatorFn[] = []): FormGroup {
         const group: any = {};
         if (form.formElements) {
-            form.formElements.forEach((element, index) => {
-                element.tabindex = index;
+            form.formElements.forEach((element) => {
                 group[element.id] = new FormControl(element.value, this.createControlValidators(element));
 
                 // For a DATE type element, there is also a hidden field to handle picking of dates using
