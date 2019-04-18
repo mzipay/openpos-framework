@@ -24,16 +24,18 @@ export class KebabButtonComponent implements OnDestroy {
         if ( this.subscription ) {
             this.subscription.unsubscribe();
         }
-
-        this.subscription = this.keyPresses.subscribe( key, 100, event => {
-            // ignore repeats
-            if ( event.repeat || !Configuration.enableKeybinds ) {
-                return;
-            }
-            if (event.type === 'keydown') {
-                this.openKebabMenu();
-            }
-        });
+        // Only subscribe to keypress if key is defined.
+        if (!!key) {
+            this.subscription = this.keyPresses.subscribe( key, 100, event => {
+                // ignore repeats
+                if ( event.repeat || !Configuration.enableKeybinds ) {
+                    return;
+                }
+                if (event.type === 'keydown') {
+                    this.openKebabMenu();
+                }
+            });
+        }
     }
 
     @Output()
