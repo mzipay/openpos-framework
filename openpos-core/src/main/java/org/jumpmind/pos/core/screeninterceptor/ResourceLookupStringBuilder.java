@@ -19,7 +19,7 @@ public class ResourceLookupStringBuilder implements Serializable{
 	private String key;
 	private String group;
 	private Map<String, String> parameters;
-	 
+	
 	public ResourceLookupStringBuilder() {
 	}
 	
@@ -31,7 +31,7 @@ public class ResourceLookupStringBuilder implements Serializable{
 		setKey(key);
 		setGroup(group);
 	}
-	 
+	
 	public String getKey() {
 		return key;
 	}
@@ -59,6 +59,14 @@ public class ResourceLookupStringBuilder implements Serializable{
 		return this;
 	}
 	
+    public static String toJson(String key) {
+        return new ResourceLookupStringBuilder(key).toJson();
+    }
+    
+    public static String toJson(String key, String group) {
+        return new ResourceLookupStringBuilder(key, group).toJson();
+    }
+    
 	public String toJson() {
 		try {
 			return DefaultObjectMapper.build().writeValueAsString(this);
