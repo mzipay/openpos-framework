@@ -4,9 +4,15 @@
 
 .back-button{
     margin-left:-20px; 
+    margin-right:10px;
     z-index:10;
 }
 
-@supports not (display: grid) {
+.operator{
+    width: 100%;
+    text-align: right;
+}
 
+.header-text{
+    margin-left: 10px;
 }

@@ -10,6 +10,7 @@ export class IconButtonComponent {
     @Input() disabled = false;
     @Input() iconName: string;
     @Input() color: string;
+    @Input() iconClass: string;
 
     @Output() buttonClick = new EventEmitter();
 
