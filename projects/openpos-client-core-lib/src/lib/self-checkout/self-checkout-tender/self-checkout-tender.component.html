@@ -1,0 +1,24 @@
+<div class="self-checkout-tender-outer" gdAreas="header | content" gdRows="auto 1fr">
+    <div gdArea="header" gdAreas="menu" gdColumns="1fr">
+        <app-self-checkout-menu gdArea="menu"></app-self-checkout-menu>
+    </div>
+
+    <div class="self-checkout-tender-body" gdArea="content" fxLayout="column" fxLayoutAlign="start center"
+        fxLayoutGap="128px">
+
+        <div fxFlex="0 0 auto" fxLayout="column" fxLayoutAlign="center center">
+            <div class="text-md text-center payment-title">Order Total</div>
+            <div class="text-md text-center payment-balance-due">{{amountDue|currency:'USD':true:'1.2'}}</div>
+        </div>
+
+        <div fxFlex="0 0 auto" class="text-md text-center payment-instructions">
+            <p>{{screen.prompt}}</p>
+        </div>
+
+        <app-self-checkout-options-part *ngIf="screen.selfCheckoutOptionsPart"></app-self-checkout-options-part>
+
+        <div fxFlex="1 1 auto">
+            <div [ngStyle]="screen.imageUrl | backgroundImageUrl" class="payment-auth-icon"></div>
+        </div>
+    </div>
+</div>
