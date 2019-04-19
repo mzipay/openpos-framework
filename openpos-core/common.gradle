@@ -1,7 +1,5 @@
 group = 'org.jumpmind.pos'
 
-repositories { mavenCentral() }
-
 apply plugin: 'eclipse'
 apply plugin: 'java'
 apply plugin: 'groovy'
@@ -44,7 +42,13 @@ processResources {
 }
 
 
-repositories { maven { url symmetricMavenUrl } }
+repositories { 
+    maven {
+        jcenter()
+        mavenCentral()
+        url symmetricMavenUrl 
+    } 
+}
 
 idea {
 
