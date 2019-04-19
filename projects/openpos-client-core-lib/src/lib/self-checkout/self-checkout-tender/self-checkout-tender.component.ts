@@ -17,6 +17,7 @@ export class SelfCheckoutTenderComponent extends PosScreen<SelfCheckoutTenderInt
     public currentView: string;
     public selectedOption: IOptionItem;
     public optionItems: IOptionItem[];
+    public amountTitle = 'Amount Due';
     public amountDue = '0.00';
 
     constructor() {
@@ -24,6 +25,9 @@ export class SelfCheckoutTenderComponent extends PosScreen<SelfCheckoutTenderInt
     }
 
     buildScreen() {
-        this.amountDue = this.screen.amountDue.amount;
+        if (this.screen.amountDue) {
+            this.amountTitle = this.screen.amountDue.name;
+            this.amountDue = this.screen.amountDue.amount;
+        }
     }
 }

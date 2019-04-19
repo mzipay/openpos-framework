@@ -3,19 +3,19 @@
         <app-self-checkout-menu gdArea="menu"></app-self-checkout-menu>
     </div>
 
-    <div class="self-checkout-options-body" gdArea="content" fxLayout="column" fxLayoutAlign="start stretch">
+    <div class="self-checkout-options-body" gdArea="content" fxLayout="column" fxLayoutAlign="center stretch">
 
-        <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.icon">
+        <div *ngIf="screen.icon" fxFlex="0 0 auto" fxLayoutAlign="center center">
             <app-icon [iconName]="screen.icon" class="options-icon"></app-icon>
         </div>
-        <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.title" class="options-title">
-            <p>{{screen.title}}</p>
+        <div *ngIf="screen.title" fxFlex="0 0 auto" class="options-title">
+            {{screen.title}}
         </div>
-        <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.imageUrl">
+        <div *ngIf="screen.imageUrl" fxFlex="0 0 auto" fxLayoutAlign="center center">
             <div [ngStyle]="screen.imageUrl | backgroundImageUrl" class="self-checkout-options-image"></div>
         </div>
-        <div fxFlex="0 0 auto" fxLayoutAlign="center center" *ngIf="screen.prompt" class="text-center options-prompt">
-            <p>{{screen.prompt}}</p>
+        <div *ngIf="screen.prompt" fxFlex="0 0 auto" class="text-center options-prompt">
+            {{screen.prompt}}
         </div>
 
         <app-self-checkout-options-part></app-self-checkout-options-part>

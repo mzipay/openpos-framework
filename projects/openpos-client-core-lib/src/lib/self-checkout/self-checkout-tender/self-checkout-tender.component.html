@@ -3,21 +3,21 @@
         <app-self-checkout-menu gdArea="menu"></app-self-checkout-menu>
     </div>
 
-    <div class="self-checkout-tender-body" gdArea="content" fxLayout="column" fxLayoutAlign="start center"
+    <div class="self-checkout-tender-body" gdArea="content" fxLayout="column" fxLayoutAlign="start stretch"
         fxLayoutGap="128px">
 
-        <div fxFlex="0 0 auto" fxLayout="column" fxLayoutAlign="center center">
-            <div class="text-md text-center payment-title">Order Total</div>
+        <div *ngIf="amountDue" fxFlex="0 0 auto" fxLayout="column" fxLayoutAlign="center center">
+            <div class="text-md text-center payment-title">{{amountTitle}}</div>
             <div class="text-md text-center payment-balance-due">{{amountDue|currency:'USD':true:'1.2'}}</div>
         </div>
 
-        <div fxFlex="0 0 auto" class="text-md text-center payment-instructions">
-            <p>{{screen.prompt}}</p>
+        <div *ngIf="screen.prompt" fxFlex="0 0 auto" class="text-md text-center payment-instructions">
+            {{screen.prompt}}
         </div>
 
         <app-self-checkout-options-part *ngIf="screen.selfCheckoutOptionsPart"></app-self-checkout-options-part>
 
-        <div fxFlex="1 1 auto">
+        <div *ngIf="screen.imageUrl" fxFlex="1 1 auto" fxLayoutAlign="center center">
             <div [ngStyle]="screen.imageUrl | backgroundImageUrl" class="payment-auth-icon"></div>
         </div>
     </div>

@@ -21,17 +21,15 @@
 .options-title {
     font-size: 36px;
     font-weight: bold;
-    p {
-        margin-top: 0px;
-        margin-bottom: 64px;
-    }
+    margin-top: 0px;
+    margin-bottom: 64px;
+    align-self: center;
 }
 
 .options-prompt {
     font-size: 26px;
-    p {
-        max-width: 400px;
-        margin-top: 64px;
-        margin-bottom: 64px;
-    }
+    max-width: 400px;
+    margin-top: 64px;
+    margin-bottom: 64px;
+    align-self: center;
 }
