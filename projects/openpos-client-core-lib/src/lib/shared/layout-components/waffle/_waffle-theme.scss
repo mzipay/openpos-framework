@@ -6,7 +6,7 @@
     $foreground: map-get($theme, foreground );
 
     app-waffle{
-        .waffle-header{
+        .waffle-header-container{
             background-color: $app-primary;
             color: map-get($foreground, inverse-text);
         }

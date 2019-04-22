@@ -1,5 +1,5 @@
 <app-waffle>
-    <app-bacon-strip waffle-header fxFlex="100%"></app-bacon-strip>
+    <app-bacon-strip waffle-header></app-bacon-strip>
     <div waffle-drawer-content class="drawer-content" fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start stretch"
         fxLayoutGap="4px" fxLayoutGap.lg="20px">
         <app-sausage-links waffle-drawer-content></app-sausage-links>
@@ -11,12 +11,11 @@
 
     <app-scan-or-search waffle-top-content class="scan-or-search mat-elevation-z3" [defaultAction]="screen.checkoutButton"></app-scan-or-search>
 
-    <div waffle-body class="sale-content" gdAreas="items | totals | nextbar | status" gdRows="minmax(200px, 100%) auto auto auto"
-        gdGap="6px">
-        <app-sale-item-list gdArea="items"></app-sale-item-list>
-        <app-overflow-list gdArea="totals" *ngIf="screen.transactionActive" [numberItemsToShow]="overFlowListSize | async"
+    <div waffle-body class="sale-content">
+        <app-sale-item-list></app-sale-item-list>
+        <app-overflow-list *ngIf="screen.transactionActive" [numberItemsToShow]="overFlowListSize | async"
             [items]="totals"></app-overflow-list>
-        <app-sale-footer gdArea="nextbar" ></app-sale-footer>
-        <app-status-strip gdArea="status"></app-status-strip>
+        <app-sale-footer></app-sale-footer>
+        <app-status-strip></app-status-strip>
     </div>
 </app-waffle>

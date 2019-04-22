@@ -7,7 +7,7 @@
     $foreground: map-get($theme, foreground );
 
     app-bacon-strip{
-        .mat-toolbar{
+        .container{
             background-color: $app-primary;
             color: map-get($foreground, inverse-text);
         }
