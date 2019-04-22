@@ -1,5 +1,19 @@
-.mat-toolbar{
-    font-weight: normal;
+:host {
+    display: flex;
+    width: 100%;
+}
+
+.container{
+    display: flex;
+    padding: 16px;
+    width: 100%;
+    align-items: center;
+    font-size: 20px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
 }
 
 .back-button{

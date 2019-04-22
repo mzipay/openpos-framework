@@ -12,9 +12,8 @@
     </ng-template>
 </div>
 
-<mat-card fxFlex="0 1 100%" class="page-content-card scrollable-content-card serrated-edge" fxLayout="column"
-    fxLayoutAlign="start">
-    <mat-card-content fxFlex="100%" #scrollList ngClass.xs="xs">
+<mat-card class="page-content-card scrollable-content-card serrated-edge">
+    <mat-card-content #scrollList ngClass.xs="xs">
         <app-selectable-item-list [configuration]="listConfig" [selectedItemList]="selectedItems"
             (selectedItemListChange)="onItemListChange($event)">
             <ng-template let-item>

@@ -1,4 +1,4 @@
-<mat-toolbar>
+<div class="container">
     <app-icon-button
             class="back-button"
             [actionItem]="screenData.backButton"
@@ -16,4 +16,4 @@
     <div class="operator" *ngIf="!(isMobile$ | async)">
         {{operatorInfo}}
     </div>
-</mat-toolbar>
+</div>
