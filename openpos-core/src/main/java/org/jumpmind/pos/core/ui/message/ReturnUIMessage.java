@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.ui.message;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jumpmind.pos.core.model.DisplayProperty;
 import org.jumpmind.pos.core.model.Total;
 import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.screen.ActionItemGroup;
@@ -26,9 +27,11 @@ public class ReturnUIMessage extends UIMessage {
     private List<ActionItem> multiSelectedMenuItems = new ArrayList<ActionItem>();
     private String itemActionName = "Item";
     private List<Total> totals = new ArrayList<>();
-    private String grandTotal;
+    private DisplayProperty grandTotal;
     private String customerName;
     private String noCustomerText;
+    private ActionItem checkoutButton;
+    private String itemCount;
 
     public ReturnUIMessage() {
         this.setScreenType(UIMessageType.RETURN);
@@ -110,11 +113,11 @@ public class ReturnUIMessage extends UIMessage {
         this.totals.add(total);
     }
 
-    public String getGrandTotal() {
+    public DisplayProperty getGrandTotal() {
         return grandTotal;
     }
 
-    public void setGrandTotal(String grandTotal) {
+    public void setGrandTotal(DisplayProperty grandTotal) {
         this.grandTotal = grandTotal;
     }
 
@@ -155,5 +158,21 @@ public class ReturnUIMessage extends UIMessage {
 
     public void setNoCustomerText(String noCustomerText) {
         this.noCustomerText = noCustomerText;
+    }
+
+    public ActionItem getCheckoutButton() {
+        return checkoutButton;
+    }
+
+    public void setCheckoutButton(ActionItem checkoutButton) {
+        this.checkoutButton = checkoutButton;
+    }
+
+    public String getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(String itemCount) {
+        this.itemCount = itemCount;
     }
 }

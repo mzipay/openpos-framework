@@ -10,9 +10,6 @@ import org.jumpmind.pos.core.screen.ActionItemGroup;
 import org.jumpmind.pos.core.screen.SellItem;
 import org.jumpmind.pos.core.ui.AssignKeyBindings;
 import org.jumpmind.pos.core.ui.UIMessage;
-import org.jumpmind.pos.core.ui.messagepart.BaconStripPart;
-import org.jumpmind.pos.core.ui.messagepart.ScanPart;
-import org.jumpmind.pos.core.ui.messagepart.StatusStripPart;
 
 @AssignKeyBindings
 public class SaleUIMessage extends UIMessage {
