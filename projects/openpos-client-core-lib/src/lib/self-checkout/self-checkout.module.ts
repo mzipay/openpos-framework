@@ -6,22 +6,23 @@ import { SelfCheckoutWithBarComponent } from './self-checkout-with-bar/self-chec
 import { SelfCheckoutTransactionComponent } from './self-checkout-transaction/self-checkout-transaction.component';
 import { SelfCheckoutStatusBarComponent } from './self-checkout-statusbar/self-checkout-statusbar.component';
 import { SelfCheckoutHomeComponent } from './self-checkout-home/self-checkout-home.component';
-import { SelfCheckoutPaymentStatusComponent } from './self-checkout-payment-status/self-checkout-payment-status.component';
 import { SelfCheckoutOptionsComponent } from './self-checkout-options/self-checkout-options.component';
 import { ScreenService } from '../core/services/screen.service';
 import { DialogService } from '../core/services/dialog.service';
 import { SelfCheckoutFormComponent } from './self-checkout-form/self-checkout-form.component';
 import { SelfCheckoutPromptComponent } from './self-checkout-prompt/self-checkout-prompt.component';
 import { SelfCheckoutMenuComponent } from './screen-parts/self-checkout-menu/self-checkout-menu.component';
+import { SelfCheckoutTenderComponent } from './self-checkout-tender/self-checkout-tender.component';
+import { SelfCheckoutOptionsPartComponent } from './screen-parts/self-checkout-options-part/self-checkout-options-part.component';
 
 
 const screens = [
     SelfCheckoutTransactionComponent,
     SelfCheckoutHomeComponent,
-    SelfCheckoutPaymentStatusComponent,
     SelfCheckoutOptionsComponent,
     SelfCheckoutFormComponent,
-    SelfCheckoutPromptComponent
+    SelfCheckoutPromptComponent,
+    SelfCheckoutTenderComponent
 ];
 
 const dialogs = [
@@ -36,7 +37,8 @@ const components = [
 ];
 
 const screenParts = [
-    SelfCheckoutMenuComponent
+    SelfCheckoutMenuComponent,
+    SelfCheckoutOptionsPartComponent
 ];
 
 @NgModule({
