@@ -1,4 +1,4 @@
-package org.jumpmind.symmetric.wrapper;
+package org.jumpmind.pos.wrapper;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import org.jumpmind.symmetric.wrapper.Constants.Status;
+import org.jumpmind.pos.wrapper.Constants.Status;
 
 import com.sun.jna.Platform;
 

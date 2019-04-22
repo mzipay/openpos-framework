@@ -1,4 +1,4 @@
-package org.jumpmind.symmetric.wrapper;
+package org.jumpmind.pos.wrapper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
