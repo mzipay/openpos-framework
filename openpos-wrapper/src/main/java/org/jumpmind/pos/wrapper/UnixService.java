@@ -1,4 +1,4 @@
-package org.jumpmind.symmetric.wrapper;
+package org.jumpmind.pos.wrapper;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jumpmind.symmetric.wrapper.jna.CLibrary;
+import org.jumpmind.pos.wrapper.jna.CLibrary;
 
 
 public class UnixService extends WrapperService {

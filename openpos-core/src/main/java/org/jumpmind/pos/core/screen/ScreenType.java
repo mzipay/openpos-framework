@@ -34,8 +34,6 @@ public interface ScreenType {
     public static final String Return = "Return";
     public static final String SaleRetrieval = "SaleRetrieval";
     public static final String SelfCheckoutHome = "SelfCheckoutHome";
-    public static final String SelfCheckoutOptions = "SelfCheckoutOptions";
-    public static final String SelfCheckoutPaymentStatus = "SelfCheckoutPaymentStatus";
     public static final String SelfCheckoutTransaction = "SelfCheckoutTransaction";
     public static final String SellItemDetail = "SellItemDetail";
     public static final String SignatureCapture = "SignatureCapture";

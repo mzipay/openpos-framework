@@ -18,21 +18,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jumpmind.symmetric.wrapper;
+package org.jumpmind.pos.wrapper;
 
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jumpmind.symmetric.wrapper.Constants.Status;
-import org.jumpmind.symmetric.wrapper.jna.Advapi32Ex;
-import org.jumpmind.symmetric.wrapper.jna.Advapi32Ex.HANDLER_FUNCTION;
-import org.jumpmind.symmetric.wrapper.jna.Advapi32Ex.SERVICE_STATUS_HANDLE;
-import org.jumpmind.symmetric.wrapper.jna.Kernel32Ex;
-import org.jumpmind.symmetric.wrapper.jna.Shell32Ex;
-import org.jumpmind.symmetric.wrapper.jna.WinsvcEx;
-import org.jumpmind.symmetric.wrapper.jna.WinsvcEx.SERVICE_MAIN_FUNCTION;
+import org.jumpmind.pos.wrapper.Constants.Status;
+import org.jumpmind.pos.wrapper.jna.Advapi32Ex;
+import org.jumpmind.pos.wrapper.jna.Kernel32Ex;
+import org.jumpmind.pos.wrapper.jna.Shell32Ex;
+import org.jumpmind.pos.wrapper.jna.WinsvcEx;
+import org.jumpmind.pos.wrapper.jna.Advapi32Ex.HANDLER_FUNCTION;
+import org.jumpmind.pos.wrapper.jna.Advapi32Ex.SERVICE_STATUS_HANDLE;
+import org.jumpmind.pos.wrapper.jna.WinsvcEx.SERVICE_MAIN_FUNCTION;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;

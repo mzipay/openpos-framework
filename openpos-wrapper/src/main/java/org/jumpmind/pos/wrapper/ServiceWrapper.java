@@ -3,8 +3,6 @@ package org.jumpmind.pos.wrapper;
 import java.io.IOException;
 import java.util.Scanner;
 
-import org.jumpmind.symmetric.wrapper.WrapperHelper;
-
 public class ServiceWrapper {
 
     protected static final String SYS_CONFIG_DIR = "org.jumpmind.pos.config.dir";

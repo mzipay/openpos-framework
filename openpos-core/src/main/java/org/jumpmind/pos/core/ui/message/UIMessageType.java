@@ -11,4 +11,6 @@ public final class UIMessageType {
     public static String MULTIPLE_FORM="MultipleForm";
     public static String SELF_CHECKOUT_FORM = "SelfCheckoutForm";
     public static String SELF_CHECKOUT_PROMPT = "SelfCheckoutPrompt";
+    public static String SELF_CHECKOUT_TENDER = "SelfCheckoutTender";
+    public static String SELF_CHECKOUT_OPTIONS = "SelfCheckoutOptions";
 }
