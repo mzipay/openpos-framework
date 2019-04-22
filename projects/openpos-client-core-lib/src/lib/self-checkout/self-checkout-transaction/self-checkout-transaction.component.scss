@@ -97,7 +97,12 @@
 }
 
 .selfcheckout-sell-background {
-    padding: 24px !important;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 25em;
+    grid-row-gap: 16px;
+    justify-items: stretch;
+    align-items: stretch;
 }
 
 .selfcheckout-side-content {
@@ -113,8 +118,4 @@
 
 .prompt {
     font-size: 36px;
-}
-
-.selfcheckout-total-background {
-    flex: 0 0 20%;
 }
