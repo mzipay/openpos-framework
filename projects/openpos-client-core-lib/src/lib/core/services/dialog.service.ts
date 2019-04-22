@@ -159,7 +159,8 @@ export class DialogService {
                 this.log.info(`Dialog options: ${JSON.stringify(dialogProperties)}`);
             }
 
-            if (!this.dialogRef || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
+            if (!this.dialogRef || !this.dialogRef.componentInstance
+                || dialog.screenType !== this.lastDialogType || dialog.screenType === 'Dialog'
                 || dialog.refreshAlways || dialog.id !== this.lastDialogId) {
 
                 // We need to make sure to block here before creating the new dialog to make sure the old one
