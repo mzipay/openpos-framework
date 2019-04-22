@@ -229,7 +229,8 @@ const pipes = [
     entryComponents: [
         KebabMenuComponent,
         ScanSomethingComponent,
-        PopTartComponent
+        PopTartComponent,
+        DatePartChooserDialogComponent
     ],
     imports: [
         FormsModule,
