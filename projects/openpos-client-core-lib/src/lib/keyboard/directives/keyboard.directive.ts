@@ -9,7 +9,7 @@ import { IMessageHandler } from '../../core/interfaces/message-handler.interface
 
 @Directive({
     // tslint:disable-next-line:directive-selector
-    selector: 'input:not([type=checkbox]), textarea'
+    selector: 'input:not([type=checkbox]):not([no-keyboard]), textarea:not([no-keyboard])'
 })
 export class KeyboardDirective implements OnDestroy, IMessageHandler<any> {
 
