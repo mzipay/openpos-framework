@@ -1,4 +1,4 @@
-apply from: "${openposDir}openpos-assemble/ide.gradle"
+apply from: "${openposDir}/openpos-core/ide.gradle"
 
 apply plugin: 'groovy'
 
