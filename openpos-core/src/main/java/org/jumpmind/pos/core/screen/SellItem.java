@@ -36,22 +36,22 @@ public class SellItem extends DefaultItem {
 
     @Override
     public String getSubtitle() {
-        String subTitle = "Item: %s%s %s@%s";
-        String altItemId = isBlank(this.getAltItemId()) ? "" : "/" + this.getAltItemId();
-        if (this.salesAssociate != null && this.salesAssociate != "") {
-            subTitle = subTitle + " - Sales Associate: %s";
-            subTitle = String.format(subTitle, this.getPosItemId(), altItemId, this.getQuantity(), this.getSellingPrice(), this.getSalesAssociate());
-        } else {
-            subTitle = String.format(subTitle, this.getPosItemId(), altItemId, this.getQuantity(), this.getSellingPrice());
+        if(isBlank(subtitle)) {
+            subtitle = "Item: %s%s %s@%s";
+            String altItemId = isBlank(this.getAltItemId()) ? "" : "/" + this.getAltItemId();
+            if (this.salesAssociate != null && this.salesAssociate != "") {
+                subtitle = subtitle + " - Sales Associate: %s";
+                subtitle = String.format(subtitle, this.getPosItemId(), altItemId, this.getQuantity(), this.getSellingPrice(), this.getSalesAssociate());
+            } else {
+                subtitle = String.format(subtitle, this.getPosItemId(), altItemId, this.getQuantity(), this.getSellingPrice());
+            }
         }
-
-        return subTitle;
+        return subtitle;
     }
     
     @Override
     public void setSubtitle(String subtitle) {
-        // do nothing
-    	// Oh.
+        this.subtitle = subtitle;
     }
 
     public void setPosItemId(String posItemId) {

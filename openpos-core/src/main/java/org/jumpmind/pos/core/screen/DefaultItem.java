@@ -12,7 +12,7 @@ public class DefaultItem implements IItem, Serializable {
     private String id;
     private Integer index;
     private String description;
-    private String subtitle;
+    protected String subtitle;
     private String amount;
     private List<String> labels = new ArrayList<>();
     private List<FormDisplayField> fields = new ArrayList<>();;
