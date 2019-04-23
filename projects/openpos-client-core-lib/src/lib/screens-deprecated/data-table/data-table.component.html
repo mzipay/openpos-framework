@@ -1,14 +1,13 @@
 <app-waffle>
-    <app-bacon-strip waffle-header fxFlex="100%"></app-bacon-strip>
+    <app-bacon-strip waffle-header></app-bacon-strip>
 
     <div waffle-drawer-content class="drawer-content" fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start stretch"
         fxLayoutGap="4px" fxLayoutGap.lg="20px">
         <app-sausage-links waffle-drawer-content></app-sausage-links>
     </div>
 
-    <div waffle-body fxLayout="column" class="body-content" gdAreas="card | status" gdRows="minmax(200px, 100%) auto"
-        gdGap="6px">
-        <mat-card gdArea="card" fxLayout="column" class="page-content-card">
+    <div waffle-body class="body-content">
+        <mat-card fxLayout="column" class="page-content-card data-table-card">
 
             <mat-card-content fxFlex="1 1 100%">
                 <app-grid-table [rows]="rows" [columnHeaders]="columnHeaders"></app-grid-table>
@@ -24,7 +23,7 @@
 
         </mat-card>
 
-        <app-status-strip gdArea="status" waffle-footer></app-status-strip>
+        <app-status-strip waffle-footer></app-status-strip>
     </div>
 
 </app-waffle>
