@@ -8,8 +8,8 @@ task generateSourceArtifact(type: Copy) {
     from('../') {
         exclude '**/target', '**/build', '**/bin', '**/src/test', 'openpos.code-workspace',
                 'openpos-client-seed','openpos-cordova', 'openpos-test-module', 'openpos-cordova-log-plugin',
-                'node', 'azure-pipelines*.yml', '**/*.iml', '**/.project', '**/.classpath', '**/.gitignore',
-                'openpos-assemble', '**/.idea', '**/.settings', '**/.gradle'
+                'node', 'azure-pipelines*.yml', '**/*.iml', '**/.project', '**/.classpath', '**/.gitignore', 
+                '**/.idea', '**/.settings', '**/.gradle'
     }
     from('../') {
         include '**/openpos-version.properties'
