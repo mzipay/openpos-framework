@@ -35,6 +35,7 @@ public enum FieldInputType {
     WordText,
     Counter,
     DatePartChooser,
+    DateScrollChooser,
     Time,
     Radio,
     SliderToggle,
