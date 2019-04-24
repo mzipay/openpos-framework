@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 
+export class LogLevel {
+    public static DEBUG = 4;
+    public static INFO = 3;
+    public static WARN = 2;
+    public static ERROR = 1;
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -8,14 +15,19 @@ export class Logger {
 
     electronLogger: any;
 
+    logLevel = LogLevel.INFO;
+
     constructor(private electron: ElectronService) {
         if (this.electron.isElectronApp) {
+            console.log('configuring electron logging');
             this.electronLogger = this.electron.remote.require('electron-log');
             // this.electronLogger.transports.rendererConsole.level = 'silly';
             // electronLogger.transports.file.level = false;
             const fileTransport = this.electronLogger.transports.file;
             const app = this.electron.remote.app;
-            const logDir = app.getAppPath() + '/logs';
+            const path = this.electron.remote.require('path');
+            const logDir = path.dirname(app.getPath('exe')) + '/../logs';
+            console.log('log directory set to ' + logDir);
             const fs = this.electron.remote.require('fs');
             if (!fs.existsSync(logDir)) {
                 fs.mkdirSync(logDir);
@@ -30,8 +42,6 @@ export class Logger {
             });
         }
     }
-
-    logLevel = LogLevel.INFO;
 
     public debug(message: any, ...args: any[]): void {
         if (this.electron.isElectronApp) {
@@ -92,9 +102,4 @@ export class Logger {
     }
 }
 
-export class LogLevel {
-    public static DEBUG = 4;
-    public static INFO = 3;
-    public static WARN = 2;
-    public static ERROR = 1;
-}
+

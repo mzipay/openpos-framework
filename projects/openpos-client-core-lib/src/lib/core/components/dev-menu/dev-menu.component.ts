@@ -417,14 +417,14 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
         if (newSavePoint) {
             this.addSaveFile(newSavePoint);
         }
-        if (!this.displaySavePoints && this.savePoints.length > 0) {
+        if (!this.displaySavePoints && this.savePoints && this.savePoints.length > 0) {
             this.displaySavePoints = true;
         }
     }
 
     public onSavePointRemove(savePoint: string) {
         this.removeSaveFile(savePoint);
-        if (this.savePoints.length === 0) {
+        if (this.savePoints && this.savePoints.length === 0) {
             this.displaySavePoints = false;
         }
     }

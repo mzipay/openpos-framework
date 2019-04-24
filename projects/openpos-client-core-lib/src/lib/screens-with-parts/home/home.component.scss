@@ -12,11 +12,27 @@
     min-height: 160px;
 }
 
-.button-grid{
-    height: 90%;
-    display: grid;
-    place-self: center;
-    place-content: center;
-    place-items: stretch;
-    grid-template-columns: repeat(auto-fit, 240px)
+@supports not (display: grid) {
+
+    .button-grid{
+        text-align: center;
+        position: absolute;
+        top: 40%;
+        width: 100%;
+    }
+
+    .menu-button-border{
+        display: inline-block;
+    }
+}
+
+@supports (display: grid) {
+    .button-grid{
+        height: 90%;
+        display: grid;
+        place-self: center;
+        place-content: center;
+        place-items: stretch;
+        grid-template-columns: repeat(auto-fit, 240px)
+    }
 }
