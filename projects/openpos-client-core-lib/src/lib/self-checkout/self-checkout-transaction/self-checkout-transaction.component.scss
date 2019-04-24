@@ -100,12 +100,12 @@
     padding: 24px;
     display: grid;
     grid-template-columns: 1fr 25em;
-    grid-row-gap: 16px;
 }
 
 .selfcheckout-list-background {
     align-self: stretch;
     justify-self: stretch;
+    padding-right: 16px;
 }
 
 .selfcheckout-total-background {
