@@ -23,6 +23,8 @@ package org.jumpmind.pos.core.screen;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ActionItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,8 +38,9 @@ public class ActionItem implements Serializable {
     private boolean sensitive;
     private String buttonSize;
     private String fontSize;
-    private boolean active = false;
-    private String keybind;
+    private String keybind;    
+    @JsonIgnore
+    private transient boolean autoAssignEnabled = true;
 
     public final static String FONT_SIZE_XS = "text-xs";
     public final static String FONT_SIZE_SM = "text-sm";
@@ -67,13 +70,7 @@ public class ActionItem implements Serializable {
     public ActionItem(String action, String title, String icon) {
         this(action, title);
         this.icon = icon;
-    }
-    
-    public ActionItem(String action, String title, String icon, boolean active) {
-        this(action, title);
-        this.icon = icon;
-        this.active = active;
-    }
+    }   
     
     
     public ActionItem(String action, String title, IIcon icon) {
@@ -243,16 +240,6 @@ public class ActionItem implements Serializable {
 	}
 
 
-	public boolean isActive() {
-		return active;
-	}
-
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-
     public String getKeybind() {
         return keybind;
     }
@@ -265,6 +252,14 @@ public class ActionItem implements Serializable {
     public ActionItem keybind(String keybind) {
         this.setKeybind(keybind);
         return this;
+    }
+    
+    public void setAutoAssignEnabled(boolean autoAssignEnabled) {
+        this.autoAssignEnabled = autoAssignEnabled;
+    }
+    
+    public boolean isAutoAssignEnabled() {
+        return autoAssignEnabled;
     }
     
 }
