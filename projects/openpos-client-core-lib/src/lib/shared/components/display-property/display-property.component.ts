@@ -11,7 +11,7 @@ export class DisplayPropertyComponent {
 
     DisplayPropertyAlignment = DisplayPropertyAligment;
 
-    @Input() alignmentType: DisplayPropertyAligment;
+    @Input() alignmentType = DisplayPropertyAligment.column;
     @Input() set label( label: string) {
         this.property.label = label;
     }
