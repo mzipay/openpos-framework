@@ -6,11 +6,14 @@ export interface SelectionListInterface extends IAbstractScreen {
     selectionList: SelectionListItem[];
     selectionButtons: IActionItem[];
     nonSelectionButtons: IActionItem[];
+    showScan: boolean;
     multiSelect: boolean;
     defaultSelect: boolean;
     defaultSelectItemIndex: number;
     selectionChangedAction: string;
     instructions: string;
     numberItemsPerPage: number;
+    noListItemsPlaceholderText: string;
+    noListItemsPlaceholderIcon: string;
     sausageLinks: IActionItem[];
 }

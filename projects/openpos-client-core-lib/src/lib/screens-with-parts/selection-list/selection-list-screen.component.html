@@ -4,12 +4,14 @@
         fxLayoutGap="4px" fxLayoutGap.lg="20px">
         <app-sausage-links waffle-drawer-content></app-sausage-links>
     </div>
-    <div waffle-body>
+    <app-scan-or-search *ngIf="screen.showScan" waffle-top-content class="scan-or-search mat-elevation-z3"></app-scan-or-search>
+    <div waffle-body fxFlexFill>
         <div fxLayout="column" class="outer">
             <mat-card fxLayout="column" class="lighter scrollable-content-card selection-list-card">
                 <mat-card-title *ngIf="screen.instructions" class="text-sm">{{screen.instructions}}</mat-card-title>
                 <mat-card-content fxFlex="1 1 100%">
-                    <app-selectable-item-list [configuration]="listConfig" (selectedItemChange)="onItemChange($event)"
+                    <app-selectable-item-list *ngIf="screen.selectionList && screen.selectionList.length > 0" 
+                        [configuration]="listConfig" (selectedItemChange)="onItemChange($event)"
                         (selectedItemListChange)="onItemListChange($event)" [defaultSelect]="screen.defaultSelect">
                         <ng-template let-item>
                             <div #items gdAreas="img info" gdColumns="auto 4fr"
@@ -32,6 +34,12 @@
                             </div>
                         </ng-template>
                     </app-selectable-item-list>
+                    <div *ngIf="!screen.selectionList || screen.selectionList.length == 0" fxLayout="column" fxLayoutAlign="center center" 
+                    class="muted-color">
+                        <app-icon *ngIf="screen.noListItemsPlaceholderIcon" iconClass="material-icons mat-180 muted-color"
+                             [iconName]="screen.noListItemsPlaceholderIcon"></app-icon>
+                        <span *ngIf="screen.noListItemsPlaceholderText" class="text-md">{{screen.noListItemsPlaceholderText}}</span>
+                    </div>
                 </mat-card-content>
                 <mat-card-actions fxLayoutAlign="end">
                     <button *ngFor="let m of screen.nonSelectionButtons" mat-raised-button color="primary-inverse"
