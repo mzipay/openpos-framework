@@ -14,28 +14,35 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-// ProxyMode so this becomes a DeviceScope bean when being @Autowired into a list of interfaces
+// ProxyMode so this becomes a DeviceScope bean when being @Autowired into a
+// list of interfaces
 @Scope(proxyMode = org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS, value = "device")
 public class KeyMappingScreenPropertyStrategy implements IScreenPropertyStrategy {
 
-	@Autowired(required=false)
-	IKeyMappingService keyMappingService;
-	
-	@In(scope=ScopeType.Device) 
-	private IStateManager stateManager;
-	
-	@Override
-	public Object doStrategy(String appId, String deviceId, Object property, Class<?> clazz, UIMessage screen, Map<String, Object> screenContext) {
-		if (property != null 
-		        && ActionItem.class.isAssignableFrom(clazz) && keyMappingService != null) {
-			ActionItem item = (ActionItem)property;
-			String keyMapping = keyMappingService.getKeyMapping(screen, item.getAction(), screenContext);
-			if (!StringUtils.isEmpty(keyMapping)) {			    
-			    item.setKeybind(keyMapping);
-			}
-			return item;
-		}
-		return property;
-	}
+    @Autowired(required = false)
+    IKeyMappingService keyMappingService;
+
+    @In(scope = ScopeType.Device)
+    private IStateManager stateManager;
+
+    @Override
+    public Object doStrategy(
+            String appId,
+            String deviceId,
+            Object property,
+            Class<?> clazz,
+            UIMessage screen,
+            Map<String, Object> screenContext) {
+        if (property != null && ActionItem.class.isAssignableFrom(clazz) && keyMappingService != null) {
+            ActionItem item = (ActionItem) property;
+            if (item.isAutoAssignEnabled()) {
+                String keyMapping = keyMappingService.getKeyMapping(screen, item.getAction(), screenContext);
+                if (!StringUtils.isEmpty(keyMapping)) {
+                    item.setKeybind(keyMapping);
+                }
+            }
+        }
+        return property;
+    }
 
 }

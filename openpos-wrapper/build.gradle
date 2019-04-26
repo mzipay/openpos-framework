@@ -1,4 +1,4 @@
-apply from: '../openpos-assemble/ide.gradle'
+apply from: '../openpos-core/ide.gradle'
 
 
 dependencies {
