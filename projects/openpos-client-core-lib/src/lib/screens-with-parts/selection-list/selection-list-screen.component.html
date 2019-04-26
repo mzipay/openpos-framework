@@ -49,7 +49,7 @@
                         <span *ngIf="keybindsEnabled(m)" class="muted-color">{{m.keybind}}</span>
                     </button>
                     <button *ngFor="let m of screen.selectionButtons;  let i = index"
-                        [attr.cdkFocusInitial]="screen.selectionButtons.length-1 == i ? '' : null" mat-raised-button
+                        mat-raised-button
                         [color]="screen.selectionButtons.length-1 == i ? 'primary' : 'primary-inverse'"
                         [disabled]="index<0" [actionItem]="m" (actionClick)="doMenuItemAction(m)"
                         (click)="doMenuItemAction(m)">
