@@ -113,6 +113,9 @@ public class ScreenService implements IScreenService, IActionListener {
 
         File file = new File(contentPath);
         if (file.exists()) {
+            if(file.getName().endsWith(".svg")) {
+                response.setContentType("image/svg+xml");
+            }
 
             InputStream in = new FileInputStream(file);
             if (in != null) {
@@ -122,6 +125,8 @@ public class ScreenService implements IScreenService, IActionListener {
         } else {
             logger.warn("Resource not found for asset: {}", contentPath);
         }
+
+
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{deviceId}/control/{controlId}")
