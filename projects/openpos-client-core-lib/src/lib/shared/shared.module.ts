@@ -230,6 +230,7 @@ const pipes = [
         KebabMenuComponent,
         ScanSomethingComponent,
         PopTartComponent,
+        SearchablePopTartComponent,
         DatePartChooserDialogComponent
     ],
     imports: [

@@ -138,7 +138,7 @@ export const ScreenConstants = {
         { name: 'Change', component: ChangeComponent },
         { name: 'PrintPreview', component: PrintPreviewComponent },
         { name: 'Wait', component: WaitComponent },
-        { name: 'ConfirmDialog', ConfirmDialogComponent },
+        { name: 'ConfirmDialog', component: ConfirmDialogComponent },
         { name: 'CustomerSearch', component: CustomerSearchResultsComponent },
         { name: 'FullPageImage', component: FullPageImageComponent },
         { name: 'CallForAuthorization', component: CallForAuthorizationComponent },

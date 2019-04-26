@@ -1,6 +1,6 @@
 <div [formGroup]="formGroup">
     <mat-form-field style="width:100%">
-        <input class="no-user-select" matInput [formControlName]="controlName" [placeholder]="placeholder"
+        <input class="no-user-select" no-keyboard matInput [formControlName]="controlName" [placeholder]="placeholder"
             [required]="required" (click)="openDatePartChooser()" onfocus="this.blur()" readonly>                
         
         <button type="button" mat-button matSuffix mat-icon-button (click)="openDatePartChooser()" [disabled]="!modifyAllowed"><mat-icon>more_vert</mat-icon></button>

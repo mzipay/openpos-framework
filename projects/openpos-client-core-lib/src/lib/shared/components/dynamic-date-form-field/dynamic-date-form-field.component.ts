@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, Optional, ViewChild } f
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
 import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { MatDatepickerInputEvent, MatInput } from '@angular/material';
+import { MatDatepickerInputEvent, MatInput, MatDatepicker } from '@angular/material';
 import { DateUtils, DatePartPositions } from '../../utils/date.utils';
 
 @Component({
@@ -26,6 +26,7 @@ import { DateUtils, DatePartPositions } from '../../utils/date.utils';
     ]);
 
     @ViewChild(MatInput) field: MatInput;
+    @ViewChild('picker') datepicker: MatDatepicker<Date>;
 
     @Input() type: string;
     @Input() value: string;
