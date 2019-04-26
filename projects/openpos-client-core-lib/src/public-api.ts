@@ -130,6 +130,8 @@ export * from './lib/keyboard/pipes/kebab-case.pipe';
 export * from './lib/keyboard/services/keyboard.service';
 export * from './lib/keyboard/utils/keyboard.utils';
 
+export * from './lib/price-checker/price-checker.module';
+
 export * from './lib/screens-deprecated/screens.module';
 export * from './lib/screens-deprecated/temporarily-shared-screens.module';
 export * from './lib/screens-deprecated/auto-complete-address/auto-complete-address.component';

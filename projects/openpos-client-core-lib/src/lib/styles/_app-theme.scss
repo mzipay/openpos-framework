@@ -6,7 +6,7 @@
 @import '../screens-deprecated/screen-themes';
 @import '../screens-with-parts/screen-with-parts-themes';
 @import '../shared/components/component-theme-mixins';
-
+@import '../price-checker/price-checker-themes';
 
 @include mat-core();
 
@@ -33,6 +33,7 @@
     @include screen-part-themes($theme);
     @include screen-themes($theme);
     @include screen-with-parts-themes($theme);
+    @include price-checker-themes($theme);
 
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));

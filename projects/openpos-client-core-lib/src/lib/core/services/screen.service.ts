@@ -18,6 +18,10 @@ export class ScreenService {
         private session: SessionService) { }
 
     public addScreen(name: string, type: Type<IScreen>): void {
+        if (type === null) {
+            throw new Error(`Cannot add null component for screen with name '${name}'`);
+        }
+
         if (ScreenService.screens.get(name)) {
             // tslint:disable-next-line:max-line-length
             this.log.info(`replacing registration for screen of type ${ScreenService.screens.get(name).name} with ${type.name} for the key of ${name} in the screen service`);

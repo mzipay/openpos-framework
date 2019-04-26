@@ -1,0 +1,50 @@
+<div class="page">
+    <div gdAreas="  title       title       title       title       title       |
+                    props       props       .           unitPrice   unitPrice   |
+                    .           pricelabel  pricelabel  pricelabel  .           |
+                    price       price       price       price       price       |
+                    logo        assocItems  assocItems  assocItems  printButton |
+                    logo        messages    messages    messages    printButton |
+                    logo        disclaimer  disclaimer  disclaimer  printButton"
+            gdColumns=" 1fr 1fr 1fr 1fr 1fr"
+            gdGap="4px"
+            class="container mat-elevation-z10">
+    <div gdArea="title" class="title">{{screen.itemDescription}}</div>
+    <div gdArea="props" class="props">
+        <app-display-property *ngFor="let prop of screen.itemProperties" [property]="prop"></app-display-property>
+    </div>
+    <div gdArea="unitPrice" gdGridAlign="end center">
+        <span class="unit-price">{{screen.pricePerUnit.value | valueFormatter:screen.pricePerUnit.valueFormatter}}</span>
+        <span class="unit-price-label">{{screen.pricePerUnit.label}}</span>
+    </div>
+    <div gdArea="pricelabel" class="current-price-label">
+        {{screen.currentPrice.label}}
+    </div>
+    <div gdArea="price" class="current-price">
+        {{screen.currentPrice.value | valueFormatter:screen.currentPrice.valueFormatter}}
+    </div>
+    <div gdArea="assocItems" class="assoc-items">
+        <ng-container *ngFor="let item of screen.associatedItems">
+            <span class="assoc-items-value">+{{item.value | valueFormatter:item.valueFormatter}}</span>
+            <span class="assoc-items-label">{{item.label}}</span>
+        </ng-container>
+    </div>
+
+    <img gdArea="logo" class="logo" [src]="screen.logoUrl | imageUrl">
+
+    <div gdArea="messages" class="messages">
+        <ng-container *ngFor="let message of screen.itemMessages">
+            {{message}}
+        </ng-container>
+    </div>
+
+    <div gdArea="disclaimer" class="disclaimer">
+        {{screen.disclaimer}}
+    </div>
+        <button mat-raised-button  gdArea="printButton" color=primary class="button">
+            <app-icon [iconName]="screen.printButton.icon"></app-icon>
+            <span>&nbsp;{{screen.printButton.title}}</span>
+        </button>
+    </div>
+
+</div>
