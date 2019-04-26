@@ -49,6 +49,10 @@ export class DialogService {
     }
 
     public addDialog(name: string, type: Type<IScreen>): void {
+        if (type === null) {
+            throw new Error(`Cannot add null component for dialog with name '${name}'`);
+        }
+
         if (DialogService.dialogs.get(name)) {
             // tslint:disable-next-line:max-line-length
             this.log.info(`replacing registration of dialog for the key of ${name} in the screen service`);
