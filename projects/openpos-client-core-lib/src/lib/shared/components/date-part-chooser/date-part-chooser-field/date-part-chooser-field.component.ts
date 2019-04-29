@@ -109,7 +109,7 @@ export class DatePartChooserFieldComponent implements OnInit, AfterViewInit {
         }
 
         const dialogRef = this.dialog.open(DatePartChooserDialogComponent, {
-            width: '600px',
+            width: '750px',
             data: {
               dateParts,
               mode: this.model.mode,
