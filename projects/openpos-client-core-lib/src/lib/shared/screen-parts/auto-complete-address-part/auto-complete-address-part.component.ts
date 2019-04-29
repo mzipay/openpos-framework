@@ -59,6 +59,7 @@ export class AutoCompleteAddressPartComponent extends ScreenPartComponent<IForm>
         this.form.get('state').setValue(address.state);
         this.form.get('postalCode').setValue(address.postalCode);
         this.form.get('country').setValue(address.country);
+        this.onFieldChanged(this.country);
     }
 
     screenDataUpdated() {
