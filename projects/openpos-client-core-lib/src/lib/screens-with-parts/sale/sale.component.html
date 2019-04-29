@@ -13,7 +13,7 @@
 
     <div waffle-body class="sale-content">
         <app-sale-item-list></app-sale-item-list>
-        <app-overflow-list *ngIf="screen.transactionActive" [numberItemsToShow]="overFlowListSize | async"
+        <app-overflow-list *ngIf="screen.transactionActive" [numberItemsToShow]="overFlowListSize"
             [items]="totals"></app-overflow-list>
         <app-sale-footer></app-sale-footer>
         <app-status-strip></app-status-strip>

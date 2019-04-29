@@ -6,7 +6,7 @@
 	 (menuAction)="onMenuAction($event)">
 	</app-transaction-item-list>
 
-	<app-overflow-list fxFlex="0 0 auto" *ngIf="screen.transaction" [numberItemsToShow]="overFlowListSize | async" [items]="amountTotals"></app-overflow-list>
+	<app-overflow-list fxFlex="0 0 auto" *ngIf="screen.transaction" [numberItemsToShow]="overFlowListSize" [items]="amountTotals"></app-overflow-list>
 
 	<mat-card *ngIf="screen.transaction" fxFlex="0 0 auto" class="page-content-card dark">
 		<mat-card-content fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" class="text-lg">
