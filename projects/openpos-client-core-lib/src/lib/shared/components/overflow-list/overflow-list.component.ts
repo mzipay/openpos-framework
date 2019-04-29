@@ -1,26 +1,32 @@
-import { Component, Input} from '@angular/core';
-import { OpenposMediaService } from '../../../core/services/openpos-media.service';
-import { Observable } from 'rxjs';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
     selector: 'app-overflow-list',
     templateUrl: './overflow-list.component.html',
     styleUrls: ['./overflow-list.component.scss']
 })
-export class OverFlowListComponent {
+export class OverFlowListComponent implements OnChanges {
 
-    @Input() numberItemsToShow: Observable<number> = this.mediaService.mediaObservableFromMap(new Map([
-        ['xs', 3],
-        ['sm', 3],
-        ['md', 4],
-        ['lg', 6],
-        ['xl', 6]
-      ]));
-
+    @Input() numberItemsToShow: number;
     @Input() items: any[];
 
     shownItems: any[];
     overflowItems: any[];
 
-    constructor(private mediaService: OpenposMediaService) {}
+    constructor() {
+
+    }
+
+    showOverflowList(): boolean {
+        return this.numberItemsToShow < this.items.length;
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        this.updateLists();
+    }
+
+    private updateLists(): void {
+        this.shownItems = this.items.slice(0, this.numberItemsToShow);
+        this.overflowItems = this.items.slice(this.numberItemsToShow);
+    }
 }

@@ -285,8 +285,6 @@ export * from './lib/shared/components/training-dialog/training-token';
 export * from './lib/shared/components/training-dialog/training-wrapper.component';
 export * from './lib/shared/components/transaction-item-list/transaction-item-list.component';
 
-export * from './lib/shared/decorators/screen-component.decorator';
-
 export * from './lib/shared/directives/action-item-key-mapping.directive';
 export * from './lib/shared/directives/arrow-tab-item.directive';
 export * from './lib/shared/directives/arrow-tab.directive';
