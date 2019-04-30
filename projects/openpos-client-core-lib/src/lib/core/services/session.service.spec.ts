@@ -17,7 +17,7 @@ describe('SessionService', () => {
     let sessionService: SessionService;
     let deviceServiceSpy: jasmine.SpyObj<DeviceService>;
     let loggerServiceSpy: jasmine.SpyObj<Logger>;
-    let electronServiceSpy: jasmine.SpyObj<Electron>;
+    let electronServiceSpy: jasmine.SpyObj<ElectronService>;
 
     beforeEach(() => {
         const stompSpy = jasmine.createSpyObj('StompRService', ['publish']);
