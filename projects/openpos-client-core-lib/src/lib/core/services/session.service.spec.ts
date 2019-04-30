@@ -1,3 +1,4 @@
+import { ElectronService } from 'ngx-electron';
 import { Logger } from './logger.service';
 import { TestBed } from '@angular/core/testing';
 import { SessionService } from './session.service';
@@ -16,6 +17,7 @@ describe('SessionService', () => {
     let sessionService: SessionService;
     let deviceServiceSpy: jasmine.SpyObj<DeviceService>;
     let loggerServiceSpy: jasmine.SpyObj<Logger>;
+    let electronServiceSpy: jasmine.SpyObj<Electron>;
 
     beforeEach(() => {
         const stompSpy = jasmine.createSpyObj('StompRService', ['publish']);
@@ -23,6 +25,7 @@ describe('SessionService', () => {
         const matDialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
         const deviceSpy = jasmine.createSpyObj('DeviceService', ['isRunningInCordova']);
         const loggerSpy = jasmine.createSpyObj('Logger', ['info']);
+        const electronSpy = jasmine.createSpyObj('ElectronService', ['isElectronApp']);
 
         TestBed.configureTestingModule({
             imports: [
@@ -34,13 +37,17 @@ describe('SessionService', () => {
                 { provide: MatDialog, useValue: matDialogSpy },
                 { provide: StompRService, useValue: stompSpy },
                 { provide: Logger, useValue: loggerSpy },
-                { provide: DeviceService, useValue: deviceSpy}
+                { provide: DeviceService, useValue: deviceSpy},
+                { provide: ElectronService, useValue: electronSpy},
             ]
         });
 
         AppInjector.Instance = TestBed.get(Injector);
         deviceServiceSpy = TestBed.get(DeviceService);
         deviceServiceSpy.isRunningInCordova.and.returnValue(false);
+
+        electronServiceSpy = TestBed.get(ElectronService);
+        electronServiceSpy.isElectronApp.and.returnValue(false);
 
         loggerServiceSpy = TestBed.get(Logger);
 
