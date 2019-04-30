@@ -9,7 +9,8 @@
             </mat-card-title>
             <mat-card-content appArrowTab fxLayout="column" style="padding-top:16px">
                     <button 
-                        *ngFor="let o of optionItems" 
+                        *ngFor="let o of optionItems; let i = index" 
+                        [attr.cdkFocusInitial]="0 == i ? '' : null"
                         mat-button 
                         appArrowTabItem 
                         (click)="onMakeOptionSelection(o)"
@@ -27,7 +28,7 @@
     <ng-template ngSwitchCase="ButtonGrid">
             <mat-card-content fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutGap="30px">
                 <button fxFlex="0 0 auto" mat-raised-button color=primary style="height:150px;width:150px" *ngFor="let o of optionItems"
-                    (click)="onMakeOptionSelection(o)">
+                    (click)="onMakeOptionSelection(o)" >
                     <div fxLayoutAlign="center center" fxLayout="column">
                         <app-icon fxFlex="1 0 auto" [iconName]="o.icon" iconClass="material-icons mat-64"></app-icon>
                         <span fxFlex="1 0 auto" class="text-sm">{{o.displayValue}}</span>

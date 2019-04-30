@@ -28,6 +28,7 @@ import { HttpClient } from '@angular/common/http';
 import { PingParams } from '../interfaces/ping-params.interface';
 import { PingResult } from '../interfaces/ping-result.interface';
 import { PersonalizationResponse } from '../interfaces/personalization-response.interface';
+import { ElectronService } from 'ngx-electron';
 
 @Injectable({
     providedIn: 'root',
@@ -71,7 +72,8 @@ export class SessionService implements IMessageHandler<any> {
         public dialogService: MatDialog,
         public zone: NgZone,
         protected personalization: PersonalizationService,
-        private http: HttpClient
+        private http: HttpClient,
+        private electron: ElectronService
     ) {
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
@@ -95,7 +97,7 @@ export class SessionService implements IMessageHandler<any> {
         return merge(
             this.stompJsonMessages$,
             this.sessionMessages$).pipe(filter(s => types && types.length > 0 ? types.includes(s.type) : true)).
-               subscribe(s => this.zone.run(() => handler.handle(s)));
+            subscribe(s => this.zone.run(() => handler.handle(s)));
     }
 
     public isRunningInBrowser(): boolean {
@@ -132,6 +134,22 @@ export class SessionService implements IMessageHandler<any> {
             const keys = Array.from(personalizationProperties.keys());
             for (const key of keys) {
                 headers[key] = personalizationProperties.get(key);
+            }
+        }
+    }
+
+    private deleteLaunchingFlg() {
+        if (this.electron.isElectronApp) {
+            const fs = this.electron.remote.require('fs');
+            const launchingFile = 'launching.flg';
+            if (fs.existsSync(launchingFile)) {
+                fs.unlink(launchingFile, (err) => {
+                    if (err) {
+                        this.log.info('unable to remove ' + launchingFile);
+                    } else {
+                        this.log.info(launchingFile + ' was removed');
+                    }
+                  });
             }
         }
     }
@@ -201,6 +219,7 @@ export class SessionService implements IMessageHandler<any> {
                     }
                     this.sendMessage(new ConnectedMessage());
                     this.cancelLoading();
+                    this.deleteLaunchingFlg();
                 } else if (stompState === 'DISCONNECTING') {
                     this.log.info('STOMP disconnecting');
                 } else if (stompState === 'CLOSED') {
@@ -371,8 +390,8 @@ export class SessionService implements IMessageHandler<any> {
         this.onAction(action, payload, null, true);
     }
 
-    public async onAction(action: string | IActionItem, 
-                          payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
+    public async onAction(action: string | IActionItem,
+        payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
         if (action) {
             let response: any = null;
             let actionString = '';
@@ -411,8 +430,10 @@ export class SessionService implements IMessageHandler<any> {
                 if (confirm.hasOwnProperty('message')) {
                     confirmD = confirm as IConfirmationDialog;
                 } else {
-                    confirmD = { title: '', message: confirm as string, cancelButtonName: 'No',
-                    confirmButtonName: 'Yes', cancelAction: null, confirmAction: null };
+                    confirmD = {
+                        title: '', message: confirm as string, cancelButtonName: 'No',
+                        confirmButtonName: 'Yes', cancelAction: null, confirmAction: null
+                    };
                 }
                 const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
                 dialogRef.componentInstance.confirmDialog = confirmD;
