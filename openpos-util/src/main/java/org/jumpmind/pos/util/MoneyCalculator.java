@@ -45,8 +45,6 @@ public class MoneyCalculator {
         return money(currencyId, value, RoundingMode.HALF_UP);
     }
     public static Money money(String currencyId, BigDecimal value, RoundingMode roundingMode) {
-        CurrencyUnit currency = CurrencyUnit.of(currencyId);
-        value = value != null ? value.round(new MathContext(currency.getDecimalPlaces(), roundingMode)) : BigDecimal.ZERO;
         return Money.of(CurrencyUnit.of(currencyId), value, roundingMode);
     }
     
