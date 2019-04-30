@@ -2,14 +2,17 @@ package org.jumpmind.pos.core.screeninterceptor;
 
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.service.IResourceLookupService;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ResourceLookupScreenPropertyStrategy implements IScreenPropertyStrategy {
 
+    protected static final Pattern PARAM_PATTERN = Pattern.compile("(\\{\\{.*?\\}\\})");
+    
 	@Autowired
 	IResourceLookupService lookupService;
 	
@@ -22,10 +25,44 @@ public class ResourceLookupScreenPropertyStrategy implements IScreenPropertyStra
 					ResourceLookupStringBuilder lookupObject = ResourceLookupStringBuilder.fromJson(value);
 
 					String group = lookupObject.getGroup() != null ? lookupObject.getGroup() : "common";
-					String newValue = lookupService.getString(appId, deviceId, group, lookupObject.getKey());
+					String originalValue = lookupService.getString(appId, deviceId, group, lookupObject.getKey()); 
+					String newValue = originalValue;
 					if(lookupObject.getParameters() != null) {
 						newValue = lookupObject.getParameters().keySet().stream().reduce( newValue, (acc, key) -> acc.replace("{{" + key + "}}", lookupObject.getParameters().get(key)));
 					}
+					
+					// Also check for references to properties that are defined within
+					// the resources used by the lookupService itself.
+					Matcher m = PARAM_PATTERN.matcher(newValue);
+					StringBuffer tempValue= new StringBuffer(newValue.length());
+					boolean atLeastOneMatch = false;
+					while (m.find()) {
+					    atLeastOneMatch = true;
+					    String match = m.group(1);
+					    String param = match.substring(2,match.length()-2);
+					    String replacement = this.lookupService.getString(appId, deviceId, group, param);
+					    if (replacement != null) {
+    					    // Make sure the replacement doesn't also have additional
+    					    // property references in it.  We don't support that (yet).
+    					    Matcher m2 = PARAM_PATTERN.matcher(replacement);
+    					    if (m2.find()) {
+    					        throw new RuntimeException(
+    					            String.format("The parameter '%s' in property '%s' " + 
+    					                "refers to at least one other property with " +
+    					                "parameters in it. Only one level of property " +
+    					                " references is supported.",
+    					                param, originalValue )
+    					        );
+    					    }
+					        m.appendReplacement(tempValue, Matcher.quoteReplacement(replacement));
+					    }
+					}
+					
+					if (atLeastOneMatch) {
+					    m.appendTail(tempValue);
+					    newValue = tempValue.toString();
+					}
+					
 					return newValue;
 				} catch( IllegalArgumentException | MissingResourceException e) {
 					return property;
