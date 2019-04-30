@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jumpmind.pos.core.screen.ActionItem;
+import org.jumpmind.pos.core.screen.IconType;
 import org.jumpmind.pos.core.screen.SelectionListItem;
 import org.jumpmind.pos.core.ui.AssignKeyBindings;
 import org.jumpmind.pos.core.ui.UIMessage;
@@ -18,10 +19,13 @@ public class SelectionListUIMessage extends UIMessage {
     private List<ActionItem> selectionButtons = new ArrayList<>();
     private boolean multiSelect = false;
     private boolean defaultSelect = false;
+    private boolean showScan = false;
     private int defaultSelectItemIndex = 0;
     private String selectionChangedAction;
     private String instructions;
     private int numberItemsPerPage;
+    private String noListItemsPlaceholderText;
+    private String noListItemsPlaceholderIcon;
     
     public SelectionListUIMessage() {
         this.setScreenType(UIMessageType.SELECTION_LIST);
@@ -78,6 +82,14 @@ public class SelectionListUIMessage extends UIMessage {
         this.defaultSelect = defaultSelect;
     }
 
+    public boolean isShowScan() {
+        return showScan;
+    }
+
+    public void setShowScan(boolean showScan) {
+        this.showScan = showScan;
+    }
+
     public int getDefaultSelectItemIndex() {
         return defaultSelectItemIndex;
     }
@@ -109,4 +121,22 @@ public class SelectionListUIMessage extends UIMessage {
     public void setNumberItemsPerPage(int numberItemsPerPage) {
         this.numberItemsPerPage = numberItemsPerPage;
     }
+
+    public String getNoListItemsPlaceholderText() {
+        return noListItemsPlaceholderText;
+    }
+
+    public void setNoListItemsPlaceholderText(String noListItemsPlaceholderText) {
+        this.noListItemsPlaceholderText = noListItemsPlaceholderText;
+    }
+
+    public String getNoListItemsPlaceholderIcon() {
+        return noListItemsPlaceholderIcon;
+    }
+
+    public void setNoListItemsPlaceholderIcon(String noListItemsPlaceholderIcon) {
+        this.noListItemsPlaceholderIcon = noListItemsPlaceholderIcon;
+    }
+
+
 }
