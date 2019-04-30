@@ -1,6 +1,7 @@
 package org.jumpmind.pos.util;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 
 import org.joda.money.CurrencyUnit;
@@ -41,9 +42,11 @@ public class MoneyCalculator {
     }
     
     public static Money money(String currencyId, BigDecimal value) {
-        return Money.of(CurrencyUnit.of(currencyId), value);
+        return money(currencyId, value, RoundingMode.HALF_UP);
     }
     public static Money money(String currencyId, BigDecimal value, RoundingMode roundingMode) {
+        CurrencyUnit currency = CurrencyUnit.of(currencyId);
+        value = value != null ? value.round(new MathContext(currency.getDecimalPlaces(), roundingMode)) : BigDecimal.ZERO;
         return Money.of(CurrencyUnit.of(currencyId), value, roundingMode);
     }
     
