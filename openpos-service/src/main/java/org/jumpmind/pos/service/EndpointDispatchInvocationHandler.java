@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.jumpmind.pos.persist.DBSession;
+import org.jumpmind.pos.service.instrumentation.Sample;
 import org.jumpmind.pos.service.instrumentation.ServiceSample;
 import org.jumpmind.pos.service.strategy.AbstractInvocationStrategy;
 import org.jumpmind.pos.service.strategy.IInvocationStrategy;
@@ -75,8 +76,8 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
         if (isNotBlank(serviceName)) {
             return serviceConfig.getServiceConfig(installationId, serviceName);
         } else {
-            throw new IllegalStateException(method.getDeclaringClass().getSimpleName() + " must declare @" + RestController.class.getSimpleName()
-                    + " and it must have the value() attribute set");
+            throw new IllegalStateException(method.getDeclaringClass().getSimpleName() + " must declare @"
+                    + RestController.class.getSimpleName() + " and it must have the value() attribute set");
         }
     }
 
@@ -86,13 +87,16 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
             Object proxy,
             Method method,
             Object[] args) {
-        ServiceSample sample = new ServiceSample();
-        sample.setSampleId(installationId + System.currentTimeMillis());
-        sample.setInstallationId(installationId);
-        sample.setHostname(AppUtils.getHostName());
-        sample.setServiceName(method.getDeclaringClass().getSimpleName() + "." + method.getName());
-        sample.setServiceType(strategy.getStrategyName());
-        sample.setStartTime(new Date());
+        ServiceSample sample = null;
+        if (method.isAnnotationPresent(Sample.class)) {
+            sample = new ServiceSample();
+            sample.setSampleId(installationId + System.currentTimeMillis());
+            sample.setInstallationId(installationId);
+            sample.setHostname(AppUtils.getHostName());
+            sample.setServiceName(method.getDeclaringClass().getSimpleName() + "." + method.getName());
+            sample.setServiceType(strategy.getStrategyName());
+            sample.setStartTime(new Date());
+        }
         return sample;
     }
 
@@ -103,7 +107,7 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
             Method method,
             Object[] args,
             Object result) {
-        if (result != null) {
+        if (result != null && sample != null) {
             sample.setServiceResult(StringUtils.abbreviate(result.toString(), MAX_SUMMARY_WIDTH));
         }
         endSample(sample, config, proxy, method, args);
@@ -117,16 +121,20 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
             Object[] args,
             Object result,
             Throwable ex) {
-        sample.setServiceResult(null);
-        sample.setErrorFlag(true);
-        sample.setErrorSummary(StringUtils.abbreviate(ex.getMessage(), MAX_SUMMARY_WIDTH));
-        endSample(sample, config, proxy, method, args);
+        if (sample != null) {
+            sample.setServiceResult(null);
+            sample.setErrorFlag(true);
+            sample.setErrorSummary(StringUtils.abbreviate(ex.getMessage(), MAX_SUMMARY_WIDTH));
+            endSample(sample, config, proxy, method, args);
+        }
     }
 
     protected void endSample(ServiceSample sample, ServiceSpecificConfig config, Object proxy, Method method, Object[] args) {
-        sample.setEndTime(new Date());
-        sample.setDurationMs(sample.getEndTime().getTime() - sample.getStartTime().getTime());
-        instrumentationExecutor.execute(() -> dbSession.save(sample));
+        if (sample != null) {
+            sample.setEndTime(new Date());
+            sample.setDurationMs(sample.getEndTime().getTime() - sample.getStartTime().getTime());
+            instrumentationExecutor.execute(() -> dbSession.save(sample));
+        }
     }
 
 }

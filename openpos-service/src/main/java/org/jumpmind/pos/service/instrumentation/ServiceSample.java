@@ -8,8 +8,6 @@ import org.jumpmind.pos.persist.TableDef;
 
 @TableDef(name = "service_sample", description="This table records statistics about service calls within openpos.")
 public class ServiceSample extends AbstractModel {
-    
-    private static final long serialVersionUID = 1L;
 
     @ColumnDef(primaryKey=true) 
     String sampleId; // TODO need sequence generator for deviceId+sequence.
