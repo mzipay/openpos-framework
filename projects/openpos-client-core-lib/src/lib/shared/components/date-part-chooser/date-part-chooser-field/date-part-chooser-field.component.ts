@@ -37,7 +37,7 @@ export class DatePartChooserFieldComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
-        if (this.formGroup) {
+        if (this.formGroup && this.model.dayOfMonth && this.model.month) {
             this.setFieldValue(this.formatForDisplay());
         }
     }
