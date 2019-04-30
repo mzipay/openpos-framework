@@ -14,6 +14,7 @@
     (keyup.enter)="onEnter()"
     [(ngModel)]="barcode"
     (paste)="onBarcodePaste($event)"
+    (ngModelChange)="onValueChange($event)"
     [placeholder]="screenData.scanSomethingText"
     [attr.minlength]="screenData.scanMinLength"
     [attr.maxlength]="screenData.scanMaxLength"

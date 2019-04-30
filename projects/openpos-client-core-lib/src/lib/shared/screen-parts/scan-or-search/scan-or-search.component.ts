@@ -1,5 +1,5 @@
 import { IActionItem } from './../../../core/interfaces/menu-item.interface';
-import { Component, AfterViewInit, Input, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, Input, ElementRef, Output, EventEmitter } from '@angular/core';
 import { ScreenPartComponent } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
 import { DeviceService } from '../../../core/services/device.service';
@@ -19,6 +19,7 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
     public barcode: string;
 
     @Input() defaultAction: IActionItem;
+    @Output() change: EventEmitter<string> = new EventEmitter<string>();
 
     constructor( public devices: DeviceService, messageProvider: MessageProvider,
                  private elRef: ElementRef) {
@@ -35,6 +36,10 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
         } else if (this.defaultAction && this.defaultAction.enabled) {
             this.sessionService.onAction(this.defaultAction);
         }
+    }
+
+    public onValueChange($event: any): void {
+        this.change.emit(this.barcode);
     }
 
     private filterBarcodeValue(val: string): string {
