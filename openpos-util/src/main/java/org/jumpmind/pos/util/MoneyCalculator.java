@@ -1,7 +1,6 @@
 package org.jumpmind.pos.util;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 
 import org.joda.money.CurrencyUnit;
