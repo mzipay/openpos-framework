@@ -8,7 +8,7 @@ import { StompRService } from '@stomp/ng2-stompjs';
 import { DeviceService } from './device.service';
 import { AppInjector } from '../app-injector';
 import { Injector } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 
 describe('SessionService', () => {
@@ -47,7 +47,6 @@ describe('SessionService', () => {
         deviceServiceSpy.isRunningInCordova.and.returnValue(false);
 
         electronServiceSpy = TestBed.get(ElectronService);
-        electronServiceSpy.isElectronApp.and.returnValue(false);
 
         loggerServiceSpy = TestBed.get(Logger);
 
