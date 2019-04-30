@@ -50,10 +50,10 @@ public class GS1Coupon {
     String retailerCompanyPrefixOrGLN;
 
     // Optional data field 9: miscellaneous
-    String saveValueCode;
-    String saveValueAppliesToWhichItem;
-    String storeCouponFlag;
-    String doNotMultiplyFlag;
+    String saveValueCode = "0";
+    String saveValueAppliesToWhichItem = "0";
+    String storeCouponFlag = "0";
+    String doNotMultiplyFlag = "0";
 
     public static boolean isGS1Databar(String gs1Databar) {
         gs1Databar = gs1Databar.trim();
@@ -89,82 +89,82 @@ public class GS1Coupon {
         primaryPurchaseFamilyCode = gs1Databar.substring(i, i + 3);
         i += 3;
 
-        int optionalFieldIndctr = Integer.parseInt(gs1Databar.substring(i, ++i));
+        if (i < gs1Databar.length()) {
+            int optionalFieldIndctr = Integer.parseInt(gs1Databar.substring(i, ++i));
+            while (i < gs1Databar.length()) {
+                switch (+optionalFieldIndctr) {
+                    case 1:
+                        // Second qualifying purchase
+                        secondaryAdditionalPurchaseRulesCode = gs1Databar.substring(i, ++i);
+                        secondaryPurchaseRequirementVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
+                        secondaryPurchaseRequirement = Integer.parseInt(gs1Databar.substring(i, i + +secondaryPurchaseRequirementVLI));
+                        i += +secondaryPurchaseRequirementVLI;
 
-        while (i < gs1Databar.length()) {
-            switch (+optionalFieldIndctr) {
-                case 1:
-                    // Second qualifying purchase
-                    secondaryAdditionalPurchaseRulesCode = gs1Databar.substring(i, ++i);
-                    secondaryPurchaseRequirementVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
-                    secondaryPurchaseRequirement = Integer.parseInt(gs1Databar.substring(i, i + +secondaryPurchaseRequirementVLI));
-                    i += +secondaryPurchaseRequirementVLI;
+                        secondaryPurchaseRequirementCode = gs1Databar.substring(i, ++i);
+                        secondaryPurchaseFamilyCode = gs1Databar.substring(i, i + 3);
+                        i += 3;
 
-                    secondaryPurchaseRequirementCode = gs1Databar.substring(i, ++i);
-                    secondaryPurchaseFamilyCode = gs1Databar.substring(i, i + 3);
-                    i += 3;
+                        secondaryPurchaseCompanyPrefixVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
+                        secondaryPurchaseCompanyPrefix = gs1Databar.substring(i, i + 6 + +secondaryPurchaseCompanyPrefixVLI);
+                        i += 6 + +secondaryPurchaseCompanyPrefixVLI;
+                        break;
 
-                    secondaryPurchaseCompanyPrefixVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
-                    secondaryPurchaseCompanyPrefix = gs1Databar.substring(i, i + 6 + +secondaryPurchaseCompanyPrefixVLI);
-                    i += 6 + +secondaryPurchaseCompanyPrefixVLI;
-                    break;
+                    case 2:
+                        // Third qualifying purchase
+                        tertiaryPurchaseRequirementVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
+                        tertiaryPurchaseRequirement = Integer.parseInt(gs1Databar.substring(i, i + +tertiaryPurchaseRequirementVLI));
+                        i += +tertiaryPurchaseRequirementVLI;
 
-                case 2:
-                    // Third qualifying purchase
-                    tertiaryPurchaseRequirementVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
-                    tertiaryPurchaseRequirement = Integer.parseInt(gs1Databar.substring(i, i + +tertiaryPurchaseRequirementVLI));
-                    i += +tertiaryPurchaseRequirementVLI;
+                        tertiaryPurchaseRequirementCode = gs1Databar.substring(i, ++i);
+                        tertiaryPurchaseFamilyCode = gs1Databar.substring(i, i + 3);
+                        i += 3;
 
-                    tertiaryPurchaseRequirementCode = gs1Databar.substring(i, ++i);
-                    tertiaryPurchaseFamilyCode = gs1Databar.substring(i, i + 3);
-                    i += 3;
+                        tertiaryPurchaseCompanyPrefixVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
+                        tertiaryPurchaseCompanyPrefix = gs1Databar.substring(i, i + 6 + +tertiaryPurchaseCompanyPrefixVLI);
+                        i += 6 + +tertiaryPurchaseCompanyPrefixVLI;
+                        break;
 
-                    tertiaryPurchaseCompanyPrefixVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
-                    tertiaryPurchaseCompanyPrefix = gs1Databar.substring(i, i + 6 + +tertiaryPurchaseCompanyPrefixVLI);
-                    i += 6 + +tertiaryPurchaseCompanyPrefixVLI;
-                    break;
+                    case 3:
+                        // Expiry date
+                        String date = gs1Databar.substring(i, i + 6);
+                        expirationDate = new SimpleDateFormat("yyMMdd").parse(date);
+                        i += 6;
+                        break;
 
-                case 3:
-                    // Expiry date                    
-                    String date = gs1Databar.substring(i, i + 6);
-                    expirationDate = new SimpleDateFormat("yyMMdd").parse(date);
-                    i += 6;
-                    break;
+                    case 4:
+                        // Start date
+                        startDate = gs1Databar.substring(i, i + 6);
+                        i += 6;
+                        break;
 
-                case 4:
-                    // Start date
-                    startDate = gs1Databar.substring(i, i + 6);
-                    i += 6;
-                    break;
+                    case 5:
+                        // Serial number
+                        serialNumberVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
+                        serialNumber = gs1Databar.substring(i, i + 6 + +serialNumberVLI);
+                        i += 6 + +serialNumberVLI;
+                        break;
 
-                case 5:
-                    // Serial number
-                    serialNumberVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
-                    serialNumber = gs1Databar.substring(i, i + 6 + +serialNumberVLI);
-                    i += 6 + +serialNumberVLI;
-                    break;
+                    case 6:
+                        // Retailer identification
+                        retailerCompanyPrefixVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
+                        retailerCompanyPrefixOrGLN = gs1Databar.substring(i, i + 7 + +retailerCompanyPrefixVLI);
+                        i += 7 + +retailerCompanyPrefixVLI;
+                        break;
 
-                case 6:
-                    // Retailer identification
-                    retailerCompanyPrefixVLI = Integer.parseInt(gs1Databar.substring(i, ++i));
-                    retailerCompanyPrefixOrGLN = gs1Databar.substring(i, i + 7 + +retailerCompanyPrefixVLI);
-                    i += 7 + +retailerCompanyPrefixVLI;
-                    break;
+                    case 9:
+                        // Miscellaneous
+                        saveValueCode = gs1Databar.substring(i, ++i);
+                        saveValueAppliesToWhichItem = gs1Databar.substring(i, ++i);
+                        storeCouponFlag = gs1Databar.substring(i, ++i);
+                        doNotMultiplyFlag = gs1Databar.substring(i, ++i);
+                        break;
+                }
 
-                case 9:
-                    // Miscellaneous
-                    saveValueCode = gs1Databar.substring(i, ++i);
-                    saveValueAppliesToWhichItem = gs1Databar.substring(i, ++i);
-                    storeCouponFlag = gs1Databar.substring(i, ++i);
-                    doNotMultiplyFlag = gs1Databar.substring(i, ++i);
-                    break;
-            }
-
-            if (i < gs1Databar.length()) {
-                optionalFieldIndctr = Integer.parseInt(gs1Databar.substring(i, ++i));
+                if (i < gs1Databar.length()) {
+                    optionalFieldIndctr = Integer.parseInt(gs1Databar.substring(i, ++i));
+                }
             }
         }
-
     }
 
     public String getApplicationIdentifer() {
