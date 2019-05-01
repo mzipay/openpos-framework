@@ -1,14 +1,21 @@
 package org.jumpmind.pos.core.ui.message;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.model.KeyboardType;
 import org.jumpmind.pos.core.model.Validator;
 import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.ui.UIMessage;
 
-import java.util.*;
-
 public class PromptUIMessage extends UIMessage {
+    
+    private static final long serialVersionUID = 1L;
+    
     private String promptIcon;
     private String placeholderText;
     private String hintText;
@@ -22,11 +29,29 @@ public class PromptUIMessage extends UIMessage {
     private Integer maxLength;
     private String comments = "";
     private boolean showComments = false;
-    private String validationPattern;
+    private List<String> validationPatterns;
     private boolean scanEnabled;
+    private Integer min;
+    private Integer max;
 
     public PromptUIMessage() {
         this.setScreenType(UIMessageType.PROMPT);
+    }
+    
+    public void setMax(Integer max) {
+        this.max = max;
+    }
+    
+    public Integer getMax() {
+        return max;
+    }
+    
+    public void setMin(Integer min) {
+        this.min = min;
+    }
+    
+    public Integer getMin() {
+        return min;
     }
 
     public String getPromptIcon() {
@@ -139,13 +164,20 @@ public class PromptUIMessage extends UIMessage {
     public void setShowComments(boolean showComments) {
         this.showComments = showComments;
     }
-
-    public String getValidationPattern() {
-        return validationPattern;
+    
+    public void setValidationPatterns(List<String> validationPatterns) {
+        this.validationPatterns = validationPatterns;
+    }
+    
+    public List<String> getValidationPatterns() {
+        return validationPatterns;
     }
 
-    public void setValidationPattern(String validationPattern) {
-        this.validationPattern = validationPattern;
+    public void addValidationPattern(String pattern) {
+        if (this.validationPatterns == null) {
+            this.validationPatterns = new ArrayList<>();
+        }
+        this.validationPatterns.add(pattern);
     }
 
     public boolean isScanEnabled() {

@@ -15,12 +15,75 @@ public class PromptConfig {
     private FieldInputType promptType = FieldInputType.AlphanumericText;
     private String icon;
     private String placeholder;
+    private String responseText;
+    private List<String> validationPatterns;
+    private Integer min;
+    private Integer max;
     private DialogProperties dialogProperties;
     private ActionItem actionMenuItem = new ActionItem("Next", "Next", true);
     private List<ActionItem> otherActions = new ArrayList<>();
 
     public PromptConfig named(String name) {
         this.name = name;
+        return this;
+    }
+    
+    public void setMax(Integer max) {
+        this.max = max;
+    }
+    
+    public Integer getMax() {
+        return max;
+    }
+    
+    public PromptConfig max(Integer max) {
+        this.max = max;
+        return this;
+    }
+    
+    public void setMin(Integer min) {
+        this.min = min;
+    }
+    
+    public Integer getMin() {
+        return min;
+    }
+    
+    public PromptConfig min(Integer min) {
+        this.min = min;
+        return this;
+    }
+    
+    public List<String> getValidationPatterns() {
+        return validationPatterns;
+    }
+    
+    public PromptConfig validationPattern(String expression) {
+        if (this.validationPatterns == null) {
+            this.validationPatterns = new ArrayList<>();
+        }
+        this.validationPatterns.add(expression);
+        return this;
+    }
+    
+    public PromptConfig validationPatterns(List<String> patterns) {
+        if (this.validationPatterns == null) {
+            this.validationPatterns = new ArrayList<>();
+        }
+        this.validationPatterns.addAll(patterns);
+        return this;
+    }
+
+    public void setResponseText(String responseText) {
+        this.responseText = responseText;
+    }
+
+    public String getResponseText() {
+        return responseText;
+    }
+
+    public PromptConfig responseText(String responseText) {
+        this.responseText = responseText;
         return this;
     }
 
@@ -68,7 +131,7 @@ public class PromptConfig {
         this.actionMenuItem = actionMenuItem;
         return this;
     }
-    
+
     public PromptConfig asDialog() {
         DialogProperties props = new DialogProperties();
         props.setMinWidth("50%");
