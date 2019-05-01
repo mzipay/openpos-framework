@@ -17,7 +17,6 @@ describe('SessionService', () => {
     let sessionService: SessionService;
     let deviceServiceSpy: jasmine.SpyObj<DeviceService>;
     let loggerServiceSpy: jasmine.SpyObj<Logger>;
-    let electronServiceSpy: jasmine.SpyObj<ElectronService>;
 
     beforeEach(() => {
         const stompSpy = jasmine.createSpyObj('StompRService', ['publish']);
@@ -26,6 +25,7 @@ describe('SessionService', () => {
         const deviceSpy = jasmine.createSpyObj('DeviceService', ['isRunningInCordova']);
         const loggerSpy = jasmine.createSpyObj('Logger', ['info']);
         const electronSpy = jasmine.createSpyObj('ElectronService', ['isElectronApp']);
+        electronSpy.isElectronApp = false;
 
         TestBed.configureTestingModule({
             imports: [
@@ -45,8 +45,6 @@ describe('SessionService', () => {
         AppInjector.Instance = TestBed.get(Injector);
         deviceServiceSpy = TestBed.get(DeviceService);
         deviceServiceSpy.isRunningInCordova.and.returnValue(false);
-
-        electronServiceSpy = TestBed.get(ElectronService);
 
         loggerServiceSpy = TestBed.get(Logger);
 
