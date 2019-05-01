@@ -2,11 +2,13 @@ package org.jumpmind.pos.service.strategy;
 
 import java.lang.reflect.Method;
 
+import org.jumpmind.pos.service.NeedsActionException;
 import org.jumpmind.pos.service.ServiceSpecificConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
 
 @Component(RemoteFirstStrategy.REMOTE_FIRST_STRATEGY)
 public class RemoteFirstStrategy implements IInvocationStrategy {
@@ -25,12 +27,14 @@ public class RemoteFirstStrategy implements IInvocationStrategy {
     public Object invoke(ServiceSpecificConfig config, Object proxy, Method method, Object[] args) throws Throwable {        
         try {
             return remoteStrategy.invoke(config, proxy, method, args);
-        } catch (Exception ex) {
+        } catch (ResourceAccessException ex) {
             try {
-                logger.info("Remote call failed.  Trying local", ex);
+                logger.info("Remote service unavailable.  Trying local");
                 return localStrategy.invoke(config, proxy, method, args);
+            } catch (NeedsActionException nae) {
+                throw nae;
             } catch (Exception e) {
-                logger.info("Local call failed.  Throwing original exception", e);
+                logger.info("Local call failed (this was the error).  Throwing original exception", e);
                 throw ex;
             }
         }
