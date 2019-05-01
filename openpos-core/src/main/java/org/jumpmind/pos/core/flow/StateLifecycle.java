@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class StateLifecycle {
     
+    @SuppressWarnings("deprecation")
     public void executeArrive(StateManager stateManager, Object state, Action action) {
         try {
             if (state instanceof IState) {
