@@ -45,8 +45,18 @@ export class PromptFormPartComponent extends ScreenPartComponent<PromptFormPartI
             validators.push(Validators.maxLength(this.screenData.maxLength));
         }
 
-        if (this.screenData.validationPattern) {
-            validators.push(Validators.pattern(this.screenData.validationPattern));
+        if (this.screenData.validationPatterns) {
+            for (const validationPattern of this.screenData.validationPatterns) {
+                validators.push(Validators.pattern(validationPattern));
+            }
+        }
+
+        if (this.screenData.max) {
+            validators.push(Validators.max(this.screenData.max));
+        }
+
+        if (this.screenData.min) {
+            validators.push(Validators.min(this.screenData.min));
         }
 
         group[this.inputControlName] = new FormControl(this.screenData.responseText, validators);

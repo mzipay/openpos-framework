@@ -15,7 +15,9 @@ export interface PromptFormPartInterface {
     otherActions: IActionItem[];
     minLength: number;
     maxLength: number;
-    validationPattern: string;
+    max: number;
+    min: number;
+    validationPatterns: Array<string>;
     scanEnabled: boolean;
     keyboardPreference: string;
     validators: Validator[];
