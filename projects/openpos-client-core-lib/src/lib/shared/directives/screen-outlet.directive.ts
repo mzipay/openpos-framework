@@ -92,6 +92,9 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             screen = new BlankScreen();
         }
 
+        let trap = false;
+        const original = document.activeElement as HTMLElement;
+
         if (screen &&
             (screen.refreshAlways
                 || screen.screenType !== this.screenTypeName
@@ -137,6 +140,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
                 this.updateTheme(this.personalization.getTheme());
             }
 
+            trap = true;
         }
 
         if (this.componentRef.instance.show) {
@@ -147,8 +151,19 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             this.installedScreen.show(screen, this.installedTemplate);
         }
 
-        this.focusTrap = this.focusTrapFactory.create(this.componentRef.location.nativeElement);
-        this.focusTrap.focusInitialElementWhenReady();
+        if (trap) {
+            // If this screen was just created, focus the first element
+            this.focusTrap = this.focusTrapFactory.create(this.componentRef.location.nativeElement);
+            this.focusTrap.focusInitialElementWhenReady();
+        } else {
+            // If this screen was updated, focus the previously focused element
+            setTimeout(() => {
+                const updatedElement = document.getElementById(original.id);
+                if (updatedElement) {
+                    updatedElement.focus();
+                }
+            });
+        }
 
         this.updateClasses(screen);
         this.dialogService.closeDialog(true);
