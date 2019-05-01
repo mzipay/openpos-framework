@@ -30,6 +30,39 @@ import { PingResult } from '../interfaces/ping-result.interface';
 import { PersonalizationResponse } from '../interfaces/personalization-response.interface';
 import { ElectronService } from 'ngx-electron';
 
+
+export class QueueLoadingMessage implements ILoading {
+    type = 'Loading';
+    title: string;
+    queue = true;
+    cancel = false;
+
+    constructor(text: string) {
+        this.title = text;
+    }
+}
+
+export class ImmediateLoadingMessage implements ILoading {
+    type = 'Loading';
+    title: string;
+    queue = false;
+    cancel = false;
+
+    constructor(text: string) {
+        this.title = text;
+    }
+}
+
+export class CancelLoadingMessage implements ILoading {
+    type = 'Loading';
+    cancel = true;
+    queue = false;
+}
+
+export class ConnectedMessage {
+    type = 'Connected';
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -65,6 +98,8 @@ export class SessionService implements IMessageHandler<any> {
     private disconnectedMessage = LoaderState.DISCONNECTED_TITLE;
 
     private queryParams = new Map();
+
+    private deletedLaunchFlg = false;
 
     constructor(
         private log: Logger,
@@ -219,7 +254,6 @@ export class SessionService implements IMessageHandler<any> {
                     }
                     this.sendMessage(new ConnectedMessage());
                     this.cancelLoading();
-                    this.deleteLaunchingFlg();
                 } else if (stompState === 'DISCONNECTING') {
                     this.log.info('STOMP disconnecting');
                 } else if (stompState === 'CLOSED') {
@@ -242,6 +276,11 @@ export class SessionService implements IMessageHandler<any> {
     handle(message: any) {
         if (message && message.theme) {
             this.personalization.setTheme(message.theme, false);
+        }
+
+        if (!this.deletedLaunchFlg) {
+            this.deleteLaunchingFlg();
+            this.deletedLaunchFlg = true;
         }
     }
 
@@ -595,36 +634,4 @@ export class SessionService implements IMessageHandler<any> {
         return `${this.personalization.getServerBaseURL()}/api`;
     }
 
-}
-
-export class QueueLoadingMessage implements ILoading {
-    type = 'Loading';
-    title: string;
-    queue = true;
-    cancel = false;
-
-    constructor(text: string) {
-        this.title = text;
-    }
-}
-
-export class ImmediateLoadingMessage implements ILoading {
-    type = 'Loading';
-    title: string;
-    queue = false;
-    cancel = false;
-
-    constructor(text: string) {
-        this.title = text;
-    }
-}
-
-export class CancelLoadingMessage implements ILoading {
-    type = 'Loading';
-    cancel = true;
-    queue = false;
-}
-
-export class ConnectedMessage {
-    type = 'Connected';
 }
