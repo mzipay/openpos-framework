@@ -30,6 +30,8 @@ import org.jumpmind.pos.core.flow.TestStates.TestScopesState;
 import org.jumpmind.pos.core.flow.TestStates.TransitionInterceptionState;
 import org.jumpmind.pos.core.flow.config.FlowBuilder;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
+import org.jumpmind.pos.core.flow.config.YamlConfigProvider;
+import org.jumpmind.pos.core.flow.config.YamlFlowConfigFileLoader;
 import org.jumpmind.pos.core.service.ScreenService;
 import org.junit.Before;
 import org.junit.Test;
@@ -130,6 +132,7 @@ public class StateManagerTest {
         TestUtil.setField(stateManager, "stateLifecyce", new StateLifecycle());
 
     }
+
     
     @Test
     public void testSubStateTransitionBackToAnotherState() {
@@ -481,5 +484,6 @@ public class StateManagerTest {
         assertEquals(MultiReturnAction2State.class, stateManager.getCurrentState().getClass());
     }
     
+
 
 }

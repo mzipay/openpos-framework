@@ -253,14 +253,7 @@ public class StateManager implements IStateManager {
             } else {
                 Action returnAction = new Action(returnActionName, action.getData());
                 returnAction.setCausedBy(action);
-                if (actionHandler.canHandleAction(applicationState.getCurrentContext().getState(), returnAction)) {
-                    actionHandler.handleAction(this, applicationState.getCurrentContext().getState(), returnAction);
-                } else {
-                    throw new FlowException(
-                            String.format("Unexpected return action from substate: \"%s\". No @ActionHandler %s.on%s() method found.",
-                                    returnAction.getName(), applicationState.getCurrentContext().getState().getClass().getName(),
-                                    returnAction.getName()));
-                }
+                doAction(returnAction); // indirect recursion
             }
         } else {
             stateLifecyce.executeArrive(this, applicationState.getCurrentContext().getState(), action);

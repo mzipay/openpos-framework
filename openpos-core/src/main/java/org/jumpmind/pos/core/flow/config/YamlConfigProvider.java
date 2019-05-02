@@ -1,5 +1,6 @@
 package org.jumpmind.pos.core.flow.config;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -47,6 +48,13 @@ public class YamlConfigProvider implements IFlowConfigProvider {
             throw new FlowException(String.format("Failed to load YML flow config for appId %s and path %s", appId, path), ex);
         }
     }
+    
+    public void load(String appId, InputStream resource) {
+        List<YamlFlowConfig> yamlFlowConfigs = new ArrayList<>();
+        yamlFlowConfigs.addAll(loadYamlResource(appId, resource));
+        // second pass here needs to then convert
+        loadYamlFlowConfigs(appId, yamlFlowConfigs);
+    }
 
     @Override
     public FlowConfig getConfigByName(String appId, String deviceId, String name) {
@@ -71,20 +79,23 @@ public class YamlConfigProvider implements IFlowConfigProvider {
             }
         }
     }
+    
+    protected List<YamlFlowConfig> loadYamlResource(String appId, InputStream resource) {      
+        List<YamlFlowConfig> yamlFlowConfigs = flowConfigLoader.loadYamlFlowConfigs(resource);
+        List<YamlFlowConfig> existingYamlFlowConfigs = loadedYamlFlowConfigs.get(appId);
+        
+        if (existingYamlFlowConfigs == null) {
+            existingYamlFlowConfigs = new ArrayList<YamlFlowConfig>();
+            loadedYamlFlowConfigs.put(appId, existingYamlFlowConfigs);
+        }
+        existingYamlFlowConfigs.addAll(yamlFlowConfigs);
+        return existingYamlFlowConfigs;
+    }
 
     protected List<YamlFlowConfig> loadYamlResource(String appId, String path, Resource resource) {
         log.info("Loading flow config from " + resource);
-
         try {
-            List<YamlFlowConfig> yamlFlowConfigs = flowConfigLoader.loadYamlFlowConfigs(resource.getInputStream());
-            List<YamlFlowConfig> existingYamlFlowConfigs = loadedYamlFlowConfigs.get(appId);
-
-            if (existingYamlFlowConfigs == null) {
-                existingYamlFlowConfigs = new ArrayList<YamlFlowConfig>();
-                loadedYamlFlowConfigs.put(appId, existingYamlFlowConfigs);
-            }
-            existingYamlFlowConfigs.addAll(yamlFlowConfigs);
-            return existingYamlFlowConfigs;
+            return loadYamlResource(appId, resource.getInputStream());
         } catch (Exception ex) {
             throw new FlowException(String.format("Failed while loading resource %s", resource), ex);
         }
