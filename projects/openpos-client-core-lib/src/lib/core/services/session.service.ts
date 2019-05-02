@@ -278,7 +278,7 @@ export class SessionService implements IMessageHandler<any> {
             this.personalization.setTheme(message.theme, false);
         }
 
-        if (!this.deletedLaunchFlg) {
+        if (!this.deletedLaunchFlg && message && message.type === 'ConfigChanged') {
             this.deleteLaunchingFlg();
             this.deletedLaunchFlg = true;
         }
