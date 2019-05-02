@@ -1,4 +1,4 @@
-package org.jumpmind.pos.server;
+package org.jumpmind.pos.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,8 +10,6 @@ import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
-import org.jumpmind.pos.util.BoxLogging;
-import org.jumpmind.pos.util.DefaultObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -21,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class Versions {
 
-    List<Version> versions = new ArrayList<>();
+    static List<Version> versions = new ArrayList<>();
     
     static final Logger log = LoggerFactory.getLogger(Versions.class);
 
@@ -35,8 +33,9 @@ public class Versions {
     }
 
     @PostConstruct
-    protected void init() {
+    protected synchronized void init() {
         try {
+            List<Version> building = new ArrayList<>();
             List<InputStream> resources = loadResources("openpos-version.properties", null);
             log.info(BoxLogging.box("Versions"));
             for (InputStream is : resources) {
@@ -45,14 +44,31 @@ public class Versions {
                 ObjectMapper m = DefaultObjectMapper.build();
                 Version version = m.convertValue(properties, Version.class);
                 log.info(m.writerWithDefaultPrettyPrinter().writeValueAsString(version));
-                versions.add(version);
+                building.add(version);
             }
+            versions = building;
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
     
-    public List<Version> getVersions() {
+    public static List<Version> getVersions() {
         return versions;
+    }
+    
+    @Override
+    public String toString() {        
+        return versions();
+    }
+    
+    public static String versions() {  
+        StringBuilder b = new StringBuilder();
+        b.append("*******************************************************\n");
+        b.append("Versions:\n");
+        for (Version version : versions) {
+            b.append(version.toString()).append("\n");
+        }
+        b.append("*******************************************************\n");
+        return b.toString();
     }
 }

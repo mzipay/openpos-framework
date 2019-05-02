@@ -11,12 +11,12 @@ import org.jumpmind.pos.core.model.IConfigSelector;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.IconType;
-import org.jumpmind.pos.server.Versions;
 import org.jumpmind.pos.server.config.MessageUtils;
 import org.jumpmind.pos.server.config.PersonalizationParameters;
 import org.jumpmind.pos.server.config.SessionSubscribedEvent;
 import org.jumpmind.pos.server.service.IMessageService;
 import org.jumpmind.pos.server.service.SessionConnectListener;
+import org.jumpmind.pos.util.Versions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -136,7 +136,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
                 config = configSelector.getClientConfig();
             } 
             
-            ConfigChangedMessage configMessage = new ConfigChangedMessage(theme, config, versions.getVersions());
+            ConfigChangedMessage configMessage = new ConfigChangedMessage(theme, config, Versions.getVersions());
             messageService.sendMessage(appId, deviceId, configMessage);
 
         } catch (NoSuchBeanDefinitionException e) {

@@ -30,9 +30,9 @@
         </layout>
     </appender>
     
-    <appender name="TEST" class="org.apache.log4j.RollingFileAppender">
+    <appender name="TEST" class="org.jumpmind.pos.util.OpenposRollingFileAppender">
         <param name="File" value="build/junit.log" />
-        <param name="MaxFileSize" value="100MB" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
         <param name="Append" value="true" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d %p [%c{1}] [%t] %m%n" />

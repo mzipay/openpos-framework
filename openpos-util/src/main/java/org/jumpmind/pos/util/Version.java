@@ -1,4 +1,4 @@
-package org.jumpmind.pos.server;
+package org.jumpmind.pos.util;
 
 public class Version {
 
@@ -65,5 +65,13 @@ public class Version {
     public void setBuildTime(String buildTime) {
         this.buildTime = buildTime;
     }
+
+    @Override
+    public String toString() {
+        return "Version [componentName=" + componentName + ", version=" + version + ", buildNumber=" + buildNumber + ", buildName="
+                + buildName + ", buildTime=" + buildTime + ", gitHash=" + gitHash + ", gitBranch=" + gitBranch + "]";
+    }
+    
+    
 
 }
