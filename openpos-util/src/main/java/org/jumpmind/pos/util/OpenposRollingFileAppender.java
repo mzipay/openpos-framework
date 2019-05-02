@@ -20,6 +20,8 @@
  */
 package org.jumpmind.pos.util;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -38,13 +40,14 @@ import org.apache.log4j.spi.LoggingEvent;
 
 public class OpenposRollingFileAppender extends DailyRollingFileAppender {
 
-    private static final int DEFAULT_HISTORY_SIZE = 2048; 
+    private static final int DEFAULT_HISTORY_SIZE = 2048;
 
-    // All access to this field should come from method calls that are otherwise synchronized 
+    // All access to this field should come from method calls that are otherwise
+    // synchronized
     // (e.g. AppenderSkeleton.doAppend())
     private Map<String, String> loggedEventKeys = new LinkedHashMap<String, String>() {
         private static final long serialVersionUID = 1L;
-        
+
         @Override
         protected boolean removeEldestEntry(Entry<String, String> eldest) {
             return (size() >= getHistorySize());
@@ -52,29 +55,34 @@ public class OpenposRollingFileAppender extends DailyRollingFileAppender {
     };
 
     private OutputStream os; // for unit testing.
-    
+
     private int historySize = DEFAULT_HISTORY_SIZE;
-    
+
     @Override
     protected void rollOver() throws IOException {
         loggedEventKeys.clear();
         super.rollOver();
         Logger logger = Logger.getLogger(getClass());
         logger.info("Rolled... ");
-        logger.info(Versions.versions());
+        String version = Versions.versions();
+        if (isNotBlank(version)) {
+            logger.info(Versions.versions());
+        }
     }
 
-    // Note that this is called from AppenderSkeleton.doAppend() which is synchronized.
+    // Note that this is called from AppenderSkeleton.doAppend() which is
+    // synchronized.
     @Override
     public void append(LoggingEvent event) {
-        if (!isLoggerAtDebug(event)) { // don't filter logging at all if the logger is at DEBUG level.
+        if (!isLoggerAtDebug(event)) { // don't filter logging at all if the
+                                       // logger is at DEBUG level.
             String key = toKey(event);
-            if (key != null) {            
+            if (key != null) {
                 if (loggedEventKeys.containsKey(key)) {
                     event = supressStackTrace(event, key);
                 } else {
                     event = appendKey(event, key);
-                    loggedEventKeys.put(key, null);                    
+                    loggedEventKeys.put(key, null);
                 }
             }
         }
@@ -94,8 +102,7 @@ public class OpenposRollingFileAppender extends DailyRollingFileAppender {
     }
 
     protected String toKey(LoggingEvent event) {
-        if (event.getThrowableInformation() == null 
-                || event.getThrowableStrRep() == null) {
+        if (event.getThrowableInformation() == null || event.getThrowableStrRep() == null) {
             return null;
         }
 
@@ -104,7 +111,7 @@ public class OpenposRollingFileAppender extends DailyRollingFileAppender {
             Throwable throwable = event.getThrowableInformation().getThrowable();
             buff.append(throwable.getClass().getSimpleName());
             if (throwable.getStackTrace().length == 0) {
-                buff.append("-jvm-optimized");    
+                buff.append("-jvm-optimized");
             }
             buff.append(":");
             buff.append(getThrowableHash(event.getThrowableStrRep()));
@@ -114,7 +121,7 @@ public class OpenposRollingFileAppender extends DailyRollingFileAppender {
             return null;
         }
     }
-    
+
     protected long getThrowableHash(String[] throwableString) throws UnsupportedEncodingException {
         CRC32 crc = new CRC32();
         crc.update(ArrayUtils.toString(throwableString).getBytes("UTF8"));
@@ -124,19 +131,18 @@ public class OpenposRollingFileAppender extends DailyRollingFileAppender {
     protected LoggingEvent appendKey(LoggingEvent event, String key) {
         String message = getMessageWithKey(event, key, ".init");
 
-        LoggingEvent eventClone = new LoggingEvent(event.getFQNOfLoggerClass(), 
-                event.getLogger(), event.getTimeStamp(), event.getLevel(), message, event.getThreadName(), 
-                event.getThrowableInformation(), event.getNDC(), event.getLocationInformation(), event.getProperties());
+        LoggingEvent eventClone = new LoggingEvent(event.getFQNOfLoggerClass(), event.getLogger(), event.getTimeStamp(), event.getLevel(),
+                message, event.getThreadName(), event.getThrowableInformation(), event.getNDC(), event.getLocationInformation(),
+                event.getProperties());
 
         return eventClone;
-    }    
+    }
 
     protected LoggingEvent supressStackTrace(LoggingEvent event, String key) {
         String message = getMessageWithKey(event, key);
 
-        LoggingEvent eventClone = new LoggingEvent(event.getFQNOfLoggerClass(), 
-                event.getLogger(), event.getTimeStamp(), event.getLevel(), message, event.getThreadName(), 
-                null, event.getNDC(), event.getLocationInformation(), event.getProperties());
+        LoggingEvent eventClone = new LoggingEvent(event.getFQNOfLoggerClass(), event.getLogger(), event.getTimeStamp(), event.getLevel(),
+                message, event.getThreadName(), null, event.getNDC(), event.getLocationInformation(), event.getProperties());
 
         return eventClone;
     }
@@ -160,18 +166,17 @@ public class OpenposRollingFileAppender extends DailyRollingFileAppender {
 
     @Override
     protected void writeHeader() {
-        if(layout != null) {
+        if (layout != null) {
             String h = layout.getHeader();
-            if(h != null && this.qw != null)
+            if (h != null && this.qw != null)
                 this.qw.write(h);
         }
     }
 
     @Override
-    public synchronized void setFile(String fileName, boolean append, boolean bufferedIO, int bufferSize)
-            throws IOException {
+    public synchronized void setFile(String fileName, boolean append, boolean bufferedIO, int bufferSize) throws IOException {
         if (os == null) {
-            super.setFile(fileName, append, bufferedIO, bufferSize);            
+            super.setFile(fileName, append, bufferedIO, bufferSize);
         }
     }
 
@@ -181,7 +186,7 @@ public class OpenposRollingFileAppender extends DailyRollingFileAppender {
         reset();
 
         Writer fw = createWriter(os);
-        if(bufferedIO) {
+        if (bufferedIO) {
             fw = new BufferedWriter(fw, bufferSize);
         }
         this.setQWForFiles(fw);
@@ -189,7 +194,7 @@ public class OpenposRollingFileAppender extends DailyRollingFileAppender {
         this.fileAppend = true;
         writeHeader();
     }
-    
+
     public int getHistorySize() {
         return historySize;
     }

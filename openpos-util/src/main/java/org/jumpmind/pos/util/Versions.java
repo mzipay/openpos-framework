@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Versions {
 
     static List<Version> versions = new ArrayList<>();
-    
+
     static final Logger log = LoggerFactory.getLogger(Versions.class);
 
     protected static List<InputStream> loadResources(final String name, final ClassLoader classLoader) throws IOException {
@@ -51,24 +51,26 @@ public class Versions {
             throw new RuntimeException(ex);
         }
     }
-    
+
     public static List<Version> getVersions() {
         return versions;
     }
-    
+
     @Override
-    public String toString() {        
+    public String toString() {
         return versions();
     }
-    
-    public static String versions() {  
+
+    public static String versions() {
         StringBuilder b = new StringBuilder();
-        b.append("*******************************************************\n");
-        b.append("Versions:\n");
-        for (Version version : versions) {
-            b.append(version.toString()).append("\n");
+        if (versions.size() > 0) {
+            b.append("\n*******************************************************\n");
+            b.append("Versions:\n");
+            for (Version version : versions) {
+                b.append(version.toString()).append("\n");
+            }
+            b.append("*******************************************************\n");
         }
-        b.append("*******************************************************\n");
         return b.toString();
     }
 }
