@@ -3,6 +3,7 @@ apply from: '../openpos-core/common.gradle'
 dependencies {
     compile("org.javapos:javapos:${javaposVersion}")
     compile("org.springframework:spring-web:${springVersion}")
+    compile group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
     compile("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
     compile("org.springframework.boot:spring-boot:${springBootVersion}") {
         exclude module: "spring-boot-starter-logging"
