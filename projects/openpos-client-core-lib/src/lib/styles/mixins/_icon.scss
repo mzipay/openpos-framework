@@ -1,5 +1,11 @@
 @mixin openpos-icon{
 
+.material-icons.mat-18 {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+}
+    
 .material-icons.mat-24 {
     font-size: 24px;
     height: 24px;
@@ -12,6 +18,12 @@
   width: 30px;
 }
 
+.material-icons.mat-36 {
+    font-size: 36px;
+    height: 36px;
+    width: 36px;
+  }
+  
 .material-icons.mat-40 {
   font-size: 40px;
   height: 40px;

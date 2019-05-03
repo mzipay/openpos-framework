@@ -10,6 +10,7 @@ export class IconSquareButtonComponent {
   @Input() disabled: boolean;
   @Input() iconName: string;
   @Input() color: string;
+  @Input() iconClass: string;
   @Output() buttonClick = new EventEmitter();
   constructor() {
     this.disabled = false;

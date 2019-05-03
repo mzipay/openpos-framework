@@ -2,6 +2,8 @@
 <app-icon-square-button
     fxFlex="0 0 auto"
     class="scan-button"
+    ngClass.xs="scan-button-xs"
+    [iconClass]="(isMobile$ | async) ? null: 'material-icons mat-36'"
     [iconName]="screenData.scanIcon" 
     [color]="'primary-inverse'"
     (buttonClick)="devices.scan()"
@@ -9,6 +11,7 @@
 <input #input matInput
     fxFlex="1 1 100%"
     class="scan-input"
+    ngClass.xs="scan-input-xs"
     cdkFocusInitial
     [keyboardLayout]="'Numeric'"
     (keyup.enter)="onEnter()"

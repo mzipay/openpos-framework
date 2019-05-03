@@ -5,6 +5,8 @@ import { ScanOrSearchInterface } from './scan-or-search.interface';
 import { DeviceService } from '../../../core/services/device.service';
 import { MessageProvider } from '../../providers/message.provider';
 import { ScreenPart } from '../../decorators/screen-part.decorator';
+import { OpenposMediaService } from '../../../core/services/openpos-media.service';
+import { Observable } from 'rxjs';
 
 @ScreenPart({
     name: 'scan'
@@ -17,13 +19,23 @@ import { ScreenPart } from '../../decorators/screen-part.decorator';
 export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> {
 
     public barcode: string;
+    isMobile$: Observable<boolean>;
 
     @Input() defaultAction: IActionItem;
     @Output() change: EventEmitter<string> = new EventEmitter<string>();
 
+
     constructor( public devices: DeviceService, messageProvider: MessageProvider,
-                 private elRef: ElementRef) {
+                 private elRef: ElementRef, mediaService: OpenposMediaService) {
         super(messageProvider);
+        const mobileMap = new Map([
+            ['xs', true],
+            ['sm', false],
+            ['md', false],
+            ['lg', false],
+            ['xl', false]
+        ]);
+        this.isMobile$ = mediaService.mediaObservableFromMap(mobileMap);
     }
 
     screenDataUpdated() {
