@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, ViewChild, AfterViewInit, ContentChild } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { ShowErrorsComponent } from '../show-errors/show-errors.component';
 import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-field.component';
@@ -14,7 +14,7 @@ import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-fi
 export class FormComponent {
 
     @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
-    @ViewChild('formErrors') formErrors: ShowErrorsComponent;
+    @ContentChild('formErrors') formErrors: ShowErrorsComponent;
 
     @Input()
     form: FormGroup;
@@ -23,11 +23,11 @@ export class FormComponent {
      * Submit event only emits if the form is valid
      */
     @Output()
-    submit = new EventEmitter();
+    submitFormEvent = new EventEmitter();
 
     submitForm() {
         if (this.form.valid) {
-            this.submit.emit();
+            this.submitFormEvent.emit();
         } else {
             // Set focus on the first invalid field found
             const invalidFieldKey = Object.keys(this.form.controls).find(key => {
