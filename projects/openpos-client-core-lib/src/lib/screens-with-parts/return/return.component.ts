@@ -11,6 +11,7 @@ import { TotalType } from '../../core/interfaces/total-type.enum';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 import { ISellItem } from '../../core/interfaces/sell-item.interface';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
+import { IActionItem } from '../../core/interfaces/menu-item.interface';
 
 /**
  * @ignore
@@ -38,6 +39,7 @@ export class ReturnComponent extends PosScreen<any> implements AfterViewInit, Af
     public amountTotals: ITotal[];
     public itemTotal: number;
     public receipts: any[];
+    public removeReceiptAction: IActionItem;
 
     constructor(
         private observableMedia: ObservableMedia, protected dialog: MatDialog) {
@@ -57,7 +59,7 @@ export class ReturnComponent extends PosScreen<any> implements AfterViewInit, Af
           this.screen.totals ? (this.screen.totals as ITotal[]).find(t => t.type === TotalType.Quantity && t.name === 'itemTotal') : null;
         this.itemTotal = screenItemTotal ? Number(screenItemTotal.amount) : this.items.length;
         this.receipts = this.screen.receipts;
-
+        this.removeReceiptAction = this.screen.removeReceiptAction;
         this.dialog.closeAll();
     }
 

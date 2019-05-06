@@ -18,7 +18,7 @@
 	<div waffle-body class="return-content">
 
 		<div *ngIf="receipts && receipts.length > 0" style="overflow-y: auto;" class="receipts">
-			<app-receipt-card *ngFor="let receipt of receipts" [receipt]="receipt" (click)="onReceiptClick(receipt)">
+			<app-receipt-card *ngFor="let receipt of receipts" [receipt]="receipt" [removeReceiptAction]="removeReceiptAction" (click)="onReceiptClick(receipt)">
 			</app-receipt-card>
 		</div>
 
