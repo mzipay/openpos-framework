@@ -58,7 +58,7 @@ const screenParts = [
         SharedModule
     ],
     exports: [
-
+        SelfCheckoutTransactionComponent,
         ...templates,
         ...components,
         ...screenParts,
