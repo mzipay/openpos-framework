@@ -5,6 +5,10 @@ import java.util.Date;
 
 import org.jumpmind.pos.core.model.SystemStatus;
 
+/**
+ * @deprecated Use {@link org.jumpmind.pos.core.ui.messagepart.StatusStripPart} instead
+ *
+ */
 @Deprecated
 public class StatusStripPart implements Serializable {
 	
