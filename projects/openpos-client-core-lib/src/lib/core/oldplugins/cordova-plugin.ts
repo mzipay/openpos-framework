@@ -1,10 +1,10 @@
-import { AppInjector } from './../app-injector';
-import { Logger } from './../services/logger.service';
-import { IPlugin } from './plugin.interface';
+import { AppInjector } from '../app-injector';
+import { Logger } from '../services/logger.service';
+import { IOldPlugin } from './oldplugin.interface';
 
 declare var cordova: any;
 
-export class CordovaPlugin implements IPlugin {
+export class CordovaPlugin implements IOldPlugin {
     pluginId: string;
     pluginName?: string;
     impl: any;

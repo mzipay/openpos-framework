@@ -1,4 +1,4 @@
-export interface IPlugin {
+export interface IOldPlugin {
     pluginId: string;
     pluginName?: string;
     impl: any;

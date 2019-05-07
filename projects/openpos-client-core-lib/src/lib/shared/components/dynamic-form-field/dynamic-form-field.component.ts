@@ -13,9 +13,9 @@ import { IFormElement, ISearchablePopTartField } from '../../../core/interfaces/
 import { Logger } from '../../../core/services/logger.service';
 import { SessionService } from '../../../core/services/session.service';
 import { ScreenService } from '../../../core/services/screen.service';
-import { PluginService } from '../../../core/services/plugin.service';
-import { BarcodeScannerPlugin } from '../../../core/plugins/barcode-scanner.plugin';
-import { Scan } from '../../../core/plugins/scan';
+import { OldPluginService } from '../../../core/services/old-plugin.service';
+import { BarcodeScannerPlugin } from '../../../core/oldplugins/barcode-scanner.plugin';
+import { Scan } from '../../../core/oldplugins/scan';
 
 @Component({
   selector: 'app-dynamic-form-field',
@@ -60,7 +60,7 @@ export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   constructor(private log: Logger, public session: SessionService, public screenService: ScreenService, protected dialog: MatDialog,
-    private pluginService: PluginService) { }
+    private pluginService: OldPluginService) { }
 
   ngOnInit() {
     this.controlName = this.formField.id;

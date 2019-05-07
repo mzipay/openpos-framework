@@ -64,8 +64,11 @@
     align-self: end;
 }
 
-.logo {
-    height: 100%
+.price-checker-logo {
+    max-width: 100%;
+    max-height: 100%;
+    align-self: start;
+    justify-self: end;
 }
 
 .button{

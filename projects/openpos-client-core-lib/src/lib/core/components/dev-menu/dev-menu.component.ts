@@ -13,7 +13,7 @@ import { PersonalizationService } from '../../../core/services/personalization.s
 import { PersonalizationComponent } from '../../../core/components/personalization/personalization.component';
 import { FileViewerComponent } from '../../../shared/components/file-viewer/file-viewer.component';
 import { IMessageHandler } from '../../interfaces/message-handler.interface';
-import { IPlugin } from '../../plugins/plugin.interface';
+import { IOldPlugin } from '../../oldplugins/oldplugin.interface';
 import { ActionMap } from '../../interfaces/action-map.interface';
 import { Element } from '../../interfaces/element.interface';
 import { ScreenService } from '../../services/screen.service';
@@ -22,7 +22,7 @@ import { ElectronService } from 'ngx-electron';
 import { SessionService } from '../../services/session.service';
 import { DeviceService } from '../../services/device.service';
 import { IconService } from '../../services/icon.service';
-import { PluginService } from '../../services/plugin.service';
+import { OldPluginService } from '../../services/old-plugin.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { IVersion } from '../../../core/interfaces/version.interface';
 
@@ -53,7 +53,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
 
     logFilenames: string[];
 
-    logPlugin: IPlugin;
+    logPlugin: IOldPlugin;
 
     showDevMenu = false;
 
@@ -111,7 +111,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
             public screenService: ScreenService, public dialogService: DialogService, public session: SessionService,
             public deviceService: DeviceService, public dialog: MatDialog,
             public iconService: IconService, public snackBar: MatSnackBar, public overlayContainer: OverlayContainer,
-            protected router: Router, private pluginService: PluginService,
+            protected router: Router, private pluginService: OldPluginService,
             private fileUploadService: FileUploadService,
             private httpClient: HttpClient, private cd: ChangeDetectorRef,
             private elRef: ElementRef, public renderer: Renderer2,
@@ -310,7 +310,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
     public onDevMenuClick(): void {
         if (!this.showDevMenu) {
             this.pluginService.getPlugin('openPOSCordovaLogPlugin').then(
-                (plugin: IPlugin) => {
+                (plugin: IOldPlugin) => {
                     this.logPlugin = plugin;
                     if (this.logPlugin && this.logPlugin.impl) {
                         this.logsAvailable = true;

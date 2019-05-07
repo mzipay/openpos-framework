@@ -1,6 +1,6 @@
-import { PluginService } from './plugin.service';
+import { OldPluginService } from './old-plugin.service';
 import { Injectable } from '@angular/core';
-import { IPlugin } from '../plugins/plugin.interface';
+import { IOldPlugin } from '../oldplugins/oldplugin.interface';
 
 declare var version: any; // read in from core at assets/version.js
 
@@ -20,7 +20,7 @@ export class AppVersion {
         return this._buildVersion;
     }
 
-    public appVersion(pluginService: PluginService): Promise<string> {
+    public appVersion(pluginService: OldPluginService): Promise<string> {
         let promiseReturn: Promise<string>;
         if (this._appVersion) {
             promiseReturn = new Promise<string>((resolve, reject) => { resolve(this._appVersion); });
@@ -28,7 +28,7 @@ export class AppVersion {
             promiseReturn = new Promise<string>(
             (resolve, reject) => {
                 pluginService.getPlugin('openPOSCordovaLogPlugin').then(
-                    (plugin: IPlugin) => {
+                    (plugin: IOldPlugin) => {
                         if (plugin.impl) {
                             plugin.impl.getAppVersion(
                               (appVersion) => {

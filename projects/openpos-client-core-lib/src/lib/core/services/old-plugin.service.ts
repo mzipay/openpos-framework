@@ -1,16 +1,16 @@
 import { Logger } from './logger.service';
 import { Injectable } from '@angular/core';
 import { CordovaService } from './cordova.service';
-import { IPlugin } from '../plugins/plugin.interface';
-import { CordovaDevicePlugin } from '../plugins/cordova-device-plugin';
-import { CordovaPlugin } from '../plugins/cordova-plugin';
-import { IDevicePlugin } from '../plugins/device-plugin.interface';
+import { IOldPlugin } from '../oldplugins/oldplugin.interface';
+import { CordovaDevicePlugin } from '../oldplugins/cordova-device-plugin';
+import { CordovaPlugin } from '../oldplugins/cordova-plugin';
+import { IDevicePlugin } from '../oldplugins/device-plugin.interface';
 
 
 @Injectable({
     providedIn: 'root',
   })
-export class PluginService {
+export class OldPluginService {
 
     private plugins = new Map<string, PluginMapEntry>();
     // private onDeviceReady: BehaviorSubject<string> = new BehaviorSubject<string>(null);
@@ -41,7 +41,7 @@ export class PluginService {
         return this.plugins.has(pluginId);
     }
 
-    public addPlugin(pluginId: string, plugin: IPlugin) {
+    public addPlugin(pluginId: string, plugin: IOldPlugin) {
         this.plugins.set(pluginId, {plugin, initialized: false});
         this.log.info(`plugin '${pluginId}' added to the PluginService`);
     }
@@ -86,7 +86,7 @@ export class PluginService {
     }
 
     public getPluginWithOptions(pluginId: string, doInitWhenNeeded: boolean = true,
-      options?: {waitForCordovaInit?: boolean}): Promise<IPlugin> {
+      options?: {waitForCordovaInit?: boolean}): Promise<IOldPlugin> {
         // waitForCordovaInit addresses a race condition where a cordova dependent plugin
         // could be attempted to be fetched before it has been added to the plugin service.
         // I believe this was happening the barcodescanner plugin. May need to revisit how
@@ -117,12 +117,12 @@ export class PluginService {
         }
     }
 
-    public getPlugin(pluginId: string, doInitWhenNeeded: boolean = true): Promise<IPlugin> {
+    public getPlugin(pluginId: string, doInitWhenNeeded: boolean = true): Promise<IOldPlugin> {
         return new Promise( (resolve, reject) => {
             this.log.debug(`Getting plugin '${pluginId}'...`);
             let pluginEntry: PluginMapEntry = this.plugins.get(pluginId);
             let initRequired = false;
-            let targetPlugin: IPlugin;
+            let targetPlugin: IOldPlugin;
             if (pluginEntry) {
                 initRequired = ! pluginEntry.initialized;
                 targetPlugin = pluginEntry.plugin;
@@ -181,7 +181,7 @@ export class PluginService {
 
     public getDevicePlugin(pluginId: string, doInitWhenNeeded: boolean = true): Promise<IDevicePlugin> {
         return new Promise<IDevicePlugin>( (resolve, reject) => {
-                const pluginPromise: Promise<IPlugin> = this.getPlugin(pluginId, doInitWhenNeeded);
+                const pluginPromise: Promise<IOldPlugin> = this.getPlugin(pluginId, doInitWhenNeeded);
                 pluginPromise.then(thePlugin => {
                     if (thePlugin && (<IDevicePlugin>thePlugin).processRequest) {
                         resolve(<IDevicePlugin> thePlugin);
@@ -195,8 +195,8 @@ export class PluginService {
         );
     }
 
-    private pluginInit(plugin: IPlugin): Promise<IPlugin> {
-        const returnPromise: Promise<IPlugin> = new Promise(
+    private pluginInit(plugin: IOldPlugin): Promise<IOldPlugin> {
+        const returnPromise: Promise<IOldPlugin> = new Promise(
           (resolve, reject) => {
             plugin.init(
                 () => {
@@ -226,6 +226,6 @@ export class PluginService {
 }
 
 export interface PluginMapEntry {
-    plugin: IPlugin;
+    plugin: IOldPlugin;
     initialized: boolean;
 }

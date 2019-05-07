@@ -30,8 +30,10 @@
         </ng-container>
     </div>
 
-    <img gdArea="logo" class="logo" [src]="screen.logoUrl | imageUrl">
-
+    <div gdArea="logo">
+        <img  class="price-checker-logo" [src]="screen.logoUrl | imageUrl">
+    </div>
+   
     <div gdArea="messages" class="messages">
         <ng-container *ngFor="let message of screen.itemMessages">
             {{message}}

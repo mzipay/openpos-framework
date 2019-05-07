@@ -88,7 +88,7 @@
             [(model)]="formField" [required]="formField.required" [iconName]="formField.iconName" 
             [formatterName]="formField.formatter || formField.mode || formField.inputType"
             [modifyAllowed]="!formField.disabled" [deleteAllowed]="!formField.disabled"
-            (change)="onFormElementChanged(formField)">
+            [hideButtons]="formField.hideButtons" (change)="onFormElementChanged(formField)">
         </app-date-part-chooser-field>
     </ng-container>
 
