@@ -30,21 +30,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ConfiguredRestTemplate extends RestTemplate {
 
     ObjectMapper mapper;
-    
+
     static BufferingClientHttpRequestFactory build(int timeout) {
         HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        httpRequestFactory.setConnectionRequestTimeout(timeout*1000);
-        httpRequestFactory.setConnectTimeout(timeout*1000);
-        httpRequestFactory.setReadTimeout(timeout*1000);
+        httpRequestFactory.setConnectionRequestTimeout(timeout * 1000);
+        httpRequestFactory.setConnectTimeout(timeout * 1000);
+        httpRequestFactory.setReadTimeout(timeout * 1000);
         return new BufferingClientHttpRequestFactory(httpRequestFactory);
     }
-    
+
     public ConfiguredRestTemplate() {
         this(30);
     }
 
-    public ConfiguredRestTemplate(int timeout) {        
-        super(build(timeout));        
+    public ConfiguredRestTemplate(int timeout) {
+        super(build(timeout));
         this.mapper = DefaultObjectMapper.build();
         getMessageConverters().add(0, new MappingJackson2HttpMessageConverter(this.mapper));
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
@@ -58,7 +58,7 @@ public class ConfiguredRestTemplate extends RestTemplate {
                     Throwable serverError = result.getThrowable();
                     String serverMessage = result.getMessage();
                     if (serverError != null && serverError instanceof RuntimeException) {
-                        throw (RuntimeException)serverError;
+                        throw (RuntimeException) serverError;
                     } else if (serverMessage != null) {
                         throw new ServerException(serverMessage, serverError);
                     } else {
@@ -75,7 +75,7 @@ public class ConfiguredRestTemplate extends RestTemplate {
                 }
             }
         });
-    }    
+    }
 
     public void execute(String url, Object request, HttpMethod method, Object... args) {
         execute(url, buildRequestEntity(request), Void.class, method, args);
@@ -101,8 +101,6 @@ public class ConfiguredRestTemplate extends RestTemplate {
 
 }
 
-
-
 class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
 
     final static Logger log = LoggerFactory.getLogger(LoggingRequestInterceptor.class.getPackage().getName() + ".REST");
@@ -119,8 +117,10 @@ class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
         log.info("===========================request begin================================================");
         log.info("URI         : {}", request.getURI());
         log.info("Method      : {}", request.getMethod());
-        log.info("Headers     : {}", request.getHeaders() );
-        log.info("Request body: {}", new String(body, "UTF-8"));
+        log.info("Headers     : {}", request.getHeaders());
+        if (!request.getURI().getPath().contains("/logs/upload")) {
+            log.info("Request body: {}", new String(body, "UTF-8"));
+        }
         log.info("==========================request end================================================");
     }
 

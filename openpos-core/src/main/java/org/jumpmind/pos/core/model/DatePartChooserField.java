@@ -18,6 +18,7 @@ public class DatePartChooserField extends FormField {
     private String formatter;
     private DatePartChooserMode mode = DatePartChooserMode.MonthDate;
     private String popupTitle;
+    private boolean hideButtons;
     
     public DatePartChooserField() {
         setInputType(FieldInputType.DatePartChooser);
@@ -127,6 +128,14 @@ public class DatePartChooserField extends FormField {
         return this;
     }
     
+    public boolean isHideButtons() {
+        return hideButtons;
+    }
+
+    public void setHideButtons(boolean hideButtons) {
+        this.hideButtons = hideButtons;
+    }
+
     public static class DateChooserValues {
         public Integer month;
         public Integer dayOfMonth;
