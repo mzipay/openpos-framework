@@ -24,6 +24,7 @@ export class DatePartChooserFieldComponent implements OnInit, AfterViewInit {
     @Input() deleteIcon = 'delete_forever';
     @Input() modifyAllowed = true;
     @Input() model: IDatePartChooserField;
+    @Input() hideButtons = false;
 
     @Output() change = new EventEmitter<any>();
 

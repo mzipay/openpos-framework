@@ -42,6 +42,7 @@ export interface IFormElement {
     maxDate: any;
     minDate: any;
     hintText: string;
+    hideButtons: boolean;
 }
 
 export interface IDynamicListField {
