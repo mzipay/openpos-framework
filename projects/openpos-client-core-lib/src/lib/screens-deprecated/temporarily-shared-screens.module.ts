@@ -10,7 +10,6 @@ import { BlankWithBarComponent } from './templates/blank-with-bar/blank-with-bar
 import { SellComponent } from './templates/sell-template/sell/sell.component';
 import { TenderingComponent } from './tendering/tendering.component';
 import { ItemSearchResultsComponent } from './item-search-results/item-search-results.component';
-import { ChooseOptionsDialogComponent } from './choose-options/choose-options-dialog.component';
 import { DynamicFormDialogComponent } from './dynamic-form/dynamic-form-dialog.component';
 import { LoadingDialogComponent } from './loading-dialog/loading-dialog.component';
 import { SignatureCaptureComponent } from './signature-capture/signature-capture.component';
@@ -29,7 +28,6 @@ const screens = [
     ];
 
 const dialogs = [
-        ChooseOptionsDialogComponent,
         DynamicFormDialogComponent,
         LoadingDialogComponent
     ];

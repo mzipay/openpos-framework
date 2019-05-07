@@ -53,6 +53,7 @@ import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { HomeComponent } from './home/home.component';
 import { MultipleDynamicFormDialogComponent } from './multiple-dynamic-form/multiple-dynamic-form-dialog.component';
+import { ChooseOptionsDialogComponent } from './choose-options/choose-options-dialog.component';
 const screens = [
     BasicItemSearchComponent,
     ChooseOptionsComponent,
@@ -97,7 +98,8 @@ const dialogs = [
     ConfirmDialogComponent,
     PromptDialogComponent,
     PromptWithOptionsDialogComponent,
-    MultipleDynamicFormDialogComponent
+    MultipleDynamicFormDialogComponent,
+    ChooseOptionsDialogComponent
 ];
 
 const templates = [
