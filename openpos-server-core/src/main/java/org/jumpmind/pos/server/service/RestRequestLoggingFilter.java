@@ -18,7 +18,7 @@ public class RestRequestLoggingFilter extends AbstractRequestLoggingFilter {
     }
 
     protected boolean log(HttpServletRequest request) {
-        return !request.getRequestURI().contains("/sql") && !request.getRequestURI().contains("/api/websocket");
+        return !request.getRequestURI().contains("/sql") && !request.getRequestURI().contains("/api/websocket") && !request.getRequestURI().contains("/logs/upload");
     }
 
     @Override
