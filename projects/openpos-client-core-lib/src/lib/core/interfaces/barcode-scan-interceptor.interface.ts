@@ -1,4 +1,4 @@
-import { Scan } from '../plugins/scan';
+import { Scan } from '../oldplugins/scan';
 
 /** Implement this interface and set your interceptor on the BarcodeScannerPlugin
  *  in order to receive a callback on each barcode scan.

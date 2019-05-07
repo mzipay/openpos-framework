@@ -5,9 +5,9 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TextMask, IMaskSpec, ITextMask } from '../../textmask';
 import { ErrorStateMatcher } from '@angular/material';
-import { PluginService } from '../../../core/services/plugin.service';
-import { BarcodeScannerPlugin } from '../../../core/plugins/barcode-scanner.plugin';
-import { Scan } from '../../../core/plugins/scan';
+import { OldPluginService } from '../../../core/services/old-plugin.service';
+import { BarcodeScannerPlugin } from '../../../core/oldplugins/barcode-scanner.plugin';
+import { Scan } from '../../../core/oldplugins/scan';
 
 @Component({
     selector: 'app-prompt-input',
@@ -38,7 +38,7 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     _textMask: ITextMask; // Mask object built for text-mask
     private barcodeEventSubscription: Subscription;
 
-    constructor(private log: Logger, private datePipe: DatePipe, private pluginService: PluginService) {
+    constructor(private log: Logger, private datePipe: DatePipe, private pluginService: OldPluginService) {
     }
 
     isNumericField(): boolean {

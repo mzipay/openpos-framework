@@ -41,6 +41,12 @@ import { ToastService } from './services/toast.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxElectronModule } from 'ngx-electron';
+import { PluginStartupTask, PLUGINS } from './components/startup/plugin-startup-task';
+import { AilaScannerCordovaPlugin } from './plugins/aila-scanner-cordova.plugin';
+import { SCANNERS } from './services/scanner.service';
+import { PlatformReadyStartupTask, PLATFORMS } from './components/startup/platform-ready-startup-task';
+import { WedgeScannerPlugin } from './plugins/wedge-scanner.plugin';
+import { CordovaPlatform } from './platforms/cordova.platform';
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,
@@ -88,8 +94,14 @@ import { NgxElectronModule } from 'ngx-electron';
         { provide: STARTUP_TASKS, useClass: SubscribeToSessionTask, multi: true, deps: [SessionService, Router, Logger]},
         { provide: STARTUP_TASKS, useClass: DialogServiceStartupTask, multi: true, deps: [DialogService]},
         { provide: STARTUP_TASKS, useClass: FinalStartupTask, multi: true, deps: [SessionService]},
+        { provide: STARTUP_TASKS, useClass: PlatformReadyStartupTask, multi: true },
+        { provide: STARTUP_TASKS, useClass: PluginStartupTask, multi: true },
         { provide: STARTUP_COMPONENT, useValue: StartupComponent },
         { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent},
+        { provide: SCANNERS, useExisting: AilaScannerCordovaPlugin, multi: true},
+        { provide: SCANNERS, useExisting: WedgeScannerPlugin, multi: true },
+        { provide: PLUGINS, useExisting: AilaScannerCordovaPlugin, multi: true},
+        { provide: PLATFORMS, useExisting: CordovaPlatform, multi: true},
         TrainingOverlayService,
         ConfigurationService,
         KeyPressProvider,

@@ -17,12 +17,12 @@ import { ActionIntercepter } from '../action-intercepter';
 // so we will import those files directly
 import { LoaderState } from '../components/loader/loader-state';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
-import { IDeviceResponse } from '../plugins/device-response.interface';
-import { InAppBrowserPlugin } from '../plugins/in-app-browser.plugin';
+import { IDeviceResponse } from '../oldplugins/device-response.interface';
+import { InAppBrowserPlugin } from '../oldplugins/in-app-browser.plugin';
 import { IActionItem } from '../interfaces/menu-item.interface';
 import { IUrlMenuItem } from '../interfaces/url-menu-item.interface';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
-import { PluginService } from './plugin.service';
+import { OldPluginService } from './old-plugin.service';
 import { AppInjector } from '../app-injector';
 import { HttpClient } from '@angular/common/http';
 import { PingParams } from '../interfaces/ping-params.interface';
@@ -444,7 +444,7 @@ export class SessionService implements IMessageHandler<any> {
                     const urlMenuItem = menuItem as IUrlMenuItem;
                     // tslint:disable-next-line:max-line-length
                     this.log.info(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode}, with options: ${urlMenuItem.options}`);
-                    const pluginService = AppInjector.Instance.get(PluginService);
+                    const pluginService = AppInjector.Instance.get(OldPluginService);
                     // Use inAppBrowserPlugin when available since it tracks whether or not the browser is active.
                     pluginService.getPlugin('InAppBrowser').then(plugin => {
                         const inAppPlugin = plugin as InAppBrowserPlugin;

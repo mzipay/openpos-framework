@@ -1,6 +1,6 @@
 
 import { IDeviceRequest } from './device-request.interface';
-import { IPlugin } from './plugin.interface';
-export interface IDevicePlugin extends IPlugin {
+import { IOldPlugin } from './oldplugin.interface';
+export interface IDevicePlugin extends IOldPlugin {
     processRequest(deviceRequest: IDeviceRequest, successCallback: (response: any) => void, errorCallback: (error: string) => void);
 }

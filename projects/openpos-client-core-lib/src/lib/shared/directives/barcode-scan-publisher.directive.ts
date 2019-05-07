@@ -1,12 +1,12 @@
 import { Subscription } from 'rxjs';
 import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { BarcodeScannerPlugin } from '../../core/plugins/barcode-scanner.plugin';
+import { BarcodeScannerPlugin } from '../../core/oldplugins/barcode-scanner.plugin';
 import { Logger } from '../../core/services/logger.service';
 import { CordovaService } from '../../core/services/cordova.service';
 import { SessionService } from '../../core/services/session.service';
 import { DialogService } from '../../core/services/dialog.service';
-import { PluginService } from '../../core/services/plugin.service';
-import { Scan } from '../../core/plugins/scan';
+import { OldPluginService } from '../../core/services/old-plugin.service';
+import { Scan } from '../../core/oldplugins/scan';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
@@ -21,7 +21,7 @@ export class BarcodeScanPublisherDirective implements OnInit, OnDestroy {
         private cordovaService: CordovaService,
         private sessionService: SessionService,
         private dialogService: DialogService,
-        private pluginService: PluginService) {
+        private pluginService: OldPluginService) {
     }
 
 
