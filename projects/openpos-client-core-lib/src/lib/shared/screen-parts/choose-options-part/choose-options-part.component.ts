@@ -2,28 +2,28 @@ import { Component, AfterViewInit, ContentChildren, ViewChild, ContentChild, Vie
 import { ScreenPart } from '../../decorators/screen-part.decorator';
 import { ScreenPartComponent } from '../screen-part';
 import { MessageProvider } from '../../providers/message.provider';
-import { IMultipleFormOption } from './multiple-form-option.interface';
 import { FormGroup } from '@angular/forms';
 import { FormBuilder } from '../../../core/services/form-builder.service';
 import { IFormElement } from '../../../core/interfaces/form-field.interface';
 import { DynamicFormFieldComponent } from '../../components/dynamic-form-field/dynamic-form-field.component';
+import { IFormOptionItem } from './form-option-item.interface';
 
 @ScreenPart({
-    name: 'forms'
+    name: 'options'
 })
 @Component({
-  selector: 'app-multiple-form-part',
-  templateUrl: './multiple-form-part.component.html',
-  styleUrls: ['./multiple-form-part.component.scss']
+  selector: 'app-choose-options-part',
+  templateUrl: './choose-options-part.component.html',
+  styleUrls: ['./choose-options-part.component.scss']
 })
-export class MultipleFormPartComponent extends ScreenPartComponent<IMultipleFormOption[]> implements AfterViewInit {
-    forms: IMultipleFormOption[];
+export class ChooseOptionsPartComponent extends ScreenPartComponent<IFormOptionItem[]> implements AfterViewInit {
+    options: IFormOptionItem[];
     formGroups: FormGroup[];
 
     @ViewChildren(DynamicFormFieldComponent) fields: QueryList<DynamicFormFieldComponent>;
 
     public showOptions = true;
-    public selectedOption: IMultipleFormOption;
+    public selectedOption: IFormOptionItem;
     public selectedForm: FormGroup;
     constructor(message: MessageProvider, private formBuilder: FormBuilder) {
         super(message);
@@ -33,9 +33,9 @@ export class MultipleFormPartComponent extends ScreenPartComponent<IMultipleForm
         if ( !this.screenData ) {
             return;
         }
-        this.forms = this.screenData;
+        this.options = this.screenData;
         this.formGroups = [];
-        this.forms.forEach( f => {
+        this.options.forEach( f => {
             this.formGroups.push(this.formBuilder.group(f.form));
         });
     }
@@ -47,24 +47,28 @@ export class MultipleFormPartComponent extends ScreenPartComponent<IMultipleForm
     }
 
 
-    onMakeOptionSelection( formOption: IMultipleFormOption, formGroup: FormGroup): void {
-        this.selectedOption = formOption;
-        this.selectedForm = formGroup;
-        this.showOptions = false;
+    onMakeOptionSelection( formOption: IFormOptionItem, formGroup: FormGroup): void {
+        if (formOption.form) {
+            this.selectedOption = formOption;
+            this.selectedForm = formGroup;
+            this.showOptions = false;
+        } else {
+            this.sessionService.onAction(formOption.optionAction);
+        }
     }
 
     onBackButtonPressed(): void {
         this.showOptions = true;
     }
 
-    onFieldChanged(formElement: IFormElement, option: IMultipleFormOption, group: FormGroup) {
+    onFieldChanged(formElement: IFormElement, option: IFormOptionItem, group: FormGroup) {
         if (formElement.valueChangedAction) {
             this.formBuilder.buildFormPayload(group, option.form);
             this.sessionService.onAction(formElement.valueChangedAction, this.screenData);
         }
     }
 
-    onSubmitForm( option: IMultipleFormOption, group: FormGroup): void {
-        this.sessionService.onAction(option.submitButton, this.formBuilder.buildFormPayload(group, option.form));
+    onSubmitForm( option: IFormOptionItem, group: FormGroup): void {
+        this.sessionService.onAction(option.optionAction, this.formBuilder.buildFormPayload(group, option.form));
     }
 }

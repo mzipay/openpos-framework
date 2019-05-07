@@ -1,4 +1,4 @@
-@mixin multiple-form-part-theme($theme){
+@mixin choose-options-part-theme($theme){
     $app-primary: mat-color(map-get($theme, primary));
     $app-accent: mat-color(map-get($theme, accent));
     $app-warn: mat-color(map-get($theme, warn));

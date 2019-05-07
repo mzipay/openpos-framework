@@ -102,16 +102,16 @@ import { SideNavComponent } from './layout-components/side-nav/side-nav.componen
 import { WaffleComponent } from './layout-components/waffle/waffle.component';
 import { CommonModule } from '@angular/common';
 import { PromptFormPartComponent } from './screen-parts/prompt-form-part/prompt-form-part.component';
-import { MultipleFormPartComponent } from './screen-parts/multiple-form-part/multiple-form-part.component';
 import { FormComponent } from './components/form/form.component';
 import { AutoCompleteAddressPartComponent } from './screen-parts/auto-complete-address-part/auto-complete-address-part.component';
 import { SellItemLineComponent } from './components/sell-item-line/sell-item-line.component';
 import { ProgressBarPartComponent } from './screen-parts/progress-bar-part/progress-bar-part.component';
 import { ToggleGroupComponent } from './components/toggle-button-group/toggle-group.component';
 import { ToggleButtonComponent } from './components/toggle-button/toggle-button.component';
+import { ChooseOptionsPartComponent } from './screen-parts/choose-options-part/choose-options-part.component';
 
 const screenParts = [
-    MultipleFormPartComponent,
+    ChooseOptionsPartComponent,
     StatusStripComponent,
     SausageLinksComponent,
     ScanOrSearchComponent,

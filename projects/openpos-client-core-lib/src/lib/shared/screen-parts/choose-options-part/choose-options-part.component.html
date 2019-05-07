@@ -1,26 +1,11 @@
-<div *ngIf="!(isMobile$ | async)">
-    <mat-tab-group>
-        <mat-tab *ngFor="let formOption of forms; let i=index" fxLayout="column">
-            <ng-template mat-tab-label>
-                <div fxLayoutAlign="start center">
-                    <app-icon [iconName]="formOption.icon"></app-icon><span>{{formOption.name}}</span>
-                </div>
-            </ng-template>
-            <ng-template matTabContent>
-                <div class="instructions" *ngIf="formOption.instructions">{{formOption.instructions}}</div>
-                <ng-container *ngTemplateOutlet="form; context:{formGroup:formGroups[i], option:formOption}"></ng-container>
-            </ng-template>
-        </mat-tab>
-    </mat-tab-group>
-</div>
-<div *ngIf="(isMobile$ | async)">
-    <div *ngIf="showOptions">
+<div>
+    <div *ngIf="showOptions">   
         <mat-nav-list>
-            <mat-list-item *ngFor="let formOption of forms; let i=index" (click)="onMakeOptionSelection(formOption, formGroups[i])">
+            <mat-list-item *ngFor="let formOption of options; let i=index" (click)="formOption.enabled && onMakeOptionSelection(formOption, formGroups[i])">      
                 <div gdColumns="auto 1fr auto" gdGap="6px" class="option">
-                    <app-icon color="primary" [iconName]="formOption.icon"></app-icon>
-                    <span>{{formOption.name}}</span>
-                    <mat-icon color="primary" class="material-icons">keyboard_arrow_right</mat-icon>
+                    <app-icon [ngClass]="{'muted-color' : !formOption.enabled}" color="primary" [iconName]="formOption.icon"></app-icon>
+                    <span [ngClass]="{'muted-color' : !formOption.enabled}">{{formOption.name}}</span>
+                    <mat-icon color="primary" class="material-icons" [ngClass]="{'muted-color' : !formOption.enabled}">keyboard_arrow_right</mat-icon>
                 </div>
             </mat-list-item>
         </mat-nav-list>
@@ -40,8 +25,8 @@
                 <span>Back</span>
             </app-secondary-button>
             <app-primary-button gdArea="submit" inputType="submit" class="submit-button">
-                <span>{{option.submitButton.title}}</span>
-                <app-icon *ngIf="option.submitButton.icon" [iconName]="option.submitButton.icon"></app-icon>
+                <span>{{option.optionAction.title}}</span>
+                <app-icon *ngIf="option.optionAction.icon" [iconName]="option.optionAction.icon"></app-icon>
             </app-primary-button>
         </div>
     </app-form>

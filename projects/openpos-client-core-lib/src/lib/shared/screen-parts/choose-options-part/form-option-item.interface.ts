@@ -1,11 +1,11 @@
 import { IActionItem } from '../../../core/interfaces/menu-item.interface';
 import { IForm } from '../../../core/interfaces/form.interface';
 
-export interface IMultipleFormOption {
+export interface IFormOptionItem {
     form: IForm;
     icon: string;
     name: string;
-    submitButton: IActionItem;
+    optionAction: IActionItem;
     submitAction: string;
     instructions: string;
 }
