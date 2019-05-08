@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class FormOptionItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Form form;
+    private Form form = new Form();
     private String icon;
     private String name;
     private ActionItem optionAction;
