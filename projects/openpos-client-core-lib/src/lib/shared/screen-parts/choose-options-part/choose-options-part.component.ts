@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ContentChildren, ViewChild, ContentChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import { ScreenPart } from '../../decorators/screen-part.decorator';
 import { ScreenPartComponent } from '../screen-part';
 import { MessageProvider } from '../../providers/message.provider';
@@ -46,9 +46,8 @@ export class ChooseOptionsPartComponent extends ScreenPartComponent<IFormOptionI
         });
     }
 
-
     onMakeOptionSelection( formOption: IFormOptionItem, formGroup: FormGroup): void {
-        if (formOption.form) {
+        if (formOption.form.formElements.length > 0) {
             this.selectedOption = formOption;
             this.selectedForm = formGroup;
             this.showOptions = false;

@@ -1,14 +1,18 @@
 <div>
-    <div *ngIf="showOptions">   
-        <mat-nav-list>
-            <mat-list-item *ngFor="let formOption of options; let i=index" (click)="formOption.enabled && onMakeOptionSelection(formOption, formGroups[i])">      
-                <div gdColumns="auto 1fr auto" gdGap="6px" class="option">
-                    <app-icon [ngClass]="{'muted-color' : !formOption.enabled}" color="primary" [iconName]="formOption.icon"></app-icon>
-                    <span [ngClass]="{'muted-color' : !formOption.enabled}">{{formOption.name}}</span>
-                    <mat-icon color="primary" class="material-icons" [ngClass]="{'muted-color' : !formOption.enabled}">keyboard_arrow_right</mat-icon>
-                </div>
-            </mat-list-item>
-        </mat-nav-list>
+    <div *ngIf="showOptions" fxLayout="column" appArrowTab>   
+        <button 
+        *ngFor="let formOption of options; let i = index" 
+        [attr.cdkFocusInitial]="0 == i ? '' : null"
+        mat-button 
+        appArrowTabItem 
+        (click)="onMakeOptionSelection(formOption, formGroups[i])"
+        [disabled]="!formOption.enabled">
+            <div gdColumns="auto 1fr auto" gdGap="6px" class="option">
+                <app-icon [ngClass]="{'muted-color' : !formOption.enabled}" color="primary" [iconName]="formOption.icon"></app-icon>
+                <span [ngClass]="{'muted-color' : !formOption.enabled}">{{formOption.name}}</span>
+                <app-icon [iconClass]="'primary'" [ngClass]="{'muted-color' : !formOption.enabled}" [iconName]="'keyboard_arrow_right'"></app-icon>
+            </div>
+        </button>
     </div>
     <div *ngIf="!showOptions">
         <span>{{selectedOption.name}}</span>

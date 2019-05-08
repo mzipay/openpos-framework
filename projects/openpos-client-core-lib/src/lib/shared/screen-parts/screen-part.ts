@@ -18,7 +18,7 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
     messageProvider: MessageProvider;
     mediaService: OpenposMediaService;
     isMobile$: Observable<boolean>;
-    private subscription: Subscription;
+    public subscriptions = new Subscription();
 
     constructor( messageProvider: MessageProvider ) {
         this.sessionService = AppInjector.Instance.get(SessionService);
@@ -38,7 +38,7 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
     }
 
     ngOnInit(): void {
-        this.subscription = this.messageProvider.getMessages$()
+        this.subscriptions.add(this.messageProvider.getMessages$()
             .pipe(filter( s => s.screenType !== 'Loading' )).subscribe( s => {
             if ( s.hasOwnProperty(this.screenPartName)) {
                 this.screenData = deepAssign( this.screenData, s[this.screenPartName]);
@@ -46,10 +46,10 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
                 this.screenData = deepAssign( this.screenData, s );
             }
             this.screenDataUpdated();
-        });
+        }));
     }
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        this.subscriptions.unsubscribe();
     }
 
     onMenuItemClick( menuItem: IActionItem, payload?: any ) {
