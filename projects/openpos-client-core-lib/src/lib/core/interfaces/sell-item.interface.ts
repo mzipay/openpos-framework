@@ -19,4 +19,5 @@ export interface ISellItem extends IItem {
     originalAmount: string;
     discountAmount: string;
     labels: string[];
+    icon: string;
 }
