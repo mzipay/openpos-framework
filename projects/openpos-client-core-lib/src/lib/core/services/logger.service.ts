@@ -33,9 +33,7 @@ export class Logger {
                 fs.mkdirSync(logDir);
             }
             fileTransport.file = logDir + '/nu-client.log';
-            // electronLogger.transports.console = function (msg) {
-            //     electronLogger.transports.file(msg);
-            // };
+            fileTransport.format = '{y}-{m}-{d} {h}:{i}:{s},{ms} {level}  {text}';
             this.electronLogger.transports.console.level = false;
             this.electron.ipcRenderer.on('errorInWindow', function(event, data) {
                 this.electronLogger.error(data);
