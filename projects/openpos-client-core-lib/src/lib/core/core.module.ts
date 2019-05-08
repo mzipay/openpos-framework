@@ -47,6 +47,7 @@ import { SCANNERS } from './services/scanner.service';
 import { PlatformReadyStartupTask, PLATFORMS } from './components/startup/platform-ready-startup-task';
 import { WedgeScannerPlugin } from './plugins/wedge-scanner.plugin';
 import { CordovaPlatform } from './platforms/cordova.platform';
+import { InfineaScannerCordovaPlugin } from './plugins/infinea-scanner-cordova.plugin';
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,
@@ -100,7 +101,9 @@ import { CordovaPlatform } from './platforms/cordova.platform';
         { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent},
         { provide: SCANNERS, useExisting: AilaScannerCordovaPlugin, multi: true},
         { provide: SCANNERS, useExisting: WedgeScannerPlugin, multi: true },
+        { provide: SCANNERS, useExisting: InfineaScannerCordovaPlugin, multi: true},
         { provide: PLUGINS, useExisting: AilaScannerCordovaPlugin, multi: true},
+        { provide: PLUGINS, useExisting: InfineaScannerCordovaPlugin, multi: true},
         { provide: PLATFORMS, useExisting: CordovaPlatform, multi: true},
         TrainingOverlayService,
         ConfigurationService,
