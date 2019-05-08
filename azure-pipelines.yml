@@ -3,6 +3,7 @@ name: $(BuildID)
 trigger:
 - master
 - ironman
+- korg
 
 variables:
   BUILD_NUMBER: $(Build.BuildNumber)
