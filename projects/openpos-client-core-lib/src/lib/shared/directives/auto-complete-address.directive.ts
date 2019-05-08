@@ -1,7 +1,5 @@
-import { Directive, ElementRef, Output, EventEmitter, AfterViewInit, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, Output, EventEmitter, AfterViewInit, OnDestroy, Input } from '@angular/core';
 import { Configuration } from '../../configuration/configuration';
-
-
 declare var google: any;
 
 
@@ -12,8 +10,11 @@ declare var google: any;
 export class AutoCompleteAddressDirective implements AfterViewInit, OnDestroy {
 
     @Output() onSelect: EventEmitter<any> = new EventEmitter();
+    @Input() minSearchLength = 3;
 
     private element: HTMLInputElement;
+    private loadAPIPromise: Promise<any>;
+    private listenerAdded = false;
 
     protected readonly SCRIPT_ID: string = 'googleMapsApiScript';
     protected readonly CALLBACK_NAME: string = 'initAutoComplete';
@@ -30,10 +31,16 @@ export class AutoCompleteAddressDirective implements AfterViewInit, OnDestroy {
             const input = this.elRef.nativeElement.querySelector('input');
             if (input && input instanceof HTMLInputElement) {
                 this.element = input;
+
+                // Add change listener to handle input events
+                this.element.addEventListener('input', () => {
+                    this.handleInputChange();
+                });
             }
         }
 
-        this.loadApi();
+        // Attach the google auto complete source script
+        this.loadAPIPromise = this.attachScript();
     }
 
     getFormattedAddress(place: any) {
@@ -74,20 +81,13 @@ export class AutoCompleteAddressDirective implements AfterViewInit, OnDestroy {
         return address;
     }
 
-    loadApi() {
-        const loadAPI = this.attachScript();
-        loadAPI.then(() => {
-            this.initAutoComplete();
-        });
-    }
-
     attachScript() {
         const key = Configuration.googleApiKey;
         if (!key) {
             return Promise.reject('No Google API Key provided');
         }
 
-        if ((<any>window).google && (<any>window).google.maps) {
+        if ((window as any).google && (window as any).google.maps) {
             // Google maps already loaded on the page
             return Promise.resolve();
         }
@@ -114,6 +114,45 @@ export class AutoCompleteAddressDirective implements AfterViewInit, OnDestroy {
         return loadAPI;
     }
 
+    handleInputChange() {
+        // This method is a workaround for supporting minimum search length (unsupported by Google API)
+        if (this.element.value && this.element.value.length >= this.minSearchLength && !this.listenerAdded) {
+            // If the input meets minimum length, add the auto complete listener
+            this.addListener();
+        } else if (this.listenerAdded && this.element.value.length < this.minSearchLength) {
+            // If the input doesn't meet minumum length, remove the auto complete listener
+            this.removeListener();
+        }
+    }
+
+    addListener() {
+        if (this.loadAPIPromise) {
+            this.loadAPIPromise.then(() => {
+                console.log('Adding auto complete listener');
+                this.initAutoComplete();
+                this.listenerAdded = true;
+
+                // Manually fire an input event to trigger the auto complete suggestions
+                setTimeout(() => {
+                    this.element.dispatchEvent(new Event('input'));
+                }, 100);
+            });
+        }
+    }
+
+    removeListener() {
+        console.log('Removing auto complete listener');
+        google.maps.event.clearListeners(this.element);
+
+        // Remove the suggestions box
+        let suggestions = document.querySelector('.pac-container');
+        while (suggestions) {
+            document.body.removeChild(suggestions);
+            suggestions = document.querySelector('.pac-container');
+        }
+        this.listenerAdded = false;
+    }
+
     initAutoComplete() {
         // Restrict search predictions to adresses
         const autocomplete = new google.maps.places.Autocomplete(this.element, { types: ['address'] });
@@ -128,13 +167,17 @@ export class AutoCompleteAddressDirective implements AfterViewInit, OnDestroy {
             const address = this.getFormattedAddress(place);
             this.onSelect.emit(address);
         });
+
+        return autocomplete;
     }
 
     ngOnDestroy(): void {
+        // Remove the google auto complete source script
         const element = document.getElementById(this.SCRIPT_ID);
         if (element) {
             document.body.removeChild(element);
         }
+        this.listenerAdded = false;
     }
 
 }
