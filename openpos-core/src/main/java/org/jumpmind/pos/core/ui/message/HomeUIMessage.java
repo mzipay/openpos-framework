@@ -2,6 +2,7 @@ package org.jumpmind.pos.core.ui.message;
 
 import org.jumpmind.pos.core.screen.ActionItem;
 import org.jumpmind.pos.core.ui.AssignKeyBindings;
+import org.jumpmind.pos.core.ui.NotificationItem;
 import org.jumpmind.pos.core.ui.UIMessage;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class HomeUIMessage extends UIMessage {
 
     private static final long serialVersionUID = 1L;
 
-    private List<ActionItem> menuItems = new ArrayList<>();
+    private List<ActionItem> menuItems;
 
     public HomeUIMessage(){
         setId("home");
@@ -33,5 +34,25 @@ public class HomeUIMessage extends UIMessage {
         }
 
         this.menuItems.add(item);
+    }
+
+    public List<NotificationItem> getNotificationItems() {
+        return (List<NotificationItem>)get("notificationItems");
+    }
+
+    public void setNotificationItems(List<NotificationItem> notificationItems) {
+        put("notificationItems", notificationItems);
+    }
+
+    public void addNotificationItem(NotificationItem item){
+        List<NotificationItem> items;
+        if(contains("notificationItems")) {
+            items = (List<NotificationItem>)get("notificationItems");
+        } else {
+            items = new ArrayList<>();
+            put("notificationItems", items);
+        }
+
+        items.add(item);
     }
 }
