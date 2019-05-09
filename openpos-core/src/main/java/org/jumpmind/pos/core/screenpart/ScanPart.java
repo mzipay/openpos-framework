@@ -5,6 +5,10 @@ import java.io.Serializable;
 import org.jumpmind.pos.core.model.FieldInputType;
 import org.jumpmind.pos.core.screen.IconType;
 
+/**
+ * @deprecated Use {@link org.jumpmind.pos.core.ui.messagepart.ScanPart} instead
+ *
+ */
 @Deprecated
 public class ScanPart implements Serializable{
     private static final long serialVersionUID = 1L;

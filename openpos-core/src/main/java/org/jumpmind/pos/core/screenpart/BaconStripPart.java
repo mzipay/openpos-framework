@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 import org.jumpmind.pos.core.screen.ActionItem;
 
+/**
+ * @deprecated Use {@link org.jumpmind.pos.core.ui.messagepart.BaconStripPart} instead
+ *
+ */
 @Deprecated
 public class BaconStripPart implements Serializable{
 

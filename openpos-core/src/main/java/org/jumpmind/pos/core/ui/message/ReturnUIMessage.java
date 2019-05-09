@@ -22,6 +22,7 @@ public class ReturnUIMessage extends UIMessage {
     private List<SellItem> selectedItems = new ArrayList<>();
     private int[] selectedItemIndexes = new int[0];
     private List<TransactionReceipt> receipts = new ArrayList<>();
+    private ActionItem removeReceiptAction;
     private String transactionMenuPrompt;
     private ActionItemGroup transactionMenu = new ActionItemGroup();
     private List<ActionItem> multiSelectedMenuItems = new ArrayList<ActionItem>();
@@ -67,6 +68,14 @@ public class ReturnUIMessage extends UIMessage {
 
     public void setReceipts(List<TransactionReceipt> receipts) {
         this.receipts = receipts;
+    }
+
+    public ActionItem getRemoveReceiptAction() {
+        return removeReceiptAction;
+    }
+
+    public void setRemoveReceiptAction(ActionItem removeReceiptAction) {
+        this.removeReceiptAction = removeReceiptAction;
     }
 
     public void addReceipt(TransactionReceipt receipt) {

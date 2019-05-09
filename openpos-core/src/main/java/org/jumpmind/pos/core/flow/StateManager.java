@@ -80,7 +80,7 @@ public class StateManager implements IStateManager {
 
     @Value("${org.jumpmind.pos.core.flow.StateManager.autoSaveState:false}")
     private boolean autoSaveState = false;
-    
+
     @Autowired
     private StateLifecycle stateLifecyce;
 
@@ -133,7 +133,7 @@ public class StateManager implements IStateManager {
     public void setErrorHandler(IErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
     }
-    
+
     public IErrorHandler getErrorHandler() {
         return errorHandler;
     }
@@ -233,7 +233,7 @@ public class StateManager implements IStateManager {
 
             stateManagerLogger.logStateTransition(applicationState.getCurrentContext().getState(), newState, action, returnActionName,
                     enterSubStateConfig, exitSubState ? applicationState.getCurrentContext() : null, getApplicationState(),
-                            resumeSuspendedState);
+                    resumeSuspendedState);
 
             stateLifecyce.executeDepart(applicationState.getCurrentContext().getState(), newState, enterSubState, action);
 
@@ -242,7 +242,7 @@ public class StateManager implements IStateManager {
                 applicationState.setCurrentContext(buildSubStateContext(enterSubStateConfig, action));
             } else if (exitSubState) {
                 applicationState.setCurrentContext(resumeSuspendedState);
-            } 
+            }
 
             applicationState.getCurrentContext().setState(newState);
 
@@ -253,14 +253,7 @@ public class StateManager implements IStateManager {
             } else {
                 Action returnAction = new Action(returnActionName, action.getData());
                 returnAction.setCausedBy(action);
-                if (actionHandler.canHandleAction(applicationState.getCurrentContext().getState(), returnAction)) {
-                    actionHandler.handleAction(this, applicationState.getCurrentContext().getState(), returnAction);
-                } else {
-                    throw new FlowException(
-                            String.format("Unexpected return action from substate: \"%s\". No @ActionHandler %s.on%s() method found.",
-                                    returnAction.getName(), applicationState.getCurrentContext().getState().getClass().getName(),
-                                    returnAction.getName()));
-                }
+                doAction(returnAction); // indirect recursion
             }
         } else {
             stateLifecyce.executeArrive(this, applicationState.getCurrentContext().getState(), action);
@@ -283,8 +276,8 @@ public class StateManager implements IStateManager {
                 return applicationState.getCurrentContext().getSubTransition().getReturnActionNames()[0];
             } else if (applicationState.getCurrentContext().getSubTransition().getReturnActionNames().length > 1) {
                 throw new FlowException("Unpected situation. Non-return action raised which completed a subflow: " + action.getName()
-                + " -- but there is more than 1 return action mapped to this subflow so we don't know which return action to pick: "
-                + Arrays.toString(applicationState.getCurrentContext().getSubTransition().getReturnActionNames()));
+                        + " -- but there is more than 1 return action mapped to this subflow so we don't know which return action to pick: "
+                        + Arrays.toString(applicationState.getCurrentContext().getSubTransition().getReturnActionNames()));
             }
         }
 
@@ -330,9 +323,10 @@ public class StateManager implements IStateManager {
 
         applicationState.setCurrentTransition(new Transition(transitionSteps, sourceStateContext, newState));
 
-        TransitionResult result = applicationState.getCurrentTransition().execute(this, action); // This
-        // will
-        // block.
+        /*
+         * This will block.
+         */
+        TransitionResult result = applicationState.getCurrentTransition().execute(this, action);
         applicationState.setCurrentTransition(null);
         return result;
     }
