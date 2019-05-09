@@ -4,8 +4,16 @@
     </div>
     <div *ngIf="!(isMobile | async)" 
             class="button-grid">
-        <div class="menu-button-border" *ngFor="let menuItem of screen.menuItems">
-            <button class="menu-button" mat-raised-button gdAuto="column" color=primary [disabled]="!menuItem.enabled"
+        <div class="menu-button-border" 
+            *ngFor="let menuItem of screen.menuItems"
+            [matBadge]="getNoficationForButton(menuItem)?.value" 
+            matBadgePosition="above after"
+            matBadgeSize="large"
+            matBadgeColor="accent"
+            [matBadgeHidden]="!getNoficationForButton(menuItem)" 
+            [@bounce]="getNoficationForButton(menuItem)? (bounceInterval | async) : 'down'">
+            <button class="menu-button" mat-raised-button
+                    gdAuto="column" color=primary [disabled]="!menuItem.enabled"
                 (click)="onMenuItemClick(menuItem)" [actionItem]="menuItem">
                     <app-icon iconName="{{menuItem.icon}}" iconClass="material-icons mat-64"></app-icon>
                     <div>{{menuItem.title}}</div>

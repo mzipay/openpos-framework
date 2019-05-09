@@ -10,5 +10,26 @@
         .menu-button-border{
             background-color: mat-color($background, card);
         }
+
+        .mat-badge-large{
+            .mat-badge-content{
+                font-size: 50px;
+                height: 60px;
+                width: 60px;
+                line-height: 55px;
+            }
+        }
+
+        .mat-badge-large.mat-badge-overlap.mat-badge-after{
+            .mat-badge-content{
+                right: -30px;
+            }
+        }
+
+        .mat-badge-large.mat-badge-above{
+            .mat-badge-content{
+                top: -30px;
+            }
+        }
     }
 }

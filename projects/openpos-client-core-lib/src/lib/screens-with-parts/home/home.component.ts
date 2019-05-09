@@ -4,7 +4,12 @@ import { ScreenComponent } from '../../shared/decorators/screen-component.decora
 import { PosScreen } from '../../screens-deprecated/pos-screen/pos-screen.component';
 import { OpenposMediaService } from '../../core/services/openpos-media.service';
 import { Configuration } from '../../configuration/configuration';
-import { Observable } from 'rxjs';
+import { Observable, from, timer } from 'rxjs';
+import { IActionItem } from '../../core/interfaces/action-item.interface';
+import { INotificationItem } from '../../core/interfaces/notification-item.interface';
+import { trigger, state, style, transition, animate, keyframes, useAnimation } from '@angular/animations';
+import { repeat, delay, tap, map } from 'rxjs/operators';
+import { bounceAnimation } from '../../shared/animations/bounce.animation';
 
 @ScreenComponent({
     name: 'Home'
@@ -13,9 +18,26 @@ import { Observable } from 'rxjs';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  animations: [
+    trigger('bounce', [
+      // ...
+      state('move', style({
+        transform: 'translateY(0)'
+      })),
+      transition('* => move', [
+        useAnimation( bounceAnimation, {
+            params: {
+                height: '100px',
+                time: '2s'
+            }
+        })
+      ])
+    ]),
+  ]
 })
 export class HomeComponent extends PosScreen<HomeInterface> {
 
+    bounceInterval = timer(5000, 5000).pipe( map( i => i % 2 ? 'down' : 'move'));
   gutterSize: Observable<number>;
   gridColumns: Observable<number>;
   isMobile: Observable<boolean>;
@@ -51,5 +73,12 @@ export class HomeComponent extends PosScreen<HomeInterface> {
 
   public keybindsEnabled() {
     return Configuration.enableKeybinds;
+  }
+
+  public getNoficationForButton(item: IActionItem): INotificationItem {
+      if (this.screen.notificationItems) {
+        return this.screen.notificationItems.find(i => i.id === item.action);
+      }
+      return null;
   }
 }
