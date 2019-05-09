@@ -30,7 +30,7 @@ import { PingResult } from '../interfaces/ping-result.interface';
 import { PersonalizationResponse } from '../interfaces/personalization-response.interface';
 import { ElectronService } from 'ngx-electron';
 
-
+declare var window: any;
 export class QueueLoadingMessage implements ILoading {
     type = 'Loading';
     title: string;
@@ -173,19 +173,22 @@ export class SessionService implements IMessageHandler<any> {
         }
     }
 
+    /*
+     * Need to come up with a better way to enapsulate electron and node ... should put these reference behind our new platform interface
+     */
     private deleteLaunchingFlg() {
-        if (this.electron.isElectronApp) {
-            const fs = this.electron.remote.require('fs');
-            const launchingFile = 'launching.flg';
-            if (fs.existsSync(launchingFile)) {
-                fs.unlink(launchingFile, (err) => {
-                    if (err) {
-                        this.log.info('unable to remove ' + launchingFile);
-                    } else {
-                        this.log.info(launchingFile + ' was removed');
-                    }
-                  });
-            }
+        const fs = this.electron.isElectronApp ? this.electron.remote.require('fs') : window.fs;
+        const launchingFile = 'launching.flg';
+        this.log.info('node.js fs exists? ' + fs);
+        this.log.info('launching.flg file exists? ' + (fs && fs.existsSync(launchingFile)));
+        if (fs && fs.existsSync(launchingFile)) {
+            fs.unlink(launchingFile, (err) => {
+                if (err) {
+                    this.log.info('unable to remove ' + launchingFile);
+                } else {
+                    this.log.info(launchingFile + ' was removed');
+                }
+            });
         }
     }
 
