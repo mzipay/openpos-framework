@@ -1,4 +1,4 @@
-import { IActionItem } from '../interfaces/menu-item.interface';
+import { IActionItem } from './action-item.interface';
 export interface IConfirmationDialog {
     title: string;
     message: string;

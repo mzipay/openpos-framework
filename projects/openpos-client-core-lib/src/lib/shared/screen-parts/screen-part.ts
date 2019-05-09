@@ -3,7 +3,7 @@ import { Subscription, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MessageProvider } from '../providers/message.provider';
 import { AppInjector } from '../../core/app-injector';
-import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { SessionService } from '../../core/services/session.service';
 import { Logger } from '../../core/services/logger.service';
 import { deepAssign } from '../../utilites/deep-assign';

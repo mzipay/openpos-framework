@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IActionItem } from '../../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../../core/interfaces/action-item.interface';
 import { SessionService } from '../../../../core/services/session.service';
 
 /**

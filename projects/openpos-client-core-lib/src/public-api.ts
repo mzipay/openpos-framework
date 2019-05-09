@@ -48,7 +48,7 @@ export * from './lib/core/interfaces/form.interface';
 export * from './lib/core/interfaces/item.interface';
 export * from './lib/core/interfaces/list-component.interface';
 export * from './lib/core/interfaces/loading.interface';
-export * from './lib/core/interfaces/menu-item.interface';
+export * from './lib/core/interfaces/action-item.interface';
 export * from './lib/core/interfaces/message-dialog-properties.interface';
 export * from './lib/core/interfaces/message-handler.interface';
 export * from './lib/core/interfaces/open-pos-dialog-config.interface';

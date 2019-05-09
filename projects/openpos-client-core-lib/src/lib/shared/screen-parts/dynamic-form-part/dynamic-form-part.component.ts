@@ -7,7 +7,7 @@ import { DynamicFormFieldComponent } from '../../components/dynamic-form-field/d
 import { ShowErrorsComponent } from '../../components/show-errors/show-errors.component';
 import { IForm } from '../../../core/interfaces/form.interface';
 import { IFormElement } from '../../../core/interfaces/form-field.interface';
-import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/action-item.interface';
 
 @Component({
     selector: 'app-dynamic-form-part',

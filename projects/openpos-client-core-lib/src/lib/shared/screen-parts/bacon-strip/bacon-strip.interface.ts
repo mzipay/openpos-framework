@@ -1,4 +1,4 @@
-import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/action-item.interface';
 
 
 export interface BaconStripInterface {

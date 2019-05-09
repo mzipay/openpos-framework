@@ -1,6 +1,6 @@
 import { IOptionItem } from './option-item.interface';
 import { IAbstractScreen } from '../../core/interfaces/abstract-screen.interface';
-import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../core/interfaces/action-item.interface';
 
 
 /**

@@ -4,7 +4,7 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IItemQuantityFormElement } from './iitem-quantity-form-field.interface';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ISellItem } from '../../core/interfaces/sell-item.interface';
-import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { IForm } from '../../core/interfaces/form.interface';
 import { ICatalogBrowserForm } from '../../core/interfaces/catalog-browser-form.interface';
 

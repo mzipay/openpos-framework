@@ -2,7 +2,7 @@ import { SelfCheckoutStatusBarData } from '../../../../self-checkout/self-checko
 import { ISellTemplate } from './sell-template.interface';
 import { SellStatusSectionData } from '../sell-status-section/sell-status-section.data';
 import { IAbstractScreen } from '../../../../core/interfaces/abstract-screen.interface';
-import { IActionItem } from '../../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../../core/interfaces/action-item.interface';
 import { ISellItem } from '../../../../core/interfaces/sell-item.interface';
 import { StatusBarData } from '../../../../shared/components/status-bar/status-bar-data';
 

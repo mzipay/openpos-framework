@@ -11,7 +11,7 @@ import { TotalType } from '../../core/interfaces/total-type.enum';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 import { ISellItem } from '../../core/interfaces/sell-item.interface';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
-import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../core/interfaces/action-item.interface';
 
 /**
  * @ignore

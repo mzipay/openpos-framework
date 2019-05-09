@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/action-item.interface';
 import { Logger } from '../../../core/services/logger.service';
 import { SessionService } from '../../../core/services/session.service';
 

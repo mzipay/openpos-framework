@@ -1,7 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
 import { IScreen } from '../../core/components/dynamic-screen/screen.interface';
-import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { SessionService } from '../../core/services/session.service';
 
 @Component({

@@ -1,4 +1,4 @@
-import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { IScan } from '../../screens-deprecated/templates/sell-template/sell/scan.interface';
 
 

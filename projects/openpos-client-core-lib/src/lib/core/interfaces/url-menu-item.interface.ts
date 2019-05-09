@@ -1,4 +1,4 @@
-import { IActionItem } from './menu-item.interface';
+import { IActionItem } from './action-item.interface';
 
 export interface IUrlMenuItem extends IActionItem {
     url: string;

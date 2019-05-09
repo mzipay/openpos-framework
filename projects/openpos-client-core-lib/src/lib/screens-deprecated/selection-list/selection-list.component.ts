@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
 import { PosScreen } from '../pos-screen/pos-screen.component';
-import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 
 /**

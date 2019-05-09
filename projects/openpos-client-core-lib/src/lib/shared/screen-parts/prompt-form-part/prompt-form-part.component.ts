@@ -4,7 +4,7 @@ import { Validators, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
 import { ValidatorsService } from '../../../core/services/validators.service';
 import { MessageProvider } from '../../providers/message.provider';
 import { PromptInterface } from '../../../screens-with-parts/prompt/prompt.interface';
-import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/action-item.interface';
 import { PromptFormPartInterface } from './prompt-form-part.interface';
 
 @Component({

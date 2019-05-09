@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ISellItem } from '../../../core/interfaces/sell-item.interface';
 import { SessionService } from '../../../core/services/session.service';
-import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/action-item.interface';
 
 
 @Component({

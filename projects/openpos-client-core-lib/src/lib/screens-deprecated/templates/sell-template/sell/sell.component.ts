@@ -9,7 +9,7 @@ import { ScreenComponent } from '../../../../shared/decorators/screen-component.
 import { AbstractTemplate } from '../../../../core/components/abstract-template';
 import { StatusBarData } from '../../../../shared/components/status-bar/status-bar-data';
 import { OpenposMediaService } from '../../../../core/services/openpos-media.service';
-import { IActionItem } from '../../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../../core/interfaces/action-item.interface';
 import { NavListComponent } from '../../../../shared/components/nav-list/nav-list.component';
 
 /**

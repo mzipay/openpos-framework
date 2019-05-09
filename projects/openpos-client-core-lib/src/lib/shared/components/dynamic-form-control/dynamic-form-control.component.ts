@@ -4,7 +4,7 @@ import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-fi
 import { ShowErrorsComponent } from '../show-errors/show-errors.component';
 import { IFormElement } from '../../../core/interfaces/form-field.interface';
 import { IForm } from '../../../core/interfaces/form.interface';
-import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/action-item.interface';
 import { SessionService } from '../../../core/services/session.service';
 import { ScreenService } from '../../../core/services/screen.service';
 import { FormBuilder } from '../../../core/services/form-builder.service';

@@ -1,4 +1,4 @@
-import { IActionItem } from './../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { FormGroup, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';

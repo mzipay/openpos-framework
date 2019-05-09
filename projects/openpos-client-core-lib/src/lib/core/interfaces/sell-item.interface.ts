@@ -1,4 +1,4 @@
-import { IActionItem } from './menu-item.interface';
+import { IActionItem } from './action-item.interface';
 import { IItem } from './item.interface';
 
 export interface ISellItem extends IItem {

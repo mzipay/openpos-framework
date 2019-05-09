@@ -1,5 +1,5 @@
 import { ScreenPartComponent } from '../screen-part';
-import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/action-item.interface';
 import { Component } from '@angular/core';
 import { MessageProvider } from '../../providers/message.provider';
 import { Configuration } from '../../../configuration/configuration';

@@ -2,7 +2,7 @@ import { Component, ViewChild, AfterViewChecked, ElementRef, OnInit } from '@ang
 import { IScreen } from '../../core/components/dynamic-screen/screen.interface';
 import { ISellItem } from '../../core/interfaces/sell-item.interface';
 import { SessionService } from '../../core/services/session.service';
-import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../core/interfaces/action-item.interface';
 
 @Component({
     selector: 'app-self-checkout-transaction',

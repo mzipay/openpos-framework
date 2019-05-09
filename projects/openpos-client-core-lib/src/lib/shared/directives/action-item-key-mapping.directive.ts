@@ -3,7 +3,7 @@ import { KeyPressProvider } from '../providers/keypress.provider';
 import { Subscription } from 'rxjs';
 import { Configuration } from '../../configuration/configuration';
 import { SessionService } from '../../core/services/session.service';
-import { IActionItem } from '../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../core/interfaces/action-item.interface';
 
 @Directive({
     // tslint:disable-next-line:directive-selector

@@ -1,5 +1,5 @@
 import { Configuration } from './../../../configuration/configuration';
-import { IActionItem } from './../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/action-item.interface';
 import { SelectionMode } from './../../../core/interfaces/selection-mode.enum';
 import { ISellItem } from './../../../core/interfaces/sell-item.interface';
 import { SelectionListScreenComponent } from '../../selection-list/selection-list-screen.component';

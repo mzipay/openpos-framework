@@ -1,4 +1,4 @@
-import { IActionItem } from './../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/action-item.interface';
 import { Component, AfterViewInit, Input, ElementRef, Output, EventEmitter } from '@angular/core';
 import { ScreenPartComponent } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';

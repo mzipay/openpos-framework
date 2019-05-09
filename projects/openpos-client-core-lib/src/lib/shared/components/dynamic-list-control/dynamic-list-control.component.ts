@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { IListComponent } from '../../../core/interfaces/list-component.interface';
-import { IActionItem } from '../../../core/interfaces/menu-item.interface';
+import { IActionItem } from '../../../core/interfaces/action-item.interface';
 import { IFormElement } from '../../../core/interfaces/form-field.interface';
 import { IForm } from '../../../core/interfaces/form.interface';
 import { SessionService } from '../../../core/services/session.service';

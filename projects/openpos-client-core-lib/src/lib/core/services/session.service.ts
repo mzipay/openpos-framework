@@ -19,7 +19,7 @@ import { LoaderState } from '../components/loader/loader-state';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
 import { IDeviceResponse } from '../oldplugins/device-response.interface';
 import { InAppBrowserPlugin } from '../oldplugins/in-app-browser.plugin';
-import { IActionItem } from '../interfaces/menu-item.interface';
+import { IActionItem } from '../interfaces/action-item.interface';
 import { IUrlMenuItem } from '../interfaces/url-menu-item.interface';
 import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
 import { OldPluginService } from './old-plugin.service';
