@@ -5,6 +5,9 @@ import { MultipleDynamicFormComponent } from './multiple-dynamic-form.component'
 import { DialogComponent } from '../../shared/decorators/dialog-component.decorator';
 import { OpenposMediaService } from '../../core/services/openpos-media.service';
 
+@DialogComponent({
+    name: 'MultipleDynamicForm'
+})
 @Component({
     selector: 'app-multiple-dynamic-form-dialog',
     templateUrl: './multiple-dynamic-form-dialog.component.html'

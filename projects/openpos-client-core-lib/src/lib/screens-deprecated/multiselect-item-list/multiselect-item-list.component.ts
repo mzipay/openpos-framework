@@ -7,10 +7,14 @@ import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
 import { ItemClickAction } from '../../shared/components/product-list/product-list.component';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
+import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 
 /**
  * @ignore
  */
+@ScreenComponent({
+    name: 'MultiselectItemList'
+  })
 @Component({
     selector: 'app-multiselect-item-list',
     templateUrl: './multiselect-item-list.component.html'

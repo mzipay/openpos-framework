@@ -3,10 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { ChooseOptionsComponent } from '../choose-options/choose-options.component';
 import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { ValidatorsService } from '../../core/services/validators.service';
+import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 
 /**
  * @ignore
  */
+@ScreenComponent({
+  name: 'PromptWithOptions'
+})
 @Component({
   selector: 'app-prompt-with-options',
   templateUrl: './prompt-with-options.component.html'

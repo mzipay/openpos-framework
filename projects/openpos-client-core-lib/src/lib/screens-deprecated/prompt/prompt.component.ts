@@ -3,6 +3,7 @@ import { FormGroup, FormControl, ValidatorFn, Validators } from '@angular/forms'
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ValidatorsService } from '../../core/services/validators.service';
+import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 
 /**
  * @ignore

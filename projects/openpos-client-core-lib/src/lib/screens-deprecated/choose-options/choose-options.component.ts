@@ -5,10 +5,14 @@ import { IChooseOptionsScreen } from './choose-options-screen.interface';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { Configuration } from '../../configuration/configuration';
 import { ActionIntercepter, ActionIntercepterBehaviorType } from '../../core/action-intercepter';
+import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 
 /**
  * @ignore
  */
+@ScreenComponent({
+  name: 'ChooseOptions'
+})
 @Component({
   selector: 'app-choose-options',
   templateUrl: './choose-options.component.html'

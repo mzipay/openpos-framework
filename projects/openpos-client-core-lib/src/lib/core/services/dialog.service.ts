@@ -78,7 +78,7 @@ export class DialogService {
         if (dialogType) {
             return this.componentFactoryResolver.resolveComponentFactory(dialogType);
         } else {
-            console.error(`Could not find a dialog type of: ${type}.  Please register it with the screen service`);
+            console.error(`Could not find a dialog type of: ${type}.  Please register it with the dialog service`);
             return this.componentFactoryResolver.resolveComponentFactory(DialogService.dialogs.get('Blank'));
         }
     }

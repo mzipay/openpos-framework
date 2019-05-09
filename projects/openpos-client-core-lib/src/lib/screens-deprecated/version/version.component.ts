@@ -4,11 +4,15 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { OldPluginService } from '../../core/services/old-plugin.service';
 import { AppVersion } from '../../core/services/app-version';
+import { DialogComponent } from '../../shared/decorators/dialog-component.decorator';
 
 declare var version: any; // read in from core at assets/version.js
 /**
  * @ignore
  */
+@DialogComponent({
+    name: 'Version'
+})
 @Component({
     selector: 'app-version',
     templateUrl: './version.component.html',

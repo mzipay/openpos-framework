@@ -3,10 +3,14 @@ import { ObservableMedia} from '@angular/flex-layout';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { Configuration } from '../../configuration/configuration';
 import { IActionItem } from '../../core/interfaces/action-item.interface';
+import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 
 /**
  * @ignore
  */
+@ScreenComponent({
+  name: 'Home'
+})
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',

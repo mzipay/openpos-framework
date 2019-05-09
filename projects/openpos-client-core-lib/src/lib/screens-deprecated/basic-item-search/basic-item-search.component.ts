@@ -2,11 +2,14 @@ import { Component, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatInput } from '@angular/material';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { IForm } from '../../core/interfaces/form.interface';
+import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 
 /**
  * @ignore
  */
-
+@ScreenComponent({
+  name: 'BasicItemSearch'
+})
 @Component({
   selector: 'app-basic-item-search',
   templateUrl: './basic-item-search.component.html'
