@@ -97,6 +97,14 @@ public class ActionItem implements Serializable {
         this.enabled = enabled;
     }
     
+    public ActionItem(String title, String action, String icon, boolean enabled) {
+        super();
+        this.action = action;
+        this.title = title;
+        this.enabled = enabled;
+        this.icon = icon;
+    }
+    
     public ActionItem(String title, String action, boolean enabled, boolean sensitive) {
         super();
         this.action = action;
