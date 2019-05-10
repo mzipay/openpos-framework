@@ -79,6 +79,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
         while (clazz != null && obj != null) {
             Field[] fields = clazz.getDeclaredFields();
             for (Field field : fields) {
+                if (!field.getName().equals("optionalProperties")) {
                 field.setAccessible(true);
                 Class<?> type = field.getType();
                 try {
@@ -102,6 +103,7 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
 
                 } catch (Exception e) {
                     logger.warn("", e);
+                }
                 }
             }
             clazz = clazz.getSuperclass();
