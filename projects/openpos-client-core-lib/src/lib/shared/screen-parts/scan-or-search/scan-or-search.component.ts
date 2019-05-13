@@ -1,12 +1,13 @@
 import { IActionItem } from '../../../core/interfaces/action-item.interface';
-import { Component, AfterViewInit, Input, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Input, ElementRef, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { ScreenPartComponent } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
 import { DeviceService } from '../../../core/services/device.service';
 import { MessageProvider } from '../../providers/message.provider';
 import { ScreenPart } from '../../decorators/screen-part.decorator';
 import { OpenposMediaService } from '../../../core/services/openpos-media.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { ScannerService } from '../../../core/services/scanner.service';
 
 @ScreenPart({
     name: 'scan'
@@ -16,7 +17,7 @@ import { Observable } from 'rxjs';
     templateUrl: './scan-or-search.component.html',
     styleUrls: ['./scan-or-search.component.scss']
 })
-export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> {
+export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> implements OnInit, OnDestroy {
 
     public barcode: string;
     isMobile$: Observable<boolean>;
@@ -24,9 +25,11 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
     @Input() defaultAction: IActionItem;
     @Output() change: EventEmitter<string> = new EventEmitter<string>();
 
+    private scanServiceSubscription: Subscription;
 
     constructor( public devices: DeviceService, messageProvider: MessageProvider,
-                 private elRef: ElementRef, mediaService: OpenposMediaService) {
+                 private elRef: ElementRef, mediaService: OpenposMediaService,
+                 private scannerService: ScannerService) {
         super(messageProvider);
         const mobileMap = new Map([
             ['xs', true],
@@ -36,6 +39,21 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
             ['xl', false]
         ]);
         this.isMobile$ = mediaService.mediaObservableFromMap(mobileMap);
+    }
+
+    ngOnInit(): void {
+        super.ngOnInit();
+        this.scanServiceSubscription = this.scannerService.startScanning().subscribe(scanData => {
+            this.barcode = scanData;
+            this.onEnter();
+        });
+    }
+
+    ngOnDestroy(): void {
+        if (this.scanServiceSubscription !== null) {
+            this.scanServiceSubscription.unsubscribe();
+        }
+        super.ngOnDestroy();
     }
 
     screenDataUpdated() {
