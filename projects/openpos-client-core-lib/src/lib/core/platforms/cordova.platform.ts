@@ -17,7 +17,7 @@ export class CordovaPlatform implements IPlatformInterface {
     }
 
     platformReady(): Observable<string> {
-        return fromEvent(document, 'deviceReady').pipe(
+        return fromEvent(document, 'deviceready').pipe(
                 map( e => 'device ready'),
                 take(1)
             );
