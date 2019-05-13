@@ -8,19 +8,23 @@ public class ConfirmationDialog implements Serializable {
 	
 	private String title;
 	private String message;
-	private ActionItem confirmAction = new ActionItem("Yes", "Yes");
-    private ActionItem cancelAction = new ActionItem("No", "No");
+	private ActionItem confirmAction;
+    private ActionItem cancelAction;
 	
 	public ConfirmationDialog() {
-	    
+	    confirmAction = new ActionItem("Yes", "Yes");
+	    confirmAction.setAutoAssignEnabled(false);
+	    cancelAction = new ActionItem("No", "No");
+	    cancelAction.setAutoAssignEnabled(false);
 	}
 	
 	public ConfirmationDialog(String message) {
+	    this();
 	    this.message = message;
 	}
 	
 	public ConfirmationDialog(String message, String title) {
-	    this.message = message;
+	    this(message);
 	    this.title = title;
 	}
 	

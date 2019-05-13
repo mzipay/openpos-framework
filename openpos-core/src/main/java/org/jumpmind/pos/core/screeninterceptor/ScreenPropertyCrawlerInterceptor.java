@@ -53,24 +53,6 @@ public class ScreenPropertyCrawlerInterceptor implements IScreenInterceptor {
         if (screen != null && screenProprtyStrategies != null && screenProprtyStrategies.size() > 0) {
             Map<String, Object> screenContext = new HashMap<>();
             processFields(appId, deviceId, screen, screen, screenContext);
-            processOptionals(appId, deviceId, screen.any(), screen, screenContext);
-        }
-    }
-
-    private void processOptionals(
-            String appId,
-            String deviceId,
-            Map<String, Object> optionals,
-            UIMessage screen,
-            Map<String, Object> screenContext) {
-        if (optionals.size() > 0) {
-            Set<String> keys = optionals.keySet();
-            for (String key : keys) {
-                Object value = optionals.get(key);
-                if (value != null && !processCollections(appId, deviceId, value, screen, screenContext) && shouldProcess(value.getClass())) {
-                    processFields(appId, deviceId, value, screen, screenContext);
-                }
-            }
         }
     }
 

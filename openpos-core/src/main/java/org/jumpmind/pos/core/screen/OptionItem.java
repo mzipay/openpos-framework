@@ -38,10 +38,6 @@ public class OptionItem extends ActionItem implements Serializable {
         this.setIcon(icon);
     }
 
-    public OptionItem(String value, String displayValue, boolean enabled, IIcon icon) {
-        this(value, displayValue, enabled, icon.getName());
-    }
-
     public String getDisplayValue() {
         return this.getTitle();
     }

@@ -10,6 +10,8 @@ import java.util.Map;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.In;
 import org.jumpmind.pos.core.flow.ScopeType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "openpos.ui.content.file-system")
 @Scope("device")
 public class FileSystemContentProvider implements IContentProvider {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     List<String> providerProperties = new ArrayList<>();
 
@@ -55,6 +59,8 @@ public class FileSystemContentProvider implements IContentProvider {
                 StringBuilder restBuilder = new StringBuilder(serverUrl);
                 restBuilder.append(contentBuilder.toString());
                 restUrl = restBuilder.toString();
+            } else {
+                logger.warn("No files found in directory: {}", dir.getAbsolutePath());
             }
         }
 
@@ -95,6 +101,8 @@ public class FileSystemContentProvider implements IContentProvider {
                 return content;
             }
         }
+
+        logger.warn("No content found for resource: {}", resource);
 
         return null;
     }
