@@ -13,7 +13,7 @@ public class HomeUIMessage extends UIMessage {
 
     private static final long serialVersionUID = 1L;
 
-    private List<ActionItem> menuItems;
+    private List<ActionItem> menuItems = new ArrayList<>();
 
     public HomeUIMessage(){
         setId("home");
@@ -36,6 +36,7 @@ public class HomeUIMessage extends UIMessage {
         this.menuItems.add(item);
     }
 
+    @SuppressWarnings("unchecked")
     public List<NotificationItem> getNotificationItems() {
         return (List<NotificationItem>)get("notificationItems");
     }
