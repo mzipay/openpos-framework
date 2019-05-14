@@ -1,5 +1,6 @@
 package org.jumpmind.pos.core.ui.message;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -31,26 +32,26 @@ public class PromptUIMessage extends UIMessage {
     private boolean showComments = false;
     private List<String> validationPatterns;
     private boolean scanEnabled;
-    private Integer min;
-    private Integer max;
+    private BigDecimal min;
+    private BigDecimal max;
 
     public PromptUIMessage() {
         this.setScreenType(UIMessageType.PROMPT);
     }
     
-    public void setMax(Integer max) {
+    public void setMax(BigDecimal max) {
         this.max = max;
     }
     
-    public Integer getMax() {
+    public BigDecimal getMax() {
         return max;
     }
     
-    public void setMin(Integer min) {
+    public void setMin(BigDecimal min) {
         this.min = min;
     }
     
-    public Integer getMin() {
+    public BigDecimal getMin() {
         return min;
     }
 
