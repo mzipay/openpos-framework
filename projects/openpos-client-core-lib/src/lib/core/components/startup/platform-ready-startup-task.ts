@@ -7,6 +7,9 @@ import { StartupTaskNames } from './startup-task-names';
 
 export const PLATFORMS = new InjectionToken<IPlatformInterface[]>('Platforms');
 
+/**
+ * This startup task checks for any loaded platforms and waits for them to be ready before preceeding
+ */
 export class PlatformReadyStartupTask implements IStartupTask {
 
     name =  StartupTaskNames.PLATFORM_READY;

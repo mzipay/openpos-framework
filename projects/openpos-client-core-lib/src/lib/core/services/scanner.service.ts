@@ -4,9 +4,7 @@ import { Observable, merge } from 'rxjs';
 
 export const SCANNERS = new InjectionToken<IScanner[]>('Scanners');
 
-@Injectable({
-    providedIn: 'root',
-  })
+@Injectable()
 export class ScannerService {
     constructor( @Optional() @Inject(SCANNERS) private scanners: Array<IScanner>) {
     }

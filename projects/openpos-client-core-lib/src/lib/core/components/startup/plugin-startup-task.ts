@@ -8,6 +8,11 @@ import { IScanner } from '../../plugins/scanner.interface';
 
 export const PLUGINS = new InjectionToken<IPlatformPlugin[]>('Plugins');
 
+/**
+ * This startup task will find all registered plugins an check to see if they are loaded.
+ * If the plug in is not loaded it will be removed from the PLATFORMS token otherwise this
+ * task will wait for all plugins to initialize.
+ */
 export class PluginStartupTask implements IStartupTask {
     name =  StartupTaskNames.PLUGIN_INIT;
     order = 800;
@@ -29,25 +34,43 @@ export class PluginStartupTask implements IStartupTask {
                     pluginsToRemove.push(p);
                     messages.next(`Removing ${p.name()}`);
                 } else {
-                    messages.next(`Found ${p.name}`);
+                    messages.next(`Found ${p.name()}`);
                 }
             });
 
             pluginsToRemove.forEach( p => {
                 this.plugins.splice( this.plugins.indexOf(p), 1);
-                if ( this.scanners.includes(p)) {
+                if ( !!this.scanners && this.scanners.includes(p)) {
                     this.scanners.splice( this.scanners.indexOf(p), 1);
                 }
             });
             messages.complete();
         }) as Observable<string>;
 
+        const initializePlugins = Observable.create( (message: Subject<string>) => {
+            const inits = this.plugins.map( p => {
+                return concat(
+                    of(`Initializing ${p.name()}`),
+                    p.initialize()
+                );
+            });
+
+            merge( ...inits ).subscribe( {
+                next: m => message.next(m),
+                error: e => message.error(e),
+                complete: () => {
+                    message.next('Done initializing plugins');
+                    message.complete();
+                }
+            });
+        });
+
         return concat(
             checkPlugins,
             iif( () => !!this.plugins && this.plugins.length > 0,
                 concat (
                     of('Initializing plugins'),
-                    merge( ...this.plugins.map(p => p.initialize()))
+                    initializePlugins
                 ),
                 of('No Plugins found')
             )

@@ -3,9 +3,7 @@ import { IScanner } from './scanner.interface';
 import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AilaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
 
     private scanData$ = new Subject<string>();
@@ -25,7 +23,7 @@ export class AilaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
             // tslint:disable-next-line:no-string-literal
             this.AilaCordovaPlugin = window['AilaCordovaPlugin'];
             if ( !this.AilaCordovaPlugin ) {
-                initialized.error(`Tried to initialize plugin ${this.name} which is not present`);
+                initialized.error(`Tried to initialize plugin ${this.name()} which is not present`);
             }
 
             this.AilaCordovaPlugin.configure(
@@ -53,7 +51,7 @@ export class AilaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
 
     startScanning(): Observable<string> {
         if ( !this.AilaCordovaPlugin ) {
-            throw Error(`Tried to start scanning with ${this.name} which is not loaded`);
+            throw Error(`Tried to start scanning with ${this.name()} which is not loaded`);
         }
 
         this.AilaCordovaPlugin.scanStart((result) => {
@@ -65,7 +63,7 @@ export class AilaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
 
     stopScanning() {
         if ( !this.AilaCordovaPlugin ) {
-            throw Error(`Tried to stop scanning with ${this.name} which is not loaded`);
+            throw Error(`Tried to stop scanning with ${this.name()} which is not loaded`);
         }
 
         this.AilaCordovaPlugin.scanStop((result) => {
