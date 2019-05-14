@@ -43,7 +43,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxElectronModule } from 'ngx-electron';
 import { PluginStartupTask, PLUGINS } from './components/startup/plugin-startup-task';
 import { AilaScannerCordovaPlugin } from './plugins/aila-scanner-cordova.plugin';
-import { SCANNERS } from './services/scanner.service';
+import { SCANNERS, ScannerService } from './services/scanner.service';
 import { PlatformReadyStartupTask, PLATFORMS } from './components/startup/platform-ready-startup-task';
 import { WedgeScannerPlugin } from './plugins/wedge-scanner.plugin';
 import { CordovaPlatform } from './platforms/cordova.platform';
@@ -91,6 +91,7 @@ import { InfineaScannerCordovaPlugin } from './plugins/infinea-scanner-cordova.p
         BreakpointObserver,
         MediaMatcher,
         StompRService,
+        ScannerService,
         { provide: STARTUP_TASKS, useClass: PersonalizationStartupTask, multi: true, deps: [PersonalizationService, MatDialog]},
         { provide: STARTUP_TASKS, useClass: SubscribeToSessionTask, multi: true, deps: [SessionService, Router, Logger]},
         { provide: STARTUP_TASKS, useClass: DialogServiceStartupTask, multi: true, deps: [DialogService]},
@@ -99,6 +100,7 @@ import { InfineaScannerCordovaPlugin } from './plugins/infinea-scanner-cordova.p
         { provide: STARTUP_TASKS, useClass: PluginStartupTask, multi: true },
         { provide: STARTUP_COMPONENT, useValue: StartupComponent },
         { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent},
+        AilaScannerCordovaPlugin,
         { provide: SCANNERS, useExisting: AilaScannerCordovaPlugin, multi: true},
         { provide: SCANNERS, useExisting: WedgeScannerPlugin, multi: true },
         { provide: SCANNERS, useExisting: InfineaScannerCordovaPlugin, multi: true},
