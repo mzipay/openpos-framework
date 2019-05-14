@@ -13,7 +13,8 @@ import { ScreenComponent } from '../../shared/decorators/screen-component.decora
 })
 @Component({
   selector: 'app-prompt-with-options',
-  templateUrl: './prompt-with-options.component.html'
+  templateUrl: './prompt-with-options.component.html',
+  styleUrls: ['./prompt-with-options.component.scss']
 })
 export class PromptWithOptionsComponent extends ChooseOptionsComponent implements OnInit {
 
