@@ -77,6 +77,11 @@ public class ActionItem implements Serializable {
         this.autoAssignEnabled = autoAssignEnabled;
     } 
     
+    public ActionItem(boolean autoAssignEnabled, String action, String title, String icon) {
+        this(action, title, icon);
+        this.autoAssignEnabled = autoAssignEnabled;
+    } 
+    
     public ActionItem(String action, String title, String icon, String confirmationMessage) {
         this(action, title, icon);
         if (confirmationMessage != null) {
