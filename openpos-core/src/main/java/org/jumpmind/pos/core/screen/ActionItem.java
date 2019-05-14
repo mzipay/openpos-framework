@@ -70,7 +70,12 @@ public class ActionItem implements Serializable {
     public ActionItem(String action, String title, String icon) {
         this(action, title);
         this.icon = icon;
-    }      
+    } 
+    
+    public ActionItem(boolean autoAssignEnabled, String action, String title, String icon) {
+        this(action, title, icon);
+        this.autoAssignEnabled = autoAssignEnabled;
+    } 
     
     public ActionItem(String action, String title, String icon, String confirmationMessage) {
         this(action, title, icon);
