@@ -6,12 +6,12 @@
             class="button-grid">
         <div class="menu-button-border" 
             *ngFor="let menuItem of screen.menuItems"
-            [matBadge]="getNoficationForButton(menuItem)?.value" 
+            [matBadge]="getNotificationForButton(menuItem)?.value" 
             matBadgePosition="above after"
             matBadgeSize="large"
             matBadgeColor="accent"
-            [matBadgeHidden]="!getNoficationForButton(menuItem)" 
-            [@bounce]="getNoficationForButton(menuItem)? (bounceInterval | async) : 'down'">
+            [matBadgeHidden]="!getNotificationForButton(menuItem)" 
+            [@bounce]="getNotificationForButton(menuItem)? (bounceInterval | async) : 'down'">
             <button class="menu-button" mat-raised-button
                     gdAuto="column" color=primary [disabled]="!menuItem.enabled"
                 (click)="onMenuItemClick(menuItem)" [actionItem]="menuItem">

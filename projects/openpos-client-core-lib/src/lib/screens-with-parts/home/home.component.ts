@@ -75,7 +75,7 @@ export class HomeComponent extends PosScreen<HomeInterface> {
     return Configuration.enableKeybinds;
   }
 
-  public getNoficationForButton(item: IActionItem): INotificationItem {
+  public getNotificationForButton(item: IActionItem): INotificationItem {
       if (this.screen.notificationItems) {
         return this.screen.notificationItems.find(i => i.id === item.action);
       }
