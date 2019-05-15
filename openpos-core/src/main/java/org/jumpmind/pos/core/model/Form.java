@@ -1,5 +1,7 @@
 package org.jumpmind.pos.core.model;
 
+import org.jumpmind.pos.util.DriversLicenseValidator;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -337,6 +339,38 @@ public class Form implements Serializable {
     public FormField addUSPostalCodeField(String fieldId, String label, String value, boolean required) {
         FormField formField = createUSPostalCodeField(fieldId, label, value, required);
         formElements.add(formField);
+        return formField;
+    }
+
+    public FormField addDriversLicenseField(String fieldId, String label, String value, String state, boolean required, DriversLicenseValidator validator) {
+        FormField formField = createDriversLicenseField(fieldId, label, value, state, required, validator);
+        formElements.add(formField);
+        return formField;
+    }
+
+    public FormField createDriversLicenseField(String fieldId, String label, String value, String state, boolean required, DriversLicenseValidator validator) {
+        FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.AlphanumericText, required);
+        formField.setValue(value);
+        if (state != null)
+            formField.setPattern(validator.getRule(state));
+        else
+            formField.disabled(true);
+        return formField;
+    }
+
+    public ComboField addStatesListField(String fieldId, String label, String value, List<String> values, boolean required) {
+        ComboField formField = createStatesListField(fieldId, label, value, values, required);
+        formElements.add(formField);
+        return formField;
+    }
+
+    public ComboField createStatesListField(String fieldId, String label, String value, List<String> values, boolean required) {
+
+        ComboField formField = new ComboField(fieldId, label, null, values);
+        if (value != null)
+            formField.setValue(value);
+        formField.required(required);
+        formField.setValueChangedAction("StateSelected");
         return formField;
     }
     
