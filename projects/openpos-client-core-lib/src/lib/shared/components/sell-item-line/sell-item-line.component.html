@@ -24,7 +24,10 @@
     <div gdArea="giftReceipt" *ngIf="item.isGiftReceipt" fxAlign="right center">
         <mat-icon color="muted-color">redeem</mat-icon>&nbsp;&nbsp;
     </div>
-    <div gdArea="cost" gdGridAlign="center center" class="primary text-md">
+    <div gdArea="cost" gdGridAlign="center center" class="primary text-md sell-item-line-cost-outer">
+        <span *ngIf="item.sellingPrice && item.showSellingPrice" class="muted-color text-sm sell-item-line-selling-price">
+            <app-currency-text [amountText]="item.sellingPrice"></app-currency-text>
+        </span>
         <app-currency-text [amountText]="item.amount"></app-currency-text>
         <div>
             <p [hidden]="!item.originalAmount" class="muted-color text-xs sell-item-line-original"
@@ -41,8 +44,6 @@
     <div gdArea="kebab">
         <app-kebab-button block-selection *ngIf="showMenu()" fxAlign="right"
             [menuItems]="item.menuItems" (menuItemClick)="onMenuItemClick($event, [item.index])"></app-kebab-button>
-        <ng-template #hideButton>
-            <div style="height: 40px; width: 40px;"></div>
-        </ng-template>
+        <div *ngIf="!showMenu()" class="sell-item-line-hidden-button"></div>
     </div>
 </div>
