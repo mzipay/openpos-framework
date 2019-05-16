@@ -20,4 +20,5 @@ export interface ISellItem extends IItem {
     discountAmount: string;
     labels: string[];
     icon: string;
+    showSellingPrice: boolean;
 }

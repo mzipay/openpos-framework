@@ -28,6 +28,11 @@
             <mat-list-item *ngFor="let menuItem of screen.menuItems" (click)="onMenuItemClick(menuItem)">
                 <app-icon class="primary text-lg" iconName="{{menuItem.icon}}" iconClass="material-icons"></app-icon>
                 <span class="primary text-lg">&nbsp;{{menuItem.title}}</span>
+                <span *ngIf="getNotificationForButton(menuItem)" 
+                  [matBadge]="getNotificationForButton(menuItem).value" 
+                  matBadgePosition="above after"
+                  matBadgeSize="medium"
+                  matBadgeColor="accent" class="notification-badge"></span>
                 <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
             </mat-list-item>
         </mat-nav-list>

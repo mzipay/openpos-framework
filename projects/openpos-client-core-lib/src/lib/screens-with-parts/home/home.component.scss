@@ -17,6 +17,12 @@
     flex-direction: column;
 }
 
+.notification-badge {
+    padding-left: 13px;
+    padding-bottom: 10px;
+    margin-right: 10px;
+}
+
 @supports not (display: grid) {
 
     .button-grid{
