@@ -6,7 +6,7 @@ import java.util.List;
 import org.jumpmind.pos.core.screenpart.BaconStripPart;
 import org.jumpmind.pos.core.screenpart.StatusStripPart;
 
-public class AutoCompleteAddressScreen extends DynamicFormScreen {
+public class AutoCompleteAddressScreen extends DynamicFormScreen implements IHasAutoCompleteAddress {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,6 +27,15 @@ public class AutoCompleteAddressScreen extends DynamicFormScreen {
         this.getForm().addTextField("addressLine2", "Address Line 2", "", false);
         this.getForm().addTextField("locality", "City", "", true);
         this.getForm().addTextField("state", "State", "", true);
+        this.getForm().addTextField("postalCode", "Postal Code", "", true);
+        this.getForm().addTextField("country", "Country", "", true);
+    }
+
+    public void addAddressFieldsWithComboState(List<String> states) {
+        this.getForm().addTextField("streetAddress", "Street Address", "", true);
+        this.getForm().addTextField("addressLine2", "Address Line 2", "", false);
+        this.getForm().addTextField("locality", "City", "", true);
+        this.getForm().addComboBox("state", "State", states, true);
         this.getForm().addTextField("postalCode", "Postal Code", "", true);
         this.getForm().addTextField("country", "Country", "", true);
     }

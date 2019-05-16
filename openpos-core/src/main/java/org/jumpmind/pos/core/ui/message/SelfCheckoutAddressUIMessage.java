@@ -2,7 +2,9 @@ package org.jumpmind.pos.core.ui.message;
 
 import java.util.List;
 
-public class SelfCheckoutAddressUIMessage extends SelfCheckoutFormUIMessage {
+import org.jumpmind.pos.core.screen.IHasAutoCompleteAddress;
+
+public class SelfCheckoutAddressUIMessage extends SelfCheckoutFormUIMessage implements IHasAutoCompleteAddress {
 
     private static final long serialVersionUID = 1L;
 
