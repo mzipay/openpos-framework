@@ -1,5 +1,6 @@
 package org.jumpmind.pos.core.flow.ui;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +18,8 @@ public class PromptConfig {
     private String placeholder;
     private String responseText;
     private List<String> validationPatterns;
-    private Integer min;
-    private Integer max;
+    private BigDecimal min;
+    private BigDecimal max;
     private DialogProperties dialogProperties;
     private ActionItem actionMenuItem = new ActionItem("Next", "Next", true);
     private List<ActionItem> otherActions = new ArrayList<>();
@@ -28,28 +29,28 @@ public class PromptConfig {
         return this;
     }
     
-    public void setMax(Integer max) {
+    public void setMax(BigDecimal max) {
         this.max = max;
     }
     
-    public Integer getMax() {
+    public BigDecimal getMax() {
         return max;
     }
     
-    public PromptConfig max(Integer max) {
+    public PromptConfig max(BigDecimal max) {
         this.max = max;
         return this;
     }
     
-    public void setMin(Integer min) {
+    public void setMin(BigDecimal min) {
         this.min = min;
     }
     
-    public Integer getMin() {
+    public BigDecimal getMin() {
         return min;
     }
     
-    public PromptConfig min(Integer min) {
+    public PromptConfig min(BigDecimal min) {
         this.min = min;
         return this;
     }
