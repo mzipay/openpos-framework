@@ -10,10 +10,8 @@
             [disabled]="!screenData.checkoutButton.enabled"
             (click)="onMenuItemClick(screenData.checkoutButton)"
             >
-            <div>
-                <span class="text-md">{{screenData.checkoutButton.title}}</span>
-                <app-icon [iconClass]="'mat-48'" [iconName]="screenData.checkoutButton.icon"></app-icon>
-            </div>
+            <span class="text-md">{{screenData.checkoutButton.title}}</span>
+            <app-icon [iconClass]="'mat-48'" [iconName]="screenData.checkoutButton.icon"></app-icon>
         </button>
     </mat-card-content>
 </mat-card>

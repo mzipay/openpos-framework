@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { IconDefinition, IconService } from '../../../core/services/icon.service';
+import { Component, Input, OnInit, ElementRef, Renderer2 } from '@angular/core';
+import { IconService } from '../../../core/services/icon.service';
+import { Observable } from 'rxjs';
+import { SafeHtml } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-icon',
@@ -7,31 +9,24 @@ import { IconDefinition, IconService } from '../../../core/services/icon.service
     styleUrls: ['./icon.component.scss']
 })
 
-export class IconComponent {
+export class IconComponent implements OnInit {
 
     @Input()
-    set iconName(iconName: string) {
-        this.iconDef = this.iconService.resolveIcon(iconName);
-        this.isLocalIcon = (iconName && (iconName.startsWith('openpos_')) || (this.iconDef && this.iconDef.iconType === 'svg'));
+    iconName: string;
 
-        if (this.iconDef && this.iconDef.iconType !== 'svg') {
-            this._iconName = this.iconDef.iconName;
-        } else {
-            this._iconName = iconName;
+    @Input() iconClass: string;
+
+    parser = new DOMParser();
+    icon: Observable<SafeHtml>;
+
+    ngOnInit(): void {
+        this.icon = this.iconService.getIconHtml(this.iconName);
+        this.renderer.addClass( this.elementRef.nativeElement, 'mat-24');
+        if ( this.iconClass ) {
+            this.iconClass.split(' ').forEach( e => this.renderer.addClass( this.elementRef.nativeElement, e));
         }
     }
 
-    @Input() iconClass = 'material-icons mat-24';
 
-    private _iconName: string;
-
-    isLocalIcon: boolean;
-
-    iconDef: IconDefinition;
-
-    constructor(private iconService: IconService) {}
-
-    get iconName(): string {
-        return this._iconName;
-    }
+    constructor( private iconService: IconService, private elementRef: ElementRef, private renderer: Renderer2 ) {}
 }
