@@ -27,12 +27,13 @@
     <div gdArea="cost" gdGridAlign="center center" class="primary text-md">
         <app-currency-text [amountText]="item.amount"></app-currency-text>
         <div>
-            <p [hidden]="!item.discountAmount" class="muted-color text-xs"
+            <p [hidden]="!item.originalAmount" class="muted-color text-xs sell-item-line-original"
                 style="text-align: right; margin: 0px; text-decoration: line-through;">
                 <app-currency-text [amountText]="item.originalAmount"></app-currency-text>
             </p>
-
-            <p [hidden]="!item.discountAmount" class="muted-color text-xs" style="text-align: right; margin: 0px;">
+    
+            <p [hidden]="!item.discountAmount" class="muted-color text-xs sell-item-line-discount"
+                style="text-align: right; margin: 0px;">
                 <app-currency-text [amountText]="item.discountAmount"></app-currency-text>
             </p>
         </div>
