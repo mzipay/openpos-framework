@@ -1,75 +1,116 @@
-import { Logger } from './logger.service';
-import { SessionService } from './session.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl, SafeHtml } from '@angular/platform-browser';
 import { Injectable } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
-import { PersonalizationService } from './personalization.service';
+import { ImageService } from './image.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root',
   })
 export class IconService {
-    private icons = new Map<string, IconDefinition>();
+    private icons = new Map<string, string>();
+      private iconBasePath = '${apiServerBaseUrl}/content?contentPath=/content/icons/';
 
-    constructor(private log: Logger, private iconRegistry: MatIconRegistry,
-        private sanitizer: DomSanitizer, private personalization: PersonalizationService, private sessionService: SessionService) {
-        this.sessionService.onServerConnect.subscribe(connected => {
-            if (connected) {
-                this.init();
-            }
-        });
+    constructor(
+        private sanitizer: DomSanitizer,
+        private imageService: ImageService,
+        private iconRegistry: MatIconRegistry ) {
+
+        this.icons.set('Barcode',           'barcode.svg');
+        this.icons.set('Percent',           'percent.svg');
+        this.icons.set('Search',            'search.svg');
+        this.icons.set( 'Help',             'help.svg' );
+        this.icons.set( 'Receipt',          'receipt.svg' );
+        this.icons.set( 'NoReceipt',        'block.svg' );
+        this.icons.set( 'Error',            'error.svg' );
+        this.icons.set( 'Login',            'lock.svg' );
+        this.icons.set( 'User',             'person.svg' );
+        this.icons.set( 'Password',         'lock.svg' );
+        this.icons.set( 'Logout',           'exit_to_app.svg' );
+        this.icons.set( 'Home',             'home.svg' );
+        this.icons.set( 'DayStart',         'brightness_5.svg' );
+        this.icons.set( 'DayEnd',           'brightness_3.svg' );
+        this.icons.set( 'Sales',            'local_offer.svg' );
+        this.icons.set( 'Phone',            'phone.svg' );
+        this.icons.set( 'DefaultPrompt',    'question_answer.svg' );
+        this.icons.set( 'Forward',          'keyboard_arrow_right.svg' );
+        this.icons.set( 'Back',             'keyboard_arrow_left.svg' );
+        this.icons.set( 'Customer',         'person.svg' );
+        this.icons.set( 'BusinessCustomer', 'business.svg' );
+        this.icons.set( 'Employee',         'person.svg' );
+        this.icons.set( 'Employees',        'group.svg' );
+        this.icons.set( 'AddEmployee',      'person_add.svg' );
+        this.icons.set( 'AddCustomer',      'person_add.svg' );
+        this.icons.set( 'Email',            'email.svg' );
+        this.icons.set( 'LoyaltyProgram',   'loyalty.svg' );
+        this.icons.set( 'CustomerLink',     'link.svg' );
+        this.icons.set( 'ExternalLink',     'language.svg' );
+        this.icons.set( 'Links',            'link.svg' );
+        this.icons.set( 'WebOrder',         'computer.svg' );
+        this.icons.set( 'Delivery',         'local_shipping.svg' );
+        this.icons.set( 'Pickup',           'schedule.svg' );
+        this.icons.set( 'Journal',          'book.svg' );
+        this.icons.set( 'Training',         'school.svg' );
+        this.icons.set( 'Clock',            'watch_later.svg' );
+        this.icons.set( 'Calendar',         'today.svg' );
+        this.icons.set( 'CalendarError',    'event_busy.svg' );
+        this.icons.set( 'CalendarOk',       'event_available.svg' );
+        this.icons.set( 'Completed',        'check.svg' );
+        this.icons.set( 'DollarSign',       'attach_money.svg' );
+        this.icons.set( 'Discount',         'local_offer.svg' );
+        this.icons.set( 'Check',            'money.svg' );
+        this.icons.set( 'Cash',             'local_atm.svg' );
+        this.icons.set( 'Coin',             'monetization_on.svg' );
+        this.icons.set( 'CreditCard',       'credit_card.svg' );
+        this.icons.set( 'GiftCard',         'card_giftcard.svg' );
+        this.icons.set( 'StoreCard',        'card_membership.svg' );
+        this.icons.set( 'PurchaseOrder',    'local_atm.svg' );
+        this.icons.set( 'Lease',            'account_balance.svg' );
+        this.icons.set( 'Tax',              'account_balance.svg' );
+        this.icons.set( 'Account',          'account_balance.svg' );
+        this.icons.set( 'Store',            'store.svg' );
+        this.icons.set( 'EmployeeEnter',    'keyboard.svg' );
+        this.icons.set( 'CustomerEnter',    'dialpad.svg' );
+        this.icons.set( 'ItemList',         'list.svg' );
+        this.icons.set( 'Print',            'print.svg' );
+        this.icons.set( 'Add',              'add_circle.svg' );
+        this.icons.set( 'Remove',           'remove_circle.svg' );
+        this.icons.set( 'Increment',        'add.svg' );
+        this.icons.set( 'Decrement',        'remove.svg' );
+        this.icons.set( 'AddToCart',        'add_shopping_cart.svg' );
+        this.icons.set( 'SuspendAction',    'pause.svg' );
+        this.icons.set( 'ResumeAction',     'play_arrow.svg' );
+        this.icons.set( 'RetrieveAction',   'replay.svg' );
+        this.icons.set( 'CancelAction',     'block.svg' );
+        this.icons.set( 'BypassAction',     'low_priority.svg' );
+        this.icons.set( 'ViewAction',       'pageview.svg' );
+        this.icons.set( 'Return',           'undo.svg' );
+        this.icons.set( 'Trash',            'delete.svg' );
+        this.icons.set( 'Close',            'close.svg' );
+        this.icons.set( 'Till',             'local_mall.svg' );
+        this.icons.set( 'Security',         'security.svg' );
+        this.icons.set( 'Reports',          'assessment.svg' );
+        this.icons.set( 'HamburgerMenu',    'menu.svg' );
+        this.icons.set( 'KebabMenu',        'more_vert.svg');
     }
 
-    private init() {
-        // This is no longer used. IconConstants should be used to register icons from here on out
-        this.log.info(`Icon service is initializing using base server url: ${this.personalization.getServerBaseURL()}`);
-        this.iconRegistry.addSvgIcon('openpos_calculator', this.makeIconSafeUrl('calculator.svg'));
-        this.iconRegistry.addSvgIcon('openpos_cash', this.makeIconSafeUrl('cash.svg'));
-        this.iconRegistry.addSvgIcon('openpos_cash-multiple', this.makeIconSafeUrl('cash-multiple.svg'));
-        this.iconRegistry.addSvgIcon('openpos_postvoid', this.makeIconSafeUrl('postvoid.svg'));
-        this.iconRegistry.addSvgIcon('barcode', this.makeIconSafeUrl('barcode.svg'));
-        this.iconRegistry.addSvgIcon('openpos_barcode', this.makeIconSafeUrl('barcode.svg'));
-        this.iconRegistry.addSvgIcon('percent', this.makeIconSafeUrl('percent.svg'));
-        this.iconRegistry.addSvgIcon('openpos_percent', this.makeIconSafeUrl('percent.svg'));
-        this.iconRegistry.addSvgIcon('openpos_rotate-3d', this.makeIconSafeUrl('rotate-3d.svg'));
-        this.iconRegistry.addSvgIcon('openpos_book-open-page-variant', this.makeIconSafeUrl('book-open-page-variant.svg'));
-    }
-
-    public addIcon(name: string, iconDef: IconDefinition, served?: boolean) {
-        if (this.icons.get(name)) {
-            this.log.info(`replacing registration for icon of type ${this.icons.get(name).iconName} with ${iconDef.iconName} for the key of ${name} in the icon service`);
-            this.icons.delete(name);
-        }
-        if (iconDef.iconType === 'svg') {
-            if (!served) {
-            // TODO: needs fixed. adding icons as local file resources will not work when running the application
-            // as standalone javascript app in Cordova or locally in file system.  (i.e., when not served)
-                this.iconRegistry.addSvgIcon(name, this.sanitizer.bypassSecurityTrustResourceUrl(`./assets/icons/${iconDef.iconName}`));
+    public getIconHtml(name: string): Observable<SafeHtml> {
+        let url: string;
+        if ( name.includes('${apiServerBaseUrl}/content?contentPath=') ) {
+            url = name;
+        } else {
+            if ( this.icons.has(name)) {
+                name = this.icons.get(name);
             } else {
-                this.iconRegistry.addSvgIcon(name, this.makeIconSafeUrl(iconDef.iconName));
+                name += '.svg';
             }
+            url =  this.iconBasePath + name;
+            url = this.imageService.replaceImageUrl(url);
         }
-        this.icons.set(name, iconDef);
-    }
+        const safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 
-    public resolveIcon(name: string): IconDefinition {
-        if (this.icons.has(name)) {
-            return this.icons.get(name);
-        }
-        return null;
-    }
-
-    private makeIconSafeUrl(iconFilename: string): SafeResourceUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(`${this.personalization.getServerBaseURL()}/img/${iconFilename}`);
-    }
-}
-
-export class IconDefinition {
-    iconName: string;
-    iconType: string;
-
-    constructor(iconName: string, iconType: string) {
-        this.iconName = iconName;
-        this.iconType = iconType;
+        return this.iconRegistry.getSvgIconFromUrl(safeUrl).pipe(
+            map( i => this.sanitizer.bypassSecurityTrustHtml(i.outerHTML)));
     }
 }

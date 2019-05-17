@@ -10,7 +10,7 @@ export class IconButtonComponent {
     @Input() disabled = false;
     @Input() iconName: string;
     @Input() color: string;
-    @Input() iconClass: string;
+    @Input() iconClass = 'mat-24';
 
     @Output() buttonClick = new EventEmitter();
 

@@ -25,7 +25,6 @@ import { TillSummaryComponent } from './till-summary/till-summary.component';
 import { DynamicListDialogComponent } from './dynamic-list/dynamic-list-dialog.component';
 import { LoginDialogComponent } from './login/login-dialog.component';
 import { ScreenConstants } from './screen.constants';
-import { IconConstants } from './icon.constants';
 import { SelectionListDialogComponent } from './selection-list/selection-list-dialog.component';
 import { DataTableComponent } from './data-table/data-table.component';
 import { AutoCompleteAddressComponent } from './auto-complete-address/auto-complete-address.component';
@@ -114,10 +113,6 @@ export class ScreensModule {
 
         ScreenConstants.templates.forEach((template) => {
             screenService.addScreen(template.name, template.component);
-        });
-
-        IconConstants.icons.forEach((icon) => {
-            iconService.addIcon(icon.name, icon.iconDef);
         });
     }
 

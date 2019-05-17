@@ -15,9 +15,11 @@
             <button class="menu-button" mat-raised-button
                     gdAuto="column" color=primary [disabled]="!menuItem.enabled"
                 (click)="onMenuItemClick(menuItem)" [actionItem]="menuItem">
+                <div class="menu-button-content">
                     <app-icon iconName="{{menuItem.icon}}" iconClass="material-icons mat-64"></app-icon>
                     <div>{{menuItem.title}}</div>
                     <div *ngIf="menuItem.keybind && keybindsEnabled()" style="padding-bottom: 8px;" class="text-xs">{{menuItem.keybind}}</div>
+                </div>
             </button>
         </div>
     </div>
