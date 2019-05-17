@@ -76,12 +76,12 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Autowired
     IMessageService messageService;
-    
+
     @Autowired
     ApplicationContext applicationContext;
 
     List<IScreenInterceptor> screenInterceptors = new ArrayList<>();
-    
+
     boolean atRest = true;
 
     @PostConstruct
@@ -90,7 +90,7 @@ public class ScreenService implements IScreenService, IActionListener {
             mapper.setSerializationInclusion(Include.NON_NULL);
         }
     }
-    
+
     public boolean isAtRest() {
         return atRest;
     }
@@ -101,34 +101,41 @@ public class ScreenService implements IScreenService, IActionListener {
             this.screenInterceptors.add(screenInterceptor);
         }
     }
-    
+
+    @SuppressWarnings("deprecation")
     @RequestMapping(method = RequestMethod.GET, value = "api/content")
     public void getImageAsByteArray(HttpServletResponse response, @RequestParam(name = "contentPath", required = false) String contentPath)
             throws IOException {
-        logger.info("Received a request for asset: {}", contentPath);
+        logger.debug("Received a request for asset: {}", contentPath);
 
-        if(contentPath.endsWith(".svg")) {
+        if (contentPath.endsWith(".svg")) {
             response.setContentType("image/svg+xml");
         }
 
         InputStream in = getClass().getResourceAsStream(contentPath);
 
-        if( in == null ) {
-            in =  System.class.getResourceAsStream(contentPath);
+        if (in == null) {
+            in = System.class.getResourceAsStream(contentPath);
         }
 
         File file = new File(contentPath);
 
-        // If we find the content on the file system use that over the class path
+        /*
+         * If we find the content on the file system use that over the class
+         * path
+         */
         if (file.exists()) {
             in = new FileInputStream(file);
         } else {
-            logger.warn("Resource not found for asset: {}", contentPath);
+            logger.debug("File resource not found for asset: {}", contentPath);
         }
 
         if (in != null) {
-            IOUtils.copy(in, response.getOutputStream());
-            in.close();
+            try {
+                IOUtils.copy(in, response.getOutputStream());
+            } finally {
+                IOUtils.closeQuietly(in);
+            }
         } else {
             response.setStatus(HttpStatus.NOT_FOUND.value());
         }
@@ -153,7 +160,13 @@ public class ScreenService implements IScreenService, IActionListener {
         return result;
     }
 
-    private String getComponentValues(String appId, String deviceId, String controlId, UIMessage screen, String searchTerm, Integer sizeLimit) {
+    private String getComponentValues(
+            String appId,
+            String deviceId,
+            String controlId,
+            UIMessage screen,
+            String searchTerm,
+            Integer sizeLimit) {
         String result = null;
         if (screen instanceof IHasForm) {
             IHasForm dynamicScreen = (IHasForm) screen;
@@ -190,35 +203,36 @@ public class ScreenService implements IScreenService, IActionListener {
     public void actionOccured(String appId, String deviceId, Action action) {
         try {
             atRest = false;
-        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
-        if (stateManager != null) {
-            try {                
-                stateManagerContainer.setCurrentStateManager(stateManager);
-                if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
-                    stateManager.keepAlive();
-                } else if( "Refresh".equals(action.getName())) {
-                    UIMessage lastDialog = getLastDialog(appId, deviceId);
-                    logger.info("Received Refresh action from {}", deviceId);
-                    showScreen(appId, deviceId, getLastScreen(appId, deviceId));
-                    showScreen(appId, deviceId, lastDialog);
-                } else {
-                    
-                    deserializeForm(stateManager.getApplicationState(), action);
-                    
-                    logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
-                    
-                    try {
-                        logger.debug("Posting action {}", action);
-                        stateManager.doAction(action);
-                    } catch (Throwable ex) {
-                        logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
-                        messageService.sendMessage(appId, deviceId, Toast.createWarningToast("The application received an unexpected error. Please report to the appropriate technical personnel"));
+            IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
+            if (stateManager != null) {
+                try {
+                    stateManagerContainer.setCurrentStateManager(stateManager);
+                    if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
+                        stateManager.keepAlive();
+                    } else if ("Refresh".equals(action.getName())) {
+                        UIMessage lastDialog = getLastDialog(appId, deviceId);
+                        logger.info("Received Refresh action from {}", deviceId);
+                        showScreen(appId, deviceId, getLastScreen(appId, deviceId));
+                        showScreen(appId, deviceId, lastDialog);
+                    } else {
+
+                        deserializeForm(stateManager.getApplicationState(), action);
+
+                        logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
+
+                        try {
+                            logger.debug("Posting action {}", action);
+                            stateManager.doAction(action);
+                        } catch (Throwable ex) {
+                            logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
+                            messageService.sendMessage(appId, deviceId, Toast.createWarningToast(
+                                    "The application received an unexpected error. Please report to the appropriate technical personnel"));
+                        }
                     }
+                } finally {
+                    stateManagerContainer.setCurrentStateManager(null);
                 }
-            } finally {
-                stateManagerContainer.setCurrentStateManager(null);
             }
-        }
         } finally {
             atRest = true;
         }
@@ -257,12 +271,12 @@ public class ScreenService implements IScreenService, IActionListener {
             return null;
         }
     }
-    
+
     @Override
     public void showToast(String appId, String nodeId, Toast toast) {
         try {
             atRest = false;
-        messageService.sendMessage(appId, nodeId, toast);
+            messageService.sendMessage(appId, nodeId, toast);
         } finally {
             atRest = true;
         }
@@ -273,37 +287,37 @@ public class ScreenService implements IScreenService, IActionListener {
     public void showScreen(String appId, String deviceId, UIMessage screen) {
         try {
             atRest = false;
-        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
-        if (screen != null && stateManager != null) {
-            ApplicationState applicationState = stateManager.getApplicationState();
-            screen.setSequenceNumber(applicationState.incrementAndScreenSequenceNumber());
-            try {
-                interceptScreen(appId, deviceId, screen);
-                logScreenTransition(deviceId, screen);
-            } catch (Exception ex) {
-                if (ex.toString().contains("org.jumpmind.pos.core.screen.ChangeScreen")) {
-                    logger.error(
-                            "Failed to write screen to JSON. Verify the screen type has been configured by calling setType() on the screen object.",
-                            ex);
+            IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
+            if (screen != null && stateManager != null) {
+                ApplicationState applicationState = stateManager.getApplicationState();
+                screen.setSequenceNumber(applicationState.incrementAndScreenSequenceNumber());
+                try {
+                    interceptScreen(appId, deviceId, screen);
+                    logScreenTransition(deviceId, screen);
+                } catch (Exception ex) {
+                    if (ex.toString().contains("org.jumpmind.pos.core.screen.ChangeScreen")) {
+                        logger.error(
+                                "Failed to write screen to JSON. Verify the screen type has been configured by calling setType() on the screen object.",
+                                ex);
+                    } else {
+                        logger.error("Failed to write screen to JSON", ex);
+                    }
+                }
+                if (!stateManager.areAllSessionsAuthenticated()) {
+                    logger.warn("Not sending screen because a session is attached that is not authenticated");
+                } else if (!stateManager.areAllSessionsCompatible()) {
+                    logger.warn("Not sending screen because a session is attached that is not compatible");
+
                 } else {
-                    logger.error("Failed to write screen to JSON", ex);
+                    messageService.sendMessage(appId, deviceId, screen);
+                }
+                if (screen.isDialog()) {
+                    applicationState.setLastDialog(screen);
+                } else if (!screen.getScreenType().equals("NoOp")) {
+                    applicationState.setLastScreen(screen);
+                    applicationState.setLastDialog(null);
                 }
             }
-            if (!stateManager.areAllSessionsAuthenticated()) {
-                logger.warn("Not sending screen because a session is attached that is not authenticated");
-            } else if (!stateManager.areAllSessionsCompatible()) {
-                logger.warn("Not sending screen because a session is attached that is not compatible");
-
-            } else {
-                messageService.sendMessage(appId, deviceId, screen);
-            }
-            if (screen.isDialog()) {
-                applicationState.setLastDialog(screen);
-            } else if (!screen.getScreenType().equals("NoOp")) {
-                applicationState.setLastScreen(screen);
-                applicationState.setLastDialog(null);
-            }
-        }
         } finally {
             atRest = true;
         }
@@ -316,14 +330,13 @@ public class ScreenService implements IScreenService, IActionListener {
                 screenInterceptor.intercept(appId, deviceId, screen);
             }
         }
-        
-        Map<String, IScreenInterceptor> screenInterceptorsSpring = 
-                applicationContext.getBeansOfType(IScreenInterceptor.class);
-        
+
+        Map<String, IScreenInterceptor> screenInterceptorsSpring = applicationContext.getBeansOfType(IScreenInterceptor.class);
+
         if (screenInterceptorsSpring != null) {
             for (IScreenInterceptor screenInterceptor : screenInterceptorsSpring.values()) {
                 screenInterceptor.intercept(appId, deviceId, screen);
-            }            
+            }
         }
     }
 
@@ -335,7 +348,7 @@ public class ScreenService implements IScreenService, IActionListener {
                     action.setData(form);
                 }
             } catch (IllegalArgumentException ex) {
-            	logger.error(ex.getMessage());
+                logger.error(ex.getMessage());
                 // We should not assume a form will always be returned by
                 // the DynamicFormScreen.
                 // The barcode scanner can also return a value.
@@ -378,7 +391,8 @@ public class ScreenService implements IScreenService, IActionListener {
 
     protected void logScreenTransition(String deviceId, UIMessage screen) throws JsonProcessingException {
         if (loggerGraphical.isInfoEnabled()) {
-            logger.info("Show screen on node \"" + deviceId + "\" (" + screen.getClass().getName() + ")\n" + drawBox(screen.getId(), screen.getScreenType()));
+            logger.info("Show screen on node \"" + deviceId + "\" (" + screen.getClass().getName() + ")\n"
+                    + drawBox(screen.getId(), screen.getScreenType()));
         } else {
             logger.info("Show screen on node \"" + deviceId + "\"(\" + screen.getClass().getName() + \")\n");
         }
