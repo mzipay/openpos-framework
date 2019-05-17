@@ -112,10 +112,10 @@ public class ScreenService implements IScreenService, IActionListener {
             response.setContentType("image/svg+xml");
         }
 
-        InputStream in = getClass().getResourceAsStream(contentPath);
+        InputStream in = getClass().getResourceAsStream("/content/" + contentPath);
 
-        if (in == null) {
-            in = System.class.getResourceAsStream(contentPath);
+        if( in == null ) {
+            in =  System.class.getResourceAsStream( "/content/" + contentPath);
         }
 
         File file = new File(contentPath);
