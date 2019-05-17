@@ -1,4 +1,4 @@
-import { DomSanitizer, SafeResourceUrl, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Injectable } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
 import { ImageService } from './image.service';
@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
   })
 export class IconService {
     private icons = new Map<string, string>();
-      private iconBasePath = '${apiServerBaseUrl}/content?contentPath=/content/icons/';
+      private iconBasePath = '${apiServerBaseUrl}/content?contentPath=/icons/';
 
     constructor(
         private sanitizer: DomSanitizer,
@@ -93,6 +93,10 @@ export class IconService {
         this.icons.set( 'Reports',          'assessment.svg' );
         this.icons.set( 'HamburgerMenu',    'menu.svg' );
         this.icons.set( 'KebabMenu',        'more_vert.svg');
+    }
+
+    public addIconMapping( name: string, icon: string ) {
+        this.icons.set(name, icon + '.svg');
     }
 
     public getIconHtml(name: string): Observable<SafeHtml> {
