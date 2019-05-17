@@ -45,13 +45,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -111,22 +107,31 @@ public class ScreenService implements IScreenService, IActionListener {
             throws IOException {
         logger.info("Received a request for asset: {}", contentPath);
 
-        File file = new File(contentPath);
-        if (file.exists()) {
-            if(file.getName().endsWith(".svg")) {
-                response.setContentType("image/svg+xml");
-            }
+        if(contentPath.endsWith(".svg")) {
+            response.setContentType("image/svg+xml");
+        }
 
-            InputStream in = new FileInputStream(file);
-            if (in != null) {
-                IOUtils.copy(in, response.getOutputStream());
-                in.close();
-            }
+        InputStream in = getClass().getResourceAsStream(contentPath);
+
+        if( in == null ) {
+            in =  System.class.getResourceAsStream(contentPath);
+        }
+
+        File file = new File(contentPath);
+
+        // If we find the content on the file system use that over the class path
+        if (file.exists()) {
+            in = new FileInputStream(file);
         } else {
             logger.warn("Resource not found for asset: {}", contentPath);
         }
 
-
+        if (in != null) {
+            IOUtils.copy(in, response.getOutputStream());
+            in.close();
+        } else {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "api/app/{appId}/node/{deviceId}/control/{controlId}")
