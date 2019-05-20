@@ -1,7 +1,9 @@
 package org.jumpmind.pos.wrapper.update;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -14,10 +16,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Pack200;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.threerings.getdown.util.FileUtil;
+import java.util.zip.GZIPInputStream;
 
 final public class Digester {
 
@@ -42,7 +45,7 @@ final public class Digester {
         }
     }
 
-    private static void processDir(File digestFile, File dir) throws Exception {
+    protected static void processDir(File digestFile, File dir) throws Exception {
         File[] files = dir.listFiles();
         for (File file : files) {
             if (file.isDirectory()) {
@@ -76,7 +79,7 @@ final public class Digester {
                 // the jar file digest
                 if (isPacked200Jar) {
                     tmpJarFile = new File(target.getPath() + ".tmp");
-                    FileUtil.unpackPacked200Jar(target, tmpJarFile);
+                    unpackPacked200Jar(target, tmpJarFile);
                     jar = new JarFile(tmpJarFile);
                 } else {
                     jar = new JarFile(target);
@@ -101,7 +104,7 @@ final public class Digester {
                     }
                 }
                 if (tmpJarFile != null) {
-                    FileUtil.deleteHarder(tmpJarFile);
+                    deleteHarder(tmpJarFile);
                 }
             }
 
@@ -113,6 +116,42 @@ final public class Digester {
             }
         }
         return hexlate(md.digest());
+    }
+    
+    protected static void unpackPacked200Jar (File packedJar, File target) throws IOException
+    {
+        InputStream packedJarIn = null;
+        FileOutputStream extractedJarFileOut = null;
+        JarOutputStream jarOutputStream = null;
+        try {
+            extractedJarFileOut = new FileOutputStream(target);
+            jarOutputStream = new JarOutputStream(extractedJarFileOut);
+            packedJarIn = new FileInputStream(packedJar);
+            if (packedJar.getName().endsWith(".gz") || packedJar.getName().endsWith(".gz_new")) {
+                packedJarIn = new GZIPInputStream(packedJarIn);
+            }
+            Pack200.Unpacker unpacker = Pack200.newUnpacker();
+            unpacker.unpack(packedJarIn, jarOutputStream);
+
+        } finally {
+            close(jarOutputStream);
+            close(extractedJarFileOut);
+            close(packedJarIn);
+        }
+    }
+    
+    protected static boolean deleteHarder (File file) {
+        // if at first you don't succeed... try, try again
+        return file.delete() || file.delete();
+    }
+    
+    protected static void close (Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+            }
+        }
     }
 
     protected static boolean isJar(String path) {
