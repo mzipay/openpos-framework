@@ -100,6 +100,9 @@ export class IconService {
     }
 
     public getIconHtml(name: string): Observable<SafeHtml> {
+        if (!name) {
+            return null;
+        }
         let url: string;
         if ( name.includes('${apiServerBaseUrl}/content?contentPath=') ) {
             url = name;
