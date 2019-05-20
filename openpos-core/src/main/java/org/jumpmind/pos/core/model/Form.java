@@ -1,6 +1,6 @@
 package org.jumpmind.pos.core.model;
 
-import org.jumpmind.pos.util.DriversLicenseValidator;
+import org.jumpmind.pos.util.DriversLicenseUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -342,19 +342,24 @@ public class Form implements Serializable {
         return formField;
     }
 
-    public FormField addDriversLicenseField(String fieldId, String label, String value, String state, boolean required, DriversLicenseValidator validator) {
-        FormField formField = createDriversLicenseField(fieldId, label, value, state, required, validator);
+    public FormField addDriversLicenseField(String fieldId, String label, String value, String state, boolean required) {
+        FormField formField = createDriversLicenseField(fieldId, label, value, state, required);
         formElements.add(formField);
         return formField;
     }
 
-    public FormField createDriversLicenseField(String fieldId, String label, String value, String state, boolean required, DriversLicenseValidator validator) {
+    public FormField createDriversLicenseField(String fieldId, String label, String value, String state, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.AlphanumericText, required);
-        formField.setValue(value);
         if (state != null)
-            formField.setPattern(validator.getRule(state));
+            if (value != null) {
+                formField.setPattern(DriversLicenseUtils.getRule("HASHED") + "|" + DriversLicenseUtils.getRule(state));
+                value = DriversLicenseUtils.HASH_MASK;
+            }
+            else
+                formField.setPattern(DriversLicenseUtils.getRule(state));
         else
             formField.disabled(true);
+        formField.setValue(value);
         return formField;
     }
 

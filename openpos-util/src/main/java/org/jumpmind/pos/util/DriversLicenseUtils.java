@@ -2,15 +2,17 @@ package org.jumpmind.pos.util;
 
 import java.util.*;
 
-public class DriversLicenseValidator {
+public class DriversLicenseUtils {
 
-    private Map<String, String> rules;
+    private static List<String> supportedStates;
 
-    private List<String> supportedStates;
+    public final static String HASH_MASK = "*********";
 
-    public DriversLicenseValidator() {
+    private final static String HASH_MASK_PATTERN = "^" + HASH_MASK.replaceAll("\\*", "\\\\*") + "$";
+
+    private static Map<String, String> rules;
+    static {
         rules = new HashMap<>();
-
         rules.put("AL", "^\\d{1,7}$");
         rules.put("AK", "^\\d{1,7}$");
         rules.put("AZ", "^[a-zA-Z]\\d{8,9}$");
@@ -59,25 +61,30 @@ public class DriversLicenseValidator {
         rules.put("VT", "^\\d{8}$|^\\d{7}A$");
         rules.put("VA", "^[a-zA-Z]\\d{8,11}$|^\\d{9}$");
         rules.put("WA", "^[a-zA-Z]{1}\\*{4}[a-zA-Z]{2}\\d{3}[a-zA-Z0-9]{2}$|^" +
-                        "[a-zA-Z]{2}\\*{3}[a-zA-Z]{2}\\d{3}[a-zA-Z0-9]{2}$|^" +
-                        "[a-zA-Z]{3}\\*{2}[a-zA-Z]{2}\\d{3}[a-zA-Z0-9]{2}$|^" +
-                        "[a-zA-Z]{4}\\*{1}[a-zA-Z]{2}\\d{3}[a-zA-Z0-9]{2}$|^" +
-                        "[a-zA-Z]{5}[a-zA-Z]{2}\\d{3}[a-zA-Z0-9]{2}$");
+                "[a-zA-Z]{2}\\*{3}[a-zA-Z]{2}\\d{3}[a-zA-Z0-9]{2}$|^" +
+                "[a-zA-Z]{3}\\*{2}[a-zA-Z]{2}\\d{3}[a-zA-Z0-9]{2}$|^" +
+                "[a-zA-Z]{4}\\*{1}[a-zA-Z]{2}\\d{3}[a-zA-Z0-9]{2}$|^" +
+                "[a-zA-Z]{5}[a-zA-Z]{2}\\d{3}[a-zA-Z0-9]{2}$");
         rules.put("WV", "^\\d{7}$|^[a-zA-Z]{1,2}\\d{5,6}$");
         rules.put("WI", "^[a-zA-Z]\\d{13}$");
         rules.put("WY", "^\\d{9,10}$");
-
+        rules.put("HASHED", HASH_MASK_PATTERN);
+        supportedStates = new ArrayList<>();
         supportedStates = new ArrayList<>(rules.keySet());
         Collections.sort(supportedStates);
     }
 
-    public boolean validate(String number, String stateCode) {
+    private DriversLicenseUtils() {
+
+    }
+
+    public static boolean validate(String number, String stateCode) {
         return (number.matches(rules.get(stateCode)));
     }
 
-    public List<String> getSupportedStates() {return supportedStates;}
+    public static List<String> getSupportedStates() {return supportedStates;}
 
-    public String getRule(String stateCode) {
+    public static String getRule(String stateCode) {
         return rules.get(stateCode);
     }
 }
