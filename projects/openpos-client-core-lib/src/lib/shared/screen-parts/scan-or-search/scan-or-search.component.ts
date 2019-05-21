@@ -8,6 +8,7 @@ import { ScreenPart } from '../../decorators/screen-part.decorator';
 import { OpenposMediaService } from '../../../core/services/openpos-media.service';
 import { Observable, Subscription } from 'rxjs';
 import { ScannerService } from '../../../core/services/scanner.service';
+import { DialogService } from '../../../core/services/dialog.service';
 
 @ScreenPart({
     name: 'scan'
@@ -27,9 +28,9 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     private scanServiceSubscription: Subscription;
 
-    constructor( public devices: DeviceService, messageProvider: MessageProvider,
-                 private elRef: ElementRef, mediaService: OpenposMediaService,
-                 private scannerService: ScannerService) {
+    constructor(public devices: DeviceService, messageProvider: MessageProvider,
+                private elRef: ElementRef, mediaService: OpenposMediaService,
+                private scannerService: ScannerService, private dialogService: DialogService) {
         super(messageProvider);
         const mobileMap = new Map([
             ['xs', true],
@@ -47,13 +48,20 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
             this.barcode = scanData;
             this.onEnter();
         });
+        this.dialogService.$dialogMessages.subscribe(e => this.unregisterScanner());
     }
 
     ngOnDestroy(): void {
+        this.unregisterScanner();
+        this.scannerService.stopScanning();
+        super.ngOnDestroy();
+    }
+
+    private unregisterScanner() {
         if (this.scanServiceSubscription !== null) {
             this.scanServiceSubscription.unsubscribe();
+            this.scanServiceSubscription = null;
         }
-        super.ngOnDestroy();
     }
 
     screenDataUpdated() {
@@ -74,7 +82,7 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     private filterBarcodeValue(val: string): string {
         if (!val) {
-        return val;
+            return val;
         }
         // Filter out extra characters permitted by HTML5 input type=number (for exponentials)
         const pattern = /[e|E|\+|\-|\.]/g;
@@ -86,7 +94,7 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
         const content = event.clipboardData.getData('text/plain');
         const filteredContent = this.filterBarcodeValue(content);
         if (filteredContent !== content) {
-        this.log.info(`Clipboard data contains invalid characters for barcode, suppressing pasted content '${content}'`);
+            this.log.info(`Clipboard data contains invalid characters for barcode, suppressing pasted content '${content}'`);
         }
         return filteredContent === content;
     }
