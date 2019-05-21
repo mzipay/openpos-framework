@@ -1,6 +1,8 @@
+import { ScannerService } from './../../core/services/scanner.service';
 import { Component } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
+import { SessionService } from '../../core/services/session.service';
 
 /**
  * @ignore
@@ -14,6 +16,12 @@ import { ScreenComponent } from '../../shared/decorators/screen-component.decora
 })
 export class DynamicFormComponent extends PosScreen<any> {
 
-  buildScreen() {}
+    constructor(private scannerService: ScannerService) {
+        super();
+    }
+
+    buildScreen() {
+        this.scannerService.startScanning().subscribe( m => this.session.onAction('Scan', m));
+    }
 
 }

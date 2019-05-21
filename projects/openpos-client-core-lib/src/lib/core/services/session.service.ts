@@ -78,7 +78,7 @@ export class SessionService implements IMessageHandler<any> {
 
     private stompDebug = false;
 
-    private actionPayloads: Map<string, Function> = new Map<string, Function>();
+    private actionPayloads: Map<string, (Function)> = new Map<string, Function>();
 
     private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
@@ -411,7 +411,7 @@ export class SessionService implements IMessageHandler<any> {
     }
 
     public onDeviceResponse(deviceResponse: IDeviceResponse) {
-        const sendResponseBackToServer: Function = () => {
+        const sendResponseBackToServer = () => {
             // tslint:disable-next-line:max-line-length
             this.log.info(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
             this.stompService.publish(
@@ -433,7 +433,7 @@ export class SessionService implements IMessageHandler<any> {
     }
 
     public async onAction(action: string | IActionItem,
-        payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
+                          payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
         if (action) {
             let response: any = null;
             let actionString = '';
@@ -506,7 +506,7 @@ export class SessionService implements IMessageHandler<any> {
             }
 
             if (processAction && !this.waitingForResponse) {
-                const sendToServer: Function = () => {
+                const sendToServer = () => {
                     this.log.info(`>>> Post action "${actionString}"`);
                     if (!isValueChangedAction) {
                         this.queueLoading();
