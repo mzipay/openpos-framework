@@ -1,4 +1,3 @@
-import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { MultiselectItemListComponent } from './multiselect-item-list/multiselect-item-list.component';
 import { BasicItemSearchComponent } from './basic-item-search/basic-item-search.component';
 import { ChooseOptionsComponent } from './choose-options/choose-options.component';
@@ -138,7 +137,6 @@ export const ScreenConstants = {
         { name: 'Change', component: ChangeComponent },
         { name: 'PrintPreview', component: PrintPreviewComponent },
         { name: 'Wait', component: WaitComponent },
-        { name: 'ConfirmDialog', component: ConfirmDialogComponent },
         { name: 'CustomerSearch', component: CustomerSearchResultsComponent },
         { name: 'FullPageImage', component: FullPageImageComponent },
         { name: 'CallForAuthorization', component: CallForAuthorizationComponent },
