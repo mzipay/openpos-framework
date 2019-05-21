@@ -30,7 +30,6 @@ import { DataTableComponent } from './data-table/data-table.component';
 import { AutoCompleteAddressComponent } from './auto-complete-address/auto-complete-address.component';
 import { TemporarilySharedScreens } from './temporarily-shared-screens.module';
 import { DefaultDialogComponent } from './dialog/default-dialog.component';
-import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { ScreenService } from '../core/services/screen.service';
 import { DialogService } from '../core/services/dialog.service';
 import { IconService } from '../core/services/icon.service';
@@ -68,7 +67,6 @@ const dialogs = [
     LoginDialogComponent,
     SelectionListDialogComponent,
     DefaultDialogComponent,
-    ConfirmDialogComponent,
     PromptDialogComponent,
     PromptWithOptionsDialogComponent,
     ChooseOptionsDialogComponent

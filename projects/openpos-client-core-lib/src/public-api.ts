@@ -143,7 +143,6 @@ export * from './lib/screens-deprecated/change/change.component';
 export * from './lib/screens-deprecated/choose-options/choose-options-dialog.component';
 export * from './lib/screens-deprecated/choose-options/choose-options.component';
 export * from './lib/screens-deprecated/choose-options/option-item.interface';
-export * from './lib/screens-deprecated/confirm-dialog/confirm-dialog.component';
 export * from './lib/screens-deprecated/customer-search-results/customer-search-results.component';
 export * from './lib/screens-deprecated/customer-search-results/customer.interface';
 export * from './lib/screens-deprecated/data-table/data-table.component';
@@ -221,6 +220,7 @@ export * from './lib/screens-with-parts/selection-list/selection-list-screen-dia
 export * from './lib/screens-with-parts/selection-list/selection-list-screen.component';
 export * from './lib/screens-with-parts/selection-list/selection-list.interface';
 export * from './lib/screens-with-parts/return/return.component';
+export * from './lib/screens-with-parts/confirm-dialog/confirm-dialog.component';
 
 export * from './lib/screens-with-parts/prompt/prompt-screen.component';
 export * from './lib/screens-with-parts/prompt/prompt-screen-dialog.component';
