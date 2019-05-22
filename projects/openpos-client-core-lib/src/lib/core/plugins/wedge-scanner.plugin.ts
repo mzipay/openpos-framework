@@ -28,15 +28,15 @@ import { map, filter, bufferToggle, timeout, catchError } from 'rxjs/operators';
         );
 
         return fromEvent(document, 'keydown').pipe(
-            map( (e: KeyboardEvent) => e.key === 'Clear' ? '\r' : e.key ),
-            filter( key => key !== 'Shift' && key !== 'Alt'),
+            map( (e: KeyboardEvent) => e.key ),
+            filter( key => key !== 'Shift'),
             bufferToggle(
                     startScanBuffer,
                     () => merge( stopScanBuffer, timoutScanBuffer)
             ),
             filter( s => this.checkBuffer(s)),
             // Join the buffer into a string and remove the start and stop characters
-            map( (s) => s.join('').slice(1, s.length - 1))
+            map( (s) => this.publish(s))
         );
     }
 
@@ -53,8 +53,14 @@ import { map, filter, bufferToggle, timeout, catchError } from 'rxjs/operators';
         return e.key === this.endChar;
     }
 
+    publish(s: string[]): string {
+        const f =  s.join('').slice(1, s.length - 1);
+        return f.replace(/Clear|Alt0010/g, '\r\n').replace(/Alt0030|Alt0013/g, '');
+    }
+
     checkBuffer(s: string[]): boolean {
         const f = s[0] === this.startChar && s[s.length - 1] === this.endChar;
+        console.log(s);
         return f;
     }
 
