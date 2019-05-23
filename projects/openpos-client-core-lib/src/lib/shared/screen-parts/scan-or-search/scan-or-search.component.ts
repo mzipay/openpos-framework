@@ -44,8 +44,7 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
     ngOnInit(): void {
         super.ngOnInit();
         this.scanServiceSubscription = this.scannerService.startScanning().subscribe(scanData => {
-            this.barcode = scanData;
-            this.onEnter();
+            this.sessionService.onAction( this.screenData.scanActionName, scanData );
         });
     }
 

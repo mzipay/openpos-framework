@@ -2,6 +2,8 @@ import { IScanner } from './scanner.interface';
 import { Injectable } from '@angular/core';
 import { Observable, fromEvent, merge, of } from 'rxjs';
 import { map, filter, bufferToggle, timeout, catchError } from 'rxjs/operators';
+import { IScanData } from './scan.interface';
+import { SessionService } from '../services/session.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +15,16 @@ import { map, filter, bufferToggle, timeout, catchError } from 'rxjs/operators';
     private bufferTimeout = 100;
     private scannerActive: boolean;
 
-    startScanning(): Observable<string> {
+    constructor( sessionService: SessionService ) {
+        sessionService.getMessages('ConfigChanged').pipe(
+            filter( m => m.configName === 'WedgeScanner')
+        ).subscribe( m => {
+            this.startChar = m.startChar;
+            this.endChar = m.endChar;
+        });
+    }
+
+    startScanning(): Observable<IScanData> {
         this.scannerActive = true;
 
         const startScanBuffer = fromEvent(document, 'keydown').pipe(
@@ -35,7 +46,8 @@ import { map, filter, bufferToggle, timeout, catchError } from 'rxjs/operators';
             ),
             filter( s => s[0] === this.startChar && s[s.length - 1] === this.endChar),
             // Join the buffer into a string and remove the start and stop characters
-            map( (s) => s.join('').slice(1, s.length - 1))
+            map( (s) => s.join('').slice(1, s.length - 1)),
+            map( s => this.getScanData(s))
         );
     }
 
@@ -43,5 +55,8 @@ import { map, filter, bufferToggle, timeout, catchError } from 'rxjs/operators';
         this.scannerActive = false;
     }
 
+    private getScanData( s: string ): IScanData {
+        return { type: s, data: s};
+    }
 
 }

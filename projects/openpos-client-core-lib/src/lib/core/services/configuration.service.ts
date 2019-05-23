@@ -2,9 +2,10 @@ import { IVersion } from './../interfaces/version.interface';
 import { VERSION } from './../../version';
 import { Injectable } from '@angular/core';
 import { SessionService } from './session.service';
-import { PersonalizationService } from './personalization.service';
 import { Logger } from './logger.service';
 import { Configuration } from './../../configuration/configuration';
+import { filter, tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -12,29 +13,25 @@ import { Configuration } from './../../configuration/configuration';
 export class ConfigurationService {
 
     public versions: Array<IVersion> = [];
+    public theme$ =  new BehaviorSubject<string>('openpos-theme');
 
-    constructor(private log: Logger, private sessionService: SessionService, private personalization: PersonalizationService) {
-        this.sessionService.getMessages('ConfigChanged').subscribe(m => this.updateConfig(m));
-    }
+    constructor(private log: Logger, private sessionService: SessionService ) {
+        this.sessionService.getMessages('ConfigChanged').pipe(
+            filter( m => m.configType && (m.configType === 'uiConfig')),
+            tap( m => this.log.info('Ui Config Changed: ' + JSON.stringify(m)))
+        ).subscribe( m => this.mapConfig(m));
 
-    public updateConfig(message: any) {
-        this.log.info(message);
-        if (message && message.configuration) {
-            this.mapConfig(message.configuration);
-        }
-        if (message && message.theme) {
-            console.log('Config Changed Theme: ' + message.theme);
-            this.personalization.setTheme(message.theme, true);
-        }
+        this.sessionService.getMessages('ConfigChanged').pipe(
+            filter( m => m.configType === 'theme'),
+            tap( m => this.log.info('Config Changed Theme: ' + m.name ))
+        ).subscribe( m => this.theme$.next(m.name));
 
-        this.versions = [];
-        if (message.versions) {
-            message.versions.forEach(element => {
-                this.versions.push(element);
-            });
-        }
-        this.versions.push(VERSION as IVersion);
-
+        this.sessionService.getMessages('ConfigChanged').pipe(
+            filter( m => m.configType === 'versions'),
+        ).subscribe( m => {
+            this.versions = m.versions.map( v => v);
+            this.versions.push(VERSION as IVersion);
+        });
     }
 
     protected mapConfig(response: any) {

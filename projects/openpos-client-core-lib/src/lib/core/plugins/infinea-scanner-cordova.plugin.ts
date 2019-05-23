@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { IPlatformPlugin } from './platform-plugin.interface';
 import { IScanner } from './scanner.interface';
 import { Observable, Subject } from 'rxjs';
+import { IScanData } from './scan.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -9,7 +10,7 @@ import { Observable, Subject } from 'rxjs';
 export class InfineaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
 
     private infineaPlugin;
-    private scanData$ = new Subject<string>();
+    private scanData$ = new Subject<IScanData>();
 
     name(): string {
         return 'InfineaScanner';
@@ -25,7 +26,7 @@ export class InfineaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
             this.infineaPlugin = window['Infinea'];
 
             this.infineaPlugin.barcodeDataCallback = (barcode, type, typeText) => {
-                this.scanData$.next(this.parseBarcode(barcode, type, typeText));
+                this.scanData$.next( {type, data: barcode});
             };
 
             initialized.next('Initializing Infinea Plugin');
@@ -39,7 +40,7 @@ export class InfineaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
         });
     }
 
-    startScanning(): Observable<string> {
+    startScanning(): Observable<IScanData> {
         this.infineaPlugin.barcodeScan(() => {
             console.log(`Infinea Enable Barcode Scan Success`);
         }, () => {
@@ -55,26 +56,5 @@ export class InfineaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
         }, () => {
             console.log(`Time| ${new Date()} || Disable Barcode Scan| Failure`);
         }, 'false');
-    }
-
-    private parseSKUFromBarcode(barcode: string): string {
-        return barcode.substring(3, 12);
-    }
-
-    private parseUPCEANFromBarcode(barcode: string): string {
-        if (barcode[0] === '0') {
-            return barcode.slice(1, barcode.length);
-        }
-        return barcode;
-    }
-
-    private parseBarcode(barcode: string, type: string, text: string) {
-        if (text.toLowerCase().includes('code 128') && barcode.length === 20) {
-            return this.parseSKUFromBarcode(barcode);
-        } else if (text.toLowerCase().includes('upc') || text.toLowerCase().includes('ean')) {
-            return this.parseUPCEANFromBarcode(barcode);
-        } else {
-            return barcode;
-        }
     }
   }

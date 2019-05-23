@@ -2,11 +2,12 @@ import { IPlatformPlugin } from './platform-plugin.interface';
 import { IScanner } from './scanner.interface';
 import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { IScanData } from './scan.interface';
 
 @Injectable()
 export class AilaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
 
-    private scanData$ = new Subject<string>();
+    private scanData$ = new Subject<IScanData>();
 
     private AilaCordovaPlugin;
 
@@ -49,7 +50,7 @@ export class AilaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
 
     }
 
-    startScanning(): Observable<string> {
+    startScanning(): Observable<IScanData> {
         if ( !this.AilaCordovaPlugin ) {
             throw Error(`Tried to start scanning with ${this.name()} which is not loaded`);
         }
