@@ -36,6 +36,8 @@ export class SaleComponent extends PosScreen<SaleInterface> {
   buildScreen() {
     // Reallocate totals array to force change detection in child app-overflow-list
     this.totals = this.screen.totals ? this.screen.totals.slice() : [];
+    this.screen.customerName = this.screen.customerName != null && this.screen.customerName.length > 10 ?
+      this.screen.customerName.substring(0, 10) + '...' : this.screen.customerName;
     this.dialog.closeAll();
   }
 
