@@ -109,6 +109,7 @@ import { ProgressBarPartComponent } from './screen-parts/progress-bar-part/progr
 import { ToggleGroupComponent } from './components/toggle-button-group/toggle-group.component';
 import { ToggleButtonComponent } from './components/toggle-button/toggle-button.component';
 import { ChooseOptionsPartComponent } from './screen-parts/choose-options-part/choose-options-part.component';
+import { WebcamViewerComponent } from './screen-parts/webcam-viewer/webcam-viewer.component';
 
 const screenParts = [
     ChooseOptionsPartComponent,
@@ -122,7 +123,8 @@ const screenParts = [
     PromptFormPartComponent,
     DynamicFormPartComponent,
     AutoCompleteAddressPartComponent,
-    ProgressBarPartComponent
+    ProgressBarPartComponent,
+    WebcamViewerComponent
 ];
 
 const components = [
@@ -242,7 +244,7 @@ const pipes = [
         CommonModule,
         MaterialModule,
         MatKeyboardModule,
-        TextMaskModule
+        TextMaskModule,
     ],
     exports: [
         FormsModule,
