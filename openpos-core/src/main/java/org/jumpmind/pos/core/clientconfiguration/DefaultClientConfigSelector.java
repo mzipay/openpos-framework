@@ -34,7 +34,10 @@ public class DefaultClientConfigSelector implements IClientConfigSelector {
         // Lookup the values for our tags
         propertiesForTags.forEach(s -> {
             if (properties.containsKey(s)) {
-                tagsForSpecificity.add(properties.get(s));
+                String value = properties.get(s);
+                if (value != null) {
+                    tagsForSpecificity.add(value);
+                }
             } else {
                 logger.error("Could not find personalization parameter {}", s);
             }
