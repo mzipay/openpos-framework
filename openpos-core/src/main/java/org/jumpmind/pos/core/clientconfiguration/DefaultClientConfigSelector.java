@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-@ConfigurationProperties(prefix = "openpos.clientConfiguration")
+@ConfigurationProperties(prefix = "openpos.client-configuration")
 @Scope("prototype")
 public class DefaultClientConfigSelector implements IClientConfigSelector {
 
