@@ -25,6 +25,7 @@ import { IconService } from '../../services/icon.service';
 import { OldPluginService } from '../../services/old-plugin.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { IVersion } from '../../../core/interfaces/version.interface';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-dev-menu',
@@ -599,8 +600,8 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
         this.electron.remote.getCurrentWindow().close();
     }
 
-    public getLocalTheme() {
-        return this.personalization.getTheme();
+    public getLocalTheme(): Observable<string>{
+        return this.configurationService.theme$;
     }
 
     public removeSessionElement(element: Element) {

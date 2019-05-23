@@ -1,15 +1,15 @@
 import { Observable } from 'rxjs';
+import { IScanData } from './scan.interface';
 
 export interface IScanner {
     /**
      * Tell the scanner to start scanning
-     * returns true if successfull started; false if start fails
+     * returns and observable with the scan data
      */
-    startScanning(): Observable<string>;
+    startScanning(): Observable<IScanData>;
 
     /**
      * Tell the scanner to stop scanning
-     * returns true if successful stop; false if stop fails
      */
     stopScanning();
 }

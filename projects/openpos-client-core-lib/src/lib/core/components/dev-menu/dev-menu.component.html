@@ -1,4 +1,4 @@
-<div *ngIf="showDevMenu" [class]="getLocalTheme()">
+<div *ngIf="showDevMenu" [class]="(getLocalTheme() | async)">
     <mat-expansion-panel #devMenuPanel class="devMenuPanel">
         <mat-expansion-panel-header (click)="onDevMenuRefresh()">
             <mat-panel-description fxLayout="row" fxFlex fxLayoutAlign="start center" fxLayoutGap="10px">
