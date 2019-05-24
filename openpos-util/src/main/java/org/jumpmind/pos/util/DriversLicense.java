@@ -152,11 +152,11 @@ public class DriversLicense {
 
     public void parse(String data)  {
         elements.clear();
-        String[] lines = data.split("\r\n");
+        String[] lines = data.split("\r\n|\n|\r");
         for (String line : lines) {
             if (line.length() > 2) {
-                if (line.startsWith("ANSI")) {
-                    firstLine = line;
+                if (line.startsWith("\u001E")) {
+                    firstLine = line.substring(1);
                     String[] splitFirstLine = line.split("DL");
                     elements.put(splitFirstLine[splitFirstLine.length-1].substring(0, 3), splitFirstLine[splitFirstLine.length-1].substring(3));
                 } else {
