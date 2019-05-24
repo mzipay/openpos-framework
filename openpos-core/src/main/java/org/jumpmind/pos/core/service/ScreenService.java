@@ -8,8 +8,6 @@ import static org.jumpmind.pos.util.BoxLogging.UPPER_RIGHT_CORNER;
 import static org.jumpmind.pos.util.BoxLogging.VERITCAL_LINE;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -24,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jumpmind.pos.core.content.ContentProviderService;
 import org.jumpmind.pos.core.flow.ApplicationState;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IScreenInterceptor;
@@ -103,41 +102,34 @@ public class ScreenService implements IScreenService, IActionListener {
     }
 
     @SuppressWarnings("deprecation")
-    @RequestMapping(method = RequestMethod.GET, value = "api/content")
-    public void getImageAsByteArray(HttpServletResponse response, @RequestParam(name = "contentPath", required = false) String contentPath)
-            throws IOException {
-        logger.debug("Received a request for asset: {}", contentPath);
+    @RequestMapping(method = RequestMethod.GET, value = "api/appId/{appId}/deviceId/{deviceId}/content")
+    public void getImageAsByteArray(HttpServletResponse response, @PathVariable String appId, @PathVariable String deviceId,
+            @RequestParam(name = "contentPath", required = true) String contentPath,
+            @RequestParam(name = "provider", required = true) String provider) throws IOException {
 
-        if (contentPath.endsWith(".svg")) {
-            response.setContentType("image/svg+xml");
-        }
+        logger.debug("Received a request for content: {}", contentPath);
 
-        InputStream in = getClass().getResourceAsStream("/content/" + contentPath);
+        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
+        if (stateManager != null) {
+            stateManagerContainer.setCurrentStateManager(stateManager);
 
-        if( in == null ) {
-            in =  System.class.getResourceAsStream( "/content/" + contentPath);
-        }
-
-        File file = new File(contentPath);
-
-        /*
-         * If we find the content on the file system use that over the class
-         * path
-         */
-        if (file.exists()) {
-            in = new FileInputStream(file);
-        } else {
-            logger.debug("File resource not found for asset: {}", contentPath);
-        }
-
-        if (in != null) {
-            try {
-                IOUtils.copy(in, response.getOutputStream());
-            } finally {
-                IOUtils.closeQuietly(in);
+            if (contentPath.endsWith(".svg")) {
+                response.setContentType("image/svg+xml");
             }
-        } else {
-            response.setStatus(HttpStatus.NOT_FOUND.value());
+
+            ContentProviderService contentProviderService = applicationContext.getBean(ContentProviderService.class);
+            InputStream in = contentProviderService.getContentInputStream(contentPath, provider);
+
+            if (in != null) {
+                try {
+                    IOUtils.copy(in, response.getOutputStream());
+                } finally {
+                    IOUtils.closeQuietly(in);
+                }
+            } else {
+                response.setStatus(HttpStatus.NOT_FOUND.value());
+            }
+            stateManagerContainer.setCurrentStateManager(null);
         }
     }
 

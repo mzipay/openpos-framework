@@ -2,12 +2,15 @@ package org.jumpmind.pos.core.service;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerContainer;
-import org.jumpmind.pos.core.model.ClientConfiguration;
 import org.jumpmind.pos.core.model.ConfigChangedMessage;
 import org.jumpmind.pos.core.model.IConfigSelector;
+import org.jumpmind.pos.core.clientconfiguration.IClientConfigSelector;
+import org.jumpmind.pos.core.clientconfiguration.ClientConfigChangedMessage;
+import org.jumpmind.pos.core.clientconfiguration.ClientConfiguration;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.IconType;
@@ -74,6 +77,7 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             } else {
                 stateManager.registerQueryParams(queryParams);
                 stateManager.registerPersonalizationProperties(personalizationProperties);
+                stateManager.sendConfigurationChangedMessage();
             }
 
             stateManagerContainer.setCurrentStateManager(stateManager);
@@ -106,7 +110,6 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
                 errorDialog.setMessage(Arrays.asList(incompatibleVersionMessage.split("\n")));
                 messageService.sendMessage(appId, deviceId, errorDialog);
             } else {
-                sendClientConfiguration(appId, deviceId, sessionId);
                 if (!created) {
                     stateManager.refreshScreen();
                 }
@@ -124,25 +127,4 @@ public class SessionSubscribedListener implements ApplicationListener<SessionSub
             stateManagerContainer.setCurrentStateManager(null);
         }
     }
-
-    private void sendClientConfiguration(String appId, String deviceId, String sessionId) {
-        try {
-            String theme = null;
-            ClientConfiguration config = null;
-            IConfigSelector configSelector = applicationContext.getBean(IConfigSelector.class);
-            if (configSelector != null) {
-                theme = configSelector.getTheme();
-                log.info("Config Selector Chose theme: {}", theme);
-                config = configSelector.getClientConfig();
-            } 
-            
-            ConfigChangedMessage configMessage = new ConfigChangedMessage(theme, config, Versions.getVersions());
-            messageService.sendMessage(appId, deviceId, configMessage);
-
-        } catch (NoSuchBeanDefinitionException e) {
-            log.info("An {} is not configured.  Will not be sending client configuration to the client",
-                    IConfigSelector.class.getSimpleName());
-        }
-    }
-
 }

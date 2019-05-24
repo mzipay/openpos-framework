@@ -4,7 +4,6 @@ apply from: '../openpos-core/ide.gradle'
 dependencies {
     compile "net.java.dev.jna:jna:$jnaVersion"
     compile "net.java.dev.jna:jna-platform:$jnaVersion"
-    compile group: 'com.threerings', name: 'getdown', version: '1.7.1'
 }
 
 int i = 0;

@@ -2,7 +2,7 @@ package org.jumpmind.pos.util;
 
 import java.util.*;
 
-public class DriversLicenseUtils {
+public final class DriversLicenseUtils {
 
     private static List<String> supportedStates;
 
@@ -78,8 +78,8 @@ public class DriversLicenseUtils {
 
     }
 
-    public static boolean validate(String number, String stateCode) {
-        return (number.matches(rules.get(stateCode)));
+    public static boolean validate(String number, String validateIndex) {
+        return number != null && number.matches(rules.get(validateIndex));
     }
 
     public static List<String> getSupportedStates() {return supportedStates;}

@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
 
 import java.util.Arrays;
 
@@ -33,6 +35,8 @@ import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.YamlConfigProvider;
 import org.jumpmind.pos.core.flow.config.YamlFlowConfigFileLoader;
 import org.jumpmind.pos.core.service.ScreenService;
+import org.jumpmind.pos.server.service.IMessageService;
+import org.jumpmind.pos.util.model.Message;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,8 +58,13 @@ public class StateManagerTest {
     @Mock
     private ScreenService screenService;
 
+    @Mock
+    private IMessageService messageService;
+
     @Before
     public void setup() throws Exception {
+
+        doNothing().when(messageService).sendMessage(any(String.class), any(String.class), any(Message.class));
 
         FlowConfig customerSignupFlow = new FlowConfig();
         customerSignupFlow.setInitialState(
