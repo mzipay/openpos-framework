@@ -16,7 +16,8 @@ public class FormOptionItem implements Serializable {
     
     public FormOptionItem() {}
 
-    public FormOptionItem(String id, String label, String iconType) {
+    public FormOptionItem(String actionID, String label, String iconType) {
+    	setOptionAction(new ActionItem(actionID,label));
     	setName(label);
     	setIcon(iconType);
 	}
