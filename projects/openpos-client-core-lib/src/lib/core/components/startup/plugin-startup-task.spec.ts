@@ -6,7 +6,7 @@ import { Type } from '@angular/core';
 import { IStartupTask } from '../../interfaces/startup-task.interface';
 import { getTestScheduler } from 'jasmine-marbles';
 
-fdescribe('PluginStartupTask', () => {
+describe('PluginStartupTask', () => {
     abstract class TestPlugin implements IPlatformPlugin {
         constructor( private isPresent: boolean, private pluginName: string ) { }
 
