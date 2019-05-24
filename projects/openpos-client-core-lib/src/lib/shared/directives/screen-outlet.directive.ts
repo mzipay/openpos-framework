@@ -61,11 +61,9 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         this.updateTemplateAndScreen();
         this.subscriptions.add(this.session.getMessages('Screen').subscribe((message) => this.handle(message)));
         this.subscriptions.add(this.session.getMessages('Connected').subscribe((message) => this.handle(new BlankScreen())));
-        this.subscriptions.add(this.session.getMessages('ConfigChanged').
-            subscribe(message => {
-                this.configurationService.updateConfig(message);
-                this.updateTheme(message.theme);
-            }));
+        this.subscriptions.add(this.configurationService.theme$.subscribe( theme => {
+            this.updateTheme(theme);
+        }));
     }
 
     ngOnDestroy(): void {
@@ -125,7 +123,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             this.installedTemplate = null;
 
             // Create our screen component
-            const componentFactory = this.screenService.resolveScreen(screenToCreate, this.theme);
+            const componentFactory = this.screenService.resolveScreen(screenToCreate, this.currentTheme);
             this.componentRef = this.viewContainerRef.createComponent(componentFactory,
                 this.viewContainerRef.length, this.viewContainerRef.parentInjector);
 
@@ -133,11 +131,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             if (this.componentRef.instance.installScreen) {
                 this.installedTemplate = this.componentRef.instance as AbstractTemplate<any>;
                 this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(
-                    this.screenTypeName, this.theme)) as IScreen;
-            }
-
-            if (this.personalization.getTheme() !== this.currentTheme) {
-                this.updateTheme(this.personalization.getTheme());
+                    this.screenTypeName, this.currentTheme)) as IScreen;
             }
 
             trap = true;
@@ -237,10 +231,6 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
                 this.classes.split(' ').forEach(c => this.renderer.addClass(this.componentRef.location.nativeElement, c));
             }
         }
-    }
-
-    public get theme() {
-        return this.personalization.getTheme();
     }
 }
 

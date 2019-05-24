@@ -22,8 +22,8 @@
         </app-selectable-item-list>
 
         <div *ngIf="!listConfig.items || listConfig.items.length == 0" fxLayout="column" fxLayoutAlign="center center"
-            class="muted-color">
-            <mat-icon ngClass="material-icons mat-180" ngClass="material-icons mat-128" color=icon svgIcon="barcode"></mat-icon>
+            class="muted-color" style="height: 100%;">
+            <app-icon iconClass="material-icons mat-128" iconName="barcode"></app-icon>
             <span class="text-md">Scan/Key something to get started</span>
         </div>
 

@@ -14,6 +14,9 @@
 	<mat-card class="page-content-card lighter selfcheckout-total-background scrollable-content-card">
 		<mat-card-content fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="20px"
 			class="selfcheckout-side-content">
+
+			<app-webcam-viewer *ngIf="screen.webcamViewerPart" class="selfcheckout-sell-webcam"></app-webcam-viewer>
+
 			<div fxFlex="0 0 auto" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="20px"
 				class="selfcheckout-total-content">
 				<mat-card fxFlex="0 0 auto" *ngFor="let total of screen.totals"
@@ -43,12 +46,12 @@
 				<button mat-button *ngIf="!screen.readOnly && !screen.customer && screen.loyaltyButton"
 					(click)="doMenuItemAction(screen.loyaltyButton)" class="loyalty-button text-md">
 					<span style="padding-right: 8px;">{{screen.loyaltyButton.title}}</span>
-					<app-icon [iconName]="screen.loyaltyButton.icon" class="loyalty-button-icon"></app-icon>
+					<app-icon [iconName]="screen.loyaltyButton.icon" [iconClass]="'material-icons'" class="loyalty-button-icon"></app-icon>
 					<span style="padding-left: 8px;">ID</span>
 				</button>
 				<div *ngIf="screen.customer && screen.loyaltyButton" class="text-sm text-center"
 					style="padding-top: 16px;">
-					<app-icon [iconName]="screen.loyaltyButton.icon" class="loyalty-icon"></app-icon>
+					<app-icon [iconName]="screen.loyaltyButton.icon" [iconClass]="'material-icons'" class="loyalty-icon"></app-icon>
 					<div class="muted-color" style="padding-top: 8px;">{{screen.customer.name}}</div>
 					<div class="muted-color" style="padding-top: 8px;">Rewards ID: {{screen.customer.loyaltyId}}</div>
 				</div>

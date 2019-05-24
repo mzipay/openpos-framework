@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { LoaderState } from './loader-state';
 import { SessionService } from '../../services/session.service';
-import { PersonalizationService } from '../../services/personalization.service';
 import { ILoading } from '../../interfaces/loading.interface';
 import { Logger } from './../../services/logger.service';
 import { IMessageHandler } from './../../interfaces/message-handler.interface';
+import { ConfigurationService } from '../../services/configuration.service';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-loader',
@@ -20,7 +21,7 @@ export class LoaderComponent implements OnInit, OnDestroy, IMessageHandler<ILoad
 
     constructor(
         private log: Logger,
-        private personalization: PersonalizationService,
+        private configuration: ConfigurationService,
         private session: SessionService,
         private changeRef: ChangeDetectorRef
     ) { }
@@ -72,7 +73,7 @@ export class LoaderComponent implements OnInit, OnDestroy, IMessageHandler<ILoad
         }
     }
 
-    public getLocalTheme(): string {
-        return this.personalization.getTheme();
+    public getLocalTheme(): Observable<string> {
+        return this.configuration.theme$;
     }
 }

@@ -7,7 +7,7 @@
             [disabled]="!isMenuItemEnabled(m)" class="sell-template-menu-button">
             <app-icon *ngIf="m.icon" [iconName]="m.icon"></app-icon>
             <span [ngClass]="{'muted-color': ! m.enabled}">&nbsp;{{m.title}}</span>
-            <span *ngIf="m.keybind && keybindsEnabled()" fxFlex="1 1 auto" style="padding-right: 8px;"></span>
+            <span fxFlex="1 1 auto" style="padding-right: 8px;"></span>
             <span *ngIf="m.keybind && keybindsEnabled()" class="muted-color">{{m.keybind}}</span>
         </button>
         <div fxFlex="1 1 auto"></div>

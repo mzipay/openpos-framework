@@ -78,7 +78,7 @@ export class SessionService implements IMessageHandler<any> {
 
     private stompDebug = false;
 
-    private actionPayloads: Map<string, (Function)> = new Map<string, Function>();
+    private actionPayloads: Map<string, () => void> = new Map<string, () => void>();
 
     private actionIntercepters: Map<string, ActionIntercepter> = new Map();
 
@@ -277,10 +277,6 @@ export class SessionService implements IMessageHandler<any> {
     }
 
     handle(message: any) {
-        if (message && message.theme) {
-            this.personalization.setTheme(message.theme, false);
-        }
-
         if (!this.deletedLaunchFlg && message && message.type === 'ConfigChanged') {
             this.deleteLaunchingFlg();
             this.deletedLaunchFlg = true;
@@ -588,7 +584,7 @@ export class SessionService implements IMessageHandler<any> {
         this.sendMessage(new CancelLoadingMessage());
     }
 
-    public registerActionPayload(actionName: string, actionValue: Function) {
+    public registerActionPayload(actionName: string, actionValue: () => void) {
         this.actionPayloads.set(actionName, actionValue);
     }
 

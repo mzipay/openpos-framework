@@ -1,6 +1,5 @@
 import { Logger } from './logger.service';
-import { Injectable, EventEmitter } from '@angular/core';
-import { IThemeChangingEvent } from '../../shared/events/theme-changing-event.interface';
+import { Injectable } from '@angular/core';
 
 @Injectable({
     providedIn: 'root',
@@ -8,12 +7,6 @@ import { IThemeChangingEvent } from '../../shared/events/theme-changing-event.in
 export class PersonalizationService {
 
     private serverBaseUrl: string;
-
-    private previousTheme: string;
-
-    private theme: string;
-
-    public onThemeChanging = new EventEmitter<IThemeChangingEvent>();
 
     constructor(private log: Logger) {
     }
@@ -61,14 +54,12 @@ export class PersonalizationService {
     }
 
     public dePersonalize() {
-        const theme = this.getTheme();
         localStorage.removeItem('serverName');
         localStorage.removeItem('serverPort');
         localStorage.removeItem('deviceId');
         localStorage.removeItem('theme');
         this.removePersonalizationProperties();
         localStorage.removeItem('sslEnabled');
-        this.setTheme(theme, true);
     }
 
     public getPersonalizationProperties(): Map<string, string> {
@@ -99,35 +90,12 @@ export class PersonalizationService {
         return url;
     }
 
-    public getTheme(): string {
-        const localTheme = localStorage.getItem('theme');
-        if (this.theme) {
-            return this.theme;
-        } else if (localTheme) {
-            return localTheme;
-        } else {
-            return 'openpos-theme';
-        }
-    }
-
     public isSslEnabled(): boolean {
         return 'true' === localStorage.getItem('sslEnabled');
     }
 
     public setSslEnabled(enabled: boolean) {
         localStorage.setItem('sslEnabled', enabled + '');
-    }
-
-    public setTheme(theme: string, storeLocal: boolean) {
-        this.theme = theme;
-        if (storeLocal) {
-            localStorage.setItem('theme', theme);
-        }
-        if (this.previousTheme !== theme) {
-            this.log.info(`Theme changing from '${this.previousTheme}' to '${theme}'`);
-            this.onThemeChanging.emit({ currentTheme: this.previousTheme, newTheme: theme });
-            this.previousTheme = theme;
-        }
     }
 
     public setServerName(name: string) {
