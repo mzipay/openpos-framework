@@ -18,9 +18,10 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
     messageProvider: MessageProvider;
     mediaService: OpenposMediaService;
     isMobile$: Observable<boolean>;
+    initialScreenType = '';
     public subscriptions = new Subscription();
 
-    constructor( messageProvider: MessageProvider ) {
+    constructor(messageProvider: MessageProvider) {
         this.sessionService = AppInjector.Instance.get(SessionService);
         this.log = AppInjector.Instance.get(Logger);
         this.mediaService = AppInjector.Instance.get(OpenposMediaService);
@@ -39,26 +40,31 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
 
     ngOnInit(): void {
         this.subscriptions.add(this.messageProvider.getMessages$()
-            .pipe(filter( s => s.screenType !== 'Loading' )).subscribe( s => {
-            if ( s.hasOwnProperty(this.screenPartName)) {
-                this.screenData = deepAssign( this.screenData, s[this.screenPartName]);
-            } else {
-                this.screenData = deepAssign( this.screenData, s );
-            }
-            this.screenDataUpdated();
-        }));
+            .pipe(filter(s => s.screenType !== 'Loading')).subscribe(s => {
+                if (!this.initialScreenType.length) {
+                    this.initialScreenType = s.screenType;
+                }
+                if (s.screenType === this.initialScreenType) {
+                    if (s.hasOwnProperty(this.screenPartName)) {
+                        this.screenData = deepAssign(this.screenData, s[this.screenPartName]);
+                    } else {
+                        this.screenData = deepAssign(this.screenData, s);
+                    }
+                    this.screenDataUpdated();
+                }
+            }));
     }
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 
-    onMenuItemClick( menuItem: IActionItem, payload?: any ) {
+    onMenuItemClick(menuItem: IActionItem, payload?: any) {
         if (menuItem.enabled) {
-            this.sessionService.onAction( menuItem, payload );
+            this.sessionService.onAction(menuItem, payload);
         }
     }
 
-    isActionDisabled( action: string): Observable<boolean> {
+    isActionDisabled(action: string): Observable<boolean> {
         return this.sessionService.actionIsDisabled(action);
     }
 
