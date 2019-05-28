@@ -60,6 +60,8 @@ export class ReturnComponent extends PosScreen<any> implements AfterViewInit, Af
         this.itemTotal = screenItemTotal ? Number(screenItemTotal.amount) : this.items.length;
         this.receipts = this.screen.receipts;
         this.removeReceiptAction = this.screen.removeReceiptAction;
+        this.screen.customerName = this.screen.customerName != null && this.screen.customerName.length > 10 ?
+            this.screen.customerName.substring(0, 10) + '...' : this.screen.customerName;
         this.dialog.closeAll();
     }
 
