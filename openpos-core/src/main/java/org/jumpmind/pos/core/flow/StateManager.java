@@ -19,6 +19,15 @@
  */
 package org.jumpmind.pos.core.flow;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.clientconfiguration.ClientConfigChangedMessage;
@@ -32,7 +41,6 @@ import org.jumpmind.pos.core.service.spring.DeviceScope;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.server.service.IMessageService;
-import org.jumpmind.pos.server.service.MessageService;
 import org.jumpmind.pos.util.Versions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +48,6 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Component()
 @org.springframework.context.annotation.Scope("prototype")
