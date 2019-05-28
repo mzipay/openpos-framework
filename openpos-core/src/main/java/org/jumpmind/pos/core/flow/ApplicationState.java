@@ -25,7 +25,6 @@ import java.util.LinkedList;
 
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
-import org.jumpmind.pos.core.screen.Screen;
 import org.jumpmind.pos.core.ui.UIMessage;
 
 /**
