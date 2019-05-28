@@ -287,6 +287,7 @@ export * from './lib/shared/components/transaction-item-list/transaction-item-li
 
 export * from './lib/shared/decorators/screen-component.decorator';
 export * from './lib/shared/decorators/dialog-component.decorator';
+export * from './lib/shared/decorators/screen-part.decorator';
 
 export * from './lib/shared/directives/action-item-key-mapping.directive';
 export * from './lib/shared/directives/arrow-tab-item.directive';
