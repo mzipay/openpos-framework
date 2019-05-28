@@ -350,10 +350,10 @@ public class Form implements Serializable {
 
     public FormField createDriversLicenseField(String fieldId, String label, String value, String state, boolean required) {
         FormField formField = new FormField(fieldId, label, FieldElementType.Input, FieldInputType.AlphanumericText, required);
+        formField.setScanEnabled(true);
         if (state != null)
-            if (value != null) {
+            if (value != null && value.equals(DriversLicenseUtils.HASH_MASK)) {
                 formField.setPattern(DriversLicenseUtils.getRule("HASHED") + "|" + DriversLicenseUtils.getRule(state));
-                value = DriversLicenseUtils.HASH_MASK;
             }
             else
                 formField.setPattern(DriversLicenseUtils.getRule(state));
