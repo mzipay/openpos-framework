@@ -23,7 +23,7 @@ export class DialogService {
 
     private lastDialogId: string;
 
-    private $dialogMessages = new BehaviorSubject<any>(null);
+    public $dialogMessages = new BehaviorSubject<any>(null);
 
     constructor(
         private log: Logger,

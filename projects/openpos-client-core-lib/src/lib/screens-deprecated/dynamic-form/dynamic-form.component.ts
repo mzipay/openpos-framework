@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { ScannerService } from './../../core/services/scanner.service';
+import { Component, OnDestroy } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
+import { SessionService } from '../../core/services/session.service';
+import { Subscription } from 'rxjs';
 
 /**
  * @ignore
@@ -12,8 +15,24 @@ import { ScreenComponent } from '../../shared/decorators/screen-component.decora
   selector: 'app-dynamic-form',
   templateUrl: './dynamic-form.component.html'
 })
-export class DynamicFormComponent extends PosScreen<any> {
+export class DynamicFormComponent extends PosScreen<any> implements OnDestroy {
 
-  buildScreen() {}
+    private scanServiceSubscription: Subscription;
+
+    constructor(private scannerService: ScannerService) {
+        super();
+    }
+
+    buildScreen() {
+        this.scanServiceSubscription = this.scannerService.startScanning().subscribe( m => this.session.onAction('Scan', m));
+    }
+
+    ngOnDestroy(): void {
+        if (this.scanServiceSubscription != null) {
+            this.scanServiceSubscription.unsubscribe();
+        }
+        this.scannerService.stopScanning();
+    }
+
 
 }

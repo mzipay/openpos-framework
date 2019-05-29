@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { DialogComponent } from '../../shared/decorators/dialog-component.decorator';
 import { PosScreen } from '../../screens-deprecated/pos-screen/pos-screen.component';
 import { ChooseOptionsScreenDialogInterface } from './choose-options-screen-dialog.interface';
+import { ScannerService } from './../../core/services/scanner.service';
+import { Subscription } from 'rxjs';
 
 @DialogComponent({
     name: 'ChooseOptions'
@@ -11,11 +13,23 @@ import { ChooseOptionsScreenDialogInterface } from './choose-options-screen-dial
   templateUrl: './choose-options-screen-dialog.component.html',
   styleUrls: ['./choose-options-screen-dialog.component.scss']
 })
-export class ChooseOptionsScreenDialogComponent extends PosScreen<ChooseOptionsScreenDialogInterface> {
+export class ChooseOptionsScreenDialogComponent extends PosScreen<ChooseOptionsScreenDialogInterface> implements OnDestroy {
 
-  constructor() {
+  private scanServiceSubscription: Subscription;
+
+  constructor(private scannerService: ScannerService) {
       super();
-   }
+  }
 
-  buildScreen() { }
+  buildScreen() {
+      this.scanServiceSubscription = this.scannerService.startScanning().subscribe( m => this.session.onAction('Scan', m));
+  }
+
+  ngOnDestroy(): void {
+      if (this.scanServiceSubscription != null) {
+          this.scanServiceSubscription.unsubscribe();
+      }
+      this.scannerService.stopScanning();
+  }
+
 }
