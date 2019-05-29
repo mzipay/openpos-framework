@@ -203,31 +203,4 @@ public abstract class AbstractFileContentProvider implements IContentProvider {
         }
     }
 
-    public class ContentPath {
-        private Resource resource;
-        private String relativePath;
-
-        public ContentPath(Resource resource, String relativePath) {
-            this.resource = resource;
-            this.relativePath = relativePath;
-        }
-
-        public Resource getResource() {
-            return resource;
-        }
-
-        public void setResource(Resource resource) {
-            this.resource = resource;
-        }
-
-        public String getRelativePath() {
-            return relativePath;
-        }
-
-        public void setRelativePath(String relativePath) {
-            this.relativePath = relativePath;
-        }
-
-    }
-
 }
