@@ -4,7 +4,7 @@ import { SessionService } from '../services/session.service';
 import { cold, getTestScheduler } from 'jasmine-marbles';
 import { IScanData } from './scan.interface';
 
-describe('WedgeScanner', () => {
+fdescribe('WedgeScanner', () => {
 
     let sessionService: jasmine.SpyObj<SessionService>;
     let wedgeScannerPlugin: WedgeScannerPlugin;
@@ -28,7 +28,7 @@ describe('WedgeScanner', () => {
             codeTypeLength: 1
         };
         const sessionSpy = jasmine.createSpyObj('SessionService', ['getMessages']);
-
+        scanResult = null;
         TestBed.configureTestingModule({
             providers: [
                 WedgeScannerPlugin,
@@ -76,12 +76,12 @@ describe('WedgeScanner', () => {
         dispatchEvent( '2', false, false );
         dispatchEvent( '3', false, false );
         dispatchEvent( '4', false, false );
-        dispatchEvent( 'A', false, false );
+        dispatchEvent( 'Z', false, false );
         dispatchEvent( 'B', false, false );
         dispatchEvent( 'j', true, false );
 
         expect(scanResult.type).toEqual('X');
-        expect(scanResult.data).toEqual('1234AB');
+        expect(scanResult.data).toEqual('1234ZB');
     });
 
     it('should replace special character codes with the correct special character', async () => {
