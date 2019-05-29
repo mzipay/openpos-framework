@@ -2,15 +2,9 @@ package org.jumpmind.pos.core.service;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.IStateManagerContainer;
-import org.jumpmind.pos.core.model.ConfigChangedMessage;
-import org.jumpmind.pos.core.model.IConfigSelector;
-import org.jumpmind.pos.core.clientconfiguration.IClientConfigSelector;
-import org.jumpmind.pos.core.clientconfiguration.ClientConfigChangedMessage;
-import org.jumpmind.pos.core.clientconfiguration.ClientConfiguration;
 import org.jumpmind.pos.core.screen.DialogProperties;
 import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.screen.IconType;
@@ -22,7 +16,6 @@ import org.jumpmind.pos.server.service.SessionConnectListener;
 import org.jumpmind.pos.util.Versions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
