@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class ClientConfigChangedMessage extends Message {
 
+    private static final long serialVersionUID = 1L;
     private String configType;
 
     public ClientConfigChangedMessage(String configType, Map<String,String> configProps) {
@@ -18,6 +19,7 @@ public class ClientConfigChangedMessage extends Message {
     }
 
     public ClientConfigChangedMessage(String name) {
+        super(MessageType.ConfigChanged);
         setConfigType(configType);
     }
 
