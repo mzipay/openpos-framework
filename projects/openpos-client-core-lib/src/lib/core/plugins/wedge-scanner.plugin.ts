@@ -16,16 +16,21 @@ interface ControlSequence { modifiers: string[]; key: string; }
     private endSequence = 'Enter';
     private codeTypeLength = 0;
     private scannerActive: boolean;
+    private startSequenceObj = this.getControlStrings(this.startSequence);
+    private endSequenceObj = this.getControlStrings(this.endSequence);
 
     constructor( sessionService: SessionService ) {
+
         sessionService.getMessages('ConfigChanged').pipe(
             filter( m => m.configType === 'WedgeScanner')
         ).subscribe( m => {
             if ( m.startSequence ) {
                 this.startSequence = m.startSequence;
+                this.startSequenceObj = this.getControlStrings(this.startSequence);
             }
             if ( m.endSequence ) {
                 this.endSequence = m.endSequence;
+                this.endSequenceObj = this.getControlStrings(this.endSequence);
             }
             if ( m.codeTypeLength ) {
                 this.codeTypeLength = m.codeTypeLength;
@@ -36,14 +41,12 @@ interface ControlSequence { modifiers: string[]; key: string; }
     startScanning(): Observable<IScanData> {
         this.scannerActive = true;
 
-        const startSequenceObj = this.getControlStrings(this.startSequence);
-        const endSequenceObj = this.getControlStrings(this.endSequence);
 
         const startScanBuffer = fromEvent(document, 'keypress').pipe(
-            filter( (e: KeyboardEvent) => this.filterForControlSequence(startSequenceObj, e)));
+            filter( (e: KeyboardEvent) => this.filterForControlSequence(this.startSequenceObj, e)));
 
         const stopScanBuffer = fromEvent(document, 'keypress').pipe(
-            filter((e: KeyboardEvent) => this.filterForControlSequence(endSequenceObj, e)));
+            filter((e: KeyboardEvent) => this.filterForControlSequence(this.endSequenceObj, e)));
 
         return fromEvent(document, 'keypress').pipe(
             bufferToggle(
@@ -51,8 +54,8 @@ interface ControlSequence { modifiers: string[]; key: string; }
                     () => stopScanBuffer
             ),
             // Make sure we get a full buffer and didn't timout
-            filter( (s: KeyboardEvent[]) => this.filterForControlSequence(startSequenceObj, s[0]) &&
-                                            this.filterForControlSequence(endSequenceObj, s[s.length - 1])),
+            filter( (s: KeyboardEvent[]) => this.filterForControlSequence(this.startSequenceObj, s[0]) &&
+                                            this.filterForControlSequence(this.endSequenceObj, s[s.length - 1])),
             map( events => this.convertKeyEventsToChars(events) ),
             // Join the buffer into a string and remove the start and stop characters
             map( (s) => s.join('').slice(1, s.length - 1)),
@@ -70,8 +73,8 @@ interface ControlSequence { modifiers: string[]; key: string; }
 
         if ( sequence.includes('+')) {
             modifiers = sequence.split('+');
-            modifiers = modifiers.slice(0, modifiers.lastIndexOf('+'));
-            key = modifiers.slice(modifiers.lastIndexOf('+'))[0];
+            modifiers = modifiers.slice(0, modifiers.length - 1 );
+            key = sequence.slice(sequence.lastIndexOf('+') + 1)[0];
         } else {
             key = sequence;
         }
