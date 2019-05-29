@@ -47,7 +47,9 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
         this.scanServiceSubscription = this.scannerService.startScanning().subscribe(scanData => {
             this.sessionService.onAction( this.screenData.scanActionName, scanData );
         });
-        this.dialogService.$dialogMessages.subscribe(e => this.unregisterScanner());
+        // DJK - commenting this out because since the $dialogMessages is a  behavior subject if
+        // if there ever was a dialog shown we will immediately unsubscribe.
+        // this.dialogService.$dialogMessages.subscribe(e => this.unregisterScanner());
     }
 
     ngOnDestroy(): void {
