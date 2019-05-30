@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
+    "test-dev": "ng test --karmaConfig=projects/openpos-client-core-lib/karma.conf.dev.js openpos-client-core-lib",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "bundle-scss": "scss-bundle -c projects/openpos-client-core-lib/scss-bundle.config.json",
