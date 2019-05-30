@@ -17,7 +17,7 @@ steps:
   displayName: 'Install Node.js'
   
 - script: |
-    npm install -g @angular/cli
+    npm install -g @angular/cli@7.3.9
     npm install scss-bundle -g
     npm install -g @compodoc/compodoc
     npm install        
