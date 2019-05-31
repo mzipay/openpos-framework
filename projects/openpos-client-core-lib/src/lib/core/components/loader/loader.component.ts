@@ -16,6 +16,9 @@ export class LoaderComponent implements OnInit, OnDestroy, IMessageHandler<ILoad
     show = false;
     title: string = LoaderState.LOADING_TITLE;
     message: string = null;
+    time: Date = new Date();
+    reconnecting = false;
+    interval: any;
 
     loading = false;
 
@@ -50,6 +53,11 @@ export class LoaderComponent implements OnInit, OnDestroy, IMessageHandler<ILoad
             this.show = false;
         } else if ((this.loading && !this.show) || force) {
             stateChanging = !this.show;
+            if (message.title === LoaderState.DISCONNECTED_TITLE) {
+                this.startClock();
+            } else {
+                this.stopClock();
+            }
             this.log.info(`showing the loading dialog NOW with a title of: ${message.title} `);
             this.loading = true;
             this.title = message.title;
@@ -59,6 +67,20 @@ export class LoaderComponent implements OnInit, OnDestroy, IMessageHandler<ILoad
 
         if (stateChanging) {
             this.changeRef.detectChanges();
+        }
+    }
+
+    startClock() {
+        this.reconnecting = true;
+        this.interval = setInterval(() => {
+            this.time = new Date();
+          }, 1);
+    }
+
+    stopClock() {
+        this.reconnecting = false;
+        if (this.interval) {
+            clearInterval(this.interval);
         }
     }
 

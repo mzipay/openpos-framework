@@ -4,6 +4,7 @@
                 {{title}}
             </mat-card-title>
             <mat-card-content>
+                <div *ngIf="reconnecting">{{time}}</div>
                 <p>{{message}}</p>
                 <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
             </mat-card-content>
