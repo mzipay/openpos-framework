@@ -13,7 +13,7 @@ import { BehaviorSubject } from 'rxjs';
 export class ConfigurationService {
 
     public versions: Array<IVersion> = [];
-    public theme$ =  new BehaviorSubject<string>('openpos-theme');
+    public theme$ =  new BehaviorSubject<string>('openpos-default-theme');
 
     constructor(private log: Logger, private sessionService: SessionService ) {
         this.sessionService.getMessages('ConfigChanged').pipe(
