@@ -1,9 +1,12 @@
 import { IScanner } from './scanner.interface';
 import { Injectable } from '@angular/core';
 import { Observable, fromEvent } from 'rxjs';
-import { map, filter, bufferToggle } from 'rxjs/operators';
+import { map, filter, bufferToggle, tap } from 'rxjs/operators';
 import { IScanData } from './scan.interface';
 import { SessionService } from '../services/session.service';
+import { WEDGE_SCANNER_ACCEPTED_KEYS } from './wedge-scanner-accepted-keys';
+import { DomEventsPlugin } from '@angular/platform-browser/src/dom/events/dom_events';
+import { DomEventManager } from '../services/dom-event-mangaer.service';
 
 interface ControlSequence { modifiers: string[]; key: string; }
 
@@ -19,7 +22,7 @@ interface ControlSequence { modifiers: string[]; key: string; }
     private startSequenceObj = this.getControlStrings(this.startSequence);
     private endSequenceObj = this.getControlStrings(this.endSequence);
 
-    constructor( sessionService: SessionService ) {
+    constructor( sessionService: SessionService, private domEventManager: DomEventManager ) {
 
         sessionService.getMessages('ConfigChanged').pipe(
             filter( m => m.configType === 'WedgeScanner')
@@ -35,31 +38,32 @@ interface ControlSequence { modifiers: string[]; key: string; }
             if ( m.codeTypeLength ) {
                 this.codeTypeLength = m.codeTypeLength;
             }
+            if ( m.acceptKeys ) {
+                m.acceptKeys.forEach(key => {
+                    WEDGE_SCANNER_ACCEPTED_KEYS.push(key);
+                });
+            }
         });
     }
 
     startScanning(): Observable<IScanData> {
         this.scannerActive = true;
 
-
-        const startScanBuffer = fromEvent(document, 'keypress').pipe(
+        const startScanBuffer = this.domEventManager.createEventObserver(document, 'keydown').pipe(
             filter( (e: KeyboardEvent) => this.filterForControlSequence(this.startSequenceObj, e)));
 
-        const stopScanBuffer = fromEvent(document, 'keypress').pipe(
+        const stopScanBuffer = this.domEventManager.createEventObserver(document, 'keydown').pipe(
             filter((e: KeyboardEvent) => this.filterForControlSequence(this.endSequenceObj, e)));
 
-        return fromEvent(document, 'keypress').pipe(
+        return this.domEventManager.createEventObserver(document, 'keydown', {capture: true}).pipe(
             bufferToggle(
                     startScanBuffer,
                     () => stopScanBuffer
             ),
-            // Make sure we get a full buffer and didn't timout
-            filter( (s: KeyboardEvent[]) => this.filterForControlSequence(this.startSequenceObj, s[0]) &&
-                                            this.filterForControlSequence(this.endSequenceObj, s[s.length - 1])),
-            map( events => this.convertKeyEventsToChars(events) ),
+            map( (events: KeyboardEvent[]) => this.convertKeyEventsToChars(events) ),
             // Join the buffer into a string and remove the start and stop characters
-            map( (s) => s.join('').slice(1, s.length - 1)),
-            map( (s: string) => this.getScanData(s)),
+            map( (s) => s.join('')),
+            map( (s: string) => this.getScanData(s))
         );
     }
 
@@ -106,11 +110,20 @@ interface ControlSequence { modifiers: string[]; key: string; }
     private convertKeyEventsToChars( events: KeyboardEvent[] ): string[] {
         // We need to look for 2 character sequences with the alt key pressed and convert them into the
         // special characters they represent
-        // Mac gives us the individual key for special characters ie (3 and then 0 with alt held down) for return
-        // Where as windows gives us 30;
+        // We also want to filter out keys that are not in our list of accepted keys
         const charList = [];
         for ( let i = 0; i < events.length; i++ ) {
             const e = events[i];
+
+            // if the first key is the start key skip it
+            if ( i === 0 && this.filterForControlSequence( this.startSequenceObj, events[i])) {
+                continue;
+            }
+
+            // if the first key is the end key skip it
+            if ( i === events.length - 1 && this.filterForControlSequence( this.endSequenceObj, events[i])) {
+                continue;
+            }
 
             if ( e.altKey && i < events.length - 1 ) {
                 // get the next number
@@ -121,7 +134,7 @@ interface ControlSequence { modifiers: string[]; key: string; }
 
                 // skip the next value since we already accounted for it.
                 i++;
-            } else {
+            } else if ( WEDGE_SCANNER_ACCEPTED_KEYS.includes(e.key)) {
                 charList.push(e.key);
             }
         }
