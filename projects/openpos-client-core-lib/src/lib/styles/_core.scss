@@ -63,6 +63,11 @@ $mat-card-default-margin: 24px !default;
     position:unset;
     left:unset;
     width:unset;
-}
+  }
+
+  .transaction-prompt {
+    font-size: 24px;
+    padding-bottom: 8px;
+  }
 
 }
