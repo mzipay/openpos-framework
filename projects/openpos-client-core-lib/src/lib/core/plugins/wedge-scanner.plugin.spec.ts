@@ -6,9 +6,7 @@ import { IScanData } from './scan.interface';
 import { DomEventManager } from '../services/dom-event-mangaer.service';
 import { Subscription } from 'rxjs';
 
-
-fdescribe('WedgeScanner', () => {
-
+describe('WedgeScanner', () => {
 
     const config = {
         configType: 'WedgeScanner',
@@ -110,26 +108,26 @@ fdescribe('WedgeScanner', () => {
 
     it('should buffer barcode between * and Enter', () => {
 
-            config.startSequence = '*';
-            config.endSequence = 'Enter';
+        config.startSequence = '*';
+        config.endSequence = 'Enter';
 
-            queueEvent( '*', false, false );
-            queueEvent( 'X', false, false );
-            queueEvent( '1', false, false );
-            queueEvent( '2', false, false );
-            queueEvent( '3', false, false );
-            queueEvent( '4', false, false );
-            queueEvent( 'A', false, false );
-            queueEvent( 'B', false, false );
-            queueEvent( 'Enter', false, false );
+        queueEvent( '*', false, false );
+        queueEvent( 'X', false, false );
+        queueEvent( '1', false, false );
+        queueEvent( '2', false, false );
+        queueEvent( '3', false, false );
+        queueEvent( '4', false, false );
+        queueEvent( 'A', false, false );
+        queueEvent( 'B', false, false );
+        queueEvent( 'Enter', false, false );
 
-            setup();
+        setup();
 
-            getTestScheduler().flush();
+        getTestScheduler().flush();
 
-            expect(scanResult.type).toEqual('X');
-            expect(scanResult.data).toEqual('1234AB');
-        });
+        expect(scanResult.type).toEqual('X');
+        expect(scanResult.data).toEqual('1234AB');
+    });
 
     it('should buffer barcode between ctrl+b and ctrl+j', () => {
 
