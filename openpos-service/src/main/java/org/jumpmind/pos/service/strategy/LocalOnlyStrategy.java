@@ -44,7 +44,7 @@ public class LocalOnlyStrategy extends AbstractInvocationStrategy implements IIn
                         if (controller != null) {
                             String serviceName = controller.value();
                             String implementation = env
-                                    .getProperty(String.format("openpos.services.specificConfig.{}.implementation", serviceName), "default");
+                                    .getProperty(String.format("openpos.services.specificConfig.%s.implementation", serviceName), "default");
                             log.info("Loading endpoints for the '{}' implementation of {}({})", implementation, i.getSimpleName(),
                                     serviceName);
                             Method[] methods = i.getMethods();
@@ -59,20 +59,19 @@ public class LocalOnlyStrategy extends AbstractInvocationStrategy implements IIn
                                 }
 
                                 if (!endPointsByPath.containsKey(path)) {
-                                    for (Object endpointBean : endpoints) {
-                                        Endpoint endPoint = ClassUtils.resolveAnnotation(Endpoint.class, endpointBean);
-                                        if (endPoint.path().equals(path) && endPoint.implementation().equals(implementation)) {
-                                            endPointsByPath.put(path, endpointBean);
-                                            break;
-                                        }
+                                    Object endpointBean = findMatch(path, endpoints, implementation);
+                                    if (endpointBean == null) {
+                                        endpointBean = findMatch(path, endpoints, "default");
                                     }
-                                }
-
-                                if (!endPointsByPath.containsKey(path)) {
-                                    log.warn(String.format(
-                                            "No endpoint defined for path '%s' in '%s' in the service Please define a Spring-discoverable @Endpoint class, "
-                                                    + "with a method annotated like  @Endpoint(\"%s\")",
-                                            path, i.getSimpleName(), path));
+                                    
+                                    if (endpointBean != null) {
+                                            endPointsByPath.put(path, endpointBean);
+                                    } else {
+                                        log.warn(String.format(
+                                                "No endpoint defined for path '%s' in '%s' in the service Please define a Spring-discoverable @Endpoint class, "
+                                                        + "with a method annotated like  @Endpoint(\"%s\")",
+                                                path, i.getSimpleName(), path));                                        
+                                    }
                                 }
                             }
                         }
@@ -80,6 +79,16 @@ public class LocalOnlyStrategy extends AbstractInvocationStrategy implements IIn
                 }
             }
         }
+    }
+    
+    protected Object findMatch(String path, Collection<Object> endpoints, String implementation ) {
+        for (Object endpointBean : endpoints) {
+            Endpoint endPoint = ClassUtils.resolveAnnotation(Endpoint.class, endpointBean);
+            if (endPoint.path().equals(path) && endPoint.implementation().equals(implementation)) {
+                return endpointBean;
+            }
+        }
+        return null;
     }
 
     public String getStrategyName() {
