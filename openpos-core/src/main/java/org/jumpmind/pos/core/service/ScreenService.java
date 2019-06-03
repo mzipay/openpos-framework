@@ -97,7 +97,10 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @SuppressWarnings("deprecation")
     @RequestMapping(method = RequestMethod.GET, value = "api/appId/{appId}/deviceId/{deviceId}/content")
-    public void getImageAsByteArray(HttpServletResponse response, @PathVariable String appId, @PathVariable String deviceId,
+    public void getImageAsByteArray(
+            HttpServletResponse response,
+            @PathVariable String appId,
+            @PathVariable String deviceId,
             @RequestParam(name = "contentPath", required = true) String contentPath,
             @RequestParam(name = "provider", required = true) String provider) throws IOException {
 
@@ -187,36 +190,34 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Override
     public void actionOccured(String appId, String deviceId, Action action) {
-        try {
-            IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
-            if (stateManager != null) {
-                try {
-                    stateManagerContainer.setCurrentStateManager(stateManager);
-                    if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
-                        stateManager.keepAlive();
-                    } else if ("Refresh".equals(action.getName())) {
-                        UIMessage lastDialog = getLastDialog(appId, deviceId);
-                        logger.info("Received Refresh action from {}", deviceId);
-                        showScreen(appId, deviceId, getLastScreen(appId, deviceId));
-                        showScreen(appId, deviceId, lastDialog);
-                    } else {
+        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
+        if (stateManager != null) {
+            try {
+                stateManagerContainer.setCurrentStateManager(stateManager);
+                if (SessionTimer.ACTION_KEEP_ALIVE.equals(action.getName())) {
+                    stateManager.keepAlive();
+                } else if ("Refresh".equals(action.getName())) {
+                    UIMessage lastDialog = getLastDialog(appId, deviceId);
+                    logger.info("Received Refresh action from {}", deviceId);
+                    showScreen(appId, deviceId, getLastScreen(appId, deviceId));
+                    showScreen(appId, deviceId, lastDialog);
+                } else {
 
-                        deserializeForm(stateManager.getApplicationState(), action);
+                    deserializeForm(stateManager.getApplicationState(), action);
 
-                        logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
+                    logger.info("Received action from {}\n{}", deviceId, logFormatter.toJsonString(action));
 
-                        try {
-                            logger.debug("Posting action {}", action);
-                            stateManager.doAction(action);
-                        } catch (Throwable ex) {
-                            logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
-                            messageService.sendMessage(appId, deviceId, Toast.createWarningToast(
-                                    "The application received an unexpected error. Please report to the appropriate technical personnel"));
-                        }
+                    try {
+                        logger.debug("Posting action {}", action);
+                        stateManager.doAction(action);
+                    } catch (Throwable ex) {
+                        logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
+                        messageService.sendMessage(appId, deviceId, Toast.createWarningToast(
+                                "The application received an unexpected error. Please report to the appropriate technical personnel"));
                     }
-                } finally {
-                    stateManagerContainer.setCurrentStateManager(null);
                 }
+            } finally {
+                stateManagerContainer.setCurrentStateManager(null);
             }
         }
     }
@@ -262,37 +263,35 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Override
     public void showScreen(String appId, String deviceId, UIMessage screen) {
-        try {
-            IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
-            if (screen != null && stateManager != null) {
-                ApplicationState applicationState = stateManager.getApplicationState();
-                screen.setSequenceNumber(applicationState.incrementAndScreenSequenceNumber());
-                try {
-                    interceptScreen(appId, deviceId, screen);
-                    logScreenTransition(deviceId, screen);
-                } catch (Exception ex) {
-                    if (ex.toString().contains("org.jumpmind.pos.core.screen.ChangeScreen")) {
-                        logger.error(
-                                "Failed to write screen to JSON. Verify the screen type has been configured by calling setType() on the screen object.",
-                                ex);
-                    } else {
-                        logger.error("Failed to write screen to JSON", ex);
-                    }
-                }
-                if (!stateManager.areAllSessionsAuthenticated()) {
-                    logger.warn("Not sending screen because a session is attached that is not authenticated");
-                } else if (!stateManager.areAllSessionsCompatible()) {
-                    logger.warn("Not sending screen because a session is attached that is not compatible");
-
+        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
+        if (screen != null && stateManager != null) {
+            ApplicationState applicationState = stateManager.getApplicationState();
+            screen.setSequenceNumber(applicationState.incrementAndScreenSequenceNumber());
+            try {
+                interceptScreen(appId, deviceId, screen);
+                logScreenTransition(deviceId, screen);
+            } catch (Exception ex) {
+                if (ex.toString().contains("org.jumpmind.pos.core.screen.ChangeScreen")) {
+                    logger.error(
+                            "Failed to write screen to JSON. Verify the screen type has been configured by calling setType() on the screen object.",
+                            ex);
                 } else {
-                    messageService.sendMessage(appId, deviceId, screen);
+                    logger.error("Failed to write screen to JSON", ex);
                 }
-                if (screen.isDialog()) {
-                    applicationState.setLastDialog(screen);
-                } else if (!screen.getScreenType().equals("NoOp")) {
-                    applicationState.setLastScreen(screen);
-                    applicationState.setLastDialog(null);
-                }
+            }
+            if (!stateManager.areAllSessionsAuthenticated()) {
+                logger.warn("Not sending screen because a session is attached that is not authenticated");
+            } else if (!stateManager.areAllSessionsCompatible()) {
+                logger.warn("Not sending screen because a session is attached that is not compatible");
+
+            } else {
+                messageService.sendMessage(appId, deviceId, screen);
+            }
+            if (screen.isDialog()) {
+                applicationState.setLastDialog(screen);
+            } else if (!screen.getScreenType().equals("NoOp")) {
+                applicationState.setLastScreen(screen);
+                applicationState.setLastDialog(null);
             }
         }
     }
