@@ -97,7 +97,10 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @SuppressWarnings("deprecation")
     @RequestMapping(method = RequestMethod.GET, value = "api/appId/{appId}/deviceId/{deviceId}/content")
-    public void getImageAsByteArray(HttpServletResponse response, @PathVariable String appId, @PathVariable String deviceId,
+    public void getImageAsByteArray(
+            HttpServletResponse response,
+            @PathVariable String appId,
+            @PathVariable String deviceId,
             @RequestParam(name = "contentPath", required = true) String contentPath,
             @RequestParam(name = "provider", required = true) String provider) throws IOException {
 
