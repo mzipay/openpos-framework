@@ -81,17 +81,11 @@ public class ScreenService implements IScreenService, IActionListener {
 
     List<IScreenInterceptor> screenInterceptors = new ArrayList<>();
 
-    boolean atRest = true;
-
     @PostConstruct
     public void init() {
         if (!jsonIncludeNulls) {
             mapper.setSerializationInclusion(Include.NON_NULL);
         }
-    }
-
-    public boolean isAtRest() {
-        return atRest;
     }
 
     public void setScreenInterceptors(List<IScreenInterceptor> screenInterceptors) {
@@ -194,7 +188,6 @@ public class ScreenService implements IScreenService, IActionListener {
     @Override
     public void actionOccured(String appId, String deviceId, Action action) {
         try {
-            atRest = false;
             IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
             if (stateManager != null) {
                 try {
@@ -225,8 +218,6 @@ public class ScreenService implements IScreenService, IActionListener {
                     stateManagerContainer.setCurrentStateManager(null);
                 }
             }
-        } finally {
-            atRest = true;
         }
     }
 
@@ -266,19 +257,12 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Override
     public void showToast(String appId, String nodeId, Toast toast) {
-        try {
-            atRest = false;
-            messageService.sendMessage(appId, nodeId, toast);
-        } finally {
-            atRest = true;
-        }
-
+        messageService.sendMessage(appId, nodeId, toast);
     }
 
     @Override
     public void showScreen(String appId, String deviceId, UIMessage screen) {
         try {
-            atRest = false;
             IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
             if (screen != null && stateManager != null) {
                 ApplicationState applicationState = stateManager.getApplicationState();
@@ -310,10 +294,7 @@ public class ScreenService implements IScreenService, IActionListener {
                     applicationState.setLastDialog(null);
                 }
             }
-        } finally {
-            atRest = true;
         }
-
     }
 
     protected void interceptScreen(String appId, String deviceId, UIMessage screen) {
