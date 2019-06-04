@@ -438,9 +438,10 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
         this.devMenuPanel.close();
         this.personalization.dePersonalize();
         this.session.unsubscribe();
-        this.session.cancelLoading();
 
-        this.dialog.open( PersonalizationComponent ).afterClosed().subscribe( () => this.personalization.refreshApp() );
+        const d = this.dialog.open( PersonalizationComponent );
+        d.afterOpened().subscribe( () => this.session.cancelLoading() );
+        d.afterClosed().subscribe( () => this.personalization.refreshApp() );
     }
 
     public onDevClearLocalStorage() {

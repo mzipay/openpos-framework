@@ -21,7 +21,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
 
     constructor(private log: Logger, private personalization: PersonalizationService, private session: SessionService, 
                 private formBuilder: FormBuilder, private http: HttpClient, overlayContainer: OverlayContainer) {
-        overlayContainer.getContainerElement().classList.add('default-theme');
+        overlayContainer.getContainerElement().classList.add('openpos-default-theme');
     }
 
     ngOnInit() {

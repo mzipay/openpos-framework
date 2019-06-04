@@ -75,7 +75,11 @@ export class SelectionListScreenComponent extends PosScreen<SelectionListInterfa
             indexToView -= Math.trunc(this.index / this.screen.numberItemsPerPage) * this.screen.numberItemsPerPage;
         }
         if (this.items.toArray()[indexToView]) {
-            this.items.toArray()[indexToView].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            this.items.toArray()[indexToView].nativeElement.scrollIntoView({ block: 'center' });
+            // Smooth scrolling does not seem to work in Chrome dialog windows (IE: Resume transaction window).
+            // Firefox will work fine though.
+            //
+            // this.items.toArray()[indexToView].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
 
