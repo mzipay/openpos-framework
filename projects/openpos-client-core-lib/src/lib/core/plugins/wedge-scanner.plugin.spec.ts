@@ -1,10 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { WedgeScannerPlugin } from './wedge-scanner.plugin';
 import { SessionService } from '../services/session.service';
 import { cold, getTestScheduler } from 'jasmine-marbles';
 import { IScanData } from './scan.interface';
-import { DomEventManager } from '../services/dom-event-mangaer.service';
-import { Subscription } from 'rxjs';
+import { DomEventManager } from '../services/dom-event-manager.service';
+import { Subscription, of, Subject } from 'rxjs';
+import { Logger } from '../services/logger.service';
+import { ElectronService } from 'ngx-electron';
 
 describe('WedgeScanner', () => {
 
@@ -12,12 +14,17 @@ describe('WedgeScanner', () => {
         configType: 'WedgeScanner',
         startSequence: '*',
         endSequence: 'Enter',
-        codeTypeLength: 1
+        codeTypeLength: 1,
+        timeout: null
     };
 
-    let scanResult: IScanData;
+    let scanResults: IScanData[];
     let keyDownEvents: KeyboardEvent[];
     let subscription: Subscription;
+    let sessionService: jasmine.SpyObj<SessionService>;
+    let domEventManager: jasmine.SpyObj<DomEventManager>;
+    let wedgeScannerPlugin: WedgeScannerPlugin;
+    let domEventManagerSpy;
 
     function queueEvent( key: string, ctrlKey: boolean, altKey: boolean ) {
         const event = new KeyboardEvent('keydown', {
@@ -29,15 +36,22 @@ describe('WedgeScanner', () => {
         keyDownEvents.push(event);
     }
 
+    function queueTime( time: string ) {
+        keyDownEvents.push( new KeyboardEvent(time));
+    }
+
     function makeEventCold() {
-        let marbles = '----';
+        let marbles = '-';
         const values = {};
 
         keyDownEvents.forEach( ( e, index ) => {
-            marbles = marbles.concat(String.fromCharCode(index + 97) + '-');
-            values[String.fromCharCode(index + 97)] = e;
+            if ( e.type === 'keydown') {
+                marbles = marbles.concat(String.fromCharCode(index + 97) + '-');
+                values[String.fromCharCode(index + 97)] = e;
+            } else {
+                marbles = marbles.concat(e.type);
+            }
         });
-
         return cold(marbles, values);
     }
 
@@ -46,35 +60,58 @@ describe('WedgeScanner', () => {
     }
 
     function setup() {
-        let sessionService: jasmine.SpyObj<SessionService>;
-        let domEventManager: jasmine.SpyObj<DomEventManager>;
-        let wedgeScannerPlugin: WedgeScannerPlugin;
         const sessionSpy = jasmine.createSpyObj('SessionService', ['getMessages']);
-        const domEventManagerSpy = jasmine.createSpyObj('DomEventManager', ['createEventObserver']);
+        domEventManagerSpy = jasmine.createSpyObj('DomEventManager', ['createEventObserver']);
 
         TestBed.configureTestingModule({
             providers: [
                 WedgeScannerPlugin,
+                ElectronService,
+                Logger,
                 { provide: SessionService, useValue: sessionSpy },
                 { provide: DomEventManager, useValue: domEventManagerSpy}
             ]
         });
 
         sessionService = TestBed.get(SessionService);
+        domEventManager = TestBed.get(DomEventManager);
+
         sessionService.getMessages.and.callFake(getConfig);
 
-        domEventManager = TestBed.get(DomEventManager);
+        wedgeScannerPlugin = TestBed.get(WedgeScannerPlugin);
+    }
+
+    function setupSync() {
+        setup();
         domEventManager.createEventObserver.and.callFake(makeEventCold);
 
-        wedgeScannerPlugin = TestBed.get(WedgeScannerPlugin);
-        subscription = wedgeScannerPlugin.startScanning().subscribe( s => scanResult = s);
+        subscription = wedgeScannerPlugin.startScanning().subscribe( s => scanResults.push(s));
+    }
+
+    const fakeEventSubject = new Subject();
+
+    function dispatchEvent( key: string, ctrlKey: boolean, altKey: boolean ) {
+        const event = new KeyboardEvent('keydown', {
+            key,
+            ctrlKey,
+            altKey,
+        });
+
+        fakeEventSubject.next(event);
+    }
+
+    function setupAsync() {
+        setup();
+        domEventManager.createEventObserver.and.callFake(() => fakeEventSubject);
+
+        subscription = wedgeScannerPlugin.startScanning().subscribe( s => scanResults.push(s));
     }
 
     beforeEach( () => {
-        scanResult = null;
+        scanResults = [];
         keyDownEvents = [];
         TestBed.resetTestingModule();
-        if ( subscription ) {
+        if (subscription) {
             subscription.unsubscribe();
         }
     });
@@ -98,12 +135,12 @@ describe('WedgeScanner', () => {
         queueEvent( '0', false, true);
         queueEvent( 'Enter', false, false );
 
-        setup();
+        setupSync();
 
         getTestScheduler().flush();
 
-        expect(scanResult.type).toEqual('X');
-        expect(scanResult.data).toEqual('1234AB' + String.fromCharCode(10) + String.fromCharCode(30));
+        expect(scanResults[0].type).toEqual('X');
+        expect(scanResults[0].data).toEqual('1234AB' + String.fromCharCode(10) + String.fromCharCode(30));
     });
 
     it('should buffer barcode between * and Enter', () => {
@@ -121,16 +158,15 @@ describe('WedgeScanner', () => {
         queueEvent( 'B', false, false );
         queueEvent( 'Enter', false, false );
 
-        setup();
+        setupSync();
 
         getTestScheduler().flush();
 
-        expect(scanResult.type).toEqual('X');
-        expect(scanResult.data).toEqual('1234AB');
+        expect(scanResults[0].type).toEqual('X');
+        expect(scanResults[0].data).toEqual('1234AB');
     });
 
     it('should buffer barcode between ctrl+b and ctrl+j', () => {
-
 
         config.startSequence = 'ctrl+b';
         config.endSequence = 'ctrl+j';
@@ -145,12 +181,45 @@ describe('WedgeScanner', () => {
         queueEvent( 'B', false, false );
         queueEvent( 'j', true, false );
 
-        setup();
+        setupSync();
 
         getTestScheduler().flush();
 
-        expect(scanResult.type).toEqual('X');
-        expect(scanResult.data).toEqual('1234ZB');
+        expect(scanResults[0].type).toEqual('X');
+        expect(scanResults[0].data).toEqual('1234ZB');
     });
+
+    it('should timeout and only send second scan', fakeAsync(() => {
+        config.startSequence = 'ctrl+b';
+        config.endSequence = 'ctrl+j';
+
+        setupAsync();
+
+        getTestScheduler().flush();
+
+        dispatchEvent( 'b', true, false );
+        dispatchEvent( 'T', false, false );
+        dispatchEvent( 'K', false, false );
+        dispatchEvent( 'L', false, false );
+        dispatchEvent( 'B', false, false );
+        dispatchEvent( 'R', false, false );
+
+        tick(500);
+
+        expect(scanResults.length).toBe(0);
+
+        dispatchEvent( 'b', true, false );
+        dispatchEvent( 'X', false, false );
+        dispatchEvent( '1', false, false );
+        dispatchEvent( '2', false, false );
+        dispatchEvent( '3', false, false );
+        dispatchEvent( '4', false, false );
+        dispatchEvent( 'Z', false, false );
+        dispatchEvent( 'B', false, false );
+        dispatchEvent( 'j', true, false );
+
+        expect(scanResults[0].type).toEqual('X');
+        expect(scanResults[0].data).toEqual('1234ZB');
+    }));
 
 });
