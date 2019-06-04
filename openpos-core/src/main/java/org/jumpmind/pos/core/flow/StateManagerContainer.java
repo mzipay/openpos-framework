@@ -76,8 +76,9 @@ public class StateManagerContainer implements IStateManagerContainer {
 
     @Override
     public IStateManager create(String appId, String deviceId, Map<String, Object> queryParams, Map<String, String> personalizationProperties) {
+        
         Map<String, StateManager> stateManagersByNodeId;
-        synchronized (this) {
+        synchronized (this) {            
             stateManagersByNodeId = stateManagersByAppIdByNodeId.get(appId);
             if (stateManagersByNodeId == null) {
                 if (stateManagersByNodeId == null) {
