@@ -21,6 +21,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.content.ContentProviderService;
 import org.jumpmind.pos.core.flow.ApplicationState;
@@ -263,6 +264,28 @@ public class ScreenService implements IScreenService, IActionListener {
             return null;
         }
     }
+    
+    @Override
+    public UIMessage getLastPreInterceptedScreen(String appId, String deviceId) {
+        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
+        ApplicationState applicationState = stateManager != null ? stateManager.getApplicationState() : null;
+        if (applicationState != null) {
+            return applicationState.getLastPreInterceptedScreen();
+        } else {
+            return null;
+        }
+    }
+    
+    @Override
+    public UIMessage getLastPreInterceptedDialog(String appId, String deviceId) {
+        IStateManager stateManager = stateManagerContainer.retrieve(appId, deviceId);
+        ApplicationState applicationState = stateManager != null ? stateManager.getApplicationState() : null;
+        if (applicationState != null) {
+            return applicationState.getLastPreInterceptedDialog();
+        } else {
+            return null;
+        }
+    }
 
     @Override
     public void showToast(String appId, String nodeId, Toast toast) {
@@ -283,7 +306,10 @@ public class ScreenService implements IScreenService, IActionListener {
             if (screen != null && stateManager != null) {
                 ApplicationState applicationState = stateManager.getApplicationState();
                 screen.setSequenceNumber(applicationState.incrementAndScreenSequenceNumber());
+                
+                UIMessage preInterceptedScreen = null;
                 try {
+                    preInterceptedScreen = SerializationUtils.clone(screen);
                     interceptScreen(appId, deviceId, screen);
                     logScreenTransition(deviceId, screen);
                 } catch (Exception ex) {
@@ -305,9 +331,12 @@ public class ScreenService implements IScreenService, IActionListener {
                 }
                 if (screen.isDialog()) {
                     applicationState.setLastDialog(screen);
+                    applicationState.setLastPreInterceptedDialog(preInterceptedScreen);
                 } else if (!screen.getScreenType().equals("NoOp")) {
                     applicationState.setLastScreen(screen);
+                    applicationState.setLastPreInterceptedScreen(preInterceptedScreen);
                     applicationState.setLastDialog(null);
+                    applicationState.setLastPreInterceptedDialog(null);
                 }
             }
         } finally {
