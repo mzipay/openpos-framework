@@ -1,6 +1,6 @@
 ---
 id: openpos-core
-title: Core Project
+title: OpenPOS Server Application Library
 ---
 
 # Overview
