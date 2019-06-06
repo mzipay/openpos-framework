@@ -20,6 +20,9 @@ export class KebabButtonComponent implements OnDestroy {
     color?: string;
 
     @Input()
+    iconName = 'KebabMenu';
+
+    @Input()
     set keyBinding( key: string) {
         if ( this.subscription ) {
             this.subscription.unsubscribe();
