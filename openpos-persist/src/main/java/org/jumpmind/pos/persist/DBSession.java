@@ -175,7 +175,7 @@ public class DBSession {
         QueryTemplate queryTemplate = new QueryTemplate();
         queryTemplate.setSelect(getSelectSql(entityClass, fieldValues));
         Query<T> query = new Query<T>().result(entityClass);
-        return query(query, fieldValues);
+        return query(query, queryTemplate, fieldValues);
     }
 
     public void executeScript(File file) {
