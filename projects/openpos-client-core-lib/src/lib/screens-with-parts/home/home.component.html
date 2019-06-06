@@ -2,7 +2,7 @@
     <div class="mat-elevation-z10">
         <app-bacon-strip></app-bacon-strip>
     </div>
-    <div *ngIf="!(isMobile | async)" 
+    <div *ngIf="!(isMobile | async) && screen.menuItems.length > 0" 
             class="button-grid">
         <div class="menu-button-border" 
             *ngFor="let menuItem of screen.menuItems"
@@ -23,7 +23,7 @@
             </button>
         </div>
     </div>
-    <mat-card *ngIf="isMobile | async">
+    <mat-card *ngIf="(isMobile | async) && screen.menuItems.length > 0">
         <mat-nav-list>
             <mat-list-item *ngFor="let menuItem of screen.menuItems" (click)="onMenuItemClick(menuItem)">
                 <app-icon class="primary text-lg" iconName="{{menuItem.icon}}" iconClass="material-icons"></app-icon>
