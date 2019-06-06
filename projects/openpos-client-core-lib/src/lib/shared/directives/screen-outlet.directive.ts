@@ -60,7 +60,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.updateTemplateAndScreen();
         this.subscriptions.add(this.session.getMessages('Screen').subscribe((message) => this.handle(message)));
-        this.subscriptions.add(this.session.getMessages('Connected').subscribe((message) => this.handle(new BlankScreen())));
+        // this.subscriptions.add(this.session.getMessages('Connected').subscribe((message) => this.handle(new BlankScreen())));
         this.subscriptions.add(this.configurationService.theme$.subscribe( theme => {
             this.updateTheme(theme);
         }));
@@ -87,7 +87,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     protected updateTemplateAndScreen(screen?: any): void {
         if (!screen) {
-            screen = new BlankScreen();
+            screen = new SplashScreen();
         }
 
         let trap = false;
@@ -234,8 +234,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     }
 }
 
-export class BlankScreen {
+export class SplashScreen {
     type = 'Screen';
-    screenType = 'Blank';
-    template: { type: 'Blank' };
+    screenType = 'SplashScreen';
 }
