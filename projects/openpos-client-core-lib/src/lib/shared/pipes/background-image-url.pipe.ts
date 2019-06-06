@@ -14,8 +14,7 @@ export class BackgroundImageUrlPipe implements PipeTransform {
                 'background-image': `url(${url})`,
                 'background-repeat': 'no-repeat',
                 'background-size': 'cover',
-                'background-position': 'center',
-                height: '100%'
+                'background-position': 'center'
             };
         }
         return style;

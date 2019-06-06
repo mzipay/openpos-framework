@@ -6,5 +6,6 @@ import { INotificationItem } from '../../core/interfaces/notification-item.inter
 export interface HomeInterface extends IAbstractScreen {
     menuItems: IActionItem[];
     backgroundImage: string;
+    logo: string;
     notificationItems: INotificationItem[];
 }
