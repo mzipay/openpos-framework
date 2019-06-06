@@ -48,6 +48,7 @@ import { PlatformReadyStartupTask, PLATFORMS } from './components/startup/platfo
 import { WedgeScannerPlugin } from './plugins/wedge-scanner.plugin';
 import { CordovaPlatform } from './platforms/cordova.platform';
 import { InfineaScannerCordovaPlugin } from './plugins/infinea-scanner-cordova.plugin';
+import { SplashScreenComponent } from './components/splash-screen/splash-screen.component';
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,
@@ -55,7 +56,8 @@ import { InfineaScannerCordovaPlugin } from './plugins/infinea-scanner-cordova.p
         StartupComponent,
         StartupFailedComponent,
         DialogContentComponent,
-        StatusBarStatusControlComponent
+        StatusBarStatusControlComponent,
+        SplashScreenComponent
     ],
     declarations: [
         OpenposAppComponent,
@@ -67,7 +69,8 @@ import { InfineaScannerCordovaPlugin } from './plugins/infinea-scanner-cordova.p
         PersonalizationComponent,
         StartupComponent,
         StartupFailedComponent,
-        StatusBarStatusControlComponent
+        StatusBarStatusControlComponent,
+        SplashScreenComponent
     ],
     imports: [
         SharedModule,
