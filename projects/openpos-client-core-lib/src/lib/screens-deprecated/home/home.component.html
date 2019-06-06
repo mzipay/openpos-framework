@@ -9,7 +9,7 @@
             </div>
         </button>
     </mat-card>
-    <mat-card fxFlex fxHide fxShow.xs>
+    <mat-card *ngIf="menuItems.length > 0" fxFlex fxHide fxShow.xs>
         <mat-nav-list>
             <mat-list-item *ngFor="let menuItem of menuItems" (click)="onMenuItemClick(menuItem)">
                 <app-icon class="primary text-lg" iconName="{{menuItem.icon}}" iconClass="material-icons"></app-icon>
