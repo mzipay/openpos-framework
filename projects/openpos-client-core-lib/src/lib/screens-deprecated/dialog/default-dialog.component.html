@@ -3,14 +3,13 @@
     <h4 mat-dialog-title [ngClass]="{'warn text-lg text-center': isCustomerFacing()}">{{screen.title}}</h4>
   </div>
   <div mat-dialog-content>
-  <ng-container *ngIf="messages && messages.length > 0">
-      <div *ngFor="let m of messages" [ngClass]="{'text-md': isCustomerFacing()}">
-        <p>{{m}}</p>
+    <ng-container *ngIf="messages && messages.length > 0">
+      <div *ngFor="let m of messages" [innerHTML]="m | markdownFormatter" [ngClass]="{'text-md': isCustomerFacing()}">
       </div>
     </ng-container>
     <ng-container *ngIf="lines && lines.length > 0">
       <div *ngFor="let l of lines" [ngClass]="{'text-md': isCustomerFacing()}">
-        <p [class]="l.cssClass">{{l.message}}</p>
+          <p [class]="l.cssClass">{{l.message}}</p>
       </div>
     </ng-container>
     <mat-progress-bar *ngIf="screen.subType === 'Progress'" mode="indeterminate"></mat-progress-bar>
