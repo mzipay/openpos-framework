@@ -3,6 +3,8 @@ import { DisplayProperty } from '../../shared/components/display-property/displa
 import { IAbstractScreen } from '../../core/interfaces/abstract-screen.interface';
 
 export interface PriceCheckerItemDetailInterface extends IAbstractScreen {
+    itemNotFoundMessage: string;
+    helpMessage: string;
     printButton: IActionItem;
     itemDescription: string;
     itemProperties: DisplayProperty[];
