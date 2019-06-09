@@ -7,6 +7,7 @@ export class SelfCheckoutStatusBarData {
     backButton: IActionItem;
     showSkip: boolean;
     showAdmin: boolean;
+    showLanguageSelector: boolean;
     scanSomethingData: IScan;
     type: any;
 }

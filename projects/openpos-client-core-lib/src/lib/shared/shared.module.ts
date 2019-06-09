@@ -110,6 +110,7 @@ import { ToggleGroupComponent } from './components/toggle-button-group/toggle-gr
 import { ToggleButtonComponent } from './components/toggle-button/toggle-button.component';
 import { ChooseOptionsPartComponent } from './screen-parts/choose-options-part/choose-options-part.component';
 import { WebcamViewerComponent } from './screen-parts/webcam-viewer/webcam-viewer.component';
+import { LanguageSelectorComponent } from './components/language-selector/language-selector.component';
 
 const screenParts = [
     ChooseOptionsPartComponent,
@@ -124,7 +125,7 @@ const screenParts = [
     DynamicFormPartComponent,
     AutoCompleteAddressPartComponent,
     ProgressBarPartComponent,
-    WebcamViewerComponent
+    WebcamViewerComponent,
 ];
 
 const components = [
@@ -178,7 +179,8 @@ const components = [
     SellStatusSectionComponent,
     FormComponent,
     ToggleGroupComponent,
-    ToggleButtonComponent
+    ToggleButtonComponent,
+    LanguageSelectorComponent,
 ];
 
 const directives = [

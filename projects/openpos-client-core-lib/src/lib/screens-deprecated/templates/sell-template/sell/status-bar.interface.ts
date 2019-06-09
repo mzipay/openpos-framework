@@ -11,5 +11,6 @@ export interface IStatusBar {
     showScan: boolean;
     showAdmin: boolean;
     showSkip: boolean;
+    showLanguageSelector: boolean;
     enableHomeAction: boolean;
 }

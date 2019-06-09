@@ -1,30 +1,35 @@
 import { LocaleConstantKey, LocaleConstants } from './locale.constants';
-import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { SessionService } from './session.service';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 export const DEFAULT_LOCALE = 'en-US';
 
 @Injectable({
     providedIn: 'root',
-  })
-export class LocaleService implements IMessageHandler<any> {
+})
+export class LocaleService {
     private locale = DEFAULT_LOCALE;
+    private supportedLocales = ['en-US'];
 
     constructor(public sessionService: SessionService) {
-        this.sessionService.registerMessageHandler(this);
-
+        this.sessionService.getMessages('LocaleChanged').subscribe(message => this.handleLocaleChanged(message));
     }
 
-    handle(message: any) {
+    handleLocaleChanged(message: any) {
         if (message.locale) {
-            this.locale = message.locale;
+            this.locale = this.formatLocaleForBrowser(message.locale);
         }
-        return this.locale;
+        if (message.supportedLocales) {
+            this.supportedLocales = message.supportedLocales.map(locale => this.formatLocaleForBrowser(locale));
+        }
     }
 
     getLocale(): string {
         return this.locale;
+    }
+
+    getSupportedLocales(): string[] {
+        return this.supportedLocales;
     }
 
     getConstant(key: LocaleConstantKey, locale?: string): any {
@@ -32,6 +37,22 @@ export class LocaleService implements IMessageHandler<any> {
         llocale = llocale ? llocale.toLowerCase() : null;
         if (LocaleConstants[key] && llocale) {
             return LocaleConstants[key][llocale];
+        } else {
+            return null;
+        }
+    }
+
+    formatLocaleForBrowser(locale: string): string {
+        if (locale) {
+            return locale.replace('_', '-');
+        } else {
+            return null;
+        }
+    }
+
+    formatLocaleForJava(locale: string): string {
+        if (locale) {
+            return locale.replace('-', '_');
         } else {
             return null;
         }

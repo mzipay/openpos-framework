@@ -10,6 +10,20 @@
         .container{
             background-color: $app-primary;
             color: map-get($foreground, inverse-text);
+
+            .mat-form-field-underline,
+            .mat-form-field-ripple,
+            .mat-focused .mat-form-field-ripple {
+                background-color: map-get($foreground, inverse-text);
+            }
+          
+            .mat-form-field-label,
+            .mat-focused .mat-form-field-label,
+            .mat-select-value,
+            .mat-select-arrow,
+            .mat-form-field.mat-focused .mat-select-arrow {
+                color: inherit;
+            }
         }
     }
 }

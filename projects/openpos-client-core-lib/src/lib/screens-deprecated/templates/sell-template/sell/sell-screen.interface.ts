@@ -76,6 +76,7 @@ export class SellScreenUtils {
         statusBar.showAdmin = screen.template.statusBar.showAdmin;
         statusBar.showScan = screen.template.statusBar.showScan;
         statusBar.showSkip = screen.template.statusBar.showSkip;
+        statusBar.showLanguageSelector = screen.template.statusBar.showLanguageSelector;
         statusBar.scanSomethingData = screen.template.scan;
         return statusBar;
     }

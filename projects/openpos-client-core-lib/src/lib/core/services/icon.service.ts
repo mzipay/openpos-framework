@@ -96,6 +96,10 @@ export class IconService {
         this.icons.set('Reports', ['assessment.svg', this.defaultIconProvider]);
         this.icons.set('HamburgerMenu', ['menu.svg', this.defaultIconProvider]);
         this.icons.set('KebabMenu', ['more_vert.svg', this.defaultIconProvider]);
+        this.icons.set('Flag', ['flag.svg', this.defaultIconProvider]);
+        this.icons.set('UnitedStates', ['united-states.svg', this.defaultIconProvider]);
+        this.icons.set('Canada', ['canada.svg', this.defaultIconProvider]);
+        this.icons.set('France', ['france.svg', this.defaultIconProvider]);
     }
 
     public addIconMapping(name: string, icon: string, provider?: string) {
