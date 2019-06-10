@@ -45,13 +45,13 @@
             {{screen.currentPrice.value | valueFormatter:screen.currentPrice.valueFormatter}}
         </div>
         <div gdArea="assocItems" class="assoc-items">
-            <ng-container *ngFor="let item of screen.associatedItems">
+            <div *ngFor="let item of screen.associatedItems">
                 <span class="assoc-items-value">+{{item.value | valueFormatter:item.valueFormatter}}</span>
                 <span class="assoc-items-label">{{item.label}}</span>
-            </ng-container>
+            </div>
         </div>
 
-        <div gdArea="logo">
+        <div gdArea="logo" class="logo-container">
             <img  class="price-checker-logo" [src]="screen.logoUrl | imageUrl">
         </div>
     
