@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractMessagePropertyCrawlerInterceptor<T extends Message> implements IMessageInterceptor<T> {
 
     Logger logger = LoggerFactory.getLogger(getClass());
-    private List<IMessagePropertyStrategy<T>> messagePropertyStrategies;
     
     private static final Set<Class<?>> WRAPPER_TYPES = getWrapperTypes();
 
@@ -41,12 +40,8 @@ public abstract class AbstractMessagePropertyCrawlerInterceptor<T extends Messag
         return ret;
     }
     
-    public void intercept(String appId, String deviceId, T message, List<IMessagePropertyStrategy<T>> messagePropertyStrategies) {
-        this.messagePropertyStrategies = messagePropertyStrategies;
-        if (message != null && messagePropertyStrategies != null && messagePropertyStrategies.size() > 0) {
-            this.intercept(appId, deviceId, message);
-        }
-    }
+    public abstract List<IMessagePropertyStrategy<T>> getMessagePropertyStrategies();
+    public abstract void setMessagePropertyStrategies(List<IMessagePropertyStrategy<T>> strategies);
     
     @Override
     public void intercept(String appId, String deviceId, T message) {
@@ -154,7 +149,7 @@ public abstract class AbstractMessagePropertyCrawlerInterceptor<T extends Messag
             Class<?> clazz,
             T message,
             Map<String, Object> messageContext) {
-        for (IMessagePropertyStrategy<T> s : messagePropertyStrategies) {
+        for (IMessagePropertyStrategy<T> s : this.getMessagePropertyStrategies()) {
             property = s.doStrategy(appId, deviceId, property, clazz, message, messageContext);
         }
 

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
@@ -349,8 +348,8 @@ public class ScreenService implements IScreenService, IActionListener {
         if (toastInterceptorBeanNames != null) {
             for (String beanName: toastInterceptorBeanNames) {
                 @SuppressWarnings("unchecked")
-                IMessageInterceptor<Toast> screenInterceptor =  (IMessageInterceptor<Toast>) applicationContext.getBean(beanName);
-                screenInterceptor.intercept(appId, deviceId, toast);
+                IMessageInterceptor<Toast> toastInterceptor =  (IMessageInterceptor<Toast>) applicationContext.getBean(beanName);
+                toastInterceptor.intercept(appId, deviceId, toast);
             }
         }
     }
