@@ -19,7 +19,7 @@ export class KeyboardDirective implements OnDestroy, IMessageHandler<any> {
 
     private screenSubscription: Subscription;
 
-    @Input() keyboardLayout: string;
+    @Input() keyboardLayout = 'en-US';
 
     @Input() darkTheme: boolean;
 

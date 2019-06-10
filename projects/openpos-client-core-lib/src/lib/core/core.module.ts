@@ -49,6 +49,15 @@ import { WedgeScannerPlugin } from './plugins/wedge-scanner.plugin';
 import { CordovaPlatform } from './platforms/cordova.platform';
 import { InfineaScannerCordovaPlugin } from './plugins/infinea-scanner-cordova.plugin';
 import { SplashScreenComponent } from './components/splash-screen/splash-screen.component';
+
+// Add supported locales
+import { registerLocaleData } from '@angular/common';
+import locale_enCA from '@angular/common/locales/en-CA';
+import locale_frCA from '@angular/common/locales/fr-CA';
+
+registerLocaleData(locale_enCA, 'en-CA');
+registerLocaleData(locale_frCA, 'fr-CA');
+
 @NgModule({
     entryComponents: [
         ConfirmationDialogComponent,
