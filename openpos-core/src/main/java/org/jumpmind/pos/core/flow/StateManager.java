@@ -139,16 +139,20 @@ public class StateManager implements IStateManager {
 
         applicationState.getScope().setDeviceScope("stateManager", this);
 
+
+
         if (resumeState) {
+            sendConfigurationChangedMessage();
             refreshScreen();
         } else if (initialFlowConfig != null) {
             applicationState.setCurrentContext(new StateContext(initialFlowConfig, null, null));
+            sendConfigurationChangedMessage();
+            // TODO: think about making this ASYNC so it doesn't hold up the rest of initialization
             transitionTo(new Action("Startup"), initialFlowConfig.getInitialState());
         } else {
             throw new RuntimeException("Could not find a flow config for " + appId);
         }
 
-        sendConfigurationChangedMessage();
     }
 
     public void setErrorHandler(IErrorHandler errorHandler) {
