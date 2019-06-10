@@ -693,6 +693,7 @@ public class StateManager implements IStateManager {
         screenService.showToast(applicationState.getAppId(), applicationState.getDeviceId(), toast);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void showScreen(UIMessage screen) {
         keepAlive();
@@ -702,8 +703,8 @@ public class StateManager implements IStateManager {
                     "There is no applicationState.getCurrentContext() on this StateManager.  HINT: States should use @In(scope=ScopeType.Node) to get the StateManager, not @Autowired.");
         }
         if (applicationState.getCurrentContext().getState() != null
-                && applicationState.getCurrentContext().getState() instanceof IScreenInterceptor) {
-            ((IScreenInterceptor) applicationState.getCurrentContext().getState()).intercept(applicationState.getAppId(),
+                && applicationState.getCurrentContext().getState() instanceof IMessageInterceptor) {
+            ((IMessageInterceptor<UIMessage>) applicationState.getCurrentContext().getState()).intercept(applicationState.getAppId(),
                     applicationState.getDeviceId(), screen);
         }
 
