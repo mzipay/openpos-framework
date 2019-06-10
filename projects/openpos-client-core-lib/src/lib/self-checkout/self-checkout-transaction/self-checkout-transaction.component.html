@@ -23,13 +23,13 @@
 					class="page-content-card lighter subtotal">
 					<mat-card-title class="primary">{{total.name}}</mat-card-title>
 					<mat-card-content>
-						<p>${{total.amount}}</p>
+						<app-currency-text [amountText]="total.amount"></app-currency-text>
 					</mat-card-content>
 				</mat-card>
 				<mat-card fxFlex="0 0 auto" class="page-content-card lighter total">
 					<mat-card-title> Total </mat-card-title>
 					<mat-card-content>
-						<p>${{screen.grandTotal}}</p>
+						<app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
 					</mat-card-content>
 				</mat-card>
 				<button mat-button *ngIf="screen.promoButton" (click)="doMenuItemAction(screen.promoButton)"
