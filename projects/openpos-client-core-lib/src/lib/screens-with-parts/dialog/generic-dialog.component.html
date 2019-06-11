@@ -2,7 +2,7 @@
     <app-dialog-header fxFlex="100%"></app-dialog-header>
     <mat-dialog-content>
         <ng-container *ngIf="messages && messages.length > 0">
-            <div *ngFor="let m of messages" [innerHTML]="m | markdownFormatter">
+            <div *ngFor="let m of messages" [innerHTML]="m | markdownFormatter" class="generic-dialog-line">
             </div>
         </ng-container>
         <ng-container *ngIf="lines && lines.length > 0">
