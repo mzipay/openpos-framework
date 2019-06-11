@@ -31,8 +31,9 @@ describe('ScreenPart', () => {
     let sut: TestPartComponent;
     let testScreen = {};
     function setup() {
-        const messageProviderSpy = jasmine.createSpyObj('MessageProvider', ['getMessages$']);
-        messageProviderSpy.getMessages$.and.returnValue(cold('---x|', {x: testScreen}));
+        const messageProviderSpy = jasmine.createSpyObj('MessageProvider', ['getScopedMessages$', 'getAllMessages$']);
+        messageProviderSpy.getScopedMessages$.and.returnValue(cold('---x|', {x: testScreen}));
+        messageProviderSpy.getAllMessages$.and.returnValue(cold('---x|', {x: testScreen}));
         TestBed.configureTestingModule({
             declarations: [ TestPartComponent ],
             providers: [

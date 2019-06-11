@@ -6,7 +6,9 @@ import { IScreen } from '../components/dynamic-screen/screen.interface';
 import { DialogContentComponent } from '../components/dialog-content/dialog-content.component';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { OpenPOSDialogConfig } from '../interfaces/open-pos-dialog-config.interface';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import { LifeCycleMessage } from '../messages/life-cycle-message';
+import { LifeCycleEvents } from '../messages/life-cycle-events.enum';
 
 @Injectable({
     providedIn: 'root',
@@ -112,6 +114,8 @@ export class DialogService {
             loacalDialogRef.close();
             // Wait for the dialog to fully close before moving on
             await loacalDialogRef.afterClosed().toPromise();
+
+            this.session.sendMessage( new LifeCycleMessage(LifeCycleEvents.DialogClosing));
         } else if (cancelLoading) {
             this.session.cancelLoading();
         }
@@ -173,8 +177,10 @@ export class DialogService {
 
                 if (!this.dialogRef || !this.dialogRef.componentInstance) {
                     this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
+                    this.session.sendMessage( new LifeCycleMessage(LifeCycleEvents.DialogOpening));
                     this.dialogRef = this.dialog.open(DialogContentComponent, dialogProperties);
                 } else {
+                    // I don't think this code will ever run
                     this.log.info('[DialogService] Dialog \'' + dialog.screenType + '\' refreshing content...');
                     this.dialogRef.updateSize('' + dialogProperties.minWidth, '' + dialogProperties.minHeight);
                     this.dialogRef.disableClose = dialogProperties.disableClose;

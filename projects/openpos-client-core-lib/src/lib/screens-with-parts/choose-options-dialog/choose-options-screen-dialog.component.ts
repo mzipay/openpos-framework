@@ -22,7 +22,6 @@ export class ChooseOptionsScreenDialogComponent extends PosScreen<ChooseOptionsS
   }
 
   buildScreen() {
-      this.scanServiceSubscription = this.scannerService.startScanning().subscribe( m => this.session.onAction('Scan', m));
   }
 
   ngOnDestroy(): void {

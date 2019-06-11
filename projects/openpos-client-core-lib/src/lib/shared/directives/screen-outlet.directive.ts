@@ -15,12 +15,15 @@ import { Subscription } from 'rxjs';
 import { IScreen } from '../../core/components/dynamic-screen/screen.interface';
 import { AbstractTemplate } from '../../core/components/abstract-template';
 import { Logger } from '../../core/services/logger.service';
-import { PersonalizationService } from '../../core/services/personalization.service';
 import { ScreenService } from '../../core/services/screen.service';
 import { SessionService } from '../../core/services/session.service';
 import { ConfigurationService } from '../../core/services/configuration.service';
 import { DialogService } from '../../core/services/dialog.service';
 import { FocusTrapFactory, FocusTrap } from '@angular/cdk/a11y';
+import { MessageTypes } from '../../core/messages/message-types';
+import { LifeCycleMessage } from '../../core/messages/life-cycle-message';
+import { LifeCycleEvents } from '../../core/messages/life-cycle-events.enum';
+import { LifeCycleTypeGuards } from '../../core/life-cycle-interfaces/lifecycle-type-guards';
 
 // tslint:disable-next-line:directive-selector
 @Directive({ selector: '[openposScreenOutlet]' })
@@ -59,6 +62,8 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         this.updateTemplateAndScreen();
         this.subscriptions.add(this.session.getMessages('Screen').subscribe((message) => this.handle(message)));
         this.subscriptions.add(this.session.getMessages('Connected').subscribe((message) => this.handle(new SplashScreen())));
+        this.subscriptions.add(this.session.getMessages(
+            MessageTypes.LIFE_CYCLE_EVENT).subscribe( message => this.handleLifeCycleEvent(message)));
         this.subscriptions.add(this.configurationService.theme$.subscribe( theme => {
             this.updateTheme(theme);
         }));
@@ -80,6 +85,21 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     handle(message: any) {
         if (message.screenType !== 'NoOp') {
             this.updateTemplateAndScreen(message);
+        }
+    }
+
+    private handleLifeCycleEvent( message: LifeCycleMessage ) {
+        switch ( message.eventType ) {
+            case LifeCycleEvents.DialogClosing:
+                if ( LifeCycleTypeGuards.handlesBecomingActive(this.componentRef.instance) ) {
+                    this.componentRef.instance.onBecomingActive();
+                }
+                break;
+            case LifeCycleEvents.DialogOpening:
+                if ( LifeCycleTypeGuards.handlesLeavingActive(this.componentRef.instance) ) {
+                    this.componentRef.instance.onLeavingActive();
+                }
+                break;
         }
     }
 

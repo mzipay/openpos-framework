@@ -8,6 +8,11 @@ import { SessionService } from '../../core/services/session.service';
 import { Logger } from '../../core/services/logger.service';
 import { deepAssign } from '../../utilites/deep-assign';
 import { OpenposMediaService } from '../../core/services/openpos-media.service';
+import { UIMessage } from '../../core/messages/ui-message';
+import { LifeCycleMessage } from '../../core/messages/life-cycle-message';
+import { LifeCycleEvents } from '../../core/messages/life-cycle-events.enum';
+import { LifeCycleTypeGuards } from '../../core/life-cycle-interfaces/lifecycle-type-guards';
+import { MessageTypes } from '../../core/messages/message-types';
 
 export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
 
@@ -35,11 +40,10 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
             ['xl', false]
         ]);
         this.isMobile$ = this.mediaService.mediaObservableFromMap(sizeMap);
-
     }
 
     ngOnInit(): void {
-        this.subscriptions.add(this.messageProvider.getMessages$()
+        this.subscriptions.add(this.messageProvider.getScopedMessages$<UIMessage>()
             .pipe(filter(s => s.screenType !== 'Loading')).subscribe(s => {
                 if (!this.initialScreenType.length) {
                     this.initialScreenType = s.screenType;
@@ -53,6 +57,9 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
                     this.screenDataUpdated();
                 }
             }));
+        this.subscriptions.add(this.messageProvider.getAllMessages$().pipe(
+            filter( message => message.type === MessageTypes.LIFE_CYCLE_EVENT )
+        ).subscribe( message => this.handleLifeCycleEvent(message as LifeCycleMessage)));
     }
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -66,6 +73,21 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
 
     isActionDisabled(action: string): Observable<boolean> {
         return this.sessionService.actionIsDisabled(action);
+    }
+
+    private handleLifeCycleEvent( message: LifeCycleMessage ) {
+        switch ( message.eventType ) {
+            case LifeCycleEvents.BecomingActive:
+                if ( LifeCycleTypeGuards.handlesBecomingActive(this) ) {
+                    this.onBecomingActive();
+                }
+                break;
+            case LifeCycleEvents.LeavingActive:
+                if ( LifeCycleTypeGuards.handlesLeavingActive(this) ) {
+                    this.onLeavingActive();
+                }
+                break;
+        }
     }
 
     abstract screenDataUpdated();
