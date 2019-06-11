@@ -19,6 +19,10 @@ export class SelfCheckoutTransactionComponent implements AfterViewChecked, IScre
     public items: ISellItem[];
     public size = -1;
 
+    private loyaltyIconToken = '${icon}';
+    public loyaltyBefore: string;
+    public loyaltyAfter: string;
+
     constructor(public session: SessionService) {
     }
 
@@ -26,6 +30,17 @@ export class SelfCheckoutTransactionComponent implements AfterViewChecked, IScre
         this.screen = screen;
 
         this.items = this.screen.items;
+
+        if (this.screen.loyaltyButton) {
+            const title = this.screen.loyaltyButton.title as string;
+            const parts = title.split(this.loyaltyIconToken);
+            if (parts && parts.length > 0) {
+                this.loyaltyBefore = parts[0].trim();
+                if (parts.length > 1) {
+                    this.loyaltyAfter = parts[1].trim();
+                }
+            }
+        }
     }
 
     ngOnInit(): void {

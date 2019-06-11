@@ -25,7 +25,7 @@
 					</mat-card-content>
 				</mat-card>
 				<mat-card fxFlex="0 0 auto" class="page-content-card lighter total">
-					<mat-card-title> Total </mat-card-title>
+					<mat-card-title> {{screen.grandTotalLabel}} </mat-card-title>
 					<mat-card-content>
 						<app-currency-text [amountText]="screen.grandTotal"></app-currency-text>
 					</mat-card-content>
@@ -45,10 +45,10 @@
 			<div style="width: 100%;">
 				<button mat-button *ngIf="!screen.readOnly && !screen.customer && screen.loyaltyButton"
 					(click)="doMenuItemAction(screen.loyaltyButton)" class="loyalty-button text-md">
-					<span style="padding-right: 8px;">{{screen.loyaltyButton.title}}</span>
+					<span *ngIf="loyaltyBefore" style="padding-right: 8px;">{{loyaltyBefore}}</span>
 					<app-icon [iconName]="screen.loyaltyButton.icon" [iconClass]="'material-icons'"
 						class="loyalty-button-icon"></app-icon>
-					<span style="padding-left: 8px;">ID</span>
+					<span *ngIf="loyaltyAfter" style="padding-left: 8px;">{{loyaltyAfter}}</span>
 				</button>
 				<div *ngIf="screen.customer && screen.loyaltyButton" class="text-sm text-center"
 					style="padding-top: 16px;">
