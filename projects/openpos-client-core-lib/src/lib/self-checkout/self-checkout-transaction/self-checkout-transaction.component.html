@@ -15,8 +15,6 @@
 		<mat-card-content fxFlex="1 1 100%" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="20px"
 			class="selfcheckout-side-content">
 
-			<app-webcam-viewer *ngIf="screen.webcamViewerPart" class="selfcheckout-sell-webcam"></app-webcam-viewer>
-
 			<div fxFlex="0 0 auto" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="20px"
 				class="selfcheckout-total-content">
 				<mat-card fxFlex="0 0 auto" *ngFor="let total of screen.totals"
@@ -41,6 +39,8 @@
 			</div>
 
 			<div fxFlex="2 1 auto"></div>
+
+			<app-webcam-viewer *ngIf="screen.webcamViewerPart" class="selfcheckout-sell-webcam"></app-webcam-viewer>
 
 			<div style="width: 100%;">
 				<button mat-button *ngIf="!screen.readOnly && !screen.customer && screen.loyaltyButton"
