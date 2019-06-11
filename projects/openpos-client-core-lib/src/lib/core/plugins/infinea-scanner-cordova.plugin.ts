@@ -3,6 +3,7 @@ import { IPlatformPlugin } from './platform-plugin.interface';
 import { IScanner } from './scanner.interface';
 import { Observable, Subject } from 'rxjs';
 import { IScanData } from './scan.interface';
+import { InfineaBarcodeUtils } from './infinea-to-openpos-barcode-type';
 
 @Injectable({
     providedIn: 'root'
@@ -26,7 +27,7 @@ export class InfineaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
             this.infineaPlugin = window['Infinea'];
 
             this.infineaPlugin.barcodeDataCallback = (barcode, type, typeText) => {
-                this.scanData$.next( {type, data: barcode});
+                this.scanData$.next( { type: InfineaBarcodeUtils.convertToOpenposType(type), data: barcode});
             };
 
             initialized.next('Initializing Infinea Plugin');
