@@ -1,5 +1,5 @@
 import { IActionItem } from '../../../core/interfaces/action-item.interface';
-import { Component, AfterViewInit, Input, ElementRef, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, ElementRef, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { ScreenPartComponent } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
 import { DeviceService } from '../../../core/services/device.service';
@@ -9,6 +9,8 @@ import { OpenposMediaService } from '../../../core/services/openpos-media.servic
 import { Observable, Subscription } from 'rxjs';
 import { ScannerService } from '../../../core/services/scanner.service';
 import { DialogService } from '../../../core/services/dialog.service';
+import { OnBecomingActive } from '../../../core/life-cycle-interfaces/becoming-active.interface';
+import { OnLeavingActive } from '../../../core/life-cycle-interfaces/leaving-active.interface';
 
 @ScreenPart({
     name: 'scan'
@@ -18,7 +20,8 @@ import { DialogService } from '../../../core/services/dialog.service';
     templateUrl: './scan-or-search.component.html',
     styleUrls: ['./scan-or-search.component.scss']
 })
-export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> implements OnInit, OnDestroy {
+export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInterface> implements
+                                    OnInit, OnDestroy, OnBecomingActive, OnLeavingActive {
 
     public barcode: string;
     isMobile$: Observable<boolean>;
@@ -29,8 +32,7 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
     private scanServiceSubscription: Subscription;
 
     constructor(public devices: DeviceService, messageProvider: MessageProvider,
-                private elRef: ElementRef, mediaService: OpenposMediaService,
-                private scannerService: ScannerService, private dialogService: DialogService) {
+                mediaService: OpenposMediaService, private scannerService: ScannerService ) {
         super(messageProvider);
         const mobileMap = new Map([
             ['xs', true],
@@ -44,18 +46,27 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     ngOnInit(): void {
         super.ngOnInit();
-        this.scanServiceSubscription = this.scannerService.startScanning().subscribe(scanData => {
-            this.sessionService.onAction( this.screenData.scanActionName, scanData );
-        });
-        // DJK - commenting this out because since the $dialogMessages is a  behavior subject if
-        // if there ever was a dialog shown we will immediately unsubscribe.
-        // this.dialogService.$dialogMessages.subscribe(e => this.unregisterScanner());
+        this.registerScanner();
+    }
+
+    onBecomingActive() {
+        this.registerScanner();
+    }
+
+    onLeavingActive() {
+        this.unregisterScanner();
     }
 
     ngOnDestroy(): void {
         this.unregisterScanner();
         this.scannerService.stopScanning();
         super.ngOnDestroy();
+    }
+
+    private registerScanner() {
+        this.scanServiceSubscription = this.scannerService.startScanning().subscribe(scanData => {
+            this.sessionService.onAction( this.screenData.scanActionName, scanData );
+        });
     }
 
     private unregisterScanner() {

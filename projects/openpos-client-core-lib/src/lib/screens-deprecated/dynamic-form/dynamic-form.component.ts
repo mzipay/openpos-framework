@@ -24,7 +24,7 @@ export class DynamicFormComponent extends PosScreen<any> implements OnDestroy {
     }
 
     buildScreen() {
-        this.scanServiceSubscription = this.scannerService.startScanning().subscribe( m => this.session.onAction('Scan', m));
+        // this.scanServiceSubscription = this.scannerService.startScanning().subscribe( m => this.session.onAction('Scan', m));
     }
 
     ngOnDestroy(): void {
