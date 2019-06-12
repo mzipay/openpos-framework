@@ -55,7 +55,7 @@
 					<app-icon [iconName]="screen.loyaltyButton.icon" [iconClass]="'material-icons'"
 						class="loyalty-icon"></app-icon>
 					<div class="muted-color" style="padding-top: 8px;">{{screen.customer.name}}</div>
-					<div class="muted-color" style="padding-top: 8px;">Rewards ID: {{screen.customer.loyaltyId}}</div>
+					<div class="muted-color" style="padding-top: 8px;">{{screen.loyaltyButton.title}}: {{screen.customer.loyaltyId}}</div>
 				</div>
 				<button mat-button *ngIf="!screen.readOnly && screen.checkoutButton"
 					[disabled]="!screen.transaction.active || items.length == 0"
