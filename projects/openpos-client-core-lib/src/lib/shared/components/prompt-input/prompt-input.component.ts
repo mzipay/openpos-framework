@@ -34,7 +34,6 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     errorMatcher = new MyErrorStateMatcher();
     keyboardLayout = 'en-US';
 
-    formatter: string;
     _textMask: ITextMask; // Mask object built for text-mask
     private barcodeEventSubscription: Subscription;
 
@@ -71,7 +70,6 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.formatter = this.responseType;
 
         if (this.maskSpec) {
             const newMask = TextMask.instance(this.maskSpec);

@@ -1,9 +1,8 @@
 import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { FormGroup, FormControl, ValidatorFn, Validators } from '@angular/forms';
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ValidatorsService } from '../../core/services/validators.service';
-import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 
 /**
  * @ignore
@@ -12,7 +11,7 @@ import { ScreenComponent } from '../../shared/decorators/screen-component.decora
     selector: 'app-prompt',
     templateUrl: './prompt.component.html'
 })
-export class PromptComponent extends PosScreen<any> implements AfterViewInit, OnInit {
+export class PromptComponent extends PosScreen<any> implements AfterViewInit {
     initialized = false;
     promptFormGroup: FormGroup;
     instructions: string;
@@ -23,9 +22,6 @@ export class PromptComponent extends PosScreen<any> implements AfterViewInit, On
 
     buildScreen() {
         this.instructions = this.screen.instructions;
-    }
-
-    ngOnInit(): void {
 
         const group: any = {};
         const validators: ValidatorFn[] = [];
