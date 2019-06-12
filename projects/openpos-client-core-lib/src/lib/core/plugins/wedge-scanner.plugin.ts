@@ -186,7 +186,7 @@ interface ControlSequence { modifiers: string[]; key: string; }
 
     private getScanData( s: string ): IScanData {
         let type = s.slice(0, this.codeTypeLength);
-        if ( this.typeMap.has(type) ) {
+        if ( !!this.typeMap && this.typeMap.has(type) ) {
             type = this.typeMap.get(type);
         }
         return { type, data: s.slice(this.codeTypeLength)};
