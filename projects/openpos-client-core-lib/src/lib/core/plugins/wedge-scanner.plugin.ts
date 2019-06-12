@@ -7,6 +7,7 @@ import { SessionService } from '../services/session.service';
 import { WEDGE_SCANNER_ACCEPTED_KEYS } from './wedge-scanner-accepted-keys';
 import { DomEventManager } from '../services/dom-event-manager.service';
 import { Logger } from '../services/logger.service';
+import { OpenposBarcodeType } from './openpos-barcode-type.enum';
 
 interface ControlSequence { modifiers: string[]; key: string; }
 
@@ -19,6 +20,7 @@ interface ControlSequence { modifiers: string[]; key: string; }
     private endSequence = 'Enter';
     private codeTypeLength = 0;
     private timeout = 100;
+    private typeMap: Map<string, OpenposBarcodeType>;
     private scannerActive: boolean;
     private startSequenceObj = this.getControlStrings(this.startSequence);
     private endSequenceObj = this.getControlStrings(this.endSequence);
@@ -47,6 +49,15 @@ interface ControlSequence { modifiers: string[]; key: string; }
             if ( m.timeout ) {
                 this.timeout = m.timeout;
             }
+        });
+
+        sessionService.getMessages('ConfigChanged').pipe(
+            filter( m => m.configType === 'WedgeScannerTypes')
+        ).subscribe( m => {
+            this.typeMap = new Map<string, OpenposBarcodeType>();
+            Object.getOwnPropertyNames(m).forEach(element => {
+                this.typeMap.set( element, m[element]);
+            });
         });
     }
 
@@ -174,7 +185,11 @@ interface ControlSequence { modifiers: string[]; key: string; }
     }
 
     private getScanData( s: string ): IScanData {
-        return { type: s.slice(0, this.codeTypeLength), data: s.slice(this.codeTypeLength)};
+        let type = s.slice(0, this.codeTypeLength);
+        if ( this.typeMap.has(type) ) {
+            type = this.typeMap.get(type);
+        }
+        return { type, data: s.slice(this.codeTypeLength)};
     }
 
 }
