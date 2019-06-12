@@ -12,7 +12,7 @@
                 <ng-template #iconBlock>
                     <app-icon matPrefix iconClass="material-icons mat-48 primary" [iconName]="promptIcon"></app-icon>
                 </ng-template>
-                <input matInput [errorStateMatcher]="errorMatcher" [formControlName]="'promptInputControl'" [formatterName]="formatter" cdkFocusInitial
+                <input matInput [errorStateMatcher]="errorMatcher" [formControlName]="'promptInputControl'" [formatterName]="responseType" cdkFocusInitial
                        [attr.minlength]="minLength" [attr.maxlength]="maxLength" [readonly]="readOnly" [attr.type]="isNumericField() ? 'tel' : 'text'"
                        [keyboardLayout]="keyboardLayout" autoSelectOnFocus>
                 <mat-placeholder>{{placeholderText}}</mat-placeholder>
