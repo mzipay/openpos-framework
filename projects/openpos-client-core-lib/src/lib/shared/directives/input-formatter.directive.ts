@@ -1,4 +1,4 @@
-import { Directive, Input, ElementRef, forwardRef, Renderer2, HostListener, OnChanges, SimpleChanges } from '@angular/core';
+import { Directive, Input, ElementRef, forwardRef, Renderer2, HostListener } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Platform } from '@angular/cdk/platform';
 import { IFormatter } from '../formatters/formatter.interface';
@@ -16,9 +16,10 @@ export const FORMATTED_INPUT_VALUE_ACCESSOR: any = {
     providers: [FORMATTED_INPUT_VALUE_ACCESSOR]
 })
 // tslint:disable-next-line:directive-class-suffix
-export class InputFormatterDirective implements ControlValueAccessor, OnChanges {
+export class InputFormatterDirective implements ControlValueAccessor {
 
-    @Input() formatterName: string;
+    // tslint:disable-next-line:variable-name
+    private _formatterName: string;
 
     private formatter: IFormatter;
 
@@ -29,13 +30,14 @@ export class InputFormatterDirective implements ControlValueAccessor, OnChanges 
                 private platform: Platform) {
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        for (const propName in changes) {
-            if (propName === 'formatterName') {
-                const change = changes[propName];
-                this.formatter = this.formatterService.getFormatter(this.formatterName);
-            }
-        }
+    @Input()
+    set formatterName(formatterName: string) {
+        this._formatterName = formatterName;
+        this.formatter = this.formatterService.getFormatter(this.formatterName);
+    }
+
+    get formatterName(): string {
+        return this._formatterName;
     }
 
     writeValue(value: string): void {
