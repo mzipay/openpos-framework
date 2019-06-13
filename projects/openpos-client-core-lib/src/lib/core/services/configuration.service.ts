@@ -37,7 +37,23 @@ export class ConfigurationService {
     protected mapConfig(response: any) {
         for (const p of Object.keys(response)) {
             if (Configuration.hasOwnProperty(p)) {
-                Configuration[p] = response[p];
+                const configPropertyType = typeof Configuration[p];
+                const responsePropertyType = typeof response[p];
+                try {
+                    if (configPropertyType !== responsePropertyType) {
+                        if (configPropertyType === 'string') {
+                            Configuration[p] = response[p].toString();
+                        } else {
+                            Configuration[p] = JSON.parse(response[p]);
+                        }
+                    } else {
+                        Configuration[p] = response[p];
+                    }
+                } catch (e) {
+                    this.log.warn(`Failed to convert configuration response property '${p}' with value [${response[p]}] ` +
+                      `and type '${responsePropertyType}' to Configuration[${p}] of type '${configPropertyType}'` +
+                      ` Error: ${e}`);
+                }
             }
         }
     }
