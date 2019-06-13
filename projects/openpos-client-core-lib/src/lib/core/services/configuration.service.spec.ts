@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 import { cold, getTestScheduler } from 'jasmine-marbles';
 import { ElectronService } from 'ngx-electron';
 
-fdescribe('ConfigurationService', () => {
+describe('ConfigurationService', () => {
 
     let configService: ConfigurationService;
     let sessionServiceSpy: jasmine.SpyObj<SessionService>;
@@ -49,18 +49,18 @@ fdescribe('ConfigurationService', () => {
         expect(Configuration.mimicScroll).toEqual(true);
         Configuration.mimicScroll = originalValue;
     });
-/*
+
     it('test mapping of response boolean property to Configuration string property', () => {
-        const originalValue = Configuration.mimicScroll;
-        Configuration.mimicScroll = false;
+        const originalValue = Configuration.compatibilityVersion;
+        Configuration.compatibilityVersion = 'false';
         // tslint:disable-next-line:no-string-literal
-        testUiConfigMsg['mimicScroll'] = true;
+        testUiConfigMsg['compatibilityVersion'] = true;
 
         getTestScheduler().flush();
-        expect(Configuration.mimicScroll).toEqual(true);
-        Configuration.mimicScroll = originalValue;
+        expect(Configuration.compatibilityVersion).toEqual('true');
+        Configuration.compatibilityVersion = originalValue;
     });
-*/
+
     it('test mapping of response string property to Configuration number property', () => {
         const originalValue = Configuration.keepAliveMillis;
         Configuration.keepAliveMillis = 1000;
