@@ -42,20 +42,20 @@ export class InfineaScannerCordovaPlugin implements IPlatformPlugin, IScanner {
     }
 
     startScanning(): Observable<IScanData> {
-        this.infineaPlugin.barcodeScan(() => {
+        /*this.infineaPlugin.barcodeScan(() => {
             console.log(`Infinea Enable Barcode Scan Success`);
         }, () => {
             console.log(`Infinea Enable Barcode Scan Failure`);
-        }, 'true');
+        }, 'true');*/
 
         return this.scanData$;
     }
 
     stopScanning() {
-        this.infineaPlugin.barcodeScan(() => {
+        /*this.infineaPlugin.barcodeScan(() => {
             console.log(`Time| ${new Date()} || Disable Barcode Scan| Success`);
         }, () => {
             console.log(`Time| ${new Date()} || Disable Barcode Scan| Failure`);
-        }, 'false');
+        }, 'false');*/
     }
   }
