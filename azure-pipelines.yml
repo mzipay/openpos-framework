@@ -22,9 +22,7 @@ steps:
 - checkout: self
   persistCredentials: true
   clean: true
-- task: Bash@3
-  inputs:
-    script: ssh-keyscan -p $deployPort -H $deployServer >> ~/.ssh/known_hosts
+- script: ssh-keyscan -p $deployPort -H $deployServer >> ~/.ssh/known_hosts
 - task: Gradle@2
   inputs:
     workingDirectory: 'openpos-assemble'
