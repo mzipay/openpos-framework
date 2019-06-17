@@ -16,9 +16,9 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  BUILD_NUMBER: $(Build.BuildNumber)
-  BUILD_NAME: $(Build.DefinitionName)
-- group: maven
+  - group: maven
+  - BUILD_NUMBER: $(Build.BuildNumber)
+  - BUILD_NAME: $(Build.DefinitionName)
 
 steps:
 - checkout: self
