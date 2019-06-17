@@ -17,10 +17,11 @@ pool:
 
 variables:
   - group: maven
-  - name: BUILD_NUMBER: 
-    value: $(Build.BuildNumber)
-  - name: BUILD_NAME: 
-    value: $(Build.DefinitionName)
+  - name: BUILD_NUMBER 
+    value: '$(Build.BuildNumber)'
+  - name: BUILD_NAME 
+    value: '$(Build.DefinitionName)'
+
 
 steps:
 - checkout: self
