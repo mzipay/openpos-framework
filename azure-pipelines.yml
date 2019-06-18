@@ -89,7 +89,7 @@ steps:
   workingDirectory: 'openpos-client-libs'
 - script: |
     npm install -g publish-if-not-published
-    cp .npmrc dist/openpos-client-core-lib
+    cp ../.npmrc dist/openpos-client-core-lib
     cd dist/openpos-client-core-lib
     publish-if-not-published
     npm pack
