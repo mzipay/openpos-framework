@@ -49,3 +49,6 @@ openpos-client-core-lib/\.project
 **/node_modules/
 
 **/version.ts
+openpos-assemble/.classpath
+openpos-assemble/.project
+openpos-assemble/openpos-assemble.iws
