@@ -50,7 +50,8 @@ repositories {
 idea {
 
     module {
-        testResourceDirs -= file('src/test/resources')
+        testResourceDirs = []
+        testSourceDirs = [ file('src/test/java')]
         resourceDirs += file('src/test/resources')
         downloadJavadoc = true
         downloadSources = true
@@ -96,7 +97,7 @@ test {
 
     //Dynamic exclude through property defined in the build.gradle file
     if (project.hasProperty('excludeTests')) {
-        println('Excluding tests: ' + project.property('excludeTests'));
+        println('Excluding tests: ' + project.property('excludeTests'))
         exclude project.property('excludeTests')
     }
 }
