@@ -50,8 +50,8 @@ repositories {
 idea {
 
     module {
+        testResourceDirs -= file('src/test/resources')
         resourceDirs += file('src/test/resources')
-
         downloadJavadoc = true
         downloadSources = true
     }

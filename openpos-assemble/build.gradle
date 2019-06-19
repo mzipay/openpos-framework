@@ -1,3 +1,4 @@
+apply from: '../openpos-gradle/src/main/resources/java.gradle'
 
 task generateSourceArtifact(type: Copy) {
     doFirst {
