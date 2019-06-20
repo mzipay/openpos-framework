@@ -27,5 +27,4 @@ public class PriceCheckerHomeUIMessage extends UIMessage {
     public void setScanAction(ActionItem scanAction) {
         this.scanAction = scanAction;
     }
-
 }
