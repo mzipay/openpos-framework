@@ -7,6 +7,7 @@ public class PriceCheckerHomeUIMessage extends UIMessage {
 
     private String backgroundImageUrl;
     private ActionItem scanAction;
+    private String message;
 
     public PriceCheckerHomeUIMessage(){
         setScreenType(UIMessageType.PRICE_CHECKER_HOME);
@@ -26,5 +27,13 @@ public class PriceCheckerHomeUIMessage extends UIMessage {
 
     public void setScanAction(ActionItem scanAction) {
         this.scanAction = scanAction;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
