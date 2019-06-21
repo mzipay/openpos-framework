@@ -30,7 +30,7 @@ ext {
 
 // update jar files with version information
 processResources {
-    if (hasProperty('releaseBuildEnabled') && property('releaseBuildEnabled').toBoolean()) {
+    if (project.hasProperty('releaseBuildEnabled') && project.getProperty('releaseBuildEnabled').toBoolean()) {
         version = removeSnapshot(version)
     }
     eachFile { details ->
