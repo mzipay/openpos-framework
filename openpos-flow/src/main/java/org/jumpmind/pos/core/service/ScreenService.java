@@ -71,7 +71,7 @@ public class ScreenService implements IScreenService, IActionListener {
     @Value("${openpos.screenService.jsonIncludeNulls:true}")
     boolean jsonIncludeNulls = true;
 
-    @Value("${openpos.ui.content.maxage}")
+    @Value("${openpos.ui.content.maxage:null}")
     String contentMaxAge;
 
     @Autowired
