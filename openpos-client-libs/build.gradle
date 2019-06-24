@@ -48,7 +48,7 @@ task ng_build_angular(type: NpmTask){
     ]
 }
 
-task bundle_sass(type: Npm){
+task bundle_sass(type: NpmTask){
     args = [
             'run',
             'scss-bundle', '-c', 'projects/openpos-client-core-lib/scss-bundle.config.json'
