@@ -1,0 +1,112 @@
+
+plugins {
+    id 'org.hidetake.ssh' version '2.10.1'
+}
+
+apply plugin: "com.moowork.node"
+
+remotes {
+    maven {
+        host = deployUploadUrl
+        user = deployUser
+        password = deployPassword
+    }
+}
+
+node {
+    version = '10.5.0'
+    npmVersion = '6.1.0'
+    download = downloadNode.toBoolean()
+    println """
+      **************************************************************************************************
+        Using native node & npm? ${!download}.  Set downloadNode to true in gradle.properties 
+        if you want to use downloaded versions of node and npm
+      **************************************************************************************************
+      """
+    workDir = file("${projectDir}/node")
+    nodeModulesDir = file("./")
+}
+
+task npm_angluar_cli(type: NpmTask){
+    args = [
+            'install',
+            '-g',
+            '@angular/cli@7.3.9'
+    ]
+}
+
+task npm_sass_bundle(type: NpmTask){
+    args = [
+            'install',
+            '-g',
+            'scss-bundle'
+    ]
+}
+
+task npm_install(type: NpmTask){
+    args = [
+            'install'
+    ]
+}
+
+task ng_test(type: Exec){
+    dependsOn npm_angluar_cli
+    dependsOn npm_install
+    commandLine 'ng', 'test', 'openpos-client-core-lib'
+}
+
+task ng_build_angular(type: Exec){
+    dependsOn npm_angluar_cli
+    dependsOn npm_install
+    commandLine 'ng', 'build', 'openpos-client-core-lib'
+}
+
+task bundle_sass(type: Exec){
+    dependsOn npm_sass_bundle
+    commandLine 'scss-bundle', '-c', 'projects/openpos-client-core-lib/scss-bundle.config.json'
+}
+
+task npm_pack(type: NpmTask){
+    args = [
+            'pack',
+            '@jumpmind/openpos-client-core-lib'
+    ]
+}
+
+task processResources {}
+
+task test {
+    dependsOn ng_test
+}
+
+task build {
+    dependsOn ng_build_angular
+    dependsOn bundle_sass
+}
+
+task deploy {
+    dependsOn npm_pack
+    doLast {
+        ssh.run{
+            session(remotes.maven) {
+
+                copy {
+                    from ('.') {
+                        include 'jumpmind-openpos-client-core-lib-*.tgz'
+                    }
+                    into 'www/npm/test'
+                }
+
+                copy {
+                    from ('.') {
+                        include 'jumpmind-openpos-client-core-lib-*.tgz'
+                        rename 'jumpmind-openpos-client-core-lib-*.tgz', 'jumpmind-openpos-client-core-lib-latest.tgz'
+                    }
+                    into 'www/npm/test'
+                }
+            }
+
+        }
+
+    }
+}
