@@ -46,11 +46,4 @@ steps:
   inputs:
     pathtoPublish: 'openpos-assemble/build/openpos-server-core-lib'
     artifactName: 'openpos-server-core-lib'
-- task: NodeTool@0
-  inputs:
-    versionSpec: '8.x'
-  displayName: 'Install Node.js'  
-- task: npmAuthenticate@0
-  inputs:
-    workingFile: '.npmrc'
-    customEndpoint: 'npm'  
+
