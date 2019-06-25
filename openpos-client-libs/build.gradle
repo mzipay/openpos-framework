@@ -79,16 +79,16 @@ task npm_pack(type: NpmTask){
 
 task deploy {
     dependsOn npm_pack
-    copy {
-        from ('.') {
-            include 'jumpmind-openpos-client-core-lib-*.tgz'
-        }
-        into ('.')
-        rename { String fileName ->
-            'jumpmind-openpos-client-core-lib-latest.tgz'
-        }
-    }
     doLast {
+        copy {
+            from ('.') {
+                include 'jumpmind-openpos-client-core-lib-*.tgz'
+            }
+            into ('.')
+            rename { String fileName ->
+                'jumpmind-openpos-client-core-lib-latest.tgz'
+            }
+        }
         ssh.settings {
             fileTransfer = 'scp'
         }
