@@ -39,7 +39,7 @@ steps:
     jdkVersionOption: '1.11'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
+    testResultsFiles: '**/TEST*.xml'
     tasks: 'test deploy generateSourceArtifact'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish server source for downstream pipeline consumption'
