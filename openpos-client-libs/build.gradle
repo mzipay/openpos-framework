@@ -73,7 +73,7 @@ task npm_pack(type: NpmTask){
     dependsOn build
     args = [
             'pack',
-            '@jumpmind/openpos-client-core-lib'
+            'dist/openpos-client-core-lib'
     ]
 }
 
