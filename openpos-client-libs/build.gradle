@@ -50,18 +50,14 @@ task ng_build_angular(type: NpmTask){
 }
 
 task bundle_sass(type: NpmTask){
+    dependsOn npm_install
     args = [
             'run',
-            'scss-bundle', '-c', 'projects/openpos-client-core-lib/scss-bundle.config.json'
+            'scss-bundle'
     ]
 }
 
-task npm_pack(type: NpmTask){
-    args = [
-            'pack',
-            '@jumpmind/openpos-client-core-lib'
-    ]
-}
+
 
 task processResources {}
 
@@ -74,13 +70,20 @@ task build {
     dependsOn bundle_sass
 }
 
+task npm_pack(type: NpmTask){
+    dependsOn build
+    args = [
+            'pack',
+            '@jumpmind/openpos-client-core-lib'
+    ]
+}
+
 task deploy {
     dependsOn npm_pack
     doLast {
         ssh.run{
             session(remotes.maven) {
-                put from: file('jumpmind-openpos-client-core-lib-*.tgz'), into: 'www/npm/test/'
-                put from: 'jumpmind-openpos-client-core-lib-*.tgz', into: 'www/npm/test/jumpmind-openpos-client-core-lib-snapshot.tgz'
+                put from: '', into: 'www/npm/test', filter: { it.name =~ /\.tgz$/ }
             }
 
         }
