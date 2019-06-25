@@ -86,7 +86,7 @@ task deploy {
             }
             into ('.')
             rename { String fileName ->
-                'jumpmind-openpos-client-core-lib-latest.tgz'
+                'jumpmind-openpos-client-core-lib-snapshot.tgz'
             }
         }
         ssh.settings {
