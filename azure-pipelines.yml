@@ -46,7 +46,3 @@ steps:
   inputs:
     pathtoPublish: 'openpos-assemble/build/openpos-server-core-lib'
     artifactName: 'openpos-server-core-lib'
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish client library for downstream pipeline consumption'
-  inputs:
-    pathtoPublish: 'openpos-client-libs/dist/openpos-client-core-lib/jumpmind-openpos-client-core-lib-snapshot.tgz' 
