@@ -83,7 +83,7 @@ task deploy {
     doLast {
         ssh.run{
             session(remotes.maven) {
-                put from: '', into: 'www/npm/test', filter: { it.name =~ /\.tgz$/ }
+                put from: './', into: 'www/npm', filter: { it.name =~ /\.tgz$/ }
             }
 
         }
