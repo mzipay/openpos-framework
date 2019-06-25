@@ -79,21 +79,8 @@ task deploy {
     doLast {
         ssh.run{
             session(remotes.maven) {
-
-                copy {
-                    from ('.') {
-                        include 'jumpmind-openpos-client-core-lib-*.tgz'
-                    }
-                    into 'www/npm/test'
-                }
-
-                copy {
-                    from ('.') {
-                        include 'jumpmind-openpos-client-core-lib-*.tgz'
-                        rename 'jumpmind-openpos-client-core-lib-*.tgz', 'jumpmind-openpos-client-core-lib-latest.tgz'
-                    }
-                    into 'www/npm/test'
-                }
+                put from: file('jumpmind-openpos-client-core-lib-*.tgz'), into: 'www/npm/test/'
+                put from: 'jumpmind-openpos-client-core-lib-*.tgz', into: 'www/npm/test/jumpmind-openpos-client-core-lib-snapshot.tgz'
             }
 
         }
