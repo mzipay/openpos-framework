@@ -2,6 +2,7 @@ package org.jumpmind.pos.translate;
 
 import org.jumpmind.pos.core.device.IDeviceRequest;
 import org.jumpmind.pos.core.device.IDeviceResponse;
+import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.server.model.Action;
 
@@ -24,5 +25,7 @@ public interface ITranslationManager {
 	public boolean showLegacyScreen(ILegacyScreen screen);
 	
 	public IDeviceResponse sendDeviceRequest(IDeviceRequest request);
+	
+	public void setStateManager(IStateManager stateManager);
     
 }

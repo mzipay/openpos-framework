@@ -8,6 +8,7 @@ import java.util.Map;
 import org.jumpmind.pos.core.device.IDeviceMessageDispatcher;
 import org.jumpmind.pos.core.device.IDeviceRequest;
 import org.jumpmind.pos.core.device.IDeviceResponse;
+import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.POSSessionInfo;
 import org.jumpmind.pos.core.screen.NoOpScreen;
@@ -46,6 +47,8 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
     private boolean lastScreenWasNoOp = false;
 
     private boolean lastScreenTrainingMode = false;
+    
+    private IStateManager stateManager;
 
     public TranslationManagerServer(ILegacyScreenInterceptor interceptor, ITranslatorFactory translatorFactory,
             Class<?> subsystemClass) {
@@ -237,6 +240,7 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
 
                     if (newTranslator != null) {
                         newTranslator.setPosSessionInfo(posSessionInfo);
+                        stateManager.performInjections(newTranslator);
                     }
                     if (newTranslator instanceof AbstractScreenTranslator<?>) {
                         AbstractScreenTranslator<?> screenTranslator = (AbstractScreenTranslator<?>) newTranslator;
@@ -318,6 +322,11 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
         }
 
         return response;
+    }
+    
+    @Override
+    public void setStateManager(IStateManager stateManager) {
+        this.stateManager = stateManager;
     }
 
 }

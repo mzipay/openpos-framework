@@ -53,8 +53,10 @@ public class TranslatorState implements IState {
     @Override
     public void arrive(Action action) {
         if (subscribe(action)) {
+            translationManager.setStateManager(stateManager);
             translationManager.showActiveScreen();
         } else {
+            translationManager.setStateManager(stateManager);
             translationManager.doAction(subscriber.getAppId(), action, new Form());
         }
     }

@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import org.jumpmind.pos.core.device.IDeviceRequest;
 import org.jumpmind.pos.core.device.IDeviceResponse;
+import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.util.RMICallbackProxyManager;
 import org.jumpmind.pos.server.model.Action;
@@ -34,6 +35,8 @@ public class TranslationManagerBridge implements ITranslationManager {
     boolean externalProcessEnabled;
     
     ITranslationManagerSubscriber subscriber;
+    
+    private IStateManager stateManager;
 
     String nodeId;
 
@@ -45,6 +48,8 @@ public class TranslationManagerBridge implements ITranslationManager {
         logger.debug( "ITranslationManager implementation for nodeId {} is: {}", nodeId, implementation );
         if (implementation == null) {
             headlessStartupService.start(subscriber.getNodeId());
+        } else {
+            implementation.setStateManager(stateManager);
         }
 
         // Only create a Remote-able proxy TranslactionManagerSubscriber if we are running
@@ -58,11 +63,17 @@ public class TranslationManagerBridge implements ITranslationManager {
     public void doAction(String appId, Action action, Form formResults) {
         try {
             ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
+            if (implementation != null) {
+                implementation.setStateManager(stateManager);
+            }
             implementation.doAction(appId, action, formResults);
         } catch (RemoteConnectFailureException e) {
             headlessStartupService.start(nodeId);
             setTranslationManagerSubscriber();
             ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
+            if (implementation != null) {
+                implementation.setStateManager(stateManager);
+            }
             implementation.doAction(appId, action, formResults);
         }
     }
@@ -71,11 +82,17 @@ public class TranslationManagerBridge implements ITranslationManager {
     public void showActiveScreen() {
         try {
             ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
+            if (implementation != null) {
+                implementation.setStateManager(stateManager);
+            }
             implementation.showActiveScreen();
         } catch (RemoteConnectFailureException e) {
             headlessStartupService.start(nodeId);
             setTranslationManagerSubscriber();
             ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
+            if (implementation != null) {
+                implementation.setStateManager(stateManager);
+            }
             implementation.showActiveScreen();
         }
     }
@@ -84,11 +101,17 @@ public class TranslationManagerBridge implements ITranslationManager {
     public IDeviceResponse sendDeviceRequest(IDeviceRequest request) {
         try {
             ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
+            if (implementation != null) {
+                implementation.setStateManager(stateManager);
+            }
             return implementation.sendDeviceRequest(request);
         } catch (RemoteConnectFailureException e) {
             headlessStartupService.start(nodeId);
             setTranslationManagerSubscriber();
             ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
+            if (implementation != null) {
+                implementation.setStateManager(stateManager);
+            }
             return implementation.sendDeviceRequest(request);
         }
     }
@@ -113,8 +136,9 @@ public class TranslationManagerBridge implements ITranslationManager {
         ITranslationManager implementation = headlessStartupService.getTranslationManagerRef(nodeId);
         if (implementation != null) {
             implementation.setTranslationManagerSubscriber(this.subscriber);
-            
-            logger.debug( "TranslationManagerSubscriber set to {} on TranslationManager: {}", this.subscriber, implementation );
+            implementation.setStateManager(stateManager);
+
+            logger.debug("TranslationManagerSubscriber set to {} on TranslationManager: {}", this.subscriber, implementation);
         } else {
             throw new IllegalStateException(format("Failed to find a translator for %s", nodeId));
         }
@@ -139,5 +163,9 @@ public class TranslationManagerBridge implements ITranslationManager {
 		return false;
 	}
 
+    @Override
+    public void setStateManager(IStateManager stateManager) {
+        this.stateManager = stateManager;
+    }
 
 }
