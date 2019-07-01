@@ -36,7 +36,9 @@ public class LocaleChangedMessage extends Message {
     }
 
     public void setLocale(Locale locale) {
-        this.locale = locale.toString();
+        if (locale != null) {
+            this.locale = locale.toString();
+        }
     }
 
     public String[] getSupportedLocales() {
