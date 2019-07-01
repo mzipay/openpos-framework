@@ -28,17 +28,18 @@ steps:
 - script: ssh-keyscan -p $(deployPort) -H $(deployServer) >> ~/.ssh/known_hosts
 - task: npmAuthenticate@0
   inputs:
-    workingFile: '.npmrc'
+    workingFile: '~/.npmrc'
     customEndpoint: 'npm'
-- task: Gradle@2
-  inputs:
-    workingDirectory: 'openpos-assemble'
-    options: '-PbuildNumber=$(Build.BuildNumber) -PbuildName=$(Build.DefinitionName) -PgitHash=$(Build.SourceVersion) -PgitBranch=$(Build.SourceBranch) -PdeployUser=$(deployUser) -PdeployPassword=$(deployPassword) -PdeployUploadUrl=$(deployUploadUrl) -PpersonalAccessToken=$(personalAccessToken) -PreleaseBuildEnabled=true'
-    gradleWrapperFile: 'openpos-assemble/gradlew'
-    gradleOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
-    tasks: 'release'
+- script: cat ~/.npmrc
+#- task: Gradle@2
+#  inputs:
+#    workingDirectory: 'openpos-assemble'
+#    options: '-PbuildNumber=$(Build.BuildNumber) -PbuildName=$(Build.DefinitionName) -PgitHash=$(Build.SourceVersion) -PgitBranch=$(Build.SourceBranch) -PdeployUser=$(deployUser) -PdeployPassword=$(deployPassword) -PdeployUploadUrl=$(deployUploadUrl) -PpersonalAccessToken=$(personalAccessToken) -PreleaseBuildEnabled=true'
+#    gradleWrapperFile: 'openpos-assemble/gradlew'
+#    gradleOptions: '-Xmx3072m'
+#    javaHomeOption: 'JDKVersion'
+#    jdkVersionOption: '1.11'
+#    jdkArchitectureOption: 'x64'
+#    publishJUnitResults: true
+#    testResultsFiles: '**/TEST-*.xml'
+#    tasks: 'release'
