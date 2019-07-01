@@ -28,8 +28,9 @@ steps:
 - script: ssh-keyscan -p $(deployPort) -H $(deployServer) >> ~/.ssh/known_hosts
 - task: npmAuthenticate@0
   inputs:
-    workingFile: '~/.npmrc'
+    workingFile: '.npmrc'
     customEndpoint: 'npm'
+- script: cp .npmrc ~/.npmrc
 - script: cat ~/.npmrc
 #- task: Gradle@2
 #  inputs:
