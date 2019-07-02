@@ -93,7 +93,7 @@ task npm_publish(type: NpmTask) {
     dependsOn githubRelease
     args = [
             'publish',
-            "${projectDir}/dist/openpos-client-core-lib"
+            "${projectDir}/../openpos-client-libs/dist/openpos-client-core-lib"
     ]
 }
 
