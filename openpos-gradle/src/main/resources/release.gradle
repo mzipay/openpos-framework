@@ -16,8 +16,9 @@ apply plugin: 'co.riiid.gradle'
 def gitCommit = { files ->
 
     files.each {
+        def file = it
         exec {
-            commandLine 'git', 'add', it
+            commandLine 'git', 'add', file
         }
     }
 
