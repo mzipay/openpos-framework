@@ -17,9 +17,8 @@ def gitCommit = { files ->
 
     files.each {
         exec {
-            commandLine 'git', 'add', file
+            commandLine 'git', 'add', it
         }
-
     }
 
     exec {
@@ -88,10 +87,11 @@ task setPackageJsonVersion(type: NpmTask) {
     args = [ 'version', '--allow-same-version', version ]
 }
 
+
 task prereleaseCommit() {
     dependsOn setPackageJsonVersion
     doLast {
-        gitCommit [ 'gradle.properties', packageJsonDir + '/package.json', packageJsonDir + '/package-lock.json' ]
+        gitCommit ([ 'gradle.properties', packageJsonDir + '/package.json', packageJsonDir + '/package-lock.json' ])
     }
 }
 
@@ -167,7 +167,7 @@ task release() {
         updateGradlePropertiesVersion(version)
         tasks.setPackageJsonVersionToSnapshot.args[2] = version
         tasks.setPackageJsonVersionToSnapshot.execute()
-        gitCommit ['gradle.properties', packageJsonDir + '/package.json', packageJsonDir + '/package-lock.json', '../CHANGELOG.md']
+        gitCommit (['gradle.properties', packageJsonDir + '/package.json', packageJsonDir + '/package-lock.json', '../CHANGELOG.md'])
     }
 }
 
