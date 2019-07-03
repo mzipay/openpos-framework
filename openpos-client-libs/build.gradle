@@ -81,7 +81,7 @@ task deploy {
         def distFile = "dist/openpos-client-core-lib/jumpmind-openpos-client-core-lib-${version}.tgz"
         def snapshotFile = 'dist/openpos-client-core-lib/jumpmind-openpos-client-core-lib-snapshot.tgz'
         ant.scp(todir: toDir, port: 2222, trust: 'true', verbose: 'true', localFile: distFile)
-        ant.copy(file: distFile, tofile: 'snapshot')
+        ant.copy(file: distFile, tofile: snapshotFile)
         ant.scp(todir: toDir, port: 2222, trust: 'true', verbose: 'true', localFile: snapshotFile)
     }
 }
