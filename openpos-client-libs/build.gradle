@@ -74,7 +74,7 @@ task npm_pack(type: NpmTask){
 }
 
 task deploy {
-    // dependsOn npm_pack
+    dependsOn npm_pack
     doLast {
         ant.taskdef(name: 'scp', classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp', classpath: configurations.sshAntTask.asPath)
         def toDir = "$deployUser:$deployPassword@maven.jumpmind.com:~/www/npm"
