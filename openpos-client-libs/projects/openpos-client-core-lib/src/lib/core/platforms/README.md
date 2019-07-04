@@ -1,4 +1,4 @@
-# Platforms
+# Platforms Overview
 
 Platforms represent the container in which the Openpos app runs. Examples would be Cordova, Electron, ReactNative.
 
