@@ -90,7 +90,6 @@ export class DialogService {
     public async closeDialog() {
         if (this.dialogRef) {
             this.log.info('[DialogService] closing dialog ref');
-
             const loacalDialogRef = this.dialogRef;
             this.dialogRef = null;
             loacalDialogRef.close();
