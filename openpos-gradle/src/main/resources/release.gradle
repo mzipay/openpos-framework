@@ -126,7 +126,8 @@ task gitChangelogTask(type: Class.forName('se.bjurr.gitchangelog.plugin.gradle.G
     gitHubApi = gitHubApi
     gitHubToken = personalAccessToken
     file = new File("../CHANGELOG.md");
-    fromRef = '0.3.4'
+    fromRef = '0.3.6'
+    fromRepo = "$projectDir/.."
     toRef = version
     templateContent = """
 # Release Notes
