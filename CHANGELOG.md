@@ -12,6 +12,7 @@ Released on:
   | [#114](https://github.com/JumpMind/openpos-framework/issues/114) | Aila Scanner passes Null for UPCA barcode types | [bug] |Dan Kaste|
   | [#115](https://github.com/JumpMind/openpos-framework/pull/115) | 114: Correctly map UPCA barcode types for Aila Scanner | [bug] |Dan Kaste|
   | [#116](https://github.com/JumpMind/openpos-framework/pull/116) | added maxResults to the persist api | [enhancement] |Chris Henson|
+  | [#119](https://github.com/JumpMind/openpos-framework/pull/119) | IValidatorSpec implementations fail deserialization with jackson  | [bug] |Jason Mihalick|
   | [#87](https://github.com/JumpMind/openpos-framework/pull/87) | Feature/selection list paging |  |Klementina Stojanovska Chirico|
 
 ## 0.3.6 
