@@ -51,7 +51,7 @@ task generateChangeLog(type: Class.forName('se.bjurr.gitchangelog.plugin.gradle.
     gitHubApi = gitHubApi
     gitHubToken = personalAccessToken
     file = new File("../CHANGELOG.md");
-    fromRef = '0.3.6'
+    fromRef = '0.2.27'
     fromRepo = "$projectDir/.."
     templateContent = """
 # Change Log
