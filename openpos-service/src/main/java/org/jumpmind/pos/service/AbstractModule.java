@@ -105,7 +105,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
     
     static Server h2Server;
 
-    public final String getVersion() {
+    public String getVersion() {
         String version = new AbstractVersion() {
             @Override
             protected String getArtifactName() {

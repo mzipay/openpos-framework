@@ -28,7 +28,7 @@ public class TestModule extends AbstractModule {
     public String getName() {
         return NAME;
     }
-    
+
     public void setDynamicVersion(String dynamicVersion) {
         this.dynamicVersion = dynamicVersion;
     }
@@ -36,6 +36,11 @@ public class TestModule extends AbstractModule {
     @Override
     public String getVersion() {
         return dynamicVersion;
+    }
+
+    @Override
+    protected String getArtifactName() {
+        return "test-module";
     }
 
     @Override
