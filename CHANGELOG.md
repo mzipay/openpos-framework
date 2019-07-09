@@ -1,21 +1,31 @@
 
-# Release Notes
+# Change Log
 
-## Release Unreleased 
-Release time: 
-#### [#107](https://github.com/JumpMind/openpos-framework/pull/107) Feature/106 differentiate web orders
-by Klementina Stojanovska Chirico 
-#### [#110](https://github.com/JumpMind/openpos-framework/pull/110) Add client documentation
-by Dan Kaste 
-#### [#111](https://github.com/JumpMind/openpos-framework/pull/111) bugfix/PriceChecker price per unit label
-by jliao300 
-#### [#114](https://github.com/JumpMind/openpos-framework/issues/114) Aila Scanner passes Null for UPCA barcode types
-[bug]
-by Dan Kaste 
-#### [#115](https://github.com/JumpMind/openpos-framework/pull/115) 114: Correctly map UPCA barcode types for Aila Scanner
-by Dan Kaste 
-#### [#116](https://github.com/JumpMind/openpos-framework/pull/116) added maxResults to the persist api
-[enhancement]
-by Chris Henson 
-#### [#87](https://github.com/JumpMind/openpos-framework/pull/87) Feature/selection list paging
-by Klementina Stojanovska Chirico 
+## Unreleased 
+Released on: 
+
+|       | Name   | Labels | Author |
+|-------|--------|--------|--------|
+  | [#107](https://github.com/JumpMind/openpos-framework/pull/107) | Feature/106 differentiate web orders | [enhancement] |Klementina Stojanovska Chirico|
+  | [#110](https://github.com/JumpMind/openpos-framework/pull/110) | Add client documentation | [architecture] |Dan Kaste|
+  | [#111](https://github.com/JumpMind/openpos-framework/pull/111) | bugfix/PriceChecker price per unit label | [bug] |jliao300|
+  | [#114](https://github.com/JumpMind/openpos-framework/issues/114) | Aila Scanner passes Null for UPCA barcode types | [bug] |Dan Kaste|
+  | [#115](https://github.com/JumpMind/openpos-framework/pull/115) | 114: Correctly map UPCA barcode types for Aila Scanner | [bug] |Dan Kaste|
+  | [#116](https://github.com/JumpMind/openpos-framework/pull/116) | added maxResults to the persist api | [enhancement] |Chris Henson|
+  | [#87](https://github.com/JumpMind/openpos-framework/pull/87) | Feature/selection list paging |  |Klementina Stojanovska Chirico|
+
+## 0.3.6 
+Released on: 2019-07-03 17:05:14
+
+|       | Name   | Labels | Author |
+|-------|--------|--------|--------|
+  | [#100](https://github.com/JumpMind/openpos-framework/pull/100) | Fix for Bug #99 |  |Klementina Stojanovska Chirico|
+  | [#103](https://github.com/JumpMind/openpos-framework/pull/103) | Separate formatter locale and display locale | [enhancement] |maxwellpettit|
+  | [#104](https://github.com/JumpMind/openpos-framework/pull/104) | Separate formatter locale and display locale |  |maxwellpettit|
+  | [#105](https://github.com/JumpMind/openpos-framework/pull/105) | Generate a change log with each release | [enhancement] |Chris Henson|
+  | [#90](https://github.com/JumpMind/openpos-framework/pull/90) | Feature/location service |  |Klementina Stojanovska Chirico|
+  | [#91](https://github.com/JumpMind/openpos-framework/pull/91) | Feature/e2e tests |  |Dan Kaste|
+  | [#93](https://github.com/JumpMind/openpos-framework/pull/93) | Bugfix/92 refresh screen |  |Dan Kaste|
+  | [#94](https://github.com/JumpMind/openpos-framework/pull/94) | add openpos-translate to maven |  |Dan Kaste|
+  | [#95](https://github.com/JumpMind/openpos-framework/pull/95) | Feature/location service | [enhancement] |Klementina Stojanovska Chirico|
+  | [#97](https://github.com/JumpMind/openpos-framework/pull/97) | fix npm publish |  |Dan Kaste|
