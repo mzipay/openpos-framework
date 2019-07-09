@@ -12,6 +12,7 @@ buildscript {
     }
 }
 
+apply plugin: 'se.bjurr.gitchangelog.git-changelog-gradle-plugin'
 apply from: '../openpos-gradle/src/main/resources/java.gradle'
 apply from: '../openpos-gradle/src/main/resources/release.gradle'
 
@@ -44,4 +45,31 @@ task generateSourceArtifact(type: Copy) {
                     'buildName' : buildName
                 ])
     }
+}
+
+task generateChangeLog(type: Class.forName('se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask')) {
+    gitHubApi = gitHubApi
+    gitHubToken = personalAccessToken
+    file = new File("../CHANGELOG.md");
+    fromRef = '0.3.6'
+    fromRepo = "$projectDir/.."
+    templateContent = """
+# Release Notes
+{{#tags}}
+
+## Release {{name}} 
+Release time: {{tagTime}}
+ {{#issues}}
+  {{#hasLink}}
+#### [{{issue}}]({{link}}) {{title}}
+  {{#hasLabels}}
+{{labels}}
+  {{/hasLabels}}
+  {{#commits}}
+by {{authorName}} 
+  {{/commits}}
+  {{/hasLink}}
+ {{/issues}}
+{{/tags}}
+""";
 }

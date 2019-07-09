@@ -1,15 +1,3 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath "se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.63"
-    }
-}
-
-apply plugin: 'se.bjurr.gitchangelog.git-changelog-gradle-plugin'
 apply plugin: 'com.moowork.node'
 apply plugin: 'co.riiid.gradle'
 
@@ -121,37 +109,8 @@ task setPackageJsonVersionToSnapshot(type: NpmTask) {
     args = [ 'version', '--allow-same-version', version ]
 }
 
-task gitChangelogTask(type: Class.forName('se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask')) {
-    dependsOn npm_publish
-    gitHubApi = gitHubApi
-    gitHubToken = personalAccessToken
-    file = new File("../CHANGELOG.md");
-    fromRef = '0.3.6'
-    fromRepo = "$projectDir/.."
-    toRef = version
-    templateContent = """
-# Release Notes
-{{#tags}}
-
-## Release {{name}} 
-Release time: {{tagTime}}
- {{#issues}}
-  {{#hasLink}}
-#### [{{issue}}]({{link}}) {{title}}
-  {{#hasLabels}}
-{{labels}}
-  {{/hasLabels}}
-  {{#commits}}
-by {{authorName}} 
-  {{/commits}}
-  {{/hasLink}}
- {{/issues}}
-{{/tags}}
-""";
-}
-
 task release() {
-    dependsOn gitChangelogTask
+    dependsOn npm_publish
     doFirst {
         if (!releaseBuildEnabled.toBoolean()) {
             throw new GradleException('You need to specify -PreleaseBuildEnabled=true when running the release task')
@@ -175,5 +134,4 @@ task release() {
 
 subprojects.each { tasks.getByPath(":${it.name}:processResources").dependsOn prerelease }
 subprojects.each { tasks.githubRelease.dependsOn("${it.name}:deploy") }
-tasks.gitChangelogTask.dependsOn githubRelease
 tasks.githubRelease.dependsOn prerelease
