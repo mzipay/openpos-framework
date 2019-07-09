@@ -54,20 +54,17 @@ task generateChangeLog(type: Class.forName('se.bjurr.gitchangelog.plugin.gradle.
     fromRef = '0.3.6'
     fromRepo = "$projectDir/.."
     templateContent = """
-# Release Notes
+# Change Log
 {{#tags}}
 
-## Release {{name}} 
-Release time: {{tagTime}}
+## {{name}} 
+Released on: {{tagTime}}
+
+|       | Name   | Labels | Author |
+|-------|--------|--------|--------|
  {{#issues}}
-  {{#hasLink}}
-#### [{{issue}}]({{link}}) {{title}}
-  {{#hasLabels}}
-{{labels}}
-  {{/hasLabels}}
-  {{#commits}}
-by {{authorName}} 
-  {{/commits}}
+  {{#hasLink}}  
+| [{{issue}}]({{link}}) | {{title}} | {{#hasLabels}}{{labels}}{{/hasLabels}} |{{#commits}}{{authorName}}{{/commits}}|
   {{/hasLink}}
  {{/issues}}
 {{/tags}}
