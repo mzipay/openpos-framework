@@ -8,11 +8,11 @@ Released on:
 |-------|--------|--------|--------|
   | [#107](https://github.com/JumpMind/openpos-framework/pull/107) | Feature/106 differentiate web orders | [enhancement] |Klementina Stojanovska Chirico|
   | [#110](https://github.com/JumpMind/openpos-framework/pull/110) | Add client documentation | [architecture] |Dan Kaste|
-  | [#111](https://github.com/JumpMind/openpos-framework/pull/111) | bugfix/PriceChecker price per unit label | [bug] |jliao300|
+  | [#111](https://github.com/JumpMind/openpos-framework/pull/111) | bugfix/PriceChecker price per unit label | [bug, client] |jliao300|
   | [#114](https://github.com/JumpMind/openpos-framework/issues/114) | Aila Scanner passes Null for UPCA barcode types | [bug] |Dan Kaste|
-  | [#115](https://github.com/JumpMind/openpos-framework/pull/115) | 114: Correctly map UPCA barcode types for Aila Scanner | [bug] |Dan Kaste|
-  | [#116](https://github.com/JumpMind/openpos-framework/pull/116) | added maxResults to the persist api | [enhancement] |Chris Henson|
-  | [#119](https://github.com/JumpMind/openpos-framework/pull/119) | IValidatorSpec implementations fail deserialization with jackson  | [bug] |Jason Mihalick|
+  | [#115](https://github.com/JumpMind/openpos-framework/pull/115) | 114: Correctly map UPCA barcode types for Aila Scanner | [bug, client] |Dan Kaste|
+  | [#116](https://github.com/JumpMind/openpos-framework/pull/116) | added maxResults to the persist api | [enhancement, server] |Chris Henson|
+  | [#119](https://github.com/JumpMind/openpos-framework/pull/119) | IValidatorSpec implementations fail deserialization with jackson  | [bug, server] |Jason Mihalick|
   | [#87](https://github.com/JumpMind/openpos-framework/pull/87) | Feature/selection list paging |  |Klementina Stojanovska Chirico|
 
 ## 0.3.6 
