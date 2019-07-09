@@ -48,7 +48,7 @@ public class TestModuleTest {
     
     @Test
     public void test02SqlScript001WasRun() {
-        List<TestTableModel> rows = testSession.findAll(TestTableModel.class);
+        List<TestTableModel> rows = testSession.findAll(TestTableModel.class, 1000);
         assertNotNull(rows);
         assertEquals(2, rows.size());
     }
@@ -57,7 +57,7 @@ public class TestModuleTest {
     public void test03SqlScript002WasRun() {
         module.setDynamicVersion("0.0.2");
         module.updateDataModel(testSession);
-        List<TestTableModel> rows = testSession.findAll(TestTableModel.class);
+        List<TestTableModel> rows = testSession.findAll(TestTableModel.class, 1000);
         assertNotNull(rows);
         assertEquals(4, rows.size());
     }
