@@ -1,7 +1,7 @@
 import { ValidationConstants } from './../../shared/validators/validation.constants';
 import { IValidator, IValidatorSpec } from './../interfaces/validator.interface';
 import { Logger } from './logger.service';
-import { Injectable, Type } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
 // Since there are directives in shared that import validator service using the ../../shared
 // barrel here causes a circular reference
@@ -45,7 +45,15 @@ export class ValidatorsService {
 
     getValidator(validatorSpec: string | IValidatorSpec): ValidatorFn {
         const locale = this.localeService.getLocale();
-        if (typeof validatorSpec === 'string') {
+        if (typeof (validatorSpec as IValidatorSpec) !== 'undefined' && (validatorSpec as IValidatorSpec).name) {
+            // Support for dynamically loading validators specified by the server side.
+            // If locale support is needed, that can be handled in the validator implementation
+            const name = (validatorSpec as IValidatorSpec).name;
+            const validatorInstance: IValidator =
+                ValidationConstants.validators.find(entry => entry.name === name).validatorClass.prototype;
+            validatorInstance.constructor.apply(validatorInstance, [validatorSpec]);
+            return validatorInstance.validationFunc;
+        } else {
             const name = (validatorSpec as string);
 
             if (name && locale) {
@@ -65,14 +73,6 @@ export class ValidatorsService {
             }
             this.log.info(`No validator found for locale '${locale}' validator name '${name}'. Using an 'always valid' validator`);
             return () => null;
-        } else {
-            // Support for dynamically loading validators specified by the server side.
-            // If locale support is needed, that can be handled in the validator implementation
-            const name = (validatorSpec as IValidatorSpec).name;
-            const validatorInstance: IValidator =
-                ValidationConstants.validators.find(entry => entry.name === name).validatorClass.prototype;
-            validatorInstance.constructor.apply(validatorInstance, [validatorSpec]);
-            return validatorInstance.validationFunc;
         }
     }
 
