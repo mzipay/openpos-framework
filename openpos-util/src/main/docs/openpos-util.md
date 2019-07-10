@@ -1,6 +1,6 @@
 ---
 id: openpos-util
-title: OpenPOS Utilties Library
+title: Utilities Library
 ---
 
 # Overview

@@ -1,6 +1,6 @@
 ---
-id: openpos-core
-title: OpenPOS Flow Framework
+id: openpos-flow
+title: Flow Framework
 ---
 
 # Overview

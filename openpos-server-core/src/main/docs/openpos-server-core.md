@@ -1,6 +1,6 @@
 ---
 id: openpos-server-core
-title: OpenPOS Server Core Library
+title: Server Core Library
 ---
 
 # Overview

@@ -1,6 +1,6 @@
 ---
 id: openpos-persist
-title: OpenPOS Persistence Framework
+title: Persistence Framework
 ---
 
 # Overview

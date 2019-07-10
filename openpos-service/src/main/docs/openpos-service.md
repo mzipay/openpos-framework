@@ -1,6 +1,6 @@
 ---
 id: openpos-service
-title: OpenPOS Service Framework
+title: Service Framework
 ---
 
 # Overview

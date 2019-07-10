@@ -1,9 +1,9 @@
 {
-    "Overview": [
-        "core-overview"
+    "Change Log": [
+        "changelog"
     ],    
     "Server Core Lib": [
-        "openpos-core",
+        "openpos-flow",
         "openpos-server-core",
         "openpos-service",
         "openpos-persist",

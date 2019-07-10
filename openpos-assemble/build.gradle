@@ -53,8 +53,7 @@ task generateChangeLog(type: Class.forName('se.bjurr.gitchangelog.plugin.gradle.
     file = new File("../CHANGELOG.md");
     fromRef = '0.2.27'
     fromRepo = "$projectDir/.."
-    templateContent = """
-# Change Log
+    templateContent = """# Change Log
 {{#tags}}
 
 ## {{name}} 
