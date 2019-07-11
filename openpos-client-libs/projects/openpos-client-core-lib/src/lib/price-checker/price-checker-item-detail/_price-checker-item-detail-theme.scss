@@ -17,5 +17,8 @@
         .display-property-label{
             color: mat-color($foreground, text);
         }
+	.messages {
+		color: $app-primary;
+	}
     }
 }
