@@ -1,7 +1,6 @@
 # Change Log
 
 ## Unreleased 
-Released on: 
 
 |       | Name   | Labels | Author | Time |
 |-------|--------|--------|--------|------|
@@ -18,9 +17,9 @@ Released on: 2019-07-12 18:47:38
   | [#115](https://github.com/JumpMind/openpos-framework/pull/115) | 114: Correctly map UPCA barcode types for Aila Scanner | [bug, client] |Dan Kaste|2019-07-08 19:46:48|
   | [#116](https://github.com/JumpMind/openpos-framework/pull/116) | added maxResults to the persist api | [enhancement, server] |Chris Henson|2019-07-09 15:12:14|
   | [#119](https://github.com/JumpMind/openpos-framework/pull/119) | IValidatorSpec implementations fail deserialization with jackson  | [bug, server] |Jason Mihalick|2019-07-09 22:52:32|
-  | [#120](https://github.com/JumpMind/openpos-framework/pull/120) | 120: Ensure MaxValueValidator can be serialized, fix typo in error msg |  |Jason Mihalick|2019-07-10 13:59:43|
+  | [#120](https://github.com/JumpMind/openpos-framework/pull/120) | 120: Ensure MaxValueValidator can be serialized, fix typo in error msg | [bug, client, server] |Jason Mihalick|2019-07-10 13:59:43|
   | [#122](https://github.com/JumpMind/openpos-framework/pull/122) | bugfix/PromoColor to BL orange | [bug] |jliao300|2019-07-11 17:43:32|
-  | [#123](https://github.com/JumpMind/openpos-framework/pull/123) | Add test module to make sure we catch and sass errors in themes |  |Dan Kaste|2019-07-11 14:02:23|
+  | [#123](https://github.com/JumpMind/openpos-framework/pull/123) | Add test module to make sure we catch and sass errors in themes | [build, client] |Dan Kaste|2019-07-11 14:02:23|
   | [#124](https://github.com/JumpMind/openpos-framework/pull/124) | Don&#39;t deploy if the branch name is merge | [bug, build] |Chris Henson|2019-07-11 14:35:15|
   | [#126](https://github.com/JumpMind/openpos-framework/pull/126) | Cleanup of client build and documentation update | [build, client] |Dan Kaste|2019-07-12 14:13:30|
   | [#87](https://github.com/JumpMind/openpos-framework/pull/87) | Feature/selection list paging | [client, enhancement, server] |Klementina Stojanovska Chirico|2019-07-04 13:44:50|

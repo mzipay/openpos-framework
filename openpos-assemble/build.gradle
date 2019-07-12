@@ -57,7 +57,9 @@ task generateChangeLog(type: Class.forName('se.bjurr.gitchangelog.plugin.gradle.
 {{#tags}}
 
 ## {{name}} 
+{{#hasTagTime}}
 Released on: {{tagTime}}
+{{/hasTagTime}}
 
 |       | Name   | Labels | Author | Time |
 |-------|--------|--------|--------|------|
