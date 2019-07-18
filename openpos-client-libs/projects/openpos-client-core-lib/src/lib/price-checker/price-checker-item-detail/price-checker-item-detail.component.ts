@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { PosScreen } from '../../screens-deprecated/pos-screen/pos-screen.component';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 import { PriceCheckerItemDetailInterface } from './price-checker-item-detail.interface';
@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
     templateUrl: 'price-checker-item-detail.component.html',
     styleUrls: ['./price-checker-item-detail.component.scss']
 })
-export class PriceCheckerItemDetailComponent extends PosScreen<PriceCheckerItemDetailInterface> implements OnDestroy, OnInit {
+export class PriceCheckerItemDetailComponent extends PosScreen<PriceCheckerItemDetailInterface> implements OnDestroy {
 
     scannerSubscription: Subscription;
 
@@ -21,11 +21,11 @@ export class PriceCheckerItemDetailComponent extends PosScreen<PriceCheckerItemD
         super();
     }
 
-    ngOnInit(): void {
-        this.scannerSubscription = this.scannerService.startScanning().subscribe( m => this.session.onAction(this.screen.scanAction, m));
-    }
-
     buildScreen() {
+        if (this.scannerSubscription != null) {
+            this.scannerSubscription.unsubscribe();
+        }
+        this.scannerSubscription = this.scannerService.startScanning().subscribe( m => this.session.onAction(this.screen.scanAction, m));
     }
 
     ngOnDestroy(): void {
