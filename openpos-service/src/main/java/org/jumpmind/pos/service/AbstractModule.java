@@ -124,14 +124,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
     }
 
     private String findDevelopmentVersion() {
-        try {
-            return Files.walk(Paths.get("../"))
-                    .filter((f) -> f.toFile().getName().equals("gradle.properties")).map((f) ->
-                            new TypedProperties(f.toFile()).get("version")).findFirst().orElse(null);
-        } catch (Exception e) {
-            log.warn("Could not locate the development version in gradle.properties", e);
-            return "0.0.0";
-        }
+        return "1000.0.0";
     }
 
     abstract protected String getArtifactName();
