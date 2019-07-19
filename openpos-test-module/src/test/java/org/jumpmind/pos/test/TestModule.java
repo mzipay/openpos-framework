@@ -34,8 +34,8 @@ public class TestModule extends AbstractModule {
     }
 
     @Override
-    public String getVersion() {
-        return dynamicVersion;
+    protected String getArtifactName() {
+        return "openpos-test-module";
     }
 
     @Override
