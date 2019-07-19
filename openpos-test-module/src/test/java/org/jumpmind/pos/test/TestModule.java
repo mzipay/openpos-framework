@@ -39,6 +39,11 @@ public class TestModule extends AbstractModule {
     }
 
     @Override
+    public String getVersion() {
+        return dynamicVersion;
+    }
+
+    @Override
     public String getTablePrefix() {
         return "tst";
     }
