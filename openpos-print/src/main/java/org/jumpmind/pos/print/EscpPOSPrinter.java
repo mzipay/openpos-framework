@@ -9,7 +9,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrSubstitutor;
 
 import javax.imageio.ImageIO;
-import javax.xml.bind.PrintConversionEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.HashMap;
