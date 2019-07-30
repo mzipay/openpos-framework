@@ -17,7 +17,7 @@ public class EscP_Constants {
     public static final String FORMAT_BOLD = codes(ESC, CHANGE_MODE,0x8);
 
     public static final String FONT_LETTER_GOTHIC = codes(ESC, 107, 9);
-    public static final String FONT_SIZE_MEDIUM = codes(ESC, 88, 1, 25, 1);
+    public static final String FONT_SIZE_MEDIUM = codes(ESC, CHANGE_MODE, 0x0);
     public static final String FONT_SIZE_LARGE = codes(ESC, 88, 1, 64, 0);
     public static final String FONT_SIZE_LARGE_EPSON = codes(29, 33, 0b00010001);
 

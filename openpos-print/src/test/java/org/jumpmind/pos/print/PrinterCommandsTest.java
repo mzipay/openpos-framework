@@ -1,5 +1,6 @@
 package org.jumpmind.pos.print;
 
+import jpos.POSPrinterConst;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -47,7 +48,7 @@ public class PrinterCommandsTest {
         printer.setOutputStream(new ByteArrayOutputStream());
         printer.open("Printer", null);
 
-        String barcodeCommand = printer.buildBarcodeCommand(0, "380502001835720192324", 0, 0, 0, 0, 0);
+        String barcodeCommand = printer.buildBarcodeCommand(0, "380502001835720192324", POSPrinterConst.PTR_BCS_Code128, 0, 0, 0, 0);
 
         assertCommandsEqual(EscP_Constants.EPSON_CODE128_BARCODE, barcodeCommand);
     }
