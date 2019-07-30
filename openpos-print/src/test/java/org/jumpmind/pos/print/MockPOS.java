@@ -1,11 +1,9 @@
 package org.jumpmind.pos.print;
 
-import javafx.print.Printer;
 import jpos.JposException;
 import jpos.POSPrinter;
 import jpos.POSPrinterConst;
 import jpos.POSPrinterControl114;
-import org.springframework.boot.SpringBootExceptionReporter;
 
 import java.lang.reflect.Field;
 
