@@ -166,8 +166,6 @@ export * from './lib/screens-deprecated/home/home.component';
 export * from './lib/screens-deprecated/item-list/item-list.component';
 export * from './lib/screens-deprecated/item-options/item-options.component';
 export * from './lib/screens-deprecated/item-search-results/item-search-results.component';
-export * from './lib/screens-deprecated/loading-dialog/loading-dialog-screen.interface';
-export * from './lib/screens-deprecated/loading-dialog/loading-dialog.component';
 export * from './lib/screens-deprecated/login/login-dialog.component';
 export * from './lib/screens-deprecated/login/login.component';
 export * from './lib/screens-deprecated/multiple-dynamic-form/multiple-dynamic-form-dialog.component';
@@ -176,7 +174,7 @@ export * from './lib/screens-deprecated/multiple-dynamic-form/multiple-dynamic-f
 export * from './lib/screens-deprecated/multiselect-item-list/multiselect-item-list.component';
 export * from './lib/screens-deprecated/options/options.component';
 export * from './lib/screens-deprecated/payment-status/payment-status.component';
-export * from './lib/screens-deprecated/pos-screen/pos-screen.component';
+export * from './lib/screens-with-parts/pos-screen.component';
 export * from './lib/screens-deprecated/print-preview/print-preview.component';
 export * from './lib/screens-deprecated/prompt/prompt-dialog.component';
 export * from './lib/screens-deprecated/prompt/prompt.component';

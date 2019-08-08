@@ -68,7 +68,7 @@ const dialogs = [
     DefaultDialogComponent,
     PromptDialogComponent,
     PromptWithOptionsDialogComponent,
-    ChooseOptionsDialogComponent
+    ChooseOptionsDialogComponent,
 ];
 
 const templates = [
