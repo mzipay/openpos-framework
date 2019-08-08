@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 import { PromptWithInfoInterface } from './prompt-with-info.interface';
-import { PosScreen } from '../pos-screen.component';
 
 /**
  * @ignore

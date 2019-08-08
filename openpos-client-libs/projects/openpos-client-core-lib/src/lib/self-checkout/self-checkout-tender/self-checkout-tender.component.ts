@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { SelfCheckoutTenderInterface } from './self-checkout-tender.interface';
-import { IOptionItem } from '../../screens-deprecated/choose-options/option-item.interface';
+import { IOptionItem } from '../../core/interfaces/option-item.interface';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
-import { PosScreen } from '../../screens-with-parts/pos-screen.component';
+import { PosScreen } from '../../screens-with-parts/pos-screen/pos-screen.component';
 
 @ScreenComponent({
     name: 'SelfCheckoutTender'
@@ -19,10 +19,6 @@ export class SelfCheckoutTenderComponent extends PosScreen<SelfCheckoutTenderInt
     public optionItems: IOptionItem[];
     public amountTitle = 'Amount Due';
     public amountDue = '0.00';
-
-    constructor() {
-        super();
-    }
 
     buildScreen() {
         if (this.screen.amountDue) {

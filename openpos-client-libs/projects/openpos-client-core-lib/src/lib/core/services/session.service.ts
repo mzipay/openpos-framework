@@ -12,23 +12,18 @@ import { Message } from '@stomp/stompjs';
 import { Injectable, NgZone, } from '@angular/core';
 import { StompState, StompRService } from '@stomp/ng2-stompjs';
 import { MatDialog } from '@angular/material';
-import { ActionIntercepter } from '../action-intercepter';
 // Importing the ../components barrel causes a circular reference since dynamic-screen references back to here,
 // so we will import those files directly
 import { LoaderState } from '../../shared/components/loader/loader-state';
-import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
 import { IDeviceResponse } from '../oldplugins/device-response.interface';
-import { InAppBrowserPlugin } from '../oldplugins/in-app-browser.plugin';
-import { IActionItem } from '../interfaces/action-item.interface';
-import { IUrlMenuItem } from '../interfaces/url-menu-item.interface';
-import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
-import { OldPluginService } from './old-plugin.service';
-import { AppInjector } from '../app-injector';
 import { HttpClient } from '@angular/common/http';
 import { PingParams } from '../interfaces/ping-params.interface';
 import { PingResult } from '../interfaces/ping-result.interface';
 import { PersonalizationResponse } from '../personalization/personalization-response.interface';
 import { ElectronService } from 'ngx-electron';
+import { OpenposMessage } from '../messages/message';
+import { MessageTypes } from '../messages/message-types';
+import { ActionMessage } from '../messages/action-message';
 
 declare var window: any;
 export class QueueLoadingMessage implements ILoading {
@@ -78,13 +73,6 @@ export class SessionService implements IMessageHandler<any> {
 
     private stompDebug = false;
 
-    private actionPayloads: Map<string, () => void> = new Map<string, () => void>();
-
-    private actionIntercepters: Map<string, ActionIntercepter> = new Map();
-
-    private waitingForResponse = false;
-    private actionDisablers = new Map<string, BehaviorSubject<boolean>>();
-
     public inBackground = false;
 
     private stompStateSubscription: Subscription;
@@ -118,7 +106,11 @@ export class SessionService implements IMessageHandler<any> {
         this.registerMessageHandler(this);
     }
 
-    public sendMessage(message: any) {
+    public sendMessage<T extends OpenposMessage>(message: T) {
+        if ( message.type === MessageTypes.ACTION && message instanceof ActionMessage ) {
+            const actionMessage = message as ActionMessage;
+            this.publish(actionMessage.actionName, 'Screen', actionMessage.payload);
+        }
         this.sessionMessages$.next(message);
     }
 
@@ -415,124 +407,7 @@ export class SessionService implements IMessageHandler<any> {
                 JSON.stringify(deviceResponse));
         };
 
-        // see if we have any intercepters registered for the type of this deviceResponse
-        // otherwise just send the response
-        if (this.actionIntercepters.has(deviceResponse.type)) {
-            this.actionIntercepters.get(deviceResponse.type).intercept(deviceResponse, sendResponseBackToServer);
-        } else {
-            sendResponseBackToServer();
-        }
-    }
-
-    public async onValueChange(action: string, payload?: any) {
-        this.onAction(action, payload, null, true);
-    }
-
-    public async onAction(action: string | IActionItem,
-                          payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
-        if (action) {
-            let response: any = null;
-            let actionString = '';
-            // we need to figure out if we are a menuItem or just a string
-            if (action.hasOwnProperty('action')) {
-                const menuItem = action as IActionItem;
-                confirm = menuItem.confirmationDialog;
-                actionString = menuItem.action;
-                // check to see if we are an IURLMenuItem
-                if (menuItem.hasOwnProperty('url')) {
-                    const urlMenuItem = menuItem as IUrlMenuItem;
-                    // tslint:disable-next-line:max-line-length
-                    this.log.info(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode}, with options: ${urlMenuItem.options}`);
-                    const pluginService = AppInjector.Instance.get(OldPluginService);
-                    // Use inAppBrowserPlugin when available since it tracks whether or not the browser is active.
-                    pluginService.getPlugin('InAppBrowser').then(plugin => {
-                        const inAppPlugin = plugin as InAppBrowserPlugin;
-                        inAppPlugin.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
-                    }).catch(error => {
-                        this.log.info(`InAppBrowser not found, using window.open. Reason: ${error}`);
-                        window.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
-                    });
-                    if (!actionString || 0 === actionString.length) {
-                        return;
-                    }
-                }
-            } else {
-                actionString = action as string;
-            }
-
-            this.log.info(`action is: ${actionString}`);
-
-            if (confirm) {
-                this.log.info('Confirming action');
-                let confirmD: IConfirmationDialog;
-                if (confirm.hasOwnProperty('message')) {
-                    confirmD = confirm as IConfirmationDialog;
-                } else {
-                    confirmD = {
-                        title: '', message: confirm as string, cancelButtonName: 'No',
-                        confirmButtonName: 'Yes', cancelAction: null, confirmAction: null
-                    };
-                }
-                const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
-                dialogRef.componentInstance.confirmDialog = confirmD;
-                const result = await dialogRef.afterClosed().toPromise();
-
-                // if we didn't confirm return and don't send the action to the server
-                if (!result) {
-                    this.log.info('Canceling action');
-                    return;
-                }
-            }
-
-            let processAction = true;
-
-            // First we will use the payload passed into this function then
-            // Check if we have registered action payload
-            // Otherwise we will send whatever is in this.response
-            if (payload != null) {
-                response = payload;
-            } else if (this.actionPayloads.has(actionString)) {
-                this.log.info(`Checking registered action payload for ${actionString}`);
-                try {
-                    response = this.actionPayloads.get(actionString)();
-                } catch (e) {
-                    this.log.info(`invalid action payload for ${actionString}: ` + e);
-                    processAction = false;
-                }
-            }
-
-            if (processAction && !this.waitingForResponse) {
-                const sendToServer = () => {
-                    this.log.info(`>>> Post action "${actionString}"`);
-                    if (!isValueChangedAction) {
-                        this.queueLoading();
-                    }
-                    if (!this.publish(actionString, 'Screen', response)) {
-                        this.cancelLoading();
-                    }
-                };
-
-                // see if we have any intercepters registered
-                // otherwise just send the action
-                if (this.actionIntercepters.has(actionString)) {
-                    const interceptor = this.actionIntercepters.get(actionString);
-                    interceptor.intercept(response, sendToServer);
-                    if (interceptor.options && interceptor.options.showLoadingAfterIntercept) {
-                        if (!isValueChangedAction) {
-                            this.queueLoading();
-                        }
-                    }
-                } else {
-                    sendToServer();
-                }
-            } else {
-                this.log.info(
-                    `Not sending action: ${actionString}.  processAction: ${processAction}, waitingForResponse:${this.waitingForResponse}`);
-            }
-
-        } else {
-            this.log.info(`received an invalid action: ${action}`);
-        }
+        sendResponseBackToServer();
     }
 
     public keepAlive() {
@@ -574,55 +449,8 @@ export class SessionService implements IMessageHandler<any> {
         }
     }
 
-    private queueLoading() {
-        this.waitingForResponse = true;
-        this.sendMessage(new QueueLoadingMessage(LoaderState.LOADING_TITLE));
-    }
-
     public cancelLoading() {
-        this.waitingForResponse = false;
         this.sendMessage(new CancelLoadingMessage());
-    }
-
-    public registerActionPayload(actionName: string, actionValue: () => void) {
-        this.actionPayloads.set(actionName, actionValue);
-    }
-
-    public unregisterActionPayloads() {
-        this.actionPayloads.clear();
-    }
-
-    public unregisterActionPayload(actionName: string) {
-        this.actionPayloads.delete(actionName);
-    }
-
-    public registerActionIntercepter(actionName: string, actionIntercepter: ActionIntercepter) {
-        this.actionIntercepters.set(actionName, actionIntercepter);
-    }
-
-    public unregisterActionIntercepters() {
-        this.actionIntercepters.clear();
-    }
-
-    public unregisterActionIntercepter(actionName: string) {
-        this.actionIntercepters.delete(actionName);
-    }
-
-
-    public registerActionDisabler(action: string, disabler: Observable<boolean>): Subscription {
-        if (!this.actionDisablers.has(action)) {
-            this.actionDisablers.set(action, new BehaviorSubject<boolean>(false));
-        }
-
-        return disabler.subscribe(value => this.actionDisablers.get(action).next(value));
-    }
-
-    public actionIsDisabled(action: string): Observable<boolean> {
-        if (!this.actionDisablers.has(action)) {
-            this.actionDisablers.set(action, new BehaviorSubject<boolean>(false));
-        }
-
-        return this.actionDisablers.get(action);
     }
 
     public getCurrencyDenomination(): string {

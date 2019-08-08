@@ -34,7 +34,7 @@
                         <div gdArea="amount">{{item.amount | valueFormatter:'money'}}</div>
                         <app-kebab-button gdArea="button" *ngIf="!!screen.tenderItemActions" 
                             [menuItems]="screen.tenderItemActions"
-                            (menuItemClick)="onMenuItemClick($event, i)"></app-kebab-button>
+                            (menuItemClick)="doAction($event, i)"></app-kebab-button>
                     </div>
                     <div *ngIf="!screen.tenderItems || screen.tenderItems.length == 0" class="no-tenders">
                         <app-icon [iconName]="screen.noCompletedTendersIcon" iconClass="mat-128"></app-icon>

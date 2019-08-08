@@ -1,7 +1,7 @@
-import { PosScreen } from '../pos-screen.component';
 import { ItemDetailInterface } from './item-detail.interface';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 import { Component } from '@angular/core';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 
 @ScreenComponent({
     name: 'ItemDetail'

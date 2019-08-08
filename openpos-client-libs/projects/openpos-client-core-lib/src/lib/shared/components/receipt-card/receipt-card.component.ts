@@ -1,6 +1,6 @@
 import { Component, Input, HostListener } from '@angular/core';
-import { SessionService } from '../../../core/services/session.service';
-import { IActionItem } from '../../../core/interfaces/action-item.interface';
+import { IActionItem } from '../../../core/actions/action-item.interface';
+import { ActionService } from '../../../core/actions/action.service';
 import { ITransactionReceipt } from './transaction-receipt.interface';
 
 @Component({
@@ -18,7 +18,7 @@ export class ReceiptCardComponent {
 
   public hover = false;
 
-  constructor(public session: SessionService) {
+  constructor(public actionService: ActionService) {
   }
 
   @HostListener('mouseenter')

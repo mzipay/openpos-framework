@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { HomeInterface } from './home.interface';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
-import { PosScreen } from '../pos-screen.component';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 import { OpenposMediaService } from '../../core/services/openpos-media.service';
 import { Configuration } from '../../configuration/configuration';
 import { Observable, from, timer } from 'rxjs';
-import { IActionItem } from '../../core/interfaces/action-item.interface';
+import { IActionItem } from '../../core/actions/action-item.interface';
 import { INotificationItem } from '../../core/interfaces/notification-item.interface';
-import { trigger, state, style, transition, animate, keyframes, useAnimation } from '@angular/animations';
-import { repeat, delay, tap, map } from 'rxjs/operators';
+import { trigger, state, style, transition, useAnimation } from '@angular/animations';
+import { map } from 'rxjs/operators';
 import { bounceAnimation } from '../../shared/animations/bounce.animation';
 
 @ScreenComponent({
@@ -42,8 +42,8 @@ export class HomeComponent extends PosScreen<HomeInterface> {
   gridColumns: Observable<number>;
   isMobile: Observable<boolean>;
 
-  constructor( media: OpenposMediaService ) {
-    super();
+  constructor( media: OpenposMediaService, injector: Injector ) {
+    super(injector);
     this.gridColumns = media.mediaObservableFromMap(new Map([
         ['xs', 1],
         ['sm', 2],

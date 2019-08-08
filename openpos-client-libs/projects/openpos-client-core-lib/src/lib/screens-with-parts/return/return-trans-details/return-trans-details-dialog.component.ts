@@ -1,13 +1,13 @@
 import { Configuration } from './../../../configuration/configuration';
-import { IActionItem } from '../../../core/interfaces/action-item.interface';
+import { IActionItem } from '../../../core/actions/action-item.interface';
 import { SelectionMode } from './../../../core/interfaces/selection-mode.enum';
 import { ISellItem } from './../../../core/interfaces/sell-item.interface';
 import { Component, Input } from '@angular/core';
 import { DialogComponent } from '../../../shared/decorators/dialog-component.decorator';
 import { SelectableItemListComponentConfiguration } from '../../../shared/components/selectable-item-list/selectable-item-list.component';
 import { ReturnTransDetailsInterface } from './return-trans-detals.interface';
-import { PosScreen } from '../../pos-screen.component';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { PosScreen } from '../../pos-screen/pos-screen.component';
+import { Observable } from 'rxjs';
 import { ISelectableListData } from '../../../shared/components/selectable-item-list/selectable-list-data.interface';
 
 @DialogComponent({
@@ -55,7 +55,7 @@ export class ReturnTransDetailsDialogComponent extends PosScreen<ReturnTransDeta
 
     public doMenuItemAction(menuItem: IActionItem) {
         if (this.index > -1) {
-            this.session.onAction(menuItem, this.index);
+            this.doAction(menuItem, this.index);
         }
     }
 

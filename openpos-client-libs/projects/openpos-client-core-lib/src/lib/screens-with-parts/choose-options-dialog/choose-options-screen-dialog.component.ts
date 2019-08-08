@@ -1,6 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, Injector } from '@angular/core';
 import { DialogComponent } from '../../shared/decorators/dialog-component.decorator';
-import { PosScreen } from '../pos-screen.component';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ChooseOptionsScreenDialogInterface } from './choose-options-screen-dialog.interface';
 import { ScannerService } from '../../core/platform-plugins/scanners/scanner.service';
 import { Subscription } from 'rxjs';
@@ -17,8 +17,8 @@ export class ChooseOptionsScreenDialogComponent extends PosScreen<ChooseOptionsS
 
   private scanServiceSubscription: Subscription;
 
-  constructor(private scannerService: ScannerService) {
-      super();
+  constructor(private scannerService: ScannerService, injector: Injector) {
+      super(injector);
   }
 
   buildScreen() {

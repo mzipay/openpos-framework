@@ -1,16 +1,16 @@
-import { Component, ViewChildren, QueryList, ElementRef, AfterViewInit } from '@angular/core';
-import { IActionItem } from '../../core/interfaces/action-item.interface';
+import { Component, ViewChildren, QueryList, ElementRef, AfterViewInit, Injector } from '@angular/core';
+import { IActionItem } from '../../core/actions/action-item.interface';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 import { SelectableItemListComponentConfiguration } from '../../shared/components/selectable-item-list/selectable-item-list.component';
-import { PosScreen } from '../pos-screen.component';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 import { SelectionListInterface } from './selection-list.interface';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 import { Configuration } from '../../configuration/configuration';
 import { Observable, of, merge, Subject, BehaviorSubject } from 'rxjs';
 import { ISelectableListData } from '../../shared/components/selectable-item-list/selectable-list-data.interface';
-import { MessageProvider } from '../../shared/providers/message.provider';
 import { filter, map } from 'rxjs/operators';
 import { ISelectionListItem } from './selection-list-item.interface';
+import { SessionService } from '../../core/services/session.service';
 
 @ScreenComponent({
     name: 'SelectionList'
@@ -32,8 +32,8 @@ export class SelectionListScreenComponent extends PosScreen<SelectionListInterfa
 
     private screenData$ = new BehaviorSubject<ISelectableListData<ISelectionListItem>>(null);
 
-    constructor() {
-        super();
+    constructor(injector: Injector, private session: SessionService) {
+        super(injector);
         this.listData = merge( this.session.getMessages('UIData').pipe(
             filter( d => d.dataType === 'SelectionListData'),
             map((d) => {
@@ -101,15 +101,15 @@ export class SelectionListScreenComponent extends PosScreen<SelectionListInterfa
 
         if (this.screen.selectionChangedAction && this.index !== this.lastSelection) {
             this.lastSelection = this.index;
-            this.session.onAction(this.screen.selectionChangedAction, this.index);
+            this.doAction(this.screen.selectionChangedAction, this.index);
         }
     }
 
     public doMenuItemAction(menuItem: IActionItem) {
         if (this.screen.multiSelect) {
-            this.session.onAction(menuItem, this.indexes);
+            this.doAction(menuItem, this.indexes);
         } else {
-            this.session.onAction(menuItem, this.index);
+            this.doAction(menuItem, this.index);
         }
     }
 

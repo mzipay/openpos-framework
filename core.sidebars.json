@@ -21,6 +21,9 @@
     "Client Startup": [
         "startup"
     ],
+    "Actions": [
+        "actions"
+    ],
     "Client Services": [
         "focus"
     ],

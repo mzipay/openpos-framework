@@ -2,8 +2,8 @@ package org.jumpmind.pos.core.ui.message;
 
 import org.jumpmind.pos.core.model.DisplayProperty;
 import org.jumpmind.pos.core.model.Form;
-import org.jumpmind.pos.core.screen.ActionItem;
-import org.jumpmind.pos.core.screen.IHasForm;
+import org.jumpmind.pos.core.ui.IHasForm;
+import org.jumpmind.pos.core.ui.ActionItem;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.core.ui.data.TenderItem;
 

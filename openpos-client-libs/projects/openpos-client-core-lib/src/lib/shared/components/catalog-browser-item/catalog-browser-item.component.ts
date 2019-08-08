@@ -2,8 +2,8 @@ import { Component, Input, OnInit, Inject, forwardRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ISellItem } from '../../../core/interfaces/sell-item.interface';
 import { Logger } from '../../../core/services/logger.service';
+import { IUrlMenuItem } from '../../../core/actions/url-menu-item.interface';
 import { PersonalizationService } from '../../../core/personalization/personalization.service';
-import { IUrlMenuItem } from '../../../core/interfaces/url-menu-item.interface';
 
 @Component({
     selector: 'app-catalog-browser-item',

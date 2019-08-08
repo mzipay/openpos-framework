@@ -1,8 +1,8 @@
 package org.jumpmind.pos.core.ui.message;
 
 import org.jumpmind.pos.core.model.Form;
-import org.jumpmind.pos.core.screen.ActionItem;
-import org.jumpmind.pos.core.screen.IHasForm;
+import org.jumpmind.pos.core.ui.IHasForm;
+import org.jumpmind.pos.core.ui.ActionItem;
 import org.jumpmind.pos.core.ui.UIMessage;
 
 import java.util.ArrayList;
@@ -13,6 +13,8 @@ public class DynamicFormUIMessage extends UIMessage implements IHasForm {
     private Form form = new Form();
 
     private ActionItem submitButton;
+
+    private String instructions;
 
     private List<String> alternateSubmitActions = new ArrayList<String>();
 
@@ -48,5 +50,14 @@ public class DynamicFormUIMessage extends UIMessage implements IHasForm {
 
     public void addAlternateSubmitAction( String alternatedSubmitAction ) {
 
+    }
+
+
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
     }
 }

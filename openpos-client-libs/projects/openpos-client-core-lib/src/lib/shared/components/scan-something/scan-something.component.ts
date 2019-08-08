@@ -2,14 +2,18 @@ import { Component, Input, Optional, Inject, ViewChild, AfterViewInit, OnDestroy
 import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { IMessageHandler } from '../../../core/interfaces/message-handler.interface';
-import { IScan } from '../../../screens-deprecated/templates/sell-template/sell/scan.interface';
+import { IScan } from './scan.interface';
 import { Logger } from '../../../core/services/logger.service';
 import { SessionService } from '../../../core/services/session.service';
 import { DeviceService } from '../../../core/services/device.service';
+import { ActionService } from '../../../core/actions/action.service';
 import { OnBecomingActive } from '../../../core/life-cycle-interfaces/becoming-active.interface';
 import { OnLeavingActive } from '../../../core/life-cycle-interfaces/leaving-active.interface';
 import { ScannerService } from '../../../core/platform-plugins/scanners/scanner.service';
 
+/**
+ * Deprecated
+ */
 @Component({
   selector: 'app-scan-something',
   templateUrl: './scan-something.component.html',
@@ -31,6 +35,7 @@ export class ScanSomethingComponent implements AfterViewInit, IMessageHandler<an
 
   constructor(
     private log: Logger, private session: SessionService, public devices: DeviceService,
+    private actionService: ActionService,
     @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: IScan, private scannerService: ScannerService) {
 
@@ -62,7 +67,7 @@ export class ScanSomethingComponent implements AfterViewInit, IMessageHandler<an
   private registerScanner() {
     if (typeof this.scanServiceSubscription === 'undefined' || this.scanServiceSubscription === null) {
       this.scanServiceSubscription = this.scannerService.startScanning().subscribe(scanData => {
-        this.session.onAction(this.scanSomethingData.scanActionName, scanData.data);
+        this.actionService.doAction({action: this.scanSomethingData.scanActionName}, scanData.data);
       });
     }
   }
@@ -83,7 +88,7 @@ export class ScanSomethingComponent implements AfterViewInit, IMessageHandler<an
 
   public onEnter(): void {
     if (this.barcode && this.barcode.trim().length >= this.scanSomethingData.scanMinLength) {
-      this.session.onAction('Next', this.barcode);
+      this.actionService.doAction({action: 'Next'}, this.barcode);
       this.barcode = '';
       if (this.dialogRef) {
         this.dialogRef.close();

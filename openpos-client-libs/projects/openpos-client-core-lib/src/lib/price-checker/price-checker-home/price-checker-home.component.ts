@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, Injector, OnInit } from '@angular/core';
 import { PriceCheckerHomeInterface } from './price-checker-home.interface';
-import { PosScreen } from '../../screens-with-parts/pos-screen.component';
+import { PosScreen } from '../../screens-with-parts/pos-screen/pos-screen.component';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 import { ImageService } from '../../core/services/image.service';
 import { ScannerService } from '../../core/platform-plugins/scanners/scanner.service';
@@ -20,12 +20,12 @@ export class PriceCheckerHomeComponent extends PosScreen<PriceCheckerHomeInterfa
 
     scannerSubscription: Subscription;
 
-    constructor( private imageService: ImageService, private scannerService: ScannerService) {
-        super();        
+    constructor( private imageService: ImageService, private scannerService: ScannerService, injector: Injector) {
+        super(injector);
     }
 
     ngOnInit(): void {
-        this.scannerSubscription = this.scannerService.startScanning().subscribe( m => this.onMenuItemClick(this.screen.scanAction, m));
+        this.scannerSubscription = this.scannerService.startScanning().subscribe( m => this.doAction(this.screen.scanAction, m));
     }
 
     buildScreen() {

@@ -1,13 +1,9 @@
 
-import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
-import { PromptScreenComponent } from '../prompt/prompt-screen.component';
-import { ValidatorsService } from '../../core/services/validators.service';
-import { IOptionItem } from '../../screens-deprecated/choose-options/option-item.interface';
+import { IOptionItem } from '../../core/interfaces/option-item.interface';
 import { PromptWithOptionsInterface } from './prompt-with-options.interface';
-import { PosScreen } from '../pos-screen.component';
-import { FormGroup, ValidatorFn, Validators, FormControl } from '@angular/forms';
-import { IActionItem } from '../../core/interfaces/action-item.interface';
+import { PosScreen } from '../pos-screen/pos-screen.component';
 import { PromptFormPartComponent } from '../../shared/screen-parts/prompt-form-part/prompt-form-part.component';
 
 
@@ -29,7 +25,7 @@ export class PromptWithOptionsScreenComponent extends PosScreen<PromptWithOption
 
     onOptionSelected(action: string) {
         if (this.promptForm.promptFormGroup.valid) {
-            this.session.onAction(action, this.promptForm.promptFormGroup.value[this.promptForm.inputControlName]);
+            this.doAction(action, this.promptForm.promptFormGroup.value[this.promptForm.inputControlName]);
         }
     }
 }
