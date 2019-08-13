@@ -69,7 +69,6 @@ jar {
 }
 
 idea {
-
     module {
         testResourceDirs = []
         testSourceDirs = [ file('src/test/java')]
@@ -115,6 +114,8 @@ eclipse {
 test {
     // ignoreFailures = true
     testLogging.showStandardStreams = true
+
+    forkEvery = 1
 
     //Dynamic exclude through property defined in the build.gradle file
     if (project.hasProperty('excludeTests')) {
