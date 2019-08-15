@@ -45,7 +45,7 @@ steps:
   displayName: 'Publish Server Code Coverage'
   inputs: 
     codeCoverageTool: JaCoCo
-    summaryFileLocation: 'openpos-assemble/**/jacocoTestReport.xml'
+    summaryFileLocation: '**/jacocoRootReport.xml'
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish Client Code Coverage'
   inputs: 
