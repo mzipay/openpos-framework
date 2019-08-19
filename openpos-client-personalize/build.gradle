@@ -47,7 +47,7 @@ task npm_add_client(type: NpmTask) {
     ignoreExitValue true
     args = [
         'install',
-        "../openpos-client-libs/dist/openpos-client-core-lib/jumpmind-openpos-client-core-lib-${version}.tgz"
+        project.hasProperty('openposClientCoreLibLocation') ? openposClientCoreLibLocation : "../openpos-client-libs/dist/openpos-client-core-lib/jumpmind-openpos-client-core-lib-${version}.tgz"
     ]
 }
 
