@@ -21,7 +21,7 @@ def gitCommit = { files ->
     }
 
     exec {
-        commandLine 'git', 'commit', '-m', "releasing ${version}"
+        commandLine 'git', 'commit', '-m', "updating ${version}"
         ignoreExitValue true
     }
     exec {
