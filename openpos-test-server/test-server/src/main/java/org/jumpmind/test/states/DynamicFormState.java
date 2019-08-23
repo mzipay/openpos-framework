@@ -1,5 +1,7 @@
 package org.jumpmind.test.states;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jumpmind.pos.core.flow.*;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.FormField;
@@ -12,8 +14,6 @@ import org.jumpmind.pos.core.ui.messagepart.BaconStripPart;
 import org.jumpmind.pos.core.ui.messagepart.MessagePartConstants;
 import org.jumpmind.pos.server.model.Action;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class DynamicFormState {
     @In(scope = ScopeType.Device)
