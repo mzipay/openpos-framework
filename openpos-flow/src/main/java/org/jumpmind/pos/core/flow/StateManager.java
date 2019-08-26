@@ -326,7 +326,7 @@ public class StateManager implements IStateManager {
     }
 
     protected void refreshDeviceScope() {
-        for (String name : applicationState.getScope().getDeviceScope().keySet()) {
+        for (String name : new HashSet<>(applicationState.getScope().getDeviceScope().keySet())) {
             Object value = applicationState.getScopeValue(ScopeType.Device, name);
             performOutjections(value);
             if (DeviceScope.isDeviceScope(name)) {
@@ -677,7 +677,7 @@ public class StateManager implements IStateManager {
     }
 
     private void clearScopeOnDeviceScopeBeans(ScopeType scopeType) {
-        for (String name : applicationState.getScope().getDeviceScope().keySet()) {
+        for (String name :  new HashSet<>(applicationState.getScope().getDeviceScope().keySet())) {
             Object value = applicationState.getScopeValue(ScopeType.Device, name);
             injector.resetInjections(value, scopeType);
         }
