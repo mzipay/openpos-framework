@@ -64,7 +64,7 @@ task npm_build(type: NpmTask) {
     workingDir = file("${project.projectDir}")
     args = [
         'run',
-        'build-prod'
+        'build'
     ]
 }
 
