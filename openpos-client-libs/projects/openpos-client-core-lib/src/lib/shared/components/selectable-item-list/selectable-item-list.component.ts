@@ -66,6 +66,7 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy, OnInit,
     disabledItems: Map<number, ItemType>;
     itemsToShow: ItemType[];
     itemPageMap: Map<number, ItemType[]> = new Map<number, ItemType[]>();
+    disabledItemPageMap: Map<number, Map<number, ItemType>> = new Map<number, Map<number, ItemType>>();
     scrollToIndex: number;
 
     private _selectedItem: ItemType;
@@ -201,39 +202,60 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy, OnInit,
                 this.configuration.numItemsPerPage, this.configuration.numItemsPerPage * this.currentPage);
             } else if (this.isPageSavedInMap()) {
                 this.itemsToShow = this.itemPageMap.get(this.currentPage);
+                if (this.disabledItemPageMap && this.disabledItemPageMap.get(this.currentPage) !== undefined
+                    && this.disabledItemPageMap.get(this.currentPage) !== null) {
+                    this.disabledItems = this.disabledItemPageMap.get(this.currentPage);
+                }
             } else {
                 this.itemsToShow = Array.from(this.items.values());
                 if (this.itemsToShow.length > 0) {
                     this.itemPageMap.set(this.currentPage, this.itemsToShow);
                 }
+                if (this.disabledItems.size > 0) {
+                    this.disabledItemPageMap.set(this.currentPage, this.disabledItems);
+                }
             }
 
-            if (this.defaultSelect && this.useDefaultSelectIndexToStart && this.configuration.defaultSelectItemIndex) {
-                const index = this.configuration.defaultSelectItemIndex % this.configuration.numItemsPerPage;
-                this.scrollToIndex = index;
-                switch (this.configuration.selectionMode) {
-                    case SelectionMode.Single:
-                        this.selectedItem = this.itemsToShow[index];
-                        this.selectedItemChange.emit(this.configuration.defaultSelectItemIndex);
-                        break;
-                    case SelectionMode.Multiple:
-                        this.selectedItemList.push(this.itemsToShow[index]);
-                        const indexes = this.selectedItemList.map(i => this.selectedItemList.indexOf(i));
-                        this.selectedItemListChange.emit(indexes);
-                        break;
+            if (this.defaultSelect && this.useDefaultSelectIndexToStart
+                && this.configuration.defaultSelectItemIndex !== undefined && this.configuration.defaultSelectItemIndex !== null) {
+                this.scrollToIndex = this.configuration.defaultSelectItemIndex % this.configuration.numItemsPerPage;
+                let originalItemIndex = this.scrollToIndex + ((this.currentPage - 1) * this.configuration.numItemsPerPage);
+                while (this.disabledItems.get(originalItemIndex)) {
+                    this.scrollToIndex++;
+                    originalItemIndex = this.scrollToIndex + ((this.currentPage - 1) * this.configuration.numItemsPerPage);
+                }
+                if (this.itemsToShow.length > this.scrollToIndex && this.scrollToIndex > -1) {
+                    switch (this.configuration.selectionMode) {
+                        case SelectionMode.Single:
+                            this.selectedItem = this.itemsToShow[this.scrollToIndex];
+                            this.scrollToItem(this.scrollToIndex);
+                            this.selectedItemChange.emit(originalItemIndex);
+                            break;
+                        case SelectionMode.Multiple:
+                            this.selectedItemList.push(this.itemsToShow[this.scrollToIndex]);
+                            this.scrollToItem(this.scrollToIndex);
+                            const indexes = [];
+                            this.selectedItemList.forEach(i =>
+                                indexes.push(this.itemsToShow.indexOf(i) + ((this.currentPage - 1) * this.configuration.numItemsPerPage)));
+                            this.selectedItemListChange.emit(indexes);
+                            break;
+                    }
                 }
             } else if (this.defaultSelect && this.useDefaultSelectIndexToStart &&  this.itemsToShow.length === 1) {
                 this.scrollToIndex = 0;
-                switch (this.configuration.selectionMode) {
-                    case SelectionMode.Single:
-                        this.selectedItem = this.itemsToShow[0];
-                        this.selectedItemChange.emit(0);
-                        break;
-                    case SelectionMode.Multiple:
-                        this.selectedItemList.push(this.itemsToShow[0]);
-                        const indexes = this.selectedItemList.map(i => this.selectedItemList.indexOf(i));
-                        this.selectedItemListChange.emit(indexes);
-                        break;
+                const originalItemIndex = this.scrollToIndex + ((this.currentPage - 1) * this.configuration.numItemsPerPage);
+                if (!this.disabledItems.get(originalItemIndex)) {
+                    switch (this.configuration.selectionMode) {
+                        case SelectionMode.Single:
+                            this.selectedItem = this.itemsToShow[0];
+                            this.selectedItemChange.emit(originalItemIndex);
+                            break;
+                        case SelectionMode.Multiple:
+                            this.selectedItemList.push(this.itemsToShow[0]);
+                            const indexes = [originalItemIndex];
+                            this.selectedItemListChange.emit(indexes);
+                            break;
+                    }
                 }
             }
         }
@@ -262,8 +284,9 @@ export class SelectableItemListComponent<ItemType> implements OnDestroy, OnInit,
 
     onItemClick(item: ItemType, event: any) {
         // look for block-selection attribute and don't do the selection if we find it in our path
+        const originalItemIndex = this.itemsToShow.indexOf(item) + ((this.currentPage - 1) * this.configuration.numItemsPerPage);
         if ( event.path.find(element => element.attributes && element.attributes.getNamedItem('block-selection')) ||
-            Array.from(this.disabledItems.values()).includes(item)) {
+            this.disabledItems.get(originalItemIndex)) {
             return;
         }
 
