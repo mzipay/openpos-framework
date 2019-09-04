@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, DoCheck } from '@angular/core';
+import { Component, Input, OnInit, DoCheck, OnChanges } from '@angular/core';
 import { LocaleService } from '../../../core/services/locale.service';
 import { CurrencyPipe } from '@angular/common';
+import { catchError } from 'rxjs/operators';
 
 /**
  * Component used to display a currency text amount in a locale-specific format.
@@ -13,7 +14,9 @@ import { CurrencyPipe } from '@angular/common';
     templateUrl: './currency-text.component.html',
     styleUrls: ['./currency-text.component.scss']
 })
-export class CurrencyTextComponent implements DoCheck {
+export class CurrencyTextComponent implements OnChanges {
+
+    private euRegex = /,\d\d$/;
 
     @Input()
     amountText: string | number;
@@ -27,7 +30,7 @@ export class CurrencyTextComponent implements DoCheck {
 
     constructor(private localeService: LocaleService) {}
 
-    ngDoCheck(): void {
+    ngOnChanges(): void {
         const locale = this.localeService.getLocale();
         const targetSymbol = this.symbol || this.localeService.getConstant('currencySymbol');
 
@@ -37,13 +40,22 @@ export class CurrencyTextComponent implements DoCheck {
             const hasParens = localAmtText.indexOf('(') >= 0;
             // CurrencyPipe does not like text starting with open paren
             localAmtText = this.normalizeNegativeAmount(localAmtText);
-            localAmtText = this.removeCommas(localAmtText);
+
+            if (!this.euRegex.test(localAmtText)) {
+                localAmtText = this.removeCommas(localAmtText);
+            } else {
+                localAmtText = this.formatEuText(localAmtText);
+            }
             let existingSymbolIdx = localAmtText.indexOf(targetSymbol);
             if (existingSymbolIdx < 0) {
                 // No symbol in given text, use currency pipe to insert one
                 const currencyCode = this.localeService.getConstant('currencyCode');
                 const currencyPipe = new CurrencyPipe(locale);
-                localAmtText = currencyPipe.transform(localAmtText, currencyCode, 'symbol-narrow', '1.2', locale);
+                try {
+                    localAmtText = currencyPipe.transform(localAmtText, currencyCode, 'symbol-narrow', '1.2', locale);
+                } catch {
+                    console.log(`Invalid Currency text ${localAmtText}`);
+                }
                 existingSymbolIdx = localAmtText.indexOf(targetSymbol);
             }
 
@@ -73,6 +85,11 @@ export class CurrencyTextComponent implements DoCheck {
 
     protected removeCommas(text: string): string {
         return text.replace(/,/g, '');
+    }
+
+    protected formatEuText(text: string): string {
+        text = text.replace(/,/g, '.');
+        return text.replace(/\s/g, '');
     }
 
     protected normalizeNegativeAmount(text: string): string {

@@ -13,14 +13,13 @@ import { AppInjector } from './app-injector';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { StartupComponent } from './startup/startup.component';
-import { PersonalizationService } from './services/personalization.service';
+import { PersonalizationService } from './personalization/personalization.service';
 import { ConfigurationService } from './services/configuration.service';
 import { DialogService } from './services/dialog.service';
 import { ErrorHandlerService } from './services/errorhandler.service';
 import { StompRService } from '@stomp/ng2-stompjs';
 import { SubscribeToSessionTask } from './startup/subscribe-to-session-task';
 import { Router } from '@angular/router';
-import { Logger } from './services/logger.service';
 import { StartupFailedComponent } from './startup/startup-failed.component';
 import { MatDialog } from '@angular/material';
 import { FinalStartupTask } from './startup/final-startup-task';
@@ -30,9 +29,7 @@ import { TrainingOverlayService } from './services/training-overlay.service';
 import { KeyPressProvider } from '../shared/providers/keypress.provider';
 import { fromEvent, Observable } from 'rxjs';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
-import { PersonalizationComponent } from './components/personalization/personalization.component';
-import { StatusBarStatusControlComponent } from '../shared/components/status-bar-status-control/status-bar-status-control.component';
-import { STATUS_BAR_STATUS_CONTROL_COMPONENT } from '../shared/components/status-bar/status-bar.component';
+import { PersonalizationComponent } from './personalization/personalization.component';
 import { ToastService } from './services/toast.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -52,6 +49,11 @@ import locale_enCA from '@angular/common/locales/en-CA';
 import locale_frCA from '@angular/common/locales/fr-CA';
 import { LocationService, PROVIDERS } from './services/location.service';
 import { LocationProviderDefault } from './location-providers/location-provider-default';
+import { ConsoleIntercepter, LOGGERS } from './logging/console-interceptor.service';
+import { ServerLogger } from './logging/server-logger.service';
+import { ElectronLogger } from './logging/electron-logger';
+import { CLIENTCONTEXT } from './client-context/client-context-provider.interface';
+import { TimeZoneContext } from './client-context/time-zone-context';
 
 registerLocaleData(locale_enCA, 'en-CA');
 registerLocaleData(locale_frCA, 'fr-CA');
@@ -63,7 +65,6 @@ registerLocaleData(locale_frCA, 'fr-CA');
         StartupComponent,
         StartupFailedComponent,
         DialogContentComponent,
-        StatusBarStatusControlComponent,
         SplashScreenComponent
     ],
     declarations: [
@@ -72,7 +73,6 @@ registerLocaleData(locale_frCA, 'fr-CA');
         PersonalizationComponent,
         StartupComponent,
         StartupFailedComponent,
-        StatusBarStatusControlComponent,
         SplashScreenComponent
     ],
     imports: [
@@ -96,7 +96,7 @@ registerLocaleData(locale_frCA, 'fr-CA');
         StompRService,
         ScannerService,
         { provide: STARTUP_TASKS, useClass: PersonalizationStartupTask, multi: true, deps: [PersonalizationService, MatDialog]},
-        { provide: STARTUP_TASKS, useClass: SubscribeToSessionTask, multi: true, deps: [SessionService, Router, Logger]},
+        { provide: STARTUP_TASKS, useClass: SubscribeToSessionTask, multi: true, deps: [SessionService, Router]},
         { provide: STARTUP_TASKS, useClass: DialogServiceStartupTask, multi: true, deps: [DialogService]},
         { provide: STARTUP_TASKS, useClass: FinalStartupTask, multi: true, deps: [SessionService]},
         { provide: STARTUP_TASKS, useClass: PlatformReadyStartupTask, multi: true },
@@ -115,13 +115,16 @@ registerLocaleData(locale_frCA, 'fr-CA');
         TrainingOverlayService,
         ConfigurationService,
         KeyPressProvider,
-        { provide: STATUS_BAR_STATUS_CONTROL_COMPONENT, useValue: StatusBarStatusControlComponent }
+        { provide: LOGGERS, useExisting: ServerLogger, multi: true, deps: [HttpClient, PersonalizationService, ConsoleIntercepter] },
+        { provide: LOGGERS, useExisting: ElectronLogger, multi: true },
+        { provide: CLIENTCONTEXT, useClass: TimeZoneContext, multi: true }
     ]
 })
 export class CoreModule {
 
     constructor(@Optional() @SkipSelf() parentModule: CoreModule,
                 private injector: Injector,
+                logger: ConsoleIntercepter,
                 toastService: ToastService,
                 keyProvider: KeyPressProvider) {
         throwIfAlreadyLoaded(parentModule, 'CoreModule');

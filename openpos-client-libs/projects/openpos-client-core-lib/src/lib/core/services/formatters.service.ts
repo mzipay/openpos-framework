@@ -1,4 +1,3 @@
-import { Logger } from './logger.service';
 import { Injectable } from '@angular/core';
 import { LocaleService } from './locale.service';
 import { IFormatter } from '../../shared/formatters/formatter.interface';
@@ -18,6 +17,7 @@ import { WordTextFormatter } from '../../shared/formatters/word-text.formatter';
 import { DateTimeFormatter } from '../../shared/formatters/datetime.formatter';
 import { TimeFormatter, TimeFormat } from '../../shared/formatters/time.formatter';
 import { DoNothingFormatter } from '../../shared/formatters/do-nothing.formatter';
+import { NonNumericFormatter } from '../../shared/formatters/non-numeric.formatter';
 
 
 @Injectable({
@@ -26,7 +26,7 @@ import { DoNothingFormatter } from '../../shared/formatters/do-nothing.formatter
 export class FormattersService {
     private formatters = new Map<string, Map<string, IFormatter>>();
 
-    constructor(private log: Logger, private localeService: LocaleService) {
+    constructor(private localeService: LocaleService) {
         const USFormatters = new Map<string, IFormatter>();
         const defaultPhoneFormatter = new PhoneUSFormatter();
 
@@ -55,6 +55,7 @@ export class FormattersService {
         // Default formatters if no locale specific
         const numericFormatter = new NumericFormatter();
         NOLOCALEFormatters.set('numeric', numericFormatter);
+        NOLOCALEFormatters.set('nonnumerictext', new NonNumericFormatter());
         NOLOCALEFormatters.set('numerictext', numericFormatter);
         NOLOCALEFormatters.set('giftcode', new GiftCodeFormatter());
         // Use USD formatter as default
@@ -92,7 +93,7 @@ export class FormattersService {
         }
 
         if ( name ) {
-            this.log.debug(`No formatter found for locale '${locale}' formatter name '${name}'. Using a 'Do Nothing' formatter`);
+            console.debug(`No formatter found for locale '${locale}' formatter name '${name}'. Using a 'Do Nothing' formatter`);
         }
         return new DoNothingFormatter();
     }

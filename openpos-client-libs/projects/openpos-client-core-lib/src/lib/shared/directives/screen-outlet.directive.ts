@@ -7,13 +7,10 @@ import {
     Output,
     EventEmitter,
     Input,
-    Renderer2,
-    ElementRef
+    Renderer2
 } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Subscription } from 'rxjs';
-import { AbstractTemplate } from '../../core/components/abstract-template';
-import { Logger } from '../../core/services/logger.service';
 import { ScreenService } from '../../core/services/screen.service';
 import { SessionService } from '../../core/services/session.service';
 import { ConfigurationService } from '../../core/services/configuration.service';
@@ -22,7 +19,7 @@ import { MessageTypes } from '../../core/messages/message-types';
 import { LifeCycleMessage } from '../../core/messages/life-cycle-message';
 import { LifeCycleEvents } from '../../core/messages/life-cycle-events.enum';
 import { LifeCycleTypeGuards } from '../../core/life-cycle-interfaces/lifecycle-type-guards';
-import { IScreen } from '../components/dynamic-screen/screen.interface';
+import { ScreenCreatorService } from '../../core/services/screen-creator.service';
 import { FocusService } from '../../core/focus/focus.service';
 
 // tslint:disable-next-line:directive-selector
@@ -41,12 +38,9 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     public currentTheme: string;
 
-    private installedScreen: IScreen;
-    private installedTemplate: AbstractTemplate<any>;
     private subscriptions = new Subscription();
 
     constructor(
-        private log: Logger,
         public screenService: ScreenService,
         private viewContainerRef: ViewContainerRef,
         public session: SessionService,
@@ -54,11 +48,12 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         public overlayContainer: OverlayContainer,
         private dialogService: DialogService,
         private focusService: FocusService,
+        private screenCreator: ScreenCreatorService,
         public renderer: Renderer2) {
     }
 
     ngOnInit(): void {
-        this.updateTemplateAndScreen();
+        this.updateScreen();
         this.subscriptions.add(this.session.getMessages('Screen').subscribe((message) => this.handle(message)));
         this.subscriptions.add(this.session.getMessages('Connected').subscribe((message) => this.handle(new SplashScreen())));
         this.subscriptions.add(this.session.getMessages(
@@ -83,7 +78,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
 
     handle(message: any) {
         if (message.screenType !== 'NoOp') {
-            this.updateTemplateAndScreen(message);
+            this.updateScreen(message);
         }
     }
 
@@ -102,7 +97,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         }
     }
 
-    protected async updateTemplateAndScreen(screen?: any) {
+    protected async updateScreen(screen?: any) {
         if (!screen) {
             screen = new SplashScreen();
         }
@@ -127,12 +122,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             this.logSwitchScreens(screen);
 
             this.screenName = screen.name;
-            let screenToCreate = this.screenTypeName = screen.screenType;
-            // If we have a template we'll create that instead of the screen and
-            // later we'll install the screen in the temlate
-            if (screen.template) {
-                screenToCreate = this.templateTypeName = screen.template.type;
-            }
+            this.screenTypeName = screen.screenType;
 
             this.viewContainerRef.clear();
             if (!!this.componentRef) {
@@ -140,33 +130,22 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             }
 
             this.focusService.destroy();
-
             this.componentRef = null;
-            this.installedScreen = null;
-            this.installedTemplate = null;
 
             // Create our screen component
-            const componentFactory = this.screenService.resolveScreen(screenToCreate, this.currentTheme);
-            this.componentRef = this.viewContainerRef.createComponent(componentFactory,
-                this.viewContainerRef.length, this.viewContainerRef.parentInjector);
+            const componentFactory = this.screenService.resolveScreen(this.screenTypeName, this.currentTheme);
+            this.componentRef = this.screenCreator.createScreenComponent(componentFactory, this.viewContainerRef );
             this.updateTheme(this.currentTheme);
-
-            // If we accept an inner screen meaning we are a template, install the screen
-            if (this.componentRef.instance.installScreen) {
-                this.installedTemplate = this.componentRef.instance as AbstractTemplate<any>;
-                this.installedScreen = this.installedTemplate.installScreen(this.screenService.resolveScreen(
-                    this.screenTypeName, this.currentTheme)) as IScreen;
-            }
 
             trap = true;
         }
 
-        if (this.componentRef.instance.show) {
-            this.componentRef.instance.show(screen);
+        if ( this.componentRef.instance.initialize ) {
+            this.componentRef.instance.initialize( this.componentRef.injector );
         }
 
-        if (this.installedScreen) {
-            this.installedScreen.show(screen, this.installedTemplate);
+        if (this.componentRef.instance.show) {
+            this.componentRef.instance.show(screen);
         }
 
         if (trap) {
@@ -185,7 +164,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
     }
 
     protected updateTheme(theme: string) {
-        this.log.info('updating theme to ' + theme);
+        console.info('updating theme to ' + theme);
         this.overlayContainer.getContainerElement().classList.remove(this.currentTheme);
         this.overlayContainer.getContainerElement().classList.remove('default-theme');
         this.overlayContainer.getContainerElement().classList.add(theme);
@@ -219,7 +198,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             msg += `)`;
         }
 
-        this.log.info(msg);
+        console.info(msg);
     }
 
     protected updateClasses(screen: any) {

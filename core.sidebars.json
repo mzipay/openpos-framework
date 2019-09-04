@@ -21,7 +21,23 @@
     "Client Startup": [
         "startup"
     ],
+    "Actions": [
+        "actions"
+    ],
     "Client Services": [
         "focus"
+    ],
+    "Personalization": [
+        "personalization"
+    ],
+    "Icons": [
+        "available-icons"
+    ],
+    "Logging": [
+        "logging",
+        "incidents"
+    ],
+    "Client Context": [
+        "client-context"
     ]
 }

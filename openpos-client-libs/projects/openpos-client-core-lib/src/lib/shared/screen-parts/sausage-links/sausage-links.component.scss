@@ -1,9 +1,15 @@
 .sausage-link {
     text-align: left;
+    height: 48px;
 }
 
 :host {
     display: flex;
     flex-direction: column;
     align-items: start;
+    padding: 8px;
+}
+
+.button-content {
+    width: 100%;
 }

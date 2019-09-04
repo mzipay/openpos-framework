@@ -11,7 +11,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +22,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.content.ContentProviderService;
+import org.jumpmind.pos.core.error.IErrorHandler;
 import org.jumpmind.pos.core.flow.ApplicationState;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.jumpmind.pos.core.flow.IMessageInterceptor;
@@ -32,13 +32,14 @@ import org.jumpmind.pos.core.flow.SessionTimer;
 import org.jumpmind.pos.core.model.Form;
 import org.jumpmind.pos.core.model.IDynamicListField;
 import org.jumpmind.pos.core.model.IFormElement;
-import org.jumpmind.pos.core.screen.IHasForm;
-import org.jumpmind.pos.core.screen.Toast;
+import org.jumpmind.pos.core.ui.IHasForm;
+import org.jumpmind.pos.core.ui.Toast;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.core.util.LogFormatter;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.server.service.IActionListener;
 import org.jumpmind.pos.server.service.IMessageService;
+import org.jumpmind.pos.util.DefaultObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class ScreenService implements IScreenService, IActionListener {
     Logger logger = LoggerFactory.getLogger(getClass());
     Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
 
-    ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = DefaultObjectMapper.defaultObjectMapper();
 
     @Autowired
     IStateManagerContainer stateManagerContainer;
@@ -82,6 +83,9 @@ public class ScreenService implements IScreenService, IActionListener {
 
     @Autowired
     ApplicationContext applicationContext;
+
+    @Autowired
+    IErrorHandler errorHandler;
 
     @PostConstruct
     public void init() {
@@ -210,9 +214,13 @@ public class ScreenService implements IScreenService, IActionListener {
                         logger.debug("Posting action {}", action);
                         stateManager.doAction(action);
                     } catch (Throwable ex) {
-                        logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
-                        messageService.sendMessage(appId, deviceId, Toast.createWarningToast(
-                                "The application received an unexpected error. Please report to the appropriate technical personnel"));
+                        if( errorHandler != null){
+                            errorHandler.handleError(stateManager, ex);
+                        } else {
+                            logger.error(String.format("Unexpected exception while processing action from %s: %s", deviceId, action), ex);
+                            messageService.sendMessage(appId, deviceId, Toast.createWarningToast(
+                                    "The application received an unexpected error. Please report to the appropriate technical personnel"));
+                        }
                     }
                 }
             } finally {
@@ -358,7 +366,7 @@ public class ScreenService implements IScreenService, IActionListener {
                     action.setData(form);
                 }
             } catch (IllegalArgumentException ex) {
-                logger.error(ex.getMessage());
+                logger.error(ex.getMessage(), ex);
                 // We should not assume a form will always be returned by
                 // the DynamicFormScreen.
                 // The barcode scanner can also return a value.

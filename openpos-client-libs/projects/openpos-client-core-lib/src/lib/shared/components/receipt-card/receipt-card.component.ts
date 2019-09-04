@@ -1,6 +1,7 @@
 import { Component, Input, HostListener } from '@angular/core';
-import { SessionService } from '../../../core/services/session.service';
-import { IActionItem } from '../../../core/interfaces/action-item.interface';
+import { IActionItem } from '../../../core/actions/action-item.interface';
+import { ActionService } from '../../../core/actions/action.service';
+import { ITransactionReceipt } from './transaction-receipt.interface';
 
 @Component({
   selector: 'app-receipt-card',
@@ -10,14 +11,14 @@ import { IActionItem } from '../../../core/interfaces/action-item.interface';
 export class ReceiptCardComponent {
 
   @Input()
-  public receipt: any;
+  public receipt: ITransactionReceipt;
 
   @Input()
   public removeReceiptAction: IActionItem;
 
   public hover = false;
 
-  constructor(public session: SessionService) {
+  constructor(public actionService: ActionService) {
   }
 
   @HostListener('mouseenter')

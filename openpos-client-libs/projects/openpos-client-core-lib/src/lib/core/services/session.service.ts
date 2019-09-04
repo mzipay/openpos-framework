@@ -1,34 +1,29 @@
 import { VERSION } from './../../version';
 import { ILoading } from './../interfaces/loading.interface';
-import { Logger } from './logger.service';
 
 import { Configuration } from './../../configuration/configuration';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
-import { PersonalizationService } from './personalization.service';
+import { PersonalizationService } from '../personalization/personalization.service';
 
 import { Observable, Subscription, BehaviorSubject, Subject, merge } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
-import { Injectable, NgZone, } from '@angular/core';
+import { Injectable, NgZone, Inject, } from '@angular/core';
 import { StompState, StompRService } from '@stomp/ng2-stompjs';
 import { MatDialog } from '@angular/material';
-import { ActionIntercepter } from '../action-intercepter';
 // Importing the ../components barrel causes a circular reference since dynamic-screen references back to here,
 // so we will import those files directly
 import { LoaderState } from '../../shared/components/loader/loader-state';
-import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
 import { IDeviceResponse } from '../oldplugins/device-response.interface';
-import { InAppBrowserPlugin } from '../oldplugins/in-app-browser.plugin';
-import { IActionItem } from '../interfaces/action-item.interface';
-import { IUrlMenuItem } from '../interfaces/url-menu-item.interface';
-import { IConfirmationDialog } from '../interfaces/confirmation-dialog.interface';
-import { OldPluginService } from './old-plugin.service';
-import { AppInjector } from '../app-injector';
 import { HttpClient } from '@angular/common/http';
 import { PingParams } from '../interfaces/ping-params.interface';
 import { PingResult } from '../interfaces/ping-result.interface';
-import { PersonalizationResponse } from '../interfaces/personalization-response.interface';
+import { PersonalizationResponse } from '../personalization/personalization-response.interface';
 import { ElectronService } from 'ngx-electron';
+import { OpenposMessage } from '../messages/message';
+import { MessageTypes } from '../messages/message-types';
+import { ActionMessage } from '../messages/action-message';
+import { CLIENTCONTEXT, IClientContext } from '../client-context/client-context-provider.interface';
 
 declare var window: any;
 export class QueueLoadingMessage implements ILoading {
@@ -70,20 +65,11 @@ export class SessionService implements IMessageHandler<any> {
 
     public state: Observable<string>;
 
-    private appId: string;
-
     private subscription: Subscription;
 
     private authToken: string;
 
     private stompDebug = false;
-
-    private actionPayloads: Map<string, () => void> = new Map<string, () => void>();
-
-    private actionIntercepters: Map<string, ActionIntercepter> = new Map();
-
-    private waitingForResponse = false;
-    private actionDisablers = new Map<string, BehaviorSubject<boolean>>();
 
     public inBackground = false;
 
@@ -102,13 +88,13 @@ export class SessionService implements IMessageHandler<any> {
     private deletedLaunchFlg = false;
 
     constructor(
-        private log: Logger,
         private stompService: StompRService,
         public dialogService: MatDialog,
         public zone: NgZone,
         protected personalization: PersonalizationService,
         private http: HttpClient,
-        private electron: ElectronService
+        private electron: ElectronService,
+        @Inject(CLIENTCONTEXT) private clientContexts: Array<IClientContext>
     ) {
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
@@ -118,7 +104,11 @@ export class SessionService implements IMessageHandler<any> {
         this.registerMessageHandler(this);
     }
 
-    public sendMessage(message: any) {
+    public sendMessage<T extends OpenposMessage>(message: T) {
+        if ( message.type === MessageTypes.ACTION && message instanceof ActionMessage ) {
+            const actionMessage = message as ActionMessage;
+            this.publish(actionMessage.actionName, 'Screen', actionMessage.payload);
+        }
         this.sessionMessages$.next(message);
     }
 
@@ -141,7 +131,7 @@ export class SessionService implements IMessageHandler<any> {
     }
 
     private buildTopicName(): string {
-        return '/topic/app/' + this.appId + '/node/' + this.personalization.getDeviceId();
+        return '/topic/app/' + this.getAppId() + '/node/' + this.personalization.getDeviceId();
     }
 
     public setAuthToken(token: string) {
@@ -153,11 +143,11 @@ export class SessionService implements IMessageHandler<any> {
     }
 
     public setAppId(value: string) {
-        this.appId = value;
+        this.personalization.setAppId(value);
     }
 
     public getAppId(): string {
-        return this.appId;
+        return this.personalization.getAppId();
     }
 
     public connected(): boolean {
@@ -179,14 +169,14 @@ export class SessionService implements IMessageHandler<any> {
     private deleteLaunchingFlg() {
         const fs = this.electron.isElectronApp ? this.electron.remote.require('fs') : window.fs;
         const launchingFile = 'launching.flg';
-        this.log.info('node.js fs exists? ' + fs);
-        this.log.info('launching.flg file exists? ' + (fs && fs.existsSync(launchingFile)));
+        console.info('node.js fs exists? ' + fs);
+        console.info('launching.flg file exists? ' + (fs && fs.existsSync(launchingFile)));
         if (fs && fs.existsSync(launchingFile)) {
             fs.unlink(launchingFile, (err) => {
                 if (err) {
-                    this.log.info('unable to remove ' + launchingFile);
+                    console.info('unable to remove ' + launchingFile);
                 } else {
-                    this.log.info(launchingFile + ' was removed');
+                    console.info(launchingFile + ' was removed');
                 }
             });
         }
@@ -196,12 +186,18 @@ export class SessionService implements IMessageHandler<any> {
         const headers = {
             authToken: this.authToken,
             compatibilityVersion: Configuration.compatibilityVersion,
-            appId: this.appId,
+            appId: this.getAppId(),
             deviceId: this.personalization.getDeviceId(),
             queryParams: JSON.stringify(this.queryParams),
             version: JSON.stringify(VERSION)
         };
         this.appendPersonalizationProperties(headers);
+        this.clientContexts.forEach( context => {
+            const contextsToAdd = context.getContextProperties();
+            contextsToAdd.forEach( (value, key ) => {
+                headers[key] = value;
+            });
+        });
         return headers;
     }
 
@@ -211,7 +207,7 @@ export class SessionService implements IMessageHandler<any> {
         }
 
         const url = this.personalization.getWebsocketUrl();
-        this.log.info('creating new stomp service at: ' + url);
+        console.info('creating new stomp service at: ' + url);
 
         this.stompService.config = {
             url,
@@ -226,14 +222,14 @@ export class SessionService implements IMessageHandler<any> {
 
         const currentTopic = this.buildTopicName();
 
-        this.log.info('subscribing to server at: ' + currentTopic);
+        console.info('subscribing to server at: ' + currentTopic);
 
         const messages: Observable<Message> = this.stompService.subscribe(currentTopic);
 
         this.subscription = messages.subscribe((message: Message) => {
-            this.log.info('Got STOMP message');
+            console.info('Got STOMP message');
             if (this.inBackground) {
-                this.log.info('Leaving background');
+                console.info('Leaving background');
                 this.inBackground = false;
             }
             if (this.isMessageVersionValid(message)) {
@@ -241,7 +237,7 @@ export class SessionService implements IMessageHandler<any> {
                 this.logStompJson(json);
                 this.stompJsonMessages$.next(json);
             } else {
-                this.log.info(`Showing incompatible version screen`);
+                console.info(`Showing incompatible version screen`);
                 this.stompJsonMessages$.next(this.buildIncompatibleVersionScreen());
             }
         });
@@ -251,16 +247,16 @@ export class SessionService implements IMessageHandler<any> {
         if (!this.stompStateSubscription) {
             this.stompStateSubscription = this.state.subscribe(stompState => {
                 if (stompState === 'CONNECTED') {
-                    this.log.info('STOMP connecting');
+                    console.info('STOMP connecting');
                     if (!this.onServerConnect.value) {
                         this.onServerConnect.next(true);
                     }
                     this.sendMessage(new ConnectedMessage());
                     this.cancelLoading();
                 } else if (stompState === 'DISCONNECTING') {
-                    this.log.info('STOMP disconnecting');
+                    console.info('STOMP disconnecting');
                 } else if (stompState === 'CLOSED') {
-                    this.log.info('STOMP closed');
+                    console.info('STOMP closed');
                     this.sendDisconnected();
                 }
             });
@@ -285,11 +281,11 @@ export class SessionService implements IMessageHandler<any> {
 
     private logStompJson(json: any) {
         if (json && json.sequenceNumber && json.screenType) {
-            this.log.info(`[logStompJson] type: ${json.type}, screenType: ${json.screenType}, seqNo: ${json.sequenceNumber}`);
+            console.info(`[logStompJson] type: ${json.type}, screenType: ${json.screenType}, seqNo: ${json.sequenceNumber}`);
         } else if (json) {
-            this.log.info(`[logStompJson] type: ${json.type}`);
+            console.info(`[logStompJson] type: ${json.type}`);
         } else {
-            this.log.info(`[logStompJson] ${json}`);
+            console.info(`[logStompJson] ${json}`);
         }
     }
 
@@ -307,7 +303,7 @@ export class SessionService implements IMessageHandler<any> {
     private isMessageVersionValid(message: Message): boolean {
         const valid = message.headers.compatibilityVersion === Configuration.compatibilityVersion;
         if (!valid) {
-            this.log.info(`INCOMPATIBLE VERSIONS. Client compatibilityVersion: ${Configuration.compatibilityVersion}, ` +
+            console.info(`INCOMPATIBLE VERSIONS. Client compatibilityVersion: ${Configuration.compatibilityVersion}, ` +
                 `server compatibilityVersion: ${message.headers.compatibilityVersion}`);
         }
         return valid;
@@ -330,13 +326,13 @@ export class SessionService implements IMessageHandler<any> {
             url = `${this.personalization.getServerBaseURL()}/ping`;
         }
 
-        this.log.info('testing url: ' + url);
+        console.info('testing url: ' + url);
 
         let pingError: any = null;
         try {
             const httpResult = await this.http.get(url, {}).toPromise();
             if (httpResult) {
-                this.log.info('successful validation of ' + url);
+                console.info('successful validation of ' + url);
                 return { success: true };
             } else {
                 pingError = { message: '?' };
@@ -346,7 +342,7 @@ export class SessionService implements IMessageHandler<any> {
         }
 
         if (pingError) {
-            this.log.info('bad validation of ' + url + ' with an error message of :' + pingError.message);
+            console.info('bad validation of ' + url + ' with an error message of :' + pingError.message);
             return { success: false, message: pingError.message };
         }
     }
@@ -368,14 +364,14 @@ export class SessionService implements IMessageHandler<any> {
             url = `${this.personalization.getServerBaseURL()}/personalize`;
         }
 
-        this.log.info('Requesting Personalization with url: ' + url);
+        console.info('Requesting Personalization with url: ' + url);
 
         let personalizeError: any = null;
         try {
             const httpResult = await this.http.get<PersonalizationResponse>(url, {}).toPromise();
             if (httpResult) {
                 httpResult.success = true;
-                this.log.info('Successful Personalization with url: ' + url);
+                console.info('Successful Personalization with url: ' + url);
                 return httpResult;
             } else {
                 personalizeError = { message: '?' };
@@ -385,7 +381,7 @@ export class SessionService implements IMessageHandler<any> {
         }
 
         if (personalizeError) {
-            this.log.info('bad validation of ' + url + ' with an error message of :' + personalizeError.message);
+            console.info('bad validation of ' + url + ' with an error message of :' + personalizeError.message);
             return { success: false, message: personalizeError.message };
         }
     }
@@ -395,149 +391,32 @@ export class SessionService implements IMessageHandler<any> {
             return;
         }
 
-        this.log.info('unsubscribing from stomp service ...');
+        console.info('unsubscribing from stomp service ...');
 
         // This will internally unsubscribe from Stomp Broker
         // There are two subscriptions - one created explicitly, the other created in the template by use of 'async'
         this.subscription.unsubscribe();
         this.subscription = null;
 
-        this.log.info('disconnecting from stomp service');
+        console.info('disconnecting from stomp service');
         this.stompService.disconnect();
     }
 
     public onDeviceResponse(deviceResponse: IDeviceResponse) {
         const sendResponseBackToServer = () => {
             // tslint:disable-next-line:max-line-length
-            this.log.info(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
+            console.info(`>>> Publish deviceResponse requestId: "${deviceResponse.requestId}" deviceId: ${deviceResponse.deviceId} type: ${deviceResponse.type}`);
             this.stompService.publish(
-                `/app/device/app/${this.appId}/node/${this.personalization.getDeviceId()}/device/${deviceResponse.deviceId}`,
+                `/app/device/app/${this.getAppId()}/node/${this.personalization.getDeviceId()}/device/${deviceResponse.deviceId}`,
                 JSON.stringify(deviceResponse));
         };
 
-        // see if we have any intercepters registered for the type of this deviceResponse
-        // otherwise just send the response
-        if (this.actionIntercepters.has(deviceResponse.type)) {
-            this.actionIntercepters.get(deviceResponse.type).intercept(deviceResponse, sendResponseBackToServer);
-        } else {
-            sendResponseBackToServer();
-        }
-    }
-
-    public async onValueChange(action: string, payload?: any) {
-        this.onAction(action, payload, null, true);
-    }
-
-    public async onAction(action: string | IActionItem,
-                          payload?: any, confirm?: string | IConfirmationDialog, isValueChangedAction?: boolean) {
-        if (action) {
-            let response: any = null;
-            let actionString = '';
-            // we need to figure out if we are a menuItem or just a string
-            if (action.hasOwnProperty('action')) {
-                const menuItem = action as IActionItem;
-                confirm = menuItem.confirmationDialog;
-                actionString = menuItem.action;
-                // check to see if we are an IURLMenuItem
-                if (menuItem.hasOwnProperty('url')) {
-                    const urlMenuItem = menuItem as IUrlMenuItem;
-                    // tslint:disable-next-line:max-line-length
-                    this.log.info(`About to open: ${urlMenuItem.url} in target mode: ${urlMenuItem.targetMode}, with options: ${urlMenuItem.options}`);
-                    const pluginService = AppInjector.Instance.get(OldPluginService);
-                    // Use inAppBrowserPlugin when available since it tracks whether or not the browser is active.
-                    pluginService.getPlugin('InAppBrowser').then(plugin => {
-                        const inAppPlugin = plugin as InAppBrowserPlugin;
-                        inAppPlugin.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
-                    }).catch(error => {
-                        this.log.info(`InAppBrowser not found, using window.open. Reason: ${error}`);
-                        window.open(urlMenuItem.url, urlMenuItem.targetMode, urlMenuItem.options);
-                    });
-                    if (!actionString || 0 === actionString.length) {
-                        return;
-                    }
-                }
-            } else {
-                actionString = action as string;
-            }
-
-            this.log.info(`action is: ${actionString}`);
-
-            if (confirm) {
-                this.log.info('Confirming action');
-                let confirmD: IConfirmationDialog;
-                if (confirm.hasOwnProperty('message')) {
-                    confirmD = confirm as IConfirmationDialog;
-                } else {
-                    confirmD = {
-                        title: '', message: confirm as string, cancelButtonName: 'No',
-                        confirmButtonName: 'Yes', cancelAction: null, confirmAction: null
-                    };
-                }
-                const dialogRef = this.dialogService.open(ConfirmationDialogComponent, { disableClose: true });
-                dialogRef.componentInstance.confirmDialog = confirmD;
-                const result = await dialogRef.afterClosed().toPromise();
-
-                // if we didn't confirm return and don't send the action to the server
-                if (!result) {
-                    this.log.info('Canceling action');
-                    return;
-                }
-            }
-
-            let processAction = true;
-
-            // First we will use the payload passed into this function then
-            // Check if we have registered action payload
-            // Otherwise we will send whatever is in this.response
-            if (payload != null) {
-                response = payload;
-            } else if (this.actionPayloads.has(actionString)) {
-                this.log.info(`Checking registered action payload for ${actionString}`);
-                try {
-                    response = this.actionPayloads.get(actionString)();
-                } catch (e) {
-                    this.log.info(`invalid action payload for ${actionString}: ` + e);
-                    processAction = false;
-                }
-            }
-
-            if (processAction && !this.waitingForResponse) {
-                const sendToServer = () => {
-                    this.log.info(`>>> Post action "${actionString}"`);
-                    if (!isValueChangedAction) {
-                        this.queueLoading();
-                    }
-                    if (!this.publish(actionString, 'Screen', response)) {
-                        this.cancelLoading();
-                    }
-                };
-
-                // see if we have any intercepters registered
-                // otherwise just send the action
-                if (this.actionIntercepters.has(actionString)) {
-                    const interceptor = this.actionIntercepters.get(actionString);
-                    interceptor.intercept(response, sendToServer);
-                    if (interceptor.options && interceptor.options.showLoadingAfterIntercept) {
-                        if (!isValueChangedAction) {
-                            this.queueLoading();
-                        }
-                    }
-                } else {
-                    sendToServer();
-                }
-            } else {
-                this.log.info(
-                    `Not sending action: ${actionString}.  processAction: ${processAction}, waitingForResponse:${this.waitingForResponse}`);
-            }
-
-        } else {
-            this.log.info(`received an invalid action: ${action}`);
-        }
+        sendResponseBackToServer();
     }
 
     public keepAlive() {
         if (this.subscription) {
-            this.log.info(`>>> KeepAlive`);
+            console.info(`>>> KeepAlive`);
             this.publish('KeepAlive', 'KeepAlive');
         }
     }
@@ -558,71 +437,24 @@ export class SessionService implements IMessageHandler<any> {
         // Block any actions if we are backgrounded and running in cordova
         // (unless we are coming back out of the background)
         if (this.inBackground && actionString !== 'Refresh') {
-            this.log.info(`Blocked action '${actionString}' because app is in background.`);
+            console.info(`Blocked action '${actionString}' because app is in background.`);
             return false;
         }
         const deviceId = this.personalization.getDeviceId();
-        if (this.appId && deviceId) {
-            this.log.info(`Publishing action '${actionString}' of type '${type}' to server...`);
-            this.stompService.publish('/app/action/app/' + this.appId + '/node/' + deviceId,
+        if (this.getAppId() && deviceId) {
+            console.info(`Publishing action '${actionString}' of type '${type}' to server...`);
+            this.stompService.publish('/app/action/app/' + this.getAppId() + '/node/' + deviceId,
                 JSON.stringify({ name: actionString, type, data: payload }));
             return true;
         } else {
-            this.log.info(`Can't publish action '${actionString}' of type '${type}' ` +
-                `due to undefined App ID (${this.appId}) or Device ID (${deviceId})`);
+            console.info(`Can't publish action '${actionString}' of type '${type}' ` +
+                `due to undefined App ID (${this.getAppId()}) or Device ID (${deviceId})`);
             return false;
         }
     }
 
-    private queueLoading() {
-        this.waitingForResponse = true;
-        this.sendMessage(new QueueLoadingMessage(LoaderState.LOADING_TITLE));
-    }
-
     public cancelLoading() {
-        this.waitingForResponse = false;
         this.sendMessage(new CancelLoadingMessage());
-    }
-
-    public registerActionPayload(actionName: string, actionValue: () => void) {
-        this.actionPayloads.set(actionName, actionValue);
-    }
-
-    public unregisterActionPayloads() {
-        this.actionPayloads.clear();
-    }
-
-    public unregisterActionPayload(actionName: string) {
-        this.actionPayloads.delete(actionName);
-    }
-
-    public registerActionIntercepter(actionName: string, actionIntercepter: ActionIntercepter) {
-        this.actionIntercepters.set(actionName, actionIntercepter);
-    }
-
-    public unregisterActionIntercepters() {
-        this.actionIntercepters.clear();
-    }
-
-    public unregisterActionIntercepter(actionName: string) {
-        this.actionIntercepters.delete(actionName);
-    }
-
-
-    public registerActionDisabler(action: string, disabler: Observable<boolean>): Subscription {
-        if (!this.actionDisablers.has(action)) {
-            this.actionDisablers.set(action, new BehaviorSubject<boolean>(false));
-        }
-
-        return disabler.subscribe(value => this.actionDisablers.get(action).next(value));
-    }
-
-    public actionIsDisabled(action: string): Observable<boolean> {
-        if (!this.actionDisablers.has(action)) {
-            this.actionDisablers.set(action, new BehaviorSubject<boolean>(false));
-        }
-
-        return this.actionDisablers.get(action);
     }
 
     public getCurrencyDenomination(): string {

@@ -5,9 +5,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.util.Optional;
 import java.util.Properties;
 
-import org.jumpmind.pos.core.screen.DialogScreen;
 import org.jumpmind.pos.core.ui.message.DialogUIMessage;
-import org.jumpmind.pos.core.screen.ActionItem;
+import org.jumpmind.pos.core.ui.ActionItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,16 +33,21 @@ public abstract class AbstractLegacyDialogUIMessageTranslator extends AbstractLe
         ILegacyBeanSpec spec = this.getLegacyPOSBeanService().getLegacyBeanSpec(this.getLegacyScreen(), assignmentSpec.getBeanSpecName());
         ILegacyDialogBeanModel dialogModel = this.legacyPOSBeanService.getLegacyDialogBeanModel(this.getLegacyScreen());
         if (dialogModel != null) {
+            logger.info("Dialog resource is: {}", dialogModel.getResourceID());
             Properties resourceBundle = this.legacyPOSBeanService.getLegacyResourceBundleUtil().getGroupText(spec.getSpecName() + "." + dialogModel.getResourceID(),
                     new String[] { legacyScreen.getResourceBundleFilename() }, dialogModel.getLocale());
 
-            screen.setTitle(resourceBundle.getProperty(dialogModel.getResourceID() + ".title"));
+            screen.setTitle(translateDialogTitle(resourceBundle, dialogModel.getResourceID()));
 
             buildDialogMessageLines(dialogModel, resourceBundle);
 
             configureTypeAndButtons(dialogModel);
 
         }
+    }
+
+    protected String translateDialogTitle(Properties dialogResourceBundle, String dialogResourceID) {
+        return dialogResourceBundle.getProperty(String.format("%s.title", dialogResourceID));
     }
 
     protected void buildDialogMessageLines(ILegacyDialogBeanModel dialogModel, Properties resourceBundle) {

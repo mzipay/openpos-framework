@@ -5,7 +5,6 @@ import { cold, getTestScheduler } from 'jasmine-marbles';
 import { IScanData } from '../scan.interface';
 import { DomEventManager } from '../../../services/dom-event-manager.service';
 import { Subscription, of, Subject } from 'rxjs';
-import { Logger } from '../../../services/logger.service';
 import { ElectronService } from 'ngx-electron';
 
 describe('WedgeScanner', () => {
@@ -67,7 +66,6 @@ describe('WedgeScanner', () => {
             providers: [
                 WedgeScannerPlugin,
                 ElectronService,
-                Logger,
                 { provide: SessionService, useValue: sessionSpy },
                 { provide: DomEventManager, useValue: domEventManagerSpy}
             ]
@@ -139,7 +137,7 @@ describe('WedgeScanner', () => {
 
         getTestScheduler().flush();
 
-        expect(scanResults[0].type).toEqual('X');
+        expect(scanResults[0].rawType).toEqual('X');
         expect(scanResults[0].data).toEqual('1234AB' + String.fromCharCode(10) + String.fromCharCode(30));
     });
 
@@ -162,7 +160,7 @@ describe('WedgeScanner', () => {
 
         getTestScheduler().flush();
 
-        expect(scanResults[0].type).toEqual('X');
+        expect(scanResults[0].rawType).toEqual('X');
         expect(scanResults[0].data).toEqual('1234AB');
     });
 
@@ -185,7 +183,7 @@ describe('WedgeScanner', () => {
 
         getTestScheduler().flush();
 
-        expect(scanResults[0].type).toEqual('X');
+        expect(scanResults[0].rawType).toEqual('X');
         expect(scanResults[0].data).toEqual('1234ZB');
     });
 
@@ -218,8 +216,16 @@ describe('WedgeScanner', () => {
         dispatchEvent( 'B', false, false );
         dispatchEvent( 'j', true, false );
 
-        expect(scanResults[0].type).toEqual('X');
+        expect(scanResults[0].rawType).toEqual('X');
         expect(scanResults[0].data).toEqual('1234ZB');
     }));
+
+    it('should only create one event observer. subsequent calls to start should return the same observable', () => {
+        setupSync();
+        const observ1 = wedgeScannerPlugin.startScanning();
+        const observ2 = wedgeScannerPlugin.startScanning();
+
+        expect(observ1).toBe(observ2);
+    });
 
 });

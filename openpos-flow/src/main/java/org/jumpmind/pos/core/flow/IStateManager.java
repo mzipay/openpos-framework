@@ -22,7 +22,7 @@ package org.jumpmind.pos.core.flow;
 
 import java.util.Map;
 
-import org.jumpmind.pos.core.screen.Toast;
+import org.jumpmind.pos.core.ui.Toast;
 import org.jumpmind.pos.core.ui.UIMessage;
 import org.jumpmind.pos.server.model.Action;
 
@@ -62,5 +62,7 @@ public interface IStateManager {
     public Injector getInjector();
     public boolean isAtRest();
     public void sendConfigurationChangedMessage();
+    public void setClientContext(Map<String,String> context);
+    public Map<String, String> getClientContext();
     
 }

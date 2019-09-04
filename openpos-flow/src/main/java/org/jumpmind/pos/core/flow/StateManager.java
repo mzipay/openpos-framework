@@ -20,12 +20,7 @@
 package org.jumpmind.pos.core.flow;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -37,10 +32,11 @@ import org.jumpmind.pos.core.clientconfiguration.ClientConfigChangedMessage;
 import org.jumpmind.pos.core.clientconfiguration.IClientConfigSelector;
 import org.jumpmind.pos.core.clientconfiguration.LocaleChangedMessage;
 import org.jumpmind.pos.core.clientconfiguration.LocaleMessageFactory;
+import org.jumpmind.pos.core.error.IErrorHandler;
 import org.jumpmind.pos.core.flow.config.FlowConfig;
 import org.jumpmind.pos.core.flow.config.StateConfig;
 import org.jumpmind.pos.core.flow.config.SubTransition;
-import org.jumpmind.pos.core.screen.Toast;
+import org.jumpmind.pos.core.ui.Toast;
 import org.jumpmind.pos.core.service.IScreenService;
 import org.jumpmind.pos.core.service.spring.DeviceScope;
 import org.jumpmind.pos.core.ui.UIMessage;
@@ -61,6 +57,9 @@ public class StateManager implements IStateManager {
     final Logger logger = LoggerFactory.getLogger(getClass());
     final Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
     private final StateManagerLogger stateManagerLogger = new StateManagerLogger(loggerGraphical);
+
+    @Autowired(required = false)
+    private String deviceId;
 
     @Autowired
     private IScreenService screenService;
@@ -98,7 +97,7 @@ public class StateManager implements IStateManager {
     private boolean autoSaveState = false;
 
     @Autowired
-    private StateLifecycle stateLifecyce;
+    private StateLifecycle stateLifecycle;
 
     @Autowired
     LocaleMessageFactory localeMessageFactory;
@@ -114,6 +113,8 @@ public class StateManager implements IStateManager {
     private Map<String, Boolean> sessionAuthenticated = new HashMap<>();
 
     private Map<String, Boolean> sessionCompatible = new HashMap<>();
+
+    private Map<String, String> clientContext = new HashMap<>();
 
     private IErrorHandler errorHandler;
 
@@ -136,10 +137,8 @@ public class StateManager implements IStateManager {
                 logger.warn("Failed to load openpos-state.json", ex);
             }
         }
-
         applicationState.getScope().setDeviceScope("stateManager", this);
-
-
+        initDefaultScopeObjects();
 
         if (resumeState) {
             sendConfigurationChangedMessage();
@@ -153,6 +152,10 @@ public class StateManager implements IStateManager {
             throw new RuntimeException("Could not find a flow config for " + appId);
         }
 
+    }
+
+    private void initDefaultScopeObjects() {
+        applicationState.getScope().setDeviceScope("additionalTagsForConfiguration", new ArrayList<String>());
     }
 
     public void setErrorHandler(IErrorHandler errorHandler) {
@@ -181,6 +184,16 @@ public class StateManager implements IStateManager {
         }
         this.sessionAuthenticated.remove(sessionId);
         this.logger.info("Session {} removed from cache of authenticated sessions", sessionId);
+    }
+
+    @Override
+    public void setClientContext(Map<String, String> clientContext) {
+        this.clientContext = clientContext;
+    }
+
+    @Override
+    public Map<String, String> getClientContext(){
+        return this.clientContext;
     }
 
     @Override
@@ -243,10 +256,12 @@ public class StateManager implements IStateManager {
         if (applicationState.getCurrentContext().getState() != null) {
             performOutjections(applicationState.getCurrentContext().getState());
         }
+        
+        boolean enterSubState = enterSubStateConfig != null;
+        stateLifecycle.executeDepart(applicationState.getCurrentContext().getState(), newState, enterSubState, action);
 
         TransitionResult transitionResult = executeTransition(applicationState.getCurrentContext(), newState, action);
         if (transitionResult == TransitionResult.PROCEED) {
-            boolean enterSubState = enterSubStateConfig != null;
             boolean exitSubState = resumeSuspendedState != null;
             String returnActionName = null;
             if (exitSubState) {
@@ -256,9 +271,7 @@ public class StateManager implements IStateManager {
             stateManagerLogger.logStateTransition(applicationState.getCurrentContext().getState(), newState, action, returnActionName,
                     enterSubStateConfig, exitSubState ? applicationState.getCurrentContext() : null, getApplicationState(),
                     resumeSuspendedState);
-
-            stateLifecyce.executeDepart(applicationState.getCurrentContext().getState(), newState, enterSubState, action);
-
+            
             if (enterSubState) {
                 applicationState.getStateStack().push(applicationState.getCurrentContext());
                 applicationState.setCurrentContext(buildSubStateContext(enterSubStateConfig, action));
@@ -271,14 +284,17 @@ public class StateManager implements IStateManager {
             performInjections(newState);
 
             if (resumeSuspendedState == null || returnActionName == null || autoTransition) {
-                stateLifecyce.executeArrive(this, applicationState.getCurrentContext().getState(), action);
+                stateLifecycle.executeArrive(this, applicationState.getCurrentContext().getState(), action);
             } else {
                 Action returnAction = new Action(returnActionName, action.getData());
                 returnAction.setCausedBy(action);
                 doAction(returnAction); // indirect recursion
             }
         } else {
-            stateLifecyce.executeArrive(this, applicationState.getCurrentContext().getState(), action);
+            //TODO: discuss whether this is how we want to handle cancelled transitions
+            Action cancelAction= new Action("TransitionCancelled");
+            cancelAction.setCausedBy(action);
+            stateLifecycle.executeArrive(this, applicationState.getCurrentContext().getState(), cancelAction);
         }
 
     }
@@ -318,12 +334,14 @@ public class StateManager implements IStateManager {
     }
 
     public void performInjections(Object stateOrStep) {
+        this.logger.trace("Performing injections on {}...", stateOrStep.getClass().getName());
         injector.performInjections(stateOrStep, applicationState.getScope(), applicationState.getCurrentContext());
         refreshDeviceScope();
+        this.logger.trace("Injections completed on {}.", stateOrStep.getClass().getName());
     }
 
     protected void refreshDeviceScope() {
-        for (String name : applicationState.getScope().getDeviceScope().keySet()) {
+        for (String name : new HashSet<>(applicationState.getScope().getDeviceScope().keySet())) {
             Object value = applicationState.getScopeValue(ScopeType.Device, name);
             performOutjections(value);
             if (DeviceScope.isDeviceScope(name)) {
@@ -457,11 +475,21 @@ public class StateManager implements IStateManager {
                         action.getName(), applicationState.getCurrentContext().getState().getClass().getName(), action.getName(),
                         action.getName()));
             }
+        } catch (Throwable ex) {
+            handleOrRaiseException(ex);
         } finally {
             activeCalls.decrementAndGet();
         }
     }
-
+    
+    protected void handleOrRaiseException(Throwable ex) {
+        if (this.getErrorHandler() != null) {
+            this.getErrorHandler().handleError(this, ex);
+        } else {
+            throw ex instanceof RuntimeException ? (RuntimeException) ex : new FlowException(ex);
+        }
+    }
+    
     protected Class<? extends Object> getGlobalActionHandler(Action action) {
         FlowConfig flowConfig = applicationState.getCurrentContext().getFlowConfig();
         Class<? extends Object> currentActionHandler = flowConfig.getActionToStateMapping().get(action.getName());
@@ -664,7 +692,7 @@ public class StateManager implements IStateManager {
     }
 
     private void clearScopeOnDeviceScopeBeans(ScopeType scopeType) {
-        for (String name : applicationState.getScope().getDeviceScope().keySet()) {
+        for (String name :  new HashSet<>(applicationState.getScope().getDeviceScope().keySet())) {
             Object value = applicationState.getScopeValue(ScopeType.Device, name);
             injector.resetInjections(value, scopeType);
         }

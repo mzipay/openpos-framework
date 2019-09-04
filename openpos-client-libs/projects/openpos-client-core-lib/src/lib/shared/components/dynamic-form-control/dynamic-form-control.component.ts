@@ -4,10 +4,10 @@ import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-fi
 import { ShowErrorsComponent } from '../show-errors/show-errors.component';
 import { IFormElement } from '../../../core/interfaces/form-field.interface';
 import { IForm } from '../../../core/interfaces/form.interface';
-import { IActionItem } from '../../../core/interfaces/action-item.interface';
-import { SessionService } from '../../../core/services/session.service';
+import { IActionItem } from '../../../core/actions/action-item.interface';
 import { ScreenService } from '../../../core/services/screen.service';
 import { FormBuilder } from '../../../core/services/form-builder.service';
+import { ActionService } from '../../../core/actions/action.service';
 
 @Component({
   selector: 'app-dynamic-form-control',
@@ -26,7 +26,10 @@ export class DynamicFormControlComponent implements AfterViewInit {
   private _alternateSubmitActions: string[];
   @Input() submitButton: IActionItem;
 
-  constructor(public session: SessionService, public screenService: ScreenService, private formBuilder: FormBuilder) {}
+  constructor(
+      public screenService: ScreenService,
+      private formBuilder: FormBuilder,
+      private actionService: ActionService) {}
 
   @Input()
   get screenForm(): IForm {
@@ -57,7 +60,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
     if (actions) {
       actions.forEach(action => {
 
-        this.session.registerActionPayload(action, () => {
+        this.actionService.registerActionPayload(action, () => {
           if (this.form.valid) {
             this.formBuilder.buildFormPayload(this.form, this._screenForm);
             return this._screenForm;
@@ -93,7 +96,7 @@ export class DynamicFormControlComponent implements AfterViewInit {
   submitForm() {
     if (this.form.valid) {
       this.formBuilder.buildFormPayload(this.form, this._screenForm);
-      this.session.onAction(this.submitButton, this._screenForm);
+      this.actionService.doAction(this.submitButton, this._screenForm);
     } else {
         // Set focus on the first invalid field found
         const invalidFieldKey = Object.keys(this.form.controls).find(key => {
@@ -124,12 +127,13 @@ export class DynamicFormControlComponent implements AfterViewInit {
   onFieldChanged(formElement: IFormElement) {
     if (formElement.valueChangedAction) {
         this.formBuilder.buildFormPayload(this.form, this._screenForm);
-      this.session.onAction(formElement.valueChangedAction, this._screenForm );
+        this.actionService.doAction({action: formElement.valueChangedAction}, this._screenForm );
     }
   }
 
   onButtonClick(formElement: IFormElement) {
-    this.session.onAction(formElement.action, null, formElement.confirmationDialog);
+    const actionItem = { action: formElement.action, confirmationDialog: formElement.confirmationDialog };
+    this.actionService.doAction(actionItem, null);
   }
 }
 

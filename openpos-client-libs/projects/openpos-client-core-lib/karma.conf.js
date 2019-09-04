@@ -18,8 +18,9 @@ module.exports = function (config) {
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, '../../coverage/openpos-client-core-lib'),
-      reports: ['html', 'lcovonly'],
-      fixWebpackSourcePaths: true
+      reports: ['html', 'lcovonly', 'cobertura'],
+      fixWebpackSourcePaths: true,
+      skipFilesWithNoCoverage: false
     },
     junitReporter: {
       outputDir: 'dist', // results will be saved as $outputDir/$browserName.xml

@@ -1,9 +1,12 @@
+import java.text.SimpleDateFormat
+
 group = 'org.jumpmind.pos'
 
 apply plugin: 'eclipse'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'maven'
+apply plugin: 'jacoco'
 
 def removeSnapshot = { v ->
     if (v.endsWith('-SNAPSHOT')) {
@@ -56,8 +59,17 @@ repositories {
     } 
 }
 
-idea {
+jar {
+    manifest {
+        attributes("Implementation-Title": project.name,
+                "Implementation-Version": project.hasProperty('version') ? version : '0.0',
+                "Project-Artifact": project.name,
+                "Build-Version": project.hasProperty('version') ? version : '0.0',
+                "Build-Time": new SimpleDateFormat("yyyyMMdd-HHmm").format(new Date()))
+    }
+}
 
+idea {
     module {
         testResourceDirs = []
         testSourceDirs = [ file('src/test/java')]
@@ -104,10 +116,18 @@ test {
     // ignoreFailures = true
     testLogging.showStandardStreams = true
 
+    forkEvery = 1
+
     //Dynamic exclude through property defined in the build.gradle file
     if (project.hasProperty('excludeTests')) {
         println('Excluding tests: ' + project.property('excludeTests'))
         exclude project.property('excludeTests')
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
     }
 }
 
@@ -121,9 +141,7 @@ task sourcesJar(type: Jar, dependsOn:classes) {
     from sourceSets.main.allSource
 }
 
-task develop {
-    description 'Generates Eclipse artifacts and sets up your development environment'
-    dependsOn tasks.cleanEclipse, tasks.eclipse, tasks.cleanIdea, tasks.idea
+task extraClean {
     doFirst {
         println 'Removing bin and .settings directories'
         delete './bin'
@@ -131,8 +149,14 @@ task develop {
     }
 }
 
+task develop {
+    description 'Generates Eclipse artifacts and sets up your development environment'
+    dependsOn tasks.cleanEclipse, tasks.eclipse, tasks.cleanIdea, tasks.idea
+
+}
+
 configurations {
-    testArtifacts
+    testArtifacts.extendsFrom testRuntime
     deployerJars
 }
 
@@ -142,6 +166,7 @@ dependencies {
 }
 
 artifacts {
+    archives testJar
     archives sourcesJar
     testArtifacts testJar
 }
@@ -163,3 +188,4 @@ task deploy {
 }
 
 tasks.uploadArchives.dependsOn build
+clean.dependsOn extraClean

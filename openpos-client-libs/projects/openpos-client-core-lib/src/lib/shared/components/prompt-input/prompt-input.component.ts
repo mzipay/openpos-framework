@@ -1,9 +1,6 @@
-import { Logger } from './../../../core/services/logger.service';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { TextMask, IMaskSpec, ITextMask } from '../../textmask';
 import { ErrorStateMatcher } from '@angular/material';
 import { OldPluginService } from '../../../core/services/old-plugin.service';
 import { BarcodeScannerPlugin } from '../../../core/oldplugins/barcode-scanner.plugin';
@@ -21,7 +18,6 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     @Input() responseText: string;
     @Input() promptIcon: string;
     @Input() hintText: string;
-    @Input() maskSpec: IMaskSpec;
     @Input() minLength: number;
     @Input() maxLength: number;
     @Input() promptFormGroup: FormGroup;
@@ -34,10 +30,9 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     errorMatcher = new MyErrorStateMatcher();
     keyboardLayout = 'en-US';
 
-    _textMask: ITextMask; // Mask object built for text-mask
     private barcodeEventSubscription: Subscription;
 
-    constructor(private log: Logger, private datePipe: DatePipe, private pluginService: OldPluginService) {
+    constructor( private pluginService: OldPluginService) {
     }
 
     isNumericField(): boolean {
@@ -71,13 +66,6 @@ export class PromptInputComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        if (this.maskSpec) {
-            const newMask = TextMask.instance(this.maskSpec);
-            this._textMask = newMask;
-        } else {
-            this._textMask = TextMask.NO_MASK;
-        }
-
         if (this.scanEnabled) {
             this.pluginService.getPluginWithOptions('barcodeScannerPlugin', true, { waitForCordovaInit: true }).then(plugin => {
                 // the onBarcodeScanned will only emit an event when client code passes a scan
@@ -86,13 +74,13 @@ export class PromptInputComponent implements OnInit, OnDestroy {
                 // which come from other sources such as a scan device
                 this.barcodeEventSubscription = (<BarcodeScannerPlugin>plugin).onBarcodeScanned.subscribe({
                     next: (scan: Scan) => {
-                        this.log.info(`app-prompt-input got scan event: ${scan.value}`);
+                        console.info(`app-prompt-input got scan event: ${scan.value}`);
                         this.setFieldValue(scan.value);
                     }
                 });
-                this.log.info(`app-prompt-input is subscribed for barcode scan events`);
+                console.info(`app-prompt-input is subscribed for barcode scan events`);
 
-            }).catch(error => this.log.info(`Failed to get barcodeScannerPlugin.  Reason: ${error}`));
+            }).catch(error => console.info(`Failed to get barcodeScannerPlugin.  Reason: ${error}`));
         }
 
         this.setKeyboardLayout();
@@ -127,7 +115,7 @@ export class PromptInputComponent implements OnInit, OnDestroy {
                     console.error('Scanning failed: ' + error);
                 }
             )
-        ).catch(error => this.log.info(`Scanning failed: ${error}`)
+        ).catch(error => console.info(`Scanning failed: ${error}`)
         );
     }
 
