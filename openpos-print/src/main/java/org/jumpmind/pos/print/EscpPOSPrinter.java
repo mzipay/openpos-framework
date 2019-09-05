@@ -23,6 +23,14 @@ public class EscpPOSPrinter implements IOpenposPrinter {
     IConnectionFactory connectionFactory;
     boolean deviceEnabled  = true;
 
+    public EscpPOSPrinter() {
+
+    }
+
+    public EscpPOSPrinter(Map<String,Object> settings) {
+        this.settings = settings;
+    }
+
     @Override
     public void claim(int timeout) throws JposException {
     }
