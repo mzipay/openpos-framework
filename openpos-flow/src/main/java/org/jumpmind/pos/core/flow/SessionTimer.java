@@ -16,9 +16,9 @@ public class SessionTimer {
 
     @Autowired
     private StateManagerContainer stateManagerContainer;
-
+    
     private static final long TIMEOUT_CHECK_INTERVAL = 1000;
-
+        
     public static final String ACTION_KEEP_ALIVE = "KeepAlive";
 
     @Scheduled(fixedRate = TIMEOUT_CHECK_INTERVAL)

@@ -322,10 +322,13 @@ public class ScreenService implements IScreenService, IActionListener {
                 messageService.sendMessage(appId, deviceId, screen);
             }
 
-            DialogProperties properties = (DialogProperties) screen.get("dialogProperties");
-            if (properties == null || !properties.isCloseable()) {
-                applicationState.setLastDialog(screen);
-                applicationState.setLastPreInterceptedDialog(preInterceptedScreen);
+            if (screen.isDialog()) {
+                // Don't save a dialog if it is closable, otherwise it gets shown on a refresh
+                DialogProperties properties = (DialogProperties) screen.get("dialogProperties");
+                if (properties == null || !properties.isCloseable()) {
+                    applicationState.setLastDialog(screen);
+                    applicationState.setLastPreInterceptedDialog(preInterceptedScreen);
+                }
             } else if (!screen.getScreenType().equals("NoOp")) {
                 applicationState.setLastScreen(screen);
                 applicationState.setLastPreInterceptedScreen(preInterceptedScreen);
