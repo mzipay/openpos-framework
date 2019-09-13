@@ -24,6 +24,17 @@
   | [#256](https://github.com/JumpMind/openpos-framework/pull/256) | Remove deprecated projects that aren&#39;t really being used |  |Chris Henson|2019-09-11 13:57:37|
   | [#258](https://github.com/JumpMind/openpos-framework/pull/258) | Make the session timer more robust by using spring&#39;s infrastructure |  |Chris Henson|2019-09-11 16:40:16|
   | [#261](https://github.com/JumpMind/openpos-framework/pull/261) | Trim sql to avoid blank lines in the log file |  |Chris Henson|2019-09-12 15:51:49|
+  | [#263](https://github.com/JumpMind/openpos-framework/pull/263) | Convert AbstractTypeCode to String to place nicely with dbSession.fin… |  |Chris Henson|2019-09-12 20:01:05|
+  | [#264](https://github.com/JumpMind/openpos-framework/pull/264) | Adding support for status strip on Home Page Component |  |stevencarley|2019-09-13 14:05:26|
+  | [#265](https://github.com/JumpMind/openpos-framework/pull/265) | Add comment for restore focus |  |maxwellpettit|2019-09-13 14:52:50|
+
+## 0.4.4 
+Released on: 2019-09-12 19:53:00
+
+|       | Name   | Labels | Author | Time |
+|-------|--------|--------|--------|------|
+  | [#260](https://github.com/JumpMind/openpos-framework/pull/260) | Feature/bacon strip back button |  |stevencarley|2019-09-12 15:58:49|
+  | [#262](https://github.com/JumpMind/openpos-framework/pull/262) | Get an updated element reference when restoring focus |  |maxwellpettit|2019-09-12 17:25:14|
 
 ## 0.4.3 
 Released on: 2019-09-12 14:58:45
@@ -49,7 +60,6 @@ Released on: 2019-09-04 18:24:49
 |       | Name   | Labels | Author | Time |
 |-------|--------|--------|--------|------|
   | [#244](https://github.com/JumpMind/openpos-framework/pull/244) | Bugfix/selectable item list default select on disabled |  |Klementina S. Chirico|2019-09-04 18:21:48|
-
 
 ## 0.4.2 
 Released on: 2019-08-28 15:15:09
