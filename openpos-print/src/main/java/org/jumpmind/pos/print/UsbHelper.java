@@ -41,7 +41,9 @@ public class UsbHelper {
         UsbPipe pipe = usbEndpoint.getUsbPipe();
 
         try {
-            pipe.open();
+            if (!pipe.isOpen()) {
+                pipe.open();
+            }
         } catch (Exception ex) {
             throw new PrintException("Failed to open pipe to USB device vendorId=" + vendorId + " productId=" + productId, ex);
         }
