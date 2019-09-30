@@ -25,7 +25,7 @@ import { bounceAnimation } from '../../shared/animations/bounce.animation';
         transform: 'translateY(0)'
       })),
       transition('* => move', [
-        useAnimation(bounceAnimation, {
+        useAnimation( bounceAnimation, {
           params: {
             height: '100px',
             time: '2s'
@@ -37,7 +37,7 @@ import { bounceAnimation } from '../../shared/animations/bounce.animation';
 })
 export class HomeComponent extends PosScreen<HomeInterface> {
 
-  bounceInterval = timer(5000, 5000).pipe(map(i => i % 2 ? 'down' : 'move'));
+  bounceInterval = timer(5000, 5000).pipe( map( i => i % 2 ? 'down' : 'move'));
   gutterSize: Observable<number>;
   gridColumns: Observable<number>;
   isMobile: Observable<boolean>;
@@ -67,22 +67,9 @@ export class HomeComponent extends PosScreen<HomeInterface> {
       ['lg', false],
       ['xl', false]
     ]));
-
-    // Menu items per page
-    media.mediaObservableFromMap(new Map([
-      ['xs', 3],
-      ['sm', Math.round(this.pageSize/2)],
-      ['md', this.pageSize],
-      ['lg', this.pageSize],
-      ['xl', this.pageSize]
-    ])).subscribe((val => {
-      this.pageNum = 0;
-      this.pageSize = val;
-      this.updatePaginationSettings();
-    }));
   }
 
-  buildScreen() { }
+  buildScreen() {}
 
   public keybindsEnabled() {
     return Configuration.enableKeybinds;
@@ -93,18 +80,5 @@ export class HomeComponent extends PosScreen<HomeInterface> {
       return this.screen.notificationItems.find(i => i.id === item.action);
     }
     return null;
-  }
-
-  public changePage($event) {
-    this.pageNum = $event;
-    this.updatePaginationSettings();
-  }
-
-  public updatePaginationSettings() {
-    this.paginationSettings = { itemsPerPage: this.pageSize, currentPage: this.pageNum };
-  }
-
-  public pageTracker(index, page) {
-    return `${index}-${page.value}`;
   }
 }

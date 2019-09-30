@@ -22,7 +22,6 @@ import { LifeCycleEvents } from '../../core/messages/life-cycle-events.enum';
 import { LifeCycleTypeGuards } from '../../core/life-cycle-interfaces/lifecycle-type-guards';
 import { ScreenCreatorService } from '../../core/services/screen-creator.service';
 import { FocusService } from '../../core/focus/focus.service';
-import { PersonalizationService } from '../../core/personalization/personalization.service';
 
 // tslint:disable-next-line:directive-selector
 @Directive({ selector: '[openposScreenOutlet]' })
@@ -60,8 +59,8 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         this.subscriptions.add(this.session.getMessages('Screen').subscribe((message) => this.handle(message)));
         this.subscriptions.add(this.session.getMessages('Connected').subscribe((message) => this.handle(new SplashScreen())));
         this.subscriptions.add(this.session.getMessages(
-            MessageTypes.LIFE_CYCLE_EVENT).subscribe(message => this.handleLifeCycleEvent(message)));
-        this.subscriptions.add(this.configurationService.theme$.subscribe(theme => {
+            MessageTypes.LIFE_CYCLE_EVENT).subscribe( message => this.handleLifeCycleEvent(message)));
+        this.subscriptions.add(this.configurationService.theme$.subscribe( theme => {
             this.updateTheme(theme);
         }));
     }
@@ -85,15 +84,15 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         }
     }
 
-    private handleLifeCycleEvent(message: LifeCycleMessage) {
-        switch (message.eventType) {
+    private handleLifeCycleEvent( message: LifeCycleMessage ) {
+        switch ( message.eventType ) {
             case LifeCycleEvents.DialogClosing:
-                if (LifeCycleTypeGuards.handlesBecomingActive(this.componentRef.instance)) {
+                if ( LifeCycleTypeGuards.handlesBecomingActive(this.componentRef.instance) ) {
                     this.componentRef.instance.onBecomingActive();
                 }
                 break;
             case LifeCycleEvents.DialogOpening:
-                if (LifeCycleTypeGuards.handlesLeavingActive(this.componentRef.instance)) {
+                if ( LifeCycleTypeGuards.handlesLeavingActive(this.componentRef.instance) ) {
                     this.componentRef.instance.onLeavingActive();
                 }
                 break;
@@ -105,7 +104,7 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
             screen = new SplashScreen();
         }
 
-        if (this.dialogService.isDialogOpen()) {
+        if ( this.dialogService.isDialogOpen() ) {
             // Close any open dialogs
             await this.dialogService.closeDialog();
             this.focusService.restoreInitialFocus();
@@ -175,16 +174,11 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         this.overlayContainer.getContainerElement().classList.remove(this.currentTheme);
         this.overlayContainer.getContainerElement().classList.remove('default-theme');
         this.overlayContainer.getContainerElement().classList.add(theme);
-        if (!!this.componentRef) {
+        if ( !!this.componentRef ) {
             const parent = this.renderer.parentNode(this.componentRef.location.nativeElement);
             this.renderer.removeClass(parent, this.currentTheme);
             this.renderer.removeClass(parent, 'default-theme');
             this.renderer.addClass(parent, theme);
-            // Add a class for each personalization param: personalization-paramname-paramvalue
-            const personalizationParams = this.personaliation.getPersonalizationProperties();
-            for (const [key, value] of personalizationParams) {
-                this.renderer.addClass(parent, `personalization-${key.toLowerCase()}-${value.toLowerCase()}`);
-            }
         }
         this.currentTheme = theme;
     }
