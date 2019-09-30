@@ -1,4 +1,5 @@
 <div [ngStyle]="screen.backgroundImage | backgroundImageUrl" class="home-wrapper">
+
     <div class="mat-elevation-z10">
         <img *ngIf="screen.logo" [src]="screen.logo | imageUrl" class="home-screen-logo">
         <app-bacon-strip></app-bacon-strip>
@@ -21,7 +22,21 @@
                     <div class="menu-button-title">{{menuItem.title}}</div>
                     <div *ngIf="menuItem.keybind && keybindsEnabled()" style="padding-bottom: 8px;" class="text-xs">{{menuItem.keybind}}</div>
                 </div>
-            </button>
+            </div>
+
+            <mat-card *ngIf="(isMobile | async) && screen.menuItems.length > 0" class="menu-list">
+                <mat-nav-list>
+                    <mat-list-item *ngFor="let menuItem of screen.menuItems" (click)="onMenuItemClick(menuItem)">
+                        <app-icon class="primary text-lg" iconName="{{menuItem.icon}}" iconClass="material-icons">
+                        </app-icon>
+                        <span class="primary text-lg">&nbsp;{{menuItem.title}}</span>
+                        <span *ngIf="getNotificationForButton(menuItem)"
+                            [matBadge]="getNotificationForButton(menuItem).value" matBadgePosition="above after"
+                            matBadgeSize="medium" matBadgeColor="accent" class="notification-badge"></span>
+                        <mat-icon class="material-icons">keyboard_arrow_right</mat-icon>
+                    </mat-list-item>
+                </mat-nav-list>
+            </mat-card>
         </div>
     </div>
     <mat-card *ngIf="(isMobile | async) && screen.menuItems.length > 0" class="menu-list">
@@ -39,6 +54,21 @@
         </mat-nav-list>
     </mat-card>
     <div class="status-strip-container">
+        <div style="text-align: center;">
+            <pagination-template #p="paginationApi" (pageChange)="changePage($event)">
+                <div class="pagination-wrapper" *ngIf="p.pages.length > 1 && !(isMobile | async)">
+
+                    <mat-button-toggle-group>
+                        <mat-button-toggle (click)="p.getCurrent() !== page.value? p.setCurrent(page.value) : null"
+                            *ngFor="let page of p.pages; trackBy:pageTracker" class="pagination-nav-button" klass.xs="xs" [checked]="p.getCurrent() === page.value">
+                            Page {{ page.label }}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+
+                </div>
+            </pagination-template>
+        </div>
         <app-status-strip *ngIf="screen.statusStrip"></app-status-strip>
     </div>
+
 </div>
