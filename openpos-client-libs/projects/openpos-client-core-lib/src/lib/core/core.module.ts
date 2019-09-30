@@ -50,6 +50,8 @@ import locale_enCA from '@angular/common/locales/en-CA';
 import locale_frCA from '@angular/common/locales/fr-CA';
 import { LocationService, PROVIDERS } from './services/location.service';
 import { LocationProviderDefault } from './location-providers/location-provider-default';
+import { CLIENTCONTEXT } from './client-context/client-context-provider.interface';
+import { TimeZoneContext } from './client-context/time-zone-context';
 
 registerLocaleData(locale_enCA, 'en-CA');
 registerLocaleData(locale_frCA, 'fr-CA');
@@ -110,7 +112,8 @@ registerLocaleData(locale_frCA, 'fr-CA');
         { provide: PROVIDERS, useExisting: LocationProviderDefault, multi: true},
         TrainingOverlayService,
         ConfigurationService,
-        KeyPressProvider
+        KeyPressProvider,
+        { provide: CLIENTCONTEXT, useClass: TimeZoneContext, multi: true }
     ]
 })
 export class CoreModule {

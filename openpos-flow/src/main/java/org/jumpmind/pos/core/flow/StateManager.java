@@ -58,6 +58,9 @@ public class StateManager implements IStateManager {
     final Logger loggerGraphical = LoggerFactory.getLogger(getClass().getName() + ".graphical");
     private final StateManagerLogger stateManagerLogger = new StateManagerLogger(loggerGraphical);
 
+    @Autowired(required = false)
+    private String deviceId;
+
     @Autowired
     private IScreenService screenService;
 
@@ -111,6 +114,8 @@ public class StateManager implements IStateManager {
 
     private Map<String, Boolean> sessionCompatible = new HashMap<>();
 
+    private Map<String, String> clientContext = new HashMap<>();
+
     private IErrorHandler errorHandler;
 
     private final AtomicInteger activeCalls = new AtomicInteger(0);
@@ -132,7 +137,6 @@ public class StateManager implements IStateManager {
                 logger.warn("Failed to load openpos-state.json", ex);
             }
         }
-
         applicationState.getScope().setDeviceScope("stateManager", this);
         initDefaultScopeObjects();
 
@@ -180,6 +184,16 @@ public class StateManager implements IStateManager {
         }
         this.sessionAuthenticated.remove(sessionId);
         this.logger.info("Session {} removed from cache of authenticated sessions", sessionId);
+    }
+
+    @Override
+    public void setClientContext(Map<String, String> clientContext) {
+        this.clientContext = clientContext;
+    }
+
+    @Override
+    public Map<String, String> getClientContext(){
+        return this.clientContext;
     }
 
     @Override
