@@ -118,7 +118,6 @@ import { ItemCardComponent } from './components/item-card/item-card.component';
 import { SystemStatusComponent } from './screen-parts/system-status/system-status.component';
 import { BannerComponent } from './screen-parts/banner/banner.component';
 import { KebabLabelButtonComponent } from './components/kebab-label-button/kebab-label-button.component';
-import { NgxPaginationModule } from 'ngx-pagination';
 
 const screenParts = [
     ChooseOptionsPartComponent,
@@ -268,8 +267,7 @@ const pipes = [
         CommonModule,
         MaterialModule,
         MatKeyboardModule,
-        TextMaskModule,
-        NgxPaginationModule,
+        TextMaskModule
     ],
     exports: [
         FormsModule,
@@ -281,8 +279,6 @@ const pipes = [
         MaterialModule,
         MatKeyboardModule,
         TextMaskModule,
-        NgxPaginationModule,
-
         ...directives,
         ...components,
         ...screenParts,
