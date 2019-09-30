@@ -113,7 +113,9 @@ import { LocationOverrideDialogComponent } from './components/location-details/l
 import { SellLinkedCustomerComponent } from './components/sell-linked-customer/sell-linked-customer.component';
 import { ItemCardComponent } from './components/item-card/item-card.component';
 import { SystemStatusComponent } from './screen-parts/system-status/system-status.component';
+import { BannerComponent } from './screen-parts/banner/banner.component';
 import { KebabLabelButtonComponent } from './components/kebab-label-button/kebab-label-button.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 const screenParts = [
     ChooseOptionsPartComponent,
@@ -129,7 +131,8 @@ const screenParts = [
     AutoCompleteAddressPartComponent,
     ProgressBarPartComponent,
     WebcamViewerComponent,
-    SystemStatusComponent
+    SystemStatusComponent,
+    BannerComponent
 ];
 
 const components = [
@@ -260,6 +263,7 @@ const pipes = [
         MaterialModule,
         MatKeyboardModule,
         TextMaskModule,
+        NgxPaginationModule,
     ],
     exports: [
         FormsModule,
@@ -271,6 +275,7 @@ const pipes = [
         MaterialModule,
         MatKeyboardModule,
         TextMaskModule,
+        NgxPaginationModule,
 
         ...directives,
         ...components,

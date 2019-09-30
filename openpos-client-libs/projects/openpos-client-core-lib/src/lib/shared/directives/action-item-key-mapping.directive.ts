@@ -14,7 +14,7 @@ export class ActionItemKeyMappingDirective implements OnDestroy {
 
     @Input()
     set actionItem(item: IActionItem) {
-        if ( this.subscription ) {
+        if (this.subscription) {
             this.subscription.unsubscribe();
         }
 
@@ -30,11 +30,19 @@ export class ActionItemKeyMappingDirective implements OnDestroy {
                 } else {
                     this.actionService.doAction(item);
                 }
-                event.preventDefault();
-            } else if ( event.type === 'keyup') {
-                this.renderer.removeClass(this.el.nativeElement, 'key-mapping-active');
-            }
-        });
+                if (event.type === 'keydown') {
+                    this.renderer.addClass(this.el.nativeElement, 'key-mapping-active');
+                    if (this.actionClick.observers !== null && this.actionClick.observers.length > 0) {
+                        this.actionClick.emit();
+                    } else {
+                        this.session.onAction(item);
+                    }
+                    event.preventDefault();
+                } else if (event.type === 'keyup') {
+                    this.renderer.removeClass(this.el.nativeElement, 'key-mapping-active');
+                }
+            });
+        }
     }
 
     private subscription: Subscription;
@@ -48,7 +56,7 @@ export class ActionItemKeyMappingDirective implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if ( this.subscription ) {
+        if (this.subscription) {
             this.subscription.unsubscribe();
         }
     }
