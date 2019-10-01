@@ -205,16 +205,6 @@ public class StateManager implements IStateManager {
     }
 
     @Override
-    public void setClientContext(Map<String, String> clientContext) {
-        this.clientContext = clientContext;
-    }
-
-    @Override
-    public Map<String, String> getClientContext(){
-        return this.clientContext;
-    }
-
-    @Override
     public boolean isSessionAuthenticated(String sessionId) {
         return this.sessionAuthenticated.get(sessionId) != null && this.sessionAuthenticated.get(sessionId);
     }
