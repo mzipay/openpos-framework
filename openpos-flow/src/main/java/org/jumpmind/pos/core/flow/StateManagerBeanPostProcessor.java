@@ -23,7 +23,7 @@ public class StateManagerBeanPostProcessor implements BeanPostProcessor {
                 
             if (DeviceScope.isDeviceScope(beanName)) {                
                 stateManager.performInjectionsOnSpringBean(bean);
-            } else {
+            } else if (!(bean instanceof ITransitionStep)){
                 throw new FlowException("Spring bean requests injections via @In but is not a"
                         + " device scoped bean. This should be changed to a device scoped bean. beanName=" + beanName + " bean=" + bean);
             }
