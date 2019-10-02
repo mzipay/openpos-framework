@@ -119,8 +119,10 @@ import { ItemCardComponent } from './components/item-card/item-card.component';
 import { SystemStatusComponent } from './screen-parts/system-status/system-status.component';
 import { BannerComponent } from './screen-parts/banner/banner.component';
 import { KebabLabelButtonComponent } from './components/kebab-label-button/kebab-label-button.component';
+import { SaleItemCardListComponent } from './screen-parts/sale-item-card-list/sale-item-card-list.component';
 import { RoundedInputComponent } from './components/rounded-input/rounded-input.component';
 import { MobileFooterComponent } from './components/mobile-footer/mobile-footer.component';
+import { SaleTotalPanelComponent } from './screen-parts/sale-total-panel/sale-total-panel.component';
 
 const screenParts = [
     ChooseOptionsPartComponent,
@@ -137,8 +139,10 @@ const screenParts = [
     ProgressBarPartComponent,
     WebcamViewerComponent,
     SystemStatusComponent,
+    SaleItemCardListComponent,
     BannerComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    SaleTotalPanelComponent
 ];
 
 const components = [
