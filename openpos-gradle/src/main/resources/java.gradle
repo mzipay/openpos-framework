@@ -83,10 +83,12 @@ eclipse {
                 //                 id = 'org.eclipse.ui.ide.multiFilter'
                 //                 arguments = '1.0-projectRelativePath-matches-false-false-bin'
                 //               }
+                /*
                 matcher {
                     id = 'org.eclipse.ui.ide.multiFilter'
                     arguments = '1.0-projectRelativePath-matches-false-false-build'
                 }
+                */
                 matcher {
                     id = 'org.eclipse.ui.ide.multiFilter'
                     arguments = '1.0-name-matches-false-false-*.class'
