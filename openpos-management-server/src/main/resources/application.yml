@@ -1,0 +1,108 @@
+openpos:
+  managementServer:
+    # Main working directory for the OpenPOS Management Server.  Child OpenPOS
+    # device processes will each have their own working dirs that will be subdirs
+    # of this dir.
+    mainWorkDirPath: ./openpos_work
+    
+    
+    clientConnect:
+      # If specified, will override the default host name as calculated by XXXX.
+      # This hostname value would be used for return in the clientConnect URLs.
+      hostname:
+      webServiceBaseUrlTemplate: http://$host:$port
+      secureWebServiceBaseUrlTemplate: https://$host:$port
+      webSocketBaseUrlTemplate: ws://$host:$port
+      secureWebSocketBaseUrlTemplate: wss://$host:$port
+       
+# TODO:    lazyDeviceProcessLaunch: true
+# processTrackingFilename: .openpos_processes
+    deviceProcess:
+      # Maximum time a client request to start a child OpenPOS device process will
+      # but put on hold while waiting for the process to finish starting.
+      startMaxWaitMillis: 45000
+  
+      # URL template for the Status webservice of the child OpenPOS device processes.
+      # The port number will be different for each child process.    
+      statusUrlTemplate: http://localhost:%d/status
+  
+      # Maximum time to wait for a Status webservice call to a child OpenPOS device
+      # process to return
+      statusMaxWaitMillis: 1000 
+  
+      # Amount of time to wait between calls to child OpenPOS device process to
+      # confirm status
+      statusCheckPeriodMillis: 5000
+  
+      # Full path to Java executable that will be used to launch a device process.
+      # Can be a full path such as C:\Program Files\Java\jdk1.8.0_65\bin\java or
+      # a spring EL expression such as ${java.home}.  If the path is a directory
+      # and not the actual location of the java executable, the system will
+      # look for a java executable in the given directory and if it is not
+      # found, it will finally look for a java exectuable in a subdirectory of 
+      # the given directory named 'bin'. 
+      javaExecutablePath: ${java.home}
+      
+      # Sequence of classpath entries to pass to the launched device process.
+      classpathEntries:
+        - '.'
+
+      # Optional sequence of additional Java command line parameters.  You can 
+      # use this for parameters such as min and max memory, system properties, remote
+      # debug settings, etc. E.g.,
+      #  - -Xms1024m
+      #  - -Xmx2048m
+      additionalJavaArguments:
+      
+      # The path to an executable jar file to launch and bind to a given device id.
+      executableJarPath:
+      
+      # If executableJarPath is not specified, then this should specify a 
+      # Java class with a main method to launch and bind to a given device id.
+      # This should be a Spring Boot @SpringBootApplication.
+      mainClass:
+      
+      
+      # The Spring Boot server.port value to assign to the launched process. If 
+      # only one process, this can just be an integer.  If launching multiple 
+      # processes, this can be:
+      #   AUTO
+      #       Which indicates that a port number should be automatically and randomly 
+      #       allocated between the values of 1024 and 65535
+      #   range-1,range-2,...,range-n
+      #       Which is a comma separated list of integer port number values OR 
+      #       ranges that will restrict the pool of port numbers that will be attempted to
+      #       be assigned to the process.
+      processPort: AUTO
+      
+      # This is the argument that will be appended to the Java process command line
+      # to set the port number of the launched Spring Boot Java process. The %d
+      # parameter in this string will be replaced by the port number
+      processPortArgTemplate: -Dserver.port=%d
+      
+      # Optional sequence of arguments to pass to the processMainClass.  E.g., 
+      # - arg1
+      # - arg2
+      processArguments:
+      
+      # The name for the logfile that will be created in the working directory for
+      # the device process.  stderr and stdout for the process is redirected into
+      # this file.
+      processLogFilename: process.log
+      
+      # Like the processPort parameter, this can be an integer, range of
+      # values, list of integer values, or AUTO to use for assigning to the JVM process for
+      # purposes of remote debugging. If empty/blank, then remote debugging will
+      # not be enabled.
+      javaRemoteDebugPort:
+
+      # If processRemoteDebugPort has one or more values, this is the string
+      # that will be appended onto the Java process command line to set the 
+      # debug port.  The %d parameter in this string will be replaced by the debug 
+      # port number.
+      javaRemoteDebugArgTemplate: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=%d
+      
+logging:
+  level:
+    org.jumpmind: INFO
+    

@@ -1,0 +1,79 @@
+/*
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+*/
+plugins {
+    // Apply the java plugin to add support for Java
+    id 'java'
+    
+//    id 'com.gradle.build-scan' version '1.16'
+    id 'org.springframework.boot' version '2.1.8.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+repositories {
+    mavenCentral()
+}
+
+
+apply from: '../openpos-gradle/src/main/resources/java.gradle'
+// apply from: '../openpos-gradle/src/main/resources/openpos.gradle'
+
+ext {
+    slf4jVersion='1.7.28'
+    log4jVersion='2.12.1'
+}
+
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-configuration-processor"
+    
+    compile project(":openpos-util")
+    
+    implementation('org.springframework.boot:spring-boot-dependencies:2.1.8.RELEASE') {
+//        exclude module: 'spring-boot-starter-logging'
+    }
+    implementation ('org.springframework.boot:spring-boot-starter-web') {
+//        exclude module: 'spring-boot-starter-logging'
+    }
+    implementation ('org.springframework.boot:spring-boot-starter-jetty') {
+//        exclude module: 'spring-boot-starter-logging'
+    }
+    
+//    compile 'org.springframework.boot:spring-boot-starter-log4j2'
+    
+    // Use JUnit test framework
+    // testCompile 'junit:junit:4.12'
+    testImplementation ('org.springframework.boot:spring-boot-starter-test')  {
+//        exclude module: 'spring-boot-starter-logging'
+    }
+}
+
+test {
+    filter {
+        includeTestsMatching 'org.jumpmind.pos.management.*'
+    }
+}
+
+bootJar {
+    mainClassName = 'org.jumpmind.pos.management.OpenposManagementServer'
+}
+
+/*
+buildScan {
+    
+    // always accept the terms of service
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+    
+    // always publish a build scan
+    publishAlways()
+}
+*/

@@ -1,0 +1,19 @@
+openpos:
+  managementServer:
+    mainWorkDirPath: ./build/test-work
+    deviceProcess:
+      statusCheckPeriodMillis: 1000
+      # Full path to Java executable that will be used to launch a device process. 
+      javaExecutablePath: ${java.home}
+      classpathEntries:
+        - '.'             
+      processRemoteDebugPort: AUTO
+    
+
+# Spring boot properties  
+# Only works if logback is being used
+logging:
+  level:
+    org.jumpmind: DEBUG
+    org.jumpmind.pos.management: TRACE
+    

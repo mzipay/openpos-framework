@@ -1,0 +1,30 @@
+openpos:
+  managementServer:
+    mainWorkDirPath: ./build/test-work
+    deviceProcess:
+      # Full path to Java executable that will be used to launch a device process. 
+      javaExecutablePath: ${java.home}
+      
+      processRemoteDebugPort: AUTO
+      classpathEntries:
+        - '.'
+      executableJarPath: /Users/jason/projects/biglots/newpos/openpos-biglots-server/build/libs/openpos-server.jar
+      additionalJavaArguments:
+        - -Dopenpos.translate.orpos.headless.working.dir=headless
+        - -DDEV_MODE=false
+        - -Djava.security.auth.login.config=/Users/jason/projects/biglots/newpos/pos-register/app/jaas.conf
+        - -Djava.security.manager
+        - -Djava.security.policy=/Users/jason/projects/biglots/newpos/pos-register/app/java.policy
+        - -Djasypt.encryptor.password=e5279b73-4109-4695-b3aa-c107144939c9
+        - -Djasypt.encryptor.algorithm=PBEWithMD5AndTripleDES
+        - -DloginUrl=http://hnwvd-market01.cns.com:8090/store-inventory/login
+        - -Dspring.profiles.active=dvlp
+       
+
+# Spring boot properties  
+# Only works if logback is being used
+logging:
+  level:
+    org.jumpmind: DEBUG
+    org.jumpmind.pos.management: TRACE
+    
