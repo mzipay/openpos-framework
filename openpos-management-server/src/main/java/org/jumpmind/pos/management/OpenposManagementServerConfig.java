@@ -1,8 +1,5 @@
 package org.jumpmind.pos.management;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +36,7 @@ public class OpenposManagementServerConfig {
         public static final String DEFAULT_JAVA_REMOTE_DEBUG_ARG_TEMPLATE = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=%d";
         public static final String DEFAULT_PROCESS_LOG_FILENAME = "process.log";
 
+        private String initializationScript;
         private long startMaxWaitMillis = 60000;
         @NotNull 
         private String statusUrlTemplate;

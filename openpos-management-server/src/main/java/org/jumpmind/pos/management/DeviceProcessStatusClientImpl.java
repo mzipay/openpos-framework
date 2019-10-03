@@ -23,15 +23,16 @@ public class DeviceProcessStatusClientImpl implements DeviceProcessStatusClient 
 
     @Override
     public ProcessInfo getDeviceProcessStatus(String deviceId, int port) {
+        String url = "";
         try {
-            String url = String.format(config.getDeviceProcess().getStatusUrlTemplate(), port);
+            url = String.format(config.getDeviceProcess().getStatusUrlTemplate(), port);
             RestTemplate restTemplate = restTemplateBuilder
                 .setConnectTimeout(Duration.ofMillis(config.getDeviceProcess().getStatusMaxWaitMillis()))
                 .setReadTimeout(Duration.ofMillis(config.getDeviceProcess().getStatusMaxWaitMillis()))
                 .build();
             return restTemplate.getForObject(url, ProcessInfo.class);
         } catch (RestClientException ex) {
-            log.warn("Failed to get device process status for deviceId '{}' on port {}. Reason: {}", deviceId, port, ex.getMessage());
+            log.warn("Failed to get device process status for deviceId '{}' at endpoint '{}'. Reason: {}", deviceId, url, ex.getMessage());
             return null;
         }
     }

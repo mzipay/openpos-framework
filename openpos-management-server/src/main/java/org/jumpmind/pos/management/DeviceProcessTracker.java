@@ -260,7 +260,7 @@ public class DeviceProcessTracker {
                 
                 if (! running) {
                     if (dpi.getStatus() == DeviceProcessStatus.Starting) {
-                        log.trace("Device Process '{}' is 'Starting', will check again soon...");
+                        log.trace("Device Process '{}' is 'Starting', will check again soon...", dpi.getDeviceId());
                     } else if (dpi.getStatus() == DeviceProcessStatus.Running){
                         DeviceProcessTracker.this.updateDeviceProcessStatus(
                                 dpi, 
