@@ -7,8 +7,11 @@ openpos:
       
       processRemoteDebugPort: AUTO
       classpathEntries:
+        - /Users/jason/projects/biglots/newpos/openpos-biglots-server/build/libs/openpos-server.jar
         - '.'
-      executableJarPath: /Users/jason/projects/biglots/newpos/openpos-biglots-server/build/libs/openpos-server.jar
+#      executableJarPath: 
+      mainClass: org.springframework.boot.loader.PropertiesLauncher 
+      #com.biglots.openpos.app.OpenPOSServer
       additionalJavaArguments:
         - -Dopenpos.translate.orpos.headless.working.dir=headless
         - -DDEV_MODE=false
@@ -19,6 +22,7 @@ openpos:
         - -Djasypt.encryptor.algorithm=PBEWithMD5AndTripleDES
         - -DloginUrl=http://hnwvd-market01.cns.com:8090/store-inventory/login
         - -Dspring.profiles.active=dvlp
+        - -Dbiglots.openpos.managedMode=true
        
 
 # Spring boot properties  

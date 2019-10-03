@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -96,15 +97,14 @@ public class DeviceProcessLauncher {
            }
         }
         
-        String additionalArgs = constructAdditionalJavaArguments(
+        String[] additionalArgs = constructAdditionalJavaArguments(
             generatedAdditionalArgs.toArray(new String[0])
         );
         
+        log.debug("Additional Java arguments: [{}]", String.join(" ", additionalArgs));
         
-        log.debug("Additional Java arguments: [{}]", additionalArgs);
-        
-        String processArgs = constructProcessArguments();
-        log.debug("Process arguments: [{}]", processArgs);
+        String[] processArgs = constructProcessArguments();
+        log.debug("Process arguments: [{}]", String.join(" ", processArgs));
 
         List<String> commandLineArgs = new ArrayList<>();
         commandLineArgs.add(resolvedJavaPath);
@@ -112,8 +112,8 @@ public class DeviceProcessLauncher {
             commandLineArgs.add("-cp");
             commandLineArgs.add(classpath);
         }
-        if (StringUtils.isNotBlank(additionalArgs)) {
-            commandLineArgs.add(additionalArgs);
+        if (ArrayUtils.isNotEmpty(additionalArgs)) {
+            commandLineArgs.addAll(Arrays.asList(additionalArgs));
         }
         if (StringUtils.isNotBlank(config.getDeviceProcess().getExecutableJarPath())) {
             commandLineArgs.add("-jar");
@@ -123,8 +123,8 @@ public class DeviceProcessLauncher {
                 commandLineArgs.add(config.getDeviceProcess().getMainClass());
             }
         }
-        if (StringUtils.isNotBlank(processArgs)) {
-            commandLineArgs.add(processArgs);
+        if (ArrayUtils.isNotEmpty(processArgs)) {
+            commandLineArgs.addAll(Arrays.asList(processArgs));
         }
         
         return commandLineArgs;
@@ -254,14 +254,12 @@ public class DeviceProcessLauncher {
         return cp;
     }
     
-    protected String constructAdditionalJavaArguments(String...moreArgs) {
-        String additionalArgs = String.join(" ", ArrayUtils.addAll(moreArgs, config.getDeviceProcess().getAdditionalJavaArguments()));
-        return additionalArgs;
+    protected String[] constructAdditionalJavaArguments(String...moreArgs) {
+        return ArrayUtils.addAll(moreArgs, config.getDeviceProcess().getAdditionalJavaArguments());
     }
 
-    protected String constructProcessArguments() {
-        String processArgs = String.join(" ", config.getDeviceProcess().getProcessArguments());
-        return processArgs;
+    protected String[] constructProcessArguments() {
+        return config.getDeviceProcess().getProcessArguments();
     }
     
     protected String resolveJavaExecutablePath() {
