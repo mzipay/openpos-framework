@@ -51,7 +51,7 @@ public class ProcessManagerService {
                                 pi = this.processLauncher.launch(pi, timeRemaining);
                                 if (pi.isProcessAlive()) {
                                     processTracker.updateDeviceProcessStatus(pi, DeviceProcessStatus.Starting);
-                                    addShutdownHook(pi);
+                                    addShutdownHook(deviceId);
                                 } else {
                                     throw new DeviceProcessLaunchException(
                                             String.format("Failed to create process for Device '%s'.  Check the process log for the additional info.", pi.getDeviceId())
@@ -96,13 +96,14 @@ public class ProcessManagerService {
         
     }
     
-    protected void addShutdownHook(DeviceProcessInfo pi) {
+    protected void addShutdownHook(String deviceId) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(deviceId);
             if (pi.getProcess().isAlive()) {
                 log.info("Destroying child Device Process '{}', pid: {}", 
                     pi.getDeviceId(), pi.getPid() != null ? pi.getPid() : "unknown");
                 pi.getProcess().destroy();
-                this.processTracker.removeDeviceProcessInfo(pi);
+                processTracker.removeDeviceProcessInfo(pi);
             }
         }));
     }

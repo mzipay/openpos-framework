@@ -29,6 +29,8 @@ ext {
 configurations {
     all {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+        
     }
 }
 
@@ -67,10 +69,23 @@ test {
     }
 }
 
+// To launch local:
+// java -Dloader.path=./src/test/resources -Dspring.profiles.active=bltest -jar build/libs/openpos-management-server-0.4.6-SNAPSHOT.jar
 bootJar {
     mainClassName = 'org.jumpmind.pos.management.OpenposManagementServer'
+    manifest {
+        attributes 'Main-Class': 'org.springframework.boot.loader.PropertiesLauncher'
+    }
 }
 
+task bootRunRetailer(type: org.springframework.boot.gradle.tasks.run.BootRun) {
+    doFirst() {
+        main = bootJar.mainClassName
+        classpath = sourceSets.main.runtimeClasspath
+        systemProperty 'spring.profiles.active', 'bltest'
+    }
+
+}
 /*
 buildScan {
     

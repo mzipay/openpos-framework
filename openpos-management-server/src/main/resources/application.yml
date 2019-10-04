@@ -7,7 +7,8 @@ openpos:
     
     
     clientConnect:
-      # If specified, will override the default host name as calculated by XXXX.
+      # If specified, will override the default host name as calculated by 
+      # org.jumpmind.pos.util.AppUtils#getHostName()
       # This hostname value would be used for return in the clientConnect URLs.
       hostname:
       webServiceBaseUrlTemplate: http://$host:$port
@@ -33,7 +34,7 @@ openpos:
       #   log:        A logger refernce for logging messages in the OpenposManagementServer 
       #                 log
       #  
-      # Example value: /scripts/DeviceProcessInitialize.groovy
+      # Example value: file:c:/scripts/DeviceProcessInitialize.groovy
       initializationScript:
     
       # Maximum time a client request to start a child OpenPOS device process will
@@ -63,7 +64,7 @@ openpos:
       
       # Sequence of classpath entries to pass to the launched device process.
       classpathEntries:
-        - '.'
+#        - '.'
 
       # Optional sequence of additional Java command line parameters.  You can 
       # use this for parameters such as min and max memory, system properties, remote
@@ -106,7 +107,7 @@ openpos:
       # The name for the logfile that will be created in the working directory for
       # the device process.  stderr and stdout for the process is redirected into
       # this file.
-      processLogFilename: process.log
+      processLogFilePath: logs/process.log
       
       # Like the processPort parameter, this can be an integer, range of
       # values, list of integer values, or AUTO to use for assigning to the JVM process for

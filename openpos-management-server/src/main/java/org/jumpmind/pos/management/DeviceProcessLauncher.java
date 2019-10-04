@@ -144,10 +144,19 @@ public class DeviceProcessLauncher {
     
     
     protected ProcessBuilder constructProcessBuilder(DeviceProcessInfo pi, List<String> commandLineParts, File workingDir) {
+        File processLogfile = new File(workingDir, config.getDeviceProcess().getProcessLogFilePath());
+        if (! processLogfile.exists()) {
+            if (! processLogfile.getParentFile().exists()) {
+                if (processLogfile.getParentFile().mkdirs()) {
+                    log.info("Created directory '{}'", processLogfile.getParentFile().getAbsolutePath());
+                }
+            }
+        }
+        
         ProcessBuilder builder = new ProcessBuilder(commandLineParts);
         builder.directory(workingDir).redirectErrorStream(true)
             .redirectInput(Redirect.INHERIT)
-            .redirectOutput(new File(workingDir, config.getDeviceProcess().getProcessLogFilename()));
+            .redirectOutput(new File(workingDir, config.getDeviceProcess().getProcessLogFilePath()));
         return builder;
     }
     

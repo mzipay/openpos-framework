@@ -52,7 +52,7 @@ public class OpenposManagementServerConfig {
         private String processPort = AUTO_PORT_ALLOCATION;
         private String processPortArgTemplate = DEFAULT_PROCESS_PORT_ARG_TEMPLATE;
         private String[] processArguments = new String[0];
-        private String processLogFilename = DEFAULT_PROCESS_LOG_FILENAME;
+        private String processLogFilePath = DEFAULT_PROCESS_LOG_FILENAME;
         private String javaRemoteDebugPort;
         private String javaRemoteDebugArgTemplate = DEFAULT_JAVA_REMOTE_DEBUG_ARG_TEMPLATE;
     }

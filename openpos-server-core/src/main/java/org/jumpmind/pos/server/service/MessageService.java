@@ -1,19 +1,16 @@
 package org.jumpmind.pos.server.service;
 
-import java.lang.management.ManagementFactory;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.jumpmind.pos.server.config.PersonalizationParameters;
 import org.jumpmind.pos.server.model.Action;
-import org.jumpmind.pos.util.model.ProcessInfo;
 import org.jumpmind.pos.util.web.ServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -54,48 +51,13 @@ public class MessageService implements IMessageService {
     @Autowired(required=false)
     PersonalizationParameters personalizationParameters;
 
-    @Autowired
-    private Environment env;
-    
-    private Integer port;
-    private Integer pid;
-    
-    
     @PostConstruct
     public void init() {
         if (!jsonIncludeNulls) {
             mapper.setSerializationInclusion(Include.NON_NULL);
         }
-        initProcessInfo();
     }
     
-    private void initProcessInfo() {
-        // TODO? May need to hook into spring's ApplicationPidFileWriter to get PID if this
-        // doesn't work in all cases
-        String procStr = ManagementFactory.getRuntimeMXBean().getName();
-        pid = null;
-        if (procStr != null) {
-            String[] parts = procStr.split("@");
-            if (parts != null && parts.length > 1) {
-                try { pid = Integer.valueOf(parts[0]); } catch (Exception ex) {
-                   logger.warn("Failed to parse pid from {}", procStr);
-                }
-            }
-        }
-        port = null;
-        String portStr = env.getProperty("local.server.port");
-        if (portStr == null || portStr.isEmpty()) {
-            portStr = env.getProperty("server.port");
-        }
-        if (portStr != null) {
-            try { port = Integer.valueOf(portStr); } catch (Exception ex) {
-                logger.warn("Failed to parse port from {}", portStr);
-             }
-        }
-        
-        
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = "ping", produces="application/json")
     @ResponseBody
     public String ping() {
@@ -103,13 +65,6 @@ public class MessageService implements IMessageService {
         return "{ \"pong\": \"true\" }";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "status", produces="application/json")
-    @ResponseBody
-    public ProcessInfo status() {
-        logger.debug("Received a status request");
-        return new ProcessInfo(ProcessInfo.ALIVE_STATUS, port, pid);
-    }
-    
     @RequestMapping(method = RequestMethod.GET, value = "personalize", produces = "application/json")
     @ResponseBody
     public String personalize() {
