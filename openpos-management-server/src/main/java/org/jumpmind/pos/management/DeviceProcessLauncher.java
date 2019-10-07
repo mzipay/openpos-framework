@@ -1,6 +1,7 @@
 package org.jumpmind.pos.management;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,6 +16,7 @@ import javax.script.ScriptEngine;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.util.NetworkUtils;
+import org.jumpmind.pos.util.StreamCopier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
@@ -26,6 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class DeviceProcessLauncher {
+    private static final String END_OF_PROCESS_LOG_FOOTER = "\n\n" +
+        "======================================================================\n" +
+        "   END OF OUTPUT, see Device instance logs for remainder of logging\n" +
+        "======================================================================";
     
     @Autowired
     OpenposManagementServerConfig config;
@@ -38,13 +44,14 @@ public class DeviceProcessLauncher {
     
     public DeviceProcessInfo launch(DeviceProcessInfo pi, long maxWaitMillis) throws DeviceProcessSetupException, DeviceProcessLaunchException {
         initializeWorkingDir(pi);
+        File workingDir = getWorkingDir(pi.getDeviceId());
         
         List<String> commandLine = constructProcessCommandParts(pi);
         log.debug("Device Process '{}' command line: {}", pi.getDeviceId(), String.join(" ", commandLine));
         
-        ProcessBuilder processBuilder = constructProcessBuilder(pi, commandLine, getWorkingDir(pi.getDeviceId()));
+        ProcessBuilder processBuilder = constructProcessBuilder(pi, commandLine, workingDir);
         
-        Process process = startProcess(pi, processBuilder);
+        Process process = startProcess(pi, workingDir, processBuilder);
         pi.setProcess(process);
         
         return pi;
@@ -122,9 +129,18 @@ public class DeviceProcessLauncher {
         }
     }
 
-    protected Process startProcess(DeviceProcessInfo pi, ProcessBuilder processBuilder) {
+    protected Process startProcess(DeviceProcessInfo pi, File workingDir, ProcessBuilder processBuilder) {
         try {
             Process process = processBuilder.start();
+            StreamCopier streamCopier = new StreamCopier(
+                pi.getDeviceId(),
+                process.getInputStream(),
+                new FileOutputStream(new File(workingDir, config.getDeviceProcess().getProcessLogFilePath())),
+                true,
+                os -> {try {os.write(END_OF_PROCESS_LOG_FOOTER.getBytes());} catch (Exception ex) {log.warn("", ex);}}
+            );
+            streamCopier.start();
+            pi.setStreamCopier(streamCopier);
             if (process.isAlive()) {
                 log.info("Device Process '{}' started", pi.getDeviceId());
                 return process;
@@ -155,8 +171,7 @@ public class DeviceProcessLauncher {
         
         ProcessBuilder builder = new ProcessBuilder(commandLineParts);
         builder.directory(workingDir).redirectErrorStream(true)
-            .redirectInput(Redirect.INHERIT)
-            .redirectOutput(new File(workingDir, config.getDeviceProcess().getProcessLogFilePath()));
+            .redirectInput(Redirect.INHERIT);
         return builder;
     }
     

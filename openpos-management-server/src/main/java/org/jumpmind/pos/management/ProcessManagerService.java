@@ -50,7 +50,7 @@ public class ProcessManagerService {
                             try {
                                 pi = this.processLauncher.launch(pi, timeRemaining);
                                 if (pi.isProcessAlive()) {
-                                    processTracker.updateDeviceProcessStatus(pi, DeviceProcessStatus.Starting);
+                                    processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.Starting);
                                     addShutdownHook(deviceId);
                                 } else {
                                     throw new DeviceProcessLaunchException(
@@ -88,7 +88,7 @@ public class ProcessManagerService {
             if (pi.getStatus() == DeviceProcessStatus.Starting) {
                 // We exhausted the timeout period waiting for the process to finish
                 // starting, we'll have to mark it as a startup failure
-                processTracker.updateDeviceProcessStatus(pi, DeviceProcessStatus.StartupFailed);
+                processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.StartupFailed);
             }
         }
         

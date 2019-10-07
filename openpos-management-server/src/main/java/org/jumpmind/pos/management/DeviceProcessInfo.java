@@ -2,7 +2,11 @@ package org.jumpmind.pos.management;
 
 import java.time.Instant;
 
+import org.jumpmind.pos.util.StreamCopier;
+
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
 public class DeviceProcessInfo {
     @Getter
@@ -11,28 +15,19 @@ public class DeviceProcessInfo {
     private Integer port;
     @Getter
     private Integer pid;
-    @Getter
-    private DeviceProcessStatus status;
+    @Getter @Setter(AccessLevel.PACKAGE)
+    DeviceProcessStatus status;
     @Getter
     private Process process;
     @Getter
     private Instant lastUpdated;
+    @Getter @Setter(AccessLevel.PACKAGE)
+    private StreamCopier streamCopier;
 
     public DeviceProcessInfo(String deviceId, DeviceProcessStatus status) {
         this.deviceId = deviceId;
         this.status = status;
         touch();
-    }
-    
-    public DeviceProcessInfo(String deviceId, Integer port, Integer pid, DeviceProcessStatus status) {
-        this(deviceId, status);
-        this.port = port;
-        this.pid = pid;
-    }
-
-    public DeviceProcessInfo(String deviceId, Integer port, Integer pid, DeviceProcessStatus status, Process process) {
-        this(deviceId, port, pid, status);
-        this.process = process;
     }
     
     public boolean isPreviouslyStarted() {
@@ -48,17 +43,17 @@ public class DeviceProcessInfo {
                this.getProcess().isAlive();
     }
     
-    public void setProcess(Process process) {
+    void setProcess(Process process) {
         this.process = process;
         touch();
     }
 
-    public void setPid(Integer pid) {
+    void setPid(Integer pid) {
         this.pid = pid;
         touch();
     }
 
-    public void setPort(Integer port) {
+    void setPort(Integer port) {
         this.port = port;
         touch();
     }

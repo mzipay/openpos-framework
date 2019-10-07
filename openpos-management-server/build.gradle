@@ -21,11 +21,6 @@ repositories {
 apply from: '../openpos-gradle/src/main/resources/java.gradle'
 // apply from: '../openpos-gradle/src/main/resources/openpos.gradle'
 
-ext {
-    slf4jVersion='1.7.28'
-    log4jVersion='2.12.1'
-}
-
 configurations {
     all {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'

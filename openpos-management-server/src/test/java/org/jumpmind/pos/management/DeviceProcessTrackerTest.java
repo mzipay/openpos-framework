@@ -4,11 +4,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -115,7 +113,7 @@ public class DeviceProcessTrackerTest {
     @Test
     public void testCheckDeviceProcessStatus_SingleDevice() throws InterruptedException {
         DeviceProcessInfo pi = tracker.getDeviceProcessInfo(DEVICE_ID_1);
-        tracker.updateDeviceProcessPort(pi, 9999);
+        tracker.updateDeviceProcessPort(DEVICE_ID_1, 9999);
 
         // Doing this instead of using sleep in order to save test execution time
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
@@ -153,8 +151,8 @@ public class DeviceProcessTrackerTest {
     public void testCheckDeviceProcessStatus_MultipleDevices() throws InterruptedException {
         DeviceProcessInfo pi1 = tracker.getDeviceProcessInfo(DEVICE_ID_1);
         DeviceProcessInfo pi2 = tracker.getDeviceProcessInfo(DEVICE_ID_2);
-        tracker.updateDeviceProcessPort(pi1, 8888);
-        tracker.updateDeviceProcessPort(pi2, 9999);
+        tracker.updateDeviceProcessPort(DEVICE_ID_1, 8888);
+        tracker.updateDeviceProcessPort(DEVICE_ID_2, 9999);
         
         // Doing this instead of using sleep in order to save test execution time
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);

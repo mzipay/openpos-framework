@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.jumpmind.pos.util.StreamCopier;
 import org.jumpmind.pos.util.model.ProcessInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -83,27 +84,28 @@ public class DeviceProcessTracker {
         }
     }
     
-    public DeviceProcessInfo updateDeviceProcessStatus(DeviceProcessInfo pi, DeviceProcessStatus newStatus) {
+    public DeviceProcessInfo updateDeviceProcessStatus(String deviceId, DeviceProcessStatus newStatus) {
         synchronized(trackingMap) {
-            DeviceProcessInfo deviceProcessInfo = new DeviceProcessInfo(pi.getDeviceId(), pi.getPort(), pi.getPid(), newStatus, pi.getProcess());
-            trackingMap.put(pi.getDeviceId(), deviceProcessInfo);
-            return deviceProcessInfo;
+            DeviceProcessInfo dpi = trackingMap.get(deviceId);
+            dpi.setStatus(newStatus);
+            return dpi;
         }        
     }
 
-    public DeviceProcessInfo updateDeviceProcessStatus(DeviceProcessInfo pi, DeviceProcessStatus newStatus, Integer pid) {
+    public DeviceProcessInfo updateDeviceProcessStatus(String deviceId, DeviceProcessStatus newStatus, Integer pid) {
         synchronized(trackingMap) {
-            DeviceProcessInfo deviceProcessInfo = new DeviceProcessInfo(pi.getDeviceId(), pi.getPort(), pid, newStatus, pi.getProcess());
-            trackingMap.put(pi.getDeviceId(), deviceProcessInfo);
-            return deviceProcessInfo;
+            DeviceProcessInfo dpi = trackingMap.get(deviceId);
+            dpi.setStatus(newStatus);
+            dpi.setPid(pid);
+            return dpi;
         }        
     }
     
-    public DeviceProcessInfo updateDeviceProcessPort(DeviceProcessInfo pi, int port) {
+    public DeviceProcessInfo updateDeviceProcessPort(String deviceId, int port) {
         synchronized(trackingMap) {
-            DeviceProcessInfo deviceProcessInfo = new DeviceProcessInfo(pi.getDeviceId(), port, pi.getPid(), pi.getStatus(), pi.getProcess());
-            trackingMap.put(pi.getDeviceId(), deviceProcessInfo);
-            return deviceProcessInfo;
+            DeviceProcessInfo dpi = trackingMap.get(deviceId);
+            dpi.setPort(port);
+            return dpi;
         }        
     }
 
@@ -111,7 +113,7 @@ public class DeviceProcessTracker {
         synchronized(trackingMap) {
             DeviceProcessInfo deviceProcessInfo = trackingMap.get(deviceId);
             if (deviceProcessInfo == null) {
-                deviceProcessInfo = new DeviceProcessInfo(deviceId, null, null, DeviceProcessStatus.NotRunning);
+                deviceProcessInfo = new DeviceProcessInfo(deviceId, DeviceProcessStatus.NotRunning);
                 trackingMap.put(deviceId, deviceProcessInfo);
             }
 
@@ -240,15 +242,27 @@ public class DeviceProcessTracker {
                     ProcessInfo pi = DeviceProcessTracker.this.deviceProcessStatusClient.getDeviceProcessStatus(this.deviceId, this.port);
                     if (pi != null) {
                         running = true;
-                        if (dpi.getPid() != null) { 
+                        // We're transitioning from Starting to Running
+                        if (dpi.getStatus() == DeviceProcessStatus.Starting) {
+                            // We don't need to capture output any longer since the process
+                            // is now fully started.
+                            if (dpi.getStreamCopier() != null) {
+                                log.debug("Stopping output to process log file for Device Process {}", deviceId);
+                                dpi.getStreamCopier().stopCopying();
+                            } else {
+                                log.trace("StreamCopier is null for {}", deviceId);
+                            }
+                            log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), dpi.getStatus(), DeviceProcessStatus.Running);
+                        }
+                        if (pi.getPid() != null) {
                             DeviceProcessTracker.this.updateDeviceProcessStatus(
-                                    dpi, 
-                                    DeviceProcessStatus.Running,
-                                    pi.getPid()
+                                this.deviceId,
+                                DeviceProcessStatus.Running,
+                                pi.getPid()
                             );
                         } else {
                             DeviceProcessTracker.this.updateDeviceProcessStatus(
-                                    dpi, 
+                                    this.deviceId,
                                     DeviceProcessStatus.Running
                             );
                         }
@@ -263,7 +277,7 @@ public class DeviceProcessTracker {
                         log.trace("Device Process '{}' is 'Starting', will check again soon...", dpi.getDeviceId());
                     } else if (dpi.getStatus() == DeviceProcessStatus.Running){
                         DeviceProcessTracker.this.updateDeviceProcessStatus(
-                                dpi, 
+                                this.deviceId, 
                                 DeviceProcessStatus.NotRunning);
                         log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), dpi.getStatus(), DeviceProcessStatus.NotRunning);
                     }
