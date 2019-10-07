@@ -29,7 +29,7 @@ public class ProcessManagerService {
     
     // TODO: come up with better name
     public DeviceProcessInfo queryOrLaunchDeviceProcess(String deviceId) {
-        long processStartMaxWaitMillis = config.getDeviceProcess().getStartMaxWaitMillis();
+        long processStartMaxWaitMillis = config.getDeviceProcessConfig(deviceId).getStartMaxWaitMillis();
         processMgrEnvSvc.ensureMainWorkDirExists();
 
         Instant start = Instant.now();

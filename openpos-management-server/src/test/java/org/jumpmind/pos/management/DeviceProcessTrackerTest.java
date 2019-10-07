@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.test.context.ActiveProfiles;
@@ -35,13 +34,16 @@ public class DeviceProcessTrackerTest {
     
     @Mock
     DeviceProcessStatusClient statusClient;
+  
+    @Autowired
+    OpenposManagementServerConfig config;
     
-    @Value("${openpos.managementServer.deviceProcess.statusCheckPeriodMillis}")
     long deviceProcessStatusCheckPeriodMillis;
     
     
     @Before
     public void setUp() throws Exception {
+        deviceProcessStatusCheckPeriodMillis = config.getStatusCheckPeriodMillis();
         tracker.deviceProcessStatusClient = statusClient;
         tracker.clean();
     }
@@ -52,6 +54,7 @@ public class DeviceProcessTrackerTest {
      */
     @Test(timeout=500)
     public void testLockWait_SingleThread() {
+        System.out.println("testLockWait_SingleThread");
         assertThat(tracker.getDeviceLockStatus(DEVICE_ID_1)).isNull();
         tracker.waitForLock(DEVICE_ID_1, 10000);
         assertThat(tracker.getDeviceLockStatus(DEVICE_ID_1)).isEqualTo(Boolean.TRUE);
@@ -62,6 +65,7 @@ public class DeviceProcessTrackerTest {
      */
     @Test(timeout=2000)
     public void testWaitOnLock_TwoThreadsSameDevice() throws InterruptedException {
+        System.out.println("testWaitOnLock_TwoThreadsSameDevice");
         
         TestProcessLockThread t2 = new TestProcessLockThread();
         assertNull(tracker.getDeviceLockStatus(DEVICE_ID_1));
@@ -81,6 +85,7 @@ public class DeviceProcessTrackerTest {
      */
     @Test(timeout=600)
     public void testWaitForLock_TwoThreadsDifferentDevices() throws InterruptedException {
+        System.out.println("testWaitForLock_TwoThreadsDifferentDevices");
         TestProcessLockThread t1 = new TestProcessLockThread(DEVICE_ID_1, 1500);
         assertNull(tracker.getDeviceLockStatus(DEVICE_ID_1));
         
@@ -112,6 +117,7 @@ public class DeviceProcessTrackerTest {
      */
     @Test
     public void testCheckDeviceProcessStatus_SingleDevice() throws InterruptedException {
+        System.out.println("testCheckDeviceProcessStatus_SingleDevice");
         DeviceProcessInfo pi = tracker.getDeviceProcessInfo(DEVICE_ID_1);
         tracker.updateDeviceProcessPort(DEVICE_ID_1, 9999);
 
@@ -138,7 +144,8 @@ public class DeviceProcessTrackerTest {
         };
         Future<?> checkVerifier = executor.scheduleAtFixedRate(cv, 0, 110, TimeUnit.MILLISECONDS);
 
-        executor.awaitTermination(this.deviceProcessStatusCheckPeriodMillis, TimeUnit.MILLISECONDS);
+        
+        executor.awaitTermination(this.deviceProcessStatusCheckPeriodMillis * 2, TimeUnit.MILLISECONDS);
         assertTrue("Expected getDeviceProcessStatus to be called at least once", verified.get());
     }
     
@@ -149,6 +156,7 @@ public class DeviceProcessTrackerTest {
      */
     @Test
     public void testCheckDeviceProcessStatus_MultipleDevices() throws InterruptedException {
+        System.out.println("testCheckDeviceProcessStatus_MultipleDevices");
         DeviceProcessInfo pi1 = tracker.getDeviceProcessInfo(DEVICE_ID_1);
         DeviceProcessInfo pi2 = tracker.getDeviceProcessInfo(DEVICE_ID_2);
         tracker.updateDeviceProcessPort(DEVICE_ID_1, 8888);
@@ -178,7 +186,8 @@ public class DeviceProcessTrackerTest {
         };
         Future<?> checkVerifier = executor.scheduleAtFixedRate(cv, 0, 110, TimeUnit.MILLISECONDS);
 
-        executor.awaitTermination(this.deviceProcessStatusCheckPeriodMillis, TimeUnit.MILLISECONDS);
+        
+        executor.awaitTermination(this.deviceProcessStatusCheckPeriodMillis * 2, TimeUnit.MILLISECONDS);
         assertTrue("Expected getDeviceProcessStatus to be called at least once for both devices", verified.get());
     }
 

@@ -2,6 +2,7 @@ package org.jumpmind.pos.management;
 
 import java.time.Duration;
 
+import org.jumpmind.pos.management.OpenposManagementServerConfig.DeviceProcessConfig;
 import org.jumpmind.pos.util.model.ProcessInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -24,11 +25,12 @@ public class DeviceProcessStatusClientImpl implements DeviceProcessStatusClient 
     @Override
     public ProcessInfo getDeviceProcessStatus(String deviceId, int port) {
         String url = "";
+        DeviceProcessConfig deviceProcessConfig = config.getDeviceProcessConfig(deviceId);
         try {
-            url = String.format(config.getDeviceProcess().getStatusUrlTemplate(), port);
+            url = String.format(config.getStatusUrlTemplate(), port);
             RestTemplate restTemplate = restTemplateBuilder
-                .setConnectTimeout(Duration.ofMillis(config.getDeviceProcess().getStatusMaxWaitMillis()))
-                .setReadTimeout(Duration.ofMillis(config.getDeviceProcess().getStatusMaxWaitMillis()))
+                .setConnectTimeout(Duration.ofMillis(config.getStatusMaxWaitMillis()))
+                .setReadTimeout(Duration.ofMillis(config.getStatusMaxWaitMillis()))
                 .build();
             return restTemplate.getForObject(url, ProcessInfo.class);
         } catch (RestClientException ex) {

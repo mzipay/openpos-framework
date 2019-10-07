@@ -1,8 +1,8 @@
 openpos:
   managementServer:
     mainWorkDirPath: ./build/test-work
-    deviceProcess:
-      statusCheckPeriodMillis: 1000
+    statusCheckPeriodMillis: 1000
+    defaultDeviceProcessConfig:
       # Full path to Java executable that will be used to launch a device process. 
       javaExecutablePath: ${java.home}
       classpathEntries:

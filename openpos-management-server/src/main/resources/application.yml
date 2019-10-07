@@ -15,11 +15,27 @@ openpos:
       secureWebServiceBaseUrlTemplate: https://$host:$port
       webSocketBaseUrlTemplate: ws://$host:$port
       secureWebSocketBaseUrlTemplate: wss://$host:$port
+      
+    # This should be the same value as found in the application properties
+    # for the managed OpenPOS process as defined by property
+    # openpos.ui.personalization.devicePattern
+    devicePattern: \d{5}-\d{3}
+    # URL template for the Status webservice of the child OpenPOS device processes.
+    # The port number will be different for each child process.    
+    statusUrlTemplate: http://localhost:%d/status
+
+    # Maximum time to wait for a Status webservice call to a child OpenPOS device
+    # process to return
+    statusMaxWaitMillis: 1000 
+
+    # Amount of time to wait between calls to child OpenPOS device process to
+    # confirm status
+    statusCheckPeriodMillis: 5000
        
 # TODO:    lazyDeviceProcessLaunch: true
 # processTrackingFilename: .openpos_processes
-    deviceProcess:
-    
+    defaultDeviceProcessConfig:
+      
       # Uses Spring Resource loading mechanism to locate a Groovy script file to 
       # execute when the working directory for the device process is first created. 
       # This allows for any initialization code to be run before the device process 
@@ -40,18 +56,6 @@ openpos:
       # Maximum time a client request to start a child OpenPOS device process will
       # but put on hold while waiting for the process to finish starting.
       startMaxWaitMillis: 45000
-  
-      # URL template for the Status webservice of the child OpenPOS device processes.
-      # The port number will be different for each child process.    
-      statusUrlTemplate: http://localhost:%d/status
-  
-      # Maximum time to wait for a Status webservice call to a child OpenPOS device
-      # process to return
-      statusMaxWaitMillis: 1000 
-  
-      # Amount of time to wait between calls to child OpenPOS device process to
-      # confirm status
-      statusCheckPeriodMillis: 5000
   
       # Full path to Java executable that will be used to launch a device process.
       # Can be a full path such as C:\Program Files\Java\jdk1.8.0_65\bin\java or
@@ -120,7 +124,13 @@ openpos:
       # debug port.  The %d parameter in this string will be replaced by the debug 
       # port number.
       javaRemoteDebugArgTemplate: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=%d
-      
+    
+    selectorDeviceProcessConfigs: []
+        # Devices whose name matches this pattern will be mapped to this 
+        # this device process configuration
+        # deviceNamePattern: '.*'
+        # deviceProcess:
+        #   same options as defaultDeviceProcessCfg.deviceProcess
       
 logging:
   level:

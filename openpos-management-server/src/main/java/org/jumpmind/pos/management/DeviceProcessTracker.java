@@ -54,7 +54,7 @@ public class DeviceProcessTracker {
         
     }
     
-    @Scheduled(fixedRateString = "${openpos.managementServer.deviceProcess.statusCheckPeriodMillis:7500}")
+    @Scheduled(fixedRateString = "${openpos.managementServer.statusCheckPeriodMillis:7500}")
     public void checkDeviceProcessStatus() {
         log.trace("checkDeviceProcessStatus running");
 
@@ -131,6 +131,7 @@ public class DeviceProcessTracker {
         synchronized(lockMap) {
             Boolean lockStatus = this.getDeviceLockStatus(deviceId);
             if (lockStatus == null || ! lockStatus) {
+                log.debug("Locked for {}", deviceId);
                 this.lockMap.put(deviceId, Boolean.TRUE);
                 return true;
             }
@@ -142,7 +143,7 @@ public class DeviceProcessTracker {
     public void unlock(String deviceId) {
         synchronized(lockMap) {
             Boolean lockStatus = this.getDeviceLockStatus(deviceId);
-            if (lockStatus) {
+            if (lockStatus != null && lockStatus) {
                 this.lockMap.put(deviceId, Boolean.FALSE);
             }
         }        

@@ -15,6 +15,7 @@ import javax.script.ScriptEngine;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jumpmind.pos.management.OpenposManagementServerConfig.DeviceProcessConfig;
 import org.jumpmind.pos.util.NetworkUtils;
 import org.jumpmind.pos.util.StreamCopier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,25 +64,26 @@ public class DeviceProcessLauncher {
         }
 
         File processWorkingDir = createWorkingDirectory(pi.getDeviceId());
+        DeviceProcessConfig deviceProcessCfg = config.getDeviceProcessConfig(pi.getDeviceId());
         
-        if (StringUtils.isNotBlank(config.getDeviceProcess().getInitializationScript())) {
+        if (StringUtils.isNotBlank(deviceProcessCfg.getInitializationScript())) {
             if (groovyScriptEngine == null) {
                 processWorkingDir.delete();
                 throw new DeviceProcessSetupException(
                     String.format("Failed to create groovy script engine when " +
                         "attempting to run initialization script '%s'. Is groovy on the classpath?", 
-                            config.getDeviceProcess().getInitializationScript()
+                        deviceProcessCfg.getInitializationScript()
                     )
                 );
             }
  
             boolean executeFinished = false;
-            Resource scriptRes = appContext.getResource(config.getDeviceProcess().getInitializationScript());
+            Resource scriptRes = appContext.getResource(deviceProcessCfg.getInitializationScript());
             if (! scriptRes.exists()) {
                 throw new DeviceProcessSetupException(
                     String.format("The Device Process '%s' initialization script '%s' was not found at the given location.", 
                         pi.getDeviceId(),
-                        config.getDeviceProcess().getInitializationScript()
+                        deviceProcessCfg.getInitializationScript()
                     )
                 );
             }
@@ -96,7 +98,7 @@ public class DeviceProcessLauncher {
                     groovyScriptEngine.put("config", config);
                     groovyScriptEngine.put("log", log);
                     log.info("Executing Device Process '{}' initialization script '{}'...", 
-                        pi.getDeviceId(), config.getDeviceProcess().getInitializationScript());
+                        pi.getDeviceId(), deviceProcessCfg.getInitializationScript());
                     Object scriptResult = groovyScriptEngine.eval(scriptReader);
                     executeFinished = true;
                     log.info("Device Process '{}' initialization script completed with result: {}", 
@@ -106,7 +108,7 @@ public class DeviceProcessLauncher {
                     throw new DeviceProcessSetupException(
                         String.format("A failure occurred when executing Device Process '%s' initialization script '%s'.", 
                             pi.getDeviceId(),
-                            config.getDeviceProcess().getInitializationScript()
+                            deviceProcessCfg.getInitializationScript()
                         ),
                         ex
                     );
@@ -117,7 +119,7 @@ public class DeviceProcessLauncher {
                 throw new DeviceProcessSetupException(
                     String.format("A failure occurred when loading Device Process '%s' initialization script '%s'.", 
                         pi.getDeviceId(),
-                        config.getDeviceProcess().getInitializationScript()
+                        deviceProcessCfg.getInitializationScript()
                     ),
                     e
                 );
@@ -135,7 +137,7 @@ public class DeviceProcessLauncher {
             StreamCopier streamCopier = new StreamCopier(
                 pi.getDeviceId(),
                 process.getInputStream(),
-                new FileOutputStream(new File(workingDir, config.getDeviceProcess().getProcessLogFilePath())),
+                new FileOutputStream(new File(workingDir, config.getDeviceProcessConfig(pi.getDeviceId()).getProcessLogFilePath())),
                 true,
                 os -> {try {os.write(END_OF_PROCESS_LOG_FOOTER.getBytes());} catch (Exception ex) {log.warn("", ex);}}
             );
@@ -160,7 +162,7 @@ public class DeviceProcessLauncher {
     
     
     protected ProcessBuilder constructProcessBuilder(DeviceProcessInfo pi, List<String> commandLineParts, File workingDir) {
-        File processLogfile = new File(workingDir, config.getDeviceProcess().getProcessLogFilePath());
+        File processLogfile = new File(workingDir, config.getDeviceProcessConfig(pi.getDeviceId()).getProcessLogFilePath());
         if (! processLogfile.exists()) {
             if (! processLogfile.getParentFile().exists()) {
                 if (processLogfile.getParentFile().mkdirs()) {
@@ -176,13 +178,14 @@ public class DeviceProcessLauncher {
     }
     
     protected List<String> constructProcessCommandParts(DeviceProcessInfo pi) {
-        String resolvedJavaPath = resolveJavaExecutablePath();
+        DeviceProcessConfig deviceProcessCfg = config.getDeviceProcessConfig(pi.getDeviceId());
+        String resolvedJavaPath = resolveJavaExecutablePath(deviceProcessCfg);
         log.debug("Java path resolved: {}", resolvedJavaPath);
         
-        String classpath = constructClasspath();
+        String classpath = constructClasspath(deviceProcessCfg);
         log.debug("Classpath is: [{}]", classpath);
 
-        Integer port = allocateProcessPort();
+        Integer port = allocateProcessPort(deviceProcessCfg);
         if (null == port) {
             throw new DeviceProcessLaunchException(
                 String.format("Failed to allocate a port for Device Process '%s', " +
@@ -192,13 +195,13 @@ public class DeviceProcessLauncher {
         log.info("Assigning port {} to Device Process '{}'", port, pi.getDeviceId());
 
         List<String> generatedAdditionalArgs = new ArrayList<>();
-        generatedAdditionalArgs.add(String.format(config.getDeviceProcess().getProcessPortArgTemplate(), port));
+        generatedAdditionalArgs.add(String.format(deviceProcessCfg.getProcessPortArgTemplate(), port));
         pi.setPort(port);
         
-        if (StringUtils.isNotBlank(config.getDeviceProcess().getJavaRemoteDebugPort())) {
-           Integer debugPort = allocateDebugPort();
+        if (StringUtils.isNotBlank(deviceProcessCfg.getJavaRemoteDebugPort())) {
+           Integer debugPort = allocateDebugPort(deviceProcessCfg);
            if (debugPort != null) {
-               generatedAdditionalArgs.add(String.format(config.getDeviceProcess().getJavaRemoteDebugArgTemplate(), debugPort));
+               generatedAdditionalArgs.add(String.format(deviceProcessCfg.getJavaRemoteDebugArgTemplate(), debugPort));
            } else {
                log.warn("Failed to allocate a debug port for Device Process '%s', " +
                    "remote debugging won't be available.", pi.getDeviceId());
@@ -206,12 +209,13 @@ public class DeviceProcessLauncher {
         }
         
         String[] additionalArgs = constructAdditionalJavaArguments(
+            deviceProcessCfg,
             generatedAdditionalArgs.toArray(new String[0])
         );
         
         log.debug("Additional Java arguments: [{}]", String.join(" ", additionalArgs));
         
-        String[] processArgs = constructProcessArguments();
+        String[] processArgs = constructProcessArguments(deviceProcessCfg);
         log.debug("Process arguments: [{}]", String.join(" ", processArgs));
 
         List<String> commandLineArgs = new ArrayList<>();
@@ -223,12 +227,12 @@ public class DeviceProcessLauncher {
         if (ArrayUtils.isNotEmpty(additionalArgs)) {
             commandLineArgs.addAll(Arrays.asList(additionalArgs));
         }
-        if (StringUtils.isNotBlank(config.getDeviceProcess().getExecutableJarPath())) {
+        if (StringUtils.isNotBlank(deviceProcessCfg.getExecutableJarPath())) {
             commandLineArgs.add("-jar");
-            commandLineArgs.add(config.getDeviceProcess().getExecutableJarPath());
+            commandLineArgs.add(deviceProcessCfg.getExecutableJarPath());
         } else {
-            if (StringUtils.isNotBlank(config.getDeviceProcess().getMainClass())) {
-                commandLineArgs.add(config.getDeviceProcess().getMainClass());
+            if (StringUtils.isNotBlank(deviceProcessCfg.getMainClass())) {
+                commandLineArgs.add(deviceProcessCfg.getMainClass());
             }
         }
         if (ArrayUtils.isNotEmpty(processArgs)) {
@@ -281,12 +285,12 @@ public class DeviceProcessLauncher {
         return deviceProcessWorkDir;
     }
     
-    protected Integer allocateDebugPort() {
-        return allocatePort("processRemoteDebugPort", config.getDeviceProcess().getJavaRemoteDebugPort());
+    protected Integer allocateDebugPort(DeviceProcessConfig deviceProcessCfg) {
+        return allocatePort("processRemoteDebugPort", deviceProcessCfg.getJavaRemoteDebugPort());
     }
     
-    protected Integer allocateProcessPort() {
-        return allocatePort("processPort", config.getDeviceProcess().getProcessPort());
+    protected Integer allocateProcessPort(DeviceProcessConfig deviceProcessCfg) {
+        return allocatePort("processPort", deviceProcessCfg.getProcessPort());
     }
     
     protected Integer allocatePort(String portParameterName, String portParameterValue) {
@@ -309,7 +313,7 @@ public class DeviceProcessLauncher {
              } else {
                  allocatedPort = findAvailablePort(portParameterValue, portParameterName);
              }
-         } else if (portParameterValue.equalsIgnoreCase(OpenposManagementServerConfig.DeviceProcess.AUTO_PORT_ALLOCATION)) {
+         } else if (portParameterValue.equalsIgnoreCase(OpenposManagementServerConfig.DeviceProcessConfig.AUTO_PORT_ALLOCATION)) {
              allocatedPort = SocketUtils.findAvailableTcpPort();
          } else {
              try {
@@ -373,21 +377,21 @@ public class DeviceProcessLauncher {
         return availablePort;
         
     }
-    protected String constructClasspath() {
-        String cp = String.join(File.pathSeparator, config.getDeviceProcess().getClasspathEntries());
+    protected String constructClasspath(DeviceProcessConfig deviceProcessConfig) {
+        String cp = String.join(File.pathSeparator, deviceProcessConfig.getClasspathEntries());
         return cp;
     }
     
-    protected String[] constructAdditionalJavaArguments(String...moreArgs) {
-        return ArrayUtils.addAll(moreArgs, config.getDeviceProcess().getAdditionalJavaArguments());
+    protected String[] constructAdditionalJavaArguments(DeviceProcessConfig deviceProcessConfig, String...moreArgs) {
+        return ArrayUtils.addAll(moreArgs, deviceProcessConfig.getAdditionalJavaArguments());
     }
 
-    protected String[] constructProcessArguments() {
-        return config.getDeviceProcess().getProcessArguments();
+    protected String[] constructProcessArguments(DeviceProcessConfig deviceProcessConfig) {
+        return deviceProcessConfig.getProcessArguments();
     }
     
-    protected String resolveJavaExecutablePath() {
-        String javaExecutablePath = config.getDeviceProcess().getJavaExecutablePath();
+    protected String resolveJavaExecutablePath(DeviceProcessConfig deviceProcessConfig) {
+        String javaExecutablePath = deviceProcessConfig.getJavaExecutablePath();
         File javaPath = new File(javaExecutablePath);
         if (javaPath.exists() && javaPath.isFile()) {
             if (! javaPath.getPath().toLowerCase().endsWith("java") && 
