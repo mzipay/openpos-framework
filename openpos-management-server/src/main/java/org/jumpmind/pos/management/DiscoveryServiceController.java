@@ -27,12 +27,14 @@ public class DiscoveryServiceController {
         return "{ \"pong\": \"true\" }";
     }
     
-    @RequestMapping(value = "discover")
-    @GetMapping("url")
-    public ClientConnectInfo getConnectionUrl(@RequestParam("deviceId") String deviceId) {
+    @GetMapping("discover/url")
+    public ClientConnectInfo getConnectionUrl(
+        @RequestParam(required=false) String appId,
+        @RequestParam String deviceId
+    ) {
         
         try {
-            DeviceProcessInfo pi = processManager.queryOrLaunchDeviceProcess(deviceId);
+            DeviceProcessInfo pi = processManager.queryOrLaunchDeviceProcess(appId, deviceId);
             if (pi != null) {
                 if (pi.getStatus() == DeviceProcessStatus.Running) {
                     return processManager.constructClientConnectInfo(pi);

@@ -10,6 +10,8 @@ import lombok.Setter;
 
 public class DeviceProcessInfo {
     @Getter
+    private String appId;
+    @Getter
     private String deviceId;
     @Getter
     private Integer port;
@@ -25,6 +27,11 @@ public class DeviceProcessInfo {
     private StreamCopier streamCopier;
 
     public DeviceProcessInfo(String deviceId, DeviceProcessStatus status) {
+        this(null, deviceId, status);
+    }
+    
+    public DeviceProcessInfo(String appId, String deviceId, DeviceProcessStatus status) {
+        this.appId = appId;
         this.deviceId = deviceId;
         this.status = status;
         touch();

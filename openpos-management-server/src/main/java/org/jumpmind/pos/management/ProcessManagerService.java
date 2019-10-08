@@ -28,8 +28,8 @@ public class ProcessManagerService {
     
     
     // TODO: come up with better name
-    public DeviceProcessInfo queryOrLaunchDeviceProcess(String deviceId) {
-        long processStartMaxWaitMillis = config.getDeviceProcessConfig(deviceId).getStartMaxWaitMillis();
+    public DeviceProcessInfo queryOrLaunchDeviceProcess(String appId, String deviceId) {
+        long processStartMaxWaitMillis = config.getDeviceProcessConfig(appId).getStartMaxWaitMillis();
         processMgrEnvSvc.ensureMainWorkDirExists();
 
         Instant start = Instant.now();
@@ -42,7 +42,7 @@ public class ProcessManagerService {
             try {
                 if (processTracker.waitForLock(deviceId, timeRemaining)) {
                     gotLock = true;
-                    DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(deviceId);
+                    DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(appId, deviceId);
                     if (pi.getStatus() == DeviceProcessStatus.Running) {
                         return pi;
                     } else if (pi.getStatus() == DeviceProcessStatus.NotRunning) {

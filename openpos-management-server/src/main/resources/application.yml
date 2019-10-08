@@ -35,7 +35,10 @@ openpos:
 # TODO:    lazyDeviceProcessLaunch: true
 # processTrackingFilename: .openpos_processes
     defaultDeviceProcessConfig:
-      
+      # appId should only be populated for selectorDeviceProcessConfigs
+      # in order to support different Device Process configurations per
+      # application
+      appId:
       # Uses Spring Resource loading mechanism to locate a Groovy script file to 
       # execute when the working directory for the device process is first created. 
       # This allows for any initialization code to be run before the device process 
@@ -126,11 +129,10 @@ openpos:
       javaRemoteDebugArgTemplate: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=%d
     
     selectorDeviceProcessConfigs: []
-        # Devices whose name matches this pattern will be mapped to this 
+        # Devices associated with this appId will be mapped to this 
         # this device process configuration
-        # deviceNamePattern: '.*'
-        # deviceProcess:
-        #   same options as defaultDeviceProcessCfg.deviceProcess
+        # appId: '.*'
+        # Remainder of options are the same as defaultDeviceProcessConfig
       
 logging:
   level:

@@ -1,21 +1,22 @@
 package org.jumpmind.pos.management;
 
-import java.util.regex.Pattern;
-
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix="openpos.management-server")
 @Data
+@Slf4j
 public class OpenposManagementServerConfig {
 
     @NotNull
@@ -29,16 +30,25 @@ public class OpenposManagementServerConfig {
     private DeviceProcessConfig defaultDeviceProcessConfig;
     private DeviceProcessConfig[] selectorDeviceProcessConfigs;
 
-    public DeviceProcessConfig getDeviceProcessConfig(String deviceId) {
+    public DeviceProcessConfig getDeviceProcessConfig(DeviceProcessInfo dpi) {
+        return this.getDeviceProcessConfig(dpi.getAppId());
+    }
+    
+    public DeviceProcessConfig getDeviceProcessConfig(String appId) {
         DeviceProcessConfig matchedConfig = null;
-        if (ArrayUtils.isEmpty(selectorDeviceProcessConfigs)) {
+        if (ArrayUtils.isEmpty(selectorDeviceProcessConfigs) || StringUtils.isBlank(appId)) {
             matchedConfig = defaultDeviceProcessConfig;
         } else {
             for(DeviceProcessConfig dpCfg : this.selectorDeviceProcessConfigs) {
-                if (Pattern.matches(dpCfg.deviceNamePattern, deviceId)) {
+                if (dpCfg.getAppId().equalsIgnoreCase(appId)) {
                     matchedConfig = dpCfg;
                     break;
                 }
+            }
+            
+            if (matchedConfig == null) {
+                log.warn("No Device Process config found for appId '{}', selecting defaultDeviceProcessConfig", appId);
+                matchedConfig = defaultDeviceProcessConfig;
             }
         }        
         return matchedConfig;
@@ -60,7 +70,7 @@ public class OpenposManagementServerConfig {
         public static final String DEFAULT_JAVA_REMOTE_DEBUG_ARG_TEMPLATE = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=%d";
         public static final String DEFAULT_PROCESS_LOG_FILENAME = "process.log";
 
-        private String deviceNamePattern;
+        private String appId;
         private String initializationScript;
         private long startMaxWaitMillis = 60000;
         @NotNull @Value("${java.home}")

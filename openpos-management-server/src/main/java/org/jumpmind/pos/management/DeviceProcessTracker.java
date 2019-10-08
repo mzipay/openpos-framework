@@ -110,17 +110,21 @@ public class DeviceProcessTracker {
     }
 
     public DeviceProcessInfo getDeviceProcessInfo(String deviceId) {
+        return this.getDeviceProcessInfo(null, deviceId);
+    }
+
+    public DeviceProcessInfo getDeviceProcessInfo(String appId, String deviceId) {
         synchronized(trackingMap) {
             DeviceProcessInfo deviceProcessInfo = trackingMap.get(deviceId);
             if (deviceProcessInfo == null) {
-                deviceProcessInfo = new DeviceProcessInfo(deviceId, DeviceProcessStatus.NotRunning);
+                deviceProcessInfo = new DeviceProcessInfo(appId, deviceId, DeviceProcessStatus.NotRunning);
                 trackingMap.put(deviceId, deviceProcessInfo);
             }
 
             return deviceProcessInfo;
         }        
     }
-
+    
     public Boolean getDeviceLockStatus(String deviceId) {
         synchronized(lockMap) {
             return lockMap.get(deviceId);
@@ -131,7 +135,7 @@ public class DeviceProcessTracker {
         synchronized(lockMap) {
             Boolean lockStatus = this.getDeviceLockStatus(deviceId);
             if (lockStatus == null || ! lockStatus) {
-                log.debug("Locked for {}", deviceId);
+                log.trace("Locked for {}", deviceId);
                 this.lockMap.put(deviceId, Boolean.TRUE);
                 return true;
             }
@@ -145,6 +149,7 @@ public class DeviceProcessTracker {
             Boolean lockStatus = this.getDeviceLockStatus(deviceId);
             if (lockStatus != null && lockStatus) {
                 this.lockMap.put(deviceId, Boolean.FALSE);
+                log.trace("Unlocked for {}", deviceId);
             }
         }        
     }

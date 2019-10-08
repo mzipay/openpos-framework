@@ -1,7 +1,8 @@
 openpos:
   managementServer:
     mainWorkDirPath: ./build/test-work
-    deviceProcess:
+    devicePattern: 
+    defaultDeviceProcessConfig:
       initializationScript: file:/Users/jason/projects/biglots/newpos/openpos-biglots-server/app/DeviceWorkDirInitializer.groovy
       # Full path to Java executable that will be used to launch a device process. 
       javaExecutablePath: ${java.home}

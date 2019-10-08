@@ -64,7 +64,7 @@ public class DeviceProcessLauncher {
         }
 
         File processWorkingDir = createWorkingDirectory(pi.getDeviceId());
-        DeviceProcessConfig deviceProcessCfg = config.getDeviceProcessConfig(pi.getDeviceId());
+        DeviceProcessConfig deviceProcessCfg = config.getDeviceProcessConfig(pi);
         
         if (StringUtils.isNotBlank(deviceProcessCfg.getInitializationScript())) {
             if (groovyScriptEngine == null) {
@@ -137,7 +137,7 @@ public class DeviceProcessLauncher {
             StreamCopier streamCopier = new StreamCopier(
                 pi.getDeviceId(),
                 process.getInputStream(),
-                new FileOutputStream(new File(workingDir, config.getDeviceProcessConfig(pi.getDeviceId()).getProcessLogFilePath())),
+                new FileOutputStream(new File(workingDir, config.getDeviceProcessConfig(pi).getProcessLogFilePath())),
                 true,
                 os -> {try {os.write(END_OF_PROCESS_LOG_FOOTER.getBytes());} catch (Exception ex) {log.warn("", ex);}}
             );
@@ -162,7 +162,7 @@ public class DeviceProcessLauncher {
     
     
     protected ProcessBuilder constructProcessBuilder(DeviceProcessInfo pi, List<String> commandLineParts, File workingDir) {
-        File processLogfile = new File(workingDir, config.getDeviceProcessConfig(pi.getDeviceId()).getProcessLogFilePath());
+        File processLogfile = new File(workingDir, config.getDeviceProcessConfig(pi).getProcessLogFilePath());
         if (! processLogfile.exists()) {
             if (! processLogfile.getParentFile().exists()) {
                 if (processLogfile.getParentFile().mkdirs()) {
@@ -178,7 +178,7 @@ public class DeviceProcessLauncher {
     }
     
     protected List<String> constructProcessCommandParts(DeviceProcessInfo pi) {
-        DeviceProcessConfig deviceProcessCfg = config.getDeviceProcessConfig(pi.getDeviceId());
+        DeviceProcessConfig deviceProcessCfg = config.getDeviceProcessConfig(pi);
         String resolvedJavaPath = resolveJavaExecutablePath(deviceProcessCfg);
         log.debug("Java path resolved: {}", resolvedJavaPath);
         
