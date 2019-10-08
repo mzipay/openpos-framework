@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.jumpmind.pos.management.ClientConnectInfo;
+import org.jumpmind.pos.management.DiscoveryResponse;
 import org.jumpmind.pos.management.DiscoveryServiceController;
 import org.jumpmind.pos.management.OpenposManagementServer;
 import org.jumpmind.pos.util.AppUtils;
@@ -53,7 +53,7 @@ public class OpenposManagementServerRetailerTest {
     @Test
     public void testRequest() {
         String url = String.format("http://localhost:%d/discover/url?deviceId=%s", port, "05243-013");
-        ClientConnectInfo ci = restTemplate.getForObject(url, ClientConnectInfo.class);
+        DiscoveryResponse ci = restTemplate.getForObject(url, DiscoveryResponse.class);
         assertThat(ci.getHost()).isEqualTo(AppUtils.getHostName());
         assertThat(ci.getPort()).isNotNull();
         assertThat(ci.getWebServiceBaseUrl()).isEqualTo(String.format("http://%s:%d", AppUtils.getHostName(), ci.getPort()));

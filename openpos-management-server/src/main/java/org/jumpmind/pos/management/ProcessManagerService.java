@@ -108,8 +108,8 @@ public class ProcessManagerService {
         }));
     }
 
-    public ClientConnectInfo constructClientConnectInfo(DeviceProcessInfo pi) {
-        ClientConnectInfo cci = new ClientConnectInfo(
+    public DiscoveryResponse constructClientConnectInfo(DeviceProcessInfo pi) {
+        DiscoveryResponse cci = new DiscoveryResponse(
             this.resolveHostname(),
             pi.getPort(),
             makeUrl(config.getClientConnect().getWebServiceBaseUrlTemplate(), pi),

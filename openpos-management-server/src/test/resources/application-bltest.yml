@@ -1,7 +1,7 @@
 openpos:
   managementServer:
     mainWorkDirPath: ./build/test-work
-    devicePattern: 
+    devicePattern: \d{5}-\d{3}
     defaultDeviceProcessConfig:
       initializationScript: file:/Users/jason/projects/biglots/newpos/openpos-biglots-server/app/DeviceWorkDirInitializer.groovy
       # Full path to Java executable that will be used to launch a device process. 
@@ -55,7 +55,7 @@ openpos:
         #- -Dspring.profiles.active=dvlp
         #- -Dbiglots.openpos.managedMode=true
       processLogFilePath: logs/process.log
-       
+      processPort: AUTO
 
 # Spring boot properties  
 # Only works if logback is being used

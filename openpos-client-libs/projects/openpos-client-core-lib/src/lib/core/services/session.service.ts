@@ -205,12 +205,12 @@ export class SessionService implements IMessageHandler<any> {
         return headers;
     }
 
-    public subscribe() {
+    public async subscribe() {
         if (this.subscription) {
             return;
         }
 
-        const url = this.personalization.getWebsocketUrl();
+        let url: string = await this.personalization.getWebsocketUrl();
         this.log.info('creating new stomp service at: ' + url);
 
         this.stompService.config = {

@@ -19,7 +19,7 @@ export class SubscribeToSessionTask implements IStartupTask {
     ) { }
 
     execute(data: StartupTaskData): Observable<string> {
-        return Observable.create((message: Subject<string>) => {
+        return Observable.create(async (message: Subject<string>) => {
             if (!this.session.connected()) {
 
                 if (!this.session.getAppId()) {
@@ -40,7 +40,7 @@ export class SubscribeToSessionTask implements IStartupTask {
 
                 message.next(`[StartupService] Subscribing to server using appId '${this.session.getAppId()}'...`);
                 this.session.unsubscribe();
-                this.session.subscribe();
+                await this.session.subscribe();
                 message.complete();
             } else {
                 /* we shouldn't be coming there here if we are already subscribed.  lets do a refresh to get a clean start */

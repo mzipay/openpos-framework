@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientConnectInfo {
+public class DiscoveryResponse {
 
     private String host;
     private Integer port;

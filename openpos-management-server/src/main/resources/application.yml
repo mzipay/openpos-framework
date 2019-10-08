@@ -13,13 +13,13 @@ openpos:
       hostname:
       webServiceBaseUrlTemplate: http://$host:$port
       secureWebServiceBaseUrlTemplate: https://$host:$port
-      webSocketBaseUrlTemplate: ws://$host:$port
-      secureWebSocketBaseUrlTemplate: wss://$host:$port
+      webSocketBaseUrlTemplate: ws://$host:$port/api/websocket
+      secureWebSocketBaseUrlTemplate: wss://$host:$port/api/websocket
       
     # This should be the same value as found in the application properties
     # for the managed OpenPOS process as defined by property
     # openpos.ui.personalization.devicePattern
-    devicePattern: \d{5}-\d{3}
+    devicePattern:
     # URL template for the Status webservice of the child OpenPOS device processes.
     # The port number will be different for each child process.    
     statusUrlTemplate: http://localhost:%d/status
