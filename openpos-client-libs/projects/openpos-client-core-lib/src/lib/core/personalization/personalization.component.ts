@@ -1,4 +1,3 @@
-import { DiscoveryResponse } from './discovery-response.interface';
 import { Logger } from '../services/logger.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
@@ -6,8 +5,10 @@ import { IScreen } from '../../shared/components/dynamic-screen/screen.interface
 import { PersonalizationService } from './personalization.service';
 import { PersonalizationResponse } from './personalization-response.interface';
 import { ClientUrlService } from './client-url.service';
-import { MatDialog, SELECT_PANEL_PADDING_X } from '@angular/material';
-import { DiscoveryStatus } from './discovery-status.enum';
+import { MatDialog } from '@angular/material';
+import { DiscoveryService } from '../services/discovery.service';
+import { DiscoveryStatus } from '../interfaces/discovery-status.enum';
+import { DiscoveryResponse } from '../interfaces/discovery-response.interface';
 
 @Component({
     selector: 'app-personalization',
@@ -31,7 +32,9 @@ export class PersonalizationComponent implements IScreen, OnInit {
 
     constructor(
         private formBuilder: FormBuilder, private clientUrlService: ClientUrlService,
-        private personalizationService: PersonalizationService, private log: Logger,
+        private personalizationService: PersonalizationService, 
+        private discoveryService: DiscoveryService,
+        private log: Logger,
         private matDialog: MatDialog
     ) { }
 
@@ -127,7 +130,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
         let server = this.secondFormGroup.get('serverName').value;
         let port = this.secondFormGroup.get('serverPort').value;
         if (this.openposMgmtServerPresent && this.discoveryResponse && this.discoveryResponse.success) {
-            personalizationProperties.set('openposManagementServer', 'true');
+            personalizationProperties.set(PersonalizationService.OPENPOS_MANAGED_SERVER_PROPERTY, 'true');
         }
 
         this.personalizationService.personalize(
@@ -163,12 +166,8 @@ export class PersonalizationComponent implements IScreen, OnInit {
     public async discover(): Promise<any> {
         if (this.openposMgmtServerPresent) {
             this.discoveryStatus = DiscoveryStatus.InProgress;
-            this.discoveryResponse = await this.personalizationService.discoverDeviceProcess(
-                this.secondFormGroup.get('serverName').value,
-                this.secondFormGroup.get('serverPort').value, 
-                this.thirdFormGroup.get('deviceId').value,
-                this.secondFormGroup.get('sslEnabled').value
-            );
+
+            this.discoveryResponse = await this.discoveryService.discoverDeviceProcess();
             if (this.discoveryResponse && this.discoveryResponse.success) {
                 this.serverResponse = await this.personalizationService.requestPersonalization(
                     this.discoveryResponse.host, 

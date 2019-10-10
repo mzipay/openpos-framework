@@ -26,6 +26,7 @@ import { OldPluginService } from '../../../core/services/old-plugin.service';
 import { FileUploadService } from '../../../core/services/file-upload.service';
 import { IVersion } from '../../../core/interfaces/version.interface';
 import { Observable } from 'rxjs';
+import { DiscoveryService } from '../../../core/services/discovery.service';
 
 @Component({
     selector: 'app-dev-menu',
@@ -117,7 +118,8 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
             private httpClient: HttpClient, private cd: ChangeDetectorRef,
             private elRef: ElementRef, public renderer: Renderer2,
             private electron: ElectronService,
-            private configurationService: ConfigurationService) {
+            private configurationService: ConfigurationService,
+            private discovery: DiscoveryService) {
 
         if (Configuration.useTouchListener) {
             this.renderer.listen(elRef.nativeElement, 'touchstart', (event) => {
@@ -453,7 +455,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
         const prom = new Promise<{ success: boolean, message: string }>((resolve, reject) => {
             const port = this.personalization.getServerPort();
             const nodeId = this.personalization.getDeviceId().toString();
-            const url = `${this.personalization.getServerBaseURL()}/register/restart/node/${nodeId}`;
+            const url = `${this.discovery.getServerBaseURL()}/register/restart/node/${nodeId}`;
             const httpClient = this.httpClient;
             httpClient.get(url).subscribe(response => {
                 const msg = `Node '${nodeId}' restarted successfully.`;
@@ -601,7 +603,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
         this.electron.remote.getCurrentWindow().close();
     }
 
-    public getLocalTheme(): Observable<string>{
+    public getLocalTheme(): Observable<string> {
         return this.configurationService.theme$;
     }
 

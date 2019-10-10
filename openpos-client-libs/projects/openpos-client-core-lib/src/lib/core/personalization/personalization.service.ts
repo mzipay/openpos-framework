@@ -2,14 +2,12 @@ import { Logger } from '../services/logger.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { PersonalizationResponse } from './personalization-response.interface';
-import { DiscoveryResponse } from './discovery-response.interface';
-import { timeout, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class PersonalizationService {
+    static readonly OPENPOS_MANAGED_SERVER_PROPERTY = 'managedServer';
 
     private serverBaseUrl: string;
 
@@ -83,36 +81,9 @@ export class PersonalizationService {
         return map;
     }
 
-    public async getWebsocketUrl(): Promise<string> {
-        if (this.isOpenposManagementServer()) {
-            const response = await this.discoverDeviceProcess(
-                this.getServerName(),
-                this.getServerPort(),
-                this.getDeviceId(),
-                this.isSslEnabled()
-            );
-            if (response.success) {
-                return this.isSslEnabled() ? response.secureWebSocketBaseUrl : response.webSocketBaseUrl;
-            } else {
-                this.log.warn(`Failed to reach OpenPOS Management Server at ${this.getServerName()}:${this.getServerPort()}. Reason: ${response.message}`);
-                return null;
-            }
-        } else {
-            let protocol = 'ws://';
-            if (this.isSslEnabled()) {
-                protocol = 'wss://';
-            }
-            let url: string = protocol + this.getServerName();
-            if (this.getServerPort()) {
-                url = url + ':' + this.getServerPort();
-            }
-            url = url + '/api/websocket';
-            return url;
-        }
-    }
 
-    public isOpenposManagementServer(): boolean {
-        return 'true' === localStorage.getItem('openposManagementServer');
+    public isManagedServer(): boolean {
+        return 'true' === localStorage.getItem(PersonalizationService.OPENPOS_MANAGED_SERVER_PROPERTY);
     }
 
     public isSslEnabled(): boolean {
@@ -172,56 +143,6 @@ export class PersonalizationService {
             return true;
         } else {
             return false;
-        }
-    }
-
-    public getServerBaseURL(): string {
-        if (!this.serverBaseUrl) {
-            const protocol = this.isSslEnabled() ? 'https' : 'http';
-            this.serverBaseUrl = `${protocol}://${this.getServerName()}${this.getServerPort() ? `:${this.getServerPort()}` : ''}`;
-            this.log.info(`Generated serverBaseURL: ${this.serverBaseUrl}`);
-        }
-        return this.serverBaseUrl;
-    }
-
-    public getApiServerBaseURL(): string {
-        return `${this.getServerBaseURL()}/api`;
-    }
-
-    public async discoverDeviceProcess(serverName: string, serverPort: string, deviceId: string, sslEnabled: boolean, appId?: string, maxWaitMillis=60000): Promise<DiscoveryResponse> {
-        const url = `http${sslEnabled? 's' : ''}://${serverName}:${serverPort}/discover?deviceId=${deviceId}${appId ? '&appId=' + appId : ''}`;
-        console.log('Discovering client using url: ' + url);
-
-        let discoveryError: any = null;
-        try {
-            const httpResult = await this.http.get<DiscoveryResponse>(url, {})
-//                .pipe(catchError(e => {
-//                    return of({ success: false, message: e })
-//                }))
-                .pipe(timeout(maxWaitMillis), 
-                    catchError(e => {
-                        return of({ success: false, message: e.message })
-                    })
-                )
-                .toPromise();
-            if (httpResult) {
-                if (httpResult.hasOwnProperty('success')) {
-                    if (! httpResult.success) {
-                        console.log('Discovery FAILED with url: ' + url);
-                    }
-                } else {
-                    httpResult.success = true;
-                }
-                if (httpResult.success) {
-                    console.log('Successful Discovery with url: ' + url);
-                }
-                return httpResult;
-            } else {
-                discoveryError = { success: false, message: '?' };
-            }
-        } catch (error) {
-            discoveryError = error;
-            discoveryError['success'] = false;
         }
     }
 

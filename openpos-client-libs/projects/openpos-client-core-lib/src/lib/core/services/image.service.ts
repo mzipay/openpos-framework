@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { PersonalizationService } from '../personalization/personalization.service';
 import { SessionService } from './session.service';
+import { DiscoveryService } from './discovery.service';
+import { PersonalizationService } from '../personalization/personalization.service';
 
 @Injectable({
     providedIn: 'root',
@@ -10,11 +11,12 @@ export class ImageService {
     private appIdToken = '${appId}';
     private deviceIdToken = '${deviceId}';
 
-    constructor(private personalizationService: PersonalizationService, private session: SessionService) { }
+    constructor(private personalizer: PersonalizationService,
+                private discovery: DiscoveryService, private session: SessionService) { }
 
     replaceImageUrl(originalUrl: string): string {
-        const apiServerBaseUrl = this.personalizationService.getApiServerBaseURL();
-        const deviceId = this.personalizationService.getDeviceId();
+        const apiServerBaseUrl = this.discovery.getApiServerBaseURL();
+        const deviceId = this.personalizer.getDeviceId();
         const appId = this.session.getAppId();
 
         let url = originalUrl.replace(this.baseUrlToken, apiServerBaseUrl);
