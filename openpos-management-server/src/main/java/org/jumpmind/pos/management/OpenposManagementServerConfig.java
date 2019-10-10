@@ -65,14 +65,36 @@ public class OpenposManagementServerConfig {
 
     @Data
     public static class DeviceProcessConfig {
-        public static final String AUTO_PORT_ALLOCATION = "AUTO";
-        public static final String DEFAULT_PROCESS_PORT_ARG_TEMPLATE = "-Dserver.port=%d";
-        public static final String DEFAULT_JAVA_REMOTE_DEBUG_ARG_TEMPLATE = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=%d";
         public static final String DEFAULT_PROCESS_LOG_FILENAME = "process.log";
-
         private String appId;
         private String initializationScript;
         private long startMaxWaitMillis = 60000;
+        private String processLogFilePath = DEFAULT_PROCESS_LOG_FILENAME;
+        private ExecutableConfig executableConfig;
+        private JavaExecutableConfig javaExecutableConfig;
+        
+    }
+
+    @Data
+    public static class ExecutableConfig {
+        private String executablePath;
+        private String[] arguments = new String[0];
+        
+        public boolean isEmpty() {
+            return StringUtils.isEmpty(this.executablePath);
+        }
+        
+        public boolean isNotEmpty() {
+            return ! this.isEmpty();
+        }
+    }
+    
+    @Data
+    public static class JavaExecutableConfig {
+        public static final String AUTO_PORT_ALLOCATION = "AUTO";
+        public static final String DEFAULT_PROCESS_PORT_ARG_TEMPLATE = "-Dserver.port=%d";
+        public static final String DEFAULT_JAVA_REMOTE_DEBUG_ARG_TEMPLATE = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=%d";
+        
         @NotNull @Value("${java.home}")
         private String javaExecutablePath;
 
@@ -83,9 +105,7 @@ public class OpenposManagementServerConfig {
         private String processPort = AUTO_PORT_ALLOCATION;
         private String processPortArgTemplate = DEFAULT_PROCESS_PORT_ARG_TEMPLATE;
         private String[] processArguments = new String[0];
-        private String processLogFilePath = DEFAULT_PROCESS_LOG_FILENAME;
         private String javaRemoteDebugPort;
         private String javaRemoteDebugArgTemplate = DEFAULT_JAVA_REMOTE_DEBUG_ARG_TEMPLATE;
-    }
-    
+    }    
 }

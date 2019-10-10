@@ -3,11 +3,12 @@ openpos:
     mainWorkDirPath: ./build/test-work
     statusCheckPeriodMillis: 1000
     defaultDeviceProcessConfig:
-      # Full path to Java executable that will be used to launch a device process. 
-      javaExecutablePath: ${java.home}
-      classpathEntries:
-        - '.'             
-      processRemoteDebugPort: AUTO
+      javaExecutableConfig:
+        # Full path to Java executable that will be used to launch a device process. 
+        javaExecutablePath: ${java.home}
+        classpathEntries:
+          - '.'             
+        processRemoteDebugPort: AUTO
     
 
 # Spring boot properties  

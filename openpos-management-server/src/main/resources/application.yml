@@ -60,73 +60,85 @@ openpos:
       # but put on hold while waiting for the process to finish starting.
       startMaxWaitMillis: 45000
   
-      # Full path to Java executable that will be used to launch a device process.
-      # Can be a full path such as C:\Program Files\Java\jdk1.8.0_65\bin\java or
-      # a spring EL expression such as ${java.home}.  If the path is a directory
-      # and not the actual location of the java executable, the system will
-      # look for a java executable in the given directory and if it is not
-      # found, it will finally look for a java exectuable in a subdirectory of 
-      # the given directory named 'bin'. 
-      javaExecutablePath: ${java.home}
-      
-      # Sequence of classpath entries to pass to the launched device process.
-      classpathEntries:
-#        - '.'
-
-      # Optional sequence of additional Java command line parameters.  You can 
-      # use this for parameters such as min and max memory, system properties, remote
-      # debug settings, etc. E.g.,
-      #  - -Xms1024m
-      #  - -Xmx2048m
-      additionalJavaArguments:
-      
-      # The path to an executable jar file to launch and bind to a given device id.
-      executableJarPath:
-      
-      # If executableJarPath is not specified, then this should specify a 
-      # Java class with a main method to launch and bind to a given device id.
-      # This should be a Spring Boot @SpringBootApplication.
-      mainClass:
-      
-      
-      # The Spring Boot server.port value to assign to the launched process. If 
-      # only one process, this can just be an integer.  If launching multiple 
-      # processes, this can be:
-      #   AUTO
-      #       Which indicates that a port number should be automatically and randomly 
-      #       allocated between the values of 1024 and 65535
-      #   range-1,range-2,...,range-n
-      #       Which is a comma separated list of integer port number values OR 
-      #       ranges that will restrict the pool of port numbers that will be attempted to
-      #       be assigned to the process.
-      processPort: AUTO
-      
-      # This is the argument that will be appended to the Java process command line
-      # to set the port number of the launched Spring Boot Java process. The %d
-      # parameter in this string will be replaced by the port number
-      processPortArgTemplate: -Dserver.port=%d
-      
-      # Optional sequence of arguments to pass to the processMainClass.  E.g., 
-      # - arg1
-      # - arg2
-      processArguments:
-      
       # The name for the logfile that will be created in the working directory for
       # the device process.  stderr and stdout for the process is redirected into
       # this file.
       processLogFilePath: logs/process.log
-      
-      # Like the processPort parameter, this can be an integer, range of
-      # values, list of integer values, or AUTO to use for assigning to the JVM process for
-      # purposes of remote debugging. If empty/blank, then remote debugging will
-      # not be enabled.
-      javaRemoteDebugPort:
-
-      # If processRemoteDebugPort has one or more values, this is the string
-      # that will be appended onto the Java process command line to set the 
-      # debug port.  The %d parameter in this string will be replaced by the debug 
-      # port number.
-      javaRemoteDebugArgTemplate: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=%d
+  
+      # Either an executableConfig or a javaExecutableConfig section should be
+      # populated, but not both. If both are populated, executableConfig will
+      # be chosen.  If executablePath is empty, then the javaExectuableConfig will
+      # be used.
+      executableConfig:
+        # Full path to the executable to launch, not including arguments.
+        executablePath:
+        # The list of arguments to pass to the executable.
+        arguments: []
+        
+      javaExecutableConfig:
+        # Full path to Java executable that will be used to launch a device process.
+        # Can be a full path such as C:\Program Files\Java\jdk1.8.0_65\bin\java or
+        # a spring EL expression such as ${java.home}.  If the path is a directory
+        # and not the actual location of the java executable, the system will
+        # look for a java executable in the given directory and if it is not
+        # found, it will finally look for a java exectuable in a subdirectory of 
+        # the given directory named 'bin'. 
+        javaExecutablePath: ${java.home}
+        
+        # Sequence of classpath entries to pass to the launched device process.
+        classpathEntries:
+  #        - '.'
+  
+        # Optional sequence of additional Java command line parameters.  You can 
+        # use this for parameters such as min and max memory, system properties, remote
+        # debug settings, etc. E.g.,
+        #  - -Xms1024m
+        #  - -Xmx2048m
+        additionalJavaArguments:
+        
+        # The path to an executable jar file to launch and bind to a given device id.
+        executableJarPath:
+        
+        # If executableJarPath is not specified, then this should specify a 
+        # Java class with a main method to launch and bind to a given device id.
+        # This should be a Spring Boot @SpringBootApplication.
+        mainClass:
+        
+        
+        # The Spring Boot server.port value to assign to the launched process. If 
+        # only one process, this can just be an integer.  If launching multiple 
+        # processes, this can be:
+        #   AUTO
+        #       Which indicates that a port number should be automatically and randomly 
+        #       allocated between the values of 1024 and 65535
+        #   range-1,range-2,...,range-n
+        #       Which is a comma separated list of integer port number values OR 
+        #       ranges that will restrict the pool of port numbers that will be attempted to
+        #       be assigned to the process.
+        processPort: AUTO
+        
+        # This is the argument that will be appended to the Java process command line
+        # to set the port number of the launched Spring Boot Java process. The %d
+        # parameter in this string will be replaced by the port number
+        processPortArgTemplate: -Dserver.port=%d
+        
+        # Optional sequence of arguments to pass to the processMainClass.  E.g., 
+        # - arg1
+        # - arg2
+        processArguments:
+        
+        
+        # Like the processPort parameter, this can be an integer, range of
+        # values, list of integer values, or AUTO to use for assigning to the JVM process for
+        # purposes of remote debugging. If empty/blank, then remote debugging will
+        # not be enabled.
+        javaRemoteDebugPort:
+  
+        # If processRemoteDebugPort has one or more values, this is the string
+        # that will be appended onto the Java process command line to set the 
+        # debug port.  The %d parameter in this string will be replaced by the debug 
+        # port number.
+        javaRemoteDebugArgTemplate: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=%d
     
     selectorDeviceProcessConfigs: []
         # Devices associated with this appId will be mapped to this 

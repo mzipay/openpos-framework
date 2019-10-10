@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.jumpmind.pos.management.OpenposManagementServerConfig.DeviceProcessConfig;
+import org.jumpmind.pos.management.OpenposManagementServerConfig.JavaExecutableConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,72 +27,74 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @ActiveProfiles(profiles = "localtest")
 @EnableScheduling
-public class DeviceProcessLauncherTest {
+public class JavaProcessCommandBuilderImplTest {
     @Autowired
-    DeviceProcessLauncher launcher;
+    JavaProcessCommandBuilderImpl javaBuilder;
     
     static String[] classpathEntriesFromConfig;
     
     DeviceProcessConfig deviceProcessConfig;
+    JavaExecutableConfig javaProcessConfig;
     
     @Before
     public void setUp() throws Exception {
-        deviceProcessConfig = launcher.config.getDeviceProcessConfig("any");
+        deviceProcessConfig = javaBuilder.config.getDeviceProcessConfig("any");
+        javaProcessConfig = deviceProcessConfig.getJavaExecutableConfig();
         if (classpathEntriesFromConfig == null) {
-            classpathEntriesFromConfig = deviceProcessConfig.getClasspathEntries();
+            classpathEntriesFromConfig = javaProcessConfig.getClasspathEntries();
         }
-        deviceProcessConfig.setProcessPort(OpenposManagementServerConfig.DeviceProcessConfig.AUTO_PORT_ALLOCATION);
-        deviceProcessConfig.setJavaRemoteDebugPort(null);
-        deviceProcessConfig.setJavaRemoteDebugArgTemplate(OpenposManagementServerConfig.DeviceProcessConfig.DEFAULT_JAVA_REMOTE_DEBUG_ARG_TEMPLATE);
-        deviceProcessConfig.setProcessPortArgTemplate(OpenposManagementServerConfig.DeviceProcessConfig.DEFAULT_PROCESS_PORT_ARG_TEMPLATE);
+        javaProcessConfig.setProcessPort(OpenposManagementServerConfig.JavaExecutableConfig.AUTO_PORT_ALLOCATION);
+        javaProcessConfig.setJavaRemoteDebugPort(null);
+        javaProcessConfig.setJavaRemoteDebugArgTemplate(OpenposManagementServerConfig.JavaExecutableConfig.DEFAULT_JAVA_REMOTE_DEBUG_ARG_TEMPLATE);
+        javaProcessConfig.setProcessPortArgTemplate(OpenposManagementServerConfig.JavaExecutableConfig.DEFAULT_PROCESS_PORT_ARG_TEMPLATE);
     }
 
     @Test
     public void testResolveJavaExecutablePath() {
-        assertThat(launcher.resolveJavaExecutablePath(deviceProcessConfig)).isNotNull().contains(File.separator + "java");
+        assertThat(javaBuilder.resolveJavaExecutablePath(javaProcessConfig)).isNotNull().contains(File.separator + "java");
     }
 
     @Test
     public void testClasspathEntriesFromConfig() {
-        deviceProcessConfig.setClasspathEntries(classpathEntriesFromConfig);
-        assertThat(deviceProcessConfig.getClasspathEntries()).hasSize(1);
-        String cp = launcher.constructClasspath(deviceProcessConfig);
+        javaProcessConfig.setClasspathEntries(classpathEntriesFromConfig);
+        assertThat(javaProcessConfig.getClasspathEntries()).hasSize(1);
+        String cp = javaBuilder.constructClasspath(javaProcessConfig);
         assertThat(cp).isEqualTo(".");
     }
     @Test
     public void testEmptyClasspath() {
-        deviceProcessConfig.setClasspathEntries(new String[0]);
-        assertThat(launcher.constructClasspath(deviceProcessConfig)).isEmpty();
+        javaProcessConfig.setClasspathEntries(new String[0]);
+        assertThat(javaBuilder.constructClasspath(javaProcessConfig)).isEmpty();
     }
     
     @Test
     public void testMultipleClasspathEntries() {
-        deviceProcessConfig.setClasspathEntries(new String[]{"c:\\Program Files\\app\\jars", "entry 2", "/users/joe/abc def/g.jar"});
-        String cp = launcher.constructClasspath(deviceProcessConfig);
+        javaProcessConfig.setClasspathEntries(new String[]{"c:\\Program Files\\app\\jars", "entry 2", "/users/joe/abc def/g.jar"});
+        String cp = javaBuilder.constructClasspath(javaProcessConfig);
         assertThat(cp).isEqualTo("c:\\Program Files\\app\\jars" + File.pathSeparator + "entry 2" + File.pathSeparator + "/users/joe/abc def/g.jar");
     }
 
     @Test
     public void testAllocatePortUsingAUTO() {
-        deviceProcessConfig.setProcessPort("AUTO");
+        javaProcessConfig.setProcessPort("AUTO");
         
-        Integer allocatedPort = launcher.allocateProcessPort(deviceProcessConfig);
+        Integer allocatedPort = javaBuilder.allocateProcessPort(javaProcessConfig);
         assertThat(allocatedPort).isNotNull();
     }
     
     @Test
     public void testAllocatePortUsingInteger() {
         int availablePort = SocketUtils.findAvailableTcpPort();
-        deviceProcessConfig.setProcessPort(availablePort + "");
+        javaProcessConfig.setProcessPort(availablePort + "");
         
-        Integer allocatedPort = launcher.allocateProcessPort(deviceProcessConfig);
+        Integer allocatedPort = javaBuilder.allocateProcessPort(javaProcessConfig);
         assertThat(allocatedPort).isEqualTo(availablePort);
     }
     
     @Test
     public void testAllocatePortUsingRange() {
-        deviceProcessConfig.setProcessPort("5000-5500");
-        Integer allocatedPort = launcher.allocateProcessPort(deviceProcessConfig);
+        javaProcessConfig.setProcessPort("5000-5500");
+        Integer allocatedPort = javaBuilder.allocateProcessPort(javaProcessConfig);
         assertThat(allocatedPort).isNotNull().isGreaterThanOrEqualTo(5000).isLessThanOrEqualTo(5500);
     }
 
@@ -101,8 +104,8 @@ public class DeviceProcessLauncherTest {
         List<String> portList = Arrays.asList(portArray);
         List<Integer> portIntList = portList.stream().map(p -> new Integer(p.trim())).collect(Collectors.toList());
         
-        deviceProcessConfig.setProcessPort(String.join(",", portList));
-        Integer allocatedPort = launcher.allocateProcessPort(deviceProcessConfig);
+        javaProcessConfig.setProcessPort(String.join(",", portList));
+        Integer allocatedPort = javaBuilder.allocateProcessPort(javaProcessConfig);
         assertThat(allocatedPort).isIn(portIntList);
     }
 
@@ -111,8 +114,8 @@ public class DeviceProcessLauncherTest {
         String[] portRangeArray = {" 5000 - 5001 ","6000-6002 ","7000 - 7003"};
         List<String> portList = Arrays.asList(portRangeArray);
         
-        deviceProcessConfig.setProcessPort(String.join(",", portList));
-        Integer allocatedPort = launcher.allocateProcessPort(deviceProcessConfig);
+        javaProcessConfig.setProcessPort(String.join(",", portList));
+        Integer allocatedPort = javaBuilder.allocateProcessPort(javaProcessConfig);
         assertThat(allocatedPort).isIn(5000,5001,6000,6001,6002,7000,7001,7002,7003);
     }
 
@@ -121,24 +124,24 @@ public class DeviceProcessLauncherTest {
         String[] portRangeArray = {" 5000-5001","6000", "6001-6002 ","7000 - 7002", "7003"};
         List<String> portList = Arrays.asList(portRangeArray);
         
-        deviceProcessConfig.setProcessPort(String.join(",", portList));
-        Integer allocatedPort = launcher.allocateProcessPort(deviceProcessConfig);
+        javaProcessConfig.setProcessPort(String.join(",", portList));
+        Integer allocatedPort = javaBuilder.allocateProcessPort(javaProcessConfig);
         assertThat(allocatedPort).isIn(5000,5001,6000,6001,6002,7000,7001,7002,7003);
     }
 
     @Test(expected = DeviceProcessLaunchException.class)
     public void testAllocatePortUsingMalformedInteger() {
-        deviceProcessConfig.setProcessPort("a5000");
-        Integer allocatedPort = launcher.allocateProcessPort(deviceProcessConfig);
+        javaProcessConfig.setProcessPort("a5000");
+        Integer allocatedPort = javaBuilder.allocateProcessPort(javaProcessConfig);
         fail("Port should not be allocated and exception should have been raised");
     }
     
     @Test
     public void testProcessRemoteDebugPort_CommandLine() {
-        deviceProcessConfig.setJavaRemoteDebugPort("6000-7000");
+        javaProcessConfig.setJavaRemoteDebugPort("6000-7000");
         
-        final String remoteDebugArgPatternStr = deviceProcessConfig.getJavaRemoteDebugArgTemplate().replace("%d", "([6,7]\\d{3})");
-        List<String> commandParts = launcher.constructProcessCommandParts(new DeviceProcessInfo("00000-000", DeviceProcessStatus.NotRunning));
+        final String remoteDebugArgPatternStr = javaProcessConfig.getJavaRemoteDebugArgTemplate().replace("%d", "([6,7]\\d{3})");
+        List<String> commandParts = javaBuilder.constructProcessCommandParts(new DeviceProcessInfo("00000-000", DeviceProcessStatus.NotRunning));
         
         Pattern pattern = Pattern.compile(remoteDebugArgPatternStr);
         Integer debugPort = null;
@@ -153,10 +156,10 @@ public class DeviceProcessLauncherTest {
 
     @Test
     public void testProcessProcessPort_CommandLine() {
-        deviceProcessConfig.setProcessPort("6000-7000");
+        javaProcessConfig.setProcessPort("6000-7000");
         
-        final String processPortPatternStr = deviceProcessConfig.getProcessPortArgTemplate().replace("%d", "([6,7]\\d{3})");
-        List<String> commandParts = launcher.constructProcessCommandParts(new DeviceProcessInfo("00000-000", DeviceProcessStatus.NotRunning));
+        final String processPortPatternStr = javaProcessConfig.getProcessPortArgTemplate().replace("%d", "([6,7]\\d{3})");
+        List<String> commandParts = javaBuilder.constructProcessCommandParts(new DeviceProcessInfo("00000-000", DeviceProcessStatus.NotRunning));
         
         Pattern pattern = Pattern.compile(processPortPatternStr);
         Integer debugPort = null;
@@ -171,15 +174,15 @@ public class DeviceProcessLauncherTest {
 
     @Test
     public void testProcessExecutableJar_CommandLine() {
-        deviceProcessConfig.setExecutableJarPath("some.jar");
-        List<String> commandParts = launcher.constructProcessCommandParts(new DeviceProcessInfo("00000-000", DeviceProcessStatus.NotRunning));
+        javaProcessConfig.setExecutableJarPath("some.jar");
+        List<String> commandParts = javaBuilder.constructProcessCommandParts(new DeviceProcessInfo("00000-000", DeviceProcessStatus.NotRunning));
         assertThat(commandParts).endsWith("-jar", "some.jar");
     }
 
     @Test
     public void testProcessMainClass_CommandLine() {
-        deviceProcessConfig.setMainClass("org.company.App");
-        List<String> commandParts = launcher.constructProcessCommandParts(new DeviceProcessInfo("00000-000", DeviceProcessStatus.NotRunning));
+        javaProcessConfig.setMainClass("org.company.App");
+        List<String> commandParts = javaBuilder.constructProcessCommandParts(new DeviceProcessInfo("00000-000", DeviceProcessStatus.NotRunning));
         assertThat(commandParts).endsWith("org.company.App");
     }
     
