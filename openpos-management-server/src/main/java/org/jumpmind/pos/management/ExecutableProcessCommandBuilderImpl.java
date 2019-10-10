@@ -1,7 +1,12 @@
 package org.jumpmind.pos.management;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.jumpmind.pos.management.OpenposManagementServerConfig.ExecutableConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -9,11 +14,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class ExecutableProcessCommandBuilderImpl implements ProcessCommandBuilder {
+    @Autowired
+    OpenposManagementServerConfig config;
 
     @Override
     public List<String> constructProcessCommandParts(DeviceProcessInfo pi) {
-        // TODO Auto-generated method stub
-        return null;
+        ExecutableConfig exeProcessCfg = config.getDeviceProcessConfig(pi).getExecutableConfig();
+        List<String> commandLineArgs = new ArrayList<>();
+        commandLineArgs.add(constructProcessExecutablePath(exeProcessCfg, pi));
+        
+        String[] processArgs = constructProcessArguments(exeProcessCfg, pi);
+        if (ArrayUtils.isNotEmpty(processArgs)) {
+            commandLineArgs.addAll(Arrays.asList(processArgs));
+        }
+        
+        return commandLineArgs;
     }
 
+    protected String constructProcessExecutablePath(ExecutableConfig executableCfg, DeviceProcessInfo pi) {
+        return executableCfg.getExecutablePath().replaceAll("\\$deviceId", pi.getDeviceId());
+    }
+    
+    protected String[] constructProcessArguments(ExecutableConfig executableCfg, DeviceProcessInfo pi) {
+        return executableCfg.getArguments();
+    }
+    
 }

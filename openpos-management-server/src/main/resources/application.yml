@@ -70,11 +70,30 @@ openpos:
       # be chosen.  If executablePath is empty, then the javaExectuableConfig will
       # be used.
       executableConfig:
-        # Full path to the executable to launch, not including arguments.
+        # Full path to the executable to launch, not including arguments. Any
+        # occurrences of the string '$deviceId' in the path will be replaced with 
+        # the Device ID. 
         executablePath:
         # The list of arguments to pass to the executable.
         arguments: []
         
+        # The Spring Boot server.port value to assign to the launched process. If 
+        # only one process, this can just be an integer.  If launching multiple 
+        # processes, this can be:
+        #   AUTO
+        #       Which indicates that a port number should be automatically and randomly 
+        #       allocated between the values of 1024 and 65535
+        #   range-1,range-2,...,range-n
+        #       Which is a comma separated list of integer port number values OR 
+        #       ranges that will restrict the pool of port numbers that will be attempted to
+        #       be assigned to the process.
+        #   PROVIDED
+        #       Indicates the port number will be provided by the initializationScript
+        #       and supplied through an output binding variable named 'processPort'. 
+        #       If the processPort variable is found in the binding, its value
+        #       will be used in the statusUrlTemplate and other url template values 
+        #       such as webServiceBaseUrlTemplate, etc.
+        processPort: 
       javaExecutableConfig:
         # Full path to Java executable that will be used to launch a device process.
         # Can be a full path such as C:\Program Files\Java\jdk1.8.0_65\bin\java or
@@ -115,6 +134,12 @@ openpos:
         #       Which is a comma separated list of integer port number values OR 
         #       ranges that will restrict the pool of port numbers that will be attempted to
         #       be assigned to the process.
+        #   PROVIDED
+        #       Indicates the port number will be provided by the initializationScript
+        #       and supplied through an output binding variable named 'processPort'. 
+        #       If the processPort variable is found in the binding, its value
+        #       will be used in the statusUrlTemplate and other url template values 
+        #       such as webServiceBaseUrlTemplate, etc.
         processPort: AUTO
         
         # This is the argument that will be appended to the Java process command line

@@ -43,7 +43,7 @@ public class JavaProcessCommandBuilderImplTest {
         if (classpathEntriesFromConfig == null) {
             classpathEntriesFromConfig = javaProcessConfig.getClasspathEntries();
         }
-        javaProcessConfig.setProcessPort(OpenposManagementServerConfig.JavaExecutableConfig.AUTO_PORT_ALLOCATION);
+        javaProcessConfig.setProcessPort(OpenposManagementServerConfig.DeviceProcessConfig.AUTO_PORT_ALLOCATION);
         javaProcessConfig.setJavaRemoteDebugPort(null);
         javaProcessConfig.setJavaRemoteDebugArgTemplate(OpenposManagementServerConfig.JavaExecutableConfig.DEFAULT_JAVA_REMOTE_DEBUG_ARG_TEMPLATE);
         javaProcessConfig.setProcessPortArgTemplate(OpenposManagementServerConfig.JavaExecutableConfig.DEFAULT_PROCESS_PORT_ARG_TEMPLATE);
@@ -129,7 +129,7 @@ public class JavaProcessCommandBuilderImplTest {
         assertThat(allocatedPort).isIn(5000,5001,6000,6001,6002,7000,7001,7002,7003);
     }
 
-    @Test(expected = DeviceProcessLaunchException.class)
+    @Test(expected = DeviceProcessConfigException.class)
     public void testAllocatePortUsingMalformedInteger() {
         javaProcessConfig.setProcessPort("a5000");
         Integer allocatedPort = javaBuilder.allocateProcessPort(javaProcessConfig);

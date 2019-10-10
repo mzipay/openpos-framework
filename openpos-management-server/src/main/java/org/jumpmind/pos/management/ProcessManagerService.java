@@ -44,8 +44,12 @@ public class ProcessManagerService {
                     gotLock = true;
                     DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(appId, deviceId);
                     if (pi.getStatus() == DeviceProcessStatus.Running) {
+                        // TODO: Need to run a check to make sure it is actually running since it could
+                        // have been taken up and down as a separate service?
                         return pi;
                     } else if (pi.getStatus() == DeviceProcessStatus.NotRunning) {
+                        // TODO: Need to run a check to make sure it is actually running since it could
+                        // have been taken up and down as a separate service?
                         if (pi.isNotPreviouslyStarted()) {
                             try {
                                 pi = this.processLauncher.launch(pi, timeRemaining);
@@ -58,8 +62,10 @@ public class ProcessManagerService {
                                     );
                                 }
                             } catch (DeviceProcessLaunchException dplEx) {
+                                processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.StartupFailed);
                                 throw dplEx;
                             } catch (Exception e) {
+                                processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.StartupFailed);
                                 throw new OpenposManagementException(
                                    String.format("Unexpected failure during launch of Device Process for '%s'", pi.getDeviceId()),
                                    e
@@ -83,15 +89,22 @@ public class ProcessManagerService {
             }
         }
         
-        if (processTracker.waitForLock(deviceId, 3000)) {
-            DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(deviceId);
-            if (pi.getStatus() == DeviceProcessStatus.Starting) {
-                // We exhausted the timeout period waiting for the process to finish
-                // starting, we'll have to mark it as a startup failure
-                processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.StartupFailed);
+        boolean gotLock = false;
+        try {
+            if (processTracker.waitForLock(deviceId, 3000)) {
+                gotLock = true;
+                DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(deviceId);
+                if (pi.getStatus() == DeviceProcessStatus.Starting) {
+                    // We exhausted the timeout period waiting for the process to finish
+                    // starting, we'll have to mark it as a startup failure
+                    processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.StartupFailed);
+                }
+            }
+        } finally {
+            if (gotLock) {
+                processTracker.unlock(deviceId);
             }
         }
-        
         return null;
         
     }

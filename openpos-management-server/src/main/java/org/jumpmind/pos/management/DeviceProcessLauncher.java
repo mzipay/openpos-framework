@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 
+import javax.script.Bindings;
 import javax.script.ScriptEngine;
 
 import org.apache.commons.lang3.StringUtils;
@@ -93,17 +94,23 @@ public class DeviceProcessLauncher {
                 Reader scriptReader = new InputStreamReader(scriptStream);
             ) {
                 try {
-                    groovyScriptEngine.put("deviceId", pi.getDeviceId());
-                    groovyScriptEngine.put("workingDir", processWorkingDir);
-                    groovyScriptEngine.put("config", config);
-                    groovyScriptEngine.put("log", log);
+                    Bindings scriptVars = groovyScriptEngine.createBindings();
+                    scriptVars.put("deviceId", pi.getDeviceId());
+                    scriptVars.put("workingDir", processWorkingDir);
+                    scriptVars.put("config", config);
+                    scriptVars.put("deviceProcessConfig", config.getDeviceProcessConfig(pi));
+                    scriptVars.put("log", log);
                     log.info("Executing Device Process '{}' initialization script '{}'...", 
                         pi.getDeviceId(), deviceProcessCfg.getInitializationScript());
-                    Object scriptResult = groovyScriptEngine.eval(scriptReader);
+                    Object scriptResult = groovyScriptEngine.eval(scriptReader, scriptVars);
                     executeFinished = true;
                     log.info("Device Process '{}' initialization script completed with result: {}", 
                             pi.getDeviceId(), scriptResult);
 
+                    if (scriptVars.get("processPort") != null) {
+                        log.info("Detected port value set from initialization script.  processPort={}", scriptVars.get("processPort"));
+                        pi.setPort(Integer.valueOf(scriptVars.get("processPort").toString()));
+                    }
                 } catch (Exception ex) {
                     throw new DeviceProcessSetupException(
                         String.format("A failure occurred when executing Device Process '%s' initialization script '%s'.", 

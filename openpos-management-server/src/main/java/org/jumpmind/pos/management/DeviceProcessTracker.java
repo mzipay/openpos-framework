@@ -240,8 +240,8 @@ public class DeviceProcessTracker {
         
         @Override
         public void run() {
-            log.trace("Running status check for Device Process '{}' on port {}...", deviceId, port);
             DeviceProcessInfo dpi = DeviceProcessTracker.this.getDeviceProcessInfo(deviceId);
+            log.trace("Running status check for Device Process '{}' on port {} (current status is: {})...", deviceId, port, dpi.getStatus());
             if (dpi.getStatus() != DeviceProcessStatus.StartupFailed) {
                 boolean running = false;
                 try {

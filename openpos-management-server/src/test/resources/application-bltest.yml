@@ -6,7 +6,8 @@ openpos:
       initializationScript: file:/Users/jason/projects/biglots/newpos/openpos-biglots-server/app/DeviceWorkDirInitializer.groovy
       processLogFilePath: logs/process.log
       executableConfig:
-        executablePath: /Users/jason/bin/openpos.exe
+        executablePath: ./openpos_$deviceId.exe
+#        executablePath: ./openpos.exe
         arguments: []
       javaExecutableConfig:
         # Full path to Java executable that will be used to launch a device process. 
