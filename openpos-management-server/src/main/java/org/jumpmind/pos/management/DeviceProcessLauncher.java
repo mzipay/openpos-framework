@@ -1,13 +1,16 @@
 package org.jumpmind.pos.management;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
@@ -19,12 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class DeviceProcessLauncher {
+    public static final String PORT_FILENAME = ".openpos-port";
     private static final String END_OF_PROCESS_LOG_FOOTER = "\n\n" +
         "======================================================================\n" +
         "   END OF OUTPUT, see Device instance logs for remainder of logging\n" +
@@ -55,6 +60,7 @@ public class DeviceProcessLauncher {
         
         Process process = startProcess(pi, workingDir, processBuilder);
         pi.setProcess(process);
+        optionallySetPort(pi);
         
         return pi;
     }
@@ -62,6 +68,8 @@ public class DeviceProcessLauncher {
     protected void initializeWorkingDir(DeviceProcessInfo pi) throws DeviceProcessSetupException {
         if (isWorkingDirPresent(pi.getDeviceId())) {
             return;
+        } else {
+            log.info("Device Process '{}' is launching for the first time...", pi.getDeviceId());
         }
 
         File processWorkingDir = createWorkingDirectory(pi.getDeviceId());
@@ -103,14 +111,19 @@ public class DeviceProcessLauncher {
                     log.info("Executing Device Process '{}' initialization script '{}'...", 
                         pi.getDeviceId(), deviceProcessCfg.getInitializationScript());
                     Object scriptResult = groovyScriptEngine.eval(scriptReader, scriptVars);
-                    executeFinished = true;
                     log.info("Device Process '{}' initialization script completed with result: {}", 
                             pi.getDeviceId(), scriptResult);
 
                     if (scriptVars.get("processPort") != null) {
-                        log.info("Detected port value set from initialization script.  processPort={}", scriptVars.get("processPort"));
+                        log.info("Port value detected and set from initialization script.  processPort={}", scriptVars.get("processPort"));
                         pi.setPort(Integer.valueOf(scriptVars.get("processPort").toString()));
+                        if (config.getDeviceProcessConfig(pi).isReuseProcessPortEnabled()) {
+                            this.savePort(pi);
+                        }
                     }
+                    executeFinished = true;
+                } catch (DeviceProcessSetupException e) {
+                    throw e;
                 } catch (Exception ex) {
                     throw new DeviceProcessSetupException(
                         String.format("A failure occurred when executing Device Process '%s' initialization script '%s'.", 
@@ -132,7 +145,7 @@ public class DeviceProcessLauncher {
                 );
             } finally {
                 if (!executeFinished) {
-                    processWorkingDir.delete();
+                    FileSystemUtils.deleteRecursively(processWorkingDir);
                 }
             }
         }
@@ -227,5 +240,41 @@ public class DeviceProcessLauncher {
         return deviceProcessWorkDir;
     }
     
+    protected void savePort(DeviceProcessInfo pi) {
+        File portFile = new File(this.getWorkingDir(pi.getDeviceId()), PORT_FILENAME);
+        try(
+            PrintWriter printWriter = new PrintWriter(portFile);
+        ) {
+            if (pi.getPort() != null) {
+                printWriter.print(pi.getPort());
+            }
+        } catch (IOException e) {
+            throw new DeviceProcessSetupException(String.format("Failed to create port file at '%s'.", portFile.getAbsolutePath()), e);
+        }
+    }
+    
+    protected void optionallySetPort(DeviceProcessInfo pi) {
+        if (config.getDeviceProcessConfig(pi).isReuseProcessPortEnabled() && pi.getPort() == null) {
+            File portFile = new File(this.getWorkingDir(pi.getDeviceId()), PORT_FILENAME);
+            
+            try (
+                Scanner scanner = new Scanner(portFile);    
+            ) {
+                scanner.useDelimiter("\\Z");
+                String portStr = scanner.next();
+                pi.setPort(Integer.valueOf(portStr));
+                log.debug("Port {} read from {} file for Device Process '{}'", portStr, PORT_FILENAME, pi.getDeviceId());
+            } catch (FileNotFoundException fex) {
+                throw new DeviceProcessLaunchException(
+                        String.format("Expected to find port in '%s', but the file doesn't exist. " + 
+                            "Cannot start Device Process '%s'.", portFile.getAbsolutePath(), pi.getDeviceId()));
+            } catch (NumberFormatException ex) {
+                throw new DeviceProcessLaunchException(
+                    String.format("Failed to parse port from '%s'. " + 
+                        "Cannot start Device Process '%s'. Error: %s", 
+                        portFile.getAbsolutePath(), pi.getDeviceId(), ex.getMessage()));
+            } 
+        }
+    }
     
 }

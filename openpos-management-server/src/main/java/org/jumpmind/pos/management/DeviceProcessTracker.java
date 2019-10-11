@@ -1,12 +1,12 @@
 package org.jumpmind.pos.management;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.jumpmind.pos.util.StreamCopier;
 import org.jumpmind.pos.util.model.ProcessInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,6 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class DeviceProcessTracker {
+    
+    @Autowired
+    OpenposManagementServerConfig config;
     
     @Autowired
     DeviceProcessStatusClient deviceProcessStatusClient;
@@ -54,22 +57,33 @@ public class DeviceProcessTracker {
         
     }
     
+    
     @Scheduled(fixedRateString = "${openpos.managementServer.statusCheckPeriodMillis:7500}")
     public void checkDeviceProcessStatus() {
         log.trace("checkDeviceProcessStatus running");
 
-        // Iterate over all the known devices and hit their status service to determine status
-        Iterator<String> piIterator = this.trackingMap.keySet().iterator();
-        while (piIterator.hasNext()) {
-            String deviceId = piIterator.next();
-            DeviceProcessInfo pi = this.getDeviceProcessInfo(deviceId);
-            if (pi.getPort() != null) {
-                DeviceProcessStatusCheckThread statusCheckThread = new DeviceProcessStatusCheckThread(deviceId, pi.getPort());
-                statusCheckThread.start();
-            } else {
-                log.warn("No port number stored for Device Process '{}', ommitting from status tracking", pi.getDeviceId());
+        synchronized(trackingMap) {
+            // Iterate over all the known devices and hit their status service to determine status
+            Iterator<String> piIterator = trackingMap.keySet().iterator();
+            while (piIterator.hasNext()) {
+                String deviceId = piIterator.next();
+                DeviceProcessInfo pi = this.getDeviceProcessInfo(deviceId);
+                if (pi.getStatus() == DeviceProcessStatus.StartupFailed) {
+                    if (pi.getLastUpdated() != null && 
+                        Instant.now().isAfter(pi.getLastUpdated().plusMillis(config.getFailedStartupProcessRetentionPeriodMillis()))) {
+
+                        this.removeDeviceProcessInfo(pi);
+                        log.info("Evicted dead Device Process '{}' having status '{}'", pi.getDeviceId(), pi.getStatus());
+                    }
+                } else {
+                    if (pi.getPort() != null) {
+                        DeviceProcessStatusCheckThread statusCheckThread = new DeviceProcessStatusCheckThread(deviceId, pi.getPort());
+                        statusCheckThread.start();
+                    } else {
+                        log.trace("No port number stored for Device Process '{}', ommitting from status tracking", pi.getDeviceId());
+                    }
+                }
             }
-            
         }
         
     }
@@ -258,6 +272,8 @@ public class DeviceProcessTracker {
                             } else {
                                 log.trace("StreamCopier is null for {}", deviceId);
                             }
+                            log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), dpi.getStatus(), DeviceProcessStatus.Running);
+                        } else if (dpi.getStatus() == DeviceProcessStatus.NotRunning) {
                             log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), dpi.getStatus(), DeviceProcessStatus.Running);
                         }
                         if (pi.getPid() != null) {

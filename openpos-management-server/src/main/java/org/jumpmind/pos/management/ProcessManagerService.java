@@ -44,33 +44,39 @@ public class ProcessManagerService {
                     gotLock = true;
                     DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(appId, deviceId);
                     if (pi.getStatus() == DeviceProcessStatus.Running) {
-                        // TODO: Need to run a check to make sure it is actually running since it could
-                        // have been taken up and down as a separate service?
                         return pi;
                     } else if (pi.getStatus() == DeviceProcessStatus.NotRunning) {
-                        // TODO: Need to run a check to make sure it is actually running since it could
-                        // have been taken up and down as a separate service?
-                        if (pi.isNotPreviouslyStarted()) {
-                            try {
+                        boolean launched = false;
+                        try {
+                            if (pi.isNotPreviouslyStarted()) {
                                 pi = this.processLauncher.launch(pi, timeRemaining);
+                                addShutdownHook(deviceId);
+                                launched = true;
+                            } /* I don't think this is necessary now.  If not, also remove processMinUnresponsiveMillis from config
+                            } else if (pi.isProcessDeadPeriodExceeded(config.getDeviceProcessConfig(pi).getProcessMinUnresponsiveMillis())) {
+                                log.info("Device Process '{}' has been dead more than {}ms, relaunching...", config.getDeviceProcessConfig(pi).getProcessMinUnresponsiveMillis());
+                                pi = this.processLauncher.launch(pi, timeRemaining);
+                                launched = true;
+                            }
+                            */
+                            if (launched) {
                                 if (pi.isProcessAlive()) {
                                     processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.Starting);
-                                    addShutdownHook(deviceId);
                                 } else {
                                     throw new DeviceProcessLaunchException(
                                             String.format("Failed to create process for Device '%s'.  Check the process log for the additional info.", pi.getDeviceId())
                                     );
                                 }
-                            } catch (DeviceProcessLaunchException dplEx) {
-                                processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.StartupFailed);
-                                throw dplEx;
-                            } catch (Exception e) {
-                                processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.StartupFailed);
-                                throw new OpenposManagementException(
-                                   String.format("Unexpected failure during launch of Device Process for '%s'", pi.getDeviceId()),
-                                   e
-                                );
                             }
+                        } catch (DeviceProcessLaunchException dplEx) {
+                            processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.StartupFailed);
+                            throw dplEx;
+                        } catch (Exception e) {
+                            processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.StartupFailed);
+                            throw new OpenposManagementException(
+                               String.format("Unexpected failure during launch of Device Process for '%s'", pi.getDeviceId()),
+                               e
+                            );
                         }
                     } else if (pi.getStatus() == DeviceProcessStatus.Starting) {
                         log.info("Device Process '{}' is still starting, will check it again in a second. Time remaining: {}", deviceId, timeRemaining);
@@ -112,7 +118,7 @@ public class ProcessManagerService {
     protected void addShutdownHook(String deviceId) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(deviceId);
-            if (pi.getProcess().isAlive()) {
+            if (pi != null && pi.isProcessAlive()) {
                 log.info("Destroying child Device Process '{}', pid: {}", 
                     pi.getDeviceId(), pi.getPid() != null ? pi.getPid() : "unknown");
                 pi.getProcess().destroy();

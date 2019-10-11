@@ -28,9 +28,16 @@ openpos:
     # process to return
     statusMaxWaitMillis: 1000 
 
-    # Amount of time to wait between calls to child OpenPOS device process to
-    # confirm status
+    # Amount of time to check the status of child OpenPOS device process in order to
+    # confirm status and also evict dead Device Process entries 
+    # (i.e., having status of StartupFailed) from it's cache
     statusCheckPeriodMillis: 5000
+    
+    # Amount of time in milliseconds that a Device Process which failed to start up
+    # will be retained in the Management Server's internal cache before it is
+    # kicked out.  If startup fails for the process, it cannot be started again 
+    # until after this amount of time has passed.
+    failedStartupProcessRetentionPeriodMillis: 30000
        
 # TODO:    lazyDeviceProcessLaunch: true
 # processTrackingFilename: .openpos_processes
@@ -60,11 +67,21 @@ openpos:
       # but put on hold while waiting for the process to finish starting.
       startMaxWaitMillis: 45000
   
+      # Min amount of time in millisecs that the management server will wait to
+      # relaunch a device process after it was determined to be dead. The process
+      # will not be automatically attempted to be relaunched, however, until a client
+      # has attempted to connect. This number should be greater than startMaxWaitMillis.
+      processMinUnresponsiveMillis: 120000
+  
       # The name for the logfile that will be created in the working directory for
       # the device process.  stderr and stdout for the process is redirected into
       # this file.
       processLogFilePath: logs/process.log
   
+      # When the processPort is PROVIDED and this is set to true, the inital port 
+      # number allocated will be retained and re-used for subsequent device process restarts.
+      reuseProcessPortEnabled: false
+      
       # Either an executableConfig or a javaExecutableConfig section should be
       # populated, but not both. If both are populated, executableConfig will
       # be chosen.  If executablePath is empty, then the javaExectuableConfig will

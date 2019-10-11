@@ -27,6 +27,8 @@ public class OpenposManagementServerConfig {
     private String statusUrlTemplate;
     private long statusMaxWaitMillis = 1000;
     private long statusCheckPeriodMillis = 7500;
+    private long failedStartupProcessRetentionPeriodMillis = 30000;
+    
     private DeviceProcessConfig defaultDeviceProcessConfig;
     private DeviceProcessConfig[] selectorDeviceProcessConfigs;
 
@@ -71,7 +73,9 @@ public class OpenposManagementServerConfig {
         private String appId;
         private String initializationScript;
         private long startMaxWaitMillis = 60000;
+        private long processMinUnresponsiveMillis = 120000;
         private String processLogFilePath = DEFAULT_PROCESS_LOG_FILENAME;
+        private boolean reuseProcessPortEnabled = false;
         private ExecutableConfig executableConfig;
         private JavaExecutableConfig javaExecutableConfig;
                 

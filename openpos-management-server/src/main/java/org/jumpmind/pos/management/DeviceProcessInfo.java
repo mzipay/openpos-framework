@@ -17,7 +17,7 @@ public class DeviceProcessInfo {
     private Integer port;
     @Getter
     private Integer pid;
-    @Getter @Setter(AccessLevel.PACKAGE)
+    @Getter
     DeviceProcessStatus status;
     @Getter
     private Process process;
@@ -45,9 +45,20 @@ public class DeviceProcessInfo {
         return ! isPreviouslyStarted();
     }
     
+    public boolean isProcessDead() {
+        return this.getProcess() != null && ! this.getProcess().isAlive();
+    }
+    
     public boolean isProcessAlive() {
         return this.getProcess() != null &&
                this.getProcess().isAlive();
+    }
+
+    void setStatus (DeviceProcessStatus newStatus) {
+        if (this.status != newStatus) {
+            this.status = newStatus;
+            touch();
+        }
     }
     
     void setProcess(Process process) {
@@ -67,5 +78,10 @@ public class DeviceProcessInfo {
     
     private void touch() {
         this.lastUpdated = Instant.now();
+    }
+
+    public boolean isProcessDeadPeriodExceeded(long processMinUnresponsiveMillis) {
+        return lastUpdated != null && 
+                Instant.now().isAfter(lastUpdated.plusMillis(processMinUnresponsiveMillis));
     }
 }
