@@ -10,6 +10,10 @@ openpos:
         executablePath: ${openpos.managementServer.mainWorkDirPath}\$deviceId\openpos_$deviceId.exe
         arguments:
           - start
+        shutdownExecutablePath: ${openpos.managementServer.mainWorkDirPath}\$deviceId\openpos_$deviceId.exe
+        shutdownCommandArguments:
+          - stop
+          
       javaExecutableConfig:
         # Full path to Java executable that will be used to launch a device process. 
         javaExecutablePath: ${java.home}

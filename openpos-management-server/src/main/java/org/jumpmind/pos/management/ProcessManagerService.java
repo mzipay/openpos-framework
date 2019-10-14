@@ -118,10 +118,8 @@ public class ProcessManagerService {
     protected void addShutdownHook(String deviceId) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(deviceId);
-            if (pi != null && pi.isProcessAlive()) {
-                log.info("Destroying child Device Process '{}', pid: {}", 
-                    pi.getDeviceId(), pi.getPid() != null ? pi.getPid() : "unknown");
-                pi.getProcess().destroy();
+            if (pi != null) {
+                processLauncher.kill(pi);
                 processTracker.removeDeviceProcessInfo(pi);
             }
         }));

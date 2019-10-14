@@ -73,7 +73,7 @@ public class OpenposManagementServerConfig {
         private String appId;
         private String initializationScript;
         private long startMaxWaitMillis = 60000;
-        private long processMinUnresponsiveMillis = 120000;
+        private long deadProcessRetentionPeriodMillis = 120000;
         private String processLogFilePath = DEFAULT_PROCESS_LOG_FILENAME;
         private boolean reuseProcessPortEnabled = false;
         private ExecutableConfig executableConfig;
@@ -86,12 +86,19 @@ public class OpenposManagementServerConfig {
         private String executablePath;
         private String[] arguments = new String[0];
         
+        private String shutdownExecutablePath;
+        private String[] shutdownCommandArguments = new String[0];
+        
         public boolean isEmpty() {
             return StringUtils.isEmpty(this.executablePath);
         }
         
         public boolean isNotEmpty() {
             return ! this.isEmpty();
+        }
+        
+        public boolean isShutdownCommandRequired() {
+            return this.isNotEmpty() && StringUtils.isNotBlank(this.shutdownExecutablePath);
         }
     }
     

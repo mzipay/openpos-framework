@@ -38,7 +38,7 @@ openpos:
     # kicked out.  If startup fails for the process, it cannot be started again 
     # until after this amount of time has passed.
     failedStartupProcessRetentionPeriodMillis: 30000
-       
+    
 # TODO:    lazyDeviceProcessLaunch: true
 # processTrackingFilename: .openpos_processes
     defaultDeviceProcessConfig:
@@ -67,12 +67,6 @@ openpos:
       # but put on hold while waiting for the process to finish starting.
       startMaxWaitMillis: 45000
   
-      # Min amount of time in millisecs that the management server will wait to
-      # relaunch a device process after it was determined to be dead. The process
-      # will not be automatically attempted to be relaunched, however, until a client
-      # has attempted to connect. This number should be greater than startMaxWaitMillis.
-      processMinUnresponsiveMillis: 120000
-  
       # The name for the logfile that will be created in the working directory for
       # the device process.  stderr and stdout for the process is redirected into
       # this file.
@@ -81,6 +75,11 @@ openpos:
       # When the processPort is PROVIDED and this is set to true, the inital port 
       # number allocated will be retained and re-used for subsequent device process restarts.
       reuseProcessPortEnabled: false
+
+      # Amount of time in millisecs that the management server will retain a NotRunning
+      # device process in its internal cache. This number should be greater than 
+      # startMaxWaitMillis.
+      deadProcessRetentionPeriodMillis: 120000
       
       # Either an executableConfig or a javaExecutableConfig section should be
       # populated, but not both. If both are populated, executableConfig will
@@ -110,7 +109,16 @@ openpos:
         #       If the processPort variable is found in the binding, its value
         #       will be used in the statusUrlTemplate and other url template values 
         #       such as webServiceBaseUrlTemplate, etc.
-        processPort: 
+        processPort:
+        
+        # When a value is set, the management server will run this command upon
+        # shutdown in order to kill the Device process instead of attempting to 
+        # kill the process specified by executablePath. Any occurrences of the 
+        # string '$deviceId' in the path will be replaced with the Device ID. 
+        shutdownExecutablePath:
+        # This list of arguments to pass to the shutdown executable.
+        shutdownCommandArguments: []
+        
       javaExecutableConfig:
         # Full path to Java executable that will be used to launch a device process.
         # Can be a full path such as C:\Program Files\Java\jdk1.8.0_65\bin\java or

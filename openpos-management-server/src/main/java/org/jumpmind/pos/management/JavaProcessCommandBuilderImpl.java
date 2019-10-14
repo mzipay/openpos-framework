@@ -91,6 +91,12 @@ public class JavaProcessCommandBuilderImpl implements ProcessCommandBuilder {
         
         return commandLineArgs;
     }
+    
+    @Override
+    public List<String> constructKillCommandParts(DeviceProcessInfo pi) {
+        // Kill is handled by killing the process
+        return null;
+    }
 
     protected String[] constructProcessArguments(JavaExecutableConfig javaProcessCfg) {
         return javaProcessCfg.getProcessArguments();
@@ -143,5 +149,6 @@ public class JavaProcessCommandBuilderImpl implements ProcessCommandBuilder {
     protected Integer allocateProcessPort(JavaExecutableConfig javaProcessCfg) {
         return envService.allocatePort("processPort", javaProcessCfg.getProcessPort());
     }
+
     
 }

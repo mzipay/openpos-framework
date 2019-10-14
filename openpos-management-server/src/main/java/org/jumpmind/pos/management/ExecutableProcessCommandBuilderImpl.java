@@ -31,6 +31,22 @@ public class ExecutableProcessCommandBuilderImpl implements ProcessCommandBuilde
         return commandLineArgs;
     }
 
+    @Override
+    public List<String> constructKillCommandParts(DeviceProcessInfo pi) {
+        ExecutableConfig exeProcessCfg = config.getDeviceProcessConfig(pi).getExecutableConfig();
+        List<String> commandLineArgs = new ArrayList<>();
+
+        if (exeProcessCfg.isShutdownCommandRequired()) {
+            commandLineArgs.add(exeProcessCfg.getShutdownExecutablePath().replaceAll("\\$deviceId", pi.getDeviceId()));
+            
+            if (ArrayUtils.isNotEmpty(exeProcessCfg.getShutdownCommandArguments())) {
+                commandLineArgs.addAll(Arrays.asList(exeProcessCfg.getShutdownCommandArguments()));
+            }
+        }
+        
+        return commandLineArgs;
+    }
+    
     protected String constructProcessExecutablePath(ExecutableConfig executableCfg, DeviceProcessInfo pi) {
         return executableCfg.getExecutablePath().replaceAll("\\$deviceId", pi.getDeviceId());
     }
@@ -38,5 +54,6 @@ public class ExecutableProcessCommandBuilderImpl implements ProcessCommandBuilde
     protected String[] constructProcessArguments(ExecutableConfig executableCfg, DeviceProcessInfo pi) {
         return executableCfg.getArguments();
     }
+
     
 }

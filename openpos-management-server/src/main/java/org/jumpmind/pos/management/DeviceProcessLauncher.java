@@ -15,6 +15,7 @@ import java.util.Scanner;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.management.OpenposManagementServerConfig.DeviceProcessConfig;
 import org.jumpmind.pos.util.StreamCopier;
@@ -54,7 +55,7 @@ public class DeviceProcessLauncher {
         ProcessCommandBuilder commandBuilder = processCmdFactory.make(config.getDeviceProcessConfig(pi));
         
         List<String> commandLine = commandBuilder.constructProcessCommandParts(pi);
-        log.debug("Device Process '{}' command line: {}", pi.getDeviceId(), String.join(" ", commandLine));
+        log.info("Device Process '{}' command line: {}", pi.getDeviceId(), String.join(" ", commandLine));
         
         ProcessBuilder processBuilder = constructProcessBuilder(pi, commandLine, workingDir);
         
@@ -65,6 +66,25 @@ public class DeviceProcessLauncher {
         return pi;
     }
 
+    public void kill(DeviceProcessInfo pi) {
+        ProcessCommandBuilder commandBuilder = processCmdFactory.make(config.getDeviceProcessConfig(pi));
+        List<String> killCommandParts = commandBuilder.constructKillCommandParts(pi);
+        if (CollectionUtils.isNotEmpty(killCommandParts)) {
+            ProcessBuilder builder = new ProcessBuilder(killCommandParts);
+            builder.directory(getWorkingDir(pi.getDeviceId())).redirectErrorStream(true)
+                .redirectInput(Redirect.INHERIT);
+            try {
+                log.info("Killing Device Process '{}' with command line: {}", pi.getDeviceId(), String.join(" ", killCommandParts));
+                Process process = builder.start();
+                log.info("Kill command for Device Process '{}' exit code: {}", pi.getDeviceId(), process.exitValue());
+            } catch (Exception ex) {
+                log.warn(String.format("Failed to kill Device Process '%s'", pi.getDeviceId()), ex);
+            }
+        } else if (pi.getProcess() != null && pi.getProcess().isAlive()) {
+            pi.getProcess().destroy();
+        }
+    }
+    
     protected void initializeWorkingDir(DeviceProcessInfo pi) throws DeviceProcessSetupException {
         if (isWorkingDirPresent(pi.getDeviceId())) {
             return;

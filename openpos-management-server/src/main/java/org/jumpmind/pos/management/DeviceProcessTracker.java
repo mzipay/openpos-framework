@@ -59,7 +59,7 @@ public class DeviceProcessTracker {
     
     
     @Scheduled(fixedRateString = "${openpos.managementServer.statusCheckPeriodMillis:7500}")
-    public void checkDeviceProcessStatus() {
+    public void refreshDeviceProcessStatus() {
         log.trace("checkDeviceProcessStatus running");
 
         synchronized(trackingMap) {
@@ -72,6 +72,12 @@ public class DeviceProcessTracker {
                     if (pi.getLastUpdated() != null && 
                         Instant.now().isAfter(pi.getLastUpdated().plusMillis(config.getFailedStartupProcessRetentionPeriodMillis()))) {
 
+                        this.removeDeviceProcessInfo(pi);
+                        log.info("Evicted dead Device Process '{}' having status '{}'", pi.getDeviceId(), pi.getStatus());
+                    }
+                } else if (pi.getStatus() == DeviceProcessStatus.NotRunning) {
+                    if (pi.getLastUpdated() != null && 
+                        Instant.now().isAfter(pi.getLastUpdated().plusMillis(config.getDeviceProcessConfig(pi).getDeadProcessRetentionPeriodMillis()))) {
                         this.removeDeviceProcessInfo(pi);
                         log.info("Evicted dead Device Process '{}' having status '{}'", pi.getDeviceId(), pi.getStatus());
                     }
@@ -88,10 +94,6 @@ public class DeviceProcessTracker {
         
     }
     
-    public void untrack(DeviceProcessInfo pi) {
-        this.removeDeviceProcessInfo(pi);
-    }
-    
     protected DeviceProcessInfo removeDeviceProcessInfo(DeviceProcessInfo pi) {
         synchronized(trackingMap) {
             return this.trackingMap.remove(pi.getDeviceId());
@@ -101,7 +103,10 @@ public class DeviceProcessTracker {
     public DeviceProcessInfo updateDeviceProcessStatus(String deviceId, DeviceProcessStatus newStatus) {
         synchronized(trackingMap) {
             DeviceProcessInfo dpi = trackingMap.get(deviceId);
-            dpi.setStatus(newStatus);
+            // protect against evicted devices
+            if (dpi != null) {
+                dpi.setStatus(newStatus);
+            }
             return dpi;
         }        
     }
@@ -109,8 +114,11 @@ public class DeviceProcessTracker {
     public DeviceProcessInfo updateDeviceProcessStatus(String deviceId, DeviceProcessStatus newStatus, Integer pid) {
         synchronized(trackingMap) {
             DeviceProcessInfo dpi = trackingMap.get(deviceId);
-            dpi.setStatus(newStatus);
-            dpi.setPid(pid);
+            // protect against evicted devices
+            if (dpi != null) {
+                dpi.setStatus(newStatus);
+                dpi.setPid(pid);
+            }
             return dpi;
         }        
     }
@@ -118,7 +126,10 @@ public class DeviceProcessTracker {
     public DeviceProcessInfo updateDeviceProcessPort(String deviceId, int port) {
         synchronized(trackingMap) {
             DeviceProcessInfo dpi = trackingMap.get(deviceId);
-            dpi.setPort(port);
+            // protect against evicted devices
+            if (dpi != null) {
+                dpi.setPort(port);
+            }
             return dpi;
         }        
     }
