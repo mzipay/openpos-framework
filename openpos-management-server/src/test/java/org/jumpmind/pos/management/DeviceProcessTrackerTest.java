@@ -119,7 +119,6 @@ public class DeviceProcessTrackerTest {
     public void testCheckDeviceProcessStatus_SingleDevice() throws InterruptedException {
         System.out.println("testCheckDeviceProcessStatus_SingleDevice");
         DeviceProcessInfo pi = tracker.getDeviceProcessInfo(DEVICE_ID_1);
-        tracker.updateDeviceProcessStatus(DEVICE_ID_1, DeviceProcessStatus.Running);
         tracker.updateDeviceProcessPort(DEVICE_ID_1, 9999);
 
         // Doing this instead of using sleep in order to save test execution time
@@ -160,9 +159,7 @@ public class DeviceProcessTrackerTest {
         System.out.println("testCheckDeviceProcessStatus_MultipleDevices");
         DeviceProcessInfo pi1 = tracker.getDeviceProcessInfo(DEVICE_ID_1);
         DeviceProcessInfo pi2 = tracker.getDeviceProcessInfo(DEVICE_ID_2);
-        tracker.updateDeviceProcessStatus(DEVICE_ID_1, DeviceProcessStatus.Running);
         tracker.updateDeviceProcessPort(DEVICE_ID_1, 8888);
-        tracker.updateDeviceProcessStatus(DEVICE_ID_2, DeviceProcessStatus.Running);
         tracker.updateDeviceProcessPort(DEVICE_ID_2, 9999);
         
         // Doing this instead of using sleep in order to save test execution time

@@ -68,19 +68,18 @@ public class DeviceProcessTracker {
             while (piIterator.hasNext()) {
                 String deviceId = piIterator.next();
                 DeviceProcessInfo pi = this.getDeviceProcessInfo(deviceId);
-                if (pi.getStatus() == DeviceProcessStatus.StartupFailed) {
-                    if (pi.getLastUpdated() != null && 
-                        Instant.now().isAfter(pi.getLastUpdated().plusMillis(config.getFailedStartupProcessRetentionPeriodMillis()))) {
+                if (pi.getStatus() == DeviceProcessStatus.StartupFailed
+                    && pi.getLastUpdated() != null 
+                    && Instant.now().isAfter(pi.getLastUpdated().plusMillis(config.getFailedStartupProcessRetentionPeriodMillis()))) {
+ 
+                    piIterator.remove();
+                    log.info("Evicted dead Device Process '{}' having status '{}'", pi.getDeviceId(), pi.getStatus());
+                } else if (pi.getStatus() == DeviceProcessStatus.NotRunning
+                    && pi.getLastUpdated() != null 
+                    && Instant.now().isAfter(pi.getLastUpdated().plusMillis(config.getDeviceProcessConfig(pi).getDeadProcessRetentionPeriodMillis()))) {
 
-                        this.removeDeviceProcessInfo(pi);
-                        log.info("Evicted dead Device Process '{}' having status '{}'", pi.getDeviceId(), pi.getStatus());
-                    }
-                } else if (pi.getStatus() == DeviceProcessStatus.NotRunning) {
-                    if (pi.getLastUpdated() != null && 
-                        Instant.now().isAfter(pi.getLastUpdated().plusMillis(config.getDeviceProcessConfig(pi).getDeadProcessRetentionPeriodMillis()))) {
-                        this.removeDeviceProcessInfo(pi);
-                        log.info("Evicted dead Device Process '{}' having status '{}'", pi.getDeviceId(), pi.getStatus());
-                    }
+                    piIterator.remove();
+                    log.info("Evicted dead Device Process '{}' having status '{}'", pi.getDeviceId(), pi.getStatus());
                 } else {
                     if (pi.getPort() != null) {
                         DeviceProcessStatusCheckThread statusCheckThread = new DeviceProcessStatusCheckThread(deviceId, pi.getPort());

@@ -5,7 +5,6 @@ import { PersonalizationService } from '../personalization/personalization.servi
 import { DiscoveryResponse } from '../interfaces/discovery-response.interface';
 import { timeout, catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { PingResult } from '../interfaces/ping-result.interface';
 import { DiscoveryParams } from '../interfaces/discovery-params.interface';
 
 @Injectable({
@@ -64,9 +63,6 @@ export class DiscoveryService {
         let discoveryError: any = null;
         try {
             const httpResult = await this.http.get<DiscoveryResponse>(url, {})
-//                .pipe(catchError(e => {
-//                    return of({ success: false, message: e })
-//                }))
                 .pipe(timeout(params.maxWaitMillis),
                     catchError(e => {
                         return of({ success: false, message: e.message });
@@ -106,23 +102,6 @@ export class DiscoveryService {
         if (!this.serverBaseUrl) {
             if (this.personalization.isManagedServer()) {
                 this.log.debug(`serverBaseURL isn't set yet for the managed server`);
-                /*
-                const response = await this.discoverDeviceProcess(
-                    this.personalization.getServerName(),
-                    this.personalization.getServerPort(),
-                    this.personalization.getDeviceId(),
-                    this.personalization.isSslEnabled()
-                );
-                if (response.success) {
-                    this.serverBaseUrl = this.personalization.isSslEnabled() ?
-                        response.secureWebServiceBaseUrl : response.webServiceBaseUrl;
-                    this.log.info(`Fetched serverBaseURL: ${this.serverBaseUrl}`);
-                } else {
-                    this.log.warn(`Failed to reach OpenPOS Management Server at ` +
-                        `${this.personalization.getServerName()}:${this.personalization.getServerPort()}. ` +
-                        `Reason: ${response.message}`);
-                }
-                */
             } else {
                 const protocol = this.personalization.isSslEnabled() ? 'https' : 'http';
                 this.serverBaseUrl = `${protocol}://${this.personalization.getServerName()}` +
@@ -141,21 +120,6 @@ export class DiscoveryService {
         if (!this.websocketUrl) {
             if (this.personalization.isManagedServer()) {
                 this.log.debug(`webSocketUrl isn't set yet for the managed server`);
-
-                /*
-                const response = await this.discoverDeviceProcess(
-                    this.personalization.getServerName(),
-                    this.personalization.getServerPort(),
-                    this.personalization.getDeviceId(),
-                    this.personalization.isSslEnabled()
-                );
-                if (response.success) {
-                    this.websocketUrl = this.personalization.isSslEnabled() ? response.secureWebSocketBaseUrl : response.webSocketBaseUrl;
-                } else {
-                    this.log.warn(`Failed to reach OpenPOS Management Server at ` +
-                        `${this.personalization.getServerName()}:${this.personalization.getServerPort()}. Reason: ${response.message}`);
-                }
-                */
             } else {
                 let protocol = 'ws://';
                 if (this.personalization.isSslEnabled()) {

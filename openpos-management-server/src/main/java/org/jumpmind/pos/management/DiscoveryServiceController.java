@@ -19,6 +19,7 @@ public class DiscoveryServiceController {
 
     @GetMapping("personalize")
     public ImpersonalizationResponse impersonalize() {
+        log.info("Received a personalize request");
         return makeImpersonalizationResponse();
     }
     
@@ -33,12 +34,12 @@ public class DiscoveryServiceController {
         @RequestParam(required=false) String appId,
         @RequestParam String deviceId
     ) {
-        
+        log.info("Received a discovery request for appId: {}, deviceId: {}", appId, deviceId);
         try {
             DeviceProcessInfo pi = processManager.queryOrLaunchDeviceProcess(appId, deviceId);
             if (pi != null) {
                 if (pi.getStatus() == DeviceProcessStatus.Running) {
-                    return processManager.constructClientConnectInfo(pi);
+                    return processManager.constructDiscoveryResponse(pi);
                 } else {
                     log.trace("Nothing to return.  Device Process '{}' status is: {}", pi.getDeviceId(), pi.getStatus());
                     // TODO: Need to handle better

@@ -77,8 +77,10 @@ public class DeviceProcessLauncher {
                 log.info("Killing Device Process '{}' with command line: {}", pi.getDeviceId(), String.join(" ", killCommandParts));
                 Process process = builder.start();
                 log.info("Kill command for Device Process '{}' exit code: {}", pi.getDeviceId(), process.exitValue());
+            } catch (IllegalThreadStateException tse) {
+                log.debug(String.format("Failed to get process exit code for Device Process '%s'", pi.getDeviceId()), tse);
             } catch (Exception ex) {
-                log.warn(String.format("Failed to kill Device Process '%s'", pi.getDeviceId()), ex);
+                log.warn(String.format("Error while killing Device Process '%s'", pi.getDeviceId()), ex);
             }
         } else if (pi.getProcess() != null && pi.getProcess().isAlive()) {
             pi.getProcess().destroy();

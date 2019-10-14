@@ -167,7 +167,12 @@ export class PersonalizationComponent implements IScreen, OnInit {
         if (this.openposMgmtServerPresent) {
             this.discoveryStatus = DiscoveryStatus.InProgress;
 
-            this.discoveryResponse = await this.discoveryService.discoverDeviceProcess();
+            this.discoveryResponse = await this.discoveryService.discoverDeviceProcess({
+                server: this.secondFormGroup.get('serverName').value,
+                port: this.secondFormGroup.get('serverPort').value, 
+                deviceId: this.thirdFormGroup.get('deviceId').value,
+                sslEnabled: this.secondFormGroup.get('sslEnabled').value
+            });
             if (this.discoveryResponse && this.discoveryResponse.success) {
                 this.serverResponse = await this.personalizationService.requestPersonalization(
                     this.discoveryResponse.host, 

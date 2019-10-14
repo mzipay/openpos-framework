@@ -3,6 +3,8 @@ package org.jumpmind.pos.management;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.util.AppUtils;
@@ -27,7 +29,8 @@ public class ProcessManagerService {
     private DeviceProcessLauncher processLauncher;
     
     
-    // TODO: come up with better name
+    private Set<String> devicesWithShutdownHook = new HashSet<>();
+    
     public DeviceProcessInfo queryOrLaunchDeviceProcess(String appId, String deviceId) {
         long processStartMaxWaitMillis = config.getDeviceProcessConfig(appId).getStartMaxWaitMillis();
         processMgrEnvSvc.ensureMainWorkDirExists();
@@ -35,9 +38,6 @@ public class ProcessManagerService {
         Instant start = Instant.now();
         while (Duration.between(start, Instant.now()).toMillis() < processStartMaxWaitMillis) {
             long timeRemaining = processStartMaxWaitMillis - Duration.between(start, Instant.now()).toMillis();
-            // TODO: Need to read device process status from file system?
-            // Need to add logic to shutdown all processes on exit
-            // DeviceProcessInfo processInfo = processTracker.waitIfStarting(deviceId, timeRemaining);
             boolean gotLock = false;
             try {
                 if (processTracker.waitForLock(deviceId, timeRemaining)) {
@@ -46,20 +46,10 @@ public class ProcessManagerService {
                     if (pi.getStatus() == DeviceProcessStatus.Running) {
                         return pi;
                     } else if (pi.getStatus() == DeviceProcessStatus.NotRunning) {
-                        boolean launched = false;
                         try {
                             if (pi.isNotPreviouslyStarted()) {
                                 pi = this.processLauncher.launch(pi, timeRemaining);
                                 addShutdownHook(deviceId);
-                                launched = true;
-                            } /* I don't think this is necessary now.  If not, also remove processMinUnresponsiveMillis from config
-                            } else if (pi.isProcessDeadPeriodExceeded(config.getDeviceProcessConfig(pi).getProcessMinUnresponsiveMillis())) {
-                                log.info("Device Process '{}' has been dead more than {}ms, relaunching...", config.getDeviceProcessConfig(pi).getProcessMinUnresponsiveMillis());
-                                pi = this.processLauncher.launch(pi, timeRemaining);
-                                launched = true;
-                            }
-                            */
-                            if (launched) {
                                 if (pi.isProcessAlive()) {
                                     processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.Starting);
                                 } else {
@@ -116,16 +106,19 @@ public class ProcessManagerService {
     }
     
     protected void addShutdownHook(String deviceId) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(deviceId);
-            if (pi != null) {
-                processLauncher.kill(pi);
-                processTracker.removeDeviceProcessInfo(pi);
-            }
-        }));
+        if (! this.devicesWithShutdownHook.contains(deviceId)) {
+            this.devicesWithShutdownHook.add(deviceId);
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(deviceId);
+                if (pi != null) {
+                    processLauncher.kill(pi);
+                    processTracker.removeDeviceProcessInfo(pi);
+                }
+            }));
+        }
     }
 
-    public DiscoveryResponse constructClientConnectInfo(DeviceProcessInfo pi) {
+    public DiscoveryResponse constructDiscoveryResponse(DeviceProcessInfo pi) {
         DiscoveryResponse cci = new DiscoveryResponse(
             this.resolveHostname(),
             pi.getPort(),
