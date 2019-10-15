@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import org.jumpmind.pos.util.model.ProcessInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,13 @@ public class DeviceProcessTracker {
     @Autowired
     DeviceProcessStatusClient deviceProcessStatusClient;
     
+    @Autowired
+    private DeviceProcessLauncher processLauncher;
+    
+    
     Map<String, DeviceProcessInfo> trackingMap = new HashMap<>();
     Map<String, Boolean> lockMap = new HashMap<>();
+//    Map<String, Semaphore> lockMap = new HashMap<>();
 
     public boolean waitForLock(String deviceId, long maxWaitMillis) {
         DeviceProcessLockWatcher watcher = null;
@@ -71,13 +77,21 @@ public class DeviceProcessTracker {
                 if (pi.getStatus() == DeviceProcessStatus.StartupFailed
                     && pi.getLastUpdated() != null 
                     && Instant.now().isAfter(pi.getLastUpdated().plusMillis(config.getFailedStartupProcessRetentionPeriodMillis()))) {
- 
+                    try {
+                        processLauncher.kill(pi, 0);
+                    } catch (Exception ex) {
+                        log.warn("Kill failed for Device Process '{}'. Reason: {}", pi.getDeviceId(), ex.getMessage());
+                    }
                     piIterator.remove();
                     log.info("Evicted dead Device Process '{}' having status '{}'", pi.getDeviceId(), pi.getStatus());
                 } else if (pi.getStatus() == DeviceProcessStatus.NotRunning
                     && pi.getLastUpdated() != null 
                     && Instant.now().isAfter(pi.getLastUpdated().plusMillis(config.getDeviceProcessConfig(pi).getDeadProcessRetentionPeriodMillis()))) {
-
+                    try {
+                        processLauncher.kill(pi, 0);
+                    } catch (Exception ex) {
+                        log.warn("Kill failed for Device Process '{}'. Reason: {}", pi.getDeviceId(), ex.getMessage());
+                    }
                     piIterator.remove();
                     log.info("Evicted dead Device Process '{}' having status '{}'", pi.getDeviceId(), pi.getStatus());
                 } else {
@@ -282,9 +296,9 @@ public class DeviceProcessTracker {
                             } else {
                                 log.trace("StreamCopier is null for {}", deviceId);
                             }
-                            log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), dpi.getStatus(), DeviceProcessStatus.Running);
+                            log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(),  DeviceProcessStatus.Starting, DeviceProcessStatus.Running);
                         } else if (dpi.getStatus() == DeviceProcessStatus.NotRunning) {
-                            log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), dpi.getStatus(), DeviceProcessStatus.Running);
+                            log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), DeviceProcessStatus.NotRunning, DeviceProcessStatus.Running);
                         }
                         if (pi.getPid() != null) {
                             DeviceProcessTracker.this.updateDeviceProcessStatus(
@@ -311,7 +325,7 @@ public class DeviceProcessTracker {
                         DeviceProcessTracker.this.updateDeviceProcessStatus(
                                 this.deviceId, 
                                 DeviceProcessStatus.NotRunning);
-                        log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), dpi.getStatus(), DeviceProcessStatus.NotRunning);
+                        log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), DeviceProcessStatus.Running, DeviceProcessStatus.NotRunning);
                     }
                 }
             }

@@ -3,11 +3,9 @@ package org.jumpmind.pos.management;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jumpmind.pos.util.AppUtils;
+import org.jumpmind.pos.util.NetworkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +27,6 @@ public class ProcessManagerService {
     private DeviceProcessLauncher processLauncher;
     
     
-    private Set<String> devicesWithShutdownHook = new HashSet<>();
-    
     public DeviceProcessInfo queryOrLaunchDeviceProcess(String appId, String deviceId) {
         long processStartMaxWaitMillis = config.getDeviceProcessConfig(appId).getStartMaxWaitMillis();
         processMgrEnvSvc.ensureMainWorkDirExists();
@@ -39,6 +35,7 @@ public class ProcessManagerService {
         while (Duration.between(start, Instant.now()).toMillis() < processStartMaxWaitMillis) {
             long timeRemaining = processStartMaxWaitMillis - Duration.between(start, Instant.now()).toMillis();
             boolean gotLock = false;
+            boolean takeNap = false;
             try {
                 if (processTracker.waitForLock(deviceId, timeRemaining)) {
                     gotLock = true;
@@ -49,7 +46,6 @@ public class ProcessManagerService {
                         try {
                             if (pi.isNotPreviouslyStarted()) {
                                 pi = this.processLauncher.launch(pi, timeRemaining);
-                                addShutdownHook(deviceId);
                                 if (pi.isProcessAlive()) {
                                     processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.Starting);
                                 } else {
@@ -57,6 +53,9 @@ public class ProcessManagerService {
                                             String.format("Failed to create process for Device '%s'.  Check the process log for the additional info.", pi.getDeviceId())
                                     );
                                 }
+                            } else {
+                                log.info("Device Process '{}' is NotRunning, will check it again in a second. Time remaining: {}", deviceId, timeRemaining);
+                                takeNap = true;
                             }
                         } catch (DeviceProcessLaunchException dplEx) {
                             processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.StartupFailed);
@@ -69,11 +68,8 @@ public class ProcessManagerService {
                             );
                         }
                     } else if (pi.getStatus() == DeviceProcessStatus.Starting) {
-                        log.info("Device Process '{}' is still starting, will check it again in a second. Time remaining: {}", deviceId, timeRemaining);
-                        try { Thread.sleep(1000); } 
-                        catch (InterruptedException ex) {
-                            log.warn("Thread interrupted", ex);
-                        }
+                        log.info("Device Process '{}' is still Starting, will check it again in a second. Time remaining: {}", deviceId, timeRemaining);
+                        takeNap = true;
                     } else if (pi.getStatus() == DeviceProcessStatus.StartupFailed) {
                         break;
                     }
@@ -81,6 +77,12 @@ public class ProcessManagerService {
             } finally {
                 if (gotLock) {
                     processTracker.unlock(deviceId);
+                }
+            }
+            if (takeNap) {
+                try { Thread.sleep(1000); } 
+                catch (InterruptedException ex) {
+                    log.warn("Thread interrupted", ex);
                 }
             }
         }
@@ -105,19 +107,6 @@ public class ProcessManagerService {
         
     }
     
-    protected void addShutdownHook(String deviceId) {
-        if (! this.devicesWithShutdownHook.contains(deviceId)) {
-            this.devicesWithShutdownHook.add(deviceId);
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                DeviceProcessInfo pi = processTracker.getDeviceProcessInfo(deviceId);
-                if (pi != null) {
-                    processLauncher.kill(pi);
-                    processTracker.removeDeviceProcessInfo(pi);
-                }
-            }));
-        }
-    }
-
     public DiscoveryResponse constructDiscoveryResponse(DeviceProcessInfo pi) {
         DiscoveryResponse cci = new DiscoveryResponse(
             this.resolveHostname(),
@@ -131,7 +120,7 @@ public class ProcessManagerService {
     }
     
     protected String resolveHostname() {
-        return StringUtils.isNotBlank(config.getClientConnect().getHostname()) ? config.getClientConnect().getHostname() : AppUtils.getHostName();
+        return StringUtils.isNotBlank(config.getClientConnect().getHostname()) ? config.getClientConnect().getHostname() : NetworkUtils.getNetworkHostname();
     }
     protected String makeUrl(String urlTemplate, DeviceProcessInfo pi) {
         if (StringUtils.isNotBlank(urlTemplate)) {

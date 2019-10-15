@@ -9,8 +9,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.lang.ProcessBuilder.Redirect;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
@@ -47,6 +50,9 @@ public class DeviceProcessLauncher {
     
     @Autowired
     ProcessCommandBuilderFactory processCmdFactory;
+    
+    private Set<String> devicesWithShutdownHook = new HashSet<>();
+    
 
     
     public DeviceProcessInfo launch(DeviceProcessInfo pi, long maxWaitMillis) throws DeviceProcessSetupException, DeviceProcessLaunchException {
@@ -66,7 +72,7 @@ public class DeviceProcessLauncher {
         return pi;
     }
 
-    public void kill(DeviceProcessInfo pi) {
+    public void kill(DeviceProcessInfo pi, long maxWaitMillis) {
         ProcessCommandBuilder commandBuilder = processCmdFactory.make(config.getDeviceProcessConfig(pi));
         List<String> killCommandParts = commandBuilder.constructKillCommandParts(pi);
         if (CollectionUtils.isNotEmpty(killCommandParts)) {
@@ -76,6 +82,10 @@ public class DeviceProcessLauncher {
             try {
                 log.info("Killing Device Process '{}' with command line: {}", pi.getDeviceId(), String.join(" ", killCommandParts));
                 Process process = builder.start();
+                if (maxWaitMillis > 0) {
+                    process.waitFor(maxWaitMillis, TimeUnit.MILLISECONDS);
+                }
+                this.devicesWithShutdownHook.remove(pi.getDeviceId());
                 log.info("Kill command for Device Process '{}' exit code: {}", pi.getDeviceId(), process.exitValue());
             } catch (IllegalThreadStateException tse) {
                 log.debug(String.format("Failed to get process exit code for Device Process '%s'", pi.getDeviceId()), tse);
@@ -84,6 +94,7 @@ public class DeviceProcessLauncher {
             }
         } else if (pi.getProcess() != null && pi.getProcess().isAlive()) {
             pi.getProcess().destroy();
+            this.devicesWithShutdownHook.remove(pi.getDeviceId());
         }
     }
     
@@ -186,6 +197,8 @@ public class DeviceProcessLauncher {
             streamCopier.start();
             pi.setStreamCopier(streamCopier);
             if (process.isAlive()) {
+                addShutdownHook(pi);
+
                 log.info("Device Process '{}' started", pi.getDeviceId());
                 return process;
             } else {
@@ -202,6 +215,16 @@ public class DeviceProcessLauncher {
         }
     }
     
+    protected void addShutdownHook(DeviceProcessInfo dpi) {
+        if (! this.devicesWithShutdownHook.contains(dpi.getDeviceId())) {
+            this.devicesWithShutdownHook.add(dpi.getDeviceId());
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (this.devicesWithShutdownHook.contains(dpi.getDeviceId())) {
+                    this.kill(dpi, 5000);
+                }
+            }));
+        }
+    }
     
     protected ProcessBuilder constructProcessBuilder(DeviceProcessInfo pi, List<String> commandLineParts, File workingDir) {
         File processLogfile = new File(workingDir, config.getDeviceProcessConfig(pi).getProcessLogFilePath());
