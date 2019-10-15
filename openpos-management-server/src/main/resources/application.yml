@@ -31,7 +31,7 @@ openpos:
     # Amount of time to check the status of child OpenPOS device process in order to
     # confirm status and also evict dead Device Process entries 
     # (i.e., having status of StartupFailed) from it's cache
-    statusCheckPeriodMillis: 5000
+    # statusCheckPeriodMillis: 2500
     
     # Amount of time in milliseconds that a Device Process which failed to start up
     # will be retained in the Management Server's internal cache before it is

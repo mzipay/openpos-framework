@@ -26,7 +26,7 @@ public class OpenposManagementServerConfig {
     @NotNull 
     private String statusUrlTemplate;
     private long statusMaxWaitMillis = 1000;
-    private long statusCheckPeriodMillis = 7500;
+    private long statusCheckPeriodMillis = 5000;
     private long failedStartupProcessRetentionPeriodMillis = 30000;
     
     private DeviceProcessConfig defaultDeviceProcessConfig;

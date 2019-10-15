@@ -28,7 +28,7 @@ public class ProcessManagerEnvironmentService {
                 throw new OpenposManagementException(String.format("Failed to main working directory at '%s'", work.getPath())) ;
             }
         } else {
-            log.debug("Openpos Management Service working dir, '{}', already exists, no need to create", work.getPath());
+            log.trace("Openpos Management Service working dir, '{}', already exists, no need to create", work.getPath());
         }
     }
 

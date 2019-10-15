@@ -51,14 +51,14 @@ export class DiscoveryService {
             deviceId: params && typeof params.deviceId !== 'undefined' ? params.deviceId : this.personalization.getDeviceId(),
             sslEnabled: params && typeof params.sslEnabled !== 'undefined' ? params.sslEnabled : this.personalization.isSslEnabled(),
             appId: params && typeof params.appId !== 'undefined' ? params.appId : null,
-            maxWaitMillis: params && typeof params.maxWaitMillis !== 'undefined' ? params.maxWaitMillis : 60000
+            maxWaitMillis: params && typeof params.maxWaitMillis !== 'undefined' ? params.maxWaitMillis : 90000
         };
     }
     public async discoverDeviceProcess(parameters?: DiscoveryParams): Promise<DiscoveryResponse> {
         const params = this.makeParams(parameters);
         const url = `http${params.sslEnabled ? 's' : ''}://${params.server}:${params.port}/discover?` +
             `deviceId=${params.deviceId}${params.appId ? '&appId=' + params.appId : ''}`;
-        console.log('Discovering client using url: ' + url);
+        this.log.info('Discovering device process using url: ' + url);
 
         let discoveryError: any = null;
         try {

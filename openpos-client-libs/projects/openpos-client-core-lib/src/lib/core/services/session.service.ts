@@ -439,10 +439,10 @@ export class SessionService implements IMessageHandler<any> {
             this.unsubscribe();
             this.discovery.clearCachedUrls();
             this.reconnecting = true;
-            this.reconnectTimerSub = timer(5000, 12000).pipe(takeWhile(v => this.reconnecting)).subscribe(async () => {
+            this.reconnectTimerSub = timer(5000, 5000).pipe(takeWhile(v => this.reconnecting)).subscribe(async () => {
                 if (this.discovery.isManagementServerAlive()) {
                     this.log.debug(`Management server is alive`);
-                    const response = await this.discovery.discoverDeviceProcess({maxWaitMillis: 9000});
+                    const response = await this.discovery.discoverDeviceProcess({maxWaitMillis: 2500});
                     if (this.discovery.getWebsocketUrl()) {
                         // TODO: May not be necessary to run in zone, check.
                         this.zone.run(() => {

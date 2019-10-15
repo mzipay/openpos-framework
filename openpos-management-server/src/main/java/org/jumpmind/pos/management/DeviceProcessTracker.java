@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
 
 import org.jumpmind.pos.util.model.ProcessInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +30,17 @@ public class DeviceProcessTracker {
     
     Map<String, DeviceProcessInfo> trackingMap = new HashMap<>();
     Map<String, Boolean> lockMap = new HashMap<>();
-//    Map<String, Semaphore> lockMap = new HashMap<>();
 
     public boolean waitForLock(String deviceId, long maxWaitMillis) {
         DeviceProcessLockWatcher watcher = null;
         synchronized(lockMap) {
             if (this.lock(deviceId)) {
                 return true;
-            } else {
+            } else if (maxWaitMillis > 0) {
                 watcher = new DeviceProcessLockWatcher(deviceId);
                 watcher.start();
+            } else {
+                return false;
             }
         }
         if (watcher != null) {
@@ -64,7 +64,7 @@ public class DeviceProcessTracker {
     }
     
     
-    @Scheduled(fixedRateString = "${openpos.managementServer.statusCheckPeriodMillis:7500}")
+    @Scheduled(fixedRateString = "${openpos.managementServer.statusCheckPeriodMillis:2500}")
     public void refreshDeviceProcessStatus() {
         log.trace("checkDeviceProcessStatus running");
 

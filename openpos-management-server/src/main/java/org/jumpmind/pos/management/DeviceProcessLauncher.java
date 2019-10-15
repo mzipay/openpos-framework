@@ -85,7 +85,6 @@ public class DeviceProcessLauncher {
                 if (maxWaitMillis > 0) {
                     process.waitFor(maxWaitMillis, TimeUnit.MILLISECONDS);
                 }
-                this.devicesWithShutdownHook.remove(pi.getDeviceId());
                 log.info("Kill command for Device Process '{}' exit code: {}", pi.getDeviceId(), process.exitValue());
             } catch (IllegalThreadStateException tse) {
                 log.debug(String.format("Failed to get process exit code for Device Process '%s'", pi.getDeviceId()), tse);
@@ -94,7 +93,6 @@ public class DeviceProcessLauncher {
             }
         } else if (pi.getProcess() != null && pi.getProcess().isAlive()) {
             pi.getProcess().destroy();
-            this.devicesWithShutdownHook.remove(pi.getDeviceId());
         }
     }
     

@@ -171,7 +171,8 @@ export class PersonalizationComponent implements IScreen, OnInit {
                 server: this.secondFormGroup.get('serverName').value,
                 port: this.secondFormGroup.get('serverPort').value, 
                 deviceId: this.thirdFormGroup.get('deviceId').value,
-                sslEnabled: this.secondFormGroup.get('sslEnabled').value
+                sslEnabled: this.secondFormGroup.get('sslEnabled').value,
+                maxWaitMillis: 90000
             });
             if (this.discoveryResponse && this.discoveryResponse.success) {
                 this.serverResponse = await this.personalizationService.requestPersonalization(
