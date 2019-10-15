@@ -48,6 +48,8 @@ dependencies {
     implementation("org.codehaus.groovy:groovy:$groovyVersion")
     implementation("org.codehaus.groovy:groovy-jsr223:$groovyVersion")
     implementation("org.codehaus.groovy:groovy-ant:$groovyVersion")
+    // Handles decryption of values in application.yaml/properties
+    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:2.1.2")
     
 //    compile 'org.springframework.boot:spring-boot-starter-log4j2'
     
