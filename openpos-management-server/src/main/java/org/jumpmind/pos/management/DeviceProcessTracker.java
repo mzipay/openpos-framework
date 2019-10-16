@@ -1,15 +1,13 @@
 package org.jumpmind.pos.management;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jumpmind.pos.util.model.ProcessInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +28,7 @@ public class DeviceProcessTracker {
     
     Map<String, DeviceProcessInfo> trackingMap = new HashMap<>();
     Map<String, Boolean> lockMap = new HashMap<>();
+    Map<String, DeviceProcessStatusKeeperThread> threadMap = new HashMap<>();
 
     public boolean waitForLock(String deviceId, long maxWaitMillis) {
         DeviceProcessLockWatcher watcher = null;
@@ -63,52 +62,23 @@ public class DeviceProcessTracker {
         
     }
     
-    
-    @Scheduled(fixedRateString = "${openpos.managementServer.statusCheckPeriodMillis:2500}")
-    public void refreshDeviceProcessStatus() {
-        log.trace("checkDeviceProcessStatus running");
-
-        synchronized(trackingMap) {
-            // Iterate over all the known devices and hit their status service to determine status
-            Iterator<String> piIterator = trackingMap.keySet().iterator();
-            while (piIterator.hasNext()) {
-                String deviceId = piIterator.next();
-                DeviceProcessInfo pi = this.getDeviceProcessInfo(deviceId);
-                if (pi.getStatus() == DeviceProcessStatus.StartupFailed
-                    && pi.getLastUpdated() != null 
-                    && Instant.now().isAfter(pi.getLastUpdated().plusMillis(config.getFailedStartupProcessRetentionPeriodMillis()))) {
-                    try {
-                        processLauncher.kill(pi, 0);
-                    } catch (Exception ex) {
-                        log.warn("Kill failed for Device Process '{}'. Reason: {}", pi.getDeviceId(), ex.getMessage());
-                    }
-                    piIterator.remove();
-                    log.info("Evicted dead Device Process '{}' having status '{}'", pi.getDeviceId(), pi.getStatus());
-                } else if (pi.getStatus() == DeviceProcessStatus.NotRunning
-                    && pi.getLastUpdated() != null 
-                    && Instant.now().isAfter(pi.getLastUpdated().plusMillis(config.getDeviceProcessConfig(pi).getDeadProcessRetentionPeriodMillis()))) {
-                    try {
-                        processLauncher.kill(pi, 0);
-                    } catch (Exception ex) {
-                        log.warn("Kill failed for Device Process '{}'. Reason: {}", pi.getDeviceId(), ex.getMessage());
-                    }
-                    piIterator.remove();
-                    log.info("Evicted dead Device Process '{}' having status '{}'", pi.getDeviceId(), pi.getStatus());
-                } else {
-                    if (pi.getPort() != null) {
-                        DeviceProcessStatusCheckThread statusCheckThread = new DeviceProcessStatusCheckThread(deviceId, pi.getPort());
-                        statusCheckThread.start();
-                    } else {
-                        log.trace("No port number stored for Device Process '{}', ommitting from status tracking", pi.getDeviceId());
-                    }
-                }
+    public void track(DeviceProcessInfo dpi) {
+        // intentionally using tracking map for synchronization for both threadMap and trackingMap
+        synchronized (trackingMap) {  
+            if (! threadMap.containsKey(dpi.getDeviceId())) {
+                DeviceProcessStatusKeeperThread t = new DeviceProcessStatusKeeperThread(dpi.getDeviceId(), dpi.getPort());
+                t.start();
+                threadMap.put(dpi.getDeviceId(), t);
             }
         }
-        
     }
     
     protected DeviceProcessInfo removeDeviceProcessInfo(DeviceProcessInfo pi) {
         synchronized(trackingMap) {
+            DeviceProcessStatusKeeperThread statusThread = this.threadMap.remove(pi.getDeviceId());
+            if (statusThread != null) {
+                statusThread.requestStop();
+            }
             return this.trackingMap.remove(pi.getDeviceId());
         }
     }
@@ -195,6 +165,12 @@ public class DeviceProcessTracker {
     public void clean() {
         synchronized (trackingMap) {
             trackingMap.clear();
+            Iterator<Entry<String, DeviceProcessStatusKeeperThread>> threadIt = threadMap.entrySet().iterator();
+            while(threadIt.hasNext()) {
+                Entry<String, DeviceProcessStatusKeeperThread> entry = threadIt.next();
+                entry.getValue().requestStop();
+                threadIt.remove();
+            }
         }
         synchronized (lockMap) {
             lockMap.clear();
@@ -202,38 +178,6 @@ public class DeviceProcessTracker {
     }
 
     
-    class DeviceProcessStatusWatcher extends Thread {
-        String deviceId;
-        List<DeviceProcessStatus> statuses;
-        boolean stopped = false;
-        
-        DeviceProcessStatusWatcher(String deviceId,  DeviceProcessStatus...statuses) {
-            this.deviceId = deviceId;
-            this.statuses = Arrays.asList(statuses);
-        }
-        
-        public void stopRunning() {
-            this.stopped = true;
-        }
-        @Override
-        public void run() {
-            while (! stopped) {
-                DeviceProcessInfo pi = DeviceProcessTracker.this.getDeviceProcessInfo(deviceId);
-                if (null != pi && this.statuses.contains(pi.getStatus())) {
-                    synchronized(this) {
-                        this.notify();
-                    }
-                    return;
-                }
-                try {
-                    sleep(1000);
-                } catch (InterruptedException ex) {
-                    // TODO
-                }
-            }
-        }
-    }
-
     class DeviceProcessLockWatcher extends Thread {
         String deviceId;
         boolean stopped = false;
@@ -259,77 +203,116 @@ public class DeviceProcessTracker {
                 try {
                     sleep(1000);
                 } catch (InterruptedException ex) {
-                    // TODO
+                    log.warn("",ex);
                 }
             }
         }
     }
 
-    
-    class DeviceProcessStatusCheckThread extends Thread {
+    class DeviceProcessStatusKeeperThread extends Thread {
         
         private String deviceId;
         private int port;
+        private boolean stopped = false;
         
-        public DeviceProcessStatusCheckThread(String deviceId, int port) {
+        public DeviceProcessStatusKeeperThread(String deviceId, int port) {
             this.deviceId = deviceId;
             this.port = port;
         }
         
+        public void requestStop() {
+            this.stopped = true;
+        }
+        
         @Override
         public void run() {
-            DeviceProcessInfo dpi = DeviceProcessTracker.this.getDeviceProcessInfo(deviceId);
-            log.trace("Running status check for Device Process '{}' on port {} (current status is: {})...", deviceId, port, dpi.getStatus());
-            if (dpi.getStatus() != DeviceProcessStatus.StartupFailed) {
-                boolean running = false;
-                try {
-                    ProcessInfo pi = DeviceProcessTracker.this.deviceProcessStatusClient.getDeviceProcessStatus(this.deviceId, this.port);
-                    if (pi != null) {
-                        running = true;
-                        // We're transitioning from Starting to Running
-                        if (dpi.getStatus() == DeviceProcessStatus.Starting) {
-                            // We don't need to capture output any longer since the process
-                            // is now fully started.
-                            if (dpi.getStreamCopier() != null) {
-                                log.debug("Stopping output to process log file for Device Process {}", deviceId);
-                                dpi.getStreamCopier().stopCopying();
-                            } else {
-                                log.trace("StreamCopier is null for {}", deviceId);
-                            }
-                            log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(),  DeviceProcessStatus.Starting, DeviceProcessStatus.Running);
-                        } else if (dpi.getStatus() == DeviceProcessStatus.NotRunning) {
-                            log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), DeviceProcessStatus.NotRunning, DeviceProcessStatus.Running);
-                        }
-                        if (pi.getPid() != null) {
-                            DeviceProcessTracker.this.updateDeviceProcessStatus(
-                                this.deviceId,
-                                DeviceProcessStatus.Running,
-                                pi.getPid()
-                            );
-                        } else {
-                            DeviceProcessTracker.this.updateDeviceProcessStatus(
-                                    this.deviceId,
-                                    DeviceProcessStatus.Running
-                            );
-                        }
+            log.info("Status tracking thread for Device Process '{}' started", deviceId);
+            while(! stopped) {
+                DeviceProcessInfo dpi = getDeviceProcessInfo(deviceId);
+                DeviceProcessStatus status = dpi.getStatus();
+                log.trace("Running status check for Device Process '{}' on port {} (current status is: {})...", deviceId, port, dpi.getStatus());
+                if (status == DeviceProcessStatus.StartupFailed
+                    && dpi.getLastUpdated() != null 
+                    && Instant.now().isAfter(dpi.getLastUpdated().plusMillis(config.getFailedStartupProcessRetentionPeriodMillis()))) {
+                    try {
+                        DeviceProcessTracker.this.processLauncher.kill(dpi, 0);
+                    } catch (Exception ex) {
+                        log.warn("Kill failed for Device Process '{}'. Reason: {}", dpi.getDeviceId(), ex.getMessage());
                     }
-                } catch (Exception ex) {
-                    log.trace("Failed to get status for Device Process '{}'.  Reason: {}", deviceId, ex.getMessage());
-                    running = false;
+                    removeDeviceProcessInfo(dpi);
+                    stopped = true;
+                    log.info("Evicted dead Device Process '{}' having status '{}'", dpi.getDeviceId(), dpi.getStatus());
+                } else if (status == DeviceProcessStatus.NotRunning
+                    && dpi.getLastUpdated() != null 
+                    && Instant.now().isAfter(dpi.getLastUpdated().plusMillis(config.getDeviceProcessConfig(dpi).getDeadProcessRetentionPeriodMillis()))) {
+                    try {
+                        processLauncher.kill(dpi, 0);
+                    } catch (Exception ex) {
+                        log.warn("Kill failed for Device Process '{}'. Reason: {}", dpi.getDeviceId(), ex.getMessage());
+                    }
+                    removeDeviceProcessInfo(dpi);
+                    stopped = true;
+                    log.info("Evicted dead Device Process '{}' having status '{}'", dpi.getDeviceId(), dpi.getStatus());
+                } else {
+                    checkAndUpdateDeviceProcessStatus(dpi, status);
                 }
                 
-                if (! running) {
-                    if (dpi.getStatus() == DeviceProcessStatus.Starting) {
-                        log.trace("Device Process '{}' is 'Starting', will check again soon...", dpi.getDeviceId());
-                    } else if (dpi.getStatus() == DeviceProcessStatus.Running){
-                        DeviceProcessTracker.this.updateDeviceProcessStatus(
-                                this.deviceId, 
-                                DeviceProcessStatus.NotRunning);
-                        log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), DeviceProcessStatus.Running, DeviceProcessStatus.NotRunning);
+                if (! stopped) {
+                    try {
+                        sleep(config.getStatusCheckPeriodMillis());
+                    } catch (InterruptedException e) {
+                        log.warn("DeviceProcessStatusKeeperThread for Device Process '{}' interrupted!", deviceId);
                     }
+                } else {
+                    log.info("Status tracking thread for Device Process '{}' terminated", deviceId);
                 }
             }
-        }        
-    }
+        }
+        
+        private void checkAndUpdateDeviceProcessStatus(DeviceProcessInfo dpi, DeviceProcessStatus currentStatus) {
 
+            boolean running = false;
+            try {
+                ProcessInfo pi = DeviceProcessTracker.this.deviceProcessStatusClient.getRemoteProcessStatus(this.deviceId, this.port);
+                if (pi != null) {
+                    running = true;
+                    // We're transitioning from Starting to Running
+                    if (currentStatus == DeviceProcessStatus.Starting) {
+                        // We don't need to capture output any longer since the
+                        // process is now fully started.
+                        if (dpi.getStreamCopier() != null) {
+                            log.debug("Stopping output to process log file for Device Process {}", deviceId);
+                            dpi.getStreamCopier().stopCopying();
+                        } else {
+                            log.trace("StreamCopier is null for {}", deviceId);
+                        }
+                        log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), DeviceProcessStatus.Starting,
+                                DeviceProcessStatus.Running);
+                    } else if (currentStatus == DeviceProcessStatus.NotRunning) {
+                        log.info("Device Process '{}' status changed from {} to {}", dpi.getDeviceId(), DeviceProcessStatus.NotRunning,
+                                DeviceProcessStatus.Running);
+                    }
+                    if (pi.getPid() != null) {
+                        updateDeviceProcessStatus(this.deviceId, DeviceProcessStatus.Running, pi.getPid());
+                    } else {
+                        updateDeviceProcessStatus(this.deviceId, DeviceProcessStatus.Running);
+                    }
+                }
+            } catch (Exception ex) {
+                log.trace("Failed to get status for Device Process '{}'.  Reason: {}", deviceId, ex.getMessage());
+                running = false;
+            }
+
+            if (!running) {
+                if (currentStatus == DeviceProcessStatus.Starting) {
+                    log.trace("Device Process '{}' is 'Starting', will check again soon...", deviceId);
+                } else if (currentStatus == DeviceProcessStatus.Running) {
+                    updateDeviceProcessStatus(this.deviceId, DeviceProcessStatus.NotRunning);
+                    log.info("Device Process '{}' status changed from {} to {}", deviceId, DeviceProcessStatus.Running,
+                            DeviceProcessStatus.NotRunning);
+                }
+            }
+        }
+    }
+    
 }

@@ -64,6 +64,7 @@ public class ProcessManagerService {
                         if (pi.isNotPreviouslyStarted()) {
                             pi = this.processLauncher.launch(pi, timeRemaining);
                             if (pi.isProcessAlive()) {
+                                processTracker.track(pi);
                                 processTracker.updateDeviceProcessStatus(deviceId, DeviceProcessStatus.Starting);
                             } else {
                                 throw new DeviceProcessLaunchException(

@@ -22,7 +22,7 @@ public class DeviceProcessStatusClientImpl implements DeviceProcessStatusClient 
     OpenposManagementServerConfig config;
 
     @Override
-    public ProcessInfo getDeviceProcessStatus(String deviceId, int port) {
+    public ProcessInfo getRemoteProcessStatus(String deviceId, int port) {
         String url = "";
         try {
             url = String.format(config.getStatusUrlTemplate(), port);

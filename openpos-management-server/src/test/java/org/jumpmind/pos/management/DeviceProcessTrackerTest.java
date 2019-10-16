@@ -120,6 +120,7 @@ public class DeviceProcessTrackerTest {
         System.out.println("testCheckDeviceProcessStatus_SingleDevice");
         DeviceProcessInfo pi = tracker.getDeviceProcessInfo(DEVICE_ID_1);
         tracker.updateDeviceProcessPort(DEVICE_ID_1, 9999);
+        tracker.track(pi);
 
         // Doing this instead of using sleep in order to save test execution time
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
@@ -127,7 +128,7 @@ public class DeviceProcessTrackerTest {
         Runnable v = () -> {
             try {
                 if (! verified.get()) {
-                    verify(statusClient, atLeastOnce()).getDeviceProcessStatus(DEVICE_ID_1, 9999);
+                    verify(statusClient, atLeastOnce()).getRemoteProcessStatus(DEVICE_ID_1, 9999);
                     verified.set(true);
                 }
             } catch (Throwable ex) {
@@ -161,6 +162,8 @@ public class DeviceProcessTrackerTest {
         DeviceProcessInfo pi2 = tracker.getDeviceProcessInfo(DEVICE_ID_2);
         tracker.updateDeviceProcessPort(DEVICE_ID_1, 8888);
         tracker.updateDeviceProcessPort(DEVICE_ID_2, 9999);
+        tracker.track(pi1);
+        tracker.track(pi2);
         
         // Doing this instead of using sleep in order to save test execution time
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
@@ -168,8 +171,8 @@ public class DeviceProcessTrackerTest {
         Runnable v = () -> {
             try {
                 if (! verified.get()) {
-                    verify(statusClient, atLeastOnce()).getDeviceProcessStatus(DEVICE_ID_1, 8888);
-                    verify(statusClient, atLeastOnce()).getDeviceProcessStatus(DEVICE_ID_2, 9999);
+                    verify(statusClient, atLeastOnce()).getRemoteProcessStatus(DEVICE_ID_1, 8888);
+                    verify(statusClient, atLeastOnce()).getRemoteProcessStatus(DEVICE_ID_2, 9999);
                     verified.set(true);
                 }
             } catch (Throwable ex) {
