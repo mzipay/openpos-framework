@@ -88,8 +88,10 @@ export class PersonalizationComponent implements IScreen, OnInit {
         };
         if (this.serverResponse) {
             const validator = [Validators.required, , Validators.pattern('[a-zA-Z0-9]+')];
-            for (const prop of this.serverResponse.parameters) {
-                formGroup[prop.property] = [prop.defaultValue, validator];
+            if (this.serverResponse.parameters) {
+                for (const prop of this.serverResponse.parameters) {
+                    formGroup[prop.property] = [prop.defaultValue, validator];
+                }
             }
         }
 
@@ -248,7 +250,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
                 this.serverResponse = await this.personalizationService.requestPersonalization(serverName, serverPort, sslEnabled);
                 if (this.serverResponse.success) {
                     this.updateThirdFormGroup();
-                    //this.updateLastFormGroup();
+                    this.updateLastFormGroup();
                     resolve(null);
                 } else {
                     this.log.warn(`Personalization request failed with error: ${this.serverResponse.message}`);
