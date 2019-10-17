@@ -1,21 +1,39 @@
-:host{
-    display: grid;
-    grid-template-rows: 1fr;
+:host {
     height: 100%;
 }
 
-.scan-or-search{
-    margin: 16px 24px;
+.sale-bacon-strip {
+    height: 100%;
 }
 
-.min-height{
-    min-height: 400px;
-}
-
-.sale-content{
-    padding: 0px 24px 8px 24px;
+.sale-outer {
+    height: 100%;
     display: grid;
-    grid-template-rows: auto 1fr auto auto auto;
-    height: inherit;
-    box-sizing: border-box;
+    grid-template-rows: 1fr;
 }
+
+.sale-body {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr 25%;
+    overflow-y: auto;
+
+}
+
+.sale-items-outer {
+    padding-right: 16px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    overflow-y: auto;
+}
+
+.scan-or-search {
+    margin-bottom: 16px;
+}
+
+.sale-list-background {
+    overflow-y: auto;
+    margin-bottom: 8px;
+}
+
+.sale-total-background {}
