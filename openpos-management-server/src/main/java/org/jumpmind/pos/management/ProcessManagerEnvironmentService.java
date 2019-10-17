@@ -10,6 +10,10 @@ import org.springframework.util.SocketUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Utility class for setting up or accessing various aspects of the Openpos
+ * Management Server execution environment.
+ */
 @Service
 @Slf4j
 public class ProcessManagerEnvironmentService {
@@ -17,8 +21,10 @@ public class ProcessManagerEnvironmentService {
     @Autowired
     OpenposManagementServerConfig config;
 
-    // TODO: Add persisting of process info to file
-
+    /**
+     * If the directory identified by the {@link OpenposManagementServerConfig#mainWorkDirPath}
+     * property does not exist, it will be created.
+     */
     public void ensureMainWorkDirExists() {
         File work = new File(config.getMainWorkDirPath());
         if (! work.exists()) {
@@ -32,6 +38,33 @@ public class ProcessManagerEnvironmentService {
         }
     }
 
+    /**
+     * Given a port number configuration parameter value from {@link OpenposManagementServerConfig}, 
+     * an available port number will be returned.
+     * <br/>
+     * Possible {@code portParameterValue}s are as follows:<br/>
+     * <ul>
+     * <li><strong>"AUTO"</strong>
+     * <ul><li>Indicates that a port number should be automatically and randomly 
+     *         allocated between the values of 1024 and 65535</li></ul>
+     * </li>
+     * <li><strong>range-1,range-2,...,range-n</strong>
+     * <ul><li>A comma separated list of integer port number values OR 
+     * ranges that will restrict the pool of port numbers that will be attempted to
+     * be assigned to the process.</li></ul>
+     * </li>
+     * <li><strong>"PROVIDED"</strong>
+     * <ul><li>The port number will be provided by the initializationScript
+     * and supplied through an output binding variable named 'processPort'. 
+     * If the processPort variable is found in the binding, its value
+     * will be used in the statusUrlTemplate and other url template values 
+     * such as webServiceBaseUrlTemplate, etc.</li></ul>
+     * </li>
+     * </ul>
+     * @param portParameterName The name of the configuration parameter to be used
+     * for log messages.
+     * @param portParameterValue The value of the port parameter.
+     */
     public Integer allocatePort(String portParameterName, String portParameterValue) {
         if (StringUtils.isEmpty(portParameterValue)) {
             return null; 

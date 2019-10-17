@@ -6,6 +6,12 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+/**
+ * A response that looks like an OpenPOS server personalization response, but
+ * includes an extra flag that indicates that the response is coming from an
+ * OpenPOS Management Server.  The client can use this information to alter its
+ * behavior for negotiating a connection. 
+ */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ImpersonalizationResponse {

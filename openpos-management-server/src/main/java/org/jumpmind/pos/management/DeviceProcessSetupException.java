@@ -2,7 +2,7 @@ package org.jumpmind.pos.management;
 
 /**
  * Errors that occur during initialization or instantiation of the working
- * environment or instantiation of a process for a given device.
+ * environment for a given device.
  *
  */
 public class DeviceProcessSetupException extends OpenposManagementException {

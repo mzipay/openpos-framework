@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Builds a list of arguments required to run a command to start or kill a process 
+ * for a Device.
+ */
 @Slf4j
 @Component
 public class ExecutableProcessCommandBuilderImpl implements ProcessCommandBuilder {

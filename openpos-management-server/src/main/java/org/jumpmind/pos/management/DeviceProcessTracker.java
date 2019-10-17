@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Stores the current list of active Device Processes and their status.
+ */
 @Service
 @Slf4j
 public class DeviceProcessTracker {
@@ -30,6 +33,18 @@ public class DeviceProcessTracker {
     Map<String, Boolean> lockMap = new HashMap<>();
     Map<String, DeviceProcessStatusKeeperThread> threadMap = new HashMap<>();
 
+    /**
+     * Allows a thread to request a lock for a given device so that other threads
+     * will have access blocked to it. Intended to be used when a device process
+     * is being initialized or started so that two or more threads cannot
+     * simultaneously initialize or start it.  It the responsibility of the caller
+     * to release the lock when done using {@link #unlock(String)}.
+     * @param deviceId
+     * @param maxWaitMills The maximum time to wait for the lock.  If <= 0,
+     * this method will return immediately with a boolean value to indicate
+     * whether or not the lock was acquired.
+     * @return {@code true} if the lock was acquired, {@code false} if not.
+     */
     public boolean waitForLock(String deviceId, long maxWaitMillis) {
         DeviceProcessLockWatcher watcher = null;
         synchronized(lockMap) {
@@ -58,12 +73,17 @@ public class DeviceProcessTracker {
         }
         
         return false;
-        
-        
     }
     
+    /**
+     * Begins tracking the given Device Process. A separate thread for the device
+     * will be allocated to communicate with the remote Device Process in order
+     * to maintain its status via polling.
+     * @param dpi The Device Process to track.
+     */
     public void track(DeviceProcessInfo dpi) {
-        // intentionally using tracking map for synchronization for both threadMap and trackingMap
+        // intentionally using tracking map for synchronization for both threadMap 
+        // and trackingMap since both maps should be in sync with the list of devices.
         synchronized (trackingMap) {  
             if (! threadMap.containsKey(dpi.getDeviceId())) {
                 DeviceProcessStatusKeeperThread t = new DeviceProcessStatusKeeperThread(dpi.getDeviceId(), dpi.getPort());
