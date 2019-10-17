@@ -58,15 +58,16 @@ export class SubscribeToSessionTask implements IStartupTask {
         });
     }
 
-    protected confirmConnection(maxWaitMillis = 5000): Promise<boolean> {
+    protected confirmConnection(maxWaitMillis = 7500): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => { 
             this.connectionTimeoutSubscr = timer(0, 500).pipe(takeUntil(timer(maxWaitMillis))).subscribe(
-                async x => {
+                x => {
                     if (this.session.connected()) {
+                        this.log.info(`Session connection confirmed`);
                         this.connectionTimeoutSubscr.unsubscribe();
                         resolve(true);
                     } else {
-                        this.log.debug(`Session not connected yet`)
+                        this.log.info(`Session not connected yet`)
                     }
                 },
                 (err) => {

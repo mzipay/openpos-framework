@@ -80,7 +80,7 @@ export class DiscoveryService {
                 if (httpResult.success) {
                     console.log('Successful Discovery with url: ' + url);
                     const discoveryResp = httpResult as DiscoveryResponse;
-                    if (this.personalization.isSslEnabled()) {
+                    if (params.sslEnabled) {
                         this.serverBaseUrl = discoveryResp.secureWebServiceBaseUrl;
                         this.websocketUrl = discoveryResp.secureWebSocketBaseUrl;
                     } else {
