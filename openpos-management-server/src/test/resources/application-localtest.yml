@@ -1,6 +1,7 @@
 openpos:
   managementServer:
     mainWorkDirPath: ./build/test-work
+    devicePattern: \d{5}-\d{3}
     statusCheckPeriodMillis: 1000
     defaultDeviceProcessConfig:
       javaExecutableConfig:

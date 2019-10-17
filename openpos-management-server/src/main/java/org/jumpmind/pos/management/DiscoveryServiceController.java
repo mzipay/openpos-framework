@@ -57,7 +57,7 @@ public class DiscoveryServiceController {
         }
     }
     
-    @Lookup
+    @Lookup("defaultImpersonalizationResponse")
     ImpersonalizationResponse makeImpersonalizationResponse() {
         // Will be supplied by Spring context
         return null;

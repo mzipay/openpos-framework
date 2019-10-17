@@ -26,29 +26,9 @@ public class OpenposManagementServerTest {
     @Autowired
     private TestRestTemplate restTemplate;
     
-    /*
-    @Autowired
-    private MockMvc mvc;
-
-    
-    @Test
-    public void testWebService() throws Exception {
-        mvc.perform(get("/discover/url?deviceId=00000-001"))
-            .andExpect(status().isOk())
-            .andExpect(content().string("wss://server/00000-001:6140"));
-    }
-    */
     @Test
     public void contextLoads() throws Exception {
         assertThat(discoveryController).isNotNull();
     }
-    
-    /*
-    @Test
-    public void testRequest() {
-        String url = String.format("http://localhost:%d/discover/url?deviceId=%s", port, "00000-001");
-        assertThat(restTemplate.getForObject(url, String.class)).isEqualTo("wss://server/00000-001:6140");
-    }
-    */
     
 }

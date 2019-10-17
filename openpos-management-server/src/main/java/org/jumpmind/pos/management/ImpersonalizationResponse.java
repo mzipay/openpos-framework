@@ -1,10 +1,10 @@
 package org.jumpmind.pos.management;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * A response that looks like an OpenPOS server personalization response, but
@@ -12,26 +12,10 @@ import org.springframework.stereotype.Component;
  * OpenPOS Management Server.  The client can use this information to alter its
  * behavior for negotiating a connection. 
  */
-@Component
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ImpersonalizationResponse {
-    boolean openposManagementServer = true;
-    
-    @Autowired
-    OpenposManagementServerConfig config;
-
-    public boolean isOpenposManagementServer() {
-        return openposManagementServer;
-    }
-
-    public void setOpenposManagementServer(boolean openposManagementServer) {
-        this.openposManagementServer = openposManagementServer;
-    }
-    
-    public String getDevicePattern() {
-        return this.config.getDevicePattern();
-    }
-    
-    public void setDevicePattern() {
-    }
+    private boolean openposManagementServer = true;
+    private String devicePattern;
 }
