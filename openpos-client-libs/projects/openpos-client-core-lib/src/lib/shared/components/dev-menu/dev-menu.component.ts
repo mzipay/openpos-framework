@@ -26,7 +26,7 @@ import { OldPluginService } from '../../../core/services/old-plugin.service';
 import { FileUploadService } from '../../../core/services/file-upload.service';
 import { IVersion } from '../../../core/interfaces/version.interface';
 import { Observable } from 'rxjs';
-import { DiscoveryService } from '../../../core/services/discovery.service';
+import { DiscoveryService } from '../../../core/discovery/discovery.service';
 
 @Component({
     selector: 'app-dev-menu',

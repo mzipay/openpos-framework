@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { ISellItem } from '../../../core/interfaces/sell-item.interface';
 import { Logger } from '../../../core/services/logger.service';
 import { IUrlMenuItem } from '../../../core/interfaces/url-menu-item.interface';
-import { DiscoveryService } from '../../../core/services/discovery.service';
+import { DiscoveryService } from '../../../core/discovery/discovery.service';
 
 @Component({
     selector: 'app-catalog-browser-item',

@@ -1,5 +1,5 @@
 import { Directive, HostListener, Input, HostBinding, Inject, forwardRef } from '@angular/core';
-import { DiscoveryService } from '../../core/services/discovery.service';
+import { DiscoveryService } from '../../core/discovery/discovery.service';
 
 
 @Directive({
