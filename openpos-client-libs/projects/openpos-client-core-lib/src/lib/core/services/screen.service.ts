@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { SessionService } from './session.service';
 import { IScreen } from '../../shared/components/dynamic-screen/screen.interface';
 import { PersonalizationService } from '../personalization/personalization.service';
-import { DiscoveryService } from './discovery.service';
+import { DiscoveryService } from '../discovery/discovery.service';
 
 @Injectable({
     providedIn: 'root',

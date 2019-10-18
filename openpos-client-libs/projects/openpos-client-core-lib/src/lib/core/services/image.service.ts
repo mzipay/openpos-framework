@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SessionService } from './session.service';
-import { DiscoveryService } from './discovery.service';
+import { DiscoveryService } from '../discovery/discovery.service';
 import { PersonalizationService } from '../personalization/personalization.service';
 
 @Injectable({

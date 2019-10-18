@@ -29,7 +29,7 @@ import { PingParams } from '../interfaces/ping-params.interface';
 import { PingResult } from '../interfaces/ping-result.interface';
 import { PersonalizationResponse } from '../personalization/personalization-response.interface';
 import { ElectronService } from 'ngx-electron';
-import { DiscoveryService } from './discovery.service';
+import { DiscoveryService } from '../discovery/discovery.service';
 
 declare var window: any;
 export class QueueLoadingMessage implements ILoading {
@@ -229,7 +229,7 @@ export class SessionService implements IMessageHandler<any> {
             return;
         }
 
-
+        this.log.info(`Initiating session subscribe...`);
         let url: string = await this.negotiateWebsocketUrl();
         if (url) {
             this.log.info('creating new stomp service at: ' + url);

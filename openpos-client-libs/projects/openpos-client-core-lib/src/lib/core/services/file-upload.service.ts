@@ -7,7 +7,7 @@ import { PersonalizationService } from '../personalization/personalization.servi
 import { CordovaService } from './cordova.service';
 import { Subscription } from 'rxjs';
 import { FileChunkReader } from './../../shared/utils/filechunkreader';
-import { DiscoveryService } from './discovery.service';
+import { DiscoveryService } from '../discovery/discovery.service';
 @Injectable({
     providedIn: 'root',
   })

@@ -6,9 +6,9 @@ import { PersonalizationService } from './personalization.service';
 import { PersonalizationResponse } from './personalization-response.interface';
 import { ClientUrlService } from './client-url.service';
 import { MatDialog } from '@angular/material';
-import { DiscoveryService } from '../services/discovery.service';
-import { DiscoveryStatus } from '../interfaces/discovery-status.enum';
-import { DiscoveryResponse } from '../interfaces/discovery-response.interface';
+import { DiscoveryService } from '../discovery/discovery.service';
+import { DiscoveryStatus } from '../discovery/discovery-status.enum';
+import { DiscoveryResponse } from '../discovery/discovery-response.interface';
 
 @Component({
     selector: 'app-personalization',
@@ -165,7 +165,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
             JSON.stringify(this.discoveryResponse.message);
     }
 
-    public async discover(): Promise<any> {
+    public async discover() {
         if (this.openposMgmtServerPresent) {
             this.discoveryStatus = DiscoveryStatus.InProgress;
 
@@ -194,13 +194,11 @@ export class PersonalizationComponent implements IScreen, OnInit {
             } else {
                 this.discoveryStatus = DiscoveryStatus.Failed;
             }
-            return Promise.resolve(null);
         } else {
             // If we haven't connected to an openpos mgmt server, we'll
             // already have the personalization properties config and can
             // now display them.
             this.updateLastFormGroup();
-            return Promise.resolve(null);
         }
     }
 
