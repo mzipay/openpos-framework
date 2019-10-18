@@ -42,16 +42,13 @@ public class DiscoveryServiceController {
                     return processManager.constructDiscoveryResponse(pi);
                 } else {
                     log.trace("Nothing to return.  Device Process '{}' status is: {}", pi.getDeviceId(), pi.getStatus());
-                    // TODO: Need to handle better
                     return null;
                 }
             } else {
                 log.trace("No Device Process Info for '{}'",deviceId);
-                // TODO: Need to handle better
                 return null;
             }
         } catch (Exception ex) {
-            // TODO: better error handling
             log.error(String.format("Failed to launch process for '%s'", deviceId), ex);
             return null;
         }

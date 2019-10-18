@@ -11,6 +11,10 @@ import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Calls the 'status' web service on a remote OpenPOS server process to confirm
+ * it is alive.
+ */
 @Slf4j
 @Service
 public class DeviceProcessStatusClientImpl implements DeviceProcessStatusClient {

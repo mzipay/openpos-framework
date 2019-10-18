@@ -7,7 +7,7 @@ openpos:
       processLogFilePath: logs/process.log
       reuseProcessPortEnabled: true
       executableConfig:
-        executablePath: ${openpos.managementServer.mainWorkDirPath}\$deviceId\openpos_$deviceId.exe
+        #executablePath: ${openpos.managementServer.mainWorkDirPath}\$deviceId\openpos_$deviceId.exe
         arguments:
           - start
         shutdownExecutablePath: ${openpos.managementServer.mainWorkDirPath}\$deviceId\openpos_$deviceId.exe
