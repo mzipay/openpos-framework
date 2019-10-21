@@ -64,9 +64,12 @@ export class ConnectedMessage {
     type = 'Connected';
 }
 
+@Injectable({
+    providedIn: 'root',
+})
 // Works around problem with re-establishing a STOMP connection
 // as outlined here: https://github.com/stomp-js/ng2-stompjs/issues/58
-class OpenposStompService extends StompRService {
+export class OpenposStompService extends StompRService {
     disconnect() {
       if (this.client) {
         this.client.reconnect_delay = 0;
@@ -117,18 +120,17 @@ export class SessionService implements IMessageHandler<any> {
 
     private reconnectTimerSub: Subscription;
 
-    private stompService: OpenposStompService;
 
     constructor(
         private log: Logger,
         public dialogService: MatDialog,
         public zone: NgZone,
+        protected stompService: OpenposStompService,
         protected personalization: PersonalizationService,
         protected discovery: DiscoveryService,
         private http: HttpClient,
         private electron: ElectronService
     ) {
-        this.stompService = new OpenposStompService();
         this.zone.onError.subscribe((e) => {
             console.error(`[OpenPOS]${e}`);
         });
@@ -440,7 +442,7 @@ export class SessionService implements IMessageHandler<any> {
             this.discovery.clearCachedUrls();
             this.reconnecting = true;
             this.reconnectTimerSub = timer(5000, 5000).pipe(takeWhile(v => this.reconnecting)).subscribe(async () => {
-                if (this.discovery.isManagementServerAlive()) {
+                if (await this.discovery.isManagementServerAlive()) {
                     this.log.debug(`Management server is alive`);
                     const response = await this.discovery.discoverDeviceProcess({maxWaitMillis: 2500});
                     if (this.discovery.getWebsocketUrl()) {
