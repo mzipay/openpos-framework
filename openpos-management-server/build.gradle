@@ -52,7 +52,6 @@ test {
 // To launch local:
 // java -Dloader.path=./src/test/resources -Dspring.profiles.active=bltest -jar build/libs/openpos-management-server.jar
 bootJar {
-    archiveName = "$baseName.$extension"
     mainClassName = 'org.jumpmind.pos.management.OpenposManagementServer'
     manifest {
         attributes 'Main-Class': 'org.springframework.boot.loader.PropertiesLauncher'
