@@ -69,6 +69,9 @@ export * from './lib/core/interfaces/total.interface';
 export * from './lib/core/interfaces/transaction-summary.interface';
 export * from './lib/core/interfaces/url-menu-item.interface';
 export * from './lib/core/interfaces/validator.enum';
+export * from './lib/core/discovery/discovery-params.interface';
+export * from './lib/core/discovery/discovery-response.interface';
+export * from './lib/core/discovery/discovery-status.enum';
 
 export * from './lib/core/oldplugins/barcode-scanner.plugin';
 export * from './lib/core/oldplugins/cordova-device-plugin';
@@ -101,6 +104,7 @@ export * from './lib/core/services/logger.service';
 export * from './lib/core/services/markdown.service';
 export * from './lib/core/services/openpos-media.service';
 export * from './lib/core/personalization/personalization.service';
+export * from './lib/core/discovery/discovery.service';
 export * from './lib/core/services/old-plugin.service';
 export * from './lib/core/services/screen.service';
 export * from './lib/core/services/session.service';

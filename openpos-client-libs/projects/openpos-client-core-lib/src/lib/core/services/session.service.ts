@@ -6,8 +6,8 @@ import { Configuration } from './../../configuration/configuration';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { PersonalizationService } from '../personalization/personalization.service';
 
-import { Observable, Subscription, BehaviorSubject, Subject, merge } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Observable, Subscription, BehaviorSubject, Subject, merge, timer } from 'rxjs';
+import { map, filter, takeWhile } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { Injectable, NgZone, } from '@angular/core';
 import { StompState, StompRService } from '@stomp/ng2-stompjs';
@@ -29,6 +29,7 @@ import { PingParams } from '../interfaces/ping-params.interface';
 import { PingResult } from '../interfaces/ping-result.interface';
 import { PersonalizationResponse } from '../personalization/personalization-response.interface';
 import { ElectronService } from 'ngx-electron';
+import { DiscoveryService } from '../discovery/discovery.service';
 
 declare var window: any;
 export class QueueLoadingMessage implements ILoading {
@@ -61,6 +62,20 @@ export class CancelLoadingMessage implements ILoading {
 
 export class ConnectedMessage {
     type = 'Connected';
+}
+
+@Injectable({
+    providedIn: 'root',
+})
+// Works around problem with re-establishing a STOMP connection
+// as outlined here: https://github.com/stomp-js/ng2-stompjs/issues/58
+export class OpenposStompService extends StompRService {
+    disconnect() {
+      if (this.client) {
+        this.client.reconnect_delay = 0;
+      }
+      super.disconnect();
+    }
 }
 
 @Injectable({
@@ -101,12 +116,18 @@ export class SessionService implements IMessageHandler<any> {
 
     private deletedLaunchFlg = false;
 
+    private reconnecting = false;
+
+    private reconnectTimerSub: Subscription;
+
+
     constructor(
         private log: Logger,
-        private stompService: StompRService,
         public dialogService: MatDialog,
         public zone: NgZone,
+        protected stompService: OpenposStompService,
         protected personalization: PersonalizationService,
+        protected discovery: DiscoveryService,
         private http: HttpClient,
         private electron: ElectronService
     ) {
@@ -205,73 +226,95 @@ export class SessionService implements IMessageHandler<any> {
         return headers;
     }
 
-    public subscribe() {
+    public async subscribe() {
         if (this.subscription) {
             return;
         }
 
-        const url = this.personalization.getWebsocketUrl();
-        this.log.info('creating new stomp service at: ' + url);
+        this.log.info(`Initiating session subscribe...`);
+        let url: string = await this.negotiateWebsocketUrl();
+        if (url) {
+            this.log.info('creating new stomp service at: ' + url);
 
-        this.stompService.config = {
-            url,
-            headers: this.getHeaders(),
-            heartbeat_in: 0, // Typical value 0 - disabled
-            heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
-            reconnect_delay: 250,  // Typical value is 5000, 0 disables.
-            debug: this.stompDebug
-        };
+            this.stompService.config = {
+                url,
+                headers: this.getHeaders(),
+                heartbeat_in: 0, // Typical value 0 - disabled
+                heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
+                reconnect_delay: 250,  // Typical value is 5000, 0 disables.
+                debug: this.stompDebug
+            };
 
-        this.stompService.initAndConnect();
+            this.stompService.initAndConnect();
 
-        const currentTopic = this.buildTopicName();
+            const currentTopic = this.buildTopicName();
 
-        this.log.info('subscribing to server at: ' + currentTopic);
+            this.log.info('subscribing to server at: ' + currentTopic);
 
-        const messages: Observable<Message> = this.stompService.subscribe(currentTopic);
+            const messages: Observable<Message> = this.stompService.subscribe(currentTopic);
 
-        this.subscription = messages.subscribe((message: Message) => {
-            this.log.info('Got STOMP message');
-            if (this.inBackground) {
-                this.log.info('Leaving background');
-                this.inBackground = false;
-            }
-            if (this.isMessageVersionValid(message)) {
-                const json = JSON.parse(message.body);
-                this.logStompJson(json);
-                this.stompJsonMessages$.next(json);
-            } else {
-                this.log.info(`Showing incompatible version screen`);
-                this.stompJsonMessages$.next(this.buildIncompatibleVersionScreen());
-            }
-        });
-
-        this.state = this.stompService.state.pipe(map((state: number) => StompState[state]));
-
-        if (!this.stompStateSubscription) {
-            this.stompStateSubscription = this.state.subscribe(stompState => {
-                if (stompState === 'CONNECTED') {
-                    this.log.info('STOMP connecting');
-                    if (!this.onServerConnect.value) {
-                        this.onServerConnect.next(true);
-                    }
-                    this.sendMessage(new ConnectedMessage());
-                    this.cancelLoading();
-                } else if (stompState === 'DISCONNECTING') {
-                    this.log.info('STOMP disconnecting');
-                } else if (stompState === 'CLOSED') {
-                    this.log.info('STOMP closed');
-                    this.sendDisconnected();
+            this.subscription = messages.subscribe((message: Message) => {
+                this.log.info('Got STOMP message');
+                if (this.inBackground) {
+                    this.log.info('Leaving background');
+                    this.inBackground = false;
+                }
+                if (this.isMessageVersionValid(message)) {
+                    const json = JSON.parse(message.body);
+                    this.logStompJson(json);
+                    this.stompJsonMessages$.next(json);
+                } else {
+                    this.log.info(`Showing incompatible version screen`);
+                    this.stompJsonMessages$.next(this.buildIncompatibleVersionScreen());
                 }
             });
-        }
 
+            this.state = this.stompService.state.pipe(map((state: number) => StompState[state]));
+
+            if (!this.stompStateSubscription) {
+                this.stompStateSubscription = this.state.subscribe(stompState => {
+                    if (stompState === 'CONNECTED') {
+                        this.reconnecting = false;
+                        this.log.info('STOMP connecting');
+                        if (!this.onServerConnect.value) {
+                            this.onServerConnect.next(true);
+                        }
+                        this.sendMessage(new ConnectedMessage());
+                        this.cancelLoading();
+                    } else if (stompState === 'DISCONNECTING') {
+                        this.log.info('STOMP disconnecting');
+                    } else if (stompState === 'CLOSED') {
+                        this.log.info('STOMP closed');
+                        this.sendDisconnected();
+                        if( ! this.reconnecting) {
+                            this.renegotiateConnection();
+                        }
+                    }
+                });
+            }
+        } else {
+            this.log.error('Failed to negotiate server url');
+        }
+        
         if (!this.connected()) {
             this.sendDisconnected();
         }
 
     }
 
+    private async negotiateWebsocketUrl(): Promise<string> {
+        if (this.personalization.isManagedServer()) {
+            if (! this.discovery.getWebsocketUrl()) {
+                const discoverResp = await this.discovery.discoverDeviceProcess();
+                if (!discoverResp || ! discoverResp.success) {
+                    this.log.error(`Failed to get websocket url from OpenPOS Management Server. Reason: ` +
+                        `${!!discoverResp ? discoverResp.message : 'unknown'}`);
+                    return null;
+                }
+            }
+        }
+        return this.discovery.getWebsocketUrl();
+    }
     private sendDisconnected() {
         this.sendMessage(new ImmediateLoadingMessage(this.disconnectedMessage));
     }
@@ -327,7 +370,7 @@ export class SessionService implements IMessageHandler<any> {
             url = url + '/ping';
 
         } else {
-            url = `${this.personalization.getServerBaseURL()}/ping`;
+            url = `${this.discovery.getServerBaseURL()}/ping`;
         }
 
         this.log.info('testing url: ' + url);
@@ -365,7 +408,7 @@ export class SessionService implements IMessageHandler<any> {
             url = url + '/personalize';
 
         } else {
-            url = `${this.personalization.getServerBaseURL()}/personalize`;
+            url = `${this.discovery.getServerBaseURL()}/personalize`;
         }
 
         this.log.info('Requesting Personalization with url: ' + url);
@@ -390,6 +433,32 @@ export class SessionService implements IMessageHandler<any> {
         }
     }
 
+    private async renegotiateConnection() {
+        if (this.reconnecting) {
+            return;
+        }
+        if (this.personalization.isManagedServer()) {
+            this.unsubscribe();
+            this.discovery.clearCachedUrls();
+            this.reconnecting = true;
+            this.reconnectTimerSub = timer(5000, 5000).pipe(takeWhile(v => this.reconnecting)).subscribe(async () => {
+                if (await this.discovery.isManagementServerAlive()) {
+                    this.log.debug(`Management server is alive`);
+                    const response = await this.discovery.discoverDeviceProcess({maxWaitMillis: 2500});
+                    if (this.discovery.getWebsocketUrl()) {
+                        // TODO: May not be necessary to run in zone, check.
+                        this.zone.run(() => {
+                            this.subscribe();
+                            this.reconnectTimerSub.unsubscribe();
+                        });
+                    }
+                } else {
+                    this.log.debug(`Management server is not alive`);
+                }
+            } );
+        }
+    }
+
     public unsubscribe() {
         if (!this.subscription) {
             return;
@@ -402,8 +471,12 @@ export class SessionService implements IMessageHandler<any> {
         this.subscription.unsubscribe();
         this.subscription = null;
 
+        this.stompStateSubscription.unsubscribe();
+        this.stompStateSubscription = null;
+
         this.log.info('disconnecting from stomp service');
         this.stompService.disconnect();
+        this.stompService.config = null;
     }
 
     public onDeviceResponse(deviceResponse: IDeviceResponse) {
@@ -628,9 +701,4 @@ export class SessionService implements IMessageHandler<any> {
     public getCurrencyDenomination(): string {
         return 'USD';
     }
-
-    public getApiServerBaseURL(): string {
-        return `${this.personalization.getServerBaseURL()}/api`;
-    }
-
 }
