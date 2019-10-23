@@ -79,6 +79,7 @@
   | [#336](https://github.com/JumpMind/openpos-framework/pull/336) | Added a new openpos.general category to group parameters that didn&#39;t previously have a home |  |Chris Henson|2019-10-07 21:34:59|
   | [#337](https://github.com/JumpMind/openpos-framework/pull/337) | Move jsonIncludeNulls to a different section of configuration |  |Chris Henson|2019-10-08 12:09:18|
   | [#338](https://github.com/JumpMind/openpos-framework/pull/338) | Feature/customer display |  |Klementina S. Chirico|2019-10-08 16:53:52|
+  | [#339](https://github.com/JumpMind/openpos-framework/pull/339) | Updating sale interface and exporting selectable-list-data interface … |  |stevencarley|2019-10-09 13:56:54|
   | [#340](https://github.com/JumpMind/openpos-framework/pull/340) | Since the selectedItem/selectedItems is being updated every time scre… |  |Klementina S. Chirico|2019-10-09 21:10:45|
   | [#341](https://github.com/JumpMind/openpos-framework/issues/341) | If a message comes in right after a dialog message the dialog&#39;s screen parts fail to initialize with screenData because the dialog content replays the last message and not the dialog message it was expecting to repay.  Results in an undefined screenData. |  |Dan Kaste|2019-10-15 12:28:05|
   | [#342](https://github.com/JumpMind/openpos-framework/pull/342) | Feature/responsive class on self checkout options part |  |Klementina S. Chirico|2019-10-10 14:49:53|
@@ -88,20 +89,21 @@
   | [#347](https://github.com/JumpMind/openpos-framework/pull/347) | Feature/customer display updates |  |Klementina S. Chirico|2019-10-12 01:27:05|
   | [#348](https://github.com/JumpMind/openpos-framework/pull/348) | Fix bug #341 |  |Dan Kaste|2019-10-15 12:28:05|
   | [#349](https://github.com/JumpMind/openpos-framework/pull/349) | Feature/personalization classes |  |Dan Kaste|2019-10-15 19:44:31|
+  | [#351](https://github.com/JumpMind/openpos-framework/pull/351) | Add configuration for setting websocket limit and handle errors gracefully |  |Dan Kaste|2019-10-17 18:01:33|
   | [#352](https://github.com/JumpMind/openpos-framework/pull/352) | Feature/new sale screen |  |maxwellpettit|2019-10-17 20:28:25|
   | [#355](https://github.com/JumpMind/openpos-framework/issues/355) | allow the jdbc query timeout to be configured in the persistence layer.  might need a couple different categories of timeouts (ie user facing versus back end processes) |  |Chris Henson|2019-10-22 18:24:45|
   | [#356](https://github.com/JumpMind/openpos-framework/pull/356) | Bacon Strip updates |  |Dan Kaste|2019-10-21 19:15:45|
   | [#359](https://github.com/JumpMind/openpos-framework/pull/359) | Make the query timeout and the fetch size configurable via yaml or properties.  Fix #355 |  |Chris Henson|2019-10-22 18:24:45|
   | [#360](https://github.com/JumpMind/openpos-framework/pull/360) | Feature/media breakpoints |  |maxwellpettit|2019-10-23 14:17:10|
+  | [#361](https://github.com/JumpMind/openpos-framework/pull/361) | Add refresh annotation for states |  |Dan Kaste|2019-10-23 17:33:12|
   | [#362](https://github.com/JumpMind/openpos-framework/pull/362) | If a superclass with @TableDef defined has an @IndexDef defined we attempt to create the index on the subclass |  |Chris Henson|2019-10-23 14:09:52|
 
-## 0.4.8 
-Released on: 2019-10-23 13:32:05
+## 0.4.9 
+Released on: 2019-10-23 18:09:50
 
 |       | Name   | Labels | Author | Time |
 |-------|--------|--------|--------|------|
-  | [#339](https://github.com/JumpMind/openpos-framework/pull/339) | Updating sale interface and exporting selectable-list-data interface … |  |stevencarley|2019-10-09 13:56:54|
-  | [#351](https://github.com/JumpMind/openpos-framework/pull/351) | Add configuration for setting websocket limit and handle errors gracefully |  |Dan Kaste|2019-10-17 18:01:33|
+  | [#351](https://github.com/JumpMind/openpos-framework/pull/351) | Add configuration for setting websocket limit and handle errors gracefully |  |Dan Kaste|2019-10-23 16:31:23|
 
 ## 0.4.7 
 Released on: 2019-10-07 14:20:23
@@ -116,15 +118,7 @@ Released on: 2019-10-05 22:35:28
 
 |       | Name   | Labels | Author | Time |
 |-------|--------|--------|--------|------|
-  | [#241](https://github.com/JumpMind/openpos-framework/pull/241) | Add support for property crawling of top level String[] property |  |Jason Mihalick|2019-09-20 16:26:17|
-  | [#264](https://github.com/JumpMind/openpos-framework/pull/264) | Adding support for status strip on Home Page Component |  |stevencarley|2019-09-13 14:05:26|
-  | [#265](https://github.com/JumpMind/openpos-framework/pull/265) | Add comment for restore focus |  |maxwellpettit|2019-09-13 14:52:50|
   | [#267](https://github.com/JumpMind/openpos-framework/pull/267) | Log a UUID called sessionId in the client context so client and server can be correlated |  |Chris Henson|2019-09-30 18:47:14|
-  | [#269](https://github.com/JumpMind/openpos-framework/pull/269) | Check if dialog is closeable on screen refresh |  |maxwellpettit|2019-09-13 19:36:07|
-  | [#270](https://github.com/JumpMind/openpos-framework/pull/270) | Making kebab menu selections full line clickable instead of text only |  |stevencarley|2019-09-16 15:24:54|
-  | [#277](https://github.com/JumpMind/openpos-framework/pull/277) | Adding min-height to drawer-button, older version of chrome rendering… |  |stevencarley|2019-09-17 16:29:22|
-  | [#278](https://github.com/JumpMind/openpos-framework/pull/278) | Expanded clickable area for Transaction Menu in Sale Component |  |Eric Amiralian|2019-09-17 20:19:59|
-  | [#286](https://github.com/JumpMind/openpos-framework/pull/286) | Add loading dialog delay to client configuration |  |maxwellpettit|2019-09-20 15:20:17|
   | [#288](https://github.com/JumpMind/openpos-framework/pull/288) | Set the max rows to the max results and set auto commit to false so that the entire result isn&#39;t returned |  |Chris Henson|2019-09-23 18:04:09|
   | [#306](https://github.com/JumpMind/openpos-framework/pull/306) | Change the disconnected text from &quot;Reconnecting&quot; to &quot;Connecting&quot; |  |Chris Henson|2019-09-30 18:46:44|
 
@@ -133,8 +127,16 @@ Released on: 2019-09-30 12:58:53
 
 |       | Name   | Labels | Author | Time |
 |-------|--------|--------|--------|------|
+  | [#241](https://github.com/JumpMind/openpos-framework/pull/241) | Add support for property crawling of top level String[] property |  |Jason Mihalick|2019-09-20 16:26:17|
   | [#250](https://github.com/JumpMind/openpos-framework/pull/250) | Added missing AlphanumericText formatter, removed old onBarcodePaste |  |Eric Amiralian|2019-09-26 12:15:49|
+  | [#264](https://github.com/JumpMind/openpos-framework/pull/264) | Adding support for status strip on Home Page Component |  |stevencarley|2019-09-13 14:05:26|
+  | [#265](https://github.com/JumpMind/openpos-framework/pull/265) | Add comment for restore focus |  |maxwellpettit|2019-09-13 14:52:50|
+  | [#269](https://github.com/JumpMind/openpos-framework/pull/269) | Check if dialog is closeable on screen refresh |  |maxwellpettit|2019-09-13 19:36:07|
+  | [#270](https://github.com/JumpMind/openpos-framework/pull/270) | Making kebab menu selections full line clickable instead of text only |  |stevencarley|2019-09-16 15:24:54|
+  | [#277](https://github.com/JumpMind/openpos-framework/pull/277) | Adding min-height to drawer-button, older version of chrome rendering… |  |stevencarley|2019-09-17 16:29:22|
+  | [#278](https://github.com/JumpMind/openpos-framework/pull/278) | Expanded clickable area for Transaction Menu in Sale Component |  |Eric Amiralian|2019-09-17 20:19:59|
   | [#285](https://github.com/JumpMind/openpos-framework/pull/285) | Paginate &gt; 15 homescreen menu items |  |Eric Amiralian|2019-09-27 14:27:39|
+  | [#286](https://github.com/JumpMind/openpos-framework/pull/286) | Add loading dialog delay to client configuration |  |maxwellpettit|2019-09-20 15:20:17|
   | [#287](https://github.com/JumpMind/openpos-framework/pull/287) | Feature/banner screen part |  |stevencarley|2019-09-23 15:50:30|
   | [#290](https://github.com/JumpMind/openpos-framework/pull/290) | Test occasionally failing on CI with multiple invocations of error handler |  |stevencarley|2019-09-24 15:32:41|
 
@@ -176,7 +178,7 @@ Released on: 2019-09-04 18:24:49
 
 |       | Name   | Labels | Author | Time |
 |-------|--------|--------|--------|------|
-| [#244](https://github.com/JumpMind/openpos-framework/pull/244) | Bugfix/selectable item list default select on disabled |  |Klementina S. Chirico|2019-09-04 18:21:48|
+  | [#244](https://github.com/JumpMind/openpos-framework/pull/244) | Bugfix/selectable item list default select on disabled |  |Klementina S. Chirico|2019-09-04 18:21:48|
 
 ## 0.5.2 
 Released on: 2019-08-28 15:41:59
