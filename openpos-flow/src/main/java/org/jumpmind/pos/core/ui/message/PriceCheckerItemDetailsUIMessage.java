@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PriceCheckerItemDetailsUIMessage extends UIMessage {
-    private static final long serialVersionUID = 1L;
-    
+
     private ActionItem printButton;
     private String itemDescription;
     private List<DisplayProperty> itemProperties;
@@ -21,7 +20,7 @@ public class PriceCheckerItemDetailsUIMessage extends UIMessage {
     private String disclaimer;
     private String itemNotFoundMessage;
     private String helpMessage;
-    private String scanAction;
+    private String scanActionName;
 
     public PriceCheckerItemDetailsUIMessage() {
         setScreenType(UIMessageType.PRICE_CHECKER_ITEM_DETAIL);
@@ -136,11 +135,11 @@ public class PriceCheckerItemDetailsUIMessage extends UIMessage {
         this.disclaimer = disclaimer;
     }
 
-    public String getScanAction() {
-        return scanAction;
+    public String getScanActionName() {
+        return scanActionName;
     }
 
-    public void setScanAction(String scanAction) {
-        this.scanAction = scanAction;
+    public void setScanActionName(String scanActionName) {
+        this.scanActionName = scanActionName;
     }
 }
