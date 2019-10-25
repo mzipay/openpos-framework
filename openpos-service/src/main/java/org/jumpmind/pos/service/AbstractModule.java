@@ -105,11 +105,11 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
     
     static Server h2Server;
 
-    public String getVersion() {
+    public final String getVersion() {
         String version = new AbstractVersion() {
             @Override
             protected String getArtifactName() {
-                return getArtifactName();
+                return AbstractModule.this.getArtifactName();
             }
         }.version();
         if (version.equals("development")) {
@@ -117,6 +117,8 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
         }
         return version;
     }
+
+    abstract protected String getArtifactName();
 
     protected void setupH2Server() {
         if ("true".equals(env.getProperty("db.h2.startServer"))) {
