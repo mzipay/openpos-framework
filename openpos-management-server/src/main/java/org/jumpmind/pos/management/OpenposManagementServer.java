@@ -9,8 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class OpenposManagementServer {
     public static void main(String[] args) throws Exception {
-        
-        // TODO: write PID to file.  See https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-process-monitoring.html
+        System.out.println("OpenposManagementServer working dir: " + System.getProperty("user.dir"));
         SpringApplication.run(OpenposManagementServer.class, args);
     }
 }
