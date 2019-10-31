@@ -68,7 +68,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @DependsOn({"tagConfig"})
-abstract public class AbstractModule extends AbstractServiceFactory implements IModule {
+abstract public class AbstractModule extends AbstractServiceFactory implements IModule, IRDBMSModule {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -134,16 +134,19 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
         }
     }
 
-    protected PlatformTransactionManager txManager() {
+
+    @Override
+    public PlatformTransactionManager getPlatformTransactionManager() {
         if (txManager == null) {
-            this.txManager = new DataSourceTransactionManager(dataSource());
+            this.txManager = new DataSourceTransactionManager(getDataSource());
         }
         return txManager;
     }
 
-    protected IDatabasePlatform databasePlatform() {
+    @Override
+    public IDatabasePlatform getDatabasePlatform() {
         if (databasePlatform == null) {
-            databasePlatform = JdbcDatabasePlatformFactory.createNewPlatformInstance(dataSource(), new SqlTemplateSettings(), false, false);
+            databasePlatform = JdbcDatabasePlatformFactory.createNewPlatformInstance(getDataSource(), new SqlTemplateSettings(), false, false);
         }
         return databasePlatform;
     }
@@ -165,7 +168,8 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
         return env.getProperty(DB_POOL_URL, "jdbc:openpos:h2:mem:" + getName());
     }
 
-    protected DataSource dataSource() {
+    @Override
+    public DataSource getDataSource() {
         if (dataSource == null) {
             setupH2Server();
             if (this.dataSourceBeanName != null) {
@@ -224,7 +228,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
             sessionContext.put("CREATE_BY", "openpos-" + getName());
             sessionContext.put("LAST_UPDATE_BY", "openpos-" + getName());
 
-            sessionFactory.init(databasePlatform(), sessionContext, tableClasses, tagHelper);
+            sessionFactory.init(getDatabasePlatform(), sessionContext, tableClasses, tagHelper);
 
         }
 
@@ -233,7 +237,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
 
     @Override
     public void initialize() {
-        updateDataModel(session());
+        updateDataModel(getDBSession());
     }
 
     public void exportData(String format, String dir, boolean includeModuleTables) {
@@ -267,7 +271,7 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
         log.info("The previous version of {} was {} and the current version is {}", getName(), fromVersion, getVersion());
 
         DatabaseScriptContainer scripts = new DatabaseScriptContainer(String.format("%s/sql/%s", getName(), sqlScriptProfile),
-                databasePlatform());
+                getDatabasePlatform());
 
         IDBSchemaListener schemaListener = getDbSchemaListener();
 
@@ -285,12 +289,13 @@ abstract public class AbstractModule extends AbstractServiceFactory implements I
         String path = "/" + getName() + "-schema.xml";
         URL resource = getClass().getResource(path);
         if (resource != null) {
-            ConfigDatabaseUpgrader databaseUpgrade = new ConfigDatabaseUpgrader(path, databasePlatform(), true, "");
+            ConfigDatabaseUpgrader databaseUpgrade = new ConfigDatabaseUpgrader(path, getDatabasePlatform(), true, "");
             databaseUpgrade.upgrade();
         }
     }
 
-    protected DBSession session() {
+    @Override
+    public DBSession getDBSession() {
         return sessionFactory().createDbSession();
     }
 

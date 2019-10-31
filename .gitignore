@@ -61,3 +61,5 @@ openpos-assemble/.classpath
 openpos-assemble/.project
 openpos-assemble/openpos-assemble.iws
 **/coverage/
+openpos-symds/nu-symds.iml
+openpos-symds/openpos-symds.iml
