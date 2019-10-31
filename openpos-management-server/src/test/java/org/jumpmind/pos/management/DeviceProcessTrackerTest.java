@@ -73,7 +73,9 @@ public class DeviceProcessTrackerTest {
         assertTrue(tracker.getDeviceLockStatus(DEVICE_ID_1));
         t2.start();
         synchronized(t2) {
-            t2.wait();
+            if (!t2.finished.get()) {
+                t2.wait();
+            }
         }
         assertThat(t2.elapsedTimeMillis).isGreaterThanOrEqualTo(1500).isLessThan(2000);
     }
@@ -95,11 +97,15 @@ public class DeviceProcessTrackerTest {
         t2.start();
         
         synchronized(t1) {
-            t1.wait();
+            if (! t1.finished.get()) {
+                t1.wait();
+            }
         }
         
         synchronized(t2) {
-            t2.wait();
+            if (! t2.finished.get()) {
+                t2.wait();
+            }
         }
         
         assertThat(tracker.getDeviceLockStatus(DEVICE_ID_1)).isTrue();
@@ -199,6 +205,7 @@ public class DeviceProcessTrackerTest {
         public long startMillis;
         public long endMillis;
         public long elapsedTimeMillis;
+        public AtomicBoolean finished = new AtomicBoolean(false);
         
         public String deviceId = DEVICE_ID_1;
         public long maxWaitIfStartingMillis = 1500;
@@ -219,6 +226,7 @@ public class DeviceProcessTrackerTest {
             endMillis = System.currentTimeMillis();
             elapsedTimeMillis = endMillis - startMillis;
             synchronized(this) {
+                finished.set(true);
                 notify();
             }
         }
