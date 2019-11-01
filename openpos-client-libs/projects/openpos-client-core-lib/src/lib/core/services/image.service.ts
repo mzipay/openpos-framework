@@ -28,8 +28,6 @@ export class ImageService {
             return originalUrl;
         }
 
-
-        return url;
     }
 
 }

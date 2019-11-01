@@ -187,7 +187,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
                     this.discoveryStatus = DiscoveryStatus.Failed;
                     this.discoveryResponse.success = false;
                     this.discoveryResponse.message = `Personalization request failed with error: ${this.serverResponse.message}`;
-                    this.log.warn(this.discoveryResponse.message);
+                    console.warn(this.discoveryResponse.message);
                 }
             } else {
                 this.discoveryStatus = DiscoveryStatus.Failed;

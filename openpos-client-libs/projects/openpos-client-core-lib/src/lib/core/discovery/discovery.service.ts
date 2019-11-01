@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Logger } from '../services/logger.service';
 import { HttpClient } from '@angular/common/http';
 import { PersonalizationService } from '../personalization/personalization.service';
 import { DiscoveryResponse } from './discovery-response.interface';
@@ -16,7 +15,7 @@ export class DiscoveryService {
     private websocketUrl: string;
 
     constructor(protected personalization: PersonalizationService,
-                private http: HttpClient, private log: Logger) {
+                private http: HttpClient) {
     }
 
     public clearCachedUrls() {
@@ -38,7 +37,7 @@ export class DiscoveryService {
                 .toPromise();
             result = httpResult != null;
         } else {
-            this.log.warn(`Not a managed server`);
+            console.warn(`Not a managed server`);
         }
 
         return result;
@@ -58,7 +57,7 @@ export class DiscoveryService {
         const params = this.makeParams(parameters);
         const url = `http${params.sslEnabled ? 's' : ''}://${params.server}:${params.port}/discover?` +
             `deviceId=${params.deviceId}${params.appId ? '&appId=' + params.appId : ''}`;
-        this.log.info('Discovering device process using url: ' + url);
+        console.info('Discovering device process using url: ' + url);
 
         let discoveryError: any = null;
         try {
@@ -103,12 +102,12 @@ export class DiscoveryService {
     public getServerBaseURL(): string {
         if (!this.serverBaseUrl) {
             if (this.personalization.isManagedServer()) {
-                this.log.debug(`serverBaseURL isn't set yet for the managed server`);
+                console.debug(`serverBaseURL isn't set yet for the managed server`);
             } else {
                 const protocol = this.personalization.isSslEnabled() ? 'https' : 'http';
                 this.serverBaseUrl = `${protocol}://${this.personalization.getServerName()}` +
                     `${this.personalization.getServerPort() ? `:${this.personalization.getServerPort()}` : ''}`;
-                this.log.info(`Generated serverBaseURL: ${this.serverBaseUrl}`);
+                console.info(`Generated serverBaseURL: ${this.serverBaseUrl}`);
             }
         }
         return this.serverBaseUrl;
@@ -121,7 +120,7 @@ export class DiscoveryService {
     public getWebsocketUrl(): string {
         if (!this.websocketUrl) {
             if (this.personalization.isManagedServer()) {
-                this.log.debug(`webSocketUrl isn't set yet for the managed server`);
+                console.debug(`webSocketUrl isn't set yet for the managed server`);
             } else {
                 let protocol = 'ws://';
                 if (this.personalization.isSslEnabled()) {
