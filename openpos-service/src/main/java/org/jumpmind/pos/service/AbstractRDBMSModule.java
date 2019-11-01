@@ -139,9 +139,11 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
         }
     }
 
-    protected PlatformTransactionManager txManager() {
+
+    @Override
+    public PlatformTransactionManager getPlatformTransactionManager() {
         if (txManager == null) {
-            this.txManager = new DataSourceTransactionManager(dataSource());
+            this.txManager = new DataSourceTransactionManager(getDataSource());
         }
         return txManager;
     }
@@ -153,7 +155,7 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
 
     protected IDatabasePlatform databasePlatform() {
         if (databasePlatform == null) {
-            databasePlatform = JdbcDatabasePlatformFactory.createNewPlatformInstance(dataSource(), new SqlTemplateSettings(), false, false);
+            databasePlatform = JdbcDatabasePlatformFactory.createNewPlatformInstance(getDataSource(), new SqlTemplateSettings(), false, false);
         }
         return databasePlatform;
     }
@@ -180,7 +182,8 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
         return env.getProperty(DB_POOL_URL, "jdbc:openpos:h2:mem:" + getName());
     }
 
-    protected DataSource dataSource() {
+    @Override
+    public DataSource getDataSource() {
         if (dataSource == null) {
             setupH2Server();
             if (this.dataSourceBeanName != null) {
@@ -244,7 +247,7 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
             sessionContext.put("CREATE_BY", "openpos-" + getName());
             sessionContext.put("LAST_UPDATE_BY", "openpos-" + getName());
 
-            sessionFactory.init(databasePlatform(), sessionContext, tableClasses, tagHelper);
+            sessionFactory.init(getDatabasePlatform(), sessionContext, tableClasses, tagHelper);
 
         }
 
@@ -253,7 +256,7 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
 
     @Override
     public void initialize() {
-        updateDataModel(session());
+        updateDataModel(getDBSession());
     }
 
     public void exportData(String format, String dir, boolean includeModuleTables) {
@@ -287,7 +290,7 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
         log.info("The previous version of {} was {} and the current version is {}", getName(), fromVersion, getVersion());
 
         DatabaseScriptContainer scripts = new DatabaseScriptContainer(String.format("%s/sql/%s", getName(), sqlScriptProfile),
-                databasePlatform());
+                getDatabasePlatform());
 
         IDBSchemaListener schemaListener = getDbSchemaListener();
 
@@ -305,12 +308,13 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
         String path = "/" + getName() + "-schema.xml";
         URL resource = getClass().getResource(path);
         if (resource != null) {
-            ConfigDatabaseUpgrader databaseUpgrade = new ConfigDatabaseUpgrader(path, databasePlatform(), true, "");
+            ConfigDatabaseUpgrader databaseUpgrade = new ConfigDatabaseUpgrader(path, getDatabasePlatform(), true, "");
             databaseUpgrade.upgrade();
         }
     }
 
-    protected DBSession session() {
+    @Override
+    public DBSession getDBSession() {
         return sessionFactory().createDbSession();
     }
 

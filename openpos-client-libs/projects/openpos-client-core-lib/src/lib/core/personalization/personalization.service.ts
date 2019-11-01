@@ -1,12 +1,13 @@
 import { Logger } from '../services/logger.service';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { PersonalizationResponse } from './personalization-response.interface';
 
 @Injectable({
     providedIn: 'root',
 })
 export class PersonalizationService {
+    static readonly OPENPOS_MANAGED_SERVER_PROPERTY = 'managedServer';
 
     private serverBaseUrl: string;
 
@@ -80,17 +81,9 @@ export class PersonalizationService {
         return map;
     }
 
-    public getWebsocketUrl(): string {
-        let protocol = 'ws://';
-        if (this.isSslEnabled()) {
-            protocol = 'wss://';
-        }
-        let url: string = protocol + this.getServerName();
-        if (this.getServerPort()) {
-            url = url + ':' + this.getServerPort();
-        }
-        url = url + '/api/websocket';
-        return url;
+
+    public isManagedServer(): boolean {
+        return 'true' === localStorage.getItem(PersonalizationService.OPENPOS_MANAGED_SERVER_PROPERTY);
     }
 
     public isSslEnabled(): boolean {
@@ -151,19 +144,6 @@ export class PersonalizationService {
         } else {
             return false;
         }
-    }
-
-    public getServerBaseURL(): string {
-        if (!this.serverBaseUrl) {
-            const protocol = this.isSslEnabled() ? 'https' : 'http';
-            this.serverBaseUrl = `${protocol}://${this.getServerName()}${this.getServerPort() ? `:${this.getServerPort()}` : ''}`;
-            this.log.info(`Generated serverBaseURL: ${this.serverBaseUrl}`);
-        }
-        return this.serverBaseUrl;
-    }
-
-    public getApiServerBaseURL(): string {
-        return `${this.getServerBaseURL()}/api`;
     }
 
     public async requestPersonalization(serverName: string, serverPort: string, sslEnabled: boolean): Promise<PersonalizationResponse> {

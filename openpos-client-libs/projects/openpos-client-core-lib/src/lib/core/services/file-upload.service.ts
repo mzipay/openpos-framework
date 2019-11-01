@@ -7,11 +7,14 @@ import { PersonalizationService } from '../personalization/personalization.servi
 import { CordovaService } from './cordova.service';
 import { Subscription } from 'rxjs';
 import { FileChunkReader } from './../../shared/utils/filechunkreader';
+import { DiscoveryService } from '../discovery/discovery.service';
 @Injectable({
     providedIn: 'root',
   })
 export class FileUploadService {
-    constructor(private log: Logger, private cordovaService: CordovaService, private personalization: PersonalizationService, private httpClient: HttpClient) {
+    constructor(private log: Logger, private cordovaService: CordovaService,
+                private personalization: PersonalizationService, private httpClient: HttpClient,
+                private discovery: DiscoveryService) {
     }
 
     public async uploadLocalDeviceFileToServer(context: string, filename: string, contentType: string, filepath: string):
@@ -38,7 +41,7 @@ export class FileUploadService {
         } else {
             const msg = `Not running in Cordova, cannot upload file ${filename}`;
             this.log.warn(msg);
-           return Promise.reject({success: false, message: msg});
+            return Promise.reject({success: false, message: msg});
        }
 
     }
@@ -129,7 +132,7 @@ export class FileUploadService {
     }
 
     protected getUploadServiceUrl(): string {
-        const url = `${this.personalization.getServerBaseURL()}/fileupload/uploadToNode`;
+        const url = `${this.discovery.getServerBaseURL()}/fileupload/uploadToNode`;
         return url;
     }
 
