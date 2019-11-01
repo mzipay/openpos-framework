@@ -4,13 +4,11 @@ import { AppInjector } from '../app-injector';
 import { Injector } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { DiscoveryService } from '../discovery/discovery.service';
-import { Logger } from '../services/logger.service';
 import { Observable, of } from 'rxjs';
 
 
 describe('SessionService', () => {
 
-    let loggerServiceSpy: jasmine.SpyObj<Logger>;
     let personalizationServiceSpy: jasmine.SpyObj<PersonalizationService>;
     let discoveryService: DiscoveryService;
     let httpClientSpy: jasmine.SpyObj<HttpClient>;
@@ -18,7 +16,6 @@ describe('SessionService', () => {
     beforeEach(() => {
         const personalizationSpy = jasmine.createSpyObj('PersonalizationService',
             ['getDeviceId', 'isManagedServer', 'getPersonalizationProperties', 'isSslEnabled', 'getServerName', 'getServerPort']);
-        const loggerSpy = jasmine.createSpyObj('Logger', ['debug', 'info', 'warn', 'error']);
         const spyHttpClient = jasmine.createSpyObj('HttpClient', ['get']);
 
         TestBed.configureTestingModule({
@@ -27,16 +24,13 @@ describe('SessionService', () => {
               ],
             providers: [
                 { provide: PersonalizationService, useValue: personalizationSpy },
-                { provide: Logger, useValue: loggerSpy },
                 { provide: HttpClient, useValue: spyHttpClient },
 
             ]
         });
 
         AppInjector.Instance = TestBed.get(Injector);
-        loggerServiceSpy = TestBed.get(Logger);
         personalizationServiceSpy = TestBed.get(PersonalizationService);
-        loggerServiceSpy = TestBed.get(Logger);
         httpClientSpy = TestBed.get(HttpClient);
         discoveryService = TestBed.get(DiscoveryService);
 
