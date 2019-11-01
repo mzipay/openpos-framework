@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.DBSessionFactory;
-import org.jumpmind.pos.service.AbstractModule;
+import org.jumpmind.pos.service.AbstractRDBMSModule;
 import org.jumpmind.pos.service.ModuleEnabledCondition;
 import org.jumpmind.security.ISecurityService;
 import org.jumpmind.symmetric.common.Constants;
@@ -51,7 +51,7 @@ import static org.jumpmind.symmetric.common.Constants.*;
 @Conditional(ModuleEnabledCondition.class)
 @Order(200)
 @Slf4j
-public class SymDSModule extends AbstractModule {
+public class SymDSModule extends AbstractRDBMSModule {
 
     public final static String NAME = "sym";
     

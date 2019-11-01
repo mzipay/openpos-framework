@@ -21,8 +21,6 @@ import org.jumpmind.pos.core.javapos.SimulatedScannerService;
 import org.jumpmind.pos.core.model.MessageType;
 import org.jumpmind.pos.core.model.OpenposBarcodeType;
 import org.jumpmind.pos.core.model.ScanData;
-import org.jumpmind.pos.core.screen.ScopeField;
-import org.jumpmind.pos.core.screen.ScreenType;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.server.service.IActionListener;
 import org.jumpmind.pos.server.service.IMessageService;

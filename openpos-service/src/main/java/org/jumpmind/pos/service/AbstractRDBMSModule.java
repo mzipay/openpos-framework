@@ -148,11 +148,6 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
         return txManager;
     }
 
-    @Override
-    public PlatformTransactionManager getPlatformTransactionManager() {
-        return txManager();
-    }
-
     protected IDatabasePlatform databasePlatform() {
         if (databasePlatform == null) {
             databasePlatform = JdbcDatabasePlatformFactory.createNewPlatformInstance(getDataSource(), new SqlTemplateSettings(), false, false);
@@ -224,11 +219,6 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
             }
         }
         return dataSource;
-    }
-
-    @Override
-    public DataSource getDataSource() {
-        return dataSource();
     }
 
     protected DBSessionFactory sessionFactory() {
@@ -316,11 +306,6 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
     @Override
     public DBSession getDBSession() {
         return sessionFactory().createDbSession();
-    }
-
-    @Override
-    public DBSession getDBSession() {
-        return session();
     }
 
     protected IDBSchemaListener getDbSchemaListener() {

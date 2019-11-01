@@ -44,11 +44,6 @@ public class TestModule extends AbstractRDBMSModule {
     }
 
     @Override
-    protected String getArtifactName() {
-        return "test-module";
-    }
-
-    @Override
     public String getTablePrefix() {
         return "tst";
     }
