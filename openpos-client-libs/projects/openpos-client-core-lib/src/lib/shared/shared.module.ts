@@ -133,7 +133,6 @@ import { MobileSaleItemListComponent } from './screen-parts/mobile-sale-item-lis
 import { MobileItemComponent } from './components/mobile-item/mobile-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfiniteScrollComponent } from './components/infinite-scroll/infinite-scroll.component';
-import { ReturnTotalPanelComponent } from './screen-parts/return-total-panel/return-total-panel.component';
 import { ImageComponent } from './components/image/image.component';
 
 const screenParts = [
@@ -157,8 +156,7 @@ const screenParts = [
     SaleTotalPanelComponent,
     MobileTotalsPartComponent,
     MobileLoyaltyPartComponent,
-    MobileSaleItemListComponent,
-    ReturnTotalPanelComponent
+    MobileSaleItemListComponent
 ];
 
 const components = [
