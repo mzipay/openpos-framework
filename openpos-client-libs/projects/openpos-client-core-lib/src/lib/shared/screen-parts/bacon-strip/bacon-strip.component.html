@@ -4,6 +4,7 @@
         <app-icon-button *ngIf="iconButtonName" [iconName]="iconButtonName" iconClass="md" (buttonClick)="buttonClick()"></app-icon-button>
         <app-icon *ngIf="screenData.headerIcon" [iconName]="screenData.headerIcon"></app-icon>
         <span>{{screenData.headerText}}</span>
+        <app-icon-button *ngIf="helpTextService.isAvailable() | async" iconName="help" (click)="helpTextService.toggle()"></app-icon-button>
     </div>
     <div>
         <img *ngIf="screenData.logo" [src]="screenData.logo | imageUrl">
