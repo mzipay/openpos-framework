@@ -4,6 +4,7 @@ import { OpenposMediaService } from '../../../core/services/openpos-media.servic
 import { Observable } from 'rxjs';
 import { Component, Injector } from '@angular/core';
 import { ScreenPart } from '../../decorators/screen-part.decorator';
+import { HelpTextService } from '../../../core/help-text/help-text.service';
 
 @ScreenPart({
     name: 'baconStrip'})
@@ -16,7 +17,7 @@ export class BaconStripComponent extends ScreenPartComponent<BaconStripInterface
     isMobile$: Observable<boolean>;
     operatorInfo: string;
 
-    constructor( mediaService: OpenposMediaService, injector: Injector) {
+    constructor( mediaService: OpenposMediaService, injector: Injector, public helpTextService: HelpTextService) {
         super(injector);
         const mobileMap = new Map([
             ['xs', true],

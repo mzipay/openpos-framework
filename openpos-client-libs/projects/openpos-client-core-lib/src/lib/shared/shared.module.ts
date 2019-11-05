@@ -115,6 +115,8 @@ import { ItemCardComponent } from './components/item-card/item-card.component';
 import { SystemStatusComponent } from './screen-parts/system-status/system-status.component';
 import { BannerComponent } from './screen-parts/banner/banner.component';
 import { KebabLabelButtonComponent } from './components/kebab-label-button/kebab-label-button.component';
+import { HelpTextPageWrapperComponent } from './components/help-text-page-wrapper/help-text-page-wrapper.component';
+import { OpenposAppHelpContainerComponent } from './components/openpos-app-help-container/openpos-app-help-container.component';
 
 const screenParts = [
     ChooseOptionsPartComponent,
@@ -191,7 +193,9 @@ const components = [
     LocationDetailsComponent,
     LocationOverrideDialogComponent,
     SellLinkedCustomerComponent,
-    ItemCardComponent
+    ItemCardComponent,
+    HelpTextPageWrapperComponent,
+    OpenposAppHelpContainerComponent
 ];
 
 const directives = [
@@ -249,7 +253,8 @@ const pipes = [
         DatePartChooserDialogComponent,
         LocationOverrideDialogComponent,
         NavListComponent,
-        SystemStatusDialogComponent
+        SystemStatusDialogComponent,
+        HelpTextPageWrapperComponent
     ],
     imports: [
         FormsModule,

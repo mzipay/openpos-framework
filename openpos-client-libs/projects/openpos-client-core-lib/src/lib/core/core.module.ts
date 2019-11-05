@@ -52,6 +52,8 @@ import { LocationService, PROVIDERS } from './services/location.service';
 import { LocationProviderDefault } from './location-providers/location-provider-default';
 import { CLIENTCONTEXT } from './client-context/client-context-provider.interface';
 import { TimeZoneContext } from './client-context/time-zone-context';
+import { HelpTextService } from './help-text/help-text.service';
+import { STATUS_BAR_STATUS_CONTROL_COMPONENT } from '../shared/components/status-bar/status-bar.component';
 
 registerLocaleData(locale_enCA, 'en-CA');
 registerLocaleData(locale_frCA, 'fr-CA');
@@ -113,7 +115,9 @@ registerLocaleData(locale_frCA, 'fr-CA');
         TrainingOverlayService,
         ConfigurationService,
         KeyPressProvider,
-        { provide: CLIENTCONTEXT, useClass: TimeZoneContext, multi: true }
+        HelpTextService,
+        { provide: CLIENTCONTEXT, useClass: TimeZoneContext, multi: true },
+        { provide: STATUS_BAR_STATUS_CONTROL_COMPONENT, useValue: StatusBarStatusControlComponent }
     ]
 })
 export class CoreModule {
