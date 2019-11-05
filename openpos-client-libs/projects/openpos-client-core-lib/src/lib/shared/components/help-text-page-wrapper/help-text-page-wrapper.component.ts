@@ -3,7 +3,7 @@ import { MatSidenavContainer } from '@angular/material';
 import { Subscription, Observable } from 'rxjs';
 import { HelpTextService } from '../../../core/help-text/help-text.service';
 import { ConfigurationService } from '../../../core/services/configuration.service';
-import { OpenposMediaService } from '../../../core/services/openpos-media.service';
+import {OpenposMediaService} from "../../../core/media/openpos-media.service";
 
 @Component({
     selector: 'app-help-text-page-wrapper',
