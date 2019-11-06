@@ -134,6 +134,7 @@ import { MobileItemComponent } from './components/mobile-item/mobile-item.compon
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfiniteScrollComponent } from './components/infinite-scroll/infinite-scroll.component';
 import { ImageComponent } from './components/image/image.component';
+import { SearchExpandInputComponent } from './components/search-expand-input/search-expand-input.component';
 import { HelpTextPageWrapperComponent } from './components/help-text-page-wrapper/help-text-page-wrapper.component';
 import { OpenposAppHelpContainerComponent } from './components/openpos-app-help-container/openpos-app-help-container.component';
 
@@ -158,7 +159,7 @@ const screenParts = [
     SaleTotalPanelComponent,
     MobileTotalsPartComponent,
     MobileLoyaltyPartComponent,
-    MobileSaleItemListComponent
+    MobileSaleItemListComponent,
 ];
 
 const components = [
@@ -228,6 +229,7 @@ const components = [
     MobileItemComponent,
     InfiniteScrollComponent,
     ImageComponent,
+    SearchExpandInputComponent,
     HelpTextPageWrapperComponent,
     OpenposAppHelpContainerComponent
 ];
