@@ -111,7 +111,7 @@ public class QueryTemplate implements Cloneable {
             @Override
             public String lookup(String key) {
                 keys.add(key);
-                return "?";
+                return ":" + key;
             }
         });
 
@@ -142,7 +142,7 @@ public class QueryTemplate implements Cloneable {
                 @Override
                 public String lookup(String key) {
                     optionalWhereClauseKeys.add(key);
-                    return "?";
+                    return ":" + key;
                 }
             });
 
@@ -188,12 +188,11 @@ public class QueryTemplate implements Cloneable {
 
         SqlStatement sqlStatement = new SqlStatement();
         sqlStatement.setSql(buff.toString());
-
-        List<Object> values = new ArrayList<>();
         for (String key : keys) {
             Object value = params.get(key);
             if (value == null) {
                 value = params.get("*");
+                params.put(key, value);
             }
             if (value == null) {
                 if (params.containsKey(key)) {
@@ -210,10 +209,11 @@ public class QueryTemplate implements Cloneable {
             } else if (value instanceof AbstractTypeCode) {
                 value = ((AbstractTypeCode)value).value();
             }
-            values.add(value);
         }
-
-        sqlStatement.setValues(values);
+        if (params != null) {
+            params.remove("*");
+        }
+        sqlStatement.setParameters(params);
         return sqlStatement;
     }
 
