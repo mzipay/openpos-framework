@@ -206,8 +206,10 @@ public class QueryTemplate implements Cloneable {
             } else if (value instanceof Boolean) {
                 boolean bool = (Boolean)value;
                 value = bool ? 1 : 0;
+                params.put(key, value);
             } else if (value instanceof AbstractTypeCode) {
                 value = ((AbstractTypeCode)value).value();
+                params.put(key, value);
             }
         }
         if (params != null) {
