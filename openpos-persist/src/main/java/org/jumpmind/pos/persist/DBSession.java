@@ -73,8 +73,8 @@ public class DBSession {
         this.databasePlatform = databasePlatform;
         this.sessionContext = sessionContext;
         JdbcTemplate baseTemplate = new JdbcTemplate(databasePlatform.getDataSource());
-        this.baseTemplate.setQueryTimeout(sessionContext.getInt(JDBC_QUERY_TIMEOUT, 10));
-        this.baseTemplate.setFetchSize(sessionContext.getInt(JDBC_FETCH_SIZE, 1000));
+        baseTemplate.setQueryTimeout(sessionContext.getInt(JDBC_QUERY_TIMEOUT, 10));
+        baseTemplate.setFetchSize(sessionContext.getInt(JDBC_FETCH_SIZE, 1000));
         this.jdbcTemplate = new NamedParameterJdbcTemplate(baseTemplate);
         this.queryTemplates = queryTemplates;
         this.tagHelper = tagHelper;
