@@ -60,8 +60,8 @@ public class DBSession {
     private TagHelper tagHelper;
 
     public DBSession(String catalogName, String schemaName, DatabaseSchema databaseSchema, IDatabasePlatform databasePlatform,
-            Map<String, String> sessionContext, Map<String, QueryTemplate> queryTemplates, Map<String, DmlTemplate> dmlTemplates,
-            TagHelper tagHelper) {
+                     Map<String, String> sessionContext, Map<String, QueryTemplate> queryTemplates, Map<String, DmlTemplate> dmlTemplates,
+                     TagHelper tagHelper) {
         super();
         this.dmlTemplates = dmlTemplates;
         this.databaseSchema = databaseSchema;
@@ -140,7 +140,7 @@ public class DBSession {
 
     @SuppressWarnings("unchecked")
     public <T extends AbstractModel> List<T> findByCriteria(SearchCriteria searchCriteria) {
-        if(searchCriteria.getEntityClass() == null) {
+        if (searchCriteria.getEntityClass() == null) {
             throw new PersistException();
         }
         return (List<T>) findByFields(searchCriteria.getEntityClass(), searchCriteria.getCriteria(), searchCriteria.getMaxResults());
@@ -240,7 +240,7 @@ public class DBSession {
         QueryTemplate queryTemplate = getQueryTemplate(query);
         return query(query, queryTemplate, params, maxResults);
     }
-    
+
     @SuppressWarnings("unchecked")
     public <T> List<T> query(Query<T> query, QueryTemplate queryTemplate, Map<String, Object> params, int maxResults) {
         try {
@@ -258,7 +258,7 @@ public class DBSession {
         // defined in config
         if (queryTemplates.containsKey(query.getName())) {
             queryTemplate = queryTemplates.get(query.getName()).copy();
-        } else {            
+        } else {
             queryTemplate.setName(query.getName());
         }
 
@@ -280,6 +280,9 @@ public class DBSession {
         while (!current.equals(AbstractModel.class)) {
             if (current.isAnnotationPresent(TableDef.class)) {
                 toProcess.add(0, current);
+                if (current.getAnnotation(TableDef.class).ignoreSuperTableDef()) {
+                    break;
+                }
             }
             current = current.getSuperclass();
         }
@@ -297,7 +300,7 @@ public class DBSession {
             String tableAlias = "c" + tableCount;
             Table table = databaseSchema.getTable(entity, processing);
             if (table == null) {
-                throw new PersistException("Cound not find table for the %s entity in the %s module.  Are you using the correct session?", entity.getSimpleName(), databaseSchema.getTablePrefix());
+                throw new PersistException("Could not find table for the %s entity in the %s module.  Are you using the correct session?", entity.getSimpleName(), databaseSchema.getTablePrefix());
             }
             joins.append(table.getName()).append(" ").append(tableAlias);
             if (tableCount > 0) {
@@ -345,12 +348,12 @@ public class DBSession {
     public void save(AbstractModel argModel) {
         List<Table> tables = getValidatedTables(argModel);
 
-        ModelWrapper model = 
+        ModelWrapper model =
                 new ModelWrapper(argModel, databaseSchema.getModelMetaData(argModel.getClass()));
-        
+
         setMaintenanceValues(model);
         setTagValues(model);
-        
+
         model.load();
 
         for (Table table : tables) {
@@ -517,7 +520,7 @@ public class DBSession {
                     tagValues.put(columnName, row.getString(columnName));
                 }
             }
-            tagHelper.addTags((ITaggedModel)model, tagValues);
+            tagHelper.addTags((ITaggedModel) model, tagValues);
         }
     }
 
@@ -569,7 +572,7 @@ public class DBSession {
             log.debug("Failed to close connection", ex);
         }
     }
-    
+
     protected void setTagValues(ModelWrapper model) {
         if (model.getModel() instanceof ITaggedModel) {
             ITaggedModel taggedModel = (ITaggedModel) model.getModel();
@@ -589,5 +592,5 @@ public class DBSession {
         if (StringUtils.isEmpty(model.getLastUpdateBy())) {
             model.setLastUpdateBy(sessionContext.get("LAST_UPDATE_BY"));
         }
-    }    
+    }
 }
