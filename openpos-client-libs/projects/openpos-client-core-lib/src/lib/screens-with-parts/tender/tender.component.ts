@@ -14,29 +14,31 @@ import { PosScreen } from '../pos-screen/pos-screen.component';
     styleUrls: ['./tender.component.scss']
 })
 export class TenderComponent extends PosScreen<TenderScreenInterface> {
-    form: FormGroup;
 
-    constructor( private formBuilder: FormBuilder, injector: Injector ) {
+    alternateSubmitActions: string[] = [];
+
+    constructor(private formBuilder: FormBuilder, injector: Injector) {
         super(injector);
     }
 
     buildScreen() {
-        this.form = this.formBuilder.group(this.screen.form);
-        if ( !!this.screen.tenderTypeActionNames ) {
-            this.screen.tenderTypeActionNames.forEach( actionName => {
-                this.actionService.registerActionPayload(actionName, () => {
-                    if (this.form.valid) {
-                        return this.formBuilder.buildFormPayload(this.form, this.screen.form);
-                    } else {
-                        // Show errors for each of the fields where necessary
-                        Object.keys(this.form.controls).forEach(f => {
-                            const control = this.form.get(f);
-                            control.markAsTouched({ onlySelf: true });
-                        });
-                        throw Error('form is invalid');
-                    }
+        // Register form data with possible actions
+        if (this.screen.optionsList) {
+            if (this.screen.optionsList.options) {
+                this.screen.optionsList.options.forEach(value => {
+                    this.alternateSubmitActions.push(value.action);
                 });
-            });
+            }
+            if (this.screen.optionsList.additionalButtons) {
+                this.screen.optionsList.additionalButtons.forEach(value => {
+                    this.alternateSubmitActions.push(value.action);
+                });
+            }
+            if (this.screen.optionsList.linkButtons) {
+                this.screen.optionsList.linkButtons.forEach(value => {
+                    this.alternateSubmitActions.push(value.action);
+                });
+            }
         }
     }
 

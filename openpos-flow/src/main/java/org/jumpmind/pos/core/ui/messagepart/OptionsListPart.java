@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.jumpmind.pos.core.ui.ActionItem;
 
-public class SelfCheckoutOptionsPart implements Serializable {
+public class OptionsListPart implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -15,6 +15,8 @@ public class SelfCheckoutOptionsPart implements Serializable {
     private List<ActionItem> additionalButtons;
 
     private List<ActionItem> linkButtons;
+
+    private ActionItem overflowButton;
 
     public List<ActionItem> getOptions() {
         return options;
@@ -45,6 +47,14 @@ public class SelfCheckoutOptionsPart implements Serializable {
 
     public void setLinkButtons(List<ActionItem> linkButtons) {
         this.linkButtons = linkButtons;
+    }
+
+    public ActionItem getOverflowButton() {
+        return overflowButton;
+    }
+
+    public void setOverflowButton(ActionItem overflowButton) {
+        this.overflowButton = overflowButton;
     }
 
 }
