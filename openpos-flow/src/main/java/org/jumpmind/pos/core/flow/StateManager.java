@@ -484,7 +484,7 @@ public class StateManager implements IStateManager {
 
         boolean alreadyBusy = false;
         synchronized (this) {
-            if (activeCalls.get() == 0 || activeThread.get() == null || activeThread.get().equals(Thread.currentThread())) {
+            if (activeCalls.get() == 0 || activeThread.get() == null || activeThread.get().equals(Thread.currentThread()) || transitionRestFlag.get()) {
                 lastInteractionTime.set(new Date());
                 activeCalls.incrementAndGet();
                 markAsBusy();
