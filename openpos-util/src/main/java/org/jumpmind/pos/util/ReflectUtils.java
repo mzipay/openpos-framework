@@ -1,12 +1,17 @@
 package org.jumpmind.pos.util;
 
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.util.Date;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static java.lang.String.*;
+import org.apache.commons.lang3.time.DateUtils;
 
+@Slf4j
 public class ReflectUtils {
 
     static final Logger log = LoggerFactory.getLogger(ReflectUtils.class);
@@ -40,6 +45,20 @@ public class ReflectUtils {
 
         if (field.getType().isEnum()) {
             return Enum.valueOf((Class<Enum>) field.getType(), value.toString());
+        }
+
+        if (field.getType().equals(Date.class)) {
+            if (value instanceof Number) {
+                value = value.toString();
+            }
+
+            if (value instanceof String) {
+                try {
+                    value = DateUtils.parseDate((String) value, "yyyyMMdd", "yyyyMMdd hh:mm:ss");
+                } catch (ParseException e) {
+                    log.warn("Failed to parse this string " + value + " to a date value.  You might need to add a new date pattern to the list", e);
+                }
+            }
         }
 
         if ((field.getType().equals(Boolean.class) || field.getType().equals(boolean.class))
