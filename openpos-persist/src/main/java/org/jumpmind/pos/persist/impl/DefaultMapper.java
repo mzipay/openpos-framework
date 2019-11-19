@@ -29,7 +29,7 @@ public class DefaultMapper implements RowMapper<Row> {
         Row mapOfColValues = new Row(rsColumnCount);
         for (int i = 1; i <= rsColumnCount; i++) {
             String key = lookupColumnName(rsMetaData, i);
-            Object obj = getResultSetValue(rs, rsMetaData, i, false, true);
+            Object obj = getResultSetValue(rs, rsMetaData, i, false);
             mapOfColValues.put(key, obj);
         }
         return mapOfColValues;
@@ -44,7 +44,7 @@ public class DefaultMapper implements RowMapper<Row> {
         return name;
     }
 
-    private final Object getResultSetValue(ResultSet rs, ResultSetMetaData metaData, int index, boolean readStringsAsBytes, boolean returnLobObjects) throws SQLException {
+    public static Object getResultSetValue(ResultSet rs, ResultSetMetaData metaData, int index, boolean readStringsAsBytes) throws SQLException {
         if (metaData == null) {
             metaData = rs.getMetaData();
         }
@@ -63,19 +63,25 @@ public class DefaultMapper implements RowMapper<Row> {
         if (obj != null) {
             className = obj.getClass().getName();
         }
-        if (obj instanceof Blob && !returnLobObjects) {
+        if (obj instanceof Blob) {
             Blob blob = (Blob) obj;
-            try(InputStream is = blob.getBinaryStream()) {
+            InputStream is = blob.getBinaryStream();
+            try {
                 obj = IOUtils.toByteArray(is);
             } catch (IOException e) {
                 throw new SqlException(e);
+            } finally {
+                IOUtils.closeQuietly(is);
             }
-        } else if (obj instanceof Clob && !returnLobObjects) {
+        } else if (obj instanceof Clob) {
             Clob clob = (Clob) obj;
-            try(Reader reader = clob.getCharacterStream()) {
+            Reader reader = clob.getCharacterStream();
+            try {
                 obj = IOUtils.toString(reader);
             } catch (IOException e) {
                 throw new SqlException(e);
+            } finally {
+                IOUtils.closeQuietly(reader);
             }
         } else if (className != null && ("oracle.sql.TIMESTAMP".equals(className))) {
             obj = rs.getTimestamp(index);
