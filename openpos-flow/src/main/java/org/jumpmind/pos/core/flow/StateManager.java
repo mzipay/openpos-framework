@@ -428,14 +428,14 @@ public class StateManager implements IStateManager {
                     (activeThread.get() == null ||
                     activeThread.get().equals(Thread.currentThread()))) {
                 Thread active = activeThread.get();
-                log.info("Action received: {}, State manager is NOT busy.  Active calls: {}, Current thread: {}, Active thread: {}, Last display occurred after last action time: {}",
+                logger.info("Action received: {}, State manager is NOT busy.  Active calls: {}, Current thread: {}, Active thread: {}, Last display occurred after last action time: {}",
                         action.getName(),
                         activeCalls.get(), Thread.currentThread().getName(), active != null ? active.getName() : null, lastShowTimeInMs.get()-lastActionTimeInMs.get());
                 lastInteractionTime.set(new Date());
                 activeCalls.incrementAndGet();
                 markAsBusy();
             } else {
-                log.info("Action received: {}, State manager is busy.  Active calls: {}, Current thread: {}, Active thread: {}, Last display occurred after last action time: {}",
+                logger.info("Action received: {}, State manager is busy.  Active calls: {}, Current thread: {}, Active thread: {}, Last display occurred after last action time: {}",
                         action.getName(), activeCalls.get(), Thread.currentThread().getName(), activeThread.get().getName(), lastShowTimeInMs.get()-lastActionTimeInMs.get());
                 notBusy = false;
             }
@@ -503,7 +503,7 @@ public class StateManager implements IStateManager {
                 activeCalls.decrementAndGet();
             }
         } else {
-            log.warn("Discarding unexpected action " + action.getName());
+            logger.warn("Discarding unexpected action " + action.getName());
         }
     }
 
