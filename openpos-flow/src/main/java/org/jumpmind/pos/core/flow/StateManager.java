@@ -122,7 +122,7 @@ public class StateManager implements IStateManager {
     private final AtomicInteger activeCalls = new AtomicInteger(0);
     private final AtomicBoolean transitionRestFlag = new AtomicBoolean(false);
     private final AtomicLong lastActionTimeInMs = new AtomicLong(0);
-    private final AtomicLong lastShowTimeIntMs = new AtomicLong(0);
+    private final AtomicLong lastShowTimeInMs = new AtomicLong(0);
     private final AtomicReference<Thread> activeThread = new AtomicReference<>();
 
     public void init(String appId, String nodeId) {
@@ -426,23 +426,41 @@ public class StateManager implements IStateManager {
 
     @Override
     public boolean isAtRest() {
-        return (activeCalls.get() == 0 || transitionRestFlag.get()) && lastShowTimeIntMs.longValue() > lastActionTimeInMs.longValue();
+        return (activeCalls.get() == 0 || transitionRestFlag.get()) &&
+                lastShowTimeInMs.longValue() >= lastActionTimeInMs.longValue();
     }
 
     @Override
-    public void doAction(Action action) {
-        boolean alreadyBusy = false;
+    public void markAsBusy() {
+        lastActionTimeInMs.set(System.currentTimeMillis());
+        activeThread.set(Thread.currentThread());
+    }
+
+    private boolean notBusy(Action action) {
+        boolean notBusy = true;
         synchronized (this) {
-            if (activeCalls.get() == 0 || activeThread.get() == null || activeThread.get().equals(Thread.currentThread())) {
+            if (isAtRest() ||
+                    (activeThread.get() == null ||
+                    activeThread.get().equals(Thread.currentThread()))) {
+                Thread active = activeThread.get();
+                logger.info("Action received: {}, State manager is NOT busy.  Active calls: {}, Current thread: {}, Active thread: {}, Last display occurred after last action time: {}",
+                        action.getName(),
+                        activeCalls.get(), Thread.currentThread().getName(), active != null ? active.getName() : null, lastShowTimeInMs.get()-lastActionTimeInMs.get());
                 lastInteractionTime.set(new Date());
                 activeCalls.incrementAndGet();
                 markAsBusy();
             } else {
-                alreadyBusy = true;
+                logger.info("Action received: {}, State manager is busy.  Active calls: {}, Current thread: {}, Active thread: {}, Last display occurred after last action time: {}",
+                        action.getName(), activeCalls.get(), Thread.currentThread().getName(), activeThread.get().getName(), lastShowTimeInMs.get()-lastActionTimeInMs.get());
+                notBusy = false;
             }
         }
+        return notBusy;
+    }
 
-        if (!alreadyBusy) {
+    @Override
+    public void doAction(Action action) {
+        if (notBusy(action)) {
             try {
                 // Global action handler takes precedence over all actions (for now)
                 Class<? extends Object> globalActionHandler = getGlobalActionHandler(action);
@@ -500,7 +518,7 @@ public class StateManager implements IStateManager {
                 activeCalls.decrementAndGet();
             }
         } else {
-            logger.warn("Discarding unexpected action " + action.getName() + " because there are " + activeCalls.get() + " active calls on the " + activeThread.get().getName() + " thread");
+            logger.warn("Discarding unexpected action " + action.getName());
         }
     }
 
@@ -696,12 +714,6 @@ public class StateManager implements IStateManager {
     }
 
     @Override
-    public void markAsBusy() {
-        lastActionTimeInMs.set(System.currentTimeMillis());
-        activeThread.set(Thread.currentThread());
-    }
-
-    @Override
     public void endConversation() {
         applicationState.getScope().clearConversationScope();
         clearScopeOnStates(ScopeType.Conversation);
@@ -749,7 +761,7 @@ public class StateManager implements IStateManager {
 
         screenService.showToast(applicationState.getAppId(), applicationState.getDeviceId(), toast);
 
-        lastShowTimeIntMs.set(System.currentTimeMillis());
+        lastShowTimeInMs.set(System.currentTimeMillis());
     }
 
     @SuppressWarnings("unchecked")
@@ -777,7 +789,7 @@ public class StateManager implements IStateManager {
 
         screenService.showScreen(applicationState.getAppId(), applicationState.getDeviceId(), screen);
 
-        lastShowTimeIntMs.set(System.currentTimeMillis());
+        lastShowTimeInMs.set(System.currentTimeMillis());
 
     }
 
