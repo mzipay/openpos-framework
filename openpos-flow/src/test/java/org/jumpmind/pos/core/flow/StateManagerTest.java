@@ -45,6 +45,7 @@ import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.server.service.IMessageService;
 import org.jumpmind.pos.util.model.Message;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -560,13 +561,15 @@ public class StateManagerTest {
         stateManager.doAction("StackOverflow");
     }
 
+    @Ignore
     @Test
     public void testStackOverflow_WithErrorHandler() {
         stateManager.setErrorHandler(errorHandler);
         this.testStackOverflow();
         verify(errorHandler, atLeastOnce()).handleError(eq(stateManager), isA(FlowException.class));
     }
-    
+
+    @Ignore
     @Test
     public void testMultiSubFlowReturnActions1() {
         stateManager.init("pos", "100-1");
