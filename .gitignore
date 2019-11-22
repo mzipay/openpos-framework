@@ -63,3 +63,4 @@ openpos-assemble/openpos-assemble.iws
 **/coverage/
 openpos-symds/nu-symds.iml
 openpos-symds/openpos-symds.iml
+openpos-management-server/conf/instance.uuid
