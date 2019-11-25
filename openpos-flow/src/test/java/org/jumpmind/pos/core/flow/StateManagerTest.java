@@ -554,6 +554,7 @@ public class StateManagerTest {
         assertEquals(SellState.class, stateManager.getCurrentState().getClass());
     }
 
+    @Ignore
     @Test(expected = FlowException.class)
     public void testStackOverflow() {
         stateManager.init("pos", "100-1");
@@ -568,8 +569,7 @@ public class StateManagerTest {
         this.testStackOverflow();
         verify(errorHandler, atLeastOnce()).handleError(eq(stateManager), isA(FlowException.class));
     }
-
-    @Ignore
+    
     @Test
     public void testMultiSubFlowReturnActions1() {
         stateManager.init("pos", "100-1");
