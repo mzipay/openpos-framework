@@ -72,8 +72,10 @@ public abstract class AbstractLegacyDialogScreenTranslator extends AbstractLegac
         // Display arg text if no other text found.
         if (!found) {
             String[] text = dialogModel.getArgs();
-            for (String t : text) {
-                this.screen.getMessage().add(t);
+            if (text != null) {
+                for (String t : text) {
+                    this.screen.getMessage().add(t);
+                }
             }
         }
     }
