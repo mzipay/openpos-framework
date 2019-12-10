@@ -1,4 +1,5 @@
 import { IActionItem } from '../../../core/interfaces/action-item.interface';
+import { TillStatusType } from '../../../core/interfaces/till-status-type.enum';
 
 
 export interface BaconStripInterface {
@@ -7,4 +8,5 @@ export interface BaconStripInterface {
     headerText: string;
     headerIcon: string;
     backButton: IActionItem;
+    tillStatusType: TillStatusType;
 }
