@@ -1,4 +1,4 @@
-# OpenPOS Self Checkout
+# Self Checkout
 
 OpenPOS Self Checkout consists of several basic screen types that can be used for a simple self checkout flow. These screens share many common components such as buttons, inputs, images, etc.
 
