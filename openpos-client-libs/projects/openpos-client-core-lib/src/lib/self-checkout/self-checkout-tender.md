@@ -2,9 +2,9 @@
 
 The self checkout tender screen serves as the final amount tendering screen. This screen shares the same options component as self checkout options, but provides additional context related to tender amounts and partial tenders.
 
-![Self Checkout Tender](images/self-checkout-tender.png)
+![Self Checkout Tender](assets/self-checkout-tender.png)
 
-![Self Checkout Tender Options](images/self-checkout-tender-options.png)
+![Self Checkout Tender Options](assets                  /self-checkout-tender-options.png)
 
 ## Setting the Image
 

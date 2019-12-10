@@ -2,7 +2,7 @@
 
 The self checkout home screen is a basic splash screen that the user taps to start the self checkout flow. The splash screen image can be set dynamically, as well as the text and logos.
 
-![Self Checkout Home](images/self-checkout-home.png)
+![Self Checkout Home](assets/self-checkout-home.png)
 
 ## Setting the Splash Image
 

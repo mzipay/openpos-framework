@@ -2,7 +2,7 @@
 
 The self checkout options screen provides a basic list of options for the user to choose. This can be used for screens such as reciept options, loyalty search options, etc.  This is also similar to the core choose options screen.
 
-![Self Checkout Loyalty](images/self-checkout-loyalty.png)
+![Self Checkout Loyalty](assets/self-checkout-loyalty.png)
 
 ## Setting the Image
 

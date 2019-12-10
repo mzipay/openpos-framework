@@ -2,9 +2,9 @@
 
 The self checkout sale screen covers the main functionality of the sale and is similar to the core sale screen. Some functionality from the core sale screen is omitted from self checkout since this screen is customer facing.
 
-![Self Checkout Sale](images/self-checkout-sale.png)
+![Self Checkout Sale](assets/self-checkout-sale.png)
 
-![Self Checkout Sale Items](images/self-checkout-sale-items.png)
+![Self Checkout Sale Items](assets/self-checkout-sale-items.png)
 
 ## Setting the Image
 

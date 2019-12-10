@@ -2,7 +2,7 @@
 
 The self checkout prompt screen serves as a basic, single input screen that can be used for things such as email entry, phone entry, etc. This component again shares the same prompt input as the core prompt screen.
 
-![Self Checkout Search](images/self-checkout-loyalty-search.png)
+![Self Checkout Search](assets/self-checkout-loyalty-search.png)
 
 ## Setting the Image
 
