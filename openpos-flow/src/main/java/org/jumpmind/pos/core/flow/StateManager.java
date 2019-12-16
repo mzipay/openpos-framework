@@ -490,10 +490,13 @@ public class StateManager implements IStateManager {
 
     private boolean notBusy(String actionName, boolean doNotBlockForResponse) {
         boolean notBusy = true;
+        long currentActionTimeInMs = System.currentTimeMillis();
+
         synchronized (this) {
             if (isAtRest() || doNotBlockForResponse ||
                     activeThread.get() == null ||
-                    activeThread.get().equals(Thread.currentThread())) {
+                    activeThread.get().equals(Thread.currentThread()) &&
+                    currentActionTimeInMs >= lastActionTimeInMs.longValue()) {
                 Thread active = activeThread.get();
                 log.info("Action received: {}, State manager is NOT busy.  Active calls: {}, Current thread: {}, Active thread: {}, Last display occurred after last action time: {}",
                         actionName,
@@ -502,11 +505,12 @@ public class StateManager implements IStateManager {
                 activeCalls.incrementAndGet();
                 markAsBusy();
             } else {
-                log.info("Action received: {}, State manager is busy.  Active calls: {}, Current thread: {}, Active thread: {}, Last display occurred after last action time: {}",
-                        actionName, activeCalls.get(), Thread.currentThread().getName(), activeThread.get().getName(), lastShowTimeInMs.get()-lastActionTimeInMs.get());
+                logger.info("Action received: {}, State manager is busy.  Active calls: {}, Current thread: {}, Active thread: {}, Last display occurred after last action time: {}, Current action occured before last action time: {} ",
+                        action.getName(), activeCalls.get(), Thread.currentThread().getName(), activeThread.get().getName(), lastShowTimeInMs.get()-lastActionTimeInMs.get(), lastActionTimeInMs.get()-currentActionTimeInMs);
                 notBusy = false;
             }
         }
+        
         return notBusy;
     }
 
@@ -969,6 +973,9 @@ public class StateManager implements IStateManager {
             log.warn("Discarding unexpected event " + event.toString());
         }
     }
-
-
+    
+    @Override
+    public long getLastActionTimeInMs() {
+        return lastActionTimeInMs.get();
+    }
 }
