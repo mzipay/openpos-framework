@@ -505,8 +505,8 @@ public class StateManager implements IStateManager {
                 activeCalls.incrementAndGet();
                 markAsBusy();
             } else {
-                logger.info("Action received: {}, State manager is busy.  Active calls: {}, Current thread: {}, Active thread: {}, Last display occurred after last action time: {}, Current action occured before last action time: {} ",
-                        action.getName(), activeCalls.get(), Thread.currentThread().getName(), activeThread.get().getName(), lastShowTimeInMs.get()-lastActionTimeInMs.get(), lastActionTimeInMs.get()-currentActionTimeInMs);
+                log.info("Action received: {}, State manager is busy.  Active calls: {}, Current thread: {}, Active thread: {}, Last display occurred after last action time: {}, Current action occured before last action time: {} ",
+                        actionName, activeCalls.get(), Thread.currentThread().getName(), activeThread.get().getName(), lastShowTimeInMs.get()-lastActionTimeInMs.get(), lastActionTimeInMs.get()-currentActionTimeInMs);
                 notBusy = false;
             }
         }
