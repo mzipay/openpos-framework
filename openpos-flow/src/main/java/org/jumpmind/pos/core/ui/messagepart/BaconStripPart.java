@@ -1,5 +1,6 @@
 package org.jumpmind.pos.core.ui.messagepart;
 
+import org.jumpmind.pos.core.model.TillStatusType;
 import org.jumpmind.pos.core.ui.ActionItem;
 import org.jumpmind.pos.core.ui.IHasBackButton;
 
@@ -14,6 +15,7 @@ public class BaconStripPart implements IHasBackButton, Serializable {
     private String headerText;
     private String headerIcon;
     private ActionItem backButton;
+    private TillStatusType tillStatusType = TillStatusType.Normal;
 
     public String getDeviceId() {
         return deviceId;
@@ -53,5 +55,13 @@ public class BaconStripPart implements IHasBackButton, Serializable {
 
     public void setBackButton(ActionItem backButton) {
         this.backButton = backButton;
+    }
+    
+    public TillStatusType getTillStatusType() {
+        return tillStatusType;
+    }
+    
+    public void setTillStatusType(TillStatusType tillStatusType) {
+        this.tillStatusType = tillStatusType;
     }
 }

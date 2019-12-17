@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Component, Injector } from '@angular/core';
 import { ScreenPart } from '../../decorators/screen-part.decorator';
 import { HelpTextService } from '../../../core/help-text/help-text.service';
+import { TillStatusType } from '../../../core/interfaces/till-status-type.enum';
 
 @ScreenPart({
     name: 'baconStrip'})
@@ -16,6 +17,7 @@ export class BaconStripComponent extends ScreenPartComponent<BaconStripInterface
 
     isMobile$: Observable<boolean>;
     operatorInfo: string;
+    TillStatusType = TillStatusType;
 
     constructor( mediaService: OpenposMediaService, injector: Injector, public helpTextService: HelpTextService) {
         super(injector);
@@ -34,9 +36,9 @@ export class BaconStripComponent extends ScreenPartComponent<BaconStripInterface
             this.screenData.backButton.keybind = 'Escape';
         }
         if (this.screenData.operatorText && this.screenData.deviceId ) {
-            this.operatorInfo = this.screenData.operatorText + ' on ' + this.screenData.deviceId;
+            this.operatorInfo = this.screenData.operatorText + ' on ';
         } else {
-            this.operatorInfo = this.screenData.operatorText ? this.screenData.operatorText : this.screenData.deviceId;
+            this.operatorInfo = this.screenData.operatorText;
         }
     }
 }

@@ -65,5 +65,6 @@ public interface IStateManager {
     public void sendConfigurationChangedMessage();
     public void setClientContext(Map<String,String> context);
     public Map<String, String> getClientContext();
+    public long getLastActionTimeInMs();
     
 }
