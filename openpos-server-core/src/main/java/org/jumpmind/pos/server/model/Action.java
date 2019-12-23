@@ -73,6 +73,10 @@ public class Action implements Serializable, Cloneable {
         return mapper.convertValue(actionData, convertToInstanceOf);
     }
 
+    public <T> T convertActionData(Class<T> convertToInstanceOf) {
+        return mapper.convertValue(data, convertToInstanceOf);
+    }
+
     public String toDataString() {
         return data != null ? data.toString() : null;
     }
