@@ -18,7 +18,7 @@ public class ScanOrSearchPart implements Serializable{
     private ScanType scanType;
     private String scanIcon = IconType.Barcode;
     private ActionItem scanAction = new ActionItem("Scan");
-    private ActionItem keyedAction = new ActionItem("Scan");
+    private ActionItem keyedAction = new ActionItem("HandKeyed");
     private String scanSomethingText = "Scan/Key Something";
     private boolean autoFocusOnScan = false;
     private FieldInputType inputType = FieldInputType.WordText;
