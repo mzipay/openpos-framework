@@ -114,7 +114,7 @@ export class ActionService implements OnDestroy{
     }
 
     private async  canPerformAction( actionItem: IActionItem): Promise<boolean> {
-        if (typeof actionItem.enabled === 'boolean' && actionItem.enabled === false) {
+        if (actionItem && typeof actionItem.enabled === 'boolean' && actionItem.enabled === false) {
             console.info('Not sending action because it was disabled');
             return false;
         }
