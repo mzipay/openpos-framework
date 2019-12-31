@@ -24,7 +24,8 @@ export class ElectronLogger implements ILogger {
             if (!fs.existsSync(logDir)) {
                 fs.mkdirSync(logDir);
             }
-            fileTransport.file = `${logDir}/${Configuration.electronClientLogFilename}`;
+            fileTransport.fileName = Configuration.electronClientLogFilename;
+            fileTransport.resolvePath = (variables) => logDir;
             fileTransport.format = '{y}-{m}-{d} {h}:{i}:{s},{ms} {level}  {text}';
             this.electronLogger.transports.console.level = false;
             this.electron.ipcRenderer.on('errorInWindow', function(event, data) {
