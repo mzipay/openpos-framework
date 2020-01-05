@@ -144,6 +144,8 @@ import { TitleComponent } from './components/title/title.component';
 import { ContentCardComponent } from './components/content-card/content-card.component';
 import { OptionButtonComponent } from './components/option-button/option-button.component';
 import { TenderPartComponent } from './screen-parts/tender-part/tender-part.component';
+import { OrderCardComponent } from './components/order-card/order-card.component';
+import { LocalizedDateNoTimePipe } from './pipes/localized-date-no-time.pipe';
 import { BasicBaconStripComponent } from './screen-parts/basic-bacon-strip/basic-bacon-strip.component';
 
 const screenParts = [
@@ -247,7 +249,8 @@ const components = [
     InstructionsComponent,
     TitleComponent,
     ContentCardComponent,
-    OptionButtonComponent
+    OptionButtonComponent,
+    OrderCardComponent
 ];
 
 const directives = [
@@ -283,6 +286,7 @@ const pipes = [
     PhonePipe,
     HourMinSecPipe,
     LocalizedDatePipe,
+    LocalizedDateNoTimePipe,
     ValueFormatterPipe,
     POSCurrencyPipe,
     StringListFilterPipe,

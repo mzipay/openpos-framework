@@ -1,0 +1,50 @@
+@import "../../../styles/mixins/typography";
+
+:host {
+    display: grid;
+}
+
+.order-card {
+    display: grid;
+    background-color: white;
+
+    .order-header {
+        display: grid;
+        grid-template-columns: auto 1fr 1fr;
+        align-items: center;
+        padding: 10px;
+        @extend %text-md;
+
+        .order-header-value {
+            text-align: end;
+        }
+    }
+
+    .order-content {
+        display:grid;
+        padding: 10px;
+        .order-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+    
+            .order-details-labels {
+                display:grid;
+                @extend %text-sm;
+            }
+            
+            .order-details-values {
+                display: grid;
+                text-align: end;
+                @extend %text-sm;
+            }
+        }
+    
+        .remove-button {
+            display:grid;
+            justify-items:end;
+            padding-top:10px;
+            padding-right:15px;
+        }
+    }
+
+}
