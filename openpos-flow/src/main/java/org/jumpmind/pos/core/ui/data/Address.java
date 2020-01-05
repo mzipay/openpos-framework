@@ -1,10 +1,12 @@
 package org.jumpmind.pos.core.ui.data;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
+@Builder
 public class Address implements Serializable {
     private String address;
     private String city;
