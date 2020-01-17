@@ -1,5 +1,5 @@
-<h1 mat-dialog-title>
-    Please select an option to continue
+<h1 *ngIf="data.menuText" mat-dialog-title>
+    {{data.menuText}}
 </h1>
 <mat-dialog-content appArrowTab class="buttons">
     <button appArrowTabItem class="menu-item" mat-button *ngFor="let o of data.menuItems" [disabled]="!o.enabled" [mat-dialog-close]="o">

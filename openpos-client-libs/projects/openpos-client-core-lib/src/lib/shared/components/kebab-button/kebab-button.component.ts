@@ -24,6 +24,9 @@ export class KebabButtonComponent implements OnDestroy {
     iconName = 'KebabMenu';
 
     @Input()
+    menuText = 'Please select an option to continue';
+
+    @Input()
     set keyBinding(key: string) {
         if (this.subscription) {
             this.subscription.unsubscribe();
@@ -64,7 +67,8 @@ export class KebabButtonComponent implements OnDestroy {
                     payload: null,
                     disableClose: false,
                     autoFocus: false,
-                    restoreFocus: false
+                    restoreFocus: false,
+                    menuText: this.menuText
                 }
             });
 

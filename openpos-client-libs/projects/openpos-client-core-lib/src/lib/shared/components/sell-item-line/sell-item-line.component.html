@@ -44,7 +44,7 @@
     </div>
     <div gdArea="kebab">
         <app-kebab-button block-selection *ngIf="showMenu()" fxAlign="right"
-            [menuItems]="item.menuItems" (menuItemClick)="onMenuItemClick($event, [item.index])"></app-kebab-button>
+            [menuItems]="item.menuItems" [menuText]="itemMenuText" (menuItemClick)="onMenuItemClick($event, [item.index])"></app-kebab-button>
         <div *ngIf="!showMenu()" class="sell-item-line-hidden-button"></div>
     </div>
 </div>

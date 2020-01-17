@@ -13,6 +13,7 @@ export class SellItemLineComponent {
     @Input() item: ISellItem;
     @Input() readOnly: boolean;
     @Input() hideButton: boolean;
+    @Input() itemMenuText: string;
 
     constructor(private session: SessionService) {
     }

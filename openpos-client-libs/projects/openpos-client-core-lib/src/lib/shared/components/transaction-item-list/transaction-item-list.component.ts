@@ -28,6 +28,7 @@ export class TransactionItemListComponent implements AfterViewChecked {
   @Input() transactionMenu: IActionItemGroup;
   @Input() prompt: string;
   @Input() readOnly: boolean;
+  @Input() transactionMenuText: string;
 
   @Output() selectedItemListChange = new EventEmitter<number[]>();
   @Output() menuAction = new EventEmitter<any>();

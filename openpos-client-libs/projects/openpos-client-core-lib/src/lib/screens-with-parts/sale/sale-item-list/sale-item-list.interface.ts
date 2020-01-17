@@ -9,4 +9,5 @@ export interface SaleItemListInterface {
     selectedItemIndexes: number[];
     transactionMenuPrompt: string;
     transactionMenu: IActionItemGroup;
+    transactionMenuText: string;
 }
