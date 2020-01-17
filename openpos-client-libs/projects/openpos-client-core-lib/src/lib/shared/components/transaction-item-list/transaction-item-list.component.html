@@ -25,7 +25,7 @@
         <div *ngIf="listConfig.totalNumberOfItems == 0" fxLayout="column" fxLayoutAlign="center center"
             class="muted-color" style="height: 100%;">
             <app-icon iconClass="material-icons mat-128" iconName="barcode"></app-icon>
-            <span class="text-md">Scan/Key something to get started</span>
+            <span class="text-md">{{itemListText}}</span>
         </div>
 
     </mat-card-content>

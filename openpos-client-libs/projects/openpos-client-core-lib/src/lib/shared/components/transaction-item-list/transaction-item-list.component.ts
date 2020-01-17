@@ -29,6 +29,7 @@ export class TransactionItemListComponent implements AfterViewChecked {
   @Input() prompt: string;
   @Input() readOnly: boolean;
   @Input() transactionMenuText: string;
+  @Input() itemListText = 'Scan/Key something to get started';
 
   @Output() selectedItemListChange = new EventEmitter<number[]>();
   @Output() menuAction = new EventEmitter<any>();
