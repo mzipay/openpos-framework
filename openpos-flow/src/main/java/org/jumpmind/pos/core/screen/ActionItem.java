@@ -86,6 +86,17 @@ public class ActionItem implements Serializable {
         }
     }
     
+    public ActionItem(String action, String title, String icon, String confirmationMessage, ActionItem confirmAction, ActionItem cancelAction) {
+        this(action, title, icon);
+        if (confirmationMessage != null) {
+            this.confirmationDialog = new ConfirmationDialog();
+            this.confirmationDialog.setTitle(title);
+            this.confirmationDialog.setMessage(confirmationMessage);
+            this.confirmationDialog.setConfirmAction(confirmAction);
+            this.confirmationDialog.setCancelAction(cancelAction);
+        }
+    }
+    
     public ActionItem(String action, String title, String icon, ConfirmationDialog confirmationDialog) {
     	this(action, title, icon );
     	this.confirmationDialog = confirmationDialog;
