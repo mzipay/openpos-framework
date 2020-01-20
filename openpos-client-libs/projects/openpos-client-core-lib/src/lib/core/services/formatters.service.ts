@@ -106,4 +106,10 @@ export class FormattersService {
 
         this.formatters.get(locale).set(name, formatter);
     }
+
+    addFormatter(name: string, formatter: IFormatter, locale: string) {
+        const newFormatters = new Map<string, IFormatter>();
+        newFormatters.set(name, formatter);
+        this.formatters.set(locale, newFormatters);
+    }
 }
