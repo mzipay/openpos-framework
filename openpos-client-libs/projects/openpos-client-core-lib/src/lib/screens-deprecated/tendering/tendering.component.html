@@ -55,7 +55,7 @@
 
         <mat-card fxFlex="1 1 auto" ngClass="page-content-card scrollable-content-card serrated-edge" fxLayout="column">
             <mat-card-title class="text-md" style="padding:16px">
-                Completed Tenders
+                {{ screen.completedTendersLabel ? screen.completedTendersLabel : 'Completed Tenders'}}
             </mat-card-title>
             <mat-card-content fxFlex="1 1 auto">
                 <mat-list class="list-seperator" ngClass.xs="xs">
@@ -67,7 +67,7 @@
                 <div *ngIf="tenderItems.length == 0" class="text-md"
                 fxLayout="column" fxLayoutAlign="center center">
                     <app-icon iconName="credit_card" class="muted-color" iconClass="mat-128"></app-icon>
-                    Completed tenders will appear here.
+                    {{ screen.instructions ? screen.instructions : 'Completed tenders will appear here.'}} 
                 </div>
             </mat-card-content>
             <mat-card-actions align="end">
