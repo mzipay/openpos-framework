@@ -2,3 +2,9 @@
     cursor: default;
     pointer-events: none;
 }
+
+.no-customer-text {
+    max-width: 200px;
+    white-space: pre-wrap;
+    text-align: center;
+}
