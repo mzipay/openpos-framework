@@ -1,6 +1,7 @@
 package org.jumpmind.pos.util;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,16 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 
 public class ClassUtils {
     protected static final Logger logger = LoggerFactory.getLogger(ClassUtils.class);
+
+    public static boolean hasAnnotation(Class<?> clazz, Field field) {
+        Annotation[] all = field.getDeclaredAnnotations();
+        for (Annotation a : all) {
+            if (a.getClass().equals(clazz)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * This method first attempts to check the given targetObject's class for an 
@@ -55,7 +66,7 @@ public class ClassUtils {
      * Retrieves all of the classes at or below the given package which implement the given interface.
      * @param <T>
      * @param packageName The root package to begin searching
-     * @param annotation The annotation to search for.
+     * @param matchingType The annotation to search for.
      * @return A list of Class objects.
      */
     @SuppressWarnings("unchecked")
