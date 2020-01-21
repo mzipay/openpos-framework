@@ -17,16 +17,6 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 public class ClassUtils {
     protected static final Logger logger = LoggerFactory.getLogger(ClassUtils.class);
 
-    public static boolean hasAnnotation(Class<?> clazz, Field field) {
-        Annotation[] all = field.getDeclaredAnnotations();
-        for (Annotation a : all) {
-            if (a.getClass().equals(clazz)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * This method first attempts to check the given targetObject's class for an 
      * annotation of the given type.  If that fails, then it uses a Spring AOP
