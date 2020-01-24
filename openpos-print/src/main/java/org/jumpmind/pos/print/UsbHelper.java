@@ -6,27 +6,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.usb.*;
+import java.awt.print.PrinterAbortException;
 import java.util.List;
 
 public class UsbHelper {
 
     static final Logger log = LoggerFactory.getLogger(UsbHelper.class);
 
-    public UsbDevice findDevice(short vendorId, short productId) {
+    public FindUsbDeviceResult findDevice(short vendorId, short productId) {
         try {
             UsbServices services = UsbHostManager.getUsbServices();
             UsbHub rootHub = services.getRootUsbHub();
-            return findDevice(rootHub, vendorId, productId);
+            FindUsbDeviceResult findUsbDeviceResult = new FindUsbDeviceResult();
+            return findDevice(findUsbDeviceResult, rootHub, vendorId, productId);
         } catch (Exception ex) {
             throw new PrintException("Failed to locate device for vendorId=" + vendorId + " productId=" + productId, ex);
         }
-
     }
 
     public UsbConnection openUsbConnection(short vendorId, short productId) {
-        UsbDevice usbDevice = findDevice(vendorId, productId);
+        FindUsbDeviceResult findUsbDeviceResult = findDevice(vendorId, productId);
+        UsbDevice usbDevice = findUsbDeviceResult.getMatchingUsbDevice();
         if (usbDevice == null) {
-            throw new PrintException("Could not locate USB device for vendorId: " + vendorId + "  productId: " + productId);
+            throw new PrintException("Could not locate USB device for vendorId: " + vendorId + "  productId: " + productId + " ");
         }
 
         UsbConfiguration usbConfiguration = usbDevice.getActiveUsbConfiguration();
@@ -100,7 +102,7 @@ public class UsbHelper {
     }
 
 
-    public UsbDevice findDevice(UsbHub hub, short vendorId, short productId) {
+    public FindUsbDeviceResult findDevice(FindUsbDeviceResult findUsbDeviceResult, UsbHub hub, short vendorId, short productId) {
 
         final int WILDCARD = -1;
 
@@ -110,8 +112,7 @@ public class UsbHelper {
             if (log.isInfoEnabled()) {
                 try {
                     log.info("Found USB device while scanning for vendorId=" + vendorId + " productId=" + productId + " " +
-                            desc + " device.getManufacturerString()=" + device.getManufacturerString() + " device.getProductString()=" +
-                            device.getProductString() + " device.getProductString()=" + device.getSerialNumberString());
+                            usbDeviceToString(device));
                 } catch (Exception ex) {
                     log.debug("Failed to get details while scanning USB device.", ex);
                 }
@@ -120,16 +121,28 @@ public class UsbHelper {
 
             if ((desc.idVendor() == vendorId || vendorId == WILDCARD) &&
                     (desc.idProduct() == productId || productId == WILDCARD)) {
-                return device;
+                findUsbDeviceResult.setMatchingUsbDevice(device);
+                return findUsbDeviceResult;
             }
             else if (device.isUsbHub()) {
-                device = findDevice((UsbHub) device, vendorId, productId);
-                if (device != null) {
-                    return device;
+                findUsbDeviceResult = findDevice(findUsbDeviceResult, (UsbHub) device, vendorId, productId);
+                if (findUsbDeviceResult.getMatchingUsbDevice() != null) {
+                    return findUsbDeviceResult;
                 }
+            } else {
+                findUsbDeviceResult.getFoundUsbDevices().add(device);
             }
         }
         return null;
+    }
+
+    public String usbDeviceToString(UsbDevice usbDevice) {
+        try {
+            return usbDevice.getUsbDeviceDescriptor() + " device.getManufacturerString()=" + usbDevice.getManufacturerString() + " device.getProductString()=" +
+                    usbDevice.getProductString() + " device.getProductString()=" + usbDevice.getSerialNumberString();
+        } catch (Exception ex) {
+            throw new PrintException("Failed to get device info on USB device.", ex);
+        }
     }
 
 }
