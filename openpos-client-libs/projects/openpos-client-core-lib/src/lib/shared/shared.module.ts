@@ -1,4 +1,3 @@
-import { ImageTextPanelComponent } from './screen-parts/image-text-panel/image-text-panel.component';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -147,6 +146,8 @@ import { TenderPartComponent } from './screen-parts/tender-part/tender-part.comp
 import { OrderCardComponent } from './components/order-card/order-card.component';
 import { LocalizedDateNoTimePipe } from './pipes/localized-date-no-time.pipe';
 import { BasicBaconStripComponent } from './screen-parts/basic-bacon-strip/basic-bacon-strip.component';
+import { ButtonActionTimerComponent } from './components/button-action-timer/button-action-timer.component';
+import { ImageTextPanelComponent } from './screen-parts/image-text-panel/image-text-panel.component';
 
 const screenParts = [
     TenderPartComponent,
@@ -175,7 +176,7 @@ const screenParts = [
     ScanPartComponent,
     SearchExpandInputComponent,
     BasicBaconStripComponent,
-    ImageTextPanelComponent
+    ImageTextPanelComponent,
 ];
 
 const components = [
@@ -250,7 +251,8 @@ const components = [
     TitleComponent,
     ContentCardComponent,
     OptionButtonComponent,
-    OrderCardComponent
+    OrderCardComponent,
+    ButtonActionTimerComponent
 ];
 
 const directives = [
