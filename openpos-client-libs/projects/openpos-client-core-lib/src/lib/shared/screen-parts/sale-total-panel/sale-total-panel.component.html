@@ -29,12 +29,16 @@
     </div>
 
     <div class="sale-total-buttons">
-        <app-secondary-button responsive-class
+
+
+        <app-secondary-button 
+            responsive-class
             *ngIf="!screenData.readOnly && !screenData.customer && screenData.loyaltyButton"
             [actionItem]="screenData.loyaltyButton" (actionClick)="doMenuItemAction(screenData.loyaltyButton)"
-            (click)="doMenuItemAction(screenData.loyaltyButton)" class="sale-total-loyalty-button">
+            (click)="doMenuItemAction(screenData.loyaltyButton)" class="sale-total-loyalty-button"
+            [ngStyle]="screenData.loyaltyButton.icon | backgroundImageUrl" >
             <span *ngIf="loyaltyBefore">{{loyaltyBefore}}</span>
-            <img [src]="screenData.loyaltyButton.icon | imageUrl" class="sale-total-loyalty-button-icon">
+            <!-- <img [src]="screenData.loyaltyButton.icon | imageUrl" class="sale-total-loyalty-button-icon"> -->
             <span *ngIf="loyaltyAfter">{{loyaltyAfter}}</span>
             <span *ngIf="keybindsEnabled(screenData.loyaltyButton)" class="muted-color">{{screenData.loyaltyButton.keybind}}</span>
         </app-secondary-button>
