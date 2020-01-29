@@ -38,7 +38,8 @@
         background-color: $app-primary;
     }
 
-    .customer-display-form-body {     
+    .customer-display-form-body {    
+        background-color: #eeeeee; 
         .mat-form-field {
             @extend .text-sm;
 
