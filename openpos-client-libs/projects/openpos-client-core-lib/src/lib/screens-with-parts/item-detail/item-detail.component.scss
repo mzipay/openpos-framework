@@ -26,11 +26,13 @@ p{
     @extend %sub-element-container;
     @extend %page-gutter;
     @extend %page-element;
-    width: 75%;
-    height: 100%;
+    padding-top: 75px;
+  //  width: 100%;
+ //   height: 100%;
     overflow-y: auto;
     align-self: center;
     justify-self: center;
+    background-color: #eeeeee;
     grid-template: "image title" auto
                     "image summary" auto
                     "image properties" 1fr
