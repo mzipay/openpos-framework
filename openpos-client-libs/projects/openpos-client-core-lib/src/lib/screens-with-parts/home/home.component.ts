@@ -44,6 +44,8 @@ export class HomeComponent extends PosScreen<HomeInterface> {
   iconClass: Observable<string>;
   badgeSize: Observable<string>;
 
+  
+
   constructor( media: OpenposMediaService, injector: Injector ) {
     super(injector);
     this.gridColumns = media.observe(new Map([
@@ -104,4 +106,78 @@ export class HomeComponent extends PosScreen<HomeInterface> {
     }
     return null;
   }
+
+  public ngAfterViewInit() {
+    (<any>window).player.playVideo();
+  }
+
+  public ngOnDestroy() {
+    console.log('desroy - stopping video.');
+    (<any>window).player.stopVideo();
+  }
+
+  //       // 2. This code loads the IFrame Player API code asynchronously.
+  //       console.log('init youtube background.');
+  //   var tag = document.createElement('script');
+
+  //   tag.src = "https://www.youtube.com/iframe_api";
+  //   var firstScriptTag = document.getElementsByTagName('script')[0];
+  //   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  //   // 3. This function creates an <iframe> (and YouTube player)
+  //   //    after the API code downloads.
+  //   var player;
+  //   function onYouTubeIframeAPIReady() {
+  //     player = new (<any>window).YT.Player('player', {
+  //       height: '100%',
+  //       width: '100%',
+  //       videoId: 'vU-_8DkZDWo',
+  //       playerVars: {
+  //           autoplay: 1,        // Auto-play the video on load
+  //     autohide: 1, // Hide video controls when playing
+  //     disablekb: 1, 
+  //     controls: 0,        // Hide pause/play buttons in player
+  //     showinfo: 0,        // Hide the video title
+  //     modestbranding: 1,  // Hide the Youtube Logo
+  //     loop: 1,            // Run the video in a loop
+  //     fs: 0,              // Hide the full screen button       
+  //     rel: 0,
+  //     enablejsapi: 1,
+  //     theme: 'light'
+
+  //       },
+  //       events: {
+  //         'onReady': onPlayerReady,
+  //         'onStateChange': onPlayerStateChange
+  //       }
+
+  //     });
+  //   }
+
+  //   // 4. The API will call this function when the video player is ready.
+  //   function onPlayerReady(event) {
+  //     player.mute();
+  //     event.target.playVideo();
+  //   }
+
+  //   // 5. The API calls this function when the player's state changes.
+  //   //    The function indicates that when playing a video (state=1),
+  //   //    the player should play for six seconds and then stop.
+  //   var done = false;
+  //   function onPlayerStateChange(event) {
+  //       console.log('player state change: ' + event.data);
+  //     if (event.data == (<any>window).YT.PlayerState.PLAYING && !done) {
+  //       setTimeout(stopVideo, 6000);
+
+  //       done = true;
+  //     } else if (event.data == (<any>window).YT.PlayerState.ENDED) {
+  //           player.mute();
+  //           player.playVideo();
+  //     }
+
+  //   }
+  //   function stopVideo() {
+  //   //   player.stopVideo();
+  //   }
+  // }
 }
