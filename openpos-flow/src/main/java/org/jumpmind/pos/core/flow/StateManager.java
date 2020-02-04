@@ -475,8 +475,8 @@ public class StateManager implements IStateManager {
 
     @Override
     public void markAsBusy() {
-        lastActionTimeInMs.set(System.currentTimeMillis());
-        activeThread.set(Thread.currentThread());
+//        lastActionTimeInMs.set(System.currentTimeMillis());
+//        activeThread.set(Thread.currentThread());
     }
 
     private boolean notBusy(String actionName, boolean doNotBlockForResponse) {
