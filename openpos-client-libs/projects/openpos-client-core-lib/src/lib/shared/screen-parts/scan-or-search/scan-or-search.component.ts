@@ -8,7 +8,7 @@ import {
     OnDestroy,
     Injector,
     ElementRef,
-    Renderer2
+    Renderer2, ViewChild
 } from '@angular/core';
 import { ScreenPartComponent } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
@@ -19,6 +19,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ScannerService } from '../../../core/platform-plugins/scanners/scanner.service';
 import { OnBecomingActive } from '../../../core/life-cycle-interfaces/becoming-active.interface';
 import { OnLeavingActive } from '../../../core/life-cycle-interfaces/leaving-active.interface';
+import { KeyPressProvider} from "../../providers/keypress.provider";
 
 @ScreenPart({
     name: 'scanOrSearch'
@@ -40,12 +41,16 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     @Output() change: EventEmitter<string> = new EventEmitter<string>();
 
+    @ViewChild('input', { read: ElementRef }) private input: ElementRef;
+
     keyboardLayout = 'US Standard';
+
+    alphanumericArray = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split("");
 
     private scanServiceSubscription: Subscription;
 
     constructor(public devices: DeviceService, injector: Injector, private el: ElementRef, private renderer: Renderer2,
-                mediaService: OpenposMediaService, private scannerService: ScannerService) {
+                mediaService: OpenposMediaService, private scannerService: ScannerService, protected keyPresses: KeyPressProvider) {
         super(injector);
         const mobileMap = new Map([
             [MediaBreakpoints.MOBILE_PORTRAIT, true],
@@ -56,6 +61,13 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
             [MediaBreakpoints.DESKTOP_LANDSCAPE, false]
         ]);
         this.isMobile$ = mediaService.observe(mobileMap);
+        this.alphanumericArray.forEach(character => {
+            this.subscriptions.add(this.keyPresses.subscribe(character, 1, event => {
+                if (event.type === 'keydown'){
+                    this.input.nativeElement.focus();
+                }
+            }))
+        })
     }
 
     ngOnInit(): void {
