@@ -147,6 +147,7 @@ import { LocalizedDateNoTimePipe } from './pipes/localized-date-no-time.pipe';
 import { BasicBaconStripComponent } from './screen-parts/basic-bacon-strip/basic-bacon-strip.component';
 import { ButtonActionTimerComponent } from './components/button-action-timer/button-action-timer.component';
 import { ImageTextPanelComponent } from './screen-parts/image-text-panel/image-text-panel.component';
+import {ScanOrSearchProvider} from "./screen-parts/scan-or-search/scan-or-search.service";
 
 const screenParts = [
     TenderPartComponent,
@@ -343,4 +344,7 @@ const pipes = [
         ...pipes
     ]
 })
-export class SharedModule { }
+export class SharedModule {
+    constructor(scanOrSearchProvider: ScanOrSearchProvider) {
+    }
+}

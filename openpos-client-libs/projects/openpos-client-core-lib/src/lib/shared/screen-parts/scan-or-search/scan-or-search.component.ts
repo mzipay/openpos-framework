@@ -8,7 +8,7 @@ import {
     OnDestroy,
     Injector,
     ElementRef,
-    Renderer2, ViewChild
+    Renderer2, ViewChild, HostListener
 } from '@angular/core';
 import { ScreenPartComponent } from '../screen-part';
 import { ScanOrSearchInterface } from './scan-or-search.interface';
@@ -20,6 +20,8 @@ import { ScannerService } from '../../../core/platform-plugins/scanners/scanner.
 import { OnBecomingActive } from '../../../core/life-cycle-interfaces/becoming-active.interface';
 import { OnLeavingActive } from '../../../core/life-cycle-interfaces/leaving-active.interface';
 import { KeyPressProvider} from "../../providers/keypress.provider";
+import {SessionService} from "../../../core/services/session.service";
+import {ScanOrSearchProvider} from "./scan-or-search.service";
 
 @ScreenPart({
     name: 'scanOrSearch'
@@ -45,12 +47,12 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     keyboardLayout = 'US Standard';
 
-    alphanumericArray = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split("");
+    private autoFocusPattern: RegExp;
 
     private scanServiceSubscription: Subscription;
 
-    constructor(public devices: DeviceService, injector: Injector, private el: ElementRef, private renderer: Renderer2,
-                mediaService: OpenposMediaService, private scannerService: ScannerService, protected keyPresses: KeyPressProvider) {
+    constructor( sessionService: SessionService, public devices: DeviceService, injector: Injector, private el: ElementRef, private renderer: Renderer2,
+                mediaService: OpenposMediaService, private scannerService: ScannerService, protected keyPresses: KeyPressProvider, protected scanOrSearchProvider: ScanOrSearchProvider) {
         super(injector);
         const mobileMap = new Map([
             [MediaBreakpoints.MOBILE_PORTRAIT, true],
@@ -61,13 +63,7 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
             [MediaBreakpoints.DESKTOP_LANDSCAPE, false]
         ]);
         this.isMobile$ = mediaService.observe(mobileMap);
-        this.alphanumericArray.forEach(character => {
-            this.subscriptions.add(this.keyPresses.subscribe(character, 1, event => {
-                if (event.type === 'keydown'){
-                    this.input.nativeElement.focus();
-                }
-            }))
-        })
+        this.autoFocusPattern = new RegExp(scanOrSearchProvider.getKeyPressAutofocusPattern());
     }
 
     ngOnInit(): void {
@@ -80,6 +76,18 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
         }
         if (this.screenData.keyboardLayout) {
             this.keyboardLayout = this.screenData.keyboardLayout;
+        }
+    }
+
+    @HostListener('document:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent){
+        if (event.key.match(this.autoFocusPattern)){
+            if (this.input.nativeElement !== document.activeElement) {
+                this.input.nativeElement.value += event.key;
+            }
+            this.subscriptions.add(this.keyPresses.subscribe(event.key, 1, () => {
+                this.input.nativeElement.focus();
+            }));
         }
     }
 
