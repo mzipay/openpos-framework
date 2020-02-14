@@ -36,7 +36,8 @@ public interface ILegacyDialogBeanModel {
         RETRY_TENDER,
         PHONE_NOT_LINKED,
         YES_NO_PRINT,
-        BYPASS_CONTINUE
+        BYPASS_CONTINUE,
+        BYPASS_CANCEL
     }
     
     enum ButtonType {
