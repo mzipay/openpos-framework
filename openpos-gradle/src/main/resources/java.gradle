@@ -132,6 +132,7 @@ test {
 }
 
 jacocoTestReport {
+    executionData = fileTree(buildDir).include("/jacoco/*.exec")
     reports {
         xml.enabled true
     }
