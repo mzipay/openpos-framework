@@ -74,6 +74,10 @@ public class SymDSModule extends AbstractModule {
 
     @Override
     public void initialize() {
+        log.info("user.dir: " + System.getProperty("user.dir"));
+        log.info("file.encoding: " + System.getProperty("file.encoding"));
+        log.info("java.io.tmpdir: " + System.getProperty("java.io.tmpdir"));
+
         SymmetricEngineHolder holder = new SymmetricEngineHolder();
         Properties properties = new Properties();
 
