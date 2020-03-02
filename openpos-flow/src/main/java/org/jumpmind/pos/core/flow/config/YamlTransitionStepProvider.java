@@ -1,5 +1,6 @@
 package org.jumpmind.pos.core.flow.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jumpmind.pos.core.flow.FlowException;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -11,15 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class YamlTransitionStepProvider {
 
     public List<YamlTransitionStepConfig> loadTransitionSteps(ResourcePatternResolver resolver, String appId, String path, YamlFlowConfigFileLoader flowConfigLoader) {
         try {
             Resource[] resources = resolver.getResources("classpath*:/" + path + "/*-steps.yml");
             if (resources == null || resources.length == 0) {
-                throw new FlowException("Failed to load YML transition steps. pattern: " + "classpath*:/" + path + "/*-steps.yml");
+                log.warn("Failed to load YML transition steps. pattern: classpath*:/" + path + "/*-steps.yml");
+                return null;
+            } else {
+                return loadYamlTransitionStepConfigs(resources[0].getInputStream(), flowConfigLoader);
             }
-            return loadYamlTransitionStepConfigs(resources[0].getInputStream(), flowConfigLoader);
         } catch (Exception ex) {
             throw new FlowException(String.format("Failed to load YML transition steps for appId %s and path %s", appId, path), ex);
         }
