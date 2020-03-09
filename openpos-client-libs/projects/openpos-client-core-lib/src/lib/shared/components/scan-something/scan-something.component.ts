@@ -1,6 +1,6 @@
 import { Component, Input, Optional, Inject, ViewChild, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatInput } from '@angular/material';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { IMessageHandler } from '../../../core/interfaces/message-handler.interface';
 import { IScan } from '../../../screens-deprecated/templates/sell-template/sell/scan.interface';
 import { Logger } from '../../../core/services/logger.service';
@@ -9,6 +9,7 @@ import { DeviceService } from '../../../core/services/device.service';
 import { OnBecomingActive } from '../../../core/life-cycle-interfaces/becoming-active.interface';
 import { OnLeavingActive } from '../../../core/life-cycle-interfaces/leaving-active.interface';
 import { ScannerService } from '../../../core/platform-plugins/scanners/scanner.service';
+import { OpenposMediaService } from '../../../core/services/openpos-media.service';
 
 @Component({
   selector: 'app-scan-something',
@@ -23,6 +24,8 @@ export class ScanSomethingComponent implements AfterViewInit, IMessageHandler<an
   @Input()
   scanSomethingData: IScan;
 
+  isMobile: Observable<boolean>;
+
   public barcode: string;
 
   private subscription: Subscription;
@@ -32,13 +35,22 @@ export class ScanSomethingComponent implements AfterViewInit, IMessageHandler<an
   constructor(
     private log: Logger, private session: SessionService, public devices: DeviceService,
     @Optional() public dialogRef: MatDialogRef<ScanSomethingComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: IScan, private scannerService: ScannerService) {
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: IScan, private scannerService: ScannerService,
+    private mediaService: OpenposMediaService) {
 
     this.subscription = this.session.registerMessageHandler(this, 'Screen');
 
     if (data) {
       this.scanSomethingData = data;
     }
+
+    this.isMobile = mediaService.mediaObservableFromMap(new Map([
+      ['xs', true],
+      ['sm', false],
+      ['md', false],
+      ['lg', false],
+      ['xl', false]
+    ]));
   }
 
   handle(message: any) {

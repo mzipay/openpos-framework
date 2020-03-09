@@ -18,14 +18,14 @@
     </div>
 
     <app-scan-something waffle-top-content class="scan-or-search mat-elevation-z3" *ngIf="template.scan"
-        [scanSomethingData]="template.scan"></app-scan-something>
+        [scanSomethingData]="template.scan" [ngClass]="{'mobile-scan-or-search' : isMobile | async}"></app-scan-something>
 
-    <div waffle-title *ngIf="screen.prompt" class="sale-prompt">
+    <div waffle-title *ngIf="screen.prompt" class="sale-prompt" [ngClass]="{'mobile-sale-prompt' : isMobile | async}">
         <span>{{screen.prompt}}</span>
         <app-banner></app-banner> 
     </div>
 
-    <div waffle-body class="sale-content">
+    <div waffle-body class="sale-content" [ngClass]="{'mobile-sale-content' : isMobile | async}">
 
         <ng-container *ngIf="screen.subtitle">
             <mat-card-subtitle *ngIf="screen.subtitle?.length == 1" fxFlex="0 0 auto" class="text-md">{{screen.subtitle}}</mat-card-subtitle>

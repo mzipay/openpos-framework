@@ -29,6 +29,7 @@ export class SellComponent extends AbstractTemplate<any> {
   screen: ISellScreen;
   statusBar: StatusBarData;
   statusSection: SellStatusSectionData;
+  isMobile: Observable<boolean>;
 
   @ViewChild('drawer') drawer;
   public drawerOpen: Observable<boolean>;
@@ -38,6 +39,13 @@ export class SellComponent extends AbstractTemplate<any> {
 
   constructor(private mediaService: OpenposMediaService, protected dialog: MatDialog) {
     super();
+    this.isMobile = mediaService.mediaObservableFromMap(new Map([
+      ['xs', true],
+      ['sm', false],
+      ['md', false],
+      ['lg', false],
+      ['xl', false]
+    ]));
   }
 
   show(screen: any) {
