@@ -2,7 +2,7 @@
 
     <div class="mat-elevation-z10">
         <img *ngIf="screen.logo" [src]="screen.logo | imageUrl" class="home-screen-logo">
-        <app-bacon-strip></app-bacon-strip>
+        <app-bacon-strip *ngIf="screen.baconStrip"></app-bacon-strip>
     </div>
 
     <div class="home-content-wrapper" klass.xs="xs">
