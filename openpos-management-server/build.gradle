@@ -20,6 +20,15 @@ test {
     }
 }
 
+task apiJar(type: Jar) {
+    classifier = "api"
+    from sourceSets.main.output
+}
+
+artifacts {
+    // TODO: check with Chris if this needs changed
+    archives sourcesJar, bootJar, apiJar
+}
 
 // To launch local:
 // java -Dloader.path=./src/test/resources -Dspring.profiles.active=bltest -jar build/libs/openpos-management-server.jar
