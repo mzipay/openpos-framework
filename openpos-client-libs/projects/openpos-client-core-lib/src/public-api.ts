@@ -162,7 +162,6 @@ export * from './lib/screens-deprecated/dynamic-list/dynamic-list.component';
 export * from './lib/screens-deprecated/embedded-web-page/embedded-web-page.component';
 export * from './lib/screens-deprecated/form/form.component';
 export * from './lib/screens-deprecated/full-page-image/full-page-image.component';
-export * from './lib/screens-deprecated/home/home.component';
 export * from './lib/screens-deprecated/item-list/item-list.component';
 export * from './lib/screens-deprecated/item-options/item-options.component';
 export * from './lib/screens-deprecated/item-search-results/item-search-results.component';

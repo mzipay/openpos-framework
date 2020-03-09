@@ -6,7 +6,6 @@ import { FormComponent } from './form/form.component';
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { DynamicListComponent } from './dynamic-list/dynamic-list.component';
 import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
 import { ItemListComponent } from './item-list/item-list.component';
 import { PaymentStatusComponent } from './payment-status/payment-status.component';
 import { PromptComponent } from './prompt/prompt.component';
@@ -64,7 +63,6 @@ export const ScreenConstants = {
         { name: 'DynamicForm', component: DynamicFormComponent },
         { name: 'DynamicList', component: DynamicListComponent },
         { name: 'Login', component: LoginComponent },
-        { name: 'Home', component: HomeComponent },
         { name: 'ItemList', component: ItemListComponent },
         { name: 'MultiselectItemList', component: MultiselectItemListComponent },
         { name: 'PaymentStatus', component: PaymentStatusComponent },
@@ -118,7 +116,6 @@ export const ScreenConstants = {
         { name: 'Form', component: FormComponent },
         { name: 'Login', component: LoginComponent },
         { name: 'LoginDialog', component: LoginDialogComponent },
-        { name: 'Home', component: HomeComponent },
         { name: 'ItemList', component: ItemListComponent },
         { name: 'MultiselectItemList', component: MultiselectItemListComponent },
         { name: 'PaymentStatus', component: PaymentStatusComponent },

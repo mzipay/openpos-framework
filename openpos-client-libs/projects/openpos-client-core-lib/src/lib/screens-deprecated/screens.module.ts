@@ -37,7 +37,6 @@ import { PromptDialogComponent } from './prompt/prompt-dialog.component';
 import { PromptWithOptionsDialogComponent } from './prompt-with-options/prompt-with-options-dialog.component';
 import { ChooseOptionsDialogComponent } from './choose-options/choose-options-dialog.component';
 import { PromptComponent } from './prompt/prompt.component';
-import { HomeComponent } from './home/home.component';
 
 const screens = [
     FormComponent,
@@ -58,7 +57,6 @@ const screens = [
     DataTableComponent,
     AutoCompleteAddressComponent,
     PromptComponent,
-    HomeComponent
 ];
 
 const dialogs = [
