@@ -28,6 +28,8 @@ import { StaticTableComponent } from './static-table/static-table.component';
 import { VersionComponent } from './version/version.component';
 import { OptionsComponent } from './options/options.component';
 import { WaitComponent } from './wait/wait.component';
+import { HomeComponent } from '../screens-with-parts/home/home.component';
+
 
 const screens = [
         ItemListComponent,
@@ -52,7 +54,8 @@ const screens = [
         PromptWithOptionsComponent,
         StaticTableComponent,
         OptionsComponent,
-        WaitComponent
+        WaitComponent,
+        HomeComponent
     ];
 
 const dialogs = [
