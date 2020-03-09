@@ -2,16 +2,24 @@
     text-align: left;
 }
 
-.scan-or-search{
+.scan-or-search {
     margin: 16px 24px;
 }
 
-.sale-prompt{
+.mobile-scan-or-search {
+    margin: 16px 8px 0px 8px;
+}
+
+.sale-prompt {
     font-size: 24px;
     padding: 16px 24px;
 }
 
-.sale-content{
+.mobile-sale-prompt {
+    margin: 8px;
+}
+
+.sale-content {
     flex-direction: column;
     box-sizing: border-box;
     display: flex;
@@ -23,6 +31,10 @@
     margin: 0px 24px 8px 24px;
 }
 
-.drawer-content{
+.mobile-sale-content {
+    margin: 0px 8px 8px 8px;
+}
+
+.drawer-content {
     padding: 8px;
 }
