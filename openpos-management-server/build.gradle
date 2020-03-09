@@ -15,3 +15,12 @@ test {
         includeTestsMatching 'org.jumpmind.pos.management.*'
     }
 }
+
+task apiJar(type: Jar) {
+    classifier = "api"
+    from sourceSets.main.output
+}
+
+artifacts {
+    archives sourcesJar, bootJar, apiJar
+}
