@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { ISellItem } from '../../../core/interfaces/sell-item.interface';
 import { SessionService } from '../../../core/services/session.service';
 import { IActionItem } from '../../../core/interfaces/action-item.interface';
+import { OpenposMediaService } from '../../../core/services/openpos-media.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -14,6 +16,17 @@ export class ItemCardComponent {
   @Input() item: ISellItem;
   @Input() session: SessionService;
   @Input() isReadOnly = false;
+  isMobile: Observable<boolean>;
+
+  constructor(private mediaService: OpenposMediaService) {
+    this.isMobile = mediaService.mediaObservableFromMap(new Map([
+      ['xs', true],
+      ['sm', false],
+      ['md', false],
+      ['lg', false],
+      ['xl', false]
+    ]));
+  }
 
   public doMenuItemAction(menuItem: IActionItem, payLoad: any) {
     this.session.onAction(menuItem, payLoad );

@@ -1,4 +1,4 @@
-<mat-card class="item-card">
+<mat-card class="item-card" [ngClass]="{'mobile-item-card' : isMobile | async}">
     <mat-card-content>
         <img *ngIf="item.imageUrl" src="{{item.imageUrl}}" alt="{{item.description}}" class="item-card-image">
         <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="stretch" fxLayoutGap="16px" style="padding-left: 16px">

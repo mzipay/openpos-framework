@@ -6,6 +6,7 @@ import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { SelectionMode } from '../../core/interfaces/selection-mode.enum';
 import { Observable } from 'rxjs';
 import { ISelectableListData } from '../../shared/components/selectable-item-list/selectable-list-data.interface';
+import { OpenposMediaService } from '../../core/services/openpos-media.service';
 
 /**
  * @ignore
@@ -25,9 +26,17 @@ export class ItemSearchResultsComponent extends PosScreen<any> {
   listConfig = new SelectableItemListComponentConfiguration();
   listData: Observable<ISelectableListData<any>>;
   index = -1;
+  isMobile: Observable<boolean>;
 
-  constructor() {
+  constructor(private mediaService: OpenposMediaService) {
     super();
+    this.isMobile = mediaService.mediaObservableFromMap(new Map([
+      ['xs', true],
+      ['sm', false],
+      ['md', false],
+      ['lg', false],
+      ['xl', false]
+    ]));
   }
 
   buildScreen() {
