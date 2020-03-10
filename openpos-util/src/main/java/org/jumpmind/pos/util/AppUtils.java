@@ -17,6 +17,12 @@ public final class AppUtils {
         
     private AppUtils() {
     }
+
+    public static void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ex) {}
+    }
     
     public static boolean isDevMode() {
         String value = System.getProperty("profile");
