@@ -17,14 +17,14 @@ public class PrinterTester {
 
     private static IOpenposPrinter createPrinter() {
         Map<String, Object> settings = new HashMap<>();
-        settings.put("printerCommandLocations", "esc_p.properties,toshiba_esc_p.properties");
+        settings.put("printerCommandLocations", "esc_p.properties,epson.properties");
 //        settings.put("connectionClass", "org.jumpmind.pos.print.UsbConnectionFactory");
         settings.put("connectionClass", "org.jumpmind.pos.print.SocketConnectionFactory");
-        settings.put("hostName", "192.168.42.181");
+        settings.put("hostName", "192.168.42.156");
         settings.put("port", "9100");
         settings.put("printWidth", "46");
-//        settings.put("usbVendorId", 0x04b8); // EPSON
-        settings.put("usbVendorId", 0x08a6); // TOSHIBA
+        settings.put("usbVendorId", 0x04b8); // EPSON
+//        settings.put("usbVendorId", 0x08a6); // TOSHIBA
         settings.put("usbProductId", "ANY");
 
 
@@ -46,10 +46,17 @@ public class PrinterTester {
 
             // reset method.
             printer.printNormal(0, printer.getCommand(PrinterCommands.ESC_P_MODE));
+            printer.printNormal(0, printer.getCommand(PrinterCommands.PRINTER_RESET));
             printer.printNormal(0, printer.getCommand(PrinterCommands.FONT_SIZE_MEDIUM));
             printer.printNormal(0, printer.getCommand(PrinterCommands.FORMAT_NORMAL));
             printer.printNormal(0, printer.getCommand(PrinterCommands.ALIGN_LEFT));
             printer.printNormal(0, printer.getCommand(PrinterCommands.LINE_SPACING_SINGLE));
+
+//                        printer.printNormal(0, new String(new byte[] {0x1B,0x4D,0x0}));
+//            printer.printNormal(0, "Font A - an example message with font A.\n");
+//            printer.printNormal(0, new String(new byte[] {0x1B,0x4D,0x1}));
+//            printer.printNormal(0, "Font B - an example message with font B.\n");
+
 
             printer.printImage(Thread.currentThread().getContextClassLoader().getResourceAsStream("images/header-image.png"));
 
@@ -159,7 +166,10 @@ public class PrinterTester {
 
             printer.printNormal(0, "\n\n");
 
-            printer.printBarCode(POSPrinterConst.PTR_S_RECEIPT,"380502001835720192324", POSPrinterConst.PTR_BCS_Code128, 50, 150,
+//            printer.printBarCode(POSPrinterConst.PTR_S_RECEIPT,"380502001835720192324", POSPrinterConst.PTR_BCS_Code128, 50, 150,
+//                    POSPrinterConst.PTR_BC_CENTER, POSPrinterConst.PTR_BC_TEXT_BELOW);
+
+            printer.printBarCode(POSPrinterConst.PTR_S_RECEIPT,"00418002042920180121", POSPrinterConst.PTR_BCS_Code128_Parsed, 50, 150,
                     POSPrinterConst.PTR_BC_CENTER, POSPrinterConst.PTR_BC_TEXT_BELOW);
 
             printer.printNormal(0, "\n\n\n\n\n\n");
