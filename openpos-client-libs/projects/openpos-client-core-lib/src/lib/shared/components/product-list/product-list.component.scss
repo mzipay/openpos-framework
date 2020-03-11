@@ -16,6 +16,10 @@
     width: auto;
 }
 
+:host ::ng-deep .mat-list-option {
+    height: 100% !important;
+}
+
 .sale-line-item {
     height: unset !important;
 }

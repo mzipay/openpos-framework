@@ -50,6 +50,7 @@ public class EscpPOSPrinter implements IOpenposPrinter {
 
     protected void initializePrinter() {
         printNormal(0, getCommand(PrinterCommands.ESC_P_MODE));
+        printNormal(0, getCommand(PrinterCommands.PRINTER_RESET));
         printNormal(0, getCommand(PrinterCommands.FONT_SIZE_MEDIUM));
         printNormal(0, getCommand(PrinterCommands.FORMAT_NORMAL));
         printNormal(0, getCommand(PrinterCommands.ALIGN_LEFT));
@@ -109,6 +110,7 @@ public class EscpPOSPrinter implements IOpenposPrinter {
 
         switch (symbology) {
             case POSPrinterConst.PTR_BCS_Code128:
+            case POSPrinterConst.PTR_BCS_Code128_Parsed:
                 substitutions.put("barcodeType", printerCommands.get(PrinterCommands.BARCODE_TYPE_CODE_128));
                 barcodeData = printerCommands.get(PrinterCommands.BARCODE_TYPE_CODE_128_CODEA) + data;
                 break;

@@ -3,6 +3,23 @@
     margin-bottom: 16px;
 }
 
+.mobile-item-card {
+    margin: 0px; 
+    margin-bottom: 4px;
+
+    .item-card-image {
+        height: 100px;
+    }
+
+    .item-card-title {
+        font-size: 18px;
+    }
+
+    .item-card-details {
+        font-size: 14px;
+    }
+}
+
 .item-card-image {
     height: 275px;
 }

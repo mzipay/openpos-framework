@@ -7,6 +7,8 @@ import { IFormElement } from '../../core/interfaces/form-field.interface';
 import { IActionItem } from '../../core/interfaces/action-item.interface';
 import { ValidatorsService } from '../../core/services/validators.service';
 import { ActionIntercepter, ActionIntercepterBehavior, ActionIntercepterBehaviorType } from '../../core/action-intercepter';
+import { Observable } from 'rxjs';
+import { OpenposMediaService } from '../../core/services/openpos-media.service';
 
 /**
  * @ignore
@@ -28,11 +30,19 @@ export class TenderingComponent extends PosScreen<any> implements OnDestroy {
     totalAmount: IFormElement;
     itemActions: IActionItem[] = [];
     actionButton: IActionItem;
+    isMobile: Observable<boolean>;
 
     tenderFormGroup: FormGroup;
 
-    constructor(private validatorsService: ValidatorsService) {
+    constructor(private validatorsService: ValidatorsService, private mediaService: OpenposMediaService) {
         super();
+        this.isMobile = mediaService.mediaObservableFromMap(new Map([
+            ['xs', true],
+            ['sm', false],
+            ['md', false],
+            ['lg', false],
+            ['xl', false]
+        ]));
     }
 
     ngOnDestroy(): void {

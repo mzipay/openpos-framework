@@ -1,5 +1,26 @@
+.item-options-outer {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.mobile-item-options-outer {
+    flex-direction: column;
+
+    .selected-image {
+        height: 40vh;
+    }
+    
+    .image-list {
+        max-height: 40vh;
+    }
+}
+
 .side-image {
-    height: 120px; 
+    max-height: #{'min(120px, 100%)'};
+    max-width: 100%;
     cursor: pointer;
 }
 
@@ -9,7 +30,7 @@
 }
 
 .image-list {
-    padding-right: 8px; 
-    max-height: 60vh; 
+    padding-right: 8px;
+    max-height: 60vh;
     overflow: auto;
 }
