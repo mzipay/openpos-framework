@@ -1,10 +1,10 @@
-import { Logger } from './logger.service';
 import { Injectable, Type, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SessionService } from './session.service';
 import { IScreen } from '../../shared/components/dynamic-screen/screen.interface';
 import { PersonalizationService } from '../personalization/personalization.service';
+import { DiscoveryService } from '../discovery/discovery.service';
 
 @Injectable({
     providedIn: 'root',
@@ -13,9 +13,10 @@ export class ScreenService {
 
     static screens = new Map<string, Type<IScreen>>();
 
-    constructor(private log: Logger, private componentFactoryResolver: ComponentFactoryResolver, private http: HttpClient,
+    constructor(private componentFactoryResolver: ComponentFactoryResolver, private http: HttpClient,
         private personalization: PersonalizationService,
-        private session: SessionService) { }
+        private session: SessionService,
+        private discovery: DiscoveryService) { }
 
     public addScreen(name: string, type: Type<IScreen>): void {
         if (type === null) {
@@ -24,7 +25,7 @@ export class ScreenService {
 
         if (ScreenService.screens.get(name)) {
             // tslint:disable-next-line:max-line-length
-            this.log.info(`replacing registration for screen of type ${ScreenService.screens.get(name).name} with ${type.name} for the key of ${name} in the screen service`);
+            console.info(`replacing registration for screen of type ${ScreenService.screens.get(name).name} with ${type.name} for the key of ${name} in the screen service`);
             ScreenService.screens.delete(name);
         }
         ScreenService.screens.set(name, type);
@@ -45,13 +46,13 @@ export class ScreenService {
         if (screenType) {
             return this.componentFactoryResolver.resolveComponentFactory(screenType);
         } else {
-            this.log.error(`Could not find a screen type of: ${type}.  Please register it with the screen service`);
+            console.error(`Could not find a screen type of: ${type}.  Please register it with the screen service`);
             return this.resolveScreen('Blank', theme);
         }
     }
 
     public getFieldValues(fieldId: string, searchTerm?: string): Observable<any> {
-        const url: string = this.personalization.getApiServerBaseURL() + '/app/'
+        const url: string = this.discovery.getApiServerBaseURL() + '/app/'
             + this.session.getAppId() + '/node/'
             + this.personalization.getDeviceId() + '/control/'
             + fieldId;
@@ -60,7 +61,7 @@ export class ScreenService {
         if (searchTerm) {
             httpParams['searchTerm'] = searchTerm;
         }
-        this.log.info(`Requesting field values from the server using url: ${url}, params: '${JSON.stringify(httpParams)}'`);
+        console.info(`Requesting field values from the server using url: ${url}, params: '${JSON.stringify(httpParams)}'`);
         return this.http.get(url, { params: httpParams });
     }
 
