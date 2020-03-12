@@ -198,4 +198,7 @@ openpos:
 logging:
   level:
     org.jumpmind: INFO
-    
+
+spring:
+  pid:
+    file: ${openpos.managementServer.mainWorkDirPath}/openpos-mgmt.pid
