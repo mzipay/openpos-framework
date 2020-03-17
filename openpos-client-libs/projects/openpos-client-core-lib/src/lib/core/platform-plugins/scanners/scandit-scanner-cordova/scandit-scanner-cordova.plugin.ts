@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Observable, Subject} from 'rxjs';
-import {filter, takeUntil} from 'rxjs/operators';
+import {filter} from 'rxjs/operators';
 import {SessionService} from '../../../services/session.service';
 import {IPlatformPlugin} from '../../platform-plugin.interface';
 import {IScanData} from '../scan.interface';
@@ -22,6 +22,9 @@ export class ScanditScannerCordovaPlugin implements IScanner, IPlatformPlugin {
     private context: any;
     private dialogRef: MatDialogRef<ScanditCameraViewComponent>;
     private listener: any;
+    private viewFinderType: string;
+    private enableVibrate: boolean;
+    private enableBeep: boolean;
 
 
     constructor( sessionService: SessionService, private matDialog: MatDialog) {
@@ -42,6 +45,15 @@ export class ScanditScannerCordovaPlugin implements IScanner, IPlatformPlugin {
                 let codes = m.enabledCodes.split(',');
                 codes.forEach( code => this.settings.enableSymbology(ScanditBarcodeUtils.convertFromOpenposType(code.trim()), true));
             }
+            if(m.viewFinderType){
+                this.viewFinderType = m.viewFinderType;
+            }
+            if(m.enableVibrate){
+                this.enableVibrate = m.enableVibrate;
+            }
+            if(m.enableBeep){
+                this.enableBeep = m.enableBeep;
+            }
         });
 
         sessionService.getMessages('Screen', 'Dialog').subscribe( m => {
@@ -56,6 +68,7 @@ export class ScanditScannerCordovaPlugin implements IScanner, IPlatformPlugin {
         return Observable.create( (initialized: Subject<string>) => {
             this.context = Scandit.DataCaptureContext.forLicenseKey(this.licenseKey);
             this.barcodeCapture = Scandit.BarcodeCapture.forContext(this.context, this.settings);
+            this.barcodeCapture.feedback = this.getFeedback();
             this.barcodeCapture.isEnabled = false;
             const camera = Scandit.Camera.default;
 
@@ -104,8 +117,7 @@ export class ScanditScannerCordovaPlugin implements IScanner, IPlatformPlugin {
                 const view = Scandit.DataCaptureView.forContext(this.context);
                 view.connectToElement(document.getElementById("scandit-capture-view"));
                 const overlay = Scandit.BarcodeCaptureOverlay.withBarcodeCaptureForView(this.barcodeCapture, view);
-                const viewfinder = new Scandit.LaserlineViewfinder();
-                overlay.viewfinder = viewfinder;
+                overlay.viewfinder = this.getViewfinderType();
             }
         )
     }
@@ -114,5 +126,33 @@ export class ScanditScannerCordovaPlugin implements IScanner, IPlatformPlugin {
         console.log("Scanned ", session);
         let scanData = ({type: ScanditBarcodeUtils.convertToOpenposType(session.newlyRecognizedBarcodes[0].symbology), data: session.newlyRecognizedBarcodes[0].data}) as IScanData;
         this.scanData$.next(scanData);
+    }
+
+    private getViewfinderType(){
+        if(this.viewFinderType){
+            switch(this.viewFinderType){
+                case 'Laser':
+                    console.log('Scandit Setting Laserline ViewFinder')
+                    return new Scandit.LaserlineViewfinder();
+                case 'Rectangular':
+                    console.log('Scandit Setting Rectangular ViewFinder')
+                    return new Scandit.RectangularViewfinder();
+                case 'Spotlight':
+                    console.log('Scandit Setting Spotlight ViewFinder')
+                    return new Scandit.SpotlightViewfinder();
+            }
+        }
+        return null;
+    }
+
+    private getFeedback(){
+        const feedback = Scandit.BarcodeCaptureFeedback.default;
+        feedback.success = new Scandit.Feedback(
+            this.enableVibrate ? Scandit.Vibration.defaultVibration() : null,
+            this.enableBeep ? Scandit.Sound.defaultSound() : null);
+
+        console.log('Scandit Feedback', feedback);
+
+        return feedback;
     }
 }
