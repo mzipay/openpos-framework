@@ -73,7 +73,8 @@ registerLocaleData(locale_frCA, 'fr-CA');
         StartupComponent,
         StartupFailedComponent,
         DialogContentComponent,
-        SplashScreenComponent
+        SplashScreenComponent,
+        ScanditCameraViewComponent
     ],
     declarations: [
         DialogContentComponent,
