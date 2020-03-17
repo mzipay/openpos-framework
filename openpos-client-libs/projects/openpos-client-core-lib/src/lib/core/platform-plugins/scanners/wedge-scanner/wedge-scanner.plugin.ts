@@ -202,4 +202,7 @@ interface ControlSequence { modifiers: string[]; key: string; }
         return { type, data: s.slice(this.codeTypeLength)};
     }
 
+    triggerScan() {
+    }
+
 }
