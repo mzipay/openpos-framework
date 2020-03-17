@@ -32,7 +32,7 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
     private scanServiceSubscription: Subscription;
 
     constructor(public devices: DeviceService, messageProvider: MessageProvider,
-                mediaService: OpenposMediaService, private scannerService: ScannerService ) {
+                mediaService: OpenposMediaService, public scannerService: ScannerService ) {
         super(messageProvider);
         const mobileMap = new Map([
             ['xs', true],
