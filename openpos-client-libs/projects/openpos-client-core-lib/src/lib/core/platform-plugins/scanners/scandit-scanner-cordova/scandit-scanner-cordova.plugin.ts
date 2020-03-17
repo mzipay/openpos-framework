@@ -16,7 +16,7 @@ export class ScanditScannerCordovaPlugin implements IScanner, IPlatformPlugin {
 
     private licenseKey = "";
     private scanData$ = new Subject<IScanData>();
-    private settings = new Scandit.BarcodeCaptureSettings();
+    private settings;
     private barcodeCapture: any = {};
     private cameraSettings;
     private context: any;
@@ -37,11 +37,11 @@ export class ScanditScannerCordovaPlugin implements IScanner, IPlatformPlugin {
                 this.licenseKey = m.licenseKey;
             }
             Object.getOwnPropertyNames(m).forEach( propName => {
-                if(this.settings.hasOwnProperty(propName)){
+                if(this.settings && this.settings.hasOwnProperty(propName)){
                     this.settings[propName] = m[propName];
                 }
             });
-            if(m.enabledCodes){
+            if(m.enabledCodes && this.settings){
                 let codes = m.enabledCodes.split(',');
                 codes.forEach( code => this.settings.enableSymbology(ScanditBarcodeUtils.convertFromOpenposType(code.trim()), true));
             }
@@ -66,6 +66,7 @@ export class ScanditScannerCordovaPlugin implements IScanner, IPlatformPlugin {
 
     initialize(): Observable<string> {
         return Observable.create( (initialized: Subject<string>) => {
+            this.settings = new Scandit.BarcodeCaptureSettings();
             this.context = Scandit.DataCaptureContext.forLicenseKey(this.licenseKey);
             this.barcodeCapture = Scandit.BarcodeCapture.forContext(this.context, this.settings);
             this.barcodeCapture.feedback = this.getFeedback();
