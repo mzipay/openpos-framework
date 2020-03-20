@@ -7,7 +7,7 @@
                     for SVG icon
                 -->
                 <button *ngIf="isScanAllowed(); else iconBlock" type="button" mat-button matPrefix mat-icon-button (click)="onScan()">
-                    <mat-icon svgIcon="barcode"></mat-icon>
+                    <app-icon matPrefix iconClass="material-icons mat-24 primary" iconName="barcode"></app-icon>
                 </button> 
                 <ng-template #iconBlock>
                     <app-icon matPrefix iconClass="material-icons mat-48 primary" [iconName]="promptIcon"></app-icon>

@@ -4,9 +4,8 @@ import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/for
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ErrorStateMatcher } from '@angular/material';
-import { OldPluginService } from '../../../core/services/old-plugin.service';
-import { BarcodeScannerPlugin } from '../../../core/oldplugins/barcode-scanner.plugin';
-import { Scan } from '../../../core/oldplugins/scan';
+import { ScannerService } from '../../../core/platform-plugins/scanners/scanner.service';
+import { SessionService } from '../../../core/services/session.service';
 
 @Component({
     selector: 'app-prompt-input',
@@ -33,8 +32,10 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     keyboardLayout = 'en-US';
 
     private barcodeEventSubscription: Subscription;
+    private scanServiceSubscription: Subscription;
 
-    constructor(private log: Logger, private datePipe: DatePipe, private pluginService: OldPluginService) {
+    constructor(private log: Logger, private datePipe: DatePipe,
+        private session: SessionService, private scannerService: ScannerService) {
     }
 
     isNumericField(): boolean {
@@ -67,22 +68,8 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-
         if (this.scanEnabled) {
-            this.pluginService.getPluginWithOptions('barcodeScannerPlugin', true, { waitForCordovaInit: true }).then(plugin => {
-                // the onBarcodeScanned will only emit an event when client code passes a scan
-                // event to the plugin.  This won't be called for cordova barcodescanner plugin
-                // camera-based scan events.  It should only be used for third party scan events
-                // which come from other sources such as a scan device
-                this.barcodeEventSubscription = (<BarcodeScannerPlugin>plugin).onBarcodeScanned.subscribe({
-                    next: (scan: Scan) => {
-                        this.log.info(`app-prompt-input got scan event: ${scan.value}`);
-                        this.setFieldValue(scan.value);
-                    }
-                });
-                this.log.info(`app-prompt-input is subscribed for barcode scan events`);
-
-            }).catch(error => this.log.info(`Failed to get barcodeScannerPlugin.  Reason: ${error}`));
+            this.registerScanner();
         }
 
         this.setKeyboardLayout();
@@ -93,6 +80,16 @@ export class PromptInputComponent implements OnInit, OnDestroy {
         if (this.barcodeEventSubscription) {
             this.barcodeEventSubscription.unsubscribe();
         }
+        this.unregisterScanner();
+        this.scannerService.stopScanning();
+    }
+
+    onBecomingActive() {
+        this.registerScanner();
+    }
+
+    onLeavingActive() {
+        this.unregisterScanner();
     }
 
     isScanAllowed(): boolean {
@@ -105,20 +102,7 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     // For device-based scan events, see the ngOnInit method.
 
     onScan(): void {
-        this.pluginService.getDevicePlugin('barcodeScannerPlugin').then(plugin =>
-            plugin.processRequest(
-                { requestId: 'scan', deviceId: 'barcode-scanner', type: null, subType: null, payload: null },
-                (scan) => {
-                    if (scan instanceof Scan && !scan.cancelled) {
-                        this.setFieldValue(scan.value);
-                    }
-                },
-                (error) => {
-                    console.error('Scanning failed: ' + error);
-                }
-            )
-        ).catch(error => this.log.info(`Scanning failed: ${error}`)
-        );
+        this.scannerService.triggerScan();
     }
 
     private setFieldValue(value: any) {
@@ -128,20 +112,35 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     }
 
     private setKeyboardLayout() {
-        if (this.responseType)  {
+        if (this.responseType) {
             if (['numerictext', 'money', 'phone', 'postalCode', 'percent', 'percentint', 'income', 'decimal']
-            .indexOf(this.responseType.toLowerCase()) >= 0) {
+                .indexOf(this.responseType.toLowerCase()) >= 0) {
                 this.keyboardLayout = 'Numeric';
             } else if (this.responseType.toLowerCase() === 'email') {
                 this.keyboardLayout = 'Email';
             }
         }
     }
+
+    private registerScanner() {
+        if (typeof this.scanServiceSubscription === 'undefined' || this.scanServiceSubscription === null) {
+            this.scanServiceSubscription = this.scannerService.startScanning().subscribe(scanData => {
+                this.session.onAction('Scan', scanData.data);
+            });
+        }
+    }
+
+    private unregisterScanner() {
+        if (this.scanServiceSubscription) {
+            this.scanServiceSubscription.unsubscribe();
+            this.scanServiceSubscription = null;
+        }
+    }
 }
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
     isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-      const isSubmitted = form && form.submitted;
-      return (control && (control.dirty && control.invalid));  // show error only when dirty and invalid
+        const isSubmitted = form && form.submitted;
+        return (control && (control.dirty && control.invalid));  // show error only when dirty and invalid
     }
 }
