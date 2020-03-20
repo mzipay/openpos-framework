@@ -93,6 +93,11 @@ export class ScanSomethingComponent implements AfterViewInit, IMessageHandler<an
     this.scannerService.stopScanning();
   }
 
+  triggerScan(): void {
+    this.devices.scan();
+    this.scannerService.triggerScan();
+  }
+
   public onEnter(): void {
     if (this.barcode && this.barcode.trim().length >= this.scanSomethingData.scanMinLength) {
       this.session.onAction('Next', this.barcode);

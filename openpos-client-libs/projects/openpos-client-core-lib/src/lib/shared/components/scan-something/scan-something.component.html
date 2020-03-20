@@ -1,5 +1,5 @@
 <app-icon-square-button fxFlex="0 0 auto" class="scan-something-button" [iconName]="'Barcode'"
-  [color]="'primary-inverse'" (buttonClick)="devices.scan()"
+  [color]="'primary-inverse'" (buttonClick)="triggerScan()"
   [ngClass]="{'mobile-scan-something-button' : isMobile | async}"></app-icon-square-button>
 <input #input matInput cdkFocusInitial="true" [keyboardLayout]="'Numeric'" fxFlex="1 1 100%"
   class="scan-something-input" (keyup.enter)="onEnter()" [(ngModel)]="barcode"
