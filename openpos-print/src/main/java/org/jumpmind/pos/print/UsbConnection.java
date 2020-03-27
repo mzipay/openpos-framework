@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import javax.usb.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Data
 public class UsbConnection {
