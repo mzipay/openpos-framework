@@ -1,8 +1,8 @@
 <div class="container mat-elevation-z5" responsive-class>
-    <div class="leftside" [ngClass]="{'leftside-expanded' : searchExpanded}">
+    <div class="leftside" [class.expanded]="searchExpanded">
         <app-icon-button *ngIf="iconButtonName" [iconName]="iconButtonName"
                          [title]="screenData.headerText"
-                         [iconClass]="(isMobile$ | async) ? 'mat-30': 'md'" (buttonClick)="buttonClick()">
+                         [iconClass]="'md'" (buttonClick)="buttonClick()">
         </app-icon-button>
         <app-icon-button *ngIf="helpTextService.isAvailable() | async" iconName="help"
             (click)="helpTextService.toggle()"></app-icon-button>
@@ -12,13 +12,15 @@
     <div *ngIf="!(isMobile | async) && !searchExpanded">
         <img *ngIf="screenData.logo" [src]="screenData.logo | imageUrl">
     </div>
-    <div *ngIf="!searchExpanded" class="rightside">
-        <div>
-            {{operatorInfo}}
-        </div>
-        <div responsive-class class="status">
-            {{statusLine}}
-        </div>
+    <div *ngIf="!searchExpanded && screenData.operatorLine1" class="rightside">
+        <p class="operator-name">{{screenData.operatorLine1}}</p>
+        <p class="operator-id">{{screenData.operatorLine2}}</p>
+        <app-icon-button class="icon" *ngIf="screenData.endSession && screenData.endSession.action" [iconName]="screenData.endSession.icon"
+                         iconClass="md" (buttonClick)="doAction(screenData.endSession)">
+        </app-icon-button>
+        <app-icon class="icon" *ngIf="screenData.endSession && !screenData.endSession.action" [iconName]="screenData.endSession.icon"
+                         iconClass="md">
+        </app-icon>
     </div>
 </div>
 <mat-sidenav-container>
