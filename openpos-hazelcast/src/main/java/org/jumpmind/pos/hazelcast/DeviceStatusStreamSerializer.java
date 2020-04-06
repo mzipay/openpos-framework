@@ -3,7 +3,6 @@ package org.jumpmind.pos.hazelcast;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.StreamSerializer;
-import org.jumpmind.pos.core.device.DeviceStatus;
 import org.jumpmind.pos.util.DefaultObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

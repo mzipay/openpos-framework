@@ -1,6 +1,5 @@
 package org.jumpmind.pos.hazelcast;
 
-import org.jumpmind.pos.core.device.DeviceStatus;
 import org.jumpmind.pos.util.event.AppEvent;
 
 import java.util.concurrent.ConcurrentMap;

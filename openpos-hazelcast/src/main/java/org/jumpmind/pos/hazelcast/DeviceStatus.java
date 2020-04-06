@@ -1,4 +1,4 @@
-package org.jumpmind.pos.core.device;
+package org.jumpmind.pos.hazelcast;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.AllArgsConstructor;
