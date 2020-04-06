@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jumpmind.pos.core.event.DeviceHeartbeatEvent;
 import org.jumpmind.pos.util.event.AppEvent;
 import org.jumpmind.pos.util.event.ITransientEvent;
+import org.jumpmind.pos.util.model.DeviceStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;

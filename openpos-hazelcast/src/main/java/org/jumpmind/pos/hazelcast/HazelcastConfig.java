@@ -4,6 +4,7 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.SerializerConfig;
 import org.jumpmind.pos.util.event.AppEvent;
+import org.jumpmind.pos.util.model.DeviceStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
