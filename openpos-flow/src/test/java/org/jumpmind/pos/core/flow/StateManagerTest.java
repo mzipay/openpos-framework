@@ -77,6 +77,9 @@ public class StateManagerTest {
     @Mock
     private IErrorHandler errorHandler;
 
+    @Mock
+    private ActionHandlerHelper actionHelper;
+
     @Before
     public void setup() throws Exception {
 
@@ -168,15 +171,17 @@ public class StateManagerTest {
         
         stateManager.setInitialFlowConfig(config);
         ActionHandlerImpl actionHandler = new ActionHandlerImpl();
+        ActionHandlerHelper helper = new ActionHandlerHelper();
         TestUtil.setField(actionHandler, "beforeActionService" , new BeforeActionStateLifecycleService());
-        TestUtil.setField(actionHandler, "helper", new ActionHandlerHelper());
+        TestUtil.setField(actionHandler, "helper", helper);
         TestUtil.setField(stateManager, "actionHandler", actionHandler);
         TestUtil.setField(stateManager, "injector", injector);
         TestUtil.setField(stateManager, "outjector", new Outjector());
+        TestUtil.setField(stateManager, "helper", helper);
 
         TestUtil.setField(stateManager, "transitionStepConfigs", buildTestTransitionSteps());
         TestUtil.setField(stateManager, "stateLifecycle", new StateLifecycle());
-     
+
         stateManager.setErrorHandler(null);
     }
 
