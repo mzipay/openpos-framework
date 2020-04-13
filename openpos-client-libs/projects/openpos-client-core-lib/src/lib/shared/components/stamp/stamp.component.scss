@@ -1,0 +1,16 @@
+:host {
+  transform: rotate(20deg);
+  font-weight: 700;
+  border-width: .5rem;
+  border-style: double;
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  text-transform: uppercase;
+  border-radius: 1rem;
+  font-family: 'Courier', serif;
+  -webkit-mask-size: 944px 604px;
+  mask-size: 944px 604px;
+  mix-blend-mode: multiply;
+  text-align: center;
+  opacity: .3;
+}

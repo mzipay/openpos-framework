@@ -5,6 +5,7 @@
 }
 
 .item-count {
+    grid-area: item-count;
     display: flex;
     height: fit-content;
     padding-top: 12px;
@@ -12,8 +13,23 @@
     justify-content: center;
     align-items: center;
 }
+.status-stamp {
+    grid-area: status-stamp;
+    grid-row-start: status-stamp;
+    grid-row-end: buttons;
+    justify-self: stretch;
+    align-self: center;
+    text-align: center;
+}
 
 .sale-total-background {
+    grid-template-areas:
+        "status-stamp"
+        "item-count"
+        "content"
+        "buttons";
+    grid-template-rows: 0 min-content minmax(0, 1fr) min-content;
+    grid-template-columns: minmax(0, 1fr);
     display: grid;
     align-self: stretch;
     justify-self: stretch;
@@ -23,8 +39,9 @@
     overflow-y: auto;
 
     .sale-total-content {
+        grid-area: content;
         display: grid;
-        grid-row-gap: 32px;
+        align-items: center;
         padding-left: 24px;
         padding-right: 24px;
 
@@ -97,6 +114,7 @@
     }
 
     .sale-total-buttons {
+        grid-area: buttons;
         display: grid;
         align-self: end;
 
@@ -118,7 +136,7 @@
 
             .sale-total-loyalty-icon {
                 max-width: 100%;
-                max-height: 5em;
+                max-height: 5rem;
 
                 &.small-desktop-landscape {
                     max-height: 3em;
