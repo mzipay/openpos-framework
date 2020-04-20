@@ -27,15 +27,18 @@ public class SimulatedRemoteStrategy extends LocalOnlyStrategy implements IInvoc
         ObjectMapper mapper = DefaultObjectMapper.build();
         mapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        Object[] newArgs = new Object[args.length];
-        for (int i = 0; i < args.length; i++) {
-            newArgs[i] = mapper.readValue(mapper.writeValueAsString(args[i]), args[i].getClass());
+        Object[] newArgs = null;
+        if (args != null) {
+            newArgs = new Object[args.length];
+            for (int i = 0; i < args.length; i++) {
+                newArgs[i] = mapper.readValue(mapper.writeValueAsString(args[i]), args[i].getClass());
+            }
         }
         Object retObj = super.invoke(config, proxy, method, endpoints, newArgs);
         if (retObj instanceof List<?>) {
             String className = ((AnnotatedParameterizedType) method.getAnnotatedReturnType()).getAnnotatedActualTypeArguments()[0].getType().getTypeName();
             return mapper.readValue(mapper.writeValueAsString(retObj), mapper.getTypeFactory().constructCollectionType(List.class, Class.forName(className)));
         }
-        return mapper.readValue(mapper.writeValueAsString(retObj), retObj.getClass());
+        return retObj != null ? mapper.readValue(mapper.writeValueAsString(retObj), retObj.getClass()) : null;
     }
 }
