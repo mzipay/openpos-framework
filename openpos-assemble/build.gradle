@@ -37,15 +37,17 @@ task generateSourceArtifact(type: Copy) {
     }
     into('build/openpos-server-core-lib')
     from('../') {
-        exclude '**/target', '**/build', '**/bin', '**/src/test/java', 'openpos.code-workspace',
+        exclude '**/target', '**/build', '**/bin', 'openpos.code-workspace',
                 'openpos-client-seed','openpos-cordova', 'openpos-test-module', 'openpos-cordova-log-plugin',
+                'openpos-client-personalize', 'openpos-client-libs/node','**/coverage','**/node/node-v10.5.0-linux-x64',
                 '**/node_modules', '**/dist', 'openpos-test-server', 'openpos-assemble',
                 'node', 'azure-pipelines*.yml', '**/*.iml', '**/.project', '**/.classpath', '**/.gitignore', 
                 '**/.idea', '**/.settings', '**/.gradle'
     }
     from('../') {
-        exclude '**/target', '**/build', '**/bin', '**/src/test/java', 'openpos.code-workspace',
+        exclude '**/target', '**/build', '**/bin', 'openpos.code-workspace',
                 'openpos-client-seed','openpos-cordova', 'openpos-test-module', 'openpos-cordova-log-plugin',
+                'openpos-client-personalize', 'openpos-client-libs/node','**/coverage','**/node/node-v10.5.0-linux-x64',
                 'openpos-client-libs', 'openpos-test-server', 'openpos-assemble',
                 'node', 'azure-pipelines*.yml', '**/*.iml', '**/.project', '**/.classpath', '**/.gitignore',
                 '**/.idea', '**/.settings', '**/.gradle'
