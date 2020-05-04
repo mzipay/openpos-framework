@@ -31,6 +31,9 @@ public class UsbConnectionFactory implements IConnectionFactory {
         try {
             usbConnection = usbHelper.openUsbConnection(vendorId, deviceId);
         } catch (Exception ex) {
+            if (ex instanceof PrintException) {
+                throw ex;
+            }
             throw new PrintException("Failed to open USB connection to printer using settings: " + settings, ex);
         }
 
