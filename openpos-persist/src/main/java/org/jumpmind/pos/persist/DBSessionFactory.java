@@ -38,20 +38,22 @@ public class DBSessionFactory {
     IDatabasePlatform databasePlatform;
     TypedProperties sessionContext;
     List<Class<?>> modelClazzes;
+    List<Class<?>> modelExtensionClasses;
     TagHelper tagHelper;
 
-    public void init(IDatabasePlatform databasePlatform, TypedProperties sessionContext, List<Class<?>> entities, TagHelper tagHelper) {
+    public void init(IDatabasePlatform databasePlatform, TypedProperties sessionContext, List<Class<?>> entities, List<Class<?>> extensionEntities, TagHelper tagHelper) {
 
         QueryTemplates queryTemplates = getQueryTemplates(sessionContext.get("module.tablePrefix"));
         DmlTemplates dmlTemplates = getDmlTemplates(sessionContext.get("module.tablePrefix"));
 
-        init(databasePlatform, sessionContext, entities, queryTemplates, dmlTemplates, tagHelper);
+        init(databasePlatform, sessionContext, entities, extensionEntities, queryTemplates, dmlTemplates, tagHelper);
     }
 
     public void init(
             IDatabasePlatform databasePlatform,
             TypedProperties sessionContext,
             List<Class<?>> entities,
+            List<Class<?>> extensionEntities,
             QueryTemplates queryTemplatesObject,
             DmlTemplates dmlTemplates,
             TagHelper tagHelper) {
@@ -62,6 +64,7 @@ public class DBSessionFactory {
 
         this.databasePlatform = databasePlatform;
         this.modelClazzes = entities;
+        this.modelExtensionClasses = extensionEntities;
         this.tagHelper = tagHelper;
 
         this.initSchema();
@@ -72,7 +75,7 @@ public class DBSessionFactory {
         databaseSchema.init(sessionContext.get("module.tablePrefix"), databasePlatform,
                 this.modelClazzes.stream().filter(e -> e.getAnnotation(org.jumpmind.pos.persist.TableDef.class) != null)
                         .collect(Collectors.toList()),
-                this.modelClazzes.stream().filter(e -> e.getAnnotation(Extends.class) != null).collect(Collectors.toList()));
+                this.modelExtensionClasses);
     }
 
     public void createAndUpgrade() {

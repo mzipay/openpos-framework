@@ -53,7 +53,8 @@ public class TestPersistCarsConfig {
             sessionFactory.init(
                     PersistTestUtil.testDbPlatform(), 
                     PersistTestUtil.getSessionContext(), 
-                    Arrays.asList(CarModel.class, CarStats.class, ServiceInvoice.class, RaceCarModel.class), 
+                    Arrays.asList(CarModel.class, CarStats.class, ServiceInvoice.class, RaceCarModel.class),
+                    Arrays.asList(CarModelExtension.class),
                     queryTemplates,
                     DBSessionFactory.getDmlTemplates("persist-test"), tagHelper);
             
