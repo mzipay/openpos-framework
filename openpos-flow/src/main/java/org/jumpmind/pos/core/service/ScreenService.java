@@ -427,10 +427,10 @@ public class ScreenService implements IScreenService, IActionListener {
 
     protected void logScreenTransition(String deviceId, UIMessage screen) throws JsonProcessingException {
         if (loggerGraphical.isInfoEnabled()) {
-            logger.info("Show screen on node \"" + deviceId + "\" (" + screen.getClass().getName() + ")\n"
+            logger.info("Show screen on device \"" + deviceId + "\" (" + screen.getClass().getName() + ")\n"
                     + drawBox(screen.getId(), screen.getScreenType()));
         } else {
-            logger.info("Show screen on node \"" + deviceId + "\"(\" + screen.getClass().getName() + \")\n");
+            logger.info("Show screen on device \"" + deviceId + "\"(\" + screen.getClass().getName() + \")\n");
         }
     }
 
