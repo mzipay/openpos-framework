@@ -19,7 +19,7 @@ public class YamlTransitionStepProvider {
         try {
             Resource[] resources = resolver.getResources("classpath*:/" + path + "/*-steps.yml");
             if (resources == null || resources.length == 0) {
-                log.warn("Failed to load YML transition steps. pattern: classpath*:/" + path + "/*-steps.yml");
+                log.info("Did not find YML transition steps. pattern: classpath*:/" + path + "/*-steps.yml");
                 return null;
             } else {
                 return loadYamlTransitionStepConfigs(resources[0].getInputStream(), flowConfigLoader);
