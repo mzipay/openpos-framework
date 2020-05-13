@@ -19,10 +19,10 @@ public class AsyncExecutor {
     private List<ScheduledFuture<?>> scheduledJobs;
 
     @In(scope = ScopeType.Device)
-    private IStateManager stateManager;
+    IStateManager stateManager;
 
     @Autowired
-    private StateManagerContainer stateManagerContainer;
+    StateManagerContainer stateManagerContainer;
 
     @PostConstruct
     public void init() {

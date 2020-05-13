@@ -13,6 +13,7 @@ public class AsyncExecutorTest {
     @Before
     public void setup() {
         asyncExecutor = new AsyncExecutor();
+        asyncExecutor.stateManagerContainer = new StateManagerContainer();
         asyncExecutor.init();
     }
 
