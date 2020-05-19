@@ -45,6 +45,7 @@ import org.jumpmind.pos.core.flow.config.TransitionStepConfig;
 import org.jumpmind.pos.core.service.ScreenService;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.server.service.IMessageService;
+import org.jumpmind.pos.util.clientcontext.ClientContext;
 import org.jumpmind.pos.util.model.Message;
 import org.jumpmind.pos.util.startup.DeviceStartupTaskConfig;
 import org.jumpmind.symmetric.io.data.reader.IExtractDataReaderSource;
@@ -183,7 +184,9 @@ public class StateManagerTest {
 
         TestUtil.setField(stateManager, "transitionStepConfigs", buildTestTransitionSteps());
         TestUtil.setField(stateManager, "stateLifecycle", new StateLifecycle());
-        TestUtil.setField(stateManager, "stateManagerContainer", new StateManagerContainer());
+        StateManagerContainer stateManagerContainer = new StateManagerContainer();
+        TestUtil.setField(stateManagerContainer, "clientContext", new ClientContext());
+        TestUtil.setField(stateManager, "stateManagerContainer", stateManagerContainer);
 
         stateManager.setErrorHandler(null);
     }
