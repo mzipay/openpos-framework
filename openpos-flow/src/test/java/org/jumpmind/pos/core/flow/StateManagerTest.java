@@ -166,27 +166,12 @@ public class StateManagerTest {
         config.addGlobalTransitionOrActionHandler("SomeGlobalAction", GlobalActionHandler.class);
         config.addGlobalTransitionOrActionHandler("SomeGlobalActionWithException", GlobalActionHandlerWithException.class);
         config.addGlobalSubTransition("CustomerLookupGlobal", customerFlow);
-        // config.addGlobalSubTransition("VendorList", vendorFlow);
-        
-        LocaleMessageFactory localeMessageFactory = new LocaleMessageFactory();
-        TestUtil.setField(localeMessageFactory, "supportedLocales", new String[] {"en_US"});
-        TestUtil.setField(stateManager, "localeMessageFactory", localeMessageFactory);
-        
+
+        stateManager = StateManagerTestUtils.buildStateManager(injector, null);
+
         stateManager.setInitialFlowConfig(config);
-        ActionHandlerImpl actionHandler = new ActionHandlerImpl();
-        ActionHandlerHelper helper = new ActionHandlerHelper();
-        TestUtil.setField(actionHandler, "beforeActionService" , new BeforeActionStateLifecycleService());
-        TestUtil.setField(actionHandler, "helper", helper);
-        TestUtil.setField(stateManager, "actionHandler", actionHandler);
-        TestUtil.setField(stateManager, "injector", injector);
-        TestUtil.setField(stateManager, "outjector", new Outjector());
-        TestUtil.setField(stateManager, "helper", helper);
 
         TestUtil.setField(stateManager, "transitionStepConfigs", buildTestTransitionSteps());
-        TestUtil.setField(stateManager, "stateLifecycle", new StateLifecycle());
-        StateManagerContainer stateManagerContainer = new StateManagerContainer();
-        TestUtil.setField(stateManagerContainer, "clientContext", new ClientContext());
-        TestUtil.setField(stateManager, "stateManagerContainer", stateManagerContainer);
 
         stateManager.setErrorHandler(null);
     }
@@ -262,22 +247,12 @@ public class StateManagerTest {
     }
 
     private void doAction(Action action) {
-        stateManager.doAction(action);
-        action.awaitProcessing();
-
-        try {
-            while (!stateManager.isAtRest()) {
-                Thread.sleep(10);
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        StateManagerTestUtils.doAction(stateManager, action);
     }
 
 
     private void doAction(String actionName) {
-        Action action = new Action(actionName);
-        doAction(action);
+        StateManagerTestUtils.doAction(stateManager, new Action(actionName));
     }
 
     @Test
