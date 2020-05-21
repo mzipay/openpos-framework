@@ -57,13 +57,10 @@ import { LocationService, PROVIDERS } from './services/location.service';
 import { LocationProviderDefault } from './location-providers/location-provider-default';
 import { ConsoleIntercepter, LOGGERS } from './logging/console-interceptor.service';
 import { ServerLogger } from './logging/server-logger.service';
-import { ElectronLogger } from './logging/electron-logger';
 import { CLIENTCONTEXT } from './client-context/client-context-provider.interface';
 import { TimeZoneContext } from './client-context/time-zone-context';
 import {UIDataMessageService} from './ui-data-message/ui-data-message.service';
 import { HelpTextService } from './help-text/help-text.service';
-import { ELECTRON_LOGGER_CONFIG, DEFAULT_ELECTRON_LOGGER_CONFIG } from './logging/electron-logger-config';
-
 
 registerLocaleData(locale_enCA, 'en-CA');
 registerLocaleData(locale_frCA, 'fr-CA');
