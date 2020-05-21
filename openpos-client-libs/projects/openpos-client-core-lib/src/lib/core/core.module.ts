@@ -131,9 +131,7 @@ registerLocaleData(locale_frCA, 'fr-CA');
         TrainingOverlayService,
         ConfigurationService,
         KeyPressProvider,
-        { provide: ELECTRON_LOGGER_CONFIG, useValue: DEFAULT_ELECTRON_LOGGER_CONFIG },
         { provide: LOGGERS, useExisting: ServerLogger, multi: true, deps: [HttpClient, PersonalizationService, ConsoleIntercepter] },
-        { provide: LOGGERS, useExisting: ElectronLogger, multi: true },
         HelpTextService,
         { provide: CLIENTCONTEXT, useClass: TimeZoneContext, multi: true }
     ]
