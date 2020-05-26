@@ -31,7 +31,7 @@ export class BaconDrawerComponent extends ScreenPartComponent<BaconStripInterfac
     if(this.screenData.actions) {
       this.screenData.actions.forEach(action => {
         // Give these keys low priority so that keybindings inside the screen can take priority
-        this.keyPressProvider.subscribe(action.keybind, 100, () => super.doAction(action), this.stop$);
+        this.keyPressProvider.subscribe(action.keybind, 90, () => super.doAction(action), this.stop$);
       });
     }
   }

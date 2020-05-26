@@ -21,11 +21,9 @@ export class KeyPressSourceDirective implements OnInit, OnDestroy {
         // Need to do this so that this element can grab key events
         this.renderer.setAttribute(this.el.nativeElement, 'tabindex', '0');
 
-        const keydownEvent$ = fromEvent<KeyboardEvent>(window, 'keydown');
-        const keyupEvent$ = fromEvent<KeyboardEvent>(window, 'keyup');
+        const keydownEvent$ = fromEvent<KeyboardEvent>(this.el.nativeElement, 'keydown');
+        const keyupEvent$ = fromEvent<KeyboardEvent>(this.el.nativeElement, 'keyup');
 
-        // Handling events from the window allows all key presses to be captured,
-        // even if no tab index element, or input element, has focus
         merge(keydownEvent$, keyupEvent$).pipe(
             filter(event => this.el.nativeElement.contains(event.target)),
             tap(event => this.handleKeyboardEvent(event)),
