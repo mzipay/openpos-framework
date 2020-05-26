@@ -297,7 +297,9 @@ public class EscpPOSPrinter implements IOpenposPrinter {
     @Override
     public void endSlipMode() {
         try {
-            beginRemoval(-1);
+            // beginRemoval(-1);
+            getPeripheralConnection().getOut().write(new byte[] {0x0C}); // print and eject slip
+            getPeripheralConnection().getOut().flush();
             getPeripheralConnection().getOut().write(new byte[] {0x1B, 0x63, 0x30, 1}); // select receipt
             getPeripheralConnection().getOut().flush();
         } catch (Exception ex) {
