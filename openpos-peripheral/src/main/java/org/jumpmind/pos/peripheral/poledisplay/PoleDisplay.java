@@ -43,6 +43,10 @@ public class PoleDisplay {
 
     public void showText(String text) {
         try {
+            if (peripheralConnection == null || peripheralConnection.getOut() == null) {
+                log.warn("Not connected to pole display to show text: " + text);
+                this.peripheralConnection = connectionFactory.open(this.settings);
+            }
             peripheralConnection.getOut().write(CLEAR_DISPLAY);
             peripheralConnection.getOut().write(text.getBytes());
         } catch (Exception ex) {

@@ -2,10 +2,11 @@ package org.jumpmind.pos.print;
 
 import lombok.extern.slf4j.Slf4j;
 import gnu.io.*;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URL;
 import java.util.Map;
 
 @Slf4j
@@ -18,8 +19,11 @@ public class RS232ConnectionFactory implements IConnectionFactory {
     public final static String PARITY = "parity";
     public final static String CONNECT_TIMEOUT = "connectTimeout";
 
+    public final static String DLL_NAME = "rxtxSerial.dll";
+
     @Override
     public PeripheralConnection open(Map<String, Object> settings) {
+        checkRxTxDll(settings);
         String portName = (String) settings.get(PORT_NAME);
         if (StringUtils.isEmpty(portName)) {
             throw new PrintException("No PORT_NAME was specified.  Something like COM1 needs " +
@@ -38,6 +42,45 @@ public class RS232ConnectionFactory implements IConnectionFactory {
         }
 
 
+    }
+
+    private void checkRxTxDll(Map<String, Object> settings) {
+        String dllSourcePath = (String) settings.get("dllSourcePath");
+        String dllTargetPath = (String) settings.get("dllTargetPath");
+
+        if (StringUtils.isEmpty(dllSourcePath)) {
+            dllSourcePath = "";
+        }
+        if (StringUtils.isEmpty(dllTargetPath)) {
+            dllTargetPath = ".";
+        }
+
+        String sourceDll = dllSourcePath + "/" + DLL_NAME;
+        String targetDll = dllTargetPath + "/" + DLL_NAME;
+
+        try {
+            if (!new File(targetDll).exists()) {
+                URL sourceDllURL = null;
+                if (new File(sourceDll).exists()) {
+                    sourceDllURL = new File(sourceDll).toURI().toURL();
+                } else {
+                    sourceDllURL = Thread.currentThread().getContextClassLoader().getResource(sourceDll);
+                    if (sourceDllURL == null && sourceDll.startsWith("/")) {
+                        sourceDllURL = Thread.currentThread().getContextClassLoader().getResource(sourceDll.substring(1));
+                    }
+                }
+
+                if (sourceDllURL != null) {
+                    log.info("Attempting to copy DLL from " + sourceDllURL + " to " + new File(targetDll).getAbsolutePath());
+                    FileUtils.copyInputStreamToFile(sourceDllURL.openStream(), new File(targetDll));
+                } else {
+                    log.warn("Source DLL was not found \"" + sourceDll + "\"");
+                }
+            }
+        } catch (Exception ex) {
+            throw new PrintException("Failed to copy sourceDll=" + sourceDll +
+                    " to targetDll=" + targetDll);
+        }
     }
 
     private PeripheralConnection openSerialPort(Map<String, Object> settings, CommPortIdentifier portIdentifier) throws PortInUseException, UnsupportedCommOperationException, IOException {
