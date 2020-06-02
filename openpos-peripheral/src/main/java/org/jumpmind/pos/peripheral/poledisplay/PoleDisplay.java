@@ -49,7 +49,10 @@ public class PoleDisplay implements IStatusReporter {
             }
             throw new PrintException("Failed to create the connection factory for " + getClass().getName(), ex);
         }
+        log.info("Opening pole display with settings: " + this.settings);
         this.peripheralConnection = connectionFactory.open(this.settings);
+        showText("Starting");
+        log.info("Pole display appears to be successfully opened.");
     }
 
     public void close() {

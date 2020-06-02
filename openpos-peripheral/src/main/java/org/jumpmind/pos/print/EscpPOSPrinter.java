@@ -254,19 +254,21 @@ public class EscpPOSPrinter implements IOpenposPrinter {
     @Override
     public int readPrinterStatus() {
         try {
-            // for now, do non-
             getPeripheralConnection().getOut().flush();
             // TODO this needs work on NCR. Calling this more than a few times puts the printer in a bad state.
             getPeripheralConnection().getOut().write(new byte[] {0x1B, 0x76}); // request status.
-////            getPrinterConnection().getOut().write(new byte[] {0x1D, 0x04, 5});// realtime status request
 
             getPeripheralConnection().getOut().flush();
-            Thread.sleep(500);
-            int statusByte = getPeripheralConnection().getIn().read();
-            if (statusByte == -1) {
-                throw new PrinterException("Can't read printer status.");
+            if (getPeripheralConnection().getIn() != null) {
+                Thread.sleep(500);
+                int statusByte = getPeripheralConnection().getIn().read();
+                if (statusByte == -1) {
+                    throw new PrinterException("Can't read printer status.");
+                }
+                return statusByte;
+            } else {
+                return 0;
             }
-            return 0;
         } catch (Exception ex) {
             if (printerStatusReporter != null) {
                 printerStatusReporter.reportStatus(Status.Error, ex.getMessage());
