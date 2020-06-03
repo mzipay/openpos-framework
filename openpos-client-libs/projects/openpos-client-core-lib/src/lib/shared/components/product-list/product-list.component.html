@@ -26,7 +26,7 @@
             <div mat-line>
                 {{item.subtitle}}
             </div>
-            <div *ngIf="item.fields">
+            <div *ngIf="item.fields" [ngClass]="{'mobile-item-fields' : isMobile | async}">
                 <mat-form-field fxFlex *ngFor="let field of item.fields" [ngSwitch]="field.valueDisplayMode" style="margin-top: 3px; margin-right: 10px">
                     <input [value]="field.value" [name]="field.id" [placeholder]="field.label" matInput readonly=true>
                 </mat-form-field>

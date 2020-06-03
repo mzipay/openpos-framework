@@ -30,3 +30,8 @@ mat-list-item.disabled{
     text-decoration: none;
     pointer-events: none;
 }
+
+.mobile-item-fields {
+    display: grid !important;
+    grid-template-columns: auto auto auto !important;
+}

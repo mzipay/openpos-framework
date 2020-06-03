@@ -2,6 +2,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IItem } from '../../../core/interfaces/item.interface';
 import { IActionItem } from '../../../core/interfaces/action-item.interface';
 import { SelectionMode } from '../../../core/interfaces/selection-mode.enum';
+import { Observable } from 'rxjs';
+import { OpenposMediaService } from '../../../core/services/openpos-media.service';
 
 @Component({
     selector: 'app-product-list',
@@ -20,6 +22,18 @@ export class ProductListComponent {
     @Input() selectionMode: SelectionMode = SelectionMode.Single;
 
     selectedItems: number[] = [];
+
+    isMobile: Observable<boolean>;
+
+    constructor(media: OpenposMediaService) {
+        this.isMobile = media.mediaObservableFromMap(new Map([
+            ['xs', true],
+            ['sm', true],
+            ['md', false],
+            ['lg', false],
+            ['xl', false]
+          ]));
+    }
 
     onItemClick(item: IItem, event: any): void {
         this.itemClick.emit({item, event});

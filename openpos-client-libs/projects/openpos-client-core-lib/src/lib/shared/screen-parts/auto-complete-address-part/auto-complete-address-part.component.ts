@@ -54,7 +54,7 @@ export class AutoCompleteAddressPartComponent extends ScreenPartComponent<IForm>
 
         this.isMobile = media.mediaObservableFromMap(new Map([
             ['xs', true],
-            ['sm', false],
+            ['sm', true],
             ['md', false],
             ['lg', false],
             ['xl', false]
