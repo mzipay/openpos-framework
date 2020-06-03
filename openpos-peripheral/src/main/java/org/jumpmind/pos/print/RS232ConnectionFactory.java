@@ -95,10 +95,12 @@ public class RS232ConnectionFactory implements IConnectionFactory {
         SerialPort serialPort = (SerialPort) commPort;
         serialPort.setSerialPortParams(baudRate, dataBits, stopBits, parity);
         OutputStream out = serialPort.getOutputStream();
+        InputStream in = serialPort.getInputStream();
 
         PeripheralConnection peripheralConnection = new PeripheralConnection();
         peripheralConnection.setRawConnection(serialPort);
         peripheralConnection.setOut(out);
+        peripheralConnection.setIn(in);
         return peripheralConnection;
     }
 
