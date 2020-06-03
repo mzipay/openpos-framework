@@ -2,12 +2,20 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 8px;
+
+    &.mobile {
+        grid-template-columns: auto;
+    }
 }
 
 .address-zip-country {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 8px;
+    
+    &.mobile {
+        grid-template-columns: auto;
+    }
 }
 
 .scrollable-form-card {

@@ -9,6 +9,8 @@ import { ShowErrorsComponent } from '../../components/show-errors/show-errors.co
 import { IForm } from '../../../core/interfaces/form.interface';
 import { IFormElement } from '../../../core/interfaces/form-field.interface';
 import { IActionItem } from '../../../core/interfaces/action-item.interface';
+import { Observable } from 'rxjs';
+import { OpenposMediaService } from '../../../core/services/openpos-media.service';
 
 
 
@@ -25,6 +27,8 @@ export class AutoCompleteAddressPartComponent extends ScreenPartComponent<IForm>
     @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
     @ViewChild('formErrors') formErrors: ShowErrorsComponent;
     form: FormGroup;
+
+    isMobile: Observable<boolean>;
 
     streetAddress: IFormElement;
     addressLine2: IFormElement;
@@ -45,8 +49,16 @@ export class AutoCompleteAddressPartComponent extends ScreenPartComponent<IForm>
 
     @Input() submitButton: IActionItem;
 
-    constructor(private formBuilder: FormBuilder, messageProvider: MessageProvider) {
+    constructor(private formBuilder: FormBuilder, messageProvider: MessageProvider, media: OpenposMediaService) {
         super(messageProvider);
+
+        this.isMobile = media.mediaObservableFromMap(new Map([
+            ['xs', true],
+            ['sm', false],
+            ['md', false],
+            ['lg', false],
+            ['xl', false]
+          ]));
     }
 
     setAddress(address: any) {

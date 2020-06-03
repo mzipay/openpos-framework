@@ -13,7 +13,7 @@
                         (onFieldChanged)="onFieldChanged($event)" (onSelect)="setAddress($event)">
                     </app-dynamic-form-field>
 
-                    <div class="address-city-state">
+                    <div class="address-city-state" [ngClass]="{'mobile' : isMobile | async}">
                         <app-dynamic-form-field *ngIf="locality" [formGroup]="form" [formField]="locality"
                             (onFieldChanged)="onFieldChanged($event)">
                         </app-dynamic-form-field>
@@ -22,7 +22,7 @@
                         </app-dynamic-form-field>
                     </div>
 
-                    <div class="address-zip-country">
+                    <div class="address-zip-country" [ngClass]="{'mobile' : isMobile | async}">
                         <app-dynamic-form-field *ngIf="postalCode" [formGroup]="form" [formField]="postalCode"
                             (onFieldChanged)="onFieldChanged($event)">
                         </app-dynamic-form-field>
