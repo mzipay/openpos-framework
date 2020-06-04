@@ -121,7 +121,7 @@ export class PersonalizationComponent implements IScreen, OnInit {
 
     public personalizeLocal() {
         const personalizationProperties = new Map<string, string>();
-        if (this.serverResponse) {
+        if (this.serverResponse && this.serverResponse.parameters) {
             for (const parameter of this.serverResponse.parameters) {
                 personalizationProperties.set(parameter.property, this.lastFormGroup.get(parameter.property).value);
             }
