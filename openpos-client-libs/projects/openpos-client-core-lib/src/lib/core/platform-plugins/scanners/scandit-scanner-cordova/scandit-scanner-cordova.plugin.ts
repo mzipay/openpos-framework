@@ -31,7 +31,6 @@ export class ScanditScannerCordovaPlugin implements IScanner, IPlatformPlugin {
 
         if (typeof Scandit !== 'undefined') {
             this.settings = new Scandit.BarcodeCaptureSettings();
-
         }
 
         sessionService.getMessages('ConfigChanged').pipe(
@@ -43,16 +42,16 @@ export class ScanditScannerCordovaPlugin implements IScanner, IPlatformPlugin {
                 this.licenseKey = m.licenseKey;
             }
             Object.getOwnPropertyNames(m).forEach(propName => {
-                if (this.settings.hasOwnProperty(propName)) {
+                if (this.settings && this.settings.hasOwnProperty(propName)) {
                     this.settings[propName] = m[propName];
                 }
             });
 
-            if (m.enabledCodes) {
+            if (m.enabledCodes && this.settings) {
                 const codes = m.enabledCodes.split(',');
                 codes.forEach(code => this.settings.enableSymbology(ScanditBarcodeUtils.convertFromOpenposType(code.trim()), true));
                 const code128SymbologySetting = this.settings.settingsForSymbology(Barcode.Symbology.Code128);
-                code128SymbologySetting.activeSymbolCounts = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 23];
+                code128SymbologySetting.activeSymbolCounts = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
             }
             if (m.viewFinderType) {
                 this.viewFinderType = m.viewFinderType;
