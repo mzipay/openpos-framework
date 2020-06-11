@@ -22,7 +22,7 @@
     </div>
 </div>
 
-<app-dynamic-form-part *ngIf="screenData.form" [formName]="'form'" [alternateSubmitActions]="alternateSubmitActions"
+<app-dynamic-form-part *ngIf="screenData.form" [formName]="'form'" [alternateSubmitActions]="alternateSubmitActionNames"
     responsive-class class="tender-form-part"></app-dynamic-form-part>
 
 <app-instructions *ngIf="screenData.prompt" class="tender-payment-instructions" [instructions]="screenData.prompt">

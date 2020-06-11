@@ -13,6 +13,7 @@ import {LifeCycleEvents} from '../../core/messages/life-cycle-events.enum';
 import {LifeCycleTypeGuards} from '../../core/life-cycle-interfaces/lifecycle-type-guards';
 import {MessageTypes} from '../../core/messages/message-types';
 import {ActionService} from '../../core/actions/action.service';
+import {KeyPressProvider} from '../providers/keypress.provider';
 
 export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
     destroyed$ = new Subject();
@@ -24,6 +25,7 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
     messageProvider: MessageProvider;
     mediaService: OpenposMediaService;
     actionService: ActionService;
+    keyPressProvider: KeyPressProvider
     isMobile$: Observable<boolean>;
     initialScreenType = '';
     initialId = '';
@@ -39,6 +41,7 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
             this.mediaService = injector.get(OpenposMediaService);
             this.messageProvider = injector.get(MessageProvider);
             this.actionService = injector.get(ActionService);
+            this.keyPressProvider = injector.get(KeyPressProvider);
         }
         const sizeMap = new Map([
             [MediaBreakpoints.MOBILE_PORTRAIT, true],

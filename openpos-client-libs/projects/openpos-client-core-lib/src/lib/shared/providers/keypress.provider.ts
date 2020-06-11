@@ -1,6 +1,7 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {merge, Observable, Subject, Subscription} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {fromEvent, merge, Observable, Subject, Subscription} from 'rxjs';
+import {filter, map, take, takeUntil, tap} from 'rxjs/operators';
+import {IActionItem} from '../../core/actions/action-item.interface';
 
 /**
  * How to subscribe to keys, and keys with modifiers:
@@ -39,6 +40,41 @@ export class KeyPressProvider implements OnDestroy {
         ).subscribe(() => this.rebuildKeyPressObserver());
     }
 
+    globalSubscribe(actions: IActionItem[] | IActionItem): Observable<IActionItem> {
+        const actionList = Array.isArray(actions) ? actions : [actions];
+
+        actionList.forEach(action => {
+            const key = this.getNormalizedKey(action.keybind);
+            console.log(`[KeyPressProvider]: Globally subscribed to "${key}: ${action.action}"`);
+        });
+
+        return fromEvent(window, 'keydown').pipe(
+            map((event: KeyboardEvent) => this.findMatchingAction(actionList, event)),
+            // Only notify if a matching action was found
+            filter(action => !!action),
+            takeUntil(this.destroyed$)
+        );
+    }
+
+    findMatchingAction(actions: IActionItem[], event: KeyboardEvent): IActionItem {
+        const eventKey = this.getNormalizedKey(event);
+        const eventKeyBinding = this.parse(eventKey)[0];
+
+        return actions.find(action => {
+            // There can be multiple key bindings per action (comma separated, example: ctrl+p,ctrl+a)
+            const actionKeyBindings = this.parse(action.keybind);
+            return actionKeyBindings.some(keyBinding => this.areEqual(eventKeyBinding, keyBinding));
+        });
+    }
+
+    areEqual(keyBindingA: Keybinding, keyBindingB: Keybinding): boolean {
+        return keyBindingA.key === keyBindingB.key &&
+            keyBindingA.altKey === keyBindingB.altKey &&
+            keyBindingA.ctrlKey === keyBindingB.ctrlKey &&
+            keyBindingA.metaKey === keyBindingB.metaKey &&
+            keyBindingA.shiftKey === keyBindingB.shiftKey;
+    }
+
     ngOnDestroy(): void {
         this.destroyed$.next();
     }
@@ -58,42 +94,24 @@ export class KeyPressProvider implements OnDestroy {
         this.keypressSourceUnregistered$.next();
     }
 
-    subscribe(key: string, priority: number, next: (KeyboardEvent) => void, stop$?: Observable<any>): Subscription {
-        if (!key) {
+    subscribe(keyOrActionList: string | string[] | IActionItem | IActionItem[], priority: number, next: (KeyboardEvent, IActionItem?) => void, stop$?: Observable<any>): Subscription {
+        if (!keyOrActionList) {
             console.warn('[KeyPressProvider]: Cannot subscribe to null or undefined or empty string keybinding');
             return;
         }
 
-        const keyBindings = this.parse(key);
-        const subscriptions: Subscription[] = [];
+        let subscriptions;
 
-        keyBindings.forEach(keyBinding => {
-            const normalizedKey = this.getNormalizedKey(keyBinding);
-
-            const subscription = new Subscription(() => {
-                const priorityMap = this.subscribers.get(normalizedKey);
-                const keybindSubscription = priorityMap.get(priority);
-
-                if (keybindSubscription && keybindSubscription.subscription === subscription) {
-                    priorityMap.delete(priority);
-                }
-
-                console.log(`[KeyPressProvider]: Unsubscribing from "${normalizedKey}" and priority "${priority}"`);
-            });
-
-            if (!this.subscribers.has(normalizedKey)) {
-                this.subscribers.set(normalizedKey, new Map<number, KeybindSubscription>());
-            }
-
-            if (this.subscribers.get(normalizedKey).has(priority)) {
-                console.warn(`[KeyPressProvider]: Another subscriber already exists with key "${normalizedKey}" and priority "${priority}"`);
-            } else {
-                console.log(`[KeyPressProvider]: Subscribed to key "${normalizedKey}" and priority "${priority}"`);
-            }
-            this.subscribers.get(normalizedKey).set(priority, new KeybindSubscription(normalizedKey, subscription, priority, next));
-
-            subscriptions.push(subscription);
-        });
+        // Arrays - Recursively call this function with each item
+        if(Array.isArray(keyOrActionList)) {
+            subscriptions = (keyOrActionList as any[]).map(keyOrAction => this.subscribe(keyOrAction, priority, next, stop$));
+        } else {
+            // Single item - Register the binding
+            const key = typeof keyOrActionList === 'string' ? keyOrActionList : keyOrActionList.keybind;
+            const action = typeof keyOrActionList === 'string' ? null : keyOrActionList;
+            const keyBindings = this.parse(key);
+            subscriptions = this.registerKeyBindings(keyBindings, action, priority, next);
+        }
 
         const mainSubscription = new Subscription(() => subscriptions.forEach(s => s.unsubscribe()));
 
@@ -102,6 +120,41 @@ export class KeyPressProvider implements OnDestroy {
         }
 
         return mainSubscription;
+    }
+
+    registerKeyBindings(keyBindings: Keybinding[], action: IActionItem, priority: number, next: (KeyboardEvent, IActionItem?) => void): Subscription[] {
+        const subscriptions = [];
+
+        keyBindings.forEach(keyBinding => {
+            const key = this.getNormalizedKey(keyBinding);
+            const subscription = new Subscription(() => {
+                const priorityMap = this.subscribers.get(key);
+                const keybindSubscription = priorityMap.get(priority);
+
+                if (keybindSubscription && keybindSubscription.subscription === subscription) {
+                    priorityMap.delete(priority);
+                }
+
+                console.log(`[KeyPressProvider]: Unsubscribing from "${key}" with priority "${priority}"`);
+            });
+
+            if (!this.subscribers.has(key)) {
+                this.subscribers.set(key, new Map<number, KeybindSubscription>());
+            }
+
+            if (this.subscribers.get(key).has(priority)) {
+                console.warn(`[KeyPressProvider]: Another subscriber already exists with key "${key}" and priority "${priority}"`);
+            } else if(action) {
+                console.log(`[KeyPressProvider]: Subscribed to "${key}: ${action.action}" with priority "${priority}"`);
+            } else {
+                console.log(`[KeyPressProvider]: Subscribed to key "${key}" with priority "${priority}"`);
+            }
+            this.subscribers.get(key).set(priority, {key, action, subscription, priority, next});
+
+            subscriptions.push(subscription);
+        });
+
+        return subscriptions;
     }
 
     keyHasSubscribers(obj: KeyboardEvent | Keybinding | string): boolean {
@@ -124,7 +177,8 @@ export class KeyPressProvider implements OnDestroy {
 
             if (prioritiesList.length > 0) {
                 const priority = prioritiesList[0];
-                this.subscribers.get(key).get(priority).event(event);
+                const keybindSubscription = this.subscribers.get(key).get(priority);
+                keybindSubscription.next(event, keybindSubscription.action);
             }
         });
     }
@@ -151,16 +205,16 @@ export class KeyPressProvider implements OnDestroy {
         const keyBindings = [];
 
         keys.forEach(theKey => {
-            const parts = Array.from(theKey['matchAll'](this.keyRegex)).map((value: RegExpMatchArray) => value.groups.key);
+            const keyParts = Array.from(theKey['matchAll'](this.keyRegex)).map((value: RegExpMatchArray) => value.groups.key);
             const keyBinding: Keybinding = {
-                key: this.unescapeKey(parts[parts.length - 1].toLowerCase())
+                key: this.unescapeKey(keyParts[keyParts.length - 1].toLowerCase())
             };
 
-            for (let i = 0; i < parts.length - 1; i++) {
-                const part = parts[i].toLowerCase();
+            for (let i = 0; i < keyParts.length - 1; i++) {
+                const keyPart = keyParts[i].toLowerCase();
 
                 // Being flexible with how developers want to specify key modifiers
-                switch (part) {
+                switch (keyPart) {
                     case 'command':
                     case 'cmd':
                     case 'mta':
@@ -203,16 +257,15 @@ export class KeyPressProvider implements OnDestroy {
     }
 }
 
-class KeybindSubscription {
-    constructor(
-        public key: string,
-        public subscription: Subscription,
-        public priority: number,
-        public event: (KeyboardEvent) => void) {
-    }
+export interface KeybindSubscription {
+    key: string;
+    action: IActionItem;
+    subscription: Subscription;
+    priority: number;
+    next: (KeyboardEvent, IActionItem?) => void;
 }
 
-interface Keybinding {
+export interface Keybinding {
     key: string;
     ctrlKey?: boolean;
     altKey?: boolean;
