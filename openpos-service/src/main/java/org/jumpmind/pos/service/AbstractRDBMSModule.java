@@ -182,7 +182,7 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
 
     @Override
     public String getURL() {
-        return getDbProperties(DB_POOL_URL, "jdbc:h2:mem:" + getName());
+        return getDbProperties(DB_POOL_URL, "jdbc:h2:mem:" + getName() + ";DB_CLOSE_ON_EXIT=FALSE");
     }
 
     @Override
