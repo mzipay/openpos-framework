@@ -5,7 +5,8 @@ import {ScreenPartComponent} from '../../screen-part';
 import {BaconStripInterface} from '../bacon-strip.interface';
 import {KeyPressProvider} from '../../../providers/keypress.provider';
 import {Configuration} from '../../../../configuration/configuration';
-import {merge} from 'rxjs';
+import {fromEvent, merge} from 'rxjs';
+import {filter, map, takeUntil} from 'rxjs/operators';
 
 @ScreenPart({name: 'baconStrip'})
 @Component({
@@ -28,11 +29,13 @@ export class BaconDrawerComponent extends ScreenPartComponent<BaconStripInterfac
   screenDataUpdated() {
     this.keybindsEnabled = Configuration.enableKeybinds;
 
-    if(this.screenData.actions) {
-      this.screenData.actions.forEach(action => {
-        // Give these keys low priority so that keybindings inside the screen can take priority
-        this.keyPressProvider.subscribe(action.keybind, 90, () => super.doAction(action), this.stop$);
-      });
+    if(this.keybindsEnabled && this.screenData.actions) {
+      // Give these keys low priority so that keybindings inside the screen can take priority
+      this.keyPressProvider.subscribe(this.screenData.actions, 90, (event, action) => this.doAction(action), this.stop$);
+
+      this.keyPressProvider.globalSubscribe(this.screenData.actions).pipe(
+          takeUntil(this.stop$)
+      ).subscribe(action => super.doAction(action));
     }
   }
 
