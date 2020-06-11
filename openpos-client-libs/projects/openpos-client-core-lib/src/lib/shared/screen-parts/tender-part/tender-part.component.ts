@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
-import {TenderPartInterface} from './tender-part.interface';
-import {ScreenPart} from '../../decorators/screen-part.decorator';
-import {ScreenPartComponent} from '../screen-part';
+import { Component } from '@angular/core';
+import { TenderPartInterface } from './tender-part.interface';
+import { ScreenPart } from '../../decorators/screen-part.decorator';
+import { ScreenPartComponent } from '../screen-part';
+import { ITender } from './tender.interface';
 import {takeUntil} from 'rxjs/operators';
 import {IActionItem} from '../../../core/actions/action-item.interface';
-
 
 @ScreenPart({
     name: 'TenderPart'
@@ -37,5 +37,9 @@ export class TenderPartComponent extends ScreenPartComponent<TenderPartInterface
                 takeUntil(this.destroyed$)
             ).subscribe(action => this.doAction(action));
         }
+    }
+
+    voidTender(tender: ITender, index: number) {
+        this.doAction(tender.voidButton, index);
     }
 }
