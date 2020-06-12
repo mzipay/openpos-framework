@@ -22,15 +22,15 @@
 		</layout>
 	</appender>
 
-	<appender name="TEST"
-		class="org.jumpmind.pos.util.OpenposRollingFileAppender">
-		<param name="File" value="build/junit.log" />
-		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<param name="Append" value="true" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d %p [%c{1}] [%t] %m%n" />
-		</layout>
-	</appender>
+<!--	<appender name="TEST"-->
+<!--		class="org.jumpmind.pos.util.OpenposRollingFileAppender">-->
+<!--		<param name="File" value="build/junit.log" />-->
+<!--		<param name="DatePattern" value="'.'yyyy-MM-dd" />-->
+<!--		<param name="Append" value="true" />-->
+<!--		<layout class="org.apache.log4j.PatternLayout">-->
+<!--			<param name="ConversionPattern" value="%d %p [%c{1}] [%t] %m%n" />-->
+<!--		</layout>-->
+<!--	</appender>-->
 
 	<category name="org">
 		<priority value="WARN" />
@@ -78,7 +78,7 @@
 	<root>
 		<priority value="WARN" />
 		<appender-ref ref="CONSOLE" />
-		<appender-ref ref="TEST" />
+<!--		<appender-ref ref="TEST" />-->
 	</root>
 
 </log4j:configuration>

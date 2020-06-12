@@ -1,9 +1,13 @@
 package org.jumpmind.pos.core.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.PatternLayout;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Filter;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +30,8 @@ import java.util.Date;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+//import org.apache.log4j.Level;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = ClientLogCollectorService.class )
@@ -73,12 +79,25 @@ public class ClientLogCollectorServiceTest {
     @Test
     public void dateFormatTest() throws Exception {
         Logger oldLogger = clientLogCollector.logger;
-        TestingBufferAppender appender = new TestingBufferAppender();
-        appender.setLayout(new PatternLayout("%X{timestamp} [%X{deviceId}] %p %m%n")); 
-        appender.setThreshold(Level.ALL);
-        appender.setImmediateFlush(true);
-        org.apache.log4j.Logger.getLogger(ClientLogCollectorService.class).addAppender(appender);
-        org.apache.log4j.Logger.getLogger(ClientLogCollectorService.class).setLevel(Level.ALL);
+
+        final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        final Configuration config = ctx.getConfiguration();
+
+        // TODO fix this..
+
+//        TestingBufferAppender appender = new TestingBufferAppender();
+//        appender.setLayout(new PatternLayout("%X{timestamp} [%X{deviceId}] %p %m%n"));
+//        appender.setThreshold(Level.ALL);
+//        appender.setImmediateFlush(true);
+
+//        final PatternLayout layout = PatternLayout.createDefaultLayout(config);
+//        final Appender appender = WriterAppender.createAppender(layout, null, writer, writerName, false, true);
+//        appender.start();
+//        config.addAppender(appender);
+//        updateLoggers(appender, config);
+//
+//        LogManager.getLogger(ClientLogCollectorService.class).addAppender(appender);
+//        LogManager.getLogger(ClientLogCollectorService.class).setLevel(Level.ALL);
 
         try {
             Date testDate = new Date();
@@ -97,13 +116,24 @@ public class ClientLogCollectorServiceTest {
                     expectedDateStr, System.getProperty("line.separator"), 
                     expectedDateStr, System.getProperty("line.separator")
             );
-            assertThat(appender.buffer.toString()).isEqualTo(expectedLogOutput);
+//            ("this needs updated for log4j2")
+//            assertThat(appender.buffer.toString()).isEqualTo(expectedLogOutput);
+            assertThat("YES").isEqualTo("Fail");
         } finally {
             clientLogCollector.logger = oldLogger;
-            org.apache.log4j.Logger.getLogger(ClientLogCollectorService.class).removeAppender(appender);
+//            org.apache.log4j.Logger.getLogger(ClientLogCollectorService.class).removeAppender(appender);
         }
         
         
+    }
+
+    private void updateLoggers(final Appender appender, final Configuration config) {
+        final Level level = null;
+        final Filter filter = null;
+        for (final LoggerConfig loggerConfig : config.getLoggers().values()) {
+            loggerConfig.addAppender(appender, level, filter);
+        }
+        config.getRootLogger().addAppender(appender, level, filter);
     }
     
 

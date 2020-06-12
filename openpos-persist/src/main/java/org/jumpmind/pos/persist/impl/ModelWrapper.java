@@ -1,17 +1,8 @@
 package org.jumpmind.pos.persist.impl;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.Map.Entry;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.jumpmind.db.model.Column;
@@ -23,11 +14,16 @@ import org.jumpmind.pos.persist.PersistException;
 import org.jumpmind.pos.persist.model.ITaggedModel;
 import org.jumpmind.pos.persist.model.TagModel;
 import org.jumpmind.pos.util.ReflectUtils;
-import org.jumpmind.pos.util.ReflectionException;
 import org.jumpmind.pos.util.model.ITypeCode;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.Map.Entry;
+
+@Slf4j
 public class ModelWrapper {
-    private static Logger log = Logger.getLogger(ModelWrapper.class);
 
     public static final String ENTITY_RETRIEVAL_TIME = "entity.retrieval.time";
     

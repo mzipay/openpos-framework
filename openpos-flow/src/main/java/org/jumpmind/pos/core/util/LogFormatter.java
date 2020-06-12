@@ -1,25 +1,21 @@
 package org.jumpmind.pos.core.util;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.log4j.Logger;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
+import lombok.extern.slf4j.Slf4j;
 import org.jumpmind.pos.server.model.Action;
 import org.jumpmind.pos.util.AppUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.BeanDescription;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationConfig;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
+import javax.annotation.PostConstruct;
 
 @Component
 @Scope("prototype")
+@Slf4j
 public class LogFormatter {
     
     public static String[] SENSITIVE_FIELDS = new String[] {
@@ -27,9 +23,7 @@ public class LogFormatter {
             "cardNumber", "driverLicense", "pinblock", "routingnumber", "walletidentifier", 
             "emvdata", "track1", "track2", "track3", "approvalcode", "ksnblock", "cardexpirydate", "referralnum",
             "ecomtoken", "issuernumber", "socialsec" };
-    
-    private static Logger log = Logger.getLogger(LogFormatter.class);
-    
+
     private ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL);
     
     @PostConstruct

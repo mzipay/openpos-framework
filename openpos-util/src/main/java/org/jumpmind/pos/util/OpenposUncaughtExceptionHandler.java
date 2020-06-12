@@ -1,9 +1,11 @@
 package org.jumpmind.pos.util;
 
-import java.lang.Thread.UncaughtExceptionHandler;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.Thread.UncaughtExceptionHandler;
+
+
 
 /**
  * An instance of this class can be passed to either the {@link java.lang.Thread#setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler) setDefaultUncaughtExceptionHandler} method

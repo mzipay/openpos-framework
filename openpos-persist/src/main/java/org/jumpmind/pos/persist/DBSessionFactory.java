@@ -1,26 +1,11 @@
 package org.jumpmind.pos.persist;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
-import org.jumpmind.pos.persist.impl.DatabaseSchema;
-import org.jumpmind.pos.persist.impl.DmlTemplate;
-import org.jumpmind.pos.persist.impl.DmlTemplates;
-import org.jumpmind.pos.persist.impl.QueryTemplate;
-import org.jumpmind.pos.persist.impl.QueryTemplates;
+import org.jumpmind.pos.persist.impl.*;
 import org.jumpmind.pos.persist.model.ITaggedModel;
 import org.jumpmind.pos.persist.model.TagHelper;
 import org.jumpmind.pos.persist.model.TagModel;
@@ -28,9 +13,14 @@ import org.jumpmind.properties.TypedProperties;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-public class DBSessionFactory {
+import java.io.InputStream;
+import java.net.URL;
+import java.sql.Types;
+import java.util.*;
+import java.util.stream.Collectors;
 
-    static Logger log = Logger.getLogger(DBSessionFactory.class);
+@Slf4j
+public class DBSessionFactory {
 
     DatabaseSchema databaseSchema;
     Map<String, QueryTemplate> queryTemplates;

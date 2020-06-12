@@ -1,18 +1,11 @@
 package org.jumpmind.pos.util;
 
-import java.io.ByteArrayInputStream;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
-import org.apache.log4j.Logger;
-
+@Slf4j
 public class ObjectUtils {
-
-    private static Logger log = Logger.getLogger(ObjectUtils.class);
 
     public static <T> T deepClone(T object) {
         byte[] bytes = serialize(object);

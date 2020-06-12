@@ -1,19 +1,17 @@
 package org.jumpmind.pos.core.javapos;
 
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
-
 import jpos.JposException;
 import jpos.POSPrinterConst;
 import jpos.services.POSPrinterService19;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Map;
+
+@Slf4j
 public class SimulatedPOSPrinterService extends AbstractSimulatedService implements POSPrinterService19 {
-    static final Log logger = LogFactory.getLog(SimulatedPOSPrinterService.class);
-    protected Logger printerLogger = Logger.getLogger(SimulatedPOSPrinterService.class);
+//    static final Log logger = LogFactory.getLog(SimulatedPOSPrinterService.class);
+//    protected Logger printerLogger = LogManager.getLogger(SimulatedPOSPrinterService.class);
 
     protected boolean asyncMode = true;
     protected int slpLineChars;
@@ -83,7 +81,7 @@ public class SimulatedPOSPrinterService extends AbstractSimulatedService impleme
 
     protected void flush() {
         if (receipt.length() > 0) {
-            printerLogger.info("\n" + receipt);
+//            printerLogger.info("\n" + receipt);
         }
         reset();
     }
