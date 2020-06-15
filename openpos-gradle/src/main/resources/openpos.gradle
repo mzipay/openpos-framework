@@ -27,7 +27,8 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.3'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
     compile group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.13.3'
-
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.8' // for using yml in log4j2
+    
 //    compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: "${slf4jVersion}"
 //    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: "${slf4jVersion}"
 //    compile(group: 'log4j', name: 'log4j', version: "${log4jVersion}")
@@ -38,4 +39,5 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'com.vmlens', name: 'concurrent-junit', version: '1.0.2'
     testCompile "org.springframework:spring-test:$springVersion"
+    testCompile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3', classifier: 'tests' // borrows some code to unit test log output
 }

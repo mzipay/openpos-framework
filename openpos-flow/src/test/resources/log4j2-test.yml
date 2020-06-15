@@ -1,0 +1,19 @@
+Configuration:
+  status: warn
+  name: TestConfig
+  appenders:
+    Console:
+      name: STDOUT
+    List:
+      name: List
+
+  Loggers:
+    logger:
+      -
+        name: org.jumpmind
+        AppenderRef:
+          ref: List
+    Root:
+      level: info
+      AppenderRef:
+        ref: STDOUT

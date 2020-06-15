@@ -5,10 +5,15 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Filter;
+import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.junit.LoggerContextRule;
+import org.apache.logging.log4j.test.appender.ListAppender;
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -26,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,6 +49,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 public class ClientLogCollectorServiceTest {
 
+    private static ListAppender appender;
+
+    @ClassRule
+    public static LoggerContextRule init = new LoggerContextRule("log4j2-test.yml");
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -52,6 +64,12 @@ public class ClientLogCollectorServiceTest {
 
     @Before
     public void beforeTest() {
+        appender.clear();
+    }
+
+    @BeforeClass
+    public static void setupLogging() {
+        appender = init.getListAppender("List");
     }
     
     @Test
@@ -86,6 +104,7 @@ public class ClientLogCollectorServiceTest {
         // TODO fix this..
 
 //        TestingBufferAppender appender = new TestingBufferAppender();
+
 //        appender.setLayout(new PatternLayout("%X{timestamp} [%X{deviceId}] %p %m%n"));
 //        appender.setThreshold(Level.ALL);
 //        appender.setImmediateFlush(true);
@@ -118,6 +137,15 @@ public class ClientLogCollectorServiceTest {
             );
 //            ("this needs updated for log4j2")
 //            assertThat(appender.buffer.toString()).isEqualTo(expectedLogOutput);
+
+            List<LogEvent> logEvents = appender.getEvents();
+            List<String> logMessages = logEvents.stream()
+//                    .filter(event -> event.getLevel().equals(Level.ERROR))
+                    .map(event -> event.getMessage().getFormattedMessage())
+                    .collect(Collectors.toList());
+
+            System.out.println("Messagees: " + logMessages);
+
             assertThat("YES").isEqualTo("Fail");
         } finally {
             clientLogCollector.logger = oldLogger;

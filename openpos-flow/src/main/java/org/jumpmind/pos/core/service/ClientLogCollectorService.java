@@ -8,11 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.annotation.PostConstruct;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
 
 @RestController
 @ApiIgnore
@@ -34,11 +33,11 @@ public class ClientLogCollectorService {
             try {
                 this.timestampFormatter = DateTimeFormatter.ofPattern(timestampFormat).withZone(ZoneId.systemDefault());
             } catch (Exception ex) {
-                logger.error("openpos.clientLogCollector.timestampFormat value of '{}' is not valid. Reason: {}", this.timestampFormat, ex.getMessage());
+                logger.error("openpos.clientLogCollector.timestampFormat value of '{}' is not valid.", this.timestampFormat, ex);
             }
         }
     }
-
+x
     @RequestMapping(method = RequestMethod.POST, value = "api/appId/{appId}/deviceId/{deviceId}/clientlogs")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
