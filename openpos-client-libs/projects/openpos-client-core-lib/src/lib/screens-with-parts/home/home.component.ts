@@ -108,12 +108,12 @@ export class HomeComponent extends PosScreen<HomeInterface> {
   }
 
   public ngAfterViewInit() {
-    (<any>window).player.playVideo();
+//     (<any>window).player.playVideo();
   }
 
   public ngOnDestroy() {
-    console.log('desroy - stopping video.');
-    (<any>window).player.stopVideo();
+//     console.log('desroy - stopping video.');
+//     (<any>window).player.stopVideo();
   }
 
   //       // 2. This code loads the IFrame Player API code asynchronously.
