@@ -4,8 +4,8 @@ Configuration:
   appenders:
     Console:
       name: STDOUT
-    List:
-      name: List
+    RollingFile:
+      name: RollingFile
 
   Loggers:
     logger:

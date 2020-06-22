@@ -1,0 +1,46 @@
+Configuration:
+  status: info
+  packages: org.jumpmind.pos.util.logging
+  name: TestConfig
+  appenders:
+    Console:
+      - name: STDOUT
+        PatternLayout:
+          pattern: "%d %-5p [%X{stateManager}] [%c{1}] [%t] %m %n"
+        LevelRangeFilter:
+          minLevel: INFO
+          maxLevel: TRACE
+        target: SYSTEM_OUT
+      - name: STDERR
+        PatternLayout:
+          pattern: "%d %-5p [%X{stateManager}] [%c{1}] [%t] %m %n"
+        LevelRangeFilter:
+          minLevel: FATAL
+          maxLevel: WARN
+        target: SYSTEM_ERR
+    RollingFile:
+      name: LOGFILE
+      OpenposPatternLayout:
+        pattern: "%d %-5p [%X{stateManager}] [%c{1}] [%t] %m %n"
+      fileName: ${LOG_DIR}/commerce.log
+      filePattern: ${LOG_DIR}/$${date:yyyy-MM-dd}/commerce.%d{yyyy-MM-dd}.log.gz
+      Policies:
+        SizeBasedTriggeringPolicy:
+          size: "10 MB"
+        TimeBasedTriggeringPolicy:
+          interval: 1 # 1 day
+          modulate: true
+      DefaultRolloverStrategy:
+        max: 10
+
+  Loggers:
+    Root:
+      level: debug
+      AppenderRef:
+        - ref: LOGFILE
+        - ref: STDERR
+        - ref: STDOUT
+
+
+
+

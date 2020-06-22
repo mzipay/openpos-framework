@@ -37,7 +37,7 @@ public class ClientLogCollectorService {
             }
         }
     }
-x
+
     @RequestMapping(method = RequestMethod.POST, value = "api/appId/{appId}/deviceId/{deviceId}/clientlogs")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)

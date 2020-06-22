@@ -1,10 +1,13 @@
 package org.jumpmind.pos.util;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicReference;
+import java.net.URL;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
@@ -12,10 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import static org.apache.commons.lang3.StringUtils.*;
+
+
+@Slf4j
 public final class AppUtils {
-    
-    static final Logger logger = LoggerFactory.getLogger(AppUtils.class);
-    
+
     static AtomicReference<String> HOST_NAME = new AtomicReference<String>(null);
 
     private static FastDateFormat timezoneFormatter = FastDateFormat.getInstance("Z");
@@ -75,7 +79,7 @@ public final class AppUtils {
                 }
                 HOST_NAME.compareAndSet(null, hostName);
             } catch (Exception ex) {
-                logger.info("Unable to lookup hostname: " + ex);
+                log.info("Unable to lookup hostname: " + ex);
             }
         }
         return HOST_NAME.get();
@@ -85,8 +89,31 @@ public final class AppUtils {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException ex) {
-            logger.debug("Thread sleep interrupted.", ex);
+            log.debug("Thread sleep interrupted.", ex);
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        URL log4jUrl = Thread.currentThread().getContextClassLoader().getResource("log4j2.yml");
+        if (log4jUrl != null) {
+            System.out.println("log4j2.yml is at: " + log4jUrl);
+        }
+        System.out.println(new File(".").getCanonicalPath());
+
+        log.debug("Debug message here.");
+        log.info("Info message here.");
+        log.warn("Warn message here.");
+
+        Throwable t = new Throwable("Throwable Test");
+        Throwable t2 = new Throwable("Throwable Test2");
+        for (int i = 0; i < 10000000; i++) {
+            String message = StringUtils.repeat('X', 60);
+            log.debug("debug message");
+            log.info("Info message");
+            log.error("Error message here. " + message, t);
+            log.error("Error message here." + message, t2);
+        }
+
     }
     
     
