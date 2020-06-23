@@ -106,7 +106,7 @@ public final class AppUtils {
 
         Throwable t = new Throwable("Throwable Test");
         Throwable t2 = new Throwable("Throwable Test2");
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < 10; i++) {
             String message = StringUtils.repeat('X', 60);
             log.debug("debug message");
             log.info("Info message");

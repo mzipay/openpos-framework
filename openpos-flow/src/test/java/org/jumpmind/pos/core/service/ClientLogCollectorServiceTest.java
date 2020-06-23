@@ -3,12 +3,12 @@ package org.jumpmind.pos.core.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.Filter;
-import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
+//import org.apache.logging.log4j.core.Appender;
+//import org.apache.logging.log4j.core.Filter;
+//import org.apache.logging.log4j.core.LogEvent;
+//import org.apache.logging.log4j.core.LoggerContext;
+//import org.apache.logging.log4j.core.config.Configuration;
+//import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.junit.LoggerContextRule;
 import org.apache.logging.log4j.test.appender.ListAppender;
 import org.junit.Before;
@@ -98,8 +98,8 @@ public class ClientLogCollectorServiceTest {
     public void dateFormatTest() throws Exception {
         Logger oldLogger = clientLogCollector.logger;
 
-        final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        final Configuration config = ctx.getConfiguration();
+//        final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+//        final Configuration config = ctx.getConfiguration();
 
         // TODO fix this..
 
@@ -138,13 +138,13 @@ public class ClientLogCollectorServiceTest {
 //            ("this needs updated for log4j2")
 //            assertThat(appender.buffer.toString()).isEqualTo(expectedLogOutput);
 
-            List<LogEvent> logEvents = appender.getEvents();
-            List<String> logMessages = logEvents.stream()
-//                    .filter(event -> event.getLevel().equals(Level.ERROR))
-                    .map(event -> event.getMessage().getFormattedMessage())
-                    .collect(Collectors.toList());
+//            List<LogEvent> logEvents = appender.getEvents();
+//            List<String> logMessages = logEvents.stream()
+////                    .filter(event -> event.getLevel().equals(Level.ERROR))
+//                    .map(event -> event.getMessage().getFormattedMessage())
+//                    .collect(Collectors.toList());
 
-            System.out.println("Messagees: " + logMessages);
+//            System.out.println("Messagees: " + logMessages);
 
             assertThat("YES").isEqualTo("Fail");
         } finally {
@@ -155,14 +155,14 @@ public class ClientLogCollectorServiceTest {
         
     }
 
-    private void updateLoggers(final Appender appender, final Configuration config) {
-        final Level level = null;
-        final Filter filter = null;
-        for (final LoggerConfig loggerConfig : config.getLoggers().values()) {
-            loggerConfig.addAppender(appender, level, filter);
-        }
-        config.getRootLogger().addAppender(appender, level, filter);
-    }
+//    private void updateLoggers(final Appender appender, final Configuration config) {
+//        final Level level = null;
+//        final Filter filter = null;
+//        for (final LoggerConfig loggerConfig : config.getLoggers().values()) {
+//            loggerConfig.addAppender(appender, level, filter);
+//        }
+//        config.getRootLogger().addAppender(appender, level, filter);
+//    }
     
 
 }
