@@ -1,19 +1,12 @@
 package org.jumpmind.pos.util.logging;
 
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.*;
+
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.zip.CRC32;
-
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
-import ch.qos.logback.classic.pattern.ThrowableProxyConverter;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.classic.spi.IThrowableProxy;
-import ch.qos.logback.classic.spi.LoggingEvent;
-import ch.qos.logback.classic.spi.StackTraceElementProxy;
-import org.slf4j.LoggerFactory;
 
 public class OpenposPatternLayoutEncoder extends PatternLayoutEncoder {
 
@@ -39,7 +32,7 @@ public class OpenposPatternLayoutEncoder extends PatternLayoutEncoder {
     }
 
     public byte[] encode(ILoggingEvent event) {
-        if (event.getThrowableProxy() == null) {
+        if (event.getThrowableProxy() != null) {
             String key = toKey(event);
             if (loggedEventKeys.containsKey(key)) {
                 event = supressStackTrace(event, key);
@@ -63,14 +56,29 @@ public class OpenposPatternLayoutEncoder extends PatternLayoutEncoder {
 
     protected ILoggingEvent appendKey(ILoggingEvent event, String key) {
         String message = getMessageWithKey(event, key, ".init");
-        LogEvent eventClone = new Log4jLogEvent.Builder(event).setMessage(new SimpleMessage(message)).build();
+        ILoggingEvent eventClone = cloneLoggingEvent(event, message, (ThrowableProxy) event.getThrowableProxy());
         return eventClone;
     }
 
     protected ILoggingEvent supressStackTrace(ILoggingEvent event, String key) {
         String message = getMessageWithKey(event, key);
-        LogEvent eventClone = new Log4jLogEvent.Builder(event).setMessage(new SimpleMessage(message)).setThrown(null).build();
+        ILoggingEvent eventClone = cloneLoggingEvent(event, message, null);
         return eventClone;
+    }
+
+    protected ILoggingEvent cloneLoggingEvent(ILoggingEvent event, String message, ThrowableProxy throwableProxy) {
+        LoggingEvent clonedEvent = new LoggingEvent();
+        clonedEvent.setMessage(message);
+        clonedEvent.setThrowableProxy(throwableProxy);
+        clonedEvent.setLevel(event.getLevel());
+        clonedEvent.setArgumentArray(event.getArgumentArray());
+        clonedEvent.setLoggerName(event.getLoggerName());
+        clonedEvent.setMarker(event.getMarker());
+        clonedEvent.setTimeStamp(event.getTimeStamp());
+        clonedEvent.setCallerData(event.getCallerData());
+        clonedEvent.setMDCPropertyMap(event.getMDCPropertyMap());
+        clonedEvent.setThreadName(event.getThreadName());
+        return clonedEvent;
     }
 
     protected String getMessageWithKey(ILoggingEvent event, String key) {
@@ -101,19 +109,14 @@ public class OpenposPatternLayoutEncoder extends PatternLayoutEncoder {
 
             if (stackTraceElements == null || stackTraceElements.length == 0) {
                 buff.append("-jvm-optimized");
-            } else {
-                buff.append(":");
-                buff.append(getThrowableHash(stackTraceElements));
-                return buff.toString();
             }
-
-
+            buff.append(":");
+            buff.append(getThrowableHash(stackTraceElements));
+            return buff.toString();
         } catch (Exception ex) {
             System.err.println("Failed to hash stack trace for " + ex.toString());
             ex.printStackTrace(System.err);
             return null;
         }
     }
-
-
 }

@@ -1,12 +1,12 @@
 <configuration>
 
-    <variable name="LOG_DIR" value="./logs" />
+    <variable name="LOG_DIR" value="${.LOG_DIR:-./logs}" />
+    <variable name="LOG_TARGET" value="${LOG_TARGET:-CONSOLE}" />
+    <variable name="DEV_PATTERN" value="%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are assigned the type
-             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-        <encoder class="org.jumpmind.pos.util.logging.OpenposPatternLayoutEncoder">
-            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${DEV_PATTERN}</pattern>
         </encoder>
     </appender>
 
@@ -26,7 +26,6 @@
     </appender>
 
     <root level="INFO">
-<!--        <appender-ref ref="STDOUT" />-->
         <appender-ref ref="${LOG_TARGET}" />
     </root>
 </configuration>
