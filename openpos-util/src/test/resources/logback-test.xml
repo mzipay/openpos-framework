@@ -1,6 +1,6 @@
 <configuration>
 
-    <variable name="LOG_DIR" value="${.LOG_DIR:-./logs}" />
+    <variable name="LOG_DIR" value="${.LOG_DIR:-./build}" />
     <variable name="LOG_TARGET" value="${LOG_TARGET:-CONSOLE}" />
     <variable name="LOG_PATTERN" value="%d{YYYY-MM-dd HH:mm:ss.SSS} %-5level [%X{stateManager:--}] [%thread] [%class{0}] %msg %n" />
 
@@ -11,10 +11,10 @@
     </appender>
 
     <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/commerce.log</file>
+        <file>${LOG_DIR}/junit.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOG_DIR}/commerce-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/junit-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!-- each file should be at most 100MB, keep 90 days worth of history, but at most 20GB -->
             <maxFileSize>100MB</maxFileSize>
             <maxHistory>90</maxHistory>
@@ -38,7 +38,7 @@
     <logger name="org.jumpmind.symmetric.db.SqlScript" level="ERROR" />
     <logger name="org.springframework.boot.autoconfigure.freemarker" level="ERROR" />
 
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="${LOG_TARGET}" />
     </root>
     
