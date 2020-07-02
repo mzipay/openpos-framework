@@ -9,7 +9,8 @@ import {Subject, Subscription} from 'rxjs';
 export abstract class PosScreen<T extends IAbstractScreen> implements IScreen, OnDestroy {
     screen: T;
     actionService: ActionService;
-
+    beforeScreenDataUpdated$ = new Subject<T>();
+    afterScreenDataUpdated$ = new Subject<T>();
     subscriptions = new Subscription();
     destroyed$ = new Subject();
 
@@ -24,7 +25,9 @@ export abstract class PosScreen<T extends IAbstractScreen> implements IScreen, O
 
     show(screen: any) {
         this.screen = deepAssign(this.screen, screen);
+        this.beforeScreenDataUpdated$.next(this.screen);
         this.buildScreen();
+        this.afterScreenDataUpdated$.next(this.screen);
     }
 
     doAction( action: IActionItem | string, payload?: any) {
