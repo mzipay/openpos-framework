@@ -29,6 +29,8 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -76,6 +78,7 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
     @Value("${openpos.general.failStartupOnModuleLoadFailure:false}")
     boolean failStartupOnModuleLoadFailure;
 
+    @Autowired(required = false)
     protected DataSource dataSource;
 
     protected ISecurityService securityService;
@@ -195,7 +198,8 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
 
     @Override
     public DataSource getDataSource() {
-        if (dataSource == null) {
+        if (dataSource == null ||
+                (dataSource.getClass().getSimpleName().contains("EmbeddedDataSourceProxy"))) {
             setupH2Server();
             if (this.dataSourceBeanName != null) {
                 try {
@@ -205,9 +209,7 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
                     log.warn("Failed to load dataSource with name '{}', will load default dataSource instead. Reason: {}",
                             this.dataSourceBeanName, ex.getMessage());
                 }
-            }
-
-            if (dataSource == null) {
+            } else {
                 Driver.class.getName(); // Load openpos driver wrapper.
                 TypedProperties properties = new TypedProperties();
                 properties.put(DB_POOL_DRIVER, getDriver());

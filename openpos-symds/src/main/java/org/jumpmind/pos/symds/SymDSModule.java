@@ -210,12 +210,6 @@ public class SymDSModule extends AbstractRDBMSModule {
     }
 
     @Override
-    @Bean(name = NAME + "DataSource")
-    public DataSource getDataSource() {
-        return super.getDataSource();
-    }
-
-    @Override
     @Bean(name = NAME + "SessionFactory")
     protected DBSessionFactory sessionFactory() {
         return super.sessionFactory();
