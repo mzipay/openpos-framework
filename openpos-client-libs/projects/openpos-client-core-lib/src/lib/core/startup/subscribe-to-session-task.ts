@@ -66,7 +66,7 @@ export class SubscribeToSessionTask implements IStartupTask {
         }
     }
 
-    protected confirmConnection(maxWaitMillis = 120000): Observable<boolean> {
+    protected confirmConnection(maxWaitMillis = 172800000): Observable<boolean> {
         return Observable.create((result: Subject<boolean>) => {
             this.connectionTimeoutSubscr = timer(0, 500).pipe(takeUntil(timer(maxWaitMillis))).subscribe(
                 x => {
