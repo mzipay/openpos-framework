@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.service.instrumentation.Sample;
-import org.jumpmind.pos.service.instrumentation.ServiceSample;
+import org.jumpmind.pos.service.instrumentation.ServiceSampleModel;
 import org.jumpmind.pos.service.strategy.AbstractInvocationStrategy;
 import org.jumpmind.pos.service.strategy.IInvocationStrategy;
 import org.jumpmind.pos.util.AppUtils;
@@ -211,7 +211,7 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
         } else {
             strategy = strategies.get(config.getStrategy().name());
         }
-        ServiceSample sample = startSample(strategy, config, proxy, method, args);
+        ServiceSampleModel sample = startSample(strategy, config, proxy, method, args);
         Object result = null;
         try {
             result = strategy.invoke(config, proxy, method, endPointsByPath, args);
@@ -234,15 +234,15 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
         }
     }
 
-    protected ServiceSample startSample(
+    protected ServiceSampleModel startSample(
             IInvocationStrategy strategy,
             ServiceSpecificConfig config,
             Object proxy,
             Method method,
             Object[] args) {
-        ServiceSample sample = null;
+        ServiceSampleModel sample = null;
         if (method.isAnnotationPresent(Sample.class)) {
-            sample = new ServiceSample();
+            sample = new ServiceSampleModel();
             sample.setSampleId(installationId + System.currentTimeMillis());
             sample.setInstallationId(installationId);
             sample.setHostname(AppUtils.getHostName());
@@ -254,7 +254,7 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
     }
 
     protected void endSampleSuccess(
-            ServiceSample sample,
+            ServiceSampleModel sample,
             ServiceSpecificConfig config,
             Object proxy,
             Method method,
@@ -267,7 +267,7 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
     }
 
     protected void endSampleError(
-            ServiceSample sample,
+            ServiceSampleModel sample,
             ServiceSpecificConfig config,
             Object proxy,
             Method method,
@@ -282,7 +282,7 @@ public class EndpointDispatchInvocationHandler implements InvocationHandler {
         }
     }
 
-    protected void endSample(ServiceSample sample, ServiceSpecificConfig config, Object proxy, Method method, Object[] args) {
+    protected void endSample(ServiceSampleModel sample, ServiceSpecificConfig config, Object proxy, Method method, Object[] args) {
         if (sample != null) {
             sample.setEndTime(new Date());
             sample.setDurationMs(sample.getEndTime().getTime() - sample.getStartTime().getTime());
