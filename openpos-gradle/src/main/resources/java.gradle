@@ -121,7 +121,7 @@ eclipse {
 
 test {
     if (project.hasProperty('ignoreFailures')) {
-       ignoreFailures = project.property('ignoreFailures').toBoolean
+       ignoreFailures = project.property('ignoreFailures').toBoolean()
     }
     testLogging.showStandardStreams = true
     //Dynamic exclude through property defined in the build.gradle file
