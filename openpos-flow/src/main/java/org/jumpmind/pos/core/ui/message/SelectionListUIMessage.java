@@ -7,6 +7,7 @@ import org.jumpmind.pos.core.ui.ActionItem;
 import org.jumpmind.pos.core.ui.data.SelectionListItem;
 import org.jumpmind.pos.core.ui.AssignKeyBindings;
 import org.jumpmind.pos.core.ui.UIMessage;
+import org.jumpmind.pos.server.model.Action;
 
 @AssignKeyBindings
 public class SelectionListUIMessage extends UIMessage {
@@ -26,7 +27,7 @@ public class SelectionListUIMessage extends UIMessage {
     private int defaultSelectItemIndex = 0;
     private int numberItemsPerPage;
     private int numberTotalItems;
-    private String selectionChangedAction;
+    private ActionItem selectionChangedAction;
     private String fetchDataAction;
 
     
@@ -141,11 +142,15 @@ public class SelectionListUIMessage extends UIMessage {
         this.numberTotalItems = numberTotalItems;
     }
 
-    public String getSelectionChangedAction() {
+    public ActionItem getSelectionChangedAction() {
         return selectionChangedAction;
     }
 
     public void setSelectionChangedAction(String selectionChangedAction) {
+        this.selectionChangedAction = new ActionItem(selectionChangedAction);
+    }
+
+    public void setSelectionChangedAction(ActionItem selectionChangedAction) {
         this.selectionChangedAction = selectionChangedAction;
     }
 
