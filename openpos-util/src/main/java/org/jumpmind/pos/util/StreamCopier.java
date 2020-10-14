@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,8 +21,10 @@ import lombok.extern.slf4j.Slf4j;
  * before the OutputStream is closed.  This provides an opportunity to write
  * to the OutputStream before it is closed.
  */
-@Slf4j
 public class StreamCopier extends Thread {
+    
+    static final Logger log = LoggerFactory.getLogger(StreamCopier.class);
+    
     public static final int BUF_SIZE = 32;
     BufferedInputStream is;
     OutputStream os;
