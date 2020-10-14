@@ -26,6 +26,7 @@ ext {
     slf4jVersion='1.7.25'
     log4jVersion='1.2.17'
     jacksonVersion='2.8.10'
+    lombokVersion='1.18.6'
 }
 
 // update jar files with version information
@@ -138,7 +139,14 @@ configurations {
 
 dependencies {
     deployerJars group: 'org.apache.maven.wagon', name: 'wagon-ssh', version: '3.3.2'
-    dependencies {   compile 'org.projectlombok:lombok:1.18.6' }
+    dependencies {   
+        compile group: 'org.yaml', name: 'snakeyaml', version: '1.23'
+        // compile 'org.projectlombok:lombok:1.18.6' 
+        compileOnly("org.projectlombok:lombok:${lombokVersion}")
+        testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
+        annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+        testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+    }
 }
 
 artifacts {
