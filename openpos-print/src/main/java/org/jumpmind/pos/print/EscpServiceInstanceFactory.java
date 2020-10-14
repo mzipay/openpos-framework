@@ -22,7 +22,6 @@ public class EscpServiceInstanceFactory implements JposServiceInstanceFactory {
 
     private final static String PRINTER_COMMAND_LOCATIONS = "PrinterCommandLocations";
 
-
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public JposServiceInstance createInstance(String s, JposEntry jposentry) throws JposException {
         if (!jposentry.hasPropertyWithName("serviceClass")) {
@@ -56,6 +55,7 @@ public class EscpServiceInstanceFactory implements JposServiceInstanceFactory {
                     }
                 }
             }
+            
 
             if (instance instanceof IOpenposPrinter) {
                 configureOpenposPrinter((IOpenposPrinter)instance, jposentry);
