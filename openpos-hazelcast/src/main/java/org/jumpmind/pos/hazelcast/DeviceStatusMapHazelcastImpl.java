@@ -98,13 +98,19 @@ public class DeviceStatusMapHazelcastImpl implements IDeviceStatusMap, Membershi
 
     @Override
     public void memberRemoved(MembershipEvent event) {
+        log.trace("member removed with id: {}", event.getMember().getUuid().toString());
         if (this.disappearanceHandler != null) {
             String memberId = event.getMember().getUuid().toString();
-            get().values().stream()
-                .filter(deviceStatus -> memberId.equals(deviceStatus.getServerId()))
-                .forEach(deviceStatus -> {
-                    this.disappearanceHandler.accept(deviceStatus.getDeviceId());
-                });
+            try {
+                get().values().stream()
+                        .filter(deviceStatus -> memberId.equals(deviceStatus.getServerId()))
+                        .forEach(deviceStatus -> {
+                            log.trace("Notifying listeners that Device {} has been removed. device server id: {}", deviceStatus.getDeviceId(), deviceStatus.getServerId());
+                            this.disappearanceHandler.accept(deviceStatus.getDeviceId());
+                        });
+            } catch (Exception ex) {
+                log.error("Error while processing member removal for member " +  event.getMember().getUuid().toString(), ex);
+            }
         }
     }
 
