@@ -14,7 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class ResourceLookupScreenPropertyStrategyTest {
 
-    @Mock
+    @Mock(lenient = true)
     IResourceLookupService lookupService;
     
     @InjectMocks

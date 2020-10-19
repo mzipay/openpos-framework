@@ -70,7 +70,7 @@ public class StateManagerTest {
     @Mock
     private ScreenService screenService;
 
-    @Mock
+    @Mock(lenient = true)
     private IMessageService messageService;
     
     @Mock

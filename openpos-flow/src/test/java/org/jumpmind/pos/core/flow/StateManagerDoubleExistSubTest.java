@@ -19,7 +19,7 @@ public class StateManagerDoubleExistSubTest {
     @InjectMocks
     Injector injector;
 
-    @Mock
+    @Mock(lenient = true)
     IMessageService messageService;
 
     @Test

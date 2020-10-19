@@ -38,7 +38,7 @@ public class BeforeActionStateLifeCycleServiceIT {
     @InjectMocks
     Injector injector;
     
-    @Mock
+    @Mock (lenient = true)
     private IMessageService messageService;
 
     @Mock

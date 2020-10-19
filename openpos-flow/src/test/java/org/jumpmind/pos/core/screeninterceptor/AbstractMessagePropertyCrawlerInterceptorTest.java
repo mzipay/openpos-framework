@@ -1,35 +1,22 @@
 package org.jumpmind.pos.core.screeninterceptor;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.AdditionalMatchers.and;
-import static org.mockito.AdditionalMatchers.not;
-import static org.mockito.Matchers.anyMapOf;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Matchers.startsWith;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.jumpmind.pos.util.model.Message;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractMessagePropertyCrawlerInterceptorTest {
 
-    @Mock
     IMessagePropertyStrategy<TestMessage> mockStrategy;
 
     AbstractMessagePropertyCrawlerInterceptor<TestMessage> interceptor;
@@ -38,24 +25,19 @@ public class AbstractMessagePropertyCrawlerInterceptorTest {
     
     @Before
     public void setUp() throws Exception {
-        interceptor = new TestMessageCrawlerInterceptor(mockStrategy);
         // Set up mock IMessagePropertyStrategy to do the following:
         // If the property being processed is a String and starts with "@" character, return hardcoded "foo"
         // else, for all other cases just return the given unmodified value back
-        when(
-            mockStrategy.doStrategy(
-                anyString(), anyString(), and(isA(String.class), startsWith("@")), 
-                any(Class.class), isA(TestMessage.class), anyMapOf(String.class, Object.class)
-            )
-        ).thenReturn("foo");
-        
-        when(
-            mockStrategy.doStrategy(
-                anyString(), anyString(), not(and(isA(String.class), startsWith("@"))), 
-                any(Class.class), isA(TestMessage.class), anyMapOf(String.class, Object.class)
-            )
-        ).then(returnCurrentPropertyValue());
-        
+        mockStrategy = (appId, deviceId, property, clazz, message, messageContext) -> {
+            if (property != null && property instanceof String && property.toString().startsWith("@")) {
+                return "foo";
+            }
+            else {
+                return property;
+            }
+        };
+
+        interceptor = new TestMessageCrawlerInterceptor(mockStrategy);
         testMessage = new TestMessage();
     }
 
