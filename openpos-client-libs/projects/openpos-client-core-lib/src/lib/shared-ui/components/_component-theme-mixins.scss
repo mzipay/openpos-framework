@@ -1,0 +1,5 @@
+@import "carousel/carousel-theme";
+
+@mixin openpos-ui-component-theme-mixins($theme) {
+  @include carousel-theme($theme);
+}

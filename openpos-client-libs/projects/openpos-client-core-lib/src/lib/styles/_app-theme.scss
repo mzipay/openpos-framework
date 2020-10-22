@@ -5,6 +5,7 @@
 @import '../shared/screen-parts/screen-part-themes';
 @import '../screens-with-parts/screen-with-parts-themes';
 @import '../shared/components/component-theme-mixins';
+@import '../shared-ui/components/component-theme-mixins';
 @import './mixins/serrated-edge';
 @import '../self-checkout/self-checkout-themes';
 @import '../customer-display/customer-display-themes';
@@ -65,8 +66,10 @@
 @mixin app-theme($theme) {
 
     @include component-theme-mixins($theme);
+
     @include layout-component-themes($theme);
     @include openpos-component-theme-mixins($theme);
+    @include openpos-ui-component-theme-mixins($theme);
     @include screen-part-themes($theme);
     @include screen-with-parts-themes($theme);
     @include serrated-edge($theme);

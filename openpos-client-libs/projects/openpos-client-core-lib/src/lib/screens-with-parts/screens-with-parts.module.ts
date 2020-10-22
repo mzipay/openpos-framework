@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
+import { SharedUIModule} from '../shared-ui/share-ui.module';
 import {AutoCompleteAddressDialogComponent} from './auto-complete-address/auto-complete-address-dialog.component';
 
 import { SelectionListScreenComponent } from './selection-list/selection-list-screen.component';
@@ -86,7 +87,8 @@ const dialogs = [
         ...dialogs
     ],
     imports: [
-        SharedModule
+        SharedModule,
+        SharedUIModule
     ],
     exports: [
     ],
