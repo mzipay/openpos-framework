@@ -7,6 +7,9 @@ import java.util.Map;
 
 public interface IOpenposPrinter extends POSPrinterService19 {
 
+    static final int DRAWER_OPEN = 0;
+    static final int DRAWER_CLOSED = 1;
+
     public void printImage(InputStream image);
 
     public void openCashDrawer(String cashDrawerId);
@@ -24,6 +27,8 @@ public interface IOpenposPrinter extends POSPrinterService19 {
     public PeripheralConnection getPeripheralConnection();
 
     int readPrinterStatus();
+
+    public int waitForDrawerClose(String cashDrawerId, long timeout);
 
     public void beginSlipMode();
 

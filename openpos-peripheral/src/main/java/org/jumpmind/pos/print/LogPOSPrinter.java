@@ -3,7 +3,9 @@ package org.jumpmind.pos.print;
 import jpos.JposException;
 import jpos.POSPrinterConst;
 import jpos.services.EventCallbacks;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jumpmind.pos.util.AppUtils;
 import org.jumpmind.pos.util.status.Status;
 
 import java.io.InputStream;
@@ -66,6 +68,13 @@ public class LogPOSPrinter implements IOpenposPrinter {
         }
 
         return 0;
+    }
+
+    @Override
+    @SneakyThrows
+    public int waitForDrawerClose(String cashDrawerId, long timeout) {
+        AppUtils.sleep(1000);
+        return DRAWER_CLOSED;
     }
 
     @Override

@@ -3,11 +3,11 @@ package org.jumpmind.pos.print;
 import jpos.JposException;
 import jpos.POSPrinterConst;
 import jpos.services.EventCallbacks;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.jumpmind.pos.util.ClassUtils;
 import org.jumpmind.pos.util.status.Status;
-import org.jumpmind.pos.util.status.StatusReport;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class EscpPOSPrinter implements IOpenposPrinter {
 
     PrinterCommands printerCommands = new PrinterCommandPlaceholders();
@@ -134,7 +135,7 @@ public class EscpPOSPrinter implements IOpenposPrinter {
             printNormal(0, printerCommands.get(PrinterCommands.CASH_DRAWER_STATE));
             code = Integer.toString(getPeripheralConnection().getIn().read());
         } catch (IOException e) {
-            String msg = String.format("Failure while closing cash drawer with id '%s'. Reason: %s",
+            String msg = String.format("Failure while closing cash drawer with id %s'. Reason: %s",
                     cashDrawerId, e.getMessage());
             throw new PrintException(msg, e);
         }
@@ -144,6 +145,32 @@ public class EscpPOSPrinter implements IOpenposPrinter {
     @Override
     public void openCashDrawer(String cashDrawerId) {
         printNormal(0, printerCommands.get(PrinterCommands.CASH_DRAWER_OPEN));
+    }
+
+    @Override
+    public int waitForDrawerClose(String cashDrawerId, long timeout) {
+        long startTime = System.currentTimeMillis();
+        int drawerState = DRAWER_OPEN;
+        try {
+            while (drawerState != DRAWER_CLOSED && System.currentTimeMillis() - startTime < timeout) {
+                    Thread.sleep(1000);
+                    drawerState = isDrawerOpen(cashDrawerId) ? DRAWER_OPEN : DRAWER_CLOSED;
+            }
+        } catch (Exception e) {
+            String msg = String.format("Failure to read the status of the drawer: %s", cashDrawerId);
+            throw new PrintException(msg, e);
+        }
+        return drawerState;
+    }
+
+    public boolean isDrawerOpen(String cashDrawerId) {
+        try {
+            getPeripheralConnection().getOut().write(getCommand(PrinterCommands.CASH_DRAWER_STATE).getBytes());
+            return getPeripheralConnection().getIn().read() == DRAWER_CLOSED ? false : true;
+        } catch (Exception e) {
+            String msg = String.format("Failure to read the status of the drawer: %s", cashDrawerId);
+            throw new PrintException(msg, e);
+        }
     }
 
     @Override
