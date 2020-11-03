@@ -29,16 +29,23 @@
                     </li>
                 </ul>
             </section>
-            <ul responsive-class class="item-card-details" *ngIf="filteredAdditionalLabels && !expanded">
+            <div responsive-class class="item-card-details">
+            <ul *ngIf="filteredLabels && expanded">
+                <li *ngFor="let label of filteredLabels" class="muted-color">
+                    {{label}}
+                </li>
+            </ul>
+            <ul *ngIf="filteredAdditionalLabels && !expanded">
                 <li *ngFor="let additionalLabel of filteredAdditionalLabels" class="muted-color" style="margin-top: 4px">
                     {{additionalLabel.label}}: {{additionalLabel.value}}
                 </li>
             </ul>
-            <ul responsive-class class="item-card-details" *ngIf="item.additionalLabels && expanded">
+            <ul *ngIf="item.additionalLabels && expanded">
                 <li *ngFor="let additionalLabel of item.additionalLabels" class="muted-color">
                     {{additionalLabel.label}}: {{additionalLabel.value}}
                 </li>
             </ul>
+            </div>
         </div>
         <div class="right-side">
             <section class="price" [ngClass]="{'collapsed': !expanded}">

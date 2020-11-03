@@ -19,10 +19,12 @@ export class ItemCardComponent implements OnDestroy {
 
   private _item:ISellItem;
   filteredAdditionalLabels:{label: string, value: string} [];
+  filteredLabels:string [];
 
   @Input() set item(item: ISellItem) {
     this._item = item;
     this.filterAdditionalLabels();
+    this.filterLabels();
   }
 
   get item() {
@@ -91,11 +93,17 @@ export class ItemCardComponent implements OnDestroy {
   }
 
   public filterAdditionalLabels() {
+    if (this.item.additionalLabels){
     this.filteredAdditionalLabels = this.item.additionalLabels.filter(additionalLabel =>
         this.item.collapsedAdditionalLabels.find(
             label => label == additionalLabel.label
         )
     )
+    }
+  }
+
+  public filterLabels() {
+    this.filteredLabels = this.item.labels.filter(label => label.length > 1)
   }
 
   @HostListener('mouseenter')
