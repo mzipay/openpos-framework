@@ -1,7 +1,6 @@
-import {Component, Inject, Injector, OnDestroy, Optional} from '@angular/core';
-import {Observable, Subject, Subscription} from 'rxjs';
+import {Component, Inject, OnDestroy} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
-import { KeyPressProvider } from '../../shared/providers/keypress.provider';
 import {ActionService} from '../actions/action.service';
 import {LockScreenMessage} from '../messages/lock-screen-message';
 import {LOCK_SCREEN_DATA} from './lock-screen.service';
@@ -18,25 +17,19 @@ export class LockScreenComponent implements OnDestroy {
   password = '';
   username = '';
   override = false;
-  keyPressProvider: KeyPressProvider;
-  keyPressSubscription: Subscription;
   destroy = new Subject();
 
   constructor(
       @Inject(LOCK_SCREEN_DATA) data: Observable<LockScreenMessage>,
-      private actionService: ActionService,
-      @Optional() injector: Injector) {
+      private actionService: ActionService) {
       data.pipe(
           tap( message => this.data = message),
           takeUntil(this.destroy)
       ).subscribe();
-      if ( !!injector ) {
-        this.keyPressProvider = injector.get(KeyPressProvider);
-      }
-      this.keyPressSubscription = this.keyPressProvider.subscribe('Enter', 10, () => this.submit());
   }
 
-  submit() {
+  submit($event: any) {
+    $event.stopPropagation();
     if (this.override) {
       this.doOverride();
     } else {
@@ -57,7 +50,6 @@ export class LockScreenComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.keyPressSubscription.unsubscribe();
     this.destroy.next();
   }
 
