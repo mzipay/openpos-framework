@@ -61,13 +61,12 @@ import { CLIENTCONTEXT } from './client-context/client-context-provider.interfac
 import { TimeZoneContext } from './client-context/time-zone-context';
 import {UIDataMessageService} from './ui-data-message/ui-data-message.service';
 import { HelpTextService } from './help-text/help-text.service';
-<<<<<<< feature/play-sounds-burl-0.9
-=======
 import {ErrorStateMatcher, ShowOnDirtyErrorStateMatcher} from "@angular/material/core";
 import { ServerScannerPlugin } from './platform-plugins/scanners/server-scanner/server-scanner.service';
 import {TransactionService} from './services/transaction.service';
-import { AudioService } from './services/audio.service';
->>>>>>> fc2d319 Added audio capabilities and pre-packaged sounds
+import { AudioService } from '../audio/audio.service';
+import { AudioInteractionService } from '../audio/audio-interaction.service';
+import { AudioStartupTask } from '../audio/audio-startup-task';
 
 registerLocaleData(locale_enCA, 'en-CA');
 registerLocaleData(locale_frCA, 'fr-CA');
@@ -116,6 +115,7 @@ registerLocaleData(locale_frCA, 'fr-CA');
         { provide: STARTUP_TASKS, useClass: PersonalizationStartupTask, multi: true, deps: [PersonalizationService, MatDialog]},
         { provide: STARTUP_TASKS, useClass: SubscribeToSessionTask, multi: true, deps: [SessionService, Router]},
         { provide: STARTUP_TASKS, useClass: DialogServiceStartupTask, multi: true, deps: [DialogService]},
+        { provide: STARTUP_TASKS, useClass: AudioStartupTask, multi: true, deps: [SessionService, AudioService, AudioInteractionService]},
         { provide: STARTUP_TASKS, useClass: FinalStartupTask, multi: true, deps: [SessionService]},
         { provide: STARTUP_TASKS, useClass: PlatformReadyStartupTask, multi: true },
         { provide: STARTUP_TASKS, useClass: PluginStartupTask, multi: true },
@@ -140,14 +140,10 @@ registerLocaleData(locale_frCA, 'fr-CA');
         KeyPressProvider,
         { provide: LOGGERS, useExisting: ServerLogger, multi: true, deps: [HttpClient, PersonalizationService, ConsoleIntercepter] },
         HelpTextService,
-<<<<<<< feature/play-sounds-burl-0.9
-        { provide: CLIENTCONTEXT, useClass: TimeZoneContext, multi: true }
-=======
         { provide: CLIENTCONTEXT, useClass: TimeZoneContext, multi: true },
-        { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
         TransactionService,
-        AudioService
->>>>>>> fc2d319 Added audio capabilities and pre-packaged sounds
+        AudioService,
+        AudioInteractionService
     ]
 })
 export class CoreModule {
@@ -157,12 +153,10 @@ export class CoreModule {
                 logger: ConsoleIntercepter,
                 toastService: ToastService,
                 uiDataService: UIDataMessageService,
-                keyProvider: KeyPressProvider,
-                audioService: AudioService) {
+                keyProvider: KeyPressProvider) {
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
         AppInjector.Instance = this.injector;
         keyProvider.registerKeyPressSource(fromEvent(document, 'keydown') as Observable<KeyboardEvent>);
         keyProvider.registerKeyPressSource(fromEvent(document, 'keyup') as Observable<KeyboardEvent>);
-        audioService.listen();
     }
 }
