@@ -140,7 +140,6 @@ import {ScanPartComponent} from './screen-parts/scan-part/scan-part.component';
 import {InstructionsComponent} from './components/instructions/instructions.component';
 import {TitleComponent} from './components/title/title.component';
 import {ContentCardComponent} from './components/content-card/content-card.component';
-import {ContentLicenseComponent} from './components/content-license/content-license.component';
 import {OptionButtonComponent} from './components/option-button/option-button.component';
 import {TenderPartComponent} from './screen-parts/tender-part/tender-part.component';
 import {OrderCardComponent} from './components/order-card/order-card.component';
@@ -153,6 +152,7 @@ import {TransactionHistoryPartComponent} from './screen-parts/transaction-histor
 import {StatusBarComponent} from '../core/status/status-bar/status-bar.component';
 import {StampComponent} from './components/stamp/stamp.component';
 import {FitTextDirective} from './directives/fit-text.directive';
+import { AudioLicenseComponent } from './components/audio-license/audio-license.component';
 
 const screenParts = [
     TenderPartComponent,
@@ -255,7 +255,7 @@ const components = [
     InstructionsComponent,
     TitleComponent,
     ContentCardComponent,
-    ContentLicenseComponent,
+    AudioLicenseComponent,
     OptionButtonComponent,
     OrderCardComponent,
     ButtonActionTimerComponent,
