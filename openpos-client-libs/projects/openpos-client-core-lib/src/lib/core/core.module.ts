@@ -62,8 +62,6 @@ import { TimeZoneContext } from './client-context/time-zone-context';
 import {UIDataMessageService} from './ui-data-message/ui-data-message.service';
 import { HelpTextService } from './help-text/help-text.service';
 import {ErrorStateMatcher, ShowOnDirtyErrorStateMatcher} from "@angular/material/core";
-import { ServerScannerPlugin } from './platform-plugins/scanners/server-scanner/server-scanner.service';
-import {TransactionService} from './services/transaction.service';
 import { AudioStartupTask } from './audio/audio-startup-task';
 import { AudioService } from './audio/audio.service';
 import { AudioRepositoryService } from './audio/audio-repository.service';
@@ -142,7 +140,6 @@ registerLocaleData(locale_frCA, 'fr-CA');
         { provide: LOGGERS, useExisting: ServerLogger, multi: true, deps: [HttpClient, PersonalizationService, ConsoleIntercepter] },
         HelpTextService,
         { provide: CLIENTCONTEXT, useClass: TimeZoneContext, multi: true },
-        TransactionService,
         AudioService,
         AudioInteractionService,
         AudioRepositoryService

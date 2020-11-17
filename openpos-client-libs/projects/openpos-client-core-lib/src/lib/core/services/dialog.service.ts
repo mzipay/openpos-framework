@@ -93,7 +93,7 @@ export class DialogService {
             this.dialogRef = null;
             this.closingDialogRef.close();
 
-            this.session.sendMessage( new LifeCycleMessage(LifeCycleEvents.DialogClosing));
+            this.session.sendMessage( new LifeCycleMessage(LifeCycleEvents.DialogClosing, null));
 
             // Wait for the dialog to fully close before moving on
             await this.closingDialogRef.afterClosed().toPromise();
@@ -165,7 +165,7 @@ export class DialogService {
 
                 if (!this.dialogRef || !this.dialogRef.componentInstance) {
                     console.info('[DialogService] Dialog \'' + dialog.screenType + '\' opening...');
-                    this.session.sendMessage( new LifeCycleMessage(LifeCycleEvents.DialogOpening));
+                    this.session.sendMessage( new LifeCycleMessage(LifeCycleEvents.DialogOpening, dialog));
                     this.beforeOpened$.next(dialogProperties);
                     this.dialogRef = this.dialog.open(DialogContentComponent, dialogProperties);
 
@@ -196,6 +196,8 @@ export class DialogService {
         } finally {
             this.dialogOpening = false;
         }
+        console.log("screen updated");
+        this.session.sendMessage( new LifeCycleMessage(LifeCycleEvents.ScreenUpdated, dialog));
     }
 
 }
