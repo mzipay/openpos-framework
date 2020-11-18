@@ -66,6 +66,7 @@ import { AudioStartupTask } from './audio/audio-startup-task';
 import { AudioService } from './audio/audio.service';
 import { AudioRepositoryService } from './audio/audio-repository.service';
 import { AudioInteractionService } from './audio/audio-interaction.service';
+import { AudioConsolePlugin } from './audio/audio-console.plugin';
 
 registerLocaleData(locale_enCA, 'en-CA');
 registerLocaleData(locale_frCA, 'fr-CA');
@@ -142,7 +143,8 @@ registerLocaleData(locale_frCA, 'fr-CA');
         { provide: CLIENTCONTEXT, useClass: TimeZoneContext, multi: true },
         AudioService,
         AudioInteractionService,
-        AudioRepositoryService
+        AudioRepositoryService,
+        { provide: PLUGINS, useExisting: AudioConsolePlugin, multi: true, deps: [AudioService]}
     ]
 })
 export class CoreModule {
