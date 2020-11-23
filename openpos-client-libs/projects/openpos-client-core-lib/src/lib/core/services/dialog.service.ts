@@ -123,7 +123,8 @@ export class DialogService {
                 this.dialogOpening = true;
                 setTimeout(() => this.openDialog(dialog), 0);
             } else {
-                this.log.info(`[DialogService] Not opening dialog! Here's why: dialogOpening? ${this.dialogOpening}`);
+                this.log.info(`[DialogService] putting off the opening of the dialog to the future because another dialog is currently opening`);
+                setTimeout(() => this.updateDialog(dialog), 100);
             }
         }
     }
