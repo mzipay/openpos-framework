@@ -1,6 +1,7 @@
 export module Barcode{
     export enum Symbology {
         EAN13UPCA = 'ean13Upca',
+        EAN13 = 'ean13',
         UPCE = 'upce',
         EAN8 = 'ean8',
         Code39 = 'code39',

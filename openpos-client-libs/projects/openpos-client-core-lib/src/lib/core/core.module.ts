@@ -71,6 +71,8 @@ import { AudioService } from './audio/audio.service';
 import { AudioRepositoryService } from './audio/audio-repository.service';
 import { AudioInteractionService } from './audio/audio-interaction.service';
 import { AudioConsolePlugin } from './audio/audio-console.plugin';
+import { ScanditScannerViewComponent } from './platform-plugins/scanners/scandit-scanner-web/scandit-scanner-view/scandit-scanner-view.component';
+import { ScanditScannerWebPlugin } from "./platform-plugins/scanners/scandit-scanner-web/scandit-scanner-web.plugin";
 
 registerLocaleData(locale_enCA, 'en-CA');
 registerLocaleData(locale_frCA, 'fr-CA');
@@ -84,6 +86,7 @@ registerLocaleData(locale_frCA, 'fr-CA');
         DialogContentComponent,
         SplashScreenComponent,
         ScanditCameraViewComponent,
+        ScanditScannerViewComponent,
         LockScreenComponent
     ],
     declarations: [
@@ -94,6 +97,7 @@ registerLocaleData(locale_frCA, 'fr-CA');
         StartupFailedComponent,
         SplashScreenComponent,
         ScanditCameraViewComponent,
+        ScanditScannerViewComponent,
         LockScreenComponent
     ],
     imports: [
@@ -126,11 +130,13 @@ registerLocaleData(locale_frCA, 'fr-CA');
         { provide: STARTUP_FAILED_COMPONENT, useValue: StartupFailedComponent},
         AilaScannerCordovaPlugin,
         ScanditScannerCordovaPlugin,
+        ScanditScannerWebPlugin,
         { provide: SCANNERS, useExisting: AilaScannerCordovaPlugin, multi: true},
         { provide: SCANNERS, useExisting: WedgeScannerPlugin, multi: true },
         { provide: SCANNERS, useExisting: InfineaScannerCordovaPlugin, multi: true},
         { provide: SCANNERS, useExisting: ConsoleScannerPlugin, multi: true},
         { provide: SCANNERS, useExisting: ScanditScannerCordovaPlugin, multi: true},
+        { provide: SCANNERS, useExisting: ScanditScannerWebPlugin, multi: true},
         { provide: PLUGINS, useExisting: AilaScannerCordovaPlugin, multi: true},
         { provide: PLUGINS, useExisting: InfineaScannerCordovaPlugin, multi: true},
         { provide: PLUGINS, useExisting: NCRPaymentPlugin, multi: true, deps: [SessionService]},
