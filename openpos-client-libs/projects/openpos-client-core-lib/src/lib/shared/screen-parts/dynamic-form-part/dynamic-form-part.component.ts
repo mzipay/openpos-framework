@@ -9,7 +9,7 @@ import {
     ViewChild,
     ViewChildren
 } from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {AbstractControl, FormGroup} from '@angular/forms';
 import {ScreenPartComponent} from '../screen-part';
 import {FormBuilder} from '../../../core/services/form-builder.service';
 import {DynamicFormFieldComponent} from '../../components/dynamic-form-field/dynamic-form-field.component';
@@ -121,8 +121,35 @@ export class DynamicFormPartComponent extends ScreenPartComponent<IForm> impleme
     }
 
     submitForm() {
-        this.formBuilder.buildFormPayload(this.form, this.screenData);
-        this.doAction(this.submitButton, this.screenData);
+        if(this.form.valid) {
+            this.formBuilder.buildFormPayload(this.form, this.screenData);
+            this.doAction(this.submitButton, this.screenData);
+        } else {
+
+            // Set focus on the first invalid field found
+            const invalidFieldKey = Object.keys(this.form.controls).find(key => {
+                const ctrl: AbstractControl = this.form.get(key);
+                return ctrl.invalid && ctrl.dirty;
+            });
+            if (invalidFieldKey) {
+                const invalidField = this.children.find(f => f.controlName === invalidFieldKey).field;
+                if (invalidField) {
+                    const invalidElement = document.getElementById(invalidFieldKey);
+                    if (invalidElement) {
+                        invalidElement.scrollIntoView();
+                    } else {
+                        invalidField.focus();
+                    }
+                }
+            } else {
+                if (this.formErrors.shouldShowErrors()) {
+                    const formErrorList = this.formErrors.listOfErrors();
+                    if (formErrorList && formErrorList.length > 0) {
+                        document.getElementById('formErrorsWrapper').scrollIntoView();
+                    }
+                }
+            }
+        }
     }
 
     onFieldChanged(formElement: IFormElement) {
