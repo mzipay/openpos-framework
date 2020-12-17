@@ -1,4 +1,4 @@
-import { Component, ViewChild, HostListener } from '@angular/core';
+import { Component, ViewChild, HostListener, Injector } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { SellScreenUtils, ISellScreen } from './sell-screen.interface';
 import { ISellTemplate } from './sell-template.interface';
@@ -37,8 +37,9 @@ export class SellComponent extends AbstractTemplate<any> {
 
   public drawerMode: Observable<string>;
 
-  constructor(private mediaService: OpenposMediaService, protected dialog: MatDialog, public helpTextService: HelpTextService) {
-    super();
+  constructor(private mediaService: OpenposMediaService, protected dialog: MatDialog,
+              public helpTextService: HelpTextService, injector: Injector) {
+    super(injector);
   }
 
   show(screen: any) {
@@ -60,7 +61,7 @@ export class SellComponent extends AbstractTemplate<any> {
 
   public doMenuItemAction(menuItem: IActionItem) {
     if (this.isMenuItemEnabled(menuItem)) {
-      this.session.onAction(menuItem);
+      this.actionService.doAction(menuItem);
     }
   }
 

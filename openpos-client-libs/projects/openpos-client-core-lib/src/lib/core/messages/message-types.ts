@@ -1,5 +1,9 @@
 export class MessageTypes {
     static LIFE_CYCLE_EVENT = 'LifeCycleEvent';
-    static DIALOG = 'dialog';
-    static SCREEN = 'screen';
+    static ACTION = 'action';
+    static DIALOG = 'Dialog';
+    static PROXY = 'proxy';
+    static SCREEN = 'Screen';
+    static TOAST = 'Toast';
+    static CONFIG_CHANGED = 'ConfigChanged';
 }

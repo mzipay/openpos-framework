@@ -13,7 +13,7 @@ import { Scan } from '../oldplugins/scan';
 import { IDeviceRequest } from '../oldplugins/device-request.interface';
 import { IDevicePlugin } from '../oldplugins/device-plugin.interface';
 import { DEVICE_RESPONSE_TYPE, DEVICE_ERROR_RESPONSE_TYPE, DEVICE_DNE_RESPONSE_TYPE } from '../oldplugins/device-response.interface';
-
+import { ActionMessage } from '../messages/action-message';
 @Injectable({
     providedIn: 'root',
 })
@@ -29,9 +29,9 @@ export class DeviceService implements IMessageHandler<any> {
     private cameraScanInProgress = false;
 
     constructor(private log: Logger, protected session: SessionService,
-        private cordovaService: CordovaService,
-        public pluginService: OldPluginService,
-        private fileUploadService: FileUploadService) {
+                private cordovaService: CordovaService,
+                public pluginService: OldPluginService,
+                private fileUploadService: FileUploadService) {
 
         // On iOS need to enter into loading state when the app is backgrounded, otherwise
         // user can execute actions as app is coming back to foreground.
@@ -161,7 +161,7 @@ export class DeviceService implements IMessageHandler<any> {
                             if (response instanceof Scan && source && !response.source) {
                                 response.source = source;
                             }
-                            this.session.onAction('Scan', response);
+                            this.session.sendMessage( new ActionMessage('Scan', true, response));
                         }
                         this.cameraScanInProgress = false;
                     },
