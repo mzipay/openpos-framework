@@ -148,7 +148,7 @@ export class SessionService implements IMessageHandler<any> {
             const actionMessage = message as ActionMessage;
             this.publish(actionMessage.actionName, 'Screen', actionMessage.payload);
         }
-        this.sessionMessages$.next(message);	        this.sessionMessages$.next(message);
+        this.sessionMessages$.next(message);
     }
 
     public getMessages(...types: string[]): Observable<any> {

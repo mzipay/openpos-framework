@@ -211,6 +211,7 @@ export class ActionService implements OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.logger.info('Destroying Action Service');
         if (this.subscriptions) {
             this.subscriptions.unsubscribe();
         }
