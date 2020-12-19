@@ -1127,7 +1127,7 @@ public class StateManager implements IStateManager {
 
     @Override
     public void registerQueryParams(Map<String, Object> queryParams) {
-        if (queryParams != null) {
+        if (queryParams != null && queryParams.size() > 0) {
             log.info("Registering query params " + queryParams.toString());
             applicationState.getScope().setScopeValue(ScopeType.Device, "queryParams", queryParams);
         }
