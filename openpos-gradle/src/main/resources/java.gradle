@@ -55,6 +55,7 @@ repositories {
         url symmetricMavenUrl 
         jcenter()
         mavenCentral()
+        url 'https://jitpack.io'
     } 
 }
 
