@@ -19,7 +19,7 @@
             {{screen.promotions.length > 0 ? screen.itemPromotionsTitle : screen.itemNoPromotionsTitle}}
         </h3>
         <app-instructions *ngIf="screen.promotions && screen.promotions.length > 1"  [instructions]="screen.promotionStackingDisclaimer"
-            [instructionsSize]="'text-md'"></app-instructions>
+            [instructionsSize]="'text-sm'"></app-instructions>
         <div class="promotion-items">
             <ng-container *ngFor="let promo of screen.promotions">
                 <div class="promotion-item-icon">
