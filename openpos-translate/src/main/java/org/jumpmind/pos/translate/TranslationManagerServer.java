@@ -199,11 +199,13 @@ public class TranslationManagerServer implements ITranslationManager, IDeviceMes
                     }
                 }
 
-                if (objects.size() == 0) {
-                    logger.info("{} macro finished", activeMacro.getClass().getSimpleName());
-                    activeMacro = null;
-                } else if (activeMacro != null ){
-                    logger.info("{} macro has {} objects remaining to process", activeMacro.getClass().getSimpleName(), objects.size());
+                if (activeMacro != null) {
+                    if (objects.size() == 0) {
+                        logger.info("{} macro finished", activeMacro.getClass().getSimpleName());
+                        activeMacro = null;
+                    } else {
+                        logger.info("{} macro has {} objects remaining to process", activeMacro.getClass().getSimpleName(), objects.size());
+                    }
                 }
             } else {
                 activeMacro = null;
