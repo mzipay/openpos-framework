@@ -33,7 +33,8 @@ public class ModuleRegistry {
     @PostConstruct
     public void loadModuleDatabaseDefaults() {
         if (this.modules != null) {
-            File file = new File("work", ".h2.server.properties");
+            File file = new File(System.getProperty("java.io.tmpdir"), ".h2.server.properties");
+            file.getParentFile().mkdirs();
             Properties properties = new Properties();
             try {
                 if (file.exists()) {
