@@ -112,10 +112,12 @@ export class OpenposScreenOutletDirective implements OnInit, OnDestroy {
         if (!screen) {
             screen = new SplashScreen();
         }
-
-        if (this.dialogService.isDialogOpen()) {
+        this.log.info(`updateTemplateAndScreen invoked for '${screen.hasOwnProperty('id') ? screen.id : '?'}'`);
+        if (this.dialogService.isDialogOpenOrOpening()) {
             // Close any open dialogs
+            this.log.info(`Not showing screen '${screen.hasOwnProperty('id') ? screen.id : '?'}' until dialog closes...`);
             await this.dialogService.closeDialog();
+            this.log.info(`Dialog closed, will now resume showing screen '${screen.hasOwnProperty('id') ? screen.id : '?'}'`);
             this.focusService.restoreInitialFocus();
         }
 
