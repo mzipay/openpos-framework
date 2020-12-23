@@ -138,6 +138,8 @@ public class DatabaseScriptContainer {
             loadSql(resource.getURL(), failOnError);
         } else if (compareString.endsWith(".csv")) {
             loadCsv(databaseScript, resource, failOnError);
+        } else {
+            throw new PersistException("Unknown script type: \"" + compareString + "\". Expected .sql or .csv");
         }
     }
 
