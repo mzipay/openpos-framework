@@ -94,9 +94,13 @@ public class EndpointInvoker implements InvocationHandler {
             if (controller != null) {
                 String serviceName = controller.value();
                 String implementation = getServiceImplementation(serviceName);
-
-                log.debug("Loading endpoints for the '{}' implementation of {}({})", implementation, i.getSimpleName(),
-                        serviceName);
+                if (implementation != null && !implementation.equals("default")) {
+                    log.info("Loading endpoints for the '{}' implementation of {}({})", implementation, i.getSimpleName(),
+                            serviceName);
+                } else {
+                    log.debug("Loading endpoints for the '{}' implementation of {}({})", implementation, i.getSimpleName(),
+                            serviceName);
+                }
                 Method[] methods = i.getMethods();
                 for (Method method : methods) {
                     String path = buildPath(method);
@@ -141,22 +145,8 @@ public class EndpointInvoker implements InvocationHandler {
                                 implMatchedOverrides.size(), path, implementation)
                 );
             } else if (implMatchedOverrides.size() == 1) {
-                log.debug("Endpoint at path '{}' overridden with {}", path, implMatchedOverrides.get(0).getKey().getClass().getName());
+                log.info("Endpoint at path '{}' overridden with {}", path, implMatchedOverrides.get(0).getKey().getClass().getName());
                 bestMatch = implMatchedOverrides.get(0).getKey();
-            } else {
-                List<SimpleEntry<Object, EndpointOverride>> defaultImplOverrides = pathMatchedOverrides.stream()
-                        .filter(entry -> EndpointOverride.IMPLEMENTATION_DEFAULT.equalsIgnoreCase(entry.getValue().implementation()) ||
-                                StringUtils.isBlank(entry.getValue().implementation()))
-                        .collect(Collectors.toList());
-                if (defaultImplOverrides.size() > 1) {
-                    throw new IllegalStateException(
-                            String.format("Found %d EndpointOverrides having path '%s'. Expected only one.",
-                                    defaultImplOverrides.size(), path)
-                    );
-                } else if (defaultImplOverrides.size() == 1) {
-                    log.debug("Endpoint at path '{}' overridden with {}", path, defaultImplOverrides.get(0).getKey().getClass().getName());
-                    bestMatch = defaultImplOverrides.get(0).getKey();
-                }
             }
         }
 
@@ -196,14 +186,17 @@ public class EndpointInvoker implements InvocationHandler {
         if (endPointsByPath == null) {
             throw new PosServerException("endPointsByPath == null.  This class has not been fully initialized by Spring");
         }
-            Object obj = endPointsByPath.get(path);
+        Object obj = endPointsByPath.get(path);
         ServiceSpecificConfig config = getSpecificConfig(method);
         EndpointSpecificConfig endConfig = null;
+        Endpoint annotation = null;
         if (obj != null) {
-            for (EndpointSpecificConfig aWeirdAcronym : config.getEndpoints()) {
-                Endpoint annotation = obj.getClass().getAnnotation(Endpoint.class);
-                if (annotation != null && annotation.path().equals(aWeirdAcronym.getPath())) {
-                    endConfig = aWeirdAcronym;
+            annotation = obj.getClass().getAnnotation(Endpoint.class);
+            if (annotation != null) {
+                for (EndpointSpecificConfig aWeirdAcronym : config.getEndpoints()) {
+                    if (annotation.path().equals(aWeirdAcronym.getPath())) {
+                        endConfig = aWeirdAcronym;
+                    }
                 }
             }
         }
@@ -222,7 +215,7 @@ public class EndpointInvoker implements InvocationHandler {
         ServiceSampleModel sample = startSample(strategy, config, proxy, method, args);
         Object result = null;
         try {
-            log(method, args);
+            log(method, args, annotation);
             result = strategy.invoke(profileIds, proxy, method, endPointsByPath, args);
             endSampleSuccess(sample, config, proxy, method, args, result);
         } catch (Throwable ex) {
@@ -233,7 +226,7 @@ public class EndpointInvoker implements InvocationHandler {
         return result;
     }
 
-    private void log(Method method, Object[] args) {
+    private void log(Method method, Object[] args, Endpoint annotation) {
         if (!method.isAnnotationPresent(SuppressMethodLogging.class)) {
             StringBuilder logArgs = new StringBuilder();
             if (args != null && args.length > 0) {
@@ -253,10 +246,12 @@ public class EndpointInvoker implements InvocationHandler {
                     }
                 }
             }
-            log.info("{}.{}({})",
+            log.info("{}.{}({}) {}",
                     method.getDeclaringClass().getSimpleName(),
                     method.getName(),
-                    logArgs);
+                    logArgs,
+                    annotation == null || annotation.implementation().equals("default") ?
+                            "" : annotation.implementation() + " implementation");
         }
     }
 
