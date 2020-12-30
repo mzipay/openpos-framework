@@ -24,6 +24,10 @@ export class MoneyFormatter implements IFormatter {
             value = value.replace(',', decimalChar);
         }
 
+        // Eliminate any remaining commas, CurrencyPipe doesn't like them, but will
+        // put them back in as necessary below.
+        value = value.replace(',', '');
+
         const i = value.toString().indexOf(decimalChar);
         if (i > 0) {
             const d = value.toString().slice(i + 1);
