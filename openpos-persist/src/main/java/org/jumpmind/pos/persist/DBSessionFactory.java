@@ -12,12 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
-import org.jumpmind.pos.persist.impl.DatabaseSchema;
-import org.jumpmind.pos.persist.impl.DmlTemplate;
-import org.jumpmind.pos.persist.impl.DmlTemplates;
-import org.jumpmind.pos.persist.impl.QueryTemplate;
-import org.jumpmind.pos.persist.impl.QueryTemplates;
+import org.jumpmind.pos.persist.impl.*;
 import org.jumpmind.pos.persist.model.*;
+import org.jumpmind.pos.util.ClassUtils;
 import org.jumpmind.properties.TypedProperties;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -36,15 +33,23 @@ public class DBSessionFactory {
     List<Class<?>> modelExtensionClasses;
     TagHelper tagHelper;
     AugmenterHelper augmenterHelper;
+    ShadowTablesConfigModel shadowTablesConfig;
 
     private static final String DEFAULT_COLUMN_SIZE = "32";
 
-    public void init(IDatabasePlatform databasePlatform, TypedProperties sessionContext, List<Class<?>> entities, List<Class<?>> extensionEntities, TagHelper tagHelper, AugmenterHelper augmenterHelper) {
+    public void init(
+            IDatabasePlatform databasePlatform,
+            TypedProperties sessionContext,
+            List<Class<?>> entities,
+            List<Class<?>> extensionEntities,
+            TagHelper tagHelper,
+            AugmenterHelper augmenterHelper,
+            ShadowTablesConfigModel shadowTablesConfig) {
 
         QueryTemplates queryTemplates = getQueryTemplates(sessionContext.get("module.tablePrefix"));
         DmlTemplates dmlTemplates = getDmlTemplates(sessionContext.get("module.tablePrefix"));
 
-        init(databasePlatform, sessionContext, entities, extensionEntities, queryTemplates, dmlTemplates, tagHelper, augmenterHelper);
+        init(databasePlatform, sessionContext, entities, extensionEntities, queryTemplates, dmlTemplates, tagHelper, augmenterHelper, shadowTablesConfig);
     }
 
     public void init(
@@ -55,7 +60,8 @@ public class DBSessionFactory {
             QueryTemplates queryTemplatesObject,
             DmlTemplates dmlTemplates,
             TagHelper tagHelper,
-            AugmenterHelper augmenterHelper) {
+            AugmenterHelper augmenterHelper,
+            ShadowTablesConfigModel shadowTablesConfig) {
 
         this.queryTemplates = buildQueryTemplatesMap(queryTemplatesObject);
         this.dmlTemplates = buildDmlTemplatesMap(dmlTemplates);
@@ -67,6 +73,8 @@ public class DBSessionFactory {
         this.tagHelper = tagHelper;
         this.augmenterHelper = augmenterHelper;
 
+        this.shadowTablesConfig = shadowTablesConfig;
+
         this.initSchema();
     }
 
@@ -76,7 +84,8 @@ public class DBSessionFactory {
                 this.modelClasses.stream().filter(e -> e.getAnnotation(org.jumpmind.pos.persist.TableDef.class) != null)
                         .collect(Collectors.toList()),
                 this.modelExtensionClasses,
-                this.augmenterHelper);
+                this.augmenterHelper,
+                this.shadowTablesConfig);
     }
 
     public void createAndUpgrade() {
@@ -338,5 +347,4 @@ public class DBSessionFactory {
     protected String getColumnName(String prefix, AugmenterModel augmenter) {
         return databasePlatform.alterCaseToMatchDatabaseDefaultCase(prefix + augmenter.getName().toUpperCase());
     }
-
 }

@@ -94,7 +94,7 @@ public class EndpointInvoker implements InvocationHandler {
             if (controller != null) {
                 String serviceName = controller.value();
                 String implementation = getServiceImplementation(serviceName);
-                if (implementation != null && !implementation.equals("default")) {
+                if (implementation != null && !implementation.equals(Endpoint.IMPLEMENTATION_DEFAULT)) {
                     log.info("Loading endpoints for the '{}' implementation of {}({})", implementation, i.getSimpleName(),
                             serviceName);
                 } else {
@@ -112,7 +112,7 @@ public class EndpointInvoker implements InvocationHandler {
                     if (!endPointsByPath.containsKey(path)) {
                         Object endpointBean = findMatch(path, endpoints, implementation);
                         if (endpointBean == null) {
-                            endpointBean = findMatch(path, endpoints, "default");
+                            endpointBean = findMatch(path, endpoints, Endpoint.IMPLEMENTATION_DEFAULT);
                         }
 
                         if (endpointBean != null) {
@@ -161,7 +161,7 @@ public class EndpointInvoker implements InvocationHandler {
             serviceNameMatcher.matches();
             String versionLessServiceName = serviceNameMatcher.group("service");
             implementation = env
-                    .getProperty(String.format(implementationConfigPath, versionLessServiceName), "default");
+                    .getProperty(String.format(implementationConfigPath, versionLessServiceName), Endpoint.IMPLEMENTATION_DEFAULT);
         }
 
         return implementation;
@@ -250,7 +250,7 @@ public class EndpointInvoker implements InvocationHandler {
                     method.getDeclaringClass().getSimpleName(),
                     method.getName(),
                     logArgs,
-                    annotation == null || annotation.implementation().equals("default") ?
+                    annotation == null || annotation.implementation().equals(Endpoint.IMPLEMENTATION_DEFAULT) ?
                             "" : annotation.implementation() + " implementation");
         }
     }

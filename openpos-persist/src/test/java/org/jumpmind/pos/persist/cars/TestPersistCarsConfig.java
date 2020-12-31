@@ -98,7 +98,8 @@ public class TestPersistCarsConfig {
                     queryTemplates,
                     DBSessionFactory.getDmlTemplates("persist-test"),
                     tagHelper,
-                    augmenterHelper);
+                    augmenterHelper,
+                    null);
             
 
             DBSession session = sessionFactory.createDbSession();

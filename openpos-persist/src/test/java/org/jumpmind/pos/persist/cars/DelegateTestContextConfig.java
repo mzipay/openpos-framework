@@ -71,7 +71,7 @@ public class DelegateTestContextConfig {
                     Arrays.asList(CarExtendedWarrantyServiceModel.class),
                     null,
                     queryTemplates,
-                    DBSessionFactory.getDmlTemplates("persist-test"), tagHelper, augmenterHelper);
+                    DBSessionFactory.getDmlTemplates("persist-test"), tagHelper, augmenterHelper, null);
 
             DBSession session = sessionFactory.createDbSession();
 

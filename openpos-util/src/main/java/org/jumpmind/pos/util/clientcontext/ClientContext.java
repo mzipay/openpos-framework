@@ -23,6 +23,9 @@ public class ClientContext {
     @Value("${openpos.businessunitId:'not set'}")
     String businessUnitId;
 
+    @Value("${openpos.deviceMode:'not set'}")
+    String deviceMode;
+
     public void put(String name, String value) {
         if (propertiesMap.get() == null) {
             propertiesMap.set(new HashMap<>());
@@ -41,6 +44,8 @@ public class ClientContext {
                 return businessUnitId;
             } else if ("appId".equals(name)) {
                 return "server";
+            } else if ("deviceMode".equals(name)) {
+                return deviceMode;
             } else if ("timezoneOffset".equals(name)) {
                 return AppUtils.getTimezoneOffset();
             }

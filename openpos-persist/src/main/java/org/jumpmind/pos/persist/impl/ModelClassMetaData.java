@@ -15,6 +15,7 @@ import javax.annotation.sql.DataSourceDefinition;
 public class ModelClassMetaData {
 
     private Table table;
+    private Table shadowTable;
     private Class<?> clazz;
     private List<Class<?>> extensionClazzes;
     private String idxPrefix;
@@ -24,6 +25,10 @@ public class ModelClassMetaData {
     private Set<String> primaryKeyFieldNames = new LinkedHashSet<>();
     private Set<String> augmentedFieldNames = new LinkedHashSet<>();
     private List<AugmenterConfig> augmenterConfigs = new ArrayList<>();
+
+    private boolean hasShadowTable;
+    private String shadowPrefix;
+    private String modulePrefix;
 
     public ModelClassMetaData() {
     }
@@ -61,6 +66,23 @@ public class ModelClassMetaData {
 
             primaryKeyColumns.add(fieldMetaData.getColumn());
         }
+    }
+
+    public void setShadowTable(String shadowPrefix, String modulePrefix)  {
+        Table shadowTable = table.copy();
+        shadowTable.setName(shadowPrefix + "_" + modulePrefix + "_" + table.getName());
+
+        this.shadowTable = shadowTable;
+        this.shadowPrefix = shadowPrefix;
+        this.modulePrefix = modulePrefix;
+    }
+
+    public boolean hasShadowTable()  {
+        return (shadowTable != null);
+    }
+
+    public String getShadowTableName()  {
+        return (hasShadowTable ? shadowTable.getName() : table.getName());
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.util.stream.StreamSupport;
 
 import lombok.*;
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
+import org.apache.commons.lang.StringUtils;
 import org.jumpmind.pos.persist.*;
 import org.jumpmind.pos.persist.model.ITaggedModel;
 import org.jumpmind.util.AppUtils;
@@ -52,9 +53,17 @@ public class DeviceModel extends AbstractModel implements ITaggedModel {
     @ColumnDef(size = "255", description = "A user defined name for the Device")
     private String description;
 
+    @ToString.Include
+    @Builder.Default
+    @ColumnDef(size = "100", description = "The current mode of the Device")
+    private String deviceMode = DEVICE_MODE_DEFAULT;
+
     private Map<String, String> tags = new CaseInsensitiveMap<String, String>();
 
-    public DeviceModel(String deviceId, String appId, String deviceType, String locale, String timezoneOffset, String businessUnitId, String description, Map<String, String> tags, List<DeviceParamModel> deviceParamModels) {
+    public static final String DEVICE_MODE_DEFAULT  = "default";
+    public static final String DEVICE_MODE_TRAINING = "training";
+
+    public DeviceModel(String deviceId, String appId, String deviceType, String locale, String timezoneOffset, String businessUnitId, String description, String deviceMode, Map<String, String> tags, List<DeviceParamModel> deviceParamModels) {
         this.deviceId = deviceId;
         this.appId = appId;
         this.deviceType = deviceType;
@@ -62,8 +71,13 @@ public class DeviceModel extends AbstractModel implements ITaggedModel {
         this.timezoneOffset = timezoneOffset;
         this.businessUnitId = businessUnitId;
         this.description = description;
+        this.deviceMode = (StringUtils.isEmpty(deviceMode) ? DEVICE_MODE_DEFAULT : deviceMode);
         this.tags = new CaseInsensitiveMap<>(tags != null ? tags : new HashMap<>());
         this.deviceParamModels = deviceParamModels;
+    }
+
+    public DeviceModel(String deviceId, String appId, String deviceType, String locale, String timezoneOffset, String businessUnitId, String description, Map<String, String> tags, List<DeviceParamModel> deviceParamModels) {
+        this(deviceId, appId, deviceType, locale, timezoneOffset, businessUnitId, description, DEVICE_MODE_DEFAULT, tags, deviceParamModels);
     }
 
     @Override
@@ -114,6 +128,14 @@ public class DeviceModel extends AbstractModel implements ITaggedModel {
             }
         }
         return withOutBusinessUnitId;
+    }
+
+    public boolean isDeviceModeDefault()  {
+        return (deviceMode == null ? true : deviceMode.equals(DEVICE_MODE_DEFAULT));
+    }
+
+    public boolean isDeviceModeTraining()  {
+        return (deviceMode == null ? false : deviceMode.equals(DEVICE_MODE_TRAINING));
     }
 
     private List<DeviceParamModel> deviceParamModels;
