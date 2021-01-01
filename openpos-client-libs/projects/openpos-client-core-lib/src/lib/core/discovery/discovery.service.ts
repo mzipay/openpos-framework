@@ -71,7 +71,7 @@ export class DiscoveryService {
             if (httpResult) {
                 if (httpResult.hasOwnProperty('success')) {
                     if (! httpResult.success) {
-                        console.log('Discovery FAILED with url: ' + url);
+                        console.log(`Discovery FAILED with url: ${url}, message: ${httpResult.message}`);
                     }
                 } else {
                     httpResult.success = true;
