@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 class MoneyExtensions implements InitializingBean {
 
     @SuppressWarnings('MethodName')
-    static Money $(String amount) {
+    static Money $(BigDecimal amount) {
         CurrencyUnit usd = CurrencyUnit.of('USD')
         Money.of(usd, amount)
     }
