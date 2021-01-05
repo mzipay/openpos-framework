@@ -1,6 +1,6 @@
 package org.jumpmind.pos.persist;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.beans.PropertyDescriptor;
 import java.io.File;
@@ -199,8 +199,8 @@ public class DBSession {
     }
 
     public void executeScript(Reader reader) {
-        try {
-            RunScript.execute(getConnection(), reader);
+        try (Connection connection = getConnection()) {
+            RunScript.execute(connection, reader);
         } catch (Exception ex) {
             throw new PersistException("Failed to execute script " + reader, ex);
         }
