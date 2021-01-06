@@ -15,7 +15,7 @@ import { DynamicFormFieldComponent } from '../dynamic-form-field/dynamic-form-fi
 export class FormComponent {
 
     @ContentChildren(DynamicFormFieldComponent, {descendants: true}) children: QueryList<DynamicFormFieldComponent>;
-    @ContentChild('formErrors') formErrors: ShowErrorsComponent;
+    @ContentChild('formErrors', { static: false }) formErrors: ShowErrorsComponent;
 
     @Input()
     form: FormGroup;

@@ -32,7 +32,7 @@ export class ToggleButtonComponent {
     @Output()
     change: EventEmitter<ToggleChange> = new EventEmitter<ToggleChange>();
 
-    @ContentChild(MatButton)
+    @ContentChild(MatButton, { static: false })
     button: MatButton;
 
     constructor(private renderer: Renderer2) {

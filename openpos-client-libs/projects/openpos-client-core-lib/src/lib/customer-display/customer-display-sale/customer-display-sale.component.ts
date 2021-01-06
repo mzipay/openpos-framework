@@ -15,7 +15,7 @@ import { OpenposMediaService, MediaBreakpoints } from '../../core/media/openpos-
 
 })
 export class CustomerDisplaySaleComponent extends PosScreen<any> implements OnInit, AfterViewChecked {
-    @ViewChild('scrollList', { read: ElementRef }) private scrollList: ElementRef;
+    @ViewChild('scrollList', { read: ElementRef, static: false }) private scrollList: ElementRef;
 
     isMobile: Observable<boolean>;
 

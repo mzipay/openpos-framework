@@ -22,8 +22,8 @@ import { Scan } from '../../../core/oldplugins/scan';
 })
 export class DynamicFormFieldComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild(MatInput) field: MatInput;
-  @ViewChild(DynamicDateFormFieldComponent) dateField: DynamicDateFormFieldComponent;
+  @ViewChild(MatInput, { static: false }) field: MatInput;
+  @ViewChild(DynamicDateFormFieldComponent, { static: false }) dateField: DynamicDateFormFieldComponent;
 
   @Input() formField: IFormElement;
 

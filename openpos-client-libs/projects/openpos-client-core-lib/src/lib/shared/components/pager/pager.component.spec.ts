@@ -163,7 +163,7 @@ class MockIconComponent {
     </app-pager>`
 })
 class TestPagerWrapperComponent {
-    @ViewChild(PagerComponent) myPager;
+    @ViewChild(PagerComponent, /* TODO: add static flag */ {}) myPager;
     numbers = Array(17).fill(0).map((x,i) => i);
     public index = 2;
 }

@@ -47,7 +47,7 @@ export class ItemCardComponent implements OnDestroy {
 
   public hover = false;
 
-  @ViewChild('kebab') kebab: KebabLabelButtonComponent;
+  @ViewChild('kebab', { static: false }) kebab: KebabLabelButtonComponent;
   buttonSubscription: Subscription;
 
   constructor(public actionService: ActionService, public session: SessionService,  protected keyPresses: KeyPressProvider) {

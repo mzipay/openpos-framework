@@ -12,10 +12,10 @@ import {OpenposMediaService} from "../../../core/media/openpos-media.service";
 })
 export class HelpTextPageWrapperComponent implements OnInit, AfterViewInit, OnDestroy {
 
-    @ViewChild(MatSidenavContainer)
+    @ViewChild(MatSidenavContainer, { static: true })
     sidenavContainer: MatSidenavContainer;
 
-    @ViewChild('helpPageWrapperContainer')
+    @ViewChild('helpPageWrapperContainer', { static: true })
     helpPageWrapperContainer: ElementRef;
 
     @Input()

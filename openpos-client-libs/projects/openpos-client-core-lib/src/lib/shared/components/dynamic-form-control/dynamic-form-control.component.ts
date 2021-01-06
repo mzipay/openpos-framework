@@ -17,7 +17,7 @@ import { ActionService } from '../../../core/actions/action.service';
 export class DynamicFormControlComponent implements AfterViewInit {
 
   @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
-  @ViewChild('formErrors') formErrors: ShowErrorsComponent;
+  @ViewChild('formErrors', { static: true }) formErrors: ShowErrorsComponent;
   form: FormGroup;
 
   buttons: IFormElement[];

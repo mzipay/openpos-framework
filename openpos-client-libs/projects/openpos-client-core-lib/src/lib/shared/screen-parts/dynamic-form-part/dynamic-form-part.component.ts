@@ -28,7 +28,7 @@ export class DynamicFormPartComponent extends ScreenPartComponent<IForm> impleme
     @Output() formInit = new EventEmitter<IDynamicFormPartEventArg>();
     @Output() formChanges = new EventEmitter<IDynamicFormPartEventArg>();
     @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
-    @ViewChild('formErrors') formErrors: ShowErrorsComponent;
+    @ViewChild('formErrors', { static: false }) formErrors: ShowErrorsComponent;
     form: FormGroup;
 
     buttons: IFormElement[];

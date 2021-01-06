@@ -25,8 +25,8 @@ import { DateUtils, DatePartPositions } from '../../utils/date.utils';
                          datePipe: createAutoCorrectedDatePipe('dd/mm/yyyy') }]
     ]);
 
-    @ViewChild(MatInput) field: MatInput;
-    @ViewChild('picker') datepicker: MatDatepicker<Date>;
+    @ViewChild(MatInput, { static: true }) field: MatInput;
+    @ViewChild('picker', { static: true }) datepicker: MatDatepicker<Date>;
 
     @Input() type: string;
     @Input() value: string;

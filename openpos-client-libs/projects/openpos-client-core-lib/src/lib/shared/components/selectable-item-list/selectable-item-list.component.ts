@@ -23,7 +23,7 @@ export class SelectableItemListComponentConfiguration {
     styleUrls: ['./selectable-item-list.component.scss']
 })
 export class SelectableItemListComponent<ItemType> implements OnDestroy, OnInit, AfterViewInit {
-    @ContentChild(TemplateRef) itemTemplate: TemplateRef<ElementRef>;
+    @ContentChild(TemplateRef, { static: true }) itemTemplate: TemplateRef<ElementRef>;
     @ViewChildren('items') private itemsRef: QueryList<ElementRef>;
 
     @Input() keyboardControl = true;

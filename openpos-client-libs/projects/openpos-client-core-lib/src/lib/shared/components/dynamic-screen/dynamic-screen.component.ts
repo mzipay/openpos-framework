@@ -10,7 +10,7 @@ import {ToastContainerDirective, ToastrService} from "ngx-toastr";
     providers: [MessageProvider, ActionService]
 })
 export class DynamicScreenComponent implements OnInit{
-    @ViewChild(ToastContainerDirective)
+    @ViewChild(ToastContainerDirective, { static: true })
     toastContainer: ToastContainerDirective;
     constructor(
                 messageProvider: MessageProvider,
