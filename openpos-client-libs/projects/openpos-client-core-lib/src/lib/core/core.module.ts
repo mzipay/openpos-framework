@@ -76,16 +76,6 @@ registerLocaleData(locale_enCA, 'en-CA');
 registerLocaleData(locale_frCA, 'fr-CA');
 
 @NgModule({
-    entryComponents: [
-        ConfirmationDialogComponent,
-        PersonalizationComponent,
-        StartupComponent,
-        StartupFailedComponent,
-        DialogContentComponent,
-        SplashScreenComponent,
-        ScanditCameraViewComponent,
-        LockScreenComponent
-    ],
     declarations: [
         DialogContentComponent,
         ConfirmationDialogComponent,

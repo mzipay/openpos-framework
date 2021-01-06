@@ -324,17 +324,6 @@ const pipes = [
         BaconDrawerComponent,
         StatusBarComponent,
     ],
-    entryComponents: [
-        KebabMenuComponent,
-        PopTartComponent,
-        DatePartChooserDialogComponent,
-        LocationOverrideDialogComponent,
-        NavListComponent,
-        SystemStatusDialogComponent,
-        BaconDrawerComponent,
-        HelpTextPageWrapperComponent,
-        ToastComponent
-    ],
     imports: [
         FormsModule,
         ReactiveFormsModule,

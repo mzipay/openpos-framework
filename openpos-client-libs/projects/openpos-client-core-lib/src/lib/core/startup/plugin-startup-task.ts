@@ -1,10 +1,11 @@
-import { Observable, merge, concat, of, Subject, iif } from 'rxjs';
+import { Observable, merge, concat, of, Subject, iif, from, Subscriber } from 'rxjs';
 import { IStartupTask } from './startup-task.interface';
 import { StartupTaskNames } from './startup-task-names';
 import { InjectionToken, Optional, Inject, Injectable } from '@angular/core';
 import { IPlatformPlugin } from '../platform-plugins/platform-plugin.interface';
 import { SCANNERS } from '../platform-plugins/scanners/scanner.service';
 import { IScanner } from '../platform-plugins/scanners/scanner.interface';
+import { mergeAll, mergeMap, tap } from 'rxjs/operators';
 
 export const PLUGINS = new InjectionToken<IPlatformPlugin[]>('Plugins');
 
@@ -24,18 +25,17 @@ export class PluginStartupTask implements IStartupTask {
     }
 
     execute(): Observable<string> {
-
-        const checkPlugins = Observable.create( (messages: Subject<string>) => {
-            // remove plugins that are not loaded
+        const checkPlugins = new Observable<string>(subscriber => {
             const pluginsToRemove = [];
 
-            messages.next(`${this.plugins.length} plugins found to try`);
+            subscriber.next(`${this.plugins.length} plugins found to try`);
+            
             this.plugins.forEach( p => {
                 if ( !p.pluginPresent() ) {
                     pluginsToRemove.push(p);
-                    messages.next(`Removing ${p.name()}`);
+                    subscriber.next(`Removing ${p.name()}`);
                 } else {
-                    messages.next(`Found ${p.name()}`);
+                    subscriber.next(`Found ${p.name()}`);
                 }
             });
 
@@ -45,33 +45,24 @@ export class PluginStartupTask implements IStartupTask {
                     this.scanners.splice( this.scanners.indexOf(p), 1);
                 }
             });
-            messages.complete();
-        }) as Observable<string>;
 
-        const initializePlugins = Observable.create( (message: Subject<string>) => {
-            const inits = this.plugins.map( p => {
-                return concat(
-                    of(`Initializing ${p.name()}`),
-                    p.initialize()
-                );
-            });
-
-            merge( ...inits ).subscribe( {
-                next: m => message.next(m),
-                error: e => message.error(e),
-                complete: () => {
-                    message.next('Done initializing plugins');
-                    message.complete();
-                }
-            });
+            subscriber.complete();
         });
+
+        const pluginInitialization = from(this.plugins).pipe(
+            mergeMap(plugin => concat(
+                of(`Initializing ${plugin.name()}`),
+                plugin.initialize()
+            )),
+        );
 
         return concat(
             checkPlugins,
             iif( () => !!this.plugins && this.plugins.length > 0,
                 concat (
                     of('Initializing plugins'),
-                    initializePlugins
+                    pluginInitialization,
+                    of('Done initalizing plugins')
                 ),
                 of('No Plugins found')
             )

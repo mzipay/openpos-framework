@@ -77,10 +77,6 @@ const dialogs = [
 ];
 
 @NgModule({
-    entryComponents: [
-        ...screens,
-        ...dialogs
-    ],
     declarations: [
         ...screens,
         ...dialogs

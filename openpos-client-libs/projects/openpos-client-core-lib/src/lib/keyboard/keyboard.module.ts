@@ -2,7 +2,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 // Angular CDK
-import { LIVE_ANNOUNCER_PROVIDER } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 // Angular material
@@ -50,11 +49,6 @@ import { MatKeyboardService } from './services/keyboard.service';
     MatKeyboardContainerComponent,
     MatKeyboardKeyComponent,
     KeyboardDirective
-  ],
-  entryComponents: [
-    MatKeyboardComponent,
-    MatKeyboardContainerComponent,
-    MatKeyboardKeyComponent
   ],
   providers: [
     MatKeyboardService,

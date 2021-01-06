@@ -1,8 +1,8 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {MediaService} from '@angular/flex-layout';
+import {MediaObserver} from '@angular/flex-layout';
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 import {BehaviorSubject, merge, Observable, Subject} from 'rxjs';
-import {debounceTime, filter, map, startWith, takeUntil, tap} from 'rxjs/operators';
+import {debounceTime, filter, map, mergeMap, startWith, takeUntil, tap} from 'rxjs/operators';
 import {SessionService} from '../services/session.service';
 
 export class MediaBreakpoints {
@@ -68,7 +68,7 @@ export class OpenposMediaService implements OnDestroy {
     logDebounceTime = 100;
 
     constructor(
-        private mediaService: MediaService,
+        private mediaService: MediaObserver,
         private breakpointObserver: BreakpointObserver,
         private sessionService: SessionService) {
 
@@ -201,7 +201,7 @@ export class OpenposMediaService implements OnDestroy {
 
         return this.mediaService.asObservable()
             .pipe(
-                map(change => mappedValues.get(change.mqAlias)),
+                mergeMap(changes => changes.map(c => mappedValues.get(c.mqAlias))),
                 startWith(mappedValues.get(startAlias))
             );
     }
