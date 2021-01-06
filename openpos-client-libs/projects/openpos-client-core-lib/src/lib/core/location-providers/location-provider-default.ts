@@ -1,7 +1,7 @@
 import { ILocationProvider } from './location-provider.interface';
 import { ILocationData } from './location-data.interface';
 import { Observable } from 'rxjs/internal/Observable';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Configuration } from '../../configuration/configuration';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
@@ -16,8 +16,7 @@ export class LocationProviderDefault implements ILocationProvider {
 
     private $locationData = new BehaviorSubject<ILocationData>(null);
 
-    constructor(private http: Http) {
-    }
+    constructor(private http: HttpClient) {}
 
     getProviderName(): string {
         return 'default';
@@ -66,13 +65,8 @@ export class LocationProviderDefault implements ILocationProvider {
     }
 
     async reverseGeocode(key: string, param: string): Promise<any> {
-        try {
-            const response = await this.http
-                .get('https://maps.google.com/maps/api/geocode/json?key=' + key + '&latlng=' + param + '&sensor=false')
-                .toPromise();
-            return await Promise.resolve(response.json());
-        } catch (error) {
-            return await Promise.resolve(error.json());
-        }
+        return await this.http
+            .get('https://maps.google.com/maps/api/geocode/json?key=' + key + '&latlng=' + param + '&sensor=false')
+            .toPromise();
     }
 }
