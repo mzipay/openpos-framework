@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TransactionSummaryComponent } from './transaction-summary.component';
 import { Component, Input } from '@angular/core';
 import { ActionService } from '../../../core/actions/action.service';
-import { MatChipsModule } from '@angular/material';
+import { MatChipsModule } from '@angular/material/chips';
 
 describe('TransactionSummaryComponent', () => {
   let component: TransactionSummaryComponent;

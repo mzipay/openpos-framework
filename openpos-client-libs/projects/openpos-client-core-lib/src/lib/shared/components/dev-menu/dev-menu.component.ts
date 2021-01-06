@@ -2,7 +2,9 @@ import { ConfigurationService } from '../../../core/services/configuration.servi
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
 import { Component, ViewChild, HostListener, ComponentRef, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MatSnackBar, MatSnackBarRef, SimpleSnackBar, MatExpansionPanel } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Configuration } from '../../../configuration/configuration';
 import { IScreen } from '../dynamic-screen/screen.interface';

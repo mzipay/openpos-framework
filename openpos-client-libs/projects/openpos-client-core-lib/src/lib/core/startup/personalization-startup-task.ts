@@ -8,7 +8,7 @@ import {
 import { IStartupTask } from './startup-task.interface';
 import { PersonalizationService } from '../personalization/personalization.service';
 import {concat, interval, merge, Observable, of, Subject, throwError} from 'rxjs';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { StartupTaskNames } from './startup-task-names';
 import { Injectable } from '@angular/core';
 import { StartupTaskData } from './startup-task-data';

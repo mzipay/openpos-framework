@@ -7,7 +7,7 @@ import { IScreen } from '../../shared/components/dynamic-screen/screen.interface
 import { PersonalizationService } from './personalization.service';
 import { PersonalizationConfigResponse } from './personalization-config-response.interface';
 import { ClientUrlService } from './client-url.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DiscoveryService } from '../discovery/discovery.service';
 import { DiscoveryStatus } from '../discovery/discovery-status.enum';
 import { DiscoveryResponse } from '../discovery/discovery-response.interface';

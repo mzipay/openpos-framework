@@ -1,6 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { SaleInterface } from './sale.interface';
-import { MatDialog, MatBottomSheet } from '@angular/material';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
 import { PosScreen } from '../pos-screen/pos-screen.component';
 import { ScreenComponent } from '../../shared/decorators/screen-component.decorator';
 import { ITotal } from '../../core/interfaces/total.interface';

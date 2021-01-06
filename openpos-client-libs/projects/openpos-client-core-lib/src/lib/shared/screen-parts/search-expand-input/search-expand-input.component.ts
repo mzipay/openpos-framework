@@ -6,7 +6,7 @@ import { IActionItem } from '../../../core/actions/action-item.interface';
 import { DeviceService } from '../../../core/services/device.service';
 import { ScannerService } from '../../../core/platform-plugins/scanners/scanner.service';
 import { MediaBreakpoints, OpenposMediaService } from '../../../core/media/openpos-media.service';
-import { MatInput } from '@angular/material';
+import { MatInput } from '@angular/material/input';
 import { ScreenPart } from '../../decorators/screen-part.decorator';
 import { ScreenPartComponent } from '../screen-part';
 import { ScanOrSearchInterface } from '../scan-or-search/scan-or-search.interface';

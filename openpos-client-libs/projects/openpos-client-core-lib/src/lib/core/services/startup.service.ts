@@ -3,7 +3,7 @@ import { Injectable, InjectionToken, Inject, Optional } from '@angular/core';
 import { IStartupTask } from '../startup/startup-task.interface';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { map, catchError } from 'rxjs/operators';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ComponentType } from '@angular/cdk/overlay/index';
 import { StartupTaskData } from '../startup/startup-task-data';
 

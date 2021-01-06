@@ -1,5 +1,5 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IActionItem } from './action-item.interface';
 import { IConfirmationDialog } from './confirmation-dialog.interface';
 import { ActionService } from './action.service';

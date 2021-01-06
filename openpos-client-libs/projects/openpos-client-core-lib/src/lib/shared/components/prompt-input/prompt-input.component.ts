@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs';
 import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { ErrorStateMatcher } from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { OldPluginService } from '../../../core/services/old-plugin.service';
 import { BarcodeScannerPlugin } from '../../../core/oldplugins/barcode-scanner.plugin';
 import { Scan } from '../../../core/oldplugins/scan';

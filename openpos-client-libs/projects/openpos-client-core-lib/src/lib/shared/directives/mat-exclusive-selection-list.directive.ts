@@ -1,5 +1,5 @@
 import { Directive, HostListener } from '@angular/core';
-import { MatSelectionList, MatListOption } from '@angular/material';
+import { MatSelectionList, MatListOption } from '@angular/material/list';
 
 @Directive({
     // tslint:disable-next-line:directive-selector

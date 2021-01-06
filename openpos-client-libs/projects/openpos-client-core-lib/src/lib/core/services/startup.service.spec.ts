@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { StartupService, STARTUP_TASKS, STARTUP_COMPONENT, STARTUP_FAILED_COMPONENT, STARTUP_FAILED_TASK } from './startup.service';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IStartupTask } from '../startup/startup-task.interface';
 import { scan } from 'rxjs/operators';
 import { cold, getTestScheduler } from 'jasmine-marbles';
