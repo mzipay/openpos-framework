@@ -483,6 +483,7 @@ public class DatabaseSchema {
 
             if (metaData.isPrimaryKey(field)) {
                 dbCol.setRequired(true);
+                dbCol.setPrimaryKeySequence(new ArrayList<>(metaData.getPrimaryKeyFieldNames()).indexOf(dbCol.getName()));
             } else {
                 dbCol.setRequired(colAnnotation.required());
             }
