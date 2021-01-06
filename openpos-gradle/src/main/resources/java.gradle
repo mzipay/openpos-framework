@@ -150,13 +150,6 @@ task develop {
 
 }
 
-configurations {
-    testArtifacts.extendsFrom testCompile {
-        canBeResolved = true
-        canBeConsumed = true
-    }
-}
-
 dependencies {
     implementation group: 'org.yaml', name: 'snakeyaml', version: snakeYamlVersion
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
