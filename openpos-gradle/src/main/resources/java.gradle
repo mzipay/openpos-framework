@@ -179,7 +179,7 @@ publishing {
     }
     repositories {
         maven {
-            url "$deployUploadUrl"
+            url "$deploySftpUrl"
             credentials {
                 username deployUser
                 password deployPassword
@@ -191,7 +191,7 @@ publishing {
 task deploy {
     description 'Shortcut for Maven users'
     if (!gitBranch.equals('merge')) {
-        dependsOn tasks.uploadArchives
+        dependsOn tasks.publish
     }
 }
 
