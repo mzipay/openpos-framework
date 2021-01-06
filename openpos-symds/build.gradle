@@ -5,15 +5,17 @@ apply from: '../openpos-gradle/src/main/resources/spring.gradle'
 dependencies {
     implementation ("org.jumpmind.symmetric:symmetric-server:$symmetricVersion") {
          exclude group: 'org.slf4j'
+         exclude group: 'org.slf4j'
          exclude group: 'com.mangofactory', module: 'swagger-springmvc'
          exclude group: 'org.springframework'
-         exclude group: 'net.java.dev.jna'
+         exclude group: 'org.apache.logging.log4j'
     }
     api ("org.jumpmind.symmetric:symmetric-core:$symmetricVersion") {
          exclude group: 'org.slf4j'
          exclude group: 'com.mangofactory', module: 'swagger-springmvc'
          exclude group: 'org.springframework'
          exclude group: 'net.java.dev.jna'
+         exclude group: 'org.apache.logging.log4j'
     }
     implementation project(":openpos-service")
     implementation project(":openpos-persist")
