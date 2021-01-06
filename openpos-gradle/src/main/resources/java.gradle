@@ -101,16 +101,6 @@ eclipse {
             type = 'EXCLUDE_ALL'
             matcher {
                 id = 'org.eclipse.ui.ide.orFilterMatcher'
-                //               matcher {
-                //                 id = 'org.eclipse.ui.ide.multiFilter'
-                //                 arguments = '1.0-projectRelativePath-matches-false-false-bin'
-                //               }
-                /*
-                matcher {
-                    id = 'org.eclipse.ui.ide.multiFilter'
-                    arguments = '1.0-projectRelativePath-matches-false-false-build'
-                }
-                */
                 matcher {
                     id = 'org.eclipse.ui.ide.multiFilter'
                     arguments = '1.0-name-matches-false-false-*.class'
@@ -161,19 +151,18 @@ task develop {
 }
 
 configurations {
-    testArtifacts.extendsFrom testRuntime
-    deployerJars
+    testArtifacts.extendsFrom testCompile {
+        canBeResolved = true
+        canBeConsumed = true
+    }
 }
 
 dependencies {
-    deployerJars group: 'org.apache.maven.wagon', name: 'wagon-ssh', version: '3.3.2'
-    dependencies {
-          implementation group: 'org.yaml', name: 'snakeyaml', version: snakeYamlVersion
-          compileOnly("org.projectlombok:lombok:${lombokVersion}")
-          testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
-          annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
-          testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
-    }
+    implementation group: 'org.yaml', name: 'snakeyaml', version: snakeYamlVersion
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
 }
 
 publishing {
@@ -190,7 +179,7 @@ publishing {
     }
     repositories {
         maven {
-            url "$deployUploadUrl"
+            url "$deploySftpUrl"
             credentials {
                 username deployUser
                 password deployPassword
@@ -202,7 +191,7 @@ publishing {
 task deploy {
     description 'Shortcut for Maven users'
     if (!gitBranch.equals('merge')) {
-        dependsOn tasks.uploadArchives
+        dependsOn tasks.publish
     }
 }
 
