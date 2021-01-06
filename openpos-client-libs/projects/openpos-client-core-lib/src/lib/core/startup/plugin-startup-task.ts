@@ -1,7 +1,7 @@
 import { Observable, merge, concat, of, Subject, iif } from 'rxjs';
 import { IStartupTask } from './startup-task.interface';
 import { StartupTaskNames } from './startup-task-names';
-import { InjectionToken, Optional, Inject } from '@angular/core';
+import { InjectionToken, Optional, Inject, Injectable } from '@angular/core';
 import { IPlatformPlugin } from '../platform-plugins/platform-plugin.interface';
 import { SCANNERS } from '../platform-plugins/scanners/scanner.service';
 import { IScanner } from '../platform-plugins/scanners/scanner.interface';
@@ -13,6 +13,7 @@ export const PLUGINS = new InjectionToken<IPlatformPlugin[]>('Plugins');
  * If the plug in is not loaded it will be removed from the PLATFORMS token otherwise this
  * task will wait for all plugins to initialize.
  */
+@Injectable()
 export class PluginStartupTask implements IStartupTask {
     name =  StartupTaskNames.PLUGIN_INIT;
     order = 800;

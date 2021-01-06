@@ -14,7 +14,7 @@ import {merge} from 'rxjs';
 })
 export class PromptFormPartComponent extends ScreenPartComponent<PromptFormPartInterface> implements AfterViewInit, OnInit {
 
-    @ViewChild('optionsRef', { static: false }) options;
+    @ViewChild('optionsRef') options;
 
     stop$ = merge(this.beforeScreenDataUpdated$, this.destroyed$);
     promptFormGroup: FormGroup;

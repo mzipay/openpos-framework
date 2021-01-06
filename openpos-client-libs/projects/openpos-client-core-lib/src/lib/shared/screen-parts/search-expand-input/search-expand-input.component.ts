@@ -31,7 +31,7 @@ export class SearchExpandInputComponent extends ScreenPartComponent<ScanOrSearch
 
     private scanServiceSubscription: Subscription;
 
-    @ViewChild(MatInput, { static: false }) inputElement: MatInput;
+    @ViewChild(MatInput) inputElement: MatInput;
     public open = false;
 
     constructor(

@@ -25,7 +25,7 @@ export class DatePartChooserComponent implements OnInit {
     @Input() dayOfMonth: number;
     @Input() year: number;
     @Output() change = new EventEmitter<IDateParts>();
-    @ViewChild('monthGroup', { static: false }) monthGroup: FabToggleGroupComponent;
+    @ViewChild('monthGroup') monthGroup: FabToggleGroupComponent;
 
     constructor() {
     }

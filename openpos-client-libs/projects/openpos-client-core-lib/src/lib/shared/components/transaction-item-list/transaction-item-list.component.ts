@@ -18,7 +18,7 @@ import { KebabButtonComponent } from '../kebab-button/kebab-button.component';
 export class TransactionItemListComponent implements AfterViewChecked {
 
   @ViewChild('scrollList', { read: ElementRef, static: true }) private scrollList: ElementRef;
-  @ViewChild('txMenu', { static: false }) private txMenuButton: KebabButtonComponent;
+  @ViewChild('txMenu') private txMenuButton: KebabButtonComponent;
 
   @Input() listData: Observable<ISelectableListData<ISellItem>>;
   @Input() listConfig: SelectableItemListComponentConfiguration;

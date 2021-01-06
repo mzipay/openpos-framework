@@ -127,7 +127,7 @@ export class DevMenuComponent implements OnInit, IMessageHandler<any> {
 
     private disableDevMenu = false;
 
-    @ViewChild('devMenuPanel', { static: false }) devMenuPanel: MatExpansionPanel;
+    @ViewChild('devMenuPanel') devMenuPanel: MatExpansionPanel;
 
     constructor(
         private personalization: PersonalizationService,

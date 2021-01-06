@@ -22,7 +22,7 @@ import { IActionItem } from '../../../core/actions/action-item.interface';
 export class AutoCompleteAddressPartComponent extends ScreenPartComponent<IForm> {
 
     @ViewChildren(DynamicFormFieldComponent) children: QueryList<DynamicFormFieldComponent>;
-    @ViewChild('formErrors', { static: false }) formErrors: ShowErrorsComponent;
+    @ViewChild('formErrors') formErrors: ShowErrorsComponent;
     form: FormGroup;
 
     streetAddress: IFormElement;
