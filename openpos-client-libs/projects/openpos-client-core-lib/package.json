@@ -4,6 +4,9 @@
   "description": "This is an angular.io library for developing web-based point-of-sale functionality.  It is to be used in conjunction with openpos-server-core-lib.",
   "author": "Jumpmind",
   "license": "GPLv3",
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
   "peerDependencies": {
     "@angular/animations": "^9.1.13",
     "@angular/cdk": "^9.2.4",
