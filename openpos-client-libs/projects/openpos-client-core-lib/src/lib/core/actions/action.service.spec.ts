@@ -43,9 +43,9 @@ describe('ActionService', () => {
 
         messageProviderSpy.getScopedMessages$.and.returnValue(scopedMessages$);
         messageProviderSpy.getAllMessages$.and.returnValue(allMessages$);
-        messageProvider = TestBed.get(MessageProvider);
-        actionService = TestBed.get(ActionService);
-        matDialog = TestBed.get(MatDialog);
+        messageProvider = TestBed.inject(MessageProvider) as jasmine.SpyObj<MessageProvider>;
+        actionService = TestBed.inject(ActionService) as jasmine.SpyObj<ActionService>;
+        matDialog = TestBed.inject(MatDialog) as jasmine.SpyObj<MatDialog>;
         matDialog.open.and.returnValue(matDialogRefSpy);
     }
 

@@ -42,9 +42,9 @@ describe('StartupService', () => {
             ]
         });
 
-        AppInjector.Instance = TestBed.get(Injector);
-        startupService = TestBed.get(StartupService);
-        matDialog = TestBed.get(MatDialog);
+        AppInjector.Instance = TestBed.inject(Injector);
+        startupService = TestBed.inject(StartupService);
+        matDialog = TestBed.inject(MatDialog) as jasmine.SpyObj<MatDialog>;
         matDialog.open.and.returnValue(matDialogRefSpy);
 
         // never complete so we don't restart

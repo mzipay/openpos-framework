@@ -30,14 +30,14 @@ describe('ServerLoggerService', () => {
                 { provide: ConsoleInterceptorBypassService, useValue: consoleInterceptorBypassServiceSpy}
             ]
         });
-        httpTestingController = TestBed.get(HttpTestingController);
-        discoveryService = TestBed.get(DiscoveryService);
-        configurationService = TestBed.get(ConfigurationService);
-        consoleInterceptorBypassService = TestBed.get(ConsoleInterceptorBypassService);
+        httpTestingController = TestBed.inject(HttpTestingController);
+        discoveryService = TestBed.inject(DiscoveryService) as jasmine.SpyObj<DiscoveryService>;
+        configurationService = TestBed.inject(ConfigurationService) as jasmine.SpyObj<ConfigurationService>;
+        consoleInterceptorBypassService = TestBed.inject(ConsoleInterceptorBypassService) as jasmine.SpyObj<ConsoleInterceptorBypassService>;
         discoveryService.getDeviceAppApiServerBaseUrl$.and.returnValue(of('/test/api'));
         configSubject = new Subject<ServerLoggerConfiguration>();
         configurationService.getConfiguration.and.returnValue(configSubject);
-        serverLogger = TestBed.get(ServerLogger);
+        serverLogger = TestBed.inject(ServerLogger);
     }
 
     it('Should collect logs and send them in a batch to the server', fakeAsync(() => {

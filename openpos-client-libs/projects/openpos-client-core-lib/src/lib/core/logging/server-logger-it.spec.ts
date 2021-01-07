@@ -52,10 +52,10 @@ describe('ServerLoggerServiceIT', () => {
                 { provide: LOGGERS, useExisting: ServerLogger, multi: true, deps: [DiscoveryService, ConsoleIntercepter] },
             ]
         });
-        httpTestingController = TestBed.get(HttpTestingController);
-        discoveryService = TestBed.get(DiscoveryService);
-        configurationService = TestBed.get(ConfigurationService);
-        consoleInterceptorBypassService = TestBed.get(ConsoleInterceptorBypassService);
+        httpTestingController = TestBed.inject(HttpTestingController);
+        discoveryService = TestBed.inject(DiscoveryService) as jasmine.SpyObj<DiscoveryService>;
+        configurationService = TestBed.inject(ConfigurationService) as jasmine.SpyObj<ConfigurationService>;
+        consoleInterceptorBypassService = TestBed.inject(ConsoleInterceptorBypassService) as jasmine.SpyObj<ConsoleInterceptorBypassService>;
         consoleInterceptorBypassService.getMessages$.and.callFake(getBypassMessages);
         discoveryService.getDeviceAppApiServerBaseUrl$.and.returnValue(of('/test/api'));
         serverLoggerConfigSubject = new Subject<ServerLoggerConfiguration>();
@@ -67,8 +67,8 @@ describe('ServerLoggerServiceIT', () => {
                 return consoleInterceptorConfigSubject;
             }
         });
-        serverLogger = TestBed.get(ServerLogger);
-        consoleInterceptor = TestBed.get(ConsoleIntercepter);
+        serverLogger = TestBed.inject(ServerLogger);
+        consoleInterceptor = TestBed.inject(ConsoleIntercepter);
 
     }
 

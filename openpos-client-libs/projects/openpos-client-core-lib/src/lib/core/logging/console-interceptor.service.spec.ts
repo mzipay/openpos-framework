@@ -55,17 +55,17 @@ describe( 'ConsoleInterceptor', () => {
                 {provide: LOGGERS, useValue: logSpy, multi: true},
             ]
         });
-        configurationService = TestBed.get(ConfigurationService);
+        configurationService = TestBed.inject(ConfigurationService) as jasmine.SpyObj<ConfigurationService>;
     }
 
     function setupSync() {
         setup();
         configurationService.getConfiguration.and.callFake(getConfig);
 
-        consoleInterceptorBypassService = TestBed.get(ConsoleInterceptorBypassService);
+        consoleInterceptorBypassService = TestBed.inject(ConsoleInterceptorBypassService) as jasmine.SpyObj<ConsoleInterceptorBypassService>;
         consoleInterceptorBypassService.getMessages$.and.callFake(getBypassMessages);
-        TestBed.get(ConsoleIntercepter);
-        loggers = TestBed.get(LOGGERS);
+        TestBed.inject(ConsoleIntercepter);
+        loggers = TestBed.inject(LOGGERS);
     }
 
     function setupAsync( configSubject: Subject<ConsoleInterceptorConfig> ) {
@@ -73,10 +73,10 @@ describe( 'ConsoleInterceptor', () => {
 
         configurationService.getConfiguration.and.callFake(() => configSubject);
 
-        consoleInterceptorBypassService = TestBed.get(ConsoleInterceptorBypassService);
+        consoleInterceptorBypassService = TestBed.inject(ConsoleInterceptorBypassService) as jasmine.SpyObj<ConsoleInterceptorBypassService>;
         consoleInterceptorBypassService.getMessages$.and.callFake(getBypassMessages);
-        TestBed.get(ConsoleIntercepter);
-        loggers = TestBed.get(LOGGERS);
+        TestBed.inject(ConsoleIntercepter);
+        loggers = TestBed.inject(LOGGERS);
     }
 
     describe( 'Intercepting enabled', () => {

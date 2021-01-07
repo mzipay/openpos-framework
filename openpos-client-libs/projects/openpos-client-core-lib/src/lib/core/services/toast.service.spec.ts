@@ -52,14 +52,14 @@ describe('ToastService', () => {
             ]
         });
 
-        AppInjector.Instance = TestBed.get(Injector);
-        sessionServiceSpy = TestBed.get(SessionService);
+        AppInjector.Instance = TestBed.inject(Injector);
+        sessionServiceSpy = TestBed.inject(SessionService) as jasmine.SpyObj<SessionService>;
         sessionServiceSpy.getMessages.and.returnValue(of(testToast));
 
-        toastrServiceSpy = TestBed.get(ToastrService);
+        toastrServiceSpy = TestBed.inject(ToastrService) as jasmine.SpyObj<ToastrService>;
         toastrServiceSpy.show.and.returnValue({ toastRef: { componentInstance: {}}})
 
-        toastService = TestBed.get(ToastService);
+        toastService = TestBed.inject(ToastService);
 
     });
 

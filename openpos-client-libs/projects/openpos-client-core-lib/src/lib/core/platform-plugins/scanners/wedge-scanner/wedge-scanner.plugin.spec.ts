@@ -71,12 +71,12 @@ describe('WedgeScanner', () => {
             ]
         });
 
-        sessionService = TestBed.get(SessionService);
-        domEventManager = TestBed.get(DomEventManager);
+        sessionService = TestBed.inject(SessionService) as jasmine.SpyObj<SessionService>;
+        domEventManager = TestBed.inject(DomEventManager) as jasmine.SpyObj<DomEventManager>;
 
         sessionService.getMessages.and.callFake(getConfig);
 
-        wedgeScannerPlugin = TestBed.get(WedgeScannerPlugin);
+        wedgeScannerPlugin = TestBed.inject(WedgeScannerPlugin);
     }
 
     function setupSync() {
