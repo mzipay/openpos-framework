@@ -1,10 +1,10 @@
-import {Component, Inject, OnDestroy} from '@angular/core';
+import {Component, Inject, InjectionToken, OnDestroy} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
 import {ActionService} from '../actions/action.service';
 import {LockScreenMessage} from '../messages/lock-screen-message';
-import {LOCK_SCREEN_DATA} from './lock-screen.service';
 
+export const LOCK_SCREEN_DATA = new InjectionToken<Observable<LockScreenMessage>>('LOCK_SCREEN_DATA');
 @Component({
   selector: 'app-lock-screen',
   templateUrl: './lock-screen.component.html',
@@ -12,7 +12,6 @@ import {LOCK_SCREEN_DATA} from './lock-screen.service';
   providers: [ActionService]
 })
 export class LockScreenComponent implements OnDestroy {
-
   data: LockScreenMessage;
   password = '';
   username = '';
