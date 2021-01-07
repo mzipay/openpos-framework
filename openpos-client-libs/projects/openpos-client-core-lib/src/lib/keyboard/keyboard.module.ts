@@ -50,6 +50,11 @@ import { MatKeyboardService } from './services/keyboard.service';
     MatKeyboardKeyComponent,
     KeyboardDirective
   ],
+  entryComponents: [
+    MatKeyboardComponent,
+    MatKeyboardContainerComponent,
+    MatKeyboardKeyComponent
+  ],
   providers: [
     MatKeyboardService,
     { provide: MAT_KEYBOARD_DEADKEYS, useValue: keyboardDeadkeys },

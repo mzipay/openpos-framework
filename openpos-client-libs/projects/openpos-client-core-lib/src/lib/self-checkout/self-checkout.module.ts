@@ -32,6 +32,10 @@ const screenParts = [
 ];
 
 @NgModule({
+    entryComponents: [
+        ...screens,
+        ...dialogs,
+    ],
     declarations: [
         ...screens,
         ...dialogs,

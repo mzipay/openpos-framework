@@ -1,6 +1,6 @@
 import { TestBed, ComponentFixture, tick, fakeAsync } from '@angular/core/testing';
 import { PagerComponent } from './pager.component';
-import { Component, Input, QueryList, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 
 describe('PagerComponent', () => {
 
