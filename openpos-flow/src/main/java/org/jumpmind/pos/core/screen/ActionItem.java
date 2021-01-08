@@ -40,6 +40,7 @@ public class ActionItem implements Serializable {
     protected String fontSize;
     protected String keybind;
     protected boolean queueIfBlocked;
+    protected boolean doNotBlockForResponse;
     @JsonIgnore
     protected transient boolean autoAssignEnabled = true;
 
@@ -279,4 +280,13 @@ public class ActionItem implements Serializable {
     public boolean isQueueIfBlocked() {
         return queueIfBlocked;
     }    
+    
+    public boolean getDoNotBlockForResponse() {
+        return doNotBlockForResponse;
+    }
+
+    public void setDoNotBlockForResponse(boolean doNotBlockForResponse) {
+        this.doNotBlockForResponse = doNotBlockForResponse;
+    }
+    
 }
