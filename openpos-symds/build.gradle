@@ -20,5 +20,4 @@ dependencies {
     implementation project(":openpos-service")
     implementation project(":openpos-persist")
     implementation "org.springframework:spring-tx:$springVersion"
-    testImplementation project(path: ':openpos-util', configuration: 'testArtifacts')
 }
