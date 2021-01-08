@@ -9,6 +9,7 @@ import org.jumpmind.pos.persist.DatabaseScriptContainer;
 import org.jumpmind.pos.persist.driver.Driver;
 import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.jumpmind.pos.persist.model.*;
+import org.jumpmind.pos.util.clientcontext.ClientContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
@@ -90,6 +91,8 @@ public class TestPersistCarsConfig {
             AugmenterHelper augmenterHelper = new AugmenterHelper();
             augmenterHelper.setAugmenterConfigs(augmenterConfigs);
 
+            ClientContext clientContext = new ClientContext();
+
             sessionFactory.init(
                     PersistTestUtil.testDbPlatform(), 
                     PersistTestUtil.getSessionContext(), 
@@ -99,6 +102,7 @@ public class TestPersistCarsConfig {
                     DBSessionFactory.getDmlTemplates("persist-test"),
                     tagHelper,
                     augmenterHelper,
+                    clientContext,
                     null);
             
 

@@ -31,8 +31,10 @@ import org.jumpmind.pos.persist.model.AugmenterHelper;
 import org.jumpmind.pos.persist.model.AugmenterIndexConfig;
 import org.jumpmind.pos.persist.model.AugmenterModel;
 import org.jumpmind.pos.util.model.ITypeCode;
+import org.jumpmind.pos.util.clientcontext.ClientContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class DatabaseSchema {
 
@@ -47,15 +49,21 @@ public class DatabaseSchema {
     private String tablePrefix;
     private AugmenterHelper augmenterHelper;
     private ShadowTablesConfigModel shadowTablesConfig;
+    private ClientContext clientContext;
     private Map<Class<?>, ModelClassMetaData> shadowTables;
 
     @SneakyThrows
-    public void init(String tablePrefix, IDatabasePlatform platform, List<Class<?>> entityClasses, List<Class<?>> entityExtensionClasses, AugmenterHelper augmenterHelper, ShadowTablesConfigModel shadowTablesConfig) {
+    public void init(String tablePrefix, IDatabasePlatform platform, List<Class<?>> entityClasses, List<Class<?>> entityExtensionClasses, AugmenterHelper augmenterHelper, ClientContext clientContext, ShadowTablesConfigModel shadowTablesConfig) {
         this.platform = platform;
         this.tablePrefix = tablePrefix;
         this.entityClasses = entityClasses;
         this.entityExtensionClasses = entityExtensionClasses;
         this.augmenterHelper = augmenterHelper;
+        if (clientContext == null)  {
+            log.error("ClientContext is null in {}, initialization error", this.getClass().getSimpleName());
+            //  TODO  Should this throw an exception instead?
+        }
+        this.clientContext = clientContext;
         this.shadowTablesConfig = shadowTablesConfig;
         this.desiredModel = buildDesiredModel();
     }
@@ -83,6 +91,21 @@ public class DatabaseSchema {
     }
 
     public Table getTable(Class<?> entityClass, Class<?> superClass) {
+        return getTableForDeviceMode(getDeviceMode(), entityClass, superClass);
+    }
+
+    public Table getTableForDeviceMode(String deviceMode, Class<?> entityClass, Class<?> superClass)  {
+        //  Handle special Device Modes here.
+
+        if (deviceMode.equals("training")) {
+            ModelClassMetaData meta = shadowTables.get(entityClass);
+            if (meta != null) {
+                return meta.getShadowTable();
+            }
+        }
+
+        //  If no special Device Mode, use the default approach.
+
         List<ModelClassMetaData> metas = classToModelMetaData.get(entityClass).getModelClassMetaData();
         if (metas != null) {
             for (ModelClassMetaData modelMetaData : metas) {
@@ -857,5 +880,10 @@ public class DatabaseSchema {
         }
 
         return modelClassMetaDataMap;
+    }
+
+    private String getDeviceMode()  {
+        String deviceMode = clientContext.get("deviceMode");
+        return (deviceMode == null ? "default" : deviceMode);
     }
 }

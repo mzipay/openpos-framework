@@ -14,12 +14,11 @@ import org.jumpmind.db.util.ConfigDatabaseUpgrader;
 import org.jumpmind.exception.IoException;
 import org.jumpmind.pos.persist.*;
 import org.jumpmind.pos.persist.driver.Driver;
-import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.jumpmind.pos.persist.impl.ShadowTablesConfigModel;
 import org.jumpmind.pos.persist.model.AugmenterHelper;
 import org.jumpmind.pos.persist.model.TagHelper;
 import org.jumpmind.pos.service.model.ModuleModel;
-import org.jumpmind.pos.util.ClassUtils;
+import org.jumpmind.pos.util.clientcontext.ClientContext;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.ISecurityService;
 import org.jumpmind.security.SecurityServiceFactory;
@@ -52,6 +51,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.jumpmind.db.util.BasicDataSourceFactory.create;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.*;
 import static org.jumpmind.pos.service.util.ClassUtils.getClassesForPackageAndAnnotation;
 
@@ -103,6 +103,9 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
 
     @Autowired(required = false)
     protected DataSource dataSource;
+
+    @Autowired
+    protected ClientContext clientContext;
 
     protected ISecurityService securityService;
 
@@ -322,7 +325,7 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
                 }
             }
 
-            sessionFactory.init(getDatabasePlatform(), sessionContext, tableClasses, tableExtensionClasses, tagHelper, augmenterHelper, shadowTablesConfig);
+            sessionFactory.init(getDatabasePlatform(), sessionContext, tableClasses, tableExtensionClasses, tagHelper, augmenterHelper, clientContext, shadowTablesConfig);
         }
 
         return sessionFactory;

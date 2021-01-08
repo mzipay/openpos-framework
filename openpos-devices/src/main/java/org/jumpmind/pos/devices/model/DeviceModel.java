@@ -8,7 +8,7 @@ import java.util.stream.StreamSupport;
 
 import lombok.*;
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.persist.*;
 import org.jumpmind.pos.persist.model.ITaggedModel;
 import org.jumpmind.util.AppUtils;
