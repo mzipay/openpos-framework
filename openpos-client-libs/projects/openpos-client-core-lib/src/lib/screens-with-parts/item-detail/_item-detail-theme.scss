@@ -1,5 +1,19 @@
 @mixin item-detail-theme($theme) {
     $app-primary: mat-color(map-get($theme, primary));
+    $border: map-get(map-get($theme, foreground), border);
+    $card: map-get(map-get($theme, background), card);
+
+    .card {
+        background-color: $card;
+        border-color: $border;
+        border-style: solid;
+        border-width: 2px;
+
+        &.mobile,
+        &.tablet-portrait {
+            border-width: 1px;
+        }
+    }
 
     .promotion-icon {
         color: $app-primary;
@@ -8,4 +22,5 @@
     .rounded-edge {
         border-radius: 4px;
     }
+
 }

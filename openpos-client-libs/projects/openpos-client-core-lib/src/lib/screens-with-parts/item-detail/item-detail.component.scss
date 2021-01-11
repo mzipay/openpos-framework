@@ -2,10 +2,10 @@
 @import "../../styles/variables/spacing";
 
 
-:host{
-    height: 100%;
-    display: grid;
-}
+// :host{
+//     height: 100%;
+//     display: grid;
+// }
 
 h1{
     grid-area: title;
@@ -20,34 +20,78 @@ p{
     font-weight: normal;
     margin: 0;
 }
-
-.item-card{
-    display: grid;
-    @extend %sub-element-container;
-    @extend %page-gutter;
-    @extend %page-element;
-    width: 75%;
+.bacon-strip {
     height: 100%;
-    overflow-y: auto;
-    align-self: center;
-    justify-self: center;
-    grid-template: "image title" auto
-                    "image summary" auto
-                    "image properties" 1fr
-                    "image promotions" 1fr
-                    "actions actions" auto/ auto 1fr;
-    &.mobile,
-    &.tablet-portrait{
-        grid-template: "title" auto
-                        "image" auto
-                        "summary" auto
-                        "properties" auto
-                        "promotions" auto
-                        "actions" auto/auto;
-        width: 100%;
-        align-self: start;
-    }
+    min-height: 10%;
 }
+.item-detail-outer {
+    display: grid;
+    width:100%;
+    @extend %page-element;
+    grid-template: "details" auto
+                   "promos-and-availability" auto;
+    grid-template-rows: auto 1fr;
+    row-gap: 20px;
+
+    .item-detail {
+        grid-area: details;
+        overflow-y: auto; 
+        @extend %sub-element-container;
+        align-self: center;
+        justify-self: center;
+        width:90%;
+        height:100%;
+        
+        .item-card {
+            align-content: center;
+            display: grid;
+            @extend %sub-element;
+            @extend %sub-element-spaced-content;
+            grid-template: "image title" auto
+                        "image summary" auto
+                        "image properties" 1fr
+                        "image actions" auto/ auto 1fr;
+            &.mobile,
+            &.tablet-portrait{
+                grid-template: "title" auto
+                            "image" auto
+                            "summary" auto
+                            "properties" auto
+                            "actions" auto/auto;
+                align-self: start;
+            }
+        }
+    }
+
+}
+
+// .item-card{
+//     display: grid;
+//     @extend %sub-element-container;
+//     @extend %page-gutter;
+//     @extend %page-element;
+//     width: 100%;
+//     height: 100%;
+//     overflow-y: auto;
+//     align-self: center;
+//     justify-self: center;
+//     grid-template: "image title" auto
+//                     "image summary" auto
+//                     "image properties" 1fr
+//                     "image promotions" 1fr
+//                     "actions actions" auto/ auto 1fr;
+//     &.mobile,
+//     &.tablet-portrait{
+//         grid-template: "title" auto
+//                         "image" auto
+//                         "summary" auto
+//                         "properties" auto
+//                         "promotions" auto
+//                         "actions" auto/auto;
+//         width: 100%;
+//         align-self: start;
+//     }
+// }
 
 app-options-list {
     grid-area: actions;
@@ -58,9 +102,22 @@ app-options-list {
     justify-self: center;
 }
 
+.promos-and-availability {
+    grid-area: promos-and-availability;
+    overflow-y: auto; 
+    @extend %sub-element-container;
+    align-self: center;
+    justify-self: center;
+    width:90%;
+    height:100%;
+    grid-template-columns: repeat(auto-fit, minmax(0px, 1fr));
+}
+
 .promotions {
     grid-area: promotions;
-    align-self: start;
+    display:grid;
+    @extend %sub-element;
+    @extend %sub-element-spaced-content;
 
     @extend %text-md;
 }

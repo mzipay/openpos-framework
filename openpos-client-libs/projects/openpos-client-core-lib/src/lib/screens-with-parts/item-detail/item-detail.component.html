@@ -1,41 +1,77 @@
-<app-bacon-strip></app-bacon-strip>
-<section responsive-class class="item-card">
-    <h1 responsive-class>{{screen.itemName}}</h1>
-    <p responsive-class>{{screen.summary}}</p>
-    <app-carousel class="carousel" carouselSize="xl" [carouselItemClass]="'rounded-edge'">
-        <ng-template *ngFor="let image of screen.imageUrls" #carouselItem>
-            <app-image [imageUrl]="image | imageUrl" [altImageUrl]="screen.alternateImageUrl" [altText]="'Image NotFound'"></app-image>
-        </ng-template>
-    </app-carousel>
 
-    <ul responsive-class class="properties">
-        <li *ngFor="let prop of screen.itemProperties">
-            <app-display-property [property]="prop"></app-display-property>
-        </li>
-    </ul>
-
-    <section responsive-class class="promotions">
-        <h3 responsive-class>
-            {{screen.promotions.length > 0 ? screen.itemPromotionsTitle : screen.itemNoPromotionsTitle}}
-        </h3>
-        <app-instructions *ngIf="screen.promotions && screen.promotions.length > 1"  [instructions]="screen.promotionStackingDisclaimer"
-            [instructionsSize]="'text-md'"></app-instructions>
-        <div class="promotion-items">
-            <ng-container *ngFor="let promo of screen.promotions">
-                <div class="promotion-item-icon">
-                    <app-icon [iconName]="promo.icon" color="primary" class="promotion-icon" iconClass="md"></app-icon> 
-                </div>
-                <div class="promotion-item-name">
-                    {{promo.promotionName}}
-                </div>
-                <ul responsive-class class="promotion-item-rewards">
-                    <li *ngFor="let reward of promo.rewards">
-                        {{reward}}
+<app-bacon-strip class="bacon-strip">
+    <div class="item-detail-outer">
+        <div class="item-detail">
+            <section class="card item-card" responsive-class>
+                <app-title responsive-class [title]="screen.itemName"></app-title>
+                <p responsive-class>{{screen.summary}}</p>
+                <app-carousel class="carousel" carouselSize="xl" [carouselItemClass]="'rounded-edge'">
+                    <ng-template *ngFor="let image of screen.imageUrls" #carouselItem>
+                        <app-image [imageUrl]="image | imageUrl" [altImageUrl]="screen.alternateImageUrl" [altText]="'Image NotFound'"></app-image>
+                    </ng-template>
+                </app-carousel>
+                
+                <ul responsive-class class="properties">
+                    <li *ngFor="let prop of screen.itemProperties">
+                        <app-display-property [property]="prop"></app-display-property>
                     </li>
                 </ul>
-            </ng-container>
+                <app-options-list optionListSizeClass="md"></app-options-list>
+            </section>
         </div>
-    </section>
 
-    <app-options-list optionListSizeClass="md"></app-options-list>
-</section>
+        <div class="promos-and-availability">
+            <section class="card promotions" responsive-class>
+                <h3 responsive-class>
+                    {{screen.promotions.length > 0 ? screen.itemPromotionsTitle : screen.itemNoPromotionsTitle}}
+                </h3>
+                <app-instructions *ngIf="screen.promotions && screen.promotions.length > 1"  [instructions]="screen.promotionStackingDisclaimer"
+                    [instructionsSize]="'text-md'"></app-instructions>
+                <div class="promotion-items">
+                    <ng-container *ngFor="let promo of screen.promotions">
+                        <div class="promotion-item-icon">
+                            <app-icon [iconName]="promo.icon" color="primary" class="promotion-icon" iconClass="md"></app-icon> 
+                        </div>
+                        <div class="promotion-item-name">
+                            {{promo.promotionName}}
+                        </div>
+                        <ul responsive-class class="promotion-item-rewards">
+                            <li *ngFor="let reward of promo.rewards">
+                                {{reward}}
+                            </li>
+                        </ul>
+                    </ng-container>
+                </div>
+            </section>
+        </div>
+
+    </div>
+</app-bacon-strip>
+
+    
+        <!-- <section responsive-class class="promotions">
+            <h3 responsive-class>
+                {{screen.promotions.length > 0 ? screen.itemPromotionsTitle : screen.itemNoPromotionsTitle}}
+            </h3>
+            <app-instructions *ngIf="screen.promotions && screen.promotions.length > 1"  [instructions]="screen.promotionStackingDisclaimer"
+                [instructionsSize]="'text-md'"></app-instructions>
+            <div class="promotion-items">
+                <ng-container *ngFor="let promo of screen.promotions">
+                    <div class="promotion-item-icon">
+                        <app-icon [iconName]="promo.icon" color="primary" class="promotion-icon" iconClass="md"></app-icon> 
+                    </div>
+                    <div class="promotion-item-name">
+                        {{promo.promotionName}}
+                    </div>
+                    <ul responsive-class class="promotion-item-rewards">
+                        <li *ngFor="let reward of promo.rewards">
+                            {{reward}}
+                        </li>
+                    </ul>
+                </ng-container>
+            </div>
+        </section>
+    
+        <app-options-list optionListSizeClass="md"></app-options-list> -->
+<!-- </div> -->
+
