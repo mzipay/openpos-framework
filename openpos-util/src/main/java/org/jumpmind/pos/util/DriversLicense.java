@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 public class DriversLicense {
@@ -15,6 +12,8 @@ public class DriversLicense {
     private static final FastDateFormat DATE_FORMAT = FastDateFormat.getInstance("MMddyyyy");
 
     private Map<String, String> elements;
+
+    private String rawData;
 
     private String firstLine;
 
@@ -29,7 +28,7 @@ public class DriversLicense {
     private String jurisdictionBarCodeVersion;
 
     private String numberOfSubFiles;
-    
+
     private String subfileDesignators;
 
     private String jurisdictionVehicleClass;
@@ -139,12 +138,18 @@ public class DriversLicense {
     public DriversLicense(String data) {
         elements = new HashMap<>();
         parse(data);
-        setAttributes();
     }
 
     public void parse(String data)  {
+        rawData = data;
+
         elements.clear();
-        String[] lines = data.split("\r\n|\n|\r");
+        String[] lines = Arrays.stream(data.split("\r\n|\n|\r")).filter(StringUtils::isNotEmpty).toArray(String[]::new);
+
+        if (lines.length < 2) {
+            return;
+        }
+
         complianceIndicator = lines[0];
         fileType = lines[1].substring(0, 5);
         issuerIDNumber = lines[1].substring(5, 11);
@@ -260,6 +265,8 @@ public class DriversLicense {
         }
         return parsedDate;
     }
+
+    public String getRawData() { return rawData; }
 
     public String getFileType() { return fileType; }
 
