@@ -11,6 +11,7 @@ import org.jumpmind.pos.service.strategy.IInvocationStrategy;
 import org.jumpmind.pos.util.AppUtils;
 import org.jumpmind.pos.util.ClassUtils;
 import org.jumpmind.pos.util.SuppressMethodLogging;
+import org.jumpmind.pos.util.clientcontext.ClientContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,6 +49,9 @@ public class EndpointInvoker implements InvocationHandler {
     @Autowired
     private ServiceConfig serviceConfig;
 
+    @Autowired
+    private ClientContext clientContext;
+
     final static int MAX_SUMMARY_WIDTH = 127;
 
     @Autowired
@@ -64,6 +68,7 @@ public class EndpointInvoker implements InvocationHandler {
     private final static Pattern serviceNamePattern = Pattern.compile("^(?<service>[^_]+)(_(?<version>\\d(_\\d)*))?$");
     private final static String implementationConfigPath = "openpos.services.specificConfig.%s.implementation";
     Map<String, Object> endPointsByPath;
+    Map<String, Object> trainingEndPointsByPath;
 
     static BasicThreadFactory factory = new BasicThreadFactory.Builder().namingPattern("service-instrumentation-thread-%d").daemon(true)
             .build();
@@ -76,6 +81,7 @@ public class EndpointInvoker implements InvocationHandler {
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (endPointsByPath == null) {
             endPointsByPath = new HashMap<>();
+            trainingEndPointsByPath = new HashMap<>();
             Collection<Object> beans = applicationContext.getBeansWithAnnotation(RestController.class).values();
             if (beans != null) {
                 for (Object object : beans) {
@@ -84,49 +90,103 @@ public class EndpointInvoker implements InvocationHandler {
                 }
             }  
     }
-    
-    public void buildEndpointMappingsForService( Object service){
+
+    public void buildEndpointMappingsForService(Object service) {
         Class<?>[] interfaces = service.getClass().getInterfaces();
         Collection<Object> endpointOverrides = applicationContext.getBeansWithAnnotation(EndpointOverride.class).values();
         Collection<Object> endpoints = applicationContext.getBeansWithAnnotation(Endpoint.class).values();
+
+        Map<String, Object> regularOverrideEndPoints = new HashMap<>();
+        Map<String, Object> trainingOverrideEndPoints = new HashMap<>();
+        Map<String, Object> regularEndPoints = new HashMap<>();
+        Map<String, Object> trainingEndPoints = new HashMap<>();
+
         for (Class<?> i : interfaces) {
             RestController controller = i.getAnnotation(RestController.class);
             if (controller != null) {
                 String serviceName = controller.value();
                 String implementation = getServiceImplementation(serviceName);
+
+                boolean isTrainingModeImplementation = false;
                 if (implementation != null && !implementation.equals(Endpoint.IMPLEMENTATION_DEFAULT)) {
                     log.info("Loading endpoints for the '{}' implementation of {}({})", implementation, i.getSimpleName(),
                             serviceName);
+                    isTrainingModeImplementation = implementation.equals(Endpoint.IMPLEMENTATION_TRAINING);
                 } else {
                     log.debug("Loading endpoints for the '{}' implementation of {}({})", implementation, i.getSimpleName(),
                             serviceName);
                 }
+
+                //  For each endpoint, classify it and drop it into one of four buckets by type.
+
                 Method[] methods = i.getMethods();
                 for (Method method : methods) {
                     String path = buildPath(method);
+
+                    //  See if there is an endpoint override. If so, add it to the appropriate map.
+
                     Object endpointOverride = findBestEndpointOverrideMatch(path, implementation, endpointOverrides);
                     if (endpointOverride != null) {
-                        endPointsByPath.put(path, endpointOverride);
+                        (isTrainingModeImplementation ? trainingOverrideEndPoints : regularOverrideEndPoints).put(path, endpointOverride);
                     }
 
-                    if (!endPointsByPath.containsKey(path)) {
-                        Object endpointBean = findMatch(path, endpoints, implementation);
-                        if (endpointBean == null) {
-                            endpointBean = findMatch(path, endpoints, Endpoint.IMPLEMENTATION_DEFAULT);
-                        }
+                    //  See if there is a non-override endpoint for this path. If so, add it to the
+                    //  appropriate map.
 
-                        if (endpointBean != null) {
-                            endPointsByPath.put(path, endpointBean);
-                        } else {
-                            log.warn(String.format(
-                                    "No endpoint defined for path '%s' in '%s' in the service Please define a Spring-discoverable @Endpoint class, "
-                                            + "with a method annotated like  @Endpoint(\"%s\")",
-                                    path, i.getSimpleName(), path));
-                        }
+                    Object endpointBean = findMatch(path, endpoints, implementation);
+                    if (endpointBean == null) {
+                        endpointBean = findMatch(path, endpoints, Endpoint.IMPLEMENTATION_DEFAULT);
+                    }
+                    if (endpointBean != null) {
+                        (isTrainingModeImplementation ? trainingEndPoints : regularEndPoints).put(path, endpointBean);
+                    }  else  {
+                        log.warn("No endpoint match found for service {}, path '{}', implementation '{}'", i.getSimpleName(), path, implementation);
+                    }
+                }
+
+                //  Now run the list again and create the master endpoint maps for regular and training mode
+                //  based on the type-specific maps created above.
+
+                for (Method method : methods) {
+                    String path = buildPath(method);
+
+                    //  There is an order of precedence for implementations:
+                    //     1.  Training override endpoints.
+                    //     2.  Non-training override endpoints.
+                    //     3.  Training endpoints.
+                    //     4.  Non-training endpoints.
+
+                    if (isTrainingModeImplementation && trainingOverrideEndPoints.containsKey(path)) {
+                        trainingEndPointsByPath.put(path, trainingOverrideEndPoints.get(path));
+
+                    }  else if (regularOverrideEndPoints.containsKey(path)) {
+                        endPointsByPath.put(path, regularOverrideEndPoints.get(path));
+                        trainingEndPointsByPath.put(path, regularOverrideEndPoints.get(path));
+
+                    }  else if (isTrainingModeImplementation && trainingEndPoints.containsKey(path)) {
+                        trainingEndPointsByPath.put(path, trainingEndPoints.get(path));
+
+                    }  else if (regularEndPoints.containsKey(path))  {
+                        endPointsByPath.put(path, regularEndPoints.get(path));
+                        trainingEndPointsByPath.put(path, regularEndPoints.get(path));
+
+                    }  else {
+                        log.warn(String.format(
+                                "No endpoint defined for path '%s' in the '%s' service. Please define a Spring-discoverable @Endpoint class, "
+                                + "with a method annotated like  @Endpoint(\"%s\")",
+                                path, i.getSimpleName(), path));
                     }
                 }
             }
         }
+    }
+
+    protected Map<String, Object> getEndpointsByPathMapForImplementation(String implementation)  {
+        if ((implementation != null) && implementation.equals(Endpoint.IMPLEMENTATION_TRAINING))  {
+            return trainingEndPointsByPath;
+
+        }
+        return endPointsByPath;
     }
 
     protected Object findBestEndpointOverrideMatch(String path, String implementation, Collection<Object> endpointOverrides) {
@@ -183,10 +243,14 @@ public class EndpointInvoker implements InvocationHandler {
             return false;
         }
         String path = buildPath(method);
-        if (endPointsByPath == null) {
-            throw new PosServerException("endPointsByPath == null.  This class has not been fully initialized by Spring");
+        if ((endPointsByPath == null) || (trainingEndPointsByPath == null)) {
+            throw new PosServerException("endPointsByPath == null and/or trainingEndPointsByPath == null.  This class has not been fully initialized by Spring");
         }
-        Object obj = endPointsByPath.get(path);
+
+        String deviceMode = clientContext.get("deviceMode");
+        String implementation = ((deviceMode != null) && deviceMode.equals("training") ? Endpoint.IMPLEMENTATION_TRAINING : Endpoint.IMPLEMENTATION_DEFAULT);
+        Object obj = getEndpointsByPathMapForImplementation(implementation).get(path);
+
         ServiceSpecificConfig config = getSpecificConfig(method);
         EndpointSpecificConfig endConfig = null;
         Endpoint annotation = null;
@@ -216,7 +280,7 @@ public class EndpointInvoker implements InvocationHandler {
         Object result = null;
         try {
             log(method, args, annotation);
-            result = strategy.invoke(profileIds, proxy, method, endPointsByPath, args);
+            result = strategy.invoke(profileIds, proxy, method, getEndpointsByPathMapForImplementation(implementation), args);
             endSampleSuccess(sample, config, proxy, method, args, result);
         } catch (Throwable ex) {
             endSampleError(sample, config, proxy, method, args, result, ex);
