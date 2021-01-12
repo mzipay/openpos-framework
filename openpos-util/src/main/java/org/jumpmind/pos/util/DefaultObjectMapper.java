@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.joda.money.Money;
 import org.jumpmind.pos.util.web.MoneyDeserializer;
@@ -27,6 +28,7 @@ public class DefaultObjectMapper {
         mapper.setSerializationInclusion(Include.NON_NULL);
         mapper.registerModule(module);
         mapper.registerModule(new JavaTimeModule());
+        mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
         return mapper;
     }
 
