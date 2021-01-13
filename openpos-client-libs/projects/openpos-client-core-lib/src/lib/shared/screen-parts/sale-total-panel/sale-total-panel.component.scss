@@ -75,7 +75,7 @@
             .sale-total-total-title {
                 @extend %text-lg;
                 padding-top: 8px;
-                padding-bottom: 8px;
+                padding-bottom: 0px;
 
                 &.small-desktop-landscape {
                     @extend %text-md;

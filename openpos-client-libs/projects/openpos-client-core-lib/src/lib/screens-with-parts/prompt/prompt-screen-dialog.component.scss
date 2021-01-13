@@ -12,6 +12,7 @@
         width: 100%;
         justify-self: center;
         align-content: center;
+        text-align: -webkit-center;
         @extend %page-spaced-content; 
     
         .prompt-image {
