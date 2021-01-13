@@ -55,7 +55,7 @@
             .sale-total-subtotal-title {
                 @extend %text-sm;
                 padding-bottom: 8px;
-                padding-top: 8px;
+                padding-top: 0px;
             }
 
             .sale-total-subtotal-amount {
@@ -74,7 +74,7 @@
 
             .sale-total-total-title {
                 @extend %text-lg;
-                padding-top: 8px;
+                padding-top: 0px;
                 padding-bottom: 8px;
 
                 &.small-desktop-landscape {
