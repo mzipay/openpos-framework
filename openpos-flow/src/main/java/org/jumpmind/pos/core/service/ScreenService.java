@@ -309,6 +309,12 @@ public class ScreenService implements IScreenService, IActionListener {
     }
 
     @Override
+    public void closeToast(String appId, String deviceId, CloseToast toast) {
+        interceptCloseToast(appId, deviceId, toast);
+        messageService.sendMessage(appId, deviceId, toast);
+    }
+
+    @Override
     public void showScreen(String appId, String deviceId, UIMessage screen) {
         showScreen(appId, deviceId, screen, null);
     }
@@ -365,6 +371,16 @@ public class ScreenService implements IScreenService, IActionListener {
                 IMessageInterceptor<Toast> toastInterceptor =  (IMessageInterceptor<Toast>) applicationContext.getBean(beanName);
                 toastInterceptor.intercept(appId, deviceId, toast);
             }
+        }
+    }
+
+    protected void interceptCloseToast(String appId, String deviceId, CloseToast closeToast) {
+        String[] closeToastInterceptorBeanNames = applicationContext.getBeanNamesForType(ResolvableType.forClassWithGenerics(IMessageInterceptor.class, CloseToast.class));
+
+        for (String beanName: closeToastInterceptorBeanNames) {
+            @SuppressWarnings("unchecked")
+            IMessageInterceptor<CloseToast> toastInterceptor =  (IMessageInterceptor<CloseToast>) applicationContext.getBean(beanName);
+            toastInterceptor.intercept(appId, deviceId, closeToast);
         }
     }
     

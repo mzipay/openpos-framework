@@ -1,9 +1,7 @@
 package org.jumpmind.pos.devices.model;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.map.HashedMap;
-import org.jumpmind.pos.devices.DeviceNotAuthorizedException;
+import org.apache.commons.collections4.CollectionUtils;
 import org.jumpmind.pos.devices.DeviceNotFoundException;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.ModelId;
@@ -110,7 +108,7 @@ public class DevicesRepository {
     }
 
     private List<DeviceParamModel> getDeviceParams(String deviceId, String appId) {
-        Map<String, Object> params = new HashedMap();
+        Map<String, Object> params = new HashMap<>();
         params.put("deviceId", deviceId);
         params.put("appId", appId);
 

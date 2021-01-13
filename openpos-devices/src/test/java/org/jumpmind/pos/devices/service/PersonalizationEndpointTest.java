@@ -1,13 +1,13 @@
 package org.jumpmind.pos.devices.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.collections4.map.HashedMap;
 import org.jumpmind.pos.devices.TestDevicesConfig;
 import org.jumpmind.pos.devices.service.model.GetDeviceResponse;
 import org.jumpmind.pos.devices.service.model.PersonalizationRequest;
 import org.jumpmind.pos.devices.service.model.PersonalizationResponse;
-import org.jumpmind.pos.service.utils.MockGetRequestBuilder;
-import org.jumpmind.pos.service.utils.MockPostRequestBuilder;
+import org.jumpmind.pos.test.MockGetRequestBuilder;
+import org.jumpmind.pos.test.MockPostRequestBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

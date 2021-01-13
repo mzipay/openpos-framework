@@ -1,7 +1,7 @@
 package org.jumpmind.pos.core.audio;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.core.content.ContentProviderService;
 import org.jumpmind.pos.core.flow.IStateManager;
 import org.jumpmind.pos.core.flow.In;
@@ -37,7 +37,7 @@ public class AudioService implements IAudioService {
     @Override
     public void play(AudioRequest request) {
         if (!enableAudio) {
-            log.warn("Audio is disabled on device '{}', so the sound '{}' will not be played", stateManager.getDeviceId(), request.getSound());
+            log.debug("Audio is disabled on device '{}', so the sound '{}' will not be played", stateManager.getDeviceId(), request.getSound());
             return;
         }
 

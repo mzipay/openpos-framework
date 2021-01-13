@@ -1,21 +1,5 @@
 package org.jumpmind.pos.persist;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
-
-import java.beans.PropertyDescriptor;
-import java.io.File;
-import java.io.FileReader;
-import java.io.Reader;
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.sql.DataSource;
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -42,6 +26,21 @@ import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterUtils;
 import org.springframework.jdbc.core.namedparam.ParsedSql;
+
+import javax.sql.DataSource;
+import java.beans.PropertyDescriptor;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
+import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Slf4j
 public class DBSession {
@@ -199,8 +198,8 @@ public class DBSession {
     }
 
     public void executeScript(Reader reader) {
-        try {
-            RunScript.execute(getConnection(), reader);
+        try (Connection connection = getConnection()) {
+            RunScript.execute(connection, reader);
         } catch (Exception ex) {
             throw new PersistException("Failed to execute script " + reader, ex);
         }
@@ -523,7 +522,7 @@ public class DBSession {
 
     protected int excecuteDml(DmlType type, ModelWrapper model, Table table) {
         boolean[] nullKeyValues = model.getNullKeys();
-        List<Column> primaryKeyColumns = model.getPrimaryKeyColumns();
+        List<Column> primaryKeyColumns = getPrimaryKeyWithTags(model, table);
 
         DmlStatement statement = databasePlatform.createDmlStatement(type, table.getCatalog(), table.getSchema(), table.getName(),
                 primaryKeyColumns.toArray(new Column[primaryKeyColumns.size()]), model.getColumns(table), nullKeyValues, null);
@@ -547,13 +546,32 @@ public class DBSession {
             List<Table> tables = getValidatedTables(exampleModel);
             for (Table table : tables) {
                 boolean[] nullKeyValues = model.getNullKeys();
-                List<Column> primaryKeyColumns = model.getPrimaryKeyColumns();
+                List<Column> primaryKeyColumns = getPrimaryKeyWithTags(model, table);
+                
                 DmlStatement statement = databasePlatform.createDmlStatement(dmlType, table.getCatalog(), table.getSchema(), table.getName(),
                         primaryKeyColumns.toArray(new Column[primaryKeyColumns.size()]), model.getColumns(table), nullKeyValues, null);
                 String sql = statement.getSql();
                 jdbcTemplate.getJdbcOperations().batchUpdate(sql, getValueArray(statement, models), model.getColumnTypes(table));
             }
         }
+    }
+    
+    private List<Column> getPrimaryKeyWithTags(ModelWrapper model, Table table) {
+        List<Column> primaryKeyColumns = new ArrayList<>(model.getPrimaryKeyColumns());
+        if (isTaggedWithPrimaryKey(model.getModel())) {
+            primaryKeyColumns.addAll(Arrays.stream(model.getColumns(table))
+                    .filter(c -> StringUtils.startsWith(c.getName(), TagModel.TAG_PREFIX))
+                    .collect(Collectors.toList()));
+        }
+        return primaryKeyColumns;
+    }
+    
+    private boolean isTaggedWithPrimaryKey(AbstractModel model) {
+        if (model != null && model instanceof ITaggedModel) {
+            Tagged tagged = model.getClass().getAnnotation(Tagged.class);
+            return tagged != null && tagged.includeTagsInPrimaryKey();
+        }
+        return false;
     }
 
     public void batchInsert(List<? extends AbstractModel> models) {
@@ -643,6 +661,14 @@ public class DBSession {
                 if (resultClass != null) {
                     if (resultClass.equals(String.class)) {
                         object = (T) row.stringValue();
+                    } else if (resultClass.getPackage().getName().equals("java.lang") ||
+                            resultClass.getPackage().getName().equals("java.util") ||
+                            resultClass.getPackage().getName().equals("java.sql") ||
+                            resultClass.getPackage().getName().equals("java.math")) {
+                        object = (T) row.values().iterator().next();
+                        if (object != null && !resultClass.isAssignableFrom(object.getClass())) {
+                            throw new PersistException(object.getClass().getName() + " is not assignable to " + resultClass.getName());
+                        }
                     } else if (isModel(resultClass)) {
                         object = mapModel(resultClass, row);
                     } else {
@@ -768,7 +794,7 @@ public class DBSession {
         if (model instanceof IAugmentedModel) {
             List<AugmenterConfig> configs = augmenterHelper.getAugmenterConfigs(model);
             if (CollectionUtils.isEmpty(configs)) {
-                log.warn("Missing config for model class" + model.getClass().getSimpleName());
+                log.info("No augmenter columns defined for the model: " + model.getClass().getSimpleName());
                 return;
             }
             Map<String, Object> augmentsValues = new HashMap<>();
