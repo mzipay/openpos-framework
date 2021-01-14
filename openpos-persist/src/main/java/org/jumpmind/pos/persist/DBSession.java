@@ -53,13 +53,13 @@ public class DBSession {
     private IDatabasePlatform databasePlatform;
     private TypedProperties sessionContext;
     private NamedParameterJdbcTemplate jdbcTemplate;
-    private Map<String, QueryTemplate> queryTemplates;
+    private QueryTemplates queryTemplates;
     private Map<String, DmlTemplate> dmlTemplates;
     private TagHelper tagHelper;
     private AugmenterHelper augmenterHelper;
 
     public DBSession(String catalogName, String schemaName, DatabaseSchema databaseSchema, IDatabasePlatform databasePlatform,
-                     TypedProperties sessionContext, Map<String, QueryTemplate> queryTemplates, Map<String, DmlTemplate> dmlTemplates,
+                     TypedProperties sessionContext, QueryTemplates queryTemplates, Map<String, DmlTemplate> dmlTemplates,
                      TagHelper tagHelper, AugmenterHelper augmenterHelper) {
         super();
         this.dmlTemplates = dmlTemplates;
@@ -324,8 +324,8 @@ public class DBSession {
         QueryTemplate queryTemplate = new QueryTemplate();
         boolean isEntityResult = AbstractModel.class.isAssignableFrom(query.getResultClass());
         // defined in config
-        if (queryTemplates.containsKey(query.getName())) {
-            queryTemplate = queryTemplates.get(query.getName()).copy();
+        if (queryTemplates.containsQueryTemplate(databaseSchema.getDeviceMode(), query.getName())) {
+            queryTemplate = queryTemplates.getQueryTemplate(databaseSchema.getDeviceMode(), query.getName()).copy();
         } else {
             queryTemplate.setName(query.getName());
         }

@@ -13,7 +13,7 @@ import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.pos.persist.cars.CarModel;
 import org.jumpmind.pos.persist.impl.DatabaseSchema;
 import org.jumpmind.pos.persist.impl.DmlTemplate;
-import org.jumpmind.pos.persist.impl.QueryTemplate;
+import org.jumpmind.pos.persist.impl.QueryTemplates;
 import org.jumpmind.pos.persist.model.AugmenterHelper;
 import org.jumpmind.pos.persist.model.TagHelper;
 import org.jumpmind.properties.TypedProperties;
@@ -58,7 +58,7 @@ public class DBSessionQueryConcurrentTest {
         Mockito.when(ps.getResultSet()).thenReturn(rs);
         Mockito.when(ps.executeQuery()).thenReturn(rs);
         
-        Map<String, QueryTemplate> queryTemplates = new HashMap<>();
+        QueryTemplates queryTemplates = new QueryTemplates();
         Map<String, DmlTemplate> dmlTemplates = new HashMap<>();
         
         DBSession db = new DBSession("catalog", "schema", databaseSchema, databasePlatform, new TypedProperties(), queryTemplates, dmlTemplates, tagHelper, augmenterHelper);

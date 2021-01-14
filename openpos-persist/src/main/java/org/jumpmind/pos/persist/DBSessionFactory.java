@@ -24,7 +24,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 public class DBSessionFactory {
 
     DatabaseSchema databaseSchema;
-    Map<String, QueryTemplate> queryTemplates;
+    QueryTemplates queryTemplates;
     Map<String, DmlTemplate> dmlTemplates;
     IDatabasePlatform databasePlatform;
     TypedProperties sessionContext;
@@ -81,7 +81,7 @@ public class DBSessionFactory {
             ClientContext clientContext,
             ShadowTablesConfigModel shadowTablesConfig) {
 
-        this.queryTemplates = buildQueryTemplatesMap(queryTemplatesObject);
+        this.queryTemplates = queryTemplatesObject;
         this.dmlTemplates = buildDmlTemplatesMap(dmlTemplates);
         this.sessionContext = sessionContext;
 
@@ -106,6 +106,8 @@ public class DBSessionFactory {
                 this.augmenterHelper,
                 this.clientContext,
                 this.shadowTablesConfig);
+
+        this.queryTemplates.replaceModelClassNamesWithTableNames(this.databaseSchema, this.modelClasses);
     }
 
     public void createAndUpgrade() {
@@ -140,25 +142,27 @@ public class DBSessionFactory {
             Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(tablePrefix + "-query.yml");
 
             QueryTemplates templates = new QueryTemplates();
-            
-            if(!urls.hasMoreElements()) {
+
+            if (!urls.hasMoreElements()) {
                 log.debug("Could not locate " + tablePrefix + "-query.yml on the classpath.");
                 return new QueryTemplates();
             }
             
-            while(urls.hasMoreElements()){
+            while (urls.hasMoreElements()) {
                 URL url = urls.nextElement();
                 log.info(String.format("Loading %s...", url.toString()));
                 InputStream queryYamlStream = url.openStream();
                 QueryTemplates queryTemplates = new Yaml(new Constructor(QueryTemplates.class)).load(queryYamlStream);
-                if(queryTemplates != null){
-                    templates.getQueries().addAll(queryTemplates.getQueries());
+                if (queryTemplates != null) {
+                    templates.addQueries("default", queryTemplates.getQueries());
+                    templates.addQueries("training", queryTemplates.getQueries());
                 }
             }
-            
+
             return templates;
 
         } catch (Exception ex) {
+            log.error("ERROR: Failed to load query file " + tablePrefix + "-query.yml");
             throw new PersistException("Failed to load " + tablePrefix + "-query.yml", ex);
         }
     }
@@ -179,7 +183,7 @@ public class DBSessionFactory {
             throw new PersistException("Failed to load " + tablePrefix + "-dml.yml", ex);
         }
     }
-
+/*
     protected Map<String, QueryTemplate> buildQueryTemplatesMap(QueryTemplates queryTemplates) {
         Map<String, QueryTemplate> queryTemplatesMap = new HashMap<>();
         if (queryTemplates != null) {
@@ -187,7 +191,7 @@ public class DBSessionFactory {
         }
         return queryTemplatesMap;
     }
-
+*/
     protected Map<String, DmlTemplate> buildDmlTemplatesMap(DmlTemplates dmlTemplates) {
         Map<String, DmlTemplate> dmlTemplatesMap = new HashMap<>();
         if (dmlTemplates != null && dmlTemplates.getDmls() != null) {

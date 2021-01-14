@@ -34,7 +34,6 @@ import org.jumpmind.pos.util.model.ITypeCode;
 import org.jumpmind.pos.util.clientcontext.ClientContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class DatabaseSchema {
 
@@ -882,7 +881,7 @@ public class DatabaseSchema {
         return modelClassMetaDataMap;
     }
 
-    private String getDeviceMode()  {
+    public String getDeviceMode()  {
         String deviceMode = clientContext.get("deviceMode");
         return (deviceMode == null ? "default" : deviceMode);
     }
