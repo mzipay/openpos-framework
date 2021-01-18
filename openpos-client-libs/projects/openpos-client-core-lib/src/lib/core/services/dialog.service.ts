@@ -111,8 +111,11 @@ export class DialogService {
 
             this.closingDialogRef = null;
             this.dialogRef = null;
+            this.dialogOpening = false;
         } else if (this.closingDialogRef != null) {
             await this.closingDialogRef.afterClosed().toPromise();
+        } else if (this.dialogOpening) {
+            this.dialogOpening = false;
         }
     }
 
@@ -140,6 +143,13 @@ export class DialogService {
     }
 
     private async openDialog(dialog: any) {
+        // Must check dialogOpening here because updateDialog leaves the possibility that a closeDialog
+        // could be invoked from elsewhere (OpenposScreenOutletDirective) before open actually runs.
+        if (! this.dialogOpening) {
+            this.log.info(`[DialogService] Not opening dialog because the dialog was already closed.`);
+            return;
+        }
+
         try {
             const dialogComponentFactory: ComponentFactory<IScreen> = this.resolveDialog(dialog.screenType);
             this.log.info(`[DialogService] Opening a dialog with a ` +
