@@ -184,7 +184,6 @@ public class EndpointInvoker implements InvocationHandler {
     protected Map<String, Object> getEndpointsByPathMapForImplementation(String implementation)  {
         if ((implementation != null) && implementation.equals(Endpoint.IMPLEMENTATION_TRAINING))  {
             return trainingEndPointsByPath;
-
         }
         return endPointsByPath;
     }
@@ -249,13 +248,14 @@ public class EndpointInvoker implements InvocationHandler {
 
         String deviceMode = clientContext.get("deviceMode");
         String implementation = ((deviceMode != null) && deviceMode.equals("training") ? Endpoint.IMPLEMENTATION_TRAINING : Endpoint.IMPLEMENTATION_DEFAULT);
-        Object obj = getEndpointsByPathMapForImplementation(implementation).get(path);
+        Map<String, Object> endpointsByPathMap = getEndpointsByPathMapForImplementation(implementation);
+        Object endpointObj = endpointsByPathMap.get(path);
 
         ServiceSpecificConfig config = getSpecificConfig(method);
         EndpointSpecificConfig endConfig = null;
         Endpoint annotation = null;
-        if (obj != null) {
-            annotation = obj.getClass().getAnnotation(Endpoint.class);
+        if (endpointObj != null) {
+            annotation = endpointObj.getClass().getAnnotation(Endpoint.class);
             if (annotation != null) {
                 for (EndpointSpecificConfig aWeirdAcronym : config.getEndpoints()) {
                     if (annotation.path().equals(aWeirdAcronym.getPath())) {
@@ -280,7 +280,7 @@ public class EndpointInvoker implements InvocationHandler {
         Object result = null;
         try {
             log(method, args, annotation);
-            result = strategy.invoke(profileIds, proxy, method, getEndpointsByPathMapForImplementation(implementation), args);
+            result = strategy.invoke(profileIds, proxy, method, endpointsByPathMap, args);
             endSampleSuccess(sample, config, proxy, method, args, result);
         } catch (Throwable ex) {
             endSampleError(sample, config, proxy, method, args, result, ex);

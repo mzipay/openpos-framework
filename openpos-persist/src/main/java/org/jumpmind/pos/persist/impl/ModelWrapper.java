@@ -239,7 +239,7 @@ public class ModelWrapper {
             return columnNamesToObjectValues;
         } catch (Exception ex) {
             throw new PersistException(
-                    "Failed to getObjectValuesByColumnName on model " + model + " fieldsToColumns: " + fieldsToColumns, ex);
+                    "Failed to getObjectValuesByColumnName on model " + model + ", fieldsToColumns: " + fieldsToColumns, ex);
         }
     }
 
@@ -253,19 +253,19 @@ public class ModelWrapper {
     }
 
     public Object getFieldValue(String fieldName) {
-        Object fieldValue=null;
+        Object fieldValue = null;
         Object obj = model;
 
         // First we need to figure out if this field is on the model or an extension model
         FieldMetaData fieldMetaData = getFieldMetaData(fieldName);
-        if( fieldMetaData  != null && model.getExtensions().containsKey(fieldMetaData.getClazz())){
+        if (fieldMetaData != null && model.getExtensions().containsKey(fieldMetaData.getClazz())) {
             obj = model.getExtension(fieldMetaData.getClazz());
         }
 
         try {
             fieldValue = PropertyUtils.getProperty(obj, fieldName);
         } catch (Exception ex) {
-            throw new PersistException("Failed to getFieldValue on " + obj + " fieldName " + fieldName, ex);
+            throw new PersistException("Failed to getFieldValue on " + obj + ", class " + obj.getClass().getSimpleName() + ", field name " + fieldName, ex);
         }
         return fieldValue;
     }

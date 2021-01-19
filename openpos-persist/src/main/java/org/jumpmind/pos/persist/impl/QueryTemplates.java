@@ -61,6 +61,7 @@ public class QueryTemplates {
                         if (StringUtils.indexOf(select, modelClassName) >= 0)  {
                             //  TODO  Model class/super class. Works this way, but...
                             select = select.replaceAll("\\b" + modelClassName + "\\b", dbSchema.getTableForDeviceMode(deviceMode, modelClass, modelClass).getName());
+                            template.setSelect(select);
                         }
                     }
                 }
@@ -74,7 +75,7 @@ public class QueryTemplates {
         Map<String, QueryTemplate> queryTemplatesMap = new HashMap<>();
         if (templateList != null) {
             for (QueryTemplate t : templateList)  {
-                queryTemplatesMap.put(t.getName(), t);
+                queryTemplatesMap.put(t.getName(), t.copy());
             }
         }
         return queryTemplatesMap;

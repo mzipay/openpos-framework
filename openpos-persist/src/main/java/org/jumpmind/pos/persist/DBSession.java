@@ -608,7 +608,7 @@ public class DBSession {
     }
 
     protected List<Table> getValidatedTables(Class<?> entityClass) {
-        List<Table> tables = databaseSchema.getTables(entityClass);
+        List<Table> tables = databaseSchema.getTables(databaseSchema.getDeviceMode(), entityClass);
         if (tables == null || tables.size() == 0) {
             throw new PersistException("Failed to locate a database table for entity class: '" + entityClass
                     + "'. Make sure the correct dbSession is used with the module by using the correct @Qualifier");
@@ -687,7 +687,7 @@ public class DBSession {
                 throw new PersistException("Failed to execute sql: " + sql, ex);
             } catch (Exception ex2) {
                 if (ex2 instanceof PersistException) {
-                    throw (PersistException)ex2;
+                    throw ex2;
                 } else {
                     log.warn("Could not generate dynamic sql to log.", ex2);
                     throw ex; // throw the first.
@@ -718,13 +718,14 @@ public class DBSession {
 
     @SuppressWarnings("unchecked")
     protected <T> T mapModel(Class<T> resultClass, Row row) throws Exception {
+        //  TODO  If shadow tables, do we have the right model class and columns?
         ModelMetaData modelMetaData = databaseSchema.getModelMetaData(resultClass);
 
         T object = resultClass.newInstance();
         ModelWrapper model = new ModelWrapper((AbstractModel) object, modelMetaData, augmenterHelper);
         model.load();
 
-        LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<String>();
+        LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<>();
         LinkedHashMap<String, Object> deferredLoadValues = new LinkedHashMap<>();
 
         mapModelHelper(modelMetaData, row, object, model, resultClass, matchedColumns, deferredLoadValues);
@@ -824,7 +825,7 @@ public class DBSession {
         T object = resultClass.newInstance();
         PropertyDescriptor[] propertyDescriptors = PropertyUtils.getPropertyDescriptors(object);
 
-        LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<String>();
+        LinkedCaseInsensitiveMap<String> matchedColumns = new LinkedCaseInsensitiveMap<>();
 
         for (int i = 0; i < propertyDescriptors.length; i++) {
             String propertyName = propertyDescriptors[i].getName();

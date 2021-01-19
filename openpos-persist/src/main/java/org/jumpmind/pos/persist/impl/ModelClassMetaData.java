@@ -26,7 +26,6 @@ public class ModelClassMetaData {
     private Set<String> augmentedFieldNames = new LinkedHashSet<>();
     private List<AugmenterConfig> augmenterConfigs = new ArrayList<>();
 
-    private boolean hasShadowTable;
     private String shadowPrefix;
     private String modulePrefix;
 
@@ -70,6 +69,10 @@ public class ModelClassMetaData {
         }
     }
 
+    public Table getTableForDeviceMode(String deviceMode)  {
+        return (deviceMode.equalsIgnoreCase("training") && hasShadowTable() ? getShadowTable() : getTable());
+    }
+
     public void setShadowTable(String shadowPrefix, String modulePrefix)  {
         Table shadowTable = table.copy();
         shadowTable.setName((shadowPrefix + "_" + modulePrefix + "_" + table.getName()).toUpperCase());
@@ -84,7 +87,7 @@ public class ModelClassMetaData {
     }
 
     public String getShadowTableName()  {
-        return (hasShadowTable ? shadowTable.getName() : table.getName());
+        return (hasShadowTable() ? shadowTable.getName() : table.getName());
     }
 
     @Override

@@ -96,7 +96,7 @@ public class DatabaseSchema {
     public Table getTableForDeviceMode(String deviceMode, Class<?> entityClass, Class<?> superClass)  {
         //  Handle special Device Modes here.
 
-        if (deviceMode.equals("training")) {
+        if (deviceMode.equalsIgnoreCase("training")) {
             ModelClassMetaData meta = shadowTables.get(entityClass);
             if (meta != null) {
                 return meta.getShadowTable();
@@ -107,28 +107,41 @@ public class DatabaseSchema {
 
         List<ModelClassMetaData> metas = classToModelMetaData.get(entityClass).getModelClassMetaData();
         if (metas != null) {
-            for (ModelClassMetaData modelMetaData : metas) {
-                if (modelMetaData.getClazz().equals(superClass)) {
-                    return modelMetaData.getTable();
+            for (ModelClassMetaData meta : metas) {
+                if (meta.getClazz().equals(superClass)) {
+                    return meta.getTable();
                 }
             }
         }
         return null;
     }
 
-    public List<Table> getTables(Class<?> entityClass) {
+    public List<Table> getTables(String deviceMode, Class<?> entityClass) {
         if (entityClass == null) {
             throw new PersistException("Cannot lookup a table for a null entity class.");
         }
 
         List<Table> tables = new ArrayList<>();
-        List<ModelClassMetaData> metas = classToModelMetaData.get(entityClass).getModelClassMetaData();
+        List<ModelClassMetaData> metas = getModelClassMetaDataList(deviceMode, entityClass);
         if (metas != null) {
-            for (ModelClassMetaData ModelMetaData : metas) {
-                tables.add(ModelMetaData.getTable());
+            for (ModelClassMetaData modelMetaData : metas) {
+                tables.add(modelMetaData.getTableForDeviceMode("training"));
             }
         }
         return tables;
+    }
+
+    protected List<ModelClassMetaData> getModelClassMetaDataList(String deviceMode, Class<?> entityClass)  {
+        if (deviceMode.equalsIgnoreCase("training"))  {
+            ModelClassMetaData meta = shadowTables.get(entityClass);
+            if ((meta != null) && meta.hasShadowTable())  {
+                List<ModelClassMetaData> metaList = new ArrayList<>();
+                metaList.add(meta);
+                return metaList;
+            }
+        }
+
+        return classToModelMetaData.get(entityClass).getModelClassMetaData();
     }
 
     protected void refreshMetaData(Database actualModel) {

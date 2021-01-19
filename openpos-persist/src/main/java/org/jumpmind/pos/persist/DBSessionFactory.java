@@ -121,7 +121,8 @@ public class DBSessionFactory {
         List<Class<?>> toExclude = exclude != null ? Arrays.asList(exclude) : Collections.emptyList();
         for (Class<?> modelClazz : this.modelClasses) {
             if (!toExclude.contains(modelClazz)) {
-                List<Table> tables = this.databaseSchema.getTables(modelClazz);
+                //  Note that the list below returns regular tables only, NOT shadow tables.
+                List<Table> tables = this.databaseSchema.getTables("default", modelClazz);
                 list.addAll(tables);
             }
         }
@@ -133,7 +134,7 @@ public class DBSessionFactory {
     }
 
     public org.jumpmind.db.model.Table getTableForEnhancement(Class<?> entityClazz) {
-        List<org.jumpmind.db.model.Table> tables = this.databaseSchema.getTables(entityClazz);
+        List<org.jumpmind.db.model.Table> tables = this.databaseSchema.getTables("default", entityClazz);
         return tables != null && tables.size() > 0 ? tables.get(0) : null;
     }
 
@@ -183,15 +184,7 @@ public class DBSessionFactory {
             throw new PersistException("Failed to load " + tablePrefix + "-dml.yml", ex);
         }
     }
-/*
-    protected Map<String, QueryTemplate> buildQueryTemplatesMap(QueryTemplates queryTemplates) {
-        Map<String, QueryTemplate> queryTemplatesMap = new HashMap<>();
-        if (queryTemplates != null) {
-            queryTemplates.getQueries().stream().forEach((q) -> queryTemplatesMap.put(q.getName(), q));
-        }
-        return queryTemplatesMap;
-    }
-*/
+
     protected Map<String, DmlTemplate> buildDmlTemplatesMap(DmlTemplates dmlTemplates) {
         Map<String, DmlTemplate> dmlTemplatesMap = new HashMap<>();
         if (dmlTemplates != null && dmlTemplates.getDmls() != null) {
