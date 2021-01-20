@@ -1042,7 +1042,6 @@ public class StateManager implements IStateManager {
 
         applicationState.setStateStack(new LinkedList<>());
         applicationState.setAppId(this.getAppId());
-        applicationState.setDeviceId(this.getNodeId());
         applicationState.getScope().setDeviceScope("stateManager", this);
         applicationState.setCurrentContext(new StateContext(initialFlowConfig, null, null));
 
@@ -1122,6 +1121,7 @@ public class StateManager implements IStateManager {
     public void showScreen(UIMessage screen) {
         showScreen(screen, null);
     }
+
 
     @Override
     public String getDeviceId() {
