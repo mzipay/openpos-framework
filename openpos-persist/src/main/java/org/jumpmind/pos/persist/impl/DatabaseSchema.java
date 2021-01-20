@@ -124,8 +124,8 @@ public class DatabaseSchema {
         List<Table> tables = new ArrayList<>();
         List<ModelClassMetaData> metas = getModelClassMetaDataList(deviceMode, entityClass);
         if (metas != null) {
-            for (ModelClassMetaData modelMetaData : metas) {
-                tables.add(modelMetaData.getTableForDeviceMode("training"));
+            for (ModelClassMetaData modelClassMetaData : metas) {
+                tables.add(modelClassMetaData.getTableForDeviceMode(deviceMode));
             }
         }
         return tables;
@@ -133,12 +133,12 @@ public class DatabaseSchema {
 
     protected List<ModelClassMetaData> getModelClassMetaDataList(String deviceMode, Class<?> entityClass)  {
         if (deviceMode.equalsIgnoreCase("training"))  {
-            ModelClassMetaData meta = shadowTables.get(entityClass);
-            if ((meta != null) && meta.hasShadowTable())  {
-                List<ModelClassMetaData> metaList = new ArrayList<>();
-                metaList.add(meta);
-                return metaList;
+            List<ModelClassMetaData> metaList = new ArrayList<>();
+            for (ModelClassMetaData regularMeta : classToModelMetaData.get(entityClass).getModelClassMetaData()) {
+                ModelClassMetaData shadowMeta = shadowTables.get(regularMeta.getClazz());
+                metaList.add((shadowMeta != null) && shadowMeta.hasShadowTable() ? shadowMeta : regularMeta);
             }
+            return metaList;
         }
 
         return classToModelMetaData.get(entityClass).getModelClassMetaData();
