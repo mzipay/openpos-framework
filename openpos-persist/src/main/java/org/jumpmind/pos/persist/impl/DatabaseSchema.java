@@ -94,25 +94,29 @@ public class DatabaseSchema {
     }
 
     public Table getTableForDeviceMode(String deviceMode, Class<?> entityClass, Class<?> superClass)  {
-        //  Handle special Device Modes here.
-
-        if (deviceMode.equalsIgnoreCase("training")) {
-            ModelClassMetaData meta = shadowTables.get(entityClass);
-            if (meta != null) {
-                return meta.getShadowTable();
-            }
-        }
-
-        //  If no special Device Mode, use the default approach.
-
         List<ModelClassMetaData> metas = classToModelMetaData.get(entityClass).getModelClassMetaData();
+
         if (metas != null) {
+            //  Handle special Device Modes here.
+
+            if (deviceMode.equalsIgnoreCase("training")) {
+                for (ModelClassMetaData regularMeta : metas) {
+                    if (regularMeta.getClazz().equals(superClass)) {
+                        ModelClassMetaData shadowMeta = shadowTables.get(superClass);
+                        return ((shadowMeta != null) && shadowMeta.hasShadowTable() ? shadowMeta.getShadowTable() : regularMeta.getTable());
+                    }
+                }
+            }
+
+            //  If no special Device Mode, use the default approach.
+
             for (ModelClassMetaData meta : metas) {
                 if (meta.getClazz().equals(superClass)) {
                     return meta.getTable();
                 }
             }
         }
+
         return null;
     }
 
