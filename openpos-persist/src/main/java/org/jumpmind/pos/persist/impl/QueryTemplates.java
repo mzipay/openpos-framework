@@ -59,7 +59,7 @@ public class QueryTemplates {
                     for (Class<?> modelClass : modelClassList)  {
                         String modelClassName = modelClass.getSimpleName();
                         if (StringUtils.indexOf(select, modelClassName) >= 0)  {
-                            //  TODO  Model class/super class. Works this way, but...
+                            //  In the case below, we always want the model class, not its superclass.
                             select = select.replaceAll("\\b" + modelClassName + "\\b", dbSchema.getTableForDeviceMode(deviceMode, modelClass, modelClass).getName());
                             template.setSelect(select);
                         }

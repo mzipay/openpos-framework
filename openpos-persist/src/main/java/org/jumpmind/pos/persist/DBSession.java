@@ -718,7 +718,6 @@ public class DBSession {
 
     @SuppressWarnings("unchecked")
     protected <T> T mapModel(Class<T> resultClass, Row row) throws Exception {
-        //  TODO  If shadow tables, do we have the right model class and columns?
         ModelMetaData modelMetaData = databaseSchema.getModelMetaData(resultClass);
 
         T object = resultClass.newInstance();
