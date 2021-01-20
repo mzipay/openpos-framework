@@ -93,7 +93,6 @@ public class PrinterCommandsTest {
 
             assertCommandsEqual(new String(barcodeAlphaNumeric), barcodeCommand);
         }
-
     }
 
     private void assertCommandsEqual(String expected, String actual) {

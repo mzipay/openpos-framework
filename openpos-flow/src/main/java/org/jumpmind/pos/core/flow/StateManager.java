@@ -1034,12 +1034,20 @@ public class StateManager implements IStateManager {
 
     @Override
     public void endSession() {
+        endConversation();
         applicationState.getScope().clearSessionScope();
         clearScopeOnStates(ScopeType.Session);
         clearScopeOnDeviceScopeBeans(ScopeType.Session);
         refreshDeviceScope();
-    }
 
+        applicationState.setStateStack(new LinkedList<>());
+        applicationState.setAppId(this.getAppId());
+        applicationState.setDeviceId(this.getNodeId());
+        applicationState.getScope().setDeviceScope("stateManager", this);
+        applicationState.setCurrentContext(new StateContext(initialFlowConfig, null, null));
+
+        transitionTo(new Action(StateManagerActionConstants.STARTUP_ACTION), initialFlowConfig.getInitialState());
+    }
 
     public void setInitialFlowConfig(FlowConfig initialFlowConfig) {
         this.initialFlowConfig = initialFlowConfig;

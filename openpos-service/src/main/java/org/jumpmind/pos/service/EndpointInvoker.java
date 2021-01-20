@@ -82,9 +82,9 @@ public class EndpointInvoker implements InvocationHandler {
                         buildEndpointMappingsForService(object);
                     }
                 }
-            }  
+            }
     }
-    
+
     public void buildEndpointMappingsForService( Object service){
         Class<?>[] interfaces = service.getClass().getInterfaces();
         Collection<Object> endpointOverrides = applicationContext.getBeansWithAnnotation(EndpointOverride.class).values();
@@ -170,7 +170,7 @@ public class EndpointInvoker implements InvocationHandler {
     protected Object findMatch(String path, Collection<Object> endpoints, String implementation) {
         for (Object endpointBean : endpoints) {
             Endpoint endPoint = ClassUtils.resolveAnnotation(Endpoint.class, endpointBean);
-            if (endPoint.path().equals(path) && endPoint.implementation().equals(implementation)) {
+            if (endPoint != null && endPoint.path().equals(path) && endPoint.implementation().equals(implementation)) {
                 return endpointBean;
             }
         }

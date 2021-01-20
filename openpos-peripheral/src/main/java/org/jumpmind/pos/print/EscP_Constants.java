@@ -38,7 +38,4 @@ public class EscP_Constants {
         return s;
     }
 
-
-
-
 }

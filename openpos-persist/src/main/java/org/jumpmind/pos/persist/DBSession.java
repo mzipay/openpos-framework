@@ -547,7 +547,7 @@ public class DBSession {
             for (Table table : tables) {
                 boolean[] nullKeyValues = model.getNullKeys();
                 List<Column> primaryKeyColumns = getPrimaryKeyWithTags(model, table);
-                
+
                 DmlStatement statement = databasePlatform.createDmlStatement(dmlType, table.getCatalog(), table.getSchema(), table.getName(),
                         primaryKeyColumns.toArray(new Column[primaryKeyColumns.size()]), model.getColumns(table), nullKeyValues, null);
                 String sql = statement.getSql();
@@ -555,7 +555,7 @@ public class DBSession {
             }
         }
     }
-    
+
     private List<Column> getPrimaryKeyWithTags(ModelWrapper model, Table table) {
         List<Column> primaryKeyColumns = new ArrayList<>(model.getPrimaryKeyColumns());
         if (isTaggedWithPrimaryKey(model.getModel())) {
@@ -565,7 +565,7 @@ public class DBSession {
         }
         return primaryKeyColumns;
     }
-    
+
     private boolean isTaggedWithPrimaryKey(AbstractModel model) {
         if (model != null && model instanceof ITaggedModel) {
             Tagged tagged = model.getClass().getAnnotation(Tagged.class);
@@ -693,7 +693,6 @@ public class DBSession {
                     throw ex; // throw the first.
                 }
             }
-
         }
 
         return objects;
