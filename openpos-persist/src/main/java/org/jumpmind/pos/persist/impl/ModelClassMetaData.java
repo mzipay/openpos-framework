@@ -7,6 +7,7 @@ import lombok.Data;
 import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.pos.persist.PersistException;
+import org.jumpmind.pos.persist.model.AugmenterConfig;
 
 import javax.annotation.sql.DataSourceDefinition;
 
@@ -14,6 +15,7 @@ import javax.annotation.sql.DataSourceDefinition;
 public class ModelClassMetaData {
 
     private Table table;
+    private Table shadowTable;
     private Class<?> clazz;
     private List<Class<?>> extensionClazzes;
     private String idxPrefix;
@@ -21,6 +23,11 @@ public class ModelClassMetaData {
     private Map<String, FieldMetaData> entityFieldMetaDatas = new LinkedHashMap<>();
     private List<Column> primaryKeyColumns = new ArrayList<Column>();
     private Set<String> primaryKeyFieldNames = new LinkedHashSet<>();
+    private Set<String> augmentedFieldNames = new LinkedHashSet<>();
+    private List<AugmenterConfig> augmenterConfigs = new ArrayList<>();
+
+    private String shadowPrefix;
+    private String modulePrefix;
 
     public ModelClassMetaData() {
     }
@@ -50,14 +57,37 @@ public class ModelClassMetaData {
     }
 
     private void initPrimaryKeyColumns() {
+        int primaryKeySequence = 0;
         for (String primaryKeyFieldName : primaryKeyFieldNames) {
             FieldMetaData fieldMetaData = entityIdFieldMetaDatas.get(primaryKeyFieldName);
             if (fieldMetaData == null) {
                 throw new PersistException("There is no field meta data for field name '" + primaryKeyFieldName + "' for model " + getClazz().getSimpleName());
             }
 
+            // fieldMetaData.getColumn().setPrimaryKeySequence(primaryKeySequence++);
             primaryKeyColumns.add(fieldMetaData.getColumn());
         }
+    }
+
+    public Table getTableForDeviceMode(String deviceMode)  {
+        return (deviceMode.equalsIgnoreCase("training") && hasShadowTable() ? getShadowTable() : getTable());
+    }
+
+    public void setShadowTable(String shadowPrefix, String modulePrefix)  {
+        Table shadowTable = table.copy();
+        shadowTable.setName((shadowPrefix + "_" + modulePrefix + "_" + table.getName()).toUpperCase());
+
+        this.shadowTable = shadowTable;
+        this.shadowPrefix = shadowPrefix;
+        this.modulePrefix = modulePrefix;
+    }
+
+    public boolean hasShadowTable()  {
+        return (shadowTable != null);
+    }
+
+    public String getShadowTableName()  {
+        return (hasShadowTable() ? shadowTable.getName() : table.getName());
     }
 
     @Override

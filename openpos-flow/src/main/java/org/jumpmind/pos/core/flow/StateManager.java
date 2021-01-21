@@ -486,6 +486,11 @@ public class StateManager implements IStateManager {
         }
     }
 
+    public void pushScopeValue(String name, ScopeType scopeType, Object value) {
+        applicationState.getScope().setScope(name, scopeType, value);
+        refreshDeviceScope();
+    }
+
     public void performOutjections(Object stateOrStep) {
         outjector.performOutjections(stateOrStep, applicationState.getScope(), applicationState.getCurrentContext());
     }
@@ -1129,6 +1134,16 @@ public class StateManager implements IStateManager {
     @Override
     public String getAppId() {
         return applicationState.getAppId();
+    }
+
+    @Override
+    public String getDeviceMode() {
+        return applicationState.getDeviceMode();
+    }
+
+    @Override
+    public void setDeviceMode(String deviceMode) {
+        applicationState.setDeviceMode(deviceMode);
     }
 
     // called from a Timer thread.

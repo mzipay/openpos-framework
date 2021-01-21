@@ -2,19 +2,17 @@ package org.jumpmind.pos.persist.impl;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.sql.Types;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import lombok.SneakyThrows;
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.joda.money.Money;
 import org.jumpmind.db.model.Column;
 import org.jumpmind.db.model.Database;
@@ -28,7 +26,12 @@ import org.jumpmind.db.platform.IDatabasePlatform;
 import org.jumpmind.db.platform.IDdlBuilder;
 import org.jumpmind.db.sql.SqlScript;
 import org.jumpmind.pos.persist.*;
+import org.jumpmind.pos.persist.model.AugmenterConfig;
+import org.jumpmind.pos.persist.model.AugmenterHelper;
+import org.jumpmind.pos.persist.model.AugmenterIndexConfig;
+import org.jumpmind.pos.persist.model.AugmenterModel;
 import org.jumpmind.pos.util.model.ITypeCode;
+import org.jumpmind.pos.util.clientcontext.ClientContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,18 +46,30 @@ public class DatabaseSchema {
     private Database desiredModel;
     private static ModelValidator modelClassValidator = new ModelValidator();
     private String tablePrefix;
+    private AugmenterHelper augmenterHelper;
+    private ShadowTablesConfigModel shadowTablesConfig;
+    private ClientContext clientContext;
+    private Map<Class<?>, ModelClassMetaData> shadowTables;
 
     @SneakyThrows
-    public void init(String tablePrefix, IDatabasePlatform platform, List<Class<?>> entityClasses, List<Class<?>> entityExtensionClasses) {
+    public void init(String tablePrefix, IDatabasePlatform platform, List<Class<?>> entityClasses, List<Class<?>> entityExtensionClasses, AugmenterHelper augmenterHelper, ClientContext clientContext, ShadowTablesConfigModel shadowTablesConfig) {
         this.platform = platform;
         this.tablePrefix = tablePrefix;
         this.entityClasses = entityClasses;
         this.entityExtensionClasses = entityExtensionClasses;
-        desiredModel = buildDesiredModel();
+        this.augmenterHelper = augmenterHelper;
+        if (clientContext == null)  {
+            log.error("ClientContext is null in {}, initialization error", this.getClass().getSimpleName());
+            //  TODO  Should this throw an exception instead?
+        }
+        this.clientContext = clientContext;
+        this.shadowTablesConfig = shadowTablesConfig;
+        this.desiredModel = buildDesiredModel();
     }
 
     protected Database buildDesiredModel() {
         Collection<Table> tables = loadTables(tablePrefix);
+        this.shadowTables = buildTrainingModeShadowTableList();
 
         Database db = new Database();
         db.addTables(tables);
@@ -65,34 +80,72 @@ public class DatabaseSchema {
                 table.setName(tableName.substring(0, tableName.length() - 1));
             }
         }
+
+        for (ModelClassMetaData shadowMeta : shadowTables.values())  {
+            db.addTable(shadowMeta.getShadowTable());
+            log.info("Adding shadow table, regular table name {}, shadow table name {}", getTableName(tablePrefix, shadowMeta.getTable().getName()), shadowMeta.getShadowTable().getName());
+        }
+
         return db;
     }
 
     public Table getTable(Class<?> entityClass, Class<?> superClass) {
+        return getTableForDeviceMode(getDeviceMode(), entityClass, superClass);
+    }
+
+    public Table getTableForDeviceMode(String deviceMode, Class<?> entityClass, Class<?> superClass)  {
         List<ModelClassMetaData> metas = classToModelMetaData.get(entityClass).getModelClassMetaData();
+
         if (metas != null) {
-            for (ModelClassMetaData modelMetaData : metas) {
-                if (modelMetaData.getClazz().equals(superClass)) {
-                    return modelMetaData.getTable();
+            //  Handle special Device Modes here.
+
+            if (deviceMode.equalsIgnoreCase("training")) {
+                for (ModelClassMetaData regularMeta : metas) {
+                    if (regularMeta.getClazz().equals(superClass)) {
+                        ModelClassMetaData shadowMeta = shadowTables.get(superClass);
+                        return ((shadowMeta != null) && shadowMeta.hasShadowTable() ? shadowMeta.getShadowTable() : regularMeta.getTable());
+                    }
+                }
+            }
+
+            //  If no special Device Mode, use the default approach.
+
+            for (ModelClassMetaData meta : metas) {
+                if (meta.getClazz().equals(superClass)) {
+                    return meta.getTable();
                 }
             }
         }
+
         return null;
     }
 
-    public List<Table> getTables(Class<?> entityClass) {
+    public List<Table> getTables(String deviceMode, Class<?> entityClass) {
         if (entityClass == null) {
             throw new PersistException("Cannot lookup a table for a null entity class.");
         }
 
         List<Table> tables = new ArrayList<>();
-        List<ModelClassMetaData> metas = classToModelMetaData.get(entityClass).getModelClassMetaData();
+        List<ModelClassMetaData> metas = getModelClassMetaDataList(deviceMode, entityClass);
         if (metas != null) {
-            for (ModelClassMetaData ModelMetaData : metas) {
-                tables.add(ModelMetaData.getTable());
+            for (ModelClassMetaData modelClassMetaData : metas) {
+                tables.add(modelClassMetaData.getTableForDeviceMode(deviceMode));
             }
         }
         return tables;
+    }
+
+    protected List<ModelClassMetaData> getModelClassMetaDataList(String deviceMode, Class<?> entityClass)  {
+        if (deviceMode.equalsIgnoreCase("training"))  {
+            List<ModelClassMetaData> metaList = new ArrayList<>();
+            for (ModelClassMetaData regularMeta : classToModelMetaData.get(entityClass).getModelClassMetaData()) {
+                ModelClassMetaData shadowMeta = shadowTables.get(regularMeta.getClazz());
+                metaList.add((shadowMeta != null) && shadowMeta.hasShadowTable() ? shadowMeta : regularMeta);
+            }
+            return metaList;
+        }
+
+        return classToModelMetaData.get(entityClass).getModelClassMetaData();
     }
 
     protected void refreshMetaData(Database actualModel) {
@@ -130,7 +183,7 @@ public class DatabaseSchema {
                 log.info("There are database tables that need to be created or altered. SQL generated:\r\n{}", alterSql);
                 runScript(alterSql);
                 actualModel = platform.readFromDatabase(desiredModel.getTables());
-                log.info("Finished updating tables.");
+                log.info("Finished updating tables");
                 refreshMetaData(actualModel);
                 return true;
             } else {
@@ -186,7 +239,7 @@ public class DatabaseSchema {
         }
     }
 
-    protected void validateTable(String tablePrefix, Table table) {
+    public void validateTable(String tablePrefix, Table table) {
         String tableName = getTableName(tablePrefix, table.getName());
         validateName(tableName, "table", tableName);
         boolean hasPk = false;
@@ -217,12 +270,12 @@ public class DatabaseSchema {
         }
     }
 
-    public static ModelMetaData createMetaData(Class<?> clazz, List<Class<?>> entityExtensionClasses) {
+    public ModelMetaData createMetaData(Class<?> clazz, List<Class<?>> entityExtensionClasses) {
         return createMetaData(clazz, entityExtensionClasses, null);
     }
 
     @SneakyThrows
-    public static ModelMetaData createMetaData(Class<?> clazz, List<Class<?>> entityExtensionClasses, IDatabasePlatform databasePlatform) {
+    public ModelMetaData createMetaData(Class<?> clazz, List<Class<?>> entityExtensionClasses, IDatabasePlatform databasePlatform) {
         List<ModelClassMetaData> list = new ArrayList<>();
         Class<?> entityClass = clazz;
         boolean ignoreSuperClasses = false;
@@ -250,7 +303,7 @@ public class DatabaseSchema {
                 for (Class<?> extensionClass : myExtensions) {
                     createClassFieldsMetadata(extensionClass, meta, true, columns, databasePlatform);
                 }
-
+                createAugmentedFieldsMetaData(meta, columns, databasePlatform);
                 meta.init();
 
                 for (Column column : meta.getPrimaryKeyColumns()) {
@@ -275,12 +328,32 @@ public class DatabaseSchema {
             for (IIndex index : indices.values()) {
                 dbTable.addIndex(index);
             }
+            Map<String, IIndex> augmentedIndices = createAugmentedIndices(currentClass, dbTable, meta, platform);
+            for (IIndex index : augmentedIndices.values()) {
+                dbTable.addIndex(index);
+            }
         }
 
         ModelMetaData metaData = new ModelMetaData();
         metaData.setModelClassMetaData(list);
         metaData.init();
         return metaData;
+    }
+
+    private void createAugmentedFieldsMetaData(ModelClassMetaData meta, List<Column> columns, IDatabasePlatform databasePlatform) {
+        List<AugmenterConfig> configs = augmenterHelper.getAugmenterConfigs(meta.getClazz());
+        for (AugmenterConfig config : configs) {
+            meta.getAugmenterConfigs().add(config);
+            for (AugmenterModel augmenterModel : config.getAugmenters()) {
+                meta.getAugmentedFieldNames().add(augmenterModel.getName());
+                Column column = new Column();
+                column.setName(alterCaseToMatchDatabaseDefaultCase(config.getPrefix(), databasePlatform) + alterCaseToMatchDatabaseDefaultCase(camelToSnakeCase(augmenterModel.getName()), databasePlatform));
+                column.setDefaultValue(augmenterModel.getDefaultValue());
+                column.setSize(augmenterModel.getSize() != null ? Integer.toString(augmenterModel.getSize()) : "32");
+                column.setTypeCode(Types.VARCHAR);
+                columns.add(column);
+            }
+        }
     }
 
     public static Set<String> getPrimaryKeyNames(TableDef tblAnnotation) {
@@ -307,8 +380,8 @@ public class DatabaseSchema {
     }
 
     @SneakyThrows
-    private static void createClassFieldsMetadata(Class<?> clazz, ModelClassMetaData metaData,
-                                                  boolean includeAllFields, List<Column> columns, IDatabasePlatform platform) {
+    private void createClassFieldsMetadata(Class<?> clazz, ModelClassMetaData metaData,
+                                           boolean includeAllFields, List<Column> columns, IDatabasePlatform platform) {
 
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
@@ -338,8 +411,8 @@ public class DatabaseSchema {
         }
     }
 
-    private static Map<String, IIndex> createIndices(IndexDefs indexDefs, Table table,
-                                                     ModelClassMetaData metaData, IDatabasePlatform platform) {
+    private Map<String, IIndex> createIndices(IndexDefs indexDefs, Table table,
+                                              ModelClassMetaData metaData, IDatabasePlatform platform) {
         Map<String, IIndex> indices = new HashMap<>();
         if (indexDefs != null && indexDefs.value() != null) {
             for (IndexDef indexDef : indexDefs.value()) {
@@ -350,7 +423,7 @@ public class DatabaseSchema {
         return indices;
     }
 
-    private static void parseIndexDef(IndexDef indexDef, Table table, Map<String, IIndex> indices, ModelClassMetaData metaData, IDatabasePlatform platform) {
+    private void parseIndexDef(IndexDef indexDef, Table table, Map<String, IIndex> indices, ModelClassMetaData metaData, IDatabasePlatform platform) {
         if (indexDef.column() != null && !indexDef.column().isEmpty()) {
             Column column = findColumn(indexDef.column(), table, platform);
             createIndex(indexDef, column, indexDef.column(), indices, metaData.getIdxPrefix());
@@ -364,13 +437,18 @@ public class DatabaseSchema {
         }
     }
 
-    private static Column findColumn(String columnName, Table table, IDatabasePlatform platform) {
+    private Column findColumn(String columnName, String augmentedPrefix, Table table, IDatabasePlatform platform) {
+        String augmentedColumnName = alterCaseToMatchDatabaseDefaultCase(augmentedPrefix + camelToSnakeCase(columnName), platform);
+        return table.getColumnWithName(augmentedColumnName);
+    }
+
+    private Column findColumn(String columnName, Table table, IDatabasePlatform platform) {
         String snakeCase = alterCaseToMatchDatabaseDefaultCase(camelToSnakeCase(columnName), platform);
         Column column = table.getColumnWithName(snakeCase);
         return column;
     }
 
-    private static void createIndex(IndexDef indexDef, Column column, String columnName, Map<String, IIndex> indices, String idxPrefix) {
+    private void createIndex(IndexDef indexDef, Column column, String columnName, Map<String, IIndex> indices, String idxPrefix) {
         if (column != null && indexDef != null) {
             String indexName = idxPrefix != null && !idxPrefix.isEmpty() ? idxPrefix + "_" + indexDef.name() : indexDef.name();
             boolean unique = indexDef.unique();
@@ -387,7 +465,7 @@ public class DatabaseSchema {
         }
     }
 
-    private static boolean isPrimaryKey(Field field, ModelClassMetaData metaData) {
+    private boolean isPrimaryKey(Field field, ModelClassMetaData metaData) {
         if (field != null) {
             ColumnDef colAnnotation = field.getAnnotation(ColumnDef.class);
             if (colAnnotation != null) {
@@ -398,14 +476,14 @@ public class DatabaseSchema {
         return false;
     }
 
-    private static String alterCaseToMatchDatabaseDefaultCase(String name, IDatabasePlatform platform) {
+    private String alterCaseToMatchDatabaseDefaultCase(String name, IDatabasePlatform platform) {
         if (platform != null) {
             name = platform.alterCaseToMatchDatabaseDefaultCase(name);
         }
         return name;
     }
 
-    private static Column createColumn(Field field, IDatabasePlatform platform, ModelClassMetaData metaData) {
+    private Column createColumn(Field field, IDatabasePlatform platform, ModelClassMetaData metaData) {
         Column dbCol = null;
         ColumnDef colAnnotation = field.getAnnotation(ColumnDef.class);
 
@@ -444,6 +522,7 @@ public class DatabaseSchema {
 
             if (metaData.isPrimaryKey(field)) {
                 dbCol.setRequired(true);
+                // dbCol.setPrimaryKeySequence(new ArrayList<>(metaData.getPrimaryKeyFieldNames()).indexOf(dbCol.getName()));
             } else {
                 dbCol.setRequired(colAnnotation.required());
             }
@@ -451,7 +530,7 @@ public class DatabaseSchema {
         return dbCol;
     }
 
-    private static boolean platformMatches(String name, IDatabasePlatform platform) {
+    private boolean platformMatches(String name, IDatabasePlatform platform) {
         return platform != null && name != null && platform.getName().equals(name);
     }
 
@@ -492,8 +571,25 @@ public class DatabaseSchema {
                 entityIdColumnsToFields.put(columnName, field.getField().getName());
             }
         }
+        Map<String, String> augmentedColumnsToFields = getAugmentedColumnsToFields(entityClass);
+        Map<String, String> mergedMaps = Stream.concat(entityIdColumnsToFields.entrySet().stream(), augmentedColumnsToFields.entrySet().stream())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (value1, value2) -> value1,
+                        CaseInsensitiveMap::new));
+        return mergedMaps;
+    }
 
-        return entityIdColumnsToFields;
+    private Map<String, String> getAugmentedColumnsToFields(Class<?> entityClass) {
+        Map<String, String> columnsToAugmentedFields = new CaseInsensitiveMap<>();
+        List<AugmenterConfig> configs = augmenterHelper.getAugmenterConfigs(entityClass);
+        for (AugmenterConfig config : configs) {
+            for (String augmenterName: config.getAugmenterNames()) {
+                columnsToAugmentedFields.put(config.getPrefix() + camelToSnakeCase(augmenterName), augmenterName);
+            }
+        }
+        return columnsToAugmentedFields;
     }
 
     public Map<String, String> getEntityFieldsToColumns(Class<?> entityClass) {
@@ -565,7 +661,7 @@ public class DatabaseSchema {
         return classToModelMetaData.get(modelClass);
     }
 
-    private static int getDefaultType(Field field) {
+    private int getDefaultType(Field field) {
         if (field.getType().isAssignableFrom(String.class) || field.getType().isEnum() || ITypeCode.class.isAssignableFrom(field.getType())) {
             return Types.VARCHAR;
         } else if (field.getType().isAssignableFrom(long.class) || field.getType().isAssignableFrom(Long.class)) {
@@ -599,5 +695,211 @@ public class DatabaseSchema {
         }
 
         return buff.toString().toLowerCase();
+    }
+
+    private Map<String, IIndex> createAugmentedIndices(Class<?> currentClass, Table table,
+                                                       ModelClassMetaData metaData, IDatabasePlatform platform) {
+        Map<String, IIndex> indices = new HashMap<>();
+        Augmented augmented = currentClass.getAnnotation(Augmented.class);
+        if (augmented != null) {
+            AugmenterConfig config = augmenterHelper.getAugmenterConfig(augmented.name());
+            if (config != null && config.getIndexConfigs() != null) {
+                List<AugmenterIndexConfig> indexConfigs = config.getIndexConfigs();
+                for (AugmenterIndexConfig indexConfig : indexConfigs) {
+                    createIndex(indexConfig, table, indices, augmented.indexPrefix(), platform, config.getPrefix());
+                }
+            }
+        }
+        return indices;
+    }
+
+    private void createIndex(AugmenterIndexConfig indexConfig, Table table, Map<String, IIndex> indices, String idxPrefix, IDatabasePlatform platform, String augmentedColumnPrefix) {
+        String indexName = idxPrefix != null && !idxPrefix.isEmpty() ? idxPrefix + "_" + indexConfig.getName() : indexConfig.getName();
+        indexName += (indexConfig.isUnique() ? "_unq" : "");
+        IIndex index = indices.get(indexName);
+        if (index == null) {
+            index = indexConfig.isUnique() ? new UniqueIndex(indexName) : new NonUniqueIndex(indexName);
+            indices.put(indexName, index);
+        }
+        for (String columnName : indexConfig.getColumnNames()) {
+            Column column = findColumn(columnName, augmentedColumnPrefix, table, platform);
+            if (column == null) {
+                column = findColumn(columnName, table, platform);
+            }
+            if (column != null) {
+                index.addColumn(new IndexColumn(column));
+            }
+            if (column == null) {
+                log.warn("No column {} found for index {} on augmented table {}", columnName, indexName, table.getName());
+            }
+        }
+    }
+
+    /**
+     **  This gets the shadow table list for this module.
+     */
+    private Map<Class<?>, ModelClassMetaData> buildTrainingModeShadowTableList()  {
+        Map<Class<?>, ModelClassMetaData> trainingModeShadowTableList = new HashMap<>();
+
+        //  We will configure Training Mode shadow tables if we got a shadow table configuration object
+        //  and the Device Mode is training.
+
+        if ((shadowTablesConfig != null) && shadowTablesConfig.getDeviceMode().equalsIgnoreCase("training")) {
+            //  Get a map of full table names (with prefix) to meta data for this module.
+
+            Map<String, ModelClassMetaData> tableMap = getTableMap();
+
+            //  Now figure out what tables to include and exclude.
+
+            Map<String, ModelClassMetaData> includeTableList = new HashMap<>();
+
+            //  Expand the includes list by replacing any wildcards.
+
+            for (String includeName : shadowTablesConfig.getIncludesList()) {
+                //  See if the given include entry matches the desired module.
+
+                if (includeName.toLowerCase().startsWith(tablePrefix.toLowerCase())) {
+                    log.info("Included shadow table name entry {} matches module prefix {}", includeName, tablePrefix);
+
+                    String leadingPortion = null;
+                    String trailingPortion = null;
+
+                    if (includeName.contains("*")) {
+                        //  Need to replace wildcards with the actual matching table names.
+                        log.info("Included shadow table name {} contains a wild card", includeName);
+
+                        //  Parse out the wildcard.
+
+                        int index = includeName.indexOf('*');
+                        leadingPortion = includeName.substring(0, index);
+
+                        if (!includeName.endsWith("*")) {
+                            trailingPortion = includeName.substring(index + 1);
+                        }
+
+                    } else {
+                        log.info("Included shadow table name {} does not contain a wild card", includeName);
+                    }
+
+                    //  See what table name(s) match the current include name.
+
+                    for (String tableName : tableMap.keySet()) {
+                        if (leadingPortion == null) {
+                            //  This is a valid table name without a wild card.
+
+                            if (tableName.equalsIgnoreCase(includeName)) {
+                                ModelClassMetaData meta = tableMap.get(tableName);
+                                meta.setShadowTable(shadowTablesConfig.getTablePrefix(), tablePrefix);
+                                includeTableList.put(tableName, meta);
+                            }
+
+                        } else {
+                            //  This is a table name that contained a wild card.
+
+                            if (tableName.startsWith(leadingPortion.toLowerCase()) || ((trailingPortion != null) && tableName.endsWith(trailingPortion.toLowerCase()))) {
+                                ModelClassMetaData meta = tableMap.get(tableName);
+                                meta.setShadowTable(shadowTablesConfig.getTablePrefix(), tablePrefix);
+                                includeTableList.put(tableName, meta);
+                            }
+                        }
+                    }
+
+                    log.info("Processed included shadow table entry {}, there are now {} shadow table(s) for this module", includeName, includeTableList.size());
+                }
+            }
+
+            //  Remove exclude table names from the list.
+
+            for (String excludeName : shadowTablesConfig.getExcludesList()) {
+                //  See if the given include entry matches the desired module.
+
+                if (excludeName.toLowerCase().startsWith(tablePrefix.toLowerCase())) {
+                    log.info("Excluded shadow table name entry {} matches module prefix {}", excludeName, tablePrefix);
+
+                    if (excludeName.contains("*")) {
+                        //  Need to replace wildcards with the actual matching table names.
+                        log.info("Excluded shadow table name {} contains a wild card", excludeName);
+
+                        //  Parse out the wildcard.
+
+                        int index = excludeName.indexOf('*');
+                        String leadingPortion = excludeName.substring(0, index);
+                        String trailingPortion = null;
+
+                        if (!excludeName.endsWith("*")) {
+                            trailingPortion = excludeName.substring(index + 1);
+                        }
+
+                        //  See what tables match the wild card we found.
+
+                        for (String tableName : tableMap.keySet()) {
+                            if (tableName.startsWith(leadingPortion.toLowerCase()) || ((trailingPortion != null) && tableName.endsWith(trailingPortion.toLowerCase()))) {
+                                includeTableList.remove(tableName);
+                                log.info("Removed excluded table name {} from the shadow table list", tableName);
+                            }
+                        }
+
+                    } else {
+                        //  For an exclude, if it does not contain a wildcard, just remove it.
+
+                        log.info("Excluded shadow table name {} does not contain a wild card", excludeName);
+                        includeTableList.remove(excludeName.toLowerCase());
+                    }
+
+                    log.info("Processed excluded shadow table name {}, there are now {} shadow table(s)", excludeName, includeTableList.size());
+                }
+            }
+
+            //  Finally, build the list of actual shadow tables.  This a map whose key is the
+            //  entity class corresponding to the given table, as opposed to the list we already
+            //  have whose key is the table name.
+
+            for (String tableName : includeTableList.keySet()) {
+                ModelClassMetaData tableClassMetaData = includeTableList.get(tableName);
+                trainingModeShadowTableList.put(tableClassMetaData.getClazz(), tableClassMetaData);
+            }
+
+            //  At this point, we've processed the table list.
+
+            log.info("Configuration specifies {} shadow table(s) for module {}", trainingModeShadowTableList.size(), tablePrefix.toUpperCase());
+        }
+
+        return trainingModeShadowTableList;
+    }
+
+    /**
+     **  Build a map of table names to ModelClassMetaData for this module.
+     */
+    private  Map<String, ModelClassMetaData> getTableMap() {
+        Map<String, ModelClassMetaData> modelClassMetaDataMap = new HashMap<>();
+
+        for (Class<?> tableClass : entityClasses) {
+            ModelMetaData modelMetaData = createMetaData(tableClass, entityExtensionClasses, platform);
+
+            for (ModelClassMetaData meta : modelMetaData.getModelClassMetaData()) {
+                Table entityTable = meta.getTable();
+                String tableName = entityTable.getName();
+
+                if (tableName.endsWith("_")) {
+                    tableName = tableName.substring(0, tableName.length() - 1);
+                    entityTable.setName(tableName);
+                }
+
+                //  Prepend the prefix to the table name and add it to the map if it
+                //  isn't already there.
+
+                String fullTableName = tablePrefix + "_" + tableName;
+                if (!modelClassMetaDataMap.containsKey(fullTableName)) {
+                    modelClassMetaDataMap.put(fullTableName.toLowerCase(), meta);
+                }
+            }
+        }
+
+        return modelClassMetaDataMap;
+    }
+
+    public String getDeviceMode()  {
+        String deviceMode = clientContext.get("deviceMode");
+        return (deviceMode == null ? "default" : deviceMode);
     }
 }

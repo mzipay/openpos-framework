@@ -101,7 +101,7 @@ public class QueryTemplate implements Cloneable {
         String select = this.getSelect();
         List<String> keys = new ArrayList<>();
 
-        StringSubstitutor literalSubtitution = new StringSubstitutor(new StringLookup() {
+        StringSubstitutor literalSubstitution = new StringSubstitutor(new StringLookup() {
             @Override
             public String lookup(String key) {
                 Object paramValue = params.get(key);
@@ -117,10 +117,10 @@ public class QueryTemplate implements Cloneable {
             }
         });
 
-        String preppedSelectClause = literalSubtitution.replace(select);
+        String preppedSelectClause = literalSubstitution.replace(select);
         preppedSelectClause = sub.replace(preppedSelectClause);
 
-        String preppedWhereClause = literalSubtitution.replace(this.getWhere());
+        String preppedWhereClause = literalSubstitution.replace(this.getWhere());
         preppedWhereClause = sub.replace(preppedWhereClause);
 
         StringBuilder buff = new StringBuilder();
@@ -138,7 +138,7 @@ public class QueryTemplate implements Cloneable {
         boolean firstIncluded = true;
         for (String optionalWhereClause : this.getOptionalWhereClauses()) {
             Set<String> optionalWhereClauseKeys = new LinkedHashSet<>();
-            String preppedOptionalWhereClause = literalSubtitution.replace(optionalWhereClause);
+            String preppedOptionalWhereClause = literalSubstitution.replace(optionalWhereClause);
 
             StringSubstitutor optionalSubstitution = new StringSubstitutor(new StringLookup() {
                 @Override
