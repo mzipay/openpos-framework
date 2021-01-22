@@ -51,7 +51,6 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.jumpmind.db.util.BasicDataSourceFactory.create;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.*;
 import static org.jumpmind.pos.service.util.ClassUtils.getClassesForPackageAndAnnotation;
 
@@ -314,6 +313,7 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
             ShadowTablesConfigModel shadowTablesConfig = null;
             String shadowTablesDeviceMode = getEnvironmentConfig("db.shadowTables.deviceMode", "");
             String shadowTablePrefix = getEnvironmentConfig("db.shadowTables.tablePrefix", "tng");
+            String validateQueries = getEnvironmentConfig("db.shadowTables.validateQueries", "true");
 
             if (StringUtils.isNotEmpty(shadowTablesDeviceMode) && StringUtils.isNotEmpty(shadowTablePrefix)) {
                 List<String> includesList = getEnvironmentConfigList("db.shadowTables.includes");
@@ -321,7 +321,13 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
 
                 if (hasShadowTables(getTablePrefix(), includesList)) {
                     log.info("Module {} has shadow table(s) for device mode {}", getTablePrefix().toUpperCase(), shadowTablesDeviceMode);
-                    shadowTablesConfig = new ShadowTablesConfigModel(shadowTablesDeviceMode, shadowTablePrefix, includesList, getEnvironmentConfigList("db.shadowTables.excludes"));
+                    shadowTablesConfig = new ShadowTablesConfigModel(
+                        shadowTablesDeviceMode,
+                        shadowTablePrefix,
+                        validateQueries.equalsIgnoreCase("true") || validateQueries.equalsIgnoreCase("yes") || validateQueries.equalsIgnoreCase("on"),
+                        includesList,
+                        getEnvironmentConfigList("db.shadowTables.excludes")
+                    );
                 }
             }
 

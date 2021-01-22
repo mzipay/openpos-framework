@@ -229,7 +229,9 @@ public class EndpointInvoker implements InvocationHandler {
     protected Object findMatch(String path, Collection<Object> endpoints, String implementation) {
         for (Object endpointBean : endpoints) {
             Endpoint endPoint = ClassUtils.resolveAnnotation(Endpoint.class, endpointBean);
-            if (endPoint.path().equals(path) && endPoint.implementation().equals(implementation)) {
+            if (endPoint == null)  {
+                log.warn("No @Endpoint annotation found for endpoint class {}, path {}, implementation {}", endpointBean.getClass().getSimpleName(), path, implementation);
+            } else if (endPoint.path().equals(path) && endPoint.implementation().equals(implementation)) {
                 return endpointBean;
             }
         }
