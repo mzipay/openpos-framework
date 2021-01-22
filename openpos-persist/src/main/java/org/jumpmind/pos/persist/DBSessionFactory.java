@@ -105,9 +105,10 @@ public class DBSessionFactory {
                 this.modelExtensionClasses,
                 this.augmenterHelper,
                 this.clientContext,
-                this.shadowTablesConfig);
+                this.shadowTablesConfig
+        );
 
-        this.queryTemplates.replaceModelClassNamesWithTableNames(this.databaseSchema, this.modelClasses);
+        this.queryTemplates.replaceModelClassNamesWithTableNames(this.databaseSchema, this.modelClasses, (shadowTablesConfig != null) && shadowTablesConfig.validateTablesInQueries());
     }
 
     public void createAndUpgrade() {

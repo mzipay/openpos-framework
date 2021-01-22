@@ -1,6 +1,7 @@
 package org.jumpmind.pos.persist.impl;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jumpmind.db.sql.InvalidSqlException;
 
 import java.util.*;
 
@@ -50,7 +51,7 @@ public class QueryTemplates {
 
     //  SQL parsing.
 
-    public void replaceModelClassNamesWithTableNames(DatabaseSchema dbSchema, List<Class<?>> modelClassList)  {
+    public void replaceModelClassNamesWithTableNames(DatabaseSchema dbSchema, List<Class<?>> modelClassList, boolean validateTablesInQueries)  {
         for (String deviceMode : queriesByDeviceMode.keySet())  {
             Map<String, QueryTemplate> queryMap = queriesByDeviceMode.get(deviceMode);
             for (QueryTemplate template : queryMap.values())  {
@@ -58,6 +59,26 @@ public class QueryTemplates {
                 if (select != null)  {
                     for (Class<?> modelClass : modelClassList)  {
                         String modelClassName = modelClass.getSimpleName();
+
+                        if (validateTablesInQueries)  {
+                            String regularTableName = dbSchema.getTableForDeviceMode("default", modelClass, modelClass).getName();
+                            String shadowTableName  = dbSchema.getTableForDeviceMode("training", modelClass, modelClass).getName();
+
+                            boolean selectContainsRegularName = select.matches(".*\\b" + regularTableName + "\\b.*");
+                            boolean selectContainsShadowName = false;
+                            if (!regularTableName.equals(shadowTableName))  {
+                                selectContainsShadowName = select.matches(".*\\b" + shadowTableName + "\\b.*");
+                            }
+
+                            if (selectContainsRegularName || selectContainsShadowName)  {
+                                throw new InvalidSqlException(
+                                    "SQL SELECT statement contains literal table name " + (selectContainsRegularName ? regularTableName : shadowTableName) +
+                                    " in query " + template.getName() + " in file " + dbSchema.getTablePrefix().toLowerCase() +
+                                    "-query.yml. Replace it with the corresponding model class name " + modelClassName + " instead."
+                                );
+                            }
+                        }
+
                         if (StringUtils.indexOf(select, modelClassName) >= 0)  {
                             //  In the case below, we always want the model class, not its superclass.
                             select = select.replaceAll("\\b" + modelClassName + "\\b", dbSchema.getTableForDeviceMode(deviceMode, modelClass, modelClass).getName());
