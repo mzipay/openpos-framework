@@ -95,85 +95,84 @@ public class EndpointInvoker implements InvocationHandler {
         Collection<Object> endpointOverrides = applicationContext.getBeansWithAnnotation(EndpointOverride.class).values();
         Collection<Object> endpoints = applicationContext.getBeansWithAnnotation(Endpoint.class).values();
 
-        Map<String, Object> regularOverrideEndPoints = new HashMap<>();
-        Map<String, Object> trainingOverrideEndPoints = new HashMap<>();
-        Map<String, Object> regularEndPoints = new HashMap<>();
-        Map<String, Object> trainingEndPoints = new HashMap<>();
-
         for (Class<?> i : interfaces) {
             RestController controller = i.getAnnotation(RestController.class);
             if (controller != null) {
                 String serviceName = controller.value();
                 String implementation = getServiceImplementation(serviceName);
 
-                boolean isTrainingModeImplementation = false;
-                if (implementation != null && !implementation.equals(Endpoint.IMPLEMENTATION_DEFAULT)) {
-                    log.info("Loading endpoints for the '{}' implementation of {}({})", implementation, i.getSimpleName(),
+                if ((implementation != null) && !implementation.equals(Endpoint.IMPLEMENTATION_DEFAULT)) {
+                    log.info("Loading endpoints for the '{}' implementation of {} ({})", implementation, i.getSimpleName(),
                             serviceName);
-                    isTrainingModeImplementation = implementation.equals(Endpoint.IMPLEMENTATION_TRAINING);
                 } else {
-                    log.debug("Loading endpoints for the '{}' implementation of {}({})", implementation, i.getSimpleName(),
+                    log.debug("Loading endpoints for the '{}' implementation of {} ({})", implementation, i.getSimpleName(),
                             serviceName);
                 }
 
-                //  For each endpoint, classify it and drop it into one of four buckets by type.
+                //  For each endpoint, see if there is an override or special Training Mode version.
+                //  Build out lists for both regular operations and Training Mode.
 
                 Method[] methods = i.getMethods();
                 for (Method method : methods) {
                     String path = buildPath(method);
 
-                    //  See if there is an endpoint override. If so, add it to the appropriate map.
+                    //  See if there is an endpoint override bean for this service and path, both normal and Training Mode.
 
-                    Object endpointOverride = findBestEndpointOverrideMatch(path, implementation, endpointOverrides);
-                    if (endpointOverride != null) {
-                        (isTrainingModeImplementation ? trainingOverrideEndPoints : regularOverrideEndPoints).put(path, endpointOverride);
+                    Object regularEndpointOverrideBean  = findBestEndpointOverrideMatch(path, implementation, endpointOverrides);
+                    Object trainingEndpointOverrideBean = findBestEndpointOverrideMatch(path, "training", endpointOverrides);
+
+                    //  Now see if there is a standard endpoint bean for this service and path. Again, both normal and
+                    //  Training Mode.
+
+                    Object regularEndpointBean  = findMatch(path, endpoints, implementation);
+                    String regularEndpointImplementaton = implementation;
+                    if (regularEndpointBean == null) {
+                        //  Nothing for the current implementation, so try the default.
+                        regularEndpointBean = findMatch(path, endpoints, Endpoint.IMPLEMENTATION_DEFAULT);
+                        regularEndpointImplementaton = Endpoint.IMPLEMENTATION_DEFAULT;
                     }
-
-                    //  See if there is a non-override endpoint for this path. If so, add it to the
-                    //  appropriate map.
-
-                    Object endpointBean = findMatch(path, endpoints, implementation);
-                    if (endpointBean == null) {
-                        endpointBean = findMatch(path, endpoints, Endpoint.IMPLEMENTATION_DEFAULT);
-                    }
-                    if (endpointBean != null) {
-                        (isTrainingModeImplementation ? trainingEndPoints : regularEndPoints).put(path, endpointBean);
-                    }  else  {
+                    if (regularEndpointBean == null) {
                         log.warn("No endpoint match found for service {}, path '{}', implementation '{}'", i.getSimpleName(), path, implementation);
                     }
-                }
 
-                //  Now run the list again and create the master endpoint maps for regular and training mode
-                //  based on the type-specific maps created above.
+                    Object trainingEndpointBean = findMatch(path, endpoints, "training");
+                    if ((trainingEndpointBean != null) && (regularEndpointBean == null))  {
+                        log.warn("Endpoint match found for service {}, path '{}', implementation 'training', but not implementation '{}' or default", i.getSimpleName(), path, implementation);
+                    }
 
-                for (Method method : methods) {
-                    String path = buildPath(method);
+                    //  Given the endpoint beans we discovered above, decide which one will be
+                    //  used in both normal scenarios and Training Mode.
 
-                    //  There is an order of precedence for implementations:
-                    //     1.  Training override endpoints.
-                    //     2.  Non-training override endpoints.
-                    //     3.  Training endpoints.
-                    //     4.  Non-training endpoints.
+                    if (trainingEndpointOverrideBean != null) {
+                        log.info("Training override endpoint bean for service {}, path {}, implementation {}", i.getSimpleName(), path, "training");
+                        trainingEndPointsByPath.put(path, trainingEndpointOverrideBean);
+                        if (regularEndpointOverrideBean != null) {
+                            log.info("Regular override endpoint bean for service {}, path {}, implementation {}", i.getSimpleName(), path, implementation);
+                            endPointsByPath.put(path, regularEndpointOverrideBean);
+                        }
 
-                    if (isTrainingModeImplementation && trainingOverrideEndPoints.containsKey(path)) {
-                        trainingEndPointsByPath.put(path, trainingOverrideEndPoints.get(path));
+                    }  else if (regularEndpointOverrideBean != null) {
+                        log.debug("Regular override endpoint bean for service {}, path {}, implementation {}", i.getSimpleName(), path, implementation);
+                        endPointsByPath.put(path, regularEndpointOverrideBean);
+                        trainingEndPointsByPath.put(path, regularEndpointOverrideBean);
 
-                    }  else if (regularOverrideEndPoints.containsKey(path)) {
-                        endPointsByPath.put(path, regularOverrideEndPoints.get(path));
-                        trainingEndPointsByPath.put(path, regularOverrideEndPoints.get(path));
+                    }  else if (trainingEndpointBean != null) {
+                        log.info("Training endpoint bean for service {}, path {}, implementation {}", i.getSimpleName(), path, "training");
+                        trainingEndPointsByPath.put(path, trainingEndpointBean);
+                        if (regularEndpointBean != null)  {
+                            log.info("Regular endpoint bean for service {}, path {}, implementation {}", i.getSimpleName(), path, regularEndpointImplementaton);
+                            endPointsByPath.put(path, regularEndpointBean);
+                       }
 
-                    }  else if (isTrainingModeImplementation && trainingEndPoints.containsKey(path)) {
-                        trainingEndPointsByPath.put(path, trainingEndPoints.get(path));
-
-                    }  else if (regularEndPoints.containsKey(path))  {
-                        endPointsByPath.put(path, regularEndPoints.get(path));
-                        trainingEndPointsByPath.put(path, regularEndPoints.get(path));
+                    }  else if (regularEndpointBean != null)  {
+                        log.debug("Regular endpoint bean for service {}, path {}, implementation {}", i.getSimpleName(), path, regularEndpointImplementaton);
+                        endPointsByPath.put(path, regularEndpointBean);
+                        trainingEndPointsByPath.put(path, regularEndpointBean);
 
                     }  else {
                         log.warn(String.format(
-                                "No endpoint defined for path '%s' in the '%s' service. Please define a Spring-discoverable @Endpoint class, "
-                                        + "with a method annotated like  @Endpoint(\"%s\")",
-                                path, i.getSimpleName(), path));
+                            "No endpoint defined for path '%s' in the '%s' service. Please define a Spring-discoverable @Endpoint class, " +
+                            "with a method annotated like  @Endpoint(\"%s\")", path, i.getSimpleName(), path));
                     }
                 }
             }
@@ -181,10 +180,7 @@ public class EndpointInvoker implements InvocationHandler {
     }
 
     protected Map<String, Object> getEndpointsByPathMapForImplementation(String implementation)  {
-        if ((implementation != null) && implementation.equals(Endpoint.IMPLEMENTATION_TRAINING))  {
-            return trainingEndPointsByPath;
-        }
-        return endPointsByPath;
+        return ((implementation != null) && implementation.equals(Endpoint.IMPLEMENTATION_TRAINING) ? trainingEndPointsByPath : endPointsByPath);
     }
 
     protected Object findBestEndpointOverrideMatch(String path, String implementation, Collection<Object> endpointOverrides) {
