@@ -3,6 +3,11 @@
     <div class="display-contents" toastContainer></div>
     <app-status-bar></app-status-bar>
     <app-watermark *ngIf="showWatermark" class="display-contents" [message]="watermarkMessage"></app-watermark>
-    <ng-template openposScreenOutlet>
-    </ng-template>
+    <div class="content-area">
+        <ng-template openposScreenOutlet>
+        </ng-template>
+        <div appModalOverlayContainer>
+            <div style="display: contents" toastContainer></div>
+        </div>
+    </div>
 </div>

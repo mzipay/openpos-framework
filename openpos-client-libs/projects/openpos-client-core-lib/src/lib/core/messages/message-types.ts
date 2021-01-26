@@ -22,4 +22,5 @@ export class MessageTypes {
     static LOADING = 'Loading';
     static WATERMARK = 'Watermark';
     static HIDE_WATERMARK = 'HideWatermark';
+    static PERIPHERAL_DEVICE_SELECTION = 'PeripheralDeviceSelection';
 }
