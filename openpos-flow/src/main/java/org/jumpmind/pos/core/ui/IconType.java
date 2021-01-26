@@ -12,6 +12,7 @@ public interface IconType {
     public static final String Broken = "Broken"; //broken_image.svg
     public static final String BusinessCustomer = "BusinessCustomer"; //business
     public static final String BypassAction = "BypassAction"; //low_priority
+    public static final String Calculator = "Calculator"; //calculator
     public static final String Calendar = "Calendar"; //today
     public static final String CalendarError = "CalendarError"; //event_busy
     public static final String CalendarOk = "CalendarOk"; //event_available
@@ -21,6 +22,7 @@ public interface IconType {
     public static final String CashUp = "CashUp"; //cash_up
     public static final String CashDown= "CashDown"; //cash_down
     public static final String Check = "Check"; //money
+    public static final String CheckoutScale = "CheckoutScale"; //checkout_scale
     public static final String Clock = "Clock"; //watch_later
     public static final String Close = "Close"; //close
     public static final String Coin = "Coin"; //monetization_on

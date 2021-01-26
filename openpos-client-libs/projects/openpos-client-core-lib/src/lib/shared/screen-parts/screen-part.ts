@@ -73,6 +73,10 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
         this.subscriptions.add(this.messageProvider.getAllMessages$().pipe(
             filter( message => message.type === MessageTypes.LIFE_CYCLE_EVENT )
         ).subscribe( message => this.handleLifeCycleEvent(message as LifeCycleMessage)));
+
+        this.subscriptions.add(this.messageProvider.getAllMessages$().pipe(
+            filter( message => message.type === MessageTypes.SCREEN_VALUE_UPDATE )
+        ).subscribe( message => this.handleScreenValueUpdate(message)));
     }
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -103,6 +107,12 @@ export abstract class ScreenPartComponent<T> implements OnDestroy, OnInit {
                     this.onLeavingActive();
                 }
                 break;
+        }
+    }
+
+    private handleScreenValueUpdate( message: any ) {
+        if (this.screenData[message.valuePath] !== undefined) {
+            this.screenData[message.valuePath] = message.value;
         }
     }
 
