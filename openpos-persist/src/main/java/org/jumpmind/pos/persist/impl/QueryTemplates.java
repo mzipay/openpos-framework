@@ -2,16 +2,14 @@ package org.jumpmind.pos.persist.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.db.sql.InvalidSqlException;
-import org.jumpmind.pos.persist.PersistException;
-import org.springframework.data.mapping.PersistentPropertyAccessor;
 
-import java.text.ParseException;
 import java.util.*;
 
 public class QueryTemplates {
     Map<String, Map<String, QueryTemplate>> queriesByDeviceMode = new HashMap<>();
 
-    public QueryTemplates()  {}
+    public QueryTemplates() {
+    }
 
     public List<QueryTemplate> getQueries(String deviceMode) {
         List<QueryTemplate> templateList = new ArrayList<>();
@@ -38,57 +36,84 @@ public class QueryTemplates {
         addQueries("default", queries);
     }
 
-    public void setQueries(List<QueryTemplate> queries)  {
+    public void setQueries(List<QueryTemplate> queries) {
         setQueries("default", queries);
     }
 
     //  Lookups for queries by Device Mode and name.
 
-    public boolean containsQueryTemplate(String deviceMode, String queryName)  {
+    public boolean containsQueryTemplate(String deviceMode, String queryName) {
         return getQueryTemplateMapForDeviceMode(deviceMode).containsKey(queryName);
     }
 
-    public QueryTemplate getQueryTemplate(String deviceMode, String queryName)  {
+    public QueryTemplate getQueryTemplate(String deviceMode, String queryName) {
         return getQueryTemplateMapForDeviceMode(deviceMode).get(queryName);
     }
 
     //  SQL parsing.
 
-    public void replaceModelClassNamesWithTableNames(DatabaseSchema dbSchema, List<Class<?>> modelClassList, boolean validateTablesInQueries)  {
-        for (String deviceMode : queriesByDeviceMode.keySet())  {
+    public void replaceModelClassNamesWithTableNames(DatabaseSchema dbSchema, List<Class<?>> modelClassList, boolean validateTablesInQueries) {
+        for (String deviceMode : queriesByDeviceMode.keySet()) {
             Map<String, QueryTemplate> queryMap = queriesByDeviceMode.get(deviceMode);
-            for (QueryTemplate template : queryMap.values())  {
-                String select = template.getSelect();
-                if (select != null)  {
-                    for (Class<?> modelClass : modelClassList)  {
-                        String modelClassName = modelClass.getSimpleName();
+            for (QueryTemplate template : queryMap.values()) {
+                for (Class<?> modelClass : modelClassList) {
+                    String modelClassName = modelClass.getSimpleName();
+                    String regularTableName = dbSchema.getTableForDeviceMode("default", modelClass, modelClass).getName();
+                    String shadowTableName = dbSchema.getTableForDeviceMode("training", modelClass, modelClass).getName();
 
-                        if (validateTablesInQueries)  {
-                            String regularTableName = dbSchema.getTableForDeviceMode("default", modelClass, modelClass).getName();
-                            String shadowTableName  = dbSchema.getTableForDeviceMode("training", modelClass, modelClass).getName();
+                    if (validateTablesInQueries) {
+                        scanSqlTextForLiteralTableName(template.getSelect(), "SELECT", template.getName(), regularTableName, shadowTableName, dbSchema.getTablePrefix(), modelClassName);
+                        scanSqlTextForLiteralTableName(template.getWhere(), "WHERE", template.getName(), regularTableName, shadowTableName, dbSchema.getTablePrefix(), modelClassName);
+                        scanSqlTextForLiteralTableName(template.getOrderBy(), "ORDER BY", template.getName(), regularTableName, shadowTableName, dbSchema.getTablePrefix(), modelClassName);
+                        scanSqlTextForLiteralTableName(template.getGroupBy(), "GROUP BY", template.getName(), regularTableName, shadowTableName, dbSchema.getTablePrefix(), modelClassName);
 
-                            boolean selectContainsRegularName = select.matches(".*\\b" + regularTableName + "\\b.*");
-                            boolean selectContainsShadowName = false;
-                            if (!regularTableName.equals(shadowTableName))  {
-                                selectContainsShadowName = select.matches(".*\\b" + shadowTableName + "\\b.*");
-                            }
-
-                            if (selectContainsRegularName || selectContainsShadowName)  {
-                                throw new InvalidSqlException(
-                                    "SQL SELECT statement contains literal table name " + (selectContainsRegularName ? regularTableName : shadowTableName) +
-                                    " in query " + template.getName() + " in file " + dbSchema.getTablePrefix().toLowerCase() +
-                                    "-query.yml. Replace it with the corresponding model class name " + modelClassName + " instead."
-                                );
-                            }
-                        }
-
-                        if (StringUtils.indexOf(select, modelClassName) >= 0)  {
-                            //  In the case below, we always want the model class, not its superclass.
-                            select = select.replaceAll("\\b" + modelClassName + "\\b", dbSchema.getTableForDeviceMode(deviceMode, modelClass, modelClass).getName());
-                            template.setSelect(select);
+                        for (String optionalWhereClause : template.getOptionalWhereClauses()) {
+                            scanSqlTextForLiteralTableName(optionalWhereClause, "optional WHERE clause", template.getName(), regularTableName, shadowTableName, dbSchema.getTablePrefix(), modelClassName);
                         }
                     }
+
+                    //  In the case below, we always want the model class, NOT its superclass.
+                    String tableName = (deviceMode.equals("training") ? shadowTableName : regularTableName);
+
+                    template.setSelect(replaceClassModelNameInSqlText(template.getSelect(), modelClassName, tableName));
+                    template.setWhere(replaceClassModelNameInSqlText(template.getWhere(), modelClassName, tableName));
+                    template.setOrderBy(replaceClassModelNameInSqlText(template.getOrderBy(), modelClassName, tableName));
+                    template.setGroupBy(replaceClassModelNameInSqlText(template.getGroupBy(), modelClassName, tableName));
+
+                    if (template.hasOptionalWhereClauses()) {
+                        ArrayList<String> newOptionalWhereClauses = new ArrayList<>();
+                        for (String optionalWhereClause : template.getOptionalWhereClauses()) {
+                            newOptionalWhereClauses.add(replaceClassModelNameInSqlText(optionalWhereClause, modelClassName, tableName));
+                        }
+                        template.setOptionalWhereClauses(newOptionalWhereClauses);
+                    }
                 }
+            }
+        }
+    }
+
+    private String replaceClassModelNameInSqlText(String sqlText, String modelClassName, String tableName)  {
+        if ((sqlText != null) && StringUtils.indexOf(sqlText, modelClassName) >= 0)  {
+            return sqlText.replaceAll("\\b" + modelClassName + "\\b", tableName);
+        }
+
+        return sqlText;
+    }
+
+    private void scanSqlTextForLiteralTableName(String sqlText, String textType, String templateName, String regularTableName, String shadowTableName, String modulePrefix, String modelClassName)  {
+        if (sqlText != null) {
+            boolean textContainsRegularName = sqlText.matches(".*\\b" + regularTableName + "\\b.*");
+            boolean textContainsShadowName = false;
+            if (!regularTableName.equals(shadowTableName)) {
+                textContainsShadowName = sqlText.matches(".*\\b" + shadowTableName + "\\b.*");
+            }
+
+            if (textContainsRegularName || textContainsShadowName) {
+                throw new InvalidSqlException("SQL " + textType + " contains literal table name " +
+                        (textContainsRegularName ? regularTableName : shadowTableName) + " in query " + templateName +
+                        " in file " + modulePrefix.toLowerCase() + "-query.yml. Replace it with the corresponding model class name " +
+                        modelClassName + " instead."
+                );
             }
         }
     }
