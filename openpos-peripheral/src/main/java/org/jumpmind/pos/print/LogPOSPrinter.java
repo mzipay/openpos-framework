@@ -69,7 +69,6 @@ public class LogPOSPrinter implements IOpenposPrinter {
 
     @Override
     public void beginSlipMode() {
-
     }
 
     @Override
