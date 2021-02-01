@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.StreamSupport;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
 import org.apache.commons.lang3.StringUtils;
@@ -53,13 +55,13 @@ public class DeviceModel extends AbstractModel implements ITaggedModel {
 
     @ColumnDef(size = "255", description = "A user defined name for the Device")
     private String description;
-    @ToString.Include
-    @Builder.Default
-    @ColumnDef(size = "100", description = "The current mode of the Device")
-    private String deviceMode = DEVICE_MODE_DEFAULT;
 
     public static final String DEVICE_MODE_DEFAULT  = "default";
     public static final String DEVICE_MODE_TRAINING = "training";
+
+    @ToString.Include
+    @Builder.Default
+    private String deviceMode = DEVICE_MODE_DEFAULT;
 
     public DeviceModel(String deviceId, String appId, String locale, String timezoneOffset, String businessUnitId, String description, String deviceMode, Map<String, String> tags, List<DeviceParamModel> deviceParamModels) {
         this.deviceId = deviceId;
@@ -129,10 +131,13 @@ public class DeviceModel extends AbstractModel implements ITaggedModel {
         }
         return withOutBusinessUnitId;
     }
+
+    @JsonIgnore
     public boolean isDeviceModeDefault()  {
         return (deviceMode == null ? true : deviceMode.equals(DEVICE_MODE_DEFAULT));
     }
 
+    @JsonIgnore
     public boolean isDeviceModeTraining()  {
         return (deviceMode == null ? false : deviceMode.equals(DEVICE_MODE_TRAINING));
     }
