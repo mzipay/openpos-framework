@@ -4,7 +4,7 @@ public final class MessageType {
 
     private MessageType() {
     }
-    
+
     public static final String Screen = "Screen";
     public static final String Dialog = "Dialog";
     public static final String Toast = "Toast";
@@ -24,4 +24,5 @@ public final class MessageType {
     public static final String SimulatedPeripheral = "SimulatedPeripheral";
     public static final String Watermark = "Watermark";
     public static final String HideWatermark = "HideWatermark";
+    public static final String ClientExecutable = "ClientExecutable";
 }
