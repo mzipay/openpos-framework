@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.StreamSupport;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
@@ -56,12 +55,12 @@ public class DeviceModel extends AbstractModel implements ITaggedModel {
     @ColumnDef(size = "255", description = "A user defined name for the Device")
     private String description;
 
-    public static final String DEVICE_MODE_DEFAULT  = "default";
-    public static final String DEVICE_MODE_TRAINING = "training";
-
     @ToString.Include
     @Builder.Default
     private String deviceMode = DEVICE_MODE_DEFAULT;
+
+    public static final String DEVICE_MODE_DEFAULT  = "default";
+    public static final String DEVICE_MODE_TRAINING = "training";
 
     public DeviceModel(String deviceId, String appId, String locale, String timezoneOffset, String businessUnitId, String description, String deviceMode, Map<String, String> tags, List<DeviceParamModel> deviceParamModels) {
         this.deviceId = deviceId;
