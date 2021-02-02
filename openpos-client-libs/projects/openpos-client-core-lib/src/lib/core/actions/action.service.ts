@@ -44,10 +44,14 @@ export class ActionService implements OnDestroy {
     async doAction(actionItem: IActionItem, payload?: any) {
         const sendAction = await this.canPerformAction(actionItem);
         if (sendAction) {
-            if (payload && actionItem.defaultPayload) {
+            if (typeof payload !== 'undefined' && typeof actionItem.defaultPayload !== 'undefined') {
                 console.warn("Default action payload overridden for action " + actionItem.action);
             }
-            payload = payload || actionItem.defaultPayload;
+
+            if (typeof payload === 'undefined' && typeof actionItem.defaultPayload !== 'undefined') {
+                payload = actionItem.defaultPayload;
+            }
+
             if (!actionItem.doNotBlockForResponse) {
                 this.blockActions = true;
             }
