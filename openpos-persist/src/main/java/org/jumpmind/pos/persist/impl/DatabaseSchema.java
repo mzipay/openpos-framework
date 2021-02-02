@@ -94,25 +94,29 @@ public class DatabaseSchema {
     }
 
     public Table getTableForDeviceMode(String deviceMode, Class<?> entityClass, Class<?> superClass)  {
-        List<ModelClassMetaData> metas = classToModelMetaData.get(entityClass).getModelClassMetaData();
+        ModelMetaData modelMetaData = classToModelMetaData.get(entityClass);
 
-        if (metas != null) {
-            //  Handle special Device Modes here.
+        if (modelMetaData != null) {
+            List<ModelClassMetaData> metas = modelMetaData.getModelClassMetaData();
 
-            if (deviceMode.equalsIgnoreCase("training")) {
-                for (ModelClassMetaData regularMeta : metas) {
-                    if (regularMeta.getClazz().equals(superClass)) {
-                        ModelClassMetaData shadowMeta = shadowTables.get(superClass);
-                        return ((shadowMeta != null) && shadowMeta.hasShadowTable() ? shadowMeta.getShadowTable() : regularMeta.getTable());
+            if (metas != null) {
+                //  Handle special Device Modes here.
+
+                if (deviceMode.equalsIgnoreCase("training")) {
+                    for (ModelClassMetaData regularMeta : metas) {
+                        if (regularMeta.getClazz().equals(superClass)) {
+                            ModelClassMetaData shadowMeta = shadowTables.get(superClass);
+                            return ((shadowMeta != null) && shadowMeta.hasShadowTable() ? shadowMeta.getShadowTable() : regularMeta.getTable());
+                        }
                     }
                 }
-            }
 
-            //  If no special Device Mode, use the default approach.
+                //  If no special Device Mode, use the default approach.
 
-            for (ModelClassMetaData meta : metas) {
-                if (meta.getClazz().equals(superClass)) {
-                    return meta.getTable();
+                for (ModelClassMetaData meta : metas) {
+                    if (meta.getClazz().equals(superClass)) {
+                        return meta.getTable();
+                    }
                 }
             }
         }

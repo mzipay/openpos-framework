@@ -1,6 +1,7 @@
 package org.jumpmind.pos.persist.impl;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jumpmind.db.model.Table;
 import org.jumpmind.db.sql.InvalidSqlException;
 
 import java.util.*;
@@ -58,8 +59,20 @@ public class QueryTemplates {
             for (QueryTemplate template : queryMap.values()) {
                 for (Class<?> modelClass : modelClassList) {
                     String modelClassName = modelClass.getSimpleName();
-                    String regularTableName = dbSchema.getTableForDeviceMode("default", modelClass, modelClass).getName();
-                    String shadowTableName = dbSchema.getTableForDeviceMode("training", modelClass, modelClass).getName();
+
+                    Table regularTable = dbSchema.getTableForDeviceMode("default", modelClass, modelClass);
+                    Table shadowTable = dbSchema.getTableForDeviceMode("training", modelClass, modelClass);
+
+                    if (regularTable == null)  {
+                        //  For whatever reason, we could not find a table associated with the given model class.
+                        continue;
+
+                    } else if (shadowTable == null)  {
+                        shadowTable = regularTable;
+                    }
+
+                    String regularTableName = regularTable.getName();
+                    String shadowTableName = shadowTable.getName();
 
                     if (validateTablesInQueries) {
                         scanSqlTextForLiteralTableName(template.getSelect(), "SELECT", template.getName(), regularTableName, shadowTableName, dbSchema.getTablePrefix(), modelClassName);

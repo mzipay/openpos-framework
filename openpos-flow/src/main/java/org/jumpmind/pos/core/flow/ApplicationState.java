@@ -219,6 +219,7 @@ public class ApplicationState {
     public String getDeviceId() {
         return deviceId;
     }
+
     public void setDeviceMode(String deviceMode) {
         this.deviceMode = (deviceMode == null ? DeviceModel.DEVICE_MODE_DEFAULT : deviceMode);
     }

@@ -133,13 +133,23 @@ public class DeviceModel extends AbstractModel implements ITaggedModel {
     }
 
     @JsonIgnore
-    public boolean isDeviceModeDefault()  {
+    public boolean isDefaultDeviceMode()  {
         return (deviceMode == null ? true : deviceMode.equals(DEVICE_MODE_DEFAULT));
     }
 
     @JsonIgnore
-    public boolean isDeviceModeTraining()  {
+    public void setDefaultDeviceMode()  {
+        deviceMode = DEVICE_MODE_DEFAULT;
+    }
+
+    @JsonIgnore
+    public boolean isTrainingDeviceMode()  {
         return (deviceMode == null ? false : deviceMode.equals(DEVICE_MODE_TRAINING));
+    }
+
+    @JsonIgnore
+    public void setTrainingDeviceMode()  {
+        deviceMode = DEVICE_MODE_TRAINING;
     }
 
     private List<DeviceParamModel> deviceParamModels;

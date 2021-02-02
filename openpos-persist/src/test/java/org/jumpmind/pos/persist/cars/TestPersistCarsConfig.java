@@ -8,6 +8,7 @@ import org.jumpmind.pos.persist.DBSessionFactory;
 import org.jumpmind.pos.persist.DatabaseScriptContainer;
 import org.jumpmind.pos.persist.driver.Driver;
 import org.jumpmind.pos.persist.impl.QueryTemplates;
+import org.jumpmind.pos.persist.impl.ShadowTablesConfigModel;
 import org.jumpmind.pos.persist.model.*;
 import org.jumpmind.pos.util.clientcontext.ClientContext;
 import org.springframework.context.annotation.Bean;
@@ -86,6 +87,13 @@ public class TestPersistCarsConfig {
 
             ClientContext clientContext = new ClientContext();
 
+            ShadowTablesConfigModel shadowTablesConfig = new ShadowTablesConfigModel(
+                    "training",
+                    "tng",
+                    true,
+                    Arrays.asList("car_*"),
+                    Arrays.asList("car_stats")
+            );
             
             sessionFactory.init(
                     PersistTestUtil.testDbPlatform(), 
@@ -97,9 +105,8 @@ public class TestPersistCarsConfig {
                     tagHelper,
                     augmenterHelper,
                     clientContext,
-                    null);
-
-
+                    shadowTablesConfig
+            );
 
             DBSession session = sessionFactory.createDbSession();
 
