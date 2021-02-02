@@ -17,7 +17,7 @@ public class InitSymDSStep implements ITransitionStep {
     @Autowired
     protected Environment env;
 
-    @Autowired
+    @Autowired(required = false)
     ISymmetricEngine symmetricEngine;
 
     @In(scope = ScopeType.Device)
@@ -38,7 +38,8 @@ public class InitSymDSStep implements ITransitionStep {
 
     boolean isApplicable() {
         INodeService nodeService = symmetricEngine.getNodeService();
-        if ("true".equals(env.getProperty("openpos.symmetric.start", "false")) &&
+        if (symmetricEngine != null &&
+                "true".equals(env.getProperty("openpos.symmetric.start", "false")) &&
                 "true".equals(env.getProperty("openpos.symmetric.waitForInitialLoad", "false")) &&
                 !nodeService.isRegistrationServer()) {
 
