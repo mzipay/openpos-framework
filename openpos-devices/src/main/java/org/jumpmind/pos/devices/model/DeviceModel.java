@@ -1,12 +1,15 @@
 package org.jumpmind.pos.devices.model;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.StreamSupport;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
+import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.persist.*;
 import org.jumpmind.pos.persist.model.ITaggedModel;
 import org.jumpmind.util.AppUtils;
@@ -51,6 +54,30 @@ public class DeviceModel extends AbstractModel implements ITaggedModel {
 
     @ColumnDef(size = "255", description = "A user defined name for the Device")
     private String description;
+
+    @ToString.Include
+    @Builder.Default
+    private String deviceMode = DEVICE_MODE_DEFAULT;
+
+    public static final String DEVICE_MODE_DEFAULT  = "default";
+    public static final String DEVICE_MODE_TRAINING = "training";
+
+    public DeviceModel(String deviceId, String appId, String locale, String timezoneOffset, String businessUnitId, String description, String deviceMode, Map<String, String> tags, List<DeviceParamModel> deviceParamModels) {
+        this.deviceId = deviceId;
+        this.appId = appId;
+        this.locale = locale;
+        this.timezoneOffset = timezoneOffset;
+        this.businessUnitId = businessUnitId;
+        this.description = description;
+        this.deviceMode = (StringUtils.isEmpty(deviceMode) ? DEVICE_MODE_DEFAULT : deviceMode);
+        this.tags = new CaseInsensitiveMap<>(tags != null ? tags : new HashMap<>());
+        this.deviceParamModels = deviceParamModels;
+    }
+
+    public DeviceModel(String deviceId, String appId, String locale, String timezoneOffset, String businessUnitId, String description, Map<String, String> tags, List<DeviceParamModel> deviceParamModels) {
+        this(deviceId, appId, locale, timezoneOffset, businessUnitId, description, DEVICE_MODE_DEFAULT, tags, deviceParamModels);
+    }
+
 
     private Map<String, String> tags = new CaseInsensitiveMap<String, String>();
 
@@ -102,6 +129,26 @@ public class DeviceModel extends AbstractModel implements ITaggedModel {
             }
         }
         return withOutBusinessUnitId;
+    }
+
+    @JsonIgnore
+    public boolean isDefaultDeviceMode()  {
+        return (deviceMode == null ? true : deviceMode.equals(DEVICE_MODE_DEFAULT));
+    }
+
+    @JsonIgnore
+    public void setDefaultDeviceMode()  {
+        deviceMode = DEVICE_MODE_DEFAULT;
+    }
+
+    @JsonIgnore
+    public boolean isTrainingDeviceMode()  {
+        return (deviceMode == null ? false : deviceMode.equals(DEVICE_MODE_TRAINING));
+    }
+
+    @JsonIgnore
+    public void setTrainingDeviceMode()  {
+        deviceMode = DEVICE_MODE_TRAINING;
     }
 
     private List<DeviceParamModel> deviceParamModels;

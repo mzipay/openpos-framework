@@ -42,6 +42,8 @@ public interface IStateManager {
     public String getNodeId();
     public String getDeviceId();
     public String getAppId();
+    public String getDeviceMode();
+    public void setDeviceMode(String mode);
     public void doAction(String action);
     public void doAction(String action, Map<String, String> params);
     public void doAction(Action action);    

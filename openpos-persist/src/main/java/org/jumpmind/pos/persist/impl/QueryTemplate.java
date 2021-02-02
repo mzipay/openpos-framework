@@ -34,18 +34,16 @@ public class QueryTemplate implements Cloneable {
     public void setName(String name) {
         this.name = name;
     }
-    
-    public void setOptionalWhereClauses(List<String> optionalWhereClauses) {
-        this.optionalWhereClauses = optionalWhereClauses;
-    }
-    
+
     public void setSelect(String select) {
         this.select = select;
     }
     
     public String getSelect() {
         return select;
-    }    
+    }
+
+    public boolean hasSelect()  { return (this.select != null); }
     
     public List<String> getOptionalWhereClauses() {
         if (optionalWhereClauses == null) {
@@ -53,6 +51,12 @@ public class QueryTemplate implements Cloneable {
         }
         return optionalWhereClauses;
     }
+
+    public void setOptionalWhereClauses(List<String> optionalWhereClauses) {
+        this.optionalWhereClauses = optionalWhereClauses;
+    }
+
+    public boolean hasOptionalWhereClauses()  { return !getOptionalWhereClauses().isEmpty(); }
 
     public QueryTemplate optionalWhere(String optionalWhere) {
         this.getOptionalWhereClauses().add(optionalWhere);
@@ -67,6 +71,8 @@ public class QueryTemplate implements Cloneable {
         this.groupBy = groupBy;
     }
 
+    public boolean hasGroupBy()  { return (this.groupBy != null); }
+
     public String getWhere() {
         return where;
     }
@@ -75,6 +81,8 @@ public class QueryTemplate implements Cloneable {
         this.where = where;
     }
 
+    public boolean hasWhere()  { return (this.where != null); }
+
     public String getOrderBy() {
         return orderBy;
     }
@@ -82,6 +90,8 @@ public class QueryTemplate implements Cloneable {
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
     }
+
+    public boolean hasOrderBy()  { return (this.orderBy != null); }
 
     public QueryTemplate copy() {
         try {
@@ -101,7 +111,7 @@ public class QueryTemplate implements Cloneable {
         String select = this.getSelect();
         List<String> keys = new ArrayList<>();
 
-        StringSubstitutor literalSubtitution = new StringSubstitutor(new StringLookup() {
+        StringSubstitutor literalSubstitution = new StringSubstitutor(new StringLookup() {
             @Override
             public String lookup(String key) {
                 Object paramValue = params.get(key);
@@ -117,10 +127,10 @@ public class QueryTemplate implements Cloneable {
             }
         });
 
-        String preppedSelectClause = literalSubtitution.replace(select);
+        String preppedSelectClause = literalSubstitution.replace(select);
         preppedSelectClause = sub.replace(preppedSelectClause);
 
-        String preppedWhereClause = literalSubtitution.replace(this.getWhere());
+        String preppedWhereClause = literalSubstitution.replace(this.getWhere());
         preppedWhereClause = sub.replace(preppedWhereClause);
 
         StringBuilder buff = new StringBuilder();
@@ -138,7 +148,7 @@ public class QueryTemplate implements Cloneable {
         boolean firstIncluded = true;
         for (String optionalWhereClause : this.getOptionalWhereClauses()) {
             Set<String> optionalWhereClauseKeys = new LinkedHashSet<>();
-            String preppedOptionalWhereClause = literalSubtitution.replace(optionalWhereClause);
+            String preppedOptionalWhereClause = literalSubstitution.replace(optionalWhereClause);
 
             StringSubstitutor optionalSubstitution = new StringSubstitutor(new StringLookup() {
                 @Override

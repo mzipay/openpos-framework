@@ -159,6 +159,7 @@ import { WarnButtonComponent } from './components/warn-button/warn-button.compon
 import {StayFocusedDirective} from './directives/stay-focused.directive';
 import { AudioLicenseComponent } from './components/audio-license/audio-license.component';
 import { ToastComponent } from './components/toast/toast.component';
+import { WatermarkComponent } from './components/watermark/watermark.component';
 
 const screenParts = [
     TenderPartComponent,
@@ -270,7 +271,8 @@ const components = [
     ButtonActionTimerComponent,
     TransactionSummaryComponent,
     StampComponent,
-    ToastComponent
+    ToastComponent,
+    WatermarkComponent
 ];
 
 const directives = [

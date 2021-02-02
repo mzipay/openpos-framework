@@ -1,5 +1,8 @@
 package org.jumpmind.pos.service;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.h2.tools.Server;
 import org.jumpmind.db.model.Table;
 import org.jumpmind.db.platform.IDatabasePlatform;
@@ -11,8 +14,11 @@ import org.jumpmind.db.util.ConfigDatabaseUpgrader;
 import org.jumpmind.exception.IoException;
 import org.jumpmind.pos.persist.*;
 import org.jumpmind.pos.persist.driver.Driver;
+import org.jumpmind.pos.persist.impl.ShadowTablesConfigModel;
+import org.jumpmind.pos.persist.model.AugmenterHelper;
 import org.jumpmind.pos.persist.model.TagHelper;
 import org.jumpmind.pos.service.model.ModuleModel;
+import org.jumpmind.pos.util.clientcontext.ClientContext;
 import org.jumpmind.properties.TypedProperties;
 import org.jumpmind.security.ISecurityService;
 import org.jumpmind.security.SecurityServiceFactory;
@@ -24,7 +30,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.BindResult;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.boot.context.properties.source.ConfigurationPropertySources;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,8 +53,10 @@ import java.util.List;
 import static org.jumpmind.db.util.BasicDataSourcePropertyConstants.*;
 import static org.jumpmind.pos.service.util.ClassUtils.getClassesForPackageAndAnnotation;
 
+@Configuration
 @EnableTransactionManagement
-@DependsOn({"tagConfig"})
+@DependsOn({"tagConfig", "augmenterConfigs"})
+@ConfigurationProperties(prefix = "openpos.module")
 abstract public class AbstractRDBMSModule extends AbstractServiceFactory implements IModule, IRDBMSModule {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
@@ -62,6 +76,9 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
     protected TagHelper tagHelper;
 
     @Autowired
+    protected AugmenterHelper augmenterHelper;
+
+    @Autowired
     protected ApplicationContext applicationContext;
 
     protected IDatabasePlatform databasePlatform;
@@ -78,13 +95,22 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
     @Value("${openpos.general.failStartupOnModuleLoadFailure:false}")
     boolean failStartupOnModuleLoadFailure;
 
+    //  Per CEH, the below is needed for AEO only.
+    // @Autowired(required = false)
     protected DataSource dataSource;
+
+    @Autowired
+    protected ClientContext clientContext;
 
     protected ISecurityService securityService;
 
     protected PlatformTransactionManager txManager;
 
     protected DBSessionFactory sessionFactory;
+
+    @Getter
+    @Setter
+    private ModuleLoaderConfig loaderConfig;
 
     static Server h2Server;
 
@@ -211,7 +237,8 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
 
     @Override
     public DataSource getDataSource() {
-        if (dataSource == null) {
+        if (dataSource == null || dataSource.getClass().getSimpleName().contains("EmbeddedDataSourceProxy")) {
+            this.dataSource = null;
             setupH2Server();
             if (this.dataSourceBeanName != null) {
                 try {
@@ -279,8 +306,28 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
             sessionContext.put(DBSession.JDBC_FETCH_SIZE, env.getProperty(DBSession.JDBC_FETCH_SIZE));
             sessionContext.put(DBSession.JDBC_QUERY_TIMEOUT, env.getProperty(DBSession.JDBC_QUERY_TIMEOUT));
 
-            sessionFactory.init(getDatabasePlatform(), sessionContext, tableClasses, tableExtensionClasses, tagHelper);
+            ShadowTablesConfigModel shadowTablesConfig = null;
+            String shadowTablesDeviceMode = getEnvironmentConfig("db.shadowTables.deviceMode", "");
+            String shadowTablePrefix = getEnvironmentConfig("db.shadowTables.tablePrefix", "tng");
+            String validateQueries = getEnvironmentConfig("db.shadowTables.validateQueries", "true");
 
+            if (StringUtils.isNotEmpty(shadowTablesDeviceMode) && StringUtils.isNotEmpty(shadowTablePrefix)) {
+                List<String> includesList = getEnvironmentConfigList("db.shadowTables.includes");
+                List<String> excludesList = getEnvironmentConfigList("db.shadowTables.excludes");
+
+                if (hasShadowTables(getTablePrefix(), includesList)) {
+                    log.info("Module {} has shadow table(s) for device mode {}", getTablePrefix().toUpperCase(), shadowTablesDeviceMode);
+                    shadowTablesConfig = new ShadowTablesConfigModel(
+                            shadowTablesDeviceMode,
+                            shadowTablePrefix,
+                            validateQueries.equalsIgnoreCase("true") || validateQueries.equalsIgnoreCase("yes") || validateQueries.equalsIgnoreCase("on"),
+                            includesList,
+                            getEnvironmentConfigList("db.shadowTables.excludes")
+                    );
+                }
+            }
+
+            sessionFactory.init(getDatabasePlatform(), sessionContext, tableClasses, tableExtensionClasses, tagHelper, augmenterHelper, clientContext, shadowTablesConfig);
         }
 
         return sessionFactory;
@@ -377,4 +424,36 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
         };
     }
 
+    private boolean hasShadowTables(String modulePrefix, List<String> includesList)  {
+        for (String includeName : includesList)  {
+            if (includeName.toLowerCase().startsWith(modulePrefix.toLowerCase()))  {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String getEnvironmentConfig(String configName, String defaultValue) {
+        String value = env.getProperty(configName);
+        return (value == null ? defaultValue : value);
+    }
+
+    private List<String> getEnvironmentConfigList(String configName) {
+        Binder binder = new Binder(ConfigurationPropertySources.get(env));
+        BindResult<List<String>> val = null;
+        // Springboot 2.0 does not allow camelCase, or we could put in dashes
+        configName = configName.toLowerCase();
+        try {
+            val = binder.bind(configName, Bindable.listOf(String.class));
+        } catch (Exception e) {
+            log.info("ConfigName: '{}' not in environment", configName);
+        }
+
+        if (val != null && val.isBound()) {
+            return val.get();
+        } else {
+            log.info("Value for object 'String' could not be bound to list. Config '{}' is not in environment", configName);
+            return null;
+        }
+    }
 }
