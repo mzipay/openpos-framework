@@ -37,14 +37,14 @@ public class InitSymDSStep implements ITransitionStep {
     }
 
     boolean isApplicable() {
-        INodeService nodeService = symmetricEngine.getNodeService();
-        if (symmetricEngine != null &&
-                "true".equals(env.getProperty("openpos.symmetric.start", "false")) &&
-                "true".equals(env.getProperty("openpos.symmetric.waitForInitialLoad", "false")) &&
-                !nodeService.isRegistrationServer()) {
-
-            IRegistrationService registrationService = symmetricEngine.getRegistrationService();
-            return !registrationService.isRegisteredWithServer() || !nodeService.isDataLoadCompleted();
+        if (symmetricEngine != null) {
+            INodeService nodeService = symmetricEngine.getNodeService();
+            if ("true".equals(env.getProperty("openpos.symmetric.start", "false")) &&
+                            "true".equals(env.getProperty("openpos.symmetric.waitForInitialLoad", "false")) &&
+                            !nodeService.isRegistrationServer()) {
+                IRegistrationService registrationService = symmetricEngine.getRegistrationService();
+                return !registrationService.isRegisteredWithServer() || !nodeService.isDataLoadCompleted();
+            }
         }
         return false;
     }
