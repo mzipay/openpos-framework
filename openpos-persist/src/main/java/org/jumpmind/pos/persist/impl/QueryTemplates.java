@@ -145,7 +145,7 @@ public class QueryTemplates {
 
     private Map<String, QueryTemplate> getQueryTemplateMapForDeviceMode(String deviceMode)  {
         //  Normalize the Device Mode. Currently only "training" and "default" are supported.
-        deviceMode = (deviceMode.equalsIgnoreCase("training") ? "training" : "default");
+        deviceMode = (deviceMode == null ? "default" : (deviceMode.equalsIgnoreCase("training") ? "training" : "default"));
         Map<String, QueryTemplate> queryMap = queriesByDeviceMode.get(deviceMode);
         return (queryMap == null ? new HashMap<>() : queryMap);
     }
