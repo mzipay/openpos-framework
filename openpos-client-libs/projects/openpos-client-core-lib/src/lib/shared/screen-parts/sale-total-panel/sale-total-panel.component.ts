@@ -16,22 +16,7 @@ import { Configuration } from '../../../configuration/configuration';
 })
 export class SaleTotalPanelComponent extends ScreenPartComponent<SaleTotalPanelInterface> {
 
-    private loyaltyIconToken = '${icon}';
-    public loyaltyBefore: string;
-    public loyaltyAfter: string;
-
-    screenDataUpdated() {
-        if (this.screenData.loyaltyButton) {
-            const title = this.screenData.loyaltyButton.title as string;
-            const parts = title.split(this.loyaltyIconToken);
-            if (parts && parts.length > 0) {
-                this.loyaltyBefore = parts[0].trim();
-                if (parts.length > 1) {
-                    this.loyaltyAfter = parts[1].trim();
-                }
-            }
-        }
-    }
+    screenDataUpdated() {}
 
     public keybindsEnabled(menuItem: IActionItem): boolean {
         return Configuration.enableKeybinds && menuItem.keybind && menuItem.keybind !== 'Enter';

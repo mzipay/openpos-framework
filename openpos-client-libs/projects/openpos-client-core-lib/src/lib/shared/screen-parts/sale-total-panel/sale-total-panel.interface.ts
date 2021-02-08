@@ -9,7 +9,6 @@ export interface SaleTotalPanelInterface extends IAbstractScreen {
     checkoutButton: IActionItem;
     helpButton: IActionItem;
     logoutButton: IActionItem;
-    loyaltyButton: IActionItem;
     linkedCustomerButton: IActionItem;
     linkedEmployeeButton: IActionItem;
     promoButton: IActionItem;

@@ -1,5 +1,15 @@
 <app-bacon-strip class="sale-bacon-strip">
     <div class="sale-outer">
+        <div *ngIf="!(isMobile | async)" class="sale-header">
+            <app-accent-button *ngIf="!screen.readOnly && !screen.linkedCustomerButton && screen.loyaltyButton"
+                               [actionItem]="screen.loyaltyButton"
+                               (actionClick)="doMenuItemAction(screen.loyaltyButton)"
+                               (click)click="doMenuItemAction(screen.loyaltyButton)"
+                               class="link-customer">
+                <span>Link customer to apply rewards!</span>
+                <mat-icon class="material-icons line-item-caret" align="end">keyboard_arrow_right</mat-icon>
+            </app-accent-button>
+        </div>
         <div *ngIf="!(isMobile | async)" class="sale-body">
             <section class="orders" *ngIf="screen.orders && screen.orders.length > 0">
                 <div class="orders-content">
@@ -33,7 +43,7 @@
             <app-mobile-sale-item-list class="sale-list-background-mobile"></app-mobile-sale-item-list>
         </div>
         <app-mobile-totals-part *ngIf="(isMobile | async)"></app-mobile-totals-part>
-        <div *ngIf="(isMobile | async) && screen.orders && screen.orders.length > 0" class="orders-mobile-swipe-up-container dark-background" (swipeup)="openSheet()" responsive-class> 
+        <div *ngIf="(isMobile | async) && screen.orders && screen.orders.length > 0" class="orders-mobile-swipe-up-container dark-background" (swipeup)="openSheet()" responsive-class>
             <strong class="orders-label-mobile contrast-color">
                 <app-icon iconName="double_arrow" iconClass="double-arrow md"></app-icon>
                 {{screen.orders.length}} Linked Order(s)

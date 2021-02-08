@@ -38,11 +38,11 @@
              class="muted-color sale-total-tax-exempt-label-no-customer">
             {{screenData.taxExemptCertificateDetail.label}}: {{screenData.taxExemptCertificateDetail.value}}
         </div>
-        <app-secondary-button responsive-class 
+        <app-secondary-button responsive-class
                               *ngIf="screenData.employee"
                               class="sale-total-employee-sale-button"
                               [actionItem]="screenData.linkedEmployeeButton"
-                              (actionClick)="doMenuItemAction(screenData.linkedEmployeeButton)" 
+                              (actionClick)="doMenuItemAction(screenData.linkedEmployeeButton)"
                               (click)="doMenuItemAction(screenData.linkedEmployeeButton)">
             <div *ngIf="screenData.employee.name" class="muted-color sale-total-employee-sale-name">
                 <app-icon responsive-class *ngIf="screenData.employee.icon" [iconName]="screenData.employee.icon" [iconClass]="'xs'"></app-icon>
@@ -51,17 +51,6 @@
             <div *ngIf="screenData.employee.label && screenData.employee.id" class="muted-color">
                 {{screenData.employee.label}}: {{screenData.employee.id}}
             </div>
-        </app-secondary-button>
-        <app-secondary-button responsive-class
-                              *ngIf="!screenData.readOnly && !screenData.linkedCustomerButton && screenData.loyaltyButton"
-                              [actionItem]="screenData.loyaltyButton"
-                              (actionClick)="doMenuItemAction(screenData.loyaltyButton)"
-                              (click)="doMenuItemAction(screenData.loyaltyButton)" class="sale-total-loyalty-button">
-            <span *ngIf="loyaltyBefore">{{loyaltyBefore}}</span>
-            <img [src]="screenData.loyaltyButton.icon | imageUrl" class="sale-total-loyalty-button-icon">
-            <span *ngIf="loyaltyAfter">{{loyaltyAfter}}</span>
-            <span *ngIf="keybindsEnabled(screenData.loyaltyButton)"
-                  class="muted-color loyalty-keybind">{{screenData.loyaltyButton.keybindDisplayName}}</span>
         </app-secondary-button>
         <app-secondary-button responsive-class *ngIf="screenData.helpButton"
                               [actionItem]="screenData.helpButton"

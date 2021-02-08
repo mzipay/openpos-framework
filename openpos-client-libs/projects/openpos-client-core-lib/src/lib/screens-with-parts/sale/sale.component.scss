@@ -7,10 +7,15 @@
 
 .sale-bacon-strip {
     height: 100%;
-
+    .sale-header {
+        padding: 16px 16px 0px 16px;
+        .line-item-caret {
+            font-size: 36px;
+        }
+    }
     .sale-outer {
         display: grid;
-        grid-template-rows: 1fr;
+        grid-template-rows: min-content;
         min-height:100px;
 
         .sale-body {

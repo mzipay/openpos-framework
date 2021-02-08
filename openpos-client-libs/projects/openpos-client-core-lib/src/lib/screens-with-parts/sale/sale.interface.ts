@@ -11,10 +11,13 @@ export interface SaleInterface extends IAbstractScreen {
     customerName: string;
     noCustomerText: string;
     loyaltyButton: IActionItem;
+    linkedCustomerButton: IActionItem;
     locationEnabled: boolean;
     locationOverridePrompt: string;
     checkoutButton: IActionItem;
     providerKey: string;
     orders: IOrderSummary[];
     removeOrderAction: IActionItem;
+    readOnly: boolean;
+    scanIcon: string;
 }
