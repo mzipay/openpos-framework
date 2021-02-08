@@ -11,11 +11,13 @@
     ></app-icon-button>
 </mat-card-title>
 
-<div mat-dialog-content>
-    <app-option-button *ngFor="let o of data.category.knownDevices; let i = index"
-        appArrowTabItem
-        [attr.tabindex]="i"
-        [optionTitle]="o.displayName"
-        (click)="assignDevice(o)">
-    </app-option-button>
+<div *ngIf="data.category.knownDevices.length > 0" class="note-from">
+    <mat-select [(value)]="selectedDevice">
+        <mat-option *ngFor="let option of data.category.knownDevices" [value]="option">
+            {{option.displayName}}
+        </mat-option>
+    </mat-select>
+    <mat-dialog-actions class="buttons" align="end">
+        <app-primary-button [disabled]="!selectedDevice" (buttonClick)="assignDevice()">Ok</app-primary-button>
+    </mat-dialog-actions>
 </div>

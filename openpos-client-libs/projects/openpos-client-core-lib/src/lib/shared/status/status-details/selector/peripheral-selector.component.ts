@@ -10,15 +10,19 @@ export interface PeripheralSelectorDialogData {
     styleUrls: ['./peripheral-selector.component.scss']
 })
 export class PeripheralSelectorComponent {
+
+    public selectedDevice: PeripheralDevice;
+    
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: PeripheralSelectorDialogData,
         private dialogRef: MatDialogRef<PeripheralSelectorComponent>,
         public periph: PeripheralSelectionService
     ) {
+        this.selectedDevice = this.data.category.selectedDevice
     }
 
-    assignDevice(device: PeripheralDevice) {
-        this.periph.selectDevice(this.data.category, device);
+    assignDevice() {
+        this.periph.selectDevice(this.data.category, this.selectedDevice);
         this.dialogRef.close();
     }
 
