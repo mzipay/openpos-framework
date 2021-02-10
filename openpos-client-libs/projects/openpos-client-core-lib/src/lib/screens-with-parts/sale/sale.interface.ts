@@ -9,6 +9,7 @@ export interface SaleInterface extends IAbstractScreen {
     logoutButton: IActionItem;
     transactionActive: boolean;
     customerName: string;
+    customer: { name: string, label: string, icon: string, id: string };
     noCustomerText: string;
     loyaltyButton: IActionItem;
     linkedCustomerButton: IActionItem;

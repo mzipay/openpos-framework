@@ -4,11 +4,32 @@
             <app-accent-button *ngIf="!screen.readOnly && !screen.linkedCustomerButton && screen.loyaltyButton"
                                [actionItem]="screen.loyaltyButton"
                                (actionClick)="doMenuItemAction(screen.loyaltyButton)"
-                               (click)click="doMenuItemAction(screen.loyaltyButton)"
+                               (click)="doMenuItemAction(screen.loyaltyButton)"
                                class="link-customer">
                 <span>Link customer to apply rewards!</span>
                 <mat-icon class="material-icons line-item-caret" align="end">keyboard_arrow_right</mat-icon>
             </app-accent-button>
+            <button *ngIf="!screen.readOnly && screen.linkedCustomerButton && screen.customer"
+                    mat-flat-button
+                    class="icon-button account-profile-button"
+                    [disabled]="false"
+                    [actionItem]="screen.linkedCustomerButton"
+                    (actionClick)="doMenuItemAction(screen.linkedCustomerButton)"
+                    (click)="doMenuItemAction(screen.linkedCustomerButton)">
+                <app-icon [iconName]="'account_circle'" [iconClass]="(isMobile | async) ? null: 'material-icons mat-36'"></app-icon>
+            </button>
+            <button *ngIf="!screen.readOnly && screen.linkedCustomerButton && screen.customer"
+                    class="linked-customer-summary"
+                    fxFlex="1 0 auto"
+                    responsive-class
+                    mat-flat-button
+                    [actionItem]="screen.linkedCustomerButton"
+                    (actionClick)="doMenuItemAction(screen.linkedCustomerButton)"
+                    (click)="doMenuItemAction(screen.linkedCustomerButton)">
+                <span class="customer-name">{{screen.customer.name}}</span>
+                <span>Loyalty ID: {{screen.customer.id}}</span>
+                <mat-icon class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
+            </button>
         </div>
         <div *ngIf="!(isMobile | async)" class="sale-body">
             <section class="orders" *ngIf="screen.orders && screen.orders.length > 0">
