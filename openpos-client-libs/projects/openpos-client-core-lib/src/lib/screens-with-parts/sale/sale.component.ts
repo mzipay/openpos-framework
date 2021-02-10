@@ -100,4 +100,8 @@ export class SaleComponent extends PosScreen<SaleInterface> {
             }
         }));
     }
+
+    public keybindsEnabled(menuItem: IActionItem): boolean {
+        return Configuration.enableKeybinds && !!menuItem.keybind && menuItem.keybind !== 'Enter';
+    }
 }

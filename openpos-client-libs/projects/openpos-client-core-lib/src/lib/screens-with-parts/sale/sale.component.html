@@ -6,7 +6,9 @@
                                (actionClick)="doMenuItemAction(screen.loyaltyButton)"
                                (click)="doMenuItemAction(screen.loyaltyButton)"
                                class="link-customer">
-                <span>Link customer to apply rewards!</span>
+                <span>{{screen.loyaltyButton.title}}</span>
+                <span *ngIf="keybindsEnabled(screen.loyaltyButton)"
+                      class="muted-color loyalty-keybind">{{screen.loyaltyButton.keybindDisplayName}}</span>
                 <mat-icon class="material-icons line-item-caret" align="end">keyboard_arrow_right</mat-icon>
             </app-accent-button>
             <button *ngIf="!screen.readOnly && screen.linkedCustomerButton && screen.customer"
@@ -28,6 +30,8 @@
                     (click)="doMenuItemAction(screen.linkedCustomerButton)">
                 <span class="customer-name">{{screen.customer.name}}</span>
                 <span>Loyalty ID: {{screen.customer.id}}</span>
+                <span *ngIf="keybindsEnabled(screen.linkedCustomerButton)"
+                      class="muted-color loyalty-keybind">{{screen.linkedCustomerButton.keybindDisplayName}}</span>
                 <mat-icon class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
             </button>
         </div>

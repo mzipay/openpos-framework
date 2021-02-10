@@ -15,10 +15,12 @@ import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 import { TimeZoneContext } from '../../core/client-context/time-zone-context';
 import { CLIENTCONTEXT } from '../../core/client-context/client-context-provider.interface';
 import { SaleInterface } from './sale.interface';
+import { Configuration } from './../../configuration/configuration';
+import { Subscription, Observable, of } from 'rxjs';
+
 class MockMatDialog {};
 class MockActionService {};
 class MockMatBottomSheet {};
-import { Subscription, Observable, of } from 'rxjs';
 class MockKeyPressProvider {
     subscribe(): Subscription {
         return new Subscription();
@@ -71,6 +73,45 @@ describe('SaleComponent', () => {
             expect(component).toBeDefined();
         });
 
+        describe('component', () => {
+            describe('doMenuItemAction', () => {
+                it('calls through to doAction', () => {
+                    spyOn(component, 'doAction');
+                    const menuItem = { title: 'some button'} as IActionItem;
+                    component.doMenuItemAction(menuItem);
+                    expect(component.doAction).toHaveBeenCalledWith(menuItem);
+                });
+            });
+
+            describe('keybindsEnabled', () => {
+                let menuItem;
+                beforeEach(() => {
+                    Configuration.enableKeybinds = true;
+                    menuItem = {
+                        keybind: "F5"
+                    };
+                })
+                it('returns false when Configuration.enableKeybinds is false', () => {
+                    Configuration.enableKeybinds = false;
+                    expect(component.keybindsEnabled(menuItem)).toBe(false);
+                });
+
+                it('returns false when Configuration.enableKeybinds is true and the menuItem.keybind is falsey', () => {
+                    menuItem.keybind = undefined;
+                    expect(component.keybindsEnabled(menuItem)).toBe(false);
+                });
+
+                it('returns false when Configuration.enableKeybinds is true and the menuItem.keybind is truthy and is "Enter"', () => {
+                    menuItem.keybind = 'Enter';
+                    expect(component.keybindsEnabled(menuItem)).toBe(false);
+                });
+
+                it('returns true when the Configuration.enableKeybinds is true and the menuItem.keybind is truthy and not "Enter"', () => {
+                    expect(component.keybindsEnabled(menuItem)).toBe(true);
+                });
+            });
+        });
+
         describe('template', () => {
             describe('sale-header', () => {
                 const configureComponent = (readOnly: boolean, linkedCustomerButton: IActionItem, loyaltyButton: IActionItem, customer = undefined) => {
@@ -105,7 +146,10 @@ describe('SaleComponent', () => {
                 });
                 describe('when no customer is linked', () => {
                     beforeEach(() => {
-                        configureComponent(false, undefined, {} as IActionItem);
+                        configureComponent(false, undefined, {
+                            keybindDisplayName: "F5",
+                            title: "Link customer to apply rewards!"
+                        } as IActionItem);
                     });
                     it('it shows the link customer button', () => {
                         const button = fixture.debugElement.query(By.css('.sale-header .link-customer'));
@@ -129,10 +173,23 @@ describe('SaleComponent', () => {
                         button.nativeElement.click();
                         expect(component.doMenuItemAction).toHaveBeenCalledWith(component.screen.loyaltyButton);
                     });
+
+                    it('shows the keybinding when keybinds are enabled', () => {
+                        spyOn(component, 'keybindsEnabled').and.returnValue(true);
+                        fixture.detectChanges();
+                        const button = fixture.debugElement.query(By.css('.sale-header .link-customer .loyalty-keybind'));
+                        expect(button.nativeElement.textContent).toContain('F5');
+                    });
+
+                    it('hides the keybinding when keybinds are disabled', () => {
+                        spyOn(component, 'keybindsEnabled').and.returnValue(false);
+                        fixture.detectChanges();
+                        validateDoesNotExist('.sale-header .link-customer .loyalty-keybind');
+                    });
                 });
                 describe('when a customer is linked', () => {
                     beforeEach(() => {
-                        configureComponent(false, {} as IActionItem, {} as IActionItem, {
+                        configureComponent(false, { keybindDisplayName: "F7" } as IActionItem, {} as IActionItem, {
                             name: 'bob',
                             label: 'manager',
                             icon: undefined,
@@ -198,6 +255,19 @@ describe('SaleComponent', () => {
                         it('displays a left arrow carrot icon', () => {
                             const icon = fixture.debugElement.query(By.css('.sale-header .line-item-caret'));
                             expect(icon.nativeElement).toBeDefined();
+                        });
+
+                        it('shows the keybinding when keybinds are enabled', () => {
+                            spyOn(component, 'keybindsEnabled').and.returnValue(true);
+                            fixture.detectChanges();
+                            const button = fixture.debugElement.query(By.css('.sale-header .linked-customer-summary .loyalty-keybind'));
+                            expect(button.nativeElement.textContent).toContain('F7');
+                        });
+
+                        it('hides the keybinding when keybinds are disabled', () => {
+                            spyOn(component, 'keybindsEnabled').and.returnValue(false);
+                            fixture.detectChanges();
+                            validateDoesNotExist('.sale-header .linked-customer-summary .loyalty-keybind');
                         });
                     });
                 });
