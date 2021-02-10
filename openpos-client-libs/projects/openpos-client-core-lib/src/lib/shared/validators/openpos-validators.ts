@@ -5,6 +5,7 @@ import { PhoneUSValidator } from './phone-us-validator';
 import { RequireAtLeastOneValidator } from './require-at-least-one-validator';
 import { GiftCodeValidator } from './gift-code-validator';
 import { GreaterThanEqZeroValidator } from './greater-than-eq-zero-validator';
+import { RegexValidator } from "./regex-validator";
 
 export class OpenPosValidators {
     static readonly PHONE_CA = new PhoneCAValidator();
@@ -18,7 +19,11 @@ export class OpenPosValidators {
 
     static readonly GT_0 = new GreaterThanEqZeroValidator();
     static readonly GTE_0 = new GreaterThanEqZeroValidator();
-
+    static readonly EMAIL_REGEX = new RegexValidator({
+        name: 'EmailRegexValidator',
+        javascriptRegex: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
+        flags: null
+    });
 
     static LESS_THAN( limit: Number ): ValidatorFn {
 

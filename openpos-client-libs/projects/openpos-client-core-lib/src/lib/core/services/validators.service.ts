@@ -29,7 +29,7 @@ export class ValidatorsService {
         NOLOCALEValidators.set('dateddmmyyyy', OpenPosValidators.DATE_DDMMYYYY);
         NOLOCALEValidators.set('dateddmmyy', OpenPosValidators.DATE_DDMMYY);
 
-        NOLOCALEValidators.set('email', { name: 'Email', validationFunc: Validators.email } );
+        NOLOCALEValidators.set('email', OpenPosValidators.EMAIL_REGEX );
         NOLOCALEValidators.set('postalcode', { name: 'PostalCode', validationFunc: Validators.minLength(5) });
         NOLOCALEValidators.set('gt_0', OpenPosValidators.GT_0);
         NOLOCALEValidators.set('gte_0', OpenPosValidators.GTE_0);
