@@ -74,15 +74,6 @@ describe('SaleComponent', () => {
         });
 
         describe('component', () => {
-            describe('doMenuItemAction', () => {
-                it('calls through to doAction', () => {
-                    spyOn(component, 'doAction');
-                    const menuItem = { title: 'some button'} as IActionItem;
-                    component.doMenuItemAction(menuItem);
-                    expect(component.doAction).toHaveBeenCalledWith(menuItem);
-                });
-            });
-
             describe('keybindsEnabled', () => {
                 let menuItem;
                 beforeEach(() => {
@@ -160,18 +151,18 @@ describe('SaleComponent', () => {
                         validateDoesNotExist('.sale-header .linked-customer-summary');
                     });
 
-                    it('calls doMenuItemAction with the loyaltyButton when an actionClick event is triggered', () => {
-                        spyOn(component, 'doMenuItemAction');
+                    it('calls doAction with the loyaltyButton when an actionClick event is triggered', () => {
+                        spyOn(component, 'doAction');
                         const button = fixture.debugElement.query(By.css('.sale-header .link-customer'));
                         button.nativeElement.dispatchEvent(new Event('actionClick'));
-                        expect(component.doMenuItemAction).toHaveBeenCalledWith(component.screen.loyaltyButton);
+                        expect(component.doAction).toHaveBeenCalledWith(component.screen.loyaltyButton);
                     });
 
-                    it('calls doMenuItemAction with the loyaltyButton when an click event is triggered', () => {
-                        spyOn(component, 'doMenuItemAction');
+                    it('calls doAction with the loyaltyButton when an click event is triggered', () => {
+                        spyOn(component, 'doAction');
                         const button = fixture.debugElement.query(By.css('.sale-header .link-customer'));
                         button.nativeElement.click();
-                        expect(component.doMenuItemAction).toHaveBeenCalledWith(component.screen.loyaltyButton);
+                        expect(component.doAction).toHaveBeenCalledWith(component.screen.loyaltyButton);
                     });
 
                     it('shows the keybinding when keybinds are enabled', () => {
@@ -226,30 +217,30 @@ describe('SaleComponent', () => {
                             expect(button.nativeElement.textContent).toContain('123');
                         });
 
-                        it('calls doMenuItemAction with the account-profile-button when an actionClick event is triggered', () => {
-                            spyOn(component, 'doMenuItemAction');
+                        it('calls doAction with the account-profile-button when an actionClick event is triggered', () => {
+                            spyOn(component, 'doAction');
                             const profileButton = fixture.debugElement.query(By.css('.sale-header button.account-profile-button'));
                             profileButton.nativeElement.dispatchEvent(new Event('actionClick'));
-                            expect(component.doMenuItemAction).toHaveBeenCalledWith(component.screen.linkedCustomerButton);
+                            expect(component.doAction).toHaveBeenCalledWith(component.screen.linkedCustomerButton);
                         });
 
-                        it('calls doMenuItemAction with the account-profile-button when an click event is triggered', () => {
-                            spyOn(component, 'doMenuItemAction');
+                        it('calls doAction with the account-profile-button when an click event is triggered', () => {
+                            spyOn(component, 'doAction');
                             const profileButton = fixture.debugElement.query(By.css('.sale-header button.account-profile-button'));
                             profileButton.nativeElement.click();
-                            expect(component.doMenuItemAction).toHaveBeenCalledWith(component.screen.linkedCustomerButton);
+                            expect(component.doAction).toHaveBeenCalledWith(component.screen.linkedCustomerButton);
                         });
 
-                        it('calls doMenuItemAction with the linkedCustomerButton when an actionClick event is triggered', () => {
-                            spyOn(component, 'doMenuItemAction');
+                        it('calls doAction with the linkedCustomerButton when an actionClick event is triggered', () => {
+                            spyOn(component, 'doAction');
                             button.nativeElement.dispatchEvent(new Event('actionClick'));
-                            expect(component.doMenuItemAction).toHaveBeenCalledWith(component.screen.linkedCustomerButton);
+                            expect(component.doAction).toHaveBeenCalledWith(component.screen.linkedCustomerButton);
                         });
 
-                        it('calls doMenuItemAction with the linkedCustomerButton when an click event is triggered', () => {
-                            spyOn(component, 'doMenuItemAction');
+                        it('calls doAction with the linkedCustomerButton when an click event is triggered', () => {
+                            spyOn(component, 'doAction');
                             button.nativeElement.click();
-                            expect(component.doMenuItemAction).toHaveBeenCalledWith(component.screen.linkedCustomerButton);
+                            expect(component.doAction).toHaveBeenCalledWith(component.screen.linkedCustomerButton);
                         });
 
                         it('displays a left arrow carrot icon', () => {

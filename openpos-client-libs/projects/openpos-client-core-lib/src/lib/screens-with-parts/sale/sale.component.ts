@@ -74,10 +74,6 @@ export class SaleComponent extends PosScreen<SaleInterface> {
         }
     }
 
-    public doMenuItemAction(menuItem: IActionItem) {
-        this.doAction(menuItem);
-    }
-
     public onOrderClick(event: any) {
         if (this.screen.orders) {
             const index = this.screen.orders.indexOf(event);

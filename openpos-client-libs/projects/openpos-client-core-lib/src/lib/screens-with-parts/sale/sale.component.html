@@ -3,8 +3,8 @@
         <div *ngIf="!(isMobile | async)" class="sale-header">
             <app-accent-button *ngIf="!screen.readOnly && !screen.linkedCustomerButton && screen.loyaltyButton"
                                [actionItem]="screen.loyaltyButton"
-                               (actionClick)="doMenuItemAction(screen.loyaltyButton)"
-                               (click)="doMenuItemAction(screen.loyaltyButton)"
+                               (actionClick)="doAction(screen.loyaltyButton)"
+                               (click)="doAction(screen.loyaltyButton)"
                                class="link-customer">
                 <span>{{screen.loyaltyButton.title}}</span>
                 <span *ngIf="keybindsEnabled(screen.loyaltyButton)"
@@ -16,8 +16,8 @@
                     class="icon-button account-profile-button"
                     [disabled]="false"
                     [actionItem]="screen.linkedCustomerButton"
-                    (actionClick)="doMenuItemAction(screen.linkedCustomerButton)"
-                    (click)="doMenuItemAction(screen.linkedCustomerButton)">
+                    (actionClick)="doAction(screen.linkedCustomerButton)"
+                    (click)="doAction(screen.linkedCustomerButton)">
                 <app-icon [iconName]="'account_circle'" [iconClass]="(isMobile | async) ? null: 'material-icons mat-36'"></app-icon>
             </button>
             <button *ngIf="!screen.readOnly && screen.linkedCustomerButton && screen.customer"
@@ -26,8 +26,8 @@
                     responsive-class
                     mat-flat-button
                     [actionItem]="screen.linkedCustomerButton"
-                    (actionClick)="doMenuItemAction(screen.linkedCustomerButton)"
-                    (click)="doMenuItemAction(screen.linkedCustomerButton)">
+                    (actionClick)="doAction(screen.linkedCustomerButton)"
+                    (click)="doAction(screen.linkedCustomerButton)">
                 <span class="customer-name">{{screen.customer.name}}</span>
                 <span>Loyalty ID: {{screen.customer.id}}</span>
                 <span *ngIf="keybindsEnabled(screen.linkedCustomerButton)"
