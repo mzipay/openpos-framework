@@ -1,3 +1,38 @@
+
+<div *ngIf="!(isMobile | async)" class="sale-total-header">
+    <app-primary-button responsive-class *ngIf="!screenData.readOnly && !screenData.linkedCustomerButton && screenData.loyaltyButton"
+                       [actionItem]="screenData.loyaltyButton"
+                       (actionClick)="doAction(screenData.loyaltyButton)"
+                       (click)="doAction(screenData.loyaltyButton)"
+                       class="link-customer">
+        <span>{{screenData.loyaltyButton.title}}</span>
+        <span *ngIf="keybindsEnabled(screenData.loyaltyButton)"
+              class="muted-color loyalty-keybind" >{{screenData.loyaltyButton.keybindDisplayName}}</span>
+            <mat-icon class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
+    </app-primary-button>
+    <button *ngIf="!screenData.readOnly && screenData.linkedCustomerButton && screenData.customer"
+            class="linked-customer-summary"
+            style="width: 100%;"
+            responsive-class
+            mat-flat-button
+            [actionItem]="screenData.linkedCustomerButton"
+            (actionClick)="doAction(screenData.linkedCustomerButton)"
+            (click)="doAction(screenData.linkedCustomerButton)">
+        <div class="button-wrapper">
+            <div class="grid-container">
+                <div class="name">
+                    <div class="customer-name">
+                        {{screenData.customer.name}}
+                        <span *ngIf="keybindsEnabled(screenData.linkedCustomerButton)"
+                              class="muted-color loyalty-keybind">{{screenData.linkedCustomerButton.keybindDisplayName}}</span></div>
+                    </div>
+
+                <div class="icon"><app-icon [iconName]="'account_circle'" [iconClass]="(isMobile | async) ? null: 'material-icons mat-36'"></app-icon></div>
+                <div class="memberships"><span>Loyalty ID: {{screenData.customer.id}}</span></div>
+            </div>
+        </div>
+    </button>
+</div>
 <mat-card class="sale-total-background">
     <div class="status-stamp">
         <app-stamp fitText *ngIf="screenData.statusMessage">

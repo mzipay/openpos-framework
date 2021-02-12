@@ -7,57 +7,6 @@
 
 .sale-bacon-strip {
     height: 100%;
-    .sale-header {
-        padding: 16px 16px 0px 16px;
-        .material-icons {
-            font-size: 36px;
-        }
-        .loyalty-keybind {
-            padding-left: 15px;
-        }
-        .customer-name {
-            padding-right: 15px;
-        }
-        .link-customer {
-            width: 100%;
-        }
-        .account-profile-button {
-            background-color: white;
-            border-right: 1px solid lightgray;
-            border-radius: 4px 0px 0px 4px;
-            color: lightgray;
-            .line-item-caret {
-                color: gray
-            }
-        }
-        .linked-customer-summary {
-            border-radius: 0px 4px 4px 0px;
-        }
-        button {
-            @extend %text-md;
-            border-width: 2px;
-            padding: $text-md/2 $text-md*1.25;
-            min-width: 150px;
-
-            &.tablet {
-                min-width: 100px;
-                padding: $text-md-mobile/4 $text-md-mobile;
-            }
-
-            &.tablet-portrait {
-                border-width: 1px;
-                min-width: 75px;
-                font-size: $text-xs-mobile*1.75;
-            }
-
-            &.mobile {
-                border-width: 1px;
-                font-size: $text-xs-mobile*1.25;
-                min-width: 75px;
-                padding: $text-sm-mobile/8 $text-sm-mobile*.75;
-            }
-        }
-    }
     .sale-outer {
         display: grid;
         grid-template-rows: min-content;
@@ -119,6 +68,10 @@
                 grid-area: 1/3/1/3
             }
             
+        }
+
+        .sale-total-panel {
+            display: block;
         }
 
         .sale-body-mobile {

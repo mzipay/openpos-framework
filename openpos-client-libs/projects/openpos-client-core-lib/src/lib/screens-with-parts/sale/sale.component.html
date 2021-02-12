@@ -1,40 +1,5 @@
 <app-bacon-strip class="sale-bacon-strip">
     <div class="sale-outer">
-        <div *ngIf="!(isMobile | async)" class="sale-header">
-            <app-accent-button *ngIf="!screen.readOnly && !screen.linkedCustomerButton && screen.loyaltyButton"
-                               [actionItem]="screen.loyaltyButton"
-                               (actionClick)="doAction(screen.loyaltyButton)"
-                               (click)="doAction(screen.loyaltyButton)"
-                               class="link-customer">
-                <span>{{screen.loyaltyButton.title}}</span>
-                <span *ngIf="keybindsEnabled(screen.loyaltyButton)"
-                      class="muted-color loyalty-keybind">{{screen.loyaltyButton.keybindDisplayName}}</span>
-                <mat-icon class="material-icons line-item-caret" align="end">keyboard_arrow_right</mat-icon>
-            </app-accent-button>
-            <button *ngIf="!screen.readOnly && screen.linkedCustomerButton && screen.customer"
-                    mat-flat-button
-                    class="icon-button account-profile-button"
-                    [disabled]="false"
-                    [actionItem]="screen.linkedCustomerButton"
-                    (actionClick)="doAction(screen.linkedCustomerButton)"
-                    (click)="doAction(screen.linkedCustomerButton)">
-                <app-icon [iconName]="'account_circle'" [iconClass]="(isMobile | async) ? null: 'material-icons mat-36'"></app-icon>
-            </button>
-            <button *ngIf="!screen.readOnly && screen.linkedCustomerButton && screen.customer"
-                    class="linked-customer-summary"
-                    fxFlex="1 0 auto"
-                    responsive-class
-                    mat-flat-button
-                    [actionItem]="screen.linkedCustomerButton"
-                    (actionClick)="doAction(screen.linkedCustomerButton)"
-                    (click)="doAction(screen.linkedCustomerButton)">
-                <span class="customer-name">{{screen.customer.name}}</span>
-                <span>Loyalty ID: {{screen.customer.id}}</span>
-                <span *ngIf="keybindsEnabled(screen.linkedCustomerButton)"
-                      class="muted-color loyalty-keybind">{{screen.linkedCustomerButton.keybindDisplayName}}</span>
-                <mat-icon class="material-icons line-item-caret">keyboard_arrow_right</mat-icon>
-            </button>
-        </div>
         <div *ngIf="!(isMobile | async)" class="sale-body">
             <section class="orders" *ngIf="screen.orders && screen.orders.length > 0">
                 <div class="orders-content">
@@ -60,7 +25,7 @@
 
                 <app-status-strip></app-status-strip>
             </div>
-            <app-sale-total-panel></app-sale-total-panel>
+            <app-sale-total-panel class="sale-total-panel"></app-sale-total-panel>
         </div>
         <div *ngIf="(isMobile | async)" class="sale-body-mobile">
             <app-mobile-employee-part class="sale-employee-mobile"></app-mobile-employee-part>

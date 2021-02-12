@@ -1,5 +1,47 @@
 @import "../../../styles/mixins/typography";
 
+.sale-total-header {
+    margin-bottom: 10px;
+    .material-icons {
+        font-size: 36px;
+    }
+    .linked-customer-summary {
+        padding: 5px;
+        .button-wrapper {
+            vertical-align: inherit;
+            width: 100%;
+            text-align: left;
+            padding: 10px;
+            .grid-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+                gap: 0px 0px;
+                grid-template-areas:
+                    "Name Name Name Name"
+                    "Icon Memberships Memberships Memberships";
+                .name {
+                    grid-area: Name;
+                    .customer-name {
+                        font-size: 24px;
+                        .loyalty-keybind {
+                            margin-left: 10px;
+                        }
+                    }
+                }
+                .icon {
+                    grid-area: Icon;
+                    display: inline-block;
+                    color: lightgray;
+                }
+                .memberships {
+                    grid-area: Memberships;
+                }
+            }
+        }
+    }
+}
+
 :host {
     display: grid;
 }
@@ -30,7 +72,6 @@
         "buttons";
     grid-template-rows: 0 min-content minmax(0, 1fr) min-content;
     grid-template-columns: minmax(0, 1fr);
-    display: grid;
     align-self: stretch;
     justify-self: stretch;
     margin: 0;
