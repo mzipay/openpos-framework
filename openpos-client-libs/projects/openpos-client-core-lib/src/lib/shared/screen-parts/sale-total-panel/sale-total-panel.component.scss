@@ -1,9 +1,32 @@
 @import "../../../styles/mixins/typography";
 
+.sale-total-wrapper {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+            "header"
+            "body";
+    .sale-total-header { grid-area: header; }
+    .sale-total-background { grid-area: body; }
+}
+
 .sale-total-header {
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     .material-icons {
         font-size: 36px;
+    }
+    .link-customer {
+        height: 102px;
+        @extend %text-md;
+        border-width: 2px;
+        padding: $text-md/2 $text-md*1.25;
+        min-width: 150px;
+        .material-icons {
+            margin-top: -8px;
+        }
     }
     .linked-customer-summary {
         padding: 5px;
