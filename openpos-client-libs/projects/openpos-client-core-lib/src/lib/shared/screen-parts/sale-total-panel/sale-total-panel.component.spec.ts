@@ -104,6 +104,7 @@ describe('SaleTotalPanelComponent', () => {
                     component.screenData.linkedCustomerButton = linkedCustomerButton;
                     component.screenData.loyaltyButton = loyaltyButton;
                     component.screenData.customer = customer;
+                    component.screenData.loyaltyIDLabel = "Loyalty ID";
                     fixture.detectChanges();
                 };
 
