@@ -59,4 +59,31 @@ app-content-card {
     }
   }
 }
-.memberships { grid-area: memberships; }
+.memberships {
+  grid-area: memberships;
+  padding-bottom: 10px;
+  .wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+      "title list";
+    height: 100%;
+    border-radius: 3px;
+    .title {
+      padding-top: 20px;
+      padding-left: 30px;
+      grid-area: title;
+      app-icon {
+        display: inline-block;
+        margin-right: 5px;
+      }
+    }
+    .list {
+      padding-top: 20px;
+      grid-area: list;
+    }
+  }
+
+}

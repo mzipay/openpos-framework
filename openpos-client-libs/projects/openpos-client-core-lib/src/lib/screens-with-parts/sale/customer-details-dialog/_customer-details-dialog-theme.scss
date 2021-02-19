@@ -1,7 +1,15 @@
 @mixin customer-details-dialog-theme($theme) {
     $foreground: map-get($theme, foreground );
 
-    .icon{
+    .icon {
         color: map_get($foreground, icon);
+    }
+
+    .title app-icon {
+        color: mat-color($foreground, secondary-text);
+    }
+
+    .memberships .wrapper {
+        border: 2px solid map_get($foreground, icon);
     }
 }
