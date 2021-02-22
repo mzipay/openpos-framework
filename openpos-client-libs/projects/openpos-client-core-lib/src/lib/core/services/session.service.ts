@@ -5,8 +5,8 @@ import { Configuration } from './../../configuration/configuration';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { PersonalizationService } from '../personalization/personalization.service';
 
-import { Observable, Subscription, BehaviorSubject, Subject, merge, timer, ConnectableObservable } from 'rxjs';
-import { map, filter, takeWhile, publishReplay } from 'rxjs/operators';
+import { Observable, Subscription, BehaviorSubject, Subject, merge, timer } from 'rxjs';
+import { map, filter, takeWhile } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { Injectable, NgZone, Inject, } from '@angular/core';
 import { StompState, StompRService } from '@stomp/ng2-stompjs';
@@ -108,8 +108,6 @@ export class SessionService implements IMessageHandler<any> {
     private reconnectTimerSub: Subscription;
     private connectedOnce = false;
 
-    public screenMessage$: Observable<any>;
-
 
     constructor(
         public dialogService: MatDialog,
@@ -127,22 +125,12 @@ export class SessionService implements IMessageHandler<any> {
         this.onServerConnect = new BehaviorSubject<boolean>(false);
 
         this.registerMessageHandler(this);
-
-        const screenMessagesBehavior = this.stompJsonMessages$.pipe(
-            filter(message => message.type === MessageTypes.SCREEN && message.screenType !== 'NoOp'),
-            publishReplay(1)
-        ) as ConnectableObservable<any>;
-
-        this.screenMessage$ = screenMessagesBehavior;
-
-        // We need to capture incomming screen messages even with no subscribers, so make this hot 🔥
-        screenMessagesBehavior.connect();
     }
 
     public sendMessage<T extends OpenposMessage>(message: T) {
         if ( message.type === MessageTypes.ACTION && message instanceof ActionMessage ) {
             const actionMessage = message as ActionMessage;
-            this.publish(actionMessage.actionName, MessageTypes.SCREEN, actionMessage.payload, actionMessage.doNotBlockForResponse);
+            this.publish(actionMessage.actionName, 'Screen', actionMessage.payload, actionMessage.doNotBlockForResponse);
         } else if (message.type === MessageTypes.PROXY && message instanceof ActionMessage) {
             const actionMessage = message as ActionMessage;
             this.publish(actionMessage.actionName, actionMessage.type, actionMessage.payload, actionMessage.doNotBlockForResponse);
@@ -417,9 +405,10 @@ export class SessionService implements IMessageHandler<any> {
         if (this.personalization.getIsManagedServer$().getValue()) {
             this.unsubscribe();
             this.reconnecting = true;
-            this.reconnectTimerSub = timer(5000, 5000).pipe(takeWhile(() => this.reconnecting)).subscribe(async () => {
+            this.reconnectTimerSub = timer(5000, 5000).pipe(takeWhile(v => this.reconnecting)).subscribe(async () => {
                 if (await this.discovery.isManagementServerAlive()) {
                     console.debug(`Management server is alive`);
+                    const response = await this.discovery.discoverDeviceProcess({maxWaitMillis: 2500});
                     if (this.discovery.getWebsocketUrl()) {
                         // TODO: May not be necessary to run in zone, check.
                         this.zone.run(() => {

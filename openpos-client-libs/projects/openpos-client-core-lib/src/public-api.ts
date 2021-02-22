@@ -337,5 +337,3 @@ export * from './lib/utilites/deep-assign';
 export * from './lib/utilites/time-utils';
 
 export * from './lib/styles/theme-test.module';
-
-export * from './lib/core/status/status.service';
