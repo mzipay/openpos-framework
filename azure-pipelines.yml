@@ -9,10 +9,7 @@ trigger:
   batch: true
   branches:
     include:
-    - master
-    - releases/0.4
-    - releases/0.5
-    - burl/0.9
+    - petco/2.0-central
 
 pool:
   vmImage: 'ubuntu-18.04'
