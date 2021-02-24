@@ -2,7 +2,7 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import {ActionService} from "../../../core/actions/action.service";
 import {MembershipDisplayComponent} from "./membership-display.component";
-import {validateText} from "../../../utilites/test-utils";
+import {validateDoesNotExist, validateIcon, validateText} from "../../../utilites/test-utils";
 import {By} from "@angular/platform-browser";
 
 class MockActionService {};
@@ -46,18 +46,36 @@ describe('MembershipDisplayComponent', () => {
             validateText(fixture, 'mat-chip', component.membership.name);
         });
 
-        it('has the "in" class when the membership.member is true', () => {
-            component.membership.member = true;
-            fixture.detectChanges();
-            const chip = fixture.debugElement.query(By.css('mat-chip'));
-            expect(chip.nativeElement.classList).toContain('in');
+        describe('when the user is a member', () => {
+            beforeEach(() => {
+                component.membership.member = true;
+                fixture.detectChanges();
+            });
+
+            it('has the "in" class', () => {
+                const chip = fixture.debugElement.query(By.css('mat-chip'));
+                expect(chip.nativeElement.classList).toContain('in');
+            });
+
+            it('displays the check icon', () => {
+                validateIcon(fixture, 'mat-chip app-icon', 'check');
+            });
         });
 
-        it('has the "not-in" class when the membership.member is false', () => {
-            component.membership.member = false;
-            fixture.detectChanges();
-            const chip = fixture.debugElement.query(By.css('mat-chip'));
-            expect(chip.nativeElement.classList).toContain('not-in');
+        describe('when the user is not a member', () => {
+            beforeEach(() => {
+                component.membership.member = false
+                fixture.detectChanges();
+            });
+
+            it('has the "not-in" class', () => {
+                const chip = fixture.debugElement.query(By.css('mat-chip'));
+                expect(chip.nativeElement.classList).toContain('not-in');
+            });
+
+            it('does not have the check icon', () => {
+               validateDoesNotExist(fixture, 'mat-chip mat-icon');
+            });
         });
     });
 });

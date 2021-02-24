@@ -1,5 +1,7 @@
 <mat-chip-list>
     <mat-chip [ngClass]="{'in': membership.member, 'not-in': !membership.member}">
-        {{membership.name}}
+        <app-icon *ngIf="membership.member"
+                  [iconName]="'check'"
+                  [iconClass]="'material-icons mat-24'"></app-icon> {{membership.name}}
     </mat-chip>
 </mat-chip-list>
