@@ -21,6 +21,8 @@ export interface CustomerDetailsDialogInterface extends IAbstractScreen {
             member: boolean
         }
     };
+    membershipEnabled: boolean;
+    membershipLabel: String;
     loyaltyPromotions: IActionItem;
     editButton: IActionItem;
     unlinkButton: IActionItem;

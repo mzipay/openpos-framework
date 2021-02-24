@@ -29,10 +29,10 @@
                     </div>
                 </div>
             </div>
-            <div class="memberships">
+            <div class="memberships" *ngIf="screen.membershipEnabled">
                 <div class="wrapper">
                     <div class="title">
-                        <app-icon [iconName]="'card_account_details'" [iconClass]="'material-icons mat-24'"></app-icon> Memberships
+                        <app-icon [iconName]="'card_account_details'" [iconClass]="'material-icons mat-24'"></app-icon> {{screen.membershipLabel}}
                     </div>
                     <div class="list">
                         <div *ngFor="let membership of screen.customer.memberships" class="item">

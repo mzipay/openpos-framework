@@ -99,7 +99,46 @@ describe('CustomerDetailsDialog', () => {
       })
 
     });
+    describe('membership details', () => {
+      describe('when membership is disabled', () => {
+        beforeEach(() => {
+          component.screen.membershipEnabled = false;
+          fixture.detectChanges();
+        });
 
+        it('does not render the details', () => {
+          validateDoesNotExist(fixture, '.memberships');
+        });
+      });
+      describe('when membership is enabled', () => {
+        let memberships;
+        beforeEach(() => {
+          memberships = [
+            {}, {}, {}
+          ]
+          component.screen.customer.memberships = memberships;
+          component.screen.membershipEnabled = true;
+          fixture.detectChanges();
+        });
+
+        it('renders the details section', () => {
+          const membershipDetailsElement = fixture.debugElement.query(By.css('.memberships'));
+          expect(membershipDetailsElement.nativeElement).toBeDefined();
+        });
+
+        it('shows the membership label', () => {
+          component.screen.membershipLabel = 'some value';
+          fixture.detectChanges();
+          const membershipLabelElement = fixture.debugElement.query(By.css('.memberships .title'));
+          expect(membershipLabelElement.nativeElement.textContent).toContain(component.screen.membershipLabel);
+        });
+
+        it('shows a membership-display component for each membership', () => {
+          const membershipDisplayComponents = fixture.debugElement.queryAll(By.css('app-membership-display'));
+          expect(membershipDisplayComponents.length).toBe(memberships.length);
+        });
+      });
+    })
     describe('actions', () => {
       describe('edit button', () => {
         let button;
