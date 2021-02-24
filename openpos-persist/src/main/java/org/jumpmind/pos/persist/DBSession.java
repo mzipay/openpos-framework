@@ -550,7 +550,7 @@ public class DBSession {
             message = message.substring(0, message.indexOf("SQL statement"));
         }
         errorStatement.append(": " + message);
-        log.warn(errorStatement.toString());
+        throw new DuplicateKeyException(errorStatement.toString(), e);
     }
 
     protected void batchInternal(List<? extends  AbstractModel> models, DmlType dmlType) {
