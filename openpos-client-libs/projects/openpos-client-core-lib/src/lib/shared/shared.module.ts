@@ -168,6 +168,7 @@ import { StatusBarComponent } from './status/status-bar/status-bar.component';
 import { LocalizePipe } from './pipes/localize.pipe';
 import { ModalOverlayContainerDirective } from './modal-overlay-container/modal-overlay-container.directive';
 import { ImageScannerComponent } from '../core/platform-plugins/image-scanners/image-scanner.component';
+import {MembershipDisplayComponent} from "./screen-parts/membership-display/membership-display.component";
 
 const screenParts = [
     TenderPartComponent,
@@ -182,6 +183,7 @@ const screenParts = [
     PromptFormPartComponent,
     DynamicFormPartComponent,
     AutoCompleteAddressPartComponent,
+    MembershipDisplayComponent,
     ProgressBarPartComponent,
     WebcamViewerComponent,
     SystemStatusComponent,

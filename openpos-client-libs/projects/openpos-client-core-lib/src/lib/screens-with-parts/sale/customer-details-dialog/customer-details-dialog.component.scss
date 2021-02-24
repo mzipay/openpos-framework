@@ -83,6 +83,9 @@ app-content-card {
     .list {
       padding-top: 20px;
       grid-area: list;
+      .item {
+        margin-bottom: 10px;
+      }
     }
   }
 

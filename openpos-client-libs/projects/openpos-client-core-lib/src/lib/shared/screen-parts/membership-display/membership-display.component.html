@@ -1,0 +1,5 @@
+<mat-chip-list>
+    <mat-chip [ngClass]="{'in': membership.member, 'not-in': !membership.member}">
+        {{membership.name}}
+    </mat-chip>
+</mat-chip-list>

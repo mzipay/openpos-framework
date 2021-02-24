@@ -18,7 +18,7 @@ export interface CustomerDetailsDialogInterface extends IAbstractScreen {
         memberships: {
             id: string,
             name: string,
-            isMember: boolean
+            member: boolean
         }
     };
     loyaltyPromotions: IActionItem;

@@ -35,8 +35,8 @@
                         <app-icon [iconName]="'card_account_details'" [iconClass]="'material-icons mat-24'"></app-icon> Memberships
                     </div>
                     <div class="list">
-                        <div *ngFor="let membership of screen.customer.memberships">
-                            <input type="checkbox" checked /> {{membership.name}}
+                        <div *ngFor="let membership of screen.customer.memberships" class="item">
+                            <app-membership-display [membership]="membership"></app-membership-display>
                         </div>
                     </div>
                 </div>
