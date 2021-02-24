@@ -534,21 +534,23 @@ public class DBSession {
             return jdbcTemplate.getJdbcOperations().update(sql, values, types);
         } catch (DataAccessException e) {
             logDMLError(type, sql, values, e);
-            return 0;
+            return jdbcTemplate.getJdbcOperations().update(sql, values, types);
         }
     }
 
     protected void logDMLError(DmlType type, String sql, Object[] values, DataAccessException e) {
         StringBuilder errorStatement = new StringBuilder();
-        errorStatement.append("There was an error with " + type + " statement: ");
-        errorStatement.append(sql.substring(0, sql.indexOf("(?")));
-        errorStatement.append("(");
+        errorStatement.append("There was a data access violation in " + type + " statement: ");
         for (Object value : values) {
-            errorStatement.append(String.valueOf(value) + ",");
+            sql = sql.replaceFirst("[?]", String.valueOf(value));
         }
-        errorStatement.deleteCharAt(errorStatement.lastIndexOf(","));
-        errorStatement.append(")");
-        throw new PersistException(errorStatement.toString(), e);
+        errorStatement.append(sql);
+        String message = e.getCause().getMessage();
+        if (message.contains("SQL statement")) {
+            message = message.substring(0, message.indexOf("SQL statement"));
+        }
+        errorStatement.append(": " + message);
+        log.warn(errorStatement.toString());
     }
 
     protected void batchInternal(List<? extends  AbstractModel> models, DmlType dmlType) {
