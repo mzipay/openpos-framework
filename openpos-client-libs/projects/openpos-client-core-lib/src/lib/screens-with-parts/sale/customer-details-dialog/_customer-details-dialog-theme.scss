@@ -1,0 +1,7 @@
+@mixin customer-details-dialog-theme($theme) {
+    $foreground: map-get($theme, foreground );
+
+    .icon{
+        color: map_get($foreground, icon);
+    }
+}

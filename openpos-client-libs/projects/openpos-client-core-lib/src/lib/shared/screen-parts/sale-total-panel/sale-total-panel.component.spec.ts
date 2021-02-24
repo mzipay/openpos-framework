@@ -14,6 +14,7 @@ import {KeyPressProvider} from "../../providers/keypress.provider";
 import {IActionItem} from "../../../core/actions/action-item.interface";
 import {By} from "@angular/platform-browser";
 import {Configuration} from "../../../configuration/configuration";
+import {validateDoesNotExist} from "../../../utilites/test-utils";
 
 class MockMatDialog {};
 class MockActionService {};
@@ -103,12 +104,8 @@ describe('SaleTotalPanelComponent', () => {
                     component.screenData.linkedCustomerButton = linkedCustomerButton;
                     component.screenData.loyaltyButton = loyaltyButton;
                     component.screenData.customer = customer;
+                    component.screenData.loyaltyIDLabel = "Loyalty ID";
                     fixture.detectChanges();
-                };
-
-                const validateDoesNotExist = (selector: string) => {
-                    const button = fixture.debugElement.query(By.css(selector));
-                    expect(button).toBeNull();
                 };
 
                 describe('when read only', () => {
@@ -117,7 +114,7 @@ describe('SaleTotalPanelComponent', () => {
                     });
 
                     it('does not show the link customer button', () => {
-                        validateDoesNotExist('.sale-total-header .link-customer');
+                        validateDoesNotExist(fixture, '.sale-total-header .link-customer');
                     });
                 });
                 describe('when there is no screen data for the loyaltyButton', () => {
@@ -125,7 +122,7 @@ describe('SaleTotalPanelComponent', () => {
                         configureComponent(false, undefined, undefined);
                     });
                     it('does not show the link customer button', () => {
-                        validateDoesNotExist('.sale-total-header .link-customer');
+                        validateDoesNotExist(fixture, '.sale-total-header .link-customer');
                     });
                 });
                 describe('when no customer is linked', () => {
@@ -141,7 +138,7 @@ describe('SaleTotalPanelComponent', () => {
                     });
 
                     it('does not show the linked customer button', () => {
-                        validateDoesNotExist('.sale-total-header .linked-customer-summary');
+                        validateDoesNotExist(fixture, '.sale-total-header .linked-customer-summary');
                     });
 
                     it('calls doAction with the loyaltyButton when an actionClick event is triggered', () => {
@@ -168,7 +165,7 @@ describe('SaleTotalPanelComponent', () => {
                     it('hides the keybinding when keybinds are disabled', () => {
                         spyOn(component, 'keybindsEnabled').and.returnValue(false);
                         fixture.detectChanges();
-                        validateDoesNotExist('.sale-total-header .link-customer .loyalty-keybind');
+                        validateDoesNotExist(fixture, '.sale-total-header .link-customer .loyalty-keybind');
                     });
                 });
                 describe('when a customer is linked', () => {
@@ -182,7 +179,7 @@ describe('SaleTotalPanelComponent', () => {
                     });
 
                     it('does not show the link customer button', () => {
-                        validateDoesNotExist('.sale-total-header .link-customer');
+                        validateDoesNotExist(fixture, '.sale-total-header .link-customer');
                     });
 
                     it('shows the linked customer button', () => {
@@ -232,7 +229,7 @@ describe('SaleTotalPanelComponent', () => {
                         it('hides the keybinding when keybinds are disabled', () => {
                             spyOn(component, 'keybindsEnabled').and.returnValue(false);
                             fixture.detectChanges();
-                            validateDoesNotExist('.sale-total-header .linked-customer-summary .loyalty-keybind');
+                            validateDoesNotExist(fixture, '.sale-total-header .linked-customer-summary .loyalty-keybind');
                         });
                     });
                 });

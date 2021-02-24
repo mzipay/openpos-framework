@@ -1,0 +1,71 @@
+<app-dialog-header></app-dialog-header>
+<mat-dialog-content>
+    <app-content-card>
+        <div class="grid-container">
+            <div class="icon">
+                <app-icon [iconName]="'account_circle'" [iconClass]="'material-icons'"></app-icon>
+            </div>
+            <div class="details">
+                <div class="customer-name">
+                    {{screen.customer.name}}
+                </div>
+                <div class="customer-details muted-color">
+                    <div class="details-row email">
+                        <app-icon [iconName]="'mail_outline'" [iconClass]="'material-icons mat-18'"></app-icon> {{screen.customer.email}}
+                    </div>
+                    <div class="details-row phone-number">
+                        <app-icon [iconName]="'phone'" [iconClass]="'material-icons mat-18'"></app-icon> {{screen.customer.phoneNumber}}
+                    </div>
+                    <div class="details-row loyalty-number">
+                        <app-icon [iconName]="'account_heart'" [iconClass]="'material-icons mat-18'"></app-icon> {{screen.customer.loyaltyNumber}}
+                    </div>
+                    <div class="details-row address">
+                        <app-icon [iconName]="'place'" [iconClass]="'material-icons mat-18'"></app-icon>
+                        <div class="address-details">
+                            <div>{{screen.customer.address.line1}}</div>
+                            <div>{{screen.customer.address.line2}}</div>
+                            <div>{{screen.customer.address.city + ', ' + screen.customer.address.state + ' ' + screen.customer.address.postalCode}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="memberships">
+
+            </div>
+        </div>
+    </app-content-card>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="buttons">
+    <app-secondary-button responsive-class
+                          class="edit"
+                          *ngIf="screen.editButton"
+                          [actionItem]="screen.editButton"
+                          (actionClick)="doAction(screen.editButton)"
+                          (click)="doAction(screen.editButton)">
+        <span>{{screen.editButton.title}}</span>
+    </app-secondary-button>
+    <app-secondary-button responsive-class
+                          class="loyalty-promotion"
+                          *ngIf="screen.loyaltyPromotions"
+                          [actionItem]="screen.loyaltyPromotions"
+                          (actionClick)="doAction(screen.loyaltyPromotions)"
+                          (click)="doAction(screen.loyaltyPromotions)">
+        <span>{{screen.loyaltyPromotions.title}}</span>
+    </app-secondary-button>
+    <app-secondary-button responsive-class
+                          class="unlink"
+                          *ngIf="screen.unlinkButton"
+                          [actionItem]="screen.unlinkButton"
+                          (actionClick)="doAction(screen.unlinkButton)"
+                          (click)="doAction(screen.unlinkButton)">
+        <span>{{screen.unlinkButton.title}}</span>
+    </app-secondary-button>
+    <app-primary-button responsive-class
+                        class="done"
+                        *ngIf="screen.doneButton"
+                        [actionItem]="screen.doneButton"
+                        (actionClick)="doAction(screen.doneButton)"
+                        (click)="doAction(screen.doneButton)">
+        <span>{{screen.doneButton.title}}</span>
+    </app-primary-button>
+</mat-dialog-actions>
