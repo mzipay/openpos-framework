@@ -220,7 +220,7 @@ public class ModelWrapper {
                 if (fieldName.toUpperCase().startsWith(TagModel.TAG_PREFIX)) {
                     String tagValue = ((ITaggedModel) model).getTagValue(fieldName.substring(TagModel.TAG_PREFIX.length()));
                     if (StringUtils.isEmpty(tagValue)) {
-                        log.warn("Tag \'" + fieldName.substring(TagModel.TAG_PREFIX.length()) + "\' in model \'" + model.getClass().getName() + "\' was set to an empty value.");
+                        log.warn("Tag \'" + fieldName.substring(TagModel.TAG_PREFIX.length()) + "\' in model \'" + model.getClass().getSimpleName() + "\' was set to an empty value.");
                     }
                     columnNamesToObjectValues.put(fieldName, tagValue);
                 } else if (config != null) {
