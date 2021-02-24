@@ -541,9 +541,9 @@ public class DBSession {
     protected void logDMLError(DmlType type, String sql, Object[] values, DataAccessException e) {
         StringBuilder errorStatement = new StringBuilder();
         errorStatement.append("There was a data access violation in " + type + " statement: ");
-        for (Object value : values) {
-            sql = sql.replaceFirst("[?]", String.valueOf(value));
-        }
+        LogSqlBuilder builder = new LogSqlBuilder();
+        Object[] rawArgs = cleanArgs(values);
+        sql = builder.buildDynamicSqlForLog(sql, rawArgs, null);
         errorStatement.append(sql);
         String message = e.getCause().getMessage();
         if (message.contains("SQL statement")) {
