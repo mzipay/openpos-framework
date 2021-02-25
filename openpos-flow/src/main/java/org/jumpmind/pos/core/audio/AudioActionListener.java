@@ -47,18 +47,18 @@ public class AudioActionListener implements IActionListener {
 
     public void onGetConfig(IStateManager stateManager) {
         AudioConfigMessage message = AudioUtil.getInteractionMessageFromConfig(stateManager, audioConfig);
-        log.warn("Sending audio configuration", message);
+        log.debug("Sending audio configuration", message);
         this.messageService.sendMessage(stateManager.getAppId(), stateManager.getDeviceId(), message);
     }
 
     public void onPreload(IStateManager stateManager) {
-        log.warn("Preloading sounds");
+        log.debug("Preloading sounds");
         List<String> urls = new ArrayList<>();
 
         if (audioConfig.getEnabled() != null && audioConfig.getEnabled()) {
             urls = AudioUtil.getAllContentUrls(stateManager);
         } else {
-            log.warn("Not getting content URLs to preload because audio is disabled");
+            log.debug("Not getting content URLs to preload because audio is disabled");
         }
 
         AudioPreloadMessage message = AudioPreloadMessage.builder().urls(urls).build();
@@ -67,7 +67,7 @@ public class AudioActionListener implements IActionListener {
 
     public void onPlay(IStateManager stateManager, Action action) {
         if (action.getData() == null) {
-            log.warn("Skipping audio request because there is no data for the request");
+            log.debug("Skipping audio request because there is no data for the request");
             return;
         }
 
