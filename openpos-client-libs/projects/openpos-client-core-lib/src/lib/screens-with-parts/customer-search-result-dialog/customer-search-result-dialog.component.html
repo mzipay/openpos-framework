@@ -1,29 +1,13 @@
 <app-dialog-header></app-dialog-header>
 <app-instructions *ngIf="screen.instructions" [instructions]="screen.instructions" [instructionsSize]="'text-sm'"></app-instructions>
-New Customer Search Results
 <app-content-card>
     <mat-dialog-content>
         <div class="dialog-content">
-            <app-selectable-item-list fxFlex="0 1 100%" [listData]="listData"
-                                      [configuration]="listConfig" [defaultSelect]="screen.defaultSelect"
-                                      [selectedItemList]="selectedItems"
-                                      [selectedItem]="selectedItem"
-                                      (selectedItemChange)="onItemChange($event)" (selectedItemListChange)="onItemListChange($event)">
+            <app-selectable-item-list fxFlex="0 1 100%" [listData]="listData" [configuration]="listConfig"
+                                      (selectedItemChange)="onItemChange($event)">
                 <ng-template let-item>
                     <div class="text-md">
-                        {{item.title}}::Optional Star:: ::Loyalty Number::
-                    </div>
-                    <div class="flex-container customer-info-section" fxLayout="row" fxLayoutAlign="space-between">
-                        <div>
-                            ::Email::
-                            <br>
-                            ::Phone::
-                        </div>
-                        <div>
-                            ::Address line 1::
-                            <br>
-                            ::Address line 2::
-                        </div>
+                        {{item | json}}
                     </div>
                 </ng-template>
             </app-selectable-item-list>
@@ -31,25 +15,14 @@ New Customer Search Results
     </mat-dialog-content>
 </app-content-card>
 <mat-dialog-actions>
-    <app-secondary-button *ngFor="let m of screen.nonSelectionButtons"[actionItem]="m"
-                          (actionClick)="doNonSelectionButtonAction(m)"
-                          (click)="doNonSelectionButtonAction(m)" [disabled]="!isSelectionDisabled()">
-        <span>{{m.title}}</span>&nbsp;
-        <span *ngIf="keybindsEnabled(m)" class="muted-color">{{m.keybindDisplayName}}</span>
+    <app-secondary-button [actionItem]="screen.viewButton"
+                          (actionClick)="doSelectionButtonAction(screen.viewButton)"
+                          (click)="doSelectionButtonAction(screen.viewButton)">
+        <span>{{screen.viewButton.title}}</span>&nbsp;
     </app-secondary-button>
-    <div *ngFor="let m of screen.selectionButtons;  let i = index">
-        <app-secondary-button *ngIf="screen.selectionButtons.length-1 !== i"
-                              [disabled]="isSelectionDisabled()"
-                              [actionItem]="m" (actionClick)="doSelectionButtonAction(m)" (click)="doSelectionButtonAction(m)">
-            <span>{{m.title}}</span>&nbsp;
-            <span *ngIf="keybindsEnabled(m)" class="muted-color">{{m.keybindDisplayName}}</span>
-        </app-secondary-button>
-        <app-primary-button *ngIf="screen.selectionButtons.length-1 == i"
-                            [attr.cdkFocusInitial]="screen.selectionButtons.length-1 == i ? '' : null"
-                            [disabled]="isSelectionDisabled()"
-                            [actionItem]="m" (actionClick)="doSelectionButtonAction(m)" (click)="doSelectionButtonAction(m)">
-            <span>{{m.title}}</span>&nbsp;
-            <span *ngIf="keybindsEnabled(m)" class="muted-color">{{m.keybindDisplayName}}</span>
-        </app-primary-button>
-    </div>
+    <app-primary-button cdkFocusInitial [actionItem]="screen.selectButton"
+                        (actionClick)="doSelectionButtonAction(screen.selectButton)"
+                        (click)="doSelectionButtonAction(screen.selectButton)">
+        <span>{{screen.selectButton.title}}</span>&nbsp;
+    </app-primary-button>
 </mat-dialog-actions>
