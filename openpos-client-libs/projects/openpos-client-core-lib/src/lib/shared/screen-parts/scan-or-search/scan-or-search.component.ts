@@ -14,12 +14,13 @@ import {ScreenPartComponent} from '../screen-part';
 import {ScanOrSearchInterface} from './scan-or-search.interface';
 import {ScreenPart} from '../../decorators/screen-part.decorator';
 import {MediaBreakpoints, OpenposMediaService} from '../../../core/media/openpos-media.service';
-import {Observable, Subscription} from 'rxjs';
-import {ScannerService} from '../../../core/platform-plugins/scanners/scanner.service';
+import {Observable, Subject, Subscription} from 'rxjs';
 import {OnBecomingActive} from '../../../core/life-cycle-interfaces/becoming-active.interface';
 import {OnLeavingActive} from '../../../core/life-cycle-interfaces/leaving-active.interface';
-import { IScanData } from '../../../core/platform-plugins/scanners/scan.interface';
-import { ImageScanners } from '../../../core/platform-plugins/image-scanners/image-scanners.service';
+import { BarcodeScanner } from '../../../core/platform-plugins/barcode-scanners/barcode-scanner.service';
+import { ScanData } from '../../../core/platform-plugins/barcode-scanners/scanner';
+import { MatDialog } from '@angular/material';
+import { LockScreenService } from '../../../core/lock-screen/lock-screen.service';
 
 @ScreenPart({
     name: 'scanOrSearch'
@@ -36,6 +37,8 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     @Input() defaultAction: IActionItem;
 
+    @Input() allowImageScanner = true;
+
     @HostBinding('class.focusInitial')
     @Input() focusInitial = true;
 
@@ -47,12 +50,18 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
 
     private scanServiceSubscription: Subscription;
 
+    private triggerNotify = new Subject<void>();
+
+    private dialogWatcherSub?: Subscription;
+    private lockScreenSub?: Subscription;
+
     constructor(
         injector: Injector,
         private el: ElementRef,
         mediaService: OpenposMediaService,
-        public scannerService: ScannerService,
-        public imageScanners: ImageScanners
+        public imageScanners: BarcodeScanner,
+        public dialog: MatDialog,
+        public lockScreen: LockScreenService
     ) {
         super(injector);
         const mobileMap = new Map([
@@ -73,6 +82,14 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
         if (this.screenData.keyboardLayout) {
             this.keyboardLayout = this.screenData.keyboardLayout;
         }
+
+        // shut the scanner off if a dialog opens
+        this.dialogWatcherSub = this.dialog.afterOpened.subscribe(() => this.showScannerVisual = false);
+        this.lockScreenSub = this.lockScreen.enabled$.subscribe(locked => {
+            if (locked) {
+                this.showScannerVisual = false;
+            }
+        });
     }
 
     onBecomingActive() {
@@ -84,26 +101,36 @@ export class ScanOrSearchComponent extends ScreenPartComponent<ScanOrSearchInter
     }
 
     ngOnDestroy(): void {
+        if (this.dialogWatcherSub) {
+            this.dialogWatcherSub.unsubscribe();
+        }
+
+        if (this.lockScreenSub) {
+            this.lockScreenSub.unsubscribe();
+        }
+
         this.unregisterScanner();
         // this.scannerService.stopScanning();
         super.ngOnDestroy();
     }
 
-    scan(data: IScanData) {
+    scan(data: ScanData) {
         this.doAction(this.screenData.scanAction, data);
     }
 
     onScannerButtonClicked() {
-        if (this.imageScanners.isSupported) {
+        if (this.imageScanners.hasImageScanner) {
             this.showScannerVisual = !this.showScannerVisual;
-        } else {
-            this.scannerService.triggerScan();
         }
+
+        this.triggerNotify.next();
     }
 
     private registerScanner() {
         if ((typeof this.scanServiceSubscription === 'undefined' || this.scanServiceSubscription === null) && this.screenData.willUnblock) {
-            this.scanServiceSubscription = this.scannerService.startScanning().subscribe(scanData => {
+            this.scanServiceSubscription = this.imageScanners.beginScanning({
+                softwareTrigger: this.triggerNotify
+            }).subscribe(scanData => {
                 this.doAction(this.screenData.scanAction, scanData);
             });
         }
