@@ -6,8 +6,18 @@ import {ActionService} from "../../../core/actions/action.service";
 import {validateDoesNotExist, validateIcon, validateText} from "../../../utilites/test-utils";
 import {By} from "@angular/platform-browser";
 import {IActionItem} from "../../../core/actions/action-item.interface";
+import {PhonePipe} from "../../../shared/pipes/phone.pipe";
+import {MatDialog} from "@angular/material";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {ElectronService} from "ngx-electron";
+import {CLIENTCONTEXT} from "../../../core/client-context/client-context-provider.interface";
+import {TimeZoneContext} from "../../../core/client-context/time-zone-context";
+import {FormattersService} from "../../../core/services/formatters.service";
 
 class MockActionService {};
+class MockMatDialog {};
+class MockElectronService {};
+class ClientContext {};
 
 describe('CustomerDetailsDialog', () => {
   let component: CustomerDetailsDialogComponent;
@@ -15,11 +25,16 @@ describe('CustomerDetailsDialog', () => {
   let customer;
   beforeEach( () => {
     TestBed.configureTestingModule({
+      imports: [ HttpClientTestingModule],
       declarations: [
-        CustomerDetailsDialogComponent
+        CustomerDetailsDialogComponent, PhonePipe
       ],
       providers: [
-        { provide: ActionService, useClass: MockActionService }
+        { provide: ActionService, useClass: MockActionService },
+        { provide: MatDialog, useClass: MockMatDialog },
+        { provide: ElectronService, useClass: MockElectronService },
+        { provide: ClientContext, useValue: {}},
+        { provide: CLIENTCONTEXT, useClass: TimeZoneContext}
       ],
       schemas: [
         NO_ERRORS_SCHEMA,
@@ -30,7 +45,7 @@ describe('CustomerDetailsDialog', () => {
     customer = {
       name: 'Bob bobert',
       email: 'b.bobert@gmail.com',
-      phoneNumber: '(111)-879-8322',
+      phoneNumber: '1118798322',
       loyaltyNumber: 's321111111',
       address: {
         line1: '123 Mockingbird Lane',
@@ -69,7 +84,8 @@ describe('CustomerDetailsDialog', () => {
       });
 
       it('displays the customer phone number and icon', () => {
-        validateText(fixture, '.details .phone-number', component.screen.customer.phoneNumber);
+        const phonePipe: PhonePipe = new PhonePipe(TestBed.get(FormattersService));
+        validateText(fixture, '.details .phone-number', phonePipe.transform(component.screen.customer.phoneNumber));
         validateIcon(fixture, '.details .phone-number app-icon', 'phone');
       });
 
@@ -83,21 +99,70 @@ describe('CustomerDetailsDialog', () => {
           validateIcon(fixture, '.details .address app-icon', 'place');
         });
 
-        it('shows line 1, city, state, and postal code when there is no line 2', () => {
-          const address = component.screen.customer.address;
-          const expectedText = address.line1 + address.city + ', ' + address.state + ' ' + address.postalCode;
-          validateText(fixture, '.details .address .address-details', expectedText);
+        describe('line1', () => {
+          it('does not render the row if line1 is undefined', () => {
+            component.screen.customer.address.line1 = undefined;
+            fixture.detectChanges();
+            validateDoesNotExist(fixture,'.details .address .line1');
+          });
+          it('renders the line1 data', () => {
+            component.screen.customer.address.line1 = 'line 1 content';
+            fixture.detectChanges();
+            validateText(fixture, '.details .address .line1', 'line 1 content');
+          });
         });
 
-        it('shows line1, line2, city, state, and postal code when there is a line2', () => {
-          component.screen.customer.address.line2 = 'some new information';
-          fixture.detectChanges();
-          const address = component.screen.customer.address;
-          const expectedText = address.line1 + address.line2 + address.city + ', ' + address.state + ' ' + address.postalCode;
-          validateText(fixture, '.details .address .address-details', expectedText);
+        describe('line2', () => {
+          it('does not render the row if line2 is undefined', () => {
+            component.screen.customer.address.line2 = undefined;
+            fixture.detectChanges();
+            validateDoesNotExist(fixture,'.details .address .line2');
+          });
+          it('renders the line2 data', () => {
+            component.screen.customer.address.line2 = 'line 2 content';
+            fixture.detectChanges();
+            validateText(fixture, '.details .address .line2', 'line 2 content');
+          });
         });
-      })
 
+        describe('line3', () => {
+          it('does not render the "city, " if city is undefined', () => {
+            component.screen.customer.address.city = undefined;
+            fixture.detectChanges();
+            validateDoesNotExist(fixture,'.details .address .line3 .city');
+          });
+
+          it('renders the city', () => {
+            component.screen.customer.address.city = 'a city';
+            fixture.detectChanges();
+            validateText(fixture, '.details .address .line3', 'a city, ');
+          });
+
+          it('does not render the "state " if state is undefined', () => {
+            component.screen.customer.address.state = undefined;
+            fixture.detectChanges();
+            validateDoesNotExist(fixture,'.details .address .line3 .state');
+          });
+
+          it('renders the city', () => {
+            component.screen.customer.address.state = 'OH';
+            fixture.detectChanges();
+            validateText(fixture, '.details .address .line3', 'OH ');
+          });
+
+          it('does not render the "postalCode" if postal code is undefined', () => {
+            component.screen.customer.address.postalCode = undefined;
+            fixture.detectChanges();
+            validateDoesNotExist(fixture,'.details .address .line3 .postalCode');
+          });
+
+          it('renders the postalCode', () => {
+            component.screen.customer.address.state = '12345';
+            fixture.detectChanges();
+            validateText(fixture, '.details .address .line3', '12345');
+          });
+        });
+      });
     });
     describe('membership details', () => {
       describe('when membership is disabled', () => {

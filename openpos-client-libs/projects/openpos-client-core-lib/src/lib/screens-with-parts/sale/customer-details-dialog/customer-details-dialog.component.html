@@ -14,7 +14,7 @@
                         <app-icon [iconName]="'mail_outline'" [iconClass]="'material-icons mat-18'"></app-icon> {{screen.customer.email}}
                     </div>
                     <div class="details-row phone-number">
-                        <app-icon [iconName]="'phone'" [iconClass]="'material-icons mat-18'"></app-icon> {{screen.customer.phoneNumber}}
+                        <app-icon [iconName]="'phone'" [iconClass]="'material-icons mat-18'"></app-icon> {{screen.customer.phoneNumber | phone}}
                     </div>
                     <div class="details-row loyalty-number">
                         <app-icon [iconName]="'account_heart'" [iconClass]="'material-icons mat-18'"></app-icon> {{screen.customer.loyaltyNumber}}
@@ -22,9 +22,13 @@
                     <div class="details-row address">
                         <app-icon [iconName]="'place'" [iconClass]="'material-icons mat-18'"></app-icon>
                         <div class="address-details">
-                            <div>{{screen.customer.address.line1}}</div>
-                            <div>{{screen.customer.address.line2}}</div>
-                            <div>{{screen.customer.address.city + ', ' + screen.customer.address.state + ' ' + screen.customer.address.postalCode}}</div>
+                            <div *ngIf="screen.customer.address.line1" class="line1">{{screen.customer.address.line1}}</div>
+                            <div *ngIf="screen.customer.address.line2" class="line2">{{screen.customer.address.line2}}</div>
+                            <div class="line3">
+                                <span *ngIf="screen.customer.address.city" class="city">{{screen.customer.address.city}}, </span>
+                                <span *ngIf="screen.customer.address.state" class="state">{{screen.customer.address.state}} </span>
+                                <span *ngIf="screen.customer.address.postalCode" class="postal-code">{{screen.customer.address.postalCode}}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
