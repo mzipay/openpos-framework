@@ -202,11 +202,6 @@ describe('SaleTotalPanelComponent', () => {
                             expect(button.nativeElement.textContent).toContain('bob');
                         });
 
-                        it('displays the loyalty id', () => {
-                            expect(button.nativeElement.textContent).toContain('Loyalty ID:');
-                            expect(button.nativeElement.textContent).toContain('123');
-                        });
-
                         it('calls doAction with the linkedCustomerButton when an actionClick event is triggered', () => {
                             spyOn(component, 'doAction');
                             button.nativeElement.dispatchEvent(new Event('actionClick'));
@@ -231,6 +226,41 @@ describe('SaleTotalPanelComponent', () => {
                             fixture.detectChanges();
                             validateDoesNotExist(fixture, '.sale-total-header .linked-customer-summary .loyalty-keybind');
                         });
+
+                        describe('when membershipEnabled is false', () => {
+                            beforeEach(() => {
+                                component.screenData.membershipEnabled = false;
+                                fixture.detectChanges();
+                                button = fixture.debugElement.query(By.css('.sale-total-header button.linked-customer-summary .loyaltyId'));
+                            });
+
+                            it('displays the loyalty id', () => {
+                                expect(button.nativeElement.textContent).toContain('Loyalty ID:');
+                                expect(button.nativeElement.textContent).toContain('123');
+                            });
+                        });
+
+                        describe('when membershipEnabled is true', () => {
+                            beforeEach(() => {
+                                component.screenData.membershipEnabled = true;
+                                component.screenData.memberships = [
+                                    { id: '123', name: 'membership1', member: true},
+                                    { id: '124', name: 'membership2', member: false},
+                                    { id: '125', name: 'membership3', member: false},
+                                ]
+                                fixture.detectChanges();
+                            });
+
+                            it('does not display the loyalty id', () => {
+                                validateDoesNotExist(fixture, '.memberships .loyaltyId');
+                            });
+
+                            it('displays a membership-display component for each membership', () => {
+                                const membershipDisplays = fixture.debugElement.queryAll(By.css('app-membership-display'));
+                                expect(membershipDisplays.length).toBe(component.screenData.memberships.length);
+                            });
+                        });
+
                     });
                 });
             });

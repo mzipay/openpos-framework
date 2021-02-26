@@ -4,13 +4,14 @@ import {ActionService} from "../../../core/actions/action.service";
 import {MembershipDisplayComponent} from "./membership-display.component";
 import {validateDoesNotExist, validateIcon, validateText} from "../../../utilites/test-utils";
 import {By} from "@angular/platform-browser";
+import {Membership} from "./memebership-display.interface";
 
 class MockActionService {};
 
 describe('MembershipDisplayComponent', () => {
     let component: MembershipDisplayComponent;
     let fixture: ComponentFixture<MembershipDisplayComponent>;
-    let membership;
+    let membership: Membership;
     beforeEach( () => {
         TestBed.configureTestingModule({
             declarations: [

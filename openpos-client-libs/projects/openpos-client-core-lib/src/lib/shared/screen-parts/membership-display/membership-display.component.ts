@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {Membership} from "./memebership-display.interface";
 
 
 @Component({
@@ -7,6 +8,6 @@ import {Component, Input} from '@angular/core';
     styleUrls: ['./membership-display.component.scss']})
 export class MembershipDisplayComponent {
     @Input()
-    membership: { id: string, name: string, member: boolean};
+    membership: Membership;
     constructor() {}
 }

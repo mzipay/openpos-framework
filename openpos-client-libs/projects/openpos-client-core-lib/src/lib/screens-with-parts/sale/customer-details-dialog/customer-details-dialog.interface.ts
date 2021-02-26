@@ -1,5 +1,6 @@
 import {IAbstractScreen} from "../../../core/interfaces/abstract-screen.interface";
 import {IActionItem} from "../../../core/actions/action-item.interface";
+import {Membership} from "../../../shared/screen-parts/membership-display/memebership-display.interface";
 
 export interface CustomerDetailsDialogInterface extends IAbstractScreen {
     message: string;
@@ -15,11 +16,7 @@ export interface CustomerDetailsDialogInterface extends IAbstractScreen {
             state: string,
             postalCode: string
         },
-        memberships: {
-            id: string,
-            name: string,
-            member: boolean
-        }
+        memberships: Membership[]
     };
     membershipEnabled: boolean;
     membershipLabel: String;
