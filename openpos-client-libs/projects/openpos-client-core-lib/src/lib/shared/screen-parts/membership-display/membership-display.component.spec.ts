@@ -47,6 +47,15 @@ describe('MembershipDisplayComponent', () => {
             validateText(fixture, 'mat-chip', component.membership.name);
         });
 
+        it('calls clickEvent.emit when the chip is clicked', () => {
+            spyOn(component.clickEvent, 'emit');
+
+            const chip = fixture.debugElement.query(By.css('mat-chip'));
+            chip.nativeElement.click();
+
+            expect(component.clickEvent.emit).toHaveBeenCalledWith(component.membership);
+        })
+
         describe('when the user is a member', () => {
             beforeEach(() => {
                 component.membership.member = true;

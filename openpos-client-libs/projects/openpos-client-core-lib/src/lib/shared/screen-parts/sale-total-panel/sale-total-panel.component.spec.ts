@@ -214,6 +214,18 @@ describe('SaleTotalPanelComponent', () => {
                             expect(component.doAction).toHaveBeenCalledWith(component.screenData.linkedCustomerButton);
                         });
 
+                        it('calls doAction with the linkedCustomerButton when an clickEvent event is triggered on the app-membership-display component', () => {
+                            spyOn(component, 'doAction');
+                            component.screenData.membershipEnabled = true;
+                            component.screenData.memberships = [{id: '1', name: 'loyalty', member: true}];
+                            fixture.detectChanges();
+
+                            const membershipDisplay = fixture.debugElement.query(By.css('.linked-customer-summary app-membership-display'));
+                            membershipDisplay.nativeElement.dispatchEvent(new Event('clickEvent'));
+
+                            expect(component.doAction).toHaveBeenCalledWith(component.screenData.linkedCustomerButton);
+                        });
+
                         it('shows the keybinding when keybinds are enabled', () => {
                             spyOn(component, 'keybindsEnabled').and.returnValue(true);
                             fixture.detectChanges();

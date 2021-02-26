@@ -1,5 +1,5 @@
 <mat-chip-list>
-    <mat-chip [ngClass]="{'in': membership.member, 'not-in': !membership.member}">
+    <mat-chip (click)="clickEvent.emit(membership)" [ngClass]="{'in': membership.member, 'not-in': !membership.member}" [selectable]="false">
         <app-icon *ngIf="membership.member"
                   [iconName]="'check'"
                   [iconClass]="'material-icons mat-24'"></app-icon> {{membership.name}}

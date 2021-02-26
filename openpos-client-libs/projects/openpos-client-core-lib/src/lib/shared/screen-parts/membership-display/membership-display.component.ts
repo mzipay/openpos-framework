@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Membership} from "./memebership-display.interface";
 
 
@@ -9,5 +9,7 @@ import {Membership} from "./memebership-display.interface";
 export class MembershipDisplayComponent {
     @Input()
     membership: Membership;
+    @Output()
+    clickEvent: EventEmitter<Membership> = new EventEmitter();
     constructor() {}
 }

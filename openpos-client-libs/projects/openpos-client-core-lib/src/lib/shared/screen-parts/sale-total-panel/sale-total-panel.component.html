@@ -41,7 +41,7 @@
                         </span>
                         <div *ngIf="screenData.membershipEnabled">
                             <div *ngFor="let membership of screenData.memberships">
-                                <app-membership-display [membership]="membership"></app-membership-display>
+                                <app-membership-display (clickEvent)="doAction(screenData.linkedCustomerButton)" [membership]="membership"></app-membership-display>
                             </div>
                         </div>
                     </div>

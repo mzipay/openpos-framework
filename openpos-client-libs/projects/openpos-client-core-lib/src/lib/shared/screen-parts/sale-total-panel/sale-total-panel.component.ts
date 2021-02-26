@@ -38,5 +38,4 @@ export class SaleTotalPanelComponent extends ScreenPartComponent<SaleTotalPanelI
     public doMenuItemAction(menuItem: IActionItem) {
         this.doAction(menuItem);
     }
-
 }
