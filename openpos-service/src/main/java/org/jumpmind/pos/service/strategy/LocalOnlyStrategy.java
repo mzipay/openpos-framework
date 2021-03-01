@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,12 +18,18 @@ public class LocalOnlyStrategy extends AbstractInvocationStrategy implements IIn
         return LOCAL_ONLY_STRATEGY;
     }
 
+    Map<Method, Method> methodMap = new HashMap<>();
+
     @Override
     public Object invoke(List<String> profileIds, Object proxy, Method method, Map<String, Object> endpoints, Object[] args) throws Throwable {
         String path = buildPath(method);
         Object obj = endpoints.get(path);
         if (obj != null) {
-            Method targetMethod = obj.getClass().getMethod(method.getName(), method.getParameterTypes());
+            Method targetMethod = methodMap.get(method);
+            if (targetMethod == null) {
+                targetMethod = obj.getClass().getMethod(method.getName(), method.getParameterTypes());
+                methodMap.put(method, targetMethod);
+            }
             if (targetMethod != null) {
                 try {
                     return targetMethod.invoke(obj, args);

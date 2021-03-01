@@ -66,8 +66,12 @@ public class EndpointInvoker implements InvocationHandler {
 
     Map<String, Object> endPointsByPath;
 
-    static BasicThreadFactory factory = new BasicThreadFactory.Builder().namingPattern("service-instrumentation-thread-%d").daemon(true)
-            .build();
+    Map<String, Endpoint> annotationsByPath;
+
+    static BasicThreadFactory factory = new BasicThreadFactory.Builder().
+            namingPattern("service-instrumentation-thread-%d").daemon(true).
+            build();
+
     private static final ExecutorService instrumentationExecutor = Executors.newSingleThreadExecutor(factory);
 
     public EndpointInvoker() {
@@ -77,16 +81,17 @@ public class EndpointInvoker implements InvocationHandler {
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (endPointsByPath == null) {
             endPointsByPath = new HashMap<>();
+            annotationsByPath = new HashMap<>();
             Collection<Object> beans = applicationContext.getBeansWithAnnotation(RestController.class).values();
             if (beans != null) {
                 for (Object object : beans) {
-                        buildEndpointMappingsForService(object);
-                    }
+                    buildEndpointMappingsForService(object);
                 }
-            }  
+            }
+        }
     }
-    
-    public void buildEndpointMappingsForService( Object service){
+
+    public void buildEndpointMappingsForService(Object service) {
         Class<?>[] interfaces = service.getClass().getInterfaces();
         Collection<Object> endpointOverrides = applicationContext.getBeansWithAnnotation(EndpointOverride.class).values();
         Collection<Object> endpoints = applicationContext.getBeansWithAnnotation(Endpoint.class).values();
@@ -118,6 +123,7 @@ public class EndpointInvoker implements InvocationHandler {
 
                         if (endpointBean != null) {
                             endPointsByPath.put(path, endpointBean);
+                            annotationsByPath.put(path, endpointBean.getClass().getAnnotation(Endpoint.class));
                         } else {
                             log.warn(String.format(
                                     "No endpoint defined for path '%s' in '%s' in the service Please define a Spring-discoverable @Endpoint class, "
@@ -132,8 +138,8 @@ public class EndpointInvoker implements InvocationHandler {
 
     protected Object findBestEndpointOverrideMatch(String path, String implementation, Collection<Object> endpointOverrides) {
         Object bestMatch = null;
-        List<SimpleEntry<Object,EndpointOverride>> pathMatchedOverrides = endpointOverrides.stream()
-                .map(o -> new SimpleEntry<Object,EndpointOverride>(o, ClassUtils.resolveAnnotation(EndpointOverride.class, o)))
+        List<SimpleEntry<Object, EndpointOverride>> pathMatchedOverrides = endpointOverrides.stream()
+                .map(o -> new SimpleEntry<Object, EndpointOverride>(o, ClassUtils.resolveAnnotation(EndpointOverride.class, o)))
                 .filter(entry -> entry.getValue().path().equals(path)
                 ).collect(Collectors.toList());
 
@@ -157,7 +163,7 @@ public class EndpointInvoker implements InvocationHandler {
     protected String getServiceImplementation(String serviceName) {
         String implementation = env.getProperty(String.format(implementationConfigPath, serviceName));
 
-        if(StringUtils.isBlank(implementation)) {
+        if (StringUtils.isBlank(implementation)) {
             Matcher serviceNameMatcher = serviceNamePattern.matcher(serviceName);
             serviceNameMatcher.matches();
             String versionLessServiceName = serviceNameMatcher.group("service");
@@ -192,11 +198,13 @@ public class EndpointInvoker implements InvocationHandler {
         EndpointSpecificConfig endConfig = null;
         Endpoint annotation = null;
         if (obj != null) {
-            annotation = obj.getClass().getAnnotation(Endpoint.class);
+            annotation = annotationsByPath.get(path);
             if (annotation != null) {
+                String annotationPath = annotation.path();
                 for (EndpointSpecificConfig aWeirdAcronym : config.getEndpoints()) {
-                    if (annotation.path().equals(aWeirdAcronym.getPath())) {
+                    if (annotationPath.equals(aWeirdAcronym.getPath())) {
                         endConfig = aWeirdAcronym;
+                        break;
                     }
                 }
             }
@@ -208,7 +216,7 @@ public class EndpointInvoker implements InvocationHandler {
             profileIds.add(endConfig.getProfile());
         } else {
             strategy = strategies.get(config.getStrategy().name());
-            profileIds.addAll(config.getProfileIds() != null ? config.getProfileIds(): Arrays.asList());
+            profileIds.addAll(config.getProfileIds() != null ? config.getProfileIds() : Arrays.asList());
         }
         if (profileIds.size() == 0) {
             profileIds.add("local");
@@ -231,7 +239,7 @@ public class EndpointInvoker implements InvocationHandler {
         if (!method.isAnnotationPresent(SuppressMethodLogging.class)) {
             StringBuilder logArgs = new StringBuilder();
             if (args != null && args.length > 0) {
-                for(int i = 0; i < args.length; i++) {
+                for (int i = 0; i < args.length; i++) {
                     Object arg = args[i];
                     if (arg instanceof CharSequence) {
                         logArgs.append("'");
@@ -242,7 +250,7 @@ public class EndpointInvoker implements InvocationHandler {
                     } else {
                         logArgs.append("null");
                     }
-                    if (args.length-1 > i) {
+                    if (args.length - 1 > i) {
                         logArgs.append(",");
                     }
                 }
