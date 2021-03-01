@@ -1,8 +1,6 @@
 package org.jumpmind.pos.service.strategy;
 
-import org.jumpmind.pos.service.InjectionContext;
 import org.jumpmind.pos.service.PosServerException;
-import org.jumpmind.pos.service.ServiceSpecificConfig;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +22,6 @@ public class LocalOnlyStrategy extends AbstractInvocationStrategy implements IIn
         String path = buildPath(method);
         Object obj = endpoints.get(path);
         if (obj != null) {
-            endpointInjector.performInjections(obj, new InjectionContext(args));
             Method targetMethod = obj.getClass().getMethod(method.getName(), method.getParameterTypes());
             if (targetMethod != null) {
                 try {
