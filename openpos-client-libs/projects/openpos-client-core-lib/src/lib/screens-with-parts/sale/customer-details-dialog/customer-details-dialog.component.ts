@@ -1,4 +1,4 @@
-import { Component, Injector } from '@angular/core';
+import { Component } from '@angular/core';
 import {CustomerDetailsDialogInterface} from "./customer-details-dialog.interface";
 import {DialogComponent} from "../../../shared/decorators/dialog-component.decorator";
 import {PosScreen} from "../../pos-screen/pos-screen.component";
@@ -12,5 +12,11 @@ import {PosScreen} from "../../pos-screen/pos-screen.component";
   styleUrls: ['./customer-details-dialog.component.scss']
 })
 export class CustomerDetailsDialogComponent extends PosScreen<CustomerDetailsDialogInterface> {
-  buildScreen() { }
+  buildScreen() {
+    this.screen.rewards = [];
+  }
+
+  getRewardsLabel() : string {
+    return this.screen.rewardsLabel + ((this.screen.rewards) ? ' (' + this.screen.rewards.length + ')': '');
+  }
 }

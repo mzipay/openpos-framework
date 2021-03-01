@@ -2,6 +2,10 @@ import {IAbstractScreen} from "../../../core/interfaces/abstract-screen.interfac
 import {IActionItem} from "../../../core/actions/action-item.interface";
 import {Membership} from "../../../shared/screen-parts/membership-display/memebership-display.interface";
 
+export interface Reward {
+
+};
+
 export interface CustomerDetailsDialogInterface extends IAbstractScreen {
     message: string;
     customer: {
@@ -24,4 +28,7 @@ export interface CustomerDetailsDialogInterface extends IAbstractScreen {
     editButton: IActionItem;
     unlinkButton: IActionItem;
     doneButton: IActionItem;
+    rewardsLabel: string;
+    rewardHistoryLabel: string;
+    rewards: Reward[];
 }

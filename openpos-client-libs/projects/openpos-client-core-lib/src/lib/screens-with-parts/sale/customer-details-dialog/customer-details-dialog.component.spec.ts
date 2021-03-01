@@ -63,6 +63,26 @@ describe('CustomerDetailsDialog', () => {
   });
 
   describe('component', () => {
+    describe('getRewardsLabel', () => {
+      beforeEach(() => {
+        component.screen.rewardsLabel = "Rewards";
+      });
+
+      it('returns "Rewards" when the rewards list is undefined', () => {
+        component.screen.rewards = undefined;
+        expect(component.getRewardsLabel()).toBe("Rewards");
+      });
+
+      it('returns "Rewards (0)" when the rewards list is empty', () => {
+        component.screen.rewards = [];
+        expect(component.getRewardsLabel()).toBe("Rewards (0)");
+      });
+
+      it('returns "Rewards (#)" when the rewards list has items', () => {
+        component.screen.rewards = [{}];
+        expect(component.getRewardsLabel()).toBe("Rewards (1)");
+      });
+    });
   });
 
   describe('template', () => {
@@ -204,6 +224,27 @@ describe('CustomerDetailsDialog', () => {
         });
       });
     })
+    describe('tabs', () => {
+      describe('when membership is enabled', () => {
+        beforeEach(() => {
+          component.screen.membershipEnabled = true;
+          fixture.detectChanges();
+        });
+
+        it('displays the tabs section', () => {
+          const tabsElement = fixture.debugElement.query(By.css('.tabs'));
+          expect(tabsElement.nativeElement).toBeDefined();
+        });
+      });
+
+      describe('when membership is disabled', () => {
+        it('does not display the tabs', () => {
+          component.screen.membershipEnabled = false;
+          fixture.detectChanges();
+          validateDoesNotExist(fixture, 'tabs');
+        });
+      });
+    });
     describe('actions', () => {
       describe('edit button', () => {
         let button;

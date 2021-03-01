@@ -6,6 +6,14 @@ mat-dialog-content {
   flex-direction: column;
 }
 
+.details-wrapper, .tabs {
+  margin-bottom: 8px;
+}
+
+.tabs {
+  margin-top: 8px;
+}
+
 .buttons {
   display: grid;
   grid-auto-flow: column;
@@ -88,5 +96,5 @@ app-content-card {
       }
     }
   }
-
 }
+

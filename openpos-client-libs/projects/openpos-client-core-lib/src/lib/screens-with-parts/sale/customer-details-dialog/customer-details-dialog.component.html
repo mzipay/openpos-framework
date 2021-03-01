@@ -1,6 +1,6 @@
 <app-dialog-header></app-dialog-header>
 <mat-dialog-content>
-    <app-content-card>
+    <app-content-card class="details-wrapper">
         <div class="grid-container">
             <div class="icon">
                 <app-icon [iconName]="'account_circle'" [iconClass]="'material-icons'"></app-icon>
@@ -47,6 +47,20 @@
             </div>
         </div>
     </app-content-card>
+    <div *ngIf="screen.membershipEnabled" class="tabs">
+        <mat-tab-group mat-align-tabs="start" animationDuration="0ms">
+            <mat-tab class="rewardsTab" [label]="getRewardsLabel()">
+                <mat-card class="rewardsContent">
+                    Rewards Content
+                </mat-card>
+            </mat-tab>
+            <mat-tab class="rewardsHistoryTab" [label]="screen.rewardHistoryLabel">
+                <mat-card class="rewardsHistoryContent">
+                    Reward History Content
+                </mat-card>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end" class="buttons">
     <app-secondary-button responsive-class
