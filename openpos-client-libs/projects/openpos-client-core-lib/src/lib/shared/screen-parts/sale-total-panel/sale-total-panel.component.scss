@@ -19,7 +19,7 @@
         font-size: 36px;
     }
     .link-customer {
-        height: 102px;
+        min-height: 102px;
         @extend %text-md;
         border-width: 2px;
         padding: $text-md/2 $text-md*1.25;
