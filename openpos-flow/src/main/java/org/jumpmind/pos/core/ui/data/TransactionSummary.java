@@ -5,6 +5,7 @@ import org.jumpmind.pos.core.ui.ActionItem;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ public class TransactionSummary implements Serializable {
     private String customerName;
     private Integer items;
     private String itemsFormatted;
+    private Date endTime;
     private Timestamp transactionDate;
     private String deviceId;
     private String storeId;
