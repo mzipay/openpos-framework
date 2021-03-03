@@ -1,0 +1,25 @@
+<div class="customer-details text-sm">
+    <span class="customer-name text-md">{{customer.name}}</span>
+    <span class="customer-loyaltyNumber muted-color">{{customer.loyaltyNumber}}</span>
+    <div class="customer-info-section muted-color">
+        <div>
+            <div class="customer-email">{{customer.email}}</div>
+            <div class="customer-phoneNumber">{{customer.phoneNumber | phone}}</div>
+        </div>
+        <div>
+            <div class="customer-line1">{{customer.address.line1}}</div>
+            <div class="customer-line2" *ngIf="customer.address.line2">{{customer.address.line2}}</div>
+            <div class="customer-cityStateZip">
+                <span *ngIf="customer.address.city != ''">{{customer.address.city}}</span>
+                <span *ngIf="customer.address.state != ''">
+                    <span *ngIf="customer.address.city != ''">, </span>
+                    {{customer.address.state}}
+                </span>
+                <span *ngIf="customer.address.postalCode != ''">
+                    <span *ngIf="customer.address.state != '' || customer.address.city != ''"> </span>
+                    {{customer.address.postalCode}}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

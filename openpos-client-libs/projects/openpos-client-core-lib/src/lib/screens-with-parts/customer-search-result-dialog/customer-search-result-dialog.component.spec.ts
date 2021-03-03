@@ -1,42 +1,24 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { CustomerSearchResultDialogComponent } from './customer-search-result-dialog.component';
-import {CustomerSearchResultDialogInterface} from "./customer-search-result-dialog.interface";
-// import { MatDialog, MatBottomSheet } from '@angular/material';
-// import { OpenposMediaService } from '../../core/media/openpos-media.service';
-// import { HttpClientTestingModule } from '@angular/common/http/testing';
-// import { KeyPressProvider } from '../../shared/providers/keypress.provider';
+import { CustomerSearchResultDialogInterface, ICustomerDetails } from "./customer-search-result-dialog.interface";
 import { NO_ERRORS_SCHEMA } from '@angular/core'
-// import { ActionService } from '../../core/actions/action.service';
-// import { ElectronService } from 'ngx-electron';
-// import { BaconStripComponent } from '../../shared/screen-parts/bacon-strip/bacon-strip.component';
-// import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
-// import { TimeZoneContext } from '../../core/client-context/time-zone-context';
-// import { CLIENTCONTEXT } from '../../core/client-context/client-context-provider.interface';
-// import { SaleInterface } from './customer-search-result-dialog.interface';
-// import { Subscription, Observable, of } from 'rxjs';
-
-class MockMatDialog {};
+import { ActionService } from "../../core/actions/action.service";
+import { SelectionMode } from "../../core/interfaces/selection-mode.enum";
+import { IActionItem } from "../../core/actions/action-item.interface";
+import { By } from "@angular/platform-browser";
 class MockActionService {};
-class MockMatBottomSheet {};
-class MockKeyPressProvider {
-    // subscribe(): Subscription {
-    //     return new Subscription();
-    // }
-};
-class MockElectronService {};
-class ClientContext {};
 
-describe('SaleComponent', () => {
+describe('CustomerSearchResultDialogComponent', () => {
     let component: CustomerSearchResultDialogComponent;
     let fixture: ComponentFixture<CustomerSearchResultDialogComponent>;
-    // let openposMediaSerivce: OpenposMediaService;
+
+    let testAddress = {line1: 'testStreet', line2: 'testStreetLine2', city: 'testCity', state: 'testState', postalCode: '12345'}
+    let testCustomer = {name: 'test', loyaltyNumber: '7327', email: 'testUser@test.com',
+        phoneNumber: '614 234 5678', address: testAddress } as ICustomerDetails
+    let threeResults = [testCustomer, testCustomer, testCustomer];
+    let fourResults = [testCustomer, testCustomer, testCustomer, testCustomer];
 
     describe('non mobile', () => {
-        // class MockOpenposMediaServiceMobile {
-        //     observe(): Observable<boolean> {
-        //         return of(false);
-        //     }
-        // };
         beforeEach( () => {
             TestBed.configureTestingModule({
                 imports: [],
@@ -44,14 +26,7 @@ describe('SaleComponent', () => {
                     CustomerSearchResultDialogComponent,
                 ],
                 providers: [
-                    // { provide: ActionService, useClass: MockActionService },
-                    // { provide: MatDialog, useClass: MockMatDialog},
-                    // { provide: OpenposMediaService, useClass: MockOpenposMediaServiceMobile },
-                    // { provide: MatBottomSheet, useClass: MockMatBottomSheet},
-                    // { provide: KeyPressProvider, useClass: MockKeyPressProvider },
-                    // { provide: ElectronService, useClass: MockElectronService },
-                    // { provide: ClientContext, useValue: {}},
-                    // { provide: CLIENTCONTEXT, useClass: TimeZoneContext}
+                    { provide: ActionService, useClass: MockActionService }
                 ],
                 schemas: [
                     NO_ERRORS_SCHEMA,
@@ -59,9 +34,7 @@ describe('SaleComponent', () => {
             }).compileComponents();
             fixture = TestBed.createComponent(CustomerSearchResultDialogComponent);
             component = fixture.componentInstance;
-            component.screen = {} as CustomerSearchResultDialogInterface;
-            // component.screen.orders = [];
-            // openposMediaSerivce = TestBed.get(OpenposMediaService);
+            component.screen = {viewButton: {title: 'View'}, selectButton: {title: 'Select'} } as CustomerSearchResultDialogInterface;
             fixture.detectChanges();
         });
 
@@ -70,11 +43,69 @@ describe('SaleComponent', () => {
         });
 
         describe('component', () => {
+            beforeEach(() => {
+                fixture = TestBed.createComponent(CustomerSearchResultDialogComponent);
+                component = fixture.componentInstance;
+                component.screen = {viewButton: {title: 'View'}, selectButton: {title: 'Select'} } as CustomerSearchResultDialogInterface;
+                fixture.detectChanges();
+            });
+            it('transformResultsToMap', () => {
+                component.screen.results = threeResults
+                let result = component.transformResultsToMap();
+                expect(result.size).toBe(3);
+                expect(result.get(0)).toBe(component.screen.results[0]);
+                expect(result.get(2)).toBe(component.screen.results[2]);
+            });
 
+            it('populateListData', () => {
+                component.screen.results = threeResults
+                component.populateListData();
+                component.listData.subscribe(x => {
+                    expect(x.items).toBeTruthy();
+                    expect(x.disabledItems).toBeTruthy();
+                });
+            });
+            it('defineConfiguration', () => {
+                component.screen.results = threeResults
+                component.defineConfiguration()
+                expect(component.listConfig).toBeDefined()
+                expect(component.listConfig.selectionMode).toBe(SelectionMode.Single);
+                expect(component.listConfig.totalNumberOfItems).toBe(3);
+
+                component.screen.results = fourResults
+                component.defineConfiguration()
+                expect(component.listConfig.totalNumberOfItems).toBe(4);
+            });
+            it('onItemChange', () => {
+                component.onItemChange(5);
+                expect(component.index).toBe(5);
+                component.onItemChange(6);
+                expect(component.index).toBe(6);
+            });
+            it('doSelectionButtonAction ',  () =>{
+                spyOn(component, 'doAction')
+                component.index = 1;
+                component.doSelectionButtonAction({} as IActionItem);
+                expect(component.doAction).toHaveBeenCalledWith({} as IActionItem, 1);
+            });
         });
 
         describe('template', () => {
+            it('secondary-button', () => {
+                const secondaryButton = fixture.debugElement.query(By.css('app-secondary-button'));
+                expect(secondaryButton.nativeElement.textContent).toBeDefined();
+                spyOn(component, 'doSelectionButtonAction');
+                secondaryButton.nativeElement.click()
+                expect(component.doSelectionButtonAction).toHaveBeenCalled();
+            });
 
+            it('primary-button', () => {
+                const secondaryButton = fixture.debugElement.query(By.css('app-primary-button'));
+                expect(secondaryButton.nativeElement.textContent).toBeDefined();
+                spyOn(component, 'doSelectionButtonAction');
+                secondaryButton.nativeElement.click()
+                expect(component.doSelectionButtonAction).toHaveBeenCalled();
+            });
         });
     });
 });

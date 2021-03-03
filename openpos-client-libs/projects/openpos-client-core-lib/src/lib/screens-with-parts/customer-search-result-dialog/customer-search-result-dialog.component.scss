@@ -1,7 +1,16 @@
 @import "../../styles/mixins/typography";
-
-.customer-info-section {
-  div {
-    flex-grow: 1;
+.buttons {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: end;
+  grid-column-gap: 8px;
+  &.mobile {
+    grid-column-gap: 4px;
+  }
+}
+.customer-details{
+  .customer-name{
+    font-weight: bold;
+    margin-right: 2rem;
   }
 }

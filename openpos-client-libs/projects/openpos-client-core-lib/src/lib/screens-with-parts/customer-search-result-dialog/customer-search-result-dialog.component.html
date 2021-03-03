@@ -6,15 +6,13 @@
             <app-selectable-item-list fxFlex="0 1 100%" [listData]="listData" [configuration]="listConfig"
                                       (selectedItemChange)="onItemChange($event)">
                 <ng-template let-item>
-                    <div class="text-md">
-                        {{item | json}}
-                    </div>
+                    <app-display-customer-lookup [customer]="item"></app-display-customer-lookup>
                 </ng-template>
             </app-selectable-item-list>
         </div>
     </mat-dialog-content>
 </app-content-card>
-<mat-dialog-actions>
+<mat-dialog-actions class="buttons">
     <app-secondary-button [actionItem]="screen.viewButton"
                           (actionClick)="doSelectionButtonAction(screen.viewButton)"
                           (click)="doSelectionButtonAction(screen.viewButton)">

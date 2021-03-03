@@ -168,6 +168,7 @@ import { StatusBarComponent } from './status/status-bar/status-bar.component';
 import { LocalizePipe } from './pipes/localize.pipe';
 import { ModalOverlayContainerDirective } from './modal-overlay-container/modal-overlay-container.directive';
 import { ImageScannerComponent } from '../core/platform-plugins/image-scanners/image-scanner.component';
+import { DisplayCustomerLookupComponent } from "./components/display-customer-lookup/display-customer-lookup.component";
 
 const screenParts = [
     TenderPartComponent,
@@ -281,7 +282,8 @@ const components = [
     TransactionSummaryComponent,
     StampComponent,
     ToastComponent,
-    ImageScannerComponent
+    ImageScannerComponent,
+    DisplayCustomerLookupComponent
 ];
 
 const directives = [

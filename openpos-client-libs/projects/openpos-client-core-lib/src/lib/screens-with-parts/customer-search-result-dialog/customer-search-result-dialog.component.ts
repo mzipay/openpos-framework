@@ -20,16 +20,16 @@ export class CustomerSearchResultDialogComponent extends PosScreen<CustomerSearc
 
     index = -1;
     listData: Observable<ISelectableListData<ICustomerDetails>>;
-
     listConfig: SelectableItemListComponentConfiguration;
 
     buildScreen() {
+        this.populateListData();
+        this.defineConfiguration();
+    }
 
-        let allItems = new Map<number, ICustomerDetails>();
+     populateListData() {
+        let allItems = this.transformResultsToMap();
         let disabledItems = new Map<number, ICustomerDetails>();
-        for (let i = 0; i < this.screen.results.length; i++){
-            allItems.set(i, this.screen.results[i]);
-        }
 
         this.listData = new Observable<ISelectableListData<ICustomerDetails>>((observer) => {
             observer.next({
@@ -37,12 +37,22 @@ export class CustomerSearchResultDialogComponent extends PosScreen<CustomerSearc
                 disabledItems: disabledItems
             } as ISelectableListData<ICustomerDetails>);
         });
+    }
 
+    transformResultsToMap() {
+        let allItems = new Map<number, ICustomerDetails>();
+        this.screen.results.forEach((value, index) => {
+           allItems.set(index, value);
+        });
+
+        return allItems;
+    }
+
+    defineConfiguration(): void{
         this.listConfig = new SelectableItemListComponentConfiguration();
         this.listConfig.selectionMode = SelectionMode.Single;
         this.listConfig.numItemsPerPage = Number.MAX_VALUE;
-        this.listConfig.totalNumberOfItems = 3;
-
+        this.listConfig.totalNumberOfItems = this.screen.results.length;
     }
 
     public onItemChange(event: any): void {

@@ -1,0 +1,10 @@
+.customer-details{
+  .customer-name{
+    font-weight: bold;
+    margin-right: 2rem;
+  }
+  .customer-info-section{
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
+}

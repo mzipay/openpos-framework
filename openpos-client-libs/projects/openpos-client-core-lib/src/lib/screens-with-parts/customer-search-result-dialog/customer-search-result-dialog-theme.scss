@@ -1,0 +1,10 @@
+@mixin customer-search-result-dialog-theme($theme) {
+  .selection-list:not(:last-child) {
+    border-bottom: 2px solid $black-12-opacity;
+  }
+
+  .selectable-list{
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+}
