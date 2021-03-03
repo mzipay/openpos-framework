@@ -35,7 +35,16 @@
                         </div>
 
                     <div class="icon"><app-icon [iconName]="'account_circle'" [iconClass]="(isMobile | async) ? null: 'material-icons mat-36'"></app-icon></div>
-                    <div class="memberships"><span>{{screenData.loyaltyIDLabel}}: {{screenData.customer.id}}</span></div>
+                    <div class="memberships">
+                        <span *ngIf="!screenData.membershipEnabled" class="loyaltyId">
+                            {{screenData.loyaltyIDLabel}}: {{screenData.customer.id}}
+                        </span>
+                        <div *ngIf="screenData.membershipEnabled">
+                            <div *ngFor="let membership of screenData.memberships">
+                                <app-membership-display (clickEvent)="doAction(screenData.linkedCustomerButton)" [membership]="membership"></app-membership-display>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </button>

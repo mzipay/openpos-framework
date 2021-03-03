@@ -3,6 +3,8 @@ package org.jumpmind.pos.core.ui.message;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class UICustomerDetails implements Serializable {
@@ -13,4 +15,5 @@ public class UICustomerDetails implements Serializable {
     private String email;
     private String phoneNumber;
     private UIAddress address;
+    private List<UIMembership> memberships = new ArrayList<>();
 }
