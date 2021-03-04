@@ -51,7 +51,9 @@
         <mat-tab-group mat-align-tabs="start" animationDuration="0ms">
             <mat-tab class="rewardsTab" [label]="getRewardsLabel()">
                 <mat-card class="rewardsContent">
-                    Rewards Content
+                    <div *ngFor="let reward of screen.customer.rewards" class="line">
+                        <app-rewards-line-item [reward]="reward"></app-rewards-line-item>
+                    </div>
                 </mat-card>
             </mat-tab>
             <mat-tab class="rewardsHistoryTab" [label]="screen.rewardHistoryLabel">

@@ -169,6 +169,7 @@ import { LocalizePipe } from './pipes/localize.pipe';
 import { ModalOverlayContainerDirective } from './modal-overlay-container/modal-overlay-container.directive';
 import { MembershipDisplayComponent } from "./screen-parts/membership-display/membership-display.component";
 import { ImageScannerComponent } from '../core/platform-plugins/barcode-scanners/image-scanner.component';
+import {RewardsLineItemComponent} from "./screen-parts/rewards-line-item/rewards-line-item.component";
 
 const screenParts = [
     TenderPartComponent,
@@ -184,6 +185,7 @@ const screenParts = [
     DynamicFormPartComponent,
     AutoCompleteAddressPartComponent,
     MembershipDisplayComponent,
+    RewardsLineItemComponent,
     ProgressBarPartComponent,
     WebcamViewerComponent,
     SystemStatusComponent,

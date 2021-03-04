@@ -12,11 +12,9 @@ import {PosScreen} from "../../pos-screen/pos-screen.component";
   styleUrls: ['./customer-details-dialog.component.scss']
 })
 export class CustomerDetailsDialogComponent extends PosScreen<CustomerDetailsDialogInterface> {
-  buildScreen() {
-    this.screen.rewards = [];
-  }
+  buildScreen() {}
 
   getRewardsLabel() : string {
-    return this.screen.rewardsLabel + ((this.screen.rewards) ? ' (' + this.screen.rewards.length + ')': '');
+    return this.screen.rewardsLabel + ((this.screen.customer.rewards) ? ' (' + this.screen.customer.rewards.length + ')': '');
   }
 }

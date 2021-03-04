@@ -1,17 +1,19 @@
 @import "../../../styles/mixins/typography";
 
-mat-dialog-content {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-}
-
 .details-wrapper, .tabs {
   margin-bottom: 8px;
 }
 
 .tabs {
   margin-top: 8px;
+  mat-card {
+    overflow: scroll;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    &::-webkit-scrollbar {
+      display: none;  /* Safari and Chrome */
+    }
+  }
 }
 
 .buttons {
@@ -28,11 +30,11 @@ app-content-card {
 }
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 3fr 4fr;
   grid-template-rows: 1fr;
   gap: 0px 0px;
   grid-template-areas:
-    "icon details details details memberships memberships memberships memberships";
+    "icon details memberships";
 }
 .icon {
   grid-area: icon;

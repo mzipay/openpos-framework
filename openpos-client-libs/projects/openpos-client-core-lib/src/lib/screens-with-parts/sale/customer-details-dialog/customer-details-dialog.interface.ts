@@ -3,7 +3,8 @@ import {IActionItem} from "../../../core/actions/action-item.interface";
 import {Membership} from "../../../shared/screen-parts/membership-display/memebership-display.interface";
 
 export interface Reward {
-
+    name: string;
+    expirationDate: Date;
 };
 
 export interface CustomerDetailsDialogInterface extends IAbstractScreen {
@@ -20,7 +21,8 @@ export interface CustomerDetailsDialogInterface extends IAbstractScreen {
             state: string,
             postalCode: string
         },
-        memberships: Membership[]
+        memberships: Membership[],
+        rewards: Reward[]
     };
     membershipEnabled: boolean;
     membershipLabel: String;
@@ -30,5 +32,4 @@ export interface CustomerDetailsDialogInterface extends IAbstractScreen {
     doneButton: IActionItem;
     rewardsLabel: string;
     rewardHistoryLabel: string;
-    rewards: Reward[];
 }

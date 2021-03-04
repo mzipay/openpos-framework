@@ -4,7 +4,7 @@
     $background: map-get($theme, background);
 
 
-    .icon {
+    .icon, .line .loyalty-icon, .line .expiration {
         color: map_get($foreground, icon);
     }
 
@@ -32,6 +32,18 @@
             background-color: $app-primary;
             color: white;
             opacity: inherit;
+        }
+    }
+
+    .details-wrapper {
+        display: inherit;
+        min-height: inherit;
+    }
+
+    .line {
+        padding: 10px;
+        &:not(:last-child) {
+            border-bottom: 1px solid map-get($background, app-bar);
         }
     }
 }
