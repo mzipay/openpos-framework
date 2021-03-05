@@ -47,7 +47,7 @@
             </div>
         </div>
     </app-content-card>
-    <div *ngIf="screen.membershipEnabled" class="tabs">
+    <div *ngIf="screen.membershipEnabled" class="tabs" [ngClass]="{'tabs': true, 'mobile': (isMobile |async)}" responsive-class>
         <mat-tab-group mat-align-tabs="start" animationDuration="0ms">
             <mat-tab class="rewardsTab" [label]="getRewardsLabel()">
                 <mat-card class="rewardsContent">
@@ -61,7 +61,7 @@
                     </div>
                 </mat-card>
             </mat-tab>
-            <mat-tab class="rewardsHistoryTab" [label]="screen.rewardHistoryLabel">
+            <mat-tab class="rewardsHistoryTab" [label]="screen.rewardHistoryLabel" responsive-class>
                 <mat-card class="rewardsHistoryContent">
                     Reward History Content
                 </mat-card>

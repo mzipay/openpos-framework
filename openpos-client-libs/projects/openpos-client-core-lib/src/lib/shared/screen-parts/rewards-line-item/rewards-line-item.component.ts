@@ -1,7 +1,9 @@
-import {Component, Input} from '@angular/core';
+import {Component, Injector, Input} from '@angular/core';
 import {Reward} from "../../../screens-with-parts/sale/customer-details-dialog/customer-details-dialog.interface";
 import {ScreenPartComponent} from "../screen-part";
 import {RewardsLineItemComponentInterface} from "./rewards-line-item.interface";
+import {Observable} from "rxjs";
+import {MediaBreakpoints, OpenposMediaService} from "../../../core/media/openpos-media.service";
 
 
 @Component({
@@ -11,6 +13,18 @@ import {RewardsLineItemComponentInterface} from "./rewards-line-item.interface";
 export class RewardsLineItemComponent extends ScreenPartComponent<RewardsLineItemComponentInterface>{
     @Input()
     reward: Reward;
+    isMobile: Observable<boolean>;
+    constructor(injector: Injector, media: OpenposMediaService) {
+        super(injector);
+        this.isMobile = media.observe(new Map([
+            [MediaBreakpoints.MOBILE_PORTRAIT, true],
+            [MediaBreakpoints.MOBILE_LANDSCAPE, true],
+            [MediaBreakpoints.TABLET_PORTRAIT, true],
+            [MediaBreakpoints.TABLET_LANDSCAPE, false],
+            [MediaBreakpoints.DESKTOP_PORTRAIT, false],
+            [MediaBreakpoints.DESKTOP_LANDSCAPE, false]
+        ]));
+    }
 
     screenDataUpdated() {
     }

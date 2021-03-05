@@ -46,4 +46,23 @@
             border-bottom: 1px solid map-get($background, app-bar);
         }
     }
+    .tabs {
+        &.tablet-portrait {
+            .mat-tab-label {
+                font-size: $text-xs-mobile*1.75;
+            }
+        }
+
+        &.mobile {
+            .mat-tab-label {
+                font-size: $text-xs-mobile*1.25;
+            }
+        }
+    }
+    .tabs.mobile {
+        mat-card {
+            margin: 0px;
+            padding: 0px;
+        }
+    }
 }

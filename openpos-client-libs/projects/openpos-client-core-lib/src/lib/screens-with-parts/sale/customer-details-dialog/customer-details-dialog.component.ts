@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, Injector} from '@angular/core';
 import {CustomerDetailsDialogInterface} from "./customer-details-dialog.interface";
 import {DialogComponent} from "../../../shared/decorators/dialog-component.decorator";
 import {PosScreen} from "../../pos-screen/pos-screen.component";
+import {Observable} from "rxjs";
+import {MediaBreakpoints, OpenposMediaService} from "../../../core/media/openpos-media.service";
 
 @DialogComponent({
   name: 'CustomerDetailsDialog'
@@ -12,6 +14,20 @@ import {PosScreen} from "../../pos-screen/pos-screen.component";
   styleUrls: ['./customer-details-dialog.component.scss']
 })
 export class CustomerDetailsDialogComponent extends PosScreen<CustomerDetailsDialogInterface> {
+
+  isMobile: Observable<boolean>;
+  constructor(injector: Injector, media: OpenposMediaService) {
+    super(injector);
+    this.isMobile = media.observe(new Map([
+      [MediaBreakpoints.MOBILE_PORTRAIT, true],
+      [MediaBreakpoints.MOBILE_LANDSCAPE, true],
+      [MediaBreakpoints.TABLET_PORTRAIT, true],
+      [MediaBreakpoints.TABLET_LANDSCAPE, false],
+      [MediaBreakpoints.DESKTOP_PORTRAIT, false],
+      [MediaBreakpoints.DESKTOP_LANDSCAPE, false]
+    ]));
+  }
+
   buildScreen() {}
 
   getRewardsLabel() : string {
