@@ -1,14 +1,16 @@
-<div [ngClass]="{'with-household': householdEnabled, 'without-household': !householdEnabled}">
+<div class="reward-line-item-wrapper">
     <div class="loyalty-icon"><app-icon [iconName]="'loyalty'" [iconClass]="'material-icons mat-36'"></app-icon></div>
     <div class="details">
         <div class="name">{{reward.name}}</div>
-        <div class="expiration"><app-icon [iconName]="'access_time'" [iconClass]="'material-icons mat-24'"></app-icon>Expires {{reward.expirationDate | date:'M/d/yyyy'}}</div>
-    </div>
-    <div *ngIf="householdEnabled" class="household">household</div>
-    <div class="value">
-        <app-currency-text [amountText]="0.00"></app-currency-text>
+        <div class="expiration"><app-icon [iconName]="'access_time'" [iconClass]="'material-icons mat-24'"></app-icon>Expires {{reward.expirationDate}}</div>
     </div>
     <div class="apply">
-        <a mat-button>Apply <app-icon [iconName]="'chevron_right'" [iconClass]="'material-icons mat-24'"></app-icon></a>
+        <a *ngIf="reward.applyButton"
+           [actionItem]="reward.applyButton"
+           (actionClick)="doAction(reward.applyButton, reward.promotionId)"
+           (click)="doAction(reward.applyButton, reward.promotionId)"
+           mat-button>
+            Apply <app-icon [iconName]="'chevron_right'" [iconClass]="'material-icons mat-24'"></app-icon>
+        </a>
     </div>
 </div>

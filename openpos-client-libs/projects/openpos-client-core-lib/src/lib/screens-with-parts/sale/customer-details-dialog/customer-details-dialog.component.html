@@ -51,8 +51,13 @@
         <mat-tab-group mat-align-tabs="start" animationDuration="0ms">
             <mat-tab class="rewardsTab" [label]="getRewardsLabel()">
                 <mat-card class="rewardsContent">
-                    <div *ngFor="let reward of screen.customer.rewards" class="line">
-                        <app-rewards-line-item [reward]="reward"></app-rewards-line-item>
+                    <div *ngIf="(screen.customer.rewards && screen.customer.rewards.length)" >
+                        <div *ngFor="let reward of screen.customer.rewards" class="line">
+                            <app-rewards-line-item [reward]="reward"></app-rewards-line-item>
+                        </div>
+                    </div>
+                    <div *ngIf="!(screen.customer.rewards && screen.customer.rewards.length)" class="no-items">
+                        {{screen.noPromotionsText}}
                     </div>
                 </mat-card>
             </mat-tab>
@@ -72,14 +77,6 @@
                           (actionClick)="doAction(screen.editButton)"
                           (click)="doAction(screen.editButton)">
         <span>{{screen.editButton.title}}</span>
-    </app-secondary-button>
-    <app-secondary-button responsive-class
-                          class="loyalty-promotion"
-                          *ngIf="screen.loyaltyPromotions"
-                          [actionItem]="screen.loyaltyPromotions"
-                          (actionClick)="doAction(screen.loyaltyPromotions)"
-                          (click)="doAction(screen.loyaltyPromotions)">
-        <span>{{screen.loyaltyPromotions.title}}</span>
     </app-secondary-button>
     <app-secondary-button responsive-class
                           class="unlink"

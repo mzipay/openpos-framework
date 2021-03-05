@@ -3,8 +3,10 @@ import {IActionItem} from "../../../core/actions/action-item.interface";
 import {Membership} from "../../../shared/screen-parts/membership-display/memebership-display.interface";
 
 export interface Reward {
+    promotionId: string;
     name: string;
-    expirationDate: Date;
+    expirationDate: string;
+    applyButton: IActionItem;
 };
 
 export interface CustomerDetailsDialogInterface extends IAbstractScreen {
@@ -32,4 +34,5 @@ export interface CustomerDetailsDialogInterface extends IAbstractScreen {
     doneButton: IActionItem;
     rewardsLabel: string;
     rewardHistoryLabel: string;
+    noPromotionsText: string;
 }

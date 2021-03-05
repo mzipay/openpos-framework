@@ -1,6 +1,7 @@
 package org.jumpmind.pos.core.ui.message;
 
 import lombok.Data;
+import org.jumpmind.pos.core.ui.ActionItem;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,8 +10,8 @@ import java.util.Date;
 public class UILoyaltyReward implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private String promotionId;
     private String name;
-    private Double amount;
-    private Date expirationDate;
-    private boolean canApply;
+    private String expirationDate;
+    private ActionItem applyButton;
 }

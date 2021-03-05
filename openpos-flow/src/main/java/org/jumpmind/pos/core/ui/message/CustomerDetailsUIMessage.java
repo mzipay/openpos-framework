@@ -10,7 +10,6 @@ public class CustomerDetailsUIMessage extends UIMessage {
 
     private String title;
 
-    private ActionItem loyaltyPromotions;
     private ActionItem unlinkButton;
     private ActionItem editButton;
     private ActionItem doneButton;
@@ -21,6 +20,7 @@ public class CustomerDetailsUIMessage extends UIMessage {
     private String membershipLabel;
     private String rewardsLabel;
     private String rewardHistoryLabel;
+    private String noPromotionsText;
 
     public CustomerDetailsUIMessage() {
         setScreenType(UIMessageType.CUSTOMER_DETAILS_DIALOG);

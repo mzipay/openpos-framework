@@ -13,6 +13,10 @@
     &::-webkit-scrollbar {
       display: none;  /* Safari and Chrome */
     }
+    .no-items {
+      @extend %text-lg;
+      text-align: center;
+    }
   }
 }
 

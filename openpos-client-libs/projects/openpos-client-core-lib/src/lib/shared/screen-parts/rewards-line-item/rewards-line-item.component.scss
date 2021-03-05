@@ -1,21 +1,12 @@
 @import "../../../styles/mixins/typography";
 
-.without-household {
+.reward-line-item-wrapper {
   display: grid;
   grid-template-columns: 1fr 10fr 2fr 2fr;
   grid-template-rows: 1fr;
   gap: 0px 0px;
   grid-template-areas:
-    "loyalty-icon details value apply";
-}
-
-.with-household {
-  display: grid;
-  grid-template-columns: 1fr 5fr 5fr 1fr 1fr;
-  grid-template-rows: 1fr;
-  gap: 0px 0px;
-  grid-template-areas:
-    "loyalty-icon details household value apply";
+    "loyalty-icon details apply";
 }
 
 .loyalty-icon {
@@ -41,15 +32,7 @@
     display: inline-block;
   }
 }
-.household {
-  grid-area: household;
-}
-.value {
-  grid-area: value;
-  @extend %text-lg;
-  text-align: center;
-  margin: auto;
-}
+
 .apply {
   grid-area: apply;
   text-align: center;

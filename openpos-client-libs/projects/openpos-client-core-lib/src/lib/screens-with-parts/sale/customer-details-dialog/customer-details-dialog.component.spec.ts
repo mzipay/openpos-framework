@@ -1,7 +1,7 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import {CustomerDetailsDialogComponent} from "./customer-details-dialog.component";
-import {CustomerDetailsDialogInterface} from "./customer-details-dialog.interface";
+import {CustomerDetailsDialogInterface, Reward} from "./customer-details-dialog.interface";
 import {ActionService} from "../../../core/actions/action.service";
 import {validateDoesNotExist, validateIcon, validateText} from "../../../utilites/test-utils";
 import {By} from "@angular/platform-browser";
@@ -69,17 +69,17 @@ describe('CustomerDetailsDialog', () => {
       });
 
       it('returns "Rewards" when the rewards list is undefined', () => {
-        component.screen.rewards = undefined;
+        component.screen.customer.rewards = undefined;
         expect(component.getRewardsLabel()).toBe("Rewards");
       });
 
       it('returns "Rewards (0)" when the rewards list is empty', () => {
-        component.screen.rewards = [];
+        component.screen.customer.rewards = [];
         expect(component.getRewardsLabel()).toBe("Rewards (0)");
       });
 
       it('returns "Rewards (#)" when the rewards list has items', () => {
-        component.screen.rewards = [{}];
+        component.screen.customer.rewards = [{} as Reward];
         expect(component.getRewardsLabel()).toBe("Rewards (1)");
       });
     });
