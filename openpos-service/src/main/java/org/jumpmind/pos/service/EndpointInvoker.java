@@ -32,7 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.*;
 import static org.jumpmind.pos.service.strategy.AbstractInvocationStrategy.buildPath;
 
 @Slf4j
@@ -43,17 +43,17 @@ public class EndpointInvoker implements InvocationHandler {
     Map<String, IInvocationStrategy> strategies;
 
     @Autowired
-    protected ApplicationContext applicationContext;
+    ApplicationContext applicationContext;
 
     @Autowired
-    private ServiceConfig serviceConfig;
+    ServiceConfig serviceConfig;
 
     final static int MAX_SUMMARY_WIDTH = 127;
 
     @Autowired
     @Qualifier("ctxSession")
     @Lazy
-    private DBSession dbSession;
+    DBSession dbSession;
 
     @Value("${openpos.installationId:'not set'}")
     String installationId;
@@ -63,10 +63,15 @@ public class EndpointInvoker implements InvocationHandler {
 
     private final static Pattern serviceNamePattern = Pattern.compile("^(?<service>[^_]+)(_(?<version>\\d(_\\d)*))?$");
     private final static String implementationConfigPath = "openpos.services.specificConfig.%s.implementation";
+
     Map<String, Object> endPointsByPath;
 
-    static BasicThreadFactory factory = new BasicThreadFactory.Builder().namingPattern("service-instrumentation-thread-%d").daemon(true)
-            .build();
+    Map<String, Endpoint> annotationsByPath;
+
+    static BasicThreadFactory factory = new BasicThreadFactory.Builder().
+            namingPattern("service-instrumentation-thread-%d").daemon(true).
+            build();
+
     private static final ExecutorService instrumentationExecutor = Executors.newSingleThreadExecutor(factory);
 
     public EndpointInvoker() {
@@ -76,19 +81,24 @@ public class EndpointInvoker implements InvocationHandler {
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (endPointsByPath == null) {
             endPointsByPath = new HashMap<>();
+            annotationsByPath = new HashMap<>();
             Collection<Object> beans = applicationContext.getBeansWithAnnotation(RestController.class).values();
             if (beans != null) {
                 for (Object object : beans) {
-                        buildEndpointMappingsForService(object);
-                    }
+                    buildEndpointMappingsForService(object);
                 }
-            }  
+            }
+        }
     }
-    
-    public void buildEndpointMappingsForService( Object service){
+
+    public void buildEndpointMappingsForService(Object service) {
         Class<?>[] interfaces = service.getClass().getInterfaces();
         Collection<Object> endpointOverrides = applicationContext.getBeansWithAnnotation(EndpointOverride.class).values();
         Collection<Object> endpoints = applicationContext.getBeansWithAnnotation(Endpoint.class).values();
+        //if we have any endpoints that are an @EndpointOverride and extend an Endpoint with @Endpoint they were included
+        //in the collection of endpoints and should therefore be filtered out.
+        endpoints = endpoints.stream().filter(e -> !endpointOverrides.contains(e)).collect(Collectors.toList());
+
         for (Class<?> i : interfaces) {
             RestController controller = i.getAnnotation(RestController.class);
             if (controller != null) {
@@ -117,6 +127,7 @@ public class EndpointInvoker implements InvocationHandler {
 
                         if (endpointBean != null) {
                             endPointsByPath.put(path, endpointBean);
+                            annotationsByPath.put(path, endpointBean.getClass().getAnnotation(Endpoint.class));
                         } else {
                             log.warn(String.format(
                                     "No endpoint defined for path '%s' in '%s' in the service Please define a Spring-discoverable @Endpoint class, "
@@ -131,8 +142,8 @@ public class EndpointInvoker implements InvocationHandler {
 
     protected Object findBestEndpointOverrideMatch(String path, String implementation, Collection<Object> endpointOverrides) {
         Object bestMatch = null;
-        List<SimpleEntry<Object,EndpointOverride>> pathMatchedOverrides = endpointOverrides.stream()
-                .map(o -> new SimpleEntry<Object,EndpointOverride>(o, ClassUtils.resolveAnnotation(EndpointOverride.class, o)))
+        List<SimpleEntry<Object, EndpointOverride>> pathMatchedOverrides = endpointOverrides.stream()
+                .map(o -> new SimpleEntry<Object, EndpointOverride>(o, ClassUtils.resolveAnnotation(EndpointOverride.class, o)))
                 .filter(entry -> entry.getValue().path().equals(path)
                 ).collect(Collectors.toList());
 
@@ -156,7 +167,7 @@ public class EndpointInvoker implements InvocationHandler {
     protected String getServiceImplementation(String serviceName) {
         String implementation = env.getProperty(String.format(implementationConfigPath, serviceName));
 
-        if(StringUtils.isBlank(implementation)) {
+        if (StringUtils.isBlank(implementation)) {
             Matcher serviceNameMatcher = serviceNamePattern.matcher(serviceName);
             serviceNameMatcher.matches();
             String versionLessServiceName = serviceNameMatcher.group("service");
@@ -170,7 +181,9 @@ public class EndpointInvoker implements InvocationHandler {
     protected Object findMatch(String path, Collection<Object> endpoints, String implementation) {
         for (Object endpointBean : endpoints) {
             Endpoint endPoint = ClassUtils.resolveAnnotation(Endpoint.class, endpointBean);
-            if (endPoint.path().equals(path) && endPoint.implementation().equals(implementation)) {
+            if (endPoint == null)  {
+                log.warn("No @Endpoint annotation found for endpoint class {}, path {}, implementation {}", endpointBean.getClass().getSimpleName(), path, implementation);
+            } else if (endPoint.path().equals(path) && endPoint.implementation().equals(implementation)) {
                 return endpointBean;
             }
         }
@@ -186,20 +199,34 @@ public class EndpointInvoker implements InvocationHandler {
         if (endPointsByPath == null) {
             throw new PosServerException("endPointsByPath == null.  This class has not been fully initialized by Spring");
         }
-        Object obj = endPointsByPath.get(path);
+        Object endpointObj = endPointsByPath.get(path);
         ServiceSpecificConfig config = getSpecificConfig(method);
         EndpointSpecificConfig endConfig = null;
-        Endpoint annotation = null;
-        if (obj != null) {
-            annotation = obj.getClass().getAnnotation(Endpoint.class);
-            if (annotation != null) {
-                for (EndpointSpecificConfig aWeirdAcronym : config.getEndpoints()) {
-                    if (annotation.path().equals(aWeirdAcronym.getPath())) {
-                        endConfig = aWeirdAcronym;
+        String endpointImplementation = null;
+        if(endpointObj != null) {
+            EndpointOverride override = endpointObj.getClass().getAnnotation(EndpointOverride.class);
+            if (override != null) {
+                for (EndpointSpecificConfig endpointSpecificConfig : config.getEndpoints()) {
+                    if (override.path().equals(endpointSpecificConfig.getPath())) {
+                        endpointImplementation = override.implementation();
+                        endConfig = endpointSpecificConfig;
+                    }
+                }
+            }
+            else {
+                Endpoint annotation = endpointObj.getClass().getAnnotation(Endpoint.class);
+
+                if (annotation != null) {
+                    for (EndpointSpecificConfig endpointSpecificConfig : config.getEndpoints()) {
+                        if (annotation.path().equals(endpointSpecificConfig.getPath())) {
+                            endpointImplementation = annotation.implementation();
+                            endConfig = endpointSpecificConfig;
+                        }
                     }
                 }
             }
         }
+
         IInvocationStrategy strategy;
         List<String> profileIds = new ArrayList<>();
         if (endConfig != null) {
@@ -207,7 +234,7 @@ public class EndpointInvoker implements InvocationHandler {
             profileIds.add(endConfig.getProfile());
         } else {
             strategy = strategies.get(config.getStrategy().name());
-            profileIds.addAll(config.getProfileIds() != null ? config.getProfileIds(): Arrays.asList());
+            profileIds.addAll(config.getProfileIds() != null ? config.getProfileIds() : Arrays.asList());
         }
         if (profileIds.size() == 0) {
             profileIds.add("local");
@@ -215,7 +242,7 @@ public class EndpointInvoker implements InvocationHandler {
         ServiceSampleModel sample = startSample(strategy, config, proxy, method, args);
         Object result = null;
         try {
-            log(method, args, annotation);
+            log(method, args, endpointImplementation);
             result = strategy.invoke(profileIds, proxy, method, endPointsByPath, args);
             endSampleSuccess(sample, config, proxy, method, args, result);
         } catch (Throwable ex) {
@@ -226,11 +253,11 @@ public class EndpointInvoker implements InvocationHandler {
         return result;
     }
 
-    private void log(Method method, Object[] args, Endpoint annotation) {
+    private void log(Method method, Object[] args, String implementation) {
         if (!method.isAnnotationPresent(SuppressMethodLogging.class)) {
             StringBuilder logArgs = new StringBuilder();
             if (args != null && args.length > 0) {
-                for(int i = 0; i < args.length; i++) {
+                for (int i = 0; i < args.length; i++) {
                     Object arg = args[i];
                     if (arg instanceof CharSequence) {
                         logArgs.append("'");
@@ -241,23 +268,21 @@ public class EndpointInvoker implements InvocationHandler {
                     } else {
                         logArgs.append("null");
                     }
-                    if (args.length-1 > i) {
+                    if (args.length - 1 > i) {
                         logArgs.append(",");
                     }
                 }
             }
-            log.info("{}.{}({}) {}",
+            log.info("{}.{}() {}",
                     method.getDeclaringClass().getSimpleName(),
                     method.getName(),
-                    logArgs,
-                    annotation == null || annotation.implementation().equals("default") ?
-                            "" : annotation.implementation() + " implementation");
+                    implementation == null || "default".equals(implementation) ? "" : implementation + " implementation");
         }
     }
 
     private ServiceSpecificConfig getSpecificConfig(Method method) {
         String serviceName = AbstractInvocationStrategy.getServiceName(method);
-        if (isNotBlank(serviceName)) {
+        if (StringUtils.isNotBlank(serviceName)) {
             return serviceConfig.getServiceConfig(serviceName);
         } else {
             throw new IllegalStateException(method.getDeclaringClass().getSimpleName() + " must declare @"
