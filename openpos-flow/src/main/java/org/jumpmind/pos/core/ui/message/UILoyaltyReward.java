@@ -13,5 +13,6 @@ public class UILoyaltyReward implements Serializable {
     private String promotionId;
     private String name;
     private String expirationDate;
+    private String expirationLabel;
     private ActionItem applyButton;
 }

@@ -1,8 +1,13 @@
 import {By} from "@angular/platform-browser";
 
+export const validateExist = (fixture, selector: string) => {
+    const element = fixture.debugElement.query(By.css(selector));
+    expect(element.nativeElement).toBeDefined();
+}
+
 export const validateDoesNotExist = (fixture, selector: string) => {
-    const button = fixture.debugElement.query(By.css(selector));
-    expect(button).toBeNull();
+    const element = fixture.debugElement.query(By.css(selector));
+    expect(element).toBeNull();
 };
 
 export const validateText = (fixture, selector: string, value: string) => {

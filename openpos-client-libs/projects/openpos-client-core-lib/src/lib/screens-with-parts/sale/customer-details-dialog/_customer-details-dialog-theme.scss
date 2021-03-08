@@ -58,11 +58,23 @@
                 font-size: $text-xs-mobile*1.25;
             }
         }
+
     }
     .tabs.mobile {
         mat-card {
             margin: 0px;
             padding: 0px;
+        }
+        .no-items {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            &.tablet-portrait {
+                font-size: $text-xs-mobile*1.75;
+            }
+
+            &.mobile {
+                font-size: $text-xs-mobile*1.25;
+            }
         }
     }
 }

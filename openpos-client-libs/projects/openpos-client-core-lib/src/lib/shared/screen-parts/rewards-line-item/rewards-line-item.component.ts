@@ -14,9 +14,12 @@ export class RewardsLineItemComponent extends ScreenPartComponent<RewardsLineIte
     @Input()
     reward: Reward;
     isMobile: Observable<boolean>;
-    constructor(injector: Injector, media: OpenposMediaService) {
+    constructor(injector: Injector, private media: OpenposMediaService) {
         super(injector);
-        this.isMobile = media.observe(new Map([
+        this.initIsMobile();
+    }
+    initIsMobile(): void {
+        this.isMobile = this.media.observe(new Map([
             [MediaBreakpoints.MOBILE_PORTRAIT, true],
             [MediaBreakpoints.MOBILE_LANDSCAPE, true],
             [MediaBreakpoints.TABLET_PORTRAIT, true],

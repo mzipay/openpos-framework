@@ -47,7 +47,7 @@
             </div>
         </div>
     </app-content-card>
-    <div *ngIf="screen.membershipEnabled" class="tabs" [ngClass]="{'tabs': true, 'mobile': (isMobile |async)}" responsive-class>
+    <div class="tabs" [ngClass]="{'tabs': true, 'mobile': (isMobile | async)}" responsive-class>
         <mat-tab-group mat-align-tabs="start" animationDuration="0ms">
             <mat-tab class="rewardsTab" [label]="getRewardsLabel()">
                 <mat-card class="rewardsContent">
@@ -56,7 +56,7 @@
                             <app-rewards-line-item [reward]="reward"></app-rewards-line-item>
                         </div>
                     </div>
-                    <div *ngIf="!(screen.customer.rewards && screen.customer.rewards.length)" class="no-items">
+                    <div *ngIf="!(screen.customer.rewards && screen.customer.rewards.length)" class="no-items banana" responsive-class>
                         {{screen.noPromotionsText}}
                     </div>
                 </mat-card>

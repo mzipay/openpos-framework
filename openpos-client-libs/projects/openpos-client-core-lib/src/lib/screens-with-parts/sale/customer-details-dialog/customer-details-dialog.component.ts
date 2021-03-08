@@ -16,13 +16,17 @@ import {MediaBreakpoints, OpenposMediaService} from "../../../core/media/openpos
 export class CustomerDetailsDialogComponent extends PosScreen<CustomerDetailsDialogInterface> {
 
   isMobile: Observable<boolean>;
-  constructor(injector: Injector, media: OpenposMediaService) {
+  constructor(injector: Injector, private media: OpenposMediaService) {
     super(injector);
-    this.isMobile = media.observe(new Map([
+    this.initIsMobile();
+  }
+
+  initIsMobile(): void {
+    this.isMobile = this.media.observe(new Map([
       [MediaBreakpoints.MOBILE_PORTRAIT, true],
       [MediaBreakpoints.MOBILE_LANDSCAPE, true],
       [MediaBreakpoints.TABLET_PORTRAIT, true],
-      [MediaBreakpoints.TABLET_LANDSCAPE, false],
+      [MediaBreakpoints.TABLET_LANDSCAPE, true],
       [MediaBreakpoints.DESKTOP_PORTRAIT, false],
       [MediaBreakpoints.DESKTOP_LANDSCAPE, false]
     ]));
