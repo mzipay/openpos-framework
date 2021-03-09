@@ -33,6 +33,7 @@ export interface CustomerDetailsDialogInterface extends IAbstractScreen {
     editButton: IActionItem;
     unlinkButton: IActionItem;
     doneButton: IActionItem;
+    contactLabel: string;
     rewardsLabel: string;
     rewardHistoryLabel: string;
     noPromotionsText: string;

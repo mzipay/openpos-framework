@@ -18,6 +18,7 @@ public class CustomerDetailsUIMessage extends UIMessage {
 
     private Boolean membershipEnabled;
     private String membershipLabel;
+    private String contactLabel;
     private String rewardsLabel;
     private String rewardHistoryLabel;
     private String noPromotionsText;

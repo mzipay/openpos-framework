@@ -6,17 +6,19 @@
 
 .tabs {
   margin-top: 8px;
+  height: 40vmin;
+  mat-tab-group, mat-card {
+    height: 100%;
+  }
   mat-card {
     overflow: scroll;
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
-    &::-webkit-scrollbar {
-      display: none;  /* Safari and Chrome */
-    }
     .no-items {
       @extend %text-lg;
       text-align: center;
     }
+  }
+  &.mobile {
+    height: 60vmin;
   }
 }
 
@@ -26,12 +28,14 @@
   justify-content: end;
   grid-column-gap: 8px;
 }
+
 app-content-card {
   section {
     padding-left: 0px;
     padding-right: 0px;
   }
 }
+
 .grid-container {
   display: grid;
   grid-template-columns: 1fr 3fr 4fr;
@@ -39,68 +43,103 @@ app-content-card {
   gap: 0px 0px;
   grid-template-areas:
     "icon details memberships";
-}
-.icon {
-  grid-area: icon;
-  justify-content: center;
-  display: flex;
-  app-icon {
-    margin-left: -16px;
-  }
-  .material-icons {
-    font-size: 90px;
-    height: 90px;
-    width: 90px;
-  }
-}
-.details {
-  grid-area: details;
-  .customer-name {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  .customer-details {
+  .icon {
+    justify-content: center;
+    display: flex;
+    app-icon {
+      margin-left: -16px;
+    }
     .material-icons {
-      display: inline-block;
-      margin-right: 5px;
-
-    }
-    .details-row {
-      margin-top: 10px;
-    }
-    .address-details {
-      display: inline-grid;
+      font-size: 90px;
+      height: 90px;
+      width: 90px;
     }
   }
-}
-.memberships {
-  grid-area: memberships;
-  padding-bottom: 10px;
-  .wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-    gap: 0px 0px;
-    grid-template-areas:
-      "title list";
-    height: 100%;
-    border-radius: 3px;
-    .title {
-      padding-top: 20px;
-      padding-left: 30px;
-      grid-area: title;
-      app-icon {
+  .details {
+    .customer-name {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .customer-details {
+      .material-icons {
         display: inline-block;
         margin-right: 5px;
+
       }
-    }
-    .list {
-      padding-top: 20px;
-      grid-area: list;
-      .item {
-        margin-bottom: 10px;
+      .details-row {
+        margin-top: 10px;
+      }
+      .address-details {
+        display: inline-grid;
       }
     }
   }
+  .memberships {
+    padding-bottom: 10px;
+    .wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+      "title list";
+      height: 100%;
+      border-radius: 3px;
+      .title {
+        padding-top: 20px;
+        padding-left: 30px;
+        grid-area: title;
+        app-icon {
+          display: inline-block;
+          margin-right: 5px;
+        }
+      }
+      .list {
+        padding-top: 20px;
+        grid-area: list;
+        .item {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+
+.mobile-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 10fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    "icon details"
+    "memberships memberships";
+
+  .details {
+    .customer-name {
+      @extend %text-md;
+      height: 100%;
+      padding-top: 16px;
+      padding-left: 5px;
+    }
+  }
+
+  .memberships {
+    padding-top: 5px;
+    display: inline-block;
+  }
+}
+
+
+
+.icon {
+  grid-area: icon;
+}
+
+.details {
+  grid-area: details;
+}
+
+.memberships {
+  grid-area: memberships;
 }
 

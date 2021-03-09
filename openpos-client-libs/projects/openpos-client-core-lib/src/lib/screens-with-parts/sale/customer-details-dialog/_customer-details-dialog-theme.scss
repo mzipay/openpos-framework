@@ -12,9 +12,25 @@
         color: mat-color($foreground, secondary-text);
     }
 
-    .memberships .wrapper {
-        border: 2px solid map_get($foreground, icon);
+
+    .grid-container {
+        .memberships .wrapper {
+            border: 2px solid map_get($foreground, icon);
+        }
     }
+
+    .mobile-grid-container {
+        .list {
+            .item {
+                vertical-align: middle;
+                margin-right: 5px;
+                .mat-chip-list-wrapper {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
 
     .mat-ink-bar {
         display: none !important;
@@ -49,13 +65,15 @@
     .tabs {
         &.tablet-portrait {
             .mat-tab-label {
-                font-size: $text-xs-mobile*1.75;
+                font-size: $text-xs-mobile*1.5;
             }
         }
 
         &.mobile {
             .mat-tab-label {
-                font-size: $text-xs-mobile*1.25;
+                font-size: $text-xs-mobile;
+                padding-right: 3px;
+                padding-left: 3px;
             }
         }
 
