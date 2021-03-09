@@ -97,5 +97,27 @@ public class ClassUtils {
         return classes;
     }
     
+    public static Class loadClass(String className) {
+        if (className == null) {
+            throw new ReflectionException("className cannot be null.");
+        }
+        try {
+            return Thread.currentThread().getContextClassLoader().loadClass(className);
+        } catch (Exception ex) {
+            throw new ReflectionException("Failed to load class named \"" + className + "\"", ex);
+        }
+    }
     
+    public static <T> T instantiate(String className) {
+        Class clazz = loadClass(className);
+        if (clazz == null) {
+            throw new ReflectionException("No class found for className:\"" + className + "\"");
+        }
+        try {
+            return (T)clazz.newInstance();
+        } catch (Exception ex) {
+            throw new ReflectionException("Failed to instansitate class named \"" + className + "\"", ex);
+        }
+    }
+
 }
